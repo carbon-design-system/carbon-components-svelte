@@ -1,7 +1,7 @@
 import { withKnobs, text, select, boolean } from '@storybook/addon-knobs';
 import Component from './RadioButton.Story.svelte';
 
-export default { title: 'Radio Button', decorators: [withKnobs] };
+export default { title: 'RadioButton', decorators: [withKnobs] };
 
 const labelPositions = {
   'Left (left)': 'left',
