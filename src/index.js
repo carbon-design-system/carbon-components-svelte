@@ -16,6 +16,7 @@ import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
 import Tag, { TagSkeleton } from './components/Tag';
 import TextArea, { TextAreaSkeleton } from './components/TextArea';
+import TextInput, { TextInputSkeleton, PasswordInput } from './components/TextInput';
 import Toggle, { ToggleSkeleton } from './components/Toggle';
 import ToggleSmall, { ToggleSmallSkeleton } from './components/ToggleSmall';
 import TooltipDefinition from './components/TooltipDefinition';
@@ -52,6 +53,9 @@ export {
   TagSkeleton,
   TextArea,
   TextAreaSkeleton,
+  TextInput,
+  TextInputSkeleton,
+  PasswordInput,
   Toggle,
   ToggleSkeleton,
   ToggleSmall,

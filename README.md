@@ -18,16 +18,16 @@ Currently, the following components are supported:
 
 - Accordion
 - AccordionItem
-- AccordionSkeleton
+  - AccordionSkeleton
 - Breadcrumb
 - BreadcrumbItem
-- BreadcrumbSkeleton
+  - BreadcrumbSkeleton
 - Button
-- ButtonSkeleton
+  - ButtonSkeleton
 - Checkbox
-- CheckboxSkeleton
+  - CheckboxSkeleton
 - CodeSnippet
-- CodeSnippetSkeleton
+  - CodeSnippetSkeleton
 - Copy
 - CopyButton
 - InlineLoading
@@ -36,19 +36,22 @@ Currently, the following components are supported:
 - ListItem
 - OrderedList
 - RadioButton
-- RadioButtonSkeleton
+  - RadioButtonSkeleton
 - Search
-- SearchSkeleton
+  - SearchSkeleton
 - SkeletonPlaceholder
 - SkeletonText
 - Tag
-- TagSkeleton
+  - TagSkeleton
 - TextArea
-- TextAreaSkeleton
+  - TextAreaSkeleton
+- TextInput
+  - TextInputSkeleton
+  - PasswordInput
 - Toggle
-- ToggleSkeleton
+  - ToggleSkeleton
 - ToggleSmall
-- ToggleSmallSkeleton
+  - ToggleSmallSkeleton
 - TooltipDefinition
 - TooltipIcon
 - UnorderedList
