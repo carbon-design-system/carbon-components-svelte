@@ -1,10 +1,9 @@
 # carbon-components-svelte
 
+> 🚧🚧🚧 UNDER CONSTRUCTION
 > Svelte implementation of the Carbon Design System
 
-[🚧🚧🚧 UNDER CONSTRUCTION]
-
-## [Docs](https://ibm.github.io/carbon-components-svelte)
+## [Storybook](https://ibm.github.io/carbon-components-svelte)
 
 ## Getting Started
 
@@ -33,6 +32,8 @@ Currently, the following components are supported:
 - Link
 - ListItem
 - OrderedList
+- Search
+- SearchSkeleton
 - SkeletonText
 - Tag
 - TagSkeleton
