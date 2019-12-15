@@ -11,6 +11,7 @@ import Link from './components/Link';
 import ListItem from './components/ListItem';
 import OrderedList from './components/OrderedList';
 import Search, { SearchSkeleton } from './components/Search';
+import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
 import Tag, { TagSkeleton } from './components/Tag';
 import TextArea, { TextAreaSkeleton } from './components/TextArea';
@@ -42,6 +43,7 @@ export {
   OrderedList,
   Search,
   SearchSkeleton,
+  SkeletonPlaceholder,
   SkeletonText,
   Tag,
   TagSkeleton,

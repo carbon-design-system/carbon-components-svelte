@@ -34,6 +34,7 @@ Currently, the following components are supported:
 - OrderedList
 - Search
 - SearchSkeleton
+- SkeletonPlaceholder
 - SkeletonText
 - Tag
 - TagSkeleton
