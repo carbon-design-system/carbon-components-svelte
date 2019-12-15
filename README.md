@@ -1,16 +1,10 @@
 # carbon-components-svelte
 
-> 🚧🚧🚧 UNDER CONSTRUCTION
+> 🚧 UNDER CONSTRUCTION
 
 > Svelte implementation of the Carbon Design System
 
-> 🚧🚧🚧
-
 ## [Storybook](https://ibm.github.io/carbon-components-svelte)
-
-## Getting Started
-
-[Placeholder]
 
 ## Supported Components
 
