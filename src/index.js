@@ -10,6 +10,7 @@ import Loading from './components/Loading';
 import Link from './components/Link';
 import ListItem from './components/ListItem';
 import OrderedList from './components/OrderedList';
+import RadioButton, { RadioButtonSkeleton } from './components/RadioButton';
 import Search, { SearchSkeleton } from './components/Search';
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
@@ -41,6 +42,8 @@ export {
   Link,
   ListItem,
   OrderedList,
+  RadioButton,
+  RadioButtonSkeleton,
   Search,
   SearchSkeleton,
   SkeletonPlaceholder,

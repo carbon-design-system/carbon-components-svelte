@@ -1,7 +1,10 @@
 # carbon-components-svelte
 
 > 🚧🚧🚧 UNDER CONSTRUCTION
+
 > Svelte implementation of the Carbon Design System
+
+> 🚧🚧🚧
 
 ## [Storybook](https://ibm.github.io/carbon-components-svelte)
 
@@ -32,6 +35,8 @@ Currently, the following components are supported:
 - Link
 - ListItem
 - OrderedList
+- RadioButton
+- RadioButtonSkeleton
 - Search
 - SearchSkeleton
 - SkeletonPlaceholder
