@@ -1,14 +1,14 @@
 # carbon-components-svelte
 
-> [🚧🚧🚧 UNDER CONSTRUCTION] Svelte implementation of the Carbon Design System
+> Svelte implementation of the Carbon Design System
 
-This library is a work in progress.
+[🚧🚧🚧 UNDER CONSTRUCTION]
+
+## [Docs](https://ibm.github.io/carbon-components-svelte)
 
 ## Getting Started
 
-```bash
-yarn add -D carbon-components carbon-components-svelte carbon-icons-svelte
-```
+[Placeholder]
 
 ## Supported Components
 
@@ -48,13 +48,7 @@ Currently, the following components are supported:
 
 ## Usage
 
-```html
-<script>
-  import { Tag } from 'carbon-components-svelte';
-</script>
-
-<Tag>Text</Tag>
-```
+[Placeholder]
 
 ## Contributing
 
