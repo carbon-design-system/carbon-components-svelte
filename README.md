@@ -33,6 +33,7 @@ Currently, the following components are supported:
 - Link
 - ListItem
 - OrderedList
+- SkeletonPlaceholder
 - SkeletonText
 - Tag
 - TagSkeleton

@@ -10,6 +10,7 @@ import Loading from './components/Loading';
 import Link from './components/Link';
 import ListItem from './components/ListItem';
 import OrderedList from './components/OrderedList';
+import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
 import Tag, { TagSkeleton } from './components/Tag';
 import TextArea, { TextAreaSkeleton } from './components/TextArea';
@@ -39,6 +40,7 @@ export {
   Link,
   ListItem,
   OrderedList,
+  SkeletonPlaceholder,
   SkeletonText,
   Tag,
   TagSkeleton,
