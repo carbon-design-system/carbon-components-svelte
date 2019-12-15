@@ -4,13 +4,13 @@
   export let cols = 50;
   export let disabled = false;
   export let id = Math.random();
-  export let labelText = undefined;
+  export let labelText = '';
   export let placeholder = '';
   export let rows = 4;
-  export let value = undefined;
+  export let value = '';
   export let invalid = false;
-  export let invalidText = undefined;
-  export let helperText = undefined;
+  export let invalidText = '';
+  export let helperText = '';
   export let hideLabel = false;
   export let light = false;
   export let props = {};
@@ -33,24 +33,6 @@
     invalid && '--text-area--invalid',
     className
   );
-
-  function handleClick(event) {
-    if (!disabled) {
-      dispatch('click', event);
-    }
-  }
-
-  function handleChange(event) {
-    if (!disabled) {
-      dispatch('change', event);
-    }
-  }
-
-  function handleInput(event) {
-    if (!disabled) {
-      dispatch('input', event);
-    }
-  }
 </script>
 
 <div class={cx('--form-item')}>
@@ -66,12 +48,22 @@
     {/if}
     <textarea
       {...props}
-      on:click
-      on:click={handleClick}
-      on:change
-      on:change={handleChange}
-      on:input
-      on:input={handleInput}
+      on:click={event => {
+        if (!disabled) {
+          dispatch('click', event);
+        }
+      }}
+      on:change={event => {
+        if (!disabled) {
+          dispatch('change', event);
+        }
+      }}
+      on:input={event => {
+        value = event.target.value;
+        if (!disabled) {
+          dispatch('input', event);
+        }
+      }}
       class={_textAreaClass}
       aria-invalid={invalid || undefined}
       aria-describedby={invalid ? errorId : undefined}
