@@ -1,0 +1,120 @@
+{
+  "name": "carbon-components-svelte",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "description": "Svelte implementation of the Carbon Design System",
+  "svelte": "src/index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "scripts": {
+    "start": "start-storybook",
+    "build": "rollup -c",
+    "build:storybook": "build-storybook -o docs",
+    "test": "jest --coverage",
+    "test:tdd": "jest --watch",
+    "prepublishOnly": "yarn build"
+  },
+  "dependencies": {
+    "carbon-icons-svelte": "^10.8.0-rc.0"
+  },
+  "peerDependencies": {
+    "carbon-components": "^10.8.0",
+    "carbon-icons-svelte": "^10.8.0-rc.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@storybook/addon-knobs": "^5.2.6",
+    "@storybook/addon-storysource": "^5.2.6",
+    "@storybook/cli": "^5.2.6",
+    "@storybook/svelte": "^5.2.6",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/svelte": "^1.11.0",
+    "babel-jest": "^24.9.0",
+    "babel-loader": "^8.0.6",
+    "carbon-components": "10.8.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-svelte3": "^2.7.3",
+    "husky": "^3.1.0",
+    "jest": "^24.9.0",
+    "jest-transform-svelte": "^2.1.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
+    "prettier-plugin-svelte": "^0.7.0",
+    "pretty-quick": "^2.0.1",
+    "regenerator-runtime": "^0.13.3",
+    "rollup": "^1.27.13",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-svelte": "^5.1.1",
+    "rollup-plugin-terser": "^5.1.3",
+    "svelte": "^3.16.4",
+    "svelte-loader": "^2.13.6"
+  },
+  "contributors": [
+    {
+      "name": "Eric Liu",
+      "email": "eric.young.liu@ibm.com"
+    }
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && pretty-quick --pattern 'src/**/*.{js,svelte}' --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{js,svelte}": [
+      "eslint --fix 'src/**'",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "printWidth": 100,
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.svelte$": "jest-transform-svelte",
+      "^.+\\.js$": "babel-jest"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "svelte"
+    ],
+    "setupFilesAfterEnv": [
+      "regenerator-runtime/runtime",
+      "@testing-library/jest-dom/extend-expect"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "resolutions": {
+    "**/bin-links": ">=1.1.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ibm/carbon-components-svelte.git"
+  },
+  "homepage": "https://github.com/ibm/carbon-components-svelte",
+  "keywords": [
+    "carbon",
+    "carbon components",
+    "svelte"
+  ],
+  "files": [
+    "lib"
+  ],
+  "bugs": "https://github.com/ibm/carbon-components-svelte/issues"
+}
