@@ -24,6 +24,7 @@ Currently, the following components are supported:
   - CodeSnippetSkeleton
 - Copy
 - CopyButton
+- DataTableSkeleton
 - InlineLoading
 - Loading
 - Link

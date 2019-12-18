@@ -6,7 +6,7 @@
   export let description = undefined;
   export let iconDescription = undefined;
   export let successDelay = 1500;
-  export let props = {};
+  export let style = undefined;
 
   import { createEventDispatcher, onDestroy } from 'svelte';
   import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
@@ -20,19 +20,26 @@
 
   onDestroy(() => {
     if (timeoutId !== undefined) {
-      clearTimeout(timeoutId);
+      window.clearTimeout(timeoutId);
       timeoutId = undefined;
     }
   });
 
   $: if (status === 'finished') {
-    timeoutId = setTimeout(() => {
+    timeoutId = window.setTimeout(() => {
       dispatch('success');
     }, successDelay);
   }
 </script>
 
-<div {...props} class={_class} aria-live={$$props['aria-live'] || 'assertive'}>
+<div
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  {style}
+  class={_class}
+  aria-live={$$props['aria-live'] || 'assertive'}>
   <div class={cx('--inline-loading__animation')}>
     {#if status === 'error'}
       <Error20 class={cx('--inline-loading--error')} />

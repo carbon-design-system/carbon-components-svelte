@@ -41,10 +41,6 @@
     display: flex;
     width: 300px;
   }
-
-  :global(.loader) {
-    margin-left: 1rem;
-  }
 </style>
 
 <Layout>
@@ -53,7 +49,7 @@
       <Button kind="secondary" {disabled}>Cancel</Button>
       {#if disabled}
         <InlineLoading
-          class="loader"
+          style="margin-left: 1rem;"
           description={loadingDescription}
           status={success ? 'finished' : 'active'}
           aria-live={ariaLive} />

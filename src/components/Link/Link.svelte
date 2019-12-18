@@ -4,7 +4,7 @@
   export let href = undefined;
   export let disabled = false;
   export let inline = false;
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
@@ -17,11 +17,26 @@
 </script>
 
 {#if disabled}
-  <p {...props} class={_class}>
+  <p
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    {style}
+    aria-current={$$props['aria-current']}
+    class={_class}>
     <slot />
   </p>
 {:else}
-  <a {...props} class={_class} {href}>
+  <a
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    {style}
+    aria-current={$$props['aria-current']}
+    class={_class}
+    {href}>
     <slot />
   </a>
 {/if}

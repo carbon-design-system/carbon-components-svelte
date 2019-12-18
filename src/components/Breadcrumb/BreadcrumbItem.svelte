@@ -15,17 +15,16 @@
     isCurrentPage && ariaCurrent !== 'page' && '--breadcrumb-item--current',
     className
   );
-  $: itemProps = { 'aria-current': ariaCurrent, class: cx('--link') };
 </script>
 
 {#if href}
   <li class={_class} {...props}>
-    <Link {href} props={itemProps}>
+    <Link {href} aria-current={ariaCurrent}>
       <slot />
     </Link>
   </li>
 {:else}
   <li class={_class} {...props}>
-    <slot props={itemProps} />
+    <slot props={{ 'aria-current': ariaCurrent, class: cx('--link') }} />
   </li>
 {/if}

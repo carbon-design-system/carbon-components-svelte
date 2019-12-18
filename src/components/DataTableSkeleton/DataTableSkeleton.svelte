@@ -6,7 +6,7 @@
   export let rowCount = 5;
   export let columnCount = 5;
   export let headers = [];
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
@@ -25,7 +25,7 @@
   );
 </script>
 
-<table {...props} on:click on:mouseover on:mouseenter on:mouseleave class={_class}>
+<table on:click on:mouseover on:mouseenter on:mouseleave {style} class={_class}>
   <thead>
     <tr>
       {#each columns as column, i (column)}
