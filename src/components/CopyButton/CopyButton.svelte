@@ -4,59 +4,52 @@
   export let iconDescription = 'Copy to clipboard';
   export let feedback = 'Copied!';
   export let feedbackTimeout = 2000;
-  export let props = {};
 
-  import { createEventDispatcher, onDestroy } from 'svelte';
+  import { onDestroy } from 'svelte';
   import Copy16 from 'carbon-icons-svelte/lib/Copy16';
   import { cx } from '../../lib';
 
-  const dispatch = createEventDispatcher();
   let animation = undefined;
   let timeoutId = undefined;
 
   onDestroy(() => {
     if (timeoutId !== undefined) {
-      clearTimeout(timeoutId);
+      window.clearTimeout(timeoutId);
       timeoutId = undefined;
     }
   });
 
-  function handleClick(event) {
-    animation = 'fade-in';
-
-    timeoutId = setTimeout(() => {
-      animation = 'fade-out';
-    }, feedbackTimeout);
-  }
-
-  function handleAnimationEnd(event) {
-    if (event.animationName === 'hide-feedback') {
-      animation = undefined;
-    }
-  }
-
   $: _class = cx(
-    '--snippet-button', // TODO: deprecated?
     '--copy-btn',
     animation && '--copy-btn--animating',
     animation && `--copy-btn--${animation}`,
+    animation === 'fade-in' && '--btn--copy__feedback--displayed',
     className
   );
 </script>
 
 <button
-  {...props}
   type="button"
+  tabindex="0"
   aria-label={iconDescription}
   title={iconDescription}
   class={_class}
   on:click
-  on:click={handleClick}
+  on:click={() => {
+    animation = 'fade-in';
+    timeoutId = window.setTimeout(() => {
+      animation = 'fade-out';
+    }, feedbackTimeout);
+  }}
   on:mouseover
   on:mouseenter
   on:mouseleave
   on:animationend
-  on:animationend={handleAnimationEnd}>
+  on:animationend={({ animationName }) => {
+    if (animationName === 'hide-feedback') {
+      animation = undefined;
+    }
+  }}>
   <span class={cx('--assistive-text', '--copy-btn__feedback')}>{feedback}</span>
   <Copy16 class={cx('--snippet__icon')} />
 </button>

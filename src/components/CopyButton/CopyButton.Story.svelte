@@ -4,7 +4,5 @@
 </script>
 
 <Layout>
-  <div style="position: relative;">
-    <CopyButton {...$$props} />
-  </div>
+  <CopyButton {...$$props} />
 </Layout>
