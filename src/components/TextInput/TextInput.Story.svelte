@@ -11,7 +11,6 @@
 </script>
 
 <Layout>
-  {value}
   {#if story === 'skeleton'}
     <div aria-label="loading text input" aria-live="assertive" role="status" tabindex="0">
       <TextInputSkeleton />
