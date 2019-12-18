@@ -17,11 +17,26 @@
 </script>
 
 {#if disabled}
-  <p on:click on:mouseover on:mouseenter on:mouseleave {style} class={_class}>
+  <p
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    {style}
+    aria-current={$$props['aria-current']}
+    class={_class}>
     <slot />
   </p>
 {:else}
-  <a on:click on:mouseover on:mouseenter on:mouseleave {style} class={_class} {href}>
+  <a
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    {style}
+    aria-current={$$props['aria-current']}
+    class={_class}
+    {href}>
     <slot />
   </a>
 {/if}
