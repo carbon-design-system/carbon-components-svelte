@@ -5,6 +5,7 @@ import Checkbox, { CheckboxSkeleton } from './components/Checkbox';
 import Copy from './components/Copy';
 import CopyButton from './components/CopyButton';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
+import DataTableSkeleton from './components/DataTableSkeleton';
 import InlineLoading from './components/InlineLoading';
 import Loading from './components/Loading';
 import Link from './components/Link';
@@ -38,6 +39,7 @@ export {
   CodeSnippetSkeleton,
   Copy,
   CopyButton,
+  DataTableSkeleton,
   InlineLoading,
   Loading,
   Link,
