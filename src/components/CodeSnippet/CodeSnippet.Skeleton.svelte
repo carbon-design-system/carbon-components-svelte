@@ -2,7 +2,7 @@
   let className = undefined;
   export { className as class };
   export let type = 'single';
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
@@ -16,13 +16,13 @@
 </script>
 
 {#if type === 'single'}
-  <div {...props} class={_class}>
+  <div on:click on:mouseover on:mouseenter on:mouseleave {style} class={_class}>
     <div class={cx('--snippet-container')}>
       <span />
     </div>
   </div>
 {:else if type === 'multi'}
-  <div {...props} class={_class}>
+  <div on:click on:mouseover on:mouseenter on:mouseleave {style} class={_class}>
     <div class={cx('--snippet-container')}>
       <span />
       <span />

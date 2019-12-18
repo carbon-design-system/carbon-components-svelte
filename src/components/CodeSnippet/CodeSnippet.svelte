@@ -10,7 +10,6 @@
   export let light = false;
   export let props = {};
 
-  import { onMount } from 'svelte';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
   import { cx } from '../../lib';
   import Button from '../Button';
@@ -20,18 +19,16 @@
   const id = Math.random();
   let codeRef = undefined;
   let expandedCode = false;
-  let shouldShowMoreLessBtn = false;
+  let showMoreLessBtn = false;
 
-  onMount(() => {
-    if (codeRef) {
-      const { height } = codeRef.getBoundingClientRect();
-      shouldShowMoreLessBtn = type === 'multi' && height > 255;
-    }
-  });
-
+  $: if (codeRef) {
+    const { height } = codeRef.getBoundingClientRect();
+    showMoreLessBtn = type === 'multi' && height > 255;
+  }
   $: _class = cx(
     '--snippet',
     type && `--snippet--${type}`,
+    type === 'inline' && '--btn--copy',
     expandedCode && '--snippet--expand',
     light && '--snippet--light',
     className
@@ -64,8 +61,12 @@
         </pre>
       </code>
     </div>
-    <CopyButton on:click {feedback} iconDescription={copyButtonDescription} />
-    {#if shouldShowMoreLessBtn}
+    <CopyButton
+      on:click
+      class={cx('--snippet-button')}
+      {feedback}
+      iconDescription={copyButtonDescription} />
+    {#if showMoreLessBtn}
       <Button
         kind="ghost"
         size="small"
