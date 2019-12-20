@@ -3,7 +3,7 @@
   export { className as class };
   export let open = true;
   export let count = 4;
-  export let props = {};
+  export let style = undefined;
 
   import ChevronRight16 from 'carbon-icons-svelte/lib/ChevronRight16';
   import { cx } from '../../lib';
@@ -13,7 +13,7 @@
   const skeletonItems = Array.from({ length: open ? count - 1 : count });
 </script>
 
-<ul class={_class} {...props}>
+<ul on:click on:mouseover on:mouseenter on:mouseleave {style} class={_class}>
   {#if open}
     <li class={cx('--accordion__item', '--accordion__item--active')}>
       <span class={cx('--accordion__heading')}>

@@ -1,11 +1,11 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 </script>
 
-<ul {...props} class={cx('--accordion', className)}>
+<ul on:click on:mouseover on:mouseenter on:mouseleave {style} class={cx('--accordion', className)}>
   <slot />
 </ul>
