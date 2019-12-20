@@ -1,7 +1,7 @@
 import { withKnobs, select } from '@storybook/addon-knobs';
 import Component from './SkeletonPlaceholder.Story.svelte';
 
-export default { title: 'Skeleton Placeholder', decorators: [withKnobs] };
+export default { title: 'SkeletonPlaceholder', decorators: [withKnobs] };
 
 const classes = {
   'my--skeleton__placeholder--small': 'my--skeleton__placeholder--small',
