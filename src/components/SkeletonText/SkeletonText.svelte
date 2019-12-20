@@ -5,7 +5,7 @@
   export let lineCount = 3;
   export let width = '100%';
   export let heading = false;
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
@@ -14,6 +14,7 @@
   const widthNum = parseInt(width, 10);
   const widthPx = width.includes('px');
   const widthPercent = width.includes('%');
+
   let lines = [];
 
   $: if (paragraph) {
@@ -27,11 +28,18 @@
 </script>
 
 {#if paragraph}
-  <div>
+  <div on:click on:mouseover on:mouseenter on:mouseleave {style}>
     {#each lines as { width }}
-      <p {...props} class={_class} style={`width: ${width};`} />
+      <p class={_class} style={`width: ${width};`} />
     {/each}
   </div>
 {:else}
-  <p {...props} class={_class} style={`width: ${width};`} />
+  <p
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    {style}
+    class={_class}
+    style={`width: ${width};`} />
 {/if}
