@@ -9,7 +9,8 @@
   import ChevronRight16 from 'carbon-icons-svelte/lib/ChevronRight16';
   import { cx } from '../../lib';
 
-  $: animation = open ? 'expanding' : 'collapsing';
+  let animation = undefined;
+
   $: _class = cx(
     '--accordion__item',
     open && '--accordion__item--active',
@@ -33,6 +34,7 @@
     on:click
     on:click={() => {
       open = !open;
+      animation = open ? 'expanding' : 'collapsing';
     }}
     on:mouseover
     on:mouseenter
