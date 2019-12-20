@@ -1,5 +1,4 @@
 <script>
-  // TODO: emit current selected tile
   let className = undefined;
   export { className as class };
   export let selected = false;
@@ -12,9 +11,15 @@
   export let light = false;
   export let style = undefined;
 
+  import { createEventDispatcher } from 'svelte';
   import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
   import { cx } from '../../lib';
 
+  const dispatch = createEventDispatcher();
+
+  $: if (selected) {
+    dispatch('select', id);
+  }
   $: _class = cx(
     '--tile',
     '--tile--selectable',
