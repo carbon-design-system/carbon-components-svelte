@@ -5,27 +5,9 @@
   export let rel = undefined;
   export let light = false;
   export let clicked = false;
-  export let props = {};
+  export let style = undefined;
 
-  import { createEventDispatcher, tick } from 'svelte';
   import { cx } from '../../lib';
-
-  const dispatch = createEventDispatcher();
-
-  async function handleClick(event) {
-    clicked = !clicked;
-    await tick();
-    dispatch('click', event);
-  }
-
-  async function handleKeyDown(event) {
-    if (event.key === ' ' || event.key === 'Enter') {
-      clicked = !clicked;
-      await tick();
-    }
-
-    dispatch('keydown', event);
-  }
 
   $: _class = cx(
     '--link',
@@ -37,6 +19,23 @@
   );
 </script>
 
-<a {...props} class={_class} on:click={handleClick} on:keydown={handleKeyDown} {href} {rel}>
+<a
+  class={_class}
+  on:click
+  on:click={() => {
+    clicked = !clicked;
+  }}
+  on:keydown
+  on:keydown={event => {
+    if (event.key === ' ' || event.key === 'Enter') {
+      clicked = !clicked;
+    }
+  }}
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  {style}
+  {href}
+  {rel}>
   <slot />
 </a>

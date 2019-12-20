@@ -7,9 +7,9 @@
   export let name = '';
   export let iconDescription = 'Tile checkmark';
   export let value = '';
-  export let tabIndex = 0;
+  export let tabindex = '0';
   export let light = false;
-  export let props = {};
+  export let style = undefined;
 
   import { createEventDispatcher } from 'svelte';
   import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
@@ -40,7 +40,6 @@
 </script>
 
 <input
-  {...props}
   type="radio"
   class={cx('--tile-input')}
   on:change
@@ -49,7 +48,17 @@
   {name}
   {value}
   {checked} />
-<label for={id} class={_class} tabindex={tabIndex} on:keydown={handleKeyDown}>
+<label
+  for={id}
+  class={_class}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  on:keydown
+  on:keydown={handleKeyDown}
+  {tabindex}
+  {style}>
   <span class={cx('--tile__checkmark')}>
     <CheckmarkFilled16 aria-label={iconDescription} title={iconDescription} />
   </span>

@@ -7,9 +7,9 @@
   export let tileExpandedIconText = 'Interact to collapse Tile';
   export let tileMaxHeight = 0;
   export let tilePadding = 0;
-  export let tabIndex = 0;
+  export let tabindex = '0';
   export let light = false;
-  export let props = {};
+  export let style = undefined;
 
   import { createEventDispatcher, tick, onMount } from 'svelte';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
@@ -63,14 +63,19 @@
 </script>
 
 <div
-  {...props}
   bind:this={tile}
   style={tileStyle}
   class={_class}
+  on:click
   on:click={handleClick}
+  on:keypress
   on:keypress={handleKeyPress}
-  tabindex={tabIndex}
-  {id}>
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  {tabindex}
+  {id}
+  {style}>
   <div bind:this={tileContent}>
     <div bind:this={aboveTheFold} class={cx('--tile-content')}>
       <slot name="above" />

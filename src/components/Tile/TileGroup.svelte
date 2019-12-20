@@ -3,13 +3,14 @@
   export { className as class };
   export let disabled = false;
   export let legend = '';
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
-  $: _class = cx('--tile-group', className);
+  const _class = cx('--tile-group', className);
 </script>
 
-<fieldset class={_class} {disabled}>
+<fieldset class={_class} {disabled} {style}>
   {#if legend}
     <legend>{legend}</legend>
   {/if}

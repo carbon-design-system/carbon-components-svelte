@@ -2,13 +2,13 @@
   let className = undefined;
   export { className as class };
   export let light = false;
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
-  $: _class = cx('--tile', light && '--tile--light', className);
+  const _class = cx('--tile', light && '--tile--light', className);
 </script>
 
-<div class={_class} {...props}>
+<div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
   <slot />
 </div>
