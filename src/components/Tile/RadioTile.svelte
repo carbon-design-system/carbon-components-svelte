@@ -1,5 +1,4 @@
 <script>
-  // TODO: compose as "children" components
   let className = undefined;
   export { className as class };
   export let checked = false;
@@ -11,25 +10,15 @@
   export let light = false;
   export let style = undefined;
 
-  import { createEventDispatcher } from 'svelte';
+  import { getContext } from 'svelte';
   import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
   import { cx } from '../../lib';
 
-  const dispatch = createEventDispatcher();
+  const { addTile, updateSelected, selected } = getContext('TileGroup');
 
-  function handleChange(event) {
-    dispatch('change', event);
-  }
+  addTile({ id, value, checked });
 
-  function handleKeyDown(event) {
-    if (event.key === ' ' || event.key === 'Enter') {
-      event.preventDefault();
-      handleChange(event);
-    }
-
-    dispatch('keydown', event);
-  }
-
+  $: checked = value === $selected.value;
   $: _class = cx(
     '--tile',
     '--tile--selectable',
@@ -43,7 +32,9 @@
   type="radio"
   class={cx('--tile-input')}
   on:change
-  on:change={handleChange}
+  on:change={() => {
+    updateSelected({ id, value });
+  }}
   {id}
   {name}
   {value}
@@ -56,7 +47,12 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={handleKeyDown}
+  on:keydown={event => {
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      updateSelected({ id, value });
+    }
+  }}
   {tabindex}
   {style}>
   <span class={cx('--tile__checkmark')}>
