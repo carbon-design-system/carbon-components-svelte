@@ -1,6 +1,4 @@
 <script>
-  // NOTE: no 'renderExpando'; use 'expando' named slot
-  // TODO: change 'expando' to something more intuitive?
   let className = undefined;
   export { className as class };
   export let title = undefined;
@@ -10,8 +8,6 @@
 
   import ChevronRight16 from 'carbon-icons-svelte/lib/ChevronRight16';
   import { cx } from '../../lib';
-
-  let animation = undefined;
 
   $: animation = open ? 'expanding' : 'collapsing';
   $: _class = cx(
