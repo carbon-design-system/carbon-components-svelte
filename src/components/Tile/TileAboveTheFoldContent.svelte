@@ -1,7 +1,14 @@
 <script>
   import { cx } from '../../lib';
+  export let style = undefined;
 </script>
 
-<span class={cx('--tile-content__above-the-fold')}>
+<span
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={cx('--tile-content__above-the-fold')}
+  {style}>
   <slot />
 </span>

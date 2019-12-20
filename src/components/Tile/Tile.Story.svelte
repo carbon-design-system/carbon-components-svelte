@@ -17,7 +17,7 @@
     { value: 'selected', id: 'tile-3', labelText: 'Selectable Tile' }
   ];
 
-  let selected = radioTiles[1].value;
+  let defaultSelected = radioTiles[1];
 </script>
 
 <Layout>
@@ -28,24 +28,14 @@
       <ClickableTile {...$$props}>Clickable Tile</ClickableTile>
     {:else if story === 'multi-select'}
       <div role="group" aria-label="selectable tiles">
-        <SelectableTile id="tile-1" name="tiles" {...$$props}>Multi-select Tile</SelectableTile>
-        <SelectableTile id="tile-2" name="tiles" {...$$props}>Multi-select Tile</SelectableTile>
-        <SelectableTile id="tile-3" name="tiles" {...$$props}>Multi-select Tile</SelectableTile>
+        <SelectableTile {...$$props} id="tile-1" name="tiles">Multi-select Tile</SelectableTile>
+        <SelectableTile {...$$props} id="tile-2" name="tiles">Multi-select Tile</SelectableTile>
+        <SelectableTile {...$$props} id="tile-3" name="tiles">Multi-select Tile</SelectableTile>
       </div>
     {:else if story === 'selectable'}
-      <TileGroup legend="Selectable Tile Group">
+      <TileGroup legend="Selectable Tile Group" bind:defaultSelected>
         {#each radioTiles as { value, id, labelText }, i (id)}
-          <RadioTile
-            {...$$props}
-            checked={selected === value}
-            on:change={() => {
-              selected = value;
-            }}
-            {value}
-            {id}
-            {labelText}>
-            Selectable Tile
-          </RadioTile>
+          <RadioTile {...$$props} {value} {id} {labelText}>Selectable Tile</RadioTile>
         {/each}
       </TileGroup>
     {:else if story === 'expandable'}

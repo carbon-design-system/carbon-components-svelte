@@ -43,6 +43,16 @@ Currently, the following components are supported:
 - TextInput
   - TextInputSkeleton
   - PasswordInput
+- Tile
+  - ClickableTile
+  - SelectableTile
+  - ExpandableTile
+    - TileAboveTheFoldContent
+    - TileBelowTheFoldContent
+  - RadioTile
+  - Tile
+  - TileGroup
+    - RadioTile
 - Toggle
   - ToggleSkeleton
 - ToggleSmall
