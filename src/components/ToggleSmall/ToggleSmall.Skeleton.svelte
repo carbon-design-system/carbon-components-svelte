@@ -3,7 +3,7 @@
   export { className as class };
   export let id = undefined;
   export let labelText = undefined;
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
@@ -11,7 +11,7 @@
   const ariaLabel = labelText ? undefined : $$props['aria-label'] || 'Toggle is loading';
 </script>
 
-<div {...props} class={_class}>
+<div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
   <input type="checkbox" class={cx('--toggle', '--toggle--small', '--skeleton')} {id} />
   <label class={cx('--toggle__label --skeleton')} for={id}>
     {#if labelText}
