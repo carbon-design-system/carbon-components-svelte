@@ -20,6 +20,10 @@ import {
   NotificationTextDetails
 } from './components/Notification';
 import OrderedList from './components/OrderedList';
+import ProgressIndicator, {
+  ProgressIndicatorSkeleton,
+  ProgressStep
+} from './components/ProgressIndicator';
 import RadioButton, { RadioButtonSkeleton } from './components/RadioButton';
 import Search, { SearchSkeleton } from './components/Search';
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
@@ -71,6 +75,9 @@ export {
   NotificationTextDetails,
   OrderedList,
   PasswordInput,
+  ProgressIndicator,
+  ProgressIndicatorSkeleton,
+  ProgressStep,
   RadioButton,
   RadioButtonSkeleton,
   Search,
