@@ -34,7 +34,7 @@
     "@testing-library/svelte": "^1.11.0",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
-    "carbon-components": "10.9.0-rc.1",
+    "carbon-components": "10.9.0",
     "eslint": "^6.7.2",
     "eslint-plugin-svelte3": "^2.7.3",
     "husky": "^3.1.0",
