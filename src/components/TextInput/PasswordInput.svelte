@@ -16,17 +16,14 @@
   export let tooltipAlignment = 'center';
   export let hidePasswordLabel = 'Hide password';
   export let showPasswordLabel = 'Show password';
-  export let props = {};
+  export let style = undefined;
 
-  import { createEventDispatcher } from 'svelte';
   import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';
   import View16 from 'carbon-icons-svelte/lib/View16';
   import ViewOff16 from 'carbon-icons-svelte/lib/ViewOff16';
   import { cx } from '../../lib';
 
-  const dispatch = createEventDispatcher();
   const errorId = `${id}-error`;
-  const passwordIsVisible = type === 'text';
   const _labelClass = cx(
     '--label',
     hideLabel && '--visually-hidden',
@@ -48,13 +45,14 @@
     tooltipPosition && `--tooltip--${tooltipPosition}`,
     tooltipAlignment && `--tooltip--align-${tooltipAlignment}`
   );
+
+  $: passwordIsVisible = type === 'text';
 </script>
 
-<div class={cx('--form-item', '--text-input-wrapper', '--password-input-wrapper')}>
+<div class={cx('--form-item', '--text-input-wrapper', '--password-input-wrapper')} {style}>
   {#if labelText}
     <label for={id} class={_labelClass}>{labelText}</label>
   {/if}
-
   {#if helperText}
     <div class={_helperTextClass}>{helperText}</div>
   {/if}
@@ -63,23 +61,12 @@
       <WarningFilled16 class={cx('--text-input__invalid-icon')} />
     {/if}
     <input
-      {...props}
       class={_textInputClass}
-      on:click={event => {
-        if (!disabled) {
-          dispatch('click', event);
-        }
-      }}
-      on:change={event => {
-        if (!disabled) {
-          dispatch('change', event);
-        }
-      }}
+      on:click
+      on:change
+      on:input
       on:input={event => {
         value = event.target.value;
-        if (!disabled) {
-          dispatch('input', event);
-        }
       }}
       data-invalid={invalid || undefined}
       aria-invalid={invalid || undefined}
