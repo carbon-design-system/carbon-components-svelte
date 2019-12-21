@@ -39,6 +39,9 @@ Currently, the following components are supported:
   - NotificationIcon
   - NotificationTextDetails
 - OrderedList
+- ProgressIndicator
+  - ProgressIndicatorSkeleton
+  - ProgressStep
 - RadioButton
   - RadioButtonSkeleton
 - Search
