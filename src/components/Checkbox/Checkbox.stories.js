@@ -26,7 +26,4 @@ export const Unchecked = () => ({
   }
 });
 
-export const Skeleton = () => ({
-  Component,
-  props: { story: 'skeleton' }
-});
+export const Skeleton = () => ({ Component, props: { story: 'skeleton' } });

@@ -4,13 +4,13 @@
   export let checked = false;
   export let indeterminate = false;
   export let disabled = false;
-  export let id = undefined;
+  export let id = Math.random();
   export let labelText = undefined;
   export let hideLabel = false;
   export let title = '';
   export let wrapperClassName = undefined;
   export { wrapperClassName as wrapperClass };
-  export let props = {};
+  export let style = undefined;
 
   import { createEventDispatcher } from 'svelte';
   import { cx } from '../../lib';
@@ -20,17 +20,26 @@
   const _innerLabelClass = cx('--checkbox-label-text', hideLabel && '--visually-hidden');
   const _wrapperClass = cx('--form-item', '--checkbox-wrapper', wrapperClassName);
 
-  function handleChange(event) {
-    dispatch('change', { checked: event.target.checked, id, event });
+  let inputRef = undefined;
+
+  $: {
+    dispatch('check', { id, checked });
+
+    if (inputRef) {
+      inputRef.checked = checked;
+    }
   }
 </script>
 
-<div class={_wrapperClass}>
+<div on:click on:mouseover on:mouseenter on:mouseleave class={_wrapperClass} {style}>
   <input
-    {...props}
+    bind:this={inputRef}
     type="checkbox"
     class={cx('--checkbox')}
-    on:change={handleChange}
+    on:change
+    on:change={() => {
+      checked = !checked;
+    }}
     {indeterminate}
     {disabled}
     {checked}
