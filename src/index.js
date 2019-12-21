@@ -8,9 +8,17 @@ import CopyButton from './components/CopyButton';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
 import DataTableSkeleton from './components/DataTableSkeleton';
 import InlineLoading from './components/InlineLoading';
-import Loading from './components/Loading';
 import Link from './components/Link';
 import ListItem from './components/ListItem';
+import Loading from './components/Loading';
+import {
+  ToastNotification,
+  InlineNotification,
+  NotificationActionButton,
+  NotificationButton,
+  NotificationIcon,
+  NotificationTextDetails
+} from './components/Notification';
 import OrderedList from './components/OrderedList';
 import RadioButton, { RadioButtonSkeleton } from './components/RadioButton';
 import Search, { SearchSkeleton } from './components/Search';
@@ -53,9 +61,14 @@ export {
   DataTableSkeleton,
   ExpandableTile,
   InlineLoading,
+  InlineNotification,
   Link,
   ListItem,
   Loading,
+  NotificationActionButton,
+  NotificationButton,
+  NotificationIcon,
+  NotificationTextDetails,
   OrderedList,
   PasswordInput,
   RadioButton,
@@ -76,6 +89,7 @@ export {
   TileAboveTheFoldContent,
   TileBelowTheFoldContent,
   TileGroup,
+  ToastNotification,
   Toggle,
   ToggleSkeleton,
   ToggleSmall,
