@@ -2,6 +2,7 @@ import Accordion, { AccordionItem, AccordionSkeleton } from './components/Accord
 import Breadcrumb, { BreadcrumbItem, BreadcrumbSkeleton } from './components/Breadcrumb';
 import Button, { ButtonSkeleton } from './components/Button';
 import Checkbox, { CheckboxSkeleton } from './components/Checkbox';
+import ContentSwitcher, { Switch } from './components/ContentSwitcher';
 import Copy from './components/Copy';
 import CopyButton from './components/CopyButton';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
@@ -46,6 +47,7 @@ export {
   ClickableTile,
   CodeSnippet,
   CodeSnippetSkeleton,
+  ContentSwitcher,
   Copy,
   CopyButton,
   DataTableSkeleton,
@@ -63,6 +65,7 @@ export {
   SelectableTile,
   SkeletonPlaceholder,
   SkeletonText,
+  Switch,
   Tag,
   TagSkeleton,
   TextArea,
