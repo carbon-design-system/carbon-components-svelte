@@ -3268,10 +3268,10 @@ capture-exit@^2.0.0:
   dependencies:
     rsvp "^4.8.4"
 
-carbon-components@10.9.0-rc.1:
-  version "10.9.0-rc.1"
-  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.9.0-rc.1.tgz#d801a12ae1053c078d4f3e33169a71c914ae8408"
-  integrity sha512-JCJqKaEfttHW0Wr12JRdhRMtAg8f8Pn/ryxVQp/FAY1Z4iNNEFFS6ShVavOJMrEE28ojT7QPEhl8ruZ3THHoJg==
+carbon-components@10.9.0:
+  version "10.9.0"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.9.0.tgz#b96f097582301b009232ebc54927327ee3608a84"
+  integrity sha512-r0fHHGV1nAGazL42ecsFSBHlrRlg/2d1XAvnlnRzOvZW8O+DFR4XxpAgf5ZWKFCiiysS5eDympZTqTflN/NewQ==
   dependencies:
     carbon-icons "^7.0.7"
     flatpickr "4.6.1"
