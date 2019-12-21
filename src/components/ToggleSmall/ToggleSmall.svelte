@@ -7,7 +7,7 @@
   export let labelText = undefined;
   export let labelA = 'Off';
   export let labelB = 'On';
-  export let props = {};
+  export let style = undefined;
 
   import { createEventDispatcher } from 'svelte';
   import { cx } from '../../lib';
@@ -15,37 +15,37 @@
   const dispatch = createEventDispatcher();
   const _class = cx('--form-item', className);
   const ariaLabel = labelText ? undefined : $$props['aria-label'] || 'Toggle';
+
   let inputRef = undefined;
 
-  function handleChange(event) {
-    dispatch('change', event);
-    dispatch('toggle', { checked: inputRef.checked, id, event });
-  }
+  $: {
+    dispatch('toggle', { id, toggled });
 
-  function handleKeyUp(event) {
-    if (event.key === 'Enter') {
-      if (inputRef) {
-        inputRef.checked = !inputRef.checked;
-      }
-
-      handleChange(event);
+    if (inputRef) {
+      inputRef.checked = toggled;
     }
   }
 </script>
 
-<div class={_class}>
+<div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
   <input
-    {...props}
+    bind:this={inputRef}
     type="checkbox"
     class={cx('--toggle-input', '--toggle-input--small')}
-    bind:this={inputRef}
     checked={toggled}
-    {disabled}
-    {id}
     on:change
-    on:change={handleChange}
+    on:change={() => {
+      toggled = !toggled;
+    }}
     on:keyup
-    on:keyup={handleKeyUp} />
+    on:keyup={event => {
+      if (event.key === ' ' || event.key === 'Enter') {
+        event.preventDefault();
+        toggled = !toggled;
+      }
+    }}
+    {disabled}
+    {id} />
 
   <label class={cx('--toggle-input__label')} for={id} aria-label={ariaLabel}>
     {labelText}
