@@ -28,9 +28,16 @@ Currently, the following components are supported:
 - CopyButton
 - DataTableSkeleton
 - InlineLoading
-- Loading
 - Link
 - ListItem
+- Loading
+- Notification
+  - ToastNotification
+  - InlineNotification
+  - NotificationActionButton
+  - NotificationButton
+  - NotificationIcon
+  - NotificationTextDetails
 - OrderedList
 - RadioButton
   - RadioButtonSkeleton
