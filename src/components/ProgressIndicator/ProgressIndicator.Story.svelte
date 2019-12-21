@@ -32,14 +32,10 @@
         <ProgressStep
           label="Second step with tooltip"
           description="Step 2: Getting started with Carbon Design System"
-          secondaryLabel="Optional label">
-          Label
-        </ProgressStep>
+          secondaryLabel="Optional label" />
         <ProgressStep
           label="Third step with tooltip"
-          description="Step 3: Getting started with Carbon Design System">
-          Label
-        </ProgressStep>
+          description="Step 3: Getting started with Carbon Design System" />
         <ProgressStep
           label="Fourth step"
           description="Step 4: Getting started with Carbon Design System"
