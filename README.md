@@ -22,6 +22,8 @@ Currently, the following components are supported:
   - CheckboxSkeleton
 - CodeSnippet
   - CodeSnippetSkeleton
+- ContentSwitcher
+  - Switch
 - Copy
 - CopyButton
 - DataTableSkeleton
