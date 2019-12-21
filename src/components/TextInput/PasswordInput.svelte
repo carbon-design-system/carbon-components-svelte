@@ -26,7 +26,6 @@
 
   const dispatch = createEventDispatcher();
   const errorId = `${id}-error`;
-  const passwordIsVisible = type === 'text';
   const _labelClass = cx(
     '--label',
     hideLabel && '--visually-hidden',
@@ -48,6 +47,7 @@
     tooltipPosition && `--tooltip--${tooltipPosition}`,
     tooltipAlignment && `--tooltip--align-${tooltipAlignment}`
   );
+  $: passwordIsVisible = type === 'text';
 </script>
 
 <div class={cx('--form-item', '--text-input-wrapper', '--password-input-wrapper')}>
