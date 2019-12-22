@@ -13,7 +13,7 @@
   export let helperText = '';
   export let hideLabel = false;
   export let light = false;
-  export let props = {};
+  export let style = undefined;
 
   import { createEventDispatcher } from 'svelte';
   import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';
@@ -35,7 +35,7 @@
   );
 </script>
 
-<div class={cx('--form-item')}>
+<div on:mouseover on:mouseenter on:mouseleave class={cx('--form-item')} {style}>
   {#if labelText && !hideLabel}
     <label for={id} class={_labelClass}>{labelText}</label>
   {/if}
@@ -47,7 +47,6 @@
       <WarningFilled16 class={cx('--text-area__invalid-icon')} />
     {/if}
     <textarea
-      {...props}
       on:click={event => {
         if (!disabled) {
           dispatch('click', event);

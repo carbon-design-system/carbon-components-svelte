@@ -20,12 +20,12 @@
 </script>
 
 <li
-  {style}
   class={_class}
   on:animationend
   on:animationend={() => {
     animation = undefined;
-  }}>
+  }}
+  {style}>
   <button
     type="button"
     class={cx('--accordion__heading')}

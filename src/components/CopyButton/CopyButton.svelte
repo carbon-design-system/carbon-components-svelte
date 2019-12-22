@@ -4,6 +4,7 @@
   export let iconDescription = 'Copy to clipboard';
   export let feedback = 'Copied!';
   export let feedbackTimeout = 2000;
+  export let style = undefined;
 
   import { onDestroy } from 'svelte';
   import Copy16 from 'carbon-icons-svelte/lib/Copy16';
@@ -49,7 +50,8 @@
     if (animationName === 'hide-feedback') {
       animation = undefined;
     }
-  }}>
+  }}
+  {style}>
   <span class={cx('--assistive-text', '--copy-btn__feedback')}>{feedback}</span>
   <Copy16 class={cx('--snippet__icon')} />
 </button>

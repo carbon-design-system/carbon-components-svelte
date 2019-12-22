@@ -8,6 +8,6 @@
   const _class = cx('--form', className);
 </script>
 
-<form class={_class} {style}>
+<form on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
   <slot />
 </form>

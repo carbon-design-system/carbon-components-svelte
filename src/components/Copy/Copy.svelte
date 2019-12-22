@@ -3,6 +3,7 @@
   export { className as class };
   export let feedback = 'Copied!';
   export let feedbackTimeout = 2000;
+  export let style = undefined;
 
   import { onDestroy } from 'svelte';
   import { cx } from '../../lib';
@@ -32,7 +33,8 @@
   }}
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+  {style}>
   <slot />
   <div class={_class} data-feedback={feedback} />
 </button>

@@ -14,7 +14,7 @@
   export let hasIconOnly = false;
   export let tooltipPosition = undefined;
   export let tooltipAlignment = undefined;
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
@@ -37,13 +37,13 @@
     className
   );
   const buttonProps = {
-    ...props,
+    role: 'button',
+    type: href && !disabled ? undefined : type,
     tabindex,
     class: _class,
     disabled,
-    type: href && !disabled ? undefined : type,
-    role: 'button',
-    href
+    href,
+    style
   };
 </script>
 

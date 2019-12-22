@@ -27,7 +27,6 @@
       </div>
     </li>
   {/if}
-
   {#each skeletonItems as item}
     <li class={cx('--accordion__item')}>
       <span class={cx('--accordion__heading')}>

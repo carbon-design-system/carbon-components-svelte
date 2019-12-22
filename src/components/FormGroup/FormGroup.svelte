@@ -13,7 +13,14 @@
   const _legendClass = cx('--label', className);
 </script>
 
-<fieldset data-invalid={invalid ? '' : undefined} class={_class} {style}>
+<fieldset
+  data-invalid={invalid ? '' : undefined}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={_class}
+  {style}>
   <legend class={_legendClass}>{legendText}</legend>
   <slot />
   {#if message}

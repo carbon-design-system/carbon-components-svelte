@@ -3,7 +3,7 @@
   export { className as class };
   export let small = false;
   export let href = undefined;
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
@@ -11,7 +11,9 @@
 </script>
 
 {#if href}
-  <a {...props} class={_class} {href} role="button">{''}</a>
+  <a role="button" on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style} {href}>
+    {''}
+  </a>
 {:else}
-  <div {...props} class={_class} />
+  <div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style} />
 {/if}

@@ -1,8 +1,7 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let success = false; // TODO: deprecate
-  export let status = success ? 'finished' : 'active';
+  export let status = 'active';
   export let description = undefined;
   export let iconDescription = undefined;
   export let successDelay = 1500;
@@ -33,13 +32,13 @@
 </script>
 
 <div
+  aria-live={$$props['aria-live'] || 'assertive'}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
-  {style}
   class={_class}
-  aria-live={$$props['aria-live'] || 'assertive'}>
+  {style}>
   <div class={cx('--inline-loading__animation')}>
     {#if status === 'error'}
       <Error20 class={cx('--inline-loading--error')} />

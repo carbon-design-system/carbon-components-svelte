@@ -18,24 +18,24 @@
 
 {#if disabled}
   <p
+    aria-current={$$props['aria-current']}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
-    {style}
-    aria-current={$$props['aria-current']}
-    class={_class}>
+    class={_class}
+    {style}>
     <slot />
   </p>
 {:else}
   <a
+    aria-current={$$props['aria-current']}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
-    {style}
-    aria-current={$$props['aria-current']}
     class={_class}
+    {style}
     {href}>
     <slot />
   </a>

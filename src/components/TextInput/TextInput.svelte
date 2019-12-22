@@ -47,6 +47,7 @@
       class={_textInputClass}
       on:click
       on:change
+      on:input
       on:input={event => {
         value = event.target.value;
       }}
