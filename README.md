@@ -27,6 +27,10 @@ Currently, the following components are supported:
 - Copy
 - CopyButton
 - DataTableSkeleton
+- Form
+- FormGroup
+- FormItem
+- FormLabel
 - InlineLoading
 - Link
 - ListItem

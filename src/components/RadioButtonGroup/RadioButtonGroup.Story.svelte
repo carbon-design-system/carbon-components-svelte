@@ -2,7 +2,7 @@
   import Layout from '../../internal/ui/Layout.svelte';
   import RadioButtonGroup from './RadioButtonGroup.svelte';
   import RadioButton from '../RadioButton';
-  import { FormGroup } from '../Form';
+  import FormGroup from '../FormGroup';
 </script>
 
 <Layout>

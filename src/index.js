@@ -7,6 +7,10 @@ import Copy from './components/Copy';
 import CopyButton from './components/CopyButton';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
 import DataTableSkeleton from './components/DataTableSkeleton';
+import Form from './components/Form';
+import FormGroup from './components/FormGroup';
+import FormItem from './components/FormItem';
+import FormLabel from './components/FormLabel';
 import InlineLoading from './components/InlineLoading';
 import Link from './components/Link';
 import ListItem from './components/ListItem';
@@ -75,6 +79,10 @@ export {
   Copy,
   CopyButton,
   DataTableSkeleton,
+  Form,
+  FormGroup,
+  FormItem,
+  FormLabel,
   ExpandableTile,
   InlineLoading,
   InlineNotification,
