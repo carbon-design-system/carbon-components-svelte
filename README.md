@@ -47,6 +47,10 @@ Currently, the following components are supported:
 - RadioButtonGroup
 - Search
   - SearchSkeleton
+- Select
+  - SelectSkeleton
+  - SelectItem
+  - SelectItemGroup
 - SkeletonPlaceholder
 - SkeletonText
 - Tag

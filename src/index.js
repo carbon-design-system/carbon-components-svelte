@@ -27,6 +27,7 @@ import ProgressIndicator, {
 import RadioButton, { RadioButtonSkeleton } from './components/RadioButton';
 import RadioButtonGroup from './components/RadioButtonGroup';
 import Search, { SearchSkeleton } from './components/Search';
+import Select, { SelectSkeleton, SelectItem, SelectItemGroup } from './components/Select';
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
 import Tag, { TagSkeleton } from './components/Tag';
@@ -85,6 +86,10 @@ export {
   Search,
   SearchSkeleton,
   SelectableTile,
+  Select,
+  SelectSkeleton,
+  SelectItem,
+  SelectItemGroup,
   SkeletonPlaceholder,
   SkeletonText,
   Switch,
