@@ -1,6 +1,3 @@
-import StructuredList from './StructuredList.svelte';
-
-export default StructuredList;
 export { default as StructuredListSkeleton } from './StructuredList.Skeleton.svelte';
 export { default as StructuredListBody } from './StructuredListBody.svelte';
 export { default as StructuredListHead } from './StructuredListHead.svelte';
