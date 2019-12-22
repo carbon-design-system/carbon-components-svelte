@@ -38,6 +38,10 @@ Currently, the following components are supported:
   - SearchSkeleton
 - SkeletonPlaceholder
 - SkeletonText
+- Tabs
+  - Tab
+  - TabContent
+  - TabsSkeleton
 - Tag
   - TagSkeleton
 - TextArea

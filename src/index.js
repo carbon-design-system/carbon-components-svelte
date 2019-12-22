@@ -16,6 +16,7 @@ import RadioButton, { RadioButtonSkeleton } from './components/RadioButton';
 import Search, { SearchSkeleton } from './components/Search';
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
+import Tabs, { Tab, TabContent, TabsSkeleton } from './components/Tabs';
 import Tag, { TagSkeleton } from './components/Tag';
 import TextArea, { TextAreaSkeleton } from './components/TextArea';
 import TextInput, { TextInputSkeleton, PasswordInput } from './components/TextInput';
@@ -66,6 +67,10 @@ export {
   SkeletonPlaceholder,
   SkeletonText,
   Switch,
+  Tabs,
+  Tab,
+  TabContent,
+  TabsSkeleton,
   Tag,
   TagSkeleton,
   TextArea,
