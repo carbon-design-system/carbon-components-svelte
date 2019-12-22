@@ -30,6 +30,15 @@ import Search, { SearchSkeleton } from './components/Search';
 import Select, { SelectSkeleton, SelectItem, SelectItemGroup } from './components/Select';
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
+import StructuredList, {
+  StructuredListSkeleton,
+  StructuredListBody,
+  StructuredListHead,
+  StructuredListCell,
+  StructuredListRow,
+  StructuredListInput,
+  StructuredListWrapper
+} from './components/StructuredList';
 import Tag, { TagSkeleton } from './components/Tag';
 import TextArea, { TextAreaSkeleton } from './components/TextArea';
 import TextInput, { TextInputSkeleton, PasswordInput } from './components/TextInput';
@@ -93,6 +102,14 @@ export {
   SkeletonPlaceholder,
   SkeletonText,
   Switch,
+  StructuredList,
+  StructuredListSkeleton,
+  StructuredListBody,
+  StructuredListHead,
+  StructuredListCell,
+  StructuredListRow,
+  StructuredListInput,
+  StructuredListWrapper,
   Tag,
   TagSkeleton,
   TextArea,

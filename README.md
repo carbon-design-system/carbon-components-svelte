@@ -53,6 +53,14 @@ Currently, the following components are supported:
   - SelectItemGroup
 - SkeletonPlaceholder
 - SkeletonText
+- StructuredList
+  - StructuredListSkeleton
+  - StructuredListBody
+  - StructuredListHead
+  - StructuredListCell
+  - StructuredListRow
+  - StructuredListInput
+  - StructuredListWrapper
 - Tag
   - TagSkeleton
 - TextArea
