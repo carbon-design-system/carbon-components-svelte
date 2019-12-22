@@ -44,8 +44,13 @@ Currently, the following components are supported:
   - ProgressStep
 - RadioButton
   - RadioButtonSkeleton
+- RadioButtonGroup
 - Search
   - SearchSkeleton
+- Select
+  - SelectSkeleton
+  - SelectItem
+  - SelectItemGroup
 - SkeletonPlaceholder
 - SkeletonText
 - Tag
