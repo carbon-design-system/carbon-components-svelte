@@ -30,7 +30,7 @@ import Search, { SearchSkeleton } from './components/Search';
 import Select, { SelectSkeleton, SelectItem, SelectItemGroup } from './components/Select';
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
-import StructuredList, {
+import {
   StructuredListSkeleton,
   StructuredListBody,
   StructuredListHead,
@@ -102,7 +102,6 @@ export {
   SkeletonPlaceholder,
   SkeletonText,
   Switch,
-  StructuredList,
   StructuredListSkeleton,
   StructuredListBody,
   StructuredListHead,
