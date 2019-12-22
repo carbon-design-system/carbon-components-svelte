@@ -39,6 +39,7 @@ import {
   StructuredListInput,
   StructuredListWrapper
 } from './components/StructuredList';
+import Tabs, { Tab, TabContent, TabsSkeleton } from './components/Tabs';
 import Tag, { TagSkeleton } from './components/Tag';
 import TextArea, { TextAreaSkeleton } from './components/TextArea';
 import TextInput, { TextInputSkeleton, PasswordInput } from './components/TextInput';
@@ -109,6 +110,10 @@ export {
   StructuredListRow,
   StructuredListInput,
   StructuredListWrapper,
+  Tabs,
+  Tab,
+  TabContent,
+  TabsSkeleton,
   Tag,
   TagSkeleton,
   TextArea,

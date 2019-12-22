@@ -61,6 +61,10 @@ Currently, the following components are supported:
   - StructuredListRow
   - StructuredListInput
   - StructuredListWrapper
+- Tabs
+  - Tab
+  - TabContent
+  - TabsSkeleton
 - Tag
   - TagSkeleton
 - TextArea
