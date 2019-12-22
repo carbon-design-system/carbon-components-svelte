@@ -39,7 +39,7 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
-    {style}
     class={_class}
-    style={`width: ${width};`} />
+    style={`width: ${width};`}
+    {style} />
 {/if}

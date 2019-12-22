@@ -36,16 +36,9 @@
   $: disabled = isSubmitting || success;
 </script>
 
-<style>
-  .wrapper {
-    display: flex;
-    width: 300px;
-  }
-</style>
-
 <Layout>
   {#if story === 'ux-example'}
-    <div class="wrapper">
+    <div style="display: flex; width: 300px">
       <Button kind="secondary" {disabled}>Cancel</Button>
       {#if disabled}
         <InlineLoading

@@ -8,6 +8,6 @@
   const _class = cx('--form-item', className);
 </script>
 
-<div class={_class} {style}>
+<div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
   <slot />
 </div>

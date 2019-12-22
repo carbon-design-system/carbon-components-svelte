@@ -9,6 +9,6 @@
   const _class = cx('--form-item', className);
 </script>
 
-<label for={id} class={_class} {style}>
+<label on:click on:mouseover on:mouseenter on:mouseleave for={id} class={_class} {style}>
   <slot />
 </label>

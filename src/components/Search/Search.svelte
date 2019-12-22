@@ -10,7 +10,7 @@
   export let size = small ? 'sm' : 'xl';
   export let light = false;
   export let id = Math.random();
-  export let props = {};
+  export let style = undefined;
 
   import { createEventDispatcher } from 'svelte';
   import Search16 from 'carbon-icons-svelte/lib/Search16';
@@ -33,27 +33,25 @@
     }
   }
 
-  $: hasContent = value !== '';
-  $: _clearClass = cx('--search-close', !hasContent && '--search-close--hidden');
+  $: _clearClass = cx('--search-close', value === '' && '--search-close--hidden');
 </script>
 
-<div class={_class}>
+<div class={_class} {style}>
   <Search16 class={cx('--search-magnifier')} />
   <label for={id} class={cx('--label')}>{labelText}</label>
   <input
-    {...props}
     bind:this={inputRef}
     role="searchbox"
     class={cx('--search-input')}
     placeholder={placeHolderText}
-    {type}
-    {id}
-    {value}
     on:change
     on:input
     on:input={event => {
       value = event.target.value;
-    }} />
+    }}
+    {type}
+    {id}
+    {value} />
   <button
     type="button"
     class={_clearClass}

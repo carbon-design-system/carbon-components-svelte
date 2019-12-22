@@ -2,13 +2,13 @@
   let className = undefined;
   export { className as class };
   export let nested = false;
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
   const _class = cx('--list--unordered', nested && '--list--nested', className);
 </script>
 
-<ul {...props} class={_class}>
+<ul on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
   <slot />
 </ul>

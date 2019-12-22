@@ -3,12 +3,13 @@
   export { className as class };
   export let type = 'single';
   export let feedback = undefined;
+  export let feedbackTimeout = undefined;
   export let copyButtonDescription = undefined;
   export let copyLabel = undefined;
   export let showMoreText = 'Show more';
   export let showLessText = 'Show less';
   export let light = false;
-  export let props = {};
+  export let style = undefined;
 
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
   import { cx } from '../../lib';
@@ -18,38 +19,41 @@
 
   const id = Math.random();
   let codeRef = undefined;
-  let expandedCode = false;
-  let showMoreLessBtn = false;
+  let expanded = false;
+  let showMoreLess = false;
 
+  $: expandText = expanded ? showLessText : showMoreText;
   $: if (codeRef) {
-    const { height } = codeRef.getBoundingClientRect();
-    showMoreLessBtn = type === 'multi' && height > 255;
+    showMoreLess = type === 'multi' && codeRef.getBoundingClientRect().height > 255;
   }
   $: _class = cx(
     '--snippet',
     type && `--snippet--${type}`,
     type === 'inline' && '--btn--copy',
-    expandedCode && '--snippet--expand',
+    expanded && '--snippet--expand',
     light && '--snippet--light',
     className
   );
-  $: expandCodeBtnText = expandedCode ? showLessText : showMoreText;
 </script>
 
 {#if type === 'inline'}
   <Copy
-    on:click
-    aria-label={copyLabel || $$props['aria-label']}
+    aria-label={$$props['aria-label'] || copyLabel}
     aria-describedby={id}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
     class={_class}
     {feedback}
-    {props}>
+    {feedbackTimeout}
+    {style}>
     <code {id}>
       <slot />
     </code>
   </Copy>
 {:else}
-  <div {...props} class={_class}>
+  <div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
     <div
       role="textbox"
       tabindex="0"
@@ -65,18 +69,19 @@
       on:click
       class={cx('--snippet-button')}
       {feedback}
+      {feedbackTimeout}
       iconDescription={copyButtonDescription} />
-    {#if showMoreLessBtn}
+    {#if showMoreLess}
       <Button
         kind="ghost"
         size="small"
         class={cx('--snippet-btn--expand')}
         on:click={() => {
-          expandedCode = !expandedCode;
+          expanded = !expanded;
         }}>
-        <span class={cx('--snippet-btn--text')}>{expandCodeBtnText}</span>
+        <span class={cx('--snippet-btn--text')}>{expandText}</span>
         <ChevronDown16
-          aria-label={expandCodeBtnText}
+          aria-label={expandText}
           class={cx('--icon-chevron--down', '--snippet__icon')} />
       </Button>
     {/if}
