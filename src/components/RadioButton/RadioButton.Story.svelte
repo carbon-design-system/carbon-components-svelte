@@ -8,11 +8,8 @@
 </script>
 
 <Layout>
-
   {#if story === 'skeleton'}
-    <div>
-      <RadioButtonSkeleton />
-    </div>
+    <RadioButtonSkeleton />
   {:else}
     <RadioButton {...$$props} id="radio-1" />
   {/if}
