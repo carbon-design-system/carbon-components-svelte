@@ -36,6 +36,11 @@
       </button>
     </div>
   {:else}
-    <TextInput {...$$props} bind:value />
+    <TextInput
+      {...$$props}
+      bind:value
+      on:change={() => {
+        console.log('change');
+      }} />
   {/if}
 </Layout>

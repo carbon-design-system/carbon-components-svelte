@@ -8,14 +8,37 @@ import CopyButton from './components/CopyButton';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
 import DataTableSkeleton from './components/DataTableSkeleton';
 import InlineLoading from './components/InlineLoading';
-import Loading from './components/Loading';
 import Link from './components/Link';
 import ListItem from './components/ListItem';
+import Loading from './components/Loading';
+import {
+  ToastNotification,
+  InlineNotification,
+  NotificationActionButton,
+  NotificationButton,
+  NotificationIcon,
+  NotificationTextDetails
+} from './components/Notification';
 import OrderedList from './components/OrderedList';
+import ProgressIndicator, {
+  ProgressIndicatorSkeleton,
+  ProgressStep
+} from './components/ProgressIndicator';
 import RadioButton, { RadioButtonSkeleton } from './components/RadioButton';
+import RadioButtonGroup from './components/RadioButtonGroup';
 import Search, { SearchSkeleton } from './components/Search';
+import Select, { SelectSkeleton, SelectItem, SelectItemGroup } from './components/Select';
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
+import {
+  StructuredListSkeleton,
+  StructuredListBody,
+  StructuredListHead,
+  StructuredListCell,
+  StructuredListRow,
+  StructuredListInput,
+  StructuredListWrapper
+} from './components/StructuredList';
 import Tabs, { Tab, TabContent, TabsSkeleton } from './components/Tabs';
 import Tag, { TagSkeleton } from './components/Tag';
 import TextArea, { TextAreaSkeleton } from './components/TextArea';
@@ -54,19 +77,39 @@ export {
   DataTableSkeleton,
   ExpandableTile,
   InlineLoading,
+  InlineNotification,
   Link,
   ListItem,
   Loading,
+  NotificationActionButton,
+  NotificationButton,
+  NotificationIcon,
+  NotificationTextDetails,
   OrderedList,
   PasswordInput,
+  ProgressIndicator,
+  ProgressIndicatorSkeleton,
+  ProgressStep,
   RadioButton,
   RadioButtonSkeleton,
+  RadioButtonGroup,
   Search,
   SearchSkeleton,
   SelectableTile,
+  Select,
+  SelectSkeleton,
+  SelectItem,
+  SelectItemGroup,
   SkeletonPlaceholder,
   SkeletonText,
   Switch,
+  StructuredListSkeleton,
+  StructuredListBody,
+  StructuredListHead,
+  StructuredListCell,
+  StructuredListRow,
+  StructuredListInput,
+  StructuredListWrapper,
   Tabs,
   Tab,
   TabContent,
@@ -81,6 +124,7 @@ export {
   TileAboveTheFoldContent,
   TileBelowTheFoldContent,
   TileGroup,
+  ToastNotification,
   Toggle,
   ToggleSkeleton,
   ToggleSmall,

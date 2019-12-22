@@ -4,7 +4,5 @@
 </script>
 
 <Layout>
-  <div>
-    <TooltipDefinition {...$$props}>Defintion Tooltip</TooltipDefinition>
-  </div>
+  <TooltipDefinition {...$$props}>Defintion Tooltip</TooltipDefinition>
 </Layout>

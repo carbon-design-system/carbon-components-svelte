@@ -12,13 +12,11 @@
   export let helperText = '';
   export let hideLabel = false;
   export let light = false;
-  export let props = {};
+  export let style = undefined;
 
-  import { createEventDispatcher } from 'svelte';
   import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';
   import { cx } from '../../lib';
 
-  const dispatch = createEventDispatcher();
   const errorId = `${id}-error`;
   const _labelClass = cx(
     '--label',
@@ -34,7 +32,7 @@
   );
 </script>
 
-<div class={cx('--form-item', '--text-input-wrapper')}>
+<div class={cx('--form-item', '--text-input-wrapper')} {style}>
   {#if labelText}
     <label for={id} class={_labelClass}>{labelText}</label>
   {/if}
@@ -46,23 +44,11 @@
       <WarningFilled16 class={cx('--text-input__invalid-icon')} />
     {/if}
     <input
-      {...props}
       class={_textInputClass}
-      on:click={event => {
-        if (!disabled) {
-          dispatch('click', event);
-        }
-      }}
-      on:change={event => {
-        if (!disabled) {
-          dispatch('change', event);
-        }
-      }}
+      on:click
+      on:change
       on:input={event => {
         value = event.target.value;
-        if (!disabled) {
-          dispatch('input', event);
-        }
       }}
       data-invalid={invalid || undefined}
       aria-invalid={invalid || undefined}

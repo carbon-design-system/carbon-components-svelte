@@ -1,19 +1,13 @@
 <script>
   export let story = undefined;
-  const { labelText, indeterminate, disabled, hideLabel, wrapperClassName } = $$props;
 
   import { cx } from '../../lib';
   import Layout from '../../internal/ui/Layout.svelte';
   import Checkbox from './Checkbox.svelte';
   import CheckboxSkeleton from './Checkbox.Skeleton.svelte';
 
-  const checkboxProps = {
-    labelText,
-    indeterminate,
-    disabled,
-    hideLabel,
-    wrapperClassName
-  };
+  const { labelText, indeterminate, disabled, hideLabel, wrapperClassName } = $$props;
+  const checkboxProps = { labelText, indeterminate, disabled, hideLabel, wrapperClassName };
 </script>
 
 <Layout>
