@@ -7,7 +7,7 @@
   export let triggerClassName = undefined;
   export { triggerClassName as triggerClass };
   export let tooltipText = '';
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
@@ -22,7 +22,7 @@
   );
 </script>
 
-<div {...props} class={_class}>
+<div class={_class} {style}>
   <button
     on:click
     on:mouseover

@@ -5,7 +5,7 @@
   export let align = 'center';
   export let id = Math.random();
   export let tooltipText = '';
-  export let props = {};
+  export let style = undefined;
 
   import { cx } from '../../lib';
 
@@ -19,13 +19,13 @@
 </script>
 
 <button
-  {...props}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
+  aria-describedby={id}
   class={_class}
-  aria-describedby={id}>
+  {style}>
   <span class={cx('--assistive-text')} {id}>{tooltipText}</span>
   <slot />
 </button>
