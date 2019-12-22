@@ -31,6 +31,8 @@ Currently, the following components are supported:
 - FormGroup
 - FormItem
 - FormLabel
+- Icon
+  - IconSkeleton
 - InlineLoading
 - Link
 - ListItem

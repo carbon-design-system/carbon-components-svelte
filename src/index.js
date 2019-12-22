@@ -11,6 +11,7 @@ import Form from './components/Form';
 import FormGroup from './components/FormGroup';
 import FormItem from './components/FormItem';
 import FormLabel from './components/FormLabel';
+import Icon, { IconSkeleton } from './components/Icon';
 import InlineLoading from './components/InlineLoading';
 import Link from './components/Link';
 import ListItem from './components/ListItem';
@@ -84,6 +85,8 @@ export {
   FormItem,
   FormLabel,
   ExpandableTile,
+  Icon,
+  IconSkeleton,
   InlineLoading,
   InlineNotification,
   Link,
