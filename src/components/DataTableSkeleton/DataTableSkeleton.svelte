@@ -8,10 +8,10 @@
   export let headers = [];
   export let style = undefined;
 
-  import { cx } from '../../lib';
+  import { cx, fillArray } from '../../lib';
 
-  const rows = Array.from({ length: rowCount - 1 }, (_, i) => i);
-  const columns = Array.from({ length: columnCount }, (_, i) => i);
+  const rows = fillArray(rowCount - 1);
+  const columns = fillArray(columnCount);
   const _headers =
     headers[0] === Object(headers[0]) && !Array.isArray(headers[0])
       ? headers.map(({ header }) => header)

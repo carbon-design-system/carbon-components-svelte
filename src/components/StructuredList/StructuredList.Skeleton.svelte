@@ -5,7 +5,7 @@
   export let rowCount = 5;
   export let style = undefined;
 
-  import { cx } from '../../lib';
+  import { cx, fillArray } from '../../lib';
 
   const _class = cx(
     '--skeleton',
@@ -13,7 +13,7 @@
     border && '--structured-list--border',
     className
   );
-  const rows = Array.from({ length: rowCount - 1 }, (_, i) => i);
+  const rows = fillArray(rowCount - 1);
 </script>
 
 <section on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>

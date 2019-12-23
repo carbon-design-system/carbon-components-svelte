@@ -21,11 +21,11 @@
   import CaretRight24 from 'carbon-icons-svelte/lib/CaretRight24';
   import CaretLeft24 from 'carbon-icons-svelte/lib/CaretLeft24';
   import Select, { SelectItem } from '../Select';
-  import { cx } from '../../lib';
+  import { cx, fillArray } from '../../lib';
 
   const _class = cx('--pagination', className);
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
-  $: selectItems = Array.from({ length: totalPages }, (_, i) => i);
+  $: selectItems = fillArray(totalPages);
   $: backButtonDisabled = disabled || page === 1;
   $: _backButtonClass = cx(
     '--pagination__button',
