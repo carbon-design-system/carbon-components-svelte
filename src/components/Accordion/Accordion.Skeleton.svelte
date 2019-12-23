@@ -6,11 +6,11 @@
   export let style = undefined;
 
   import ChevronRight16 from 'carbon-icons-svelte/lib/ChevronRight16';
-  import { cx } from '../../lib';
+  import { cx, fillArray } from '../../lib';
   import SkeletonText from '../SkeletonText';
 
   const _class = cx('--accordion', '--skeleton', className);
-  const skeletonItems = Array.from({ length: open ? count - 1 : count });
+  const items = fillArray(open ? count - 1 : count);
 </script>
 
 <ul on:click on:mouseover on:mouseenter on:mouseleave {style} class={_class}>
@@ -27,7 +27,7 @@
       </div>
     </li>
   {/if}
-  {#each skeletonItems as item}
+  {#each items as item, i (item)}
     <li class={cx('--accordion__item')}>
       <span class={cx('--accordion__heading')}>
         <ChevronRight16 class={cx('--accordion__arrow')} />
