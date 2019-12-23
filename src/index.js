@@ -25,6 +25,7 @@ import {
   NotificationTextDetails
 } from './components/Notification';
 import OrderedList from './components/OrderedList';
+import Pagination, { PaginationSkeleton } from './components/Pagination';
 import ProgressIndicator, {
   ProgressIndicatorSkeleton,
   ProgressStep
@@ -97,6 +98,8 @@ export {
   NotificationIcon,
   NotificationTextDetails,
   OrderedList,
+  Pagination,
+  PaginationSkeleton,
   PasswordInput,
   ProgressIndicator,
   ProgressIndicatorSkeleton,
