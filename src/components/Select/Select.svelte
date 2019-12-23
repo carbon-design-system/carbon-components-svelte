@@ -42,9 +42,11 @@
   setContext('Select', { selected });
 
   $: {
-    defaultValue = $selected;
+    selected.set(defaultValue);
     dispatch('change', $selected);
   }
+
+  $: defaultValue = $selected;
 </script>
 
 <div class={cx('--form-item')} {style}>
@@ -82,7 +84,6 @@
         <div class={_helperTextClass}>{helperText}</div>
       {/if}
     {/if}
-
     {#if !inline}
       <div class={cx('--select-input__wrapper')} data-invalid={invalid || undefined}>
         <select
