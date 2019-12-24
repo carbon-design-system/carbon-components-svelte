@@ -20,12 +20,6 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const _class = cx(
-    '--toast-notification',
-    lowContrast && '--toast-notification--low-contrast',
-    kind && `--toast-notification--${kind}`,
-    className
-  );
 
   let open = true;
 
@@ -43,18 +37,26 @@
 </script>
 
 {#if open}
-  <div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style} {role} {kind}>
+  <div
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    class={cx('--toast-notification', lowContrast && '--toast-notification--low-contrast', kind && `--toast-notification--${kind}`, className)}
+    {style}
+    {role}
+    {kind}>
     <NotificationIcon {notificationType} {kind} {iconDescription} />
     <NotificationTextDetails {title} {subtitle} {caption} {notificationType}>
       <slot />
     </NotificationTextDetails>
     {#if !hideCloseButton}
       <NotificationButton
-        {iconDescription}
-        {notificationType}
         on:click={() => {
           open = false;
-        }} />
+        }}
+        {iconDescription}
+        {notificationType} />
     {/if}
   </div>
 {/if}

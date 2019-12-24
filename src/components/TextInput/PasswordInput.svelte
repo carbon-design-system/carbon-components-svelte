@@ -23,45 +23,28 @@
   import ViewOff16 from 'carbon-icons-svelte/lib/ViewOff16';
   import { cx } from '../../lib';
 
-  const errorId = `${id}-error`;
-  const _labelClass = cx(
-    '--label',
-    hideLabel && '--visually-hidden',
-    disabled && '--label--disabled'
-  );
-  const _helperTextClass = cx('--form__helper-text', disabled && '--form__helper-text--disabled');
-  const _textInputClass = cx(
-    '--text-input',
-    '--password-input',
-    light && '--text-input--light',
-    invalid && '--text-input--invalid',
-    className
-  );
-  const _passwordVisibilityToggleClass = cx(
-    '--text-input--password__visibility__toggle',
-    '--btn--icon-only',
-    '--tooltip__trigger',
-    '--tooltip--a11y',
-    tooltipPosition && `--tooltip--${tooltipPosition}`,
-    tooltipAlignment && `--tooltip--align-${tooltipAlignment}`
-  );
-
-  $: passwordIsVisible = type === 'text';
+  $: errorId = `error-${id}`;
 </script>
 
 <div class={cx('--form-item', '--text-input-wrapper', '--password-input-wrapper')} {style}>
   {#if labelText}
-    <label for={id} class={_labelClass}>{labelText}</label>
+    <label
+      for={id}
+      class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}>
+      {labelText}
+    </label>
   {/if}
   {#if helperText}
-    <div class={_helperTextClass}>{helperText}</div>
+    <div class={cx('--form__helper-text', disabled && '--form__helper-text--disabled')}>
+      {helperText}
+    </div>
   {/if}
   <div class={cx('--text-input__field-wrapper')} data-invalid={invalid || undefined}>
     {#if invalid}
       <WarningFilled16 class={cx('--text-input__invalid-icon')} />
     {/if}
     <input
-      class={_textInputClass}
+      class={cx('--text-input', '--password-input', light && '--text-input--light', invalid && '--text-input--invalid', className)}
       on:click
       on:change
       on:input
@@ -78,15 +61,14 @@
       {disabled} />
     <button
       type="button"
-      class={_passwordVisibilityToggleClass}
+      class={cx('--text-input--password__visibility__toggle', '--btn--icon-only', '--tooltip__trigger', '--tooltip--a11y', tooltipPosition && `--tooltip--${tooltipPosition}`, tooltipAlignment && `--tooltip--align-${tooltipAlignment}`)}
       on:click={() => {
         type = type === 'password' ? 'text' : 'password';
       }}>
       <span class={cx('--assistive-text')}>
-        {#if passwordIsVisible}{hidePasswordLabel}{:else}{showPasswordLabel}{/if}
+        {#if type === 'text'}{hidePasswordLabel}{:else}{showPasswordLabel}{/if}
       </span>
-
-      {#if passwordIsVisible}
+      {#if type === 'text'}
         <ViewOff16 class={cx('--icon-visibility-off')} />
       {:else}
         <View16 class={cx('--icon-visibility-on')} />

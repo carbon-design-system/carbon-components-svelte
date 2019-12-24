@@ -26,14 +26,6 @@
   $: if (codeRef) {
     showMoreLess = type === 'multi' && codeRef.getBoundingClientRect().height > 255;
   }
-  $: _class = cx(
-    '--snippet',
-    type && `--snippet--${type}`,
-    type === 'inline' && '--btn--copy',
-    expanded && '--snippet--expand',
-    light && '--snippet--light',
-    className
-  );
 </script>
 
 {#if type === 'inline'}
@@ -44,7 +36,7 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
-    class={_class}
+    class={cx('--snippet', type && `--snippet--${type}`, type === 'inline' && '--btn--copy', expanded && '--snippet--expand', light && '--snippet--light', className)}
     {feedback}
     {feedbackTimeout}
     {style}>
@@ -53,7 +45,13 @@
     </code>
   </Copy>
 {:else}
-  <div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+  <div
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    class={cx('--snippet', type && `--snippet--${type}`, type === 'inline' && '--btn--copy', expanded && '--snippet--expand', light && '--snippet--light', className)}
+    {style}>
     <div
       role="textbox"
       tabindex="0"

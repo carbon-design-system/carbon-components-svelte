@@ -5,8 +5,6 @@
 
   import Button from '../Button';
   import { cx } from '../../lib';
-
-  const _class = cx('--inline-notification__action-button', className);
 </script>
 
 <Button
@@ -16,7 +14,7 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  class={_class}
+  class={cx('--inline-notification__action-button', className)}
   {style}>
   <slot />
 </Button>

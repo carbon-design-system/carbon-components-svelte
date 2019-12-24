@@ -23,24 +23,13 @@
   import Select, { SelectItem } from '../Select';
   import { cx, fillArray } from '../../lib';
 
-  const _class = cx('--pagination', className);
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = fillArray(totalPages);
   $: backButtonDisabled = disabled || page === 1;
-  $: _backButtonClass = cx(
-    '--pagination__button',
-    '--pagination__button--backward',
-    backButtonDisabled && '--pagination__button--no-index'
-  );
   $: forwardButtonDisabled = disabled || page === totalPages;
-  $: _forwardButtonClass = cx(
-    '--pagination__button',
-    '--pagination__button--forward',
-    forwardButtonDisabled && '--pagination__button--no-index'
-  );
 </script>
 
-<div class={_class} {style}>
+<div class={cx('--pagination', className)} {style}>
   <div class={cx('--pagination__left')}>
     <label
       id={cx(`--pagination-select-${id}-count-label`)}
@@ -93,7 +82,7 @@
     {/if}
     <button
       type="button"
-      class={_backButtonClass}
+      class={cx('--pagination__button', '--pagination__button--backward', backButtonDisabled && '--pagination__button--no-index')}
       on:click={() => {
         page--;
       }}
@@ -103,7 +92,7 @@
     </button>
     <button
       type="button"
-      class={_forwardButtonClass}
+      class={cx('--pagination__button', '--pagination__button--forward', forwardButtonDisabled && '--pagination__button--no-index')}
       aria-label={forwardText}
       on:click={() => {
         page++;

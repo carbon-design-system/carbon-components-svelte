@@ -14,7 +14,7 @@
   import Loading from '../Loading';
 
   const dispatch = createEventDispatcher();
-  const _class = cx('--inline-loading', className);
+
   let timeoutId = undefined;
 
   onDestroy(() => {
@@ -33,11 +33,11 @@
 
 <div
   aria-live={$$props['aria-live'] || 'assertive'}
+  class={cx('--inline-loading', className)}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
-  class={_class}
   {style}>
   <div class={cx('--inline-loading__animation')}>
     {#if status === 'error'}

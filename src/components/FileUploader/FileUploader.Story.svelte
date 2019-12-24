@@ -48,7 +48,7 @@
         <Button
           kind="secondary"
           size="small"
-          style={'margin-top: 1rem'}
+          style="margin-top: 1rem"
           {disabled}
           on:click={() => {
             files = [];

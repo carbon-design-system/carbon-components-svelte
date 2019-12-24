@@ -19,14 +19,6 @@
       timeoutId = undefined;
     }
   });
-
-  $: _class = cx(
-    '--copy-btn',
-    animation && '--copy-btn--animating',
-    animation && `--copy-btn--${animation}`,
-    animation === 'fade-in' && '--btn--copy__feedback--displayed',
-    className
-  );
 </script>
 
 <button
@@ -34,7 +26,7 @@
   tabindex="0"
   aria-label={iconDescription}
   title={iconDescription}
-  class={_class}
+  class={cx('--copy-btn', animation && '--copy-btn--animating', animation && `--copy-btn--${animation}`, animation === 'fade-in' && '--btn--copy__feedback--displayed', className)}
   on:click
   on:click={() => {
     animation = 'fade-in';

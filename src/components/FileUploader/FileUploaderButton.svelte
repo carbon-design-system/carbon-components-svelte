@@ -15,15 +15,15 @@
 
   import { cx } from '../../lib';
 
-  const _class = cx(
+  let inputRef = undefined;
+
+  $: _class = cx(
     '--btn',
     '--btn--sm',
     kind && `--btn--${kind}`,
     disabled && '--btn--disabled',
     className
   );
-
-  let inputRef = undefined;
 </script>
 
 <label

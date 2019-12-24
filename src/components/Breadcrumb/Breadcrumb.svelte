@@ -5,9 +5,6 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const ariaLabel = $$props['aria-label'] || 'Breadcrumb';
-  const _class = cx('--breadcrumb', noTrailingSlash && '--breadcrumb--no-trailing-slash');
 </script>
 
 <nav
@@ -15,10 +12,10 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  aria-label={ariaLabel}
+  aria-label={$$props['aria-label'] || 'Breadcrumb'}
   class={className}
   {style}>
-  <ol class={_class}>
+  <ol class={cx('--breadcrumb', noTrailingSlash && '--breadcrumb--no-trailing-slash')}>
     <slot />
   </ol>
 </nav>

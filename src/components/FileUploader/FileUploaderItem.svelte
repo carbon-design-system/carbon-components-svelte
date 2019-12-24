@@ -15,14 +15,14 @@
   import Filename from './Filename.svelte';
 
   const dispatch = createEventDispatcher();
-  const _class = cx(
-    '--file__selected-file',
-    invalid && '--file__selected-file--invalid',
-    className
-  );
 </script>
 
-<span on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<span
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={cx('--file__selected-file', invalid && '--file__selected-file--invalid', className)}
+  {style}>
   <p class={cx('--file-filename')}>{name}</p>
   <span class={cx('--file__state-container')}>
     <Filename

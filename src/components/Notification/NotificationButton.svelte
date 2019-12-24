@@ -10,16 +10,6 @@
 
   import Close20 from 'carbon-icons-svelte/lib/Close20';
   import { cx } from '../../lib';
-
-  const _class = cx(
-    notificationType === 'toast' && '--toast-notification__close-button',
-    notificationType === 'inline' && '--inline-notification__close-button',
-    className
-  );
-  const _iconClass = cx(
-    notificationType === 'toast' && '--toast-notification__close-icon',
-    notificationType === 'inline' && '--inline-notification__close-icon'
-  );
 </script>
 
 <button
@@ -29,8 +19,11 @@
   on:mouseleave
   aria-label={iconDescription}
   title={iconDescription}
-  class={_class}
+  class={cx(notificationType === 'toast' && '--toast-notification__close-button', notificationType === 'inline' && '--inline-notification__close-button', className)}
   {style}
   {type}>
-  <svelte:component this={renderIcon} class={_iconClass} {title} />
+  <svelte:component
+    this={renderIcon}
+    class={cx(notificationType === 'toast' && '--toast-notification__close-icon', notificationType === 'inline' && '--inline-notification__close-icon')}
+    {title} />
 </button>

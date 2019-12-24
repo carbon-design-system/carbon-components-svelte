@@ -6,10 +6,8 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx('--select-optgroup', className);
 </script>
 
-<optgroup class={_class} {label} {disabled} {style}>
+<optgroup class={cx('--select-optgroup', className)} {label} {disabled} {style}>
   <slot />
 </optgroup>

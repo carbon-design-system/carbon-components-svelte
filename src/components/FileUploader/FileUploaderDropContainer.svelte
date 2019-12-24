@@ -18,12 +18,12 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const _labelClass = cx('--file-browse-btn', disabled && '--file-browse-btn--disabled');
 
   let over = false;
   let inputRef = undefined;
 
   $: _class = cx('--file__drop-container', over && '--file__drop-container--drag-over', className);
+  $: _labelClass = cx('--file-browse-btn', disabled && '--file-browse-btn--disabled');
 </script>
 
 <div

@@ -5,11 +5,15 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx('--progress', vertical && '--progress--vertical', '--skeleton', className);
 </script>
 
-<ul on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<ul
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={cx('--progress', vertical && '--progress--vertical', '--skeleton', className)}
+  {style}>
   {#each [0, 1, 2, 3] as item, i (item)}
     <li class={cx('--progress-step', '--progress-step--incomplete')}>
       <div class={cx('--progress-step-button', '--progress-step-button--unclickable')}>

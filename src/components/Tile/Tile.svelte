@@ -5,10 +5,14 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx('--tile', light && '--tile--light', className);
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<div
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={cx('--tile', light && '--tile--light', className)}
+  {style}>
   <slot />
 </div>

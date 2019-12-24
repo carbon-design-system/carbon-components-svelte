@@ -5,7 +5,7 @@
 
   import { cx } from '../../lib';
 
-  const _class = cx('--form', className);
+  $: _class = cx('--form', className);
 </script>
 
 <form on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>

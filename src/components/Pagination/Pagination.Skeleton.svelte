@@ -5,11 +5,15 @@
 
   import SkeletonText from '../SkeletonText';
   import { cx } from '../../lib';
-
-  const _class = cx('--pagination', '--skeleton', className);
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<div
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={cx('--pagination', '--skeleton', className)}
+  {style}>
   <div class={cx('--pagination__left')}>
     <SkeletonText width="70px" />
     <SkeletonText width="35px" />

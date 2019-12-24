@@ -8,14 +8,6 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx(
-    '--tooltip__trigger',
-    '--tooltip--a11y',
-    `--tooltip--${direction}`,
-    `--tooltip--align-${align}`,
-    className
-  );
 </script>
 
 <button
@@ -24,7 +16,7 @@
   on:mouseenter
   on:mouseleave
   aria-describedby={id}
-  class={_class}
+  class={cx('--tooltip__trigger', '--tooltip--a11y', `--tooltip--${direction}`, `--tooltip--align-${align}`, className)}
   {style}>
   <span class={cx('--assistive-text')} {id}>{tooltipText}</span>
   <slot />

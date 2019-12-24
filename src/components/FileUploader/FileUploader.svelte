@@ -19,9 +19,7 @@
   import FileUploaderButton from './FileUploaderButton.svelte';
 
   const dispatch = createEventDispatcher();
-  const _class = cx('--form-item', className);
 
-  // let files = [];
   let prevFiles = [];
 
   $: {
@@ -38,7 +36,7 @@
   }
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
   <strong class={cx('--file--label')}>{labelTitle}</strong>
   <p class={cx('--label-description')}>{labelDescription}</p>
   <FileUploaderButton

@@ -10,7 +10,7 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const _class = cx('--progress', vertical && '--progress--vertical', className);
+
   let steps = writable([]);
   let stepsById = derived(steps, $steps => $steps.reduce((a, c) => ({ ...a, [c.id]: c }), {}));
 
@@ -34,6 +34,12 @@
   });
 </script>
 
-<ul on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<ul
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={cx('--progress', vertical && '--progress--vertical', className)}
+  {style}>
   <slot />
 </ul>
