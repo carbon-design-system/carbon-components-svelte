@@ -25,7 +25,7 @@
   );
 </script>
 
-<table on:click on:mouseover on:mouseenter on:mouseleave {style} class={_class}>
+<table on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
   <thead>
     <tr>
       {#each columns as column, i (column)}
