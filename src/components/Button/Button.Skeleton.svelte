@@ -6,8 +6,6 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx('--skeleton', '--btn', small && '--btn--sm', className);
 </script>
 
 {#if href}
