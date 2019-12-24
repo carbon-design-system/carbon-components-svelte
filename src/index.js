@@ -5,6 +5,7 @@ import Checkbox, { CheckboxSkeleton } from './components/Checkbox';
 import ContentSwitcher, { Switch } from './components/ContentSwitcher';
 import Copy from './components/Copy';
 import CopyButton from './components/CopyButton';
+import ComposedModal, { ModalHeader, ModalBody, ModalFooter } from './components/ComposedModal';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
 import DataTableSkeleton from './components/DataTableSkeleton';
 import Form from './components/Form';
@@ -77,6 +78,10 @@ export {
   ClickableTile,
   CodeSnippet,
   CodeSnippetSkeleton,
+  ComposedModal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   ContentSwitcher,
   Copy,
   CopyButton,

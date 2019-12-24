@@ -22,6 +22,10 @@ Currently, the following components are supported:
   - CheckboxSkeleton
 - CodeSnippet
   - CodeSnippetSkeleton
+- ComposedModal
+  - ModalHeader
+  - ModalBody
+  - ModalFooter
 - ContentSwitcher
   - Switch
 - Copy

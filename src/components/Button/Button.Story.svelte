@@ -30,7 +30,7 @@
     kind,
     disabled,
     size,
-    renderIcon: Add16,
+    icon: Add16,
     iconDescription,
     tooltipPosition,
     tooltipAlignment
