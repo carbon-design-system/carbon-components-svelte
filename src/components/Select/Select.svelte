@@ -21,41 +21,33 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const errorId = `error-${id}`;
-  const _class = cx(
-    '--select',
-    inline && '--select--inline',
-    light && '--select--light',
-    invalid && '--select--invalid',
-    disabled && '--select--disabled',
-    className
-  );
-  const _labelClass = cx(
-    '--label',
-    hideLabel && '--visually-hidden',
-    disabled && '--label--disabled'
-  );
-  const _helperTextClass = cx('--form__helper-text', disabled && '--form__helper-text--disabled');
 
   let selected = writable(defaultValue);
 
   setContext('Select', { selected });
 
+  $: errorId = `error-${id}`;
   $: {
     selected.set(defaultValue);
     dispatch('change', $selected);
   }
-
   $: defaultValue = $selected;
 </script>
 
 <div class={cx('--form-item')} {style}>
-  <div class={_class}>
+  <div
+    class={cx('--select', inline && '--select--inline', light && '--select--light', invalid && '--select--invalid', disabled && '--select--disabled', className)}>
     {#if !noLabel}
-      <label for={id} class={_labelClass}>{labelText}</label>
+      <label
+        for={id}
+        class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}>
+        {labelText}
+      </label>
     {/if}
     {#if !inline && helperText}
-      <div class={_helperTextClass}>{helperText}</div>
+      <div class={cx('--form__helper-text', disabled && '--form__helper-text--disabled')}>
+        {helperText}
+      </div>
     {/if}
     {#if inline}
       <div class={cx('--select-input--inline__wrapper')}>
@@ -81,7 +73,9 @@
         {/if}
       </div>
       {#if helperText}
-        <div class={_helperTextClass}>{helperText}</div>
+        <div class={cx('--form__helper-text', disabled && '--form__helper-text--disabled')}>
+          {helperText}
+        </div>
       {/if}
     {/if}
     {#if !inline}

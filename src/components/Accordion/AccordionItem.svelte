@@ -10,17 +10,10 @@
   import { cx } from '../../lib';
 
   let animation = undefined;
-
-  $: _class = cx(
-    '--accordion__item',
-    open && '--accordion__item--active',
-    animation && `--accordion__item--${animation}`,
-    className
-  );
 </script>
 
 <li
-  class={_class}
+  class={cx('--accordion__item', open && '--accordion__item--active', animation && `--accordion__item--${animation}`, className)}
   on:animationend
   on:animationend={() => {
     animation = undefined;
@@ -40,8 +33,8 @@
     on:mouseenter
     on:mouseleave
     on:keydown
-    on:keydown={event => {
-      if (open && event.key === 'Escape') {
+    on:keydown={({ key }) => {
+      if (open && key === 'Escape') {
         open = false;
       }
     }}>

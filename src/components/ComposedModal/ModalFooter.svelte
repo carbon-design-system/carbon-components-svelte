@@ -9,16 +9,14 @@
   export let danger = false;
   export let style = undefined;
 
-  import { createEventDispatcher, getContext } from 'svelte';
+  import { getContext } from 'svelte';
   import { cx } from '../../lib';
   import Button from '../Button';
 
-  const dispatch = createEventDispatcher();
   const { closeModal, submit } = getContext('ComposedModal');
-  const _footerClass = cx('--modal-footer', className);
 </script>
 
-<div class={_footerClass} {style}>
+<div class={cx('--modal-footer', className)} {style}>
   {#if secondaryButtonText}
     <Button kind="secondary" class={secondaryClass} on:click={closeModal}>
       {secondaryButtonText}

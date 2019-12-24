@@ -11,12 +11,6 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const _class = cx(
-    '--structured-list',
-    border && '--structured-list--border',
-    selection && '--structured-list--selection',
-    className
-  );
 
   let selected = writable(defaultSelected);
 
@@ -38,7 +32,7 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  class={_class}
+  class={cx('--structured-list', border && '--structured-list--border', selection && '--structured-list--selection', className)}
   aria-label={$$props['aria-label'] || 'Structured list section'}
   {style}>
   <slot />

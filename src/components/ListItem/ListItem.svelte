@@ -4,10 +4,8 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx('--list__item', className);
 </script>
 
-<li on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<li on:click on:mouseover on:mouseenter on:mouseleave class={cx('--list__item', className)} {style}>
   <slot />
 </li>

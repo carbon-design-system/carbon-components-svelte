@@ -19,13 +19,6 @@
   addTile({ id, value, checked });
 
   $: checked = value === $selected.value;
-  $: _class = cx(
-    '--tile',
-    '--tile--selectable',
-    checked && '--tile--is-selected',
-    light && '--tile--light',
-    className
-  );
 </script>
 
 <input
@@ -41,7 +34,7 @@
   {checked} />
 <label
   for={id}
-  class={_class}
+  class={cx('--tile', '--tile--selectable', checked && '--tile--is-selected', light && '--tile--light', className)}
   on:click
   on:mouseover
   on:mouseenter

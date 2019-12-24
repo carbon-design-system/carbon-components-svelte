@@ -9,7 +9,6 @@
   import { cx } from '../../lib';
 
   let timeoutId = undefined;
-  let showFeedback = false;
 
   onDestroy(() => {
     if (timeoutId !== undefined) {
@@ -18,7 +17,7 @@
     }
   });
 
-  $: _class = cx('--btn--copy__feedback', showFeedback && '--btn--copy__feedback--displayed');
+  $: showFeedback = timeoutId !== undefined;
 </script>
 
 <button
@@ -26,9 +25,8 @@
   class={className}
   on:click
   on:click={() => {
-    showFeedback = true;
     timeoutId = window.setTimeout(() => {
-      showFeedback = false;
+      showFeedback = undefined;
     }, feedbackTimeout);
   }}
   on:mouseover
@@ -36,5 +34,7 @@
   on:mouseleave
   {style}>
   <slot />
-  <div class={_class} data-feedback={feedback} />
+  <div
+    class={cx('--btn--copy__feedback', showFeedback && '--btn--copy__feedback--displayed')}
+    data-feedback={feedback} />
 </button>

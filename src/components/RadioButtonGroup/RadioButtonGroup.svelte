@@ -12,12 +12,6 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const _class = cx(
-    '--radio-button-group',
-    orientation === 'vertical' && `--radio-button-group--${orientation}`,
-    labelPosition && `--radio-button-group--label-${labelPosition}`,
-    className
-  );
 
   let selected = writable(defaultSelected);
 
@@ -40,7 +34,9 @@
 </script>
 
 <div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item')} {style}>
-  <div class={_class} {disabled}>
+  <div
+    class={cx('--radio-button-group', orientation === 'vertical' && `--radio-button-group--${orientation}`, labelPosition && `--radio-button-group--label-${labelPosition}`, className)}
+    {disabled}>
     <slot />
   </div>
 </div>

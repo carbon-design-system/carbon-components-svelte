@@ -11,8 +11,6 @@
   import { getContext } from 'svelte';
   import { cx } from '../../lib';
 
-  const _class = cx('--structured-list-input', className);
-
   const { selected, update } = getContext('StructuredListWrapper');
 
   if (checked) {
@@ -25,7 +23,7 @@
 <input
   type="radio"
   tabindex="-1"
-  class={_class}
+  class={cx('--structured-list-input', className)}
   on:change={() => {
     update(value);
   }}

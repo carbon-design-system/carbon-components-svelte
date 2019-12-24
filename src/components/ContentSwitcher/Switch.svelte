@@ -3,8 +3,8 @@
   export { className as class };
   export let selected = false;
   export let text = 'Provide text';
-  export let style = undefined;
   export let disabled = false;
+  export let style = undefined;
 
   import { cx } from '../../lib';
   import { getContext } from 'svelte';
@@ -20,7 +20,6 @@
   $: if (selected && buttonRef) {
     buttonRef.focus();
   }
-  $: _class = cx('--content-switcher-btn', selected && '--content-switcher--selected', className);
 </script>
 
 <button
@@ -28,7 +27,7 @@
   role="tab"
   tabindex={selected ? '0' : '-1'}
   aria-selected={selected}
-  class={_class}
+  class={cx('--content-switcher-btn', selected && '--content-switcher--selected', className)}
   on:click
   on:click|preventDefault={() => {
     update(id);

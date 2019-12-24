@@ -7,12 +7,6 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx(
-    '--structured-list-row',
-    head && '--structured-list-row--header-row',
-    className
-  );
 </script>
 
 {#if label}
@@ -23,14 +17,20 @@
     on:mouseenter
     on:mouseleave
     on:keydown
-    class={_class}
+    class={cx('--structured-list-row', head && '--structured-list-row--header-row', className)}
     for={$$props.for}
     {tabindex}
     {style}>
     <slot />
   </label>
 {:else}
-  <div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+  <div
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    class={cx('--structured-list-row', head && '--structured-list-row--header-row', className)}
+    {style}>
     <slot />
   </div>
 {/if}

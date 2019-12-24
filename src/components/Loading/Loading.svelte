@@ -9,24 +9,17 @@
 
   import { cx } from '../../lib';
 
-  const loadingId = `loading-id-${Math.random()}`;
-  const spinnerRadius = small ? '26.8125' : '37.5';
-  const _class = cx(
-    '--loading',
-    small && '--loading--small',
-    !active && '--loading--stop',
-    className
-  );
-  const _overlayClass = cx('--loading-overlay', !active && '--loading-overlay--stop');
+  $: loadingId = `loading-${Math.random()}`;
+  $: spinnerRadius = small ? '26.8125' : '37.5';
 </script>
 
 {#if withOverlay}
-  <div class={_overlayClass}>
+  <div class={cx('--loading-overlay', !active && '--loading-overlay--stop')}>
     <div
       aria-atomic="true"
       aria-labelledby={loadingId}
       aria-live={active ? 'assertive' : 'off'}
-      class={_class}
+      class={cx('--loading', small && '--loading--small', !active && '--loading--stop', className)}
       {style}>
       <label id={loadingId} class={cx('--visually-hidden')}>{description}</label>
       <svg class={cx('--loading__svg')} viewBox="-75 -75 150 150">
@@ -43,7 +36,7 @@
     aria-atomic="true"
     aria-labelledby={loadingId}
     aria-live={active ? 'assertive' : 'off'}
-    class={_class}
+    class={cx('--loading', small && '--loading--small', !active && '--loading--stop', className)}
     {style}>
     <label id={loadingId} class={cx('--visually-hidden')}>{description}</label>
     <svg class={cx('--loading__svg')} viewBox="-75 -75 150 150">

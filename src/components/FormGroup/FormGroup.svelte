@@ -9,8 +9,8 @@
 
   import { cx } from '../../lib';
 
-  const _class = cx('--fieldset', className);
-  const _legendClass = cx('--label', className);
+  $: _class = cx('--fieldset', className);
+  $: _legendClass = cx('--label', className);
 </script>
 
 <fieldset

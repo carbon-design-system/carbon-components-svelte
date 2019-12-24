@@ -8,12 +8,15 @@
   import ChevronRight16 from 'carbon-icons-svelte/lib/ChevronRight16';
   import { cx, fillArray } from '../../lib';
   import SkeletonText from '../SkeletonText';
-
-  const _class = cx('--accordion', '--skeleton', className);
-  const items = fillArray(open ? count - 1 : count);
 </script>
 
-<ul on:click on:mouseover on:mouseenter on:mouseleave {style} class={_class}>
+<ul
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={cx('--accordion', '--skeleton', className)}
+  {style}>
   {#if open}
     <li class={cx('--accordion__item', '--accordion__item--active')}>
       <span class={cx('--accordion__heading')}>
@@ -27,7 +30,7 @@
       </div>
     </li>
   {/if}
-  {#each items as item, i (item)}
+  {#each fillArray(open ? count - 1 : count) as item, i (item)}
     <li class={cx('--accordion__item')}>
       <span class={cx('--accordion__heading')}>
         <ChevronRight16 class={cx('--accordion__arrow')} />

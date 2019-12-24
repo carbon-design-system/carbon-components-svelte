@@ -7,34 +7,27 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx(
-    '--link',
-    disabled && '--link--disabled',
-    inline && '--link--inline',
-    className
-  );
 </script>
 
 {#if disabled}
   <p
     aria-current={$$props['aria-current']}
+    class={cx('--link', disabled && '--link--disabled', inline && '--link--inline', className)}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
-    class={_class}
     {style}>
     <slot />
   </p>
 {:else}
   <a
     aria-current={$$props['aria-current']}
+    class={cx('--link', disabled && '--link--disabled', inline && '--link--inline', className)}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
-    class={_class}
     {style}
     {href}>
     <slot />

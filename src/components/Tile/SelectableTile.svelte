@@ -20,13 +20,6 @@
   $: if (selected) {
     dispatch('select', id);
   }
-  $: _class = cx(
-    '--tile',
-    '--tile--selectable',
-    selected && '--tile--is-selected',
-    light && '--tile--light',
-    className
-  );
 </script>
 
 <input
@@ -41,7 +34,7 @@
   {title} />
 <label
   for={id}
-  class={_class}
+  class={cx('--tile', '--tile--selectable', selected && '--tile--is-selected', light && '--tile--light', className)}
   on:click
   on:click|preventDefault={() => {
     selected = !selected;

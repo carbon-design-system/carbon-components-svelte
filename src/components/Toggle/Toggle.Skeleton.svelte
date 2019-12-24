@@ -1,19 +1,19 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = undefined;
-  export let labelText = undefined;
+  export let id = Math.random();
+  export let labelText = '';
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx('--form-item', className);
-  const ariaLabel = labelText ? null : $$props['aria-label'] || 'Toggle is loading';
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
   <input type="checkbox" class={cx('--toggle --skeleton')} {id} />
-  <label class={cx('--toggle__label', '--skeleton')} aria-label={ariaLabel} for={id}>
+  <label
+    aria-label={labelText ? null : $$props['aria-label'] || 'Toggle is loading'}
+    class={cx('--toggle__label', '--skeleton')}
+    for={id}>
     {#if labelText}
       <span class={cx('--toggle__label-text')}>{labelText}</span>
     {/if}

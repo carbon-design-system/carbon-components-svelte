@@ -11,9 +11,23 @@
 </script>
 
 {#if href}
-  <a role="button" on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style} {href}>
+  <a
+    role="button"
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    class={cx('--skeleton', '--btn', small && '--btn--sm', className)}
+    {style}
+    {href}>
     {''}
   </a>
 {:else}
-  <div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style} />
+  <div
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    class={cx('--skeleton', '--btn', small && '--btn--sm', className)}
+    {style} />
 {/if}

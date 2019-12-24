@@ -4,10 +4,8 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  const _class = cx('--accordion', className);
 </script>
 
-<ul on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<ul on:click on:mouseover on:mouseenter on:mouseleave class={cx('--accordion', className)} {style}>
   <slot />
 </ul>

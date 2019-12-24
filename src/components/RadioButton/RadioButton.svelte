@@ -16,12 +16,6 @@
   import { cx } from '../../lib';
 
   const ctx = getContext('RadioButtonGroup');
-  const _class = cx(
-    '--radio-button-wrapper',
-    labelPosition !== 'right' && `--radio-button-wrapper--label-${labelPosition}`,
-    className
-  );
-  const _innerLabelClass = cx(hideLabel && '--visually-hidden');
 
   let selected = ctx ? ctx.selected : writable(checked ? value : undefined);
 
@@ -32,7 +26,9 @@
   $: checked = $selected === value;
 </script>
 
-<div class={_class} {style}>
+<div
+  class={cx('--radio-button-wrapper', labelPosition !== 'right' && `--radio-button-wrapper--label-${labelPosition}`, className)}
+  {style}>
   <input
     type="radio"
     class={cx('--radio-button')}
@@ -47,8 +43,8 @@
     {checked}
     {disabled}
     {value} />
-  <label for={id} class={cx('--radio-button__label')}>
+  <label class={cx('--radio-button__label')} for={id}>
     <span class={cx('--radio-button__appearance')} />
-    <span class={_innerLabelClass}>{labelText}</span>
+    <span class={cx(hideLabel && '--visually-hidden')}>{labelText}</span>
   </label>
 </div>

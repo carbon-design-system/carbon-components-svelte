@@ -10,8 +10,8 @@
 
   import IconSkeleton from './Icon.Skeleton.svelte';
 
-  const iconName = render.toString().split(' ')[1];
-  const size = parseInt(iconName.slice(-2), 10);
+  $: iconName = render.toString().split(' ')[1];
+  $: size = parseInt(iconName.slice(-2), 10);
 </script>
 
 {#if skeleton}
@@ -20,18 +20,18 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
-    {size}
     class={className}
-    {style} />
+    {style}
+    {size} />
 {:else}
   <svelte:component
     this={render}
+    aria-label={$$props['aria-label']}
+    aria-labelledby={$$props['aria-labelledby']}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
-    aria-label={$$props['aria-label']}
-    aria-labelledby={$$props['aria-labelledby']}
     class={className}
     {tabindex}
     {focusable}

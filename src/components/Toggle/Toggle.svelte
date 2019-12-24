@@ -13,8 +13,6 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const _class = cx('--form-item', className);
-  const ariaLabel = labelText ? undefined : $$props['aria-label'] || 'Toggle';
 
   let inputRef = undefined;
 
@@ -27,7 +25,7 @@
   }
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
   <input
     bind:this={inputRef}
     type="checkbox"
@@ -46,7 +44,10 @@
     }}
     {disabled}
     {id} />
-  <label class={cx('--toggle-input__label')} for={id} aria-label={ariaLabel}>
+  <label
+    aria-label={labelText ? undefined : $$props['aria-label'] || 'Toggle'}
+    class={cx('--toggle-input__label')}
+    for={id}>
     {labelText}
     <span class={cx('--toggle__switch')}>
       <span aria-hidden="true" class={cx('--toggle__text--off')}>{labelA}</span>

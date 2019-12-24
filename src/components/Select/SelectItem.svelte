@@ -11,9 +11,14 @@
   import { cx } from '../../lib';
 
   const { selected } = getContext('Select');
-  const _class = cx('--select-option', className);
 </script>
 
-<option class={_class} {value} {disabled} {hidden} {style} selected={$selected === value}>
+<option
+  selected={$selected === value}
+  class={cx('--select-option', className)}
+  {value}
+  {disabled}
+  {hidden}
+  {style}>
   {text}
 </option>

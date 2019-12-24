@@ -14,7 +14,7 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const _class = cx('--tabs', type === 'container' && '--tabs--container', className);
+
   let dropdownHidden = true;
   let tabs = writable([]);
   let tabsById = derived(tabs, _ => _.reduce((a, c) => ({ ...a, [c.id]: c }), {}));
@@ -79,10 +79,9 @@
   $: if ($selectedTab) {
     dropdownHidden = true;
   }
-  $: _listClass = cx('--tabs__nav', dropdownHidden && '--tabs__nav--hidden');
 </script>
 
-<div class={_class} {style} {role}>
+<div class={cx('--tabs', type === 'container' && '--tabs--container', className)} {style} {role}>
   <div
     role="listbox"
     tabindex="0"
@@ -107,7 +106,7 @@
     </a>
     <ChevronDownGlyph aria-hidden="true" title={iconDescription} />
   </div>
-  <ul role="tablist" class={_listClass}>
+  <ul role="tablist" class={cx('--tabs__nav', dropdownHidden && '--tabs__nav--hidden')}>
     <slot />
   </ul>
 </div>

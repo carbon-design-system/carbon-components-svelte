@@ -66,7 +66,8 @@
       </Button>
       &nbsp;
       <Button {...regularProps} as let:props>
-        <a href="#link" {...props}>Custom component</a>
+        <!-- svelte-ignore a11y-missing-attribute -->
+        <a {...props}>Custom component</a>
       </Button>
     {/if}
   </div>

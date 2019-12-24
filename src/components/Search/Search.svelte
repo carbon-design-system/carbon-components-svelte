@@ -19,24 +19,13 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const _class = cx('--search', size && `--search--${size}`, light && '--search--light', className);
 
   let inputRef = undefined;
-
-  function clearInput() {
-    value = '';
-
-    dispatch('change', value);
-
-    if (inputRef) {
-      inputRef.focus();
-    }
-  }
-
-  $: _clearClass = cx('--search-close', value === '' && '--search-close--hidden');
 </script>
 
-<div class={_class} {style}>
+<div
+  class={cx('--search', size && `--search--${size}`, light && '--search--light', className)}
+  {style}>
   <Search16 class={cx('--search-magnifier')} />
   <label for={id} class={cx('--label')}>{labelText}</label>
   <input
@@ -54,9 +43,13 @@
     {value} />
   <button
     type="button"
-    class={_clearClass}
+    class={cx('--search-close', value === '' && '--search-close--hidden')}
     on:click
-    on:click={clearInput}
+    on:click={() => {
+      value = '';
+      dispatch('change', value);
+      inputRef.focus();
+    }}
     aria-label={closeButtonLabelText}>
     <svelte:component this={size === 'xl' ? Close20 : Close16} />
   </button>

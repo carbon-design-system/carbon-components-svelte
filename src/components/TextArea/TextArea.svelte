@@ -20,27 +20,22 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const errorId = `${id}-error`;
-  const _labelClass = cx(
-    '--label',
-    hideLabel && '--visually-hidden',
-    disabled && '--label--disabled'
-  );
-  const _helperTextClass = cx('--form__helper-text', disabled && '--form__helper-text--disabled');
-  const _textAreaClass = cx(
-    '--text-area',
-    light && '--text-area--light',
-    invalid && '--text-area--invalid',
-    className
-  );
+
+  $: errorId = `error-${id}`;
 </script>
 
 <div on:mouseover on:mouseenter on:mouseleave class={cx('--form-item')} {style}>
   {#if labelText && !hideLabel}
-    <label for={id} class={_labelClass}>{labelText}</label>
+    <label
+      for={id}
+      class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}>
+      {labelText}
+    </label>
   {/if}
   {#if helperText}
-    <div class={_helperTextClass}>{helperText}</div>
+    <div class={cx('--form__helper-text', disabled && '--form__helper-text--disabled')}>
+      {helperText}
+    </div>
   {/if}
   <div class={cx('--text-area__wrapper')} data-invalid={invalid || undefined}>
     {#if invalid}
@@ -63,7 +58,7 @@
           dispatch('input', event);
         }
       }}
-      class={_textAreaClass}
+      class={cx('--text-area', light && '--text-area--light', invalid && '--text-area--invalid', className)}
       aria-invalid={invalid || undefined}
       aria-describedby={invalid ? errorId : undefined}
       {disabled}

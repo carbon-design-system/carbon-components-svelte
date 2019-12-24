@@ -9,7 +9,6 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const _class = cx('--content-switcher', className);
   let currentId = writable(null);
   let currentIndex = selectedIndex;
   let switches = [];
@@ -49,6 +48,13 @@
   }
 </script>
 
-<div role="tablist" on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<div
+  role="tablist"
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={cx('--content-switcher', className)}
+  {style}>
   <slot />
 </div>

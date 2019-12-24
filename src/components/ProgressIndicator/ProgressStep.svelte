@@ -26,22 +26,16 @@
     current = step.current;
     complete = step.complete;
   }
-  $: _class = cx(
-    '--progress-step',
-    current && '--progress-step--current',
-    complete && '--progress-step--complete',
-    !complete && !current && '--progress-step--incomplete',
-    disabled && '--progress-step--disabled',
-    className
-  );
-  $: _buttonClass = cx('--progress-step-button', current && '--progress-step-button--unclickable');
 </script>
 
-<li aria-disabled={disabled} class={_class} {style}>
+<li
+  aria-disabled={disabled}
+  class={cx('--progress-step', current && '--progress-step--current', complete && '--progress-step--complete', !complete && !current && '--progress-step--incomplete', disabled && '--progress-step--disabled', className)}
+  {style}>
   <div
     role="button"
-    class={_buttonClass}
     tabindex={current ? '-1' : '0'}
+    class={cx('--progress-step-button', current && '--progress-step-button--unclickable')}
     on:click={() => {
       change(step.index);
     }}

@@ -44,11 +44,9 @@
     defaultSelected = $selected;
     dispatch('select', $selected);
   }
-
-  const _class = cx('--tile-group', className);
 </script>
 
-<fieldset class={_class} {disabled} {style}>
+<fieldset class={cx('--tile-group', className)} {disabled} {style}>
   {#if legend}
     <legend>{legend}</legend>
   {/if}
