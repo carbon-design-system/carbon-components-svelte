@@ -11,7 +11,7 @@
   export let light = false;
   export let style = undefined;
 
-  import { tick, onMount } from 'svelte';
+  import { tick } from 'svelte';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
   import { cx, css } from '../../lib';
 
@@ -19,19 +19,22 @@
   let tileContent = undefined;
   let aboveTheFold = undefined;
 
-  onMount(() => {
-    const tileStyle = window.getComputedStyle(tile, null);
-    tileMaxHeight = aboveTheFold.getBoundingClientRect().height;
-    tilePadding =
-      parseInt(tileStyle.getPropertyValue('padding-top'), 10) +
-      parseInt(tileStyle.getPropertyValue('padding-bottom'), 10);
-  });
-
   async function setHeight() {
     await tick();
     tileMaxHeight = expanded
       ? tileContent.getBoundingClientRect().height
       : aboveTheFold.getBoundingClientRect().height;
+  }
+
+  $: {
+    if (tile) {
+      const style = window.getComputedStyle(tile);
+
+      tileMaxHeight = aboveTheFold.getBoundingClientRect().height;
+      tilePadding =
+        parseInt(style.getPropertyValue('padding-top'), 10) +
+        parseInt(style.getPropertyValue('padding-bottom'), 10);
+    }
   }
 </script>
 
@@ -45,8 +48,9 @@
     setHeight();
   }}
   on:keypress
-  on:keypress={({ key }) => {
-    if (key === ' ' || key === 'Enter') {
+  on:keypress={event => {
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
       expanded = !expanded;
       setHeight();
     }
