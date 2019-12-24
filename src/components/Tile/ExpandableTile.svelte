@@ -11,15 +11,13 @@
   export let light = false;
   export let style = undefined;
 
-  import { createEventDispatcher, tick, onMount } from 'svelte';
+  import { tick, onMount } from 'svelte';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
-  import { cx } from '../../lib';
+  import { cx, css } from '../../lib';
 
   let tile = undefined;
   let tileContent = undefined;
   let aboveTheFold = undefined;
-
-  const dispatch = createEventDispatcher();
 
   onMount(() => {
     const tileStyle = window.getComputedStyle(tile, null);
@@ -29,47 +27,30 @@
       parseInt(tileStyle.getPropertyValue('padding-bottom'), 10);
   });
 
-  function setMaxHeight() {
+  async function setHeight() {
+    await tick();
     tileMaxHeight = expanded
       ? tileContent.getBoundingClientRect().height
       : aboveTheFold.getBoundingClientRect().height;
   }
-
-  async function handleClick(event) {
-    expanded = !expanded;
-    await tick();
-    setMaxHeight();
-    dispatch('click', event);
-  }
-
-  async function handleKeyPress(event) {
-    if (event.key === ' ' || event.key === 'Enter') {
-      expanded = !expanded;
-      await tick();
-      setMaxHeight();
-    }
-
-    dispatch('keypress', event);
-  }
-
-  $: _class = cx(
-    '--tile',
-    '--tile--expandable',
-    expanded && '--tile--is-expanded',
-    light && '--tile--light',
-    className
-  );
-  $: tileStyle = expanded ? undefined : `max-height: ${tileMaxHeight + tilePadding}px`;
 </script>
 
 <div
   bind:this={tile}
-  style={tileStyle}
-  class={_class}
+  style={expanded ? undefined : `max-height: ${tileMaxHeight + tilePadding}px`}
+  class={cx('--tile', '--tile--expandable', expanded && '--tile--is-expanded', light && '--tile--light', className)}
   on:click
-  on:click={handleClick}
+  on:click={() => {
+    expanded = !expanded;
+    setHeight();
+  }}
   on:keypress
-  on:keypress={handleKeyPress}
+  on:keypress={({ key }) => {
+    if (key === ' ' || key === 'Enter') {
+      expanded = !expanded;
+      setHeight();
+    }
+  }}
   on:mouseover
   on:mouseenter
   on:mouseleave
