@@ -50,7 +50,7 @@
     {:else if story === 'inline'}
       <Button />
     {:else if story === 'icon-only buttons'}
-      <Button {...iconOnlyProps} hasIconOnly />
+      <Button {...iconOnlyProps} />
     {:else if story === 'set of buttons'}
       <div class={cx('--btn-set')}>
         <Button kind="secondary" {...setProps}>Secondary button</Button>
