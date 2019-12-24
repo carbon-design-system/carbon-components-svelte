@@ -11,7 +11,6 @@
   export let type = 'button';
   export let icon = undefined;
   export let iconDescription = undefined;
-  export let hasIconOnly = false;
   export let tooltipPosition = undefined;
   export let tooltipAlignment = undefined;
   export let style = undefined;
@@ -19,6 +18,7 @@
   import { getContext } from 'svelte';
   import { cx } from '../../lib';
 
+  const hasIconOnly = !!icon && !$$props.$$slots;
   const ctx = getContext('ComposedModal');
 
   let buttonRef = undefined;
