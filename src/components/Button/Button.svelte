@@ -9,14 +9,25 @@
   export let href = undefined;
   export let tabindex = '0';
   export let type = 'button';
-  export let renderIcon = undefined;
+  export let icon = undefined;
   export let iconDescription = undefined;
   export let hasIconOnly = false;
   export let tooltipPosition = undefined;
   export let tooltipAlignment = undefined;
   export let style = undefined;
 
+  import { getContext } from 'svelte';
   import { cx } from '../../lib';
+
+  const ctx = getContext('ComposedModal');
+
+  let buttonRef = undefined;
+
+  $: {
+    if (ctx && buttonRef) {
+      ctx.declareRef({ name: 'buttonRef', ref: buttonRef });
+    }
+  }
 
   const _class = cx(
     '--btn',
@@ -51,28 +62,34 @@
   <slot props={buttonProps} />
 {:else}
   {#if href && !disabled}
-    <a {...buttonProps} {href} on:click on:mouseover on:mouseenter on:mouseleave>
+    <a {...buttonProps} on:click on:mouseover on:mouseenter on:mouseleave {href}>
       {#if hasIconOnly}
         <span class={cx('--assistive-text')}>{iconDescription}</span>
       {/if}
       <slot />
-      {#if renderIcon}
+      {#if icon}
         <svelte:component
-          this={renderIcon}
+          this={icon}
           aria-hidden="true"
           class={cx('--btn__icon')}
           aria-label={iconDescription} />
       {/if}
     </a>
   {:else}
-    <button {...buttonProps} on:click on:mouseover on:mouseenter on:mouseleave>
+    <button
+      {...buttonProps}
+      bind:this={buttonRef}
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseleave>
       {#if hasIconOnly}
         <span class={cx('--assistive-text')}>{iconDescription}</span>
       {/if}
       <slot />
-      {#if renderIcon}
+      {#if icon}
         <svelte:component
-          this={renderIcon}
+          this={icon}
           aria-hidden="true"
           class={cx('--btn__icon')}
           aria-label={iconDescription} />
