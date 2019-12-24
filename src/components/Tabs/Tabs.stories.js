@@ -10,7 +10,7 @@ export const Default = () => ({
       disabled: boolean('Disabled (disabled in <Tab>)', false),
       href: text('The href for tab (href in <Tab>)', '#'),
       role: text('ARIA role (role in <Tab>)', 'presentation'),
-      tabindex: number('Tab index (tabindex in <Tab>)', 0)
+      tabindex: text('Tab index (tabindex in <Tab>)', '0')
     },
     tabsProps: {
       className: 'some-class',

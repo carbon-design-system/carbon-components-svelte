@@ -23,13 +23,10 @@
 
   let buttonRef = undefined;
 
-  $: {
-    if (ctx && buttonRef) {
-      ctx.declareRef({ name: 'buttonRef', ref: buttonRef });
-    }
+  $: if (ctx && buttonRef) {
+    ctx.declareRef({ name: 'buttonRef', ref: buttonRef });
   }
-
-  const _class = cx(
+  $: _class = cx(
     '--btn',
     size === 'field' && '--btn--field',
     (size === 'small' || small) && '--btn--sm',
@@ -47,7 +44,7 @@
     hasIconOnly && tooltipAlignment && `--tooltip--align-${tooltipAlignment}`,
     className
   );
-  const buttonProps = {
+  $: buttonProps = {
     role: 'button',
     type: href && !disabled ? undefined : type,
     tabindex,

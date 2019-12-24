@@ -48,7 +48,7 @@ export const Expandable = () => ({
   Component,
   props: {
     story: 'expandable',
-    tabIndex: number('Tab index (tabIndex)', 0),
+    tabindex: text('Tab index (tabindex)', '0'),
     expanded: boolean('Expanded (expanded)', false),
     tileMaxHeight: number('Max height (tileMaxHeight)', 0),
     tileCollapsedIconText: text(

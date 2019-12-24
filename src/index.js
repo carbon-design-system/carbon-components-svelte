@@ -8,6 +8,12 @@ import CopyButton from './components/CopyButton';
 import ComposedModal, { ModalHeader, ModalBody, ModalFooter } from './components/ComposedModal';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
 import DataTableSkeleton from './components/DataTableSkeleton';
+import FileUploader, {
+  FileUploaderButton,
+  FileUploaderItem,
+  FileUploaderDropContainer,
+  Filename
+} from './components/FileUploader';
 import Form from './components/Form';
 import FormGroup from './components/FormGroup';
 import FormItem from './components/FormItem';
@@ -86,6 +92,11 @@ export {
   Copy,
   CopyButton,
   DataTableSkeleton,
+  FileUploader,
+  FileUploaderButton,
+  FileUploaderItem,
+  FileUploaderDropContainer,
+  Filename,
   Form,
   FormGroup,
   FormItem,

@@ -31,6 +31,11 @@ Currently, the following components are supported:
 - Copy
 - CopyButton
 - DataTableSkeleton
+- FileUploader
+  - FileUploaderButton
+  - FileUploaderItem
+  - FileUploaderDropContainer
+  - Filename
 - Form
 - FormGroup
 - FormItem
