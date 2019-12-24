@@ -13,7 +13,8 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  const refs = {};
+
+  let buttonRef = undefined;
   let outerModal = undefined;
   let innerModal = undefined;
 
@@ -24,8 +25,8 @@
     submit: () => {
       dispatch('submit');
     },
-    declareRef: ({ name, ref }) => {
-      refs[name] = ref;
+    declareRef: ref => {
+      buttonRef = ref;
     }
   });
 
@@ -38,22 +39,17 @@
       return focusElement.focus();
     }
 
-    if (refs.buttonRef) {
-      refs.buttonRef.focus();
+    if (buttonRef) {
+      buttonRef.focus();
     }
   }
 
-  const _containerClass = cx(
-    '--modal-container',
-    size && `--modal-container--${size}`,
-    containerClass
-  );
   $: didOpen = open;
-  $: _class = cx('--modal', open && 'is-visible', danger && '--modal--danger', className);
-  $: if (innerModal) {
-    focus(innerModal);
-  }
   $: {
+    if (innerModal) {
+      focus(innerModal);
+    }
+
     if (open) {
       document.body.classList.add(cx('--body--with-modal-open'));
     } else {
@@ -64,10 +60,10 @@
 </script>
 
 <div
+  bind:this={outerModal}
   role="presentation"
   tabindex="-1"
-  bind:this={outerModal}
-  class={_class}
+  class={cx('--modal', open && 'is-visible', danger && '--modal--danger', className)}
   on:click
   on:click={({ target }) => {
     if (!innerModal.contains(target)) {
@@ -85,7 +81,9 @@
     }
   }}
   {style}>
-  <div bind:this={innerModal} class={_containerClass}>
+  <div
+    bind:this={innerModal}
+    class={cx('--modal-container', size && `--modal-container--${size}`, containerClass)}>
     <slot />
   </div>
 </div>
