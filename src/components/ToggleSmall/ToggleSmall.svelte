@@ -9,20 +9,17 @@
   export let labelB = 'On';
   export let style = undefined;
 
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, afterUpdate } from 'svelte';
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
 
   let inputRef = undefined;
 
-  $: {
+  afterUpdate(() => {
+    inputRef.checked = toggled;
     dispatch('toggle', { id, toggled });
-
-    if (inputRef) {
-      inputRef.checked = toggled;
-    }
-  }
+  });
 </script>
 
 <div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
