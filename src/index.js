@@ -23,6 +23,7 @@ import InlineLoading from './components/InlineLoading';
 import Link from './components/Link';
 import ListItem from './components/ListItem';
 import Loading from './components/Loading';
+import Modal from './components/Modal';
 import {
   ToastNotification,
   InlineNotification,
@@ -105,6 +106,7 @@ export {
   Icon,
   IconSkeleton,
   InlineLoading,
+  Modal,
   InlineNotification,
   Link,
   ListItem,
