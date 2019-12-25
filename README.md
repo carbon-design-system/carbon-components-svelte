@@ -46,6 +46,7 @@ Currently, the following components are supported:
 - Link
 - ListItem
 - Loading
+- Modal
 - Notification
   - ToastNotification
   - InlineNotification

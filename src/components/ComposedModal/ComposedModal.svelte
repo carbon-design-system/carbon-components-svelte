@@ -30,19 +30,15 @@
     }
   });
 
+  // TODO: reuse in Modal
   function focus(element) {
-    if (element.querySelector(selectorPrimaryFocus)) {
-      return focusElement.focus();
-    }
-
-    if (buttonRef) {
-      buttonRef.focus();
-    }
+    const node = (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
+    node.focus();
   }
 
   onMount(async () => {
     await tick();
-    focus(innerModal);
+    focus();
 
     return () => {
       document.body.classList.remove(cx('--body--with-modal-open'));
@@ -50,11 +46,8 @@
   });
 
   afterUpdate(() => {
-    if (!didOpen) {
-      focus(outerModal);
-    }
-
     if (open) {
+      dispatch('open');
       document.body.classList.add(cx('--body--with-modal-open'));
     } else {
       dispatch('close');
@@ -80,8 +73,9 @@
   on:mouseenter
   on:mouseleave
   on:transitionend
-  on:transitionend={() => {
+  on:transitionend={({ currentTarget }) => {
     if (didOpen) {
+      focus(currentTarget);
       didOpen = false;
     }
   }}
