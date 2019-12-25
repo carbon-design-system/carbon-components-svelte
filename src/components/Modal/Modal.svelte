@@ -4,8 +4,8 @@
   export let passiveModal = false;
   export let hasForm = false;
   export let id = Math.random();
-  export let modalHeading = undefined; // node
-  export let modalLabel = undefined; // node
+  export let modalHeading = undefined;
+  export let modalLabel = undefined;
   export let open = false;
   export let iconDescription = 'Close the modal';
   export let primaryButtonDisabled = false;
