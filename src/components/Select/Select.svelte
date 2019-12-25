@@ -57,8 +57,8 @@
             aria-describedby={invalid ? errorId : undefined}
             disabled={disabled || undefined}
             aria-invalid={invalid || undefined}
-            on:change={event => {
-              selected.set(event.target.value);
+            on:change={({ target }) => {
+              selected.set(target.value);
             }}
             {id}>
             <slot />
@@ -86,8 +86,8 @@
           disabled={disabled || undefined}
           aria-invalid={invalid || undefined}
           on:change
-          on:change={event => {
-            selected.set(event.target.value);
+          on:change={({ target }) => {
+            selected.set(target.value);
           }}
           {id}>
           <slot />

@@ -65,6 +65,7 @@ import Tile, {
   TileAboveTheFoldContent,
   TileBelowTheFoldContent
 } from './components/Tile';
+import TimePicker, { TimePickerSelect } from './components/TimePicker';
 import Toggle, { ToggleSkeleton } from './components/Toggle';
 import ToggleSmall, { ToggleSmallSkeleton } from './components/ToggleSmall';
 import TooltipDefinition from './components/TooltipDefinition';
@@ -157,6 +158,8 @@ export {
   TileBelowTheFoldContent,
   TileGroup,
   ToastNotification,
+  TimePicker,
+  TimePickerSelect,
   Toggle,
   ToggleSkeleton,
   ToggleSmall,

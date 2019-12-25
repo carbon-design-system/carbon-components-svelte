@@ -10,11 +10,11 @@
   import { getContext } from 'svelte';
   import { cx } from '../../lib';
 
-  const { selected } = getContext('Select');
+  const ctx = getContext('Select') || getContext('TimePickerSelect');
 </script>
 
 <option
-  selected={$selected === value}
+  selected={ctx.$selected === value}
   class={cx('--select-option', className)}
   {value}
   {disabled}

@@ -100,6 +100,8 @@ Currently, the following components are supported:
   - Tile
   - TileGroup
     - RadioTile
+- TimePicker
+  - TimePickerSelect
 - Toggle
   - ToggleSkeleton
 - ToggleSmall
