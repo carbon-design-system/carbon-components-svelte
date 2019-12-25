@@ -2,6 +2,7 @@
   let className = undefined;
   export { className as class };
   export let files = [];
+  export const clearFiles = () => (files = []);
   export let name = '';
   export let labelDescription = '';
   export let labelTitle = '';
@@ -13,7 +14,7 @@
   export let accept = [];
   export let style = undefined;
 
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, afterUpdate } from 'svelte';
   import { cx } from '../../lib';
   import Filename from './Filename.svelte';
   import FileUploaderButton from './FileUploaderButton.svelte';
@@ -22,7 +23,7 @@
 
   let prevFiles = [];
 
-  $: {
+  afterUpdate(() => {
     if (files.length > prevFiles.length) {
       dispatch('add', files);
     } else {
@@ -33,7 +34,7 @@
     }
 
     prevFiles = [...files];
-  }
+  });
 </script>
 
 <div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
