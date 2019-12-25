@@ -11,10 +11,8 @@
   let timeoutId = undefined;
 
   onDestroy(() => {
-    if (timeoutId !== undefined) {
-      window.clearTimeout(timeoutId);
-      timeoutId = undefined;
-    }
+    window.clearTimeout(timeoutId);
+    timeoutId = undefined;
   });
 
   $: showFeedback = timeoutId !== undefined;

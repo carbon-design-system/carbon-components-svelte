@@ -7,7 +7,7 @@
   export let successDelay = 1500;
   export let style = undefined;
 
-  import { createEventDispatcher, onDestroy } from 'svelte';
+  import { createEventDispatcher, afterUpdate, onDestroy } from 'svelte';
   import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
   import Error20 from 'carbon-icons-svelte/lib/Error20';
   import { cx } from '../../lib';
@@ -17,18 +17,18 @@
 
   let timeoutId = undefined;
 
-  onDestroy(() => {
-    if (timeoutId !== undefined) {
-      window.clearTimeout(timeoutId);
-      timeoutId = undefined;
+  afterUpdate(() => {
+    if (status === 'finished') {
+      timeoutId = window.setTimeout(() => {
+        dispatch('success');
+      }, successDelay);
     }
   });
 
-  $: if (status === 'finished') {
-    timeoutId = window.setTimeout(() => {
-      dispatch('success');
-    }, successDelay);
-  }
+  onDestroy(() => {
+    window.clearTimeout(timeoutId);
+    timeoutId = undefined;
+  });
 </script>
 
 <div
