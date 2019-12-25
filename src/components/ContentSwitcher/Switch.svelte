@@ -6,8 +6,8 @@
   export let disabled = false;
   export let style = undefined;
 
+  import { afterUpdate, getContext } from 'svelte';
   import { cx } from '../../lib';
-  import { getContext } from 'svelte';
 
   const id = Math.random();
   const { currentId, add, update, change } = getContext('ContentSwitcher');
@@ -16,10 +16,13 @@
 
   add({ id, text, selected });
 
+  afterUpdate(() => {
+    if (selected) {
+      buttonRef.focus();
+    }
+  });
+
   $: selected = $currentId === id;
-  $: if (selected && buttonRef) {
-    buttonRef.focus();
-  }
 </script>
 
 <button
@@ -36,10 +39,10 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={event => {
-    if (event.key === 'ArrowRight') {
+  on:keydown={({ key }) => {
+    if (key === 'ArrowRight') {
       change(1);
-    } else if (event.key === 'ArrowLeft') {
+    } else if (key === 'ArrowLeft') {
       change(-1);
     }
   }}

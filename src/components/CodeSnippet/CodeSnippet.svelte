@@ -11,6 +11,7 @@
   export let light = false;
   export let style = undefined;
 
+  import { afterUpdate } from 'svelte';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
   import { cx } from '../../lib';
   import Button from '../Button';
@@ -22,10 +23,11 @@
   let expanded = false;
   let showMoreLess = false;
 
-  $: expandText = expanded ? showLessText : showMoreText;
-  $: if (codeRef) {
+  afterUpdate(() => {
     showMoreLess = type === 'multi' && codeRef.getBoundingClientRect().height > 255;
-  }
+  });
+
+  $: expandText = expanded ? showLessText : showMoreText;
 </script>
 
 {#if type === 'inline'}

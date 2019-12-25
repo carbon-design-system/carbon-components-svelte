@@ -21,9 +21,6 @@
 
   let over = false;
   let inputRef = undefined;
-
-  $: _class = cx('--file__drop-container', over && '--file__drop-container--drag-over', className);
-  $: _labelClass = cx('--file-browse-btn', disabled && '--file-browse-btn--disabled');
 </script>
 
 <div
@@ -51,7 +48,7 @@
   }}
   {style}>
   <label
-    class={_labelClass}
+    class={cx('--file-browse-btn', disabled && '--file-browse-btn--disabled')}
     for={id}
     on:keydown
     on:keydown={({ key }) => {
@@ -60,7 +57,9 @@
       }
     }}
     {tabindex}>
-    <div class={_class} {role}>
+    <div
+      class={cx('--file__drop-container', over && '--file__drop-container--drag-over', className)}
+      {role}>
       {labelText}
       <input
         bind:this={inputRef}

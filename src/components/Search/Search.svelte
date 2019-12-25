@@ -2,6 +2,7 @@
   let className = undefined;
   export { className as class };
   export let value = '';
+  export let autofocus = false;
   export let type = 'text';
   export let small = false;
   export let placeHolderText = '';
@@ -28,6 +29,7 @@
   {style}>
   <Search16 class={cx('--search-magnifier')} />
   <label for={id} class={cx('--label')}>{labelText}</label>
+  <!-- svelte-ignore a11y-autofocus -->
   <input
     bind:this={inputRef}
     role="searchbox"
@@ -35,9 +37,10 @@
     placeholder={placeHolderText}
     on:change
     on:input
-    on:input={event => {
-      value = event.target.value;
+    on:input={({ target }) => {
+      value = target.value;
     }}
+    {autofocus}
     {type}
     {id}
     {value} />

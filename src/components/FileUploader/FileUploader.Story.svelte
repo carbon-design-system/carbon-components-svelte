@@ -10,6 +10,7 @@
   import FileUploaderDropContainer from './FileUploaderDropContainer.svelte';
   import FileUploaderSkeleton from './FileUploader.Skeleton.svelte';
 
+  let fileUploader = undefined;
   let files = [];
 
   $: disabled = files.length === 0;
@@ -37,6 +38,7 @@
     {:else if story === 'uploader'}
       <div class={cx('--file__container')}>
         <FileUploader
+          bind:this={fileUploader}
           {...$$props}
           bind:files
           on:add={({ detail }) => {
@@ -50,9 +52,7 @@
           size="small"
           style="margin-top: 1rem"
           {disabled}
-          on:click={() => {
-            files = [];
-          }}>
+          on:click={fileUploader.clearFiles}>
           Clear File{files.length === 1 ? '' : 's'}
         </Button>
       </div>

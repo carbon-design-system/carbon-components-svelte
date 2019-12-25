@@ -6,18 +6,24 @@
   export let feedbackTimeout = 2000;
   export let style = undefined;
 
-  import { onDestroy } from 'svelte';
+  import { afterUpdate, onDestroy } from 'svelte';
   import Copy16 from 'carbon-icons-svelte/lib/Copy16';
   import { cx } from '../../lib';
 
   let animation = undefined;
   let timeoutId = undefined;
 
-  onDestroy(() => {
-    if (timeoutId !== undefined) {
-      window.clearTimeout(timeoutId);
-      timeoutId = undefined;
+  afterUpdate(() => {
+    if (animation === 'fade-in') {
+      timeoutId = window.setTimeout(() => {
+        animation = 'fade-out';
+      }, feedbackTimeout);
     }
+  });
+
+  onDestroy(() => {
+    window.clearTimeout(timeoutId);
+    timeoutId = undefined;
   });
 </script>
 
@@ -30,9 +36,6 @@
   on:click
   on:click={() => {
     animation = 'fade-in';
-    timeoutId = window.setTimeout(() => {
-      animation = 'fade-out';
-    }, feedbackTimeout);
   }}
   on:mouseover
   on:mouseenter
