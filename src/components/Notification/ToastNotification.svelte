@@ -21,14 +21,20 @@
 
   const dispatch = createEventDispatcher();
 
+  let timeoutId = undefined;
   let open = true;
 
   onMount(() => {
     if (timeout) {
-      window.setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
         open = false;
       }, timeout);
     }
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      timeoutId = undefined;
+    };
   });
 
   $: if (!open) {
