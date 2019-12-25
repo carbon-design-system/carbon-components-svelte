@@ -8,7 +8,7 @@
   export let size = undefined;
   export let style = undefined;
 
-  import { createEventDispatcher, setContext, onDestroy } from 'svelte';
+  import { createEventDispatcher, tick, setContext, onMount, afterUpdate } from 'svelte';
   import { writable } from 'svelte/store';
   import { cx } from '../../lib';
 
@@ -30,10 +30,6 @@
     }
   });
 
-  onDestroy(() => {
-    document.body.classList.remove(cx('--body--with-modal-open'));
-  });
-
   function focus(element) {
     if (element.querySelector(selectorPrimaryFocus)) {
       return focusElement.focus();
@@ -44,10 +40,18 @@
     }
   }
 
-  $: didOpen = open;
-  $: {
-    if (innerModal) {
-      focus(innerModal);
+  onMount(async () => {
+    await tick();
+    focus(innerModal);
+
+    return () => {
+      document.body.classList.remove(cx('--body--with-modal-open'));
+    };
+  });
+
+  afterUpdate(() => {
+    if (!didOpen) {
+      focus(outerModal);
     }
 
     if (open) {
@@ -56,7 +60,9 @@
       dispatch('close');
       document.body.classList.remove(cx('--body--with-modal-open'));
     }
-  }
+  });
+
+  $: didOpen = open;
 </script>
 
 <div
@@ -76,7 +82,6 @@
   on:transitionend
   on:transitionend={() => {
     if (didOpen) {
-      focus(outerModal);
       didOpen = false;
     }
   }}
