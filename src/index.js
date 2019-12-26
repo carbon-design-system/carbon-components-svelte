@@ -33,6 +33,7 @@ import {
   NotificationTextDetails
 } from './components/Notification';
 import OrderedList from './components/OrderedList';
+import OverflowMenu, { OverflowMenuItem } from './components/OverflowMenu';
 import Pagination, { PaginationSkeleton } from './components/Pagination';
 import ProgressIndicator, {
   ProgressIndicatorSkeleton,
@@ -117,6 +118,8 @@ export {
   NotificationIcon,
   NotificationTextDetails,
   OrderedList,
+  OverflowMenu,
+  OverflowMenuItem,
   Pagination,
   PaginationSkeleton,
   PasswordInput,

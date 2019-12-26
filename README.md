@@ -55,6 +55,8 @@ Currently, the following components are supported:
   - NotificationIcon
   - NotificationTextDetails
 - OrderedList
+- OverflowMenu
+  - OverflowMenuItem
 - Pagination
   - PaginationSkeleton
 - ProgressIndicator
