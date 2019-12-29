@@ -8,6 +8,7 @@ import CopyButton from './components/CopyButton';
 import ComposedModal, { ModalHeader, ModalBody, ModalFooter } from './components/ComposedModal';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
 import DataTableSkeleton from './components/DataTableSkeleton';
+import DatePicker, { DatePickerInput } from './components/DatePicker';
 import FileUploader, {
   FileUploaderButton,
   FileUploaderItem,
@@ -95,6 +96,8 @@ export {
   Copy,
   CopyButton,
   DataTableSkeleton,
+  DatePicker,
+  DatePickerInput,
   FileUploader,
   FileUploaderButton,
   FileUploaderItem,

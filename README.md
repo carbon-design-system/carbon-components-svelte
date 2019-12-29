@@ -31,6 +31,8 @@ Currently, the following components are supported:
 - Copy
 - CopyButton
 - DataTableSkeleton
+- DatePicker
+  - DatePickerInput
 - FileUploader
   - FileUploaderButton
   - FileUploaderItem

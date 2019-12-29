@@ -15,7 +15,8 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "carbon-icons-svelte": "^10.8.0-rc.0"
+    "carbon-icons-svelte": "^10.8.0-rc.0",
+    "flatpickr": "^4.6.3"
   },
   "peerDependencies": {
     "carbon-components": "^10.8.0",
@@ -46,6 +47,7 @@
     "pretty-quick": "^2.0.1",
     "regenerator-runtime": "^0.13.3",
     "rollup": "^1.27.13",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte": "^5.1.1",
     "rollup-plugin-terser": "^5.1.3",
