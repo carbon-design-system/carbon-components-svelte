@@ -56,6 +56,8 @@ Currently, the following components are supported:
   - NotificationButton
   - NotificationIcon
   - NotificationTextDetails
+- NumberInput
+  - NumberInputSkeleton
 - OrderedList
 - OverflowMenu
   - OverflowMenuItem
