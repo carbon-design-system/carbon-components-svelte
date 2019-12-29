@@ -30,7 +30,6 @@
   } = getContext('DatePicker');
 
   let inputRef = undefined;
-  let iconRef = undefined;
 
   add({ id, labelText });
 
@@ -56,10 +55,10 @@
       class={cx('--date-picker__input')}
       on:input
       on:input={({ target }) => {
-        updateValue({ id, type: 'input', value: target.value });
+        updateValue({ type: 'input', value: target.value });
       }}
       on:change={({ target }) => {
-        updateValue({ id, type: 'change', value: target.value });
+        updateValue({ type: 'change', value: target.value });
       }}
       on:keydown
       on:keydown={({ key }) => {

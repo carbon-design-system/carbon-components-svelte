@@ -39,12 +39,9 @@
   });
 
   $: if (switches[currentIndex]) {
+    dispatch('change', currentIndex);
     selectedIndex = currentIndex;
     currentId.set(switches[currentIndex].id);
-    switches = switches.map((_, i) => ({ ..._, selected: i === currentIndex }));
-
-    const { id, ...rest } = switches[currentIndex];
-    dispatch('change', { ...rest, index: currentIndex });
   }
 </script>
 

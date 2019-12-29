@@ -6,6 +6,7 @@
   export let id = Math.random();
   export let modalHeading = undefined;
   export let modalLabel = undefined;
+  export let modalAriaLabel = undefined;
   export let open = false;
   export let iconDescription = 'Close the modal';
   export let primaryButtonDisabled = false;
@@ -19,7 +20,6 @@
   export let style = undefined;
 
   import { createEventDispatcher, afterUpdate, onDestroy } from 'svelte';
-  import { writable } from 'svelte/store';
   import Close20 from 'carbon-icons-svelte/lib/Close20';
   import { cx } from '../../lib';
   import Button from '../Button';

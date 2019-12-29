@@ -1,4 +1,4 @@
-import { withKnobs, boolean, text, number } from '@storybook/addon-knobs';
+import { withKnobs, boolean, number } from '@storybook/addon-knobs';
 import Component from './ProgressIndicator.Story.svelte';
 
 export default { title: 'ProgressIndicator', decorators: [withKnobs] };

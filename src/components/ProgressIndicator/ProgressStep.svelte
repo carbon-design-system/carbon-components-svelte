@@ -10,12 +10,11 @@
   export let disabled = false;
   export let style = undefined;
 
-  import { createEventDispatcher, getContext } from 'svelte';
+  import { getContext } from 'svelte';
   import Warning16 from 'carbon-icons-svelte/lib/Warning16';
   import CheckmarkOutline16 from 'carbon-icons-svelte/lib/CheckmarkOutline16';
   import { cx } from '../../lib';
 
-  const dispatch = createEventDispatcher();
   const id = Math.random();
   const { stepsById, add, change } = getContext('ProgressIndicator');
 

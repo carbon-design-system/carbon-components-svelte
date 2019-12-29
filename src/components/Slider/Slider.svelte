@@ -9,9 +9,8 @@
   export let minLabel = '';
   export let maxLabel = '';
   export let labelText = '';
-  export let formatLabel = (value, label) => {
-    return typeof label === 'function' ? label(value) : `${value}${label}`;
-  };
+  export let formatLabel = (value, label) =>
+    typeof label === 'function' ? label(value) : `${value}${label}`;
   export let step = 1;
   export let stepMultiplier = 4;
   export let disabled = false;
@@ -22,7 +21,7 @@
   export let light = false;
   export let style = undefined;
 
-  import { createEventDispatcher, afterUpdate, tick } from 'svelte';
+  import { createEventDispatcher, afterUpdate } from 'svelte';
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();

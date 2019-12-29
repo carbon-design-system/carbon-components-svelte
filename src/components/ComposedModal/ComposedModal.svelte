@@ -9,7 +9,6 @@
   export let style = undefined;
 
   import { createEventDispatcher, tick, setContext, onMount, afterUpdate } from 'svelte';
-  import { writable } from 'svelte/store';
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();

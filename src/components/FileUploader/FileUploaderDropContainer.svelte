@@ -13,8 +13,6 @@
   export let style = undefined;
 
   import { createEventDispatcher } from 'svelte';
-  import SkeletonText from '../SkeletonText';
-  import { ButtonSkeleton } from '../Button';
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();

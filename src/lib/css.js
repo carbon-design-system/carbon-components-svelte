@@ -1,6 +1,6 @@
 function css(array) {
   return array
-    .map((item, i) => {
+    .map(item => {
       if (!item) return false;
 
       return Array.isArray(item)

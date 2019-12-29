@@ -15,10 +15,7 @@
   export let light = false;
   export let style = undefined;
 
-  import { createEventDispatcher } from 'svelte';
   import { cx } from '../../lib';
-
-  const dispatch = createEventDispatcher();
 </script>
 
 <div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>

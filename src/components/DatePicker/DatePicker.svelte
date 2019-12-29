@@ -22,7 +22,6 @@
 
   let inputs = writable([]);
   let inputIds = derived(inputs, _ => _.map(({ id }) => id));
-  let inputsById = derived(inputs, _ => _.reduce((a, c) => ({ ...a, [c.id]: c }), {}));
   let labelTextEmpty = derived(inputs, _ => _.filter(({ labelText }) => !!labelText).length === 0);
   let inputValue = writable(value);
   let mode = writable(datePickerType);
@@ -48,7 +47,7 @@
         inputRefTo = ref;
       }
     },
-    updateValue: ({ id, type, value }) => {
+    updateValue: ({ type, value }) => {
       if ((!calendar && type === 'input') || type === 'change') {
         inputValue.set(value);
       }

@@ -11,7 +11,6 @@
     kind,
     disabled,
     size,
-    renderIcon,
     iconDescription,
     small,
     tooltipPosition,
