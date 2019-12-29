@@ -18,10 +18,6 @@
     "carbon-icons-svelte": "^10.8.0-rc.0",
     "flatpickr": "^4.6.3"
   },
-  "peerDependencies": {
-    "carbon-components": "^10.8.0",
-    "carbon-icons-svelte": "^10.8.0-rc.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
