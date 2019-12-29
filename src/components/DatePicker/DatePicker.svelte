@@ -117,7 +117,6 @@
     }
   });
 
-  // $: hasCalendar.set($mode === 'single' || $mode === 'range');
   $: inputValue.set(value);
   $: value = $inputValue;
 </script>

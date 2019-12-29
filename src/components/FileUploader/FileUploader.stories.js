@@ -1,4 +1,4 @@
-import { withKnobs, text, select, boolean, number, array } from '@storybook/addon-knobs';
+import { withKnobs, text, select, boolean, array } from '@storybook/addon-knobs';
 import Component from './FileUploader.Story.svelte';
 
 export default { title: 'FileUploader', decorators: [withKnobs] };
@@ -89,7 +89,7 @@ export const FileUploaderDropContainer = () => ({
     ),
     disabled: boolean('Disabled (disabled)', false),
     role: text('ARIA role of the button (role)', ''),
-    tabindex: number('Tab index (tabindex)', '0')
+    tabindex: text('Tab index (tabindex)', '0')
   }
 });
 
