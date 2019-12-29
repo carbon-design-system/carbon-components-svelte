@@ -70,6 +70,7 @@ import Tile, {
 import TimePicker, { TimePickerSelect } from './components/TimePicker';
 import Toggle, { ToggleSkeleton } from './components/Toggle';
 import ToggleSmall, { ToggleSmallSkeleton } from './components/ToggleSmall';
+import Tooltip from './components/Tooltip';
 import TooltipDefinition from './components/TooltipDefinition';
 import TooltipIcon from './components/TooltipIcon';
 import UnorderedList from './components/UnorderedList';
@@ -170,6 +171,7 @@ export {
   ToggleSkeleton,
   ToggleSmall,
   ToggleSmallSkeleton,
+  Tooltip,
   TooltipDefinition,
   TooltipIcon,
   UnorderedList

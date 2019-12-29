@@ -110,6 +110,7 @@ Currently, the following components are supported:
   - ToggleSkeleton
 - ToggleSmall
   - ToggleSmallSkeleton
+- Tooltip
 - TooltipDefinition
 - TooltipIcon
 - UnorderedList
