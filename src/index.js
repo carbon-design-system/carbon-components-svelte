@@ -33,6 +33,7 @@ import {
   NotificationIcon,
   NotificationTextDetails
 } from './components/Notification';
+import NumberInput, { NumberInputSkeleton } from './components/NumberInput';
 import OrderedList from './components/OrderedList';
 import OverflowMenu, { OverflowMenuItem } from './components/OverflowMenu';
 import Pagination, { PaginationSkeleton } from './components/Pagination';
@@ -122,6 +123,8 @@ export {
   NotificationButton,
   NotificationIcon,
   NotificationTextDetails,
+  NumberInput,
+  NumberInputSkeleton,
   OrderedList,
   OverflowMenu,
   OverflowMenuItem,
