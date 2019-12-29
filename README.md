@@ -75,6 +75,8 @@ Currently, the following components are supported:
   - SelectItemGroup
 - SkeletonPlaceholder
 - SkeletonText
+- Slider
+  - SliderSkeleton
 - StructuredList
   - StructuredListSkeleton
   - StructuredListBody

@@ -46,6 +46,7 @@ import Search, { SearchSkeleton } from './components/Search';
 import Select, { SelectSkeleton, SelectItem, SelectItemGroup } from './components/Select';
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
+import Slider, { SliderSkeleton } from './components/Slider';
 import {
   StructuredListSkeleton,
   StructuredListBody,
@@ -143,6 +144,8 @@ export {
   SkeletonPlaceholder,
   SkeletonText,
   Switch,
+  Slider,
+  SliderSkeleton,
   StructuredListSkeleton,
   StructuredListBody,
   StructuredListHead,
