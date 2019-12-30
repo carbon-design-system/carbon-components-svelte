@@ -23,18 +23,21 @@
     <div class={cx('--time-picker__input')}>
       {#if labelText}
         <label
-          for={id}
-          class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}>
+          class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}
+          for={id}>
           {labelText}
         </label>
       {/if}
       <input
         data-invalid={invalid || undefined}
         class={cx('--time-picker__input-field', '--text-input', light && '--text-input--light', invalid && '--text-input--invalid')}
+        on:change
         on:input
         on:input={({ target }) => {
           value = target.value;
         }}
+        on:focus
+        on:blur
         {pattern}
         {placeholder}
         {maxlength}
@@ -42,7 +45,6 @@
         {type}
         {value}
         {disabled} />
-
     </div>
     <slot />
   </div>
