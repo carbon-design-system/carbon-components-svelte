@@ -56,6 +56,10 @@
       "email": "eric.young.liu@ibm.com"
     }
   ],
+  "engines": {
+    "node": ">=10",
+    "yarn": ">=1"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged && pretty-quick --pattern 'src/**/*.{js,svelte}' --staged",
