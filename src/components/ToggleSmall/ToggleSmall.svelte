@@ -9,22 +9,11 @@
   export let labelB = 'On';
   export let style = undefined;
 
-  import { createEventDispatcher, afterUpdate } from 'svelte';
   import { cx } from '../../lib';
-
-  const dispatch = createEventDispatcher();
-
-  let inputRef = undefined;
-
-  afterUpdate(() => {
-    inputRef.checked = toggled;
-    dispatch('toggle', { id, toggled });
-  });
 </script>
 
 <div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
   <input
-    bind:this={inputRef}
     type="checkbox"
     class={cx('--toggle-input', '--toggle-input--small')}
     checked={toggled}
@@ -39,9 +28,10 @@
         toggled = !toggled;
       }
     }}
+    on:focus
+    on:blur
     {disabled}
     {id} />
-
   <label
     aria-label={labelText ? undefined : $$props['aria-label'] || 'Toggle'}
     class={cx('--toggle-input__label')}

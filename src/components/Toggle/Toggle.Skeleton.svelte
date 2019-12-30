@@ -11,7 +11,7 @@
 <div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
   <input type="checkbox" class={cx('--toggle --skeleton')} {id} />
   <label
-    aria-label={labelText ? null : $$props['aria-label'] || 'Toggle is loading'}
+    aria-label={labelText ? undefined : $$props['aria-label'] || 'Toggle is loading'}
     class={cx('--toggle__label', '--skeleton')}
     for={id}>
     {#if labelText}

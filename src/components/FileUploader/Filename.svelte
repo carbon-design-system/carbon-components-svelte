@@ -15,7 +15,7 @@
 </script>
 
 {#if status === 'uploading'}
-  <Loading description={iconDescription} withOverlay={false} small class={className} {style} />
+  <Loading small description={iconDescription} withOverlay={false} class={className} {style} />
 {/if}
 
 {#if status === 'edit'}

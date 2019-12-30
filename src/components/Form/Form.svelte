@@ -4,10 +4,8 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  $: _class = cx('--form', className);
 </script>
 
-<form on:click on:mouseover on:mouseenter on:mouseleave class={_class} {style}>
+<form on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form', className)} {style}>
   <slot />
 </form>

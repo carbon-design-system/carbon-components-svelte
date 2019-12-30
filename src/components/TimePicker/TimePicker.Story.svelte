@@ -1,12 +1,16 @@
 <script>
   import Layout from '../../internal/ui/Layout.svelte';
+  import { SelectItem } from '../Select';
   import TimePicker from './TimePicker.svelte';
   import TimePickerSelect from './TimePickerSelect.svelte';
-  import { SelectItem } from '../Select';
 
   let value = '';
   let select1 = 'PM';
   let select2 = 'Time zone 1';
+
+  $: {
+    console.log(value, select1, select2);
+  }
 </script>
 
 <Layout>

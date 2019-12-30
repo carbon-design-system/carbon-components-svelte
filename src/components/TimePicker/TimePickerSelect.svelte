@@ -9,21 +9,16 @@
   export let disabled = false;
   export let style = undefined;
 
-  import { createEventDispatcher, setContext } from 'svelte';
+  import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
   import ChevronDownGlyph from 'carbon-icons-svelte/lib/ChevronDownGlyph';
   import { cx } from '../../lib';
-
-  const dispatch = createEventDispatcher();
 
   let selected = writable(value);
 
   setContext('TimePickerSelect', { selected });
 
-  $: {
-    selected.set(value);
-    dispatch('change', $selected);
-  }
+  $: selected.set(value);
   $: value = $selected;
 </script>
 
@@ -39,12 +34,12 @@
   {/if}
   <select
     class={cx('--select-input')}
-    {id}
-    {disabled}
-    {value}
     on:change={({ target }) => {
       selected.set(target.value);
-    }}>
+    }}
+    {id}
+    {disabled}
+    {value}>
     <slot />
   </select>
   <ChevronDownGlyph

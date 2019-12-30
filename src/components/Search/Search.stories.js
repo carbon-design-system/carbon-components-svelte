@@ -20,7 +20,7 @@ export const Default = () => ({
       'The label text for the close button (closeButtonLabelText)',
       'Clear search input'
     ),
-    placeHolderText: text('Placeholder text (placeHolderText)', 'Search')
+    placeholder: text('Placeholder text (placeholder)', 'Search')
   }
 });
 
