@@ -17,6 +17,7 @@
   role="listbox"
   tabindex="-1"
   data-invalid={invalid || undefined}
+  aria-label={$$props['aria-label']}
   class={cx('--list-box', size && `--list-box--${size}`, type === 'inline' && '--list-box--inline', disabled && '--list-box--disabled', open && '--list-box--expanded', light && '--list-box--light', className)}
   on:keydown
   on:keydown={event => {
