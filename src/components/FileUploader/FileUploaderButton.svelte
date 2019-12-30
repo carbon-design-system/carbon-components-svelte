@@ -16,20 +16,12 @@
   import { cx } from '../../lib';
 
   let inputRef = undefined;
-
-  $: _class = cx(
-    '--btn',
-    '--btn--sm',
-    kind && `--btn--${kind}`,
-    disabled && '--btn--disabled',
-    className
-  );
 </script>
 
 <label
   tabindex={disabled ? '-1' : tabindex}
   aria-disabled={disabled}
-  class={_class}
+  class={cx('--btn', '--btn--sm', kind && `--btn--${kind}`, disabled && '--btn--disabled', className)}
   for={id}
   on:keydown
   on:keydown={({ key }) => {
@@ -54,8 +46,8 @@
     }
   }}
   on:click
-  on:click={event => {
-    event.target.value = null;
+  on:click={({ target }) => {
+    target.value = null;
   }}
   {id}
   {disabled}

@@ -26,9 +26,6 @@
   <p class={cx('--file-filename')}>{name}</p>
   <span class={cx('--file__state-container')}>
     <Filename
-      {iconDescription}
-      {status}
-      {invalid}
       on:keydown={({ key }) => {
         if (key === ' ' || key === 'Enter') {
           dispatch('delete', id);
@@ -36,7 +33,10 @@
       }}
       on:click={() => {
         dispatch('delete', id);
-      }} />
+      }}
+      {iconDescription}
+      {status}
+      {invalid} />
   </span>
   {#if invalid && errorSubject}
     <div class={cx('--form-requirement')}>
