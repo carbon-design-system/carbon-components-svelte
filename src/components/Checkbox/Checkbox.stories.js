@@ -9,8 +9,7 @@ export const Checked = () => ({
     labelText: text('Label text (labelText)', 'Checkbox label'),
     indeterminate: boolean('Intermediate (indeterminate)', false),
     disabled: boolean('Disabled (disabled)', false),
-    hideLabel: boolean('No label (hideLabel)', false),
-    wrapperClass: text('Wrapper CSS class name (wrapperClass)', '')
+    hideLabel: boolean('No label (hideLabel)', false)
   }
 });
 
@@ -21,8 +20,7 @@ export const Unchecked = () => ({
     labelText: text('Label text (labelText)', 'Checkbox label'),
     indeterminate: boolean('Intermediate (indeterminate)', false),
     disabled: boolean('Disabled (disabled)', false),
-    hideLabel: boolean('No label (hideLabel)', false),
-    wrapperClass: text('Wrapper CSS class name (wrapperClass)', '')
+    hideLabel: boolean('No label (hideLabel)', false)
   }
 });
 
