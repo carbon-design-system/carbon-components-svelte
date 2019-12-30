@@ -27,19 +27,17 @@
   tabindex={disabled ? '-1' : '0'}
   title={description}
   class={cx('--list-box__selection', selectionCount && '--tag--filter', selectionCount && '--list-box__selection--multi', className)}
-  on:click
-  on:click|stopPropagation={event => {
+  on:click|preventDefault|stopPropagation={event => {
     if (!disabled) {
       dispatch('clear', event);
     }
   }}
-  on:keydown
   on:keydown|stopPropagation={event => {
     if (!disabled && event.key === 'Enter') {
       dispatch('clear', event);
     }
   }}
   {style}>
-  {selectionCount}
-  <Close16 />
+  {#if selectionCount}{selectionCount}{/if}
+  <Close16 focusable="false" tabindex="-1" />
 </div>

@@ -17,6 +17,9 @@
   $: description = open ? translateWithId('close') : translateWithId('open');
 </script>
 
-<div class={cx('--list-box__menu-icon', open && '--list-box__menu-icon--open', className)} {style}>
-  <ChevronDown16 name="chevron--down" aria-label={description} title={description} />
+<div
+  on:click|preventDefault|stopPropagation
+  class={cx('--list-box__menu-icon', open && '--list-box__menu-icon--open', className)}
+  {style}>
+  <ChevronDown16 name="chevron--down" tabindex="-1" aria-label={description} title={description} />
 </div>

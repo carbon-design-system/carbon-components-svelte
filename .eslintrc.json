@@ -16,5 +16,5 @@
       "processor": "svelte3/svelte3"
     }
   ],
-  "ignorePatterns": ["*.snap"]
+  "ignorePatterns": ["docs", "*.snap"]
 }

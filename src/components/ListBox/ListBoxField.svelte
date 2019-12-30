@@ -22,11 +22,16 @@
 
 <div
   role={ariaExpanded ? 'combobox' : role}
+  aria-expanded={ariaExpanded}
   aria-owns={(ariaExpanded && menuId) || undefined}
   aria-controls={(ariaExpanded && menuId) || undefined}
   aria-label={ariaExpanded ? translateWithId('close') : translateWithId('open')}
   tabindex={disabled ? '-1' : tabindex}
   class={cx('--list-box__field', className)}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
   {style}>
   <slot />
 </div>
