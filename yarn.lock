@@ -3283,10 +3283,10 @@ carbon-components@10.9.0:
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
 
-carbon-icons-svelte@^10.8.1:
-  version "10.8.1"
-  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.8.1.tgz#b4fcf1fcda22ed17f7820211492e6100639d8e3c"
-  integrity sha512-1CST4qRV8lu49OYgHVBzj9VN03ipY6+qyZPSQGx+chK6Z9sn+NdJUNhR1mvPIgfddz5SY30RSR76Vfd22bQC9Q==
+carbon-icons-svelte@^10.8.2:
+  version "10.8.2"
+  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.8.2.tgz#b1432c8de8a19210f50b42e1498b08d01c25b86b"
+  integrity sha512-5kPCxcED9OXV96NRFKqWbUGRfBf4qX0XcvYqV4c5IL8yGaJGWu1qows7ldENqhwVGXrfsBNQ7tDoR0fIC3CSsw==
 
 carbon-icons@^7.0.7:
   version "7.0.7"
