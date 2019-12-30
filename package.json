@@ -15,7 +15,7 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "carbon-icons-svelte": "^10.8.0-rc.0",
+    "carbon-icons-svelte": "^10.8.1",
     "flatpickr": "^4.6.3"
   },
   "devDependencies": {
