@@ -4,6 +4,8 @@
 
 > Svelte implementation of the Carbon Design System
 
+Currently, this project is under active development. See the [ongoing project](https://github.com/IBM/carbon-components-svelte/projects/1) for the anticipated v1.0.0 release.
+
 ## [Storybook](https://ibm.github.io/carbon-components-svelte)
 
 ## Supported Components
@@ -119,13 +121,9 @@ Currently, the following components are supported:
 - TooltipIcon
 - UnorderedList
 
-## Usage
-
-[Placeholder]
-
 ## Contributing
 
-[Placeholder]
+Refer to the [Contributing guidelines](CONTRIBUTING.md).
 
 ## [Changelog](CHANGELOG.md)
 
