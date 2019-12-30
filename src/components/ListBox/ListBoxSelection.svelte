@@ -39,5 +39,5 @@
   }}
   {style}>
   {#if selectionCount}{selectionCount}{/if}
-  <Close16 focusable="false" tabindex="-1" />
+  <Close16 />
 </div>
