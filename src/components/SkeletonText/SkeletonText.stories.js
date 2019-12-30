@@ -8,7 +8,7 @@ export const Default = () => ({
   props: {
     heading: boolean('Skeleton text at a larger size (heading)'),
     paragraph: boolean('Use multiple lines of text (paragraph)'),
-    lineCount: number('The number of lines in a paragraph (lineCount)', 3),
+    lines: number('The number of lines in a paragraph (lines)', 3),
     width: select(
       'Width (in px or %) of single line of text or max-width of paragraph lines (width)',
       { '100%': '100%', '250px': '250px' },
