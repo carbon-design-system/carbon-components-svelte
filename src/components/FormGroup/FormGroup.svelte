@@ -8,20 +8,17 @@
   export let style = undefined;
 
   import { cx } from '../../lib';
-
-  $: _class = cx('--fieldset', className);
-  $: _legendClass = cx('--label', className);
 </script>
 
 <fieldset
-  data-invalid={invalid ? '' : undefined}
+  data-invalid={invalid || undefined}
+  class={cx('--fieldset', className)}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
-  class={_class}
   {style}>
-  <legend class={_legendClass}>{legendText}</legend>
+  <legend class={cx('--label', className)}>{legendText}</legend>
   <slot />
   {#if message}
     <div class={cx('--form__requirements')}>{messageText}</div>
