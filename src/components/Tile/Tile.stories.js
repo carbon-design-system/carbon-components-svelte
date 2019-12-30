@@ -1,13 +1,11 @@
-import { withKnobs, select, number, boolean, text } from '@storybook/addon-knobs';
+import { withKnobs, number, boolean, text } from '@storybook/addon-knobs';
 import Component from './Tile.Story.svelte';
 
 export default { title: 'Tile', decorators: [withKnobs] };
 
 export const Default = () => ({
   Component,
-  props: {
-    light: boolean('Light variant (light)', false)
-  }
+  props: { light: boolean('Light variant (light)', false) }
 });
 
 export const Clickable = () => ({
@@ -27,13 +25,6 @@ export const MultiSelect = () => ({
     light: boolean('Light variant (light)', false)
   }
 });
-
-const radioValues = {
-  None: '',
-  standard: 'standard',
-  'default-selected': 'default-selected',
-  selected: 'selected'
-};
 
 export const Selectable = () => ({
   Component,

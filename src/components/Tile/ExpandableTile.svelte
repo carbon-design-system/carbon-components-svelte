@@ -13,7 +13,7 @@
 
   import { onMount, afterUpdate } from 'svelte';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
-  import { cx, css } from '../../lib';
+  import { cx } from '../../lib';
 
   let tile = undefined;
   let tileContent = undefined;

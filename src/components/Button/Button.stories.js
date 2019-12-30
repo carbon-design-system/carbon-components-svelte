@@ -3,8 +3,6 @@ import Component from './Button.Story.svelte';
 
 export default { title: 'Button', decorators: [withKnobs] };
 
-// TODO: add selectable renderIcon for Default, Icon-only stories
-
 const kinds = {
   'Primary button (primary)': 'primary',
   'Secondary button (secondary)': 'secondary',

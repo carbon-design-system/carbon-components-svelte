@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/svelte';
+import { render } from '@testing-library/svelte';
 import Component from './Breadcrumb.Story.svelte';
 
 describe('Breadcrumb', () => {

@@ -3,11 +3,6 @@ import Component from './Select.Story.svelte';
 
 export default { title: 'Select', decorators: [withKnobs] };
 
-const labelPositions = {
-  'Left (left)': 'left',
-  'Right (right)': 'right'
-};
-
 export const Default = () => ({
   Component,
   props: {
@@ -32,5 +27,8 @@ export const Default = () => ({
 
 export const Skeleton = () => ({
   Component,
-  props: { story: 'skeleton', hideLabel: boolean('No label (hideLabel in <Select>)', false) }
+  props: {
+    story: 'skeleton',
+    hideLabel: boolean('No label (hideLabel in <Select>)', false)
+  }
 });

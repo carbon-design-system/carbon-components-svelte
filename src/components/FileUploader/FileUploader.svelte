@@ -64,7 +64,7 @@
               }
             }}
             on:click
-            on:click={evt => {
+            on:click={() => {
               files = files.filter((_, index) => index !== i);
             }}
             {iconDescription}

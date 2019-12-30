@@ -14,7 +14,7 @@
   export let style = undefined;
 
   import { createEventDispatcher, setContext, afterUpdate } from 'svelte';
-  import { writable, derived } from 'svelte/store';
+  import { writable } from 'svelte/store';
   import OverflowMenuVertical16 from 'carbon-icons-svelte/lib/OverflowMenuVertical16';
   import { cx } from '../../lib';
   import { formatStyle } from './formatStyle';

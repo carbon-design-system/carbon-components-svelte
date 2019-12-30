@@ -22,7 +22,6 @@
   {#if invalid}
     <WarningFilled16 class={cx('--file-invalid')} />
   {/if}
-  <!-- TODO: forward keydown event to Svelte icon -->
   <Close16
     class={cx('--file-close', className)}
     aria-label={iconDescription}
