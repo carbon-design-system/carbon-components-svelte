@@ -26,11 +26,17 @@
   $: errorId = `error-${id}`;
 </script>
 
-<div class={cx('--form-item', '--text-input-wrapper', '--password-input-wrapper')} {style}>
+<div
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  class={cx('--form-item', '--text-input-wrapper', '--password-input-wrapper', className)}
+  {style}>
   {#if labelText}
     <label
-      for={id}
-      class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}>
+      class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}
+      for={id}>
       {labelText}
     </label>
   {/if}
@@ -44,16 +50,17 @@
       <WarningFilled16 class={cx('--text-input__invalid-icon')} />
     {/if}
     <input
-      class={cx('--text-input', '--password-input', light && '--text-input--light', invalid && '--text-input--invalid', className)}
-      on:click
-      on:change
-      on:input
-      on:input={event => {
-        value = event.target.value;
-      }}
       data-invalid={invalid || undefined}
       aria-invalid={invalid || undefined}
       aria-describedby={invalid ? errorId : undefined}
+      class={cx('--text-input', '--password-input', light && '--text-input--light', invalid && '--text-input--invalid')}
+      on:change
+      on:input
+      on:input={({ target }) => {
+        value = target.value;
+      }}
+      on:focus
+      on:blur
       {id}
       {placeholder}
       {type}
