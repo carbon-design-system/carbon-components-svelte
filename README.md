@@ -48,6 +48,12 @@ Currently, the following components are supported:
   - IconSkeleton
 - InlineLoading
 - Link
+- ListBox
+  - ListBoxField
+  - ListBoxMenu
+  - ListBoxMenuIcon
+  - ListBoxMenuItem
+  - ListBoxSelection
 - ListItem
 - Loading
 - Modal

@@ -22,6 +22,13 @@ import FormLabel from './components/FormLabel';
 import Icon, { IconSkeleton } from './components/Icon';
 import InlineLoading from './components/InlineLoading';
 import Link from './components/Link';
+import ListBox, {
+  ListBoxField,
+  ListBoxMenu,
+  ListBoxMenuIcon,
+  ListBoxMenuItem,
+  ListBoxSelection
+} from './components/ListBox';
 import ListItem from './components/ListItem';
 import Loading from './components/Loading';
 import Modal from './components/Modal';
@@ -117,6 +124,12 @@ export {
   Modal,
   InlineNotification,
   Link,
+  ListBox,
+  ListBoxField,
+  ListBoxMenu,
+  ListBoxMenuIcon,
+  ListBoxMenuItem,
+  ListBoxSelection,
   ListItem,
   Loading,
   NotificationActionButton,
