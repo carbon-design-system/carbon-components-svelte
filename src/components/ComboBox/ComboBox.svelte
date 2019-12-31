@@ -32,7 +32,7 @@
 
   let selectedId = undefined;
   let inputRef = undefined;
-  let inputValue = undefined;
+  let inputValue = '';
   let highlightedIndex = -1;
 
   function change(direction) {
@@ -57,14 +57,14 @@
     }
   });
 
-  $: selectedItem = items[selectedIndex];
-  $: inputValue = selectedItem ? selectedItem.text : undefined;
-  $: value = inputValue;
   $: ariaLabel = $$props['aria-label'] || 'Choose an item';
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : undefined;
   $: filteredItems = items.filter(item => shouldFilterItem(item, value));
+  $: selectedItem = items[selectedIndex];
+  $: inputValue = selectedItem ? selectedItem.text : undefined;
+  $: value = inputValue;
 </script>
 
 <svelte:body
@@ -107,6 +107,7 @@
         tabindex="0"
         autocomplete="off"
         aria-autocomplete="list"
+        aria-expanded={open}
         aria-activedescendant={highlightedId}
         aria-labelledby={comboId}
         aria-disabled={disabled}
