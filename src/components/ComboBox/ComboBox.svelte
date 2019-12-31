@@ -30,6 +30,7 @@
     ListBoxSelection
   } from '../ListBox';
 
+  let selectedId = undefined;
   let inputRef = undefined;
   let inputValue = undefined;
   let highlightedIndex = -1;
@@ -49,6 +50,7 @@
   afterUpdate(() => {
     if (open) {
       inputRef.focus();
+      filteredItems = items.filter(item => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
       inputValue = selectedItem ? selectedItem.text : '';
@@ -165,10 +167,11 @@
       <ListBoxMenu aria-label={ariaLabel} {id}>
         {#each filteredItems as item, i (item.id || i)}
           <ListBoxMenuItem
-            active={selectedIndex === i}
+            active={selectedIndex === i || selectedId === item.id}
             highlighted={highlightedIndex === i || selectedIndex === i}
             on:click={() => {
-              selectedIndex = i;
+              selectedId = item.id;
+              selectedIndex = items.map(({ id }) => id).indexOf(filteredItems[i].id);
               open = false;
             }}
             on:mouseenter={() => {
