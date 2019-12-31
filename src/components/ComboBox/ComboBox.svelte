@@ -30,8 +30,9 @@
     ListBoxSelection
   } from '../ListBox';
 
+  let selectedId = undefined;
   let inputRef = undefined;
-  let inputValue = undefined;
+  let inputValue = '';
   let highlightedIndex = -1;
 
   function change(direction) {
@@ -49,20 +50,21 @@
   afterUpdate(() => {
     if (open) {
       inputRef.focus();
+      filteredItems = items.filter(item => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
       inputValue = selectedItem ? selectedItem.text : '';
     }
   });
 
-  $: selectedItem = items[selectedIndex];
-  $: inputValue = selectedItem ? selectedItem.text : undefined;
-  $: value = inputValue;
   $: ariaLabel = $$props['aria-label'] || 'Choose an item';
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : undefined;
   $: filteredItems = items.filter(item => shouldFilterItem(item, value));
+  $: selectedItem = items[selectedIndex];
+  $: inputValue = selectedItem ? selectedItem.text : undefined;
+  $: value = inputValue;
 </script>
 
 <svelte:body
@@ -105,6 +107,7 @@
         tabindex="0"
         autocomplete="off"
         aria-autocomplete="list"
+        aria-expanded={open}
         aria-activedescendant={highlightedId}
         aria-labelledby={comboId}
         aria-disabled={disabled}
@@ -165,10 +168,11 @@
       <ListBoxMenu aria-label={ariaLabel} {id}>
         {#each filteredItems as item, i (item.id || i)}
           <ListBoxMenuItem
-            active={selectedIndex === i}
+            active={selectedIndex === i || selectedId === item.id}
             highlighted={highlightedIndex === i || selectedIndex === i}
             on:click={() => {
-              selectedIndex = i;
+              selectedId = item.id;
+              selectedIndex = items.map(({ id }) => id).indexOf(filteredItems[i].id);
               open = false;
             }}
             on:mouseenter={() => {

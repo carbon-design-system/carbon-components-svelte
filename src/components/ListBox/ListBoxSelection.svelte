@@ -7,21 +7,28 @@
   export let translateWithId = id => defaultTranslations[id];
   export let style = undefined;
 
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, getContext } from 'svelte';
   import Close16 from 'carbon-icons-svelte/lib/Close16';
   import { cx } from '../../lib';
-
-  const dispatch = createEventDispatcher();
 
   const defaultTranslations = {
     [translationIds.clearAll]: 'Clear all selected items',
     [translationIds.clearSelection]: 'Clear selected item'
   };
+  const dispatch = createEventDispatcher();
+  const ctx = getContext('MultiSelect');
+
+  let selectionRef = undefined;
+
+  $: if (ctx && selectionRef) {
+    ctx.declareRef({ key: 'selection', ref: selectionRef });
+  }
 
   $: description = selectionCount ? translateWithId('clearAll') : translateWithId('clearSelection');
 </script>
 
 <div
+  bind:this={selectionRef}
   role="button"
   aria-label="Clear Selection"
   tabindex={disabled ? '-1' : '0'}

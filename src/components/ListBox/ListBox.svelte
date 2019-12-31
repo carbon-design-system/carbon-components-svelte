@@ -1,6 +1,7 @@
 <script>
   let className = undefined;
   export { className as class };
+  export let id = Math.random();
   export let size = undefined;
   export let type = 'default';
   export let disabled = false;
@@ -26,7 +27,8 @@
     }
   }}
   on:click|preventDefault|stopPropagation
-  {style}>
+  {style}
+  {id}>
   <slot />
 </div>
 {#if invalid}
