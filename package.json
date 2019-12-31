@@ -68,7 +68,7 @@
   },
   "lint-staged": {
     "*.{js,svelte}": [
-      "eslint --fix 'src/**'",
+      "eslint --fix",
       "git add"
     ]
   },
