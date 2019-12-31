@@ -15,14 +15,14 @@
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
   import { cx, css } from '../../lib';
 
-  let tile = undefined;
-  let tileContent = undefined;
-  let aboveTheFold = undefined;
+  let tileRef = undefined;
+  let contentRef = undefined;
+  let aboveRef = undefined;
 
   onMount(() => {
-    const style = window.getComputedStyle(tile);
+    const style = window.getComputedStyle(tileRef);
 
-    tileMaxHeight = aboveTheFold.getBoundingClientRect().height;
+    tileMaxHeight = aboveRef.getBoundingClientRect().height;
     tilePadding =
       parseInt(style.getPropertyValue('padding-top'), 10) +
       parseInt(style.getPropertyValue('padding-bottom'), 10);
@@ -30,13 +30,13 @@
 
   afterUpdate(() => {
     tileMaxHeight = expanded
-      ? tileContent.getBoundingClientRect().height
-      : aboveTheFold.getBoundingClientRect().height;
+      ? contentRef.getBoundingClientRect().height
+      : aboveRef.getBoundingClientRect().height;
   });
 </script>
 
 <div
-  bind:this={tile}
+  bind:this={tileRef}
   class={cx('--tile', '--tile--expandable', expanded && '--tile--is-expanded', light && '--tile--light', className)}
   style={expanded ? undefined : css([style, `max-height: ${tileMaxHeight + tilePadding}px`])}
   on:click
@@ -55,9 +55,16 @@
   on:mouseleave
   {tabindex}
   {id}>
-  <div bind:this={tileContent}>
-    <div bind:this={aboveTheFold} class={cx('--tile-content')}>
-      <slot name="above" />
+  <div bind:this={contentRef}>
+    <div bind:this={aboveRef} class={cx('--tile-content')}>
+      <span
+        on:click
+        on:mouseover
+        on:mouseenter
+        on:mouseleave
+        class={cx('--tile-content__above-the-fold')}>
+        <slot name="above" />
+      </span>
     </div>
     <button
       aria-expanded={expanded}
@@ -66,7 +73,14 @@
       <ChevronDown16 />
     </button>
     <div class={cx('--tile-content')}>
-      <slot name="below" />
+      <span
+        on:click
+        on:mouseover
+        on:mouseenter
+        on:mouseleave
+        class={cx('--tile-content__below-the-fold')}>
+        <slot name="below" />
+      </span>
     </div>
   </div>
 </div>

@@ -70,14 +70,7 @@ import Tabs, { Tab, TabContent, TabsSkeleton } from './components/Tabs';
 import Tag, { TagSkeleton } from './components/Tag';
 import TextArea, { TextAreaSkeleton } from './components/TextArea';
 import TextInput, { TextInputSkeleton, PasswordInput } from './components/TextInput';
-import Tile, {
-  ClickableTile,
-  ExpandableTile,
-  SelectableTile,
-  TileGroup,
-  TileAboveTheFoldContent,
-  TileBelowTheFoldContent
-} from './components/Tile';
+import Tile, { ClickableTile, ExpandableTile, SelectableTile, TileGroup } from './components/Tile';
 import TimePicker, { TimePickerSelect } from './components/TimePicker';
 import Toggle, { ToggleSkeleton } from './components/Toggle';
 import ToggleSmall, { ToggleSmallSkeleton } from './components/ToggleSmall';
@@ -184,8 +177,6 @@ export {
   TextInput,
   TextInputSkeleton,
   Tile,
-  TileAboveTheFoldContent,
-  TileBelowTheFoldContent,
   TileGroup,
   ToastNotification,
   TimePicker,

@@ -7,8 +7,6 @@
   import RadioTile from './RadioTile.svelte';
   import SelectableTile from './SelectableTile.svelte';
   import Tile from './Tile.svelte';
-  import TileAboveTheFoldContent from './TileAboveTheFoldContent.svelte';
-  import TileBelowTheFoldContent from './TileBelowTheFoldContent.svelte';
   import TileGroup from './TileGroup.svelte';
 
   const radioTiles = [
@@ -54,16 +52,8 @@
       </TileGroup>
     {:else if story === 'expandable'}
       <ExpandableTile {...$$props}>
-        <div slot="above">
-          <TileAboveTheFoldContent>
-            <div style="height: 200px">Above the fold content here</div>
-          </TileAboveTheFoldContent>
-        </div>
-        <div slot="below">
-          <TileBelowTheFoldContent>
-            <div style="height: 400px">Below the fold content here</div>
-          </TileBelowTheFoldContent>
-        </div>
+        <div slot="above" style="height: 200px">Above the fold content here</div>
+        <div slot="below" style="height: 400px">Below the fold content here</div>
       </ExpandableTile>
     {:else}
       <Tile {...$$props}>Default Tile</Tile>

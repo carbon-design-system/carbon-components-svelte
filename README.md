@@ -112,8 +112,6 @@ Currently, the following components are supported:
   - ClickableTile
   - SelectableTile
   - ExpandableTile
-    - TileAboveTheFoldContent
-    - TileBelowTheFoldContent
   - RadioTile
   - Tile
   - TileGroup
