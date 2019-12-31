@@ -1,23 +1,23 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let value = 'value';
-  export let title = 'title';
-  export let name = '';
   export let checked = false;
+  export let id = Math.random();
+  export let name = '';
   export let style = undefined;
+  export let title = 'title';
+  export let value = 'value';
 
   import { getContext } from 'svelte';
   import { cx } from '../../lib';
 
-  const { selected, update } = getContext('StructuredListWrapper');
+  const { selectedValue, update } = getContext('StructuredListWrapper');
 
   if (checked) {
     update(value);
   }
 
-  $: checked = $selected === value;
+  $: checked = $selectedValue === value;
 </script>
 
 <input
@@ -27,9 +27,9 @@
   on:change={() => {
     update(value);
   }}
-  {value}
-  {name}
-  {title}
-  {style}
+  {checked}
   {id}
-  {checked} />
+  {name}
+  {style}
+  {title}
+  {value} />

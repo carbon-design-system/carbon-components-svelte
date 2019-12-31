@@ -96,7 +96,6 @@ Currently, the following components are supported:
   - StructuredListCell
   - StructuredListRow
   - StructuredListInput
-  - StructuredListWrapper
 - Tabs
   - Tab
   - TabContent

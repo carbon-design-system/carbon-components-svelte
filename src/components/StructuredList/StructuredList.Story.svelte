@@ -9,8 +9,10 @@
   import StructuredListHead from './StructuredListHead.svelte';
   import StructuredListInput from './StructuredListInput.svelte';
   import StructuredListRow from './StructuredListRow.svelte';
-  import StructuredListWrapper from './StructuredListWrapper.svelte';
   import StructuredListSkeleton from './StructuredList.Skeleton.svelte';
+  import StructuredList from './StructuredList.svelte';
+
+  let selected = 'row-1-value';
 </script>
 
 <Layout>
@@ -18,10 +20,9 @@
     {#if story === 'skeleton'}
       <div style="width: 800px">
         <StructuredListSkeleton />
-        <StructuredListSkeleton border />
       </div>
     {:else if story === 'selection'}
-      <StructuredListWrapper selection border defaultSelected="row-1-value">
+      <StructuredList selection border bind:selected>
         <StructuredListHead>
           <StructuredListRow head>
             <StructuredListCell head>ColumnA</StructuredListCell>
@@ -54,9 +55,9 @@
             </StructuredListRow>
           {/each}
         </StructuredListBody>
-      </StructuredListWrapper>
+      </StructuredList>
     {:else}
-      <StructuredListWrapper>
+      <StructuredList>
         <StructuredListHead>
           <StructuredListRow head>
             <StructuredListCell head>ColumnA</StructuredListCell>
@@ -84,7 +85,7 @@
             </StructuredListCell>
           </StructuredListRow>
         </StructuredListBody>
-      </StructuredListWrapper>
+      </StructuredList>
     {/if}
   </div>
 </Layout>

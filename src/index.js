@@ -57,14 +57,13 @@ import Select, { SelectSkeleton, SelectItem, SelectItemGroup } from './component
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
 import Slider, { SliderSkeleton } from './components/Slider';
-import {
+import StructuredList, {
   StructuredListSkeleton,
   StructuredListBody,
   StructuredListHead,
   StructuredListCell,
   StructuredListRow,
-  StructuredListInput,
-  StructuredListWrapper
+  StructuredListInput
 } from './components/StructuredList';
 import Tabs, { Tab, TabContent, TabsSkeleton } from './components/Tabs';
 import Tag, { TagSkeleton } from './components/Tag';
@@ -159,13 +158,13 @@ export {
   Switch,
   Slider,
   SliderSkeleton,
+  StructuredList,
   StructuredListSkeleton,
   StructuredListBody,
   StructuredListHead,
   StructuredListCell,
   StructuredListRow,
   StructuredListInput,
-  StructuredListWrapper,
   Tabs,
   Tab,
   TabContent,

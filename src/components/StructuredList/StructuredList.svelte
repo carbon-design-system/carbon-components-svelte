@@ -1,7 +1,7 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let defaultSelected = undefined;
+  export let selected = undefined;
   export let border = false;
   export let selection = false;
   export let style = undefined;
@@ -12,18 +12,18 @@
 
   const dispatch = createEventDispatcher();
 
-  let selected = writable(defaultSelected);
+  let selectedValue = writable(selected);
 
   setContext('StructuredListWrapper', {
-    selected,
+    selectedValue,
     update: value => {
-      selected.set(value);
+      selectedValue.set(value);
     }
   });
 
+  $: selected = $selectedValue;
   $: {
-    defaultSelected = $selected;
-    dispatch('change', $selected);
+    dispatch('change', $selectedValue);
   }
 </script>
 
@@ -32,8 +32,8 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  class={cx('--structured-list', border && '--structured-list--border', selection && '--structured-list--selection', className)}
   aria-label={$$props['aria-label'] || 'Structured list section'}
+  class={cx('--structured-list', border && '--structured-list--border', selection && '--structured-list--selection', className)}
   {style}>
   <slot />
 </section>
