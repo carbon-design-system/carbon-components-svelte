@@ -5,7 +5,7 @@
   export let indeterminate = false;
   export let disabled = false;
   export let id = Math.random();
-  export let labelText = undefined;
+  export let labelText = '';
   export let hideLabel = false;
   export let title = '';
   export let style = undefined;

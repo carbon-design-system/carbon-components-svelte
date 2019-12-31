@@ -4,7 +4,7 @@
   export let id = Math.random();
   export let toggled = false;
   export let disabled = false;
-  export let labelText = undefined;
+  export let labelText = '';
   export let labelA = 'Off';
   export let labelB = 'On';
   export let style = undefined;
