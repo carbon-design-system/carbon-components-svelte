@@ -132,7 +132,7 @@
 <div style="position: relative">
   {#if showIcon}
     <div bind:this={buttonRef} id={triggerId} class={cx('--tooltip__label', triggerClass)} {style}>
-      {triggerText}
+      <slot name="triggerText">{triggerText}</slot>
       <div
         bind:this={iconRef}
         {...buttonProps}
