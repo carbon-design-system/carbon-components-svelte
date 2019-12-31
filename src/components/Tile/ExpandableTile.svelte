@@ -3,17 +3,17 @@
   export { className as class };
   export let expanded = false;
   export let id = Math.random();
+  export let light = false;
+  export let style = undefined;
+  export let tabindex = '0';
   export let tileCollapsedIconText = 'Interact to expand Tile';
   export let tileExpandedIconText = 'Interact to collapse Tile';
   export let tileMaxHeight = 0;
   export let tilePadding = 0;
-  export let tabindex = '0';
-  export let light = false;
-  export let style = undefined;
 
   import { onMount, afterUpdate } from 'svelte';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
-  import { cx } from '../../lib';
+  import { cx, css } from '../../lib';
 
   let tile = undefined;
   let tileContent = undefined;
@@ -37,8 +37,8 @@
 
 <div
   bind:this={tile}
-  style={expanded ? undefined : `max-height: ${tileMaxHeight + tilePadding}px`}
   class={cx('--tile', '--tile--expandable', expanded && '--tile--is-expanded', light && '--tile--light', className)}
+  style={expanded ? undefined : css([style, `max-height: ${tileMaxHeight + tilePadding}px`])}
   on:click
   on:click={() => {
     expanded = !expanded;
@@ -54,8 +54,7 @@
   on:mouseenter
   on:mouseleave
   {tabindex}
-  {id}
-  {style}>
+  {id}>
   <div bind:this={tileContent}>
     <div bind:this={aboveTheFold} class={cx('--tile-content')}>
       <slot name="above" />
