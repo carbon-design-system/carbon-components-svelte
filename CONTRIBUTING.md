@@ -57,7 +57,7 @@ This project uses Storybook for UI development and "live" documentation.
 Run the following command to start the Storybook:
 
 ```bash
-yarn start -p 9090
+yarn start
 ```
 
 #### Component Format

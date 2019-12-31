@@ -7,7 +7,7 @@
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "scripts": {
-    "start": "start-storybook",
+    "start": "start-storybook -p 9090",
     "build": "rollup -c",
     "build:storybook": "build-storybook -o docs",
     "test": "jest --coverage",
