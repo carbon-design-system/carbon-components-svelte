@@ -7,6 +7,7 @@
   export let id = Math.random();
   export let labelText = '';
   export let name = '';
+  export let readonly = false;
   export let hideLabel = false;
   export let title = '';
   export let style = undefined;
@@ -39,7 +40,8 @@
     {disabled}
     {checked}
     {name}
-    {id} />
+    {id}
+    {readonly} />
   <label class={cx('--checkbox-label')} for={id} title={title || undefined}>
     <span class={cx('--checkbox-label-text', hideLabel && '--visually-hidden')}>{labelText}</span>
   </label>
