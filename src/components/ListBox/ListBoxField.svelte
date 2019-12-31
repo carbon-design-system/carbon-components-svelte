@@ -9,18 +9,27 @@
   export let translateWithId = id => defaultTranslations[id];
   export let style = undefined;
 
+  import { getContext } from 'svelte';
   import { cx } from '../../lib';
 
   const defaultTranslations = {
     [translationIds.close]: 'Close menu',
     [translationIds.open]: 'Open menu'
   };
+  const ctx = getContext('MultiSelect');
+
+  let fieldRef = undefined;
+
+  $: if (ctx && fieldRef) {
+    ctx.declareRef({ key: 'field', ref: fieldRef });
+  }
 
   $: ariaExpanded = $$props['aria-expanded'];
   $: menuId = `menu-${id}`;
 </script>
 
 <div
+  bind:this={fieldRef}
   role={ariaExpanded ? 'combobox' : role}
   aria-expanded={ariaExpanded}
   aria-owns={(ariaExpanded && menuId) || undefined}
@@ -32,6 +41,8 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
+  on:keydown|preventDefault|stopPropagation
+  on:blur
   {style}>
   <slot />
 </div>

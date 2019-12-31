@@ -32,6 +32,7 @@ import ListBox, {
 } from './components/ListBox';
 import ListItem from './components/ListItem';
 import Loading from './components/Loading';
+import MultiSelect from './components/MultiSelect';
 import Modal from './components/Modal';
 import {
   ToastNotification,
@@ -123,6 +124,7 @@ export {
   Icon,
   IconSkeleton,
   InlineLoading,
+  MultiSelect,
   Modal,
   InlineNotification,
   Link,

@@ -57,6 +57,7 @@ Currently, the following components are supported:
   - ListBoxSelection
 - ListItem
 - Loading
+- MultiSelect
 - Modal
 - Notification
   - ToastNotification
