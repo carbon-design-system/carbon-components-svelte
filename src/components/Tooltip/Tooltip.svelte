@@ -1,22 +1,21 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let triggerText = ''; // TODO: support slot?
-  export let triggerId = Math.random();
-  export let tooltipId = Math.random();
-  export let triggerClass = undefined;
-  export let open = false;
   export let direction = 'bottom';
+  export let hideIcon = false;
   export let icon = Information16;
-  export let showIcon = true; // TODO: change to hideIcon
-  export let iconName = '';
   export let iconDescription = '';
-  export let tabindex = '0';
+  export let iconName = '';
+  export let open = false;
   export let style = undefined;
+  export let tabindex = '0';
+  export let tooltipId = Math.random();
+  export let triggerId = Math.random();
+  export let triggerText = '';
 
   import { createEventDispatcher, afterUpdate } from 'svelte';
   import Information16 from 'carbon-icons-svelte/lib/Information16';
-  import { cx } from '../../lib';
+  import { cx, css } from '../../lib';
 
   const dispatch = createEventDispatcher();
 
@@ -71,7 +70,7 @@
 
       switch (direction) {
         case 'bottom':
-          if (!showIcon) {
+          if (hideIcon) {
             offsetX = -1 * (tooltip.width / 2 - button.width / 2);
           } else {
             offsetX = -1 * (tooltip.width / 2 - button.width + iconWidth / 2);
@@ -83,7 +82,7 @@
           offsetY = -1 * (tooltip.height / 2 + iconWidth / 2 - 3);
           break;
         case 'left':
-          if (!showIcon) {
+          if (hideIcon) {
             offsetX = -1 * (tooltip.width + 6 + 1);
           } else {
             offsetX = -1 * (tooltip.width - button.width + iconWidth + 8);
@@ -91,7 +90,7 @@
           offsetY = -1 * (tooltip.height / 2 + button.height) - 2;
           break;
         case 'top':
-          if (!showIcon) {
+          if (hideIcon) {
             offsetX = -1 * (tooltip.width / 2 - button.width / 2);
           } else {
             offsetX = -1 * (tooltip.width / 2 - button.width + iconWidth / 2 + 1);
@@ -111,14 +110,14 @@
   $: buttonProps = {
     role: 'button',
     'aria-haspopup': 'true',
-    id: showIcon ? undefined : triggerId,
-    class: showIcon ? cx('--tooltip__trigger') : cx('--tooltip__label', triggerClass),
+    id: hideIcon ? triggerId : undefined,
+    class: hideIcon ? cx('--tooltip__label') : cx('--tooltip__trigger'),
     'aria-expanded': open,
     'aria-describedby': open ? tooltipId : undefined,
     'aria-labelledby': triggerText ? triggerId : undefined,
     'aria-label': triggerText ? iconDescription : undefined,
     tabindex,
-    style: showIcon ? undefined : style
+    style: hideIcon ? style : undefined
   };
 </script>
 
@@ -129,9 +128,9 @@
     }
   }} />
 
-<div style="position: relative">
-  {#if showIcon}
-    <div bind:this={buttonRef} id={triggerId} class={cx('--tooltip__label', triggerClass)} {style}>
+<div class={className} style={css([style, ['position', 'relative']])}>
+  {#if !hideIcon}
+    <div bind:this={buttonRef} id={triggerId} class={cx('--tooltip__label')} {style}>
       <slot name="triggerText">{triggerText}</slot>
       <div
         bind:this={iconRef}
@@ -163,7 +162,7 @@
       tabindex="0"
       id={tooltipId}
       data-floating-menu-direction={direction}
-      class={cx('--tooltip', open && '--tooltip--shown', className)}
+      class={cx('--tooltip', open && '--tooltip--shown')}
       on:blur={closeMenu}>
       <span class={cx('--tooltip__caret')} />
       <slot />

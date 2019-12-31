@@ -23,7 +23,7 @@ export const NoIcon = () => ({
   Component,
   props: {
     story: 'no icon',
-    showIcon: false,
+    hideIcon: true,
     direction: select('Tooltip direction (direction)', directions, 'bottom'),
     triggerText: text('Trigger text (triggerText)', 'Tooltip label'),
     tabindex: text('Tab index (tabindex in <Tooltip>)', '0')
@@ -45,7 +45,6 @@ export const CustomIconOnly = () => ({
   Component,
   props: {
     story: 'custom icon only',
-    showIcon: true,
     direction: select('Tooltip direction (direction)', directions, 'bottom'),
     iconDescription: 'Helpful Information',
     tabindex: text('Tab index (tabindex in <Tooltip>)', '0')
