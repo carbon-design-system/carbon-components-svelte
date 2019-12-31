@@ -18,6 +18,8 @@
   ];
 
   let selected = radioTiles[1].value;
+
+  let selectedTile1 = false;
 </script>
 
 <Layout>
@@ -28,7 +30,19 @@
       <ClickableTile {...$$props}>Clickable Tile</ClickableTile>
     {:else if story === 'multi-select'}
       <div role="group" aria-label="selectable tiles">
-        <SelectableTile {...$$props} id="tile-1" name="tiles">Multi-select Tile</SelectableTile>
+        <SelectableTile
+          {...$$props}
+          id="tile-1"
+          name="tiles"
+          bind:selected={selectedTile1}
+          on:select={({ detail }) => {
+            console.log('on:select', detail);
+          }}
+          on:deselect={({ detail }) => {
+            console.log('on:deselect', detail);
+          }}>
+          Multi-select Tile
+        </SelectableTile>
         <SelectableTile {...$$props} id="tile-2" name="tiles">Multi-select Tile</SelectableTile>
         <SelectableTile {...$$props} id="tile-3" name="tiles">Multi-select Tile</SelectableTile>
       </div>

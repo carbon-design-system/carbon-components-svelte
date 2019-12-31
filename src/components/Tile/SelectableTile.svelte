@@ -1,15 +1,15 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let selected = false;
-  export let id = Math.random();
-  export let value = 'value';
-  export let title = 'title';
-  export let name = '';
   export let iconDescription = 'Tile checkmark';
-  export let tabindex = '0';
+  export let id = Math.random();
   export let light = false;
+  export let name = '';
+  export let selected = false;
   export let style = undefined;
+  export let tabindex = '0';
+  export let title = 'title';
+  export let value = 'value';
 
   import { createEventDispatcher } from 'svelte';
   import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
@@ -17,16 +17,13 @@
 
   const dispatch = createEventDispatcher();
 
-  $: if (selected) {
-    dispatch('select', id);
-  }
+  $: dispatch(selected ? 'select' : 'deselect', id);
 </script>
 
 <input
   type="checkbox"
   tabindex="-1"
   class={cx('--tile-input')}
-  on:change
   checked={selected}
   {id}
   {value}
