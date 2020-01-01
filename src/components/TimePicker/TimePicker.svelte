@@ -1,19 +1,19 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let value = '';
-  export let labelText = '';
+  export let disabled = false;
   export let hideLabel = false;
-  export let type = 'text';
+  export let id = Math.random();
+  export let invalid = false;
+  export let invalidText = 'Invalid time format.';
+  export let labelText = '';
+  export let light = false;
+  export let maxlength = 5;
   export let pattern = '(1[012]|[1-9]):[0-5][0-9](\\s)?';
   export let placeholder = 'hh=mm';
-  export let maxlength = 5;
-  export let invalidText = 'Invalid time format.';
-  export let invalid = false;
-  export let disabled = false;
-  export let light = false;
   export let style = undefined;
+  export let type = 'text';
+  export let value = '';
 
   import { cx } from '../../lib';
 </script>
