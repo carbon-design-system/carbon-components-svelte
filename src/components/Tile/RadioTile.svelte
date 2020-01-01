@@ -2,23 +2,23 @@
   let className = undefined;
   export { className as class };
   export let checked = false;
-  export let id = Math.random();
-  export let name = '';
   export let iconDescription = 'Tile checkmark';
-  export let value = '';
-  export let tabindex = '0';
+  export let id = Math.random();
   export let light = false;
+  export let name = '';
   export let style = undefined;
+  export let tabindex = '0';
+  export let value = '';
 
   import { getContext } from 'svelte';
   import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
   import { cx } from '../../lib';
 
-  const { addTile, updateSelected, selected } = getContext('TileGroup');
+  const { add, update, selectedValue } = getContext('TileGroup');
 
-  addTile({ id, value, checked });
+  add({ value, checked });
 
-  $: checked = value === $selected.value;
+  $: checked = value === $selectedValue;
 </script>
 
 <input
@@ -26,7 +26,7 @@
   class={cx('--tile-input')}
   on:change
   on:change={() => {
-    updateSelected({ id, value });
+    update(value);
   }}
   {id}
   {name}
@@ -43,7 +43,7 @@
   on:keydown={event => {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
-      updateSelected({ id, value });
+      update(value);
     }
   }}
   {tabindex}

@@ -1,25 +1,25 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let value = '';
-  export let labelText = '';
+  export let disabled = false;
   export let hideLabel = true;
   export let iconDescription = 'Open list of options';
-  export let disabled = false;
+  export let id = Math.random();
+  export let labelText = '';
   export let style = undefined;
+  export let value = '';
 
   import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
   import ChevronDownGlyph from 'carbon-icons-svelte/lib/ChevronDownGlyph';
   import { cx } from '../../lib';
 
-  let selected = writable(value);
+  let selectedValue = writable(value);
 
-  setContext('TimePickerSelect', { selected });
+  setContext('TimePickerSelect', { selectedValue });
 
-  $: selected.set(value);
-  $: value = $selected;
+  $: selectedValue.set(value);
+  $: value = $selectedValue;
 </script>
 
 <div
@@ -35,7 +35,7 @@
   <select
     class={cx('--select-input')}
     on:change={({ target }) => {
-      selected.set(target.value);
+      selectedValue.set(target.value);
     }}
     {id}
     {disabled}

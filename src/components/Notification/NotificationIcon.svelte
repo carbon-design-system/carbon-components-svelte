@@ -3,8 +3,8 @@
   export let notificationType = 'toast';
   export let iconDescription = 'closes notification';
 
-  import ErrorFilled20 from 'carbon-icons-svelte/lib/ErrorFilled20';
   import CheckmarkFilled20 from 'carbon-icons-svelte/lib/CheckmarkFilled20';
+  import ErrorFilled20 from 'carbon-icons-svelte/lib/ErrorFilled20';
   import WarningFilled20 from 'carbon-icons-svelte/lib/WarningFilled20';
   import { cx } from '../../lib';
 

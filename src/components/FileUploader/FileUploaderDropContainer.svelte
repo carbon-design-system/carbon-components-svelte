@@ -1,16 +1,16 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let name = '';
-  export let role = 'button';
-  export let id = Math.random();
+  export let accept = [];
   export let disabled = false;
-  export let tabindex = '0';
+  export let id = Math.random();
   export let labelText = 'Add file';
   export let multiple = false;
-  export let accept = [];
-  export let validateFiles = files => files;
+  export let name = '';
+  export let role = 'button';
   export let style = undefined;
+  export let tabindex = '0';
+  export let validateFiles = files => files;
 
   import { createEventDispatcher } from 'svelte';
   import { cx } from '../../lib';

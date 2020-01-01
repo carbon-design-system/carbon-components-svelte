@@ -1,7 +1,7 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let defaultSelected = { value: undefined };
+  export let selected = undefined;
   export let disabled = false;
   export let legend = '';
   export let style = undefined;
@@ -11,44 +11,30 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
-  let tiles = [];
-  let selected = writable(defaultSelected);
+
+  let selectedValue = writable(selected);
 
   setContext('TileGroup', {
-    selected,
-    addTile: tile => {
-      tiles = [...tiles, tile];
+    selectedValue,
+    add: ({ checked, value }) => {
+      if (checked) {
+        selectedValue.set(value);
+      }
     },
-    updateSelected: tile => {
-      selected.set(tile);
+    update: value => {
+      selectedValue.set(value);
     }
   });
 
+  $: selected = $selectedValue;
   $: {
-    const checkedTiles = tiles.filter(tile => tile.checked);
-
-    if (checkedTiles.length > 1) {
-      console.warn('Multiple RadioTiles cannot be checked.');
-
-      if (defaultSelected.value) {
-        console.warn('Using `defaultSelected`:', defaultSelected);
-      } else {
-        console.warn('Using `RadioTile`:', checkedTiles[0]);
-        selected.set(checkedTiles[0]);
-      }
-    } else if (checkedTiles.length === 1) {
-      selected.set(checkedTiles[0]);
-      tiles = [];
-    }
-
-    defaultSelected = $selected;
-    dispatch('select', $selected);
+    dispatch('select', $selectedValue);
   }
 </script>
 
 <fieldset class={cx('--tile-group', className)} {disabled} {style}>
   {#if legend}
-    <legend>{legend}</legend>
+    <legend class={cx('--label')}>{legend}</legend>
   {/if}
   <div>
     <slot />

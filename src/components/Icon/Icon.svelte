@@ -1,12 +1,12 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let skeleton = false;
-  export let render = undefined;
-  export let title = undefined;
-  export let tabindex = undefined;
   export let focusable = false;
+  export let render = undefined;
+  export let skeleton = false;
   export let style = undefined;
+  export let tabindex = undefined;
+  export let title = undefined;
 
   import IconSkeleton from './Icon.Skeleton.svelte';
 

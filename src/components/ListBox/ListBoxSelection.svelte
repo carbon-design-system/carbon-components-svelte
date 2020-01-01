@@ -1,11 +1,11 @@
 <script>
   let className = undefined;
   export { className as class };
+  export const translationIds = { clearAll: 'clearAll', clearSelection: 'clearSelection' };
   export let disabled = false;
   export let selectionCount = undefined;
-  export const translationIds = { clearAll: 'clearAll', clearSelection: 'clearSelection' };
-  export let translateWithId = id => defaultTranslations[id];
   export let style = undefined;
+  export let translateWithId = id => defaultTranslations[id];
 
   import { createEventDispatcher, getContext } from 'svelte';
   import Close16 from 'carbon-icons-svelte/lib/Close16';

@@ -1,10 +1,10 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let href = undefined;
-  export let rel = undefined;
-  export let light = false;
   export let clicked = false;
+  export let href = undefined;
+  export let light = false;
+  export let rel = undefined;
   export let style = undefined;
 
   import { cx } from '../../lib';

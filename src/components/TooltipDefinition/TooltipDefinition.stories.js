@@ -19,7 +19,6 @@ const alignments = {
 export const Default = () => ({
   Component,
   props: {
-    triggerClass: text('Trigger element CSS class name (triggerClassName)', ''),
     direction: select('Tooltip direction (direction)', directions, 'bottom'),
     align: select('Tooltip alignment to trigger button (align)', alignments, 'start'),
     tooltipText: text(

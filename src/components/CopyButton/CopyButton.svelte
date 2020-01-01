@@ -1,9 +1,9 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let iconDescription = 'Copy to clipboard';
   export let feedback = 'Copied!';
   export let feedbackTimeout = 2000;
+  export let iconDescription = 'Copy to clipboard';
   export let style = undefined;
 
   import { afterUpdate, onDestroy } from 'svelte';

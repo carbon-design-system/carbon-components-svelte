@@ -1,25 +1,23 @@
 <script>
   let className = undefined;
   export { className as class };
+  export let disabled = false;
   export let hideTextInput = false;
   export let id = Math.random();
-  export let value = '';
-  export let min = 0;
-  export let max = 100;
-  export let minLabel = '';
-  export let maxLabel = '';
-  export let labelText = '';
-  export let formatLabel = (value, label) =>
-    typeof label === 'function' ? label(value) : `${value}${label}`;
-  export let step = 1;
-  export let stepMultiplier = 4;
-  export let disabled = false;
-  export let name = '';
   export let inputType = 'number';
   export let invalid = false;
-  export let required = false;
+  export let labelText = '';
   export let light = false;
+  export let max = 100;
+  export let maxLabel = '';
+  export let min = 0;
+  export let minLabel = '';
+  export let name = '';
+  export let required = false;
+  export let step = 1;
+  export let stepMultiplier = 4;
   export let style = undefined;
+  export let value = '';
 
   import { createEventDispatcher, afterUpdate } from 'svelte';
   import { cx } from '../../lib';
@@ -82,7 +80,7 @@
 <div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
   <label for={id} class={cx('--label', disabled && '--label--disabled')}>{labelText}</label>
   <div class={cx('--slider-container')}>
-    <span class={cx('--slider__range-label')}>{formatLabel(min, minLabel)}</span>
+    <span class={cx('--slider__range-label')}>{minLabel || min}</span>
     <div
       bind:this={elementRef}
       role="presentation"
@@ -134,7 +132,7 @@
         {max}
         {step} />
     </div>
-    <span class={cx('--slider__range-label')}>{formatLabel(max, maxLabel)}</span>
+    <span class={cx('--slider__range-label')}>{maxLabel || max}</span>
     {#if !hideTextInput}
       <input
         type={inputType}

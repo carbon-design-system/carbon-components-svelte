@@ -2,15 +2,15 @@
   let className = undefined;
   export { className as class };
   export let checked = false;
-  export let indeterminate = false;
   export let disabled = false;
+  export let hideLabel = false;
   export let id = Math.random();
+  export let indeterminate = false;
   export let labelText = '';
   export let name = '';
   export let readonly = false;
-  export let hideLabel = false;
-  export let title = '';
   export let style = undefined;
+  export let title = '';
 
   import { createEventDispatcher } from 'svelte';
   import { cx } from '../../lib';

@@ -2,8 +2,8 @@
   export let story = undefined;
 
   import Layout from '../../internal/ui/Layout.svelte';
-  import TextInput from './TextInput.svelte';
   import PasswordInput from './PasswordInput.svelte';
+  import TextInput from './TextInput.svelte';
   import TextInputSkeleton from './TextInput.Skeleton.svelte';
 
   let value = '';

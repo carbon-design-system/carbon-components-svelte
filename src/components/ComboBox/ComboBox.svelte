@@ -1,23 +1,23 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let titleText = '';
-  export let helperText = '';
   export let disabled = false;
-  export let value = '';
-  export let open = false;
-  export let selectedIndex = -1;
-  export let items = [];
-  export let itemToString = item => item.text || item.id;
-  export let placeholder = '';
-  export let shouldFilterItem = () => true;
+  export let helperText = '';
+  export let id = Math.random();
   export let invalid = false;
   export let invalidText = '';
-  export let translateWithId = undefined;
-  export let size = undefined;
+  export let items = [];
+  export let itemToString = item => item.text || item.id;
   export let light = false;
+  export let open = false;
+  export let placeholder = '';
+  export let selectedIndex = -1;
+  export let shouldFilterItem = () => true;
+  export let size = undefined;
   export let style = undefined;
+  export let titleText = '';
+  export let translateWithId = undefined;
+  export let value = '';
 
   import { afterUpdate } from 'svelte';
   import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';

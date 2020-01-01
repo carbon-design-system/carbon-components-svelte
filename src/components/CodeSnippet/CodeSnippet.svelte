@@ -1,15 +1,15 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let type = 'single';
-  export let feedback = undefined;
-  export let feedbackTimeout = undefined;
   export let copyButtonDescription = undefined;
   export let copyLabel = undefined;
-  export let showMoreText = 'Show more';
-  export let showLessText = 'Show less';
+  export let feedback = undefined;
+  export let feedbackTimeout = undefined;
   export let light = false;
+  export let showLessText = 'Show less';
+  export let showMoreText = 'Show more';
   export let style = undefined;
+  export let type = 'single';
 
   import { afterUpdate } from 'svelte';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';

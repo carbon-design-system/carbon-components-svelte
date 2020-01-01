@@ -1,22 +1,22 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let kind = 'error';
-  export let title = 'provide a title';
-  export let subtitle = ''; // TODO: support subtitle slot?
   export let caption = 'provide a caption';
-  export let role = 'alert';
-  export let notificationType = 'toast';
-  export let iconDescription = 'closes notification';
   export let hideCloseButton = false;
+  export let iconDescription = 'closes notification';
+  export let kind = 'error';
   export let lowContrast = false;
-  export let timeout = 0;
+  export let notificationType = 'toast';
+  export let role = 'alert';
   export let style = undefined;
+  export let subtitle = ''; // TODO: support subtitle slot?
+  export let timeout = 0;
+  export let title = 'provide a title';
 
   import { createEventDispatcher, onMount } from 'svelte';
+  import NotificationButton from './NotificationButton.svelte';
   import NotificationIcon from './NotificationIcon.svelte';
   import NotificationTextDetails from './NotificationTextDetails.svelte';
-  import NotificationButton from './NotificationButton.svelte';
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();

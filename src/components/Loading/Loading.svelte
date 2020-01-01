@@ -2,10 +2,10 @@
   let className = undefined;
   export { className as class };
   export let active = true;
-  export let withOverlay = true;
-  export let small = false;
   export let description = 'Active loading indicator';
+  export let small = false;
   export let style = undefined;
+  export let withOverlay = true;
 
   import { cx } from '../../lib';
 

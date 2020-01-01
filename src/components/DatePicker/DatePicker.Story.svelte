@@ -3,8 +3,8 @@
 
   import Layout from '../../internal/ui/Layout.svelte';
   import DatePicker from './DatePicker.svelte';
-  import DatePickerSkeleton from './DatePicker.Skeleton.svelte';
   import DatePickerInput from './DatePickerInput.svelte';
+  import DatePickerSkeleton from './DatePicker.Skeleton.svelte';
 
   let datePickerType = 'simple';
   let value = '';

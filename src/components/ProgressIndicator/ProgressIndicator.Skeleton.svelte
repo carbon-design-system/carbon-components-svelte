@@ -1,8 +1,8 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let vertical = false;
   export let style = undefined;
+  export let vertical = false;
 
   import { cx } from '../../lib';
 </script>

@@ -1,13 +1,13 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let tabindex = '-1';
-  export let role = 'combobox';
-  export let disabled = false;
   export const translationIds = { close: 'close', open: 'open' };
-  export let translateWithId = id => defaultTranslations[id];
+  export let disabled = false;
+  export let id = Math.random();
+  export let role = 'combobox';
   export let style = undefined;
+  export let tabindex = '-1';
+  export let translateWithId = id => defaultTranslations[id];
 
   import { getContext } from 'svelte';
   import { cx } from '../../lib';

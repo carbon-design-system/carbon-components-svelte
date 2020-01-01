@@ -1,14 +1,14 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let text = 'Provide text';
-  export let href = '';
-  export let hasDivider = false;
   export let danger = false;
   export let disabled = false;
+  export let hasDivider = false;
+  export let href = '';
   export let primaryFocus = false;
   export let requireTitle = true;
   export let style = undefined;
+  export let text = 'Provide text';
 
   import { getContext, afterUpdate } from 'svelte';
   import { cx } from '../../lib';

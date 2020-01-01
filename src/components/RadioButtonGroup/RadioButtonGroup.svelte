@@ -1,10 +1,10 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let orientation = 'horizontal';
-  export let labelPosition = 'right';
-  export let defaultSelected = undefined;
+  export let selected = undefined;
   export let disabled = false;
+  export let labelPosition = 'right';
+  export let orientation = 'horizontal';
   export let style = undefined;
 
   import { createEventDispatcher, setContext } from 'svelte';
@@ -13,23 +13,23 @@
 
   const dispatch = createEventDispatcher();
 
-  let selected = writable(defaultSelected);
+  let selectedValue = writable(selected);
 
   setContext('RadioButtonGroup', {
-    selected,
+    selectedValue,
     add: ({ checked, value }) => {
       if (checked) {
-        selected.set(value);
+        selectedValue.set(value);
       }
     },
     update: value => {
-      selected.set(value);
+      selectedValue.set(value);
     }
   });
 
+  $: selected = $selectedValue;
   $: {
-    defaultSelected = $selected;
-    dispatch('change', $selected);
+    dispatch('change', $selectedValue);
   }
 </script>
 

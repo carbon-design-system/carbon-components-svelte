@@ -96,7 +96,6 @@ Currently, the following components are supported:
   - StructuredListCell
   - StructuredListRow
   - StructuredListInput
-  - StructuredListWrapper
 - Tabs
   - Tab
   - TabContent
@@ -112,8 +111,6 @@ Currently, the following components are supported:
   - ClickableTile
   - SelectableTile
   - ExpandableTile
-    - TileAboveTheFoldContent
-    - TileBelowTheFoldContent
   - RadioTile
   - Tile
   - TileGroup

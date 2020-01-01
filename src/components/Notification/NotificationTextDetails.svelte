@@ -1,8 +1,8 @@
 <script>
-  export let title = 'title';
-  export let subtitle = '';
   export let caption = 'caption';
   export let notificationType = 'toast';
+  export let subtitle = '';
+  export let title = 'title';
 
   import { cx } from '../../lib';
 </script>

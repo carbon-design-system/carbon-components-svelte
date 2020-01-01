@@ -3,8 +3,8 @@
   export { className as class };
   export let style = undefined;
 
-  import SkeletonText from '../SkeletonText';
   import { cx } from '../../lib';
+  import SkeletonText from '../SkeletonText';
 </script>
 
 <div

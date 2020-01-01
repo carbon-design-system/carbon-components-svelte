@@ -3,8 +3,8 @@
   export { className as class };
   export let head = false;
   export let label = false;
-  export let tabindex = '0';
   export let style = undefined;
+  export let tabindex = '0';
 
   import { cx } from '../../lib';
 </script>

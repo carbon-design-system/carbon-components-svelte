@@ -1,17 +1,17 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let open = false;
   export let direction = 'bottom';
   export let flipped = false;
-  export let tabindex = '0';
-  export let id = Math.random();
-  export let iconDescription = 'Open and close list of options';
-  export let iconClass = undefined;
   export let icon = OverflowMenuVertical16;
+  export let iconClass = undefined;
+  export let iconDescription = 'Open and close list of options';
+  export let id = Math.random();
   export let light = false;
   export let menuOptionsClass = undefined;
+  export let open = false;
   export let style = undefined;
+  export let tabindex = '0';
 
   import { createEventDispatcher, setContext, afterUpdate } from 'svelte';
   import { writable } from 'svelte/store';

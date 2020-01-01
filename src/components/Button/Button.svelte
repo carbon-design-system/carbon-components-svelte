@@ -3,16 +3,16 @@
   export { className as class };
   export let as = undefined;
   export let disabled = false;
-  export let size = 'default';
-  export let kind = 'primary';
   export let href = undefined;
-  export let tabindex = '0';
-  export let type = 'button';
   export let icon = undefined;
   export let iconDescription = undefined;
-  export let tooltipPosition = undefined;
-  export let tooltipAlignment = undefined;
+  export let kind = 'primary';
+  export let size = 'default';
   export let style = undefined;
+  export let tabindex = '0';
+  export let tooltipAlignment = undefined;
+  export let tooltipPosition = undefined;
+  export let type = 'button';
 
   import { getContext } from 'svelte';
   import { cx } from '../../lib';

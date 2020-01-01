@@ -6,14 +6,17 @@
   import SelectItem from './SelectItem.svelte';
   import SelectSkeleton from './Select.Skeleton.svelte';
   import SelectItemGroup from './SelectItemGroup.svelte';
+
+  let selected = 'placeholder-item';
 </script>
 
 <Layout>
   <div>
+    {selected}
     {#if story === 'skeleton'}
       <SelectSkeleton {...$$props} />
     {:else}
-      <Select {...$$props.select} id="select-1" defaultValue="placeholder-item">
+      <Select {...$$props.select} id="select-1" bind:selected>
         <SelectItem value="placeholder-item" text="Choose an option" disabled hidden />
         <SelectItemGroup {...$$props.group} label="Category 1">
           <SelectItem value="option-1" text="Option 1" />

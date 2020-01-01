@@ -26,6 +26,8 @@ export const MultiSelect = () => ({
   }
 });
 
+MultiSelect.story = { name: 'Multi-select' };
+
 export const Selectable = () => ({
   Component,
   props: {

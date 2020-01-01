@@ -58,7 +58,7 @@
         Show
       </Button>
       <div style="padding: 15px 20px; margin: 4px 20px">
-        <Tooltip {...$$props} bind:open showIcon={false}>
+        <Tooltip {...$$props} bind:open hideIcon>
           <div slot="triggerText">My text wrapped with tooltip</div>
           Tooltip content
         </Tooltip>

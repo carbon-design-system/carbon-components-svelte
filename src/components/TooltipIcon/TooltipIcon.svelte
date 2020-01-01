@@ -1,11 +1,11 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let direction = 'bottom';
   export let align = 'center';
+  export let direction = 'bottom';
   export let id = Math.random();
-  export let tooltipText = '';
   export let style = undefined;
+  export let tooltipText = '';
 
   import { cx } from '../../lib';
 </script>

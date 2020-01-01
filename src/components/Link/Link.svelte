@@ -1,8 +1,8 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let href = undefined;
   export let disabled = false;
+  export let href = undefined;
   export let inline = false;
   export let style = undefined;
 
