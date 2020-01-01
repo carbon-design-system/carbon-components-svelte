@@ -1,15 +1,15 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let value = '';
   export let checked = false;
   export let disabled = false;
-  export let id = Math.random();
-  export let labelText = '';
   export let hideLabel = false;
+  export let id = Math.random();
   export let labelPosition = 'right';
+  export let labelText = '';
   export let name = '';
   export let style = undefined;
+  export let value = '';
 
   import { getContext } from 'svelte';
   import { writable } from 'svelte/store';
@@ -17,13 +17,13 @@
 
   const ctx = getContext('RadioButtonGroup');
 
-  let selected = ctx ? ctx.selected : writable(checked ? value : undefined);
+  let selectedValue = ctx ? ctx.selectedValue : writable(checked ? value : undefined);
 
   if (ctx) {
     ctx.add({ id, checked, disabled, value });
   }
 
-  $: checked = $selected === value;
+  $: checked = $selectedValue === value;
 </script>
 
 <div
