@@ -92,6 +92,9 @@
       "js",
       "svelte"
     ],
+    "moduleNameMapper": {
+      "^carbon-icons-svelte*": "<rootDir>src/internal/Icon.stub.svelte"
+    },
     "setupFilesAfterEnv": [
       "regenerator-runtime/runtime",
       "@testing-library/jest-dom/extend-expect"
