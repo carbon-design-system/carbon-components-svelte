@@ -2,9 +2,9 @@
   export let story = undefined;
 
   import Layout from '../../internal/ui/Layout.svelte';
-  import Tabs from './Tabs.svelte';
   import Tab from './Tab.svelte';
   import TabContent from './TabContent.svelte';
+  import Tabs from './Tabs.svelte';
   import TabsSkeleton from './TabsSkeleton.svelte';
 
   const { tabProps, ...tabsProps } = $$props;

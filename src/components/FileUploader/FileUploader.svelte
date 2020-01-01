@@ -1,17 +1,17 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let files = [];
   export const clearFiles = () => (files = []);
-  export let name = '';
+  export let accept = [];
+  export let buttonLabel = '';
+  export let files = [];
+  export let iconDescription = 'Provide icon description';
+  export let kind = 'primary';
   export let labelDescription = '';
   export let labelTitle = '';
-  export let iconDescription = 'Provide icon description';
-  export let status = 'uploading';
-  export let buttonLabel = '';
-  export let kind = 'primary';
   export let multiple = false;
-  export let accept = [];
+  export let name = '';
+  export let status = 'uploading';
   export let style = undefined;
 
   import { createEventDispatcher, afterUpdate } from 'svelte';

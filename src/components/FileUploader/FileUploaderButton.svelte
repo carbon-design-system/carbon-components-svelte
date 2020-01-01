@@ -1,17 +1,17 @@
 <script>
   let className = undefined;
   export { className as class };
+  export let accept = [];
+  export let disabled = false;
   export let disableLabelChanges = false;
   export let id = Math.random();
+  export let kind = 'primary';
   export let labelText = 'Add file';
   export let multiple = false;
   export let name = '';
   export let role = 'button';
-  export let tabindex = '0';
-  export let kind = 'primary';
-  export let accept = [];
-  export let disabled = false;
   export let style = undefined;
+  export let tabindex = '0';
 
   import { cx } from '../../lib';
 

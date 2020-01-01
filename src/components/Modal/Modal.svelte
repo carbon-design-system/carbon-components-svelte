@@ -1,21 +1,21 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let passiveModal = false;
+  export let danger = false;
   export let hasForm = false;
+  export let hasScrollingContent = false;
+  export let iconDescription = 'Close the modal';
   export let id = Math.random();
+  export let modalAriaLabel = undefined;
   export let modalHeading = undefined;
   export let modalLabel = undefined;
-  export let modalAriaLabel = undefined;
   export let open = false;
-  export let iconDescription = 'Close the modal';
+  export let passiveModal = false;
   export let primaryButtonDisabled = false;
   export let primaryButtonText = '';
   export let secondaryButtonText = '';
-  export let danger = false;
-  export let shouldSubmitOnEnter = true;
-  export let hasScrollingContent = false;
   export let selectorPrimaryFocus = '[data-modal-primary-focus]';
+  export let shouldSubmitOnEnter = true;
   export let size = undefined;
   export let style = undefined;
 

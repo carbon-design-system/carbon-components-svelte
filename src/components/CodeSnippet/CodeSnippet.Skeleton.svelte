@@ -1,8 +1,8 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let type = 'single';
   export let style = undefined;
+  export let type = 'single';
 
   import { cx } from '../../lib';
 </script>

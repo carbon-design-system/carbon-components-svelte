@@ -1,8 +1,8 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let legendText = '';
   export let invalid = false;
+  export let legendText = '';
   export let message = false;
   export let messageText = '';
   export let style = undefined;

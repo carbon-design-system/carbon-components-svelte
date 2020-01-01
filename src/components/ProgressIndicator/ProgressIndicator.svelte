@@ -2,8 +2,8 @@
   let className = undefined;
   export { className as class };
   export let currentIndex = 0;
-  export let vertical = false;
   export let style = undefined;
+  export let vertical = false;
 
   import { createEventDispatcher, setContext } from 'svelte';
   import { writable, derived } from 'svelte/store';

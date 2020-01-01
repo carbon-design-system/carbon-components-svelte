@@ -6,8 +6,8 @@
   import Button from '../Button';
   import FileUploader from './FileUploader.svelte';
   import FileUploaderButton from './FileUploaderButton.svelte';
-  import FileUploaderItem from './FileUploaderItem.svelte';
   import FileUploaderDropContainer from './FileUploaderDropContainer.svelte';
+  import FileUploaderItem from './FileUploaderItem.svelte';
   import FileUploaderSkeleton from './FileUploader.Skeleton.svelte';
 
   let fileUploader = undefined;

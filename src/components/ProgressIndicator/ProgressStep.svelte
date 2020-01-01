@@ -1,18 +1,18 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let label = '';
-  export let current = false;
   export let complete = false;
+  export let current = false;
   export let description = '';
-  export let invalid = false;
-  export let secondaryLabel = '';
   export let disabled = false;
+  export let invalid = false;
+  export let label = '';
+  export let secondaryLabel = '';
   export let style = undefined;
 
   import { getContext } from 'svelte';
-  import Warning16 from 'carbon-icons-svelte/lib/Warning16';
   import CheckmarkOutline16 from 'carbon-icons-svelte/lib/CheckmarkOutline16';
+  import Warning16 from 'carbon-icons-svelte/lib/Warning16';
   import { cx } from '../../lib';
 
   const id = Math.random();

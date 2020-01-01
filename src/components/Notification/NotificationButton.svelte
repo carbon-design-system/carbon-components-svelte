@@ -1,12 +1,12 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let notificationType = 'toast';
-  export let type = 'button';
   export let iconDescription = 'close icon';
+  export let notificationType = 'toast';
   export let renderIcon = Close20;
-  export let title = undefined;
   export let style = undefined;
+  export let title = undefined;
+  export let type = 'button';
 
   import Close20 from 'carbon-icons-svelte/lib/Close20';
   import { cx } from '../../lib';

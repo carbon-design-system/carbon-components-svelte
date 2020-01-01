@@ -1,11 +1,11 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let type = undefined;
   export let disabled = false;
   export let filter = false;
-  export let title = 'Clear filter';
   export let style = undefined;
+  export let title = 'Clear filter';
+  export let type = undefined;
 
   import Close16 from 'carbon-icons-svelte/lib/Close16';
   import { cx } from '../../lib';

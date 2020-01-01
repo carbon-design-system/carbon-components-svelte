@@ -1,15 +1,15 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let size = undefined;
-  export let type = 'default';
   export let disabled = false;
+  export let id = Math.random();
   export let invalid = false;
   export let invalidText = '';
-  export let open = false;
   export let light = false;
+  export let open = false;
+  export let size = undefined;
   export let style = undefined;
+  export let type = 'default';
 
   import { cx } from '../../lib';
 </script>

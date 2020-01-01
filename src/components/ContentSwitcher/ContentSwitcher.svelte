@@ -9,6 +9,7 @@
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();
+
   let currentId = writable(null);
   let currentIndex = selectedIndex;
   let switches = [];

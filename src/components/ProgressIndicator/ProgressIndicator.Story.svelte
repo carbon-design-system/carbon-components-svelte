@@ -3,8 +3,8 @@
 
   import Layout from '../../internal/ui/Layout.svelte';
   import ProgressIndicator from './ProgressIndicator.svelte';
-  import ProgressStep from './ProgressStep.svelte';
   import ProgressIndicatorSkeleton from './ProgressIndicator.Skeleton.svelte';
+  import ProgressStep from './ProgressStep.svelte';
 </script>
 
 <Layout>
@@ -39,8 +39,8 @@
         <ProgressStep
           label="Fourth step"
           description="Step 4: Getting started with Carbon Design System"
-          invalid
-          secondaryLabel="Example invalid step" />
+          secondaryLabel="Example invalid step"
+          invalid />
         <ProgressStep
           label="Fifth step"
           description="Step 5: Getting started with Carbon Design System"

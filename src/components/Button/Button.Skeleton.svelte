@@ -1,8 +1,8 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let small = false;
   export let href = undefined;
+  export let small = false;
   export let style = undefined;
 
   import { cx } from '../../lib';

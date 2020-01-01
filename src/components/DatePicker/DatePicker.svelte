@@ -1,21 +1,21 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let short = false;
-  export let datePickerType = 'simple';
-  export let dateFormat = 'm/d/Y';
-  export let locale = 'en';
-  export let value = '';
   export let appendTo = document.body;
-  export let minDate = null;
-  export let maxDate = null;
+  export let dateFormat = 'm/d/Y';
+  export let datePickerType = 'simple';
+  export let id = Math.random();
   export let light = false;
+  export let locale = 'en';
+  export let maxDate = null;
+  export let minDate = null;
+  export let short = false;
   export let style = undefined;
+  export let value = '';
 
   import { createEventDispatcher, setContext, afterUpdate, onDestroy } from 'svelte';
   import { writable, derived } from 'svelte/store';
-  import { createCalendar } from './flatpickr';
+  import { createCalendar } from './createCalendar';
   import { cx } from '../../lib';
 
   const dispatch = createEventDispatcher();

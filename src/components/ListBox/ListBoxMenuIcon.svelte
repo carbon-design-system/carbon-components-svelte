@@ -1,10 +1,10 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let open = false;
   export const translationIds = { close: 'close', open: 'open' };
-  export let translateWithId = id => defaultTranslations[id];
+  export let open = false;
   export let style = undefined;
+  export let translateWithId = id => defaultTranslations[id];
 
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
   import { cx } from '../../lib';

@@ -1,12 +1,12 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let zebra = false;
+  export let columns = 5;
   export let compact = false;
   export let headers = [];
   export let rows = 5;
-  export let columns = 5;
   export let style = undefined;
+  export let zebra = false;
 
   import { cx, fillArray } from '../../lib';
 

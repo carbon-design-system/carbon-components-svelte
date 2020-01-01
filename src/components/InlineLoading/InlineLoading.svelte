@@ -1,11 +1,11 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let status = 'active';
   export let description = undefined;
   export let iconDescription = undefined;
-  export let successDelay = 1500;
+  export let status = 'active';
   export let style = undefined;
+  export let successDelay = 1500;
 
   import { createEventDispatcher, afterUpdate, onDestroy } from 'svelte';
   import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';

@@ -2,26 +2,26 @@
   let className = undefined;
   export { className as class };
   export let backwardText = 'Previous page';
-  export let itemRangeText = (min, max, total) => `${min}–${max} of ${total} items`;
+  export let disabled = false;
   export let forwardText = 'Next page';
   export let id = Math.random();
+  export let itemRangeText = (min, max, total) => `${min}–${max} of ${total} items`;
   export let itemsPerPageText = 'Items per page:';
   export let itemText = (min, max) => `${min}–${max} items`;
-  export let pageRangeText = (current, total) => `of ${total} pages`;
-  export let pageText = page => `page ${page}`;
-  export let pageSizes = [10];
-  export let totalItems = 0;
-  export let disabled = false;
   export let page = 1;
-  export let pageSize = 10;
-  export let pagesUnknown = false;
   export let pageInputDisabled = false;
+  export let pageRangeText = (current, total) => `of ${total} pages`;
+  export let pageSize = 10;
+  export let pageSizes = [10];
+  export let pagesUnknown = false;
+  export let pageText = page => `page ${page}`;
   export let style = undefined;
+  export let totalItems = 0;
 
-  import CaretRight24 from 'carbon-icons-svelte/lib/CaretRight24';
   import CaretLeft24 from 'carbon-icons-svelte/lib/CaretLeft24';
-  import Select, { SelectItem } from '../Select';
+  import CaretRight24 from 'carbon-icons-svelte/lib/CaretRight24';
   import { cx, fillArray } from '../../lib';
+  import Select, { SelectItem } from '../Select';
 
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = fillArray(totalPages);
