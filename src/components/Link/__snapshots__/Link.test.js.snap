@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Link default 1`] = `"<div><div class=\\"layout svelte-q1u82c\\"><div><a class=\\"bx--link\\" href=\\"#\\">Link</a></div></div></div>"`;
+
+exports[`Link default 2`] = `"<div><div class=\\"layout svelte-q1u82c\\"><div><p class=\\"bx--link bx--link--disabled bx--link--inline\\">Link</p></div></div></div>"`;
