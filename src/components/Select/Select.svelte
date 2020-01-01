@@ -1,17 +1,17 @@
 <script>
   let className = undefined;
   export { className as class };
+  export let disabled = false;
+  export let helperText = '';
+  export let hideLabel = false;
   export let id = Math.random();
   export let inline = false;
-  export let labelText = '';
-  export let disabled = false;
-  export let defaultValue = undefined;
-  export let hideLabel = false;
   export let invalid = false;
   export let invalidText = '';
-  export let helperText = '';
+  export let labelText = '';
   export let light = false;
   export let noLabel = false;
+  export let selected = undefined;
   export let style = undefined;
 
   import { createEventDispatcher, setContext } from 'svelte';
@@ -22,16 +22,15 @@
 
   const dispatch = createEventDispatcher();
 
-  let selected = writable(defaultValue);
+  let selectedValue = writable(selected);
 
-  setContext('Select', { selected });
+  setContext('Select', { selectedValue });
 
   $: errorId = `error-${id}`;
+  $: selected = $selectedValue;
   $: {
-    selected.set(defaultValue);
-    dispatch('change', $selected);
+    dispatch('change', $selectedValue);
   }
-  $: defaultValue = $selected;
 </script>
 
 <div class={cx('--form-item')} {style}>
@@ -58,7 +57,7 @@
             disabled={disabled || undefined}
             aria-invalid={invalid || undefined}
             on:change={({ target }) => {
-              selected.set(target.value);
+              selectedValue.set(target.value);
             }}
             {id}>
             <slot />
@@ -87,7 +86,7 @@
           aria-invalid={invalid || undefined}
           on:change
           on:change={({ target }) => {
-            selected.set(target.value);
+            selectedValue.set(target.value);
           }}
           {id}>
           <slot />
