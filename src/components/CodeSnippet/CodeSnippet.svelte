@@ -1,10 +1,12 @@
 <script>
   let className = undefined;
   export { className as class };
+  export let code = undefined;
   export let copyButtonDescription = undefined;
   export let copyLabel = undefined;
   export let feedback = undefined;
   export let feedbackTimeout = undefined;
+  export let id = Math.random();
   export let light = false;
   export let showLessText = 'Show less';
   export let showMoreText = 'Show more';
@@ -18,7 +20,6 @@
   import Copy from '../Copy';
   import CopyButton from '../CopyButton';
 
-  const id = Math.random();
   let codeRef = undefined;
   let expanded = false;
   let showMoreLess = false;
@@ -34,21 +35,20 @@
   <Copy
     aria-label={$$props['aria-label'] || copyLabel}
     aria-describedby={id}
+    class={cx('--snippet', type && `--snippet--${type}`, type === 'inline' && '--btn--copy', expanded && '--snippet--expand', light && '--snippet--light', className)}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
-    class={cx('--snippet', type && `--snippet--${type}`, type === 'inline' && '--btn--copy', expanded && '--snippet--expand', light && '--snippet--light', className)}
     {feedback}
     {feedbackTimeout}
     {style}>
     <code {id}>
-      <slot />
+      <slot>{code}</slot>
     </code>
   </Copy>
 {:else}
   <div
-    on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
@@ -61,16 +61,16 @@
       aria-label={$$props['aria-label'] || copyLabel || 'code-snippet'}>
       <code>
         <pre bind:this={codeRef}>
-          <slot />
+          <slot>{code}</slot>
         </pre>
       </code>
     </div>
     <CopyButton
-      on:click
+      iconDescription={copyButtonDescription}
       class={cx('--snippet-button')}
+      on:click
       {feedback}
-      {feedbackTimeout}
-      iconDescription={copyButtonDescription} />
+      {feedbackTimeout} />
     {#if showMoreLess}
       <Button
         kind="ghost"
