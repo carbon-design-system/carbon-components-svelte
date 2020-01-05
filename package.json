@@ -18,6 +18,10 @@
     "carbon-icons-svelte": "^10.8.2",
     "flatpickr": "^4.6.3"
   },
+  "peerDependencies": {
+    "carbon-components": "^10.9.0",
+    "carbon-icons-svelte": "^10.8.2"
+  },
   "devDependencies": {
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
@@ -56,6 +60,7 @@
       "email": "eric.young.liu@ibm.com"
     }
   ],
+  "sideEffects": false,
   "engines": {
     "node": ">=10",
     "yarn": ">=1"

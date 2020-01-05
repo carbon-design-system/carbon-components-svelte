@@ -24,5 +24,5 @@
 </script>
 
 <option class={cx('--select-option', className)} {value} {disabled} {hidden} {style} {selected}>
-  {text}
+  {text || value}
 </option>
