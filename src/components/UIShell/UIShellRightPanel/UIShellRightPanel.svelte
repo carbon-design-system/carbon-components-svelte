@@ -1,51 +1,46 @@
 <script>
   export let rightPanel = undefined;
 
-  import { onMount } from 'svelte';
   import { cx } from '../../../lib';
-  import ActionSearch from './ActionSearch.svelte';
-  import ActionComponent from './ActionComponent.svelte';
-  import ActionLink from './ActionLink.svelte';
+  import ActionGeneric from './ActionGeneric.svelte';
+  import { leftPanelActions } from '../constants';
 
-  // let switcherAtLast = [];
-  // let renderSwitcher = false;
+  let orderedRightPanel = [];
+  let customActions = 1;
 
-  $: switcherAtLast = rightPanel.map((item, index, array) => {
-    if (item.action === 'switcher') {
-      if (index !== rightPanel.length) {
-        const newItem = array[index];
-        return newItem;
+  rightPanel.forEach((item, index) => {
+    orderedRightPanel[index] = undefined;
+    if (item.action) {
+      if (Object.keys(leftPanelActions).indexOf(item.action.charAt(0).toLowerCase() + item.action.slice(1)) === -1) {
+        orderedRightPanel[customActions] = rightPanel[index];
+        customActions += 1;
       }
-    } else {
-      return undefined;
     }
   });
 
-  $: renderSwitcher = switcherAtLast ? true : false;
+  rightPanel.forEach((item, index) => {
+    if (item.action) {
+      if (item.action === leftPanelActions.search.actionString) {
+        orderedRightPanel[0] = rightPanel[index];
+      } else if (item.action === leftPanelActions.help.actionString) {
+        orderedRightPanel[customActions] = rightPanel[index];
+      } else if (item.action === leftPanelActions.notifications.actionString) {
+        orderedRightPanel[customActions + 1] = rightPanel[index];
+      } else if (item.action === leftPanelActions.account.actionString) {
+        orderedRightPanel[customActions + 2] = rightPanel[index];
+      } else if (item.action === leftPanelActions.switcher.actionString) {
+        orderedRightPanel[customActions + 3] = rightPanel[index];
+      }
+    }
+  });
 
-  onMount(()=>{
-    console.log(switcherAtLast);
-    console.log(renderSwitcher);
-  })
+  orderedRightPanel = orderedRightPanel.filter(item => {
+    return item;
+  });
 </script>
 
 <div class={cx('--header__global')}>
-  {#each rightPanel as action, index}
-    {#if action.action === 'search'}
-      <ActionSearch {...action} />
-    {:else if action.action === 'switcher'}
-      {#if index === rightPanel.length}
-        <ActionLink {...action} />
-      {/if}
-    {:else if action.type === 'search'}
-      <ActionSearch {...action} />
-    {:else if action.type === 'component'}
-      <ActionComponent {...action} />
-    {:else if action.type === 'link'}
-      <ActionLink {...action} />
-    {/if}
+  {#each orderedRightPanel as action, index}
+    <ActionGeneric {action} />
   {/each}
-  {#if renderSwitcher}
-    <ActionLink {...switcherAtLast} />
-  {/if}
 </div>
