@@ -11,7 +11,7 @@
   import UIShellNavItem from './UIShellNav/UIShellNavItem.svelte';
   import UIShellRightPanel from './UIShellRightPanel/UIShellRightPanel.svelte';
 
-  $: ariaLabel = 'IBM ' + (uiShellAriaLabel || $$props['aria-label'] || platformName);
+  $: ariaLabel = company + (uiShellAriaLabel || $$props['aria-label'] || platformName);
 </script>
 
 <header aria-label={ariaLabel} class={cx('--header')} role="banner">

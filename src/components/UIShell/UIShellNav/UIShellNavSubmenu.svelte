@@ -11,14 +11,14 @@
   let listItemSubMenu = undefined;
 
   window.addEventListener('mouseup', ({ target }) => {
-    if (target !== listItemSubMenu) {
-      if (expanded) {
-        console.log('entered first if');
-        expanded = false;
+    if (listItemSubMenu) {
+      if (listItemSubMenu.contains(target) || target === listItemSubMenu) {
+        expanded = !expanded;
+      } else {
+        if (expanded) {
+          expanded = false;
+        }
       }
-    } else if (listItemSubMenu.contains(target) || target === listItemSubMenu) {
-      console.log('entered second if');
-      expanded = !expanded;
     }
   });
 </script>
