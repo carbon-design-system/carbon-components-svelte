@@ -33,6 +33,7 @@ Currently, the following components are supported:
   - Switch
 - Copy
 - CopyButton
+- DataTable
 - DataTableSkeleton
 - DatePicker
   - DatePickerInput
