@@ -7,7 +7,7 @@
 
 **NOTE**: Currently, this project is under active development. See the [issue tracker](https://github.com/IBM/carbon-components-svelte/projects/1) for the anticipated v1.0.0 release.
 
-## [Storybook](https://ibm.github.io/carbon-components-svelte) · [Svelte REPL](https://svelte.dev/repl/201b02d3a92440f99de9129e83a67871?version=3.16.7)
+## [Storybook](https://ibm.github.io/carbon-components-svelte) · [CodeSandbox](https://codesandbox.io/s/carbon-components-svelte021-lhvc4)
 
 ## Getting Started
 
@@ -33,7 +33,7 @@ yarn add -D carbon-components-svelte
 <Button>Primary</Button>
 ```
 
-Try it in the [Svelte REPL](https://svelte.dev/repl/201b02d3a92440f99de9129e83a67871?version=3.16.7).
+Try it in the [CodeSandbox](https://codesandbox.io/s/carbon-components-svelte021-lhvc4).
 
 ## Contributing
 
