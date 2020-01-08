@@ -24,8 +24,13 @@ yarn add -D carbon-components-svelte
   import { Button } from 'carbon-components-svelte';
 </script>
 
+<svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/carbon-components@10.9.0/css/carbon-components.min.css" />
+</svelte:head>
+
 <Button>Primary</Button>
-<Button kind="secondary">Secondary</Button>
 ```
 
 Try it in the [Svelte REPL](https://svelte.dev/repl/201b02d3a92440f99de9129e83a67871?version=3.16.7).
