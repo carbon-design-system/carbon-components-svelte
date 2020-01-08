@@ -5,7 +5,7 @@
   export let size = undefined;
   export let useStaticWidth = false;
   export let shouldShowBorder = false;
-  export let isSortable = false;
+  export let sortable = false;
   export let stickyHeader = false;
   export let style = undefined;
 
@@ -15,13 +15,13 @@
 {#if stickyHeader}
   <section class={cx('--data-table_inner-container', className)} {style}>
     <table
-      class={cx('--data-table', size === 'compact' && '--data-table--compact', size === 'short' && '--data-table--short', size === 'tall' && '--data-table--tall', isSortable && '--data-table--sort', zebra && '--data-table--zebra', useStaticWidth && '--data-table--static', !shouldShowBorder && '--data-table--no-border', stickyHeader && '--data-table--sticky-header')}>
+      class={cx('--data-table', size === 'compact' && '--data-table--compact', size === 'short' && '--data-table--short', size === 'tall' && '--data-table--tall', sortable && '--data-table--sort', zebra && '--data-table--zebra', useStaticWidth && '--data-table--static', !shouldShowBorder && '--data-table--no-border', stickyHeader && '--data-table--sticky-header')}>
       <slot />
     </table>
   </section>
 {:else}
   <table
-    class={cx('--data-table', size === 'compact' && '--data-table--compact', size === 'short' && '--data-table--short', size === 'tall' && '--data-table--tall', isSortable && '--data-table--sort', zebra && '--data-table--zebra', useStaticWidth && '--data-table--static', !shouldShowBorder && '--data-table--no-border', stickyHeader && '--data-table--sticky-header', className)}
+    class={cx('--data-table', size === 'compact' && '--data-table--compact', size === 'short' && '--data-table--short', size === 'tall' && '--data-table--tall', sortable && '--data-table--sort', zebra && '--data-table--zebra', useStaticWidth && '--data-table--static', !shouldShowBorder && '--data-table--no-border', stickyHeader && '--data-table--sticky-header', className)}
     {style}>
     <slot />
   </table>

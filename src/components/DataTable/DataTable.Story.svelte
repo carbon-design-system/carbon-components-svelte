@@ -75,6 +75,7 @@
     { key: 'attached_groups', value: 'Attached Groups' },
     { key: 'status', value: 'Status' }
   ];
+  let sortable = true;
 </script>
 
 <Layout>
@@ -104,6 +105,28 @@
         </Table>
       </TableContainer>
     </DataTable>
+  {:else if story === 'sortable'}
+    <DataTable
+      bind:sortable
+      title={$$props.title}
+      description={$$props.description}
+      zebra={$$props.zebra}
+      size={$$props.size}
+      stickyHeader={$$props.stickyHeader}
+      on:click={({ detail }) => {
+        console.log('on:click', detail);
+      }}
+      on:click:header={({ detail }) => {
+        console.log('on:click:header', detail);
+      }}
+      on:click:row={({ detail }) => {
+        console.log('on:click:row', detail);
+      }}
+      on:click:cell={({ detail }) => {
+        console.log('on:click:cell', detail);
+      }}
+      {rows}
+      {headers} />
   {:else}
     <DataTable
       title={$$props.title}
@@ -111,6 +134,9 @@
       zebra={$$props.zebra}
       size={$$props.size}
       stickyHeader={$$props.stickyHeader}
+      on:click={({ detail }) => {
+        console.log('on:click', detail);
+      }}
       on:click:header={({ detail }) => {
         console.log('on:click:header', detail);
       }}
