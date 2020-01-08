@@ -1,12 +1,14 @@
 import flatpickr from 'flatpickr';
-import l10n from 'flatpickr/dist/l10n';
+import l10n from 'flatpickr/dist/l10n/index.js';
 import rangePlugin from 'flatpickr/dist/plugins/rangePlugin';
 import { cx } from '../../lib';
 
-l10n.en.weekdays.shorthand.forEach((_, index) => {
-  const shorthand = _.slice(0, 2);
-  l10n.en.weekdays.shorthand[index] = shorthand === 'Th' ? 'Th' : shorthand.charAt(0);
-});
+if (l10n.en) {
+  l10n.en.weekdays.shorthand.forEach((_, index) => {
+    const shorthand = _.slice(0, 2);
+    l10n.en.weekdays.shorthand[index] = shorthand === 'Th' ? 'Th' : shorthand.charAt(0);
+  });
+}
 
 function updateClasses(instance) {
   const { calendarContainer, days, daysContainer, weekdayContainer, selectedDates } = instance;
