@@ -1,131 +1,34 @@
 # carbon-components-svelte
 
-> 🚧 UNDER CONSTRUCTION
+[![NPM][npm]][npm-url]
+[![Build][build]][build-badge]
 
-> Svelte implementation of the Carbon Design System
+> Svelte implementation of the [Carbon Design System](https://github.com/carbon-design-system)
 
-Currently, this project is under active development. See the [ongoing project](https://github.com/IBM/carbon-components-svelte/projects/1) for the anticipated v1.0.0 release.
+**NOTE**: Currently, this project is under active development. See the [issue tracker](https://github.com/IBM/carbon-components-svelte/projects/1) for the anticipated v1.0.0 release.
 
-## [Storybook](https://ibm.github.io/carbon-components-svelte)
+## [Storybook](https://ibm.github.io/carbon-components-svelte) · [Svelte REPL](https://svelte.dev/repl/201b02d3a92440f99de9129e83a67871?version=3.16.7)
 
-## Supported Components
+## Getting Started
 
-Currently, the following components are supported:
+`carbon-components-svelte` can be installed as a development dependency.
 
-- Accordion
-- AccordionItem
-  - AccordionSkeleton
-- Breadcrumb
-- BreadcrumbItem
-  - BreadcrumbSkeleton
-- Button
-  - ButtonSkeleton
-- Checkbox
-  - CheckboxSkeleton
-- CodeSnippet
-  - CodeSnippetSkeleton
-- ComboBox
-- ComposedModal
-  - ModalHeader
-  - ModalBody
-  - ModalFooter
-- ContentSwitcher
-  - Switch
-- Copy
-- CopyButton
-- DataTable
-- DataTableSkeleton
-- DatePicker
-  - DatePickerInput
-- FileUploader
-  - FileUploaderButton
-  - FileUploaderItem
-  - FileUploaderDropContainer
-  - Filename
-- Form
-- FormGroup
-- FormItem
-- FormLabel
-- Icon
-  - IconSkeleton
-- InlineLoading
-- Link
-- ListBox
-  - ListBoxField
-  - ListBoxMenu
-  - ListBoxMenuIcon
-  - ListBoxMenuItem
-  - ListBoxSelection
-- ListItem
-- Loading
-- MultiSelect
-- Modal
-- Notification
-  - ToastNotification
-  - InlineNotification
-  - NotificationActionButton
-  - NotificationButton
-  - NotificationIcon
-  - NotificationTextDetails
-- NumberInput
-  - NumberInputSkeleton
-- OrderedList
-- OverflowMenu
-  - OverflowMenuItem
-- Pagination
-  - PaginationSkeleton
-- ProgressIndicator
-  - ProgressIndicatorSkeleton
-  - ProgressStep
-- RadioButton
-  - RadioButtonSkeleton
-- RadioButtonGroup
-- Search
-  - SearchSkeleton
-- Select
-  - SelectSkeleton
-  - SelectItem
-  - SelectItemGroup
-- SkeletonPlaceholder
-- SkeletonText
-- Slider
-  - SliderSkeleton
-- StructuredList
-  - StructuredListSkeleton
-  - StructuredListBody
-  - StructuredListHead
-  - StructuredListCell
-  - StructuredListRow
-  - StructuredListInput
-- Tabs
-  - Tab
-  - TabContent
-  - TabsSkeleton
-- Tag
-  - TagSkeleton
-- TextArea
-  - TextAreaSkeleton
-- TextInput
-  - TextInputSkeleton
-  - PasswordInput
-- Tile
-  - ClickableTile
-  - SelectableTile
-  - ExpandableTile
-  - RadioTile
-  - Tile
-  - TileGroup
-    - RadioTile
-- TimePicker
-  - TimePickerSelect
-- Toggle
-  - ToggleSkeleton
-- ToggleSmall
-  - ToggleSmallSkeleton
-- Tooltip
-- TooltipDefinition
-- TooltipIcon
-- UnorderedList
+```bash
+yarn add -D carbon-components-svelte
+```
+
+## Usage
+
+```html
+<script>
+  import { Button } from 'carbon-components-svelte';
+</script>
+
+<Button>Primary</Button>
+<Button kind="secondary">Secondary</Button>
+```
+
+Try it in the [Svelte REPL](https://svelte.dev/repl/201b02d3a92440f99de9129e83a67871?version=3.16.7).
 
 ## Contributing
 
@@ -136,3 +39,8 @@ Refer to the [Contributing guidelines](CONTRIBUTING.md).
 ## License
 
 [Apache 2.0](LICENSE)
+
+[npm]: https://img.shields.io/npm/v/carbon-components-svelte.svg?color=blue
+[npm-url]: https://npmjs.com/package/carbon-components-svelte
+[build]: https://travis-ci.com/ibm/carbon-components-svelte.svg?branch=master
+[build-badge]: https://travis-ci.com/ibm/carbon-components-svelte
