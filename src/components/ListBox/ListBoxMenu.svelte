@@ -12,6 +12,7 @@
 <div
   role="listbox"
   id={menuId}
+  aria-labelledby={$$props['aria-labelledby']}
   aria-label={$$props['aria-label']}
   class={cx('--list-box__menu', className)}
   {style}>
