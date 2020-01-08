@@ -16,7 +16,7 @@
     [translationIds.close]: 'Close menu',
     [translationIds.open]: 'Open menu'
   };
-  const ctx = getContext('MultiSelect');
+  const ctx = getContext('MultiSelect') || getContext('Dropdown');
 
   let fieldRef = undefined;
 
@@ -34,6 +34,7 @@
   aria-expanded={ariaExpanded}
   aria-owns={(ariaExpanded && menuId) || undefined}
   aria-controls={(ariaExpanded && menuId) || undefined}
+  aria-disabled={disabled}
   aria-label={ariaExpanded ? translateWithId('close') : translateWithId('open')}
   tabindex={disabled ? '-1' : tabindex}
   class={cx('--list-box__field', className)}

@@ -266,6 +266,7 @@
       <ListBoxMenu aria-label={ariaLabel} {id}>
         {#each filterable ? filteredItems : sortedItems as item, i (item.id || i)}
           <ListBoxMenuItem
+            id={item.id}
             active={item.checked}
             highlighted={highlightedIndex === i}
             on:click={() => {

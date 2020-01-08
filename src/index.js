@@ -11,6 +11,7 @@ import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
 import DataTable from './components/DataTable';
 import DataTableSkeleton from './components/DataTableSkeleton';
 import DatePicker, { DatePickerInput } from './components/DatePicker';
+import Dropdown, { DropdownSkeleton } from './components/Dropdown';
 import FileUploader, {
   FileUploaderButton,
   FileUploaderItem,
@@ -105,6 +106,8 @@ export {
   DataTableSkeleton,
   DatePicker,
   DatePickerInput,
+  Dropdown,
+  DropdownSkeleton,
   FileUploader,
   FileUploaderButton,
   FileUploaderItem,
