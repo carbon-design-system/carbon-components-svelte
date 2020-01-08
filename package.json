@@ -124,7 +124,8 @@
     "svelte"
   ],
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "bugs": "https://github.com/ibm/carbon-components-svelte/issues"
 }
