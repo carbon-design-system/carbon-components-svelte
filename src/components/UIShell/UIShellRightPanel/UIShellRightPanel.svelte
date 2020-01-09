@@ -11,7 +11,11 @@
   rightPanel.forEach((item, index) => {
     orderedRightPanel[index] = undefined;
     if (item.action) {
-      if (Object.keys(leftPanelActions).indexOf(item.action.charAt(0).toLowerCase() + item.action.slice(1)) === -1) {
+      if (
+        Object.keys(leftPanelActions).indexOf(
+          item.action.charAt(0).toLowerCase() + item.action.slice(1)
+        ) === -1
+      ) {
         orderedRightPanel[customActions] = rightPanel[index];
         customActions += 1;
       }
@@ -41,6 +45,6 @@
 
 <div class={cx('--header__global')}>
   {#each orderedRightPanel as action, index}
-    <ActionGeneric {action} />
+    <ActionGeneric {action} on:inputSearch />
   {/each}
 </div>

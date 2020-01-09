@@ -4,7 +4,9 @@
   import UIShell from './UIShell.svelte';
   import FormTest from './FormTest.svelte';
   import SettingsAdjust20 from 'carbon-icons-svelte/lib/SettingsAdjust20';
+  // import Binoculars20 from 'carbon-icons-svelte/lib/Binoculars20'
   import { leftPanelActions, leftPanelTypes } from './constants';
+  import searchStore from './searchStore';
 
   const navMenu = [
     {
@@ -61,13 +63,14 @@
 
     *** actions 'search' and 'switcher' doesnt need to specify type and icon because those are predefined actions in the component.
   */
+
   const rightPanel = [
     {
       action: leftPanelActions.search.actionString,
       type: leftPanelTypes.search,
       isVisible: true
     },
-    { 
+    {
       action: 'customsettings',
       type: leftPanelTypes.component,
       icon: [
@@ -189,13 +192,35 @@
       },
       isVisible: true
     }
+    // {
+    //   action: 'customsearch',
+    //   type: leftPanelTypes.search,
+    //   icon: [
+    //     {
+    //       class: undefined,
+    //       skeleton: false,
+    //       render: Binoculars20,
+    //       title: 'binoculars',
+    //       tabIndex: 0,
+    //       focusable: false,
+    //       style: undefined
+    //     }
+    //   ],
+    //   isVisible: true
+    // }
   ];
+
+  function searchInStore(event) {
+    if (event.detail.action === leftPanelActions.search.actionString) {
+      searchStore.search(event.detail.textInput);
+    }
+  }
 </script>
 
 {#if story === 'with-nav'}
   <UIShell {...$$props} {navMenu} />
 {:else if story === 'with-actions'}
-  <UIShell {...$$props} {rightPanel} />
+  <UIShell {...$$props} {rightPanel} on:inputSearch={searchInStore} />
 {:else}
   <UIShell {...$$props} />
 {/if}

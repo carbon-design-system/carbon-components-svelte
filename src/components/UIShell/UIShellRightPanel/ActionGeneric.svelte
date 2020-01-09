@@ -1,11 +1,10 @@
 <script>
   export let action = undefined;
 
-  import { cx } from '../../../lib';
   import ActionLink from './ActionLink.svelte';
   import ActionComponent from './ActionComponent.svelte';
   import ActionSearch from './ActionSearch.svelte';
-  import { leftPanelTypes, actionSearchWhiteList } from '../constants';
+  import { leftPanelTypes } from '../constants';
 
   let typeComponent = undefined;
   let componentIsActive = false;
@@ -47,9 +46,6 @@
   }
 
   function checkForClicksTypeSearch(target, component, actionString) {
-    let parentFirstLine;
-    let parentSecondLine;
-
     if (component && target) {
       try {
         if (
@@ -158,38 +154,45 @@
 </style>
 
 {#if action.type === leftPanelTypes.component}
-  <div bind:this={typeComponent}>
-    <ActionComponent
-      action={action.action}
-      icon={action.icon ? action.icon : undefined}
-      content={action.content}
-      bind:componentIsActive />
-  </div>
+  {#if action.isVisible}
+    <div bind:this={typeComponent}>
+      <ActionComponent
+        action={action.action}
+        icon={action.icon ? action.icon : undefined}
+        content={action.content}
+        bind:componentIsActive />
+    </div>
+  {/if}
 {:else if action.type === leftPanelTypes.search}
-  <div
-    bind:this={typeSearch}
-    class="search-wrapper"
-    class:search-wrapper-hidden={!searchIsActive}
-    class:search-focus={isSearchFocus || searchIsActive}
-    role="search">
-    <ActionSearch
-      action={action.action}
-      icon={action.icon ? action.icon : undefined}
-      content={action.content}
-      bind:searchIsActive
-      focusInputSearch={() => {
-        isSearchFocus = true;
-      }}
-      focusOutInputSearch={() => {
-        isSearchFocus = false;
-      }} />
-  </div>
+  {#if action.isVisible}
+    <div
+      bind:this={typeSearch}
+      class="search-wrapper"
+      class:search-wrapper-hidden={!searchIsActive}
+      class:search-focus={isSearchFocus || searchIsActive}
+      role="search">
+      <ActionSearch
+        action={action.action}
+        icon={action.icon ? action.icon : undefined}
+        content={action.content}
+        bind:searchIsActive
+        focusInputSearch={() => {
+          isSearchFocus = true;
+        }}
+        focusOutInputSearch={() => {
+          isSearchFocus = false;
+        }}
+        on:inputSearch />
+    </div>
+  {/if}
 {:else if action.type === leftPanelTypes.link || action.type === leftPanelTypes.links}
-  <div bind:this={typeLink}>
-    <ActionLink
-      action={action.action}
-      icon={action.icon ? action.icon : undefined}
-      content={action.content}
-      bind:linkIsActive />
-  </div>
+  {#if action.isVisible}
+    <div bind:this={typeLink}>
+      <ActionLink
+        action={action.action}
+        icon={action.icon ? action.icon : undefined}
+        content={action.content}
+        bind:linkIsActive />
+    </div>
+  {/if}
 {/if}

@@ -1,14 +1,14 @@
-<!-- <script>
-  export let action = undefined;
+<script>
+  // export let action = undefined;
   export let type = undefined;
   export let icon = undefined;
   // export let content = undefined;
 
   import { cx } from '../../../lib';
   import Icon from '../../Icon/Icon.svelte';
-  import { leftPanelActions } from '../constants';
+  // import { leftPanelActions } from '../constants';
 </script>
 
 <button aria-label={type} class={cx('--header__action')} type="button">
   <Icon {...icon} render={icon[0].render} />
-</button> -->
+</button>

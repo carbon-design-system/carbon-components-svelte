@@ -8,9 +8,7 @@
   import { cx } from '../../../lib';
   import Icon from '../../Icon/Icon.svelte';
   import { leftPanelActions } from '../constants';
-  import { slide } from 'svelte/transition'; 
-
-  let skeleton = icon ? icon.skeleton : false;
+  import { slide } from 'svelte/transition';
 
   if (!icon) {
     const actionsArray = Object.entries(leftPanelActions);
@@ -27,23 +25,14 @@
   }
 </script>
 
-{#if action === leftPanelActions.switcher.actionString}
-  <button
-    aria-label={type}
-    class={cx('--header__action', linkIsActive && '--header__action--active')}
-    type="button">
-    <Icon {...icon} render={icon.render} />
-  </button>
-{:else}
-  <button
-    aria-label={type}
-    class={cx('--header__action', linkIsActive && '--header__action--active')}
-    type="button">
-    <Icon {...icon} render={icon.render} />
-  </button>
-{/if}
+<button
+  aria-label={type}
+  class={cx('--header__action', linkIsActive && '--header__action--active')}
+  type="button">
+  <Icon {...icon} render={icon.render} />
+</button>
 {#if linkIsActive}
-  <div class="bx--header-panel bx--header-panel--expanded" transition:slide="{{duration: 200}}">
+  <div class="bx--header-panel bx--header-panel--expanded" transition:slide={{ duration: 200 }}>
     <ul class="bx--switcher__item">
       <li class="bx--switcher__item">
         <a class="bx--switcher__item-link bx--switcher__item-link--selected" href="/">Link</a>

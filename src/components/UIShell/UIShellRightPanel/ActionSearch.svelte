@@ -1,17 +1,18 @@
 <script>
   export let action = undefined;
   export let icon = undefined;
-  // export let content = undefined;
   export let searchIsActive = undefined;
 
   import { createEventDispatcher } from 'svelte';
   import { cx } from '../../../lib';
   import Icon from '../../Icon/Icon.svelte';
   import { leftPanelActions, closeIcon } from '../constants';
+  import searchStore from '../searchStore';
+  import ActionSearchResult from './ActionSearchResult.svelte'
 
-  // let searchIconProps = undefined;
   let searchTabIndex = 0;
   let closeTabIndex = -1;
+  let inputSearchField = undefined;
   const dispatch = createEventDispatcher();
 
   if (!icon) {
@@ -28,6 +29,26 @@
     }
   }
 
+  function dispatchInputs(event) {
+    const params = {
+      action: action,
+      textInput: event.target.value
+    };
+
+    dispatch('inputSearch', params);
+  }
+
+  function clearSearch() {
+    searchStore.clear();
+  }
+
+  $: if (!searchIsActive) {
+    try {
+    inputSearchField.value = '';
+    searchStore.clear();
+    } catch {}
+  }
+
   $: if (searchIsActive) {
     searchTabIndex = -1;
     closeTabIndex = 0;
@@ -35,6 +56,8 @@
     searchTabIndex = 0;
     closeTabIndex = -1;
   }
+
+  $: showResults = $searchStore ? true : false;
 </script>
 
 <style>
@@ -86,6 +109,7 @@
     padding: 0;
     flex-shrink: 0;
     opacity: 1;
+    display: block;
     transition: background-color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
       opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
   }
@@ -96,6 +120,20 @@
 
   .btn-clear-hidden {
     opacity: 0;
+    display: none;
+  }
+
+  .search-list {
+    position: absolute;
+    z-index: 10000;
+    padding: 1rem 0;
+    left: 0;
+    right: 0;
+    top: 3rem;
+    background-color: #161616;
+    border: 1px solid #393939;
+    border-top: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
   }
 </style>
 
@@ -115,6 +153,8 @@
     <Icon {...icon} render={icon.render} />
   </button>
   <input
+    bind:this={inputSearchField}
+    id="input-search-field"
     type="text"
     autocomplete="off"
     tabindex={closeTabIndex}
@@ -122,7 +162,8 @@
     class:input-hidden={!searchIsActive}
     placeholder="Search"
     on:focus={() => dispatch('focusInputSearch')}
-    on:focusout={() => dispatch('focusOutInputSearch')} />
+    on:focusout={() => dispatch('focusOutInputSearch')}
+    on:input={dispatchInputs} />
   <button
     id="right-panel-close-search"
     tabindex={closeTabIndex}
@@ -130,7 +171,15 @@
     class:btn-clear={true}
     class:btn-clear-hidden={!searchIsActive}
     type="button"
-    aria-label="Clear search">
+    aria-label="Clear search"
+    on:click={clearSearch}>
     <Icon {...closeIcon} render={closeIcon.render} />
   </button>
 </div>
+{#if showResults}
+  <ul aria-labelledby="search-label" role="menu" id="search-menu" class="search-list">
+    {#each $searchStore as searchItem, index}
+      <ActionSearchResult {searchItem} {index} />
+    {/each}
+  </ul>
+{/if}
