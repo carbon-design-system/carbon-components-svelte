@@ -1,50 +1,37 @@
 <script>
-  import { Router, Link, Route } from 'svelte-routing';
-  import copy from 'clipboard-copy';
-  import { Search, Link as CarbonLink, CodeSnippet } from 'carbon-components-svelte';
-  import ThemePicker from './components/ThemePicker.svelte';
-
-  let value = '';
-
-  $: code = `
-    search component "${value}"
-  `.trim();
+  import ComponentLayout from './components/ComponentLayout.svelte';
+  import ComponentSearch from './containers/ComponentSearch.svelte';
+  import Header from './containers/Header.svelte';
+  import Logo from './assets/logo.png';
+  import Router from 'svelte-spa-router';
 </script>
 
 <style>
+  nav {
+    position: fixed;
+    top: 2.5rem;
+    left: 0;
+    width: 14rem;
+    height: calc(100% - 2.5rem);
+    background-color: var(--cds-ui-01);
+  }
+
   header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    height: 2.5rem;
-    padding: 0 1rem;
+    margin-top: 2.5rem;
+    padding-left: 16rem;
   }
 </style>
 
-<Router>
-  <nav>
-    <Link to="/">Home</Link>
-    <Link to="about">About</Link>
-  </nav>
-  <div>
-    <Route path="about" component={ThemePicker} />
-    <Route path="/">Home</Route>
-  </div>
-</Router>
+<Router routes={{ '/c/:name': ComponentLayout }} />
 
-<header>
-  <CarbonLink href="https://github.com/IBM/carbon-components-svelte">GitHub</CarbonLink>
-  <div>
-    <ThemePicker />
+<Header />
+
+<nav>
+  <ComponentSearch />
+</nav>
+
+<header class="bx--grid">
+  <div class="bx--row">
+    <img src={Logo} alt="Logo" style="width: 4rem;" />
   </div>
 </header>
-
-<div style="width: 16rem">
-  <Search id="search-components" labelText="Components" small bind:value />
-</div>
-
-<CodeSnippet
-  on:click={() => {
-    copy(code);
-  }}
-  {code} />
