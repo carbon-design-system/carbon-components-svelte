@@ -16,6 +16,8 @@
     "clipboard-copy": "^3.1.0",
     "copy-webpack-plugin": "^5.0.5",
     "css-loader": "^3.2.0",
+    "file-loader": "^5.0.2",
+    "fuse.js": "^3.4.6",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.13.0",
@@ -25,7 +27,7 @@
     "style-loader": "^1.0.0",
     "svelte": "^3.12.1",
     "svelte-loader": "2.13.6",
-    "svelte-routing": "^1.4.0",
+    "svelte-spa-router": "^2.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"

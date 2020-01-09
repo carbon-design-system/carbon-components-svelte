@@ -34,8 +34,4 @@ $css--plex: true;
 @import 'carbon-components/scss/globals/scss/_css--helpers.scss';
 @import 'carbon-components/scss/globals/scss/_css--body.scss';
 @import 'carbon-components/scss/globals/grid/_grid.scss';
-
-@import 'carbon-components/scss/components/search/_search.scss';
-@import 'carbon-components/scss/components/select/_select.scss';
-@import 'carbon-components/scss/components/copy-button/_copy-button.scss';
-@import 'carbon-components/scss/components/code-snippet/_code-snippet.scss';
+@import 'carbon-components/scss/globals/scss/styles.scss';
