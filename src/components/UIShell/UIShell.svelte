@@ -27,6 +27,6 @@
     </UIShellNavWrapper>
   {/if}
   {#if rightPanel}
-    <UIShellRightPanel {rightPanel} />
+    <UIShellRightPanel {rightPanel} on:inputSearch />
   {/if}
 </header>
