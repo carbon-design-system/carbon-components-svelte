@@ -24,75 +24,51 @@
 
   function checkForClicksTypeComponent(target, component) {
     if (component && target) {
-      try {
-        if (
-          !isChildOf(target, 'right-panel-action-component') ||
-          !isChildOf(target, 'right-panel-action-component-form')
-        ) {
-          if (component.contains(target) || target === component) {
-            componentIsActive = !componentIsActive;
-          } else {
-            if (componentIsActive) {
-              componentIsActive = false;
-            }
+      if (
+        !isChildOf(target, 'right-panel-action-component') ||
+        !isChildOf(target, 'right-panel-action-component-form')
+      ) {
+        if (component.contains(target) || target === component) {
+          componentIsActive = !componentIsActive;
+        } else {
+          if (componentIsActive) {
+            componentIsActive = false;
           }
-        }
-      } catch (error) {
-        if (componentIsActive) {
-          componentIsActive = false;
         }
       }
     }
   }
 
-  function checkForClicksTypeSearch(target, component, actionString) {
+  function checkForClicksTypeSearch(target, component) {
     if (component && target) {
-      try {
-        if (!isChildOf(target, 'right-panel-action-search')) {
-          if (component.contains(target) || target === component) {
-            searchIsActive = !searchIsActive;
-          } else {
-            if (searchIsActive) {
-              searchIsActive = false;
-            }
-          }
+      if (!isChildOf(target, 'right-panel-action-search')) {
+        if (component.contains(target) || target === component) {
+          searchIsActive = !searchIsActive;
         } else {
-          if (!searchIsActive && target.id !== 'right-panel-close-search') {
-            searchIsActive = true;
-          } else if (searchIsActive && isChildOf(target, 'right-panel-close-search')) {
+          if (searchIsActive) {
             searchIsActive = false;
           }
         }
-      } catch (error) {
-        if (searchIsActive) {
+      } else {
+        if (!searchIsActive && target.id !== 'right-panel-close-search') {
+          searchIsActive = true;
+        } else if (searchIsActive && isChildOf(target, 'right-panel-close-search')) {
           searchIsActive = false;
         }
       }
     }
   }
 
-  function checkForClicksTypeLink(target, component, actionString) {
-    try {
-      if (component && target) {
-        if (component.contains(target) || target === component) {
-          if (actionString === leftPanelTypes.component) {
-            componentIsActive = !componentIsActive;
-          } else if (actionString === leftPanelTypes.link) {
-            linkIsActive = !linkIsActive;
-          }
-        } else {
-          if (actionString === leftPanelTypes.component) {
-            if (componentIsActive) {
-              componentIsActive = false;
-            }
-          } else if (actionString === leftPanelTypes.link) {
-            if (linkIsActive) {
-              linkIsActive = false;
-            }
-          }
+  function checkForClicksTypeLink(target, component) {
+    if (component && target) {
+      if (component.contains(target) || target === component) {
+        linkIsActive = !linkIsActive;
+      } else {
+        if (linkIsActive) {
+          linkIsActive = false;
         }
       }
-    } catch (error) {}
+    }
   }
 </script>
 
