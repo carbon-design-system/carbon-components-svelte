@@ -2,13 +2,19 @@
   export let action = undefined;
   export let type = undefined;
   export let icon = undefined;
-  // export let content = undefined;
+  export let content = undefined;
   export let linkIsActive = undefined;
 
   import { cx } from '../../../lib';
   import Icon from '../../Icon/Icon.svelte';
-  import { leftPanelActions } from '../constants';
+  import { leftPanelActions, leftPanelTypes } from '../constants';
   import { slide } from 'svelte/transition';
+
+  let href = undefined;
+
+  if (type === leftPanelTypes.link) {
+    href = content.href;
+  }
 
   if (!icon) {
     const actionsArray = Object.entries(leftPanelActions);
@@ -25,33 +31,63 @@
   }
 </script>
 
-<button
-  aria-label={type}
-  class={cx('--header__action', linkIsActive && '--header__action--active')}
-  type="button">
-  <Icon {...icon} render={icon.render} />
-</button>
-{#if linkIsActive}
-  <div class="bx--header-panel bx--header-panel--expanded" transition:slide={{ duration: 200 }}>
-    <ul class="bx--switcher__item">
-      <li class="bx--switcher__item">
-        <a class="bx--switcher__item-link bx--switcher__item-link--selected" href="/">Link</a>
-      </li>
-      <li class="bx--switcher__item">
-        <a class="bx--switcher__item-link" href="/">Link</a>
-      </li>
-      <li class="bx--switcher__item">
-        <a class="bx--switcher__item-link" href="/">Link</a>
-      </li>
-      <li class="bx--switcher__item">
-        <a class="bx--switcher__item-link" href="/">Link</a>
-      </li>
-      <li class="bx--switcher__item">
-        <a class="bx--switcher__item-link" href="/">Link</a>
-      </li>
-      <li class="bx--switcher__item">
-        <a class="bx--switcher__item-link" href="/">Link</a>
-      </li>
-    </ul>
-  </div>
+<style>
+  .action-link {
+    text-align: center;
+    align-items: center;
+    vertical-align: middle;
+    justify-content: center;
+    padding-top: 10px;
+  }
+
+  .subject-divider {
+    color: #c6c6c6;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #525252;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(82, 82, 82);
+    margin: 32px 1rem 8px;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1rem;
+    letter-spacing: 0.32px;
+  }
+</style>
+
+{#if type === leftPanelTypes.link}
+  <a
+    aria-label={type}
+    class={cx('--header__action', linkIsActive && '--header__action--active')}
+    class:action-link={true}
+    {href}>
+    <Icon {...icon} render={icon.render} />
+  </a>
+{:else}
+  <button
+    aria-label={type}
+    class={cx('--header__action', linkIsActive && '--header__action--active')}
+    type="button">
+    <Icon {...icon} render={icon.render} />
+  </button>
+  {#if linkIsActive && type === leftPanelTypes.links}
+    <div
+      class={cx('--header-panel', '--header-panel--expanded')}
+      transition:slide={{ duration: 200 }}>
+      <ul class={cx('--switcher__item')}>
+        {#each content as subject}
+          {#if subject.subject}
+            <li class={cx('--switcher__item')} class:subject-divider={true}>
+              <span>{subject.subject}</span>
+            </li>
+          {/if}
+          {#each subject.items as link}
+            <li class={cx('--switcher__item')}>
+              <a class={cx('--switcher__item-link')} href={link.href}>{link.text}</a>
+            </li>
+          {/each}
+        {/each}
+      </ul>
+    </div>
+  {/if}
 {/if}

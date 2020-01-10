@@ -38,10 +38,6 @@
     dispatch('inputSearch', params);
   }
 
-  function clearSearch() {
-    searchStore.clear();
-  }
-
   $: if (!searchIsActive) {
     try {
     inputSearchField.value = '';
@@ -172,7 +168,7 @@
     class:btn-clear-hidden={!searchIsActive}
     type="button"
     aria-label="Clear search"
-    on:click={clearSearch}>
+    on:click={() => searchStore.clear()}>
     <Icon {...closeIcon} render={closeIcon.render} />
   </button>
 </div>
