@@ -8,7 +8,7 @@
   import Icon from '../../Icon/Icon.svelte';
   import { leftPanelActions, closeIcon } from '../constants';
   import searchStore from '../searchStore';
-  import ActionSearchResult from './ActionSearchResult.svelte'
+  import ActionSearchResult from './ActionSearchResult.svelte';
 
   let searchTabIndex = 0;
   let closeTabIndex = -1;
@@ -39,10 +39,10 @@
   }
 
   $: if (!searchIsActive) {
-    try {
-    inputSearchField.value = '';
+    if (inputSearchField) {
+      inputSearchField.value = '';
+    }
     searchStore.clear();
-    } catch {}
   }
 
   $: if (searchIsActive) {
