@@ -4,7 +4,6 @@
   import UIShell from './UIShell.svelte';
   import FormTest from './FormTest.svelte';
   import SettingsAdjust20 from 'carbon-icons-svelte/lib/SettingsAdjust20';
-  // import Binoculars20 from 'carbon-icons-svelte/lib/Binoculars20'
   import { leftPanelActions, leftPanelTypes } from './constants';
   import searchStore from './searchStore';
 
@@ -101,7 +100,7 @@
       type: leftPanelTypes.links,
       content: [
         {
-          subjet: 'Notification subjet 1',
+          subject: 'Notification subject 1',
           items: [
             {
               href: '#',
@@ -110,7 +109,7 @@
           ]
         },
         {
-          subjet: 'Notification subjet 2',
+          subject: 'Notification subject 2',
           items: [
             {
               href: '#',
@@ -138,7 +137,7 @@
       type: leftPanelTypes.links,
       content: [
         {
-          subjet: 'Switcher subjet 1',
+          subject: 'Switcher subject 1',
           items: [
             {
               href: '#',
@@ -147,7 +146,7 @@
           ]
         },
         {
-          subjet: 'Switcher subjet 2',
+          subject: 'Switcher subject 2',
           items: [
             {
               href: '#',
@@ -168,7 +167,7 @@
           ]
         },
         {
-          subjet: 'Switcher subjet 3',
+          subject: 'Switcher subject 3',
           items: [
             {
               href: '#',
@@ -192,22 +191,6 @@
       },
       isVisible: true
     }
-    // {
-    //   action: 'customsearch',
-    //   type: leftPanelTypes.search,
-    //   icon: [
-    //     {
-    //       class: undefined,
-    //       skeleton: false,
-    //       render: Binoculars20,
-    //       title: 'binoculars',
-    //       tabIndex: 0,
-    //       focusable: false,
-    //       style: undefined
-    //     }
-    //   ],
-    //   isVisible: true
-    // }
   ];
 
   function searchInStore(event) {

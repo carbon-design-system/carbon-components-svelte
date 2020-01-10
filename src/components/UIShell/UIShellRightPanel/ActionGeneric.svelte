@@ -5,6 +5,7 @@
   import ActionComponent from './ActionComponent.svelte';
   import ActionSearch from './ActionSearch.svelte';
   import { leftPanelTypes } from '../constants';
+  import { isChildOf } from '../helpers';
 
   let typeComponent = undefined;
   let componentIsActive = false;
@@ -16,12 +17,61 @@
   let isSearchFocus = false;
 
   window.addEventListener('mouseup', ({ target }) => {
-    checkForClicks(target, typeComponent, leftPanelTypes.component);
-    checkForClicksTypeSearch(target, typeSearch, leftPanelTypes.search);
-    checkForClicks(target, typeLink, leftPanelTypes.link);
+    checkForClicksTypeComponent(target, typeComponent);
+    checkForClicksTypeSearch(target, typeSearch);
+    checkForClicksTypeLink(target, typeLink);
   });
 
-  function checkForClicks(target, component, actionString) {
+  function checkForClicksTypeComponent(target, component) {
+    if (component && target) {
+      try {
+        if (
+          !isChildOf(target, 'right-panel-action-component') ||
+          !isChildOf(target, 'right-panel-action-component-form')
+        ) {
+          if (component.contains(target) || target === component) {
+            componentIsActive = !componentIsActive;
+          } else {
+            if (componentIsActive) {
+              componentIsActive = false;
+            }
+          }
+        }
+      } catch (error) {
+        if (componentIsActive) {
+          componentIsActive = false;
+        }
+      }
+    }
+  }
+
+  function checkForClicksTypeSearch(target, component, actionString) {
+    if (component && target) {
+      try {
+        if (!isChildOf(target, 'right-panel-action-search')) {
+          if (component.contains(target) || target === component) {
+            searchIsActive = !searchIsActive;
+          } else {
+            if (searchIsActive) {
+              searchIsActive = false;
+            }
+          }
+        } else {
+          if (!searchIsActive && target.id !== 'right-panel-close-search') {
+            searchIsActive = true;
+          } else if (searchIsActive && isChildOf(target, 'right-panel-close-search')) {
+            searchIsActive = false;
+          }
+        }
+      } catch (error) {
+        if (searchIsActive) {
+          searchIsActive = false;
+        }
+      }
+    }
+  }
+
+  function checkForClicksTypeLink(target, component, actionString) {
     try {
       if (component && target) {
         if (component.contains(target) || target === component) {
@@ -43,88 +93,6 @@
         }
       }
     } catch (error) {}
-  }
-
-  function checkForClicksTypeSearch(target, component, actionString) {
-    if (component && target) {
-      try {
-        if (
-          target.id !== 'right-panel-action-search' &&
-          target.parentNode.id !== 'right-panel-action-search' &&
-          target.parentNode.parentNode.id !== 'right-panel-action-search'
-        ) {
-          if (component.contains(target) || target === component) {
-            if (actionString === leftPanelTypes.component) {
-              componentIsActive = !componentIsActive;
-            } else if (actionString === leftPanelTypes.search) {
-              searchIsActive = !searchIsActive;
-            } else if (actionString === leftPanelTypes.link) {
-              linkIsActive = !linkIsActive;
-            }
-          } else {
-            if (actionString === leftPanelTypes.component) {
-              if (componentIsActive) {
-                componentIsActive = false;
-              }
-            } else if (actionString === leftPanelTypes.search) {
-              if (searchIsActive) {
-                searchIsActive = false;
-              }
-            } else if (actionString === leftPanelTypes.link) {
-              if (linkIsActive) {
-                linkIsActive = false;
-              }
-            }
-          }
-        } else {
-          if (actionString === leftPanelTypes.component) {
-            if (!componentIsActive && target.id !== 'right-panel-close-search') {
-              componentIsActive = true;
-            } else if (
-              componentIsActive &&
-              (target.id === 'right-panel-close-search' ||
-                target.parentNode.id === 'right-panel-close-search')
-            ) {
-              componentIsActive = false;
-            }
-          } else if (actionString === leftPanelTypes.search) {
-            if (!searchIsActive && target.id !== 'right-panel-close-search') {
-              searchIsActive = true;
-            } else if (
-              searchIsActive &&
-              (target.id === 'right-panel-close-search' ||
-                target.parentNode.id === 'right-panel-close-search')
-            ) {
-              searchIsActive = false;
-            }
-          } else if (actionString === leftPanelTypes.link) {
-            if (!linkIsActive && target.id !== 'right-panel-close-search') {
-              linkIsActive = true;
-            } else if (
-              linkIsActive &&
-              (target.id === 'right-panel-close-search' ||
-                target.parentNode.id === 'right-panel-close-search')
-            ) {
-              linkIsActive = false;
-            }
-          }
-        }
-      } catch (error) {
-        if (actionString === leftPanelTypes.component) {
-          if (componentIsActive) {
-            componentIsActive = false;
-          }
-        } else if (actionString === leftPanelTypes.search) {
-          if (searchIsActive) {
-            searchIsActive = false;
-          }
-        } else if (actionString === leftPanelTypes.link) {
-          if (linkIsActive) {
-            linkIsActive = false;
-          }
-        }
-      }
-    }
   }
 </script>
 
@@ -153,18 +121,15 @@
   }
 </style>
 
-{#if action.type === leftPanelTypes.component}
-  {#if action.isVisible}
+{#if action.isVisible}
+  {#if action.type === leftPanelTypes.component}
     <div bind:this={typeComponent}>
       <ActionComponent
-        action={action.action}
         icon={action.icon ? action.icon : undefined}
         content={action.content}
         bind:componentIsActive />
     </div>
-  {/if}
-{:else if action.type === leftPanelTypes.search}
-  {#if action.isVisible}
+  {:else if action.type === leftPanelTypes.search}
     <div
       bind:this={typeSearch}
       class="search-wrapper"
@@ -184,12 +149,11 @@
         }}
         on:inputSearch />
     </div>
-  {/if}
-{:else if action.type === leftPanelTypes.link || action.type === leftPanelTypes.links}
-  {#if action.isVisible}
+  {:else if action.type === leftPanelTypes.link || action.type === leftPanelTypes.links}
     <div bind:this={typeLink}>
       <ActionLink
         action={action.action}
+        type={action.type}
         icon={action.icon ? action.icon : undefined}
         content={action.content}
         bind:linkIsActive />
