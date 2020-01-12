@@ -14,13 +14,11 @@
 
   let selected = false;
 
-  const unsubscribe = ctx.selectedValue.subscribe(currentValue => {
+  ctx.selectedValue.subscribe(currentValue => {
     if (currentValue === value) {
       selected = true;
     }
   });
-
-  unsubscribe();
 </script>
 
 <option class={cx('--select-option', className)} {value} {disabled} {hidden} {style} {selected}>
