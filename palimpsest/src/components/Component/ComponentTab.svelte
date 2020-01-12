@@ -12,9 +12,11 @@
     'kitchen-sink': 'KitchenSink'
   };
 
-  $: tab = paramMap[params.tab || 'Preview'];
+  $: tabName = params.tab || 'Preview';
+  $: tab = paramMap[tabName];
   $: {
     set(params.name);
+    document.title = `${params.name} · ${tabName}`;
   }
 </script>
 
