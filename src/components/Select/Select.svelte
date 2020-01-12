@@ -27,6 +27,7 @@
   setContext('Select', { selectedValue });
 
   $: errorId = `error-${id}`;
+  $: selectedValue.set(selected);
   $: selected = $selectedValue;
   $: {
     dispatch('change', $selectedValue);

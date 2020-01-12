@@ -59,9 +59,15 @@
 
 <style>
   main {
-    margin-top: 5.5rem;
+    margin-top: 5rem;
     padding-left: 12rem;
     padding-bottom: 2.5rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    main {
+      padding-left: 0;
+    }
   }
 
   h1 {
@@ -85,7 +91,7 @@
       </div>
     </header>
     <div class="bx--row">
-      <div class="bx--col bx--no-gutter--left">
+      <div class="bx--col bx--no-gutter">
         <Tabs
           type="container"
           bind:selected
@@ -94,7 +100,7 @@
           }}>
           <Tab label="Preview" href={baseUrl} />
           <Tab label="API" href={`${baseUrl}/API`} />
-          <Tab label="Kitchen Sink" href={`${baseUrl}/kitchen-sink`} />
+          <!-- <Tab disabled label="Kitchen Sink" href={`${baseUrl}/kitchen-sink`} /> -->
         </Tabs>
       </div>
     </div>
