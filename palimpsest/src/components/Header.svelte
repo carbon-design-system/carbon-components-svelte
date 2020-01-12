@@ -1,11 +1,12 @@
 <script>
-  import { Link } from 'carbon-components-svelte';
+  import { link } from 'svelte-spa-router';
   import ThemePicker from '../components/ThemePicker.svelte';
 </script>
 
 <style>
   header {
     position: fixed;
+    z-index: 9;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -28,6 +29,11 @@
     color: var(--cds-text-01);
   }
 
+  .bx--link:hover {
+    color: var(--cds-text-01);
+    text-decoration: none;
+  }
+
   .version {
     font-size: 0.75rem;
     color: var(--cds-text-02);
@@ -38,12 +44,11 @@
 
 <header>
   <nav>
-    <a class="bx--link" href="/">
+    <a class="bx--link" href="/" use:link>
       Carbon Components
       <strong>Svelte</strong>
     </a>
     <span class="version">v0.2.1</span>
-    <Link href="https://github.com/IBM/carbon-components-svelte">GitHub</Link>
   </nav>
   <div>
     <ThemePicker />

@@ -4,7 +4,7 @@
   import Fuse from 'fuse.js';
   import components from '../data/component-registry';
 
-  const fuse = new Fuse(components, { shouldSort: false, keys: ['name'] });
+  const fuse = new Fuse(components, { shouldSort: false, threshold: 0.33, keys: ['name'] });
 
   let value = '';
 
@@ -12,6 +12,16 @@
 </script>
 
 <style>
+  nav {
+    position: fixed;
+    top: 2.5rem;
+    left: 0;
+    width: 12rem;
+    height: calc(100% - 2.5rem);
+    background-color: var(--cds-ui-01);
+    overflow-y: scroll;
+  }
+
   ul {
     padding: 0.5rem 0;
   }
@@ -54,13 +64,19 @@
   }
 </style>
 
-<Search small id="search-components" labelText="Components" bind:value />
-<ul>
-  {#each results as { name }, i (name)}
-    <li>
-      <a class="bx--link" class:current={$location === `/c/${name}`} href={`/c/${name}`} use:link>
-        {name}
-      </a>
-    </li>
-  {/each}
-</ul>
+<nav>
+  <Search small id="search-components" labelText="Components" bind:value />
+  <ul>
+    {#each results as { name }, i (name)}
+      <li>
+        <a
+          class="bx--link"
+          class:current={$location.includes(`/c/${name}`)}
+          href={`/c/${name}`}
+          use:link>
+          {name}
+        </a>
+      </li>
+    {/each}
+  </ul>
+</nav>
