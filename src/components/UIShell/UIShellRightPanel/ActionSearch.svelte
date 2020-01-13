@@ -145,8 +145,13 @@
     class:btn-search={true}
     class:btn-search-disabled={searchIsActive}
     on:click={() => dispatch('focusInputSearch')}
-    type="button">
-    <Icon {...icon} render={icon.render} />
+    type="button"
+    on:keydown={({ key }) => {
+      if (key === 'Enter') {
+        searchIsActive = !searchIsActive;
+      }
+    }}>
+    <Icon {...icon} />
   </button>
   <input
     bind:this={inputSearchField}
@@ -168,8 +173,13 @@
     class:btn-clear-hidden={!searchIsActive}
     type="button"
     aria-label="Clear search"
-    on:click={() => searchStore.clear()}>
-    <Icon {...closeIcon} render={closeIcon.render} />
+    on:click={() => searchStore.clear()}
+    on:keydown={({ key }) => {
+      if (key === 'Enter') {
+        searchIsActive = !searchIsActive;
+      }
+    }}>
+    <Icon {...closeIcon} />
   </button>
 </div>
 {#if showResults}

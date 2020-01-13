@@ -41,17 +41,18 @@
   }
 
   .subject-divider {
-    color: #c6c6c6;
+    color: #525252;
     padding-bottom: 4px;
     border-bottom: 1px solid #525252;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: rgb(82, 82, 82);
     margin: 32px 1rem 8px;
+  }
+
+  .subject-divider span {
     font-size: 0.75rem;
     font-weight: 400;
     line-height: 1rem;
     letter-spacing: 0.32px;
+    color: #c6c6c6;
   }
 </style>
 
@@ -61,14 +62,19 @@
     class={cx('--header__action', linkIsActive && '--header__action--active')}
     class:action-link={true}
     {href}>
-    <Icon {...icon} render={icon.render} />
+    <Icon {...icon} />
   </a>
 {:else}
   <button
     aria-label={type}
     class={cx('--header__action', linkIsActive && '--header__action--active')}
-    type="button">
-    <Icon {...icon} render={icon.render} />
+    type="button"
+    on:keydown={({ key }) => {
+      if (key === 'Enter') {
+        linkIsActive = !linkIsActive;
+      }
+    }}>
+    <Icon {...icon} />
   </button>
   {#if linkIsActive && type === leftPanelTypes.links}
     <div
@@ -77,7 +83,7 @@
       <ul class={cx('--switcher__item')}>
         {#each content as subject}
           {#if subject.subject}
-            <li class={cx('--switcher__item')} class:subject-divider={true}>
+            <li class="subject-divider">
               <span>{subject.subject}</span>
             </li>
           {/if}

@@ -77,7 +77,7 @@
           class: undefined,
           skeleton: false,
           render: SettingsAdjust20,
-          title: 'settings',
+          title: 'Settings',
           tabIndex: 0,
           focusable: false,
           style: undefined
@@ -193,6 +193,55 @@
     }
   ];
 
+  const sideNavMenu = [
+    {
+      href: undefined,
+      text: 'Category 1',
+      subMenu: [
+        {
+          href: '#',
+          text: 'Sub-link 1'
+        },
+        {
+          href: '#',
+          text: 'Sub-link 2'
+        },
+        {
+          href: '#',
+          text: 'Sub-link 3'
+        }
+      ]
+    },
+    {
+      href: '#',
+      text: 'Link 2',
+      subMenu: undefined
+    },
+    {
+      href: '#',
+      text: 'Link 3',
+      subMenu: undefined
+    },
+    {
+      href: undefined,
+      text: 'Link 4',
+      subMenu: [
+        {
+          href: '#',
+          text: 'Sub-link 1'
+        },
+        {
+          href: '#',
+          text: 'Sub-link 2'
+        },
+        {
+          href: '#',
+          text: 'Sub-link 3'
+        }
+      ]
+    }
+  ];
+
   function searchInStore(event) {
     if (event.detail.action === leftPanelActions.search.actionString) {
       searchStore.search(event.detail.textInput);
@@ -204,6 +253,10 @@
   <UIShell {...$$props} {navMenu} />
 {:else if story === 'with-actions'}
   <UIShell {...$$props} {rightPanel} on:inputSearch={searchInStore} />
+{:else if story === 'with-actions-nav'}
+  <UIShell {...$$props} {navMenu} {rightPanel} on:inputSearch={searchInStore} />
+{:else if story === 'with-actions-sidenav'}
+  <UIShell {...$$props} {sideNavMenu} {rightPanel} on:inputSearch={searchInStore} />
 {:else}
   <UIShell {...$$props} />
 {/if}
