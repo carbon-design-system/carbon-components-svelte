@@ -15,11 +15,26 @@
   import UIShellSideNavItem from './UIShellSideNav/UIShellSideNavItem.svelte';
   import HamburgerMenu from './UIShellSideNav/HamburgerMenu.svelte';
 
+  let isSideNavOpen = undefined;
+  let winWidth = window.innerWidth;
+
+  window.addEventListener('resize', () => {
+    winWidth = window.innerWidth;
+    
+    if (winWidth >= 1056) {
+      isSideNavOpen = true;
+    } else {
+      isSideNavOpen = false;
+    }
+  });
+
   $: ariaLabel = company + (uiShellAriaLabel || $$props['aria-label'] || platformName);
 </script>
 
 <header aria-label={ariaLabel} class={cx('--header')} role="banner">
-  <HamburgerMenu />
+  {#if winWidth < 1056}
+    <HamburgerMenu bind:isOpen={isSideNavOpen} />
+  {/if}
   <a class={cx('--header__name')} {href}>
     <span class={cx('--header__name--prefix')}>{company}</span>
     &nbsp;{platformName}
@@ -35,7 +50,7 @@
     <UIShellRightPanel {rightPanel} on:inputSearch />
   {/if}
   {#if sideNavMenu}
-    <UIShellSideNavWrapper>
+    <UIShellSideNavWrapper bind:isOpen={isSideNavOpen} bind:winWidth={winWidth}>
       <UIShellSideNavItem />
     </UIShellSideNavWrapper>
   {/if}
