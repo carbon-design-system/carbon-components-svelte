@@ -20,7 +20,7 @@
 
   window.addEventListener('resize', () => {
     winWidth = window.innerWidth;
-    
+
     if (winWidth >= 1056) {
       isSideNavOpen = true;
     } else {
@@ -50,8 +50,10 @@
     <UIShellRightPanel {rightPanel} on:inputSearch />
   {/if}
   {#if sideNavMenu}
-    <UIShellSideNavWrapper bind:isOpen={isSideNavOpen} bind:winWidth={winWidth}>
-      <UIShellSideNavItem />
+    <UIShellSideNavWrapper bind:isOpen={isSideNavOpen} bind:winWidth>
+      {#each sideNavMenu as itemSideMenu}
+        <UIShellSideNavItem {...itemSideMenu} />
+      {/each}
     </UIShellSideNavWrapper>
   {/if}
 </header>
