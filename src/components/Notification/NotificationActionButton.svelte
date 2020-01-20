@@ -3,8 +3,8 @@
   export { className as class };
   export let style = undefined;
 
-  import Button from '../Button';
   import { cx } from '../../lib';
+  import Button from '../Button';
 </script>
 
 <Button

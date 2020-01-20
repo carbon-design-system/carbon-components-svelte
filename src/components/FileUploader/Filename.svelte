@@ -1,11 +1,11 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let status = 'uploading';
   export let iconDescription = '';
   export let invalid = false;
-  export let tabindex = '0';
+  export let status = 'uploading';
   export let style = undefined;
+  export let tabindex = '0';
 
   import Close16 from 'carbon-icons-svelte/lib/Close16';
   import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';

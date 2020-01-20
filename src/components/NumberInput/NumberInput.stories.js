@@ -16,7 +16,7 @@ export const Default = () => ({
     disabled: boolean('Disabled (disabled)', false),
     readonly: boolean('Read only (readonly)', false),
     invalid: boolean('Show form validation UI (invalid)', false),
-    isMobile: boolean('Mobile variant', false),
+    mobile: boolean('Mobile variant (mobile)', false),
     invalidText: text('Form validation UI content (invalidText)', 'Number is not valid'),
     helperText: text('Helper text (helperText)', 'Optional helper text.'),
     light: boolean('Light variant (light)', false)

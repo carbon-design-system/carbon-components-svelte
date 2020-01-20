@@ -5,10 +5,13 @@ import Checkbox, { CheckboxSkeleton } from './components/Checkbox';
 import ContentSwitcher, { Switch } from './components/ContentSwitcher';
 import Copy from './components/Copy';
 import CopyButton from './components/CopyButton';
+import ComboBox from './components/ComboBox';
 import ComposedModal, { ModalHeader, ModalBody, ModalFooter } from './components/ComposedModal';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
+import DataTable from './components/DataTable';
 import DataTableSkeleton from './components/DataTableSkeleton';
 import DatePicker, { DatePickerInput } from './components/DatePicker';
+import Dropdown, { DropdownSkeleton } from './components/Dropdown';
 import FileUploader, {
   FileUploaderButton,
   FileUploaderItem,
@@ -31,6 +34,7 @@ import ListBox, {
 } from './components/ListBox';
 import ListItem from './components/ListItem';
 import Loading from './components/Loading';
+import MultiSelect from './components/MultiSelect';
 import Modal from './components/Modal';
 import {
   ToastNotification,
@@ -55,27 +59,19 @@ import Select, { SelectSkeleton, SelectItem, SelectItemGroup } from './component
 import SkeletonPlaceholder from './components/SkeletonPlaceholder';
 import SkeletonText from './components/SkeletonText';
 import Slider, { SliderSkeleton } from './components/Slider';
-import {
+import StructuredList, {
   StructuredListSkeleton,
   StructuredListBody,
   StructuredListHead,
   StructuredListCell,
   StructuredListRow,
-  StructuredListInput,
-  StructuredListWrapper
+  StructuredListInput
 } from './components/StructuredList';
 import Tabs, { Tab, TabContent, TabsSkeleton } from './components/Tabs';
 import Tag, { TagSkeleton } from './components/Tag';
 import TextArea, { TextAreaSkeleton } from './components/TextArea';
 import TextInput, { TextInputSkeleton, PasswordInput } from './components/TextInput';
-import Tile, {
-  ClickableTile,
-  ExpandableTile,
-  SelectableTile,
-  TileGroup,
-  TileAboveTheFoldContent,
-  TileBelowTheFoldContent
-} from './components/Tile';
+import Tile, { ClickableTile, ExpandableTile, SelectableTile, TileGroup } from './components/Tile';
 import TimePicker, { TimePickerSelect } from './components/TimePicker';
 import Toggle, { ToggleSkeleton } from './components/Toggle';
 import ToggleSmall, { ToggleSmallSkeleton } from './components/ToggleSmall';
@@ -99,6 +95,7 @@ export {
   ClickableTile,
   CodeSnippet,
   CodeSnippetSkeleton,
+  ComboBox,
   ComposedModal,
   ModalHeader,
   ModalBody,
@@ -106,9 +103,12 @@ export {
   ContentSwitcher,
   Copy,
   CopyButton,
+  DataTable,
   DataTableSkeleton,
   DatePicker,
   DatePickerInput,
+  Dropdown,
+  DropdownSkeleton,
   FileUploader,
   FileUploaderButton,
   FileUploaderItem,
@@ -122,6 +122,7 @@ export {
   Icon,
   IconSkeleton,
   InlineLoading,
+  MultiSelect,
   Modal,
   InlineNotification,
   Link,
@@ -163,13 +164,13 @@ export {
   Switch,
   Slider,
   SliderSkeleton,
+  StructuredList,
   StructuredListSkeleton,
   StructuredListBody,
   StructuredListHead,
   StructuredListCell,
   StructuredListRow,
   StructuredListInput,
-  StructuredListWrapper,
   Tabs,
   Tab,
   TabContent,
@@ -181,8 +182,6 @@ export {
   TextInput,
   TextInputSkeleton,
   Tile,
-  TileAboveTheFoldContent,
-  TileBelowTheFoldContent,
   TileGroup,
   ToastNotification,
   TimePicker,

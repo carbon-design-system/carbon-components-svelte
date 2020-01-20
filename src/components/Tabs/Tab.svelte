@@ -1,12 +1,12 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let role = 'presentation';
-  export let label = '';
-  export let tabindex = '0';
-  export let href = '#';
   export let disabled = false;
+  export let href = '#';
+  export let label = '';
+  export let role = 'presentation';
   export let style = undefined;
+  export let tabindex = '0';
 
   import { getContext } from 'svelte';
   import { cx } from '../../lib';

@@ -1,14 +1,14 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let selected = 0;
   export let iconDescription = 'Show menu options';
   export let role = 'navigation';
-  export let type = 'default';
-  export let triggerHref = '#';
+  export let selected = 0;
   export let style = undefined;
+  export let triggerHref = '#';
+  export let type = 'default';
 
-  import { createEventDispatcher, setContext } from 'svelte';
+  import { createEventDispatcher, afterUpdate, setContext } from 'svelte';
   import { writable, derived } from 'svelte/store';
   import ChevronDownGlyph from 'carbon-icons-svelte/lib/ChevronDownGlyph';
   import { cx } from '../../lib';
@@ -62,10 +62,14 @@
     }
   });
 
+  afterUpdate(() => {
+    selected = currentIndex;
+  });
+
+  $: currentIndex = selected;
   $: currentTab = $tabs[currentIndex] || undefined;
   $: currentContent = $content[currentIndex] || undefined;
   $: {
-    selected = currentIndex;
     dispatch('change', currentIndex);
 
     if (currentTab) {

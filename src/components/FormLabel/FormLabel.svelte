@@ -13,7 +13,7 @@
   on:mouseenter
   on:mouseleave
   for={id}
-  class={cx('--form-item', className)}
+  class={cx('--label', className)}
   {style}>
   <slot />
 </label>

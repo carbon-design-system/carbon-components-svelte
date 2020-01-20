@@ -1,10 +1,10 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let title = undefined;
   export let iconDescription = 'Expand/Collapse';
   export let open = false;
   export let style = undefined;
+  export let title = undefined;
 
   import ChevronRight16 from 'carbon-icons-svelte/lib/ChevronRight16';
   import { cx } from '../../lib';

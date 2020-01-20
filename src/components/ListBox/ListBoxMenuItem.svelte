@@ -1,16 +1,17 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let id = undefined;
   export let active = false;
   export let highlighted = false;
-  export let style = undefined;
 
   import { cx } from '../../lib';
 </script>
 
 <div
-  class={cx('--list-box__menu-item', active && '--list-box__menu-item--active', highlighted && '--list-box__menu-item--highlighted', className)}
-  {style}>
+  on:click
+  on:mouseenter
+  on:mouseleave
+  class={cx('--list-box__menu-item', active && '--list-box__menu-item--active', highlighted && '--list-box__menu-item--highlighted')}
+  {id}>
   <div class={cx('--list-box__menu-item__option')}>
     <slot />
   </div>

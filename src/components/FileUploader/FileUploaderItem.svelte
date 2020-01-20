@@ -1,13 +1,13 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let status = 'uploading';
-  export let iconDescription = '';
-  export let name = '';
-  export let invalid = false;
-  export let errorSubject = '';
   export let errorBody = '';
+  export let errorSubject = '';
+  export let iconDescription = '';
+  export let id = Math.random();
+  export let invalid = false;
+  export let name = '';
+  export let status = 'uploading';
   export let style = undefined;
 
   import { createEventDispatcher } from 'svelte';

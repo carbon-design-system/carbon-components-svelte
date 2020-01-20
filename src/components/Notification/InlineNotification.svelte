@@ -1,15 +1,15 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let kind = 'error';
-  export let title = 'provide a title';
-  export let subtitle = ''; // TODO: support subtitle slot?
-  export let role = 'alert';
-  export let notificationType = 'inline';
-  export let iconDescription = 'closes notification';
   export let hideCloseButton = false;
+  export let iconDescription = 'closes notification';
+  export let kind = 'error';
   export let lowContrast = false;
+  export let notificationType = 'inline';
+  export let role = 'alert';
   export let style = undefined;
+  export let subtitle = ''; // TODO: support subtitle slot?
+  export let title = 'provide a title';
 
   import { createEventDispatcher } from 'svelte';
   import NotificationIcon from './NotificationIcon.svelte';

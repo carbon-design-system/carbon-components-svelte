@@ -1,9 +1,9 @@
 <script>
-  export let story = undefined;
-  export let type = undefined;
   export let disabled = undefined;
   export let filter = undefined;
   export let slot = undefined;
+  export let story = undefined;
+  export let type = undefined;
 
   import Layout from '../../internal/ui/Layout.svelte';
   import Tag from './Tag.svelte';

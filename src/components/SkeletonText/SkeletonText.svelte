@@ -1,11 +1,11 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let paragraph = false;
-  export let lines = 3;
-  export let width = '100%';
   export let heading = false;
+  export let lines = 3;
+  export let paragraph = false;
   export let style = undefined;
+  export let width = '100%';
 
   import { cx } from '../../lib';
 

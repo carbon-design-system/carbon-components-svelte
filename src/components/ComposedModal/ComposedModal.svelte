@@ -2,8 +2,8 @@
   let className = undefined;
   export { className as class };
   export let containerClass = undefined;
-  export let open = false;
   export let danger = false;
+  export let open = false;
   export let selectorPrimaryFocus = '[data-modal-primary-focus]';
   export let size = undefined;
   export let style = undefined;

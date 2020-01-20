@@ -1,13 +1,13 @@
 {
   "name": "carbon-components-svelte",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "src/index.js",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "scripts": {
-    "start": "start-storybook",
+    "start": "start-storybook -p 9090",
     "build": "rollup -c",
     "build:storybook": "build-storybook -o docs",
     "test": "jest --coverage",
@@ -18,6 +18,10 @@
     "bin-links": ">=1.1.6",
     "carbon-icons-svelte": "^10.8.1",
     "flatpickr": "^4.6.3"
+  },
+  "peerDependencies": {
+    "carbon-components": "^10.9.0",
+    "carbon-icons-svelte": "^10.8.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.0",
@@ -57,6 +61,7 @@
       "email": "eric.young.liu@ibm.com"
     }
   ],
+  "sideEffects": false,
   "engines": {
     "node": ">=10",
     "yarn": ">=1"
@@ -69,7 +74,7 @@
   },
   "lint-staged": {
     "*.{js,svelte}": [
-      "eslint --fix 'src/**'",
+      "eslint --fix",
       "git add"
     ]
   },
@@ -93,6 +98,9 @@
       "js",
       "svelte"
     ],
+    "moduleNameMapper": {
+      "^carbon-icons-svelte*": "<rootDir>src/internal/Icon.stub.svelte"
+    },
     "setupFilesAfterEnv": [
       "regenerator-runtime/runtime",
       "@testing-library/jest-dom/extend-expect"
@@ -117,7 +125,8 @@
     "svelte"
   ],
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "bugs": "https://github.com/ibm/carbon-components-svelte/issues"
 }

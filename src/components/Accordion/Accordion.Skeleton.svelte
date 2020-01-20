@@ -1,8 +1,8 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let open = true;
   export let count = 4;
+  export let open = true;
   export let style = undefined;
 
   import ChevronRight16 from 'carbon-icons-svelte/lib/ChevronRight16';

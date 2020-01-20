@@ -1,13 +1,13 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let toggled = false;
   export let disabled = false;
-  export let labelText = undefined;
+  export let id = Math.random();
   export let labelA = 'Off';
   export let labelB = 'On';
+  export let labelText = '';
   export let style = undefined;
+  export let toggled = false;
 
   import { cx } from '../../lib';
 </script>

@@ -3,6 +3,7 @@
   "env": {
     "es6": true,
     "browser": true,
+    "node": true,
     "jest": true
   },
   "parserOptions": {
@@ -16,5 +17,5 @@
       "processor": "svelte3/svelte3"
     }
   ],
-  "ignorePatterns": ["*.snap"]
+  "ignorePatterns": ["docs", "*.snap"]
 }

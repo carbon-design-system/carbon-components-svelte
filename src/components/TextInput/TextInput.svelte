@@ -2,17 +2,17 @@
   let className = undefined;
   export { className as class };
   export let disabled = false;
-  export let id = Math.random();
-  export let labelText = '';
-  export let placeholder = '';
-  export let type = '';
-  export let value = '';
-  export let invalid = false;
-  export let invalidText = '';
   export let helperText = '';
   export let hideLabel = false;
+  export let id = Math.random();
+  export let invalid = false;
+  export let invalidText = '';
+  export let labelText = '';
   export let light = false;
+  export let placeholder = '';
   export let style = undefined;
+  export let type = '';
+  export let value = '';
 
   import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';
   import { cx } from '../../lib';

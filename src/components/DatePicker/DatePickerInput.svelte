@@ -1,17 +1,17 @@
 <script>
   let className = undefined;
   export { className as class };
-  export let id = Math.random();
-  export let iconDescription = '';
-  export let labelText = '';
-  export let hideLabel = false;
-  export let pattern = '\\d{1,2}\\/\\d{1,2}\\/\\d{4}';
-  export let type = 'text';
-  export let placeholder = '';
   export let disabled = false;
+  export let hideLabel = false;
+  export let iconDescription = '';
+  export let id = Math.random();
   export let invalid = false;
   export let invalidText = '';
+  export let labelText = '';
+  export let pattern = '\\d{1,2}\\/\\d{1,2}\\/\\d{4}';
+  export let placeholder = '';
   export let style = undefined;
+  export let type = 'text';
 
   import { getContext, onMount } from 'svelte';
   import Calendar16 from 'carbon-icons-svelte/lib/Calendar16';
