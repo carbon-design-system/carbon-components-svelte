@@ -14,7 +14,7 @@
   export let selected = undefined;
   export let style = undefined;
 
-  import { createEventDispatcher, setContext } from 'svelte';
+  import { createEventDispatcher, setContext, afterUpdate } from 'svelte';
   import { writable } from 'svelte/store';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
   import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';
@@ -26,12 +26,13 @@
 
   setContext('Select', { selectedValue });
 
+  afterUpdate(() => {
+    selected = $selectedValue;
+    dispatch('change', $selectedValue);
+  });
+
   $: errorId = `error-${id}`;
   $: selectedValue.set(selected);
-  $: selected = $selectedValue;
-  $: {
-    dispatch('change', $selectedValue);
-  }
 </script>
 
 <div class={cx('--form-item')} {style}>
@@ -85,7 +86,6 @@
           aria-describedby={invalid ? errorId : undefined}
           disabled={disabled || undefined}
           aria-invalid={invalid || undefined}
-          on:change
           on:change={({ target }) => {
             selectedValue.set(target.value);
           }}
