@@ -15,9 +15,7 @@
   let selected = false;
 
   ctx.selectedValue.subscribe(currentValue => {
-    if (currentValue === value) {
-      selected = true;
-    }
+    selected = currentValue === value;
   });
 </script>
 

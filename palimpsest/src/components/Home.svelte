@@ -4,14 +4,14 @@
   import ButtonTile from './ButtonTile.svelte';
 
   $: {
-    document.title = `Carbon Components Svelte`;
+    document.title = 'Carbon Components Svelte';
   }
 </script>
 
 <style>
   main {
-    margin-top: 5rem;
-    padding-left: 12rem;
+    margin-top: 2.5rem;
+    padding-left: 16rem;
     padding-bottom: 2.5rem;
   }
 
@@ -19,6 +19,11 @@
     main {
       padding-left: 0;
     }
+  }
+
+  .banner {
+    background: var(--cds-ui-01);
+    padding: 2.5rem 0 1.5rem;
   }
 
   .bx--grid {
@@ -41,31 +46,35 @@
   }
 
   h3 {
-    margin-top: 4rem;
+    margin-top: 2.5rem;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
   }
 </style>
 
 <main>
-  <div class="bx--grid">
-    <div class="bx--row">
-      <div class="bx--col">
-        <img src={Logo} alt="Logo" class="logo" />
-        <h1>
-          <span>
-            <strong>Carbon</strong>
-          </span>
-          <span>
-            <strong>Components</strong>
-          </span>
-          <span>
-            <strong>Svelte</strong>
-          </span>
-        </h1>
-        <p>The Carbon Design System implemented in Svelte</p>
+  <div class="banner">
+    <div class="bx--grid">
+      <div class="bx--row">
+        <div class="bx--col">
+          <img src={Logo} alt="Logo" class="logo" />
+          <h1>
+            <span>
+              <strong>Carbon</strong>
+            </span>
+            <span>
+              <strong>Components</strong>
+            </span>
+            <span>
+              <strong>Svelte</strong>
+            </span>
+          </h1>
+          <h3>The Carbon Design System implemented in Svelte.</h3>
+        </div>
       </div>
     </div>
+  </div>
+  <div class="bx--grid">
     <div class="bx--row">
       <div class="bx--col">
         <h3>Packages</h3>

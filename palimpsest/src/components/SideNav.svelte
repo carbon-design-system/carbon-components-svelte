@@ -30,7 +30,7 @@
     z-index: 9999;
     top: 2.5rem;
     left: 0;
-    width: 12rem;
+    width: 16rem;
     height: calc(100% - 2.5rem);
     background-color: var(--cds-ui-01);
     overflow-y: scroll;
@@ -110,7 +110,12 @@
   }} />
 
 <nav class:toggled={$sideNavToggled}>
-  <Search small id="search-components" labelText="Components" bind:value />
+  <Search
+    small
+    id="search-components"
+    labelText="Components"
+    placeholder="Search components..."
+    bind:value />
   <ul>
     {#each results as { name }, i (name)}
       <li>
