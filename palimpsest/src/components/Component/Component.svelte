@@ -60,7 +60,7 @@
 <style>
   main {
     margin-top: 5rem;
-    padding-left: 12rem;
+    padding-left: 16rem;
     padding-bottom: 2.5rem;
   }
 

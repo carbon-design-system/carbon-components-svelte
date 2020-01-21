@@ -36,7 +36,7 @@
   .icon {
     position: absolute;
     bottom: 1rem;
-    fill: var(--cds-ui-05);
+    fill: var(--cds-icon-01);
   }
 
   .icon--left {
