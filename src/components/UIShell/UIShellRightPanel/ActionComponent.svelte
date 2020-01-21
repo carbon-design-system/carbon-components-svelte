@@ -19,8 +19,13 @@
   <button
     aria-label={type}
     class={cx('--header__action', componentIsActive && '--header__action--active')}
-    type="button">
-    <Icon {...icon} render={icon[0].render} />
+    type="button"
+    on:keydown={({ key }) => {
+      if (key === 'Enter') {
+        componentIsActive = !componentIsActive;
+      }
+    }}>
+    <Icon {...icon[0]} render={icon[0].render} />
   </button>
   {#if componentIsActive}
     <div

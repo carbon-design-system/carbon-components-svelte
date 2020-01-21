@@ -32,3 +32,23 @@ export const WithActions = () => ({
     platformName: text('Platform name', 'Platform Name')
   }
 });
+
+export const WithActionsAndNav = () => ({
+  Component,
+  props: {
+    story: 'with-actions-nav',
+    href: text('The link href (href)', '#'),
+    company: text('Company name', 'IBM'),
+    platformName: text('Platform name', 'Platform Name')
+  }
+});
+
+export const WithActionsAndSidenav = () => ({
+  Component,
+  props: {
+    story: 'with-actions-sidenav',
+    href: text('The link href (href)', '#'),
+    company: text('Company name', 'IBM'),
+    platformName: text('Platform name', 'Platform Name')
+  }
+});
