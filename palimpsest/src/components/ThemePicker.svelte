@@ -19,20 +19,11 @@
 
   afterUpdate(() => {
     localStorage.setItem('theme', $theme);
-  });
-
-  $: {
     document.documentElement.setAttribute('carbon-theme', $theme);
-  }
+  });
 </script>
 
-<Select
-  {inline}
-  labelText="Theme"
-  selected={$theme}
-  on:change={({ detail }) => {
-    theme.set(detail);
-  }}>
+<Select {inline} labelText="Theme" bind:selected={$theme}>
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g90" text="Gray 90" />
