@@ -33,6 +33,7 @@
     tabindex="0"
     aria-label={text}
     href="javascript:void(0)"
+    on:keydown
     on:keydown={({ key }) => {
       if (key === 'Enter') {
         expanded = !expanded;
