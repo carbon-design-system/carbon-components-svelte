@@ -27,7 +27,7 @@
     skeleton: false,
     render: ChevronDown16,
     title: 'Open Menu',
-    tabIndex: 0,
+    tabindex: '0',
     focusable: false,
     style: undefined
   };

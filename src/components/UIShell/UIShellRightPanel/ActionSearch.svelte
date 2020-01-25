@@ -10,8 +10,8 @@
   import searchStore from '../searchStore';
   import ActionSearchResult from './ActionSearchResult.svelte';
 
-  let searchTabIndex = 0;
-  let closeTabIndex = -1;
+  let searchTabIndex = '0';
+  let closeTabIndex = '-1';
   let inputSearchField = undefined;
   const dispatch = createEventDispatcher();
 
@@ -46,11 +46,11 @@
   }
 
   $: if (searchIsActive) {
-    searchTabIndex = -1;
-    closeTabIndex = 0;
+    searchTabIndex = '-1';
+    closeTabIndex = '0';
   } else {
-    searchTabIndex = 0;
-    closeTabIndex = -1;
+    searchTabIndex = '0';
+    closeTabIndex = '-1';
   }
 
   $: showResults = $searchStore ? true : false;

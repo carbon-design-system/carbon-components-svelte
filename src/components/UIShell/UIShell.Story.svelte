@@ -83,7 +83,7 @@
           skeleton: false,
           render: SettingsAdjust20,
           title: 'Settings',
-          tabIndex: 0,
+          tabindex: '0',
           focusable: false,
           style: undefined
         }
@@ -222,7 +222,7 @@
           skeleton: false,
           render: ChangeCatalog16,
           title: 'Catalog',
-          tabIndex: 0,
+          tabindex: '0',
           focusable: false,
           style: undefined
         }
@@ -238,7 +238,7 @@
           skeleton: false,
           render: ManageProtection16,
           title: 'Protection',
-          tabIndex: 0,
+          tabindex: '0',
           focusable: false,
           style: undefined
         }
@@ -254,7 +254,7 @@
           skeleton: false,
           render: Recommend16,
           title: 'Recommend',
-          tabIndex: 0,
+          tabindex: '0',
           focusable: false,
           style: undefined
         }
@@ -283,7 +283,7 @@
           skeleton: false,
           render: Settings16,
           title: 'Settings',
-          tabIndex: 0,
+          tabindex: '0',
           focusable: false,
           style: undefined
         }

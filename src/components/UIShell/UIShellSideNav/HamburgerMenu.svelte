@@ -14,7 +14,7 @@
         skeleton: false,
         render: Menu20,
         title: 'Open Menu',
-        tabIndex: 0,
+        tabindex: '0',
         focusable: false,
         style: undefined
       }
