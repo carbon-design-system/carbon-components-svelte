@@ -4,8 +4,13 @@
   import UIShell from './UIShell.svelte';
   import FormTest from './FormTest.svelte';
   import SettingsAdjust20 from 'carbon-icons-svelte/lib/SettingsAdjust20';
+  import ChangeCatalog16 from 'carbon-icons-svelte/lib/ChangeCatalog16';
+  import ManageProtection16 from 'carbon-icons-svelte/lib/ManageProtection16';
+  import Recommend16 from 'carbon-icons-svelte/lib/Recommend16';
+  import Settings16 from 'carbon-icons-svelte/lib/Settings16';
   import { leftPanelActions, leftPanelTypes } from './constants';
   import searchStore from './searchStore';
+  import isNavItemSelectedStore from './UIShellSideNav/isNavItemSelectedStore';
 
   const navMenu = [
     {
@@ -78,7 +83,7 @@
           skeleton: false,
           render: SettingsAdjust20,
           title: 'Settings',
-          tabIndex: 0,
+          tabindex: '0',
           focusable: false,
           style: undefined
         }
@@ -200,47 +205,93 @@
       subMenu: [
         {
           href: '#',
-          text: 'Sub-link 1'
+          text: 'Cat 1 Sub-link 1'
         },
         {
           href: '#',
-          text: 'Sub-link 2'
+          text: 'Cat 1 Sub-link 2'
         },
         {
           href: '#',
-          text: 'Sub-link 3'
+          text: 'Cat 1 Sub-link 3'
+        }
+      ],
+      icon: [
+        {
+          class: undefined,
+          skeleton: false,
+          render: ChangeCatalog16,
+          title: 'Catalog',
+          tabindex: '0',
+          focusable: false,
+          style: undefined
         }
       ]
     },
     {
       href: '#',
       text: 'Link 2',
-      subMenu: undefined
+      subMenu: undefined,
+      icon: [
+        {
+          class: undefined,
+          skeleton: false,
+          render: ManageProtection16,
+          title: 'Protection',
+          tabindex: '0',
+          focusable: false,
+          style: undefined
+        }
+      ]
     },
     {
       href: '#',
       text: 'Link 3',
-      subMenu: undefined
+      subMenu: undefined,
+      icon: [
+        {
+          class: undefined,
+          skeleton: false,
+          render: Recommend16,
+          title: 'Recommend',
+          tabindex: '0',
+          focusable: false,
+          style: undefined
+        }
+      ]
     },
     {
       href: undefined,
-      text: 'Link 4',
+      text: 'Category 2',
       subMenu: [
         {
           href: '#',
-          text: 'Sub-link 1'
+          text: 'Cat 2 Sub-link 1'
         },
         {
           href: '#',
-          text: 'Sub-link 2'
+          text: 'Cat 2 Sub-link 2'
         },
         {
           href: '#',
-          text: 'Sub-link 3'
+          text: 'Cat 2 Sub-link 3'
+        }
+      ],
+      icon: [
+        {
+          class: undefined,
+          skeleton: false,
+          render: Settings16,
+          title: 'Settings',
+          tabindex: '0',
+          focusable: false,
+          style: undefined
         }
       ]
     }
   ];
+
+  isNavItemSelectedStore.setStoreValues(sideNavMenu);
 
   function searchInStore(event) {
     if (event.detail.action === leftPanelActions.search.actionString) {

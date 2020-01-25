@@ -13,7 +13,7 @@ export const leftPanelActions = {
       skeleton: false,
       render: Search20,
       title: 'Search',
-      tabIndex: 0,
+      tabindex: '0',
       focusable: false,
       style: undefined
     }
@@ -25,7 +25,7 @@ export const leftPanelActions = {
       skeleton: false,
       render: Help20,
       title: 'Help',
-      tabIndex: 0,
+      tabindex: '0',
       focusable: false,
       style: undefined
     }
@@ -37,7 +37,7 @@ export const leftPanelActions = {
       skeleton: false,
       render: Notification20,
       title: 'Notifications',
-      tabIndex: 0,
+      tabindex: '0',
       focusable: false,
       style: undefined
     }
@@ -49,7 +49,7 @@ export const leftPanelActions = {
       skeleton: false,
       render: UserAvatar20,
       title: 'Account',
-      tabIndex: 0,
+      tabindex: '0',
       focusable: false,
       style: undefined
     }
@@ -61,7 +61,7 @@ export const leftPanelActions = {
       skeleton: false,
       render: AppSwitcher20,
       title: 'App Switcher',
-      tabIndex: 0,
+      tabindex: '0',
       focusable: false,
       style: undefined
     }
@@ -80,7 +80,7 @@ export const closeIcon = {
   skeleton: false,
   render: Close20,
   title: 'Close',
-  tabIndex: 0,
+  tabindex: '0',
   focusable: false,
   style: undefined
 };

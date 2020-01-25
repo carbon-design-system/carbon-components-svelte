@@ -1,29 +1,26 @@
 <script>
   export let ariaLabel = undefined;
+  export let isOpen = undefined;
 
   import { cx } from '../../../lib';
+  import Icon from '../../Icon/Icon.svelte';
+  import { closeIcon } from '../constants';
+
+  $: footerSpanText = isOpen ? 'Open' : 'Close';
 </script>
 
-<nav class={cx('--side-nav__navigation', '--side-nav', '--side-nav--ux')} aria-label={ariaLabel}>
+<nav
+  class={cx('--side-nav__navigation', '--side-nav', '--side-nav--ux', isOpen && '--side-nav--expanded')}
+  aria-label={ariaLabel}>
   <ul class={cx('--side-nav__items')}>
     <slot />
   </ul>
-  <footer class="bx--side-nav__footer">
-    <button class="bx--side-nav__toggle" type="button" title="Open">
-      <div class="bx--side-nav__icon">
-        <svg
-          focusable="false"
-          preserveAspectRatio="xMidYMid meet"
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 32 32"
-          aria-hidden="true"
-          style="will-change: transform;">
-          <path d="M22 16L12 26l-1.4-1.4 8.6-8.6-8.6-8.6L12 6z" />
-        </svg>
+  <footer class={cx('--side-nav__footer')}>
+    <button class={cx('--side-nav__toggle')} type="button" title="Open">
+      <div class={cx('--side-nav__icon')}>
+        <Icon {...closeIcon} />
       </div>
-      <span class="bx--assistive-text">Open</span>
+      <span class={cx('--assistive-text')}>{footerSpanText}</span>
     </button>
   </footer>
 </nav>
