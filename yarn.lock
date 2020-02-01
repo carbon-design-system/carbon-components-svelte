@@ -3447,9 +3447,9 @@ carbon-components@10.9.0:
     warning "^3.0.0"
 
 carbon-icons-svelte@^10.8.2:
-  version "10.8.2"
-  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.8.2.tgz#b1432c8de8a19210f50b42e1498b08d01c25b86b"
-  integrity sha512-5kPCxcED9OXV96NRFKqWbUGRfBf4qX0XcvYqV4c5IL8yGaJGWu1qows7ldENqhwVGXrfsBNQ7tDoR0fIC3CSsw==
+  version "10.8.4"
+  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-10.8.4.tgz#647c2244c7ad05007529e31edda44d42cf542719"
+  integrity sha512-W40Q9iPdJnPc9NppyZMITsAKKG0RsQSBLe6KJhrCz1YB9/QzPdzkzIJi7QFse6A2EektLeYzV1+BW4t/ragFXA==
 
 carbon-icons@^7.0.7:
   version "7.0.7"
