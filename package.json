@@ -33,7 +33,7 @@
     "@storybook/svelte": "^5.3.1",
     "@testing-library/jest-dom": "^5.1.0",
     "@testing-library/svelte": "^1.11.0",
-    "babel-jest": "^24.9.0",
+    "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
     "carbon-components": "10.9.0",
     "eslint": "^6.7.2",
