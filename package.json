@@ -73,8 +73,7 @@
   },
   "lint-staged": {
     "*.{js,svelte}": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "prettier": {
