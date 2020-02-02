@@ -7,14 +7,13 @@
   }</style><script>/* globals window */
   /* eslint-disable no-underscore-dangle */
   try {
-    if (window.parent !== window) {
-      window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-      window.__VUE_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+    if (window.top !== window) {
+      window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.top.__REACT_DEVTOOLS_GLOBAL_HOOK__;
     }
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.warn('unable to connect to parent frame for connecting dev tools');
+    console.warn('unable to connect to top frame for connecting dev tools');
   }</script><style>#root[hidden],
       #docs-root[hidden] {
         display: none !important;
-      }</style></head><body><div id="root"></div><div id="docs-root"></div><script>window['DOCS_MODE'] = false;</script><script src="runtime~main.67b3c42af12dc2b7ac9d.bundle.js"></script><script src="vendors~main.90220ada78163e544ba9.bundle.js"></script><script src="main.e7e683d3c4fc3d92da31.bundle.js"></script></body></html>
+      }</style></head><body><div id="root"></div><div id="docs-root"></div><script>window['DOCS_MODE'] = false;</script><script src="runtime~main.6b70b35614cf83eab770.bundle.js"></script><script src="vendors~main.e4a9dd44db211ed1a40c.bundle.js"></script><script src="main.428a221639b5dd3a47c0.bundle.js"></script></body></html>

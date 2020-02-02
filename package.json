@@ -1,6 +1,6 @@
 {
   "name": "carbon-components-svelte",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "src/index.js",
@@ -58,6 +58,10 @@
     {
       "name": "Eric Liu",
       "email": "eric.young.liu@ibm.com"
+    },
+    {
+      "name": "Adan Ulloa",
+      "email": "adanug@mx1.ibm.com"
     }
   ],
   "sideEffects": false,
@@ -73,8 +77,7 @@
   },
   "lint-staged": {
     "*.{js,svelte}": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "prettier": {
