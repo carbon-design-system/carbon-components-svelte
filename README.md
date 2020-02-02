@@ -5,8 +5,6 @@
 
 > Svelte implementation of the [Carbon Design System](https://github.com/carbon-design-system)
 
-**NOTE**: Currently, this project is under active development. See the [issue tracker](https://github.com/IBM/carbon-components-svelte/projects/1) for the anticipated v1.0.0 release.
-
 ## [Storybook](https://ibm.github.io/carbon-components-svelte) · [CodeSandbox](https://codesandbox.io/s/carbon-components-svelte021-lhvc4)
 
 ## Getting Started
