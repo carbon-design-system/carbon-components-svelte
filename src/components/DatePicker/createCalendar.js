@@ -3,13 +3,6 @@ import l10n from 'flatpickr/dist/l10n/index.js';
 import rangePlugin from 'flatpickr/dist/plugins/rangePlugin';
 import { cx } from '../../lib';
 
-if (l10n.en) {
-  l10n.en.weekdays.shorthand.forEach((_, index) => {
-    const shorthand = _.slice(0, 2);
-    l10n.en.weekdays.shorthand[index] = shorthand === 'Th' ? 'Th' : shorthand.charAt(0);
-  });
-}
-
 function updateClasses(instance) {
   const { calendarContainer, days, daysContainer, weekdayContainer, selectedDates } = instance;
 
@@ -48,12 +41,23 @@ function updateMonthNode(instance) {
 }
 
 function createCalendar({ options, base, input, dispatch }) {
+  let locale = options.locale;
+
+  if (l10n.en) {
+    l10n.en.weekdays.shorthand.forEach((_, index) => {
+      const shorthand = _.slice(0, 2);
+      l10n.en.weekdays.shorthand[index] = shorthand === 'Th' ? 'Th' : shorthand.charAt(0);
+    });
+
+    locale = l10n.en;
+  }
+
   return new flatpickr(base, {
     ...options,
     allowInput: true,
     disableMobile: true,
     clickOpens: true,
-    locale: l10n[options.locale],
+    locale,
     plugins: [options.mode === 'range' && new rangePlugin({ position: 'left', input })].filter(
       Boolean
     ),
