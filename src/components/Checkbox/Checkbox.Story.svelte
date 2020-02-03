@@ -14,7 +14,9 @@
 
 <Layout>
   {#if story === 'skeleton'}
-    <CheckboxSkeleton />
+    <div>
+      <CheckboxSkeleton />
+    </div>
   {:else if story === 'unchecked'}
     <fieldset class={cx('--fieldset')}>
       <legend class={cx('--label')}>Checkbox heading</legend>
