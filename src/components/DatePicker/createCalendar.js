@@ -43,7 +43,7 @@ function updateMonthNode(instance) {
 function createCalendar({ options, base, input, dispatch }) {
   let locale = options.locale;
 
-  if (l10n.en) {
+  if (options.locale === 'en' && l10n && l10n.en) {
     l10n.en.weekdays.shorthand.forEach((_, index) => {
       const shorthand = _.slice(0, 2);
       l10n.en.weekdays.shorthand[index] = shorthand === 'Th' ? 'Th' : shorthand.charAt(0);
