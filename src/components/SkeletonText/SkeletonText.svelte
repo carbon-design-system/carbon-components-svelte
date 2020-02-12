@@ -7,7 +7,7 @@
   export let style = undefined;
   export let width = '100%';
 
-  import { cx } from '../../lib';
+  import { cx, css } from '../../lib';
 
   const randoms = [0.973051493507435, 0.15334737213558558, 0.5671034553053769];
 
@@ -41,6 +41,5 @@
     on:mouseenter
     on:mouseleave
     class={cx('--skeleton__text', heading && '--skeleton__heading', className)}
-    style={`width: ${width};`}
-    {style} />
+    style={css([style, ['width', width]])} />
 {/if}
