@@ -14,20 +14,24 @@
   import UIShellSideNavWrapper from './UIShellSideNav/UIShellSideNavWrapper.svelte';
   import UIShellSideNavItem from './UIShellSideNav/UIShellSideNavItem.svelte';
   import HamburgerMenu from './UIShellSideNav/HamburgerMenu.svelte';
-
+  import { onMount } from 'svelte' 
+  
   let isSideNavOpen = undefined;
-  let winWidth = window.innerWidth;
+  let winWidth = undefined;
+  
+  onMount(() => {
+    winWidth = window.innerWidth
+    window.addEventListener('resize', () => {
+      winWidth = window.innerWidth;
 
-  window.addEventListener('resize', () => {
-    winWidth = window.innerWidth;
-
-    if (winWidth >= 1056) {
-      isSideNavOpen = true;
-    } else {
-      isSideNavOpen = false;
-    }
-  });
-
+      if (winWidth >= 1056) {
+        isSideNavOpen = true;
+      } else {
+        isSideNavOpen = false;
+      }
+    });
+  })  
+  
   $: ariaLabel = company + (uiShellAriaLabel || $$props['aria-label'] || platformName);
 </script>
 
