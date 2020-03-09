@@ -14,22 +14,15 @@
   import UIShellSideNavWrapper from './UIShellSideNav/UIShellSideNavWrapper.svelte';
   import UIShellSideNavItem from './UIShellSideNav/UIShellSideNavItem.svelte';
   import HamburgerMenu from './UIShellSideNav/HamburgerMenu.svelte';
-
+  
   let isSideNavOpen = undefined;
-  let winWidth = window.innerWidth;
-
-  window.addEventListener('resize', () => {
-    winWidth = window.innerWidth;
-
-    if (winWidth >= 1056) {
-      isSideNavOpen = true;
-    } else {
-      isSideNavOpen = false;
-    }
-  });
+  let winWidth = undefined;
+  $: isSideNavOpen = winWidth >= 1056
 
   $: ariaLabel = company + (uiShellAriaLabel || $$props['aria-label'] || platformName);
 </script>
+
+<svelte:window bind:innerWidth={winWidth} />
 
 <header aria-label={ariaLabel} class={cx('--header')} role="banner">
   {#if winWidth < 1056}
