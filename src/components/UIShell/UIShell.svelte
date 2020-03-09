@@ -14,7 +14,6 @@
   import UIShellSideNavWrapper from './UIShellSideNav/UIShellSideNavWrapper.svelte';
   import UIShellSideNavItem from './UIShellSideNav/UIShellSideNavItem.svelte';
   import HamburgerMenu from './UIShellSideNav/HamburgerMenu.svelte';
-  import { onMount } from 'svelte' 
   
   let isSideNavOpen = undefined;
   let winWidth = undefined;
