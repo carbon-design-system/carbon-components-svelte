@@ -18,22 +18,12 @@
   
   let isSideNavOpen = undefined;
   let winWidth = undefined;
-  
-  onMount(() => {
-    winWidth = window.innerWidth
-    window.addEventListener('resize', () => {
-      winWidth = window.innerWidth;
+  $: isSideNavOpen = winWidth >= 1056
 
-      if (winWidth >= 1056) {
-        isSideNavOpen = true;
-      } else {
-        isSideNavOpen = false;
-      }
-    });
-  })  
-  
   $: ariaLabel = company + (uiShellAriaLabel || $$props['aria-label'] || platformName);
 </script>
+
+<svelte:window bind:innerWidth={winWidth} />
 
 <header aria-label={ariaLabel} class={cx('--header')} role="banner">
   {#if winWidth < 1056}
