@@ -78,7 +78,13 @@ import ToggleSmall, { ToggleSmallSkeleton } from './components/ToggleSmall';
 import Tooltip from './components/Tooltip';
 import TooltipDefinition from './components/TooltipDefinition';
 import TooltipIcon from './components/TooltipIcon';
-import UIShell from './components/UIShell';
+import UIShell, {
+  SideNav,
+  SideNavItems,
+  SideNavLink,
+  SideNavMenu,
+  SideNavMenuItem
+} from './components/UIShell';
 import UnorderedList from './components/UnorderedList';
 
 export {
@@ -194,5 +200,10 @@ export {
   TooltipDefinition,
   TooltipIcon,
   UIShell,
+  SideNav,
+  SideNavItems,
+  SideNavLink,
+  SideNavMenu,
+  SideNavMenuItem,
   UnorderedList
 };
