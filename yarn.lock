@@ -3743,11 +3743,10 @@ capture-stack-trace@^1.0.0:
   integrity sha512-mYQLZnx5Qt1JgB1WEiMCf2647plpGeQ2NMR/5L0HNZzGQo4fuSPnK+wjfPnKZV0aiJDgzmWqqkV/g7JD+DW0qw==
 
 carbon-components@^10.9.3:
-  version "10.9.3"
-  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.9.3.tgz#d0d8f42c35fb7ce1cacc131d1c4b11fc2c905a6a"
-  integrity sha512-8TPIBjFIez2ymh3RmbHilel+/ReqpbfPf9IUBTOLtSdxI2VuyBWFxtBB/82xtHpUr3RfPdQ1U/rxDKYxoDOxrg==
+  version "10.10.3"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.10.3.tgz#c3076be78fa2df8c430b329615a9ef1f1d2509c8"
+  integrity sha512-uOHcMvQNtqazCqBxXlIaAU6Jmsb1/wE6fhJ3r6wt69MfW42xjCOVAegXDXylCAk1k6F+DR6cx4WsbYMUjOXR3A==
   dependencies:
-    carbon-icons "^7.0.7"
     flatpickr "4.6.1"
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
@@ -3756,11 +3755,6 @@ carbon-icons-svelte@^10.8.2:
   version "10.8.4"
   resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.8.4.tgz#647c2244c7ad05007529e31edda44d42cf542719"
   integrity sha512-W40Q9iPdJnPc9NppyZMITsAKKG0RsQSBLe6KJhrCz1YB9/QzPdzkzIJi7QFse6A2EektLeYzV1+BW4t/ragFXA==
-
-carbon-icons@^7.0.7:
-  version "7.0.7"
-  resolved "https://registry.npmjs.org/carbon-icons/-/carbon-icons-7.0.7.tgz#ebafe3e9fa25df973796a8eca06d8a7c501cc610"
-  integrity sha512-3vgkdXJRgCViCrH3fLUdyAXo0I8wmohO6QETv7vWFx6yc7s+SirWFBSFL38zUx4MHtR8iTxIlLEzkeU6FlFtXg==
 
 case-sensitive-paths-webpack-plugin@^2.2.0:
   version "2.3.0"
