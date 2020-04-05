@@ -7,7 +7,7 @@ export { default as SideNavItems } from './SideNav/SideNavItems.svelte';
 export { default as SideNavLink } from './SideNav/SideNavLink.svelte';
 export { default as SideNavMenu } from './SideNav/SideNavMenu.svelte';
 export { default as SideNavMenuItem } from './SideNav/SideNavMenuItem.svelte';
-export { default as HeaderNavl } from './GlobalHeader/HeaderNavl.svelte';
+export { default as HeaderNav } from './GlobalHeader/HeaderNav.svelte';
 export { default as HeaderNavItem } from './GlobalHeader/HeaderNavItem.svelte';
 export { default as HeaderNavMenu } from './GlobalHeader/HeaderNavMenu.svelte';
 export { default as HeaderUtilities } from './GlobalHeader/HeaderUtilities.svelte';
