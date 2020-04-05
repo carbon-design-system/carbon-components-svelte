@@ -15,13 +15,15 @@
   import SideNavMenu from './SideNav/SideNavMenu.svelte';
   import SideNavMenuItem from './SideNav/SideNavMenuItem.svelte';
   import SideNavLink from './SideNav/SideNavLink.svelte';
-  import UIShellNav from './UIShellNav/UIShellNav.svelte';
-  import UIShellNavItem from './UIShellNav/UIShellNavItem.svelte';
-  import UIShellNavSubmenu from './UIShellNav/UIShellNavSubmenu.svelte';
-  import UIShellUtilities from './UIShellNav/UIShellUtilities.svelte';
-  import UtilitySearch from './UIShellNav/UtilitySearch.svelte';
-  import UtilityLink from './UIShellNav/UtilityLink.svelte';
-  import UtilityComponent from './UIShellNav/UtilityComponent.svelte';
+  import HeaderNav from './GlobalHeader/HeaderNav.svelte';
+  import HeaderNavItem from './GlobalHeader/HeaderNavItem.svelte';
+  import HeaderNavMenu from './GlobalHeader/HeaderNavMenu.svelte';
+  import HeaderUtilities from './GlobalHeader/HeaderUtilities.svelte';
+  import HeaderActionSearch from './GlobalHeader/HeaderActionSearch.svelte';
+  import HeaderActionLink from './GlobalHeader/HeaderActionLink.svelte';
+  import HeaderAction from './GlobalHeader/HeaderAction.svelte';
+
+  let isSideNavOpen = undefined;
 
   let iCatalog = {
     class: undefined,
@@ -106,57 +108,53 @@
 
 {#if story === 'with-nav'}
   <UIShell {...$$props}>
-    <div slot="Nav">
-      <UIShellNav>
-        <UIShellNavItem href="/" text="Link 1" />
-        <UIShellNavItem href="/" text="Link 2" />
-        <UIShellNavItem href="/" text="Link 3" />
-        <UIShellNavSubmenu text="Sub Menu">
-          <UIShellNavItem href="/" text="Link 1" />
-          <UIShellNavItem href="/" text="Link 2" />
-          <UIShellNavItem href="/" text="Link 3" />
-        </UIShellNavSubmenu>
-      </UIShellNav>
-    </div>
+    <HeaderNav>
+      <HeaderNavItem href="/" text="Link 1" />
+      <HeaderNavItem href="/" text="Link 2" />
+      <HeaderNavItem href="/" text="Link 3" />
+      <HeaderNavMenu text="Sub Menu">
+        <HeaderNavItem href="/" text="Link 1" />
+        <HeaderNavItem href="/" text="Link 2" />
+        <HeaderNavItem href="/" text="Link 3" />
+      </HeaderNavMenu>
+    </HeaderNav>
   </UIShell>
 {:else if story === 'with-actions'}
   <UIShell {...$$props}>
-    <UIShellUtilities>
-      <UtilitySearch />
-      <UtilityComponent type="Settings" icon={iSettings}>
+    <HeaderUtilities>
+      <HeaderActionSearch />
+      <HeaderAction type="Settings" icon={iSettings}>
         <p>Settings</p>
-      </UtilityComponent>
-      <UtilityLink type="Help" icon={iHelp} />
-      <UtilityComponent type="Notifications" icon={iNotifications}>
+      </HeaderAction>
+      <HeaderActionLink type="Help" icon={iHelp} />
+      <HeaderAction type="Notifications" icon={iNotifications}>
         <p>Notifications</p>
-      </UtilityComponent>
-      <UtilityLink type="Account" icon={iAccount} />
-      <UtilityComponent type="Switcher" icon={iSwitcher}>
+      </HeaderAction>
+      <HeaderActionLink type="Account" icon={iAccount} />
+      <HeaderAction type="Switcher" icon={iSwitcher}>
         <p>Switcher</p>
-      </UtilityComponent>
-    </UIShellUtilities>
+      </HeaderAction>
+    </HeaderUtilities>
   </UIShell>
-{:else if story === 'with-actions-sidenav'}
-  <UIShell {...$$props}>
-    <div slot="SideNav">
-      <SideNav>
-        <SideNavItems>
-          <SideNavMenu text="Menu 01" icon={iCatalog}>
-            <SideNavMenuItem text="Sub 01" href="/" />
-            <SideNavMenuItem text="Sub 02" href="/" />
-            <SideNavMenuItem text="Sub 03" href="/" />
-            <SideNavMenuItem text="Sub 04" href="/" />
-          </SideNavMenu>
-          <SideNavMenu text="Menu 02" icon={iAdjust}>
-            <SideNavMenuItem text="Sub 01" href="/" />
-            <SideNavMenuItem text="Sub 02" href="/" />
-            <SideNavMenuItem text="Sub 03" href="/" />
-            <SideNavMenuItem text="Sub 04" href="/" />
-          </SideNavMenu>
-          <SideNavLink text="Menu 03" href="/" icon={iProtection} />
-        </SideNavItems>
-      </SideNav>
-    </div>
+{:else if story === 'with-sidenav'}
+  <UIShell bind:isSideNavOpen {...$$props}>
+    <SideNav isOpen={isSideNavOpen}>
+      <SideNavItems>
+        <SideNavMenu text="Menu 01" icon={iCatalog}>
+          <SideNavMenuItem text="Sub 01" href="/" />
+          <SideNavMenuItem text="Sub 02" href="/" />
+          <SideNavMenuItem text="Sub 03" href="/" />
+          <SideNavMenuItem text="Sub 04" href="/" />
+        </SideNavMenu>
+        <SideNavMenu text="Menu 02" icon={iAdjust}>
+          <SideNavMenuItem text="Sub 01" href="/" />
+          <SideNavMenuItem text="Sub 02" href="/" />
+          <SideNavMenuItem text="Sub 03" href="/" />
+          <SideNavMenuItem text="Sub 04" href="/" />
+        </SideNavMenu>
+        <SideNavLink text="Menu 03" href="/" icon={iProtection} />
+      </SideNavItems>
+    </SideNav>
   </UIShell>
 {:else}
   <UIShell {...$$props} />

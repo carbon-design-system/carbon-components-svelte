@@ -26,7 +26,7 @@ export const WithActions = () => ({
 export const WithActionsAndSidenav = () => ({
   Component,
   props: {
-    story: 'with-actions-sidenav',
+    story: 'with-sidenav',
     href: text('The link href (href)', '#'),
     company: text('Company name', 'IBM'),
     platformName: text('Platform name', 'Platform Name')

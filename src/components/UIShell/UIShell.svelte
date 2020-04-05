@@ -3,11 +3,11 @@
   export let href = undefined;
   export let company = undefined;
   export let platformName = undefined;
+  export let isSideNavOpen = undefined;
 
   import { cx } from '../../lib';
   import HamburgerMenu from './SideNav/HamburgerMenu.svelte';
 
-  let isSideNavOpen = undefined;
   let winWidth = undefined;
   $: isSideNavOpen = winWidth >= 1056;
 
@@ -24,7 +24,5 @@
     <span class={cx('--header__name--prefix')}>{company}</span>
     &nbsp;{platformName}
   </a>
-  <slot name="Nav" />
   <slot />
-  <slot name="SideNav" />
 </header>

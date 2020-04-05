@@ -84,9 +84,13 @@ import UIShell, {
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
-  UIShellNav,
-  UIShellNavItem,
-  UIShellNavSubMenu
+  HeaderNav,
+  HeaderNavItem,
+  HeaderNavMenu,
+  HeaderUtilities,
+  HeaderAction,
+  HeaderActionLink,
+  HeaderActionSearch
 } from './components/UIShell';
 import UnorderedList from './components/UnorderedList';
 
@@ -208,8 +212,12 @@ export {
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
-  UIShellNav,
-  UIShellNavItem,
-  UIShellNavSubMenu,
+  HeaderNav,
+  HeaderNavItem,
+  HeaderNavMenu,
+  HeaderUtilities,
+  HeaderAction,
+  HeaderActionLink,
+  HeaderActionSearch,
   UnorderedList
 };
