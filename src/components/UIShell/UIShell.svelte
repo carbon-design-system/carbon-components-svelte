@@ -25,5 +25,6 @@
     &nbsp;{platformName}
   </a>
   <slot name="Nav" />
+  <slot />
   <slot name="SideNav" />
 </header>

@@ -84,3 +84,13 @@ export const closeIcon = {
   focusable: false,
   style: undefined
 };
+
+export const searchIcon = {
+  class: undefined,
+  skeleton: false,
+  render: Search20,
+  title: 'Search',
+  tabindex: '0',
+  focusable: false,
+  style: undefined
+};

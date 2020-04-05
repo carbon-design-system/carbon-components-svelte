@@ -3,6 +3,7 @@
 
   import UIShell from './UIShell.svelte';
   import SettingsAdjust20 from 'carbon-icons-svelte/lib/SettingsAdjust20';
+  import Help20 from 'carbon-icons-svelte/lib/Help20';
   import ChangeCatalog16 from 'carbon-icons-svelte/lib/ChangeCatalog16';
   import ManageProtection16 from 'carbon-icons-svelte/lib/ManageProtection16';
 
@@ -14,12 +15,25 @@
   import UIShellNav from './UIShellNav/UIShellNav.svelte';
   import UIShellNavItem from './UIShellNav/UIShellNavItem.svelte';
   import UIShellNavSubmenu from './UIShellNav/UIShellNavSubmenu.svelte';
+  import UIShellUtilities from './UIShellNav/UIShellUtilities.svelte';
+  import UtilitySearch from './UIShellNav/UtilitySearch.svelte';
+  import UtilityComponent from './UIShellNav/UtilityComponent.svelte';
 
   let iCatalog = {
     class: undefined,
     skeleton: false,
     render: ChangeCatalog16,
     title: 'Catalog',
+    tabindex: '0',
+    focusable: false,
+    style: undefined
+  };
+
+  let iHelp = {
+    class: undefined,
+    skeleton: false,
+    render: Help20,
+    title: 'Help',
     tabindex: '0',
     focusable: false,
     style: undefined
@@ -60,6 +74,13 @@
         </UIShellNavSubmenu>
       </UIShellNav>
     </div>
+  </UIShell>
+{:else if story === 'with-actions'}
+  <UIShell {...$$props}>
+    <UIShellUtilities>
+      <UtilitySearch />
+      <UtilityComponent type="Help" icon={iHelp} />
+    </UIShellUtilities>
   </UIShell>
 {:else if story === 'with-actions-sidenav'}
   <UIShell {...$$props}>
