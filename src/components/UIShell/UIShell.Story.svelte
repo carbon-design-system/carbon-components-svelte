@@ -6,6 +6,9 @@
   import Help20 from 'carbon-icons-svelte/lib/Help20';
   import ChangeCatalog16 from 'carbon-icons-svelte/lib/ChangeCatalog16';
   import ManageProtection16 from 'carbon-icons-svelte/lib/ManageProtection16';
+  import Notification20 from 'carbon-icons-svelte/lib/Notification20';
+  import UserAvatar20 from 'carbon-icons-svelte/lib/UserAvatar20';
+  import AppSwitcher20 from 'carbon-icons-svelte/lib/AppSwitcher20';
 
   import SideNav from './SideNav/SideNav.svelte';
   import SideNavItems from './SideNav/SideNavItems.svelte';
@@ -17,6 +20,7 @@
   import UIShellNavSubmenu from './UIShellNav/UIShellNavSubmenu.svelte';
   import UIShellUtilities from './UIShellNav/UIShellUtilities.svelte';
   import UtilitySearch from './UIShellNav/UtilitySearch.svelte';
+  import UtilityLink from './UIShellNav/UtilityLink.svelte';
   import UtilityComponent from './UIShellNav/UtilityComponent.svelte';
 
   let iCatalog = {
@@ -58,6 +62,46 @@
     focusable: false,
     style: undefined
   };
+
+  let iSwitcher = {
+    class: undefined,
+    skeleton: false,
+    render: AppSwitcher20,
+    title: 'App Switcher',
+    tabindex: '0',
+    focusable: false,
+    style: undefined
+  };
+
+  let iAccount = {
+    class: undefined,
+    skeleton: false,
+    render: UserAvatar20,
+    title: 'Account',
+    tabindex: '0',
+    focusable: false,
+    style: undefined
+  };
+
+  let iNotifications = {
+    class: undefined,
+    skeleton: false,
+    render: Notification20,
+    title: 'Notifications',
+    tabindex: '0',
+    focusable: false,
+    style: undefined
+  };
+
+  let iSettings = {
+    class: undefined,
+    skeleton: false,
+    render: SettingsAdjust20,
+    title: 'Settings',
+    tabindex: '0',
+    focusable: false,
+    style: undefined
+  };
 </script>
 
 {#if story === 'with-nav'}
@@ -79,7 +123,17 @@
   <UIShell {...$$props}>
     <UIShellUtilities>
       <UtilitySearch />
-      <UtilityComponent type="Help" icon={iHelp} />
+      <UtilityComponent type="Settings" icon={iSettings}>
+        <p>Settings</p>
+      </UtilityComponent>
+      <UtilityLink type="Help" icon={iHelp} />
+      <UtilityComponent type="Notifications" icon={iNotifications}>
+        <p>Notifications</p>
+      </UtilityComponent>
+      <UtilityLink type="Account" icon={iAccount} />
+      <UtilityComponent type="Switcher" icon={iSwitcher}>
+        <p>Switcher</p>
+      </UtilityComponent>
     </UIShellUtilities>
   </UIShell>
 {:else if story === 'with-actions-sidenav'}
