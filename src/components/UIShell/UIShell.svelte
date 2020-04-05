@@ -24,5 +24,6 @@
     <span class={cx('--header__name--prefix')}>{company}</span>
     &nbsp;{platformName}
   </a>
+  <slot name="Nav" />
   <slot name="SideNav" />
 </header>

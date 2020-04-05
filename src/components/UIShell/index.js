@@ -7,3 +7,6 @@ export { default as SideNavItems } from './SideNav/SideNavItems.svelte';
 export { default as SideNavLink } from './SideNav/SideNavLink.svelte';
 export { default as SideNavMenu } from './SideNav/SideNavMenu.svelte';
 export { default as SideNavMenuItem } from './SideNav/SideNavMenuItem.svelte';
+export { default as UIShellNav } from './UIShellShellNav/UIShellNav.svelte';
+export { default as UIShellNavItem } from './UIShellShellNav/UIShellNavItem.svelte';
+export { default as UIShellNavSubMenu } from './UIShellShellNav/UIShellNavSubMenu.svelte';

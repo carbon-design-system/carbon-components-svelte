@@ -11,6 +11,9 @@
   import SideNavMenu from './SideNav/SideNavMenu.svelte';
   import SideNavMenuItem from './SideNav/SideNavMenuItem.svelte';
   import SideNavLink from './SideNav/SideNavLink.svelte';
+  import UIShellNav from './UIShellNav/UIShellNav.svelte';
+  import UIShellNavItem from './UIShellNav/UIShellNavItem.svelte';
+  import UIShellNavSubmenu from './UIShellNav/UIShellNavSubmenu.svelte';
 
   let iCatalog = {
     class: undefined,
@@ -43,7 +46,22 @@
   };
 </script>
 
-{#if story === 'with-actions-sidenav'}
+{#if story === 'with-nav'}
+  <UIShell {...$$props}>
+    <div slot="Nav">
+      <UIShellNav>
+        <UIShellNavItem href="/" text="Link 1" />
+        <UIShellNavItem href="/" text="Link 2" />
+        <UIShellNavItem href="/" text="Link 3" />
+        <UIShellNavSubmenu text="Sub Menu">
+          <UIShellNavItem href="/" text="Link 1" />
+          <UIShellNavItem href="/" text="Link 2" />
+          <UIShellNavItem href="/" text="Link 3" />
+        </UIShellNavSubmenu>
+      </UIShellNav>
+    </div>
+  </UIShell>
+{:else if story === 'with-actions-sidenav'}
   <UIShell {...$$props}>
     <div slot="SideNav">
       <SideNav>
