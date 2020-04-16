@@ -22,6 +22,9 @@
   import HeaderActionSearch from './GlobalHeader/HeaderActionSearch.svelte';
   import HeaderActionLink from './GlobalHeader/HeaderActionLink.svelte';
   import HeaderAction from './GlobalHeader/HeaderAction.svelte';
+  import HeaderPanelDivider from './GlobalHeader/HeaderPanelDivider.svelte';
+  import HeaderPanelLink from './GlobalHeader/HeaderPanelLink.svelte';
+  import HeaderPanelLinks from './GlobalHeader/HeaderPanelLinks.svelte';
 
   let isSideNavOpen = undefined;
 
@@ -132,7 +135,16 @@
       </HeaderAction>
       <HeaderActionLink type="Account" icon={iAccount} />
       <HeaderAction type="Switcher" icon={iSwitcher}>
-        <p>Switcher</p>
+        <HeaderPanelLinks>
+          <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
+          <HeaderPanelLink>Switecher item 1</HeaderPanelLink>
+          <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
+          <HeaderPanelLink>Switecher item 1</HeaderPanelLink>
+          <HeaderPanelLink>Switecher item 2</HeaderPanelLink>
+          <HeaderPanelLink>Switecher item 3</HeaderPanelLink>
+          <HeaderPanelLink>Switecher item 4</HeaderPanelLink>
+          <HeaderPanelLink>Switecher item 5</HeaderPanelLink>
+        </HeaderPanelLinks>
       </HeaderAction>
     </HeaderUtilities>
   </UIShell>
