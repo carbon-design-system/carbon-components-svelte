@@ -14,3 +14,6 @@ export { default as HeaderUtilities } from './GlobalHeader/HeaderUtilities.svelt
 export { default as HeaderAction } from './GlobalHeader/HeaderAction.svelte';
 export { default as HeaderActionLink } from './GlobalHeader/HeaderActionLink.svelte';
 export { default as HeaderActionSearch } from './GlobalHeader/HeaderActionSearch.svelte';
+export { default as HeaderPanelDivider } from './GlobalHeader/HeaderPanelDivider.svelte';
+export { default as HeaderPanelLink } from './GlobalHeader/HeaderPanelLink.svelte';
+export { default as HeaderPanelLinks } from './GlobalHeader/HeaderPanelLinks.svelte';

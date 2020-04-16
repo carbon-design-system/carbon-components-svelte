@@ -18,12 +18,6 @@
   }
 </script>
 
-<style>
-  .component-form {
-    margin: 1rem;
-  }
-</style>
-
 <svelte:window on:mouseup={mouseUp} />
 
 <div id="right-panel-action-component">
@@ -42,9 +36,7 @@
       id="right-panel-action-component-form"
       class={cx('--header-panel', '--header-panel--expanded')}
       transition:slide={{ duration: 200 }}>
-      <div class="component-form">
-        <slot />
-      </div>
+      <slot />
     </div>
   {/if}
 </div>
