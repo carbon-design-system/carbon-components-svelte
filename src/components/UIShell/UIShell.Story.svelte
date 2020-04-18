@@ -111,6 +111,24 @@
 
 {#if story === 'header'}
   <Header {...$$props} />
+{:else if story === 'sidenav'}
+  <SideNav isOpen={true}>
+    <SideNavItems>
+      <SideNavMenu text="Menu 01" icon={iCatalog}>
+        <SideNavMenuItem text="Sub 01" href="/" />
+        <SideNavMenuItem text="Sub 02" href="/" />
+        <SideNavMenuItem text="Sub 03" href="/" />
+        <SideNavMenuItem text="Sub 04" href="/" />
+      </SideNavMenu>
+      <SideNavMenu text="Menu 02" icon={iAdjust}>
+        <SideNavMenuItem text="Sub 01" href="/" />
+        <SideNavMenuItem text="Sub 02" href="/" />
+        <SideNavMenuItem text="Sub 03" href="/" />
+        <SideNavMenuItem text="Sub 04" href="/" />
+      </SideNavMenu>
+      <SideNavLink text="Menu 03" href="/" icon={iProtection} />
+    </SideNavItems>
+  </SideNav>
 {:else if story === 'header-with-nav'}
   <Header {...$$props}>
     <HeaderNav>

@@ -13,6 +13,16 @@ export const Header = () => ({
   }
 });
 
+export const Sidenav = () => ({
+  Component,
+  props: {
+    story: 'sidenav',
+    href: text('The link href (href)', '#'),
+    company: text('Company name', 'IBM'),
+    platformName: text('Platform name', 'Platform Name')
+  }
+});
+
 export const HeaderWithNav = () => ({
   Component,
   props: {
