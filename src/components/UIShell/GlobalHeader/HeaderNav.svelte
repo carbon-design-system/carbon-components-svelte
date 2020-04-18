@@ -1,6 +1,5 @@
 <script>
   export let ariaLabel = undefined;
-
   import { cx } from '../../../lib';
 </script>
 

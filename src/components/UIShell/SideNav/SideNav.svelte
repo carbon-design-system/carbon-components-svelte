@@ -12,9 +12,7 @@
 <nav
   class={cx('--side-nav__navigation', '--side-nav', '--side-nav--ux', isOpen && '--side-nav--expanded')}
   aria-label={ariaLabel}>
-  <ul class={cx('--side-nav__items')}>
-    <slot />
-  </ul>
+  <slot />
   <footer class={cx('--side-nav__footer')}>
     <button class={cx('--side-nav__toggle')} type="button" title="Open">
       <div class={cx('--side-nav__icon')}>
