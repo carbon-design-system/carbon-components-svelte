@@ -161,7 +161,7 @@
   </Header>
 {:else if story === 'header-and-sidenav'}
   <Header bind:isSideNavOpen {...$$props} />
-  <SideNav isOpen={isSideNavOpen}>
+  <SideNav bind:isOpen={isSideNavOpen}>
     <SideNavItems>
       <SideNavMenu text="Menu 01" icon={iCatalog}>
         <SideNavMenuItem text="Sub 01" href="/" />
