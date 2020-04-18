@@ -109,9 +109,9 @@
   };
 </script>
 
-{#if story === 'base'}
+{#if story === 'header'}
   <Header {...$$props} />
-{:else if story === 'with-header-and-nav'}
+{:else if story === 'header-with-nav'}
   <Header {...$$props}>
     <HeaderNav>
       <HeaderNavItem href="/" text="Link 1" />
@@ -124,7 +124,7 @@
       </HeaderNavMenu>
     </HeaderNav>
   </Header>
-{:else if story === 'with-utilities'}
+{:else if story === 'header-with-utilities'}
   <Header {...$$props}>
     <HeaderUtilities>
       <HeaderActionSearch />
@@ -142,7 +142,7 @@
       <HeaderActionLink type="Account" icon={iAccount} />
     </HeaderUtilities>
   </Header>
-{:else if story === 'with-switcher'}
+{:else if story === 'header-with-switcher'}
   <Header {...$$props}>
     <HeaderUtilities>
       <HeaderAction type="Switcher" icon={iSwitcher} isOpen={true}>
@@ -159,7 +159,7 @@
       </HeaderAction>
     </HeaderUtilities>
   </Header>
-{:else if story === 'with-sidenav'}
+{:else if story === 'header-and-sidenav'}
   <Header bind:isSideNavOpen {...$$props} />
   <SideNav isOpen={isSideNavOpen}>
     <SideNavItems>

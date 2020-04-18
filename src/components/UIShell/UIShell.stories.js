@@ -3,50 +3,50 @@ import Component from './UIShell.Story.svelte';
 
 export default { title: 'UIShell', decorators: [withKnobs] };
 
-export const Base = () => ({
+export const Header = () => ({
   Component,
   props: {
-    story: 'base',
+    story: 'header',
     href: text('The link href (href)', '#'),
     company: text('Company name', 'IBM'),
     platformName: text('Platform name', 'Platform Name')
   }
 });
 
-export const WithHeaderAndNav = () => ({
+export const HeaderWithNav = () => ({
   Component,
   props: {
-    story: 'with-header-and-nav',
+    story: 'header-with-nav',
     href: text('The link href (href)', '#'),
     company: text('Company name', 'IBM'),
     platformName: text('Platform name', 'Platform Name')
   }
 });
 
-export const WithUtilities = () => ({
+export const HeaderWithUtilities = () => ({
   Component,
   props: {
-    story: 'with-utilities',
+    story: 'header-with-utilities',
     href: text('The link href (href)', '#'),
     company: text('Company name', 'IBM'),
     platformName: text('Platform name', 'Platform Name')
   }
 });
 
-export const WithSwitcher = () => ({
+export const HeaderWithSwitcher = () => ({
   Component,
   props: {
-    story: 'with-switcher',
+    story: 'header-with-switcher',
     href: text('The link href (href)', '#'),
     company: text('Company name', 'IBM'),
     platformName: text('Platform name', 'Platform Name')
   }
 });
 
-export const WithSidenav = () => ({
+export const HeaderAndSidenav = () => ({
   Component,
   props: {
-    story: 'with-sidenav',
+    story: 'header-and-sidenav',
     href: text('The link href (href)', '#'),
     company: text('Company name', 'IBM'),
     platformName: text('Platform name', 'Platform Name')
