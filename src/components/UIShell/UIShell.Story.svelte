@@ -1,7 +1,6 @@
 <script>
   export let story = undefined;
 
-  import UIShell from './UIShell.svelte';
   import SettingsAdjust20 from 'carbon-icons-svelte/lib/SettingsAdjust20';
   import Help20 from 'carbon-icons-svelte/lib/Help20';
   import ChangeCatalog16 from 'carbon-icons-svelte/lib/ChangeCatalog16';
@@ -15,6 +14,7 @@
   import SideNavMenu from './SideNav/SideNavMenu.svelte';
   import SideNavMenuItem from './SideNav/SideNavMenuItem.svelte';
   import SideNavLink from './SideNav/SideNavLink.svelte';
+  import Header from './GlobalHeader/Header.svelte';
   import HeaderNav from './GlobalHeader/HeaderNav.svelte';
   import HeaderNavItem from './GlobalHeader/HeaderNavItem.svelte';
   import HeaderNavMenu from './GlobalHeader/HeaderNavMenu.svelte';
@@ -109,8 +109,10 @@
   };
 </script>
 
-{#if story === 'with-nav'}
-  <UIShell {...$$props}>
+{#if story === 'base'}
+  <Header {...$$props} />
+{:else if story === 'with-header-and-nav'}
+  <Header {...$$props}>
     <HeaderNav>
       <HeaderNavItem href="/" text="Link 1" />
       <HeaderNavItem href="/" text="Link 2" />
@@ -121,20 +123,29 @@
         <HeaderNavItem href="/" text="Link 3" />
       </HeaderNavMenu>
     </HeaderNav>
-  </UIShell>
-{:else if story === 'with-actions'}
-  <UIShell {...$$props}>
+  </Header>
+{:else if story === 'with-utilities'}
+  <Header {...$$props}>
     <HeaderUtilities>
       <HeaderActionSearch />
       <HeaderAction type="Settings" icon={iSettings}>
-        <p>Settings</p>
+        <HeaderPanelLinks>
+          <HeaderPanelDivider>Settings</HeaderPanelDivider>
+        </HeaderPanelLinks>
       </HeaderAction>
       <HeaderActionLink type="Help" icon={iHelp} />
-      <HeaderAction type="Notifications" icon={iNotifications}>
-        <p>Notifications</p>
+      <HeaderAction type="Notifications" icon={iNotifications} isOpen={true}>
+        <HeaderPanelLinks>
+          <HeaderPanelDivider>Notifications</HeaderPanelDivider>
+        </HeaderPanelLinks>
       </HeaderAction>
       <HeaderActionLink type="Account" icon={iAccount} />
-      <HeaderAction type="Switcher" icon={iSwitcher}>
+    </HeaderUtilities>
+  </Header>
+{:else if story === 'with-switcher'}
+  <Header {...$$props}>
+    <HeaderUtilities>
+      <HeaderAction type="Switcher" icon={iSwitcher} isOpen={true}>
         <HeaderPanelLinks>
           <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
           <HeaderPanelLink>Switecher item 1</HeaderPanelLink>
@@ -147,27 +158,24 @@
         </HeaderPanelLinks>
       </HeaderAction>
     </HeaderUtilities>
-  </UIShell>
+  </Header>
 {:else if story === 'with-sidenav'}
-  <UIShell bind:isSideNavOpen {...$$props}>
-    <SideNav isOpen={isSideNavOpen}>
-      <SideNavItems>
-        <SideNavMenu text="Menu 01" icon={iCatalog}>
-          <SideNavMenuItem text="Sub 01" href="/" />
-          <SideNavMenuItem text="Sub 02" href="/" />
-          <SideNavMenuItem text="Sub 03" href="/" />
-          <SideNavMenuItem text="Sub 04" href="/" />
-        </SideNavMenu>
-        <SideNavMenu text="Menu 02" icon={iAdjust}>
-          <SideNavMenuItem text="Sub 01" href="/" />
-          <SideNavMenuItem text="Sub 02" href="/" />
-          <SideNavMenuItem text="Sub 03" href="/" />
-          <SideNavMenuItem text="Sub 04" href="/" />
-        </SideNavMenu>
-        <SideNavLink text="Menu 03" href="/" icon={iProtection} />
-      </SideNavItems>
-    </SideNav>
-  </UIShell>
-{:else}
-  <UIShell {...$$props} />
+  <Header bind:isSideNavOpen {...$$props} />
+  <SideNav isOpen={isSideNavOpen}>
+    <SideNavItems>
+      <SideNavMenu text="Menu 01" icon={iCatalog}>
+        <SideNavMenuItem text="Sub 01" href="/" />
+        <SideNavMenuItem text="Sub 02" href="/" />
+        <SideNavMenuItem text="Sub 03" href="/" />
+        <SideNavMenuItem text="Sub 04" href="/" />
+      </SideNavMenu>
+      <SideNavMenu text="Menu 02" icon={iAdjust}>
+        <SideNavMenuItem text="Sub 01" href="/" />
+        <SideNavMenuItem text="Sub 02" href="/" />
+        <SideNavMenuItem text="Sub 03" href="/" />
+        <SideNavMenuItem text="Sub 04" href="/" />
+      </SideNavMenu>
+      <SideNavLink text="Menu 03" href="/" icon={iProtection} />
+    </SideNavItems>
+  </SideNav>
 {/if}
