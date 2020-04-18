@@ -137,13 +137,13 @@
       <HeaderAction type="Switcher" icon={iSwitcher}>
         <HeaderPanelLinks>
           <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-          <HeaderPanelLink>Switecher item 1</HeaderPanelLink>
+          <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
           <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-          <HeaderPanelLink>Switecher item 1</HeaderPanelLink>
-          <HeaderPanelLink>Switecher item 2</HeaderPanelLink>
-          <HeaderPanelLink>Switecher item 3</HeaderPanelLink>
-          <HeaderPanelLink>Switecher item 4</HeaderPanelLink>
-          <HeaderPanelLink>Switecher item 5</HeaderPanelLink>
+          <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+          <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
+          <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
+          <HeaderPanelLink>Switcher item 4</HeaderPanelLink>
+          <HeaderPanelLink>Switcher item 5</HeaderPanelLink>
         </HeaderPanelLinks>
       </HeaderAction>
     </HeaderUtilities>

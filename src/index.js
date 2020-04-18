@@ -90,7 +90,10 @@ import UIShell, {
   HeaderUtilities,
   HeaderAction,
   HeaderActionLink,
-  HeaderActionSearch
+  HeaderActionSearch,
+  HeaderPanelDivider,
+  HeaderPanelLinks,
+  HeaderPanelLink
 } from './components/UIShell';
 import UnorderedList from './components/UnorderedList';
 
@@ -219,5 +222,8 @@ export {
   HeaderAction,
   HeaderActionLink,
   HeaderActionSearch,
+  HeaderPanelDivider,
+  HeaderPanelLinks,
+  HeaderPanelLink,
   UnorderedList
 };
