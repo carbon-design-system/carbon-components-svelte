@@ -20,7 +20,7 @@
 
 <svelte:window on:mouseup={mouseUp} />
 
-<div id="right-panel-action-component">
+<div>
   <button
     aria-label={type}
     class={cx('--header__action', isOpen && '--header__action--active')}
@@ -33,7 +33,6 @@
   {#if isOpen}
     <div
       bind:this={elRigthPanel}
-      id="right-panel-action-component-form"
       class={cx('--header-panel', '--header-panel--expanded')}
       transition:slide={{ duration: 200 }}>
       <slot />
