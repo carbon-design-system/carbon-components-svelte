@@ -79,19 +79,22 @@ import Tooltip from './components/Tooltip';
 import TooltipDefinition from './components/TooltipDefinition';
 import TooltipIcon from './components/TooltipIcon';
 import {
+  Header,
+  HeaderAction,
+  HeaderActionLink,
+  HeaderActionSearch,
+  HeaderNav,
+  HeaderNavItem,
+  HeaderNavMenu,
+  HeaderPanelDivider,
+  HeaderPanelLink,
+  HeaderPanelLinks,
+  HeaderUtilities,
   SideNav,
   SideNavItems,
   SideNavLink,
   SideNavMenu,
-  SideNavMenuItem,
-  Header,
-  HeaderNav,
-  HeaderNavItem,
-  HeaderNavMenu,
-  HeaderUtilities,
-  HeaderAction,
-  HeaderActionLink,
-  HeaderActionSearch
+  SideNavMenuItem
 } from './components/UIShell';
 import UnorderedList from './components/UnorderedList';
 
@@ -207,18 +210,21 @@ export {
   Tooltip,
   TooltipDefinition,
   TooltipIcon,
+  Header,
+  HeaderAction,
+  HeaderActionLink,
+  HeaderActionSearch,
+  HeaderNav,
+  HeaderNavItem,
+  HeaderNavMenu,
+  HeaderPanelDivider,
+  HeaderPanelLink,
+  HeaderPanelLinks,
+  HeaderUtilities,
   SideNav,
   SideNavItems,
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
-  Header,
-  HeaderNav,
-  HeaderNavItem,
-  HeaderNavMenu,
-  HeaderUtilities,
-  HeaderAction,
-  HeaderActionLink,
-  HeaderActionSearch,
   UnorderedList
 };
