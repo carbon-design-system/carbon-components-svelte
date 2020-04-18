@@ -78,12 +78,13 @@ import ToggleSmall, { ToggleSmallSkeleton } from './components/ToggleSmall';
 import Tooltip from './components/Tooltip';
 import TooltipDefinition from './components/TooltipDefinition';
 import TooltipIcon from './components/TooltipIcon';
-import UIShell, {
+import {
   SideNav,
   SideNavItems,
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
+  Header,
   HeaderNav,
   HeaderNavItem,
   HeaderNavMenu,
@@ -206,12 +207,12 @@ export {
   Tooltip,
   TooltipDefinition,
   TooltipIcon,
-  UIShell,
   SideNav,
   SideNavItems,
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
+  Header,
   HeaderNav,
   HeaderNavItem,
   HeaderNavMenu,

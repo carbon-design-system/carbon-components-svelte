@@ -1,12 +1,9 @@
-import UIShell from './UIShell.svelte';
-
-export default UIShell;
-
 export { default as SideNav } from './SideNav/SideNav.svelte';
 export { default as SideNavItems } from './SideNav/SideNavItems.svelte';
 export { default as SideNavLink } from './SideNav/SideNavLink.svelte';
 export { default as SideNavMenu } from './SideNav/SideNavMenu.svelte';
 export { default as SideNavMenuItem } from './SideNav/SideNavMenuItem.svelte';
+export { default as Header } from './GlobalHeader/Header.svelte';
 export { default as HeaderNav } from './GlobalHeader/HeaderNav.svelte';
 export { default as HeaderNavItem } from './GlobalHeader/HeaderNavItem.svelte';
 export { default as HeaderNavMenu } from './GlobalHeader/HeaderNavMenu.svelte';
