@@ -5,8 +5,8 @@
   export let platformName = undefined;
   export let isSideNavOpen = undefined;
 
-  import { cx } from '../../lib';
-  import HamburgerMenu from './SideNav/HamburgerMenu.svelte';
+  import { cx } from '../../../lib';
+  import HamburgerMenu from '../SideNav/HamburgerMenu.svelte';
 
   let winWidth = undefined;
   $: isSideNavOpen = winWidth >= 1056;

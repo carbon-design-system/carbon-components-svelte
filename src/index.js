@@ -78,22 +78,23 @@ import ToggleSmall, { ToggleSmallSkeleton } from './components/ToggleSmall';
 import Tooltip from './components/Tooltip';
 import TooltipDefinition from './components/TooltipDefinition';
 import TooltipIcon from './components/TooltipIcon';
-import UIShell, {
+import {
+  Header,
+  HeaderAction,
+  HeaderActionLink,
+  HeaderActionSearch,
+  HeaderNav,
+  HeaderNavItem,
+  HeaderNavMenu,
+  HeaderPanelDivider,
+  HeaderPanelLink,
+  HeaderPanelLinks,
+  HeaderUtilities,
   SideNav,
   SideNavItems,
   SideNavLink,
   SideNavMenu,
-  SideNavMenuItem,
-  HeaderNav,
-  HeaderNavItem,
-  HeaderNavMenu,
-  HeaderUtilities,
-  HeaderAction,
-  HeaderActionLink,
-  HeaderActionSearch,
-  HeaderPanelDivider,
-  HeaderPanelLinks,
-  HeaderPanelLink
+  SideNavMenuItem
 } from './components/UIShell';
 import UnorderedList from './components/UnorderedList';
 
@@ -209,21 +210,21 @@ export {
   Tooltip,
   TooltipDefinition,
   TooltipIcon,
-  UIShell,
+  Header,
+  HeaderAction,
+  HeaderActionLink,
+  HeaderActionSearch,
+  HeaderNav,
+  HeaderNavItem,
+  HeaderNavMenu,
+  HeaderPanelDivider,
+  HeaderPanelLink,
+  HeaderPanelLinks,
+  HeaderUtilities,
   SideNav,
   SideNavItems,
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
-  HeaderNav,
-  HeaderNavItem,
-  HeaderNavMenu,
-  HeaderUtilities,
-  HeaderAction,
-  HeaderActionLink,
-  HeaderActionSearch,
-  HeaderPanelDivider,
-  HeaderPanelLinks,
-  HeaderPanelLink,
   UnorderedList
 };
