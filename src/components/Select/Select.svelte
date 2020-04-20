@@ -61,6 +61,7 @@
             on:change={({ target }) => {
               selectedValue.set(target.value);
             }}
+            on:blur
             {id}>
             <slot />
           </select>
@@ -89,6 +90,7 @@
           on:change={({ target }) => {
             selectedValue.set(target.value);
           }}
+          on:blur
           {id}>
           <slot />
         </select>
