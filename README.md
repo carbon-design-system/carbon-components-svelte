@@ -19,16 +19,17 @@ yarn add -D carbon-components-svelte
 
 ```html
 <script>
-  import { Button } from 'carbon-components-svelte';
+  import { Button } from "carbon-components-svelte";
 </script>
 
 <svelte:head>
   <link
     rel="stylesheet"
-    href="https://unpkg.com/carbon-components@10.9.0/css/carbon-components.min.css" />
+    href="https://unpkg.com/carbon-components@10.9.0/css/carbon-components.min.css"
+  />
 </svelte:head>
 
-<Button>Primary</Button>
+<button>Primary</button>
 ```
 
 Try it in the [CodeSandbox](https://codesandbox.io/s/carbon-components-svelte021-lhvc4).

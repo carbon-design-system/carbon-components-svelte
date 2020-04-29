@@ -14,13 +14,13 @@
     "test:tdd": "jest --watch",
     "prepack": "rollup -c"
   },
-  "dependencies": {
-    "carbon-icons-svelte": "^10.8.2",
-    "flatpickr": "^4.6.3"
-  },
+  "sideEffects": false,
   "peerDependencies": {
-    "carbon-components": "^10.9.3",
-    "carbon-icons-svelte": "^10.8.2"
+    "carbon-components": "~10.9.x"
+  },
+  "dependencies": {
+    "carbon-icons-svelte": "10.9.3",
+    "flatpickr": "4.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.8.0",
@@ -33,7 +33,7 @@
     "@testing-library/svelte": "^1.11.0",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
-    "carbon-components": "^10.9.3",
+    "carbon-components": "~10.9.x",
     "jest": "^25.1.0",
     "jest-transform-svelte": "^2.1.0",
     "regenerator-runtime": "^0.13.3",
@@ -55,7 +55,6 @@
       "email": "adanug@mx1.ibm.com"
     }
   ],
-  "sideEffects": false,
   "babel": {
     "presets": [
       "@babel/preset-env"
@@ -79,7 +78,7 @@
     ]
   },
   "resolutions": {
-    "**/bin-links": ">=1.1.6"
+    "**/mem": ">=4.0"
   },
   "repository": {
     "type": "git",
