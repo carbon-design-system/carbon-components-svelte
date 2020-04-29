@@ -8,7 +8,15 @@ import CopyButton from './components/CopyButton';
 import ComboBox from './components/ComboBox';
 import ComposedModal, { ModalHeader, ModalBody, ModalFooter } from './components/ComposedModal';
 import CodeSnippet, { CodeSnippetSkeleton } from './components/CodeSnippet';
-import DataTable from './components/DataTable';
+import DataTable, {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow
+} from './components/DataTable';
 import DataTableSkeleton from './components/DataTableSkeleton';
 import DatePicker, { DatePickerInput } from './components/DatePicker';
 import Dropdown, { DropdownSkeleton } from './components/Dropdown';
@@ -121,6 +129,13 @@ export {
   Copy,
   CopyButton,
   DataTable,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow,
   DataTableSkeleton,
   DatePicker,
   DatePickerInput,
