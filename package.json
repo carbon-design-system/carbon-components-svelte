@@ -12,7 +12,7 @@
     "build:storybook": "build-storybook -o docs",
     "test": "jest --coverage",
     "test:tdd": "jest --watch",
-    "prepublishOnly": "yarn build"
+    "prepack": "rollup -c"
   },
   "dependencies": {
     "carbon-icons-svelte": "^10.8.2",
@@ -25,8 +25,6 @@
   "devDependencies": {
     "@babel/core": "^7.8.0",
     "@babel/preset-env": "^7.8.0",
-    "@commitlint/cli": "^8.3.4",
-    "@commitlint/config-conventional": "^8.3.4",
     "@storybook/addon-knobs": "^5.3.1",
     "@storybook/addon-storysource": "^5.3.1",
     "@storybook/cli": "^5.3.1",
@@ -36,15 +34,8 @@
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
     "carbon-components": "^10.9.3",
-    "eslint": "^6.7.2",
-    "eslint-plugin-svelte3": "^2.7.3",
-    "husky": "^4.2.1",
     "jest": "^25.1.0",
     "jest-transform-svelte": "^2.1.0",
-    "lint-staged": "^10.0.7",
-    "prettier": "^1.19.1",
-    "prettier-plugin-svelte": "^0.7.0",
-    "pretty-quick": "^2.0.1",
     "regenerator-runtime": "^0.13.3",
     "rollup": "^1.29.0",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -65,27 +56,6 @@
     }
   ],
   "sideEffects": false,
-  "engines": {
-    "node": ">=10",
-    "yarn": ">=1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && pretty-quick --pattern 'src/**/*.{js,svelte}' --staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "*.{js,svelte}": [
-      "eslint --fix"
-    ]
-  },
-  "prettier": {
-    "printWidth": 100,
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true
-  },
   "babel": {
     "presets": [
       "@babel/preset-env"
@@ -108,11 +78,6 @@
       "@testing-library/jest-dom/extend-expect"
     ]
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "resolutions": {
     "**/bin-links": ">=1.1.6"
   },
@@ -121,14 +86,16 @@
     "url": "https://github.com/ibm/carbon-components-svelte.git"
   },
   "homepage": "https://github.com/ibm/carbon-components-svelte",
+  "bugs": "https://github.com/ibm/carbon-components-svelte/issues",
   "keywords": [
     "carbon",
     "carbon components",
-    "svelte"
+    "svelte",
+    "component library",
+    "carbon design system"
   ],
   "files": [
     "lib",
     "src"
-  ],
-  "bugs": "https://github.com/ibm/carbon-components-svelte/issues"
+  ]
 }
