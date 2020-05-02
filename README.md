@@ -29,7 +29,7 @@ yarn add -D carbon-components-svelte
   />
 </svelte:head>
 
-<button>Primary</button>
+<Button>Primary</Button>
 ```
 
 Try it in the [CodeSandbox](https://codesandbox.io/s/carbon-components-svelte021-lhvc4).
