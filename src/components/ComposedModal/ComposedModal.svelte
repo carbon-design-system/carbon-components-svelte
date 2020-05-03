@@ -17,6 +17,8 @@
   let outerModal = undefined;
   let innerModal = undefined;
 
+  let opened = false;
+
   setContext('ComposedModal', {
     closeModal: () => {
       open = false;
@@ -45,11 +47,15 @@
   });
 
   afterUpdate(() => {
-    if (open) {
+    if (opened) {
+      if (!open) {
+        opened = false;
+        dispatch('close');
+        document.body.classList.add(cx('--body--with-modal-open'));
+      }
+    } else if (open) {
+      opened = true;
       dispatch('open');
-      document.body.classList.add(cx('--body--with-modal-open'));
-    } else {
-      dispatch('close');
       document.body.classList.remove(cx('--body--with-modal-open'));
     }
   });

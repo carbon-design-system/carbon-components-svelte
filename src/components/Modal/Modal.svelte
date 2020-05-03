@@ -30,6 +30,8 @@
   let outerModal = undefined;
   let innerModal = undefined;
 
+  let opened = false
+
   // TODO: reuse in ComposedModal
   function focus(element) {
     const node = (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
@@ -37,13 +39,17 @@
   }
 
   afterUpdate(() => {
-    if (open) {
+    if (opened) {
+      if (!open) {
+        opened = false;
+        dispatch('close');
+        document.body.classList.remove(cx('--body--with-modal-open'));
+      }
+    } else if (open) {
+      opened = true;
       focus();
       dispatch('open');
       document.body.classList.add(cx('--body--with-modal-open'));
-    } else {
-      dispatch('close');
-      document.body.classList.remove(cx('--body--with-modal-open'));
     }
   });
 
