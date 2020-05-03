@@ -19,7 +19,7 @@
   export let size = undefined;
   export let style = undefined;
 
-  import { createEventDispatcher, afterUpdate, onDestroy, onMount } from 'svelte';
+  import { createEventDispatcher, afterUpdate, onDestroy } from 'svelte';
   import Close20 from 'carbon-icons-svelte/lib/Close20';
   import { cx } from '../../lib';
   import Button from '../Button';
@@ -30,22 +30,26 @@
   let outerModal = undefined;
   let innerModal = undefined;
 
+  let opened = false
+
   // TODO: reuse in ComposedModal
   function focus(element) {
     const node = (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
     node.focus();
   }
 
-  onMount(() => {
-    focus();
-    dispatch('open');
-    document.body.classList.add(cx('--body--with-modal-open'));
-  })
-
   afterUpdate(() => {
-    if (!open) {
-      dispatch('close');
-      document.body.classList.remove(cx('--body--with-modal-open'));
+    if (opened) {
+      if (!open) {
+        opened = false;
+        dispatch('close');
+        document.body.classList.remove(cx('--body--with-modal-open'));
+      }
+    } else if (open) {
+      opened = true;
+      focus();
+      dispatch('open');
+      document.body.classList.add(cx('--body--with-modal-open'));
     }
   });
 
