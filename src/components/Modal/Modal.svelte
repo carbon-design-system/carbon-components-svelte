@@ -19,7 +19,7 @@
   export let size = undefined;
   export let style = undefined;
 
-  import { createEventDispatcher, afterUpdate, onDestroy } from 'svelte';
+  import { createEventDispatcher, afterUpdate, onDestroy, onMount } from 'svelte';
   import Close20 from 'carbon-icons-svelte/lib/Close20';
   import { cx } from '../../lib';
   import Button from '../Button';
@@ -36,12 +36,14 @@
     node.focus();
   }
 
+  onMount(() => {
+    focus();
+    dispatch('open');
+    document.body.classList.add(cx('--body--with-modal-open'));
+  })
+
   afterUpdate(() => {
-    if (open) {
-      focus();
-      dispatch('open');
-      document.body.classList.add(cx('--body--with-modal-open'));
-    } else {
+    if (!open) {
       dispatch('close');
       document.body.classList.remove(cx('--body--with-modal-open'));
     }
