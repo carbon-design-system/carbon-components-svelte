@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.6.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.6.1) - 2020-05-08
+
+- Fix `Pagination` bug by binding the correct variable (`selected`) to the `Select` component
+  ([PR#179](https://github.com/IBM/carbon-components-svelte/pull/179), thanks [@ericol](https://github.com/ericol)!)
+
 ## [0.6.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.6.0) - 2020-05-07
 
 - Fix button with icon bug by manually setting `hasIconOnly` in `Button`. This results in a breaking change for icon-only buttons, which now must include `hasIconOnly`
