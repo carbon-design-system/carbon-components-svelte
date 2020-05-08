@@ -33,7 +33,6 @@
     "@testing-library/svelte": "^1.11.0",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
-    "carbon-components": "~10.9.x",
     "jest": "^25.1.0",
     "jest-transform-svelte": "^2.1.0",
     "regenerator-runtime": "^0.13.3",
