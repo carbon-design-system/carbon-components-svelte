@@ -1,0 +1,1 @@
+require("gh-pages").publish("storybook-static");
