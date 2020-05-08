@@ -68,9 +68,6 @@
         labelText={`Page number, of ${totalPages} pages`}
         inline
         hideLabel
-        on:change={({ detail }) => {
-          page = Number(detail);
-        }}
         bind:defaultValue={page}>
         {#each selectItems as size, i (size)}
           <SelectItem value={size + 1} text={(size + 1).toString()} />
