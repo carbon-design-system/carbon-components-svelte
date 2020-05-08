@@ -47,7 +47,7 @@
       on:change={() => {
         page = 1;
       }}
-      bind:defaultValue={pageSize}>
+      bind:selected={pageSize}>
       {#each pageSizes as size, i (size)}
         <SelectItem value={size} text={size.toString()} />
       {/each}
@@ -68,10 +68,7 @@
         labelText={`Page number, of ${totalPages} pages`}
         inline
         hideLabel
-        on:change={({ detail }) => {
-          page = Number(detail);
-        }}
-        bind:defaultValue={page}>
+        bind:selected={page}>
         {#each selectItems as size, i (size)}
           <SelectItem value={size + 1} text={(size + 1).toString()} />
         {/each}
