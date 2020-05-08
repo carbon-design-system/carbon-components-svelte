@@ -26,6 +26,7 @@
   };
 
   const iconOnlyProps = {
+    hasIconOnly: true,
     kind,
     disabled,
     size,

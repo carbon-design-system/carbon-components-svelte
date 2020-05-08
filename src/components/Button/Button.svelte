@@ -6,6 +6,7 @@
   export let href = undefined;
   export let icon = undefined;
   export let iconDescription = undefined;
+  export let hasIconOnly = false;
   export let kind = 'primary';
   export let size = 'default';
   export let style = undefined;
@@ -24,7 +25,6 @@
   $: if (ctx && buttonRef) {
     ctx.declareRef(buttonRef);
   }
-  $: hasIconOnly = !!icon && !$$props.$$slots;
   $: buttonProps = {
     role: 'button',
     type: href && !disabled ? undefined : type,
