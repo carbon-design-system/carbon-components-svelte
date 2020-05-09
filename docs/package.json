@@ -1,0 +1,30 @@
+{
+  "name": "sapper-webpack",
+  "description": "Custom Sapper webpack template",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "develop": "sapper dev",
+    "build": "sapper export"
+  },
+  "dependencies": {
+    "polka": "next",
+    "sirv": "^0.4.0"
+  },
+  "devDependencies": {
+    "@metonym/sapper": "^0.27.12",
+    "autoprefixer": "^9.7.6",
+    "carbon-components": "^10.11.2",
+    "css-loader": "^3.5.3",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.14.1",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.2.1",
+    "svelte": "~3.20.0",
+    "svelte-loader": "^2.9.0",
+    "webpack": "^4.43.0",
+    "carbon-components-svelte": "../"
+  }
+}
