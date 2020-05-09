@@ -11,7 +11,7 @@
   export let tileMaxHeight = 0;
   export let tilePadding = 0;
 
-  import { onMount, afterUpdate } from 'svelte';
+  import { afterUpdate } from 'svelte';
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
   import { cx, css } from '../../lib';
 
@@ -19,19 +19,16 @@
   let contentRef = undefined;
   let aboveRef = undefined;
 
-  onMount(() => {
-    const style = window.getComputedStyle(tileRef);
+  afterUpdate(() => {
+    if (tileMaxHeight === 0) {
+      tileMaxHeight = aboveRef.getBoundingClientRect().height;
+    }
 
-    tileMaxHeight = aboveRef.getBoundingClientRect().height;
+    const style = window.getComputedStyle(tileRef);
+    
     tilePadding =
       parseInt(style.getPropertyValue('padding-top'), 10) +
       parseInt(style.getPropertyValue('padding-bottom'), 10);
-  });
-
-  afterUpdate(() => {
-    tileMaxHeight = expanded
-      ? contentRef.getBoundingClientRect().height
-      : aboveRef.getBoundingClientRect().height;
   });
 </script>
 
