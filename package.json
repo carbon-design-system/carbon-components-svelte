@@ -43,7 +43,7 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte": "^5.1.1",
     "rollup-plugin-terser": "^5.2.0",
-    "svelte": "^3.16.7",
+    "svelte": "^3.23.0",
     "svelte-loader": "^2.13.6"
   },
   "contributors": [
