@@ -32,6 +32,7 @@
   {#if labelText}
     <label class={cx('--label', hideLabel && '--visually-hidden')} for={id}>{labelText}</label>
   {/if}
+  <!-- svelte-ignore a11y-no-onchange -->
   <select
     class={cx('--select-input')}
     on:change={({ target }) => {
