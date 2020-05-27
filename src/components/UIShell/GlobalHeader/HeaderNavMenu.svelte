@@ -2,6 +2,8 @@
   export let text = undefined;
   export let iconDescription = 'Expand/Collapse';
   export let expanded = false;
+  export let href = '/';
+
   import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
   import { cx } from '../../../lib';
 
@@ -31,14 +33,14 @@
     role="menuitem"
     tabindex="0"
     aria-label={text}
-    href="javascript:void(0)"
+    {href}
     on:keydown
     on:keydown={({ key }) => {
       if (key === 'Enter') {
         expanded = !expanded;
       }
     }}
-    on:click
+    on:click|preventDefault
     on:mouseover
     on:mouseenter
     on:mouseleave
