@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.6.3](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.6.3) - 2020-05-26
+
+- Replace `"javascript:void(0)"` with `"/"` in `HeaderNavMenu` href attribute to fix a11y "not a valid attribute" warning; `href` is an exported property that can be overriden by the consumer
+  ([Issue #184](https://github.com/IBM/carbon-components-svelte/issues/184))
+
+- Ignore `a11y-no-onchange` warning in `TimePickerSelect`
+
+- Bump development dependency `svelte` to v3.23.0
+
 ## [0.6.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.6.2) - 2020-05-09
 
 - Fix `tileMaxHeight` bug in `ExpandableTile` by setting the value only if the default value is 0
