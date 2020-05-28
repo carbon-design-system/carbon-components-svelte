@@ -22,6 +22,19 @@
   import CaretRight24 from 'carbon-icons-svelte/lib/CaretRight24';
   import { cx, fillArray } from '../../lib';
   import Select, { SelectItem } from '../Select';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
+  const handlePaginationChange = (type, value) => {
+      if (type === 'pageSize') {
+        page = 1;
+        pageSize = value;
+      } else {
+        page = value;
+      }
+
+      dispatch('update', {pageSize, page});
+  };  
 
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = fillArray(totalPages);
@@ -43,9 +56,9 @@
       labelText=""
       hideLabel
       noLabel
-      inline
-      on:change={() => {
-        page = 1;
+      inline      
+      on:blur={() => {
+        handlePaginationChange('pageSize', pageSize);
       }}
       bind:selected={pageSize}>
       {#each pageSizes as size, i (size)}
@@ -68,6 +81,9 @@
         labelText={`Page number, of ${totalPages} pages`}
         inline
         hideLabel
+        on:blur={() => {
+          handlePaginationChange('page', page);          
+        }}
         bind:selected={page}>
         {#each selectItems as size, i (size)}
           <SelectItem value={size + 1} text={(size + 1).toString()} />
@@ -82,6 +98,7 @@
       class={cx('--pagination__button', '--pagination__button--backward', backButtonDisabled && '--pagination__button--no-index')}
       on:click={() => {
         page--;
+        handlePaginationChange('page', page);        
       }}
       aria-label={backwardText}
       disabled={backButtonDisabled}>
@@ -93,6 +110,7 @@
       aria-label={forwardText}
       on:click={() => {
         page++;
+        handlePaginationChange('page', page);        
       }}
       disabled={forwardButtonDisabled}>
       <CaretRight24 />
