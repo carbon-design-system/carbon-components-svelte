@@ -17,7 +17,7 @@
   export let pageText = page => `page ${page}`;
   export let style = undefined;
   export let totalItems = 0;
-  
+
   import CaretLeft24 from 'carbon-icons-svelte/lib/CaretLeft24';
   import CaretRight24 from 'carbon-icons-svelte/lib/CaretRight24';
   import { cx, fillArray } from '../../lib';
@@ -71,7 +71,7 @@
         class={cx('--select__page-number')}
         labelText={`Page number, of ${totalPages} pages`}
         inline
-        hideLabel        
+        hideLabel
         bind:selected={page}>
         {#each selectItems as size, i (size)}
           <SelectItem value={size + 1} text={(size + 1).toString()} />
@@ -85,7 +85,7 @@
       type="button"
       class={cx('--pagination__button', '--pagination__button--backward', backButtonDisabled && '--pagination__button--no-index')}
       on:click|capture={() => {
-        page--;        
+        page--;
       }}
       aria-label={backwardText}
       disabled={backButtonDisabled}>
@@ -96,7 +96,7 @@
       class={cx('--pagination__button', '--pagination__button--forward', forwardButtonDisabled && '--pagination__button--no-index')}
       aria-label={forwardText}
       on:click|capture={() => {
-        page++;        
+        page++;
       }}
       disabled={forwardButtonDisabled}>
       <CaretRight24 />
