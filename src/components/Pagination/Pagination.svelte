@@ -84,7 +84,7 @@
     <button
       type="button"
       class={cx('--pagination__button', '--pagination__button--backward', backButtonDisabled && '--pagination__button--no-index')}
-      on:click|capture={() => {
+      on:click={() => {
         page--;
       }}
       aria-label={backwardText}
@@ -95,7 +95,7 @@
       type="button"
       class={cx('--pagination__button', '--pagination__button--forward', forwardButtonDisabled && '--pagination__button--no-index')}
       aria-label={forwardText}
-      on:click|capture={() => {
+      on:click={() => {
         page++;
       }}
       disabled={forwardButtonDisabled}>
