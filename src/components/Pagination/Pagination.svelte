@@ -50,7 +50,10 @@
       labelText=""
       hideLabel
       noLabel
-      inline      
+      inline
+      on:change={() => {
+        page = 1;
+      }} 
       bind:selected={pageSize}>
       {#each pageSizes as size, i (size)}
         <SelectItem value={size} text={size.toString()} />
