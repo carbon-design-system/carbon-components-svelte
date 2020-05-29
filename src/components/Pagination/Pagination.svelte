@@ -17,24 +17,18 @@
   export let pageText = page => `page ${page}`;
   export let style = undefined;
   export let totalItems = 0;
-
+  
   import CaretLeft24 from 'carbon-icons-svelte/lib/CaretLeft24';
   import CaretRight24 from 'carbon-icons-svelte/lib/CaretRight24';
   import { cx, fillArray } from '../../lib';
   import Select, { SelectItem } from '../Select';
-  import { createEventDispatcher } from 'svelte';
+  import { afterUpdate, createEventDispatcher } from 'svelte';  
 
   const dispatch = createEventDispatcher();
-  const handlePaginationChange = (type, value) => {
-      if (type === 'pageSize') {
-        page = 1;
-        pageSize = value;
-      } else {
-        page = value;
-      }
 
-      dispatch('update', {pageSize, page});
-  };  
+  afterUpdate(() => {
+    dispatch('update', {pageSize, page});
+	});
 
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = fillArray(totalPages);
@@ -57,9 +51,6 @@
       hideLabel
       noLabel
       inline      
-      on:blur={() => {
-        handlePaginationChange('pageSize', pageSize);
-      }}
       bind:selected={pageSize}>
       {#each pageSizes as size, i (size)}
         <SelectItem value={size} text={size.toString()} />
@@ -80,10 +71,7 @@
         class={cx('--select__page-number')}
         labelText={`Page number, of ${totalPages} pages`}
         inline
-        hideLabel
-        on:blur={() => {
-          handlePaginationChange('page', page);          
-        }}
+        hideLabel        
         bind:selected={page}>
         {#each selectItems as size, i (size)}
           <SelectItem value={size + 1} text={(size + 1).toString()} />
@@ -96,9 +84,8 @@
     <button
       type="button"
       class={cx('--pagination__button', '--pagination__button--backward', backButtonDisabled && '--pagination__button--no-index')}
-      on:click={() => {
-        page--;
-        handlePaginationChange('page', page);        
+      on:click|capture={() => {
+        page--;        
       }}
       aria-label={backwardText}
       disabled={backButtonDisabled}>
@@ -108,9 +95,8 @@
       type="button"
       class={cx('--pagination__button', '--pagination__button--forward', forwardButtonDisabled && '--pagination__button--no-index')}
       aria-label={forwardText}
-      on:click={() => {
-        page++;
-        handlePaginationChange('page', page);        
+      on:click|capture={() => {
+        page++;        
       }}
       disabled={forwardButtonDisabled}>
       <CaretRight24 />
