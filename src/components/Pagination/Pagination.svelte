@@ -28,7 +28,7 @@
 
   afterUpdate(() => {
     dispatch('update', {pageSize, page});
-	});
+  });
 
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = fillArray(totalPages);
