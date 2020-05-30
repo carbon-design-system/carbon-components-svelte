@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.7.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.0) - 2020-05-29
+
+- Dispatch "update" event in `Pagination` for `pageSize`, `page` variables
+  ([PR#185](https://github.com/IBM/carbon-components-svelte/pull/185), thanks [@mabentley85](https://github.com/mabentley85)!)
+
+- Drop carbon-components as a peer dependency
+
 ## [0.6.3](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.6.3) - 2020-05-26
 
 - Replace `"javascript:void(0)"` with `"/"` in `HeaderNavMenu` href attribute to fix a11y "not a valid attribute" warning; `href` is an exported property that can be overriden by the consumer
