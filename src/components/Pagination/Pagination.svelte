@@ -22,6 +22,13 @@
   import CaretRight24 from 'carbon-icons-svelte/lib/CaretRight24';
   import { cx, fillArray } from '../../lib';
   import Select, { SelectItem } from '../Select';
+  import { afterUpdate, createEventDispatcher } from 'svelte';  
+
+  const dispatch = createEventDispatcher();
+
+  afterUpdate(() => {
+    dispatch('update', {pageSize: parseInt(pageSize), page: parseInt(page)});
+  });
 
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = fillArray(totalPages);
