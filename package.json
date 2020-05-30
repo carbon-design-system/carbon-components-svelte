@@ -16,9 +16,6 @@
     "prepack": "rollup -c"
   },
   "sideEffects": false,
-  "peerDependencies": {
-    "carbon-components": "~10.9.x"
-  },
   "dependencies": {
     "carbon-icons-svelte": "10.9.3",
     "flatpickr": "4.6.3"
