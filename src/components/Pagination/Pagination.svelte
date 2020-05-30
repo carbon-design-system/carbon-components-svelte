@@ -27,7 +27,7 @@
   const dispatch = createEventDispatcher();
 
   afterUpdate(() => {
-    dispatch('update', {pageSize, page});
+    dispatch('update', {pageSize: parseInt(pageSize), page: parseInt(page)});
   });
 
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
