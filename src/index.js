@@ -100,6 +100,7 @@ import Tile, {
   ClickableTile,
   ExpandableTile,
   SelectableTile,
+  RadioTile,
   TileGroup,
 } from "./components/Tile";
 import TimePicker, { TimePickerSelect } from "./components/TimePicker";
@@ -206,6 +207,7 @@ export {
   RadioButton,
   RadioButtonSkeleton,
   RadioButtonGroup,
+  RadioTile,
   Search,
   SearchSkeleton,
   SelectableTile,

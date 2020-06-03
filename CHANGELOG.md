@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.7.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.1) - 2020-06-03
+
+- Add missing RadioTile export
+
 ## [0.7.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.0) - 2020-05-29
 
 - Dispatch "update" event in `Pagination` for `pageSize`, `page` variables
