@@ -10,6 +10,7 @@
   export let size = undefined;
   export let sortable = false;
   export let style = undefined;
+  export let sortCurrentData = true;
 
   import { createEventDispatcher, setContext } from 'svelte';
   import { writable, derived } from 'svelte/store';
@@ -48,7 +49,7 @@
   $: ascending = $sortHeader.sortDirection === 'ascending';
   $: sortKey = $sortHeader.key;
   $: sorting = sortable && sortKey != null;
-  $: if (sorting) {
+  $: if (sorting && sortCurrentData) {
     if ($sortHeader.sortDirection === 'none') {
       sortedRows = rows;
     } else {
@@ -79,10 +80,10 @@
             <TableHeader
               on:click={() => {
                 dispatch('click', { header });
-                dispatch('click:header', header);
                 let active = header.key === $sortHeader.key;
                 let currentSortDirection = active ? $sortHeader.sortDirection : 'none';
                 let sortDirection = sortDirectionMap[currentSortDirection];
+                dispatch('click:header', {header, sortDirection});
                 sortHeader.set({
                   id: sortDirection === 'none' ? null : $thKeys[header.key],
                   key: header.key,
