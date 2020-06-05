@@ -10,7 +10,6 @@
   export let size = undefined;
   export let sortable = false;
   export let style = undefined;
-  export let sortCurrentData = true;
 
   import { createEventDispatcher, setContext } from 'svelte';
   import { writable, derived } from 'svelte/store';
@@ -49,7 +48,7 @@
   $: ascending = $sortHeader.sortDirection === 'ascending';
   $: sortKey = $sortHeader.key;
   $: sorting = sortable && sortKey != null;
-  $: if (sorting && sortCurrentData) {
+  $: if (sorting) {
     if ($sortHeader.sortDirection === 'none') {
       sortedRows = rows;
     } else {
