@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.7.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.2) - 2020-06-04
+
+- Add sort direction to dispatched "click:header" event for a sortable `DataTable`
+  ([PR#188](https://github.com/IBM/carbon-components-svelte/pull/188), thanks [@mabentley85](https://github.com/mabentley85)!)
+
 ## [0.7.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.1) - 2020-06-03
 
 - Add missing RadioTile export
