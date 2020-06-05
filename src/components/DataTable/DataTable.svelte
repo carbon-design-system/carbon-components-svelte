@@ -79,10 +79,10 @@
             <TableHeader
               on:click={() => {
                 dispatch('click', { header });
-                dispatch('click:header', header);
                 let active = header.key === $sortHeader.key;
                 let currentSortDirection = active ? $sortHeader.sortDirection : 'none';
                 let sortDirection = sortDirectionMap[currentSortDirection];
+                dispatch('click:header', {header, sortDirection});
                 sortHeader.set({
                   id: sortDirection === 'none' ? null : $thKeys[header.key],
                   key: header.key,
