@@ -1479,10 +1479,10 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001012, caniuse-lite@^1.0.30001015:
   integrity sha512-EDnZyOJ6eYh6lHmCvCdHAFbfV4KJ9lSdfv4h/ppEhrU/Yudkl7jujwMZ1we6RX7DXqBfT04pVMQ4J+1wcTlsKA==
 
 carbon-components-svelte@../:
-  version "0.3.3"
+  version "0.7.2"
   dependencies:
-    carbon-icons-svelte "^10.8.2"
-    flatpickr "^4.6.3"
+    carbon-icons-svelte "10.9.3"
+    flatpickr "4.6.3"
 
 carbon-components@^10.9.0:
   version "10.9.0"
@@ -1494,10 +1494,10 @@ carbon-components@^10.9.0:
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
 
-carbon-icons-svelte@^10.8.2:
-  version "10.8.2"
-  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-10.8.2.tgz#b1432c8de8a19210f50b42e1498b08d01c25b86b"
-  integrity sha512-5kPCxcED9OXV96NRFKqWbUGRfBf4qX0XcvYqV4c5IL8yGaJGWu1qows7ldENqhwVGXrfsBNQ7tDoR0fIC3CSsw==
+carbon-icons-svelte@10.9.3:
+  version "10.9.3"
+  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-10.9.3.tgz#bbd297c52b581884c5cb52727830045c517637bf"
+  integrity sha512-uyKxmeAotF77O+Nej8a+GHNIiwbCJVA6fS64Eg6h8pnXFIFJ4AlZRsKK9uSgA1rlVZ2y2bEHFsIkzxZ0yZjyCQ==
 
 carbon-icons@^7.0.7:
   version "7.0.7"
@@ -2758,7 +2758,7 @@ flatpickr@4.6.1:
   resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.6.1.tgz#9eb498ab805dd27f5ae02e1ac6ac6c099ce45e94"
   integrity sha512-3ULSxbXmcMIRzer/2jLNweoqHpwDvsjEawO2FUd9UFR8uPwLM+LruZcPDpuZStcEgbQKhuFOfXo4nYdGladSNw==
 
-flatpickr@^4.6.3:
+flatpickr@4.6.3:
   version "4.6.3"
   resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.6.3.tgz#15a8b76b6e34e3a072861250503a5995b9d3bc60"
   integrity sha512-007VucCkqNOMMb9ggRLNuJowwaJcyOh4sKAFcdGfahfGc7JQbf94zSzjdBq/wVyHWUEs5o3+idhFZ0wbZMRmVQ==
@@ -6814,9 +6814,9 @@ websocket-driver@>=0.5.1:
     websocket-extensions ">=0.1.1"
 
 websocket-extensions@>=0.1.1:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.3.tgz#5d2ff22977003ec687a4b87073dfbbac146ccf29"
-  integrity sha512-nqHUnMXmBzT0w570r2JpJxfiSD1IzoI+HGVdd3aZ0yNi3ngvQ4jv1dtHt5VGxfI2yj5yqImPhOK4vmIh2xMbGg==
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.4.tgz#7f8473bc839dfd87608adb95d7eb075211578a42"
+  integrity sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==
 
 which-module@^1.0.0:
   version "1.0.0"
