@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.7.3](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.3) - 2020-06-16
+
+- Fix `OverflowMenu` to focus button only after closing the menu ([PR#192](https://github.com/IBM/carbon-components-svelte/pull/192))
+
 ## [0.7.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.2) - 2020-06-04
 
 - Add sort direction to dispatched "click:header" event for a sortable `DataTable`
