@@ -29,6 +29,7 @@
   let buttonRef = undefined;
   let buttonWidth = undefined;
   let menuRef = undefined;
+  let didOpen = false;
 
   setContext('OverflowMenu', {
     focusedId,
@@ -85,10 +86,15 @@
       }
     }
 
-    if (!open) {
+    if (didOpen && !open) {
       buttonRef.focus();
       items.set([]);
       currentId.set(undefined);
+      currentIndex.set(0);
+    }
+
+    if (!didOpen) {
+      didOpen = true;
     }
   });
 
