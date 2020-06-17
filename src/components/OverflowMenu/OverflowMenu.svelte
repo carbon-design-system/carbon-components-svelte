@@ -93,7 +93,7 @@
       currentIndex.set(0);
     }
 
-    if (!didOpen) {
+    if (!didOpen && open) {
       didOpen = true;
     }
   });
