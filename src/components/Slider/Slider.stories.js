@@ -6,6 +6,7 @@ export default { title: 'Slider', decorators: [withKnobs] };
 export const Default = () => ({
   Component,
   props: {
+    id: text('Slider id', 'slider-id'),
     name: text('Form item name (name)', ''),
     inputType: text('The form element type (inputType)', 'number'),
     ariaLabelInput: text(

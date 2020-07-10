@@ -8,6 +8,7 @@
   export let hideLabel = false;
   export let iconDescription = '';
   export let id = Math.random();
+  export let name = undefined;
   export let invalid = false;
   export let invalidText = 'Provide invalidText';
   export let mobile = false;
@@ -96,6 +97,7 @@
           }}
           {disabled}
           {id}
+          {name}
           {max}
           {min}
           {step}

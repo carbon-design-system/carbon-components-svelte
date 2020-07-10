@@ -5,6 +5,7 @@
   export let helperText = '';
   export let hideLabel = false;
   export let id = Math.random();
+  export let name = undefined;
   export let inline = false;
   export let invalid = false;
   export let invalidText = '';
@@ -62,7 +63,9 @@
               selectedValue.set(target.value);
             }}
             on:blur
-            {id}>
+            {id}
+            {name}
+          >
             <slot />
           </select>
           <ChevronDown16 class={cx('--select__arrow')} />

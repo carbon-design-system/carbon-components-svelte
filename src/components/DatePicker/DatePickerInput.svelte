@@ -12,6 +12,7 @@
   export let placeholder = '';
   export let style = undefined;
   export let type = 'text';
+  export let name = undefined;
 
   import { getContext, onMount } from 'svelte';
   import Calendar16 from 'carbon-icons-svelte/lib/Calendar16';
@@ -71,6 +72,7 @@
         blurInput(relatedTarget);
       }}
       {id}
+      {name}
       {placeholder}
       {type}
       {pattern}

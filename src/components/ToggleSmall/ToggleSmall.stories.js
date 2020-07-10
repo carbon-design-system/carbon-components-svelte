@@ -10,7 +10,9 @@ export const Default = () => ({
     'aria-label': text('ARIA label of the toggle (aria-label)', ''),
     labelA: text('Label for untoggled state (labelA)', 'Off'),
     labelB: text('Label for toggled state (labelB)', 'On'),
-    disabled: boolean('Disabled (disabled)', false)
+    disabled: boolean('Disabled (disabled)', false),
+    id: text('ToggleSmall id', 'toggle-small-id'),
+    name: text('ToggleSmall name', 'toggle-small-name')
   }
 });
 
@@ -24,7 +26,9 @@ export const Toggled = () => ({
     'aria-label': text('ARIA label of the toggle (aria-label)', ''),
     labelA: text('Label for untoggled state (labelA)', 'Off'),
     labelB: text('Label for toggled state (labelB)', 'On'),
-    disabled: boolean('Disabled (disabled)', false)
+    disabled: boolean('Disabled (disabled)', false),
+    id: text('ToggleSmall id', 'toggle-small-id'),
+    name: text('ToggleSmall name', 'toggle-small-name')
   }
 });
 

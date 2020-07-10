@@ -17,7 +17,9 @@ export const Default = () => ({
         'A valid value is required'
       ),
       labelText: text('Label text (helperText)', 'Select'),
-      helperText: text('Helper text (helperText)', 'Optional helper text.')
+      helperText: text('Helper text (helperText)', 'Optional helper text.'),
+      id: text('Select id', 'select-id'),
+      name: text('Select name', 'select-name')
     },
     group: {
       disabled: boolean('Disabled (disabled in <SelectItemGroup>)', false)

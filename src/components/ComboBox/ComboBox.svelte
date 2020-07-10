@@ -18,6 +18,7 @@
   export let titleText = '';
   export let translateWithId = undefined;
   export let value = '';
+  export let name = undefined;
 
   import { afterUpdate } from 'svelte';
   import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';
@@ -100,6 +101,7 @@
         open = true;
       }}
       {id}
+      {name}
       {disabled}
       {translateWithId}>
       <input

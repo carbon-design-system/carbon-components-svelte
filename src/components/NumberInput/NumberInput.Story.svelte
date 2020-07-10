@@ -14,7 +14,8 @@
   {:else}
     <NumberInput
       {...$$props}
-      id="slider"
+      id="number-input-id"
+      name="number-input-id"
       bind:value
       on:change={({ detail }) => {
         console.log('on:change', detail);

@@ -6,6 +6,7 @@
   export let filterItem = (item, value) => item.text.toLowerCase().includes(value.toLowerCase());
   export let helperText = '';
   export let id = Math.random();
+  export let name = undefined;
   export let invalid = false;
   export let invalidText = '';
   export let items = [];
@@ -236,6 +237,7 @@
           {disabled}
           {placeholder}
           {id}
+          {name}
           value={inputValue} />
         {#if invalid}
           <WarningFilled16 class={cx('--list-box__invalid-icon')} />

@@ -16,7 +16,7 @@
     {#if story === 'skeleton'}
       <SelectSkeleton {...$$props} />
     {:else}
-      <Select {...$$props.select} id="select-1" bind:selected>
+      <Select {...$$props.select} id="select-id" name="select-name" bind:selected>
         <SelectItem value="placeholder-item" text="Choose an option" disabled hidden />
         <SelectItemGroup {...$$props.group} label="Category 1">
           <SelectItem value="option-1" text="Option 1" />

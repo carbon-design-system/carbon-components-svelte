@@ -21,7 +21,9 @@ export const Default = () => ({
         'Form validation UI content (invalidText in <TimePicker>)',
         'A valid value is required'
       ),
-      maxlength: number('Maximum length (maxlength in <TimePicker>)', 5)
+      maxlength: number('Maximum length (maxlength in <TimePicker>)', 5),
+      id: text('TimePicker id', 'time-picker-id'),
+      name: text('TimePicker name', 'time-picker-name'),
     },
     select: {
       disabled: boolean('Disabled (disabled in <TimePickerSelect>)', false),
@@ -30,7 +32,9 @@ export const Default = () => ({
       iconDescription: text(
         'Trigger icon description (iconDescription in <TimePickerSelect>)',
         'open list of options'
-      )
+      ),
+      id: text('TimePickerSelect id', 'time-picker-select-id'),
+      name: text('TimePickerSelect name', 'time-picker-select-name'),
     }
   }
 });

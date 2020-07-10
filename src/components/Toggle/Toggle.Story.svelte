@@ -14,7 +14,7 @@
 
 <Layout>
   {#if story === 'toggled'}
-    <Toggle {...$$props} id="toggle-1" bind:toggled />
+    <Toggle {...$$props} id="toggle-id" name="toggle-name" bind:toggled />
   {:else if story === 'skeleton'}
     <ToggleSkeleton />
   {:else}

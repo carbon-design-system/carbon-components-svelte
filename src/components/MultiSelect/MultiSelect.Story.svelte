@@ -32,7 +32,8 @@
   <div style="width: 300px; margin-top: 2rem;">
     <MultiSelect
       {...$$props}
-      id="multiselect"
+      id="multi-select-id"
+      name="multi-select-name"
       placeholder="Filter..."
       bind:selectedIds
       bind:items
