@@ -14,7 +14,8 @@ export const Default = () => ({
     invalidText: text('Content of form validation UI (invalidText)', 'A valid value is required'),
     helperText: text('Helper text (helperText)', 'Optional helper text.'),
     placeholder: text('Placeholder text (placeholder)', 'Placeholder text.'),
-    id: 'text-input'
+    id: text('TextInput id', 'text-input-id'),
+    name: text('TextInput name', 'text-input-name')
   }
 });
 
@@ -30,7 +31,8 @@ export const TogglePasswordVisibility = () => ({
     invalidText: text('Content of form validation UI (invalidText)', 'A valid value is required'),
     helperText: text('Helper text (helperText)', 'Optional helper text.'),
     placeholder: text('Placeholder text (placeholder)', 'Placeholder text.'),
-    id: 'text-input',
+    id: text('TextInput id', 'text-input-id'),
+    name: text('TextInput name', 'text-input-name'),
     tooltipPosition: select(
       'Tooltip position (tooltipPosition)',
       ['top', 'right', 'bottom', 'left'],
@@ -64,7 +66,8 @@ export const ControlledTogglePasswordVisibility = () => ({
     invalidText: text('Content of form validation UI (invalidText)', 'A valid value is required'),
     helperText: text('Helper text (helperText)', 'Optional helper text.'),
     placeholder: text('Placeholder text (placeholder)', 'Placeholder text.'),
-    id: 'text-input',
+    id: text('TextInput id', 'text-input-id'),
+    name: text('TextInput name', 'text-input-name'),
     tooltipPosition: select(
       'Tooltip position (tooltipPosition)',
       ['top', 'right', 'bottom', 'left'],

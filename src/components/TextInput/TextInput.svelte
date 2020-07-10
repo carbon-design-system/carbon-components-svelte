@@ -5,6 +5,7 @@
   export let helperText = '';
   export let hideLabel = false;
   export let id = Math.random();
+  export let name = Math.random();
   export let invalid = false;
   export let invalidText = '';
   export let labelText = '';
@@ -56,6 +57,7 @@
       on:focus
       on:blur
       {id}
+      {name}
       {placeholder}
       {type}
       {value}

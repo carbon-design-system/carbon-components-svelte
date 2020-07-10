@@ -14,7 +14,7 @@
   {:else}
     <Slider
       {...$$props}
-      id="slider"
+      id="slider-id"
       bind:value
       on:change={({ detail }) => {
         console.log('on:change', detail);

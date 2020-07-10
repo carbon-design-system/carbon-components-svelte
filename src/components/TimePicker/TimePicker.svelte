@@ -4,6 +4,7 @@
   export let disabled = false;
   export let hideLabel = false;
   export let id = Math.random();
+  export let name = Math.random();
   export let invalid = false;
   export let invalidText = 'Invalid time format.';
   export let labelText = '';
@@ -42,6 +43,7 @@
         {placeholder}
         {maxlength}
         {id}
+        {name}
         {type}
         {value}
         {disabled} />

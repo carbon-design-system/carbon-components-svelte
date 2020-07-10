@@ -18,6 +18,7 @@ export const Default = () => ({
     },
     datePickerInput: {
       id: 'date-picker-input-id',
+      name: 'date-picker-input-name',
       labelText: text('Label text (labelText in <DatePickerInput>)', 'Date Picker label'),
       hideLabel: boolean('Hide label (hideLabel)', false),
       pattern: select('The date format (pattern in <DatePickerInput>)', patterns, 'd{1,2}/d{4}'),

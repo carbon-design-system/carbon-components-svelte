@@ -6,7 +6,8 @@ export default { title: 'NumberInput', decorators: [withKnobs] };
 export const Default = () => ({
   Component,
   props: {
-    id: 'number-input',
+    id: text('NumberInput id', 'number-input-id'),
+    name: text('NumberInput name', 'number-input-name'),
     label: text('Label (label)', 'Number Input label'),
     hideLabel: boolean('Hide label (hideLabel)', false),
     min: number('Minimum value (min)', 0),

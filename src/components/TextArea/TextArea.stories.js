@@ -6,7 +6,8 @@ export default { title: 'TextArea', decorators: [withKnobs] };
 export const Default = () => ({
   Component,
   props: {
-    id: 'text-area',
+    id: text('TextArea id', 'text-area-id'),
+    name: text('TextArea name', 'text-area-name'),
     disabled: boolean('Disabled (disabled)', false),
     light: boolean('Light variant (light)', false),
     hideLabel: boolean('No label (hideLabel)', false),

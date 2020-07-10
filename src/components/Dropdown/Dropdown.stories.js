@@ -17,7 +17,8 @@ const sizes = {
 export const Default = () => ({
   Component,
   props: {
-    id: text('Dropdown ID (id)', 'carbon-dropdown-example'),
+    id: text('Dropdown id', 'carbon-dropdown-id'),
+    name: text('Dropdown name', 'carbon-dropdown-name'),
     type: select('Dropdown type (type)', types, 'default'),
     size: select('Field size (size)', sizes, '') || undefined,
     label: text('Label (label)', 'Dropdown menu options'),

@@ -17,7 +17,8 @@ const sizes = {
 export const Default = () => ({
   Component,
   props: {
-    id: 'multiselect',
+    id: text('MultiSelect id', 'multi-select-id'),
+    name: text('MultiSelect name', 'multi-select-name'),
     titleText: text('Title (titleText)', 'Multiselect Title'),
     helperText: text('Helper text (helperText)', 'This is not helper text'),
     filterable: boolean('Filterable (filterable)', false),

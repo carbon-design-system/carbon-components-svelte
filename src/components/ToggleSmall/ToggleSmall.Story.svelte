@@ -14,10 +14,10 @@
 
 <Layout>
   {#if story === 'toggled'}
-    <ToggleSmall {...$$props} id="toggle-1" bind:toggled />
+    <ToggleSmall {...$$props} id="toggle-small-id" name="toggle-small-name" bind:toggled />
   {:else if story === 'skeleton'}
     <ToggleSmallSkeleton />
   {:else}
-    <ToggleSmall {...$$props} id="toggle-1" />
+    <ToggleSmall {...$$props} id="toggle-small-id" name="toggle-small-name" />
   {/if}
 </Layout>

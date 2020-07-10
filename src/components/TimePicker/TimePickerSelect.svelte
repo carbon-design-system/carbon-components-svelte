@@ -5,6 +5,7 @@
   export let hideLabel = true;
   export let iconDescription = 'Open list of options';
   export let id = Math.random();
+  export let name = Math.random();
   export let labelText = '';
   export let style = undefined;
   export let value = '';
@@ -39,6 +40,7 @@
       selectedValue.set(target.value);
     }}
     {id}
+    {name}
     {disabled}
     {value}>
     <slot />

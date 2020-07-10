@@ -19,6 +19,7 @@ export const Default = () => ({
     light: boolean('Light (light)', false),
     disabled: boolean('Disabled (disabled)', false),
     invalid: boolean('Invalid (invalid)', false),
-    invalidText: text('Invalid text (invalidText)', 'A valid value is required')
+    invalidText: text('Invalid text (invalidText)', 'A valid value is required'),
+    name: 'combo-box-name'
   }
 });
