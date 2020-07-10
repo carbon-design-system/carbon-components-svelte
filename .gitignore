@@ -7,4 +7,4 @@ yarn-debug.log*
 yarn-error.log*
 *.tgz
 .vscode
-.idea/*
+.idea

@@ -3,7 +3,7 @@
   export { className as class };
   export let disabled = false;
   export let id = Math.random();
-  export let name = Math.random();
+  export let name = undefined;
   export let labelA = 'Off';
   export let labelB = 'On';
   export let labelText = '';

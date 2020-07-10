@@ -4,7 +4,7 @@
   export let disabled = false;
   export let helperText = '';
   export let id = Math.random();
-  export let name = Math.random();
+  export let name = undefined;
   export let inline = false;
   export let invalid = false;
   export let invalidText = '';
