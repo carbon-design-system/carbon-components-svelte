@@ -2,10 +2,11 @@
   export let type = undefined;
   export let icon = undefined;
   export let isOpen = undefined;
+  export let text = undefined;
 
   let elRigthPanel = undefined;
 
-  import { cx } from '../../../lib';
+  import { cx, optional } from '../../../lib';
   import Icon from '../../Icon/Icon.svelte';
   import { slide } from 'svelte/transition';
 
@@ -23,12 +24,13 @@
 <div>
   <button
     aria-label={type}
-    class={cx('--header__action', isOpen && '--header__action--active')}
+    class={cx('--header__action', isOpen && '--header__action--active', text && '--header__action--text')}
     type="button"
     on:click={() => {
       isOpen = true;
     }}>
     <Icon {...icon} />
+    {optional(text)}
   </button>
   {#if isOpen}
     <div
