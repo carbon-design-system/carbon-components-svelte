@@ -14,3 +14,5 @@ export { default as SideNavItems } from './SideNav/SideNavItems.svelte';
 export { default as SideNavLink } from './SideNav/SideNavLink.svelte';
 export { default as SideNavMenu } from './SideNav/SideNavMenu.svelte';
 export { default as SideNavMenuItem } from './SideNav/SideNavMenuItem.svelte';
+export { default as Content } from './Content.svelte';
+export { default as SkipToContent } from './SkipToContent.svelte';
