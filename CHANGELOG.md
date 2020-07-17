@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.7.5](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.5) - 2020-07-17
+
+- Add `name` prop to form-related components
+  ([PR#199](https://github.com/IBM/carbon-components-svelte/pull/199), thanks [@softartisan](https://github.com/softartisan))
+
+- Add `Content`, `SkipToContent` components to the UI Shell
+
+- Forward `on:click` event to UI Shell `Header` component
+
 ## [0.7.4](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.4) - 2020-06-17
 
 - Fix `OverflowMenu` focus behavior to set `didOpen` only if `open` is true ([PR#193](https://github.com/IBM/carbon-components-svelte/pull/193))
