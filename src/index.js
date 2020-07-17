@@ -126,6 +126,8 @@ import {
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
+  Content,
+  SkipToContent,
 } from "./components/UIShell";
 import UnorderedList from "./components/UnorderedList";
 
@@ -266,4 +268,6 @@ export {
   SideNavMenu,
   SideNavMenuItem,
   UnorderedList,
+  Content,
+  SkipToContent,
 };
