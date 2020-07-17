@@ -20,7 +20,7 @@
   {#if winWidth < 1056}
     <HamburgerMenu bind:isOpen={isSideNavOpen} />
   {/if}
-  <a class={cx('--header__name')} {href}>
+  <a class={cx('--header__name')} {href} on:click>
     <span class={cx('--header__name--prefix')}>{company}</span>
     &nbsp;{platformName}
   </a>
