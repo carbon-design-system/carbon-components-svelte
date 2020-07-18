@@ -19,18 +19,39 @@
   }
 </script>
 
+<style>
+    .action-text {
+        font-size: 16px;
+        line-height: 20px;
+        text-decoration: none;
+        color: #fff;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .action-text > span {
+        margin-left: 0.75rem;
+        vertical-align: top;
+    }
+</style>
+
 <svelte:window on:mouseup={mouseUp} />
 
 <div>
   <button
     aria-label={type}
-    class={cx('--header__action', isOpen && '--header__action--active', text && '--header__action--text')}
+    class={cx('--header__action', isOpen && '--header__action--active')}
+    class:action-text={text}
     type="button"
     on:click={() => {
       isOpen = true;
     }}>
     <Icon {...icon} />
-    {optional(text)}
+    <slot name="custom-el">
+      {#if text}
+        <span>{text}</span>
+      {/if}
+    </slot>
   </button>
   {#if isOpen}
     <div
