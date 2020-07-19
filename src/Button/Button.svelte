@@ -26,7 +26,7 @@
     tabindex,
     disabled,
     href,
-    style: $$restProps.style,
+    ...$$restProps,
     class: [
       "bx--btn",
       size === "field" && "bx--btn--field",
