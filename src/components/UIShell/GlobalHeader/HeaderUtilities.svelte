@@ -1,7 +1,3 @@
-<script>
-  import { cx } from '../../../lib';
-</script>
-
-<div class={cx('--header__global')}>
+<div class:bx--header__global={true}>
   <slot />
 </div>

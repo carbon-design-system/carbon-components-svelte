@@ -1,24 +1,25 @@
 <script>
+  export let isSelected = false;
   export let href = undefined;
   export let text = undefined;
   export let icon = undefined;
-  export let isSelected = false;
 
-  import { cx } from '../../../lib';
-  import Icon from '../../Icon/Icon.svelte';
+  import { Icon } from "../../Icon";
 </script>
 
-<li class={cx('--side-nav__item')}>
+<li class:bx--side-nav__item={true}>
   <a
-    {href}
-    class={cx('--side-nav__link', isSelected && '--side-nav__link--current')}
     aria-current={isSelected ? 'page' : ''}
+    {href}
+    class:bx--side-nav__link={true}
+    class:bx--side-nav__link--current={isSelected}
+    {...$$restProps}
     on:click>
-    <div class={cx('--side-nav__icon', '--side-nav__icon--small')}>
+    <div class:bx--side-nav__icon={true} class:bx--side-nav__icon--small={true}>
       {#if icon}
         <Icon {...icon} />
       {/if}
     </div>
-    <span class={cx('--side-nav__link-text')}>{text}</span>
+    <span class:bx--side-nav__link-text={true}>{text}</span>
   </a>
 </li>

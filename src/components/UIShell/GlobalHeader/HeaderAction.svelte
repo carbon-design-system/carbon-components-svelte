@@ -4,45 +4,46 @@
   export let isOpen = undefined;
   export let text = undefined;
 
-  let elRigthPanel = undefined;
+  import { Icon } from "../../Icon";
+  import { slide } from "svelte/transition";
 
-  import { cx } from '../../../lib';
-  import Icon from '../../Icon/Icon.svelte';
-  import { slide } from 'svelte/transition';
-
-  function mouseUp({ target }) {
-    if (target && elRigthPanel) {
-      if (!elRigthPanel.contains(target)) {
-        isOpen = false;
-      }
-    }
-  }
+  let refPanel = null;
 </script>
 
 <style>
-    .action-text {
-        font-size: 16px;
-        line-height: 20px;
-        text-decoration: none;
-        color: #fff;
-        width: 100%;
-        padding: 0 1rem;
-    }
+  .action-text {
+    font-size: 16px;
+    line-height: 20px;
+    text-decoration: none;
+    color: #fff;
+    width: 100%;
+    padding: 0 1rem;
+  }
 
-    .action-text > span {
-        margin-left: 0.75rem;
-        vertical-align: top;
-    }
+  .action-text > span {
+    margin-left: 0.75rem;
+    vertical-align: top;
+  }
 </style>
 
-<svelte:window on:mouseup={mouseUp} />
+<svelte:window
+  on:mouseup={({ target }) => {
+    if (target && refPanel) {
+      if (!refPanel.contains(target)) {
+        isOpen = false;
+      }
+    }
+  }} />
 
 <div>
   <button
-    aria-label={type}
-    class={cx('--header__action', isOpen && '--header__action--active')}
-    class:action-text={text}
     type="button"
+    aria-label={type}
+    class:bx--header__action={true}
+    class:bx--header__action--active={isOpen}
+    class:action-text={text}
+    {...$$restProps}
+    on:click
     on:click={() => {
       isOpen = true;
     }}>
@@ -55,8 +56,9 @@
   </button>
   {#if isOpen}
     <div
-      bind:this={elRigthPanel}
-      class={cx('--header-panel', '--header-panel--expanded')}
+      bind:this={refPanel}
+      class:bx--header-panel={true}
+      class:bx--header-panel--expanded={true}
       transition:slide={{ duration: 200 }}>
       <slot />
     </div>

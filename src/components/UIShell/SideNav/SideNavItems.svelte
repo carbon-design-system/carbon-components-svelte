@@ -1,7 +1,3 @@
-<script>
-  import { cx } from '../../../lib';
-</script>
-
-<ul class={cx('--side-nav__items')}>
+<ul class:bx--side-nav__items={true}>
   <slot />
 </ul>

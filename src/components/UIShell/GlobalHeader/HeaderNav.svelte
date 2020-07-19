@@ -1,10 +1,9 @@
 <script>
   export let ariaLabel = undefined;
-  import { cx } from '../../../lib';
 </script>
 
-<nav aria-label={ariaLabel} class={cx('--header__nav')}>
-  <ul aria-label={ariaLabel} class={cx('--header__menu-bar')} role="menubar">
+<nav aria-label={ariaLabel} class:bx--header__nav={true} {...$$restProps}>
+  <ul role="menubar" aria-label={ariaLabel} class:bx--header__menu-bar={true}>
     <slot />
   </ul>
 </nav>

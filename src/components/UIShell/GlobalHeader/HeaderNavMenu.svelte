@@ -1,39 +1,37 @@
 <script>
-  export let text = undefined;
-  export let iconDescription = 'Expand/Collapse';
   export let expanded = false;
-  export let href = '/';
+  export let href = "/";
+  export let text = undefined;
+  export let iconDescription = "Expand/Collapse";
 
-  import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
-  import { cx } from '../../../lib';
+  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
 
-  let listItemSubMenu = undefined;
-
-  const mouseUp = ({ target }) => {
-    if (listItemSubMenu) {
-      if (listItemSubMenu.contains(target) || target === listItemSubMenu) {
-        expanded = !expanded;
-      } else {
-        if (expanded) {
-          expanded = false;
-        }
-      }
-    }
-  };
+  let ref = null;
 </script>
 
-<svelte:window on:mouseup={mouseUp} />
+<svelte:window
+  on:mouseup={({ target }) => {
+    if (ref.contains(target) || target === ref) {
+      expanded = !expanded;
+    } else {
+      if (expanded) {
+        expanded = false;
+      }
+    }
+  }} />
 
-<li class={cx('--header__submenu')} title={iconDescription}>
+<li class:bx--header__submenu={true} title={iconDescription}>
   <a
-    bind:this={listItemSubMenu}
-    aria-haspopup="menu"
-    aria-expanded={expanded}
-    class={cx('--header__menu-item', '--header__menu-title')}
+    bind:this={ref}
     role="menuitem"
     tabindex="0"
+    aria-haspopup="menu"
+    aria-expanded={expanded}
     aria-label={text}
     {href}
+    class:bx--header__menu-item={true}
+    class:bx--header__menu-title={true}
+    {...$$restProps}
     on:keydown
     on:keydown={({ key }) => {
       if (key === 'Enter') {
@@ -48,9 +46,11 @@
     on:focus
     on:blur>
     {text}
-    <ChevronDown16 class={cx('--header__menu-arrow')} aria-label={iconDescription} />
+    <ChevronDown16
+      aria-label={iconDescription}
+      class="bx--header__menu-arrow" />
   </a>
-  <ul aria-label={text} class={cx('--header__menu')} role="menu">
+  <ul role="menu" aria-label={text} class:bx--header__menu={true}>
     <slot />
   </ul>
 </li>

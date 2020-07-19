@@ -1,18 +1,17 @@
 <script>
+  export let isSelected = undefined;
   export let href = undefined;
   export let text = undefined;
-  export let isSelected = undefined;
-
-  import { cx } from '../../../lib';
 </script>
 
-<li class={cx('--side-nav__menu-item')} role="none">
+<li role="none" class:bx--side-nav__menu-item={true}>
   <a
-    {href}
-    class={cx('--side-nav__link')}
     role="menuitem"
     aria-current={isSelected ? 'page' : ''}
+    {href}
+    class:bx--side-nav__link={true}
+    {...$$restProps}
     on:click>
-    <span class={cx('--side-nav__link-text')}>{text}</span>
+    <span class:bx--side-nav__link-text={true}>{text}</span>
   </a>
 </li>

@@ -5,6 +5,7 @@
     border-bottom: 1px solid #525252;
     margin: 32px 1rem 8px;
   }
+
   .subject-divider span {
     font-size: 0.75rem;
     font-weight: 400;

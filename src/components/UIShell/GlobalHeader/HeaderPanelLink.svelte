@@ -1,11 +1,9 @@
 <script>
-  export let href;
-
-  import { cx } from '../../../lib';
+  export let href = undefined;
 </script>
 
-<li class={cx('--switcher__item')}>
-  <a class={cx('--switcher__item-link')} {href}>
+<li class:bx--switcher__item={true}>
+  <a {href} class:bx--switcher__item-link={true} {...$$restProps}>
     <slot />
   </a>
 </li>

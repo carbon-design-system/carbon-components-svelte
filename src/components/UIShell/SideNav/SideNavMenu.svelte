@@ -1,43 +1,37 @@
 <script>
+  export let expanded = false;
   export let text = undefined;
   export let icon = undefined;
-  export let expanded = false;
 
-  import { cx } from '../../../lib';
-  import Icon from '../../Icon/Icon.svelte';
-  import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
-
-  let iconProps = {
-    class: undefined,
-    skeleton: false,
-    render: ChevronDown16,
-    title: 'Open Menu',
-    tabindex: '0',
-    focusable: false,
-    style: undefined
-  };
+  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
+  import { Icon } from "../../Icon";
 </script>
 
-<li class={cx('--side-nav__item', '--side-nav__item--icon')}>
+<li class:bx--side-nav__item={true} class:bx--side-nav__item--icon={true}>
   <button
+    type="button"
     aria-haspopup="true"
     aria-expanded={expanded}
-    class={cx('--side-nav__submenu')}
-    type="button"
+    class:bx--side-nav__submenu={true}
+    {...$$restProps}
+    on:click
     on:click={() => {
       expanded = !expanded;
     }}>
-    <div class={cx('--side-nav__icon')}>
+    <div class:bx--side-nav__icon={true}>
       {#if icon}
         <Icon {...icon} />
       {/if}
     </div>
-    <span class={cx('--side-nav__submenu-title')}>{text}</span>
-    <div class={cx('--side-nav__icon', '--side-nav__icon--small', '--side-nav__submenu-chevron')}>
-      <Icon {...iconProps} />
+    <span class:bx--side-nav__submenu-title={true}>{text}</span>
+    <div
+      class:bx--side-nav__icon={true}
+      class:bx--side-nav__icon--small={true}
+      class:bx--side-nav__submenu-chevron={true}>
+      <Icon title="Open Menu" tabindex="0" render={ChevronDown16} />
     </div>
   </button>
-  <ul class={cx('--side-nav__menu')} role="menu">
+  <ul role="menu" class:bx--side-nav__menu={true}>
     <slot />
   </ul>
 </li>

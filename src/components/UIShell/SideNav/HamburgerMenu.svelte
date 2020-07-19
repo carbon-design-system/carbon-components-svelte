@@ -2,31 +2,24 @@
   export let ariaLabel = undefined;
   export let isOpen = false;
 
-  import { cx } from '../../../lib';
-  import Menu20 from 'carbon-icons-svelte/lib/Menu20';
-  import Icon from '../../Icon/Icon.svelte';
-  import { fly } from 'svelte/transition';
-  import { closeIcon } from '../constants';
-
-  $: iconProps = !isOpen
-    ? {
-        class: undefined,
-        skeleton: false,
-        render: Menu20,
-        title: 'Open Menu',
-        tabindex: '0',
-        focusable: false,
-        style: undefined
-      }
-    : closeIcon;
+  import { fly } from "svelte/transition";
+  import Close20 from "carbon-icons-svelte/lib/Close20";
+  import Menu20 from "carbon-icons-svelte/lib/Menu20";
+  import { Icon } from "../../Icon";
 </script>
 
 <button
-  transition:fly={{ x: -200, delay: 50, duration: 250 }}
-  aria-label={ariaLabel}
-  class={cx('--header__action', '--header__menu-trigger', '--header__menu-toggle')}
-  title="Open menu"
   type="button"
+  title="Open menu"
+  aria-label={ariaLabel}
+  class:bx--header__action={true}
+  class:bx--header__menu-trigger={true}
+  class:bx--header__menu-toggle={true}
+  {...$$restProps}
+  transition:fly={{ x: -200, delay: 50, duration: 250 }}
+  on:click
   on:click={() => (isOpen = !isOpen)}>
-  <Icon {...iconProps} />
+  <Icon
+    title={isOpen ? 'Close' : 'Open Menu'}
+    render={isOpen ? Close20 : Menu20} />
 </button>

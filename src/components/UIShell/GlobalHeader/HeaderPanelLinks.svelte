@@ -1,7 +1,3 @@
-<script>
-  import { cx } from '../../../lib';
-</script>
-
-<ul class={cx('--switcher__item')}>
+<ul class:bx--switcher__item={true}>
   <slot />
 </ul>
