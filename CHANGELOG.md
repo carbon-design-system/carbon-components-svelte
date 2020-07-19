@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.8.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.8.2) - 2020-07-19
+
+- fix `ComboBox` to close dropdown menu when pressing the "Escape" key ([Issue #198](https://github.com/IBM/carbon-components-svelte/issues/198))
+
 ## [0.8.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.8.1) - 2020-07-19
 
 - fix bug in `Tag` to prevent custom class from overriding tag class
