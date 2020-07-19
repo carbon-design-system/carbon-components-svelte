@@ -1,15 +1,13 @@
 # Contributing
 
-## Getting Started
+## Prerequisites
 
-### Prerequisites
+This project uses Node.js and Yarn.
 
-This project uses node (>=10) and yarn (>=1).
+- [Node.js](https://nodejs.org/en/download/package-manager/#macos) (version >=10)
+- [Yarn](https://yarnpkg.com/en/docs/install#mac-stable)
 
-- [node](https://nodejs.org/en/download/package-manager/#macos) (version 10.x or greater)
-- [yarn](https://yarnpkg.com/en/docs/install#mac-stable) (version 1.x or greater)
-
-### Fork and Clone
+## Fork and Clone
 
 Fork the repo and clone your fork:
 
@@ -26,7 +24,7 @@ git remote add upstream git@github.com:IBM/carbon-components-svelte.git
 git remote -v
 ```
 
-### Install
+## Install
 
 Install the project dependencies:
 
@@ -38,19 +36,7 @@ yarn install
 
 ## Workflow
 
-### Repo Structure
-
-```js
-.storybook // Storybook configuration
-docs // static, exported Storybook used by GitHub Pages
-src
-│
-└───components // individual components
-└───internal // code excluded from the component library
-└───lib // shared utilities
-```
-
-### Developing
+### Develop
 
 This project uses Storybook for UI development and "live" documentation.
 
@@ -74,7 +60,7 @@ src/Component
 └───index.js // export components (e.g. `Component.svelte`, `Component.Skeleton.svelte`)
 ```
 
-### Building
+### Build
 
 #### Component Library
 
@@ -87,11 +73,11 @@ The library should be compiled in two formats:
 
 #### Storybook
 
-To build the Storybook, run `yarn build:storybook`.
+To build the Storybook, run `yarn build`.
 
-The Storybook should be outputted to the `docs` folder.
+The Storybook should be outputted to the `storybook-static` folder.
 
-## Submitting a Pull Request
+## Submit a Pull Request
 
 ### Sync Your Fork
 
