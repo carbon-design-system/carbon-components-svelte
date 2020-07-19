@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.8.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.8.0) - 2020-07-19
+
+- use $$restProps API (requires Svelte version >=3.20)
+- upgrade `carbon-icons-svelte` to version >=10.13.0
+- use svelte class:{value} API instead of `cx`
+- add ref prop to "interactive" components like text inputs, anchor links... ([Issue #196](https://github.com/IBM/carbon-components-svelte/issues/196))
+- add slot to Content Switcher `Switch` component ([Issue #183](https://github.com/IBM/carbon-components-svelte/issues/183))
+- fix `ContentSwitcher` bug where bound `selectedIndex` could not be updated
+- remove unused lib utilities (cx, css, fillArray)
+- refactor component exports and folder structure
+- create Sapper app for e2e testing and alternative development environment in `docs/`
+- update Travis CI config to build library, build storybook, and run e2e tests in `docs/`
+- remove Jest in favor of integration/e2e testing with Cypress
+- update contributing guidelines
+
 ## [0.7.6](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.6) - 2020-07-19
 
 - Add named slot to UI Shell `HeaderAction` component for text
