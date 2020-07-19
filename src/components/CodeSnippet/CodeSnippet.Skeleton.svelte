@@ -1,20 +1,18 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let style = undefined;
-  export let type = 'single';
-
-  import { cx } from '../../lib';
+  export let type = "single"; // "single" | "multi"
 </script>
 
 <div
+  class:bx--snippet={true}
+  class:bx--skeleton={true}
+  class:bx--snippet--single={type === 'single'}
+  class:bx--snippet--multi={type === 'multi'}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--snippet', '--skeleton', type === 'single' && '--snippet--single', type === 'multi' && '--snippet--multi', className)}
-  {style}>
-  <div class={cx('--snippet-container')}>
+  on:mouseleave>
+  <div class:bx--snippet-container={true}>
     {#if type === 'single'}
       <span />
     {:else if type === 'multi'}

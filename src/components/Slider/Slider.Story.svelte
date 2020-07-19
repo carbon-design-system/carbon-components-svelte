@@ -1,11 +1,11 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Slider from './Slider.svelte';
-  import SliderSkeleton from './Slider.Skeleton.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import Slider from "./Slider.svelte";
+  import SliderSkeleton from "./Slider.Skeleton.svelte";
 
-  let value = 50;
+  $: value = 50;
 </script>
 
 <Layout>

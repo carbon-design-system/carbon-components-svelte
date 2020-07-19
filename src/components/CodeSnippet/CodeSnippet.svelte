@@ -1,97 +1,95 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let type = "single"; // "single" | "inline" | "multi"
   export let code = undefined;
+  export let light = false;
+  export let skeleton = false;
   export let copyButtonDescription = undefined;
   export let copyLabel = undefined;
-  export let feedback = undefined;
-  export let feedbackTimeout = undefined;
-  export let id = Math.random();
-  export let light = false;
-  export let showLessText = 'Show less';
-  export let showMoreText = 'Show more';
-  export let skeleton = false;
-  export let style = undefined;
-  export let type = 'single';
+  export let feedback = "Copied!";
+  export let feedbackTimeout = 2000;
+  export let showLessText = "Show less";
+  export let showMoreText = "Show more";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let ref = null;
 
-  import { afterUpdate } from 'svelte';
-  import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
-  import { cx } from '../../lib';
-  import Button from '../Button';
-  import Copy from '../Copy';
-  import CopyButton from '../CopyButton';
-  import CodeSnippetSkeleton from './CodeSnippet.Skeleton.svelte';
+  import { afterUpdate } from "svelte";
+  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
+  import { Button } from "../Button";
+  import { Copy } from "../Copy";
+  import { CopyButton } from "../CopyButton";
+  import CodeSnippetSkeleton from "./CodeSnippet.Skeleton.svelte";
 
-  let codeRef = undefined;
-  let expanded = false;
-  let showMoreLess = false;
+  $: showMoreLess = false;
+  $: expanded = false;
+  $: expandText = expanded ? showLessText : showMoreText;
 
   afterUpdate(() => {
-    if (type === 'multi' && codeRef) {
-      showMoreLess = codeRef.getBoundingClientRect().height > 255;
+    if (type === "multi" && ref) {
+      showMoreLess = ref.getBoundingClientRect().height > 255;
     }
   });
-
-  $: expandText = expanded ? showLessText : showMoreText;
 </script>
 
 {#if skeleton}
-  <CodeSnippetSkeleton class={className} {type} {style} />
-{/if}
-
-{#if !skeleton}
+  <CodeSnippetSkeleton {type} {...$$restProps} />
+{:else}
   {#if type === 'inline'}
     <Copy
-      aria-label={$$props['aria-label'] || copyLabel}
+      aria-label={copyLabel}
       aria-describedby={id}
-      class={cx('--snippet', type && `--snippet--${type}`, type === 'inline' && '--btn--copy', expanded && '--snippet--expand', light && '--snippet--light', className)}
-      on:click
+      class="bx--snippet {type && `bx--snippet--${type}`}
+      {type === 'inline' && 'bx--btn--copy'}
+      {expanded && 'bx--snippet--expand'}
+      {light && 'bx--snippet--light'}"
+      {...$$restProps}
+      on:clicks
       on:mouseover
       on:mouseenter
-      on:mouseleave
-      {feedback}
-      {feedbackTimeout}
-      {style}>
+      on:mouseleave>
       <code {id}>
         <slot>{code}</slot>
       </code>
     </Copy>
   {:else}
     <div
+      class:bx--snippet={true}
+      class={type && `bx--snippet--${type}`}
+      class:bx--btn--copy={type === 'inline'}
+      class:bx--snippet--expand={expanded}
+      class:bx--snippet--light={light}
+      {...$$restProps}
       on:mouseover
       on:mouseenter
-      on:mouseleave
-      class={cx('--snippet', type && `--snippet--${type}`, type === 'inline' && '--btn--copy', expanded && '--snippet--expand', light && '--snippet--light', className)}
-      {style}>
+      on:mouseleave>
       <div
-        role="textbox"
-        tabindex="0"
-        class={cx('--snippet-container')}
-        aria-label={$$props['aria-label'] || copyLabel || 'code-snippet'}>
+        role={type === 'single' ? 'textbox' : undefined}
+        tabindex={type === 'single' ? '0' : undefined}
+        class:bx--snippet-container={true}
+        aria-label={$$restProps['aria-label'] || copyLabel || 'code-snippet'}>
         <code>
-          <pre bind:this={codeRef}>
+          <pre bind:this={ref}>
             <slot>{code}</slot>
           </pre>
         </code>
       </div>
       <CopyButton
-        iconDescription={copyButtonDescription}
-        class={cx('--snippet-button')}
-        on:click
         {feedback}
-        {feedbackTimeout} />
+        {feedbackTimeout}
+        iconDescription={copyButtonDescription}
+        on:click
+        on:animationend />
       {#if showMoreLess}
         <Button
           kind="ghost"
           size="small"
-          class={cx('--snippet-btn--expand')}
+          class="bx--snippet-btn--expand"
           on:click={() => {
             expanded = !expanded;
           }}>
-          <span class={cx('--snippet-btn--text')}>{expandText}</span>
+          <span class:bx--snippet-btn--text={true}>{expandText}</span>
           <ChevronDown16
-            aria-label={expandText}
-            class={cx('--icon-chevron--down', '--snippet__icon')} />
+            class="bx--icon-chevron--down bx--snippet__icon"
+            aria-label={expandText} />
         </Button>
       {/if}
     </div>

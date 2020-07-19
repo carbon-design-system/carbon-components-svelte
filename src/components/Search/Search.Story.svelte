@@ -1,17 +1,17 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Search from './Search.svelte';
-  import SearchSkeleton from './Search.Skeleton.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import Search from "./Search.svelte";
+  import SearchSkeleton from "./Search.Skeleton.svelte";
 
-  let value = '';
+  let value = "";
 
   $: {
     if (!value.length) {
-      console.log('cleared');
+      console.log("cleared");
     } else {
-      console.log('value', value);
+      console.log("value", value);
     }
   }
 </script>

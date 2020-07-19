@@ -1,28 +1,25 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let accept = [];
   export let disabled = false;
-  export let id = Math.random();
-  export let labelText = 'Add file';
   export let multiple = false;
-  export let name = '';
-  export let role = 'button';
-  export let style = undefined;
-  export let tabindex = '0';
   export let validateFiles = files => files;
+  export let labelText = "Add file";
+  export let role = "button";
+  export let tabindex = "0";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let name = "";
+  export let ref = null;
 
-  import { createEventDispatcher } from 'svelte';
-  import { cx } from '../../lib';
+  import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
-  let over = false;
-  let inputRef = undefined;
+  $: over = false;
 </script>
 
 <div
-  class={cx('--file')}
+  class:bx--file={true}
+  {...$$restProps}
   on:dragover
   on:dragover|preventDefault|stopPropagation={({ dataTransfer }) => {
     if (!disabled) {
@@ -43,27 +40,33 @@
       over = false;
       dispatch('add', validateFiles(dataTransfer.files));
     }
-  }}
-  {style}>
+  }}>
   <label
-    class={cx('--file-browse-btn', disabled && '--file-browse-btn--disabled')}
     for={id}
+    {tabindex}
+    class:bx--file-browse-btn={true}
+    class:bx--file-browse-btn--disabled={disabled}
     on:keydown
     on:keydown={({ key }) => {
       if (key === ' ' || key === 'Enter') {
-        inputRef.click();
+        ref.click();
       }
-    }}
-    {tabindex}>
+    }}>
     <div
-      class={cx('--file__drop-container', over && '--file__drop-container--drag-over', className)}
-      {role}>
+      {role}
+      class:bx--file__drop-container={true}
+      class:bx--file__drop-container--drag-over={over}>
       {labelText}
       <input
-        bind:this={inputRef}
+        bind:this={ref}
         type="file"
         tabindex="-1"
-        class={cx('--file-input')}
+        {id}
+        {disabled}
+        {accept}
+        {name}
+        {multiple}
+        class:bx--file-input={true}
         on:change
         on:change={({ target }) => {
           dispatch('add', validateFiles(target.files));
@@ -71,12 +74,7 @@
         on:click
         on:click={({ target }) => {
           target.value = null;
-        }}
-        {id}
-        {disabled}
-        {accept}
-        {name}
-        {multiple} />
+        }} />
     </div>
   </label>
 </div>

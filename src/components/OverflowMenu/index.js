@@ -1,4 +1,2 @@
-import OverflowMenu from './OverflowMenu.svelte';
-
-export default OverflowMenu;
-export { default as OverflowMenuItem } from './OverflowMenuItem.svelte';
+export { default as OverflowMenu } from "./OverflowMenu.svelte";
+export { default as OverflowMenuItem } from "./OverflowMenuItem.svelte";

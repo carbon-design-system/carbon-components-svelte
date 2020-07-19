@@ -1,30 +1,27 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let errorBody = '';
-  export let errorSubject = '';
-  export let iconDescription = '';
-  export let id = Math.random();
+  export let errorBody = "";
+  export let errorSubject = "";
+  export let iconDescription = "";
+  export let id = "ccs-" + Math.random().toString(36);
   export let invalid = false;
-  export let name = '';
-  export let status = 'uploading';
-  export let style = undefined;
+  export let name = "";
+  export let status = "uploading";
 
-  import { createEventDispatcher } from 'svelte';
-  import { cx } from '../../lib';
-  import Filename from './Filename.svelte';
+  import { createEventDispatcher } from "svelte";
+  import Filename from "./Filename.svelte";
 
   const dispatch = createEventDispatcher();
 </script>
 
 <span
+  class:bx--file__selected-file={true}
+  class:bx--file__selected-file--invalid={invalid}
+  {...$$restProps}
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--file__selected-file', invalid && '--file__selected-file--invalid', className)}
-  {style}>
-  <p class={cx('--file-filename')}>{name}</p>
-  <span class={cx('--file__state-container')}>
+  on:mouseleave>
+  <p class:bx--file-filename={true}>{name}</p>
+  <span class:bx--file__state-container={true}>
     <Filename
       on:keydown={({ key }) => {
         if (key === ' ' || key === 'Enter') {
@@ -39,10 +36,10 @@
       {invalid} />
   </span>
   {#if invalid && errorSubject}
-    <div class={cx('--form-requirement')}>
-      <div class={cx('--form-requirement__title')}>{errorSubject}</div>
+    <div class:bx--form-requirement={true}>
+      <div class:bx--form-requirement__title={true}>{errorSubject}</div>
       {#if errorBody}
-        <p class={cx('--form-requirement__supplement')}>{errorBody}</p>
+        <p class:bx--form-requirement__supplement={true}>{errorBody}</p>
       {/if}
     </div>
   {/if}

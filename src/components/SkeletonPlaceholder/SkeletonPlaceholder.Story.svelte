@@ -1,6 +1,6 @@
 <script>
-  import Layout from '../../internal/ui/Layout.svelte';
-  import SkeletonPlaceholder from './SkeletonPlaceholder.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import SkeletonPlaceholder from "./SkeletonPlaceholder.svelte";
 </script>
 
 <style>

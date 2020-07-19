@@ -1,7 +1,7 @@
 <script>
-  import Layout from '../../internal/ui/Layout.svelte';
-  import NumberInput from '../NumberInput';
-  import FormItem from './FormItem.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import { NumberInput } from "../NumberInput";
+  import FormItem from "./FormItem.svelte";
 </script>
 
 <Layout>

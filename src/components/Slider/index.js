@@ -1,4 +1,2 @@
-import Slider from './Slider.svelte';
-
-export default Slider;
-export { default as SliderSkeleton } from './Slider.Skeleton.svelte';
+export { default as Slider } from "./Slider.svelte";
+export { default as SliderSkeleton } from "./Slider.Skeleton.svelte";

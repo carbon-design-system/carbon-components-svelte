@@ -1,29 +1,31 @@
-import { withKnobs, select, text } from '@storybook/addon-knobs';
-import Component from './TooltipDefinition.Story.svelte';
+import { withKnobs, select, text } from "@storybook/addon-knobs";
+import Component from "./TooltipDefinition.Story.svelte";
 
-export default { title: 'TooltipDefinition', decorators: [withKnobs] };
+export default { title: "TooltipDefinition", decorators: [withKnobs] };
 
 const directions = {
-  'Top (top)': 'top',
-  'Right (right)': 'right',
-  'Bottom (bottom)': 'bottom',
-  'Left (left)': 'left'
+  "Top (top)": "top",
+  "Bottom (bottom)": "bottom",
 };
 
 const alignments = {
-  'Start (start)': 'start',
-  'Center (center)': 'center',
-  'End (end)': 'end'
+  "Start (start)": "start",
+  "Center (center)": "center",
+  "End (end)": "end",
 };
 
 export const Default = () => ({
   Component,
   props: {
-    direction: select('Tooltip direction (direction)', directions, 'bottom'),
-    align: select('Tooltip alignment to trigger button (align)', alignments, 'start'),
+    direction: select("Tooltip direction (direction)", directions, "bottom"),
+    align: select(
+      "Tooltip alignment to trigger button (align)",
+      alignments,
+      "start"
+    ),
     tooltipText: text(
-      'Tooltip content (tooltipText)',
-      'Brief description of the dotted, underlined word above.'
-    )
-  }
+      "Tooltip content (tooltipText)",
+      "Brief description of the dotted, underlined words above."
+    ),
+  },
 });

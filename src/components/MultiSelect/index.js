@@ -1,3 +1,1 @@
-import MultiSelect from './MultiSelect.svelte';
-
-export default MultiSelect;
+export { default as MultiSelect } from "./MultiSelect.svelte";

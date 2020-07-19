@@ -1,24 +1,30 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let id = Math.random();
-  export let labelText = '';
-  export let style = undefined;
-
-  import { cx } from '../../lib';
+  export let id = "ccs-" + Math.random().toString(36);
+  export let labelText = "";
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
-  <input type="checkbox" class={cx('--toggle --skeleton')} {id} />
+<div
+  class:bx--form-item={true}
+  {...$$restProps}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave>
+  <input
+    type="checkbox"
+    {id}
+    class:bx--toggle={true}
+    class:bx--skeleton={true} />
   <label
     aria-label={labelText ? undefined : $$props['aria-label'] || 'Toggle is loading'}
-    class={cx('--toggle__label', '--skeleton')}
-    for={id}>
+    for={id}
+    class:bx--toggle__label={true}
+    class:bx--skeleton={true}>
     {#if labelText}
-      <span class={cx('--toggle__label-text')}>{labelText}</span>
+      <span class:bx--toggle__label-text={true}>{labelText}</span>
     {/if}
-    <span class={cx('--toggle__text--left')} />
-    <span class={cx('--toggle__appearance')} />
-    <span class={cx('--toggle__text--right')} />
+    <span class:bx--toggle__text--left={true} />
+    <span class:bx--toggle__appearance={true} />
+    <span class:bx--toggle__text--right={true} />
   </label>
 </div>

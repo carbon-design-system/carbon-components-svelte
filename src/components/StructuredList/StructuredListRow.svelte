@@ -1,36 +1,32 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let head = false;
   export let label = false;
-  export let style = undefined;
-  export let tabindex = '0';
-
-  import { cx } from '../../lib';
+  export let tabindex = "0";
 </script>
 
 {#if label}
   <label
     role="presentation"
+    {tabindex}
+    class:bx--structured-list-row={true}
+    class:bx--structured-list-row--header-row={head}
+    {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
-    on:keydown
-    class={cx('--structured-list-row', head && '--structured-list-row--header-row', className)}
-    for={$$props.for}
-    {tabindex}
-    {style}>
+    on:keydown>
     <slot />
   </label>
 {:else}
   <div
+    class:bx--structured-list-row={true}
+    class:bx--structured-list-row--header-row={head}
+    {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave
-    class={cx('--structured-list-row', head && '--structured-list-row--header-row', className)}
-    {style}>
+    on:mouseleave>
     <slot />
   </div>
 {/if}

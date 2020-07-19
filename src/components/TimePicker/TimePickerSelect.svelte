@@ -1,41 +1,43 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let disabled = false;
-  export let hideLabel = true;
-  export let iconDescription = 'Open list of options';
-  export let id = Math.random();
+  export let value = "";
   export let name = undefined;
-  export let labelText = '';
-  export let style = undefined;
-  export let value = '';
+  export let disabled = false;
+  export let iconDescription = "Open list of options";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let labelText = "";
+  export let hideLabel = true;
 
-  import { setContext } from 'svelte';
-  import { writable } from 'svelte/store';
-  import ChevronDownGlyph from 'carbon-icons-svelte/lib/ChevronDownGlyph';
-  import { cx } from '../../lib';
+  import { setContext } from "svelte";
+  import { writable } from "svelte/store";
+  import ChevronDownGlyph from "carbon-icons-svelte/lib/ChevronDownGlyph";
 
-  let selectedValue = writable(value);
+  const selectedValue = writable(value);
 
-  setContext('TimePickerSelect', { selectedValue });
+  setContext("TimePickerSelect", { selectedValue });
 
   $: selectedValue.set(value);
   $: value = $selectedValue;
 </script>
 
 <div
+  class:bx--select={true}
+  class:bx--time-picker__select={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--select', '--time-picker__select', className)}
-  {style}>
+  on:mouseleave>
   {#if labelText}
-    <label class={cx('--label', hideLabel && '--visually-hidden')} for={id}>{labelText}</label>
+    <label
+      for={id}
+      class:bx--label={true}
+      class:bx--visually-hidden={hideLabel}>
+      {labelText}
+    </label>
   {/if}
   <!-- svelte-ignore a11y-no-onchange -->
   <select
-    class={cx('--select-input')}
+    class:bx--select-input={true}
     on:change={({ target }) => {
       selectedValue.set(target.value);
     }}
@@ -48,5 +50,5 @@
   <ChevronDownGlyph
     aria-label={iconDescription}
     title={iconDescription}
-    class={cx('--select__arrow')} />
+    class="bx--select__arrow" />
 </div>

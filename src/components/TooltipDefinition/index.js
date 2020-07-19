@@ -1,3 +1,1 @@
-import TooltipDefinition from './TooltipDefinition.svelte';
-
-export default TooltipDefinition;
+export { default as TooltipDefinition } from "./TooltipDefinition.svelte";

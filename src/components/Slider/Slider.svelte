@@ -1,33 +1,29 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let disabled = false;
   export let hideTextInput = false;
-  export let id = Math.random();
-  export let inputType = 'number';
+  export let id = "ccs-" + Math.random().toString(36);
+  export let inputType = "number";
   export let invalid = false;
-  export let labelText = '';
+  export let labelText = "";
   export let light = false;
   export let max = 100;
-  export let maxLabel = '';
+  export let maxLabel = "";
   export let min = 0;
-  export let minLabel = '';
-  export let name = '';
+  export let minLabel = "";
+  export let name = "";
   export let required = false;
   export let step = 1;
   export let stepMultiplier = 4;
-  export let style = undefined;
-  export let value = '';
+  export let value = "";
+  export let ref = null;
 
-  import { createEventDispatcher, afterUpdate } from 'svelte';
-  import { cx } from '../../lib';
+  import { createEventDispatcher, afterUpdate } from "svelte";
 
   const dispatch = createEventDispatcher();
 
+  let trackRef = null;
   let dragging = false;
   let holding = false;
-  let elementRef = undefined;
-  let trackRef = undefined;
 
   function startDragging() {
     dragging = true;
@@ -41,10 +37,12 @@
     holding = false;
   }
 
-  function calcValue(event) {
-    const offsetX = event.touches ? event.touches[0].clientX : event.clientX;
+  function calcValue(e) {
+    const offsetX = e.touches ? e.touches[0].clientX : e.clientX;
     const { left, width } = trackRef.getBoundingClientRect();
-    let nextValue = min + Math.round(((max - min) * ((offsetX - left) / width)) / step) * step;
+    let nextValue =
+      min +
+      Math.round(((max - min) * ((offsetX - left) / width)) / step) * step;
 
     if (nextValue <= min) {
       nextValue = min;
@@ -57,7 +55,7 @@
 
   afterUpdate(() => {
     if (!holding) {
-      dispatch('change', value);
+      dispatch("change", value);
     }
   });
 
@@ -77,15 +75,24 @@
   }
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
-  <label for={id} class={cx('--label', disabled && '--label--disabled')}>{labelText}</label>
-  <div class={cx('--slider-container')}>
-    <span class={cx('--slider__range-label')}>{minLabel || min}</span>
+<div
+  class:bx--form-item={true}
+  {...$$restProps}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave>
+  <label for={id} class:bx--label={true} class:bx--label--disabled={disabled}>
+    {labelText}
+  </label>
+  <div class:bx--slider-container={true}>
+    <span class:bx--slider__range-label={true}>{minLabel || min}</span>
     <div
-      bind:this={elementRef}
+      bind:this={ref}
       role="presentation"
       tabindex="-1"
-      class={cx('--slider', disabled && '--slider--disabled')}
+      class:bx--slider={true}
+      class:bx--slider--disabled={disabled}
       on:click={startDragging}
       on:mousemove={() => {
         if (holding) {
@@ -104,8 +111,8 @@
       <div
         role="slider"
         tabindex="0"
-        class={cx('--slider__thumb')}
-        style={`left: ${left}%`}
+        class:bx--slider__thumb={true}
+        style="left: {left}%"
         aria-valuemax={max}
         aria-valuemin={min}
         aria-valuenow={value}
@@ -118,13 +125,13 @@
           }
         }}
         {id} />
-      <div bind:this={trackRef} class={cx('--slider__track')} />
+      <div bind:this={trackRef} class:bx--slider__track={true} />
       <div
-        class={cx('--slider__filled-track')}
-        style={`transform: translate(0, -50%) scaleX(${left / 100})`} />
+        class:bx--slider__filled-track={true}
+        style="transform: translate(0, -50%) scaleX({left / 100})" />
       <input
         type="hidden"
-        class={cx('--slider__input')}
+        class:bx--slider__input={true}
         {name}
         {value}
         {required}
@@ -132,13 +139,16 @@
         {max}
         {step} />
     </div>
-    <span class={cx('--slider__range-label')}>{maxLabel || max}</span>
+    <span class:bx--slider__range-label={true}>{maxLabel || max}</span>
     {#if !hideTextInput}
       <input
         type={inputType}
-        id={`input-${id}`}
+        id="input-{id}"
         aria-label={$$props['aria-label'] || 'Slider number input'}
-        class={cx('--text-input', '--slider-text-input', light && '--text-input--light', invalid && '--text-input--invalid')}
+        class:bx--text-input={true}
+        class:bx--slider-text-input={true}
+        class:bx--text-input--light={light}
+        class:bx--text-input--invalid={invalid}
         on:change={({ target }) => {
           value = Number(target.value);
         }}

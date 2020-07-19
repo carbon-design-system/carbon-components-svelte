@@ -1,3 +1,1 @@
-import DataTableSkeleton from './DataTableSkeleton.svelte';
-
-export default DataTableSkeleton;
+export { default as DataTableSkeleton } from "./DataTableSkeleton.svelte";

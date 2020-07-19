@@ -1,90 +1,104 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let type = "password";
+  export let value = "";
+  export let hidePasswordLabel = "Hide password";
+  export let showPasswordLabel = "Show password";
+  export let light = false;
   export let disabled = false;
-  export let helperText = '';
-  export let hideLabel = false;
-  export let hidePasswordLabel = 'Hide password';
-  export let id = Math.random();
+  export let placeholder = "";
+  export let helperText = "";
+  export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalid = false;
-  export let invalidText = '';
-  export let labelText = '';
-  export let light = false;
-  export let placeholder = '';
-  export let showPasswordLabel = 'Show password';
-  export let style = undefined;
-  export let tooltipAlignment = 'center';
-  export let tooltipPosition = 'bottom';
-  export let type = 'password';
-  export let value = '';
+  export let invalidText = "";
+  export let labelText = "";
+  export let hideLabel = false;
+  export let tooltipAlignment = "center";
+  export let tooltipPosition = "bottom";
+  export let ref = null;
 
-  import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';
-  import View16 from 'carbon-icons-svelte/lib/View16';
-  import ViewOff16 from 'carbon-icons-svelte/lib/ViewOff16';
-  import { cx } from '../../lib';
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
+  import View16 from "carbon-icons-svelte/lib/View16";
+  import ViewOff16 from "carbon-icons-svelte/lib/ViewOff16";
 
   $: errorId = `error-${id}`;
 </script>
 
 <div
+  class:bx--form-item={true}
+  class:bx--text-input-wrapper={true}
+  class:bx--password-input-wrapper={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--form-item', '--text-input-wrapper', '--password-input-wrapper', className)}
-  {style}>
+  on:mouseleave>
   {#if labelText}
     <label
-      class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}
-      for={id}>
+      for={id}
+      class:bx--label={true}
+      class:bx--visually-hidden={hideLabel}
+      class:bx--label--disabled={disabled}>
       {labelText}
     </label>
   {/if}
   {#if helperText}
-    <div class={cx('--form__helper-text', disabled && '--form__helper-text--disabled')}>
+    <div
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}>
       {helperText}
     </div>
   {/if}
-  <div class={cx('--text-input__field-wrapper')} data-invalid={invalid || undefined}>
+  <div
+    class:bx--text-input__field-wrapper={true}
+    data-invalid={invalid || undefined}>
     {#if invalid}
-      <WarningFilled16 class={cx('--text-input__invalid-icon')} />
+      <WarningFilled16 class="bx--text-input__invalid-icon" />
     {/if}
     <input
+      bind:this={ref}
       data-invalid={invalid || undefined}
       aria-invalid={invalid || undefined}
       aria-describedby={invalid ? errorId : undefined}
-      class={cx('--text-input', '--password-input', light && '--text-input--light', invalid && '--text-input--invalid')}
+      {id}
+      {name}
+      {placeholder}
+      {type}
+      {value}
+      {disabled}
+      class:bx--text-input={true}
+      class:bx--password-input={true}
+      class:bx--text-input--light={light}
+      class:bx--text-input--invalid={invalid}
       on:change
       on:input
       on:input={({ target }) => {
         value = target.value;
       }}
       on:focus
-      on:blur
-      {id}
-      {name}
-      {placeholder}
-      {type}
-      {value}
-      {disabled} />
+      on:blur />
     <button
       type="button"
-      class={cx('--text-input--password__visibility__toggle', '--btn--icon-only', '--tooltip__trigger', '--tooltip--a11y', tooltipPosition && `--tooltip--${tooltipPosition}`, tooltipAlignment && `--tooltip--align-${tooltipAlignment}`)}
+      class:bx--text-input--password__visibility__toggle={true}
+      class:bx--btn--icon-only={true}
+      class:bx--tooltip__trigger={true}
+      class:bx--tooltip--a11y={true}
+      class="{tooltipPosition && `bx--tooltip--${tooltipPosition}`}
+      {tooltipAlignment && `bx--tooltip--align-${tooltipAlignment}`}"
       on:click={() => {
         type = type === 'password' ? 'text' : 'password';
       }}>
-      <span class={cx('--assistive-text')}>
+      <span class:bx--assistive-text={true}>
         {#if type === 'text'}{hidePasswordLabel}{:else}{showPasswordLabel}{/if}
       </span>
       {#if type === 'text'}
-        <ViewOff16 class={cx('--icon-visibility-off')} />
+        <ViewOff16 class="bx--icon-visibility-off" />
       {:else}
-        <View16 class={cx('--icon-visibility-on')} />
+        <View16 class="bx--icon-visibility-on" />
       {/if}
     </button>
   </div>
   {#if invalid}
-    <div class={cx('--form-requirement')} id={errorId}>{invalidText}</div>
+    <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
   {/if}
 </div>

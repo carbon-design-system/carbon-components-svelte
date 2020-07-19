@@ -1,50 +1,52 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export const translationIds = { clearAll: 'clearAll', clearSelection: 'clearSelection' };
+  export const translationIds = {
+    clearAll: "clearAll",
+    clearSelection: "clearSelection"
+  };
   export let disabled = false;
   export let selectionCount = undefined;
-  export let style = undefined;
   export let translateWithId = id => defaultTranslations[id];
+  export let ref = null;
 
-  import { createEventDispatcher, getContext } from 'svelte';
-  import Close16 from 'carbon-icons-svelte/lib/Close16';
-  import { cx } from '../../lib';
+  import { createEventDispatcher, getContext } from "svelte";
+  import Close16 from "carbon-icons-svelte/lib/Close16";
 
   const defaultTranslations = {
-    [translationIds.clearAll]: 'Clear all selected items',
-    [translationIds.clearSelection]: 'Clear selected item'
+    [translationIds.clearAll]: "Clear all selected items",
+    [translationIds.clearSelection]: "Clear selected item"
   };
   const dispatch = createEventDispatcher();
-  const ctx = getContext('MultiSelect');
+  const ctx = getContext("MultiSelect");
 
-  let selectionRef = undefined;
-
-  $: if (ctx && selectionRef) {
-    ctx.declareRef({ key: 'selection', ref: selectionRef });
+  $: if (ctx && ref) {
+    ctx.declareRef({ key: "selection", ref });
   }
 
-  $: description = selectionCount ? translateWithId('clearAll') : translateWithId('clearSelection');
+  $: description = selectionCount
+    ? translateWithId("clearAll")
+    : translateWithId("clearSelection");
 </script>
 
 <div
-  bind:this={selectionRef}
+  bind:this={ref}
   role="button"
   aria-label="Clear Selection"
   tabindex={disabled ? '-1' : '0'}
   title={description}
-  class={cx('--list-box__selection', selectionCount && '--tag--filter', selectionCount && '--list-box__selection--multi', className)}
-  on:click|preventDefault|stopPropagation={event => {
+  class:bx--list-box__selection={true}
+  class:bx--tag--filter={selectionCount}
+  class:bx--list-box__selection--multi={selectionCount}
+  {...$$restProps}
+  on:click|preventDefault|stopPropagation={e => {
     if (!disabled) {
-      dispatch('clear', event);
+      dispatch('clear', e);
     }
   }}
-  on:keydown|stopPropagation={event => {
-    if (!disabled && event.key === 'Enter') {
-      dispatch('clear', event);
+  on:keydown|stopPropagation={e => {
+    if (!disabled && e.key === 'Enter') {
+      dispatch('clear', e);
     }
-  }}
-  {style}>
+  }}>
   {#if selectionCount}{selectionCount}{/if}
   <Close16 />
 </div>

@@ -1,3 +1,1 @@
-import InlineLoading from './InlineLoading.svelte';
-
-export default InlineLoading;
+export { default as InlineLoading } from "./InlineLoading.svelte";

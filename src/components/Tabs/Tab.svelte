@@ -1,32 +1,31 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let disabled = false;
-  export let href = '#';
-  export let label = '';
-  export let role = 'presentation';
-  export let style = undefined;
-  export let tabindex = '0';
+  export let href = "#";
+  export let label = "";
+  export let role = "presentation";
+  export let tabindex = "0";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let ref = null;
 
-  import { getContext } from 'svelte';
-  import { cx } from '../../lib';
+  import { getContext } from "svelte";
 
-  const id = Math.random();
-  const { selectedTab, add, update, change } = getContext('Tabs');
-
-  let anchorRef = undefined;
+  const { selectedTab, add, update, change } = getContext("Tabs");
 
   add({ id, label, disabled });
 
   $: selected = $selectedTab === id;
-  $: if (selected && anchorRef) {
-    anchorRef.focus();
+  $: if (selected && ref) {
+    ref.focus();
   }
 </script>
 
 <li
   tabindex="-1"
-  class={cx('--tabs__nav-item', disabled && '--tabs__nav-item--disabled', selected && '--tabs__nav-item--selected', className)}
+  {role}
+  class:bx--tabs__nav-item={true}
+  class:bx--tabs__nav-item--disabled={disabled}
+  class:bx--tabs__nav-item--selected={selected}
+  {...$$restProps}
   on:click|preventDefault={() => {
     if (!disabled) {
       update(id);
@@ -45,17 +44,15 @@
         update(id);
       }
     }
-  }}
-  {role}
-  {style}>
+  }}>
   <a
-    bind:this={anchorRef}
+    bind:this={ref}
     role="tab"
     tabindex={disabled ? '-1' : tabindex}
     aria-selected={selected}
     aria-disabled={disabled}
-    class={cx('--tabs__nav-link')}
-    {href}>
+    {href}
+    class:bx--tabs__nav-link={true}>
     {label}
   </a>
 </li>

@@ -1,3 +1,1 @@
-import FormItem from './FormItem.svelte';
-
-export default FormItem;
+export { default as FormItem } from "./FormItem.svelte";

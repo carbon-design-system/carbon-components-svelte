@@ -1,21 +1,14 @@
-<script>
-  let className = undefined;
-  export { className as class };
-  export let style = undefined;
-
-  import { cx } from '../../lib';
-</script>
-
 <div
+  class:bx--breadcrumb={true}
+  class:bx--skeleton={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--breadcrumb', '--skeleton', className)}
-  {style}>
+  on:mouseleave>
   {#each [0, 1, 2] as item, i (item)}
-    <div class={cx('--breadcrumb-item')}>
-      <span class={cx('--link')}>&nbsp;</span>
+    <div class:bx--breadcrumb-item={true}>
+      <span class:bx--link={true}>&nbsp;</span>
     </div>
   {/each}
 </div>

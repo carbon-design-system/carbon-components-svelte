@@ -1,17 +1,13 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let scope = 'col';
-  export let translateWithId = () => '';
-  export let style = undefined;
+  export let scope = "col";
+  export let translateWithId = () => "";
+  export let id = "ccs-" + Math.random().toString(36);
 
-  import { getContext } from 'svelte';
-  import ArrowUp20 from 'carbon-icons-svelte/lib/ArrowUp20';
-  import ArrowsVertical20 from 'carbon-icons-svelte/lib/ArrowsVertical20';
-  import { cx } from '../../lib';
+  import { getContext } from "svelte";
+  import ArrowUp20 from "carbon-icons-svelte/lib/ArrowUp20";
+  import ArrowsVertical20 from "carbon-icons-svelte/lib/ArrowsVertical20";
 
-  const id = Math.random();
-  const { sortHeader, tableSortable, add } = getContext('DataTable');
+  const { sortHeader, tableSortable, add } = getContext("DataTable");
 
   add(id);
 
@@ -22,25 +18,35 @@
 
 {#if $tableSortable}
   <th
+    aria-sort={active ? $sortHeader.sortDirection : 'none'}
+    {scope}
+    {...$$restProps}
     on:mouseover
     on:mouseenter
-    on:mouseleave
-    class={className}
-    aria-sort={active ? $sortHeader.sortDirection : 'none'}
-    {scope}>
+    on:mouseleave>
     <button
-      class={cx('--table-sort', active && '--table-sort--active', active && $sortHeader.sortDirection === 'descending' && '--table-sort--ascending')}
+      class:bx--table-sort={true}
+      class:bx--table-sort--active={active}
+      class:bx--table-sort--ascending={active && $sortHeader.sortDirection === 'descending'}
       on:click>
-      <span class={cx('--table-header-label')}>
+      <span class:bx--table-header-label={true}>
         <slot />
       </span>
-      <ArrowUp20 class={cx('--table-sort__icon')} aria-label={ariaLabel} />
-      <ArrowsVertical20 class={cx('--table-sort__icon-unsorted')} aria-label={ariaLabel} />
+      <ArrowUp20 aria-label={ariaLabel} class="bx--table-sort__icon" />
+      <ArrowsVertical20
+        aria-label={ariaLabel}
+        class="bx--table-sort__icon-unsorted" />
     </button>
   </th>
 {:else}
-  <th on:click on:mouseover on:mouseenter on:mouseleave class={className} {style} {scope}>
-    <span class={cx('--table-header-label')}>
+  <th
+    {scope}
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave>
+    <span class:bx--table-header-label={true}>
       <slot />
     </span>
   </th>

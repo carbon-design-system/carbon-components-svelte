@@ -1,35 +1,34 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let disabled = false;
-  export let href = undefined;
   export let inline = false;
-  export let style = undefined;
-
-  import { cx } from '../../lib';
+  export let disabled = false;
+  export let ref = null;
 </script>
 
 {#if disabled}
   <p
-    aria-current={$$props['aria-current']}
-    class={cx('--link', disabled && '--link--disabled', inline && '--link--inline', className)}
+    bind:this={ref}
+    class:bx--link={true}
+    class:bx--link--disabled={disabled}
+    class:bx--link--inline={inline}
+    {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave
-    {style}>
+    on:mouseleave>
     <slot />
   </p>
 {:else}
+  <!-- svelte-ignore a11y-missing-attribute -->
   <a
-    aria-current={$$props['aria-current']}
-    class={cx('--link', disabled && '--link--disabled', inline && '--link--inline', className)}
+    bind:this={ref}
+    class:bx--link={true}
+    class:bx--link--disabled={disabled}
+    class:bx--link--inline={inline}
+    {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave
-    {style}
-    {href}>
+    on:mouseleave>
     <slot />
   </a>
 {/if}

@@ -1,9 +1,9 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import ListItem from '../ListItem';
-  import UnorderedList from './UnorderedList.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import { ListItem } from "../ListItem";
+  import UnorderedList from "./UnorderedList.svelte";
 </script>
 
 <Layout>

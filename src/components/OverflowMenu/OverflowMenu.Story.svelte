@@ -1,11 +1,11 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import OverflowMenu from './OverflowMenu.svelte';
-  import OverflowMenuItem from './OverflowMenuItem.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import OverflowMenu from "./OverflowMenu.svelte";
+  import OverflowMenuItem from "./OverflowMenuItem.svelte";
 
-  let primaryFocus = true;
+  $: primaryFocus = true;
 </script>
 
 <Layout>
@@ -24,10 +24,18 @@
         <OverflowMenuItem
           {...$$props.menuItem}
           href="https://ibm.com"
-          text="Option 2 is an example of a really long string and how we recommend handling this"
+          text="Option 2 is an example of a really long string and how we
+          recommend handling this"
           requireTitle />
-        <OverflowMenuItem {...$$props.menuItem} href="https://ibm.com" text="Option 3" disabled />
-        <OverflowMenuItem {...$$props.menuItem} href="https://ibm.com" text="Option 4" />
+        <OverflowMenuItem
+          {...$$props.menuItem}
+          href="https://ibm.com"
+          text="Option 3"
+          disabled />
+        <OverflowMenuItem
+          {...$$props.menuItem}
+          href="https://ibm.com"
+          text="Option 4" />
         <OverflowMenuItem
           {...$$props.menuItem}
           href="https://ibm.com"
@@ -42,10 +50,14 @@
         }}
         style="width: auto">
         <div slot="menu" style="padding: 0 1rem">Menu</div>
-        <OverflowMenuItem {...$$props.menuItem} text="Option 1" bind:primaryFocus />
         <OverflowMenuItem
           {...$$props.menuItem}
-          text="Option 2 is an example of a really long string and how we recommend handling this"
+          text="Option 1"
+          bind:primaryFocus />
+        <OverflowMenuItem
+          {...$$props.menuItem}
+          text="Option 2 is an example of a really long string and how we
+          recommend handling this"
           requireTitle />
         <OverflowMenuItem {...$$props.menuItem} text="Option 3" disabled />
         <OverflowMenuItem {...$$props.menuItem} text="Option 4" />
@@ -57,10 +69,14 @@
         on:close={({ detail }) => {
           console.log('close', detail);
         }}>
-        <OverflowMenuItem {...$$props.menuItem} text="Option 1" bind:primaryFocus />
         <OverflowMenuItem
           {...$$props.menuItem}
-          text="Option 2 is an example of a really long string and how we recommend handling this"
+          text="Option 1"
+          bind:primaryFocus />
+        <OverflowMenuItem
+          {...$$props.menuItem}
+          text="Option 2 is an example of a really long string and how we
+          recommend handling this"
           requireTitle />
         <OverflowMenuItem {...$$props.menuItem} text="Option 3" disabled />
         <OverflowMenuItem {...$$props.menuItem} text="Option 4" />

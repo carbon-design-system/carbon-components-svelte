@@ -1,29 +1,27 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let iconDescription = 'Tile checkmark';
-  export let id = Math.random();
-  export let light = false;
-  export let name = '';
   export let selected = false;
-  export let style = undefined;
-  export let tabindex = '0';
-  export let title = 'title';
-  export let value = 'value';
+  export let light = false;
+  export let title = "title";
+  export let value = "value";
+  export let tabindex = "0";
+  export let iconDescription = "Tile checkmark";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let name = "";
+  export let ref = null;
 
-  import { createEventDispatcher } from 'svelte';
-  import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
-  import { cx } from '../../lib';
+  import { createEventDispatcher } from "svelte";
+  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
 
   const dispatch = createEventDispatcher();
 
-  $: dispatch(selected ? 'select' : 'deselect', id);
+  $: dispatch(selected ? "select" : "deselect", id);
 </script>
 
 <input
+  bind:this={ref}
   type="checkbox"
   tabindex="-1"
-  class={cx('--tile-input')}
+  class:bx--tile-input={true}
   checked={selected}
   {id}
   {value}
@@ -31,7 +29,12 @@
   {title} />
 <label
   for={id}
-  class={cx('--tile', '--tile--selectable', selected && '--tile--is-selected', light && '--tile--light', className)}
+  {tabindex}
+  class:bx--tile={true}
+  class:bx--tile--selectable={true}
+  class:bx--tile--is-selected={selected}
+  class:bx--tile--light={light}
+  {...$$restProps}
   on:click
   on:click|preventDefault={() => {
     selected = !selected;
@@ -40,18 +43,16 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={event => {
-    if (event.key === ' ' || event.key === 'Enter') {
-      event.preventDefault();
+  on:keydown={e => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
       selected = !selected;
     }
-  }}
-  {tabindex}
-  {style}>
-  <span class={cx('--tile__checkmark')}>
+  }}>
+  <span class:bx--tile__checkmark={true}>
     <CheckmarkFilled16 aria-label={iconDescription} title={iconDescription} />
   </span>
-  <span class={cx('--tile-content')}>
+  <span class:bx--tile-content={true}>
     <slot />
   </span>
 </label>

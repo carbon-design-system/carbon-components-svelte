@@ -1,17 +1,14 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let checked = false;
-  export let id = Math.random();
-  export let name = '';
-  export let style = undefined;
-  export let title = 'title';
-  export let value = 'value';
+  export let title = "title";
+  export let value = "value";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let name = "";
+  export let ref = null;
 
-  import { getContext } from 'svelte';
-  import { cx } from '../../lib';
+  import { getContext } from "svelte";
 
-  const { selectedValue, update } = getContext('StructuredListWrapper');
+  const { selectedValue, update } = getContext("StructuredListWrapper");
 
   if (checked) {
     update(value);
@@ -21,15 +18,16 @@
 </script>
 
 <input
+  bind:this={ref}
   type="radio"
   tabindex="-1"
-  class={cx('--structured-list-input', className)}
-  on:change={() => {
-    update(value);
-  }}
   {checked}
   {id}
   {name}
-  {style}
   {title}
-  {value} />
+  {value}
+  class:bx--structured-list-input={true}
+  {...$$restProps}
+  on:change={() => {
+    update(value);
+  }} />

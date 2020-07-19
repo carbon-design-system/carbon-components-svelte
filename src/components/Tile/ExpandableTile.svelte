@@ -1,81 +1,81 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let expanded = false;
-  export let id = Math.random();
   export let light = false;
-  export let style = undefined;
-  export let tabindex = '0';
-  export let tileCollapsedIconText = 'Interact to expand Tile';
-  export let tileExpandedIconText = 'Interact to collapse Tile';
   export let tileMaxHeight = 0;
   export let tilePadding = 0;
+  export let tileCollapsedIconText = "Interact to expand Tile";
+  export let tileExpandedIconText = "Interact to collapse Tile";
+  export let tabindex = "0";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let ref = null;
 
-  import { afterUpdate } from 'svelte';
-  import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
-  import { cx, css } from '../../lib';
+  import { afterUpdate } from "svelte";
+  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
 
-  let tileRef = undefined;
-  let contentRef = undefined;
-  let aboveRef = undefined;
+  let refContent = null;
+  let refAbove = null;
 
   afterUpdate(() => {
     if (tileMaxHeight === 0) {
-      tileMaxHeight = aboveRef.getBoundingClientRect().height;
+      tileMaxHeight = refAbove.getBoundingClientRect().height;
     }
 
-    const style = window.getComputedStyle(tileRef);
-    
+    const style = getComputedStyle(ref);
+
     tilePadding =
-      parseInt(style.getPropertyValue('padding-top'), 10) +
-      parseInt(style.getPropertyValue('padding-bottom'), 10);
+      parseInt(style.getPropertyValue("padding-top"), 10) +
+      parseInt(style.getPropertyValue("padding-bottom"), 10);
   });
 </script>
 
 <div
-  bind:this={tileRef}
-  class={cx('--tile', '--tile--expandable', expanded && '--tile--is-expanded', light && '--tile--light', className)}
-  style={expanded ? undefined : css([style, `max-height: ${tileMaxHeight + tilePadding}px`])}
+  bind:this={ref}
+  {id}
+  {tabindex}
+  class:bx--tile={true}
+  class:bx--tile--expandable={true}
+  class:bx--tile--is-expanded={expanded}
+  class:bx--tile--light={light}
+  {...$$restProps}
+  style={expanded ? $$restProps.style : `${$$restProps.style}; max-height: ${tileMaxHeight + tilePadding}px`}
   on:click
   on:click={() => {
     expanded = !expanded;
   }}
   on:keypress
-  on:keypress={event => {
-    if (event.key === ' ' || event.key === 'Enter') {
-      event.preventDefault();
+  on:keypress={e => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
       expanded = !expanded;
     }
   }}
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  {tabindex}
-  {id}>
-  <div bind:this={contentRef}>
-    <div bind:this={aboveRef} class={cx('--tile-content')}>
+  on:mouseleave>
+  <div bind:this={refContent}>
+    <div bind:this={refAbove} class:bx--tile-content={true}>
       <span
+        class:bx--tile-content__above-the-fold={true}
         on:click
         on:mouseover
         on:mouseenter
-        on:mouseleave
-        class={cx('--tile-content__above-the-fold')}>
+        on:mouseleave>
         <slot name="above" />
       </span>
     </div>
     <button
       aria-expanded={expanded}
       aria-label={expanded ? tileExpandedIconText : tileCollapsedIconText}
-      class={cx('--tile__chevron')}>
+      class:bx--tile__chevron={true}>
       <ChevronDown16 />
     </button>
-    <div class={cx('--tile-content')}>
+    <div class:bx--tile-content={true}>
       <span
         on:click
         on:mouseover
         on:mouseenter
         on:mouseleave
-        class={cx('--tile-content__below-the-fold')}>
+        class:bx--tile-content__below-the-fold={true}>
         <slot name="below" />
       </span>
     </div>

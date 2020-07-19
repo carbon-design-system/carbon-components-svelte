@@ -1,20 +1,16 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let checked = false;
-  export let iconDescription = 'Tile checkmark';
-  export let id = Math.random();
   export let light = false;
-  export let name = '';
-  export let style = undefined;
-  export let tabindex = '0';
-  export let value = '';
+  export let value = "";
+  export let tabindex = "0";
+  export let iconDescription = "Tile checkmark";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let name = "";
 
-  import { getContext } from 'svelte';
-  import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
-  import { cx } from '../../lib';
+  import { getContext } from "svelte";
+  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
 
-  const { add, update, selectedValue } = getContext('TileGroup');
+  const { add, update, selectedValue } = getContext("TileGroup");
 
   add({ value, checked });
 
@@ -23,35 +19,38 @@
 
 <input
   type="radio"
-  class={cx('--tile-input')}
-  on:change
-  on:change={() => {
-    update(value);
-  }}
   {id}
   {name}
   {value}
-  {checked} />
+  {checked}
+  class:bx--tile-input={true}
+  on:change
+  on:change={() => {
+    update(value);
+  }} />
 <label
   for={id}
-  class={cx('--tile', '--tile--selectable', checked && '--tile--is-selected', light && '--tile--light', className)}
+  {tabindex}
+  class:bx--tile={true}
+  class:bx--tile--selectable={true}
+  class:bx--tile--is-selected={checked}
+  class:bx--tile--light={light}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={event => {
-    if (event.key === ' ' || event.key === 'Enter') {
-      event.preventDefault();
+  on:keydown={e => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
       update(value);
     }
-  }}
-  {tabindex}
-  {style}>
-  <span class={cx('--tile__checkmark')}>
+  }}>
+  <span class:bx--tile__checkmark={true}>
     <CheckmarkFilled16 aria-label={iconDescription} title={iconDescription} />
   </span>
-  <span class={cx('--tile-content')}>
+  <span class:bx--tile-content={true}>
     <slot />
   </span>
 </label>

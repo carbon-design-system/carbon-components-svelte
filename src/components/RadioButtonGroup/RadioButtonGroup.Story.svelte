@@ -1,10 +1,10 @@
 <script>
-  import Layout from '../../internal/ui/Layout.svelte';
-  import RadioButtonGroup from './RadioButtonGroup.svelte';
-  import RadioButton from '../RadioButton';
-  import FormGroup from '../FormGroup';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import RadioButtonGroup from "./RadioButtonGroup.svelte";
+  import { RadioButton } from "../RadioButton";
+  import { FormGroup } from "../FormGroup";
 
-  let selected = 'default-selected';
+  $: selected = "default-selected";
 </script>
 
 <Layout>

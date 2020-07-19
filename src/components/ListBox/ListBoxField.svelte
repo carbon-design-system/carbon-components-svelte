@@ -1,35 +1,30 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export const translationIds = { close: 'close', open: 'open' };
+  export const translationIds = { close: "close", open: "open" };
   export let disabled = false;
-  export let id = Math.random();
-  export let role = 'combobox';
-  export let style = undefined;
-  export let tabindex = '-1';
+  export let id = "ccs-" + Math.random().toString(36);
+  export let role = "combobox";
+  export let tabindex = "-1";
   export let translateWithId = id => defaultTranslations[id];
+  export let ref = null;
 
-  import { getContext } from 'svelte';
-  import { cx } from '../../lib';
+  import { getContext } from "svelte";
 
   const defaultTranslations = {
-    [translationIds.close]: 'Close menu',
-    [translationIds.open]: 'Open menu'
+    [translationIds.close]: "Close menu",
+    [translationIds.open]: "Open menu"
   };
-  const ctx = getContext('MultiSelect') || getContext('Dropdown');
+  const ctx = getContext("MultiSelect");
 
-  let fieldRef = undefined;
-
-  $: if (ctx && fieldRef) {
-    ctx.declareRef({ key: 'field', ref: fieldRef });
+  $: if (ctx && ref) {
+    ctx.declareRef({ key: "field", ref });
   }
 
-  $: ariaExpanded = $$props['aria-expanded'];
+  $: ariaExpanded = $$props["aria-expanded"];
   $: menuId = `menu-${id}`;
 </script>
 
 <div
-  bind:this={fieldRef}
+  bind:this={ref}
   role={ariaExpanded ? 'combobox' : role}
   aria-expanded={ariaExpanded}
   aria-owns={(ariaExpanded && menuId) || undefined}
@@ -37,13 +32,13 @@
   aria-disabled={disabled}
   aria-label={ariaExpanded ? translateWithId('close') : translateWithId('open')}
   tabindex={disabled ? '-1' : tabindex}
-  class={cx('--list-box__field', className)}
+  class:bx--list-box__field={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
   on:keydown|preventDefault|stopPropagation
-  on:blur
-  {style}>
+  on:blur>
   <slot />
 </div>

@@ -1,24 +1,51 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let align = 'center';
-  export let direction = 'bottom';
-  export let id = Math.random();
-  export let style = undefined;
-  export let tooltipText = '';
+  export let tooltipText = "";
+  export let align = "center"; // "start" | "center" | "end"
+  export let direction = "bottom"; // "top" | "bottom"
+  export let id = "ccs-" + Math.random().toString(36);
+  export let ref = null;
 
-  import { cx } from '../../lib';
+  $: hidden = false;
+  $: visible = false;
 </script>
 
-<div class={cx('--tooltip--definition', '--tooltip--a11y', className)} {style}>
+<svelte:body
+  on:keydown={e => {
+    if (e.key === 'Escape') {
+      hidden = true;
+    }
+  }} />
+
+<div
+  class:bx--tooltip--definition={true}
+  class:bx--tooltip--a11y={true}
+  {...$$restProps}
+  on:mouseenter={() => {
+    hidden = false;
+    visible = true;
+  }}
+  on:mouseleave={() => {
+    visible = false;
+  }}>
   <button
+    bind:this={ref}
+    aria-describedby={id}
+    class:bx--tooltip--a11y={true}
+    class:bx--tooltip__trigger={true}
+    class:bx--tooltip__trigger--definition={true}
+    class:bx--tooltip--hidden={hidden}
+    class:bx--tooltip--visible={visible}
+    class="{direction && `bx--tooltip--${direction}`}
+    {align && `bx--tooltip--align-${align}`}"
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
-    class={cx('--tooltip__trigger', '--tooltip--a11y', '--tooltip__trigger--definition', `--tooltip--${direction}`, `--tooltip--align-${align}`)}
-    aria-describedby={id}>
+    on:focus
+    on:focus={() => {
+      hidden = false;
+    }}>
     <slot />
   </button>
-  <div role="tooltip" class={cx('--assistive-text')} {id}>{tooltipText}</div>
+  <div role="tooltip" {id} class:bx--assistive-text={true}>{tooltipText}</div>
 </div>

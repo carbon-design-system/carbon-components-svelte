@@ -1,3 +1,1 @@
-import ListItem from './ListItem.svelte';
-
-export default ListItem;
+export { default as ListItem } from "./ListItem.svelte";

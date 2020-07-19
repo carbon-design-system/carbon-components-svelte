@@ -1,12 +1,11 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let backwardText = 'Previous page';
+  export let totalItems = 0;
   export let disabled = false;
-  export let forwardText = 'Next page';
-  export let id = Math.random();
-  export let itemRangeText = (min, max, total) => `${min}–${max} of ${total} items`;
-  export let itemsPerPageText = 'Items per page:';
+  export let forwardText = "Next page";
+  export let backwardText = "Previous page";
+  export let itemRangeText = (min, max, total) =>
+    `${min}–${max} of ${total} items`;
+  export let itemsPerPageText = "Items per page:";
   export let itemText = (min, max) => `${min}–${max} items`;
   export let page = 1;
   export let pageInputDisabled = false;
@@ -15,38 +14,36 @@
   export let pageSizes = [10];
   export let pagesUnknown = false;
   export let pageText = page => `page ${page}`;
-  export let style = undefined;
-  export let totalItems = 0;
+  export let id = "ccs-" + Math.random().toString(36);
 
-  import CaretLeft24 from 'carbon-icons-svelte/lib/CaretLeft24';
-  import CaretRight24 from 'carbon-icons-svelte/lib/CaretRight24';
-  import { cx, fillArray } from '../../lib';
-  import Select, { SelectItem } from '../Select';
-  import { afterUpdate, createEventDispatcher } from 'svelte';  
+  import CaretLeft24 from "carbon-icons-svelte/lib/CaretLeft24";
+  import CaretRight24 from "carbon-icons-svelte/lib/CaretRight24";
+  import { Select, SelectItem } from "../Select";
+  import { afterUpdate, createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
   afterUpdate(() => {
-    dispatch('update', {pageSize: parseInt(pageSize), page: parseInt(page)});
+    dispatch("update", { pageSize: parseInt(pageSize), page: parseInt(page) });
   });
 
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
-  $: selectItems = fillArray(totalPages);
+  $: selectItems = Array.from({ length: totalPages }, (_, i) => i);
   $: backButtonDisabled = disabled || page === 1;
   $: forwardButtonDisabled = disabled || page === totalPages;
 </script>
 
-<div class={cx('--pagination', className)} {style}>
-  <div class={cx('--pagination__left')}>
+<div class:bx--pagination={true} {...$$restProps}>
+  <div class:bx--pagination__left={true}>
     <label
-      id={cx(`--pagination-select-${id}-count-label`)}
-      class={cx('--pagination__text')}
-      for={cx(`--pagination-select-${id}`)}>
+      id="bx--pagination-select-{id}-count-label"
+      class:bx--pagination__text={true}
+      for="bx--pagination-select-{id}">
       {itemsPerPageText}
     </label>
     <Select
-      id={cx(`--pagination-select-${id}`)}
-      class={cx('--select__item-count')}
+      id="bx--pagination-select-{id}"
+      class="bx--select__item-count"
       labelText=""
       hideLabel
       noLabel
@@ -59,7 +56,7 @@
         <SelectItem value={size} text={size.toString()} />
       {/each}
     </Select>
-    <span class={cx('--pagination__text')}>
+    <span class:bx--pagination__text={true}>
       {#if pagesUnknown}
         {itemText(pageSize * (page - 1) + 1, page * pageSize)}
       {:else}
@@ -67,12 +64,12 @@
       {/if}
     </span>
   </div>
-  <div class={cx('--pagination__right')}>
+  <div class:bx--pagination__right={true}>
     {#if !pageInputDisabled}
       <Select
-        id={cx(`--pagination-select-${id + 2}`)}
-        class={cx('--select__page-number')}
-        labelText={`Page number, of ${totalPages} pages`}
+        id="bx--pagination-select-{id + 2}"
+        class="bx--select__page-number"
+        labelText="Page number, of {totalPages} pages"
         inline
         hideLabel
         bind:selected={page}>
@@ -80,28 +77,34 @@
           <SelectItem value={size + 1} text={(size + 1).toString()} />
         {/each}
       </Select>
-      <span class={cx('--pagination__text')}>
-        {#if pagesUnknown}{pageText(page)}{:else}{pageRangeText(page, totalPages)}{/if}
+      <span class:bx--pagination__text={true}>
+        {#if pagesUnknown}
+          {pageText(page)}
+        {:else}{pageRangeText(page, totalPages)}{/if}
       </span>
     {/if}
     <button
       type="button"
-      class={cx('--pagination__button', '--pagination__button--backward', backButtonDisabled && '--pagination__button--no-index')}
+      aria-label={backwardText}
+      disabled={backButtonDisabled}
+      class:bx--pagination__button={true}
+      class:bx--pagination__button--backward={true}
+      class:bx--pagination__button--no-index={backButtonDisabled}
       on:click={() => {
         page--;
-      }}
-      aria-label={backwardText}
-      disabled={backButtonDisabled}>
+      }}>
       <CaretLeft24 />
     </button>
     <button
       type="button"
-      class={cx('--pagination__button', '--pagination__button--forward', forwardButtonDisabled && '--pagination__button--no-index')}
       aria-label={forwardText}
+      disabled={forwardButtonDisabled}
+      class:bx--pagination__button={true}
+      class:bx--pagination__button--forward={true}
+      class:bx--pagination__button--no-index={forwardButtonDisabled}
       on:click={() => {
         page++;
-      }}
-      disabled={forwardButtonDisabled}>
+      }}>
       <CaretRight24 />
     </button>
   </div>

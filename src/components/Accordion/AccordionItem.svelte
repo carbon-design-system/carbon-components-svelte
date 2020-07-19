@@ -1,27 +1,25 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let iconDescription = 'Expand/Collapse';
+  export let title = "title";
   export let open = false;
-  export let style = undefined;
-  export let title = undefined;
+  export let iconDescription = "Expand/Collapse";
 
-  import ChevronRight16 from 'carbon-icons-svelte/lib/ChevronRight16';
-  import { cx } from '../../lib';
+  import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16";
 
-  let animation = undefined;
+  $: animation = undefined;
 </script>
 
 <li
-  class={cx('--accordion__item', open && '--accordion__item--active', animation && `--accordion__item--${animation}`, className)}
+  class:bx--accordion__item={true}
+  class:bx--accordion__item--active={open}
+  class="bx--accordion__item--${animation}"
+  {...$$restProps}
   on:animationend
   on:animationend={() => {
     animation = undefined;
-  }}
-  {style}>
+  }}>
   <button
     type="button"
-    class={cx('--accordion__heading')}
+    class:bx--accordion__heading={true}
     title={iconDescription}
     aria-expanded={open}
     on:click
@@ -38,12 +36,12 @@
         open = false;
       }
     }}>
-    <ChevronRight16 class={cx('--accordion__arrow')} aria-label={iconDescription} />
-    <div class={cx('--accordion__title')}>
+    <ChevronRight16 class="bx--accordion__arrow" aria-label={iconDescription} />
+    <div class="bx--accordion__title">
       <slot name="title">{title}</slot>
     </div>
   </button>
-  <div class={cx('--accordion__content')}>
+  <div class="bx--accordion__content">
     <slot />
   </div>
 </li>

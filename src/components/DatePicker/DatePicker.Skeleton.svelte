@@ -1,20 +1,25 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let id = Math.random();
   export let range = false;
-  export let style = undefined;
-
-  import { cx, fillArray } from '../../lib';
+  export let id = "ccs-" + Math.random().toString(36);
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item')} {style}>
+<div
+  class:bx--form-item={true}
+  {...$$restProps}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave>
   <div
-    class={cx('--date-picker', '--skeleton', range && '--date-picker--range', !range && '--date-picker--short', !range && '--date-picker--simple', className)}>
-    {#each fillArray(range ? 2 : 1) as input, i (input)}
-      <div class={cx('--date-picker-container')}>
-        <label class={cx('--label')} for={id} />
-        <div class={cx('--date-picker__input', '--skeleton')} />
+    class:bx--date-picker={true}
+    class:bx--skeleton={true}
+    class:bx--date-picker--range={true}
+    class:bx--date-picker--short={!range}
+    class:bx--date-picker--simple={!range}>
+    {#each Array.from({ length: range ? 2 : 1 }, (_, i) => i) as input, i (input)}
+      <div class:bx--date-picker-container={true}>
+        <label for={id} class:bx--label={true} />
+        <div class:bx--date-picker__input={true} class:bx--skeleton={true} />
       </div>
     {/each}
   </div>

@@ -3446,10 +3446,10 @@ capture-stack-trace@^1.0.0:
   resolved "https://registry.npmjs.org/capture-stack-trace/-/capture-stack-trace-1.0.1.tgz#a6c0bbe1f38f3aa0b92238ecb6ff42c344d4135d"
   integrity sha512-mYQLZnx5Qt1JgB1WEiMCf2647plpGeQ2NMR/5L0HNZzGQo4fuSPnK+wjfPnKZV0aiJDgzmWqqkV/g7JD+DW0qw==
 
-carbon-icons-svelte@10.9.3:
-  version "10.9.3"
-  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.9.3.tgz#bbd297c52b581884c5cb52727830045c517637bf"
-  integrity sha512-uyKxmeAotF77O+Nej8a+GHNIiwbCJVA6fS64Eg6h8pnXFIFJ4AlZRsKK9uSgA1rlVZ2y2bEHFsIkzxZ0yZjyCQ==
+carbon-icons-svelte@^10.13.0:
+  version "10.13.0"
+  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.13.0.tgz#fbb3d863901bee94418e8caf2959777655edfa78"
+  integrity sha512-WXEr+cE1IXtYQspp3cwE2l2qlYUeHWd46wyqYM2PJ3Qw5n4tPD7OCs+MZa6hmOaziv/fns+uYMeeisGvJp5Slg==
 
 case-sensitive-paths-webpack-plugin@^2.2.0:
   version "2.3.0"

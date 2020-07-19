@@ -1,3 +1,1 @@
-import TooltipIcon from './TooltipIcon.svelte';
-
-export default TooltipIcon;
+export { default as TooltipIcon } from "./TooltipIcon.svelte";

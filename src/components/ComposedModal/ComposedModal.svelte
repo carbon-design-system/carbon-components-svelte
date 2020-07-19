@@ -1,48 +1,51 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let containerClass = undefined;
-  export let danger = false;
   export let open = false;
-  export let selectorPrimaryFocus = '[data-modal-primary-focus]';
-  export let size = undefined;
-  export let style = undefined;
+  export let danger = false;
+  export let size = undefined; // "xs" | "sm" | "lg"
+  export let containerClass = "";
+  export let selectorPrimaryFocus = "[data-modal-primary-focus]";
+  export let ref = null;
 
-  import { createEventDispatcher, tick, setContext, onMount, afterUpdate } from 'svelte';
-  import { cx } from '../../lib';
+  import {
+    createEventDispatcher,
+    tick,
+    setContext,
+    onMount,
+    afterUpdate
+  } from "svelte";
 
   const dispatch = createEventDispatcher();
 
-  let buttonRef = undefined;
-  let outerModal = undefined;
-  let innerModal = undefined;
+  let buttonRef = null;
+  let innerModal = null;
 
-  let opened = false;
-
-  setContext('ComposedModal', {
+  setContext("ComposedModal", {
     closeModal: () => {
       open = false;
     },
     submit: () => {
-      dispatch('submit');
+      dispatch("submit");
     },
     declareRef: ref => {
       buttonRef = ref;
     }
   });
 
-  // TODO: reuse in Modal
   function focus(element) {
-    const node = (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
+    const node =
+      (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
     node.focus();
   }
+
+  $: opened = false;
+  $: didOpen = open;
 
   onMount(async () => {
     await tick();
     focus();
 
     return () => {
-      document.body.classList.remove(cx('--body--with-modal-open'));
+      document.body.classList.remove("bx--body--with-modal-open");
     };
   });
 
@@ -50,24 +53,25 @@
     if (opened) {
       if (!open) {
         opened = false;
-        dispatch('close');
-        document.body.classList.add(cx('--body--with-modal-open'));
+        dispatch("close");
+        document.body.classList.add("bx--body--with-modal-open");
       }
     } else if (open) {
       opened = true;
-      dispatch('open');
-      document.body.classList.remove(cx('--body--with-modal-open'));
+      dispatch("open");
+      document.body.classList.remove("bx--body--with-modal-open");
     }
   });
-
-  $: didOpen = open;
 </script>
 
 <div
-  bind:this={outerModal}
+  bind:this={ref}
   role="presentation"
   tabindex="-1"
-  class={cx('--modal', open && 'is-visible', danger && '--modal--danger', className)}
+  class:bx--modal={true}
+  class:is-visible={open}
+  class:bx--modal--danger={danger}
+  {...$$restProps}
   on:click
   on:click={({ target }) => {
     if (!innerModal.contains(target)) {
@@ -83,11 +87,12 @@
       focus(currentTarget);
       didOpen = false;
     }
-  }}
-  {style}>
+  }}>
   <div
     bind:this={innerModal}
-    class={cx('--modal-container', size && `--modal-container--${size}`, containerClass)}>
+    class:bx--modal-container={true}
+    class="{size && `bx--modal-container--${size}`}
+    {containerClass}">
     <slot />
   </div>
 </div>

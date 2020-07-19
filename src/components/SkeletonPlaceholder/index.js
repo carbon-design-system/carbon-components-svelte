@@ -1,3 +1,1 @@
-import SkeletonPlaceholder from './SkeletonPlaceholder.svelte';
-
-export default SkeletonPlaceholder;
+export { default as SkeletonPlaceholder } from "./SkeletonPlaceholder.svelte";

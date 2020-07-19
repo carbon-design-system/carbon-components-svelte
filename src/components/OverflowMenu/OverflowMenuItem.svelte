@@ -1,36 +1,31 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let danger = false;
   export let disabled = false;
   export let hasDivider = false;
-  export let href = '';
+  export let href = "";
   export let primaryFocus = false;
   export let requireTitle = true;
-  export let style = undefined;
-  export let text = 'Provide text';
+  export let text = "Provide text";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let ref = null;
 
-  import { getContext, afterUpdate } from 'svelte';
-  import { cx } from '../../lib';
+  import { getContext, afterUpdate } from "svelte";
 
-  const id = Math.random();
-  const { focusedId, add, update, change } = getContext('OverflowMenu');
-
-  let buttonRef = undefined;
+  const { focusedId, add, update, change } = getContext("OverflowMenu");
 
   add({ id, text, primaryFocus });
 
   afterUpdate(() => {
     if (primaryFocus) {
-      buttonRef.focus();
+      ref.focus();
     }
   });
 
   $: primaryFocus = $focusedId === id;
   $: buttonProps = {
-    tabindex: '-1',
+    tabindex: "-1",
     title: requireTitle ? text : undefined,
-    class: cx('--overflow-menu-options__btn'),
+    class: "bx--overflow-menu-options__btn",
     disabled: href ? undefined : disabled,
     href: href ? href : undefined
   };
@@ -38,12 +33,15 @@
 
 <li
   role="menuitem"
-  class={cx('--overflow-menu-options__option', hasDivider && '--overflow-menu--divider', danger && '--overflow-menu-options__option--danger', disabled && '--overflow-menu-options__option--disabled', className)}
-  {style}>
+  class:bx--overflow-menu-options__option={true}
+  class:bx--overflow-menu--divider={hasDivider}
+  class:bx--overflow-menu-options__option--danger={danger}
+  class:bx--overflow-menu-options__option--disabled={disabled}
+  {...$$restProps}>
   {#if href}
     <!-- svelte-ignore a11y-missing-attribute -->
     <a
-      bind:this={buttonRef}
+      bind:this={ref}
       {...buttonProps}
       on:click
       on:click={() => {
@@ -58,12 +56,12 @@
         }
       }}>
       <slot>
-        <div class={cx('--overflow-menu-options__option-content')}>{text}</div>
+        <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
       </slot>
     </a>
   {:else}
     <button
-      bind:this={buttonRef}
+      bind:this={ref}
       {...buttonProps}
       on:click
       on:click={() => {
@@ -78,7 +76,7 @@
         }
       }}>
       <slot>
-        <div class={cx('--overflow-menu-options__option-content')}>{text}</div>
+        <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
       </slot>
     </button>
   {/if}

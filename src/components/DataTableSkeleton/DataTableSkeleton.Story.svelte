@@ -1,6 +1,6 @@
 <script>
-  import Layout from '../../internal/ui/Layout.svelte';
-  import DataTableSkeleton from './DataTableSkeleton.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import DataTableSkeleton from "./DataTableSkeleton.svelte";
 </script>
 
 <Layout>

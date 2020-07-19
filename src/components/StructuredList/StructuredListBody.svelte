@@ -1,17 +1,9 @@
-<script>
-  let className = undefined;
-  export { className as class };
-  export let style = undefined;
-
-  import { cx } from '../../lib';
-</script>
-
 <div
+  class:bx--structured-list-tbody={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--structured-list-tbody', className)}
-  {style}>
+  on:mouseleave>
   <slot />
 </div>

@@ -1,28 +1,39 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let size = undefined; // "compact" | "short" | "tall"
   export let zebra = false;
-  export let size = undefined;
   export let useStaticWidth = false;
   export let shouldShowBorder = false;
   export let sortable = false;
   export let stickyHeader = false;
-  export let style = undefined;
-
-  import { cx } from '../../lib';
 </script>
 
 {#if stickyHeader}
-  <section class={cx('--data-table_inner-container', className)} {style}>
+  <section class:bx--data-table_inner-container={true} {...$$restProps}>
     <table
-      class={cx('--data-table', size === 'compact' && '--data-table--compact', size === 'short' && '--data-table--short', size === 'tall' && '--data-table--tall', sortable && '--data-table--sort', zebra && '--data-table--zebra', useStaticWidth && '--data-table--static', !shouldShowBorder && '--data-table--no-border', stickyHeader && '--data-table--sticky-header')}>
+      class:bx--data-table={true}
+      class:bx--data-table--compact={size === 'compact'}
+      class:bx--data-table--short={size === 'short'}
+      class:bx--data-table--tall={size === 'tall'}
+      class:bx--data-table--sort={sortable}
+      class:bx--data-table--zebra={zebra}
+      class:bx--data-table--static={useStaticWidth}
+      class:bx--data-table--no-border={!shouldShowBorder}
+      class:bx--data-table--sticky-header={stickyHeader}>
       <slot />
     </table>
   </section>
 {:else}
   <table
-    class={cx('--data-table', size === 'compact' && '--data-table--compact', size === 'short' && '--data-table--short', size === 'tall' && '--data-table--tall', sortable && '--data-table--sort', zebra && '--data-table--zebra', useStaticWidth && '--data-table--static', !shouldShowBorder && '--data-table--no-border', stickyHeader && '--data-table--sticky-header', className)}
-    {style}>
+    class:bx--data-table={true}
+    class:bx--data-table--compact={size === 'compact'}
+    class:bx--data-table--short={size === 'short'}
+    class:bx--data-table--tall={size === 'tall'}
+    class:bx--data-table--sort={sortable}
+    class:bx--data-table--zebra={zebra}
+    class:bx--data-table--static={useStaticWidth}
+    class:bx--data-table--no-border={!shouldShowBorder}
+    class:bx--data-table--sticky-header={stickyHeader}
+    {...$$restProps}>
     <slot />
   </table>
 {/if}

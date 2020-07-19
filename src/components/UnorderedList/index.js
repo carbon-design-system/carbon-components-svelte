@@ -1,3 +1,1 @@
-import UnorderedList from './UnorderedList.svelte';
-
-export default UnorderedList;
+export { default as UnorderedList } from "./UnorderedList.svelte";

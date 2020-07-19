@@ -1,37 +1,32 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let direction = 'bottom';
+  export let open = false;
+  export let light = false;
   export let flipped = false;
+  export let direction = "bottom"; // "top" | "bottom"
+  export let tabindex = "0";
   export let icon = OverflowMenuVertical16;
   export let iconClass = undefined;
-  export let iconDescription = 'Open and close list of options';
-  export let id = Math.random();
-  export let light = false;
+  export let iconDescription = "Open and close list of options";
+  export let id = "ccs-" + Math.random().toString(36);
   export let menuOptionsClass = undefined;
-  export let open = false;
-  export let style = undefined;
-  export let tabindex = '0';
 
-  import { createEventDispatcher, setContext, afterUpdate } from 'svelte';
-  import { writable } from 'svelte/store';
-  import OverflowMenuVertical16 from 'carbon-icons-svelte/lib/OverflowMenuVertical16';
-  import { cx } from '../../lib';
-  import { formatStyle } from './formatStyle';
+  import { createEventDispatcher, setContext, afterUpdate } from "svelte";
+  import { writable } from "svelte/store";
+  import OverflowMenuVertical16 from "carbon-icons-svelte/lib/OverflowMenuVertical16";
+  import { formatStyle } from "./formatStyle";
 
   const dispatch = createEventDispatcher();
+  const items = writable([]);
+  const currentId = writable(undefined);
+  const focusedId = writable(undefined);
+  const currentIndex = writable(-1);
 
-  let items = writable([]);
-  let currentId = writable(undefined);
-  let focusedId = writable(undefined);
-  let currentIndex = writable(-1);
+  $: buttonRef = undefined;
+  $: buttonWidth = undefined;
+  $: menuRef = undefined;
+  $: didOpen = false;
 
-  let buttonRef = undefined;
-  let buttonWidth = undefined;
-  let menuRef = undefined;
-  let didOpen = false;
-
-  setContext('OverflowMenu', {
+  setContext("OverflowMenu", {
     focusedId,
     add: ({ id, text, primaryFocus }) => {
       items.update(_ => {
@@ -62,7 +57,7 @@
   afterUpdate(() => {
     if ($currentId) {
       const { index, text } = $items.filter(_ => _.id === $currentId)[0];
-      dispatch('close', { index, text });
+      dispatch("close", { index, text });
       open = false;
     }
 
@@ -76,13 +71,13 @@
       }
 
       if (flipped) {
-        menuRef.style.left = 'auto';
+        menuRef.style.left = "auto";
         menuRef.style.right = 0;
       }
 
-      if (direction === 'top') {
-        menuRef.style.top = 'auto';
-        menuRef.style.bottom = height + 'px';
+      if (direction === "top") {
+        menuRef.style.top = "auto";
+        menuRef.style.bottom = height + "px";
       }
     }
 
@@ -98,12 +93,12 @@
     }
   });
 
-  $: ariaLabel = $$props['aria-label'] || 'menu';
+  $: ariaLabel = $$props["aria-label"] || "menu";
   $: if ($items[$currentIndex]) {
     focusedId.set($items[$currentIndex].id);
   }
   $: dynamicPseudoWidth = `.bx--overflow-menu-options.bx--overflow-menu-options:after {
-      width: ${buttonWidth ? buttonWidth + 'px' : '2rem'};
+      width: ${buttonWidth ? buttonWidth + "px" : "2rem"};
     }`;
   $: styles = formatStyle(dynamicPseudoWidth);
 </script>
@@ -112,12 +107,9 @@
   {@html styles}
 </svelte:head>
 
-<!-- TODO: extract utility component -->
 <svelte:body
   on:click={({ target }) => {
-    if (buttonRef && buttonRef.contains(target)) {
-      return;
-    }
+    if (buttonRef && buttonRef.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
       open = false;
     }
@@ -128,7 +120,12 @@
   aria-haspopup
   aria-expanded={open}
   aria-label={ariaLabel}
-  class={cx('--overflow-menu', open && '--overflow-menu--open', light && '--overflow-menu--light', className)}
+  {id}
+  {tabindex}
+  class:bx--overflow-menu={true}
+  class:bx--overflow-menu--open={open}
+  class:bx--overflow-menu--light={light}
+  {...$$restProps}
   on:click
   on:click={({ target }) => {
     if (!(menuRef && menuRef.contains(target))) {
@@ -139,25 +136,22 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={event => {
+  on:keydown={e => {
     if (open) {
-      if (['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(event.key)) {
-        event.preventDefault();
-      } else if (event.key === 'Escape') {
-        event.stopPropagation();
+      if (['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(e.key)) {
+        e.preventDefault();
+      } else if (e.key === 'Escape') {
+        e.stopPropagation();
         open = false;
       }
     }
-  }}
-  {id}
-  {tabindex}
-  {style}>
+  }}>
   <slot name="menu">
     <svelte:component
       this={icon}
-      class={cx('--overflow-menu__icon', iconClass)}
       aria-label={iconDescription}
-      title={iconDescription} />
+      title={iconDescription}
+      class="bx--overflow-menu__icon {iconClass}" />
   </slot>
   {#if open}
     <ul
@@ -166,7 +160,11 @@
       tabindex="-1"
       aria-label={ariaLabel}
       data-floating-menu-direction={direction}
-      class={cx('--overflow-menu-options', flipped && '--overflow-menu--flip', open && '--overflow-menu-options--open', light && '--overflow-menu-options--light', menuOptionsClass)}>
+      class:bx--overflow-menu-options={true}
+      class:bx--overflow-menu--flip={flipped}
+      class:bx--overflow-menu-options--open={open}
+      class:bx--overflow-menu-options--light={light}
+      class:menuOptionsClass>
       <slot />
     </ul>
   {/if}

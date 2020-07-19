@@ -1,17 +1,15 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let clicked = false;
-  export let href = undefined;
   export let light = false;
-  export let rel = undefined;
-  export let style = undefined;
-
-  import { cx } from '../../lib';
 </script>
 
+<!-- svelte-ignore a11y-missing-attribute -->
 <a
-  class={cx('--link', '--tile', '--tile--clickable', clicked && '--tile--is-clicked', light && '--tile--light', className)}
+  class:bx--tile={true}
+  class:bx--tile--clickable={true}
+  class:bx--tile--is-clicked={clicked}
+  class:bx--tile--light={light}
+  {...$$restProps}
   on:click
   on:click={() => {
     clicked = !clicked;
@@ -24,9 +22,6 @@
   }}
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  {style}
-  {href}
-  {rel}>
+  on:mouseleave>
   <slot />
 </a>

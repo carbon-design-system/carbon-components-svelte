@@ -1,42 +1,38 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let direction = 'bottom';
+  export let direction = "bottom";
   export let hideIcon = false;
   export let icon = Information16;
-  export let iconDescription = '';
-  export let iconName = '';
+  export let iconDescription = "";
+  export let iconName = "";
   export let open = false;
-  export let style = undefined;
-  export let tabindex = '0';
-  export let tooltipId = Math.random();
-  export let triggerId = Math.random();
-  export let triggerText = '';
+  export let tabindex = "0";
+  export let tooltipId = "ccs-" + Math.random().toString(36);
+  export let triggerId = "ccs-" + Math.random().toString(36);
+  export let triggerText = "";
+  export let ref = null;
+  export let refTooltip = null;
+  export let refIcon = null;
 
-  import { createEventDispatcher, afterUpdate } from 'svelte';
-  import Information16 from 'carbon-icons-svelte/lib/Information16';
-  import { cx, css } from '../../lib';
+  import { createEventDispatcher, afterUpdate } from "svelte";
+  import Information16 from "carbon-icons-svelte/lib/Information16";
 
   const dispatch = createEventDispatcher();
 
-  let programmatic = true;
-  let buttonRef = undefined;
-  let tooltipRef = undefined;
-  let iconRef = undefined;
+  $: programmatic = true;
 
-  function onKeydown(event) {
-    if (event.key === 'Escape') {
-      event.stopPropagation();
+  function onKeydown(e) {
+    if (e.key === "Escape") {
+      e.stopPropagation();
       open = false;
-    } else if (event.key === ' ' || event.key === 'Enter') {
-      event.stopPropagation();
-      event.preventDefault();
+    } else if (e.key === " " || e.key === "Enter") {
+      e.stopPropagation();
+      e.preventDefault();
       open = true;
     }
   }
 
   function onBlur({ relatedTarget }) {
-    if (tooltipRef && !tooltipRef.contains(relatedTarget)) {
+    if (refTooltip && !refTooltip.contains(relatedTarget)) {
       open = false;
     }
   }
@@ -53,14 +49,14 @@
 
   afterUpdate(() => {
     if (open) {
-      const button = buttonRef.getBoundingClientRect();
-      const tooltip = tooltipRef.getBoundingClientRect();
+      const button = ref.getBoundingClientRect();
+      const tooltip = refTooltip.getBoundingClientRect();
 
       let iconWidth = 16;
       let iconHeight = 16;
 
-      if (iconRef) {
-        const icon = iconRef.getBoundingClientRect();
+      if (refIcon) {
+        const icon = refIcon.getBoundingClientRect();
         iconWidth = icon.width;
         iconHeight = icon.height;
       }
@@ -69,7 +65,7 @@
       let offsetY = 0;
 
       switch (direction) {
-        case 'bottom':
+        case "bottom":
           if (hideIcon) {
             offsetX = -1 * (tooltip.width / 2 - button.width / 2);
           } else {
@@ -77,11 +73,11 @@
           }
           offsetY = iconHeight / 2;
           break;
-        case 'right':
+        case "right":
           offsetX = button.width + 6;
           offsetY = -1 * (tooltip.height / 2 + iconWidth / 2 - 3);
           break;
-        case 'left':
+        case "left":
           if (hideIcon) {
             offsetX = -1 * (tooltip.width + 6 + 1);
           } else {
@@ -89,51 +85,50 @@
           }
           offsetY = -1 * (tooltip.height / 2 + button.height) - 2;
           break;
-        case 'top':
+        case "top":
           if (hideIcon) {
             offsetX = -1 * (tooltip.width / 2 - button.width / 2);
           } else {
-            offsetX = -1 * (tooltip.width / 2 - button.width + iconWidth / 2 + 1);
+            offsetX =
+              -1 * (tooltip.width / 2 - button.width + iconWidth / 2 + 1);
           }
           offsetY = -1 * (tooltip.height + button.height + iconWidth / 2 - 1);
           break;
       }
 
-      tooltipRef.style.left = offsetX + 'px';
-      tooltipRef.style.marginTop = offsetY + 'px';
+      refTooltip.style.left = offsetX + "px";
+      refTooltip.style.marginTop = offsetY + "px";
     }
   });
 
-  $: {
-    dispatch(open ? 'open' : 'close');
-  }
+  $: dispatch(open ? "open" : "close");
   $: buttonProps = {
-    role: 'button',
-    'aria-haspopup': 'true',
+    role: "button",
+    "aria-haspopup": "true",
     id: hideIcon ? triggerId : undefined,
-    class: hideIcon ? cx('--tooltip__label') : cx('--tooltip__trigger'),
-    'aria-expanded': open,
-    'aria-describedby': open ? tooltipId : undefined,
-    'aria-labelledby': triggerText ? triggerId : undefined,
-    'aria-label': triggerText ? iconDescription : undefined,
+    class: hideIcon ? "bx--tooltip__label" : "bx--tooltip__trigger",
+    "aria-expanded": open,
+    "aria-describedby": open ? tooltipId : undefined,
+    "aria-labelledby": triggerText ? triggerId : undefined,
+    "aria-label": triggerText ? iconDescription : undefined,
     tabindex,
-    style: hideIcon ? style : undefined
+    style: hideIcon ? $$restProps.style : undefined
   };
 </script>
 
 <svelte:body
   on:click={({ target }) => {
-    if (!programmatic && open && tooltipRef && !tooltipRef.contains(target)) {
+    if (!programmatic && open && refTooltip && !refTooltip.contains(target)) {
       open = false;
     }
   }} />
 
-<div class={className} style={css([style, ['position', 'relative']])}>
+<div {...$$restProps} style="{$$restProps.style}; position: relative;">
   {#if !hideIcon}
-    <div bind:this={buttonRef} id={triggerId} class={cx('--tooltip__label')} {style}>
+    <div bind:this={ref} id={triggerId} class:bx--tooltip__label={true}>
       <slot name="triggerText">{triggerText}</slot>
       <div
-        bind:this={iconRef}
+        bind:this={refIcon}
         {...buttonProps}
         on:click|preventDefault|stopPropagation={openMenu}
         on:focus={openMenu}
@@ -146,7 +141,7 @@
     </div>
   {:else}
     <div
-      bind:this={buttonRef}
+      bind:this={ref}
       {...buttonProps}
       on:click|preventDefault|stopPropagation={openMenu}
       on:focus={openMenu}
@@ -157,14 +152,15 @@
   {/if}
   {#if open}
     <div
-      bind:this={tooltipRef}
+      bind:this={refTooltip}
       role="tooltip"
       tabindex="0"
       id={tooltipId}
       data-floating-menu-direction={direction}
-      class={cx('--tooltip', open && '--tooltip--shown')}
+      class:bx--tooltip={true}
+      class:bx--tooltip--shown={open}
       on:blur={closeMenu}>
-      <span class={cx('--tooltip__caret')} />
+      <span class:bx--tooltip__caret={true} />
       <slot />
     </div>
   {/if}

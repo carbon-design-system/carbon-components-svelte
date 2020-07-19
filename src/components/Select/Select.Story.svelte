@@ -1,23 +1,31 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Select from './Select.svelte';
-  import SelectItem from './SelectItem.svelte';
-  import SelectSkeleton from './Select.Skeleton.svelte';
-  import SelectItemGroup from './SelectItemGroup.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import Select from "./Select.svelte";
+  import SelectItem from "./SelectItem.svelte";
+  import SelectSkeleton from "./Select.Skeleton.svelte";
+  import SelectItemGroup from "./SelectItemGroup.svelte";
 
-  let selected = 'placeholder-item';
+  $: selected = "placeholder-item";
+  $: console.log(selected);
 </script>
 
 <Layout>
   <div>
-    {selected}
     {#if story === 'skeleton'}
       <SelectSkeleton {...$$props} />
     {:else}
-      <Select {...$$props.select} id="select-id" name="select-name" bind:selected>
-        <SelectItem value="placeholder-item" text="Choose an option" disabled hidden />
+      <Select
+        {...$$props.select}
+        id="select-id"
+        name="select-name"
+        bind:selected>
+        <SelectItem
+          value="placeholder-item"
+          text="Choose an option"
+          disabled
+          hidden />
         <SelectItemGroup {...$$props.group} label="Category 1">
           <SelectItem value="option-1" text="Option 1" />
           <SelectItem value="option-2" text="Option 2" />

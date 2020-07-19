@@ -1,18 +1,16 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import { cx } from '../../lib';
-  import Button from '../Button';
-  import FileUploader from './FileUploader.svelte';
-  import FileUploaderButton from './FileUploaderButton.svelte';
-  import FileUploaderDropContainer from './FileUploaderDropContainer.svelte';
-  import FileUploaderItem from './FileUploaderItem.svelte';
-  import FileUploaderSkeleton from './FileUploader.Skeleton.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import { Button } from "../Button";
+  import FileUploader from "./FileUploader.svelte";
+  import FileUploaderButton from "./FileUploaderButton.svelte";
+  import FileUploaderDropContainer from "./FileUploaderDropContainer.svelte";
+  import FileUploaderItem from "./FileUploaderItem.svelte";
+  import FileUploaderSkeleton from "./FileUploader.Skeleton.svelte";
 
-  let fileUploader = undefined;
-  let files = [];
-
+  $: fileUploader = undefined;
+  $: files = [];
   $: disabled = files.length === 0;
 </script>
 
@@ -36,7 +34,7 @@
           console.log('click');
         }} />
     {:else if story === 'uploader'}
-      <div class={cx('--file__container')}>
+      <div class="bx--file__container">
         <FileUploader
           bind:this={fileUploader}
           {...$$props}

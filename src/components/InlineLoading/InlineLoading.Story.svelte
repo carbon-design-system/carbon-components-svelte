@@ -5,30 +5,30 @@
   export let description = undefined;
   export let successDelay = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Button from '../Button';
-  import InlineLoading from './InlineLoading.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import { Button } from "../Button";
+  import InlineLoading from "./InlineLoading.svelte";
 
   const props = { status, iconDescription, description, successDelay };
 
   let isSubmitting = false;
   let success = false;
-  let ariaLive = 'off';
-  let loadingDescription = 'Submitting...';
+  let ariaLive = "off";
+  let loadingDescription = "Submitting...";
 
   function handleSubmit() {
     isSubmitting = true;
-    ariaLive = 'assertive';
+    ariaLive = "assertive";
 
     setTimeout(() => {
       isSubmitting = false;
-      loadingDescription = 'Submitted!';
+      loadingDescription = "Submitted!";
       success = true;
       setTimeout(() => {
         success = false;
         isSubmitting = false;
-        loadingDescription = 'Submitting...';
-        ariaLive = 'off';
+        loadingDescription = "Submitting...";
+        ariaLive = "off";
       }, 1500);
     }, 2000);
   }

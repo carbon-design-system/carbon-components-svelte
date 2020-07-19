@@ -1,14 +1,15 @@
 <script>
   export let story = undefined;
 
-  import OverflowMenuVertical16 from 'carbon-icons-svelte/lib/OverflowMenuVertical16';
-  import Layout from '../../internal/ui/Layout.svelte';
-  import { cx } from '../../lib';
-  import Link from '../Link';
-  import Button from '../Button';
-  import Tooltip from './Tooltip.svelte';
+  import OverflowMenuVertical16 from "carbon-icons-svelte/lib/OverflowMenuVertical16";
+  import Layout from "../../internal/ui/Layout.svelte";
+  import { Link } from "../Link";
+  import { Button } from "../Button";
+  import Tooltip from "./Tooltip.svelte";
 
-  let open = story === 'uncontrolled';
+  $: ref = null;
+  $: console.log(ref);
+  $: open = story === "uncontrolled";
 </script>
 
 <style>
@@ -25,6 +26,7 @@
     {#if story === 'custom icon'}
       <Tooltip
         {...$$props}
+        bind:ref
         bind:open
         on:open={() => {
           console.log('on:open');
@@ -34,10 +36,11 @@
         }}>
         <div slot="icon" class="custom-icon-class" />
         <p>
-          This is some tooltip text. This box shows the maximum amount of text that should appear
-          inside. If more room is needed please use a modal instead.
+          This is some tooltip text. This box shows the maximum amount of text
+          that should appear inside. If more room is needed please use a modal
+          instead.
         </p>
-        <div class={cx('--tooltip__footer')}>
+        <div class="bx--tooltip__footer">
           <Link href="/">Learn More</Link>
           <Button size="small">Create</Button>
         </div>
@@ -58,7 +61,7 @@
         Show
       </Button>
       <div style="padding: 15px 20px; margin: 4px 20px">
-        <Tooltip {...$$props} bind:open hideIcon>
+        <Tooltip {...$$props} bind:ref bind:open hideIcon>
           <div slot="triggerText">My text wrapped with tooltip</div>
           Tooltip content
         </Tooltip>
@@ -66,6 +69,7 @@
     {:else}
       <Tooltip
         {...$$props}
+        bind:ref
         bind:open
         on:open={() => {
           console.log('on:open');
@@ -75,10 +79,11 @@
         }}
         icon={story === 'custom icon only' ? OverflowMenuVertical16 : undefined}>
         <p>
-          This is some tooltip text. This box shows the maximum amount of text that should appear
-          inside. If more room is needed please use a modal instead.
+          This is some tooltip text. This box shows the maximum amount of text
+          that should appear inside. If more room is needed please use a modal
+          instead.
         </p>
-        <div class={cx('--tooltip__footer')}>
+        <div class="bx--tooltip__footer">
           <Link href="/">Learn More</Link>
           <Button size="small">Create</Button>
         </div>

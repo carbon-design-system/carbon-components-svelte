@@ -1,39 +1,38 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let border = false;
   export let rows = 5;
-  export let style = undefined;
-
-  import { cx, fillArray } from '../../lib';
 </script>
 
 <section
+  class:bx--skeleton={true}
+  class:bx--structured-list={true}
+  class:bx--structured-list--border={border}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--skeleton', '--structured-list', border && '--structured-list--border', className)}
-  {style}>
-  <div class={cx('--structured-list-thead')}>
-    <div class={cx('--structured-list-row', '--structured-list-row--header-row')}>
-      <div class={cx('--structured-list-th')}>
+  on:mouseleave>
+  <div class:bx--structured-list-thead={true}>
+    <div
+      class:bx--structured-list-row={true}
+      class:bx--structured-list-row--header-row={true}>
+      <div class:bx--structured-list-th={true}>
         <span />
       </div>
-      <div class={cx('--structured-list-th')}>
+      <div class:bx--structured-list-th={true}>
         <span />
       </div>
-      <div class={cx('--structured-list-th')}>
+      <div class:bx--structured-list-th={true}>
         <span />
       </div>
     </div>
   </div>
-  <div class={cx('--structured-list-tbody')}>
-    {#each fillArray(rows) as row, i (row)}
-      <div class={cx('--structured-list-row')}>
-        <div class={cx('--structured-list-td')} />
-        <div class={cx('--structured-list-td')} />
-        <div class={cx('--structured-list-td')} />
+  <div class:bx--structured-list-tbody={true}>
+    {#each Array.from({ length: rows }, (_, i) => i) as row, i (row)}
+      <div class:bx--structured-list-row={true}>
+        <div class:bx--structured-list-td={true} />
+        <div class:bx--structured-list-td={true} />
+        <div class:bx--structured-list-td={true} />
       </div>
     {/each}
   </div>

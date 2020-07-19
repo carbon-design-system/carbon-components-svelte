@@ -1,37 +1,46 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let value = "";
+  export let type = "text";
+  export let placeholder = "hh=mm";
+  export let pattern = "(1[012]|[1-9]):[0-5][0-9](\\s)?";
+  export let maxlength = 5;
+  export let light = false;
   export let disabled = false;
-  export let hideLabel = false;
-  export let id = Math.random();
+  export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalid = false;
-  export let invalidText = 'Invalid time format.';
-  export let labelText = '';
-  export let light = false;
-  export let maxlength = 5;
-  export let pattern = '(1[012]|[1-9]):[0-5][0-9](\\s)?';
-  export let placeholder = 'hh=mm';
-  export let style = undefined;
-  export let type = 'text';
-  export let value = '';
-
-  import { cx } from '../../lib';
+  export let invalidText = "Invalid time format.";
+  export let labelText = "";
+  export let hideLabel = false;
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item', className)} {style}>
-  <div class={cx('--time-picker', light && '--time-picker--light', light && '--select--light')}>
-    <div class={cx('--time-picker__input')}>
+<div
+  class:bx--form-item={true}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  {...$$restProps}>
+  <div
+    class:bx--time-picker={true}
+    class:bx--time-picker--light={light}
+    class:bx--select--light={light}>
+    <div class:bx--time-picker__input={true}>
       {#if labelText}
         <label
-          class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}
-          for={id}>
+          for={id}
+          class:bx--label={true}
+          class:bx--visually-hidden={hideLabel}
+          class:bx--label--disabled={disabled}>
           {labelText}
         </label>
       {/if}
       <input
         data-invalid={invalid || undefined}
-        class={cx('--time-picker__input-field', '--text-input', light && '--text-input--light', invalid && '--text-input--invalid')}
+        class:bx--time-picker__input-field={true}
+        class:bx--text-input={true}
+        class:bx--text-input--light={light}
+        class:bx--text-input--invalid={invalid}
         on:change
         on:input
         on:input={({ target }) => {
@@ -51,6 +60,6 @@
     <slot />
   </div>
   {#if invalid}
-    <div class={cx('--form-requirement')}>{invalidText}</div>
+    <div class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
 </div>

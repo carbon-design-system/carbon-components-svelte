@@ -1,10 +1,10 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import ProgressIndicator from './ProgressIndicator.svelte';
-  import ProgressIndicatorSkeleton from './ProgressIndicator.Skeleton.svelte';
-  import ProgressStep from './ProgressStep.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import ProgressIndicator from "./ProgressIndicator.svelte";
+  import ProgressIndicatorSkeleton from "./ProgressIndicator.Skeleton.svelte";
+  import ProgressStep from "./ProgressStep.svelte";
 </script>
 
 <Layout>
@@ -18,10 +18,12 @@
         </ProgressStep>
         <ProgressStep
           label="Really long label"
-          description="The progress indicator will listen for clicks on the steps" />
+          description="The progress indicator will listen for clicks on the
+          steps" />
         <ProgressStep
           label="Tooltip and really long label"
-          description="The progress indicator will listen for clicks on the steps" />
+          description="The progress indicator will listen for clicks on the
+          steps" />
       </ProgressIndicator>
     {:else}
       <ProgressIndicator {...$$props}>

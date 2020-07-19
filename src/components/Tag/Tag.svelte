@@ -1,8 +1,8 @@
 <script>
-  export let type = undefined;
+  export let type = undefined; // "red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast"
   export let filter = false;
-  export let title = "Clear filter";
   export let disabled = false;
+  export let title = "Clear filter";
   export let id = "ccs-" + Math.random().toString(36);
 
   import Close16 from "carbon-icons-svelte/lib/Close16";
@@ -17,7 +17,7 @@
     class="bx--tag--{type}"
     {id}
     {...$$restProps}>
-    <slot class="bx--tag__label">
+    <slot props={{ class: 'bx--tag__label' }}>
       <span class:bx--tag__label={true}>{type}</span>
     </slot>
     <button

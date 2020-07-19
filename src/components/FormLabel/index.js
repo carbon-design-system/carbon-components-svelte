@@ -1,3 +1,1 @@
-import FormLabel from './FormLabel.svelte';
-
-export default FormLabel;
+export { default as FormLabel } from "./FormLabel.svelte";

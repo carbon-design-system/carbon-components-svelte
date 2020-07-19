@@ -1,28 +1,24 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let href = undefined;
   export let isCurrentPage = false;
-  export let style = undefined;
 
-  import { cx } from '../../lib';
-  import Link from '../Link';
-
-  $: ariaCurrent = $$props['aria-current'];
+  import { Link } from "../Link";
 </script>
 
 <li
+  class:bx--breadcrumb-item={true}
+  class:bx--breadcrumb-item--current={isCurrentPage && $$restProps['aria-current'] !== 'page'}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--breadcrumb-item', isCurrentPage && ariaCurrent !== 'page' && '--breadcrumb-item--current', className)}
-  {style}>
+  on:mouseleave>
   {#if href}
-    <Link {href} aria-current={ariaCurrent}>
+    <Link {href} aria-current={$$restProps['aria-current']}>
       <slot />
     </Link>
   {:else}
-    <slot props={{ 'aria-current': ariaCurrent, class: cx('--link') }} />
+    <slot
+      props={{ 'aria-current': $$restProps['aria-current'], class: 'bx--link' }} />
   {/if}
 </li>

@@ -1,3 +1,1 @@
-import OrderedList from './OrderedList.svelte';
-
-export default OrderedList;
+export { default as OrderedList } from "./OrderedList.svelte";

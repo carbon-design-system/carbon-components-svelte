@@ -1,18 +1,10 @@
-<script>
-  let className = undefined;
-  export { className as class };
-  export let style = undefined;
-
-  import { cx } from '../../lib';
-</script>
-
 <div
+  class:bx--radio-button-wrapper={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--radio-button-wrapper', className)}
-  {style}>
-  <div class={cx('--radio-button', '--skeleton')} />
-  <span class={cx('--radio-button__label', '--skeleton')} />
+  on:mouseleave>
+  <div class:bx--radio-button={true} class:bx--skeleton={true} />
+  <span class:bx--radio-button__label={true} class:bx--skeleton={true} />
 </div>

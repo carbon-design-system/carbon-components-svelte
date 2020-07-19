@@ -1,29 +1,27 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let iconDescription = 'close icon';
-  export let notificationType = 'toast';
+  export let notificationType = "toast"; // "toast" | "inline"
+  export let iconDescription = "close icon";
   export let renderIcon = Close20;
-  export let style = undefined;
   export let title = undefined;
-  export let type = 'button';
+  export let type = "button";
 
-  import Close20 from 'carbon-icons-svelte/lib/Close20';
-  import { cx } from '../../lib';
+  import Close20 from "carbon-icons-svelte/lib/Close20";
 </script>
 
 <button
+  aria-label={iconDescription}
+  title={iconDescription}
+  {type}
+  class:bx--toast-notification__close-button={notificationType === 'toast'}
+  class:bx--inline-notification__close-button={notificationType === 'inline'}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  aria-label={iconDescription}
-  title={iconDescription}
-  class={cx(notificationType === 'toast' && '--toast-notification__close-button', notificationType === 'inline' && '--inline-notification__close-button', className)}
-  {style}
-  {type}>
+  on:mouseleave>
   <svelte:component
     this={renderIcon}
-    class={cx(notificationType === 'toast' && '--toast-notification__close-icon', notificationType === 'inline' && '--inline-notification__close-icon')}
-    {title} />
+    {title}
+    class="{notificationType === 'toast' && 'bx--toast-notification__close-icon'}
+    {notificationType === 'inline' && 'bx--inline-notification__close-icon'}" />
 </button>

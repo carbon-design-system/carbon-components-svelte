@@ -1,4 +1,2 @@
-import RadioButton from './RadioButton.svelte';
-
-export default RadioButton;
-export { default as RadioButtonSkeleton } from './RadioButton.Skeleton.svelte';
+export { default as RadioButton } from "./RadioButton.svelte";
+export { default as RadioButtonSkeleton } from "./RadioButton.Skeleton.svelte";

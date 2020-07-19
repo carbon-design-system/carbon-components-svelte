@@ -1,81 +1,81 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import DataTable from './DataTable.svelte';
-  import Table from './Table.svelte';
-  import TableBody from './TableBody.svelte';
-  import TableCell from './TableCell.svelte';
-  import TableContainer from './TableContainer.svelte';
-  import TableHead from './TableHead.svelte';
-  import TableHeader from './TableHeader.svelte';
-  import TableRow from './TableRow.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import DataTable from "./DataTable.svelte";
+  import Table from "./Table.svelte";
+  import TableBody from "./TableBody.svelte";
+  import TableCell from "./TableCell.svelte";
+  import TableContainer from "./TableContainer.svelte";
+  import TableHead from "./TableHead.svelte";
+  import TableHeader from "./TableHeader.svelte";
+  import TableRow from "./TableRow.svelte";
 
-  let rows = [
+  const rows = [
     {
-      id: 'a',
-      name: 'Load Balancer 3',
-      protocol: 'HTTP',
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
       port: 3000,
-      rule: 'Round robin',
-      attached_groups: 'Kevins VM Groups',
-      status: 'Disabled'
+      rule: "Round robin",
+      attached_groups: "Kevins VM Groups",
+      status: "Disabled"
     },
     {
-      id: 'b',
-      name: 'Load Balancer 1',
-      protocol: 'HTTP',
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
       port: 443,
-      rule: 'Round robin',
-      attached_groups: 'Maureens VM Groups',
-      status: 'Starting'
+      rule: "Round robin",
+      attached_groups: "Maureens VM Groups",
+      status: "Starting"
     },
     {
-      id: 'c',
-      name: 'Load Balancer 2',
-      protocol: 'HTTP',
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
       port: 80,
-      rule: 'DNS delegation',
-      attached_groups: 'Andrews VM Groups',
-      status: 'Active'
+      rule: "DNS delegation",
+      attached_groups: "Andrews VM Groups",
+      status: "Active"
     },
     {
-      id: 'd',
-      name: 'Load Balancer 6',
-      protocol: 'HTTP',
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
       port: 3000,
-      rule: 'Round robin',
-      attached_groups: 'Marcs VM Groups',
-      status: 'Disabled'
+      rule: "Round robin",
+      attached_groups: "Marcs VM Groups",
+      status: "Disabled"
     },
     {
-      id: 'e',
-      name: 'Load Balancer 4',
-      protocol: 'HTTP',
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
       port: 443,
-      rule: 'Round robin',
-      attached_groups: 'Mels VM Groups',
-      status: 'Starting'
+      rule: "Round robin",
+      attached_groups: "Mels VM Groups",
+      status: "Starting"
     },
     {
-      id: 'f',
-      name: 'Load Balancer 5',
-      protocol: 'HTTP',
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
       port: 80,
-      rule: 'DNS delegation',
-      attached_groups: 'Ronjas VM Groups',
-      status: 'Active'
+      rule: "DNS delegation",
+      attached_groups: "Ronjas VM Groups",
+      status: "Active"
     }
   ];
-  let headers = [
-    { key: 'name', value: 'Name' },
-    { key: 'protocol', value: 'Protocol' },
-    { key: 'port', value: 'Port' },
-    { key: 'rule', value: 'Rule' },
-    { key: 'attached_groups', value: 'Attached Groups' },
-    { key: 'status', value: 'Status' }
+  const headers = [
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" },
+    { key: "attached_groups", value: "Attached Groups" },
+    { key: "status", value: "Status" }
   ];
-  let sortable = true;
+  $: sortable = true;
 </script>
 
 <Layout>
@@ -89,7 +89,9 @@
           <TableHead>
             <TableRow>
               {#each props.headers as header, i (header.key)}
-                <TableHeader {...props.getHeaderProps({ header })}>{header.header}</TableHeader>
+                <TableHeader {...props.getHeaderProps({ header })}>
+                  {header.header}
+                </TableHeader>
               {/each}
             </TableRow>
           </TableHead>

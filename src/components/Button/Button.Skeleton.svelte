@@ -1,31 +1,30 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let href = undefined;
   export let small = false;
-  export let style = undefined;
-
-  import { cx } from '../../lib';
 </script>
 
 {#if href}
   <a
+    {href}
     role="button"
+    class:bx--skeleton={true}
+    class:bx--btn={true}
+    class:bx--btn--sm={small}
+    {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave
-    class={cx('--skeleton', '--btn', small && '--btn--sm', className)}
-    {style}
-    {href}>
+    on:mouseleave>
     {''}
   </a>
 {:else}
   <div
+    class:bx--skeleton={true}
+    class:bx--btn={true}
+    class:bx--btn--sm={small}
+    {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave
-    class={cx('--skeleton', '--btn', small && '--btn--sm', className)}
-    {style} />
+    on:mouseleave />
 {/if}

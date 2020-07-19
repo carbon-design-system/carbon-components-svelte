@@ -1,6 +1,6 @@
 <script>
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Loading from './Loading.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import Loading from "./Loading.svelte";
 </script>
 
 <Layout>

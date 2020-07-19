@@ -1,18 +1,17 @@
 <script>
-  export let id = undefined;
   export let active = false;
   export let highlighted = false;
-
-  import { cx } from '../../lib';
 </script>
 
 <div
+  class:bx--list-box__menu-item={true}
+  class:bx--list-box__menu-item--active={active}
+  class:bx--list-box__menu-item--highlighted={highlighted}
+  {...$$restProps}
   on:click
   on:mouseenter
-  on:mouseleave
-  class={cx('--list-box__menu-item', active && '--list-box__menu-item--active', highlighted && '--list-box__menu-item--highlighted')}
-  {id}>
-  <div class={cx('--list-box__menu-item__option')}>
+  on:mouseleave>
+  <div class:bx--list-box__menu-item__option={true}>
     <slot />
   </div>
 </div>

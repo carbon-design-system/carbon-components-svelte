@@ -1,11 +1,11 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import NumberInput from './NumberInput.svelte';
-  import NumberInputSkeleton from './NumberInput.Skeleton.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import NumberInput from "./NumberInput.svelte";
+  import NumberInputSkeleton from "./NumberInput.Skeleton.svelte";
 
-  let value = $$props.value;
+  $: value = $$props.value;
 </script>
 
 <Layout>

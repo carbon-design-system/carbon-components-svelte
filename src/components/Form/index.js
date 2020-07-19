@@ -1,3 +1,1 @@
-import Form from './Form.svelte';
-
-export default Form;
+export { default as Form } from "./Form.svelte";

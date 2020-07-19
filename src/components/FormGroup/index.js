@@ -1,3 +1,1 @@
-import FormGroup from './FormGroup.svelte';
-
-export default FormGroup;
+export { default as FormGroup } from "./FormGroup.svelte";

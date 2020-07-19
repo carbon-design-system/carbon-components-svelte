@@ -1,15 +1,12 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Toggle from './Toggle.svelte';
-  import ToggleSkeleton from './Toggle.Skeleton.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import Toggle from "./Toggle.svelte";
+  import ToggleSkeleton from "./Toggle.Skeleton.svelte";
 
-  let toggled = true;
-
-  $: {
-    console.log('toggled', toggled);
-  }
+  $: toggled = true;
+  $: console.log("bind:toggled", toggled);
 </script>
 
 <Layout>

@@ -2,14 +2,14 @@
   export let story = undefined;
   const { modalBody } = $$props;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Button from '../Button';
-  import ComposedModal from './ComposedModal.svelte';
-  import ModalHeader from './ModalHeader.svelte';
-  import ModalBody from './ModalBody.svelte';
-  import ModalFooter from './ModalFooter.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import { Button } from "../Button";
+  import ComposedModal from "./ComposedModal.svelte";
+  import ModalHeader from "./ModalHeader.svelte";
+  import ModalBody from "./ModalBody.svelte";
+  import ModalFooter from "./ModalFooter.svelte";
 
-  let open = false;
+  $: open = false;
 </script>
 
 <Layout>
@@ -19,13 +19,17 @@
       <ModalBody
         {...$$props.modalBody}
         aria-label={modalBody.hasScrollingContent ? 'Modal content' : undefined}>
-        <p>Please see ModalWrapper for more examples and demo of the functionality.</p>
+        <p>
+          Please see ModalWrapper for more examples and demo of the
+          functionality.
+        </p>
         {#if modalBody.hasScrollingContent}
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id accumsan augue.
-            Phasellus consequat augue vitae tellus tincidunt posuere. Curabitur justo urna,
-            consectetur vel elit iaculis, ultrices condimentum risus. Nulla facilisi. Etiam
-            venenatis molestie tellus. Quisque consectetur non risus eu rutrum.{' '}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id
+            accumsan augue. Phasellus consequat augue vitae tellus tincidunt
+            posuere. Curabitur justo urna, consectetur vel elit iaculis,
+            ultrices condimentum risus. Nulla facilisi. Etiam venenatis molestie
+            tellus. Quisque consectetur non risus eu rutrum.{' '}
           </p>
         {/if}
       </ModalBody>
@@ -41,28 +45,39 @@
       <ModalBody
         {...$$props.modalBody}
         aria-label={modalBody.hasScrollingContent ? 'Modal content' : undefined}>
-        <p>Please see ModalWrapper for more examples and demo of the functionality.</p>
+        <p>
+          Please see ModalWrapper for more examples and demo of the
+          functionality.
+        </p>
         {#if modalBody.hasScrollingContent}
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id accumsan augue.
-            Phasellus consequat augue vitae tellus tincidunt posuere. Curabitur justo urna,
-            consectetur vel elit iaculis, ultrices condimentum risus. Nulla facilisi. Etiam
-            venenatis molestie tellus. Quisque consectetur non risus eu rutrum.{' '}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id
+            accumsan augue. Phasellus consequat augue vitae tellus tincidunt
+            posuere. Curabitur justo urna, consectetur vel elit iaculis,
+            ultrices condimentum risus. Nulla facilisi. Etiam venenatis molestie
+            tellus. Quisque consectetur non risus eu rutrum.{' '}
           </p>
         {/if}
       </ModalBody>
       <ModalFooter>
         <Button kind="secondary">Cancel</Button>
-        <Button kind={$$props.composedModal.danger ? 'danger' : 'primary'}>Primary</Button>
+        <Button kind={$$props.composedModal.danger ? 'danger' : 'primary'}>
+          Primary
+        </Button>
       </ModalFooter>
     </ComposedModal>
   {/if}
 
   {#if story === 'title'}
-    <ComposedModal {...$$props.composedModal} open on:close={() => {}} on:submit={() => {}}>
+    <ComposedModal
+      {...$$props.composedModal}
+      open
+      on:close={() => {}}
+      on:submit={() => {}}>
       <ModalHeader
         {...$$props.modalHeader}
-        title="Passive modal title as the message. Should be direct and 3 lines or less." />
+        title="Passive modal title as the message. Should be direct and 3 lines
+        or less." />
       <ModalBody {...$$props.modalBody} />
       <ModalFooter {...$$props.modalFooter} />
     </ComposedModal>
@@ -77,55 +92,68 @@
         Launch composed modal
       </Button>
     </div>
-    <ComposedModal {...$$props.composedModal} {open} on:close={() => (open = false)}>
+    <ComposedModal
+      {...$$props.composedModal}
+      {open}
+      on:close={() => (open = false)}>
       <ModalHeader {...$$props.modalHeader} />
       <ModalBody
         {...$$props.modalBody}
         aria-label={modalBody.hasScrollingContent ? 'Modal content' : undefined}>
-        <p>Please see ModalWrapper for more examples and demo of the functionality.</p>
+        <p>
+          Please see ModalWrapper for more examples and demo of the
+          functionality.
+        </p>
         {#if modalBody.hasScrollingContent}
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id accumsan augue.
-            Phasellus consequat augue vitae tellus tincidunt posuere. Curabitur justo urna,
-            consectetur vel elit iaculis, ultrices condimentum risus. Nulla facilisi. Etiam
-            venenatis molestie tellus. Quisque consectetur non risus eu rutrum.{' '}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id
+            accumsan augue. Phasellus consequat augue vitae tellus tincidunt
+            posuere. Curabitur justo urna, consectetur vel elit iaculis,
+            ultrices condimentum risus. Nulla facilisi. Etiam venenatis molestie
+            tellus. Quisque consectetur non risus eu rutrum.{' '}
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id accumsan augue.
-            Phasellus consequat augue vitae tellus tincidunt posuere. Curabitur justo urna,
-            consectetur vel elit iaculis, ultrices condimentum risus. Nulla facilisi. Etiam
-            venenatis molestie tellus. Quisque consectetur non risus eu rutrum.{' '}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id
+            accumsan augue. Phasellus consequat augue vitae tellus tincidunt
+            posuere. Curabitur justo urna, consectetur vel elit iaculis,
+            ultrices condimentum risus. Nulla facilisi. Etiam venenatis molestie
+            tellus. Quisque consectetur non risus eu rutrum.{' '}
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id accumsan augue.
-            Phasellus consequat augue vitae tellus tincidunt posuere. Curabitur justo urna,
-            consectetur vel elit iaculis, ultrices condimentum risus. Nulla facilisi. Etiam
-            venenatis molestie tellus. Quisque consectetur non risus eu rutrum.{' '}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id
+            accumsan augue. Phasellus consequat augue vitae tellus tincidunt
+            posuere. Curabitur justo urna, consectetur vel elit iaculis,
+            ultrices condimentum risus. Nulla facilisi. Etiam venenatis molestie
+            tellus. Quisque consectetur non risus eu rutrum.{' '}
           </p>
           <h3>Lorem ipsum</h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id accumsan augue.
-            Phasellus consequat augue vitae tellus tincidunt posuere. Curabitur justo urna,
-            consectetur vel elit iaculis, ultrices condimentum risus. Nulla facilisi. Etiam
-            venenatis molestie tellus. Quisque consectetur non risus eu rutrum.{' '}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id
+            accumsan augue. Phasellus consequat augue vitae tellus tincidunt
+            posuere. Curabitur justo urna, consectetur vel elit iaculis,
+            ultrices condimentum risus. Nulla facilisi. Etiam venenatis molestie
+            tellus. Quisque consectetur non risus eu rutrum.{' '}
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id accumsan augue.
-            Phasellus consequat augue vitae tellus tincidunt posuere. Curabitur justo urna,
-            consectetur vel elit iaculis, ultrices condimentum risus. Nulla facilisi. Etiam
-            venenatis molestie tellus. Quisque consectetur non risus eu rutrum.{' '}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id
+            accumsan augue. Phasellus consequat augue vitae tellus tincidunt
+            posuere. Curabitur justo urna, consectetur vel elit iaculis,
+            ultrices condimentum risus. Nulla facilisi. Etiam venenatis molestie
+            tellus. Quisque consectetur non risus eu rutrum.{' '}
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id accumsan augue.
-            Phasellus consequat augue vitae tellus tincidunt posuere. Curabitur justo urna,
-            consectetur vel elit iaculis, ultrices condimentum risus. Nulla facilisi. Etiam
-            venenatis molestie tellus. Quisque consectetur non risus eu rutrum.{' '}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id
+            accumsan augue. Phasellus consequat augue vitae tellus tincidunt
+            posuere. Curabitur justo urna, consectetur vel elit iaculis,
+            ultrices condimentum risus. Nulla facilisi. Etiam venenatis molestie
+            tellus. Quisque consectetur non risus eu rutrum.{' '}
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id accumsan augue.
-            Phasellus consequat augue vitae tellus tincidunt posuere. Curabitur justo urna,
-            consectetur vel elit iaculis, ultrices condimentum risus. Nulla facilisi. Etiam
-            venenatis molestie tellus. Quisque consectetur non risus eu rutrum.{' '}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id
+            accumsan augue. Phasellus consequat augue vitae tellus tincidunt
+            posuere. Curabitur justo urna, consectetur vel elit iaculis,
+            ultrices condimentum risus. Nulla facilisi. Etiam venenatis molestie
+            tellus. Quisque consectetur non risus eu rutrum.{' '}
           </p>
         {/if}
       </ModalBody>

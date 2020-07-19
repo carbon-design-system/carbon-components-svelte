@@ -1,37 +1,44 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let labelClass = undefined;
-  export let titleClass = undefined;
-  export let closeClass = undefined;
-  export let closeIconClass = undefined;
-  export let label = undefined;
-  export let title = '';
-  export let iconDescription = 'Close';
-  export let style = undefined;
+  export let title = "";
+  export let label = "";
+  export let labelClass = "";
+  export let titleClass = "";
+  export let closeClass = "";
+  export let closeIconClass = "";
+  export let iconDescription = "Close";
 
-  import { getContext } from 'svelte';
-  import Close20 from 'carbon-icons-svelte/lib/Close20';
-  import { cx } from '../../lib';
+  import { getContext } from "svelte";
+  import Close20 from "carbon-icons-svelte/lib/Close20";
 
-  const { closeModal } = getContext('ComposedModal');
+  const { closeModal } = getContext("ComposedModal");
 </script>
 
-<div class={cx('--modal-header', className)} {style}>
+<div class:bx--modal-header={true} {...$$restProps}>
   {#if label}
-    <p class={cx('--modal-header__label', '--type-delta', labelClass)}>{label}</p>
+    <p
+      class:bx--modal-header__label={true}
+      class:bx--type-delta={true}
+      class:labelClass>
+      {label}
+    </p>
   {/if}
   {#if title}
-    <p class={cx('--modal-header__heading', '--type-beta', titleClass)}>{title}</p>
+    <p
+      class:bx--modal-header__heading={true}
+      class:bx--type-beta={true}
+      class:titleClass>
+      {title}
+    </p>
   {/if}
   <slot />
   <button
     type="button"
     title={iconDescription}
     aria-label={iconDescription}
-    class={cx('--modal-close', closeClass)}
+    class:bx--modal-close={true}
+    class:closeClass
     on:click
     on:click={closeModal}>
-    <Close20 class={cx('--modal-close__icon', closeIconClass)} />
+    <Close20 class="bx--modal-close__icon {closeIconClass}" />
   </button>
 </div>

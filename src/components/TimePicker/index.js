@@ -1,4 +1,2 @@
-import TimePicker from './TimePicker.svelte';
-
-export default TimePicker;
-export { default as TimePickerSelect } from './TimePickerSelect.svelte';
+export { default as TimePicker } from "./TimePicker.svelte";
+export { default as TimePickerSelect } from "./TimePickerSelect.svelte";

@@ -1,40 +1,39 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let count = 4;
   export let open = true;
-  export let style = undefined;
 
-  import ChevronRight16 from 'carbon-icons-svelte/lib/ChevronRight16';
-  import { cx, fillArray } from '../../lib';
-  import SkeletonText from '../SkeletonText';
+  import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16";
+  import { SkeletonText } from "../SkeletonText";
 </script>
 
 <ul
+  class:bx--accordion={true}
+  class:bx--skeleton={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--accordion', '--skeleton', className)}
-  {style}>
+  on:mouseleave>
   {#if open}
-    <li class={cx('--accordion__item', '--accordion__item--active')}>
-      <span class={cx('--accordion__heading')}>
-        <ChevronRight16 class={cx('--accordion__arrow')} />
-        <SkeletonText class={cx('--accordion__title')} />
+    <li
+      class:bx--accordion__item={true}
+      class:bx--accordion__item--active={true}>
+      <span class:bx--accordion__heading={true}>
+        <ChevronRight16 class="bx--accordion__arrow" />
+        <SkeletonText class="bx--accordion__title" />
       </span>
-      <div class={cx('--accordion__content')}>
+      <div class="bx--accordion__content">
         <SkeletonText width="90%" />
         <SkeletonText width="80%" />
         <SkeletonText width="95%" />
       </div>
     </li>
   {/if}
-  {#each fillArray(open ? count - 1 : count) as item, i (item)}
-    <li class={cx('--accordion__item')}>
-      <span class={cx('--accordion__heading')}>
-        <ChevronRight16 class={cx('--accordion__arrow')} />
-        <SkeletonText class={cx('--accordion__title')} />
+  {#each Array.from({ length: open ? count - 1 : count }, (_, i) => i) as item, i (item)}
+    <li class="bx--accordion__item">
+      <span class="bx--accordion__heading">
+        <ChevronRight16 class="bx--accordion__arrow" />
+        <SkeletonText class="bx--accordion__title" />
       </span>
     </li>
   {/each}

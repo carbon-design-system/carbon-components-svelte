@@ -1,3 +1,1 @@
-import Loading from './Loading.svelte';
-
-export default Loading;
+export { default as Loading } from "./Loading.svelte";

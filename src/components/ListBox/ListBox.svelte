@@ -1,36 +1,33 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let size = undefined; // "sm" | "xl"
+  export let type = "default"; // "default" | "inline"
   export let disabled = false;
-  export let id = Math.random();
   export let invalid = false;
-  export let invalidText = '';
+  export let invalidText = "";
   export let light = false;
   export let open = false;
-  export let size = undefined;
-  export let style = undefined;
-  export let type = 'default';
-
-  import { cx } from '../../lib';
 </script>
 
 <div
   role="listbox"
   tabindex="-1"
   data-invalid={invalid || undefined}
-  aria-label={$$props['aria-label']}
-  class={cx('--list-box', size && `--list-box--${size}`, type === 'inline' && '--list-box--inline', disabled && '--list-box--disabled', open && '--list-box--expanded', light && '--list-box--light', className)}
+  class:bx--list-box={true}
+  class:bx--list-box--inline={type === 'inline'}
+  class:bx--list-box--disabled={disabled}
+  class:bx--list-box--expanded={open}
+  class:bx--list-box--light={light}
+  class={size && `bx--list-box--${size}`}
+  {...$$restProps}
   on:keydown
-  on:keydown={event => {
-    if (event.key === 'Escape') {
-      event.stopPropagation();
+  on:keydown={e => {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
     }
   }}
-  on:click|preventDefault|stopPropagation
-  {style}
-  {id}>
+  on:click|preventDefault|stopPropagation>
   <slot />
 </div>
 {#if invalid}
-  <div class={cx('--form-requirement')}>{invalidText}</div>
+  <div class:bx--form-requirement={true}>{invalidText}</div>
 {/if}

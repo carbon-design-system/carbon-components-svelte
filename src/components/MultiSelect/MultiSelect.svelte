@@ -1,60 +1,61 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let size = undefined; // "sm" | "lg" | "xl"
+  export let type = "default"; // "default" | "inline"
+  export let selectionFeedback = "top-after-reopen"; // "top" | "fixed" | "top-after-reopen"
   export let disabled = false;
   export let filterable = false;
-  export let filterItem = (item, value) => item.text.toLowerCase().includes(value.toLowerCase());
-  export let helperText = '';
-  export let id = Math.random();
+  export let filterItem = (item, value) =>
+    item.text.toLowerCase().includes(value.toLowerCase());
+  export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalid = false;
-  export let invalidText = '';
+  export let invalidText = "";
+  export let helperText = "";
   export let items = [];
   export let itemToString = item => item.text || item.id;
-  export let label = '';
+  export let label = "";
   export let light = false;
-  export let locale = 'en';
+  export let locale = "en";
   export let open = false;
-  export let placeholder = '';
+  export let placeholder = "";
   export let selectedIds = [];
-  export let selectionFeedback = 'top-after-reopen';
-  export let size = undefined;
-  export let sortItem = (a, b) => a.text.localeCompare(b.text, locale, { numeric: true });
-  export let style = undefined;
-  export let titleText = '';
+  export let sortItem = (a, b) =>
+    a.text.localeCompare(b.text, locale, { numeric: true });
+  export let titleText = "";
   export let translateWithId = undefined;
-  export let type = 'default';
-  export let useTitleInItem = false;
-  export let value = '';
 
-  import { afterUpdate, setContext } from 'svelte';
-  import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';
-  import { cx } from '../../lib';
-  import Checkbox from '../Checkbox';
-  import ListBox, {
+  export let useTitleInItem = false;
+  export let value = "";
+
+  import { afterUpdate, setContext } from "svelte";
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
+  import { Checkbox } from "../Checkbox";
+  import {
+    ListBox,
     ListBoxField,
     ListBoxMenu,
     ListBoxMenuIcon,
     ListBoxMenuItem,
     ListBoxSelection
-  } from '../ListBox';
+  } from "../ListBox";
 
-  let multiSelectRef = undefined;
-  let fieldRef = undefined;
-  let selectionRef = undefined;
-  let inputRef = undefined;
-  let inputValue = '';
-  let initialSorted = false;
-  let highlightedIndex = -1;
-  let prevChecked = [];
+  let multiSelectRef = null;
+  let fieldRef = null;
+  let selectionRef = null;
+  let inputRef = null;
 
-  setContext('MultiSelect', {
+  $: inputValue = "";
+  $: initialSorted = false;
+  $: highlightedIndex = -1;
+  $: prevChecked = [];
+
+  setContext("MultiSelect", {
     declareRef: ({ key, ref }) => {
       switch (key) {
-        case 'field':
+        case "field":
           fieldRef = ref;
           break;
-        case 'selection':
+        case "selection":
           selectionRef = ref;
           break;
       }
@@ -82,7 +83,7 @@
 
   afterUpdate(() => {
     if (checked.length !== prevChecked.length) {
-      if (selectionFeedback === 'top') {
+      if (selectionFeedback === "top") {
         sortedItems = sort();
       }
       prevChecked = checked;
@@ -90,26 +91,31 @@
     }
 
     if (!open) {
-      if (!initialSorted || selectionFeedback !== 'fixed') {
+      if (!initialSorted || selectionFeedback !== "fixed") {
         sortedItems = sort();
         initialSorted = true;
       }
 
       highlightedIndex = -1;
-      inputValue = '';
+      inputValue = "";
     }
 
     items = sortedItems;
   });
 
   $: menuId = `menu-${id}`;
-  $: inline = type === 'inline';
-  $: ariaLabel = $$props['aria-label'] || 'Choose an item';
-  $: sortedItems = items.map(item => ({ ...item, checked: selectedIds.includes(item.id) }));
+  $: inline = type === "inline";
+  $: ariaLabel = $$props["aria-label"] || "Choose an item";
+  $: sortedItems = items.map(item => ({
+    ...item,
+    checked: selectedIds.includes(item.id)
+  }));
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
   $: filteredItems = sortedItems.filter(item => filterItem(item, value));
-  $: highlightedId = sortedItems[highlightedIndex] ? sortedItems[highlightedIndex].id : undefined;
+  $: highlightedId = sortedItems[highlightedIndex]
+    ? sortedItems[highlightedIndex].id
+    : undefined;
   $: value = inputValue;
 </script>
 
@@ -122,28 +128,40 @@
 
 <div
   bind:this={multiSelectRef}
-  class={cx('--multi-select__wrapper', '--list-box__wrapper', inline && '--multi-select__wrapper--inline', inline && '--list-box__wrapper--inline', inline && invalid && '--multi-select__wrapper--inline--invalid', inline && invalid && '--list-box__wrapper--inline--invalid', className)}
-  {style}>
+  class:bx--multi-select__wrapper={true}
+  class:bx--list-box__wrapper={true}
+  class:bx--multi-select__wrapper--inline={inline}
+  class:bx--list-box__wrapper--inline={inline}
+  class:bx--multi-select__wrapper--inline--invalid={inline && invalid}
+  {...$$restProps}>
   {#if titleText}
-    <label class={cx('--label', disabled && '--label--disabled')} for={id}>{titleText}</label>
+    <label for={id} class:bx--label={true} class:bx--label--disabled={disabled}>
+      {titleText}
+    </label>
   {/if}
   {#if !inline && helperText}
-    <div class={cx('--form__helper-text', disabled && '--form__helper-text--disabled')}>
+    <div
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}>
       {helperText}
     </div>
   {/if}
   <ListBox
     aria-label={ariaLabel}
-    class={cx('--multi-select', filterable && '--combo-box', filterable && '--multi-select--filterable', invalid && '--multi-select--invalid', inline && '--multi-select--inline', checked.length > 0 && '--multi-select--selected')}
     {id}
     {disabled}
     {invalid}
     {invalidText}
     {open}
     {light}
-    {size}>
+    {size}
+    class="bx--multi-select {filterable && 'bx--combo-box'}
+    {filterable && 'bx--multi-select--filterable'}
+    {invalid && 'bx--multi-select--invalid'}
+    {inline && 'bx--multi-select--inline'}
+    {checked.length > 0 && 'bx--multi-select--selected'}">
     {#if invalid}
-      <WarningFilled16 class={cx('--list-box__invalid-icon')} />
+      <WarningFilled16 class="bx--list-box__invalid-icon" />
     {/if}
     <ListBoxField
       role="button"
@@ -192,7 +210,10 @@
         <ListBoxSelection
           selectionCount={checked.length}
           on:clear={() => {
-            sortedItems = sortedItems.map(item => ({ ...item, checked: false }));
+            sortedItems = sortedItems.map(item => ({
+              ...item,
+              checked: false
+            }));
             fieldRef.blur();
           }}
           {translateWithId}
@@ -209,7 +230,8 @@
           aria-activedescendant={highlightedId}
           aria-disabled={disabled}
           aria-controls={menuId}
-          class={cx('--text-input', inputValue === '' && '--text-input--empty')}
+          class:bx--text-input={true}
+          class:bx--text-input--empty={inputValue === ''}
           on:input={({ target }) => {
             inputValue = target.value;
           }}
@@ -240,7 +262,7 @@
           {name}
           value={inputValue} />
         {#if invalid}
-          <WarningFilled16 class={cx('--list-box__invalid-icon')} />
+          <WarningFilled16 class="bx--list-box__invalid-icon" />
         {/if}
         {#if inputValue}
           <ListBoxSelection
@@ -260,7 +282,7 @@
           {open} />
       {/if}
       {#if !filterable}
-        <span class={cx('--list-box__label')}>{label}</span>
+        <span class="bx--list-box__label">{label}</span>
         <ListBoxMenuIcon {open} {translateWithId} />
       {/if}
     </ListBoxField>
@@ -283,7 +305,7 @@
             <Checkbox
               readonly
               tabindex="-1"
-              id={`checkbox-${item.id}`}
+              id="checkbox-{item.id}"
               title={useTitleInItem ? itemToString(item) : undefined}
               name={itemToString(item)}
               labelText={itemToString(item)}

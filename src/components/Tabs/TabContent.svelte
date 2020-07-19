@@ -1,19 +1,19 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let style = undefined;
+  export let id = "ccs-" + Math.random().toString(36);
+  import { getContext } from "svelte";
 
-  import { getContext } from 'svelte';
-  import { cx } from '../../lib';
-
-  const id = Math.random();
-  const { selectedContent, addContent } = getContext('Tabs');
+  const { selectedContent, addContent } = getContext("Tabs");
 
   addContent({ id });
 
   $: selected = $selectedContent === id;
 </script>
 
-<div aria-hidden={!selected} hidden={!selected} class={cx('--tab-content', className)} {style}>
+<div
+  aria-hidden={!selected}
+  hidden={!selected}
+  class:bx--tab-content={true}
+  class={$$restProps.class}
+  style={$$restProps.style}>
   <slot />
 </div>

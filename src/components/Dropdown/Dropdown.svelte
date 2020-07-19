@@ -1,39 +1,34 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let disabled = false;
-  export let helperText = '';
-  export let id = Math.random();
-  export let name = undefined;
+  export let selectedIndex = -1;
+  export let open = false;
   export let inline = false;
+  export let light = false;
+  export let disabled = false;
   export let invalid = false;
-  export let invalidText = '';
   export let items = [];
   export let itemToString = item => item.text || item.id;
+  export let type = "default"; // "default" | "inline"
+  export let size = undefined; // "sm" | "lg" | "xl"
+  export let id = "ccs-" + Math.random().toString(36);
+  export let name = undefined;
+  export let invalidText = "";
+  export let helperText = "";
   export let label = undefined;
-  export let light = false;
-  export let open = false;
-  export let selectedIndex = -1;
-  export let size = undefined;
-  export let style = undefined;
-  export let titleText = '';
+  export let titleText = "";
   export let translateWithId = undefined;
-  export let type = 'default';
+  export let ref = null;
 
-  import { setContext } from 'svelte';
-  import WarningFilled16 from 'carbon-icons-svelte/lib/WarningFilled16';
-  import { cx } from '../../lib';
-  import ListBox, { ListBoxField, ListBoxMenu, ListBoxMenuIcon, ListBoxMenuItem } from '../ListBox';
+  import { setContext } from "svelte";
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
+  import {
+    ListBox,
+    ListBoxMenu,
+    ListBoxMenuIcon,
+    ListBoxMenuItem
+  } from "../ListBox";
 
   let selectedId = undefined;
-  let fieldRef = undefined;
   let highlightedIndex = -1;
-
-  setContext('Dropdown', {
-    declareRef: ({ ref }) => {
-      fieldRef = ref;
-    }
-  });
 
   function change(direction) {
     let index = highlightedIndex + direction;
@@ -47,7 +42,7 @@
     highlightedIndex = index;
   }
 
-  $: inline = type === 'inline';
+  $: inline = type === "inline";
   $: selectedItem = items[selectedIndex];
   $: if (!open) {
     highlightedIndex = -1;
@@ -56,19 +51,27 @@
 
 <svelte:body
   on:click={({ target }) => {
-    if (open && fieldRef && !fieldRef.contains(target)) {
+    if (open && ref && !ref.contains(target)) {
       open = false;
     }
   }} />
 
 <div
-  class={cx('--dropdown__wrapper', '--list-box__wrapper', inline && '--dropdown__wrapper--inline', inline && '--list-box__wrapper--inline', inline && invalid && '--dropdown__wrapper--inline--invalid', inline && invalid && '--list-box__wrapper--inline--invalid', className)}
-  {style}>
+  class:bx--dropdown__wrapper={true}
+  class:bx--list-box__wrapper={true}
+  class:bx--dropdown__wrapper--inline={inline}
+  class:bx--list-box__wrapper--inline={inline}
+  class:bx--dropdown__wrapper--inline--invalid={inline && invalid}
+  {...$$restProps}>
   {#if titleText}
-    <label for={id} class={cx('--label', disabled && '--label--disabled')}>{titleText}</label>
+    <label for={id} class:bx--label={true} class:bx--label--disabled={disabled}>
+      {titleText}
+    </label>
   {/if}
   {#if !inline && helperText}
-    <div class={cx('--form__helper-text', disabled && '--form__helper-text--disabled')}>
+    <div
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}>
       {helperText}
     </div>
   {/if}
@@ -78,9 +81,13 @@
     {id}
     {name}
     aria-label={$$props['aria-label']}
-    class={cx('--dropdown', invalid && '--dropdown--invalid', open && '--dropdown--open', inline && '--dropdown--inline', disabled && '--dropdown--disabled', light && '--dropdown--light')}
+    class="bx--dropdown {invalid && 'bx--dropdown--invalid'}
+    {open && 'bx--dropdown--open'}
+    {inline && 'bx--dropdown--inline'}
+    {disabled && 'bx--dropdown--disabled'}
+    {light && 'bx--dropdown--light'}"
     on:click={({ target }) => {
-      open = fieldRef.contains(target) ? !open : false;
+      open = ref.contains(target) ? !open : false;
     }}
     {disabled}
     {open}
@@ -88,9 +95,11 @@
     {invalidText}
     {light}>
     {#if invalid}
-      <WarningFilled16 class={cx('--list-box__invalid-icon')} />
+      <WarningFilled16 class="bx--list-box__invalid-icon" />
     {/if}
-    <ListBoxField
+    <button
+      bind:this={ref}
+      class:bx--list-box__field={true}
       tabindex="0"
       role="button"
       aria-expanded={open}
@@ -103,7 +112,7 @@
           }
         } else if (key === 'Tab') {
           open = false;
-          fieldRef.blur();
+          ref.blur();
         } else if (key === 'ArrowDown') {
           change(1);
         } else if (key === 'ArrowUp') {
@@ -112,17 +121,17 @@
       }}
       on:blur={({ relatedTarget }) => {
         if (relatedTarget) {
-          fieldRef.focus();
+          ref.focus();
         }
       }}
       {disabled}
       {translateWithId}
       {id}>
-      <span class={cx('--list-box__label')}>
+      <span class="bx--list-box__label">
         {#if selectedItem}{itemToString(selectedItem)}{:else}{label}{/if}
       </span>
       <ListBoxMenuIcon {open} {translateWithId} />
-    </ListBoxField>
+    </button>
     {#if open}
       <ListBoxMenu aria-labelledby={id} {id}>
         {#each items as item, i (item.id || i)}

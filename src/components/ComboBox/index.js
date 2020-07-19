@@ -1,3 +1,1 @@
-import ComboBox from './ComboBox.svelte';
-
-export default ComboBox;
+export { default as ComboBox } from "./ComboBox.svelte";

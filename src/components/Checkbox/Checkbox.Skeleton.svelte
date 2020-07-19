@@ -1,17 +1,11 @@
-<script>
-  let className = undefined;
-  export { className as class };
-  export let style = undefined;
-
-  import { cx } from '../../lib';
-</script>
-
 <div
+  class:bx--form-item={true}
+  class:bx--checkbox-wrapper={true}
+  class:bx--checkbox-label={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--form-item', '--checkbox-wrapper', '--checkbox-label', className)}
-  {style}>
-  <span class={cx('--checkbox-label-text', '--skeleton')} />
+  on:mouseleave>
+  <span class:bx--checkbox-label-text={true} class:bx--skeleton={true} />
 </div>

@@ -1,3 +1,1 @@
-import SkeletonText from './SkeletonText.svelte';
-
-export default SkeletonText;
+export { default as SkeletonText } from "./SkeletonText.svelte";

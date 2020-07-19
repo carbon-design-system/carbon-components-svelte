@@ -3,6 +3,6 @@
   export let tabindex = "0";
 </script>
 
-<a {...$$props} class:bx--skip-to-content={true} {href} {tabindex} on:click>
+<a {href} {tabindex} class:bx--skip-to-content={true} {...$$restProps} on:click>
   <slot>Skip to main content</slot>
 </a>

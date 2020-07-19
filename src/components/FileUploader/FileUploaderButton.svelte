@@ -1,42 +1,44 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let accept = [];
+  export let multiple = false;
   export let disabled = false;
   export let disableLabelChanges = false;
-  export let id = Math.random();
-  export let kind = 'primary';
-  export let labelText = 'Add file';
-  export let multiple = false;
-  export let name = '';
-  export let role = 'button';
-  export let style = undefined;
-  export let tabindex = '0';
-
-  import { cx } from '../../lib';
-
-  let inputRef = undefined;
+  export let kind = "primary"; // Button.kind
+  export let labelText = "Add file";
+  export let role = "button";
+  export let tabindex = "0";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let name = "";
+  export let ref = null;
 </script>
 
 <label
-  tabindex={disabled ? '-1' : tabindex}
   aria-disabled={disabled}
-  class={cx('--btn', '--btn--sm', kind && `--btn--${kind}`, disabled && '--btn--disabled', className)}
   for={id}
+  tabindex={disabled ? '-1' : tabindex}
+  class:bx--btn={true}
+  class:bx--btn--sm={true}
+  class:bx--btn--disabled={disabled}
+  class={kind && `bx--btn--${kind}`}
   on:keydown
   on:keydown={({ key }) => {
     if (key === ' ' || key === 'Enter') {
-      inputRef.click();
+      ref.click();
     }
-  }}
-  {style}>
+  }}>
   <span {role}>{labelText}</span>
 </label>
 <input
-  bind:this={inputRef}
+  bind:this={ref}
   type="file"
   tabindex="-1"
-  class={cx('--visually-hidden')}
+  {accept}
+  {disabled}
+  {id}
+  {multiple}
+  {name}
+  class:bx--visually-hidden={true}
+  {...$$restProps}
   on:change|stopPropagation
   on:change|stopPropagation={({ target }) => {
     const files = target.files;
@@ -48,9 +50,4 @@
   on:click
   on:click={({ target }) => {
     target.value = null;
-  }}
-  {id}
-  {disabled}
-  {multiple}
-  {accept}
-  {name} />
+  }} />

@@ -1,19 +1,18 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Button from '../Button';
-  import Dropdown from './Dropdown.svelte';
-  import DropdownSkeleton from './Dropdown.Skeleton.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import { Button } from "../Button";
+  import Dropdown from "./Dropdown.svelte";
+  import DropdownSkeleton from "./Dropdown.Skeleton.svelte";
 
-  let items = [
-    { id: 'option-0', text: 'Option 1' },
-    { id: 'option-1', text: 'Option 2' },
-    { id: 'option-2', text: 'Option 3' },
-    { id: 'option-3', text: 'Option 4' }
+  $: items = [
+    { id: "option-0", text: "Option 1" },
+    { id: "option-1", text: "Option 2" },
+    { id: "option-2", text: "Option 3" },
+    { id: "option-3", text: "Option 4" }
   ];
-
-  let selectedIndex = -1;
+  $: selectedIndex = -1;
 </script>
 
 <Layout>

@@ -1,3 +1,1 @@
-import Copy from './Copy.svelte';
-
-export default Copy;
+export { default as Copy } from "./Copy.svelte";

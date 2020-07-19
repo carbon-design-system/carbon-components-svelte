@@ -1,20 +1,15 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let selected = undefined;
   export let disabled = false;
-  export let legend = '';
-  export let style = undefined;
+  export let legend = "";
 
-  import { createEventDispatcher, setContext } from 'svelte';
-  import { writable } from 'svelte/store';
-  import { cx } from '../../lib';
+  import { createEventDispatcher, setContext } from "svelte";
+  import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  const selectedValue = writable(selected);
 
-  let selectedValue = writable(selected);
-
-  setContext('TileGroup', {
+  setContext("TileGroup", {
     selectedValue,
     add: ({ checked, value }) => {
       if (checked) {
@@ -27,14 +22,12 @@
   });
 
   $: selected = $selectedValue;
-  $: {
-    dispatch('select', $selectedValue);
-  }
+  $: dispatch("select", $selectedValue);
 </script>
 
-<fieldset class={cx('--tile-group', className)} {disabled} {style}>
+<fieldset {disabled} class:bx--tile-group={true} {...$$restProps}>
   {#if legend}
-    <legend class={cx('--label')}>{legend}</legend>
+    <legend class:bx--label={true}>{legend}</legend>
   {/if}
   <div>
     <slot />

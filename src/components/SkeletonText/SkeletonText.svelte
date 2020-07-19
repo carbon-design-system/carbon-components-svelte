@@ -1,45 +1,41 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let heading = false;
   export let lines = 3;
+  export let heading = false;
   export let paragraph = false;
-  export let style = undefined;
-  export let width = '100%';
+  export let width = "100%";
 
-  import { cx, css } from '../../lib';
+  const randoms = [0.973, 0.153, 0.567];
 
-  const randoms = [0.973051493507435, 0.15334737213558558, 0.5671034553053769];
-
-  let rows = [];
-
+  $: rows = [];
   $: widthNum = parseInt(width, 10);
-  $: widthPx = width.includes('px');
-  $: widthPercent = width.includes('%');
+  $: widthPx = width.includes("px");
   $: if (paragraph) {
     for (let i = 0; i < lines; i++) {
       const min = widthPx ? widthNum - 75 : 0;
       const max = widthPx ? widthNum : 75;
-      const randomWidth = Math.floor(randoms[i % 3] * (max - min + 1)) + min + 'px';
-      rows = [...rows, { width: widthPx ? randomWidth : `calc(${width} - ${randomWidth})` }];
+      const rand = Math.floor(randoms[i % 3] * (max - min + 1)) + min + "px";
+      rows = [...rows, { width: widthPx ? rand : `calc(${width} - ${rand})` }];
     }
   }
 </script>
 
 {#if paragraph}
-  <div on:click on:mouseover on:mouseenter on:mouseleave class={className} {style}>
+  <div {...$$restProps} on:click on:mouseover on:mouseenter on:mouseleave>
     {#each rows as { width }, i (width)}
       <p
-        class={cx('--skeleton__text', heading && '--skeleton__heading')}
-        style={`width: ${width};`} />
+        class:bx--skeleton__text={true}
+        class:bx--skeleton__heading={heading}
+        style="width: {width}" />
     {/each}
   </div>
 {:else}
   <p
+    class:bx--skeleton__text={true}
+    class:bx--skeleton__heading={heading}
+    {...$$restProps}
+    style="width: {width};{$$restProps.style}"
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave
-    class={cx('--skeleton__text', heading && '--skeleton__heading', className)}
-    style={css([style, ['width', width]])} />
+    on:mouseleave />
 {/if}

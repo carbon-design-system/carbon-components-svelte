@@ -1,12 +1,12 @@
 <script>
   export let story = undefined;
 
-  import ChevronDown16 from 'carbon-icons-svelte/lib/ChevronDown16';
-  import ArrowLeft20 from 'carbon-icons-svelte/lib/ArrowLeft20';
-  import Add24 from 'carbon-icons-svelte/lib/Add24';
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Icon from './Icon.svelte';
-  import IconSkeleton from './Icon.Skeleton.svelte';
+  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
+  import ArrowLeft20 from "carbon-icons-svelte/lib/ArrowLeft20";
+  import Add24 from "carbon-icons-svelte/lib/Add24";
+  import Layout from "../../internal/ui/Layout.svelte";
+  import Icon from "./Icon.svelte";
+  import IconSkeleton from "./Icon.Skeleton.svelte";
 
   const icons = { ChevronDown16, ArrowLeft20, Add24 };
 </script>

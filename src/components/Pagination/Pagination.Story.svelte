@@ -1,9 +1,9 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import Pagination from './Pagination.svelte';
-  import PaginationSkeleton from './Pagination.Skeleton.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import Pagination from "./Pagination.svelte";
+  import PaginationSkeleton from "./Pagination.Skeleton.svelte";
 </script>
 
 <Layout>

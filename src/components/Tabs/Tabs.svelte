@@ -1,29 +1,27 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let iconDescription = 'Show menu options';
-  export let role = 'navigation';
+  export let iconDescription = "Show menu options";
+  export let role = "navigation";
   export let selected = 0;
-  export let style = undefined;
-  export let triggerHref = '#';
-  export let type = 'default';
+  export let triggerHref = "#";
+  export let type = "default";
 
-  import { createEventDispatcher, afterUpdate, setContext } from 'svelte';
-  import { writable, derived } from 'svelte/store';
-  import ChevronDownGlyph from 'carbon-icons-svelte/lib/ChevronDownGlyph';
-  import { cx } from '../../lib';
+  import { createEventDispatcher, afterUpdate, setContext } from "svelte";
+  import { writable, derived } from "svelte/store";
+  import ChevronDownGlyph from "carbon-icons-svelte/lib/ChevronDownGlyph";
 
   const dispatch = createEventDispatcher();
 
   let dropdownHidden = true;
   let tabs = writable([]);
-  let tabsById = derived(tabs, _ => _.reduce((a, c) => ({ ...a, [c.id]: c }), {}));
+  let tabsById = derived(tabs, _ =>
+    _.reduce((a, c) => ({ ...a, [c.id]: c }), {})
+  );
   let currentIndex = selected;
   let selectedTab = writable(undefined);
   let content = writable([]);
   let selectedContent = writable(undefined);
 
-  setContext('Tabs', {
+  setContext("Tabs", {
     selectedTab,
     selectedContent,
     add: data => {
@@ -70,7 +68,7 @@
   $: currentTab = $tabs[currentIndex] || undefined;
   $: currentContent = $content[currentIndex] || undefined;
   $: {
-    dispatch('change', currentIndex);
+    dispatch("change", currentIndex);
 
     if (currentTab) {
       selectedTab.set(currentTab.id);
@@ -85,11 +83,15 @@
   }
 </script>
 
-<div class={cx('--tabs', type === 'container' && '--tabs--container', className)} {style} {role}>
+<div
+  {role}
+  class:bx--tabs={true}
+  class:bx--tabs--container={type === 'container'}
+  {...$$restProps}>
   <div
     role="listbox"
     tabindex="0"
-    class={cx('--tabs-trigger')}
+    class:bx--tabs-trigger={true}
     aria-label={$$props['aria-label'] || 'listbox'}
     on:click={() => {
       dropdownHidden = !dropdownHidden;
@@ -100,7 +102,7 @@
     }}>
     <a
       tabindex="-1"
-      class={cx('--tabs-trigger-text')}
+      class:bx--tabs-trigger-text={true}
       href={triggerHref}
       on:click
       on:click={() => {
@@ -110,7 +112,10 @@
     </a>
     <ChevronDownGlyph aria-hidden="true" title={iconDescription} />
   </div>
-  <ul role="tablist" class={cx('--tabs__nav', dropdownHidden && '--tabs__nav--hidden')}>
+  <ul
+    role="tablist"
+    class:bx--tabs__nav={true}
+    class:bx--tabs__nav--hidden={dropdownHidden}>
     <slot />
   </ul>
 </div>

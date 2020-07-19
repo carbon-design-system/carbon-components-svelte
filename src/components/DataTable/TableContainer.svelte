@@ -1,21 +1,17 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let stickyHeader = false;
-  export let title = '';
-  export let description = '';
-  export let style = undefined;
-
-  import { cx } from '../../lib';
+  export let title = "";
+  export let description = "";
 </script>
 
 <div
-  class={cx('--data-table-container', stickyHeader && '--data-table--max-width', className)}
-  {style}>
+  class:bx--data-table-container={true}
+  class:bx--data-table--max-width={stickyHeader}
+  {...$$restProps}>
   {#if title}
-    <div class={cx('--data-table-header')}>
-      <h4 class={cx('--data-table-header__title')}>{title}</h4>
-      <p class={cx('--data-table-header__description')}>{description}</p>
+    <div class:bx--data-table-header={true}>
+      <h4 class:bx--data-table-header__title={true}>{title}</h4>
+      <p class:bx--data-table-header__description={true}>{description}</p>
     </div>
   {/if}
   <slot />

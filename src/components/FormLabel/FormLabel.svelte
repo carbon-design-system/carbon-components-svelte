@@ -1,19 +1,14 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let id = Math.random();
-  export let style = undefined;
-
-  import { cx } from '../../lib';
+  export let id = "ccs-" + Math.random().toString(36);
 </script>
 
 <label
+  class:bx--label={true}
+  for={id}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  for={id}
-  class={cx('--label', className)}
-  {style}>
+  on:mouseleave>
   <slot />
 </label>

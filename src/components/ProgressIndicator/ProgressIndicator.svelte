@@ -1,20 +1,17 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let currentIndex = 0;
-  export let style = undefined;
   export let vertical = false;
 
-  import { createEventDispatcher, setContext } from 'svelte';
-  import { writable, derived } from 'svelte/store';
-  import { cx } from '../../lib';
+  import { createEventDispatcher, setContext } from "svelte";
+  import { writable, derived } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  const steps = writable([]);
+  const stepsById = derived(steps, $ =>
+    $.reduce((a, c) => ({ ...a, [c.id]: c }), {})
+  );
 
-  let steps = writable([]);
-  let stepsById = derived(steps, $steps => $steps.reduce((a, c) => ({ ...a, [c.id]: c }), {}));
-
-  setContext('ProgressIndicator', {
+  setContext("ProgressIndicator", {
     steps,
     stepsById,
     add: step => {
@@ -29,17 +26,18 @@
       ]);
     },
     change: index => {
-      dispatch('change', index);
+      dispatch("change", index);
     }
   });
 </script>
 
 <ul
+  class:bx--progress={true}
+  class:bx--progress--vertical={vertical}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--progress', vertical && '--progress--vertical', className)}
-  {style}>
+  on:mouseleave>
   <slot />
 </ul>

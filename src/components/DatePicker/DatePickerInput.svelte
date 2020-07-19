@@ -1,22 +1,19 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let type = "text";
+  export let placeholder = "";
+  export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
   export let disabled = false;
+  export let iconDescription = "";
+  export let id = "ccs-" + Math.random().toString(36);
+  export let labelText = "";
   export let hideLabel = false;
-  export let iconDescription = '';
-  export let id = Math.random();
   export let invalid = false;
-  export let invalidText = '';
-  export let labelText = '';
-  export let pattern = '\\d{1,2}\\/\\d{1,2}\\/\\d{4}';
-  export let placeholder = '';
-  export let style = undefined;
-  export let type = 'text';
+  export let invalidText = "";
   export let name = undefined;
+  export let ref = null;
 
-  import { getContext, onMount } from 'svelte';
-  import Calendar16 from 'carbon-icons-svelte/lib/Calendar16';
-  import { cx } from '../../lib';
+  import { getContext, onMount } from "svelte";
+  import Calendar16 from "carbon-icons-svelte/lib/Calendar16";
 
   const {
     range,
@@ -28,32 +25,33 @@
     openCalendar,
     focusCalendar,
     inputValue
-  } = getContext('DatePicker');
-
-  let inputRef = undefined;
+  } = getContext("DatePicker");
 
   add({ id, labelText });
 
   onMount(() => {
-    declareRef({ id, ref: inputRef });
+    declareRef({ id, ref });
   });
 </script>
 
 <div
-  class={cx('--date-picker-container', !labelText && '--date-picker--nolabel', className)}
-  {style}>
+  class:bx--date-picker-container={true}
+  class:bx--date-picker--nolabel={!labelText}
+  {...$$restProps}>
   {#if labelText}
     <label
-      class={cx('--label', hideLabel && '--visually-hidden', disabled && '--label--disabled')}
-      for={id}>
+      for={id}
+      class:bx--label={true}
+      class:bx--visually-hidden={hideLabel}
+      class:bx--label--disabled={disabled}>
       {labelText}
     </label>
   {/if}
-  <div class={cx('--date-picker-input__wrapper')}>
+  <div class:bx--date-picker-input__wrapper={true}>
     <input
-      bind:this={inputRef}
+      bind:this={ref}
       data-invalid={invalid || undefined}
-      class={cx('--date-picker__input')}
+      class:bx--date-picker__input={true}
       on:input
       on:input={({ target }) => {
         updateValue({ type: 'input', value: target.value });
@@ -81,13 +79,13 @@
     {#if $hasCalendar}
       <Calendar16
         role="img"
-        class={cx('--date-picker__icon')}
+        class="bx--date-picker__icon"
         aria-label={iconDescription}
         title={iconDescription}
         on:click={openCalendar} />
     {/if}
   </div>
   {#if invalid}
-    <div class={cx('--form-requirement')}>{invalidText}</div>
+    <div class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
 </div>

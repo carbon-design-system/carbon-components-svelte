@@ -1,39 +1,44 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let text = "Provide text";
   export let selected = false;
-  export let text = 'Provide text';
   export let disabled = false;
-  export let style = undefined;
+  export let id = "ccs-" + Math.random().toString(36);
+  export let ref = null;
 
-  import { afterUpdate, getContext } from 'svelte';
-  import { cx } from '../../lib';
+  import { afterUpdate, getContext, onDestroy } from "svelte";
 
-  const id = Math.random();
-  const { currentId, add, update, change } = getContext('ContentSwitcher');
+  const ctx = getContext("ContentSwitcher");
 
-  let buttonRef = undefined;
+  ctx.add({ id, text, selected });
 
-  add({ id, text, selected });
+  const unsubscribe = ctx.currentId.subscribe($ => {
+    selected = $ === id;
+  });
 
   afterUpdate(() => {
     if (selected) {
-      buttonRef.focus();
+      ref.focus();
     }
   });
 
-  $: selected = $currentId === id;
+  onDestroy(() => {
+    unsubscribe();
+  });
 </script>
 
 <button
-  bind:this={buttonRef}
+  bind:this={ref}
   role="tab"
   tabindex={selected ? '0' : '-1'}
   aria-selected={selected}
-  class={cx('--content-switcher-btn', selected && '--content-switcher--selected', className)}
+  {disabled}
+  {id}
+  class:bx--content-switcher-btn={true}
+  class:bx--content-switcher--selected={selected}
+  {...$$restProps}
   on:click
   on:click|preventDefault={() => {
-    update(id);
+    ctx.update(id);
   }}
   on:mouseover
   on:mouseenter
@@ -41,12 +46,13 @@
   on:keydown
   on:keydown={({ key }) => {
     if (key === 'ArrowRight') {
-      change(1);
+      ctx.change(1);
     } else if (key === 'ArrowLeft') {
-      change(-1);
+      ctx.change(-1);
     }
-  }}
-  {disabled}
-  {style}>
-  <span class={cx('--content-switcher__label')}>{text}</span>
+  }}>
+
+  <span class:bx--content-switcher__label={true}>
+    <slot>{text}</slot>
+  </span>
 </button>

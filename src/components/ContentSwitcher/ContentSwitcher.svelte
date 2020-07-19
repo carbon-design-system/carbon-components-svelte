@@ -1,30 +1,30 @@
 <script>
-  export let className = undefined;
-  export { className as class };
   export let selectedIndex = 0;
-  export let style = undefined;
 
-  import { createEventDispatcher, setContext } from 'svelte';
-  import { writable } from 'svelte/store';
-  import { cx } from '../../lib';
+  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
+  import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  const currentId = writable(null);
 
-  let currentId = writable(null);
-  let currentIndex = selectedIndex;
-  let switches = [];
+  $: currentIndex = -1;
+  $: switches = [];
+  $: if (switches[currentIndex]) {
+    dispatch("change", currentIndex);
+    currentId.set(switches[currentIndex].id);
+  }
 
-  setContext('ContentSwitcher', {
+  setContext("ContentSwitcher", {
     currentId,
     add: ({ id, text, selected }) => {
-      switches = [...switches, { id, text, selected }];
-
       if (selected) {
-        currentIndex = switches.length;
+        selectedIndex = switches.length;
       }
+
+      switches = [...switches, { id, text, selected }];
     },
     update: id => {
-      currentIndex = switches.map(({ id }) => id).indexOf(id);
+      selectedIndex = switches.map(({ id }) => id).indexOf(id);
     },
     change: direction => {
       let index = currentIndex + direction;
@@ -35,24 +35,24 @@
         index = 0;
       }
 
-      currentIndex = index;
+      selectedIndex = index;
     }
   });
 
-  $: if (switches[currentIndex]) {
-    dispatch('change', currentIndex);
-    selectedIndex = currentIndex;
-    currentId.set(switches[currentIndex].id);
-  }
+  afterUpdate(() => {
+    if (selectedIndex !== currentIndex) {
+      currentIndex = selectedIndex;
+    }
+  });
 </script>
 
 <div
   role="tablist"
+  class:bx--content-switcher={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  class={cx('--content-switcher', className)}
-  {style}>
+  on:mouseleave>
   <slot />
 </div>

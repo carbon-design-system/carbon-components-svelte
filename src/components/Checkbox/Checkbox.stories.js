@@ -1,27 +1,27 @@
-import { withKnobs, boolean, text } from '@storybook/addon-knobs';
-import Component from './Checkbox.Story.svelte';
+import { withKnobs, boolean, text } from "@storybook/addon-knobs";
+import Component from "./Checkbox.Story.svelte";
 
-export default { title: 'Checkbox', decorators: [withKnobs] };
+export default { title: "Checkbox", decorators: [withKnobs] };
 
 export const Checked = () => ({
   Component,
   props: {
-    labelText: text('Label text (labelText)', 'Checkbox label'),
-    indeterminate: boolean('Intermediate (indeterminate)', false),
-    disabled: boolean('Disabled (disabled)', false),
-    hideLabel: boolean('Hide label (hideLabel)', false)
-  }
+    labelText: text("Label text (labelText)", "Checkbox label"),
+    indeterminate: boolean("Intermediate (indeterminate)", false),
+    disabled: boolean("Disabled (disabled)", false),
+    hideLabel: boolean("Hide label (hideLabel)", false),
+  },
 });
 
 export const Unchecked = () => ({
   Component,
   props: {
-    story: 'unchecked',
-    labelText: text('Label text (labelText)', 'Checkbox label'),
-    indeterminate: boolean('Intermediate (indeterminate)', false),
-    disabled: boolean('Disabled (disabled)', false),
-    hideLabel: boolean('Hide label (hideLabel)', false)
-  }
+    story: "unchecked",
+    labelText: text("Label text (labelText)", "Checkbox label"),
+    indeterminate: boolean("Intermediate (indeterminate)", false),
+    disabled: boolean("Disabled (disabled)", false),
+    hideLabel: boolean("Hide label (hideLabel)", false),
+  },
 });
 
-export const Skeleton = () => ({ Component, props: { story: 'skeleton' } });
+export const Skeleton = () => ({ Component, props: { story: "skeleton" } });

@@ -1,21 +1,16 @@
 <script>
-  let className = undefined;
-  export { className as class };
   export let selected = undefined;
   export let disabled = false;
-  export let labelPosition = 'right';
-  export let orientation = 'horizontal';
-  export let style = undefined;
+  export let labelPosition = "right"; // "right" | "left"
+  export let orientation = "horizontal"; // "horizontal" | "vertical"
 
-  import { createEventDispatcher, setContext } from 'svelte';
-  import { writable } from 'svelte/store';
-  import { cx } from '../../lib';
+  import { createEventDispatcher, setContext } from "svelte";
+  import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  const selectedValue = writable(selected);
 
-  let selectedValue = writable(selected);
-
-  setContext('RadioButtonGroup', {
+  setContext("RadioButtonGroup", {
     selectedValue,
     add: ({ checked, value }) => {
       if (checked) {
@@ -28,14 +23,20 @@
   });
 
   $: selected = $selectedValue;
-  $: {
-    dispatch('change', $selectedValue);
-  }
+  $: dispatch("change", $selectedValue);
 </script>
 
-<div on:click on:mouseover on:mouseenter on:mouseleave class={cx('--form-item')} {style}>
+<div
+  class:bx--form-item={true}
+  {...$$restProps}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave>
   <div
-    class={cx('--radio-button-group', orientation === 'vertical' && `--radio-button-group--${orientation}`, labelPosition && `--radio-button-group--label-${labelPosition}`, className)}
+    class:bx--radio-button-group={true}
+    class:bx--radio-button-group--vertical={orientation === 'vertical'}
+    class={labelPosition && `bx--radio-button-group--label-${labelPosition}`}
     {disabled}>
     <slot />
   </div>

@@ -1,26 +1,21 @@
 <script>
-  let className = undefined;
-  export { className as class };
+  export let legendText = "";
   export let invalid = false;
-  export let legendText = '';
   export let message = false;
-  export let messageText = '';
-  export let style = undefined;
-
-  import { cx } from '../../lib';
+  export let messageText = "";
 </script>
 
 <fieldset
   data-invalid={invalid || undefined}
-  class={cx('--fieldset', className)}
+  class:bx--fieldset={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  {style}>
-  <legend class={cx('--label', className)}>{legendText}</legend>
+  on:mouseleave>
+  <legend class:bx--label={true}>{legendText}</legend>
   <slot />
   {#if message}
-    <div class={cx('--form__requirements')}>{messageText}</div>
+    <div class:bx--form__requirement={true}>{messageText}</div>
   {/if}
 </fieldset>

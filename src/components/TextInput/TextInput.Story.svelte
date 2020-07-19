@@ -1,18 +1,24 @@
 <script>
   export let story = undefined;
 
-  import Layout from '../../internal/ui/Layout.svelte';
-  import PasswordInput from './PasswordInput.svelte';
-  import TextInput from './TextInput.svelte';
-  import TextInputSkeleton from './TextInput.Skeleton.svelte';
+  import Layout from "../../internal/ui/Layout.svelte";
+  import PasswordInput from "./PasswordInput.svelte";
+  import TextInput from "./TextInput.svelte";
+  import TextInputSkeleton from "./TextInput.Skeleton.svelte";
 
-  let value = '';
-  let type = 'password';
+  $: value = "";
+  $: type = "password";
+  $: ref = null;
+  $: console.log(ref);
 </script>
 
 <Layout>
   {#if story === 'skeleton'}
-    <div aria-label="loading text input" aria-live="assertive" role="status" tabindex="0">
+    <div
+      aria-label="loading text input"
+      aria-live="assertive"
+      role="status"
+      tabindex="0">
       <TextInputSkeleton />
       <br />
       <TextInputSkeleton hideLabel />
@@ -37,6 +43,7 @@
     </div>
   {:else}
     <TextInput
+      bind:ref
       {...$$props}
       bind:value
       on:change={() => {
