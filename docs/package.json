@@ -21,5 +21,8 @@
     "svelte": "^3.24.0",
     "svelte-loader": "^2.9.0",
     "webpack": "^4.7.0"
+  },
+  "resolutions": {
+    "**/lodash": ">=4.17.19 "
   }
 }
