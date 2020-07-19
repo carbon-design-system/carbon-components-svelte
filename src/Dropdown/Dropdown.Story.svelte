@@ -21,7 +21,6 @@
     <DropdownSkeleton inline />
   </div>
 {:else}
-  <p>Currently, this component does not support items as slots.</p>
   <p>
     <code>items</code>
     must be an array of objects; mandatory fields are `id` and `text`.
@@ -35,7 +34,7 @@
       on:click={() => {
         selectedIndex = selectedIndex > -1 ? -1 : 1;
       }}>
-      {selectedIndex > -1 ? 'Clear selected item' : "Set item to 'Option 2'"}
+      {selectedIndex > -1 ? 'Clear selected item' : 'Set item to "Option 2"'}
     </Button>
   </div>
   <div style="width: 300px">

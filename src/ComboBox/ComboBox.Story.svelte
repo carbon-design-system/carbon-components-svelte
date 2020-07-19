@@ -30,7 +30,6 @@
   }
 </script>
 
-<p>Currently, this component does not support items as slots.</p>
 <p>
   <code>items</code>
   must be an array of objects; mandatory fields are `id` and `text`.
@@ -47,8 +46,9 @@
     size="small"
     on:click={() => {
       selectedIndex = 1;
-    }}>
-    Set item to 'Option 2'
+    }}
+    style="margin-top: 1rem;">
+    Set item to "Option 2"
   </Button>
 </div>
 <div style="width: 300px; margin-top: 2rem;">
