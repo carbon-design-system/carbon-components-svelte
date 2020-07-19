@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.7.6](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.6) - 2020-07-19
+
+- Add named slot to UI Shell `HeaderAction` component for text
+  ([PR#201](https://github.com/IBM/carbon-components-svelte/pull/201), thanks [@danielboven](https://github.com/danielboven))
+
 ## [0.7.5](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.7.5) - 2020-07-17
 
 - Add `name` prop to form-related components
