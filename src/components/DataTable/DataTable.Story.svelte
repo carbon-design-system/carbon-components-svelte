@@ -1,7 +1,6 @@
 <script>
   export let story = undefined;
 
-  import Layout from "../../internal/ui/Layout.svelte";
   import DataTable from "./DataTable.svelte";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
@@ -78,77 +77,75 @@
   $: sortable = true;
 </script>
 
-<Layout>
-  {#if story === 'composed'}
-    <DataTable {...$$props} {rows} {headers} let:props>
-      <TableContainer
-        title="DataTable"
-        description="With default options"
-        {...props.getTableContainerProps()}>
-        <Table {...props.getTableProps()}>
-          <TableHead>
-            <TableRow>
-              {#each props.headers as header, i (header.key)}
-                <TableHeader {...props.getHeaderProps({ header })}>
-                  {header.header}
-                </TableHeader>
+{#if story === 'composed'}
+  <DataTable {...$$props} {rows} {headers} let:props>
+    <TableContainer
+      title="DataTable"
+      description="With default options"
+      {...props.getTableContainerProps()}>
+      <Table {...props.getTableProps()}>
+        <TableHead>
+          <TableRow>
+            {#each props.headers as header, i (header.key)}
+              <TableHeader {...props.getHeaderProps({ header })}>
+                {header.header}
+              </TableHeader>
+            {/each}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {#each props.rows as row, i}
+            <TableRow {...props.getRowProps({ row })}>
+              {#each row.cells as cell, j}
+                <TableCell>{cell.value}</TableCell>
               {/each}
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {#each props.rows as row, i}
-              <TableRow {...props.getRowProps({ row })}>
-                {#each row.cells as cell, j}
-                  <TableCell>{cell.value}</TableCell>
-                {/each}
-              </TableRow>
-            {/each}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </DataTable>
-  {:else if story === 'sortable'}
-    <DataTable
-      bind:sortable
-      title={$$props.title}
-      description={$$props.description}
-      zebra={$$props.zebra}
-      size={$$props.size}
-      stickyHeader={$$props.stickyHeader}
-      on:click={({ detail }) => {
-        console.log('on:click', detail);
-      }}
-      on:click:header={({ detail }) => {
-        console.log('on:click:header', detail);
-      }}
-      on:click:row={({ detail }) => {
-        console.log('on:click:row', detail);
-      }}
-      on:click:cell={({ detail }) => {
-        console.log('on:click:cell', detail);
-      }}
-      {rows}
-      {headers} />
-  {:else}
-    <DataTable
-      title={$$props.title}
-      description={$$props.description}
-      zebra={$$props.zebra}
-      size={$$props.size}
-      stickyHeader={$$props.stickyHeader}
-      on:click={({ detail }) => {
-        console.log('on:click', detail);
-      }}
-      on:click:header={({ detail }) => {
-        console.log('on:click:header', detail);
-      }}
-      on:click:row={({ detail }) => {
-        console.log('on:click:row', detail);
-      }}
-      on:click:cell={({ detail }) => {
-        console.log('on:click:cell', detail);
-      }}
-      {rows}
-      {headers} />
-  {/if}
-</Layout>
+          {/each}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </DataTable>
+{:else if story === 'sortable'}
+  <DataTable
+    bind:sortable
+    title={$$props.title}
+    description={$$props.description}
+    zebra={$$props.zebra}
+    size={$$props.size}
+    stickyHeader={$$props.stickyHeader}
+    on:click={({ detail }) => {
+      console.log('on:click', detail);
+    }}
+    on:click:header={({ detail }) => {
+      console.log('on:click:header', detail);
+    }}
+    on:click:row={({ detail }) => {
+      console.log('on:click:row', detail);
+    }}
+    on:click:cell={({ detail }) => {
+      console.log('on:click:cell', detail);
+    }}
+    {rows}
+    {headers} />
+{:else}
+  <DataTable
+    title={$$props.title}
+    description={$$props.description}
+    zebra={$$props.zebra}
+    size={$$props.size}
+    stickyHeader={$$props.stickyHeader}
+    on:click={({ detail }) => {
+      console.log('on:click', detail);
+    }}
+    on:click:header={({ detail }) => {
+      console.log('on:click:header', detail);
+    }}
+    on:click:row={({ detail }) => {
+      console.log('on:click:row', detail);
+    }}
+    on:click:cell={({ detail }) => {
+      console.log('on:click:cell', detail);
+    }}
+    {rows}
+    {headers} />
+{/if}

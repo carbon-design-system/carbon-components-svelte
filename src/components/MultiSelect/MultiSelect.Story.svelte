@@ -1,5 +1,4 @@
 <script>
-  import Layout from "../../internal/ui/Layout.svelte";
   import { Button } from "../Button";
   import MultiSelect from "./MultiSelect.svelte";
 
@@ -18,24 +17,22 @@
   ];
 </script>
 
-<Layout>
-  <div>
-    <Button
-      size="small"
-      on:click={() => {
-        selectedIds = selectedIds.length > 0 ? [] : [items[1].id, items[2].id];
-      }}>
-      {selectedIds.length > 0 ? 'Clear' : 'Set initial'} selected items
-    </Button>
-  </div>
-  <div style="width: 300px; margin-top: 2rem;">
-    <MultiSelect
-      {...$$props}
-      id="multi-select-id"
-      name="multi-select-name"
-      placeholder="Filter..."
-      bind:selectedIds
-      bind:items
-      bind:value />
-  </div>
-</Layout>
+<div>
+  <Button
+    size="small"
+    on:click={() => {
+      selectedIds = selectedIds.length > 0 ? [] : [items[1].id, items[2].id];
+    }}>
+    {selectedIds.length > 0 ? 'Clear' : 'Set initial'} selected items
+  </Button>
+</div>
+<div style="width: 300px; margin-top: 2rem;">
+  <MultiSelect
+    {...$$props}
+    id="multi-select-id"
+    name="multi-select-name"
+    placeholder="Filter..."
+    bind:selectedIds
+    bind:items
+    bind:value />
+</div>

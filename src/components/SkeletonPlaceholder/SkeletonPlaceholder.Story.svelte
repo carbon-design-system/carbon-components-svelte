@@ -1,5 +1,4 @@
 <script>
-  import Layout from "../../internal/ui/Layout.svelte";
   import SkeletonPlaceholder from "./SkeletonPlaceholder.svelte";
 </script>
 
@@ -20,8 +19,6 @@
   }
 </style>
 
-<Layout>
-  <div style="height: 250px; width: 250px;">
-    <SkeletonPlaceholder {...$$props} />
-  </div>
-</Layout>
+<div style="height: 250px; width: 250px;">
+  <SkeletonPlaceholder {...$$props} />
+</div>

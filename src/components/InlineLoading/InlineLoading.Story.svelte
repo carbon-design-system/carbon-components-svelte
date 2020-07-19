@@ -5,7 +5,6 @@
   export let description = undefined;
   export let successDelay = undefined;
 
-  import Layout from "../../internal/ui/Layout.svelte";
   import { Button } from "../Button";
   import InlineLoading from "./InlineLoading.svelte";
 
@@ -36,21 +35,19 @@
   $: disabled = isSubmitting || success;
 </script>
 
-<Layout>
-  {#if story === 'ux-example'}
-    <div style="display: flex; width: 300px">
-      <Button kind="secondary" {disabled}>Cancel</Button>
-      {#if disabled}
-        <InlineLoading
-          style="margin-left: 1rem;"
-          description={loadingDescription}
-          status={success ? 'finished' : 'active'}
-          aria-live={ariaLive} />
-      {:else}
-        <Button on:click={handleSubmit}>Submit</Button>
-      {/if}
-    </div>
-  {:else}
-    <InlineLoading {...props} />
-  {/if}
-</Layout>
+{#if story === 'ux-example'}
+  <div style="display: flex; width: 300px">
+    <Button kind="secondary" {disabled}>Cancel</Button>
+    {#if disabled}
+      <InlineLoading
+        style="margin-left: 1rem;"
+        description={loadingDescription}
+        status={success ? 'finished' : 'active'}
+        aria-live={ariaLive} />
+    {:else}
+      <Button on:click={handleSubmit}>Submit</Button>
+    {/if}
+  </div>
+{:else}
+  <InlineLoading {...props} />
+{/if}
