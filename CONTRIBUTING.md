@@ -62,12 +62,10 @@ yarn start
 
 #### Component Format
 
-Individual components are located in the `src/components` folder:
-
 Each component should adopt the following structure:
 
 ```js
-src/components/Component
+src/Component
 │
 └───Component.svelte // main component
 └───Component.Skeleton.svelte // Skeleton component (if any)

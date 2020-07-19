@@ -1,26 +1,18 @@
-export {
-  Accordion,
-  AccordionItem,
-  AccordionSkeleton,
-} from "./components/Accordion";
-export {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbSkeleton,
-} from "./components/Breadcrumb";
-export { Button, ButtonSkeleton } from "./components/Button";
-export { Checkbox, CheckboxSkeleton } from "./components/Checkbox";
-export { ContentSwitcher, Switch } from "./components/ContentSwitcher";
-export { Copy } from "./components/Copy";
-export { CopyButton } from "./components/CopyButton";
-export { ComboBox } from "./components/ComboBox";
+export { Accordion, AccordionItem, AccordionSkeleton } from "./Accordion";
+export { Breadcrumb, BreadcrumbItem, BreadcrumbSkeleton } from "./Breadcrumb";
+export { Button, ButtonSkeleton } from "./Button";
+export { Checkbox, CheckboxSkeleton } from "./Checkbox";
+export { ContentSwitcher, Switch } from "./ContentSwitcher";
+export { Copy } from "./Copy";
+export { CopyButton } from "./CopyButton";
+export { ComboBox } from "./ComboBox";
 export {
   ComposedModal,
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "./components/ComposedModal";
-export { CodeSnippet, CodeSnippetSkeleton } from "./components/CodeSnippet";
+} from "./ComposedModal";
+export { CodeSnippet, CodeSnippetSkeleton } from "./CodeSnippet";
 export {
   DataTable,
   Table,
@@ -30,24 +22,24 @@ export {
   TableHead,
   TableHeader,
   TableRow,
-} from "./components/DataTable";
-export { DataTableSkeleton } from "./components/DataTableSkeleton";
-export { DatePicker, DatePickerInput } from "./components/DatePicker";
-export { Dropdown, DropdownSkeleton } from "./components/Dropdown";
+} from "./DataTable";
+export { DataTableSkeleton } from "./DataTableSkeleton";
+export { DatePicker, DatePickerInput } from "./DatePicker";
+export { Dropdown, DropdownSkeleton } from "./Dropdown";
 export {
   FileUploader,
   FileUploaderButton,
   FileUploaderItem,
   FileUploaderDropContainer,
   Filename,
-} from "./components/FileUploader";
-export { Form } from "./components/Form";
-export { FormGroup } from "./components/FormGroup";
-export { FormItem } from "./components/FormItem";
-export { FormLabel } from "./components/FormLabel";
-export { Icon, IconSkeleton } from "./components/Icon";
-export { InlineLoading } from "./components/InlineLoading";
-export { Link } from "./components/Link";
+} from "./FileUploader";
+export { Form } from "./Form";
+export { FormGroup } from "./FormGroup";
+export { FormItem } from "./FormItem";
+export { FormLabel } from "./FormLabel";
+export { Icon, IconSkeleton } from "./Icon";
+export { InlineLoading } from "./InlineLoading";
+export { Link } from "./Link";
 export {
   ListBox,
   ListBoxField,
@@ -55,11 +47,11 @@ export {
   ListBoxMenuIcon,
   ListBoxMenuItem,
   ListBoxSelection,
-} from "./components/ListBox";
-export { ListItem } from "./components/ListItem";
-export { Loading } from "./components/Loading";
-export { MultiSelect } from "./components/MultiSelect";
-export { Modal } from "./components/Modal";
+} from "./ListBox";
+export { ListItem } from "./ListItem";
+export { Loading } from "./Loading";
+export { MultiSelect } from "./MultiSelect";
+export { Modal } from "./Modal";
 export {
   ToastNotification,
   InlineNotification,
@@ -67,28 +59,23 @@ export {
   NotificationButton,
   NotificationIcon,
   NotificationTextDetails,
-} from "./components/Notification";
-export { NumberInput, NumberInputSkeleton } from "./components/NumberInput";
-export { OrderedList } from "./components/OrderedList";
-export { OverflowMenu, OverflowMenuItem } from "./components/OverflowMenu";
-export { Pagination, PaginationSkeleton } from "./components/Pagination";
+} from "./Notification";
+export { NumberInput, NumberInputSkeleton } from "./NumberInput";
+export { OrderedList } from "./OrderedList";
+export { OverflowMenu, OverflowMenuItem } from "./OverflowMenu";
+export { Pagination, PaginationSkeleton } from "./Pagination";
 export {
   ProgressIndicator,
   ProgressIndicatorSkeleton,
   ProgressStep,
-} from "./components/ProgressIndicator";
-export { RadioButton, RadioButtonSkeleton } from "./components/RadioButton";
-export { RadioButtonGroup } from "./components/RadioButtonGroup";
-export { Search, SearchSkeleton } from "./components/Search";
-export {
-  Select,
-  SelectSkeleton,
-  SelectItem,
-  SelectItemGroup,
-} from "./components/Select";
-export { SkeletonPlaceholder } from "./components/SkeletonPlaceholder";
-export { SkeletonText } from "./components/SkeletonText";
-export { Slider, SliderSkeleton } from "./components/Slider";
+} from "./ProgressIndicator";
+export { RadioButton, RadioButtonSkeleton } from "./RadioButton";
+export { RadioButtonGroup } from "./RadioButtonGroup";
+export { Search, SearchSkeleton } from "./Search";
+export { Select, SelectSkeleton, SelectItem, SelectItemGroup } from "./Select";
+export { SkeletonPlaceholder } from "./SkeletonPlaceholder";
+export { SkeletonText } from "./SkeletonText";
+export { Slider, SliderSkeleton } from "./Slider";
 export {
   StructuredList,
   StructuredListSkeleton,
@@ -97,15 +84,11 @@ export {
   StructuredListCell,
   StructuredListRow,
   StructuredListInput,
-} from "./components/StructuredList";
-export { Tabs, Tab, TabContent, TabsSkeleton } from "./components/Tabs";
-export { Tag, TagSkeleton } from "./components/Tag";
-export { TextArea, TextAreaSkeleton } from "./components/TextArea";
-export {
-  TextInput,
-  TextInputSkeleton,
-  PasswordInput,
-} from "./components/TextInput";
+} from "./StructuredList";
+export { Tabs, Tab, TabContent, TabsSkeleton } from "./Tabs";
+export { Tag, TagSkeleton } from "./Tag";
+export { TextArea, TextAreaSkeleton } from "./TextArea";
+export { TextInput, TextInputSkeleton, PasswordInput } from "./TextInput";
 export {
   Tile,
   ClickableTile,
@@ -113,13 +96,13 @@ export {
   SelectableTile,
   RadioTile,
   TileGroup,
-} from "./components/Tile";
-export { TimePicker, TimePickerSelect } from "./components/TimePicker";
-export { Toggle, ToggleSkeleton } from "./components/Toggle";
-export { ToggleSmall, ToggleSmallSkeleton } from "./components/ToggleSmall";
-export { Tooltip } from "./components/Tooltip";
-export { TooltipDefinition } from "./components/TooltipDefinition";
-export { TooltipIcon } from "./components/TooltipIcon";
+} from "./Tile";
+export { TimePicker, TimePickerSelect } from "./TimePicker";
+export { Toggle, ToggleSkeleton } from "./Toggle";
+export { ToggleSmall, ToggleSmallSkeleton } from "./ToggleSmall";
+export { Tooltip } from "./Tooltip";
+export { TooltipDefinition } from "./TooltipDefinition";
+export { TooltipIcon } from "./TooltipIcon";
 export {
   Header,
   HeaderAction,
@@ -139,5 +122,5 @@ export {
   SideNavMenuItem,
   Content,
   SkipToContent,
-} from "./components/UIShell";
-export { UnorderedList } from "./components/UnorderedList";
+} from "./UIShell";
+export { UnorderedList } from "./UnorderedList";
