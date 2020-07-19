@@ -6,7 +6,7 @@
 
   let elRigthPanel = undefined;
 
-  import { cx, optional } from '../../../lib';
+  import { cx } from '../../../lib';
   import Icon from '../../Icon/Icon.svelte';
   import { slide } from 'svelte/transition';
 
@@ -47,7 +47,7 @@
       isOpen = true;
     }}>
     <Icon {...icon} />
-    <slot name="custom-el">
+    <slot name="text">
       {#if text}
         <span>{text}</span>
       {/if}
