@@ -1,17 +1,15 @@
 <script>
-  import Nav from "../components/Nav.svelte";
+  export let segment = undefined;
 
-  export let segment;
+  import { Content } from "carbon-components-svelte";
+  import GlobalHeader from "../components/GlobalHeader.svelte";
 </script>
 
-<style>
-  main {
-    margin-top: 3rem;
-  }
-</style>
-
-<Nav {segment} />
-
-<main>
+{#if segment !== 'examples'}
+  <GlobalHeader {segment} />
+  <Content>
+    <slot />
+  </Content>
+{:else}
   <slot />
-</main>
+{/if}

@@ -10,72 +10,34 @@
     "start": "start-storybook -p 9090",
     "build": "build-storybook",
     "deploy": "gh-pages -d storybook-static",
-    "test": "jest --coverage",
-    "test:tdd": "jest --watch",
     "prepack": "rollup -c"
   },
   "sideEffects": false,
   "dependencies": {
-    "carbon-icons-svelte": "10.9.3",
+    "carbon-icons-svelte": "^10.13.0",
     "flatpickr": "4.6.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.0",
-    "@babel/preset-env": "^7.8.0",
-    "@storybook/addon-knobs": "^5.3.1",
-    "@storybook/addon-storysource": "^5.3.1",
-    "@storybook/cli": "^5.3.1",
-    "@storybook/svelte": "^5.3.1",
-    "@testing-library/jest-dom": "^5.1.0",
-    "@testing-library/svelte": "^1.11.0",
-    "babel-jest": "^25.1.0",
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@storybook/addon-knobs": "^5.3.19",
+    "@storybook/addon-storysource": "^5.3.19",
+    "@storybook/cli": "^5.3.19",
+    "@storybook/svelte": "^5.3.19",
     "babel-loader": "^8.0.6",
-    "gh-pages": "^2.2.0",
-    "jest": "^25.1.0",
-    "jest-transform-svelte": "^2.1.0",
-    "regenerator-runtime": "^0.13.3",
-    "rollup": "^1.29.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-svelte": "^5.1.1",
-    "rollup-plugin-terser": "^5.2.0",
-    "svelte": "^3.23.0",
+    "gh-pages": "^3.1.0",
+    "rollup": "^2.22.1",
+    "rollup-plugin-svelte": "^5.2.3",
+    "rollup-plugin-terser": "^6.1.0",
+    "svelte": "^3.24.0",
     "svelte-loader": "^2.13.6"
   },
-  "contributors": [
-    {
-      "name": "Eric Liu",
-      "email": "eric.young.liu@ibm.com"
-    },
-    {
-      "name": "Adan Ulloa",
-      "email": "adanug@mx1.ibm.com"
-    }
-  ],
   "babel": {
     "presets": [
       "@babel/preset-env"
     ]
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.svelte$": "jest-transform-svelte",
-      "^.+\\.js$": "babel-jest"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "svelte"
-    ],
-    "moduleNameMapper": {
-      "^carbon-icons-svelte*": "<rootDir>src/internal/Icon.stub.svelte"
-    },
-    "setupFilesAfterEnv": [
-      "regenerator-runtime/runtime",
-      "@testing-library/jest-dom/extend-expect"
-    ]
-  },
-  "resolutions": {
-    "**/mem": ">=4.0"
   },
   "repository": {
     "type": "git",
@@ -93,5 +55,15 @@
   "files": [
     "lib",
     "src"
+  ],
+  "contributors": [
+    {
+      "name": "Eric Liu",
+      "email": "eric.young.liu@ibm.com"
+    },
+    {
+      "name": "Adan Ulloa",
+      "email": "adanug@mx1.ibm.com"
+    }
   ]
 }

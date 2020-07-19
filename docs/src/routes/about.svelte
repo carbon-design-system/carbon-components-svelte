@@ -1,18 +1,6 @@
-<script>
-  import {
-    Button,
-    Header,
-    HeaderNav,
-    HeaderNavItem
-  } from "carbon-components-svelte";
-  import { theme } from "../store";
-</script>
+<h1>About</h1>
 
-<svelte:head>
-  <title>About</title>
-</svelte:head>
-<h1>About this site</h1>
-{$theme}
-<Button>Hello world</Button>
-
-<p>This is the 'about' page. There's not much here.</p>
+<p>
+  <code>carbon-components-svelte</code>
+  is the Svelte implementation of the Carbon Design System
+</p>

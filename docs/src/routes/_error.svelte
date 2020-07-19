@@ -1,8 +1,8 @@
 <script>
   export let status;
-  export let error;
+  export let error = {};
 
-  const dev = process.env.NODE_ENV === "development";
+  import { Link } from "carbon-components-svelte";
 </script>
 
 <svelte:head>
@@ -11,8 +11,11 @@
 
 <h1>{status}</h1>
 
-<p>{error.message}</p>
+<div>
+  {error.message}.
+  <Link href=".">Return home</Link>
+</div>
 
-{#if dev && error.stack}
+{#if process.env.NODE_ENV === 'development' && error.stack}
   <pre>{error.stack}</pre>
 {/if}

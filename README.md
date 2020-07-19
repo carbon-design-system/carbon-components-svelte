@@ -5,7 +5,7 @@
 
 > Svelte implementation of the [Carbon Design System](https://github.com/carbon-design-system)
 
-## [Storybook](https://ibm.github.io/carbon-components-svelte) · [CodeSandbox](https://codesandbox.io/s/carbon-components-svelte021-lhvc4)
+## [Storybook](https://ibm.github.io/carbon-components-svelte)
 
 ## Getting Started
 
@@ -25,7 +25,7 @@ yarn add -D carbon-components-svelte
 <svelte:head>
   <link
     rel="stylesheet"
-    href="https://unpkg.com/carbon-components@10.9.0/css/carbon-components.min.css"
+    href="https://unpkg.com/carbon-components/css/carbon-components.min.css"
   />
 </svelte:head>
 

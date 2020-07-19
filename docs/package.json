@@ -1,30 +1,25 @@
 {
-  "name": "sapper-webpack",
-  "description": "Custom Sapper webpack template",
-  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "develop": "sapper dev",
-    "build": "sapper export"
+    "dev": "sapper dev",
+    "build": "shx rm -rf public && sapper export && shx mv __sapper__/export public",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "test": "run-p --race dev cy:run",
+    "test:tdd": "run-p --race dev cy:open"
   },
   "dependencies": {
     "polka": "next",
-    "sirv": "^0.4.0"
+    "sirv": "^1.0.1"
   },
   "devDependencies": {
-    "@metonym/sapper": "^0.27.12",
-    "autoprefixer": "^9.7.6",
-    "carbon-components": "^10.11.2",
-    "css-loader": "^3.5.3",
-    "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.14.1",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "postcss-loader": "^3.0.0",
-    "sass-loader": "^8.0.2",
-    "style-loader": "^1.2.1",
-    "svelte": "~3.20.0",
+    "carbon-components-svelte": "../",
+    "cypress": "^4.10.0",
+    "npm-run-all": "^4.1.5",
+    "sapper": "^0.27.16",
+    "shx": "^0.3.2",
+    "svelte": "^3.24.0",
     "svelte-loader": "^2.9.0",
-    "webpack": "^4.43.0",
-    "carbon-components-svelte": "../"
+    "webpack": "^4.7.0"
   }
 }

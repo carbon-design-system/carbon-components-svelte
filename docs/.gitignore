@@ -1,5 +1,7 @@
 .DS_Store
-/__sapper__
-/**/node_modules
-/public
+/public/
+/node_modules/
+/src/node_modules/@sapper/
 yarn-error.log
+/cypress/screenshots/
+/__sapper__/

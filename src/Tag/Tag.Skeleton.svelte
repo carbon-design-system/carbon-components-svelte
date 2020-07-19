@@ -1,0 +1,8 @@
+<span
+  class:bx--tag={true}
+  class:bx--skeleton={true}
+  {...$$restProps}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave />
