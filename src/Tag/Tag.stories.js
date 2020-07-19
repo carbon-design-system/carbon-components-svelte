@@ -38,6 +38,15 @@ export const Filter = () => ({
   props: {
     story: "filter",
     filter: true,
+    type: select(
+      "Tag type (type)",
+      Object.keys(TYPES).reduce(
+        (items, item) => ({ ...items, [`${item} (${item})`]: item }),
+        {}
+      ),
+      "red"
+    ),
+    disabled: boolean("Disabled (disabled)", false),
     slot: text("Content ($$slot)", "This is a tag"),
   },
 });

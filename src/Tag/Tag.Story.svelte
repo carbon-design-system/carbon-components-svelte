@@ -1,9 +1,6 @@
 <script>
-  export let disabled = undefined;
-  export let filter = undefined;
   export let slot = undefined;
   export let story = undefined;
-  export let type = undefined;
 
   import Tag from "./Tag.svelte";
   import TagSkeleton from "./Tag.Skeleton.svelte";
@@ -12,7 +9,7 @@
 <div>
   {#if story === 'filter'}
     <Tag
-      {filter}
+      {...$$restProps}
       on:click={() => {
         console.log('click');
       }}>
@@ -21,6 +18,6 @@
   {:else if story === 'skeleton'}
     <TagSkeleton />
   {:else}
-    <Tag {disabled} {type} class="class">{slot}</Tag>
+    <Tag {...$$restProps} class="class">{slot}</Tag>
   {/if}
 </div>

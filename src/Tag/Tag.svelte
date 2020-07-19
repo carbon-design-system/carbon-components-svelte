@@ -11,12 +11,13 @@
 {#if filter}
   <div
     aria-label={title}
+    {id}
     class:bx--tag={true}
     class:bx--tag--disabled={disabled}
     class:bx--tag--filter={filter}
-    class="bx--tag--{type}"
-    {id}
-    {...$$restProps}>
+    {...$$restProps}
+    class="{type && `bx--tag--${type}`}
+    {$$restProps.class}">
     <slot props={{ class: 'bx--tag__label' }}>
       <span class:bx--tag__label={true}>{type}</span>
     </slot>
@@ -36,8 +37,9 @@
   <span
     class:bx--tag={true}
     class:bx--tag--disabled={disabled}
-    class="bx--tag--{type}"
     {...$$restProps}
+    class="{type && `bx--tag--${type}`}
+    {$$restProps.class}"
     on:click
     on:mouseover
     on:mouseenter
