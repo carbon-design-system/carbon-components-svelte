@@ -17,7 +17,7 @@
   export let id = "ccs-" + Math.random().toString(36);
   export let ref = null;
 
-  import { createEventDispatcher, afterUpdate, onDestroy } from "svelte";
+  import { createEventDispatcher, onMount, afterUpdate } from "svelte";
   import Close20 from "carbon-icons-svelte/lib/Close20";
   import { Button } from "../Button";
 
@@ -33,6 +33,12 @@
     node.focus();
   }
 
+  onMount(() => {
+    return () => {
+      document.body.classList.remove("bx--body--with-modal-open");
+    };
+  });
+
   afterUpdate(() => {
     if (opened) {
       if (!open) {
@@ -46,10 +52,6 @@
       dispatch("open");
       document.body.classList.add("bx--body--with-modal-open");
     }
-  });
-
-  onDestroy(() => {
-    document.body.classList.remove("bx--body--with-modal-open");
   });
 
   $: modalLabelId = `bx--modal-header__label--modal-${id}`;
