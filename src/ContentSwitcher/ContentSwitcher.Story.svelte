@@ -1,5 +1,6 @@
 <script>
   export let story = undefined;
+  export let light = false;
 
   import ContentSwitcher from "./ContentSwitcher.svelte";
   import Switch from "./Switch.svelte";
@@ -11,6 +12,7 @@
 
 {#if story === 'selected'}
   <ContentSwitcher
+    {light}
     on:change={({ detail }) => {
       console.log('on:change', detail);
     }}>
@@ -20,6 +22,7 @@
   </ContentSwitcher>
 {:else}
   <ContentSwitcher
+    {light}
     bind:selectedIndex
     on:change={({ detail }) => {
       console.log('on:change', detail);

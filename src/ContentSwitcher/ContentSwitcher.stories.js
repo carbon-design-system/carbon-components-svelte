@@ -5,7 +5,10 @@ export default { title: "ContentSwitcher", decorators: [withKnobs] };
 
 export const Default = () => ({
   Component,
-  props: { disabled: boolean("Disabled (disabled)", false) },
+  props: {
+    disabled: boolean("Disabled (disabled)", false),
+    light: boolean("Light variant (light)", false),
+  },
 });
 
 export const Selected = () => ({
@@ -13,5 +16,6 @@ export const Selected = () => ({
   props: {
     story: "selected",
     disabled: boolean("Disabled (disabled)", false),
+    light: boolean("Light variant (light)", false),
   },
 });
