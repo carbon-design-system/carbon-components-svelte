@@ -3,9 +3,16 @@ import Component from "./TextInput.Story.svelte";
 
 export default { title: "TextInput", decorators: [withKnobs] };
 
+const sizes = {
+  "Extra large size (xl)": "xl",
+  "Default size": undefined,
+  "Small size (sm)": "sm",
+};
+
 export const Default = () => ({
   Component,
   props: {
+    size: select("Field size (size)", sizes, undefined) || undefined,
     disabled: boolean("Disabled (disabled)", false),
     light: boolean("Light variant (light)", false),
     hideLabel: boolean("No label (hideLabel)", false),
@@ -25,6 +32,7 @@ export const TogglePasswordVisibility = () => ({
   Component,
   props: {
     story: "password-visibility",
+    size: select("Field size (size)", sizes, undefined) || undefined,
     disabled: boolean("Disabled (disabled)", false),
     light: boolean("Light variant (light)", false),
     hideLabel: boolean("No label (hideLabel)", false),
@@ -62,6 +70,7 @@ export const ControlledTogglePasswordVisibility = () => ({
   Component,
   props: {
     story: "controlled",
+    size: select("Field size (size)", sizes, undefined) || undefined,
     disabled: boolean("Disabled (disabled)", false),
     light: boolean("Light variant (light)", false),
     hideLabel: boolean("No label (hideLabel)", false),

@@ -1,12 +1,19 @@
-import { withKnobs, text, boolean } from "@storybook/addon-knobs";
+import { withKnobs, text, boolean, select } from "@storybook/addon-knobs";
 import Component from "./Select.Story.svelte";
 
 export default { title: "Select", decorators: [withKnobs] };
+
+const sizes = {
+  "Extra large size (xl)": "xl",
+  "Default size": undefined,
+  "Small size (sm)": "sm",
+};
 
 export const Default = () => ({
   Component,
   props: {
     select: {
+      size: select("Field size (size)", sizes, undefined) || undefined,
       light: boolean("Light variant (light in <Select>)", false),
       inline: boolean(
         "Put control in-line with label (inline in <Select>)",

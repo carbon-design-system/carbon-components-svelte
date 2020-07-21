@@ -1,4 +1,5 @@
 <script>
+  export let size = undefined; // "sm" | "xl"
   export let type = "password";
   export let value = "";
   export let hidePasswordLabel = "Hide password";
@@ -70,6 +71,7 @@
       class:bx--password-input={true}
       class:bx--text-input--light={light}
       class:bx--text-input--invalid={invalid}
+      class={size && `bx--text-input--${size}`}
       on:change
       on:input
       on:input={({ target }) => {

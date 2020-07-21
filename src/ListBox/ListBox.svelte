@@ -1,11 +1,11 @@
 <script>
   export let size = undefined; // "sm" | "xl"
   export let type = "default"; // "default" | "inline"
+  export let open = false;
+  export let light = false;
   export let disabled = false;
   export let invalid = false;
   export let invalidText = "";
-  export let light = false;
-  export let open = false;
 </script>
 
 <div
@@ -17,8 +17,9 @@
   class:bx--list-box--disabled={disabled}
   class:bx--list-box--expanded={open}
   class:bx--list-box--light={light}
-  class={size && `bx--list-box--${size}`}
   {...$$restProps}
+  class="{size && `bx--list-box--${size}`}
+  {$$restProps.class}"
   on:keydown
   on:keydown={e => {
     if (e.key === 'Escape') {

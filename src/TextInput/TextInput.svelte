@@ -1,4 +1,5 @@
 <script>
+  export let size = undefined; // "sm" | "xl"
   export let type = "";
   export let value = "";
   export let placeholder = "";
@@ -62,6 +63,7 @@
       class:bx--text-input={true}
       class:bx--text-input--light={light}
       class:bx--text-input--invalid={invalid}
+      class={size && `bx--text-input--${size}`}
       on:change
       on:input
       on:input={({ target }) => {

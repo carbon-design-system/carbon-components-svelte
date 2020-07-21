@@ -1,4 +1,5 @@
 <script>
+  export let size = undefined; // "sm" | "xl"
   export let value = "";
   export let step = 1;
   export let max = undefined;
@@ -76,7 +77,8 @@
     class:bx--number--readonly={readonly}
     class:bx--number--light={light}
     class:bx--number--nolabel={hideLabel}
-    class:bx--number--mobile={mobile}>
+    class:bx--number--mobile={mobile}
+    class={size && `bx--number--${size}`}>
     {#if mobile}
       {#if label}
         <label
