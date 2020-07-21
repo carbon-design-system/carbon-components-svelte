@@ -37,6 +37,7 @@ export { Form } from "./Form";
 export { FormGroup } from "./FormGroup";
 export { FormItem } from "./FormItem";
 export { FormLabel } from "./FormLabel";
+export { Grid, Row, Column } from "./Grid";
 export { Icon, IconSkeleton } from "./Icon";
 export { InlineLoading } from "./InlineLoading";
 export { Link } from "./Link";
