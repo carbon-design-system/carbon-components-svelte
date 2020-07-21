@@ -1,4 +1,5 @@
 <script>
+  export let size = undefined; // "sm" | "xl"
   export let type = "text";
   export let placeholder = "";
   export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
@@ -51,7 +52,15 @@
     <input
       bind:this={ref}
       data-invalid={invalid || undefined}
+      value={!$range ? $inputValue : undefined}
+      {id}
+      {name}
+      {placeholder}
+      {type}
+      {pattern}
+      {disabled}
       class:bx--date-picker__input={true}
+      class={size && `bx--date-picker__input--${size}`}
       on:input
       on:input={({ target }) => {
         updateValue({ type: 'input', value: target.value });
@@ -68,14 +77,7 @@
       on:blur
       on:blur={({ relatedTarget }) => {
         blurInput(relatedTarget);
-      }}
-      {id}
-      {name}
-      {placeholder}
-      {type}
-      {pattern}
-      {disabled}
-      value={!$range ? $inputValue : undefined} />
+      }} />
     {#if $hasCalendar}
       <Calendar16
         role="img"

@@ -1,11 +1,24 @@
-import { withKnobs, text, boolean, number } from "@storybook/addon-knobs";
+import {
+  withKnobs,
+  text,
+  boolean,
+  number,
+  select,
+} from "@storybook/addon-knobs";
 import Component from "./NumberInput.Story.svelte";
 
 export default { title: "NumberInput", decorators: [withKnobs] };
 
+const sizes = {
+  "Extra large size (xl)": "xl",
+  "Default size": undefined,
+  "Small size (sm)": "sm",
+};
+
 export const Default = () => ({
   Component,
   props: {
+    size: select("Field size (size)", sizes, undefined) || undefined,
     id: text("NumberInput id", "number-input-id"),
     name: text("NumberInput name", "number-input-name"),
     label: text("Label (label)", "Number Input label"),

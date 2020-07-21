@@ -1,4 +1,5 @@
 <script>
+  export let size = undefined; // "sm" | "xl"
   export let selected = undefined;
   export let inline = false;
   export let light = false;
@@ -68,6 +69,7 @@
             {id}
             {name}
             class:bx--select-input={true}
+            class={size && `bx--select-input--${size}`}
             on:change={({ target }) => {
               selectedValue.set(target.value);
             }}
@@ -105,6 +107,7 @@
           disabled={disabled || undefined}
           aria-invalid={invalid || undefined}
           class:bx--select-input={true}
+          class={size && `bx--select-input--${size}`}
           on:change={({ target }) => {
             selectedValue.set(target.value);
           }}

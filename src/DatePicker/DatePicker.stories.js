@@ -8,6 +8,12 @@ const patterns = {
   "Regular (d{1,2}/d{1,2}/d{4})": "d{1,2}/d{1,2}/d{4}",
 };
 
+const sizes = {
+  "Extra large size (xl)": "xl",
+  "Default size": undefined,
+  "Small size (sm)": "sm",
+};
+
 export const Default = () => ({
   Component,
   props: {
@@ -19,6 +25,7 @@ export const Default = () => ({
     datePickerInput: {
       id: "date-picker-input-id",
       name: "date-picker-input-name",
+      size: select("Field size (size)", sizes, undefined) || undefined,
       labelText: text(
         "Label text (labelText in <DatePickerInput>)",
         "Date Picker label"
@@ -63,6 +70,7 @@ export const Single = () => ({
     },
     datePickerInput: {
       id: "date-picker-input-id",
+      size: select("Field size (size)", sizes, undefined) || undefined,
       labelText: text(
         "Label text (labelText in <DatePickerInput>)",
         "Date Picker label"
@@ -105,6 +113,7 @@ export const Range = () => ({
     },
     datePickerInput: {
       id: "date-picker-input-id",
+      size: select("Field size (size)", sizes, undefined) || undefined,
       labelText: text(
         "Label text (labelText in <DatePickerInput>)",
         "Date Picker label"
