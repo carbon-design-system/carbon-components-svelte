@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.8.3](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.8.3) - 2020-07-20
+
+- bump `carbon-icons-svelte` dependency to version >=10.14.0
+- support `size` prop (`undefined` or `"sm"` or `"lg`) in `DatePickerInput`, `NumberInput`, `Select`, `PasswordInput`, `TextInput` components
+- support light variant for `ContentSwitcher`
+- fix `ListBox` regression where size class can be overriden by `$$restProps.class`
+- fix `Pagination` regression where current page selection value is stuck at `1`
+
 ## [0.8.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.8.2) - 2020-07-19
 
 - fix `ComboBox` to close dropdown menu when pressing the "Escape" key ([Issue #198](https://github.com/IBM/carbon-components-svelte/issues/198))
