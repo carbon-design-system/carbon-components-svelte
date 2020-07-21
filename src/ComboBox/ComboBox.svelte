@@ -160,6 +160,7 @@
           on:clear={() => {
             selectedIndex = -1;
             open = false;
+            ref.focus();
           }}
           {translateWithId}
           {disabled}
