@@ -1,10 +1,10 @@
 <script>
-  export const translationIds = { close: "close", open: "open" };
   export let disabled = false;
-  export let id = "ccs-" + Math.random().toString(36);
   export let role = "combobox";
   export let tabindex = "-1";
+  export const translationIds = { close: "close", open: "open" };
   export let translateWithId = id => defaultTranslations[id];
+  export let id = "ccs-" + Math.random().toString(36);
   export let ref = null;
 
   import { getContext } from "svelte";
