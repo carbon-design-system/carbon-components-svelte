@@ -37,20 +37,16 @@
   <div class:bx--pagination__left={true}>
     <label
       id="bx--pagination-select-{id}-count-label"
-      class:bx--pagination__text={true}
-      for="bx--pagination-select-{id}">
+      for="bx--pagination-select-{id}"
+      class:bx--pagination__text={true}>
       {itemsPerPageText}
     </label>
     <Select
       id="bx--pagination-select-{id}"
       class="bx--select__item-count"
-      labelText=""
       hideLabel
       noLabel
       inline
-      on:change={() => {
-        page = 1;
-      }}
       bind:selected={pageSize}>
       {#each pageSizes as size, i (size)}
         <SelectItem value={size} text={size.toString()} />
