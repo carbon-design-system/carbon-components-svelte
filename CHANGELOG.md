@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - bump `carbon-icons-svelte` dependency to version >=10.14.0
 - support `size` prop (`undefined` or `"sm"` or `"lg`) in `DatePickerInput`, `NumberInput`, `Select`, `PasswordInput`, `TextInput` components
 - support light variant for `ContentSwitcher`
+- focus `ComboBox` after clearing the selection
 - fix `ListBox` regression where size class can be overriden by `$$restProps.class`
 - fix `Pagination` regression where current page selection value is stuck at `1`
 
