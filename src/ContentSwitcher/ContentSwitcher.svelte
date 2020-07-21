@@ -1,5 +1,6 @@
 <script>
   export let selectedIndex = 0;
+  export let light = false;
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
@@ -49,6 +50,7 @@
 <div
   role="tablist"
   class:bx--content-switcher={true}
+  class:bx--content-switcher--light={light}
   {...$$restProps}
   on:click
   on:mouseover
