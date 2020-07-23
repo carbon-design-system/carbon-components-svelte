@@ -22,7 +22,6 @@
 
 <div class="grid">
   <h6>Columns with auto-width</h6>
-
   <Grid>
     <Row>
       <Column>
@@ -49,7 +48,6 @@
   </Grid>
 
   <h6>Responsive Grid</h6>
-
   <Grid>
     <Row>
       <Column sm={1} md={4} lg={8}>
@@ -76,7 +74,6 @@
   </Grid>
 
   <h6>Columns with Offset</h6>
-
   <Grid>
     <Row>
       <Column sm={{ span: 1, offset: 3 }}>
@@ -103,7 +100,6 @@
   </Grid>
 
   <h6>Condensed Grid</h6>
-
   <Grid condensed>
     <Row>
       <Column>
@@ -130,7 +126,6 @@
   </Grid>
 
   <h6>Condensed Columns</h6>
-
   <Grid>
     <Row>
       <Column>
@@ -201,7 +196,6 @@
   </Grid>
 
   <h6>Full Width</h6>
-
   <Grid fullWidth>
     <Row>
       <Column>
@@ -224,6 +218,74 @@
           <div class="inside">1/4</div>
         </div>
       </Column>
+    </Row>
+  </Grid>
+
+  <h6>Aspect Ratio: 2x1</h6>
+  <Grid>
+    <Row>
+      <Column aspectRatio="2x1">1</Column>
+      <Column aspectRatio="2x1">1</Column>
+    </Row>
+  </Grid>
+
+  <h6>Aspect Ratio: 16x9</h6>
+  <Grid>
+    <Row>
+      <Column aspectRatio="16x9">1</Column>
+      <Column aspectRatio="16x9">1</Column>
+      <Column aspectRatio="16x9">1</Column>
+      <Column aspectRatio="16x9">1</Column>
+    </Row>
+  </Grid>
+
+  <h6>Aspect Ratio: 4x3</h6>
+  <Grid>
+    <Row>
+      <Column aspectRatio="4x3">1</Column>
+      <Column aspectRatio="4x3">1</Column>
+      <Column aspectRatio="4x3">1</Column>
+      <Column aspectRatio="4x3">1</Column>
+    </Row>
+  </Grid>
+
+  <h6>Aspect Ratio: 1x1</h6>
+  <Grid>
+    <Row>
+      <Column aspectRatio="1x1">1</Column>
+      <Column aspectRatio="1x1">1</Column>
+      <Column aspectRatio="1x1">1</Column>
+      <Column aspectRatio="1x1">1</Column>
+    </Row>
+  </Grid>
+
+  <h6>Aspect Ratio: 3x4</h6>
+  <Grid>
+    <Row>
+      <Column aspectRatio="3x4">1</Column>
+      <Column aspectRatio="3x4">1</Column>
+      <Column aspectRatio="3x4">1</Column>
+      <Column aspectRatio="3x4">1</Column>
+    </Row>
+  </Grid>
+
+  <h6>Aspect Ratio: 9x16</h6>
+  <Grid>
+    <Row>
+      <Column aspectRatio="9x16">1</Column>
+      <Column aspectRatio="9x16">1</Column>
+      <Column aspectRatio="9x16">1</Column>
+      <Column aspectRatio="9x16">1</Column>
+    </Row>
+  </Grid>
+
+  <h6>Aspect Ratio: 1x2</h6>
+  <Grid>
+    <Row>
+      <Column aspectRatio="1x2">1</Column>
+      <Column aspectRatio="1x2">1</Column>
+      <Column aspectRatio="1x2">1</Column>
+      <Column aspectRatio="1x2">1</Column>
     </Row>
   </Grid>
 </div>

@@ -2,6 +2,9 @@
   export let as = false;
   export let condensed = false;
   export let fullWidth = false;
+  export let noGutter = false;
+  export let noGutterLeft = false;
+  export let noGutterRight = false;
 
   $: props = {
     ...$$restProps,
@@ -9,10 +12,13 @@
       $$restProps.class,
       "bx--grid",
       condensed && "bx--grid--condensed",
-      fullWidth && "bx--grid--full-width"
+      fullWidth && "bx--grid--full-width",
+      noGutter && "bx--no-gutter",
+      noGutterLeft && "bx--no-gutter--left",
+      noGutterRight && "bx--no-gutter--right",
     ]
       .filter(Boolean)
-      .join(" ")
+      .join(" "),
   };
 </script>
 

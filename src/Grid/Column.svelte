@@ -1,16 +1,35 @@
 <script>
   export let as = false;
+  export let noGutter = false;
+  export let noGutterLeft = false;
+  export let noGutterRight = false;
 
   /**
-   * Types for `sm`, `md`, `lg`, `xlg`, `max`:
-   * true
-   * Number
-   * { span: Number | true; offset?: Number }
+   * Aspect ratio of the column
+   * @type {("2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1")} [aspectRatio]
    */
+  export let aspectRatio = undefined;
+
+  /**
+   * @typedef {(boolean | number)} ColumnSize
+   * @typedef {Object} ColumnSizeDescriptor
+   * @property {ColumnSize} [ColumnSizeDescriptor.span] Column size
+   * @property {number} [ColumnSizeDescriptor.offset] Column offset
+   */
+
+  /** @type {ColumnSize|ColumnSizeDescriptor} [sm] */
   export let sm = undefined;
+
+  /** @type {ColumnSize|ColumnSizeDescriptor} [md] */
   export let md = undefined;
+
+  /** @type {ColumnSize|ColumnSizeDescriptor} [lg] */
   export let lg = undefined;
+
+  /** @type {ColumnSize|ColumnSizeDescriptor} [xlg] */
   export let xlg = undefined;
+
+  /** @type {ColumnSize|ColumnSizeDescriptor} [max] */
   export let max = undefined;
 
   const breakpoints = ["sm", "md", "lg", "xlg", "max"];
@@ -43,9 +62,17 @@
     .join(" ");
   $: props = {
     ...$$restProps,
-    class: [$$restProps.class, columnClass, !columnClass && "bx--col"]
+    class: [
+      $$restProps.class,
+      columnClass,
+      !columnClass && "bx--col",
+      noGutter && "bx--no-gutter",
+      noGutterLeft && "bx--no-gutter--left",
+      noGutterRight && "bx--no-gutter--right",
+      aspectRatio && `bx--aspect-ratio bx--aspect-ratio--${aspectRatio}`,
+    ]
       .filter(Boolean)
-      .join(" ")
+      .join(" "),
   };
 </script>
 
