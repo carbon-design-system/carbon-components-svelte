@@ -1,0 +1,47 @@
+<script>
+  export let fromIndex = 0;
+  export let count = 0;
+
+  import { createEventDispatcher } from "svelte";
+  import OverflowMenuHorizontal16 from "carbon-icons-svelte/lib/OverflowMenuHorizontal16";
+  import PaginationItem from "./PaginationItem.svelte";
+
+  const dispatch = createEventDispatcher();
+
+  let value = "";
+</script>
+
+{#if count > 1}
+  <li class:bx--pagination-nav__list-item={true}>
+    <div class:bx--pagination-nav__select={true}>
+      <!-- svelte-ignore a11y-no-onchange -->
+      <select
+        aria-label="Select Page number"
+        {value}
+        class:bx--pagination-nav__page={true}
+        class:bx--pagination-nav__page--select={true}
+        on:change={({ target }) => {
+          value = '';
+          dispatch('select', { index: Number(target.value) });
+        }}>
+        <option value="" hidden />
+        {#each Array.from({ length: count }, (_, i) => i) as i}
+          <option value={fromIndex + i} data-page={fromIndex + i + 1}>
+            {fromIndex + i + 1}
+          </option>
+        {/each}
+      </select>
+      <div class:bx--pagination-nav__select-icon-wrapper={true}>
+        <OverflowMenuHorizontal16 class="bx--pagination-nav__select-icon" />
+      </div>
+    </div>
+  </li>
+{:else if count === 1}
+  <PaginationItem
+    page={fromIndex + 1}
+    on:click={() => {
+      dispatch('select', { index: fromIndex });
+    }}>
+    Page
+  </PaginationItem>
+{/if}

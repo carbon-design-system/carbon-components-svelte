@@ -64,6 +64,7 @@ export { NumberInput, NumberInputSkeleton } from "./NumberInput";
 export { OrderedList } from "./OrderedList";
 export { OverflowMenu, OverflowMenuItem } from "./OverflowMenu";
 export { Pagination, PaginationSkeleton } from "./Pagination";
+export { PaginationNav } from "./PaginationNav";
 export {
   ProgressIndicator,
   ProgressIndicatorSkeleton,
