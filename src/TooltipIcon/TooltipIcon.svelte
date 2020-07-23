@@ -9,8 +9,8 @@
 </script>
 
 <svelte:body
-  on:keydown={e => {
-    if (e.key === 'Escape') {
+  on:keydown={({ key }) => {
+    if (key === 'Escape') {
       hidden = true;
     }
   }} />
@@ -21,9 +21,10 @@
   class:bx--tooltip__trigger={true}
   class:bx--tooltip--a11y={true}
   class:bx--tooltip--hidden={hidden}
-  class="{direction && `bx--tooltip--${direction}`}
-  {align && `bx--tooltip--align-${align}`}"
   {...$$restProps}
+  class="{direction && `bx--tooltip--${direction}`}
+  {align && `bx--tooltip--align-${align}`}
+  {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter
