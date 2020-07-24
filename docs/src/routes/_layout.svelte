@@ -29,6 +29,10 @@
 </script>
 
 <style>
+  :global(#sapper) {
+    min-height: 100vh;
+  }
+
   :global(.bx--content) {
     padding: 0;
   }

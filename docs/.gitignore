@@ -5,3 +5,4 @@
 yarn-error.log
 /cypress/screenshots/
 /__sapper__/
+static/style.css

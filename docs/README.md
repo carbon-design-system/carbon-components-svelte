@@ -29,6 +29,14 @@ yarn link "carbon-components-svelte"
 yarn install
 ```
 
+Before starting development, you will need to build the Carbon-themed CSS StyleSheet once.
+
+```sh
+node scripts/carbon-theme
+```
+
+A file containing the four Carbon themes will be outputted to `static/style.css`. Do not check this file into source control.
+
 ## Available Scripts
 
 ### `yarn dev`

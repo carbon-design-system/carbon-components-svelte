@@ -7,8 +7,9 @@
     HeaderNav,
     HeaderNavItem,
     HeaderUtilities,
-    HeaderActionLink
+    HeaderActionLink,
   } from "carbon-components-svelte";
+  import Theme from "./Theme.svelte";
 </script>
 
 <Header
