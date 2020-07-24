@@ -633,15 +633,15 @@ camel-case@^3.0.0:
     upper-case "^1.1.1"
 
 carbon-components-svelte@../:
-  version "0.7.6"
+  version "0.8.5"
   dependencies:
-    carbon-icons-svelte "^10.13.0"
+    carbon-icons-svelte "^10.14.0"
     flatpickr "4.6.3"
 
-carbon-icons-svelte@^10.13.0:
-  version "10.13.0"
-  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.13.0.tgz#fbb3d863901bee94418e8caf2959777655edfa78"
-  integrity sha512-WXEr+cE1IXtYQspp3cwE2l2qlYUeHWd46wyqYM2PJ3Qw5n4tPD7OCs+MZa6hmOaziv/fns+uYMeeisGvJp5Slg==
+carbon-icons-svelte@^10.14.0:
+  version "10.14.0"
+  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.14.0.tgz#a26984db41bb3b04afcabfdbcf481d0387c4763b"
+  integrity sha512-Ucfy6A0GtvCxBPNCuUaFj7QsxV6hN/R8E8L/RMoytdrkZFD+tkl5pUVOHypcmYYZF7Dumnxr6ePr2bvwyTs5lg==
 
 caseless@~0.12.0:
   version "0.12.0"
