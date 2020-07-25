@@ -2,8 +2,8 @@ import components from "./_components.js";
 
 const componentsMap = new Map();
 
-components.forEach((post) => {
-  componentsMap.set(post.slug, JSON.stringify(post));
+components.forEach(($) => {
+  componentsMap.set($.slug, JSON.stringify($));
 });
 
 export function get(req, res, next) {

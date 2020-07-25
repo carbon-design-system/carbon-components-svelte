@@ -4,5 +4,6 @@
 /src/node_modules/@sapper/
 yarn-error.log
 /cypress/screenshots/
+/cypress/fixtures/
 /__sapper__/
 static/style.css

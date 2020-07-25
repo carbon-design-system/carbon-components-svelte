@@ -1,7 +1,13 @@
 <script>
-  import Theme from "../components/Theme.svelte";
+  import Portfolio from "../components/Portfolio.svelte";
 </script>
 
-<h1>Welcome</h1>
+<style>
+  h1 {
+    margin-bottom: 1rem;
+  }
+</style>
 
-<Theme />
+<h1>Component Grid</h1>
+
+<Portfolio />

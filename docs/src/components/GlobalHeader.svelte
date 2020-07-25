@@ -19,7 +19,7 @@
   rel="prefetch"
   aria-current={segment === undefined ? 'page' : undefined}>
   <SkipToContent />
-  <HeaderNav>
+  <!-- <HeaderNav>
     <HeaderNavItem
       rel="prefetch"
       href="about"
@@ -30,5 +30,5 @@
       href="components"
       text="Components"
       aria-current={segment === 'components' ? 'page' : undefined} />
-  </HeaderNav>
+  </HeaderNav> -->
 </Header>

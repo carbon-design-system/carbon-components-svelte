@@ -3,14 +3,9 @@ describe("Button", () => {
     cy.examples("Button");
   });
 
-  it("renders correctly", () => {
-    cy.get("button").then(($) => {
-      expect($.length).to.eql(4);
-    });
-  });
-
-  it.only("clicks", () => {
-    cy.get('[data-test="button-primary"]')
+  it("clicks", () => {
+    cy.get(".bx--btn--primary")
+      .first()
       .as("btn")
       .contains("Primary button");
 

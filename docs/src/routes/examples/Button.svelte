@@ -4,8 +4,9 @@
 </script>
 
 <div>
+  <h4>Buttons</h4>
   <Button
-    data-test="button-primary"
+    {...$$props}
     kind="primary"
     on:click={() => console.log('click')}
     on:mouseover={() => console.log('mouseover')}
@@ -13,29 +14,73 @@
     on:mouseleave={() => console.log('mouseleave')}>
     Primary button
   </Button>
-  <Button kind="secondary">Secondary button</Button>
-  <Button kind="tertiary">Tertiary button</Button>
-  <Button kind="ghost">Ghost button</Button>
-  <Button kind="danger">Danger button</Button>
+
+  <Button {...$$props} kind="secondary">Secondary button</Button>
+
+  <Button {...$$props} kind="tertiary">Tertiary button</Button>
+
+  <Button {...$$props} kind="ghost">Ghost button</Button>
+
+  <Button {...$$props} kind="danger">Danger button</Button>
 </div>
+
 <div>
-  <Button kind="primary" size="field">Primary button</Button>
-  <Button kind="secondary" size="field">Secondary button</Button>
-  <Button kind="tertiary" size="field">Tertiary button</Button>
-  <Button kind="ghost" size="field">Ghost button</Button>
-  <Button kind="danger" size="field">Danger button</Button>
+  <h4>Buttons with Icons</h4>
+  <Button {...$$props} kind="primary" icon={Add16}>Primary</Button>
+
+  <Button {...$$props} kind="secondary" icon={Add16}>Secondary</Button>
+
+  <Button {...$$props} kind="tertiary" icon={Add16}>Tertiary</Button>
+
+  <Button {...$$props} kind="ghost" icon={Add16}>Ghost</Button>
+
+  <Button {...$$props} kind="danger" icon={Add16}>Danger</Button>
 </div>
+
 <div>
-  <Button kind="primary" size="small">Primary button</Button>
-  <Button kind="secondary" size="small">Secondary button</Button>
-  <Button kind="tertiary" size="small">Tertiary button</Button>
-  <Button kind="ghost" size="small">Ghost button</Button>
-  <Button kind="danger" size="small">Danger button</Button>
-</div>
-<div>
-  <Button kind="primary" size="small" icon={Add16}>Primary button</Button>
-  <Button kind="secondary" size="small" icon={Add16}>Secondary button</Button>
-  <Button kind="tertiary" size="small" icon={Add16}>Tertiary button</Button>
-  <Button kind="ghost" size="small" icon={Add16}>Ghost button</Button>
-  <Button kind="danger" size="small" icon={Add16}>Danger button</Button>
+  <h4>Icon-only Buttons</h4>
+  <Button
+    {...$$props}
+    kind="primary"
+    hasIconOnly
+    icon={Add16}
+    iconDescription="Primary"
+    tooltipPosition="bottom"
+    tooltipAlignment="center" />
+
+  <Button
+    {...$$props}
+    kind="secondary"
+    hasIconOnly
+    icon={Add16}
+    iconDescription="Secondary"
+    tooltipPosition="bottom"
+    tooltipAlignment="center" />
+
+  <Button
+    {...$$props}
+    kind="tertiary"
+    hasIconOnly
+    icon={Add16}
+    iconDescription="Tertiary"
+    tooltipPosition="bottom"
+    tooltipAlignment="center" />
+
+  <Button
+    {...$$props}
+    kind="ghost"
+    hasIconOnly
+    icon={Add16}
+    iconDescription="Ghost"
+    tooltipPosition="bottom"
+    tooltipAlignment="center" />
+
+  <Button
+    {...$$props}
+    kind="danger"
+    hasIconOnly
+    icon={Add16}
+    iconDescription="Danger"
+    tooltipPosition="bottom"
+    tooltipAlignment="center" />
 </div>
