@@ -47,6 +47,32 @@
     </Row>
   </Grid>
 
+  <h6>Narrow grid</h6>
+  <Grid narrow>
+    <Row>
+      <Column>
+        <div class="outside">
+          <div class="inside">1/4</div>
+        </div>
+      </Column>
+      <Column>
+        <div class="outside">
+          <div class="inside">1/4</div>
+        </div>
+      </Column>
+      <Column>
+        <div class="outside">
+          <div class="inside">1/4</div>
+        </div>
+      </Column>
+      <Column>
+        <div class="outside">
+          <div class="inside">1/4</div>
+        </div>
+      </Column>
+    </Row>
+  </Grid>
+
   <h6>Responsive Grid</h6>
   <Grid>
     <Row>
