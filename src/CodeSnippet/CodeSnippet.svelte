@@ -1,6 +1,7 @@
 <script>
   export let type = "single"; // "single" | "inline" | "multi"
   export let code = undefined;
+  export let expanded = false;
   export let light = false;
   export let skeleton = false;
   export let copyButtonDescription = undefined;
@@ -9,6 +10,7 @@
   export let feedbackTimeout = 2000;
   export let showLessText = "Show less";
   export let showMoreText = "Show more";
+  export let showMoreLess = false;
   export let id = "ccs-" + Math.random().toString(36);
   export let ref = null;
 
@@ -19,8 +21,6 @@
   import { CopyButton } from "../CopyButton";
   import CodeSnippetSkeleton from "./CodeSnippet.Skeleton.svelte";
 
-  $: showMoreLess = false;
-  $: expanded = false;
   $: expandText = expanded ? showLessText : showMoreText;
 
   afterUpdate(() => {
@@ -31,7 +31,13 @@
 </script>
 
 {#if skeleton}
-  <CodeSnippetSkeleton {type} {...$$restProps} />
+  <CodeSnippetSkeleton
+    {type}
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave />
 {:else}
   {#if type === 'inline'}
     <Copy

@@ -6,7 +6,12 @@
 </script>
 
 {#if skeleton}
-  <AccordionSkeleton {...$$restProps} />
+  <AccordionSkeleton
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave />
 {:else}
   <ul
     class:bx--accordion={true}

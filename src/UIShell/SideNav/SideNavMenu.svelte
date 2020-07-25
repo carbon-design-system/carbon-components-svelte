@@ -7,7 +7,7 @@
   import { Icon } from "../../Icon";
 </script>
 
-<li class:bx--side-nav__item={true} class:bx--side-nav__item--icon={true}>
+<li class:bx--side-nav__item={true} class:bx--side-nav__item--icon={icon}>
   <button
     type="button"
     aria-haspopup="true"
@@ -18,11 +18,11 @@
     on:click={() => {
       expanded = !expanded;
     }}>
-    <div class:bx--side-nav__icon={true}>
-      {#if icon}
+    {#if icon}
+      <div class:bx--side-nav__icon={true}>
         <Icon {...icon} />
-      {/if}
-    </div>
+      </div>
+    {/if}
     <span class:bx--side-nav__submenu-title={true}>{text}</span>
     <div
       class:bx--side-nav__icon={true}

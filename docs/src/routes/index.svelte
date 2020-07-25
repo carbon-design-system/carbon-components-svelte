@@ -1,10 +1,13 @@
 <script>
-  import components from "./components/_components";
-  import { Link } from "carbon-components-svelte";
+  import Portfolio from "../components/Portfolio.svelte";
 </script>
 
-<h1>Welcome</h1>
+<style>
+  h1 {
+    margin-bottom: 1rem;
+  }
+</style>
 
-{#each components as component}
-  <Link href="examples/{component.title}">{component.title}</Link>
-{/each}
+<h1>Component Grid</h1>
+
+<Portfolio />

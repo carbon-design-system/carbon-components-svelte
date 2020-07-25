@@ -15,11 +15,13 @@
     class:bx--side-nav__link--current={isSelected}
     {...$$restProps}
     on:click>
-    <div class:bx--side-nav__icon={true} class:bx--side-nav__icon--small={true}>
-      {#if icon}
+    {#if icon}
+      <div
+        class:bx--side-nav__icon={true}
+        class:bx--side-nav__icon--small={true}>
         <Icon {...icon} />
-      {/if}
-    </div>
+      </div>
+    {/if}
     <span class:bx--side-nav__link-text={true}>{text}</span>
   </a>
 </li>

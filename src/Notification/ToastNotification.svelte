@@ -17,19 +17,18 @@
 
   const dispatch = createEventDispatcher();
 
-  $: open = true;
-  $: timeoutId = undefined;
+  let open = true;
+  let timeoutId = undefined;
 
   onMount(() => {
     if (timeout) {
-      timeoutId = window.setTimeout(() => {
+      timeoutId = setTimeout(() => {
         open = false;
       }, timeout);
     }
 
     return () => {
-      window.clearTimeout(timeoutId);
-      timeoutId = undefined;
+      clearTimeout(timeoutId);
     };
   });
 </script>
