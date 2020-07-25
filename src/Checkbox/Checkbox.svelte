@@ -30,7 +30,7 @@
   export let disabled = false;
 
   /**
-   * Define the label text
+   * Specify the label text
    * @type {string} [labelText=""]
    */
   export let labelText = "";

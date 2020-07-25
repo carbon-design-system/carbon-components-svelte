@@ -8,7 +8,17 @@
    */
   export let id = "ccs-" + Math.random().toString(36);
   export let inputType = "number";
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
   export let labelText = "";
 
   /**

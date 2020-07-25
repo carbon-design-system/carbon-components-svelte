@@ -7,8 +7,19 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
   export let invalidText = "";
+
   export let items = [];
   export let itemToString = (item) => item.text || item.id;
   export let light = false;

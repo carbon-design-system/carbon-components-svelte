@@ -14,7 +14,19 @@
    */
   export let light = false;
   export let disabled = false;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
+  export let invalidText = "";
+
   export let items = [];
   export let itemToString = (item) => item.text || item.id;
   export let type = "default"; // "default" | "inline"
@@ -26,7 +38,7 @@
    */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
-  export let invalidText = "";
+
   export let helperText = "";
   export let label = undefined;
   export let titleText = "";

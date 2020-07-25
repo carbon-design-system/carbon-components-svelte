@@ -10,6 +10,11 @@
   export let id = "ccs-" + Math.random().toString(36);
   export let type = "text";
   export let value = "";
+
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
   export let labelText = "";
   export let placeholder = "Search...";
   export let skeleton = false;
@@ -26,6 +31,11 @@
    */
   export let small = false;
   export let size = small ? "sm" : "xl";
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import Close16 from "carbon-icons-svelte/lib/Close16";
@@ -49,7 +59,7 @@
     class:bx--search--light={light}
     {...$$restProps}>
     <Search16 class="bx--search-magnifier" />
-    <label class:bx--label={true} for={id}>{labelText}</label>
+    <label for={id} class:bx--label={true}>{labelText}</label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
       bind:this={ref}

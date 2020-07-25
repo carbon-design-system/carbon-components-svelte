@@ -4,7 +4,13 @@
   export let step = 1;
   export let max = undefined;
   export let min = undefined;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
   export let readonly = false;
   export let mobile = false;
   export let allowEmpty = false;
@@ -17,8 +23,19 @@
    */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
-  export let invalidText = "Provide invalidText";
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText="Provide invalidText"]
+   */
+  export let invalidText = "";
+
   export let helperText = "";
   export let label = "";
   export let hideLabel = false;

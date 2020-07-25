@@ -21,11 +21,31 @@
    */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
   export let invalidText = "";
+
   export let helperText = "";
   export let noLabel = false;
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
   export let labelText = "";
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
   export let hideLabel = false;
   export let ref = null;
 

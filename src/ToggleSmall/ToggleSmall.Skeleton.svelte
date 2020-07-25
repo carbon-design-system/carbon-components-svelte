@@ -1,6 +1,6 @@
 <script>
   /**
-   * Define the label text
+   * Specify the label text
    * @type {string} [labelText=""]
    */
   export let labelText = "";

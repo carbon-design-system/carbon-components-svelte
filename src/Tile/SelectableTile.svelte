@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to select the tile
+   * @type {boolean} [selected=false]
+   */
   export let selected = false;
 
   /**

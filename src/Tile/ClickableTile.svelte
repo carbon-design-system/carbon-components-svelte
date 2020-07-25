@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to click the tile
+   * @type {boolean} [clicked=false]
+   */
   export let clicked = false;
 
   /**

@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to expand the tile
+   * @type {boolean} [expanded=false]
+   */
   export let expanded = false;
 
   /**

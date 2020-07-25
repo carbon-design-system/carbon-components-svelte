@@ -2,7 +2,7 @@
   export let notificationType = "inline";
 
   /**
-   * Set the kind of notification
+   * Specify the kind of notification
    * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"} [kind="error"]
    */
   export let kind = "error";

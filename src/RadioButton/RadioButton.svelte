@@ -9,7 +9,16 @@
    */
   export let id = "ccs-" + Math.random().toString(36);
   export let labelPosition = "right"; // "left" | "right"
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
   export let labelText = "";
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
   export let hideLabel = false;
   export let name = "";
 

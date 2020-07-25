@@ -11,6 +11,10 @@
    */
   export let type = "default";
 
+  /**
+   * Set to `true` to open the list box
+   * @type {boolean} [open=false]
+   */
   export let open = false;
 
   /**
@@ -18,8 +22,23 @@
    * @type {boolean} [light=false]
    */
   export let light = false;
+
+  /**
+   * Set to `true` to disable the list box
+   * @type {boolean} [disable=false]
+   */
   export let disabled = false;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
   export let invalidText = "";
 </script>
 

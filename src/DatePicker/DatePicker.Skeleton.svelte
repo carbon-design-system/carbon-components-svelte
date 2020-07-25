@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to use the range variant
+   * @type {boolean} [range=false]
+   */
   export let range = false;
 
   /**

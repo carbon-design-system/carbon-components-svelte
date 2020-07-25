@@ -2,7 +2,12 @@
   export let complete = false;
   export let current = false;
   export let disabled = false;
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
   export let description = "";
   export let label = "";
   export let secondaryLabel = "";

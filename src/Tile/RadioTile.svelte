@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to check the tile
+   * @type {boolean} [checked=false]
+   */
   export let checked = false;
 
   /**

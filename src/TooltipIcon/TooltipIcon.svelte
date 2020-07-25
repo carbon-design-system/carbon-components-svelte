@@ -1,7 +1,7 @@
 <script>
   /**
    * Define the tooltip text
-   * @types {string} [tooltipText=""]
+   * @type {string} [tooltipText=""]
    */
   export let tooltipText = "";
 

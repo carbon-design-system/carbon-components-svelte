@@ -1,13 +1,63 @@
 <script>
+  /**
+   * Set the direction of the tooltip relative to the button
+   * @type {"top" | "right" | "bottom" | "left"} [direction="bottom"]
+   */
   export let direction = "bottom";
-  export let hideIcon = false;
-  export let icon = Information16;
-  export let iconDescription = "";
-  export let iconName = "";
+
+  /**
+   * Set to `true` to open the tooltip
+   * @type {boolean} [open=false]
+   */
   export let open = false;
+
+  /**
+   * Set to `true` to hide the tooltip icon
+   * @type {boolean} [hideIcon=false]
+   */
+  export let hideIcon = false;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the tooltip button
+   * Icon size must be 16px (e.g. `Add16`, `Task16`)
+   * @type {typeof import("carbon-icons-svelte/lib/Information16")} [icon=Information16]
+   */
+  export let icon = Information16;
+
+  /**
+   * Define the ARIA label for the tooltip button
+   * @type {string} [iconDescription=""]
+   */
+  export let iconDescription = "";
+
+  /**
+   * Define the icon name attribute
+   * @type {string} [iconName=""]
+   */
+  export let iconName = "";
+
+  /**
+   * Set the button tabindex
+   * @type {string} [tabindex="0"]
+   */
   export let tabindex = "0";
+
+  /**
+   * Set an id for the tooltip
+   * @type {string} [tooltipId]
+   */
   export let tooltipId = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Set an id for the tooltip button
+   * @type {string} [triggerId]
+   */
   export let triggerId = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Set the tooltip button text
+   * @type {string} [triggerText=""]
+   */
   export let triggerText = "";
 
   /**

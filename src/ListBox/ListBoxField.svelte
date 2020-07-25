@@ -10,6 +10,11 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the top-level HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { getContext } from "svelte";

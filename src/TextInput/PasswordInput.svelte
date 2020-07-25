@@ -23,7 +23,17 @@
   export let name = undefined;
   export let invalid = false;
   export let invalidText = "";
+
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
   export let labelText = "";
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
   export let hideLabel = false;
   export let tooltipAlignment = "center";
   export let tooltipPosition = "bottom";

@@ -1,9 +1,23 @@
 <script>
-  export let size = undefined; // "sm" | "xl"
+  /**
+   * Set the size of the input
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
   export let type = "text";
+
+  /**
+   * Specify the input placeholder text
+   * @type {string} [placeholder=""]
+   */
   export let placeholder = "";
   export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
   export let disabled = false;
+
+  /**
+   * Define the ARIA label for the calendar icon
+   * @type {string} [iconDescription=""]
+   */
   export let iconDescription = "";
 
   /**
@@ -13,8 +27,19 @@
   export let id = "ccs-" + Math.random().toString(36);
   export let labelText = "";
   export let hideLabel = false;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
   export let invalidText = "";
+
   export let name = undefined;
 
   /**

@@ -13,13 +13,30 @@
    */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
   export let invalidText = "";
+
   export let helperText = "";
   export let items = [];
   export let itemToString = (item) => item.text || item.id;
   export let label = "";
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
   export let locale = "en";
   export let open = false;
   export let placeholder = "";

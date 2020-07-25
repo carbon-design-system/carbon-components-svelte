@@ -12,25 +12,36 @@
   export let light = false;
   export let disabled = false;
 
+  export let labelText = "";
+  export let hideLabel = false;
+
   /**
    * Set an id for the input element
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
-  export let invalidText = "Invalid time format.";
-  export let labelText = "";
-  export let hideLabel = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText="Invalid time format."]
+   */
+  export let invalidText = "";
 </script>
 
 <div
   class:bx--form-item={true}
+  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-  {...$$restProps}>
+  on:mouseleave>
   <div
     class:bx--time-picker={true}
     class:bx--time-picker--light={light}
@@ -47,6 +58,14 @@
       {/if}
       <input
         data-invalid={invalid || undefined}
+        {pattern}
+        {placeholder}
+        {maxlength}
+        {id}
+        {name}
+        {type}
+        {value}
+        {disabled}
         class:bx--time-picker__input-field={true}
         class:bx--text-input={true}
         class:bx--text-input--light={light}
@@ -57,15 +76,7 @@
           value = target.value;
         }}
         on:focus
-        on:blur
-        {pattern}
-        {placeholder}
-        {maxlength}
-        {id}
-        {name}
-        {type}
-        {value}
-        {disabled} />
+        on:blur />
     </div>
     <slot />
   </div>

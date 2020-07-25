@@ -1,8 +1,19 @@
 <script>
+  /**
+   * Specify the direction of the overflow menu relative to the button
+   * @type {"top" | "bottom"} [direction="bottom"]
+   */
+  export let direction = "bottom";
+
   export let open = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
   export let flipped = false;
-  export let direction = "bottom"; // "top" | "bottom"
+
   export let tabindex = "0";
   export let icon = OverflowMenuVertical16;
   export let iconClass = undefined;

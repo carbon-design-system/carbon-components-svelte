@@ -1,5 +1,10 @@
 <script>
-  export let invalid = false;
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
+   export let invalid = false;
+
   export let message = false;
   export let messageText = "";
   export let legendText = "";

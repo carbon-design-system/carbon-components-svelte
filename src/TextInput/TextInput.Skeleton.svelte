@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
   export let hideLabel = false;
 </script>
 

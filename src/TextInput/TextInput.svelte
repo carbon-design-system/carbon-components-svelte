@@ -19,10 +19,30 @@
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let helperText = "";
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
   export let labelText = "";
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
   export let hideLabel = false;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
   export let invalidText = "";
+
   export let ref = null;
 
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

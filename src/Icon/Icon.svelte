@@ -1,4 +1,9 @@
 <script>
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * Icon size must be 16px (e.g. `Add16`, `Task16`)
+   * @type {typeof import("carbon-icons-svelte/lib/Add16")} [render]
+   */
   export let render = undefined;
 
   /**

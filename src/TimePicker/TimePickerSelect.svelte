@@ -4,13 +4,14 @@
   export let disabled = false;
   export let iconDescription = "Open list of options";
 
+  export let labelText = "";
+  export let hideLabel = true;
+
   /**
    * Set an id for the select element
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
-  export let labelText = "";
-  export let hideLabel = true;
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
@@ -42,14 +43,14 @@
   {/if}
   <!-- svelte-ignore a11y-no-onchange -->
   <select
-    class:bx--select-input={true}
-    on:change={({ target }) => {
-      selectedValue.set(target.value);
-    }}
     {id}
     {name}
     {disabled}
-    {value}>
+    {value}
+    class:bx--select-input={true}
+    on:change={({ target }) => {
+      selectedValue.set(target.value);
+    }}>
     <slot />
   </select>
   <ChevronDownGlyph
