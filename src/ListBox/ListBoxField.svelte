@@ -3,7 +3,12 @@
   export let role = "combobox";
   export let tabindex = "-1";
   export const translationIds = { close: "close", open: "open" };
-  export let translateWithId = id => defaultTranslations[id];
+  export let translateWithId = (id) => defaultTranslations[id];
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let ref = null;
 
@@ -11,7 +16,7 @@
 
   const defaultTranslations = {
     [translationIds.close]: "Close menu",
-    [translationIds.open]: "Open menu"
+    [translationIds.open]: "Open menu",
   };
   const ctx = getContext("MultiSelect");
 

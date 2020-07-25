@@ -3,8 +3,19 @@
   export let type = "";
   export let value = "";
   export let placeholder = "";
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
   export let disabled = false;
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let helperText = "";

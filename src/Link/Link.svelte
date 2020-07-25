@@ -1,6 +1,20 @@
 <script>
+  /**
+   * Set to `true` to use the inline variant
+   * @type {boolean} [inline=false]
+   */
   export let inline = false;
+
+  /**
+   * Set to `true` to disable the checkbox
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Obtain a reference to the top-level HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 </script>
 

@@ -4,6 +4,11 @@
   export let labelA = "Off";
   export let labelB = "On";
   export let labelText = "";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
 </script>
@@ -24,7 +29,7 @@
       toggled = !toggled;
     }}
     on:keyup
-    on:keyup={e => {
+    on:keyup={(e) => {
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         toggled = !toggled;

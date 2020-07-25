@@ -1,11 +1,21 @@
 <script>
   export let expanded = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
   export let tileMaxHeight = 0;
   export let tilePadding = 0;
   export let tileCollapsedIconText = "Interact to expand Tile";
   export let tileExpandedIconText = "Interact to collapse Tile";
   export let tabindex = "0";
+
+  /**
+   * Set an id for the top-level div element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let ref = null;
 
@@ -43,7 +53,7 @@
     expanded = !expanded;
   }}
   on:keypress
-  on:keypress={e => {
+  on:keypress={(e) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       expanded = !expanded;

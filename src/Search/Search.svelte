@@ -2,13 +2,28 @@
   export let autocomplete = "off";
   export let autofocus = false;
   export let closeButtonLabelText = "Clear search input";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let type = "text";
   export let value = "";
   export let labelText = "";
   export let placeholder = "Search...";
   export let skeleton = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
+  /**
+   * Set to `true` to use the small variant
+   * @type {boolean} [small=false]
+   */
   export let small = false;
   export let size = small ? "sm" : "xl";
   export let ref = null;

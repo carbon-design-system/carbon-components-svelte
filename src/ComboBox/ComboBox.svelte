@@ -1,11 +1,16 @@
 <script>
   export let disabled = false;
   export let helperText = "";
+
+  /**
+   * Set an id for the list box component
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let invalid = false;
   export let invalidText = "";
   export let items = [];
-  export let itemToString = item => item.text || item.id;
+  export let itemToString = (item) => item.text || item.id;
   export let light = false;
   export let open = false;
   export let placeholder = "";
@@ -26,7 +31,7 @@
     ListBoxMenu,
     ListBoxMenuIcon,
     ListBoxMenuItem,
-    ListBoxSelection
+    ListBoxSelection,
   } from "../ListBox";
 
   let selectedId = undefined;
@@ -48,7 +53,7 @@
   afterUpdate(() => {
     if (open) {
       ref.focus();
-      filteredItems = items.filter(item => shouldFilterItem(item, value));
+      filteredItems = items.filter((item) => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
       inputValue = selectedItem ? selectedItem.text : "";
@@ -61,7 +66,7 @@
   $: highlightedId = items[highlightedIndex]
     ? items[highlightedIndex].id
     : undefined;
-  $: filteredItems = items.filter(item => shouldFilterItem(item, value));
+  $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
   $: selectedItem = items[selectedIndex];
   $: inputValue = selectedItem ? selectedItem.text : undefined;
   $: value = inputValue;

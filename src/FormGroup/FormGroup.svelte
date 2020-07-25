@@ -1,8 +1,8 @@
 <script>
-  export let legendText = "";
   export let invalid = false;
   export let message = false;
   export let messageText = "";
+  export let legendText = "";
 </script>
 
 <fieldset

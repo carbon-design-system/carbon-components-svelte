@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Set the `href` to use an anchor link
+   * @type {string} [href]
+   */
   export let href = undefined;
+
+  /**
+   * Set to `true` to use the small variant
+   * @type {boolean} [small=false]
+   */
   export let small = false;
 </script>
 

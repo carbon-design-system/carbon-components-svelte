@@ -4,10 +4,21 @@
   export let value = "";
   export let hidePasswordLabel = "Hide password";
   export let showPasswordLabel = "Show password";
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
   export let disabled = false;
   export let placeholder = "";
   export let helperText = "";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalid = false;

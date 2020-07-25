@@ -9,8 +9,23 @@
   export let tooltipId = "ccs-" + Math.random().toString(36);
   export let triggerId = "ccs-" + Math.random().toString(36);
   export let triggerText = "";
+
+  /**
+   * Obtain a reference to the trigger text HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
+
+  /**
+   * Obtain a reference to the tooltip HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let refTooltip = null;
+
+  /**
+   * Obtain a reference to the icon HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let refIcon = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";
@@ -112,7 +127,7 @@
     "aria-labelledby": triggerText ? triggerId : undefined,
     "aria-label": triggerText ? iconDescription : undefined,
     tabindex,
-    style: hideIcon ? $$restProps.style : undefined
+    style: hideIcon ? $$restProps.style : undefined,
   };
 </script>
 

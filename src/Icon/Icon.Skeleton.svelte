@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set the size of the icon
+   * @type {number} [size=16]
+   */
   export let size = 16;
 </script>
 

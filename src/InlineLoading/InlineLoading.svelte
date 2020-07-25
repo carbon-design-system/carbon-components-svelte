@@ -1,5 +1,9 @@
 <script>
-  export let status = "active"; // "active" | "inactive" | "finished" | "error"
+  /**
+   * Set the loading status
+   * @type {"active" | "inactive" | "finished" | "error"} [status="active"]
+   */
+  export let status = "active";
   export let description = undefined;
   export let iconDescription = undefined;
   export let successDelay = 1500;

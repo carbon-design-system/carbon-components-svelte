@@ -2,6 +2,11 @@
   export let as = undefined;
   export let skeleton = false;
   export let disabled = false;
+
+  /**
+   * Set the `href` to use an anchor link
+   * @type {string} [href]
+   */
   export let href = undefined;
   export let icon = undefined;
   export let iconDescription = undefined;

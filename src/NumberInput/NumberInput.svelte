@@ -10,6 +10,11 @@
   export let allowEmpty = false;
   export let disabled = false;
   export let iconDescription = "";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalid = false;
@@ -17,11 +22,16 @@
   export let helperText = "";
   export let label = "";
   export let hideLabel = false;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
-  export let translateWithId = id => defaultTranslations[id];
+  export let translateWithId = (id) => defaultTranslations[id];
   export const translationIds = {
     increment: "increment",
-    decrement: "decrement"
+    decrement: "decrement",
   };
 
   import { createEventDispatcher, afterUpdate } from "svelte";
@@ -31,7 +41,7 @@
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
-    [translationIds.decrement]: "Decrement number"
+    [translationIds.decrement]: "Decrement number",
   };
 
   const dispatch = createEventDispatcher();

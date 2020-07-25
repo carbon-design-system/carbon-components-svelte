@@ -2,6 +2,11 @@
   export let errorBody = "";
   export let errorSubject = "";
   export let iconDescription = "";
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let invalid = false;
   export let name = "";
@@ -14,6 +19,7 @@
 </script>
 
 <span
+  {id}
   class:bx--file__selected-file={true}
   class:bx--file__selected-file--invalid={invalid}
   {...$$restProps}

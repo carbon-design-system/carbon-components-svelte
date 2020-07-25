@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set an id for the main element
+   * @type {string} [id]
+   */
   export let id = "main-content";
 </script>
 

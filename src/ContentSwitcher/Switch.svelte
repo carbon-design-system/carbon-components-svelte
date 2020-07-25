@@ -1,8 +1,33 @@
 <script>
+  /**
+   * Specify the switch text
+   * Alternatively, use the named slot "text" (e.g. <span slot="text">...</span>)
+   * @type {string} [text="Provide text"]
+   */
   export let text = "Provide text";
+
+  /**
+   * Set to `true` for the switch to be selected
+   * @type {boolean} [selected=false]
+   */
   export let selected = false;
+
+  /**
+   * Set to `true` to disable the switch
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Set an id for the button element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the button HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { afterUpdate, getContext, onDestroy } from "svelte";
@@ -11,7 +36,7 @@
 
   ctx.add({ id, text, selected });
 
-  const unsubscribe = ctx.currentId.subscribe($ => {
+  const unsubscribe = ctx.currentId.subscribe(($) => {
     selected = $ === id;
   });
 

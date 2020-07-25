@@ -1,9 +1,24 @@
 <script>
   export let size = undefined; // "sm" | "xl"
   export let selected = undefined;
+
+  /**
+   * Set to `true` to use the inline variant
+   * @type {boolean} [inline=false]
+   */
   export let inline = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
   export let disabled = false;
+
+  /**
+   * Set an id for the select element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalid = false;

@@ -1,9 +1,19 @@
 <script>
   export let checked = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
   export let value = "";
   export let tabindex = "0";
   export let iconDescription = "Tile checkmark";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = "";
 
@@ -41,7 +51,7 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={e => {
+  on:keydown={(e) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       update(value);

@@ -1,5 +1,9 @@
 <script>
-  export let notificationType = "toast"; // "toast" | "inline"
+  /**
+   * Set the type of notification
+   * @type {"toast" | "inline"} [notificationType="toast"]
+   */
+  export let notificationType = "toast";
   export let iconDescription = "close icon";
   export let renderIcon = Close20;
   export let title = undefined;

@@ -1,9 +1,38 @@
 <script>
+  /**
+   * Set the size of the composed modal
+   * @type {"xs" | "sm" | "lg"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Set to `true` to open the modal
+   * @type {boolean} [open=false]
+   */
   export let open = false;
+
+  /**
+   * Set to `true` to use the danger variant
+   * @type {boolean} [danger=false]
+   */
   export let danger = false;
-  export let size = undefined; // "xs" | "sm" | "lg"
+
+  /**
+   * Define a class for the inner modal
+   * @type {string} [containerClass=""]
+   */
   export let containerClass = "";
+
+  /**
+   * Define a selector to be focused when opening the modal
+   * @type {string} [selectorPrimaryFocus="[data-modal-primary-focus]"]
+   */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
+
+  /**
+   * Obtain a reference to the top-level HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import {
@@ -11,7 +40,7 @@
     tick,
     setContext,
     onMount,
-    afterUpdate
+    afterUpdate,
   } from "svelte";
 
   const dispatch = createEventDispatcher();
@@ -26,9 +55,9 @@
     submit: () => {
       dispatch("submit");
     },
-    declareRef: ref => {
+    declareRef: (ref) => {
       buttonRef = ref;
-    }
+    },
   });
 
   function focus(element) {

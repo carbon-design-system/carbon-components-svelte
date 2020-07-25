@@ -7,6 +7,11 @@
   export let icon = OverflowMenuVertical16;
   export let iconClass = undefined;
   export let iconDescription = "Open and close list of options";
+
+  /**
+   * Set an id for the button element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let menuOptionsClass = undefined;
 
@@ -29,7 +34,7 @@
   setContext("OverflowMenu", {
     focusedId,
     add: ({ id, text, primaryFocus }) => {
-      items.update(_ => {
+      items.update((_) => {
         if (primaryFocus) {
           currentIndex.set(_.length);
         }
@@ -37,10 +42,10 @@
         return [..._, { id, text, primaryFocus, index: _.length }];
       });
     },
-    update: id => {
+    update: (id) => {
       currentId.set(id);
     },
-    change: direction => {
+    change: (direction) => {
       // TODO: skip disabled
       let index = $currentIndex + direction;
 
@@ -51,12 +56,12 @@
       }
 
       currentIndex.set(index);
-    }
+    },
   });
 
   afterUpdate(() => {
     if ($currentId) {
-      const { index, text } = $items.filter(_ => _.id === $currentId)[0];
+      const { index, text } = $items.filter((_) => _.id === $currentId)[0];
       dispatch("close", { index, text });
       open = false;
     }
@@ -136,7 +141,7 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={e => {
+  on:keydown={(e) => {
     if (open) {
       if (['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(e.key)) {
         e.preventDefault();

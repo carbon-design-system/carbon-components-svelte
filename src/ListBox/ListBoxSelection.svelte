@@ -1,11 +1,16 @@
 <script>
   export const translationIds = {
     clearAll: "clearAll",
-    clearSelection: "clearSelection"
+    clearSelection: "clearSelection",
   };
   export let disabled = false;
   export let selectionCount = undefined;
-  export let translateWithId = id => defaultTranslations[id];
+  export let translateWithId = (id) => defaultTranslations[id];
+
+  /**
+   * Obtain a reference to the top-level HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { createEventDispatcher, getContext } from "svelte";
@@ -13,7 +18,7 @@
 
   const defaultTranslations = {
     [translationIds.clearAll]: "Clear all selected items",
-    [translationIds.clearSelection]: "Clear selected item"
+    [translationIds.clearSelection]: "Clear selected item",
   };
   const dispatch = createEventDispatcher();
   const ctx = getContext("MultiSelect");
@@ -37,12 +42,12 @@
   class:bx--tag--filter={selectionCount}
   class:bx--list-box__selection--multi={selectionCount}
   {...$$restProps}
-  on:click|preventDefault|stopPropagation={e => {
+  on:click|preventDefault|stopPropagation={(e) => {
     if (!disabled) {
       dispatch('clear', e);
     }
   }}
-  on:keydown|stopPropagation={e => {
+  on:keydown|stopPropagation={(e) => {
     if (!disabled && e.key === 'Enter') {
       dispatch('clear', e);
     }

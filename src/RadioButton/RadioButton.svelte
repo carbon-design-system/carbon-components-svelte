@@ -2,6 +2,11 @@
   export let value = "";
   export let checked = false;
   export let disabled = false;
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let labelPosition = "right"; // "left" | "right"
   export let labelText = "";

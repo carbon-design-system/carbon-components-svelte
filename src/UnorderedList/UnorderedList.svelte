@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to use the nested variant
+   * @type {boolean} [nested=false]
+   */
   export let nested = false;
 </script>
 

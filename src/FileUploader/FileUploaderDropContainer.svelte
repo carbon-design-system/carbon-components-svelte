@@ -6,6 +6,11 @@
   export let labelText = "Add file";
   export let role = "button";
   export let tabindex = "0";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = "";
   export let ref = null;

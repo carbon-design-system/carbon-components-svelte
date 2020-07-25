@@ -6,6 +6,11 @@
   export let description = "";
   export let label = "";
   export let secondaryLabel = "";
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
 
   import { getContext } from "svelte";
@@ -25,6 +30,7 @@
 
 <li
   aria-disabled={disabled}
+  {id}
   class:bx--progress-step={true}
   class:bx--progress-step--current={current}
   class:bx--progress-step--complete={complete}
@@ -43,7 +49,7 @@
     on:mouseenter
     on:mouseleave
     on:keydown
-    on:keydown={e => {
+    on:keydown={(e) => {
       if (e.key === ' ' || e.key === 'Enter') {
         change(step.index);
       }

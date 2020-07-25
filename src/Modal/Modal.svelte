@@ -1,8 +1,28 @@
 <script>
-  export let size = undefined; // "xs" | "sm" | "lg"
+  /**
+   * Set the size of the modal
+   * @type {"xs" | "sm" | "lg"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Set to `true` to open the modal
+   * @type {boolean} [open=false]
+   */
   export let open = false;
-  export let passiveModal = false;
+
+  /**
+   * Set to `true` to use the danger variant
+   * @type {boolean} [danger=false]
+   */
   export let danger = false;
+
+  /**
+   * Set to `true` to use the passive variant
+   * @type {boolean} [passiveModal=false]
+   */
+  export let passiveModal = false;
+
   export let hasForm = false;
   export let hasScrollingContent = false;
   export let primaryButtonDisabled = false;
@@ -13,8 +33,23 @@
   export let iconDescription = "Close the modal";
   export let primaryButtonText = "";
   export let secondaryButtonText = "";
+
+  /**
+   * Define a selector to be focused when opening the modal
+   * @type {string} [selectorPrimaryFocus="[data-modal-primary-focus]"]
+   */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the top-level HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { createEventDispatcher, onMount, afterUpdate } from "svelte";

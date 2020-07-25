@@ -1,5 +1,10 @@
 <script>
   export let render = undefined;
+
+  /**
+   * Set to `true` to display the skeleton state
+   * @type {boolean} [skeleton=false]
+   */
   export let skeleton = false;
 
   import IconSkeleton from "./Icon.Skeleton.svelte";

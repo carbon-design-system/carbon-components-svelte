@@ -6,6 +6,11 @@
   export let primaryFocus = false;
   export let requireTitle = true;
   export let text = "Provide text";
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let ref = null;
 
@@ -27,12 +32,13 @@
     title: requireTitle ? text : undefined,
     class: "bx--overflow-menu-options__btn",
     disabled: href ? undefined : disabled,
-    href: href ? href : undefined
+    href: href ? href : undefined,
   };
 </script>
 
 <li
   role="menuitem"
+  {id}
   class:bx--overflow-menu-options__option={true}
   class:bx--overflow-menu--divider={hasDivider}
   class:bx--overflow-menu-options__option--danger={danger}

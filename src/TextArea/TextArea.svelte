@@ -3,9 +3,19 @@
   export let placeholder = "";
   export let cols = 50;
   export let rows = 4;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
   export let disabled = false;
   export let helperText = "";
+
+  /**
+   * Set an id for the textarea element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalid = false;

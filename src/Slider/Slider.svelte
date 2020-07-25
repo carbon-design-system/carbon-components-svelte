@@ -1,11 +1,22 @@
 <script>
   export let disabled = false;
   export let hideTextInput = false;
+
+  /**
+   * Set an id for the slider div element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let inputType = "number";
   export let invalid = false;
   export let labelText = "";
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
   export let max = 100;
   export let maxLabel = "";
   export let min = 0;

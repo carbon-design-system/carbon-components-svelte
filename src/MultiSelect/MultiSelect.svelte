@@ -6,13 +6,18 @@
   export let filterable = false;
   export let filterItem = (item, value) =>
     item.text.toLowerCase().includes(value.toLowerCase());
+
+  /**
+   * Set an id for the list box component
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalid = false;
   export let invalidText = "";
   export let helperText = "";
   export let items = [];
-  export let itemToString = item => item.text || item.id;
+  export let itemToString = (item) => item.text || item.id;
   export let label = "";
   export let light = false;
   export let locale = "en";
@@ -36,7 +41,7 @@
     ListBoxMenu,
     ListBoxMenuIcon,
     ListBoxMenuItem,
-    ListBoxSelection
+    ListBoxSelection,
   } from "../ListBox";
 
   let multiSelectRef = null;
@@ -59,7 +64,7 @@
           selectionRef = ref;
           break;
       }
-    }
+    },
   });
 
   function change(direction) {
@@ -77,7 +82,7 @@
   function sort() {
     return [
       ...(checked.length > 1 ? checked.sort(sortItem) : checked),
-      ...unchecked.sort(sortItem)
+      ...unchecked.sort(sortItem),
     ];
   }
 
@@ -106,13 +111,13 @@
   $: menuId = `menu-${id}`;
   $: inline = type === "inline";
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
-  $: sortedItems = items.map(item => ({
+  $: sortedItems = items.map((item) => ({
     ...item,
-    checked: selectedIds.includes(item.id)
+    checked: selectedIds.includes(item.id),
   }));
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
-  $: filteredItems = sortedItems.filter(item => filterItem(item, value));
+  $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
   $: highlightedId = sortedItems[highlightedIndex]
     ? sortedItems[highlightedIndex].id
     : undefined;
@@ -210,9 +215,9 @@
         <ListBoxSelection
           selectionCount={checked.length}
           on:clear={() => {
-            sortedItems = sortedItems.map(item => ({
+            sortedItems = sortedItems.map((item) => ({
               ...item,
-              checked: false
+              checked: false,
             }));
             fieldRef.blur();
           }}
@@ -294,7 +299,7 @@
             active={item.checked}
             highlighted={highlightedIndex === i}
             on:click={() => {
-              sortedItems = sortedItems.map(_ =>
+              sortedItems = sortedItems.map((_) =>
                 _.id === item.id ? { ..._, checked: !_.checked } : _
               );
               fieldRef.focus();

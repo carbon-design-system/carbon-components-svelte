@@ -1,6 +1,11 @@
 <script>
   export let notificationType = "inline";
-  export let kind = "error"; // "error" | "info" | "info-square" | "success" | "warning" | "warning-alt"
+
+  /**
+   * Set the kind of notification
+   * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"} [kind="error"]
+   */
+  export let kind = "error";
   export let role = "alert";
   export let title = "provide a title";
   export let subtitle = "";

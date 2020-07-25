@@ -1,14 +1,29 @@
 <script>
   export let selectedIndex = -1;
   export let open = false;
+
+  /**
+   * Set to `true` to use the inline variant
+   * @type {boolean} [inline=false]
+   */
   export let inline = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
   export let disabled = false;
   export let invalid = false;
   export let items = [];
-  export let itemToString = item => item.text || item.id;
+  export let itemToString = (item) => item.text || item.id;
   export let type = "default"; // "default" | "inline"
   export let size = undefined; // "sm" | "lg" | "xl"
+
+  /**
+   * Set an id for the list box component
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalidText = "";
@@ -24,7 +39,7 @@
     ListBox,
     ListBoxMenu,
     ListBoxMenuIcon,
-    ListBoxMenuItem
+    ListBoxMenuItem,
   } from "../ListBox";
 
   let selectedId = undefined;

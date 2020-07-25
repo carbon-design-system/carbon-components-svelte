@@ -1,5 +1,10 @@
 <script>
   export let range = false;
+
+  /**
+   * Set an id to be used by the label element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
 </script>
 

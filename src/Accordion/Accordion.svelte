@@ -6,7 +6,7 @@
   export let align = "end";
 
   /**
-   * Set to `true` to display skeleton state
+   * Set to `true` to display the skeleton state
    * @type {boolean} [skeleton=false]
    */
   export let skeleton = false;

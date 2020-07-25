@@ -1,6 +1,6 @@
 <script>
   /**
-   * Use anchor link
+   * Set the `href` to use an anchor link
    * @type {string} [href]
    */
   export let href = undefined;

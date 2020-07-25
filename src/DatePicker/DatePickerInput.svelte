@@ -5,12 +5,22 @@
   export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
   export let disabled = false;
   export let iconDescription = "";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let labelText = "";
   export let hideLabel = false;
   export let invalid = false;
   export let invalidText = "";
   export let name = undefined;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
@@ -25,7 +35,7 @@
     blurInput,
     openCalendar,
     focusCalendar,
-    inputValue
+    inputValue,
   } = getContext("DatePicker");
 
   add({ id, labelText });

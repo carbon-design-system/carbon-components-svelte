@@ -1,49 +1,89 @@
 <script>
-  export let type = undefined; // "red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast"
+  /**
+   * Specify the type of tag
+   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast"} [type]
+   */
+  export let type = undefined;
+
+  /**
+   * Set to `true` to use filterable variant
+   * @type {boolean} [filter=false]
+   */
   export let filter = false;
+
+  /**
+   * Set to `true` to disable a filterable tag
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Set to `true` to display the skeleton state
+   * @type {boolean} [skeleton=false]
+   */
+  export let skeleton = false;
+
+  /**
+   * Set the title for the close button in a filterable tag
+   * @type {string} [title="Clear filter"]
+   */
   export let title = "Clear filter";
+
+  /**
+   * Set an id for the filterable tag
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
 
   import Close16 from "carbon-icons-svelte/lib/Close16";
+  import TagSkeleton from "./Tag.Skeleton.svelte";
 </script>
 
-{#if filter}
-  <div
-    aria-label={title}
-    {id}
-    class:bx--tag={true}
-    class:bx--tag--disabled={disabled}
-    class:bx--tag--filter={filter}
+{#if skeleton}
+  <TagSkeleton
     {...$$restProps}
-    class="{type && `bx--tag--${type}`}
-    {$$restProps.class}">
-    <slot props={{ class: 'bx--tag__label' }}>
-      <span class:bx--tag__label={true}>{type}</span>
-    </slot>
-    <button
-      aria-labelledby={id}
-      class:bx--tag__close-icon={true}
-      {disabled}
-      {title}
-      on:click|stopPropagation
-      on:mouseover
-      on:mouseenter
-      on:mouseleave>
-      <Close16 />
-    </button>
-  </div>
-{:else}
-  <span
-    class:bx--tag={true}
-    class:bx--tag--disabled={disabled}
-    {...$$restProps}
-    class="{type && `bx--tag--${type}`}
-    {$$restProps.class}"
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
-    <slot />
-  </span>
+    on:mouseleave />
+{:else}
+  {#if filter}
+    <div
+      aria-label={title}
+      {id}
+      class:bx--tag={true}
+      class:bx--tag--disabled={disabled}
+      class:bx--tag--filter={filter}
+      {...$$restProps}
+      class="{type && `bx--tag--${type}`}
+      {$$restProps.class}">
+      <slot props={{ class: 'bx--tag__label' }}>
+        <span class:bx--tag__label={true}>{type}</span>
+      </slot>
+      <button
+        aria-labelledby={id}
+        class:bx--tag__close-icon={true}
+        {disabled}
+        {title}
+        on:click|stopPropagation
+        on:mouseover
+        on:mouseenter
+        on:mouseleave>
+        <Close16 />
+      </button>
+    </div>
+  {:else}
+    <span
+      class:bx--tag={true}
+      class:bx--tag--disabled={disabled}
+      {...$$restProps}
+      class="{type && `bx--tag--${type}`}
+      {$$restProps.class}"
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseleave>
+      <slot />
+    </span>
+  {/if}
 {/if}

@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
 </script>
 

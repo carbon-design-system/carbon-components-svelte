@@ -1,7 +1,22 @@
 <script>
-  export let size = undefined; // "sm" | "xl"
-  export let type = "default"; // "default" | "inline"
+  /**
+   * Set the size of list box
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Set the type of list box
+   * @type {"default" | "inline"} [type="default"]
+   */
+  export let type = "default";
+
   export let open = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
   export let disabled = false;
   export let invalid = false;
@@ -21,7 +36,7 @@
   class="{size && `bx--list-box--${size}`}
   {$$restProps.class}"
   on:keydown
-  on:keydown={e => {
+  on:keydown={(e) => {
     if (e.key === 'Escape') {
       e.stopPropagation();
     }

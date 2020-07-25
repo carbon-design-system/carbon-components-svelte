@@ -4,8 +4,18 @@
   export let placeholder = "hh=mm";
   export let pattern = "(1[012]|[1-9]):[0-5][0-9](\\s)?";
   export let maxlength = 5;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
   export let disabled = false;
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let name = undefined;
   export let invalid = false;

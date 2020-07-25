@@ -1,5 +1,10 @@
 <script>
-  export let size = undefined; // "compact" | "short" | "tall"
+  /**
+   * Set the size of the data table
+   * @type {"compact" | "short" | "tall"} [size]
+   */
+  export let size = undefined;
+
   export let title = "";
   export let description = "";
   export let zebra = false;
@@ -21,7 +26,7 @@
   const sortDirectionMap = {
     none: "ascending",
     ascending: "descending",
-    descending: "none"
+    descending: "none",
   };
   const dispatch = createEventDispatcher();
   const tableSortable = writable(sortable);
@@ -36,16 +41,16 @@
   setContext("DataTable", {
     sortHeader,
     tableSortable,
-    add: id => {
-      headerItems.update(_ => [..._, id]);
-    }
+    add: (id) => {
+      headerItems.update((_) => [..._, id]);
+    },
   });
 
   $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
-  $: rows = rows.map(row => ({
+  $: rows = rows.map((row) => ({
     ...row,
-    cells: headerKeys.map(key => ({ key, value: row[key] }))
+    cells: headerKeys.map((key) => ({ key, value: row[key] })),
   }));
   $: sortedRows = rows;
   $: ascending = $sortHeader.sortDirection === "ascending";
@@ -71,7 +76,7 @@
   }
   $: props = {
     headers,
-    rows
+    rows,
   };
 </script>
 
@@ -91,7 +96,7 @@
                 sortHeader.set({
                   id: sortDirection === 'none' ? null : $thKeys[header.key],
                   key: header.key,
-                  sortDirection
+                  sortDirection,
                 });
               }}>
               {header.value}

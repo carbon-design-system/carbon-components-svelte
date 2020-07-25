@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
 
   $: menuId = `menu-${id}`;

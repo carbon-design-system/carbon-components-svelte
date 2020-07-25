@@ -1,7 +1,7 @@
 <script>
   /**
-   * Specify title of accordion item heading
-   * Alternatively use the named slot "title"
+   * Specify the title of the accordion item heading
+   * Alternatively, use the named slot "title" (e.g. <div slot="title">...</div>)
    * @type {string} [title="title"]
    */
   export let title = "title";
@@ -13,7 +13,7 @@
   export let open = false;
 
   /**
-   * Define the ARIA label for accordion item chevron icon
+   * Define the ARIA label for the accordion item chevron icon
    * @type {string} [iconDescription="Expand/Collapse"]
    */
   export let iconDescription = "Expand/Collapse";

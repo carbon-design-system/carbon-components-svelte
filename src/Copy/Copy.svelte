@@ -1,14 +1,26 @@
 <script>
+  /**
+   * Set the feedback text shown after clicking the button
+   * @type {string} [feedback="Copied!"]
+   */
   export let feedback = "Copied!";
+
+  /**
+   * Set the timeout duration (ms) to display feedback text
+   * @type {number} [feedbackTimeout=2000]
+   */
   export let feedbackTimeout = 2000;
+
+  /**
+   * Obtain a reference to the button HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { onMount } from "svelte";
 
   let animation = undefined;
   let timeout = undefined;
-
-  $: showFeedback = timeout !== undefined;
 
   onMount(() => {
     return () => {

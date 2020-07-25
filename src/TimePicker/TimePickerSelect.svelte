@@ -3,6 +3,11 @@
   export let name = undefined;
   export let disabled = false;
   export let iconDescription = "Open list of options";
+
+  /**
+   * Set an id for the select element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let labelText = "";
   export let hideLabel = true;

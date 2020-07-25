@@ -14,6 +14,11 @@
   export let pageSizes = [10];
   export let pagesUnknown = false;
   export let pageText = page => `page ${page}`;
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
 
   import CaretLeft24 from "carbon-icons-svelte/lib/CaretLeft24";
@@ -33,7 +38,7 @@
   $: forwardButtonDisabled = disabled || page === totalPages;
 </script>
 
-<div class:bx--pagination={true} {...$$restProps}>
+<div {id} class:bx--pagination={true} {...$$restProps}>
   <div class:bx--pagination__left={true}>
     <label
       id="bx--pagination-select-{id}-count-label"

@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Specify the number of accordion items to render
+   * @type {number} [count=4]
+   */
   export let count = 4;
+
+  /**
+   * Set to `false` to close the first accordion item
+   * @type {boolean} [open=true]
+   */
   export let open = true;
 
   import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16";

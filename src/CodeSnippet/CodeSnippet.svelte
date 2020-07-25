@@ -1,8 +1,33 @@
 <script>
-  export let type = "single"; // "single" | "inline" | "multi"
+  /**
+   * Set the type of code snippet
+   * @type {"single" | "inline" | "multi"} [type="single"]
+   */
+  export let type = "single";
+
+  /**
+   * Set the code snippet text
+   * Alternatively, use the default slot (e.g. <CodeSnippet>{`code`}</CodeSnippet>)
+   * @type {string} [code]
+   */
   export let code = undefined;
+
+  /**
+   * Set to `true` to expand a multi-line code snippet (type="multi")
+   * @type {boolean} [expanded=false]
+   */
   export let expanded = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
+  /**
+   * Set to `true` to display the skeleton state
+   * @type {boolean} [skeleton=false]
+   */
   export let skeleton = false;
   export let copyButtonDescription = undefined;
   export let copyLabel = undefined;
@@ -11,7 +36,17 @@
   export let showLessText = "Show less";
   export let showMoreText = "Show more";
   export let showMoreLess = false;
+
+  /**
+   * Set an id for the code element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the pre HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { afterUpdate } from "svelte";
@@ -48,7 +83,7 @@
       {expanded && 'bx--snippet--expand'}
       {light && 'bx--snippet--light'}"
       {...$$restProps}
-      on:clicks
+      on:click
       on:mouseover
       on:mouseenter
       on:mouseleave>
