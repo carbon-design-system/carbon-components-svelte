@@ -1,4 +1,4 @@
-import { withKnobs, boolean } from "@storybook/addon-knobs";
+import { withKnobs, boolean, number } from "@storybook/addon-knobs";
 import Component from "./Breadcrumb.Story.svelte";
 
 export default { title: "Breadcrumb", decorators: [withKnobs] };
@@ -12,7 +12,11 @@ export const Default = () => ({
 
 export const Skeleton = () => ({
   Component,
-  props: { story: "skeleton" },
+  props: {
+    story: "skeleton",
+    noTrailingSlash: boolean("No Trailing Slash (noTrailingSlash)", false),
+    count: number("Number of breadcrumb items (count)", 3),
+  },
 });
 
 export const CurrentPage = () => ({

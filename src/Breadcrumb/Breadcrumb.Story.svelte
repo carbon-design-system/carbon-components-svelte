@@ -24,7 +24,7 @@
     <BreadcrumbItem href="#" aria-current="page">Breadcrumb 3</BreadcrumbItem>
   </Breadcrumb>
 {:else if story === 'skeleton'}
-  <BreadcrumbSkeleton />
+  <BreadcrumbSkeleton {noTrailingSlash} {...$$restProps} />
 {:else}
   <Breadcrumb {noTrailingSlash}>
     <BreadcrumbItem let:props>
