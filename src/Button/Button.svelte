@@ -1,5 +1,6 @@
 <script>
   export let as = undefined;
+  export let skeleton = false;
   export let disabled = false;
   export let href = undefined;
   export let icon = undefined;
@@ -14,6 +15,7 @@
   export let ref = null;
 
   import { getContext } from "svelte";
+  import ButtonSkeleton from "./Button.Skeleton.svelte";
 
   const ctx = getContext("ComposedModal");
 
@@ -40,54 +42,66 @@
       hasIconOnly &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
-      $$restProps.class
+      $$restProps.class,
     ]
       .filter(Boolean)
-      .join(" ")
+      .join(" "),
   };
 </script>
 
-{#if as}
-  <slot props={buttonProps} />
-{:else if href && !disabled}
-  <!-- svelte-ignore a11y-missing-attribute -->
-  <a
-    bind:this={ref}
-    {...buttonProps}
+{#if skeleton}
+  <ButtonSkeleton
+    {href}
+    small={size === 'small'}
+    {...$$restProps}
+    style={hasIconOnly && 'width: 3rem;'}
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
-    {#if hasIconOnly}
-      <span class:bx--assistive-text={true}>{iconDescription}</span>
-    {/if}
-    <slot />
-    {#if icon}
-      <svelte:component
-        this={icon}
-        aria-hidden="true"
-        class="bx--btn__icon"
-        aria-label={iconDescription} />
-    {/if}
-  </a>
+    on:mouseleave />
 {:else}
-  <button
-    bind:this={ref}
-    {...buttonProps}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave>
-    {#if hasIconOnly}
-      <span class:bx--assistive-text={true}>{iconDescription}</span>
-    {/if}
-    <slot />
-    {#if icon}
-      <svelte:component
-        this={icon}
-        aria-hidden="true"
-        class="bx--btn__icon"
-        aria-label={iconDescription} />
-    {/if}
-  </button>
+  {#if as}
+    <slot props={buttonProps} />
+  {:else if href && !disabled}
+    <!-- svelte-ignore a11y-missing-attribute -->
+    <a
+      bind:this={ref}
+      {...buttonProps}
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseleave>
+      {#if hasIconOnly}
+        <span class:bx--assistive-text={true}>{iconDescription}</span>
+      {/if}
+      <slot />
+      {#if icon}
+        <svelte:component
+          this={icon}
+          aria-hidden="true"
+          class="bx--btn__icon"
+          aria-label={iconDescription} />
+      {/if}
+    </a>
+  {:else}
+    <button
+      bind:this={ref}
+      {...buttonProps}
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseleave>
+      {#if hasIconOnly}
+        <span class:bx--assistive-text={true}>{iconDescription}</span>
+      {/if}
+      <slot />
+      {#if icon}
+        <svelte:component
+          this={icon}
+          aria-hidden="true"
+          class="bx--btn__icon"
+          aria-label={iconDescription} />
+      {/if}
+    </button>
+  {/if}
 {/if}
