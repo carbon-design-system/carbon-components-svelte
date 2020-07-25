@@ -1,5 +1,14 @@
 <script>
-  export let align = "end"; // "start" | "end"
+  /**
+   * Specify alignment of accordion item chevron icon
+   * @type {"start" | "end"} [align="end"]
+   */
+  export let align = "end";
+
+  /**
+   * Set to `true` to display skeleton state
+   * @type {boolean} [skeleton=false]
+   */
   export let skeleton = false;
 
   import AccordionSkeleton from "./Accordion.Skeleton.svelte";

@@ -6,30 +6,28 @@
 
   /**
    * Aspect ratio of the column
-   * @type {("2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1")} [aspectRatio]
+   * @type {"2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1"} [aspectRatio]
    */
   export let aspectRatio = undefined;
 
   /**
-   * @typedef {(boolean | number)} ColumnSize
-   * @typedef {Object} ColumnSizeDescriptor
-   * @property {ColumnSize} [ColumnSizeDescriptor.span] Column size
-   * @property {number} [ColumnSizeDescriptor.offset] Column offset
+   * @typedef {boolean | number} ColumnSize
+   * @typedef {{span?: ColumnSize: offset: number}} ColumnSizeDescriptor
    */
 
-  /** @type {ColumnSize|ColumnSizeDescriptor} [sm] */
+  /** @type {ColumnSize | ColumnSizeDescriptor} [sm] */
   export let sm = undefined;
 
-  /** @type {ColumnSize|ColumnSizeDescriptor} [md] */
+  /** @type {ColumnSize | ColumnSizeDescriptor} [md] */
   export let md = undefined;
 
-  /** @type {ColumnSize|ColumnSizeDescriptor} [lg] */
+  /** @type {ColumnSize | ColumnSizeDescriptor} [lg] */
   export let lg = undefined;
 
-  /** @type {ColumnSize|ColumnSizeDescriptor} [xlg] */
+  /** @type {ColumnSize | ColumnSizeDescriptor} [xlg] */
   export let xlg = undefined;
 
-  /** @type {ColumnSize|ColumnSizeDescriptor} [max] */
+  /** @type {ColumnSize | ColumnSizeDescriptor} [max] */
   export let max = undefined;
 
   const breakpoints = ["sm", "md", "lg", "xlg", "max"];

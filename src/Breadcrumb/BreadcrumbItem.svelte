@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Use anchor link
+   * @type {string} [href]
+   */
   export let href = undefined;
+
+  /**
+   * Set to `true` if item is the current page
+   * @type {boolean} [isCurrentPage=false]
+   */
   export let isCurrentPage = false;
 
   import { Link } from "../Link";
