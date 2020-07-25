@@ -4,26 +4,27 @@
   export let iconDescription = undefined;
   export let successDelay = 1500;
 
-  import { createEventDispatcher, afterUpdate, onDestroy } from "svelte";
+  import { createEventDispatcher, afterUpdate, onMount } from "svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
   import Error20 from "carbon-icons-svelte/lib/Error20";
   import { Loading } from "../Loading";
 
   const dispatch = createEventDispatcher();
 
-  $: timeoutId = undefined;
+  let timeout = undefined;
+
+  onMount(() => {
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
 
   afterUpdate(() => {
     if (status === "finished") {
-      timeoutId = window.setTimeout(() => {
+      timeout = setTimeout(() => {
         dispatch("success");
       }, successDelay);
     }
-  });
-
-  onDestroy(() => {
-    window.clearTimeout(timeoutId);
-    timeoutId = undefined;
   });
 </script>
 

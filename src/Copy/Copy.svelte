@@ -3,15 +3,17 @@
   export let feedbackTimeout = 2000;
   export let ref = null;
 
-  import { onDestroy } from "svelte";
+  import { onMount } from "svelte";
 
-  $: animation = undefined;
-  $: timeoutId = undefined;
-  $: showFeedback = timeoutId !== undefined;
+  let animation = undefined;
+  let timeout = undefined;
 
-  onDestroy(() => {
-    window.clearTimeout(timeoutId);
-    timeoutId = undefined;
+  $: showFeedback = timeout !== undefined;
+
+  onMount(() => {
+    return () => {
+      clearTimeout(timeout);
+    };
   });
 </script>
 
@@ -29,7 +31,7 @@
   on:click={() => {
     if (animation === 'fade-in') return;
     animation = 'fade-in';
-    timeoutId = setTimeout(() => {
+    timeout = setTimeout(() => {
       animation = 'fade-out';
     }, feedbackTimeout);
   }}
