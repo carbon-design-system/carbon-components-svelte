@@ -64,6 +64,7 @@
       <SideNavLink
         text="Getting Started"
         href="getting-started"
+        rel="prefetch"
         isSelected={segment === 'getting-started'} />
       <SideNavMenu
         text="Components"
@@ -72,10 +73,12 @@
         <SideNavMenuItem
           text="Index"
           href="components"
+          rel="prefetch"
           isSelected={segment === 'components' && $tail && $tail.slug === 'index'} />
         <SideNavMenuItem
           text="Button"
           href="components/button"
+          rel="prefetch"
           isSelected={segment === 'components' && $tail && $tail.slug === 'button'} />
       </SideNavMenu>
     </SideNavItems>
