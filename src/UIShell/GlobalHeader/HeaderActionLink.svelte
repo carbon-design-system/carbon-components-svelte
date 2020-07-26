@@ -1,8 +1,21 @@
 <script>
+  /**
+   * Set to `true` to use the active state
+   * @type {boolean} [linkIsActive=false]
+   */
+  export let linkIsActive = false;
+
+  /**
+   * Specify the `href` attribute
+   * @type {string} [href]
+   */
   export let href = undefined;
-  export let type = undefined;
+
+  /**
+   * Specify the icon props
+   * @type {{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }} [icon]
+   */
   export let icon = undefined;
-  export let linkIsActive = undefined;
 
   import { Icon } from "../../Icon";
 </script>
@@ -18,10 +31,10 @@
 </style>
 
 <a
-  aria-label={type}
   class:bx--header__action={true}
   class:bx--header__action--active={linkIsActive}
   class:action-link={true}
+  {...$$restProps}
   {href}>
   <Icon {...icon} />
 </a>
