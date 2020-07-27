@@ -1,6 +1,4 @@
 <script>
-  
-
   /**
    * Set the size of the input
    * @type {"sm" | "xl"} [size]
@@ -100,10 +98,10 @@
   /**
    * @typedef {"increment" | "decrement"} NumberInputTranslationId
    */
-  
+
   /**
    * Override the default translation ids
-   * @type {(id: NumberInputTranslationId) => string;} [translateWithId = (id: NumberInputTranslationId) => string;]
+   * @type {(id: NumberInputTranslationId) => string} [translateWithId = (id: NumberInputTranslationId) => string]
    */
   export let translateWithId = (id) => defaultTranslations[id];
 

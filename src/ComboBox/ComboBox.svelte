@@ -11,7 +11,7 @@
 
   /**
    * Override the display of a combobox item
-   * @type {(item: ComboBoxItem) => string;} [itemToString = (item: ComboBoxItem) => string;]
+   * @type {(item: ComboBoxItem) => string} [itemToString = (item: ComboBoxItem) => string]
    */
   export let itemToString = (item) => item.text || item.id;
 
@@ -89,7 +89,7 @@
 
   /**
    * Override the default translation ids
-   * @type {(id: any) => string;} [translateWithId]
+   * @type {(id: any) => string} [translateWithId]
    */
   export let translateWithId = undefined;
 

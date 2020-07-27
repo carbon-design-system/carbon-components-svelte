@@ -37,13 +37,13 @@
 
   /**
    * Override the item text
-   * @type {(min: number, max: number) => string;} [itemText = (min: number, max: number) => string;]
+   * @type {(min: number, max: number) => string} [itemText = (min: number, max: number) => string]
    */
   export let itemText = (min, max) => `${min}–${max} items`;
 
   /**
    * Override the item range text
-   * @type {(min: number, max: number, total: number) => string;} [itemRangeText = (min: number, max: number, total: number) => string;]
+   * @type {(min: number, max: number, total: number) => string} [itemRangeText = (min: number, max: number, total: number) => string]
    */
   export let itemRangeText = (min, max, total) =>
     `${min}–${max} of ${total} items`;
@@ -74,13 +74,13 @@
 
   /**
    * Override the page text
-   * @type {(page: number) => string;} [pageText = (current: number) => string;]
+   * @type {(page: number) => string} [pageText = (current: number) => string]
    */
   export let pageText = (page) => `page ${page}`;
 
   /**
    * Override the page range text
-   * @type {(current: number, total: number) => string;} [pageRangeText = (current: number, total: number) => string;]
+   * @type {(current: number, total: number) => string} [pageRangeText = (current: number, total: number) => string]
    */
   export let pageRangeText = (current, total) => `of ${total} pages`;
 

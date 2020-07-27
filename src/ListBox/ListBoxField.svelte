@@ -30,7 +30,7 @@
 
   /**
    * Override the default translation ids
-   * @type {(id: ListBoxFieldTranslationId) => string;} [translateWithId = (id) => string;]
+   * @type {(id: ListBoxFieldTranslationId) => string} [translateWithId = (id) => string]
    */
   export let translateWithId = (id) => defaultTranslations[id];
 

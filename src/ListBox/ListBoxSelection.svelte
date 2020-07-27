@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the number of selected items
-   * @type {*} [selectionCount]
+   * @type {any} [selectionCount]
    */
   export let selectionCount = undefined;
 
@@ -27,7 +27,7 @@
 
   /**
    * Override the default translation ids
-   * @type {(id: ListBoxSelectionTranslationId) => string;} [translateWithId = (id) => string;]
+   * @type {(id: ListBoxSelectionTranslationId) => string} [translateWithId = (id) => string]
    */
   export let translateWithId = (id) => defaultTranslations[id];
 

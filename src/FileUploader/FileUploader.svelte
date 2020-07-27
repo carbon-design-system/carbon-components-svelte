@@ -25,7 +25,7 @@
 
   /**
    * Override the default behavior of clearing the array of uploaded files
-   * @type {() => any;} [clearFiles = () => void;]
+   * @type {() => any} [clearFiles = () => void]
    */
   export const clearFiles = () => {
     files = [];
