@@ -57,7 +57,7 @@
 
   /**
    * Set to `true` to disable the button
-   * @type [boolean] [disabled=false]
+   * @type {boolean} [disabled=false]
    */
   export let disabled = false;
 
