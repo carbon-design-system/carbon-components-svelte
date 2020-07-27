@@ -30,11 +30,199 @@ yarn add -D carbon-components-svelte
 <Button>Primary</Button>
 ```
 
+## Available Components
+
+> 147 components in "carbon-components-svelte"
+
+- Accordion
+  - [AccordionSkeleton](#accordionskeleton)
+  - [Accordion](#accordion)
+  - [AccordionItem](#accordionitem)
+- Breadcrumb
+  - [BreadcrumbSkeleton](#breadcrumbskeleton)
+  - [Breadcrumb](#breadcrumb)
+  - [BreadcrumbItem](#breadcrumbitem)
+- Button
+  - [ButtonSkeleton](#buttonskeleton)
+  - [Button](#button)
+- Checkbox
+  - [CheckboxSkeleton](#checkboxskeleton)
+  - [Checkbox](#checkbox)
+- CodeSnippet
+  - [CodeSnippetSkeleton](#codesnippetskeleton)
+  - [CodeSnippet](#codesnippet)
+- [ComboBox](#combobox)
+- ComposedModal
+  - [ComposedModal](#composedmodal)
+  - [ModalBody](#modalbody)
+  - [ModalFooter](#modalfooter)
+  - [ModalHeader](#modalheader)
+- ContentSwitcher
+  - [ContentSwitcher](#contentswitcher)
+  - [Switch](#switch)
+- [Copy](#copy)
+- [CopyButton](#copybutton)
+- DataTable
+  - [DataTable](#datatable)
+  - [Table](#table)
+  - [TableBody](#tablebody)
+  - [TableCell](#tablecell)
+  - [TableContainer](#tablecontainer)
+  - [TableHead](#tablehead)
+  - [TableHeader](#tableheader)
+  - [TableRow](#tablerow)
+- [DataTableSkeleton](#datatableskeleton)
+- DatePicker
+  - [DatePickerSkeleton](#datepickerskeleton)
+  - [DatePicker](#datepicker)
+  - [DatePickerInput](#datepickerinput)
+- Dropdown
+  - [DropdownSkeleton](#dropdownskeleton)
+  - [Dropdown](#dropdown)
+- FileUploader
+  - [FileUploaderSkeleton](#fileuploaderskeleton)
+  - [FileUploader](#fileuploader)
+  - [FileUploaderButton](#fileuploaderbutton)
+  - [FileUploaderDropContainer](#fileuploaderdropcontainer)
+  - [FileUploaderItem](#fileuploaderitem)
+  - [Filename](#filename)
+- [Form](#form)
+- [FormGroup](#formgroup)
+- [FormItem](#formitem)
+- [FormLabel](#formlabel)
+- Grid
+  - [Column](#column)
+  - [Grid](#grid)
+  - [Row](#row)
+- Icon
+  - [IconSkeleton](#iconskeleton)
+  - [Icon](#icon)
+- [InlineLoading](#inlineloading)
+- [Link](#link)
+- ListBox
+  - [ListBox](#listbox)
+  - [ListBoxField](#listboxfield)
+  - [ListBoxMenu](#listboxmenu)
+  - [ListBoxMenuIcon](#listboxmenuicon)
+  - [ListBoxMenuItem](#listboxmenuitem)
+  - [ListBoxSelection](#listboxselection)
+- [ListItem](#listitem)
+- [Loading](#loading)
+- [Modal](#modal)
+- [MultiSelect](#multiselect)
+- Notification
+  - [InlineNotification](#inlinenotification)
+  - [NotificationActionButton](#notificationactionbutton)
+  - [NotificationButton](#notificationbutton)
+  - [NotificationIcon](#notificationicon)
+  - [NotificationTextDetails](#notificationtextdetails)
+  - [ToastNotification](#toastnotification)
+- NumberInput
+  - [NumberInputSkeleton](#numberinputskeleton)
+  - [NumberInput](#numberinput)
+- [OrderedList](#orderedlist)
+- OverflowMenu
+  - [OverflowMenu](#overflowmenu)
+  - [OverflowMenuItem](#overflowmenuitem)
+- Pagination
+  - [PaginationSkeleton](#paginationskeleton)
+  - [Pagination](#pagination)
+- PaginationNav
+  - [PaginationItem](#paginationitem)
+  - [PaginationNav](#paginationnav)
+  - [PaginationOverflow](#paginationoverflow)
+- ProgressIndicator
+  - [ProgressIndicatorSkeleton](#progressindicatorskeleton)
+  - [ProgressIndicator](#progressindicator)
+  - [ProgressStep](#progressstep)
+- RadioButton
+  - [RadioButtonSkeleton](#radiobuttonskeleton)
+  - [RadioButton](#radiobutton)
+- [RadioButtonGroup](#radiobuttongroup)
+- Search
+  - [SearchSkeleton](#searchskeleton)
+  - [Search](#search)
+- Select
+  - [SelectSkeleton](#selectskeleton)
+  - [Select](#select)
+  - [SelectItem](#selectitem)
+  - [SelectItemGroup](#selectitemgroup)
+- [SkeletonPlaceholder](#skeletonplaceholder)
+- [SkeletonText](#skeletontext)
+- Slider
+  - [SliderSkeleton](#sliderskeleton)
+  - [Slider](#slider)
+- StructuredList
+  - [StructuredListSkeleton](#structuredlistskeleton)
+  - [StructuredList](#structuredlist)
+  - [StructuredListBody](#structuredlistbody)
+  - [StructuredListCell](#structuredlistcell)
+  - [StructuredListHead](#structuredlisthead)
+  - [StructuredListInput](#structuredlistinput)
+  - [StructuredListRow](#structuredlistrow)
+- Tabs
+  - [Tab](#tab)
+  - [TabContent](#tabcontent)
+  - [Tabs](#tabs)
+  - [TabsSkeleton](#tabsskeleton)
+- Tag
+  - [TagSkeleton](#tagskeleton)
+  - [Tag](#tag)
+- TextArea
+  - [TextAreaSkeleton](#textareaskeleton)
+  - [TextArea](#textarea)
+- TextInput
+  - [PasswordInput](#passwordinput)
+  - [TextInputSkeleton](#textinputskeleton)
+  - [TextInput](#textinput)
+- Tile
+  - [ClickableTile](#clickabletile)
+  - [ExpandableTile](#expandabletile)
+  - [RadioTile](#radiotile)
+  - [SelectableTile](#selectabletile)
+  - [Tile](#tile)
+  - [TileGroup](#tilegroup)
+- TimePicker
+  - [TimePicker](#timepicker)
+  - [TimePickerSelect](#timepickerselect)
+- Toggle
+  - [ToggleSkeleton](#toggleskeleton)
+  - [Toggle](#toggle)
+- ToggleSmall
+  - [ToggleSmallSkeleton](#togglesmallskeleton)
+  - [ToggleSmall](#togglesmall)
+- [Tooltip](#tooltip)
+- [TooltipDefinition](#tooltipdefinition)
+- [TooltipIcon](#tooltipicon)
+- UIShell
+  - [Content](#content)
+  - [SkipToContent](#skiptocontent)
+  - [Header](#header)
+  - [HeaderAction](#headeraction)
+  - [HeaderActionLink](#headeractionlink)
+  - [HeaderActionSearch](#headeractionsearch)
+  - [HeaderNav](#headernav)
+  - [HeaderNavItem](#headernavitem)
+  - [HeaderNavMenu](#headernavmenu)
+  - [HeaderPanelDivider](#headerpaneldivider)
+  - [HeaderPanelLink](#headerpanellink)
+  - [HeaderPanelLinks](#headerpanellinks)
+  - [HeaderUtilities](#headerutilities)
+  - [HamburgerMenu](#hamburgermenu)
+  - [SideNav](#sidenav)
+  - [SideNavItems](#sidenavitems)
+  - [SideNavLink](#sidenavlink)
+  - [SideNavMenu](#sidenavmenu)
+  - [SideNavMenuItem](#sidenavmenuitem)
+- [UnorderedList](#unorderedlist)
+
 ## Component Index
 
 ### AccordionSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Accordion
 
 **Import Path**
 
@@ -51,9 +239,13 @@ import { AccordionSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Accordion
 
 <details><summary>Usage</summary>
+
+**Component Group:** Accordion
 
 **Import Path**
 
@@ -70,9 +262,13 @@ import { Accordion } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### AccordionItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** Accordion
 
 **Import Path**
 
@@ -90,9 +286,13 @@ import { AccordionItem } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### BreadcrumbSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Breadcrumb
 
 **Import Path**
 
@@ -109,9 +309,13 @@ import { BreadcrumbSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Breadcrumb
 
 <details><summary>Usage</summary>
+
+**Component Group:** Breadcrumb
 
 **Import Path**
 
@@ -128,9 +332,13 @@ import { Breadcrumb } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### BreadcrumbItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** Breadcrumb
 
 **Import Path**
 
@@ -147,9 +355,13 @@ import { BreadcrumbItem } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ButtonSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Button
 
 **Import Path**
 
@@ -166,9 +378,13 @@ import { ButtonSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Button
 
 <details><summary>Usage</summary>
+
+**Component Group:** Button
 
 **Import Path**
 
@@ -197,9 +413,13 @@ import { Button } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### CheckboxSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Checkbox
 
 **Import Path**
 
@@ -209,15 +429,17 @@ import { CheckboxSkeleton } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### Checkbox
 
 <details><summary>Usage</summary>
+
+**Component Group:** Checkbox
 
 **Import Path**
 
@@ -243,9 +465,13 @@ import { Checkbox } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### CodeSnippetSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** CodeSnippet
 
 **Import Path**
 
@@ -261,9 +487,13 @@ import { CodeSnippetSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### CodeSnippet
 
 <details><summary>Usage</summary>
+
+**Component Group:** CodeSnippet
 
 **Import Path**
 
@@ -291,9 +521,13 @@ import { CodeSnippet } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ComboBox
 
 <details><summary>Usage</summary>
+
+**Component Group:** ComboBox
 
 **Import Path**
 
@@ -326,9 +560,13 @@ import { ComboBox } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ComposedModal
 
 <details><summary>Usage</summary>
+
+**Component Group:** ComposedModal
 
 **Import Path**
 
@@ -349,9 +587,13 @@ import { ComposedModal } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ModalBody
 
 <details><summary>Usage</summary>
+
+**Component Group:** ComposedModal
 
 **Import Path**
 
@@ -368,9 +610,13 @@ import { ModalBody } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ModalFooter
 
 <details><summary>Usage</summary>
+
+**Component Group:** ComposedModal
 
 **Import Path**
 
@@ -391,9 +637,13 @@ import { ModalFooter } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ModalHeader
 
 <details><summary>Usage</summary>
+
+**Component Group:** ComposedModal
 
 **Import Path**
 
@@ -415,9 +665,13 @@ import { ModalHeader } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ContentSwitcher
 
 <details><summary>Usage</summary>
+
+**Component Group:** ContentSwitcher
 
 **Import Path**
 
@@ -434,9 +688,13 @@ import { ContentSwitcher } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Switch
 
 <details><summary>Usage</summary>
+
+**Component Group:** ContentSwitcher
 
 **Import Path**
 
@@ -456,9 +714,13 @@ import { Switch } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Copy
 
 <details><summary>Usage</summary>
+
+**Component Group:** Copy
 
 **Import Path**
 
@@ -476,9 +738,13 @@ import { Copy } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### CopyButton
 
 <details><summary>Usage</summary>
+
+**Component Group:** CopyButton
 
 **Import Path**
 
@@ -494,9 +760,13 @@ import { CopyButton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### DataTable
 
 <details><summary>Usage</summary>
+
+**Component Group:** DataTable
 
 **Import Path**
 
@@ -519,9 +789,13 @@ import { DataTable } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Table
 
 <details><summary>Usage</summary>
+
+**Component Group:** DataTable
 
 **Import Path**
 
@@ -542,9 +816,13 @@ import { Table } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TableBody
 
 <details><summary>Usage</summary>
+
+**Component Group:** DataTable
 
 **Import Path**
 
@@ -554,15 +832,17 @@ import { TableBody } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### TableCell
 
 <details><summary>Usage</summary>
+
+**Component Group:** DataTable
 
 **Import Path**
 
@@ -572,15 +852,17 @@ import { TableCell } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### TableContainer
 
 <details><summary>Usage</summary>
+
+**Component Group:** DataTable
 
 **Import Path**
 
@@ -598,9 +880,13 @@ import { TableContainer } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TableHead
 
 <details><summary>Usage</summary>
+
+**Component Group:** DataTable
 
 **Import Path**
 
@@ -610,15 +896,17 @@ import { TableHead } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### TableHeader
 
 <details><summary>Usage</summary>
+
+**Component Group:** DataTable
 
 **Import Path**
 
@@ -636,9 +924,13 @@ import { TableHeader } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TableRow
 
 <details><summary>Usage</summary>
+
+**Component Group:** DataTable
 
 **Import Path**
 
@@ -654,9 +946,13 @@ import { TableRow } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### DataTableSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** DataTableSkeleton
 
 **Import Path**
 
@@ -676,9 +972,13 @@ import { DataTableSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### DatePickerSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** DatePicker
 
 **Import Path**
 
@@ -695,9 +995,13 @@ import { DatePickerSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### DatePicker
 
 <details><summary>Usage</summary>
+
+**Component Group:** DatePicker
 
 **Import Path**
 
@@ -722,9 +1026,13 @@ import { DatePicker } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### DatePickerInput
 
 <details><summary>Usage</summary>
+
+**Component Group:** DatePicker
 
 **Import Path**
 
@@ -747,9 +1055,13 @@ import { DatePickerInput } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### DropdownSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Dropdown
 
 **Import Path**
 
@@ -765,9 +1077,13 @@ import { DropdownSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Dropdown
 
 <details><summary>Usage</summary>
+
+**Component Group:** Dropdown
 
 **Import Path**
 
@@ -800,9 +1116,13 @@ import { Dropdown } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### FileUploaderSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** FileUploader
 
 **Import Path**
 
@@ -812,15 +1132,17 @@ import { FileUploaderSkeleton } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### FileUploader
 
 <details><summary>Usage</summary>
+
+**Component Group:** FileUploader
 
 **Import Path**
 
@@ -846,9 +1168,13 @@ import { FileUploader } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### FileUploaderButton
 
 <details><summary>Usage</summary>
+
+**Component Group:** FileUploader
 
 **Import Path**
 
@@ -874,9 +1200,13 @@ import { FileUploaderButton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### FileUploaderDropContainer
 
 <details><summary>Usage</summary>
+
+**Component Group:** FileUploader
 
 **Import Path**
 
@@ -901,9 +1231,13 @@ import { FileUploaderDropContainer } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### FileUploaderItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** FileUploader
 
 **Import Path**
 
@@ -925,9 +1259,13 @@ import { FileUploaderItem } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Filename
 
 <details><summary>Usage</summary>
+
+**Component Group:** FileUploader
 
 **Import Path**
 
@@ -945,9 +1283,13 @@ import { Filename } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Form
 
 <details><summary>Usage</summary>
+
+**Component Group:** Form
 
 **Import Path**
 
@@ -957,15 +1299,17 @@ import { Form } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### FormGroup
 
 <details><summary>Usage</summary>
+
+**Component Group:** FormGroup
 
 **Import Path**
 
@@ -981,9 +1325,13 @@ import { FormGroup } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### FormItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** FormItem
 
 **Import Path**
 
@@ -993,15 +1341,17 @@ import { FormItem } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### FormLabel
 
 <details><summary>Usage</summary>
+
+**Component Group:** FormLabel
 
 **Import Path**
 
@@ -1017,9 +1367,13 @@ import { FormLabel } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Column
 
 <details><summary>Usage</summary>
+
+**Component Group:** Grid
 
 **Import Path**
 
@@ -1045,9 +1399,13 @@ import { Column } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Grid
 
 <details><summary>Usage</summary>
+
+**Component Group:** Grid
 
 **Import Path**
 
@@ -1069,9 +1427,13 @@ import { Grid } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Row
 
 <details><summary>Usage</summary>
+
+**Component Group:** Grid
 
 **Import Path**
 
@@ -1092,9 +1454,13 @@ import { Row } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### IconSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Icon
 
 **Import Path**
 
@@ -1110,9 +1476,13 @@ import { IconSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Icon
 
 <details><summary>Usage</summary>
+
+**Component Group:** Icon
 
 **Import Path**
 
@@ -1129,9 +1499,13 @@ import { Icon } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### InlineLoading
 
 <details><summary>Usage</summary>
+
+**Component Group:** InlineLoading
 
 **Import Path**
 
@@ -1150,9 +1524,13 @@ import { InlineLoading } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Link
 
 <details><summary>Usage</summary>
+
+**Component Group:** Link
 
 **Import Path**
 
@@ -1170,9 +1548,13 @@ import { Link } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ListBox
 
 <details><summary>Usage</summary>
+
+**Component Group:** ListBox
 
 **Import Path**
 
@@ -1194,9 +1576,13 @@ import { ListBox } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ListBoxField
 
 <details><summary>Usage</summary>
+
+**Component Group:** ListBox
 
 **Import Path**
 
@@ -1218,9 +1604,13 @@ import { ListBoxField } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ListBoxMenu
 
 <details><summary>Usage</summary>
+
+**Component Group:** ListBox
 
 **Import Path**
 
@@ -1236,9 +1626,13 @@ import { ListBoxMenu } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ListBoxMenuIcon
 
 <details><summary>Usage</summary>
+
+**Component Group:** ListBox
 
 **Import Path**
 
@@ -1256,9 +1650,13 @@ import { ListBoxMenuIcon } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ListBoxMenuItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** ListBox
 
 **Import Path**
 
@@ -1275,9 +1673,13 @@ import { ListBoxMenuItem } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ListBoxSelection
 
 <details><summary>Usage</summary>
+
+**Component Group:** ListBox
 
 **Import Path**
 
@@ -1297,9 +1699,13 @@ import { ListBoxSelection } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ListItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** ListItem
 
 **Import Path**
 
@@ -1309,15 +1715,17 @@ import { ListItem } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### Loading
 
 <details><summary>Usage</summary>
+
+**Component Group:** Loading
 
 **Import Path**
 
@@ -1337,9 +1745,13 @@ import { Loading } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Modal
 
 <details><summary>Usage</summary>
+
+**Component Group:** Modal
 
 **Import Path**
 
@@ -1371,9 +1783,13 @@ import { Modal } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### MultiSelect
 
 <details><summary>Usage</summary>
+
+**Component Group:** MultiSelect
 
 **Import Path**
 
@@ -1412,9 +1828,13 @@ import { MultiSelect } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### InlineNotification
 
 <details><summary>Usage</summary>
+
+**Component Group:** Notification
 
 **Import Path**
 
@@ -1437,9 +1857,13 @@ import { InlineNotification } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### NotificationActionButton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Notification
 
 **Import Path**
 
@@ -1449,15 +1873,17 @@ import { NotificationActionButton } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### NotificationButton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Notification
 
 **Import Path**
 
@@ -1475,9 +1901,13 @@ import { NotificationButton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### NotificationIcon
 
 <details><summary>Usage</summary>
+
+**Component Group:** Notification
 
 **Import Path**
 
@@ -1495,9 +1925,13 @@ import { NotificationIcon } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### NotificationTextDetails
 
 <details><summary>Usage</summary>
+
+**Component Group:** Notification
 
 **Import Path**
 
@@ -1516,9 +1950,13 @@ import { NotificationTextDetails } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ToastNotification
 
 <details><summary>Usage</summary>
+
+**Component Group:** Notification
 
 **Import Path**
 
@@ -1543,9 +1981,13 @@ import { ToastNotification } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### NumberInputSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** NumberInput
 
 **Import Path**
 
@@ -1561,9 +2003,13 @@ import { NumberInputSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### NumberInput
 
 <details><summary>Usage</summary>
+
+**Component Group:** NumberInput
 
 **Import Path**
 
@@ -1599,9 +2045,13 @@ import { NumberInput } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### OrderedList
 
 <details><summary>Usage</summary>
+
+**Component Group:** OrderedList
 
 **Import Path**
 
@@ -1617,9 +2067,13 @@ import { OrderedList } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### OverflowMenu
 
 <details><summary>Usage</summary>
+
+**Component Group:** OverflowMenu
 
 **Import Path**
 
@@ -1643,9 +2097,13 @@ import { OverflowMenu } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### OverflowMenuItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** OverflowMenu
 
 **Import Path**
 
@@ -1669,9 +2127,13 @@ import { OverflowMenuItem } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### PaginationSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Pagination
 
 **Import Path**
 
@@ -1681,15 +2143,17 @@ import { PaginationSkeleton } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### Pagination
 
 <details><summary>Usage</summary>
+
+**Component Group:** Pagination
 
 **Import Path**
 
@@ -1719,9 +2183,13 @@ import { Pagination } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### PaginationItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** PaginationNav
 
 **Import Path**
 
@@ -1738,9 +2206,13 @@ import { PaginationItem } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### PaginationNav
 
 <details><summary>Usage</summary>
+
+**Component Group:** PaginationNav
 
 **Import Path**
 
@@ -1762,9 +2234,13 @@ import { PaginationNav } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### PaginationOverflow
 
 <details><summary>Usage</summary>
+
+**Component Group:** PaginationNav
 
 **Import Path**
 
@@ -1781,9 +2257,13 @@ import { PaginationOverflow } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ProgressIndicatorSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** ProgressIndicator
 
 **Import Path**
 
@@ -1793,15 +2273,17 @@ import { ProgressIndicatorSkeleton } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### ProgressIndicator
 
 <details><summary>Usage</summary>
+
+**Component Group:** ProgressIndicator
 
 **Import Path**
 
@@ -1817,9 +2299,13 @@ import { ProgressIndicator } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ProgressStep
 
 <details><summary>Usage</summary>
+
+**Component Group:** ProgressIndicator
 
 **Import Path**
 
@@ -1842,9 +2328,13 @@ import { ProgressStep } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### RadioButtonSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** RadioButton
 
 **Import Path**
 
@@ -1854,15 +2344,17 @@ import { RadioButtonSkeleton } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### RadioButton
 
 <details><summary>Usage</summary>
+
+**Component Group:** RadioButton
 
 **Import Path**
 
@@ -1886,9 +2378,13 @@ import { RadioButton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### RadioButtonGroup
 
 <details><summary>Usage</summary>
+
+**Component Group:** RadioButtonGroup
 
 **Import Path**
 
@@ -1907,9 +2403,13 @@ import { RadioButtonGroup } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SearchSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Search
 
 **Import Path**
 
@@ -1925,9 +2425,13 @@ import { SearchSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Search
 
 <details><summary>Usage</summary>
+
+**Component Group:** Search
 
 **Import Path**
 
@@ -1955,9 +2459,13 @@ import { Search } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SelectSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Select
 
 **Import Path**
 
@@ -1973,9 +2481,13 @@ import { SelectSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Select
 
 <details><summary>Usage</summary>
+
+**Component Group:** Select
 
 **Import Path**
 
@@ -2004,9 +2516,13 @@ import { Select } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SelectItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** Select
 
 **Import Path**
 
@@ -2016,15 +2532,17 @@ import { SelectItem } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### SelectItemGroup
 
 <details><summary>Usage</summary>
+
+**Component Group:** Select
 
 **Import Path**
 
@@ -2041,9 +2559,13 @@ import { SelectItemGroup } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SkeletonPlaceholder
 
 <details><summary>Usage</summary>
+
+**Component Group:** SkeletonPlaceholder
 
 **Import Path**
 
@@ -2053,15 +2575,17 @@ import { SkeletonPlaceholder } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### SkeletonText
 
 <details><summary>Usage</summary>
+
+**Component Group:** SkeletonText
 
 **Import Path**
 
@@ -2081,9 +2605,13 @@ import { SkeletonText } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SliderSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Slider
 
 **Import Path**
 
@@ -2099,9 +2627,13 @@ import { SliderSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Slider
 
 <details><summary>Usage</summary>
+
+**Component Group:** Slider
 
 **Import Path**
 
@@ -2122,9 +2654,13 @@ import { Slider } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### StructuredListSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** StructuredList
 
 **Import Path**
 
@@ -2141,9 +2677,13 @@ import { StructuredListSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### StructuredList
 
 <details><summary>Usage</summary>
+
+**Component Group:** StructuredList
 
 **Import Path**
 
@@ -2161,9 +2701,13 @@ import { StructuredList } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### StructuredListBody
 
 <details><summary>Usage</summary>
+
+**Component Group:** StructuredList
 
 **Import Path**
 
@@ -2173,15 +2717,17 @@ import { StructuredListBody } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### StructuredListCell
 
 <details><summary>Usage</summary>
+
+**Component Group:** StructuredList
 
 **Import Path**
 
@@ -2198,9 +2744,13 @@ import { StructuredListCell } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### StructuredListHead
 
 <details><summary>Usage</summary>
+
+**Component Group:** StructuredList
 
 **Import Path**
 
@@ -2210,15 +2760,17 @@ import { StructuredListHead } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### StructuredListInput
 
 <details><summary>Usage</summary>
+
+**Component Group:** StructuredList
 
 **Import Path**
 
@@ -2239,9 +2791,13 @@ import { StructuredListInput } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### StructuredListRow
 
 <details><summary>Usage</summary>
+
+**Component Group:** StructuredList
 
 **Import Path**
 
@@ -2259,9 +2815,13 @@ import { StructuredListRow } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Tab
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tabs
 
 **Import Path**
 
@@ -2277,9 +2837,13 @@ import { Tab } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TabContent
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tabs
 
 **Import Path**
 
@@ -2295,9 +2859,13 @@ import { TabContent } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Tabs
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tabs
 
 **Import Path**
 
@@ -2307,15 +2875,17 @@ import { Tabs } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### TabsSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tabs
 
 **Import Path**
 
@@ -2325,15 +2895,17 @@ import { TabsSkeleton } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### TagSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tag
 
 **Import Path**
 
@@ -2343,15 +2915,17 @@ import { TagSkeleton } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### Tag
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tag
 
 **Import Path**
 
@@ -2372,9 +2946,13 @@ import { Tag } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TextAreaSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** TextArea
 
 **Import Path**
 
@@ -2390,9 +2968,13 @@ import { TextAreaSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TextArea
 
 <details><summary>Usage</summary>
+
+**Component Group:** TextArea
 
 **Import Path**
 
@@ -2421,9 +3003,13 @@ import { TextArea } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### PasswordInput
 
 <details><summary>Usage</summary>
+
+**Component Group:** TextInput
 
 **Import Path**
 
@@ -2456,9 +3042,13 @@ import { PasswordInput } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TextInputSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** TextInput
 
 **Import Path**
 
@@ -2474,9 +3064,13 @@ import { TextInputSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TextInput
 
 <details><summary>Usage</summary>
+
+**Component Group:** TextInput
 
 **Import Path**
 
@@ -2505,9 +3099,13 @@ import { TextInput } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ClickableTile
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tile
 
 **Import Path**
 
@@ -2524,9 +3122,13 @@ import { ClickableTile } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ExpandableTile
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tile
 
 **Import Path**
 
@@ -2550,9 +3152,13 @@ import { ExpandableTile } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### RadioTile
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tile
 
 **Import Path**
 
@@ -2574,9 +3180,13 @@ import { RadioTile } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SelectableTile
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tile
 
 **Import Path**
 
@@ -2600,9 +3210,13 @@ import { SelectableTile } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Tile
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tile
 
 **Import Path**
 
@@ -2618,9 +3232,13 @@ import { Tile } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TileGroup
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tile
 
 **Import Path**
 
@@ -2638,9 +3256,13 @@ import { TileGroup } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TimePicker
 
 <details><summary>Usage</summary>
+
+**Component Group:** TimePicker
 
 **Import Path**
 
@@ -2669,9 +3291,13 @@ import { TimePicker } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TimePickerSelect
 
 <details><summary>Usage</summary>
+
+**Component Group:** TimePicker
 
 **Import Path**
 
@@ -2694,9 +3320,13 @@ import { TimePickerSelect } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ToggleSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** Toggle
 
 **Import Path**
 
@@ -2713,9 +3343,13 @@ import { ToggleSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Toggle
 
 <details><summary>Usage</summary>
+
+**Component Group:** Toggle
 
 **Import Path**
 
@@ -2737,9 +3371,13 @@ import { Toggle } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ToggleSmallSkeleton
 
 <details><summary>Usage</summary>
+
+**Component Group:** ToggleSmall
 
 **Import Path**
 
@@ -2756,9 +3394,13 @@ import { ToggleSmallSkeleton } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### ToggleSmall
 
 <details><summary>Usage</summary>
+
+**Component Group:** ToggleSmall
 
 **Import Path**
 
@@ -2780,9 +3422,13 @@ import { ToggleSmall } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Tooltip
 
 <details><summary>Usage</summary>
+
+**Component Group:** Tooltip
 
 **Import Path**
 
@@ -2808,9 +3454,13 @@ import { Tooltip } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TooltipDefinition
 
 <details><summary>Usage</summary>
+
+**Component Group:** TooltipDefinition
 
 **Import Path**
 
@@ -2830,9 +3480,13 @@ import { TooltipDefinition } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### TooltipIcon
 
 <details><summary>Usage</summary>
+
+**Component Group:** TooltipIcon
 
 **Import Path**
 
@@ -2852,9 +3506,13 @@ import { TooltipIcon } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Content
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -2870,9 +3528,13 @@ import { Content } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SkipToContent
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -2889,9 +3551,13 @@ import { SkipToContent } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### UnorderedList
 
 <details><summary>Usage</summary>
+
+**Component Group:** UnorderedList
 
 **Import Path**
 
@@ -2907,9 +3573,13 @@ import { UnorderedList } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### Header
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -2929,9 +3599,13 @@ import { Header } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### HeaderAction
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -2949,9 +3623,13 @@ import { HeaderAction } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### HeaderActionLink
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -2969,9 +3647,13 @@ import { HeaderActionLink } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### HeaderActionSearch
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -2987,9 +3669,13 @@ import { HeaderActionSearch } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### HeaderNav
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3005,9 +3691,13 @@ import { HeaderNav } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### HeaderNavItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3024,9 +3714,13 @@ import { HeaderNavItem } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### HeaderNavMenu
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3045,9 +3739,13 @@ import { HeaderNavMenu } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### HeaderPanelDivider
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3057,15 +3755,17 @@ import { HeaderPanelDivider } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### HeaderPanelLink
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3081,9 +3781,13 @@ import { HeaderPanelLink } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### HeaderPanelLinks
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3093,15 +3797,17 @@ import { HeaderPanelLinks } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### HeaderUtilities
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3111,15 +3817,17 @@ import { HeaderUtilities } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### HamburgerMenu
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3136,9 +3844,13 @@ import { HamburgerMenu } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SideNav
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3155,9 +3867,13 @@ import { SideNav } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SideNavItems
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3167,15 +3883,17 @@ import { SideNavItems } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
+
+---
 
 ### SideNavLink
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3194,9 +3912,13 @@ import { SideNavLink } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SideNavMenu
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3214,9 +3936,13 @@ import { SideNavMenu } from "carbon-components-svelte";
 
 </details>
 
+---
+
 ### SideNavMenuItem
 
 <details><summary>Usage</summary>
+
+**Component Group:** UIShell
 
 **Import Path**
 
@@ -3226,12 +3952,11 @@ import { SideNavMenuItem } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type | Default |
-| :-------- | :--- | :------ |
-
+No exported props.
 
 </details>
 
+---
 
 ## Contributing
 
