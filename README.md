@@ -537,26 +537,26 @@ import { ComboBox } from "carbon-components-svelte";
 
 **API**
 
-| Prop name        | Type                                                        | Default                         |
-| :--------------- | :---------------------------------------------------------- | :------------------------------ |
-| items            | <code>ComboBoxItem[]</code>                                 | []                              |
-| itemToString     | <code>(item: ComboBoxItem) => string;</code>                | (item: ComboBoxItem) => string; |
-| selectedIndex    | <code>number</code>                                         | -1                              |
-| value            | <code>string</code>                                         | ""                              |
-| size             | <code>"sm" &#124; "xl"</code>                               | -                               |
-| disabled         | <code>boolean</code>                                        | false                           |
-| titleText        | <code>string</code>                                         | ""                              |
-| placeholder      | <code>string</code>                                         | ""                              |
-| helperText       | <code>string</code>                                         | ""                              |
-| invalidText      | <code>string</code>                                         | ""                              |
-| invalid          | <code>boolean</code>                                        | false                           |
-| light            | <code>boolean</code>                                        | false                           |
-| open             | <code>boolean</code>                                        | false                           |
-| shouldFilterItem | <code>(item: ComboBoxItem, value: string) => boolean</code> | () => true                      |
-| translateWithId  | <code>(id: any) => string;</code>                           | -                               |
-| id               | <code>string</code>                                         | -                               |
-| name             | <code>string</code>                                         | -                               |
-| ref              | <code>null &#124; HTMLInputElement</code>                   | null                            |
+| Prop name        | Type                                                        | Default                        |
+| :--------------- | :---------------------------------------------------------- | :----------------------------- |
+| items            | <code>ComboBoxItem[]</code>                                 | []                             |
+| itemToString     | <code>(item: ComboBoxItem) => string</code>                 | (item: ComboBoxItem) => string |
+| selectedIndex    | <code>number</code>                                         | -1                             |
+| value            | <code>string</code>                                         | ""                             |
+| size             | <code>"sm" &#124; "xl"</code>                               | -                              |
+| disabled         | <code>boolean</code>                                        | false                          |
+| titleText        | <code>string</code>                                         | ""                             |
+| placeholder      | <code>string</code>                                         | ""                             |
+| helperText       | <code>string</code>                                         | ""                             |
+| invalidText      | <code>string</code>                                         | ""                             |
+| invalid          | <code>boolean</code>                                        | false                          |
+| light            | <code>boolean</code>                                        | false                          |
+| open             | <code>boolean</code>                                        | false                          |
+| shouldFilterItem | <code>(item: ComboBoxItem, value: string) => boolean</code> | () => true                     |
+| translateWithId  | <code>(id: any) => string</code>                            | -                              |
+| id               | <code>string</code>                                         | -                              |
+| name             | <code>string</code>                                         | -                              |
+| ref              | <code>null &#124; HTMLInputElement</code>                   | null                           |
 
 </details>
 
@@ -916,11 +916,11 @@ import { TableHeader } from "carbon-components-svelte";
 
 **API**
 
-| Prop name       | Type                       | Default   |
-| :-------------- | :------------------------- | :-------- |
-| scope           | <code>string</code>        | "col"     |
-| translateWithId | <code>() => string;</code> | () => ""; |
-| id              | <code>string</code>        | -         |
+| Prop name       | Type                      | Default  |
+| :-------------- | :------------------------ | :------- |
+| scope           | <code>string</code>       | "col"    |
+| translateWithId | <code>() => string</code> | () => "" |
+| id              | <code>string</code>       | -        |
 
 </details>
 
@@ -1093,26 +1093,26 @@ import { Dropdown } from "carbon-components-svelte";
 
 **API**
 
-| Prop name       | Type                                         | Default                                  |
-| :-------------- | :------------------------------------------- | :--------------------------------------- |
-| items           | <code>DropdownItem[]</code>                  | []                                       |
-| itemToString    | <code>(item: DropdownItem) => string;</code> | (item: DropdownItem) => DropdownItemText | DropdownItemId; |
-| selectedIndex   | <code>number</code>                          | -1                                       |
-| type            | <code>"default" &#124; "inline"</code>       | "default"                                |
-| size            | <code>"sm" &#124; "lg" &#124; "xl"</code>    | -                                        |
-| open            | <code>boolean</code>                         | false                                    |
-| inline          | <code>boolean</code>                         | false                                    |
-| light           | <code>boolean</code>                         | false                                    |
-| disabled        | <code>boolean</code>                         | false                                    |
-| titleText       | <code>string</code>                          | ""                                       |
-| invalid         | <code>boolean</code>                         | false                                    |
-| invalidText     | <code>string</code>                          | ""                                       |
-| helperText      | <code>string</code>                          | ""                                       |
-| label           | <code>string</code>                          | -                                        |
-| translateWithId | <code>(id: any) => string;</code>            | -                                        |
-| id              | <code>string</code>                          | -                                        |
-| name            | <code>string</code>                          | -                                        |
-| ref             | <code>null &#124; HTMLButtonElement</code>   | null                                     |
+| Prop name       | Type                                        | Default                                  |
+| :-------------- | :------------------------------------------ | :--------------------------------------- |
+| items           | <code>DropdownItem[]</code>                 | []                                       |
+| itemToString    | <code>(item: DropdownItem) => string</code> | (item: DropdownItem) => DropdownItemText | DropdownItemId |
+| selectedIndex   | <code>number</code>                         | -1                                       |
+| type            | <code>"default" &#124; "inline"</code>      | "default"                                |
+| size            | <code>"sm" &#124; "lg" &#124; "xl"</code>   | -                                        |
+| open            | <code>boolean</code>                        | false                                    |
+| inline          | <code>boolean</code>                        | false                                    |
+| light           | <code>boolean</code>                        | false                                    |
+| disabled        | <code>boolean</code>                        | false                                    |
+| titleText       | <code>string</code>                         | ""                                       |
+| invalid         | <code>boolean</code>                        | false                                    |
+| invalidText     | <code>string</code>                         | ""                                       |
+| helperText      | <code>string</code>                         | ""                                       |
+| label           | <code>string</code>                         | -                                        |
+| translateWithId | <code>(id: any) => string</code>            | -                                        |
+| id              | <code>string</code>                         | -                                        |
+| name            | <code>string</code>                         | -                                        |
+| ref             | <code>null &#124; HTMLButtonElement</code>  | null                                     |
 
 </details>
 
@@ -1158,7 +1158,7 @@ import { FileUploader } from "carbon-components-svelte";
 | accept           | <code>string[]</code>                                                                      | []          |
 | files            | <code>string[]</code>                                                                      | []          |
 | multiple         | <code>boolean</code>                                                                       | false       |
-| clearFiles       | <code>() => any;</code>                                                                    | () => void; |
+| clearFiles       | <code>() => any</code>                                                                     | () => void  |
 | labelDescription | <code>string</code>                                                                        | ""          |
 | labelTitle       | <code>string</code>                                                                        | ""          |
 | kind             | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger"</code> | "primary"   |
@@ -1216,18 +1216,18 @@ import { FileUploaderDropContainer } from "carbon-components-svelte";
 
 **API**
 
-| Prop name     | Type                                      | Default                  |
-| :------------ | :---------------------------------------- | :----------------------- |
-| accept        | <code>string[]</code>                     | []                       |
-| multiple      | <code>boolean</code>                      | false                    |
-| validateFiles | <code>(files: Files) => Files</code>      | (files: Files) => Files; |
-| labelText     | <code>string</code>                       | "Add file"               |
-| role          | <code>string</code>                       | "button"                 |
-| disabled      | <code>boolean</code>                      | false                    |
-| tabindex      | <code>string</code>                       | "0"                      |
-| id            | <code>string</code>                       | -                        |
-| name          | <code>string</code>                       | ""                       |
-| ref           | <code>null &#124; HTMLInputElement</code> | null                     |
+| Prop name     | Type                                      | Default                 |
+| :------------ | :---------------------------------------- | :---------------------- |
+| accept        | <code>string[]</code>                     | []                      |
+| multiple      | <code>boolean</code>                      | false                   |
+| validateFiles | <code>(files: Files) => Files</code>      | (files: Files) => Files |
+| labelText     | <code>string</code>                       | "Add file"              |
+| role          | <code>string</code>                       | "button"                |
+| disabled      | <code>boolean</code>                      | false                   |
+| tabindex      | <code>string</code>                       | "0"                     |
+| id            | <code>string</code>                       | -                       |
+| name          | <code>string</code>                       | ""                      |
+| ref           | <code>null &#124; HTMLInputElement</code> | null                    |
 
 </details>
 
@@ -1395,7 +1395,6 @@ import { Column } from "carbon-components-svelte";
 | lg            | <code>ColumnBreakpoint</code>                                                                      | -       |
 | xlg           | <code>ColumnBreakpoint</code>                                                                      | -       |
 | max           | <code>ColumnBreakpoint</code>                                                                      | -       |
-|               | <code>string[]</code>                                                                              | -       |
 
 </details>
 
@@ -1592,15 +1591,14 @@ import { ListBoxField } from "carbon-components-svelte";
 
 **API**
 
-| Prop name       | Type                                                    | Default         |
-| :-------------- | :------------------------------------------------------ | :-------------- |
-| disabled        | <code>boolean</code>                                    | false           |
-| role            | <code>string</code>                                     | "combobox"      |
-| tabindex        | <code>string</code>                                     | "-1"            |
-|                 | <code>{ close: "close"; open: "open"; }</code>          | -               |
-| translateWithId | <code>(id: ListBoxFieldTranslationId) => string;</code> | (id) => string; |
-| id              | <code>string</code>                                     | -               |
-| ref             | <code>null &#124; HTMLElement</code>                    | null            |
+| Prop name       | Type                                                    | Default        |
+| :-------------- | :------------------------------------------------------ | :------------- |
+| disabled        | <code>boolean</code>                                    | false          |
+| role            | <code>string</code>                                     | "combobox"     |
+| tabindex        | <code>string</code>                                     | "-1"           |
+| translateWithId | <code>(id: ListBoxFieldTranslationId) => string;</code> | (id) => string |
+| id              | <code>string</code>                                     | -              |
+| ref             | <code>null &#124; HTMLElement</code>                    | null           |
 
 </details>
 
@@ -1642,11 +1640,10 @@ import { ListBoxMenuIcon } from "carbon-components-svelte";
 
 **API**
 
-| Prop name       | Type                                                       | Default         |
-| :-------------- | :--------------------------------------------------------- | :-------------- |
-| open            | <code>boolean</code>                                       | false           |
-|                 | <code>{ close: "close"; open: "open" }</code>              | -               |
-| translateWithId | <code>(id: ListBoxMenuIconTranslationId) => string;</code> | (id) => string; |
+| Prop name       | Type                                                      | Default        |
+| :-------------- | :-------------------------------------------------------- | :------------- |
+| open            | <code>boolean</code>                                      | false          |
+| translateWithId | <code>(id: ListBoxMenuIconTranslationId) => string</code> | (id) => string |
 
 </details>
 
@@ -1689,13 +1686,12 @@ import { ListBoxSelection } from "carbon-components-svelte";
 
 **API**
 
-| Prop name       | Type                                                                    | Default         |
-| :-------------- | :---------------------------------------------------------------------- | :-------------- |
-| selectionCount  | <code>\*</code>                                                         | -               |
-| disabled        | <code>boolean</code>                                                    | false           |
-|                 | <code>{ clearAll: "clearAll"; clearSelection: "clearSelection" }</code> | -               |
-| translateWithId | <code>(id: ListBoxSelectionTranslationId) => string;</code>             | (id) => string; |
-| ref             | <code>null &#124; HTMLElement</code>                                    | null            |
+| Prop name       | Type                                                       | Default        |
+| :-------------- | :--------------------------------------------------------- | :------------- |
+| selectionCount  | <code>\*</code>                                            | -              |
+| disabled        | <code>boolean</code>                                       | false          |
+| translateWithId | <code>(id: ListBoxSelectionTranslationId) => string</code> | (id) => string |
+| ref             | <code>null &#124; HTMLElement</code>                       | null           |
 
 </details>
 
@@ -1802,7 +1798,7 @@ import { MultiSelect } from "carbon-components-svelte";
 | Prop name         | Type                                                                      | Default                                                     |
 | :---------------- | :------------------------------------------------------------------------ | :---------------------------------------------------------- |
 | items             | <code>MultiSelectItem[]</code>                                            | []                                                          |
-| itemToString      | <code>(item: MultiSelectItem) => string;</code>                           | (item: MultiSelectItem) => MultiSelectItemText              | MultiSelectItemId; |
+| itemToString      | <code>(item: MultiSelectItem) => string</code>                            | (item: MultiSelectItem) => MultiSelectItemText              | MultiSelectItemId |
 | selectedIds       | <code>MultiSelectItemId[]</code>                                          | []                                                          |
 | value             | <code>string</code>                                                       | ""                                                          |
 | size              | <code>"sm" &#124; "lg" &#124; "xl"</code>                                 | -                                                           |
@@ -1816,7 +1812,7 @@ import { MultiSelect } from "carbon-components-svelte";
 | locale            | <code>string</code>                                                       | "en"                                                        |
 | placeholder       | <code>string</code>                                                       | ""                                                          |
 | sortItem          | <code>(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem;</code> | (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem |
-| translateWithId   | <code>(id: any) => string;</code>                                         | -                                                           |
+| translateWithId   | <code>(id: any) => string</code>                                          | -                                                           |
 | titleText         | <code>string</code>                                                       | ""                                                          |
 | useTitleInItem    | <code>boolean</code>                                                      | false                                                       |
 | invalid           | <code>boolean</code>                                                      | false                                                       |
@@ -2019,29 +2015,28 @@ import { NumberInput } from "carbon-components-svelte";
 
 **API**
 
-| Prop name       | Type                                                            | Default                                   |
-| :-------------- | :-------------------------------------------------------------- | :---------------------------------------- |
-| size            | <code>"sm" &#124; "xl"</code>                                   | -                                         |
-| value           | <code>string</code>                                             | ""                                        |
-| step            | <code>number</code>                                             | 1                                         |
-| max             | <code>number</code>                                             | -                                         |
-| min             | <code>number</code>                                             | -                                         |
-| light           | <code>boolean</code>                                            | false                                     |
-| readonly        | <code>boolean</code>                                            | false                                     |
-| mobile          | <code>boolean</code>                                            | false                                     |
-| allowEmpty      | <code>boolean</code>                                            | false                                     |
-| disabled        | <code>boolean</code>                                            | false                                     |
-| iconDescription | <code>string</code>                                             | ""                                        |
-| invalid         | <code>boolean</code>                                            | false                                     |
-| invalidText     | <code>string</code>                                             | "Provide invalidText"                     |
-| helperText      | <code>string</code>                                             | ""                                        |
-| label           | <code>string</code>                                             | ""                                        |
-| hideLabel       | <code>boolean</code>                                            | false                                     |
-| translateWithId | <code>(id: NumberInputTranslationId) => string;</code>          | (id: NumberInputTranslationId) => string; |
-|                 | <code>{ increment: "increment"; decrement: "decrement" }</code> | -                                         |
-| id              | <code>string</code>                                             | -                                         |
-| name            | <code>string</code>                                             | -                                         |
-| ref             | <code>null &#124; HTMLInputElement</code>                       | null                                      |
+| Prop name       | Type                                                  | Default                                  |
+| :-------------- | :---------------------------------------------------- | :--------------------------------------- |
+| size            | <code>"sm" &#124; "xl"</code>                         | -                                        |
+| value           | <code>string</code>                                   | ""                                       |
+| step            | <code>number</code>                                   | 1                                        |
+| max             | <code>number</code>                                   | -                                        |
+| min             | <code>number</code>                                   | -                                        |
+| light           | <code>boolean</code>                                  | false                                    |
+| readonly        | <code>boolean</code>                                  | false                                    |
+| mobile          | <code>boolean</code>                                  | false                                    |
+| allowEmpty      | <code>boolean</code>                                  | false                                    |
+| disabled        | <code>boolean</code>                                  | false                                    |
+| iconDescription | <code>string</code>                                   | ""                                       |
+| invalid         | <code>boolean</code>                                  | false                                    |
+| invalidText     | <code>string</code>                                   | "Provide invalidText"                    |
+| helperText      | <code>string</code>                                   | ""                                       |
+| label           | <code>string</code>                                   | ""                                       |
+| hideLabel       | <code>boolean</code>                                  | false                                    |
+| translateWithId | <code>(id: NumberInputTranslationId) => string</code> | (id: NumberInputTranslationId) => string |
+| id              | <code>string</code>                                   | -                                        |
+| name            | <code>string</code>                                   | -                                        |
+| ref             | <code>null &#124; HTMLInputElement</code>             | null                                     |
 
 </details>
 
@@ -2163,23 +2158,23 @@ import { Pagination } from "carbon-components-svelte";
 
 **API**
 
-| Prop name         | Type                                                              | Default                                              |
-| :---------------- | :---------------------------------------------------------------- | :--------------------------------------------------- |
-| page              | <code>number</code>                                               | 1                                                    |
-| total             | <code>number</code>                                               | 0                                                    |
-| disabled          | <code>boolean</code>                                              | false                                                |
-| forwardText       | <code>string</code>                                               | "Next page"                                          |
-| backwardText      | <code>string</code>                                               | "Previous page"                                      |
-| itemsPerPageText  | <code>string</code>                                               | "Items per page:"                                    |
-| itemText          | <code>(min: number, max: number) => string;</code>                | (min: number, max: number) => string;                |
-| itemRangeText     | <code>(min: number, max: number, total: number) => string;</code> | (min: number, max: number, total: number) => string; |
-| pageInputDisabled | <code>boolean</code>                                              | false                                                |
-| pageSize          | <code>number</code>                                               | 10                                                   |
-| pageSizes         | <code>number[]</code>                                             | [10]                                                 |
-| pagesUnknown      | <code>boolean</code>                                              | false                                                |
-| pageText          | <code>(page: number) => string;</code>                            | (current: number) => string;                         |
-| pageRangeText     | <code>(current: number, total: number) => string;</code>          | (current: number, total: number) => string;          |
-| id                | <code>string</code>                                               | -                                                    |
+| Prop name         | Type                                                             | Default                                             |
+| :---------------- | :--------------------------------------------------------------- | :-------------------------------------------------- |
+| page              | <code>number</code>                                              | 1                                                   |
+| total             | <code>number</code>                                              | 0                                                   |
+| disabled          | <code>boolean</code>                                             | false                                               |
+| forwardText       | <code>string</code>                                              | "Next page"                                         |
+| backwardText      | <code>string</code>                                              | "Previous page"                                     |
+| itemsPerPageText  | <code>string</code>                                              | "Items per page:"                                   |
+| itemText          | <code>(min: number, max: number) => string</code>                | (min: number, max: number) => string                |
+| itemRangeText     | <code>(min: number, max: number, total: number) => string</code> | (min: number, max: number, total: number) => string |
+| pageInputDisabled | <code>boolean</code>                                             | false                                               |
+| pageSize          | <code>number</code>                                              | 10                                                  |
+| pageSizes         | <code>number[]</code>                                            | [10]                                                |
+| pagesUnknown      | <code>boolean</code>                                             | false                                               |
+| pageText          | <code>(page: number) => string</code>                            | (current: number) => string                         |
+| pageRangeText     | <code>(current: number, total: number) => string</code>          | (current: number, total: number) => string          |
+| id                | <code>string</code>                                              | -                                                   |
 
 </details>
 
@@ -2230,7 +2225,6 @@ import { PaginationNav } from "carbon-components-svelte";
 | loop         | <code>boolean</code> | false       |
 | forwardText  | <code>string</code>  | "Next page" |
 | backwardText | <code>string</code>  | "Next page" |
-|              | <code>4</code>       | -           |
 
 </details>
 
@@ -2595,13 +2589,12 @@ import { SkeletonText } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type                  | Default |
-| :-------- | :-------------------- | :------ |
-| lines     | <code>number</code>   | 3       |
-| heading   | <code>boolean</code>  | false   |
-| paragraph | <code>boolean</code>  | false   |
-| width     | <code>string</code>   | "100%"  |
-|           | <code>number[]</code> | -       |
+| Prop name | Type                 | Default |
+| :-------- | :------------------- | :------ |
+| lines     | <code>number</code>  | 3       |
+| heading   | <code>boolean</code> | false   |
+| paragraph | <code>boolean</code> | false   |
+| width     | <code>string</code>  | "100%"  |
 
 </details>
 
