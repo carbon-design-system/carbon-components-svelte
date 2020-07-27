@@ -10,7 +10,7 @@
 
   let selected = false;
 
-  const unsubscribe = ctx.selectedValue.subscribe($ => {
+  const unsubscribe = ctx.selectedValue.subscribe(($) => {
     selected = $ === value;
   });
 

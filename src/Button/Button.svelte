@@ -1,17 +1,88 @@
 <script>
-  export let as = undefined;
-  export let skeleton = false;
-  export let disabled = false;
-  export let href = undefined;
-  export let icon = undefined;
-  export let iconDescription = undefined;
-  export let hasIconOnly = false;
+  /**
+   * Specify the kind of button
+   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"} [kind="primary"]
+   */
   export let kind = "primary";
+
+  /**
+   * Specify the size of button
+   * @type {"default" | "field" | "small"} [size="default"]
+   */
   export let size = "default";
-  export let tabindex = "0";
+
+  /**
+   * Set to `true` for the icon-only variant
+   * @type {boolean} [hasIconOnly=false]
+   */
+  export let hasIconOnly = false;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [icon]
+   */
+  export let icon = undefined;
+
+  /**
+   * Specify the ARIA label for the button icon
+   * @type {string} [iconDescription]
+   */
+  export let iconDescription = undefined;
+
+  /**
+   * Set the alignment of the tooltip relative to the icon
+   * `hasIconOnly` must be set to `true`
+   * @type {"start" | "center" | "end"} [tooltipAlignment]
+   */
   export let tooltipAlignment = undefined;
+
+  /**
+   * Set the position of the tooltip relative to the icon
+   * @type {"top" | "right" | "bottom" | "left"} [tooltipPosition]
+   */
   export let tooltipPosition = undefined;
+
+  /**
+   * Set to `true` to render a custom HTML element
+   * Props are destructured as `props` in the default slot (e.g. <Button let:props><div {...props}>...</div></Button>)
+   * @type {boolean} [as=false]
+   */
+  export let as = false;
+
+  /**
+   * Set to `true` to display the skeleton state
+   * @type {boolean} [skeleton=false]
+   */
+  export let skeleton = false;
+
+  /**
+   * Set to `true` to disable the button
+   * @type [boolean] [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
+   * Set the `href` to use an anchor link
+   * @type {string} [href]
+   */
+  export let href = undefined;
+
+  /**
+   * Specify the tabindex
+   * @type {string} [tabindex="0"]
+   */
+  export let tabindex = "0";
+
+  /**
+   * Specify the `type` attribute for the button element
+   * @type {string} [type="button"]
+   */
   export let type = "button";
+
+  /**
+   * Obtain a reference to the HTML element
+   * @type {null | HTMLAnchorElement | HTMLButtonElement} [ref=null]
+   */
   export let ref = null;
 
   import { getContext } from "svelte";

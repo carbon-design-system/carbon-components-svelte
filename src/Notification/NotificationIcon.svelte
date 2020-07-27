@@ -1,7 +1,21 @@
 <script>
+  /**
+   * Specify the kind of notification icon
+   * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"} [kind="error"]
+   */
   export let kind = "error";
+
+  /**
+   * Set the type of notification
+   * @type {"toast" | "inline"} [notificationType="toast"]
+   */
   export let notificationType = "toast";
-  export let iconDescription = "closes notification";
+
+  /**
+   * Specify the ARIA label for the icon
+   * @type {string} [iconDescription="Closes notification"]
+   */
+  export let iconDescription = "Closes notification";
 
   import CheckmarkFilled20 from "carbon-icons-svelte/lib/CheckmarkFilled20";
   import ErrorFilled20 from "carbon-icons-svelte/lib/ErrorFilled20";
@@ -16,7 +30,7 @@
     info: InformationFilled20,
     success: CheckmarkFilled20,
     warning: WarningFilled20,
-    "warning-alt": WarningAltFilled20
+    "warning-alt": WarningAltFilled20,
   };
 </script>
 

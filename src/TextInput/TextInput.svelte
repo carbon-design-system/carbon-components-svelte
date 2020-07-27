@@ -1,17 +1,86 @@
 <script>
-  export let size = undefined; // "sm" | "xl"
-  export let type = "";
+  /**
+   * Set the size of the input
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Specify the input value
+   * @type {string} [value=""]
+   */
   export let value = "";
+
+  /**
+   * Specify the input type
+   * @type {string} [type=""]
+   */
+  export let type = "";
+
+  /**
+   * Specify the placeholder text
+   * @type {string} [placeholder=""]
+   */
   export let placeholder = "";
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
+  /**
+   * Set to `true` to disable the input
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
-  export let id = "ccs-" + Math.random().toString(36);
-  export let name = undefined;
+
+  /**
+   * Specify the helper text
+   * @type {string} [helperText=""]
+   */
   export let helperText = "";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string} [name]
+   */
+  export let name = undefined;
+
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
   export let labelText = "";
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
   export let hideLabel = false;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
   export let invalidText = "";
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
   export let ref = null;
 
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

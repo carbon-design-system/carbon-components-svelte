@@ -1,17 +1,56 @@
 <script>
+  /**
+   * Set to `true` to disable the list box field
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Specify the role attribute
+   * @type {string} [role="combobox"]
+   */
   export let role = "combobox";
+
+  /**
+   * Specify the tabindex
+   * @type {string} [tabindex="-1"]
+   */
   export let tabindex = "-1";
+
+  /**
+   * @typedef {"close" | "open"} ListBoxFieldTranslationId
+   */
+
+  /**
+   * Default translation ids
+   * @constant
+   * @type {{ close: "close"; open: "open"; }}
+   */
   export const translationIds = { close: "close", open: "open" };
-  export let translateWithId = id => defaultTranslations[id];
+
+  /**
+   * Override the default translation ids
+   * @type {(id: ListBoxFieldTranslationId) => string;} [translateWithId = (id) => string;]
+   */
+  export let translateWithId = (id) => defaultTranslations[id];
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the top-level HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { getContext } from "svelte";
 
   const defaultTranslations = {
     [translationIds.close]: "Close menu",
-    [translationIds.open]: "Open menu"
+    [translationIds.open]: "Open menu",
   };
   const ctx = getContext("MultiSelect");
 

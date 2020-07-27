@@ -1,6 +1,20 @@
 <script>
+  /**
+   * Specify the `scope` attribute
+   * @type {string} [scope="col"]
+   */
   export let scope = "col";
+
+  /**
+   * Override the default id translations
+   * @type {() => string;} [translateWithId = () => "";]
+   */
   export let translateWithId = () => "";
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
 
   import { getContext } from "svelte";
@@ -20,6 +34,7 @@
   <th
     aria-sort={active ? $sortHeader.sortDirection : 'none'}
     {scope}
+    {id}
     {...$$restProps}
     on:mouseover
     on:mouseenter
@@ -41,6 +56,7 @@
 {:else}
   <th
     {scope}
+    {id}
     {...$$restProps}
     on:click
     on:mouseover

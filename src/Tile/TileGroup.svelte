@@ -1,6 +1,20 @@
 <script>
+  /**
+   * Specify the selected tile value
+   * @type {string} [selected]
+   */
   export let selected = undefined;
+
+  /**
+   * Set to `true` to disable the tile group
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Specify the legend text
+   * @type {string} [legend]
+   */
   export let legend = "";
 
   import { createEventDispatcher, setContext } from "svelte";
@@ -16,9 +30,9 @@
         selectedValue.set(value);
       }
     },
-    update: value => {
+    update: (value) => {
       selectedValue.set(value);
-    }
+    },
   });
 
   $: selected = $selectedValue;

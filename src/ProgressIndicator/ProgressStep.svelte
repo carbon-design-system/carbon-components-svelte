@@ -1,11 +1,50 @@
 <script>
+  /**
+   * Set to `true` for the complete variant
+   * @type {boolean} [complete=false]
+   */
   export let complete = false;
+
+  /**
+   * Set to `true` to use the current variant
+   * @type {boolean} [current=false]
+   */
   export let current = false;
+
+  /**
+   * Set to `true` to disable the progress step
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the step description
+   * @type {string} [descripton=""]
+   */
   export let description = "";
+
+  /**
+   * Specify the step label
+   * @type {string} [label=""]
+   */
   export let label = "";
+
+  /**
+   * Specify the step secondary label
+   * @type {string} [secondaryLabel=""]
+   */
   export let secondaryLabel = "";
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
 
   import { getContext } from "svelte";
@@ -25,6 +64,7 @@
 
 <li
   aria-disabled={disabled}
+  {id}
   class:bx--progress-step={true}
   class:bx--progress-step--current={current}
   class:bx--progress-step--complete={complete}
@@ -43,7 +83,7 @@
     on:mouseenter
     on:mouseleave
     on:keydown
-    on:keydown={e => {
+    on:keydown={(e) => {
       if (e.key === ' ' || e.key === 'Enter') {
         change(step.index);
       }

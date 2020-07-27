@@ -1,5 +1,9 @@
 <script>
-  export let type = "single"; // "single" | "multi"
+  /**
+   * Set the type of code snippet
+   * @type {"single" | "inline" | "multi"} [type="single"]
+   */
+  export let type = "single";
 </script>
 
 <div

@@ -1,12 +1,52 @@
 <script>
-  export let size = undefined; // "compact" | "short" | "tall"
-  export let title = "";
-  export let description = "";
-  export let zebra = false;
-  export let sortable = false;
-  export let stickyHeader = false;
-  export let rows = [];
+  /**
+   * Specify the data table headers
+   * @type {{key: string; value: string;}} [headers=[]]
+   */
   export let headers = [];
+
+  /**
+   * Specify the rows the data table should render
+   * keys defined in `headers` are used for the row ids
+   * @type {Object[]} [rows=[]]
+   */
+  export let rows = [];
+
+  /**
+   * Set the size of the data table
+   * @type {"compact" | "short" | "tall"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Specify the title of the data table
+   * @type {string} [title=""]
+   */
+  export let title = "";
+
+  /**
+   * Specify the description of the data table
+   * @type {string} [description=""]
+   */
+  export let description = "";
+
+  /**
+   * Set to `true` to use zebra styles
+   * @type {boolean} [zebra=false]
+   */
+  export let zebra = false;
+
+  /**
+   * Set to `true` for the sortable variant
+   * @type {boolean} [sortable=false]
+   */
+  export let sortable = false;
+
+  /**
+   * Set to `true` to enable a sticky header
+   * @type {boolean} [stickyHeader=false]
+   */
+  export let stickyHeader = false;
 
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
@@ -21,7 +61,7 @@
   const sortDirectionMap = {
     none: "ascending",
     ascending: "descending",
-    descending: "none"
+    descending: "none",
   };
   const dispatch = createEventDispatcher();
   const tableSortable = writable(sortable);
@@ -36,16 +76,16 @@
   setContext("DataTable", {
     sortHeader,
     tableSortable,
-    add: id => {
-      headerItems.update(_ => [..._, id]);
-    }
+    add: (id) => {
+      headerItems.update((_) => [..._, id]);
+    },
   });
 
   $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
-  $: rows = rows.map(row => ({
+  $: rows = rows.map((row) => ({
     ...row,
-    cells: headerKeys.map(key => ({ key, value: row[key] }))
+    cells: headerKeys.map((key) => ({ key, value: row[key] })),
   }));
   $: sortedRows = rows;
   $: ascending = $sortHeader.sortDirection === "ascending";
@@ -71,7 +111,7 @@
   }
   $: props = {
     headers,
-    rows
+    rows,
   };
 </script>
 
@@ -91,7 +131,7 @@
                 sortHeader.set({
                   id: sortDirection === 'none' ? null : $thKeys[header.key],
                   key: header.key,
-                  sortDirection
+                  sortDirection,
                 });
               }}>
               {header.value}

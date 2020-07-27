@@ -1,8 +1,32 @@
 <script>
+  /**
+   * Set to `true` to use the small variant
+   * @type {boolean} [small=false]
+   */
   export let small = false;
+
+  /**
+   * Set to `false` to disable the active state
+   * @type {boolean} [active=true]
+   */
   export let active = true;
+
+  /**
+   * Set to `false` to disable the overlay
+   * @type {boolean} [withOverlay=false]
+   */
   export let withOverlay = true;
+
+  /**
+   * Specify the label description
+   * @type {string} [description="Active loading indicator"]
+   */
   export let description = "Active loading indicator";
+
+  /**
+   * Set an id for the label element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
 
   $: spinnerRadius = small ? "26.8125" : "37.5";

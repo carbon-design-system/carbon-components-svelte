@@ -1,20 +1,51 @@
 <script>
   export let disabled = false;
   export let hideTextInput = false;
+
+  /**
+   * Set an id for the slider div element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let inputType = "number";
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
   export let labelText = "";
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
   export let max = 100;
   export let maxLabel = "";
   export let min = 0;
   export let minLabel = "";
+
+  /**
+   * Set a name for the slider element
+   * @type {string} [name=""]
+   */
   export let name = "";
   export let required = false;
   export let step = 1;
   export let stepMultiplier = 4;
   export let value = "";
+
+  /**
+   * Obtain a reference to the HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";

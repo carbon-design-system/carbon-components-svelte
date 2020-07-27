@@ -1,12 +1,14 @@
 <script>
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
-
-  $: menuId = `menu-${id}`;
 </script>
 
 <div
   role="listbox"
-  id={menuId}
+  id="menu-{id}"
   class:bx--list-box__menu={true}
   {...$$restProps}>
   <slot />

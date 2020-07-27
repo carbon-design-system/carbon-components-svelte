@@ -1,20 +1,104 @@
 <script>
-  export let size = undefined; // "xs" | "sm" | "lg"
+  /**
+   * Set the size of the modal
+   * @type {"xs" | "sm" | "lg"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Set to `true` to open the modal
+   * @type {boolean} [open=false]
+   */
   export let open = false;
-  export let passiveModal = false;
+
+  /**
+   * Set to `true` to use the danger variant
+   * @type {boolean} [danger=false]
+   */
   export let danger = false;
-  export let hasForm = false;
-  export let hasScrollingContent = false;
-  export let primaryButtonDisabled = false;
-  export let shouldSubmitOnEnter = true;
-  export let modalAriaLabel = undefined;
+
+  /**
+   * Set to `true` to use the passive variant
+   * @type {boolean} [passiveModal=false]
+   */
+  export let passiveModal = false;
+
+  /**
+   * Specify the modal heading
+   * @type {string} [modalHeading]
+   */
   export let modalHeading = undefined;
+
+  /**
+   * Specify the modal label
+   * @type {string} [modalLabel]
+   */
   export let modalLabel = undefined;
+
+  /**
+   * Specify the ARIA label for the modal
+   * @type {string} [modalAriaLabel]
+   */
+  export let modalAriaLabel = undefined;
+
+  /**
+   * Specify the ARIA label for the close icon
+   * @type {string} [iconDescription="Close the modal"]
+   */
   export let iconDescription = "Close the modal";
+
+  /**
+   * Set to `true` if the modal contains form elements
+   * @type {boolean} [hasForm=false]
+   */
+  export let hasForm = false;
+
+  /**
+   * Set to `true` if the modal contains scrolling content
+   * @type {boolean} [hasScrollingContent=false]
+   */
+  export let hasScrollingContent = false;
+
+  /**
+   * Specify the primary button text
+   * @type {string} [primaryButtonText=""]
+   */
   export let primaryButtonText = "";
+
+  /**
+   * Set to `true` to disable the primary button
+   * @type {boolean} [primaryButtonDisabled=false]
+   */
+  export let primaryButtonDisabled = false;
+
+  /**
+   * Set to `true` for the primary button to be triggered when pressing "Enter"
+   * @type {boolean} [shouldSubmitOnEnter=true]
+   */
+  export let shouldSubmitOnEnter = true;
+
+  /**
+   * Specify the secondary button text
+   * @type {string} [secondaryButtonText=""]
+   */
   export let secondaryButtonText = "";
+
+  /**
+   * Specify a selector to be focused when opening the modal
+   * @type {string} [selectorPrimaryFocus="[data-modal-primary-focus]"]
+   */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the top-level HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { createEventDispatcher, onMount, afterUpdate } from "svelte";

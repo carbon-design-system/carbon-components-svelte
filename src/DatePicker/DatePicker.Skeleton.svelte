@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Set to `true` to use the range variant
+   * @type {boolean} [range=false]
+   */
   export let range = false;
+
+  /**
+   * Set an id to be used by the label element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
 </script>
 

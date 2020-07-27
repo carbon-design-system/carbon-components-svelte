@@ -1,12 +1,56 @@
 <script>
+  /**
+   * Set to `true` to expand the tile
+   * @type {boolean} [expanded=false]
+   */
   export let expanded = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
+  /**
+   * Specify the max height of the tile  (number of pixels)
+   * @type {number} [tileMaxHeight=0]
+   */
   export let tileMaxHeight = 0;
+
+  /**
+   * Specify the padding of the tile (number of pixels)
+   * @type {number} [tilePadding=0]
+   */
   export let tilePadding = 0;
+
+  /**
+   * Specify the icon text of the collapsed tile
+   * @type {string} [tileCollapsedIconText="Interact to expand Tile"]
+   */
   export let tileCollapsedIconText = "Interact to expand Tile";
+
+  /**
+   * Specify the icon text of the expanded tile
+   * @type {string} [tileExpandedIconText="Interact to collapse Tile"]
+   */
   export let tileExpandedIconText = "Interact to collapse Tile";
+
+  /**
+   * Specify the tabindex
+   * @type {string} [tabindex="0"]
+   */
   export let tabindex = "0";
+
+  /**
+   * Set an id for the top-level div element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { afterUpdate } from "svelte";
@@ -43,7 +87,7 @@
     expanded = !expanded;
   }}
   on:keypress
-  on:keypress={e => {
+  on:keypress={(e) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       expanded = !expanded;

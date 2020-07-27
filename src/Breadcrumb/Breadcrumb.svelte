@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Set to `true` to hide the breadcrumb trailing slash
+   * @type {boolean} [noTrailingSlash=false]
+   */
   export let noTrailingSlash = false;
+
+  /**
+   * Set to `true` to display skeleton state
+   * @type {boolean} [skeleton=false]
+   */
   export let skeleton = false;
 
   import BreadcrumbSkeleton from "./Breadcrumb.Skeleton.svelte";

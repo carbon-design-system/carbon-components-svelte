@@ -1,21 +1,116 @@
 <script>
-  export let selectedIndex = -1;
-  export let open = false;
-  export let inline = false;
-  export let light = false;
-  export let disabled = false;
-  export let invalid = false;
+  /**
+   * @typedef {string} DropdownItemId
+   * @typedef {string} DropdownItemText
+   * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
+   */
+
+  /**
+   * Set the dropdown items
+   * @type {DropdownItem[]} [items=[]]
+   */
   export let items = [];
-  export let itemToString = item => item.text || item.id;
-  export let type = "default"; // "default" | "inline"
-  export let size = undefined; // "sm" | "lg" | "xl"
-  export let id = "ccs-" + Math.random().toString(36);
-  export let name = undefined;
-  export let invalidText = "";
-  export let helperText = "";
-  export let label = undefined;
+
+  /**
+   * Override the display of a dropdown item
+   * @type {(item: DropdownItem) => string;} [itemToString = (item: DropdownItem) => DropdownItemText | DropdownItemId;]
+   */
+  export let itemToString = (item) => item.text || item.id;
+
+  /**
+   * Specify the selected item index
+   * @type {number} [selectedIndex=-1]
+   */
+  export let selectedIndex = -1;
+
+  /**
+   * Specify the type of dropdown
+   * @type {"default" | "inline"} [type="default"]
+   */
+  export let type = "default";
+
+  /**
+   * Specify the size of the dropdown field
+   * @type {"sm" | "lg" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Set to `true` to open the dropdown
+   * @type {boolean} [open=false]
+   */
+  export let open = false;
+
+  /**
+   * Set to `true` to use the inline variant
+   * @type {boolean} [inline=false]
+   */
+  export let inline = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
+  export let light = false;
+
+  /**
+   * Set to `true` to disable the dropdown
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
+   * Specify the title text
+   * @type {string} [titleText=""]
+   */
   export let titleText = "";
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
+  export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
+  export let invalidText = "";
+
+  /**
+   * Specify the helper text
+   * @type {string} [helperText=""]
+   */
+  export let helperText = "";
+
+  /**
+   * Specify the list box label
+   * @type {string} [label]
+   */
+  export let label = undefined;
+
+  /**
+   * Override the default translation ids
+   * @type {(id: any) => string;} [translateWithId]
+   */
   export let translateWithId = undefined;
+
+  /**
+   * Set an id for the list box component
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the list box
+   * @type {string} [name]
+   */
+  export let name = undefined;
+
+  /**
+   * Obtain a reference to the button HTML element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
   export let ref = null;
 
   import { setContext } from "svelte";
@@ -24,7 +119,7 @@
     ListBox,
     ListBoxMenu,
     ListBoxMenuIcon,
-    ListBoxMenuItem
+    ListBoxMenuItem,
   } from "../ListBox";
 
   let selectedId = undefined;

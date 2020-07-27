@@ -1,13 +1,67 @@
 <script>
+  /**
+   * @typedef {string[]} Files
+   */
+
+  /**
+   * Specify the accepted file types
+   * @type {string[]} [accept=[]]
+   */
   export let accept = [];
-  export let disabled = false;
+
+  /**
+   * Set to `true` to allow multiple files
+   * @type {boolean} [multiple=false]
+   */
   export let multiple = false;
-  export let validateFiles = files => files;
+
+  /**
+   * Override the default behavior of validating uploaded files
+   * The default behavior does not validate files
+   * @type {(files: Files) => Files} [validateFiles = (files: Files) => Files;]
+   */
+  export let validateFiles = (files) => files;
+
+  /**
+   * Specify the label text
+   * @type {string} [labelText="Add file"]
+   */
   export let labelText = "Add file";
+
+  /**
+   * Specify the `role` attribute of the drop container
+   * @type {string} [role="button"]
+   */
   export let role = "button";
+
+  /**
+   * Set to `true` to disable the input
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
+   * Specify `tabindex` attribute
+   * @type {string} [tabindex="0"]
+   */
   export let tabindex = "0";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string} [name=""]
+   */
   export let name = "";
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

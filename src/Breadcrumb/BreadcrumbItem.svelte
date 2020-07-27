@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Set the `href` to use an anchor link
+   * @type {string} [href]
+   */
   export let href = undefined;
+
+  /**
+   * Set to `true` if the breadcrumb item represents the current page
+   * @type {boolean} [isCurrentPage=false]
+   */
   export let isCurrentPage = false;
 
   import { Link } from "../Link";

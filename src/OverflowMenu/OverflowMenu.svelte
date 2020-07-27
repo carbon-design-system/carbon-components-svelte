@@ -1,14 +1,57 @@
 <script>
+  /**
+   * Specify the direction of the overflow menu relative to the button
+   * @type {"top" | "bottom"} [direction="bottom"]
+   */
+  export let direction = "bottom";
+
+  /**
+   * Set to `true` to open the menu
+   * @type {boolean} [open=false]
+   */
   export let open = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
+  /**
+   * Set to `true` to flip the menu relative to the button
+   * @type {boolean} [flipped=false]
+   */
   export let flipped = false;
-  export let direction = "bottom"; // "top" | "bottom"
-  export let tabindex = "0";
-  export let icon = OverflowMenuVertical16;
-  export let iconClass = undefined;
-  export let iconDescription = "Open and close list of options";
-  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify the menu options class
+   * @type {string} [menuOptionsClass]
+   */
   export let menuOptionsClass = undefined;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [icon]
+   */
+  export let icon = OverflowMenuVertical16;
+
+  /**
+   * Specify the icon class
+   * @type {string} [iconClass]
+   */
+  export let iconClass = undefined;
+
+  /**
+   * Specify the ARIA label for the icon
+   * @type {string} [iconDescription="Open and close list of options"]
+   */
+  export let iconDescription = "Open and close list of options";
+
+  /**
+   * Set an id for the button element
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
 
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";
   import { writable } from "svelte/store";
@@ -29,7 +72,7 @@
   setContext("OverflowMenu", {
     focusedId,
     add: ({ id, text, primaryFocus }) => {
-      items.update(_ => {
+      items.update((_) => {
         if (primaryFocus) {
           currentIndex.set(_.length);
         }
@@ -37,10 +80,10 @@
         return [..._, { id, text, primaryFocus, index: _.length }];
       });
     },
-    update: id => {
+    update: (id) => {
       currentId.set(id);
     },
-    change: direction => {
+    change: (direction) => {
       // TODO: skip disabled
       let index = $currentIndex + direction;
 
@@ -51,12 +94,12 @@
       }
 
       currentIndex.set(index);
-    }
+    },
   });
 
   afterUpdate(() => {
     if ($currentId) {
-      const { index, text } = $items.filter(_ => _.id === $currentId)[0];
+      const { index, text } = $items.filter((_) => _.id === $currentId)[0];
       dispatch("close", { index, text });
       open = false;
     }
@@ -117,11 +160,11 @@
 
 <button
   bind:this={buttonRef}
+  tabindex="0"
   aria-haspopup
   aria-expanded={open}
   aria-label={ariaLabel}
   {id}
-  {tabindex}
   class:bx--overflow-menu={true}
   class:bx--overflow-menu--open={open}
   class:bx--overflow-menu--light={light}
@@ -136,7 +179,7 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={e => {
+  on:keydown={(e) => {
     if (open) {
       if (['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(e.key)) {
         e.preventDefault();

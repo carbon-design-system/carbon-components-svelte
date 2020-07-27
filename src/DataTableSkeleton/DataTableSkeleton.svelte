@@ -1,8 +1,33 @@
 <script>
+  /**
+   * Specify the number of columns
+   * @type {number} [columns=5]
+   */
   export let columns = 5;
+
+  /**
+   * Specify the number of rows
+   * @type {number} [rows=5]
+   */
   export let rows = 5;
+
+  /**
+   * Set to `true` to use the compact variant
+   * @type {boolean} [compact=false]
+   */
   export let compact = false;
+
+  /**
+   * Set to `true` to apply zebra styles to the datatable rows
+   * @type {boolean} [zebra=false]
+   */
   export let zebra = false;
+
+  /**
+   * Set the column headers
+   * If `headers` has one more items, `count` is ignored
+   * @type {string[]} [headers=[]]
+   */
   export let headers = [];
 
   $: cols = Array.from(

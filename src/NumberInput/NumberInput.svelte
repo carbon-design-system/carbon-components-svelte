@@ -1,28 +1,139 @@
 <script>
-  export let size = undefined; // "sm" | "xl"
+  
+
+  /**
+   * Set the size of the input
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Specify the input value
+   * @type {string} [value=""]
+   */
   export let value = "";
+
+  /**
+   * Specify the step increment
+   * @type {number} [step=1]
+   */
   export let step = 1;
+
+  /**
+   * Specify the maximum value
+   * @type {number} [max]
+   */
   export let max = undefined;
+
+  /**
+   * Specify the minimum value
+   * @type {number} [min]
+   */
   export let min = undefined;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
+  /**
+   * Set to `true` for the input to be read-only
+   * @type {boolean} [readonly=false]
+   */
   export let readonly = false;
+
+  /**
+   * Set to `true` to enable the mobile variant
+   * @type {boolean} [mobile=false]
+   */
   export let mobile = false;
+
+  /**
+   * Set to `true` to allow for an empty value
+   * @type {boolean} [allowEmpty=false]
+   */
   export let allowEmpty = false;
+
+  /**
+   * Set to `true` to disable the input
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Specify the ARIA label for the increment icons
+   * @type {string} [iconDescription=""]
+   */
   export let iconDescription = "";
-  export let id = "ccs-" + Math.random().toString(36);
-  export let name = undefined;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
-  export let invalidText = "Provide invalidText";
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText="Provide invalidText"]
+   */
+  export let invalidText = "";
+
+  /**
+   * Specify the helper text
+   * @type {string} [helperText=""]
+   */
   export let helperText = "";
+
+  /**
+   * Specify the label text
+   * @type {string} [label=""]
+   */
   export let label = "";
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
   export let hideLabel = false;
-  export let ref = null;
-  export let translateWithId = id => defaultTranslations[id];
+
+  /**
+   * @typedef {"increment" | "decrement"} NumberInputTranslationId
+   */
+  
+  /**
+   * Override the default translation ids
+   * @type {(id: NumberInputTranslationId) => string;} [translateWithId = (id: NumberInputTranslationId) => string;]
+   */
+  export let translateWithId = (id) => defaultTranslations[id];
+
+  /**
+   * Default translation ids
+   * @constant
+   * @type {{ increment: "increment"; decrement: "decrement" }}
+   */
   export const translationIds = {
     increment: "increment",
-    decrement: "decrement"
+    decrement: "decrement",
   };
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string} [name]
+   */
+  export let name = undefined;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
+  export let ref = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";
   import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";
@@ -31,7 +142,7 @@
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
-    [translationIds.decrement]: "Decrement number"
+    [translationIds.decrement]: "Decrement number",
   };
 
   const dispatch = createEventDispatcher();

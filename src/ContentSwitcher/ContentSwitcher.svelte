@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Set the selected index of the switch item
+   * @type {number} [selectedIndex=0]
+   */
   export let selectedIndex = 0;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
@@ -24,10 +33,10 @@
 
       switches = [...switches, { id, text, selected }];
     },
-    update: id => {
+    update: (id) => {
       selectedIndex = switches.map(({ id }) => id).indexOf(id);
     },
-    change: direction => {
+    change: (direction) => {
       let index = currentIndex + direction;
 
       if (index < 0) {
@@ -37,7 +46,7 @@
       }
 
       selectedIndex = index;
-    }
+    },
   });
 
   afterUpdate(() => {

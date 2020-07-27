@@ -1,10 +1,34 @@
 <script>
+  /**
+   * Specify the number of lines to render
+   * @type {number} [lines=3]
+   */
   export let lines = 3;
+
+  /**
+   * Set to `true` to use the heading size variant
+   * @type {boolean} [heading=false]
+   */
   export let heading = false;
+
+  /**
+   * Set to `true` to use the paragraph size variant
+   * @type {boolean} [paragraph=false]
+   */
   export let paragraph = false;
+
+  /**
+   * Specify the width of the text (% or px)
+   * @type {string} [width="100%"]
+   */
   export let width = "100%";
 
-  const randoms = [0.973, 0.153, 0.567];
+  /**
+   * Array of random numbers
+   * @constant
+   * @type {number[]}
+   */
+  const RANDOM = [0.973, 0.153, 0.567];
 
   $: rows = [];
   $: widthNum = parseInt(width, 10);
@@ -13,7 +37,7 @@
     for (let i = 0; i < lines; i++) {
       const min = widthPx ? widthNum - 75 : 0;
       const max = widthPx ? widthNum : 75;
-      const rand = Math.floor(randoms[i % 3] * (max - min + 1)) + min + "px";
+      const rand = Math.floor(RANDOM[i % 3] * (max - min + 1)) + min + "px";
       rows = [...rows, { width: widthPx ? rand : `calc(${width} - ${rand})` }];
     }
   }

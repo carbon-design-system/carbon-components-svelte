@@ -1,17 +1,89 @@
 <script>
-  export let type = "single"; // "single" | "inline" | "multi"
+  /**
+   * Set the type of code snippet
+   * @type {"single" | "inline" | "multi"} [type="single"]
+   */
+  export let type = "single";
+
+  /**
+   * Set the code snippet text
+   * Alternatively, use the default slot (e.g. <CodeSnippet>{`code`}</CodeSnippet>)
+   * @type {string} [code]
+   */
   export let code = undefined;
+
+  /**
+   * Set to `true` to expand a multi-line code snippet (type="multi")
+   * @type {boolean} [expanded=false]
+   */
   export let expanded = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
+
+  /**
+   * Set to `true` to display the skeleton state
+   * @type {boolean} [skeleton=false]
+   */
   export let skeleton = false;
+
+  /**
+   * Specify the ARIA label for the copy button icon
+   * @type {string} [copyButtonDescription]
+   */
   export let copyButtonDescription = undefined;
+
+  /**
+   * Specify the ARIA label of the copy button
+   * @type {string} [copyLabel]
+   */
   export let copyLabel = undefined;
+
+  /**
+   * Specify the feedback text displayed when clicking the snippet
+   * @type {string} [feedback="Copied!"]
+   */
   export let feedback = "Copied!";
+
+  /**
+   * Set the timeout duration (ms) to display feedback text
+   * @type {number} [feedbackTimeout=2000]
+   */
   export let feedbackTimeout = 2000;
+
+  /**
+   * Specify the show less text
+   * `type` must be "multi"
+   * @type {string} [showLessText="Show less"]
+   */
   export let showLessText = "Show less";
+
+  /**
+   * Specify the show more text
+   * `type` must be "multi"
+   * @type {string} [showLessText="Show more"]
+   */
   export let showMoreText = "Show more";
+
+  /**
+   * Set to `true` to enable the show more/less button
+   * @type {boolean} [showMoreLess=false]
+   */
   export let showMoreLess = false;
+
+  /**
+   * Set an id for the code element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the pre HTML element
+   * @type {null | HTMLPreElement} [ref=null]
+   */
   export let ref = null;
 
   import { afterUpdate } from "svelte";
@@ -48,7 +120,7 @@
       {expanded && 'bx--snippet--expand'}
       {light && 'bx--snippet--light'}"
       {...$$restProps}
-      on:clicks
+      on:click
       on:mouseover
       on:mouseenter
       on:mouseleave>

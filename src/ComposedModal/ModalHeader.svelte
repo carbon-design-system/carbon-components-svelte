@@ -1,10 +1,44 @@
 <script>
+  /**
+   * Specify the modal title
+   * @type {string} [title=""]
+   */
   export let title = "";
+
+  /**
+   * Specify the modal label
+   * @type {string} [label=""]
+   */
   export let label = "";
+
+  /**
+   * Specify the label class
+   * @type {string} [labelClass=""]
+   */
   export let labelClass = "";
+
+  /**
+   * Specify the title class
+   * @type {string} [titleClass=""]
+   */
   export let titleClass = "";
+
+  /**
+   * Specify the close class
+   * @type {string} [closeClass=""]
+   */
   export let closeClass = "";
+
+  /**
+   * Specify the close icon class
+   * @type {string} [closeIconClass=""]
+   */
   export let closeIconClass = "";
+
+  /**
+   * Specify the ARIA label for the close icon
+   * @type {string} [iconDescription="Close"]
+   */
   export let iconDescription = "Close";
 
   import { getContext } from "svelte";

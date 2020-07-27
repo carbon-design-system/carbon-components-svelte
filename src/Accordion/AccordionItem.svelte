@@ -1,6 +1,21 @@
 <script>
+  /**
+   * Specify the title of the accordion item heading
+   * Alternatively, use the named slot "title" (e.g. <div slot="title">...</div>)
+   * @type {string} [title="title"]
+   */
   export let title = "title";
+
+  /**
+   * Set to `true` to open the first accordion item
+   * @type {boolean} [open=false]
+   */
   export let open = false;
+
+  /**
+   * Specify the ARIA label for the accordion item chevron icon
+   * @type {string} [iconDescription="Expand/Collapse"]
+   */
   export let iconDescription = "Expand/Collapse";
 
   import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16";

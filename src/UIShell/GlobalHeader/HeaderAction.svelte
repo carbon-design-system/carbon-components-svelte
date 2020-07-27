@@ -1,7 +1,21 @@
 <script>
-  export let type = undefined;
+  /**
+   * Set to `true` to open the panel
+   * @type {boolean} [isOpen=false]
+   */
+  export let isOpen = false;
+
+  /**
+   * Specify the icon props
+   * @type {{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }} [icon]
+   */
   export let icon = undefined;
-  export let isOpen = undefined;
+
+  /**
+   * Specify the text
+   * Alternatively, use the named slot "text" (e.g. <div slot="text">...</div>)
+   * @type {string} [text]
+   */
   export let text = undefined;
 
   import { Icon } from "../../Icon";
@@ -38,7 +52,6 @@
 <div>
   <button
     type="button"
-    aria-label={type}
     class:bx--header__action={true}
     class:bx--header__action--active={isOpen}
     class:action-text={text}

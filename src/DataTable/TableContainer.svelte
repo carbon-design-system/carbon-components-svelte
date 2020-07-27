@@ -1,7 +1,21 @@
 <script>
-  export let stickyHeader = false;
+  /**
+   * Specify the title of the data table
+   * @type {string} [title=""]
+   */
   export let title = "";
+
+  /**
+   * Specify the description of the data table
+   * @type {string} [description=""]
+   */
   export let description = "";
+
+  /**
+   * Set to `true` to enable a sticky header
+   * @type {boolean} [stickyHeader=false]
+   */
+  export let stickyHeader = false;
 </script>
 
 <div

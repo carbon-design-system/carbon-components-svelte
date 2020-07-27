@@ -1,16 +1,56 @@
 <script>
-  export let size = undefined; // "sm" | "xl"
+  /**
+   * Set the size of the input
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Specify the input type
+   * @type {string} [type="text"]
+   */
   export let type = "text";
+
+  /**
+   * Specify the input placeholder text
+   * @type {string} [placeholder=""]
+   */
   export let placeholder = "";
   export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
   export let disabled = false;
+
+  /**
+   * Specify the ARIA label for the calendar icon
+   * @type {string} [iconDescription=""]
+   */
   export let iconDescription = "";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let labelText = "";
   export let hideLabel = false;
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
   export let invalidText = "";
+
   export let name = undefined;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
@@ -25,7 +65,7 @@
     blurInput,
     openCalendar,
     focusCalendar,
-    inputValue
+    inputValue,
   } = getContext("DatePicker");
 
   add({ id, labelText });

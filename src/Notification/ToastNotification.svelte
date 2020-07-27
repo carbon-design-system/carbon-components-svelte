@@ -1,14 +1,63 @@
 <script>
-  export let iconDescription = "closes notification";
-  export let notificationType = "toast"; // "toast" | "inline"
+  /**
+   * Set the type of notification
+   * @type {"toast" | "inline"} [notificationType="toast"]
+   */
+  export let notificationType = "toast";
+
+  /**
+   * Specify the kind of notification
+   * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"} [kind="error"]
+   */
   export let kind = "error";
-  export let hideCloseButton = false;
+
+  /**
+   * Set to `true` to use the low contrast variant
+   * @type {boolean} [lowContrast=false]
+   */
   export let lowContrast = false;
+
+  /**
+   * Set the timeout duration (ms) to hide the notification after closing it
+   * @type {number} [timeout=0]
+   */
   export let timeout = 0;
+
+  /**
+   * Set the `role` attribute
+   * @type {string} [role="alert"]
+   */
   export let role = "alert";
-  export let title = "provide a title";
+
+  /**
+   * Specify the title text
+   * @type {string} [title="Title"]
+   */
+  export let title = "Title";
+
+  /**
+   * Specify the subtitle text
+   * @type {string} [subtitle=""]
+   */
   export let subtitle = "";
-  export let caption = "provide a caption";
+
+  /**
+   * Specify the caption text
+   * @type {string} [caption="Caption"]
+   */
+  export let caption = "Caption";
+
+  /**
+   * Specify the ARIA label for the icon
+   * @type {string} [iconDescription="Closes notification"]
+   */
+  export let iconDescription = "Closes notification";
+
+  /**
+   * Set to `true` to hide the close button
+   * @type {boolean} [hideCloseButton=false]
+   */
+  export let hideCloseButton = false;
 
   import { createEventDispatcher, onMount } from "svelte";
   import NotificationButton from "./NotificationButton.svelte";

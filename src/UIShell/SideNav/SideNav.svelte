@@ -1,6 +1,15 @@
 <script>
+  /**
+   * Specify the ARIA label for the nav
+   * @type {string} [ariaLabel]
+   */
   export let ariaLabel = undefined;
-  export let isOpen = undefined;
+
+  /**
+   * Set to `true` to toggle the expanded state
+   * @type {boolean} [isOpen=false]
+   */
+  export let isOpen = false;
 </script>
 
 <nav

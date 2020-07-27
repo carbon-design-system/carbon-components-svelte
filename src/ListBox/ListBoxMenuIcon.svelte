@@ -1,13 +1,32 @@
 <script>
-  export const translationIds = { close: "close", open: "open" };
+  /**
+   * Set to `true` to open the list box menu icon
+   * @type {boolean} [open=false]
+   */
   export let open = false;
-  export let translateWithId = id => defaultTranslations[id];
+
+  /**
+   * Default translation ids
+   * @constant
+   * @type {{ close: "close"; open: "open" }}
+   */
+  export const translationIds = { close: "close", open: "open" };
+
+  /**
+   * @typedef {"close" | "open"} ListBoxMenuIconTranslationId
+   */
+
+  /**
+   * Override the default translation ids
+   * @type {(id: ListBoxMenuIconTranslationId) => string;} [translateWithId = (id) => string;]
+   */
+  export let translateWithId = (id) => defaultTranslations[id];
 
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
 
   const defaultTranslations = {
     [translationIds.close]: "Close menu",
-    [translationIds.open]: "Open menu"
+    [translationIds.open]: "Open menu",
   };
 
   $: description = open ? translateWithId("close") : translateWithId("open");

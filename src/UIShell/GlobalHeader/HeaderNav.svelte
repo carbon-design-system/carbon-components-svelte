@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Specify the ARIA label for the nav
+   * @type {string} [ariaLabel]
+   */
   export let ariaLabel = undefined;
 </script>
 

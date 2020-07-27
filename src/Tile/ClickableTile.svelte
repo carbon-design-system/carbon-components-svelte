@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Set to `true` to click the tile
+   * @type {boolean} [clicked=false]
+   */
   export let clicked = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
   export let light = false;
 </script>
 

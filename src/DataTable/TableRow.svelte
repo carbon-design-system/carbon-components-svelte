@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to select the row
+   * @type {boolean} [isSelected=false]
+   */
   export let isSelected = false;
 
   // TODO: include ariaLabel, onExpand, isExpanded, isSelected

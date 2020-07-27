@@ -4,6 +4,11 @@
   export let label = "";
   export let role = "presentation";
   export let tabindex = "0";
+
+  /**
+   * Set an id for the top-level element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
   export let ref = null;
 
@@ -22,6 +27,7 @@
 <li
   tabindex="-1"
   {role}
+  {id}
   class:bx--tabs__nav-item={true}
   class:bx--tabs__nav-item--disabled={disabled}
   class:bx--tabs__nav-item--selected={selected}

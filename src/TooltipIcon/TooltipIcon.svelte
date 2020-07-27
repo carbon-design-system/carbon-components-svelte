@@ -1,8 +1,32 @@
 <script>
+  /**
+   * Specify the tooltip text
+   * @type {string} [tooltipText=""]
+   */
   export let tooltipText = "";
-  export let align = "center"; // "start" | "center" | "end"
-  export let direction = "bottom"; // "top" | "right" | "bottom" | "left"
+
+  /**
+   * Set the alignment of the tooltip relative to the icon
+   * @type {"start" | "center" | "end"} [align="center"]
+   */
+  export let align = "center";
+
+  /**
+   * Set the direction of the tooltip relative to the icon
+   * @type {"top" | "right" | "bottom" | "left"} [direction="bottom"]
+   */
+  export let direction = "bottom";
+
+  /**
+   * Set an id for the span element
+   * @type {string} [id]
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the button HTML element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
   export let ref = null;
 
   $: hidden = false;

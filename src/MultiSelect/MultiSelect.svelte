@@ -1,31 +1,157 @@
 <script>
-  export let size = undefined; // "sm" | "lg" | "xl"
-  export let type = "default"; // "default" | "inline"
-  export let selectionFeedback = "top-after-reopen"; // "top" | "fixed" | "top-after-reopen"
+  /**
+   * @typedef {string} MultiSelectItemId
+   * @typedef {string} MultiSelectItemText
+   * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
+   */
+
+  /**
+   * Set the multiselect items
+   * @type {MultiSelectItem[]} [items=[]]
+   */
+  export let items = [];
+
+  /**
+   * Override the display of a multiselect item
+   * @type {(item: MultiSelectItem) => string;} [itemToString = (item: MultiSelectItem) =>  MultiSelectItemText | MultiSelectItemId;]
+   */
+  export let itemToString = (item) => item.text || item.id;
+
+  /**
+   * Set the selected ids
+   * @type {MultiSelectItemId[]} [selectedIds=[]]
+   */
+  export let selectedIds = [];
+
+  /**
+   * Specify the multiselect value
+   * @type {string} [value=""]
+   */
+  export let value = "";
+
+  /**
+   * Set the size of the combobox
+   * @type {"sm" | "lg" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Specify the type of multiselect
+   * @type {"default" | "inline"} [type="default"]
+   */
+  export let type = "default";
+
+  /**
+   * Specify the selection feedback after selecting items
+   * @type {"top" | "fixed" | "top-after-reopen"} [selectionFeedback="top-after-reopen"]
+   */
+  export let selectionFeedback = "top-after-reopen";
+
+  /**
+   * Set to `true` to disable the dropdown
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Set to `true` to filter items
+   * @type {boolean} [filterable=false]
+   */
   export let filterable = false;
+
+  /**
+   * Override the filtering logic
+   * The default filtering is an exact string comparison
+   * @type {(item: MultiSelectItem, value: string) => string;} [filterItem = ((item: MultiSelectItem, value: string) => string;)]
+   */
   export let filterItem = (item, value) =>
     item.text.toLowerCase().includes(value.toLowerCase());
-  export let id = "ccs-" + Math.random().toString(36);
-  export let name = undefined;
-  export let invalid = false;
-  export let invalidText = "";
-  export let helperText = "";
-  export let items = [];
-  export let itemToString = item => item.text || item.id;
-  export let label = "";
-  export let light = false;
-  export let locale = "en";
+
+  /**
+   * Set to `true` to open the dropdown
+   * @type {boolean} [open=false]
+   */
   export let open = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
+  export let light = false;
+
+  /**
+   * Specify the locale
+   * @type {string} [locale="en"]
+   */
+  export let locale = "en";
+
+  /**
+   * Specify the placeholder text
+   * @type {string} [placeholder=""]
+   */
   export let placeholder = "";
-  export let selectedIds = [];
+
+  /**
+   * Override the sorting logic
+   * The default sorting compare the item text value
+   * @type {(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem;} [sortItem = (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem]
+   */
   export let sortItem = (a, b) =>
     a.text.localeCompare(b.text, locale, { numeric: true });
-  export let titleText = "";
+
+  /**
+   * Override the default translation ids
+   * @type {(id: any) => string;} [translateWithId]
+   */
   export let translateWithId = undefined;
 
+  /**
+   * Specify the title text
+   * @type {string} [titleText=""]
+   */
+  export let titleText = "";
+
+  /**
+   * Set to `true` to pass the item to `itemToString` in the checkbox
+   * @type {boolean} [useTitleInItem=false]
+   */
   export let useTitleInItem = false;
-  export let value = "";
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
+  export let invalid = false;
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
+  export let invalidText = "";
+
+  /**
+   * Specify the helper text
+   * @type {string} [helperText=""]
+   */
+  export let helperText = "";
+
+  /**
+   * Specify the list box label
+   * @type {string} [label]
+   */
+  export let label = "";
+
+  /**
+   * Set an id for the list box component
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the select
+   * @type {string} [name]
+   */
+  export let name = undefined;
 
   import { afterUpdate, setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
@@ -36,7 +162,7 @@
     ListBoxMenu,
     ListBoxMenuIcon,
     ListBoxMenuItem,
-    ListBoxSelection
+    ListBoxSelection,
   } from "../ListBox";
 
   let multiSelectRef = null;
@@ -59,7 +185,7 @@
           selectionRef = ref;
           break;
       }
-    }
+    },
   });
 
   function change(direction) {
@@ -77,7 +203,7 @@
   function sort() {
     return [
       ...(checked.length > 1 ? checked.sort(sortItem) : checked),
-      ...unchecked.sort(sortItem)
+      ...unchecked.sort(sortItem),
     ];
   }
 
@@ -106,13 +232,13 @@
   $: menuId = `menu-${id}`;
   $: inline = type === "inline";
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
-  $: sortedItems = items.map(item => ({
+  $: sortedItems = items.map((item) => ({
     ...item,
-    checked: selectedIds.includes(item.id)
+    checked: selectedIds.includes(item.id),
   }));
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
-  $: filteredItems = sortedItems.filter(item => filterItem(item, value));
+  $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
   $: highlightedId = sortedItems[highlightedIndex]
     ? sortedItems[highlightedIndex].id
     : undefined;
@@ -210,9 +336,9 @@
         <ListBoxSelection
           selectionCount={checked.length}
           on:clear={() => {
-            sortedItems = sortedItems.map(item => ({
+            sortedItems = sortedItems.map((item) => ({
               ...item,
-              checked: false
+              checked: false,
             }));
             fieldRef.blur();
           }}
@@ -294,7 +420,7 @@
             active={item.checked}
             highlighted={highlightedIndex === i}
             on:click={() => {
-              sortedItems = sortedItems.map(_ =>
+              sortedItems = sortedItems.map((_) =>
                 _.id === item.id ? { ..._, checked: !_.checked } : _
               );
               fieldRef.focus();

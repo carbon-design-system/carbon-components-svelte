@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to use the inline variant
+   * @type {boolean} [inline=false]
+   */
   export let inline = false;
 </script>
 

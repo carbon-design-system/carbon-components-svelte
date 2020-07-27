@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Specify the `href` attribute
+   * @type {string} [href]
+   */
   export let href = undefined;
+
+  /**
+   * Specify the text
+   * @type {string} [text]
+   */
   export let text = undefined;
 </script>
 

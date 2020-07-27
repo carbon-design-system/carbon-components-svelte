@@ -1,4 +1,8 @@
 <script>
+  /**
+   * Set to `true` to use the small variant
+   * @type {boolean} [small=false]
+   */
   export let small = false;
 </script>
 

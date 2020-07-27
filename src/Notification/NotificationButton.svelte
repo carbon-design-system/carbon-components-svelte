@@ -1,17 +1,34 @@
 <script>
-  export let notificationType = "toast"; // "toast" | "inline"
-  export let iconDescription = "close icon";
+  /**
+   * Set the type of notification
+   * @type {"toast" | "inline"} [notificationType="toast"]
+   */
+  export let notificationType = "toast";
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [renderIcon]
+   */
   export let renderIcon = Close20;
+
+  /**
+   * Specify the title of the icon
+   */
   export let title = undefined;
-  export let type = "button";
+
+  /**
+   * Specify the ARIA label for the icon
+   * @type {string} [iconDescription="Close icon"]
+   */
+  export let iconDescription = "Close icon";
 
   import Close20 from "carbon-icons-svelte/lib/Close20";
 </script>
 
 <button
+  type="button"
   aria-label={iconDescription}
   title={iconDescription}
-  {type}
   class:bx--toast-notification__close-button={notificationType === 'toast'}
   class:bx--inline-notification__close-button={notificationType === 'inline'}
   {...$$restProps}

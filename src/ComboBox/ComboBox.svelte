@@ -1,21 +1,114 @@
 <script>
-  export let disabled = false;
-  export let helperText = "";
-  export let id = "ccs-" + Math.random().toString(36);
-  export let invalid = false;
-  export let invalidText = "";
+  /**
+   * @typedef {{ id: string; text: string; }} ComboBoxItem
+   */
+
+  /**
+   * Set the combobox items
+   * @type {ComboBoxItem[]} [items=[]]
+   */
   export let items = [];
-  export let itemToString = item => item.text || item.id;
-  export let light = false;
-  export let open = false;
-  export let placeholder = "";
+
+  /**
+   * Override the display of a combobox item
+   * @type {(item: ComboBoxItem) => string;} [itemToString = (item: ComboBoxItem) => string;]
+   */
+  export let itemToString = (item) => item.text || item.id;
+
+  /**
+   * Set the selected item by value index
+   * @type {number} [selectedIndex=-1]
+   */
   export let selectedIndex = -1;
-  export let shouldFilterItem = () => true;
-  export let size = undefined;
-  export let titleText = "";
-  export let translateWithId = undefined;
+
+  /**
+   * Specify the selected combobox value
+   * @type {string} [value=""]
+   */
   export let value = "";
+
+  /**
+   * Set the size of the combobox
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Set to `true` to disable the combobox
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
+   * Specify the title text of the combobox
+   * @type {string} [titleText=""]
+   */
+  export let titleText = "";
+
+  /**
+   * Specify the placeholder text
+   * @type {string} [placeholder=""]
+   */
+  export let placeholder = "";
+
+  /**
+   * Specify the helper text
+   * @type {string} [helperText=""]
+   */
+  export let helperText = "";
+
+  /**
+   * Specify the invalid state text
+   * @type {string} [invalidText=""]
+   */
+  export let invalidText = "";
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
+  export let invalid = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
+  export let light = false;
+
+  /**
+   * Set to `true` to open the combobox menu dropdown
+   * @type {boolean} [open=false]
+   */
+  export let open = false;
+
+  /**
+   * Determine if an item should be filtered given the current combobox value
+   * @type {(item: ComboBoxItem, value: string) => boolean} [shouldFilterItem=() => true]
+   */
+  export let shouldFilterItem = () => true;
+
+  /**
+   * Override the default translation ids
+   * @type {(id: any) => string;} [translateWithId]
+   */
+  export let translateWithId = undefined;
+
+  /**
+   * Set an id for the list box component
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string} [name]
+   */
   export let name = undefined;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
   export let ref = null;
 
   import { afterUpdate } from "svelte";
@@ -26,7 +119,7 @@
     ListBoxMenu,
     ListBoxMenuIcon,
     ListBoxMenuItem,
-    ListBoxSelection
+    ListBoxSelection,
   } from "../ListBox";
 
   let selectedId = undefined;
@@ -48,7 +141,7 @@
   afterUpdate(() => {
     if (open) {
       ref.focus();
-      filteredItems = items.filter(item => shouldFilterItem(item, value));
+      filteredItems = items.filter((item) => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
       inputValue = selectedItem ? selectedItem.text : "";
@@ -61,7 +154,7 @@
   $: highlightedId = items[highlightedIndex]
     ? items[highlightedIndex].id
     : undefined;
-  $: filteredItems = items.filter(item => shouldFilterItem(item, value));
+  $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
   $: selectedItem = items[selectedIndex];
   $: inputValue = selectedItem ? selectedItem.text : undefined;
   $: value = inputValue;

@@ -1,7 +1,21 @@
 <script>
+  /**
+   * Specify the file name status
+   * @type {"uploading" | "edit" | "complete"} [status="uploading"]
+   */
+  export let status = "uploading";
+
+  /**
+   * Specify the ARIA label used for the status icons
+   * @type {string} [iconDescription=""]
+   */
   export let iconDescription = "";
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
   export let invalid = false;
-  export let status = "uploading"; // "uploading" | "edit" | "complete"
 
   import Close16 from "carbon-icons-svelte/lib/Close16";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
