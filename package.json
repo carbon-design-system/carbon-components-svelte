@@ -55,7 +55,8 @@
   ],
   "files": [
     "lib",
-    "src"
+    "src",
+    "types"
   ],
   "contributors": [
     {
