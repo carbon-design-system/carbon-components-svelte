@@ -1,4 +1,7 @@
 <script>
+  /**
+   * Set to `true` to use the vertical variant
+   */
   export let vertical = false;
 </script>
 

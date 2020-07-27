@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Set to `true` to use as a header
+   * @type {boolean} [head=false]
+   */
   export let head = false;
+
+  /**
+   * Set to `true` to prevent wrapping
+   * @type {boolean} [noWrap=false]
+   */
   export let noWrap = false;
 </script>
 

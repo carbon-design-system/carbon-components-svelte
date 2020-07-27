@@ -1,17 +1,52 @@
 <script>
   /**
+   * Specify the data table headers
+   * @type {{key: string; value: string;}} [headers=[]]
+   */
+  export let headers = [];
+
+  /**
+   * Specify the rows the data table should render
+   * keys defined in `headers` are used for the row ids
+   * @type {Object[]} [rows=[]]
+   */
+  export let rows = [];
+
+  /**
    * Set the size of the data table
    * @type {"compact" | "short" | "tall"} [size]
    */
   export let size = undefined;
 
+  /**
+   * Specify the title of the data table
+   * @type {string} [title=""]
+   */
   export let title = "";
+
+  /**
+   * Specify the description of the data table
+   * @type {string} [description=""]
+   */
   export let description = "";
+
+  /**
+   * Set to `true` to use zebra styles
+   * @type {boolean} [zebra=false]
+   */
   export let zebra = false;
+
+  /**
+   * Set to `true` for the sortable variant
+   * @type {boolean} [sortable=false]
+   */
   export let sortable = false;
+
+  /**
+   * Set to `true` to enable a sticky header
+   * @type {boolean} [stickyHeader=false]
+   */
   export let stickyHeader = false;
-  export let rows = [];
-  export let headers = [];
 
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";

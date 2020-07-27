@@ -5,6 +5,10 @@
    */
   export let direction = "bottom";
 
+  /**
+   * Set to `true` to open the menu
+   * @type {boolean} [open=false]
+   */
   export let open = false;
 
   /**
@@ -12,11 +16,35 @@
    * @type {boolean} [light=false]
    */
   export let light = false;
+
+  /**
+   * Set to `true` to flip the menu relative to the button
+   * @type {boolean} [flipped=false]
+   */
   export let flipped = false;
 
-  export let tabindex = "0";
+  /**
+   * Specify the menu options class
+   * @type {string} [menuOptionsClass]
+   */
+  export let menuOptionsClass = undefined;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [icon]
+   */
   export let icon = OverflowMenuVertical16;
+
+  /**
+   * Specify the icon class
+   * @type {string} [iconClass]
+   */
   export let iconClass = undefined;
+
+  /**
+   * Specify the ARIA label for the icon
+   * @type {string} [iconDescription="Open and close list of options"]
+   */
   export let iconDescription = "Open and close list of options";
 
   /**
@@ -24,7 +52,6 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
-  export let menuOptionsClass = undefined;
 
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";
   import { writable } from "svelte/store";
@@ -133,11 +160,11 @@
 
 <button
   bind:this={buttonRef}
+  tabindex="0"
   aria-haspopup
   aria-expanded={open}
   aria-label={ariaLabel}
   {id}
-  {tabindex}
   class:bx--overflow-menu={true}
   class:bx--overflow-menu--open={open}
   class:bx--overflow-menu--light={light}

@@ -1,8 +1,27 @@
 <script>
-  export let notificationType = "toast"; // "toast" | "inline"
-  export let title = "title";
+  /**
+   * Set the type of notification
+   * @type {"toast" | "inline"} [notificationType="toast"]
+   */
+  export let notificationType = "toast";
+
+  /**
+   * Specify the title text
+   * @type {string} [title="Title"]
+   */
+  export let title = "Title";
+
+  /**
+   * Specify the subtitle text
+   * @type {string} [subtitle=""]
+   */
   export let subtitle = "";
-  export let caption = "caption";
+
+  /**
+   * Specify the caption text
+   * @type {string} [caption="Caption"]
+   */
+  export let caption = "Caption";
 </script>
 
 {#if notificationType === 'toast'}

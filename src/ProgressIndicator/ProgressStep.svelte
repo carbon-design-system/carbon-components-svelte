@@ -1,15 +1,44 @@
 <script>
+  /**
+   * Set to `true` for the complete variant
+   * @type {boolean} [complete=false]
+   */
   export let complete = false;
+
+  /**
+   * Set to `true` to use the current variant
+   * @type {boolean} [current=false]
+   */
   export let current = false;
+
+  /**
+   * Set to `true` to disable the progress step
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
   /**
    * Set to `true` to indicate an invalid state
    * @type {boolean} [invalid=false]
    */
   export let invalid = false;
 
+  /**
+   * Specify the step description
+   * @type {string} [descripton=""]
+   */
   export let description = "";
+
+  /**
+   * Specify the step label
+   * @type {string} [label=""]
+   */
   export let label = "";
+
+  /**
+   * Specify the step secondary label
+   * @type {string} [secondaryLabel=""]
+   */
   export let secondaryLabel = "";
 
   /**

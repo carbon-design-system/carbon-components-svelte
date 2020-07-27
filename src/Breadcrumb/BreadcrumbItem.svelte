@@ -6,7 +6,7 @@
   export let href = undefined;
 
   /**
-   * Set to `true` if item is the current page
+   * Set to `true` if the breadcrumb item represents the current page
    * @type {boolean} [isCurrentPage=false]
    */
   export let isCurrentPage = false;

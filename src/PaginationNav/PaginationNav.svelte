@@ -1,9 +1,38 @@
 <script>
+  /**
+   * Specify the current page index
+   * @type {number} [page=0]
+   */
   export let page = 0;
+
+  /**
+   * Specify the total number of pages
+   * @type {number} [total=10]
+   */
   export let total = 10;
+
+  /**
+   * Specify the total number of pages to show
+   * @type {number} [shown=10]
+   */
   export let shown = 10;
+
+  /**
+   * Set to `true` to loop the navigation
+   * @type {boolean} [loop=false]
+   */
   export let loop = false;
+
+  /**
+   * Specify the forward button text
+   * @type {string} [forwardText="Next page"]
+   */
   export let forwardText = "Next page";
+
+  /**
+   * Specify the backward button text
+   * @type {string} [backwardText="Next page"]
+   */
   export let backwardText = "Previous page";
 
   import { afterUpdate, createEventDispatcher } from "svelte";
@@ -14,7 +43,13 @@
   import { Button } from "../Button";
 
   const dispatch = createEventDispatcher();
-  const MIN = 4; // minimum items shown
+
+  /**
+   * Minimum number of items to be shown
+   * @constant
+   * @type {4}
+   */
+  const MIN = 4;
 
   afterUpdate(() => {
     dispatch("change", { page });

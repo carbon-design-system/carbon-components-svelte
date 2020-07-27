@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Specify the ARIA label for the button
+   * @type {string} [ariaLabel]
+   */
   export let ariaLabel = undefined;
+
+  /**
+   * Set to `true` to toggle the open state
+   * @type {boolean} [isOpen=false]
+   */
   export let isOpen = false;
 
   import { fly } from "svelte/transition";

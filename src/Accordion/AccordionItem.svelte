@@ -13,7 +13,7 @@
   export let open = false;
 
   /**
-   * Define the ARIA label for the accordion item chevron icon
+   * Specify the ARIA label for the accordion item chevron icon
    * @type {string} [iconDescription="Expand/Collapse"]
    */
   export let iconDescription = "Expand/Collapse";

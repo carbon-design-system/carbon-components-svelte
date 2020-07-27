@@ -23,7 +23,12 @@
    */
   export let width = "100%";
 
-  const randoms = [0.973, 0.153, 0.567];
+  /**
+   * Array of random numbers
+   * @constant
+   * @type {number[]}
+   */
+  const RANDOM = [0.973, 0.153, 0.567];
 
   $: rows = [];
   $: widthNum = parseInt(width, 10);
@@ -32,7 +37,7 @@
     for (let i = 0; i < lines; i++) {
       const min = widthPx ? widthNum - 75 : 0;
       const max = widthPx ? widthNum : 75;
-      const rand = Math.floor(randoms[i % 3] * (max - min + 1)) + min + "px";
+      const rand = Math.floor(RANDOM[i % 3] * (max - min + 1)) + min + "px";
       rows = [...rows, { width: widthPx ? rand : `calc(${width} - ${rand})` }];
     }
   }

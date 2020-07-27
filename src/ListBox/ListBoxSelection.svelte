@@ -1,10 +1,34 @@
 <script>
+  /**
+   * Specify the number of selected items
+   * @type {*} [selectionCount]
+   */
+  export let selectionCount = undefined;
+
+  /**
+   * Set to `true` to disable the list box selection
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
+   * @typedef {"clearAll" | "clearSelection"} ListBoxSelectionTranslationId
+   */
+
+  /**
+   * Default translation ids
+   * @constant
+   * @type {{ clearAll: "clearAll"; clearSelection: "clearSelection" }}
+   */
   export const translationIds = {
     clearAll: "clearAll",
     clearSelection: "clearSelection",
   };
-  export let disabled = false;
-  export let selectionCount = undefined;
+
+  /**
+   * Override the default translation ids
+   * @type {(id: ListBoxSelectionTranslationId) => string;} [translateWithId = (id) => string;]
+   */
   export let translateWithId = (id) => defaultTranslations[id];
 
   /**

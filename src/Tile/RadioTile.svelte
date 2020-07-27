@@ -10,8 +10,23 @@
    * @type {boolean} [light=false]
    */
   export let light = false;
+
+  /**
+   * Specify the value of the radio input
+   * @type {string} [value=""]
+   */
   export let value = "";
+
+  /**
+   * Specify the tabindex
+   * @type {string} [tabindex="0"]
+   */
   export let tabindex = "0";
+
+  /**
+   * Specify the ARIA label for the radio tile checkmark icon
+   * @type {string} [iconDescription="Tile checkmark"]
+   */
   export let iconDescription = "Tile checkmark";
 
   /**
@@ -19,6 +34,11 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string} [name=""]
+   */
   export let name = "";
 
   import { getContext } from "svelte";

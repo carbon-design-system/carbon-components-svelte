@@ -1,8 +1,37 @@
 <script>
+  /**
+   * Set to `true` to disable the list box field
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Specify the role attribute
+   * @type {string} [role="combobox"]
+   */
   export let role = "combobox";
+
+  /**
+   * Specify the tabindex
+   * @type {string} [tabindex="-1"]
+   */
   export let tabindex = "-1";
+
+  /**
+   * @typedef {"close" | "open"} ListBoxFieldTranslationId
+   */
+
+  /**
+   * Default translation ids
+   * @constant
+   * @type {{ close: "close"; open: "open"; }}
+   */
   export const translationIds = { close: "close", open: "open" };
+
+  /**
+   * Override the default translation ids
+   * @type {(id: ListBoxFieldTranslationId) => string;} [translateWithId = (id) => string;]
+   */
   export let translateWithId = (id) => defaultTranslations[id];
 
   /**

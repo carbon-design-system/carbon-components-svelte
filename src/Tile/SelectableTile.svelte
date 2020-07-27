@@ -10,9 +10,29 @@
    * @type {boolean} [light=false]
    */
   export let light = false;
+
+  /**
+   * Specify the title of the selectable tile
+   * @type {string} [title="title"]
+   */
   export let title = "title";
+
+  /**
+   * Specify the value of the selectable tile
+   * @type {string} [value="value"]
+   */
   export let value = "value";
+
+  /**
+   * Specify the tabindex
+   * @type {string} [tabindex="0"]
+   */
   export let tabindex = "0";
+
+  /**
+   * Specify the ARIA label for the selectable tile checkmark icon
+   * @type {string} [iconDescription="Tile checkmark"]
+   */
   export let iconDescription = "Tile checkmark";
 
   /**
@@ -20,7 +40,17 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string} [name=""]
+   */
   export let name = "";
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

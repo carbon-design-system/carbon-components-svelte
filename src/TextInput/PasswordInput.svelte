@@ -1,9 +1,51 @@
 <script>
-  export let size = undefined; // "sm" | "xl"
-  export let type = "password";
+  /**
+   * Set the size of the input
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Specify the input value
+   * @type {string} [value=""]
+   */
   export let value = "";
+
+  /**
+   * Specify the input type
+   * @type {string} [type="password"]
+   */
+  export let type = "password";
+
+  /**
+   * Specify the placeholder text
+   * @type {string} [placeholder=""]
+   */
+  export let placeholder = "";
+
+  /**
+   * Specify the hide password label text
+   * @type {string} [hidePasswordLabel="Hide password"]
+   */
   export let hidePasswordLabel = "Hide password";
+
+  /**
+   * Specify the show password label text
+   * @type {string} [showPasswordLabel="Show password"]
+   */
   export let showPasswordLabel = "Show password";
+
+  /**
+   * Set the alignment of the tooltip relative to the icon
+   * @type {"start" | "center" | "end"} [tooltipAlignment="center"]
+   */
+  export let tooltipAlignment = undefined;
+
+  /**
+   * Set the position of the tooltip relative to the icon
+   * @type {"top" | "right" | "bottom" | "left"} [tooltipPosition="bottom"]
+   */
+  export let tooltipPosition = undefined;
 
   /**
    * Set to `true` to enable the light variant
@@ -11,18 +53,17 @@
    */
   export let light = false;
 
+  /**
+   * Set to `true` to disable the input
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
-  export let placeholder = "";
-  export let helperText = "";
 
   /**
-   * Set an id for the input element
-   * @type {string} [id]
+   * Specify the helper text
+   * @type {string} [helperText=""]
    */
-  export let id = "ccs-" + Math.random().toString(36);
-  export let name = undefined;
-  export let invalid = false;
-  export let invalidText = "";
+  export let helperText = "";
 
   /**
    * Specify the label text
@@ -35,8 +76,35 @@
    * @type {boolean} [hideLabel=false]
    */
   export let hideLabel = false;
-  export let tooltipAlignment = "center";
-  export let tooltipPosition = "bottom";
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
+  export let invalid = false;
+
+  /**
+   * Specify the text for the invalid state
+   * @type {string} [invalidText=""]
+   */
+  export let invalidText = "";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string} [name]
+   */
+  export let name = undefined;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
   export let ref = null;
 
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

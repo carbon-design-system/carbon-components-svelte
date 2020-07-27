@@ -1,9 +1,33 @@
 <script>
+  /**
+   * Set to `true` to open the side nav
+   * @type {boolean} [isSideNavOpen=false]
+   */
+  export let isSideNavOpen = false;
+
+  /**
+   * Specify the ARIA label for the header
+   * @type {string} [uiShellAriaLabel]
+   */
   export let uiShellAriaLabel = undefined;
+
+  /**
+   * Specify the `href` attribute
+   * @type {string} [href]
+   */
   export let href = undefined;
+
+  /**
+   * Specify the company name
+   * @type {string} [company]
+   */
   export let company = undefined;
+
+  /**
+   * Specify the platform name
+   * @type {string} [platformName]
+   */
   export let platformName = undefined;
-  export let isSideNavOpen = undefined;
 
   import HamburgerMenu from "../SideNav/HamburgerMenu.svelte";
 

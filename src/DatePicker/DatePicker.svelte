@@ -1,28 +1,63 @@
 <script>
   /**
+   * Specify the date picker type
+   * @type {"simple" | "single" | "range"} [datePickerType="simple"]
+   */
+  export let datePickerType = "simple";
+
+  /**
+   * Specify the date picker input value
+   * @type {string} [value=""]
+   */
+  export let value = "";
+
+  /**
    * Specify the element to append the calendar to
    * @type {HTMLElement} [appendTo=document.body]
    */
   export let appendTo = document.body;
-  export let dateFormat = "m/d/Y";
-  export let datePickerType = "simple";
 
   /**
-   * Set an id for the date picker element
-   * @type {string} [id]
+   * Specify the date format
+   * @type {string} [dateFormat="m/d/Y"]
    */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let dateFormat = "m/d/Y";
+
+  /**
+   * Specify the maximum date
+   * @type {null | string | Date} [maxDate=null]
+   */
+  export let maxDate = null;
+
+  /**
+   * Specify the minimum date
+   * @type {null | string | Date} [minDate=null]
+   */
+  export let minDate = null;
+
+  /**
+   * Specify the locale
+   * @type {string} [locale="en"]
+   */
+  export let locale = "en";
+
+  /**
+   * Set to `true` to use the short variant
+   * @type {boolean} [short=false]
+   */
+  export let short = false;
 
   /**
    * Set to `true` to enable the light variant
    * @type {boolean} [light=false]
    */
   export let light = false;
-  export let locale = "en";
-  export let maxDate = null;
-  export let minDate = null;
-  export let short = false;
-  export let value = "";
+
+  /**
+   * Set an id for the date picker element
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
 
   import {
     createEventDispatcher,

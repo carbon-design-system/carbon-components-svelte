@@ -1,22 +1,20 @@
 <script>
-  export let autocomplete = "off";
-  export let autofocus = false;
-  export let closeButtonLabelText = "Clear search input";
+  /**
+   * Set to `true` to use the small variant
+   * @type {boolean} [small=false]
+   */
+  export let small = false;
 
   /**
-   * Set an id for the input element
-   * @type {string} [id]
+   * Specify the size of the search input
+   * @type {"sm" | "lg"} [size]
    */
-  export let id = "ccs-" + Math.random().toString(36);
-  export let type = "text";
-  export let value = "";
+  export let size = small ? "sm" : "xl";
 
   /**
-   * Specify the label text
-   * @type {string} [labelText=""]
+   * Set to `true` to display the skeleton state
+   * @type {boolean} [skeleton=false]
    */
-  export let labelText = "";
-  export let placeholder = "Search...";
   export let skeleton = false;
 
   /**
@@ -26,15 +24,56 @@
   export let light = false;
 
   /**
-   * Set to `true` to use the small variant
-   * @type {boolean} [small=false]
+   * Specify the value of the search input
+   * @type {string} [value="text"]
    */
-  export let small = false;
-  export let size = small ? "sm" : "xl";
+  export let value = "";
+
+  /**
+   * Specify the `type` attribute of the search input
+   * @type {string} [type="text"]
+   */
+  export let type = "text";
+
+  /**
+   * Specify the `placeholder` attribute of the search input
+   * @type {string} [placeholder="Search..."]
+   */
+  export let placeholder = "Search...";
+
+  /**
+   * Specify the `autocomplete` attribute
+   * @type {"on" | "off"} [autocomplete="off"]
+   */
+  export let autocomplete = "off";
+
+  /**
+   * Set to `true` to auto focus the search element
+   * @type {boolean} [autofocus=false]
+   */
+  export let autofocus = false;
+
+  /**
+   * Specify the close button label text
+   * @type {string} [closeButtonLabelText="Clear search input"]
+   */
+  export let closeButtonLabelText = "Clear search input";
+
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
+  export let labelText = "";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * @type {null | HTMLInputElement} [ref=null]
    */
   export let ref = null;
 
@@ -55,9 +94,10 @@
 {:else}
   <div
     class:bx--search={true}
-    class="bx--search--{size}"
     class:bx--search--light={light}
-    {...$$restProps}>
+    {...$$restProps}
+    class="bx--search--{size}
+    {$$restProps.class}">
     <Search16 class="bx--search-magnifier" />
     <label for={id} class:bx--label={true}>{labelText}</label>
     <!-- svelte-ignore a11y-autofocus -->

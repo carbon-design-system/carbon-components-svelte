@@ -1,17 +1,57 @@
 <script>
-  export let danger = false;
-  export let disabled = false;
-  export let hasDivider = false;
-  export let href = "";
-  export let primaryFocus = false;
-  export let requireTitle = true;
+  /**
+   * Specify the item text
+   * Alternatively, use the default slot for a custom element
+   * @type {string} [text="Provide text"]
+   */
   export let text = "Provide text";
+
+  /**
+   * Specify the `href` attribute if the item is a link
+   * @type {string} [href=""]
+   */
+  export let href = "";
+
+  /**
+   * Set to `true` if the item should be focused when opening the menu
+   * @type {boolean} [primaryFocus=false]
+   */
+  export let primaryFocus = false;
+
+  /**
+   * Set to `true` to disable the item
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
+   * Set to `true` to include a divider
+   * @type {boolean} [hasDivider=false]
+   */
+  export let hasDivider = false;
+
+  /**
+   * Set to `true` to use the danger variant
+   * @type {boolean} [danger=false]
+   */
+  export let danger = false;
+
+  /**
+   * Set to `false` to omit the button `title` attribute
+   * @type {boolean} [requireTitle=false]
+   */
+  export let requireTitle = true;
 
   /**
    * Set an id for the top-level element
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the HTML element
+   * @type {null | HTMLAnchorElement | HTMLButtonElement} [ref=null]
+   */
   export let ref = null;
 
   import { getContext, afterUpdate } from "svelte";

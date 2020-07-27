@@ -12,7 +12,7 @@
   export let description = undefined;
 
   /**
-   * Define the ARIA label for the loading icon
+   * Specify the ARIA label for the loading icon
    * @type {string} [iconDescription="Expand/Collapse"]
    */
   export let iconDescription = undefined;

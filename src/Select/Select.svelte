@@ -1,6 +1,15 @@
 <script>
-  export let size = undefined; // "sm" | "xl"
+  /**
+   * Specify the selected item value
+   * @type {string} [selected]
+   */
   export let selected = undefined;
+
+  /**
+   * Set the size of the select input
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
 
   /**
    * Set to `true` to use the inline variant
@@ -13,6 +22,11 @@
    * @type {boolean} [light=false]
    */
   export let light = false;
+
+  /**
+   * Set to `true` to disable the select element
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
 
   /**
@@ -20,6 +34,11 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the select element
+   * @type {string} [name]
+   */
   export let name = undefined;
 
   /**
@@ -34,8 +53,18 @@
    */
   export let invalidText = "";
 
+  /**
+   * Specify the helper text
+   * @type {string} [helperText=""]
+   */
   export let helperText = "";
+
+  /**
+   * Set to `true` to not render a label
+   * @type {boolean} [noLabel=false]
+   */
   export let noLabel = false;
+
   /**
    * Specify the label text
    * @type {string} [labelText=""]
@@ -47,6 +76,11 @@
    * @type {boolean} [hideLabel=false]
    */
   export let hideLabel = false;
+
+  /**
+   * Obtain a reference to the select HTML element
+   * @type {null | HTMLSelectElement} [ref=null]
+   */
   export let ref = null;
 
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";

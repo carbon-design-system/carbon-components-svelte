@@ -20,18 +20,18 @@
   /**
    * Specify the icon from `carbon-icons-svelte` to render for the tooltip button
    * Icon size must be 16px (e.g. `Add16`, `Task16`)
-   * @type {typeof import("carbon-icons-svelte/lib/Information16")} [icon=Information16]
+   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [icon=Information16]
    */
   export let icon = Information16;
 
   /**
-   * Define the ARIA label for the tooltip button
+   * Specify the ARIA label for the tooltip button
    * @type {string} [iconDescription=""]
    */
   export let iconDescription = "";
 
   /**
-   * Define the icon name attribute
+   * Specify the icon name attribute
    * @type {string} [iconName=""]
    */
   export let iconName = "";

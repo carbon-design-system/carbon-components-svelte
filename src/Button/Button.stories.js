@@ -6,6 +6,7 @@ export default { title: "Button", decorators: [withKnobs] };
 const kinds = {
   "Primary button (primary)": "primary",
   "Secondary button (secondary)": "secondary",
+  "Tertiary button (tertiary)": "tertiary",
   "Danger button (danger)": "danger",
   "Ghost button (ghost)": "ghost",
 };

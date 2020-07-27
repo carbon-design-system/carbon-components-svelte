@@ -1,5 +1,9 @@
 <script>
-  export let searchIsActive = undefined;
+  /**
+   * Set to `true` to focus the search
+   * @type {boolean} [searchIsActive=false]
+   */
+  export let searchIsActive = false;
 
   import { createEventDispatcher } from "svelte";
   import Close20 from "carbon-icons-svelte/lib/Close20";
@@ -18,7 +22,7 @@
   function dispatchInputs(event) {
     const params = {
       action: "search",
-      textInput: event.target.value
+      textInput: event.target.value,
     };
     dispatch("inputSearch", params);
   }

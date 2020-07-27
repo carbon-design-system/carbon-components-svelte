@@ -1,5 +1,13 @@
 <script>
+  /**
+   * Specify the current step index
+   * @type {number} [currentIndex=0]
+   */
   export let currentIndex = 0;
+
+  /**
+   * Set to `true` to use the vertical variant
+   */
   export let vertical = false;
 
   import { createEventDispatcher, setContext } from "svelte";
@@ -7,27 +15,27 @@
 
   const dispatch = createEventDispatcher();
   const steps = writable([]);
-  const stepsById = derived(steps, $ =>
+  const stepsById = derived(steps, ($) =>
     $.reduce((a, c) => ({ ...a, [c.id]: c }), {})
   );
 
   setContext("ProgressIndicator", {
     steps,
     stepsById,
-    add: step => {
-      steps.update(_ => [
+    add: (step) => {
+      steps.update((_) => [
         ..._,
         {
           ...step,
           index: _.length,
           current: _.length === currentIndex,
-          complete: _.length <= currentIndex
-        }
+          complete: _.length <= currentIndex,
+        },
       ]);
     },
-    change: index => {
+    change: (index) => {
       dispatch("change", index);
-    }
+    },
   });
 </script>
 

@@ -26,7 +26,7 @@
 
   /**
    * Obtain a reference to the button HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * @type {null | HTMLButtonElement} [ref=null]
    */
   export let ref = null;
 

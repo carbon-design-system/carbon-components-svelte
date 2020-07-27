@@ -29,12 +29,49 @@
    * @type {boolean} [skeleton=false]
    */
   export let skeleton = false;
+
+  /**
+   * Specify the ARIA label for the copy button icon
+   * @type {string} [copyButtonDescription]
+   */
   export let copyButtonDescription = undefined;
+
+  /**
+   * Specify the ARIA label of the copy button
+   * @type {string} [copyLabel]
+   */
   export let copyLabel = undefined;
+
+  /**
+   * Specify the feedback text displayed when clicking the snippet
+   * @type {string} [feedback="Copied!"]
+   */
   export let feedback = "Copied!";
+
+  /**
+   * Set the timeout duration (ms) to display feedback text
+   * @type {number} [feedbackTimeout=2000]
+   */
   export let feedbackTimeout = 2000;
+
+  /**
+   * Specify the show less text
+   * `type` must be "multi"
+   * @type {string} [showLessText="Show less"]
+   */
   export let showLessText = "Show less";
+
+  /**
+   * Specify the show more text
+   * `type` must be "multi"
+   * @type {string} [showLessText="Show more"]
+   */
   export let showMoreText = "Show more";
+
+  /**
+   * Set to `true` to enable the show more/less button
+   * @type {boolean} [showMoreLess=false]
+   */
   export let showMoreLess = false;
 
   /**
@@ -45,7 +82,7 @@
 
   /**
    * Obtain a reference to the pre HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * @type {null | HTMLPreElement} [ref=null]
    */
   export let ref = null;
 

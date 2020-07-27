@@ -1,6 +1,15 @@
 <script>
-  export let border = false;
+  /**
+   * Specify the number of rows
+   * @type {number} [rows=5]
+   */
   export let rows = 5;
+
+  /**
+   * Set to `true` to use the bordered variant
+   * @type {boolean} [border=false]
+   */
+  export let border = false;
 </script>
 
 <section

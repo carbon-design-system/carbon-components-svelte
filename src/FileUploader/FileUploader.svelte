@@ -1,14 +1,70 @@
 <script>
-  export let status = "uploading"; // "uploading" | "edit" | "complete"
+  /**
+   * Specify the file uploader status
+   * @type {"uploading" | "edit" | "complete"} [status="uploading"]
+   */
+  export let status = "uploading";
+
+  /**
+   * Specify the accepted file types
+   * @type {string[]} [accept=[]]
+   */
   export let accept = [];
+
+  /**
+   * Obtain the uploaded file names
+   * @type {string[]} [files=[]]
+   */
   export let files = [];
-  export const clearFiles = () => (files = []);
-  export let buttonLabel = "";
-  export let iconDescription = "Provide icon description";
-  export let kind = "primary";
-  export let labelDescription = "";
-  export let labelTitle = "";
+
+  /**
+   * Set to `true` to allow multiple files
+   * @type {boolean} [multiple=false]
+   */
   export let multiple = false;
+
+  /**
+   * Override the default behavior of clearing the array of uploaded files
+   * @type {() => any;} [clearFiles = () => void;]
+   */
+  export const clearFiles = () => {
+    files = [];
+  };
+
+  /**
+   * Specify the label description
+   * @type {string} [labelDescription=""]
+   */
+  export let labelDescription = "";
+
+  /**
+   * Specify the label title
+   * @type {string} [labelTitle=""]
+   */
+  export let labelTitle = "";
+
+  /**
+   * Specify the kind of file uploader button
+   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"} [kind="primary"]
+   */
+  export let kind = "primary";
+
+  /**
+   * Specify the button label
+   * @type {string} [buttonLabel=""]
+   */
+  export let buttonLabel = "";
+
+  /**
+   * Specify the ARIA label used for the status icons
+   * @type {string} [iconDescription=""]
+   */
+  export let iconDescription = "Provide icon description";
+
+  /**
+   * Specify a name attribute for the file button uploader input
+   * @type {string} [name]
+   */
   export let name = "";
 
   import { createEventDispatcher, afterUpdate } from "svelte";
@@ -23,7 +79,10 @@
     if (files.length > prevFiles.length) {
       dispatch("add", files);
     } else {
-      dispatch("remove", prevFiles.filter(_ => !files.includes(_)));
+      dispatch(
+        "remove",
+        prevFiles.filter((_) => !files.includes(_))
+      );
     }
 
     prevFiles = [...files];

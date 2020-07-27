@@ -1,18 +1,121 @@
 <script>
-  export let size = undefined; // "sm" | "lg" | "xl"
-  export let type = "default"; // "default" | "inline"
-  export let selectionFeedback = "top-after-reopen"; // "top" | "fixed" | "top-after-reopen"
+  /**
+   * @typedef {string} MultiSelectItemId
+   * @typedef {string} MultiSelectItemText
+   * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
+   */
+
+  /**
+   * Set the multiselect items
+   * @type {MultiSelectItem[]} [items=[]]
+   */
+  export let items = [];
+
+  /**
+   * Override the display of a multiselect item
+   * @type {(item: MultiSelectItem) => string;} [itemToString = (item: MultiSelectItem) =>  MultiSelectItemText | MultiSelectItemId;]
+   */
+  export let itemToString = (item) => item.text || item.id;
+
+  /**
+   * Set the selected ids
+   * @type {MultiSelectItemId[]} [selectedIds=[]]
+   */
+  export let selectedIds = [];
+
+  /**
+   * Specify the multiselect value
+   * @type {string} [value=""]
+   */
+  export let value = "";
+
+  /**
+   * Set the size of the combobox
+   * @type {"sm" | "lg" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Specify the type of multiselect
+   * @type {"default" | "inline"} [type="default"]
+   */
+  export let type = "default";
+
+  /**
+   * Specify the selection feedback after selecting items
+   * @type {"top" | "fixed" | "top-after-reopen"} [selectionFeedback="top-after-reopen"]
+   */
+  export let selectionFeedback = "top-after-reopen";
+
+  /**
+   * Set to `true` to disable the dropdown
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Set to `true` to filter items
+   * @type {boolean} [filterable=false]
+   */
   export let filterable = false;
+
+  /**
+   * Override the filtering logic
+   * The default filtering is an exact string comparison
+   * @type {(item: MultiSelectItem, value: string) => string;} [filterItem = ((item: MultiSelectItem, value: string) => string;)]
+   */
   export let filterItem = (item, value) =>
     item.text.toLowerCase().includes(value.toLowerCase());
 
   /**
-   * Set an id for the list box component
-   * @type {string} [id]
+   * Set to `true` to open the dropdown
+   * @type {boolean} [open=false]
    */
-  export let id = "ccs-" + Math.random().toString(36);
-  export let name = undefined;
+  export let open = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
+  export let light = false;
+
+  /**
+   * Specify the locale
+   * @type {string} [locale="en"]
+   */
+  export let locale = "en";
+
+  /**
+   * Specify the placeholder text
+   * @type {string} [placeholder=""]
+   */
+  export let placeholder = "";
+
+  /**
+   * Override the sorting logic
+   * The default sorting compare the item text value
+   * @type {(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem;} [sortItem = (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem]
+   */
+  export let sortItem = (a, b) =>
+    a.text.localeCompare(b.text, locale, { numeric: true });
+
+  /**
+   * Override the default translation ids
+   * @type {(id: any) => string;} [translateWithId]
+   */
+  export let translateWithId = undefined;
+
+  /**
+   * Specify the title text
+   * @type {string} [titleText=""]
+   */
+  export let titleText = "";
+
+  /**
+   * Set to `true` to pass the item to `itemToString` in the checkbox
+   * @type {boolean} [useTitleInItem=false]
+   */
+  export let useTitleInItem = false;
 
   /**
    * Set to `true` to indicate an invalid state
@@ -26,28 +129,29 @@
    */
   export let invalidText = "";
 
+  /**
+   * Specify the helper text
+   * @type {string} [helperText=""]
+   */
   export let helperText = "";
-  export let items = [];
-  export let itemToString = (item) => item.text || item.id;
+
+  /**
+   * Specify the list box label
+   * @type {string} [label]
+   */
   export let label = "";
 
   /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
+   * Set an id for the list box component
+   * @type {string} [id]
    */
-  export let light = false;
+  export let id = "ccs-" + Math.random().toString(36);
 
-  export let locale = "en";
-  export let open = false;
-  export let placeholder = "";
-  export let selectedIds = [];
-  export let sortItem = (a, b) =>
-    a.text.localeCompare(b.text, locale, { numeric: true });
-  export let titleText = "";
-  export let translateWithId = undefined;
-
-  export let useTitleInItem = false;
-  export let value = "";
+  /**
+   * Specify a name attribute for the select
+   * @type {string} [name]
+   */
+  export let name = undefined;
 
   import { afterUpdate, setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

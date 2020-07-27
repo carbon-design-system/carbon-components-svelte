@@ -1,5 +1,14 @@
 <script>
+  /**
+   * Specify the `scope` attribute
+   * @type {string} [scope="col"]
+   */
   export let scope = "col";
+
+  /**
+   * Override the default id translations
+   * @type {() => string;} [translateWithId = () => "";]
+   */
   export let translateWithId = () => "";
 
   /**

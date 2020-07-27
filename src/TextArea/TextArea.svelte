@@ -1,7 +1,26 @@
 <script>
+  /**
+   * Specify the textarea value
+   * @type {string} [value=""]
+   */
   export let value = "";
+
+  /**
+   * Specify the placeholder text
+   * @type {string} [placeholder=""]
+   */
   export let placeholder = "";
+
+  /**
+   * Specify the number of cols
+   * @type {number} [cols=50]
+   */
   export let cols = 50;
+
+  /**
+   * Specify the number of rows
+   * @type {number} [rows=4]
+   */
   export let rows = 4;
 
   /**
@@ -9,7 +28,17 @@
    * @type {boolean} [light=false]
    */
   export let light = false;
+
+  /**
+   * Set to `true` to disable the input
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Specify the helper text
+   * @type {string} [helperText=""]
+   */
   export let helperText = "";
 
   /**
@@ -24,8 +53,6 @@
    */
   export let hideLabel = false;
 
-  export let name = undefined;
-
   /**
    * Set to `true` to indicate an invalid state
    * @type {boolean} [invalid=false]
@@ -33,7 +60,7 @@
   export let invalid = false;
 
   /**
-   * Specify the invalid state text
+   * Specify the text for the invalid state
    * @type {string} [invalidText=""]
    */
   export let invalidText = "";
@@ -45,8 +72,14 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
+   * Specify a name attribute for the input
+   * @type {string} [name]
+   */
+  export let name = undefined;
+
+  /**
    * Obtain a reference to the textarea HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * @type {null | HTMLTextAreaElement} [ref=null]
    */
   export let ref = null;
 

@@ -18,13 +18,13 @@
   export let danger = false;
 
   /**
-   * Define a class for the inner modal
+   * Specify a class for the inner modal
    * @type {string} [containerClass=""]
    */
   export let containerClass = "";
 
   /**
-   * Define a selector to be focused when opening the modal
+   * Specify a selector to be focused when opening the modal
    * @type {string} [selectorPrimaryFocus="[data-modal-primary-focus]"]
    */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";

@@ -13,7 +13,7 @@
 
   let dropdownHidden = true;
   let tabs = writable([]);
-  let tabsById = derived(tabs, _ =>
+  let tabsById = derived(tabs, (_) =>
     _.reduce((a, c) => ({ ...a, [c.id]: c }), {})
   );
   let currentIndex = selected;
@@ -24,16 +24,16 @@
   setContext("Tabs", {
     selectedTab,
     selectedContent,
-    add: data => {
-      tabs.update(_ => [..._, { ...data, index: _.length }]);
+    add: (data) => {
+      tabs.update((_) => [..._, { ...data, index: _.length }]);
     },
-    addContent: data => {
-      content.update(_ => [..._, { ...data, index: _.length }]);
+    addContent: (data) => {
+      content.update((_) => [..._, { ...data, index: _.length }]);
     },
-    update: id => {
+    update: (id) => {
       currentIndex = $tabsById[id].index;
     },
-    change: direction => {
+    change: (direction) => {
       let index = currentIndex + direction;
 
       if (index < 0) {
@@ -57,7 +57,7 @@
       }
 
       currentIndex = index;
-    }
+    },
   });
 
   afterUpdate(() => {

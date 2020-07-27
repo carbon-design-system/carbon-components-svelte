@@ -1,12 +1,12 @@
 <script>
   /**
-   * Specify the filename status
+   * Specify the file name status
    * @type {"uploading" | "edit" | "complete"} [status="uploading"]
    */
   export let status = "uploading";
 
   /**
-   * Define the ARIA label used for the status icons
+   * Specify the ARIA label used for the status icons
    * @type {string} [iconDescription=""]
    */
   export let iconDescription = "";

@@ -13,7 +13,7 @@
 
   /**
    * Obtain a reference to the top-level HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * @type {null | HTMLAnchorElement | HTMLParagraphElement} [ref=null]
    */
   export let ref = null;
 </script>

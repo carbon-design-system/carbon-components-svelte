@@ -7,7 +7,7 @@
 <li role="none" class:bx--side-nav__menu-item={true}>
   <a
     role="menuitem"
-    aria-current={isSelected ? 'page' : ''}
+    aria-current={isSelected ? 'page' : undefined}
     {href}
     class:bx--side-nav__link={true}
     {...$$restProps}

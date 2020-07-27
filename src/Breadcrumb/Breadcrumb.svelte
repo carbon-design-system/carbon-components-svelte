@@ -1,6 +1,6 @@
 <script>
   /**
-   * Set to `true` to hide breadcrumb trailing slash
+   * Set to `true` to hide the breadcrumb trailing slash
    * @type {boolean} [noTrailingSlash=false]
    */
   export let noTrailingSlash = false;

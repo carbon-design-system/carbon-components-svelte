@@ -1,16 +1,45 @@
 <script>
-  export let errorBody = "";
-  export let errorSubject = "";
+  /**
+   * Specify the file uploader status
+   * @type {"uploading" | "edit" | "complete"} [status="uploading"]
+   */
+  export let status = "uploading";
+
+  /**
+   * Specify the ARIA label used for the status icons
+   * @type {string} [iconDescription=""]
+   */
   export let iconDescription = "";
+
+  /**
+   * Set to `true` to indicate an invalid state
+   * @type {boolean} [invalid=false]
+   */
+  export let invalid = false;
+
+  /**
+   * Specify the error subject text
+   * @type {string} [errorSubject=""]
+   */
+  export let errorSubject = "";
+
+  /**
+   * Specify the error body text
+   * @type {string} [errorBody=""]
+   */
+  export let errorBody = "";
 
   /**
    * Set an id for the top-level element
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
-  export let invalid = false;
+
+  /**
+   * Specify the file uploader name
+   * @type {string} [name=""]
+   */
   export let name = "";
-  export let status = "uploading";
 
   import { createEventDispatcher } from "svelte";
   import Filename from "./Filename.svelte";

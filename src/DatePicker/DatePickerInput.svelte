@@ -4,6 +4,11 @@
    * @type {"sm" | "xl"} [size]
    */
   export let size = undefined;
+
+  /**
+   * Specify the input type
+   * @type {string} [type="text"]
+   */
   export let type = "text";
 
   /**
@@ -15,7 +20,7 @@
   export let disabled = false;
 
   /**
-   * Define the ARIA label for the calendar icon
+   * Specify the ARIA label for the calendar icon
    * @type {string} [iconDescription=""]
    */
   export let iconDescription = "";
@@ -44,7 +49,7 @@
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * @type {null | HTMLInputElement} [ref=null]
    */
   export let ref = null;
 

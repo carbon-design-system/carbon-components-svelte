@@ -1,8 +1,32 @@
 <script>
+  /**
+   * Specify the input value
+   * @type {string} [value=""]
+   */
   export let value = "";
+
+  /**
+   * Specify the input type
+   * @type {string} [type="text"]
+   */
   export let type = "text";
+
+  /**
+   * Specify the input placeholder text
+   * @type {string} [placeholder="hh=mm"]
+   */
   export let placeholder = "hh=mm";
+
+  /**
+   * Specify the `pattern` attribute for the input element
+   * @type {string} [pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"]
+   */
   export let pattern = "(1[012]|[1-9]):[0-5][0-9](\\s)?";
+
+  /**
+   * Specify the `maxlength` input attribute
+   * @type {number} [maxLength=5]
+   */
   export let maxlength = 5;
 
   /**
@@ -10,17 +34,24 @@
    * @type {boolean} [light=false]
    */
   export let light = false;
-  export let disabled = false;
-
-  export let labelText = "";
-  export let hideLabel = false;
 
   /**
-   * Set an id for the input element
-   * @type {string} [id]
+   * Set to `true` to disable the input
+   * @type {boolean} [disabled=false]
    */
-  export let id = "ccs-" + Math.random().toString(36);
-  export let name = undefined;
+  export let disabled = false;
+
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
+  export let labelText = "";
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
+  export let hideLabel = false;
 
   /**
    * Set to `true` to indicate an invalid state
@@ -33,6 +64,24 @@
    * @type {string} [invalidText="Invalid time format."]
    */
   export let invalidText = "";
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string} [name]
+   */
+  export let name = undefined;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
+  export let ref = null;
 </script>
 
 <div
@@ -57,6 +106,7 @@
         </label>
       {/if}
       <input
+        bind:this={ref}
         data-invalid={invalid || undefined}
         {pattern}
         {placeholder}

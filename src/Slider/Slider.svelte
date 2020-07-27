@@ -31,11 +31,21 @@
   export let maxLabel = "";
   export let min = 0;
   export let minLabel = "";
+
+  /**
+   * Set a name for the slider element
+   * @type {string} [name=""]
+   */
   export let name = "";
   export let required = false;
   export let step = 1;
   export let stepMultiplier = 4;
   export let value = "";
+
+  /**
+   * Obtain a reference to the HTML element
+   * @type {null | HTMLElement} [ref=null]
+   */
   export let ref = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";

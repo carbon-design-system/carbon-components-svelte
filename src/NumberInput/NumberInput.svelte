@@ -1,8 +1,34 @@
 <script>
-  export let size = undefined; // "sm" | "xl"
+  
+
+  /**
+   * Set the size of the input
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
+   * Specify the input value
+   * @type {string} [value=""]
+   */
   export let value = "";
+
+  /**
+   * Specify the step increment
+   * @type {number} [step=1]
+   */
   export let step = 1;
+
+  /**
+   * Specify the maximum value
+   * @type {number} [max]
+   */
   export let max = undefined;
+
+  /**
+   * Specify the minimum value
+   * @type {number} [min]
+   */
   export let min = undefined;
 
   /**
@@ -11,18 +37,35 @@
    */
   export let light = false;
 
+  /**
+   * Set to `true` for the input to be read-only
+   * @type {boolean} [readonly=false]
+   */
   export let readonly = false;
-  export let mobile = false;
-  export let allowEmpty = false;
-  export let disabled = false;
-  export let iconDescription = "";
 
   /**
-   * Set an id for the input element
-   * @type {string} [id]
+   * Set to `true` to enable the mobile variant
+   * @type {boolean} [mobile=false]
    */
-  export let id = "ccs-" + Math.random().toString(36);
-  export let name = undefined;
+  export let mobile = false;
+
+  /**
+   * Set to `true` to allow for an empty value
+   * @type {boolean} [allowEmpty=false]
+   */
+  export let allowEmpty = false;
+
+  /**
+   * Set to `true` to disable the input
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
+   * Specify the ARIA label for the increment icons
+   * @type {string} [iconDescription=""]
+   */
+  export let iconDescription = "";
 
   /**
    * Set to `true` to indicate an invalid state
@@ -36,20 +79,61 @@
    */
   export let invalidText = "";
 
+  /**
+   * Specify the helper text
+   * @type {string} [helperText=""]
+   */
   export let helperText = "";
+
+  /**
+   * Specify the label text
+   * @type {string} [label=""]
+   */
   export let label = "";
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
   export let hideLabel = false;
 
   /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * @typedef {"increment" | "decrement"} NumberInputTranslationId
    */
-  export let ref = null;
+  
+  /**
+   * Override the default translation ids
+   * @type {(id: NumberInputTranslationId) => string;} [translateWithId = (id: NumberInputTranslationId) => string;]
+   */
   export let translateWithId = (id) => defaultTranslations[id];
+
+  /**
+   * Default translation ids
+   * @constant
+   * @type {{ increment: "increment"; decrement: "decrement" }}
+   */
   export const translationIds = {
     increment: "increment",
     decrement: "decrement",
   };
+
+  /**
+   * Set an id for the input element
+   * @type {string} [id]
+   */
+  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string} [name]
+   */
+  export let name = undefined;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
+  export let ref = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";
   import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";
