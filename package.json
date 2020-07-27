@@ -6,6 +6,7 @@
   "svelte": "./src/index.js",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
+  "types": "./types/index.d.ts",
   "scripts": {
     "start": "start-storybook -p 9090",
     "build": "build-storybook",

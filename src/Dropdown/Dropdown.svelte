@@ -13,7 +13,7 @@
 
   /**
    * Override the display of a dropdown item
-   * @type {(item: DropdownItem) => string;} [itemToString = (item: DropdownItem) => DropdownItemText | DropdownItemId;]
+   * @type {(item: DropdownItem) => string} [itemToString = (item: DropdownItem) => DropdownItemText | DropdownItemId]
    */
   export let itemToString = (item) => item.text || item.id;
 
@@ -91,7 +91,7 @@
 
   /**
    * Override the default translation ids
-   * @type {(id: any) => string;} [translateWithId]
+   * @type {(id: any) => string} [translateWithId]
    */
   export let translateWithId = undefined;
 

@@ -7,7 +7,7 @@
 
   /**
    * Override the default id translations
-   * @type {() => string;} [translateWithId = () => "";]
+   * @type {() => string} [translateWithId = () => ""]
    */
   export let translateWithId = () => "";
 

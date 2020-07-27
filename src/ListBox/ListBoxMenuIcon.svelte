@@ -18,7 +18,7 @@
 
   /**
    * Override the default translation ids
-   * @type {(id: ListBoxMenuIconTranslationId) => string;} [translateWithId = (id) => string;]
+   * @type {(id: ListBoxMenuIconTranslationId) => string} [translateWithId = (id) => string]
    */
   export let translateWithId = (id) => defaultTranslations[id];
 

@@ -13,7 +13,7 @@
 
   /**
    * Override the display of a multiselect item
-   * @type {(item: MultiSelectItem) => string;} [itemToString = (item: MultiSelectItem) =>  MultiSelectItemText | MultiSelectItemId;]
+   * @type {(item: MultiSelectItem) => string} [itemToString = (item: MultiSelectItem) =>  MultiSelectItemText | MultiSelectItemId]
    */
   export let itemToString = (item) => item.text || item.id;
 
@@ -62,7 +62,7 @@
   /**
    * Override the filtering logic
    * The default filtering is an exact string comparison
-   * @type {(item: MultiSelectItem, value: string) => string;} [filterItem = ((item: MultiSelectItem, value: string) => string;)]
+   * @type {(item: MultiSelectItem, value: string) => string} [filterItem = (item: MultiSelectItem, value: string) => string]
    */
   export let filterItem = (item, value) =>
     item.text.toLowerCase().includes(value.toLowerCase());
@@ -94,14 +94,14 @@
   /**
    * Override the sorting logic
    * The default sorting compare the item text value
-   * @type {(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem;} [sortItem = (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem]
+   * @type {(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem} [sortItem = (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem]
    */
   export let sortItem = (a, b) =>
     a.text.localeCompare(b.text, locale, { numeric: true });
 
   /**
    * Override the default translation ids
-   * @type {(id: any) => string;} [translateWithId]
+   * @type {(id: any) => string} [translateWithId]
    */
   export let translateWithId = undefined;
 

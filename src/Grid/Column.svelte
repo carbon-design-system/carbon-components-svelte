@@ -32,7 +32,7 @@
 
   /**
    * @typedef {boolean | number} ColumnSize
-   * @typedef {{span?: ColumnSize: offset: number;}} ColumnSizeDescriptor
+   * @typedef {{span?: ColumnSize; offset: number;}} ColumnSizeDescriptor
    * @typedef {ColumnSize | ColumnSizeDescriptor} ColumnBreakpoint
    */
 

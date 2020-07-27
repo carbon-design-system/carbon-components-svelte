@@ -18,7 +18,7 @@
   /**
    * Override the default behavior of validating uploaded files
    * The default behavior does not validate files
-   * @type {(files: Files) => Files} [validateFiles = (files: Files) => Files;]
+   * @type {(files: Files) => Files} [validateFiles = (files: Files) => Files]
    */
   export let validateFiles = (files) => files;
 
