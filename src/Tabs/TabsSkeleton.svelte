@@ -1,3 +1,11 @@
+<script>
+  /**
+   * Specify the number of tabs to render
+   * @type {number} [count=4]
+   */
+  export let count = 4;
+</script>
+
 <div
   class:bx--tabs={true}
   class:bx--skeleton={true}
@@ -13,7 +21,7 @@
     </svg>
   </div>
   <ul class:bx--tabs__nav={true} class:bx--tabs__nav--hidden={true}>
-    {#each [0, 1, 2, 3] as item, i (item)}
+    {#each Array.from({ length: count }, (_, i) => i) as item, i (item)}
       <li class:bx--tabs__nav-item={true}>
         <div class:bx--tabs__nav-link={true}>&nbsp;</div>
       </li>
