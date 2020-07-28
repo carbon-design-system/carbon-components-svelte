@@ -18,9 +18,7 @@
   aria-hidden={!selected}
   hidden={!selected}
   {id}
-  {...$$restProps}
   class:bx--tab-content={true}
-  class={$$restProps.class}
-  style={$$restProps.style}>
+  {...$$restProps}>
   <slot />
 </div>

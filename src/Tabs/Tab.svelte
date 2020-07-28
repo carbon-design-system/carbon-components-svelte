@@ -1,8 +1,27 @@
 <script>
-  export let disabled = false;
-  export let href = "#";
+  /**
+   * Specify the tab label
+   * Alternatively, use the default slot (e.g. <Tab><span>Label</span></Tab>)
+   * @type {string} [label=""]
+   */
   export let label = "";
-  export let role = "presentation";
+
+  /**
+   * Specify the href attribute
+   * @type {string} [href="#"]
+   */
+  export let href = "#";
+
+  /**
+   * Set to `true` to disable the tab
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
+   * Specify the tabindex
+   * @type {string} [tabindex="0"]
+   */
   export let tabindex = "0";
 
   /**
@@ -10,6 +29,11 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the anchor HTML element
+   * @type {null | HTMLAnchorElement} [ref=null]
+   */
   export let ref = null;
 
   import { getContext } from "svelte";
@@ -26,7 +50,7 @@
 
 <li
   tabindex="-1"
-  {role}
+  role="presentation"
   {id}
   class:bx--tabs__nav-item={true}
   class:bx--tabs__nav-item--disabled={disabled}
@@ -59,6 +83,6 @@
     aria-disabled={disabled}
     {href}
     class:bx--tabs__nav-link={true}>
-    {label}
+    <slot>{label}</slot>
   </a>
 </li>

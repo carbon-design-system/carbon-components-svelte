@@ -1,9 +1,27 @@
 <script>
-  export let iconDescription = "Show menu options";
-  export let role = "navigation";
+  /**
+   * Specify the selected tab index
+   * @type {number} [selected=0]
+   */
   export let selected = 0;
-  export let triggerHref = "#";
+
+  /**
+   * Specify the type of tabs
+   * @type {"default" | "container"} [type="default"]
+   */
   export let type = "default";
+
+  /**
+   * Specify the ARIA label for the chevron icon
+   * @type {string} [iconDescription="Expand/Collapse"]
+   */
+  export let iconDescription = "Show menu options";
+
+  /**
+   * Specify the tab trigger href attribute
+   * @type {string} [triggerHref="#"]
+   */
+  export let triggerHref = "#";
 
   import { createEventDispatcher, afterUpdate, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
@@ -11,15 +29,14 @@
 
   const dispatch = createEventDispatcher();
 
-  let dropdownHidden = true;
-  let tabs = writable([]);
-  let tabsById = derived(tabs, (_) =>
+  const tabs = writable([]);
+  const tabsById = derived(tabs, (_) =>
     _.reduce((a, c) => ({ ...a, [c.id]: c }), {})
   );
-  let currentIndex = selected;
-  let selectedTab = writable(undefined);
-  let content = writable([]);
-  let selectedContent = writable(undefined);
+
+  const selectedTab = writable(undefined);
+  const content = writable([]);
+  const selectedContent = writable(undefined);
 
   setContext("Tabs", {
     selectedTab,
@@ -64,6 +81,9 @@
     selected = currentIndex;
   });
 
+  let dropdownHidden = true;
+  let currentIndex = selected;
+
   $: currentIndex = selected;
   $: currentTab = $tabs[currentIndex] || undefined;
   $: currentContent = $content[currentIndex] || undefined;
@@ -84,7 +104,7 @@
 </script>
 
 <div
-  {role}
+  role="navigation"
   class:bx--tabs={true}
   class:bx--tabs--container={type === 'container'}
   {...$$restProps}>
