@@ -233,7 +233,6 @@
             open = !open;
             if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
               selectedIndex = highlightedIndex;
-              selectedId = items[selectedIndex].id;
               open = false;
             }
           } else if (key === 'Tab') {
@@ -287,7 +286,6 @@
             active={selectedIndex === i || selectedId === item.id}
             highlighted={highlightedIndex === i || selectedIndex === i}
             on:click={() => {
-              selectedId = item.id;
               selectedIndex = items
                 .map(({ id }) => id)
                 .indexOf(filteredItems[i].id);
