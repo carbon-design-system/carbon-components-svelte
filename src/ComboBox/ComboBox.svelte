@@ -111,7 +111,7 @@
    */
   export let ref = null;
 
-  import { afterUpdate } from "svelte";
+  import { createEventDispatcher, afterUpdate } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
   import {
     ListBox,
@@ -121,6 +121,8 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox";
+
+  const dispatch = createEventDispatcher();
 
   let selectedId = undefined;
   let inputValue = "";
@@ -145,9 +147,18 @@
     } else {
       highlightedIndex = -1;
       inputValue = selectedItem ? selectedItem.text : "";
+
+      if (!selectedItem) {
+        selectedId = undefined;
+        selectedIndex = -1;
+      }
     }
   });
 
+  $: if (selectedIndex > -1) {
+    selectedId = items[selectedIndex].id;
+    dispatch("select", { selectedId, selectedIndex, selectedItem });
+  }
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
@@ -250,6 +261,7 @@
       {/if}
       {#if inputValue}
         <ListBoxSelection
+          on:clear
           on:clear={() => {
             selectedIndex = -1;
             open = false;
@@ -274,7 +286,6 @@
             active={selectedIndex === i || selectedId === item.id}
             highlighted={highlightedIndex === i || selectedIndex === i}
             on:click={() => {
-              selectedId = item.id;
               selectedIndex = items
                 .map(({ id }) => id)
                 .indexOf(filteredItems[i].id);

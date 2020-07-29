@@ -11,8 +11,8 @@
     {
       id: "option-4",
       text:
-        "An example option that is really long to show what should be done to handle long text"
-    }
+        "An example option that is really long to show what should be done to handle long text",
+    },
   ];
 
   $: toggled = false;
@@ -58,6 +58,12 @@
     bind:ref
     bind:value
     bind:selectedIndex
+    on:select={({ detail }) => {
+      console.log('on:select', detail);
+    }}
+    on:clear={() => {
+      console.log('on:clear');
+    }}
     {items}
     {shouldFilterItem} />
 </div>
