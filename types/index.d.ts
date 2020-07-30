@@ -1,4 +1,4 @@
-// Type definitions for carbon-components-svelte 0.8
+// Type definitions for carbon-components-svelte 0.9
 // https://github.com/IBM/carbon-components-svelte
 
 // Carbon Icon type from carbon-icons-svelte 10.14
@@ -1059,7 +1059,12 @@ export class StructuredListRow {
 
 export class Tab {
   $$prop_def: {
+    label?: string; // default: ""
+    href?: string; // default: "#"
+    disabled?: boolean; // default: false
+    tabindex?: string; // default: "0"
     id?: string;
+    ref?: null | HTMLAnchorElement; // default: null
   };
 }
 
@@ -1070,11 +1075,18 @@ export class TabContent {
 }
 
 export class Tabs {
-  $$prop_def: {};
+  $$prop_def: {
+    selected?: number; // default: 0
+    type?: "default" | "container"; // default: "default"
+    iconDescription?: string; // default: "Expand/Collapse"
+    triggerHref?: string; // default: "#"
+  };
 }
 
 export class TabsSkeleton {
-  $$prop_def: {};
+  $$prop_def: {
+    count?: number; // default: 4
+  };
 }
 
 export class TagSkeleton {
@@ -1377,6 +1389,7 @@ export class HeaderAction {
     isOpen?: boolean; // default: false
     icon?: { render: CarbonIcon; skeleton: boolean };
     text?: string;
+    ref?: null | HTMLButtonElement; // default: null
   };
 }
 

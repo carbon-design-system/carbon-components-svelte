@@ -30,9 +30,9 @@ yarn add -D carbon-components-svelte
 <Button>Primary</Button>
 ```
 
-## Available Components
+## Components
 
-> 147 components in "carbon-components-svelte"
+> 147 components exported from "carbon-components-svelte"
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -1591,14 +1591,14 @@ import { ListBoxField } from "carbon-components-svelte";
 
 **API**
 
-| Prop name       | Type                                                    | Default        |
-| :-------------- | :------------------------------------------------------ | :------------- |
-| disabled        | <code>boolean</code>                                    | false          |
-| role            | <code>string</code>                                     | "combobox"     |
-| tabindex        | <code>string</code>                                     | "-1"           |
-| translateWithId | <code>(id: ListBoxFieldTranslationId) => string;</code> | (id) => string |
-| id              | <code>string</code>                                     | -              |
-| ref             | <code>null &#124; HTMLElement</code>                    | null           |
+| Prop name       | Type                                                   | Default        |
+| :-------------- | :----------------------------------------------------- | :------------- |
+| disabled        | <code>boolean</code>                                   | false          |
+| role            | <code>string</code>                                    | "combobox"     |
+| tabindex        | <code>string</code>                                    | "-1"           |
+| translateWithId | <code>(id: ListBoxFieldTranslationId) => string</code> | (id) => string |
+| id              | <code>string</code>                                    | -              |
+| ref             | <code>null &#124; HTMLElement</code>                   | null           |
 
 </details>
 
@@ -1688,7 +1688,7 @@ import { ListBoxSelection } from "carbon-components-svelte";
 
 | Prop name       | Type                                                       | Default        |
 | :-------------- | :--------------------------------------------------------- | :------------- |
-| selectionCount  | <code>\*</code>                                            | -              |
+| selectionCount  | <code>any</code>                                           | -              |
 | disabled        | <code>boolean</code>                                       | false          |
 | translateWithId | <code>(id: ListBoxSelectionTranslationId) => string</code> | (id) => string |
 | ref             | <code>null &#124; HTMLElement</code>                       | null           |
@@ -1795,32 +1795,32 @@ import { MultiSelect } from "carbon-components-svelte";
 
 **API**
 
-| Prop name         | Type                                                                      | Default                                                     |
-| :---------------- | :------------------------------------------------------------------------ | :---------------------------------------------------------- |
-| items             | <code>MultiSelectItem[]</code>                                            | []                                                          |
-| itemToString      | <code>(item: MultiSelectItem) => string</code>                            | (item: MultiSelectItem) => MultiSelectItemText              | MultiSelectItemId |
-| selectedIds       | <code>MultiSelectItemId[]</code>                                          | []                                                          |
-| value             | <code>string</code>                                                       | ""                                                          |
-| size              | <code>"sm" &#124; "lg" &#124; "xl"</code>                                 | -                                                           |
-| type              | <code>"default" &#124; "inline"</code>                                    | "default"                                                   |
-| selectionFeedback | <code>"top" &#124; "fixed" &#124; "top-after-reopen"</code>               | "top-after-reopen"                                          |
-| disabled          | <code>boolean</code>                                                      | false                                                       |
-| filterable        | <code>boolean</code>                                                      | false                                                       |
-| filterItem        | <code>(item: MultiSelectItem, value: string) => string;</code>            | ((item: MultiSelectItem, value: string) => string;)         |
-| open              | <code>boolean</code>                                                      | false                                                       |
-| light             | <code>boolean</code>                                                      | false                                                       |
-| locale            | <code>string</code>                                                       | "en"                                                        |
-| placeholder       | <code>string</code>                                                       | ""                                                          |
-| sortItem          | <code>(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem;</code> | (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem |
-| translateWithId   | <code>(id: any) => string</code>                                          | -                                                           |
-| titleText         | <code>string</code>                                                       | ""                                                          |
-| useTitleInItem    | <code>boolean</code>                                                      | false                                                       |
-| invalid           | <code>boolean</code>                                                      | false                                                       |
-| invalidText       | <code>string</code>                                                       | ""                                                          |
-| helperText        | <code>string</code>                                                       | ""                                                          |
-| label             | <code>string</code>                                                       | -                                                           |
-| id                | <code>string</code>                                                       | -                                                           |
-| name              | <code>string</code>                                                       | -                                                           |
+| Prop name         | Type                                                                     | Default                                                     |
+| :---------------- | :----------------------------------------------------------------------- | :---------------------------------------------------------- |
+| items             | <code>MultiSelectItem[]</code>                                           | []                                                          |
+| itemToString      | <code>(item: MultiSelectItem) => string</code>                           | (item: MultiSelectItem) => MultiSelectItemText              | MultiSelectItemId |
+| selectedIds       | <code>MultiSelectItemId[]</code>                                         | []                                                          |
+| value             | <code>string</code>                                                      | ""                                                          |
+| size              | <code>"sm" &#124; "lg" &#124; "xl"</code>                                | -                                                           |
+| type              | <code>"default" &#124; "inline"</code>                                   | "default"                                                   |
+| selectionFeedback | <code>"top" &#124; "fixed" &#124; "top-after-reopen"</code>              | "top-after-reopen"                                          |
+| disabled          | <code>boolean</code>                                                     | false                                                       |
+| filterable        | <code>boolean</code>                                                     | false                                                       |
+| filterItem        | <code>(item: MultiSelectItem, value: string) => string</code>            | (item: MultiSelectItem, value: string) => string            |
+| open              | <code>boolean</code>                                                     | false                                                       |
+| light             | <code>boolean</code>                                                     | false                                                       |
+| locale            | <code>string</code>                                                      | "en"                                                        |
+| placeholder       | <code>string</code>                                                      | ""                                                          |
+| sortItem          | <code>(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem</code> | (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem |
+| translateWithId   | <code>(id: any) => string</code>                                         | -                                                           |
+| titleText         | <code>string</code>                                                      | ""                                                          |
+| useTitleInItem    | <code>boolean</code>                                                     | false                                                       |
+| invalid           | <code>boolean</code>                                                     | false                                                       |
+| invalidText       | <code>string</code>                                                      | ""                                                          |
+| helperText        | <code>string</code>                                                      | ""                                                          |
+| label             | <code>string</code>                                                      | -                                                           |
+| id                | <code>string</code>                                                      | -                                                           |
+| name              | <code>string</code>                                                      | -                                                           |
 
 </details>
 
@@ -2824,9 +2824,14 @@ import { Tab } from "carbon-components-svelte";
 
 **API**
 
-| Prop name | Type                | Default |
-| :-------- | :------------------ | :------ |
-| id        | <code>string</code> | -       |
+| Prop name | Type                                       | Default |
+| :-------- | :----------------------------------------- | :------ |
+| label     | <code>string</code>                        | ""      |
+| href      | <code>string</code>                        | "#"     |
+| disabled  | <code>boolean</code>                       | false   |
+| tabindex  | <code>string</code>                        | "0"     |
+| id        | <code>string</code>                        | -       |
+| ref       | <code>null &#124; HTMLAnchorElement</code> | null    |
 
 </details>
 
@@ -2868,7 +2873,12 @@ import { Tabs } from "carbon-components-svelte";
 
 **API**
 
-No exported props.
+| Prop name       | Type                                      | Default           |
+| :-------------- | :---------------------------------------- | :---------------- |
+| selected        | <code>number</code>                       | 0                 |
+| type            | <code>"default" &#124; "container"</code> | "default"         |
+| iconDescription | <code>string</code>                       | "Expand/Collapse" |
+| triggerHref     | <code>string</code>                       | "#"               |
 
 </details>
 
@@ -2888,7 +2898,9 @@ import { TabsSkeleton } from "carbon-components-svelte";
 
 **API**
 
-No exported props.
+| Prop name | Type                | Default |
+| :-------- | :------------------ | :------ |
+| count     | <code>number</code> | 4       |
 
 </details>
 
@@ -3613,6 +3625,7 @@ import { HeaderAction } from "carbon-components-svelte";
 | isOpen    | <code>boolean</code>                                                                                | false   |
 | icon      | <code>{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }</code> | -       |
 | text      | <code>string</code>                                                                                 | -       |
+| ref       | <code>null &#124; HTMLButtonElement</code>                                                          | null    |
 
 </details>
 
