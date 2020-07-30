@@ -22,9 +22,19 @@
     <TextInputSkeleton hideLabel />
   </div>
 {:else if story === 'password-visibility'}
-  <PasswordInput {...$$props} aria-level="" />
+  <PasswordInput
+    {...$$props}
+    aria-level=""
+    on:keydown={(e) => {
+      console.log('on:keydown', e);
+    }} />
 {:else if story === 'controlled'}
-  <PasswordInput {...$$props} {type} />
+  <PasswordInput
+    {...$$props}
+    {type}
+    on:keydown={(e) => {
+      console.log('on:keydown', e);
+    }} />
   <div>
     <button
       on:click={() => {
@@ -44,6 +54,9 @@
     bind:ref
     {...$$props}
     bind:value
+    on:keydown={(e) => {
+      console.log('on:keydown', e);
+    }}
     on:change={() => {
       console.log('change');
     }} />

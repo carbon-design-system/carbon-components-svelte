@@ -166,6 +166,7 @@
       on:input={({ target }) => {
         value = target.value;
       }}
+      on:keydown
       on:focus
       on:blur />
     <button
