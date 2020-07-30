@@ -18,8 +18,17 @@
    */
   export let text = undefined;
 
+  /**
+   * Obtain a reference to the button HTML element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
+  export let ref = null;
+
   import { Icon } from "../../Icon";
+  import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
+
+  const dispatch = createEventDispatcher();
 
   let refPanel = null;
 </script>
@@ -40,17 +49,17 @@
   }
 </style>
 
-<svelte:window
-  on:mouseup={({ target }) => {
-    if (target && refPanel) {
-      if (!refPanel.contains(target)) {
-        isOpen = false;
-      }
+<svelte:body
+  on:click={({ target }) => {
+    if (isOpen && !ref.contains(target) && !refPanel.contains(target)) {
+      isOpen = false;
+      dispatch('close');
     }
   }} />
 
 <div>
   <button
+    bind:this={ref}
     type="button"
     class:bx--header__action={true}
     class:bx--header__action--active={isOpen}
@@ -58,7 +67,8 @@
     {...$$restProps}
     on:click
     on:click={() => {
-      isOpen = true;
+      isOpen = !isOpen;
+      dispatch(isOpen ? 'open' : 'close');
     }}>
     <Icon {...icon} />
     <slot name="text">

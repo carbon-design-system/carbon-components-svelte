@@ -37,7 +37,7 @@
     title: "Catalog",
     tabindex: "0",
     focusable: false,
-    style: undefined
+    style: undefined,
   };
 
   let iHelp = {
@@ -47,7 +47,7 @@
     title: "Help",
     tabindex: "0",
     focusable: false,
-    style: undefined
+    style: undefined,
   };
 
   let iAdjust = {
@@ -57,7 +57,7 @@
     title: "Catalog",
     tabindex: "0",
     focusable: false,
-    style: undefined
+    style: undefined,
   };
 
   let iProtection = {
@@ -67,7 +67,7 @@
     title: "Catalog",
     tabindex: "0",
     focusable: false,
-    style: undefined
+    style: undefined,
   };
 
   let iSwitcher = {
@@ -77,7 +77,7 @@
     title: "App Switcher",
     tabindex: "0",
     focusable: false,
-    style: undefined
+    style: undefined,
   };
 
   let iAccount = {
@@ -87,7 +87,7 @@
     title: "Account",
     tabindex: "0",
     focusable: false,
-    style: undefined
+    style: undefined,
   };
 
   let iNotifications = {
@@ -97,7 +97,7 @@
     title: "Notifications",
     tabindex: "0",
     focusable: false,
-    style: undefined
+    style: undefined,
   };
 
   let iSettings = {
@@ -107,7 +107,7 @@
     title: "Settings",
     tabindex: "0",
     focusable: false,
-    style: undefined
+    style: undefined,
   };
 </script>
 
@@ -167,7 +167,16 @@
 {:else if story === 'header-with-switcher'}
   <Header {...$$props}>
     <HeaderUtilities>
-      <HeaderAction type="Switcher" icon={iSwitcher} isOpen={true}>
+      <HeaderAction
+        type="Switcher"
+        icon={iSwitcher}
+        isOpen
+        on:open={() => {
+          console.log('on:open');
+        }}
+        on:close={() => {
+          console.log('on:close');
+        }}>
         <HeaderPanelLinks>
           <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
           <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
