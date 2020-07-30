@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.9.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.0) - 2020-07-30
+
+- add TypeScript definitions
+- dispatch "select" and "clear" events in `ComboBox`
+- forward `keydown` event to `TextInput`, `PasswordInput` components
+- add `count` prop to `TabsSkeleton`
+- apply toggle behavior to `HeaderAction` button; dispatch "open" and "close" events
+- fix forwarded click event in `CodeSnippet`
+- fix class name typo in `UnorderedList`
 
 ## [0.8.5](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.8.5) - 2020-07-23
 
