@@ -51,7 +51,6 @@
 <li
   tabindex="-1"
   role="presentation"
-  {id}
   class:bx--tabs__nav-item={true}
   class:bx--tabs__nav-item--disabled={disabled}
   class:bx--tabs__nav-item--selected={selected}
@@ -81,6 +80,7 @@
     tabindex={disabled ? '-1' : tabindex}
     aria-selected={selected}
     aria-disabled={disabled}
+    {id}
     {href}
     class:bx--tabs__nav-link={true}>
     <slot>{label}</slot>

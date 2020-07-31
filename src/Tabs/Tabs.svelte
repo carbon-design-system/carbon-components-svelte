@@ -33,12 +33,16 @@
   const tabsById = derived(tabs, (_) =>
     _.reduce((a, c) => ({ ...a, [c.id]: c }), {})
   );
-
   const selectedTab = writable(undefined);
   const content = writable([]);
+  const contentById = derived(content, (_) =>
+    _.reduce((a, c) => ({ ...a, [c.id]: c }), {})
+  );
   const selectedContent = writable(undefined);
 
   setContext("Tabs", {
+    tabs,
+    contentById,
     selectedTab,
     selectedContent,
     add: (data) => {
