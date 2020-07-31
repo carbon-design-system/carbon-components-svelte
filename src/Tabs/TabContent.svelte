@@ -7,16 +7,20 @@
 
   import { getContext } from "svelte";
 
-  const { selectedContent, addContent } = getContext("Tabs");
+  const { selectedContent, addContent, tabs, contentById } = getContext("Tabs");
 
   addContent({ id });
 
   $: selected = $selectedContent === id;
+  $: index = $contentById[id].index;
+  $: tabId = $tabs[index].id;
 </script>
 
 <div
+  role="tabpanel"
+  aria-labelledby={tabId}
   aria-hidden={!selected}
-  hidden={!selected}
+  hidden={selected ? undefined : ''}
   {id}
   class:bx--tab-content={true}
   {...$$restProps}>
