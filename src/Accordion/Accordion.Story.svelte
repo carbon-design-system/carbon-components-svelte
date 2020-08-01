@@ -14,7 +14,7 @@
     <AccordionSkeleton {open} {count} />
   </div>
 {:else}
-  <Accordion>
+  <Accordion {...$$restProps}>
     <AccordionItem {title} {open}>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
