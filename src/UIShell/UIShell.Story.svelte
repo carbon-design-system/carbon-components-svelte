@@ -113,9 +113,27 @@
   let isOpen = !true;
 </script>
 
+<style>
+  .platform-name {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .platform-name small {
+    margin-left: 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 400;
+    color: #a8a8a8;
+  }
+</style>
+
 {#if story === 'header'}
   <Header {...$$props} company={undefined}>
     <SkipToContent />
+    <span slot="platform" class="platform-name">
+      Platform Name
+      <small>1.12.2</small>
+    </span>
   </Header>
 {:else if story === 'sidenav'}
   <SideNav isOpen={true}>

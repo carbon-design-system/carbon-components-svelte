@@ -25,6 +25,7 @@
 
   /**
    * Specify the platform name
+   * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
    * @type {string} [platformName]
    */
   export let platformName = undefined;
@@ -50,7 +51,7 @@
       <span class:bx--header__name--prefix={true}>{company}</span>
       &nbsp;
     {/if}
-    {platformName}
+    <slot name="platform">{platformName}</slot>
   </a>
   <slot />
 </header>
