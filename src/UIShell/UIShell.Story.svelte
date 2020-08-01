@@ -129,7 +129,9 @@
 
 {#if story === 'header'}
   <Header {...$$props} company={undefined}>
-    <SkipToContent />
+    <div slot="skip-to-main-content">
+      <SkipToContent />
+    </div>
     <span slot="platform" class="platform-name">
       Platform Name
       <small>1.12.2</small>
