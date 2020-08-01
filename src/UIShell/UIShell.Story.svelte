@@ -109,6 +109,8 @@
     focusable: false,
     style: undefined,
   };
+
+  let isOpen = !true;
 </script>
 
 {#if story === 'header'}
@@ -169,8 +171,8 @@
     <HeaderUtilities>
       <HeaderAction
         type="Switcher"
-        icon={iSwitcher}
-        isOpen
+        icon={isOpen ? iAccount : iSwitcher}
+        bind:isOpen
         on:open={() => {
           console.log('on:open');
         }}
