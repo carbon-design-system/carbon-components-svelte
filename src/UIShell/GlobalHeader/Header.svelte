@@ -35,7 +35,7 @@
 
   $: isSideNavOpen = winWidth >= 1056;
   $: ariaLabel =
-    company + (uiShellAriaLabel || $$props["aria-label"] || platformName);
+    company + " " + (uiShellAriaLabel || $$props["aria-label"] || platformName);
 </script>
 
 <svelte:window bind:innerWidth={winWidth} />
