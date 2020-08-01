@@ -1,6 +1,6 @@
 export { Accordion, AccordionItem, AccordionSkeleton } from "./Accordion";
 export { Breadcrumb, BreadcrumbItem, BreadcrumbSkeleton } from "./Breadcrumb";
-export { Button, ButtonSkeleton } from "./Button";
+export { Button, ButtonSkeleton, ButtonSet } from "./Button";
 export { Checkbox, CheckboxSkeleton } from "./Checkbox";
 export { ContentSwitcher, Switch } from "./ContentSwitcher";
 export { Copy } from "./Copy";

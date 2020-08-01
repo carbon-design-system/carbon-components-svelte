@@ -3,6 +3,7 @@
 
   import Button from "./Button.svelte";
   import ButtonSkeleton from "./Button.Skeleton.svelte";
+  import ButtonSet from "./ButtonSet.svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16";
 
   const {
@@ -12,7 +13,7 @@
     iconDescription,
     small,
     tooltipPosition,
-    tooltipAlignment
+    tooltipAlignment,
   } = $$props;
 
   const regularProps = {
@@ -20,7 +21,7 @@
     disabled,
     size,
     iconDescription,
-    small
+    small,
   };
 
   const iconOnlyProps = {
@@ -31,7 +32,7 @@
     icon: Add16,
     iconDescription,
     tooltipPosition,
-    tooltipAlignment
+    tooltipAlignment,
   };
 
   const setProps = { disabled, small, size, iconDescription };
@@ -49,10 +50,11 @@
   {:else if story === 'icon-only buttons'}
     <Button {...iconOnlyProps} />
   {:else if story === 'set of buttons'}
-    <div class="bx--btn-set">
+    <ButtonSet>
+      <Button kind="ghost" {...setProps}>Ghost button</Button>
       <Button kind="secondary" {...setProps}>Secondary button</Button>
       <Button kind="primary" {...setProps}>Primary button</Button>
-    </div>
+    </ButtonSet>
   {:else}
     <Button {...regularProps}>Button</Button>
     &nbsp;
