@@ -34,8 +34,9 @@
   let winWidth = undefined;
 
   $: isSideNavOpen = winWidth >= 1056;
-  $: ariaLabel =
-    company + " " + (uiShellAriaLabel || $$props["aria-label"] || platformName);
+  $: ariaLabel = company
+    ? `${company} `
+    : "" + (uiShellAriaLabel || $$props["aria-label"] || platformName);
 </script>
 
 <svelte:window bind:innerWidth={winWidth} />
@@ -45,8 +46,11 @@
     <HamburgerMenu bind:isOpen={isSideNavOpen} />
   {/if}
   <a {href} class:bx--header__name={true} {...$$restProps} on:click>
-    <span class:bx--header__name--prefix={true}>{company}</span>
-    &nbsp;{platformName}
+    {#if company}
+      <span class:bx--header__name--prefix={true}>{company}</span>
+      &nbsp;
+    {/if}
+    {platformName}
   </a>
   <slot />
 </header>

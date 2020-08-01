@@ -114,7 +114,7 @@
 </script>
 
 {#if story === 'header'}
-  <Header {...$$props}>
+  <Header {...$$props} company={undefined}>
     <SkipToContent />
   </Header>
 {:else if story === 'sidenav'}
