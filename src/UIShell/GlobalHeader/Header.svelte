@@ -49,7 +49,7 @@
 <svelte:window bind:innerWidth={winWidth} />
 
 <header role="banner" aria-label={ariaLabel} class:bx--header={true}>
-  <slot name="skip-to-main-content" />
+  <slot name="skip-to-content" />
   {#if winWidth < 1056}
     <HamburgerMenu bind:isOpen={isSideNavOpen} />
   {/if}
