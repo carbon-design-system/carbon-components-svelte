@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.9.3](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.3) - 2020-08-02
+
+- rename UI Shell `Header` slot from "skip-to-main-content" to "skip-to-content"
+- support fixed `SideNav`
+- add `expandedByDefault` prop to `Header` to prevent `SideNav` from being expanded
+
 ## [0.9.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.2) - 2020-08-01
 
 - add "skip-to-main-content" slot to `Header`
