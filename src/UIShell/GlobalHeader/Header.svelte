@@ -1,5 +1,11 @@
 <script>
   /**
+   * Set to `false` to hide the side nav by default
+   * @type {boolean} [expandedByDefault=true]
+   */
+  export let expandedByDefault = true;
+
+  /**
    * Set to `true` to open the side nav
    * @type {boolean} [isSideNavOpen=false]
    */
@@ -34,7 +40,7 @@
 
   let winWidth = undefined;
 
-  $: isSideNavOpen = winWidth >= 1056;
+  $: isSideNavOpen = expandedByDefault && winWidth >= 1056;
   $: ariaLabel = company
     ? `${company} `
     : "" + (uiShellAriaLabel || $$props["aria-label"] || platformName);
@@ -49,8 +55,7 @@
   {/if}
   <a {href} class:bx--header__name={true} {...$$restProps} on:click>
     {#if company}
-      <span class:bx--header__name--prefix={true}>{company}</span>
-      &nbsp;
+      <span class:bx--header__name--prefix={true}>{company}&nbsp;</span>
     {/if}
     <slot name="platform">{platformName}</slot>
   </a>
