@@ -115,6 +115,8 @@
     <Copy
       aria-label={copyLabel}
       aria-describedby={id}
+      {feedback}
+      {feedbackTimeout}
       class="bx--snippet {type && `bx--snippet--${type}`}
       {type === 'inline' && 'bx--btn--copy'}
       {expanded && 'bx--snippet--expand'}
