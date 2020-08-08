@@ -30,7 +30,7 @@
     "rollup": "^2.22.1",
     "rollup-plugin-svelte": "^5.2.3",
     "rollup-plugin-terser": "^6.1.0",
-    "svelte": "^3.24.0",
+    "svelte": "^3.24.1",
     "svelte-loader": "^2.13.6"
   },
   "babel": {
