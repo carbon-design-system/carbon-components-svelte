@@ -19,6 +19,7 @@
 </script>
 
 {#if label}
+  <!-- svelte-ignore a11y-label-has-associated-control -->
   <label
     role="presentation"
     {tabindex}
