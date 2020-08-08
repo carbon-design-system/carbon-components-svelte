@@ -19,6 +19,12 @@
   export let expanded = false;
 
   /**
+   * Set to `true` to hide the copy button
+   * @type {boolean} [hideCopyButton=false]
+   */
+  export let hideCopyButton = false;
+
+  /**
    * Set to `true` to enable the light variant
    * @type {boolean} [light=false]
    */
@@ -108,32 +114,49 @@
     on:mouseleave />
 {:else}
   {#if type === 'inline'}
-    <Copy
-      aria-label={copyLabel}
-      aria-describedby={id}
-      {feedback}
-      {feedbackTimeout}
-      class="bx--snippet {type && `bx--snippet--${type}`}
-      {type === 'inline' && 'bx--btn--copy'}
-      {expanded && 'bx--snippet--expand'}
-      {light && 'bx--snippet--light'}"
-      {...$$restProps}
-      on:click
-      on:mouseover
-      on:mouseenter
-      on:mouseleave>
-      <code {id}>
-        <slot>{code}</slot>
-      </code>
-    </Copy>
+    {#if hideCopyButton}
+      <span
+        class="bx--snippet {type && `bx--snippet--${type}`}
+        {type === 'inline' && 'bx--btn--copy'}
+        {expanded && 'bx--snippet--expand'}
+        {light && 'bx--snippet--light'}
+        {hideCopyButton && 'bx--snippet--no-copy'}"
+        {...$$restProps}>
+        <code {id}>
+          <slot>{code}</slot>
+        </code>
+      </span>
+    {:else}
+      <Copy
+        aria-label={copyLabel}
+        aria-describedby={id}
+        {feedback}
+        {feedbackTimeout}
+        class="bx--snippet {type && `bx--snippet--${type}`}
+        {type === 'inline' && 'bx--btn--copy'}
+        {expanded && 'bx--snippet--expand'}
+        {light && 'bx--snippet--light'}
+        {hideCopyButton && 'bx--snippet--no-copy'}"
+        {...$$restProps}
+        on:click
+        on:mouseover
+        on:mouseenter
+        on:mouseleave>
+        <code {id}>
+          <slot>{code}</slot>
+        </code>
+      </Copy>
+    {/if}
   {:else}
     <div
       class:bx--snippet={true}
-      class={type && `bx--snippet--${type}`}
       class:bx--btn--copy={type === 'inline'}
       class:bx--snippet--expand={expanded}
       class:bx--snippet--light={light}
+      class:bx--snippet--no-copy={hideCopyButton}
       {...$$restProps}
+      class="{type && `bx--snippet--${type}`}
+      {$$restProps.class}"
       on:mouseover
       on:mouseenter
       on:mouseleave>
@@ -148,12 +171,14 @@
           </pre>
         </code>
       </div>
-      <CopyButton
-        {feedback}
-        {feedbackTimeout}
-        iconDescription={copyButtonDescription}
-        on:click
-        on:animationend />
+      {#if !hideCopyButton}
+        <CopyButton
+          {feedback}
+          {feedbackTimeout}
+          iconDescription={copyButtonDescription}
+          on:click
+          on:animationend />
+      {/if}
       {#if showMoreLess}
         <Button
           kind="ghost"

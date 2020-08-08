@@ -13,6 +13,7 @@ export const Inline = () => ({
       "ARIA label for the snippet/copy button (copyLabel)",
       "copyable code snippet"
     ),
+    hideCopyButton: boolean("Hide copy button (hideCopyButton", false),
   },
 });
 
@@ -30,6 +31,7 @@ export const SingleLine = () => ({
       "ARIA label of the container (ariaLabel)",
       "Container label"
     ),
+    hideCopyButton: boolean("Hide copy button (hideCopyButton", false),
   },
 });
 
@@ -46,6 +48,7 @@ export const MultiLine = () => ({
       'Text for "show less" button (showLessText)',
       "Show less"
     ),
+    hideCopyButton: boolean("Hide copy button (hideCopyButton", false),
   },
 });
 
