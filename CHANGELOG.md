@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.9.4](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.4) - 2020-08-08
+
+- ignore false positive `a11y-label-has-associated-control` warnings added in svelte^v3.24.1
+- fix `DatePicker`: use wildcard import to resolve flatpickr "no default" error when using ESM
+- allow `CodeSnippet` button to be optional by using the `hideCopyButton` prop
+- refactor `CodeSnippet`: replace afterUpdate with reactive statement
+- fix `CodeSnippet`: forward `feedback`, `feedbackTimeout` props to `Copy` component
+
 ## [0.9.3](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.3) - 2020-08-02
 
 - rename UI Shell `Header` slot from "skip-to-main-content" to "skip-to-content"
