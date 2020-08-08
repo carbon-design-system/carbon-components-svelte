@@ -86,7 +86,6 @@
    */
   export let ref = null;
 
-  import { afterUpdate } from "svelte";
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
   import { Button } from "../Button";
   import { Copy } from "../Copy";
@@ -94,12 +93,9 @@
   import CodeSnippetSkeleton from "./CodeSnippet.Skeleton.svelte";
 
   $: expandText = expanded ? showLessText : showMoreText;
-
-  afterUpdate(() => {
-    if (type === "multi" && ref) {
-      showMoreLess = ref.getBoundingClientRect().height > 255;
-    }
-  });
+  $: if (type === "multi" && ref) {
+    showMoreLess = ref.getBoundingClientRect().height > 255;
+  }
 </script>
 
 {#if skeleton}
