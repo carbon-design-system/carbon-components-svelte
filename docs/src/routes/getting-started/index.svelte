@@ -16,7 +16,7 @@
 <Row>
   <Column>
     <h1>Getting Started</h1>
-    <p>
+    <p style="position: relative; z-index: 1;">
       <CopyableCodeSnippet type="inline" code="carbon-components-svelte" />
       can be installed as a development dependency.
     </p>
@@ -37,17 +37,3 @@
     </p>
   </Column>
 </Row>
-<!-- 
-<div style="margin-left: -1rem; margin-right: -1rem;">
-  <Tabs type="container">
-    <Tab label="Rapid Prototyping" />
-    <Tab label="Single-Page Application (SPA)" />
-    <Tab label="Server-side Rendered (SSR)" />
-    <div slot="content" class="content">
-      <TabContent>1</TabContent>
-      <TabContent>2</TabContent>
-      <TabContent>3</TabContent>
-    </div>
-  </Tabs>
-</div>
- -->

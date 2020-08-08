@@ -59,7 +59,7 @@
 
 {#if segment !== 'examples'}
   <GlobalHeader {segment} />
-  <SideNav isOpen={true}>
+  <SideNav isOpen>
     <SideNavItems>
       <SideNavLink
         text="Getting Started"

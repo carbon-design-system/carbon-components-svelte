@@ -1,35 +1,13 @@
 <script>
   import * as Carbon from "carbon-components-svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16";
+  import TileCard from "./TileCard.svelte";
 
   let skeleton = false;
   let accordionItemOpen = false;
 </script>
 
 <style>
-  :global(.tile-card) {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 12rem;
-  }
-
-  .title {
-    font-size: 0.75rem;
-  }
-
-  .tile-card__preview {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 0;
-  }
-
-  .tile-card__actions {
-    display: none;
-  }
-
   :global(.component-grid) {
     margin-top: 1.5rem;
   }
@@ -58,171 +36,174 @@
 
   <Carbon.Row class="scope">
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Accordion</div>
-        <div class="tile-card__preview">
-          <Carbon.Accordion count={3} {skeleton} open={accordionItemOpen}>
-            <Carbon.AccordionItem title="Title 1" bind:open={accordionItemOpen}>
-              Content 1
-            </Carbon.AccordionItem>
-            <Carbon.AccordionItem title="Title 2">
-              Content 2
-            </Carbon.AccordionItem>
-            <Carbon.AccordionItem title="Title 3">
-              Content 3
-            </Carbon.AccordionItem>
-          </Carbon.Accordion>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Accordion">
+        <Carbon.Accordion count={3} {skeleton} open={accordionItemOpen}>
+          <Carbon.AccordionItem title="Title 1" bind:open={accordionItemOpen}>
+            Content 1
+          </Carbon.AccordionItem>
+          <Carbon.AccordionItem title="Title 2">Content 2</Carbon.AccordionItem>
+          <Carbon.AccordionItem title="Title 3">Content 3</Carbon.AccordionItem>
+        </Carbon.Accordion>
+      </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Breadcrumb</div>
-        <div class="tile-card__preview">
-          <Carbon.Breadcrumb {skeleton}>
-            <Carbon.BreadcrumbItem href="/">Breadcrumb 1</Carbon.BreadcrumbItem>
-            <Carbon.BreadcrumbItem href="/">Breadcrumb 2</Carbon.BreadcrumbItem>
-            <Carbon.BreadcrumbItem href="/">Breadcrumb 3</Carbon.BreadcrumbItem>
-          </Carbon.Breadcrumb>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Breadcrumb">
+        <Carbon.Breadcrumb {skeleton}>
+          <Carbon.BreadcrumbItem href="/">Breadcrumb 1</Carbon.BreadcrumbItem>
+          <Carbon.BreadcrumbItem href="/">Breadcrumb 2</Carbon.BreadcrumbItem>
+          <Carbon.BreadcrumbItem href="/">Breadcrumb 3</Carbon.BreadcrumbItem>
+        </Carbon.Breadcrumb>
+      </TileCard>
     </Carbon.Column>
   </Carbon.Row>
 
   <Carbon.Row class="scope">
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Primary button</div>
-        <div class="tile-card__preview">
-          <Carbon.Button {skeleton}>Primary</Carbon.Button>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Primary button">
+        <Carbon.Button {skeleton}>Primary</Carbon.Button>
+      </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Secondary button</div>
-        <div class="tile-card__preview">
-          <Carbon.Button kind="secondary" {skeleton}>Secondary</Carbon.Button>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Secondary button">
+        <Carbon.Button kind="secondary" {skeleton}>Secondary</Carbon.Button>
+      </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Tertiary button</div>
-        <div class="tile-card__preview">
-          <Carbon.Button kind="tertiary" {skeleton}>Tertiary</Carbon.Button>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Tertiary button">
+        <Carbon.Button kind="tertiary" {skeleton}>Tertiary</Carbon.Button>
+      </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Ghost button</div>
-        <div class="tile-card__preview">
-          <Carbon.Button kind="ghost" {skeleton}>Ghost</Carbon.Button>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Ghost button">
+        <Carbon.Button kind="ghost" {skeleton}>Ghost</Carbon.Button>
+      </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Danger button</div>
-        <div class="tile-card__preview">
-          <Carbon.Button kind="danger" {skeleton}>Danger</Carbon.Button>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Danger button">
+        <Carbon.Button kind="danger" {skeleton}>Danger</Carbon.Button>
+      </TileCard>
     </Carbon.Column>
   </Carbon.Row>
 
   <Carbon.Row class="scope">
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Primary button with icon</div>
-        <div class="tile-card__preview">
-          <Carbon.Button icon={Add16} {skeleton}>With icon</Carbon.Button>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Primary button with icon">
+        <Carbon.Button icon={Add16} {skeleton}>With icon</Carbon.Button>
+      </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Icon-only buttons</div>
-        <div class="tile-card__preview">
-          <Carbon.Button
-            icon={Add16}
-            hasIconOnly
-            iconDescription="Primary"
-            tooltipPosition="bottom"
-            tooltipAlignment="center"
-            {skeleton} />
-          <Carbon.Button
-            icon={Add16}
-            hasIconOnly
-            kind="secondary"
-            iconDescription="Secondary"
-            tooltipPosition="bottom"
-            tooltipAlignment="center"
-            {skeleton} />
-          <Carbon.Button
-            icon={Add16}
-            hasIconOnly
-            kind="tertiary"
-            iconDescription="Tertiary"
-            tooltipPosition="bottom"
-            tooltipAlignment="center"
-            {skeleton} />
-          <Carbon.Button
-            icon={Add16}
-            hasIconOnly
-            kind="ghost"
-            iconDescription="Ghost"
-            tooltipPosition="bottom"
-            tooltipAlignment="center"
-            {skeleton} />
-          <Carbon.Button
-            icon={Add16}
-            hasIconOnly
-            kind="danger"
-            iconDescription="Danger"
-            tooltipPosition="bottom"
-            tooltipAlignment="center"
-            {skeleton} />
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Icon-only buttons">
+        <Carbon.Button
+          icon={Add16}
+          hasIconOnly
+          iconDescription="Primary"
+          tooltipPosition="bottom"
+          tooltipAlignment="center"
+          {skeleton} />
+        <Carbon.Button
+          icon={Add16}
+          hasIconOnly
+          kind="secondary"
+          iconDescription="Secondary"
+          tooltipPosition="bottom"
+          tooltipAlignment="center"
+          {skeleton} />
+        <Carbon.Button
+          icon={Add16}
+          hasIconOnly
+          kind="tertiary"
+          iconDescription="Tertiary"
+          tooltipPosition="bottom"
+          tooltipAlignment="center"
+          {skeleton} />
+        <Carbon.Button
+          icon={Add16}
+          hasIconOnly
+          kind="ghost"
+          iconDescription="Ghost"
+          tooltipPosition="bottom"
+          tooltipAlignment="center"
+          {skeleton} />
+        <Carbon.Button
+          icon={Add16}
+          hasIconOnly
+          kind="danger"
+          iconDescription="Danger"
+          tooltipPosition="bottom"
+          tooltipAlignment="center"
+          {skeleton} />
+      </TileCard>
     </Carbon.Column>
   </Carbon.Row>
 
   <Carbon.Row class="scope">
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Checkbox</div>
-        <div class="tile-card__preview">
-          <fieldset class="bx--fieldset">
-            <legend class="bx--label">Checkbox heading</legend>
-            <Carbon.Checkbox {skeleton} labelText="Checkbox label" />
-            <Carbon.Checkbox {skeleton} labelText="Checkbox label" />
-            <Carbon.Checkbox {skeleton} labelText="Checkbox label" />
-          </fieldset>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Checkbox">
+        <fieldset class="bx--fieldset">
+          <legend class="bx--label">Checkbox heading</legend>
+          <Carbon.Checkbox {skeleton} labelText="Checkbox label" />
+          <Carbon.Checkbox {skeleton} labelText="Checkbox label" />
+          <Carbon.Checkbox {skeleton} labelText="Checkbox label" />
+        </fieldset>
+      </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
-      <Carbon.Tile class="tile-card">
-        <div class="title">Code Snippet</div>
-        <div class="tile-card__preview">
-          <Carbon.CodeSnippet type="single" light {skeleton}>
-            {`body { margin: 0; padding: 0; }`}
-          </Carbon.CodeSnippet>
-        </div>
-        <div class="tile-card__actions">Actions</div>
-      </Carbon.Tile>
+      <TileCard title="Indeterminate Checkboox">
+        <fieldset class="bx--fieldset">
+          <legend class="bx--label">Checkbox heading</legend>
+          <Carbon.Checkbox
+            indeterminate
+            {skeleton}
+            labelText="Checkbox label" />
+          <Carbon.Checkbox
+            indeterminate
+            {skeleton}
+            labelText="Checkbox label" />
+        </fieldset>
+      </TileCard>
+    </Carbon.Column>
+  </Carbon.Row>
+
+  <Carbon.Row class="scope">
+    <Carbon.Column noGutter>
+      <TileCard title="Inline Code Snippet">
+        <Carbon.CodeSnippet type="inline" light {skeleton}>
+          {`node -v`}
+        </Carbon.CodeSnippet>
+      </TileCard>
+    </Carbon.Column>
+    <Carbon.Column noGutter>
+      <TileCard title="Single-line Code Snippet">
+        <Carbon.CodeSnippet type="single" light {skeleton}>
+          {`tsc -c tsconfig.json`}
+        </Carbon.CodeSnippet>
+      </TileCard>
+    </Carbon.Column>
+    <Carbon.Column lg={8} noGutter>
+      <TileCard title="Multi-line Code Snippet">
+        <Carbon.CodeSnippet type="multi" light {skeleton}>
+          {`* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: "IBM Plex Sans";
+lin-height: 1.45;
+}
+
+h1 {
+font-size: 1rem;
+color: #171717; 
+}
+
+a {
+color: currentColor;
+text-decoration: underline;
+}`}
+        </Carbon.CodeSnippet>
+      </TileCard>
     </Carbon.Column>
   </Carbon.Row>
 </div>

@@ -719,15 +719,15 @@ caniuse-lite@^1.0.30001093, caniuse-lite@^1.0.30001097:
   integrity sha512-JupOe6+dGMr7E20siZHIZQwYqrllxotAhiaej96y6x00b/48rPt42o+SzOSCPbrpsDWvRja40Hwrj0g0q6LZJg==
 
 carbon-components-svelte@../:
-  version "0.9.0"
+  version "0.9.3"
   dependencies:
     carbon-icons-svelte "^10.14.0"
     flatpickr "4.6.3"
 
-carbon-components@^10.16.0:
-  version "10.16.0"
-  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.16.0.tgz#1f631788ea16485041729c5a6b65d1d79063eb86"
-  integrity sha512-7MltjxNKEjjJ+TOJv3qexE2wBiXQ5qNtMb+in2OJqAWEfixeDHLB+ZtkShAQmKzNw5jIX7w8jfsp2JC4CkApiw==
+carbon-components@^10.17.0:
+  version "10.17.0"
+  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.17.0.tgz#e1f5e219443b9317147013280224cdb89dbc0bf8"
+  integrity sha512-kTSWkgtTaW9FGBTHOCj0/Ir86RCNRBti0Ckf7yVC1LaQJ0VWy2/BLrwhfNWaWGCGUnx4A+qt8MwEuG1Yz07JhA==
   dependencies:
     flatpickr "4.6.1"
     lodash.debounce "^4.0.8"
