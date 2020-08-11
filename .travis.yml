@@ -4,4 +4,5 @@ cache: yarn
 script:
   - yarn prepack
   - yarn build
+  - node scripts/generate-docs.js
   - cd docs && yarn && yarn test

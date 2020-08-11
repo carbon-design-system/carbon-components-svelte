@@ -13,6 +13,7 @@
 
   /**
    * Specify the title of the icon
+   * @type {string} [title]
    */
   export let title = undefined;
 

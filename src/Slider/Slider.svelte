@@ -1,5 +1,74 @@
 <script>
+  /**
+   * Specify the value of the slider
+   * @type {string} [value=""]
+   */
+  export let value = "";
+
+  /**
+   * Set the maximum slider value
+   * @type {number} [max=100]
+   */
+  export let max = 100;
+
+  /**
+   * Specify the label for the max value
+   * @type {string} [maxLabel=""]
+   */
+  export let maxLabel = "";
+
+  /**
+   * Set the minimum slider value
+   * @type {number} [min=100]
+   */
+  export let min = 0;
+
+  /**
+   * Specify the label for the min value
+   * @type {string} [minLabel=""]
+   */
+  export let minLabel = "";
+
+  /**
+   * Set the step value
+   * @type {number} [step=1]
+   */
+  export let step = 1;
+
+  /**
+   * Set the step multiplier value
+   * @type {number} [stepMultiplier=4]
+   */
+  export let stepMultiplier = 4;
+
+  /**
+   * Set to `true` to require a value
+   * @type {boolean} [required=false]
+   */
+  export let required = false;
+
+  /**
+   * Specify the input type
+   * @type {string} [inputType="number"]
+   */
+  export let inputType = "number";
+
+  /**
+   * Set to `true` to disable the slider
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @type {boolean} [light=false]
+   */
+  export let light = false;
+
+  /**
+   * Set to `true` to hide the text input
+   * @type {boolean} [hideTextInput=false]
+   */
   export let hideTextInput = false;
 
   /**
@@ -7,7 +76,6 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
-  export let inputType = "number";
 
   /**
    * Set to `true` to indicate an invalid state
@@ -22,25 +90,10 @@
   export let labelText = "";
 
   /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
-  export let light = false;
-
-  export let max = 100;
-  export let maxLabel = "";
-  export let min = 0;
-  export let minLabel = "";
-
-  /**
    * Set a name for the slider element
    * @type {string} [name=""]
    */
   export let name = "";
-  export let required = false;
-  export let step = 1;
-  export let stepMultiplier = 4;
-  export let value = "";
 
   /**
    * Obtain a reference to the HTML element

@@ -1,6 +1,20 @@
 <script>
+  /**
+   * Set to `true` to select the item
+   * @type {boolean} [isSelected]
+   */
   export let isSelected = undefined;
+
+  /**
+   * Specify the `href` attribute
+   * @type {string} [href]
+   */
   export let href = undefined;
+
+  /**
+   * Specify the item text
+   * @type {string} [text]
+   */
   export let text = undefined;
 </script>
 
