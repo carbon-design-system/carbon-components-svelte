@@ -46,10 +46,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ibm/carbon-components-svelte.git"
+    "url": "https://github.com/IBM/carbon-components-svelte.git"
   },
-  "homepage": "https://github.com/ibm/carbon-components-svelte",
-  "bugs": "https://github.com/ibm/carbon-components-svelte/issues",
+  "homepage": "https://github.com/IBM/carbon-components-svelte",
+  "bugs": "https://github.com/IBM/carbon-components-svelte/issues",
   "keywords": [
     "carbon",
     "carbon components",

@@ -1,7 +1,12 @@
-const { parse, walk } = require("svelte/compiler");
-const commentParser = require("comment-parser");
+import { parse, walk } from "svelte/compiler";
+import commentParser from "comment-parser";
 
-function parseComponent(source, hooks) {
+/**
+ * Parse Svelte component for metadata using the Svelte compiler
+ * @param {string} source - raw Svelte component code
+ * @param {{ component: string; onTypeDef: (tag: { type: "typedef"; tag: string; name: string; }) => void;}} hooks
+ */
+export function parseComponent(source, hooks) {
   const exported_props = new Map();
   const slots = new Map();
   const forwarded_events = new Map();
@@ -111,5 +116,3 @@ function parseComponent(source, hooks) {
     dispatched_events,
   };
 }
-
-module.exports = { parseComponent };
