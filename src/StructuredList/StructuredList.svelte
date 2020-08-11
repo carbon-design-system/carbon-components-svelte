@@ -25,9 +25,9 @@
 
   setContext("StructuredListWrapper", {
     selectedValue,
-    update: value => {
+    update: (value) => {
       selectedValue.set(value);
-    }
+    },
   });
 
   $: selected = $selectedValue;

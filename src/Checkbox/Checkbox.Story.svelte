@@ -9,14 +9,14 @@
     indeterminate,
     disabled,
     hideLabel,
-    wrapperClassName
+    wrapperClassName,
   } = $$props;
   const checkboxProps = {
     labelText,
     indeterminate,
     disabled,
     hideLabel,
-    wrapperClassName
+    wrapperClassName,
   };
 
   let checked = true;

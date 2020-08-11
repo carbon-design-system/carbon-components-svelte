@@ -5,6 +5,7 @@ const svelte = require("rollup-plugin-svelte");
 const resolve = require("@rollup/plugin-node-resolve").default;
 const commonjs = require("@rollup/plugin-commonjs");
 const path = require("path");
+const prettier = require("prettier");
 const { parseComponent } = require("./parse-component");
 
 async function generateDocs() {
@@ -43,10 +44,7 @@ class CarbonSvelteBase {
           const moduleName = name.replace(/\./g, "");
 
           if (ext === ".svelte" && components.has(moduleName)) {
-            const group = dir
-              .split("src/")
-              .pop()
-              .split("/")[0];
+            const group = dir.split("src/").pop().split("/")[0];
 
             if (groups.has(group)) {
               groups.set(group, [...groups.get(group), moduleName]);
@@ -126,7 +124,11 @@ class CarbonSvelteBase {
     }
   }
 
-  fs.writeFileSync(pkg.types, definitions);
+  const formatted_definitions = prettier.format(definitions, {
+    parser: "typescript",
+  });
+
+  fs.writeFileSync(pkg.types, formatted_definitions);
 }
 
 generateDocs();

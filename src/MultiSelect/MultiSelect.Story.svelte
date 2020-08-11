@@ -12,8 +12,8 @@
     {
       id: "option-4",
       text:
-        "An example option that is really long to show what should be done to handle long text"
-    }
+        "An example option that is really long to show what should be done to handle long text",
+    },
   ];
 </script>
 

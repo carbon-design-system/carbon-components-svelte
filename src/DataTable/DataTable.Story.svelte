@@ -18,7 +18,7 @@
       port: 3000,
       rule: "Round robin",
       attached_groups: "Kevins VM Groups",
-      status: "Disabled"
+      status: "Disabled",
     },
     {
       id: "b",
@@ -27,7 +27,7 @@
       port: 443,
       rule: "Round robin",
       attached_groups: "Maureens VM Groups",
-      status: "Starting"
+      status: "Starting",
     },
     {
       id: "c",
@@ -36,7 +36,7 @@
       port: 80,
       rule: "DNS delegation",
       attached_groups: "Andrews VM Groups",
-      status: "Active"
+      status: "Active",
     },
     {
       id: "d",
@@ -45,7 +45,7 @@
       port: 3000,
       rule: "Round robin",
       attached_groups: "Marcs VM Groups",
-      status: "Disabled"
+      status: "Disabled",
     },
     {
       id: "e",
@@ -54,7 +54,7 @@
       port: 443,
       rule: "Round robin",
       attached_groups: "Mels VM Groups",
-      status: "Starting"
+      status: "Starting",
     },
     {
       id: "f",
@@ -63,8 +63,8 @@
       port: 80,
       rule: "DNS delegation",
       attached_groups: "Ronjas VM Groups",
-      status: "Active"
-    }
+      status: "Active",
+    },
   ];
   const headers = [
     { key: "name", value: "Name" },
@@ -72,7 +72,7 @@
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule" },
     { key: "attached_groups", value: "Attached Groups" },
-    { key: "status", value: "Status" }
+    { key: "status", value: "Status" },
   ];
   $: sortable = true;
 </script>

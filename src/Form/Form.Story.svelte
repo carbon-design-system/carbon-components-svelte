@@ -15,7 +15,7 @@
 </script>
 
 <Form
-  on:submit={event => {
+  on:submit={(event) => {
     console.log('on:submit', event);
   }}>
   <FormGroup {...$$props}>
