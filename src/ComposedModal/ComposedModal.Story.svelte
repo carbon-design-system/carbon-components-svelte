@@ -14,7 +14,9 @@
 </script>
 
 {#if story === undefined}
-  <ComposedModal {...$$props.composedModal}>
+  <ComposedModal {...$$props.composedModal} on:click={(e) => {
+    console.log(e.target)
+  }}>
     <ModalHeader {...$$props.modalHeader} />
     <ModalBody
       {...$$props.modalBody}

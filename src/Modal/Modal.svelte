@@ -110,6 +110,7 @@
   let buttonRef = null;
   let innerModal = null;
   let opened = false;
+  let didClickInnerModal = false;
 
   function focus(element) {
     const node =
@@ -165,10 +166,9 @@
     }
   }}
   on:click
-  on:click={({ target }) => {
-    if (!innerModal.contains(target)) {
-      open = false;
-    }
+  on:click={() => {
+    if (!didClickInnerModal) open = false;
+    didClickInnerModal = false;
   }}
   on:mouseover
   on:mouseenter
@@ -179,7 +179,10 @@
     aria-modal="true"
     aria-label={ariaLabel}
     class:bx--modal-container={true}
-    class={size && `bx--modal-container--${size}`}>
+    class={size && `bx--modal-container--${size}`}
+    on:click={() => {
+      didClickInnerModal = true;
+    }}>
     <div class:bx--modal-header={true}>
       {#if passiveModal}
         <button

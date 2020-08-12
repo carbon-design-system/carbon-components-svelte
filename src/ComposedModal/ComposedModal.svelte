@@ -47,6 +47,7 @@
 
   let buttonRef = null;
   let innerModal = null;
+  let didClickInnerModal = false;
 
   setContext("ComposedModal", {
     closeModal: () => {
@@ -102,10 +103,9 @@
   class:bx--modal--danger={danger}
   {...$$restProps}
   on:click
-  on:click={({ target }) => {
-    if (!innerModal.contains(target)) {
-      open = false;
-    }
+  on:click={() => {
+    if (!didClickInnerModal) open = false;
+    didClickInnerModal = false;
   }}
   on:mouseover
   on:mouseenter
@@ -121,7 +121,10 @@
     bind:this={innerModal}
     class:bx--modal-container={true}
     class="{size && `bx--modal-container--${size}`}
-    {containerClass}">
+    {containerClass}"
+    on:click={() => {
+      didClickInnerModal = true;
+    }}>
     <slot />
   </div>
 </div>

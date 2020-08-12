@@ -18,6 +18,9 @@
 <Modal
   {...$$props}
   bind:open
+  on:click={(e) => {
+    console.log(e.target)
+  }}
   on:click:button--secondary={() => {
     console.log('click button secondary');
     open = false;
