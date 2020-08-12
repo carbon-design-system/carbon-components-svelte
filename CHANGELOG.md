@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.9.5](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.5) - 2020-08-12
+
+- fix `Modal` and `ComposedModal` to prevent modal from closing unexpectedly ([PR #231](https://github.com/IBM/carbon-components-svelte/pull/231))
+
 ## [0.9.4](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.4) - 2020-08-08
 
 - ignore false positive `a11y-label-has-associated-control` warnings added in svelte^v3.24.1
