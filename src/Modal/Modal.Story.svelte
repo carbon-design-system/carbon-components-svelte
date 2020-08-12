@@ -1,8 +1,10 @@
 <script>
   import { Button } from "../Button";
+  import { TextInput, PasswordInput } from "../TextInput"
   import Modal from "./Modal.svelte";
 
   let open = $$props.open;
+  let type = "password";
 </script>
 
 <div>
@@ -29,6 +31,10 @@
   on:submit={() => {
     console.log('submit');
   }}>
+  <div>
+    <PasswordInput bind:type placeholder="Password Input" aria-level="" />
+    <Button kind="ghost" size="field" on:click="{() => {type = type === 'password' ? 'text' : 'password'}}">Programmatically toggle password</Button>
+  </div>
   <p>
     This component supports two-way binding by default. Please see ComposedModal
     for piecemeal functionality.
