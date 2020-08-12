@@ -36,19 +36,34 @@
    * @typedef {ColumnSize | ColumnSizeDescriptor} ColumnBreakpoint
    */
 
-  /** @type {ColumnBreakpoint} [sm] */
+  /**
+   * Set the small breakpoint
+   * @type {ColumnBreakpoint} [sm]
+   */
   export let sm = undefined;
 
-  /** @type {ColumnBreakpoint} [md] */
+  /**
+   * Set the medium breakpoint
+   * @type {ColumnBreakpoint} [md]
+   */
   export let md = undefined;
 
-  /** @type {ColumnBreakpoint} [lg] */
+  /**
+   * Set the large breakpoint
+   * @type {ColumnBreakpoint} [lg]
+   */
   export let lg = undefined;
 
-  /** @type {ColumnBreakpoint} [xlg] */
+  /**
+   * Set the extra large breakpoint
+   * @type {ColumnBreakpoint} [xlg]
+   */
   export let xlg = undefined;
 
-  /** @type {ColumnBreakpoint} [max] */
+  /**
+   * Set the maximum breakpoint
+   * @type {ColumnBreakpoint} [max]
+   */
   export let max = undefined;
 
   /**

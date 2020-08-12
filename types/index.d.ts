@@ -6,24 +6,8 @@ class SvelteComponent {
 
   $$slot_def: {};
 
-  // stub all 'on:{event}' directives
+  // stub all `on:{eventname}` directives
   $on(eventname: string, handler: (e: Event) => any): () => void;
-}
-
-export class AccordionSkeleton extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the number of accordion items to render
-     * @default 4
-     */
-    count?: number;
-
-    /**
-     * Set to `false` to close the first accordion item
-     * @default true
-     */
-    open?: boolean;
-  };
 }
 
 export class Accordion extends SvelteComponent {
@@ -69,19 +53,19 @@ export class AccordionItem extends SvelteComponent {
   $$slot_def: { title: {}; default: {} };
 }
 
-export class BreadcrumbSkeleton extends SvelteComponent {
+export class AccordionSkeleton extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` to hide the breadcrumb trailing slash
-     * @default false
-     */
-    noTrailingSlash?: boolean;
-
-    /**
-     * Specify the number of breadcrumb items to render
-     * @default 3
+     * Specify the number of accordion items to render
+     * @default 4
      */
     count?: number;
+
+    /**
+     * Set to `false` to close the first accordion item
+     * @default true
+     */
+    open?: boolean;
   };
 }
 
@@ -120,18 +104,19 @@ export class BreadcrumbItem extends SvelteComponent {
   $$slot_def: { default: { props: any } };
 }
 
-export class ButtonSkeleton extends SvelteComponent {
+export class BreadcrumbSkeleton extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set the `href` to use an anchor link
-     */
-    href?: string;
-
-    /**
-     * Set to `true` to use the small variant
+     * Set to `true` to hide the breadcrumb trailing slash
      * @default false
      */
-    small?: boolean;
+    noTrailingSlash?: boolean;
+
+    /**
+     * Specify the number of breadcrumb items to render
+     * @default 3
+     */
+    count?: number;
   };
 }
 
@@ -226,7 +211,20 @@ export class ButtonSet extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class CheckboxSkeleton extends SvelteComponent {}
+export class ButtonSkeleton extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the `href` to use an anchor link
+     */
+    href?: string;
+
+    /**
+     * Set to `true` to use the small variant
+     * @default false
+     */
+    small?: boolean;
+  };
+}
 
 export class Checkbox extends SvelteComponent {
   $$prop_def: {
@@ -296,14 +294,24 @@ export class Checkbox extends SvelteComponent {
   };
 }
 
-export class CodeSnippetSkeleton extends SvelteComponent {
+export class CheckboxSkeleton extends SvelteComponent {}
+
+export class ClickableTile extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set the type of code snippet
-     * @default "single"
+     * Set to `true` to click the tile
+     * @default false
      */
-    type?: "single" | "inline" | "multi";
+    clicked?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
   };
+
+  $$slot_def: { default: {} };
 }
 
 export class CodeSnippet extends SvelteComponent {
@@ -396,6 +404,86 @@ export class CodeSnippet extends SvelteComponent {
      * @default null
      */
     ref?: null | HTMLPreElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class CodeSnippetSkeleton extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the type of code snippet
+     * @default "single"
+     */
+    type?: "single" | "inline" | "multi";
+  };
+}
+
+type ColumnSize = boolean | number;
+
+interface ColumnSizeDescriptor {
+  span?: ColumnSize;
+  offset: number;
+}
+
+type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
+
+export class Column extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to render a custom HTML element
+     * Props are destructured as `props` in the default slot (e.g. <Column let:props><article {...props}>...</article></Column>)
+     * @default false
+     */
+    as?: boolean;
+
+    /**
+     * Set to `true` to remove the gutter
+     * @default false
+     */
+    noGutter?: boolean;
+
+    /**
+     * Set to `true` to remove the left gutter
+     * @default false
+     */
+    noGutterLeft?: boolean;
+
+    /**
+     * Set to `true` to remove the right gutter
+     * @default false
+     */
+    noGutterRight?: boolean;
+
+    /**
+     * Specify the aspect ratio of the column
+     */
+    aspectRatio?: "2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1";
+
+    /**
+     *
+     */
+    sm?: boolean | number;
+
+    /**
+     * Set the medium breakpoint
+     */
+    md?: ColumnBreakpoint;
+
+    /**
+     * Set the large breakpoint
+     */
+    lg?: ColumnBreakpoint;
+
+    /**
+     * Set the extra large breakpoint
+     */
+    xlg?: ColumnBreakpoint;
+
+    /**
+     * Set the maximum breakpoint
+     */
+    max?: ColumnBreakpoint;
   };
 
   $$slot_def: { default: {} };
@@ -551,107 +639,13 @@ export class ComposedModal extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ModalBody extends SvelteComponent {
+export class Content extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` if the modal contains form elements
-     * @default false
+     * Specify the id for the main element
+     * @default "main-content"
      */
-    hasForm?: boolean;
-
-    /**
-     * Set to `true` if the modal contains scrolling content
-     * @default false
-     */
-    hasScrollingContent?: boolean;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class ModalFooter extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the primary button text
-     * @default ""
-     */
-    primaryButtonText?: string;
-
-    /**
-     * Set to `true` to disable the primary button
-     * @default false
-     */
-    primaryButtonDisabled?: boolean;
-
-    /**
-     * Specify a class for the primary button
-     */
-    primaryClass?: string;
-
-    /**
-     * Specify the secondary button text
-     * @default ""
-     */
-    secondaryButtonText?: string;
-
-    /**
-     * Specify a class for the secondary button
-     */
-    secondaryClass?: string;
-
-    /**
-     * Set to `true` to use the danger variant
-     * @default false
-     */
-    danger?: boolean;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class ModalHeader extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the modal title
-     * @default ""
-     */
-    title?: string;
-
-    /**
-     * Specify the modal label
-     * @default ""
-     */
-    label?: string;
-
-    /**
-     * Specify the label class
-     * @default ""
-     */
-    labelClass?: string;
-
-    /**
-     * Specify the title class
-     * @default ""
-     */
-    titleClass?: string;
-
-    /**
-     * Specify the close class
-     * @default ""
-     */
-    closeClass?: string;
-
-    /**
-     * Specify the close icon class
-     * @default ""
-     */
-    closeIconClass?: string;
-
-    /**
-     * Specify the ARIA label for the close icon
-     * @default "Close"
-     */
-    iconDescription?: string;
+    id?: string;
   };
 
   $$slot_def: { default: {} };
@@ -670,42 +664,6 @@ export class ContentSwitcher extends SvelteComponent {
      * @default false
      */
     light?: boolean;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class Switch extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the switch text
-     * Alternatively, use the named slot "text" (e.g. <span slot="text">...</span>)
-     * @default "Provide text"
-     */
-    text?: string;
-
-    /**
-     * Set to `true` for the switch to be selected
-     * @default false
-     */
-    selected?: boolean;
-
-    /**
-     * Set to `true` to disable the switch
-     * @default false
-     */
-    disabled?: boolean;
-
-    /**
-     * Set an id for the button element
-     */
-    id?: string;
-
-    /**
-     * Obtain a reference to the button HTML element
-     * @default null
-     */
-    ref?: null | HTMLButtonElement;
   };
 
   $$slot_def: { default: {} };
@@ -795,117 +753,6 @@ export class DataTable extends SvelteComponent {
   };
 
   $$slot_def: { default: { props: any } };
-}
-
-export class Table extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set the size of the table
-     */
-    size?: "compact" | "short" | "tall";
-
-    /**
-     * Set to `true` to use zebra styles
-     * @default false
-     */
-    zebra?: boolean;
-
-    /**
-     * Set to `true` to use static width
-     * @default false
-     */
-    useStaticWidth?: boolean;
-
-    /**
-     * Set to `true` for the bordered variant
-     * @default false
-     */
-    shouldShowBorder?: boolean;
-
-    /**
-     * Set to `true` for the sortable variant
-     * @default false
-     */
-    sortable?: boolean;
-
-    /**
-     * Set to `true` to enable a sticky header
-     * @default false
-     */
-    stickyHeader?: boolean;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class TableBody extends SvelteComponent {
-  $$slot_def: { default: {} };
-}
-
-export class TableCell extends SvelteComponent {
-  $$slot_def: { default: {} };
-}
-
-export class TableContainer extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the title of the data table
-     * @default ""
-     */
-    title?: string;
-
-    /**
-     * Specify the description of the data table
-     * @default ""
-     */
-    description?: string;
-
-    /**
-     * Set to `true` to enable a sticky header
-     * @default false
-     */
-    stickyHeader?: boolean;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class TableHead extends SvelteComponent {
-  $$slot_def: { default: {} };
-}
-
-export class TableHeader extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the `scope` attribute
-     * @default "col"
-     */
-    scope?: string;
-
-    /**
-     * Override the default id translations
-     */
-    translateWithId?: () => string;
-
-    /**
-     * Set an id for the top-level element
-     */
-    id?: string;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class TableRow extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to select the row
-     * @default false
-     */
-    isSelected?: boolean;
-  };
-
-  $$slot_def: { default: {} };
 }
 
 export class DataTableSkeleton extends SvelteComponent {
@@ -1085,16 +932,6 @@ export class DatePickerInput extends SvelteComponent {
   };
 }
 
-export class DropdownSkeleton extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to use the inline variant
-     * @default false
-     */
-    inline?: boolean;
-  };
-}
-
 type DropdownItemId = string;
 
 type DropdownItemText = string;
@@ -1206,6 +1043,75 @@ export class Dropdown extends SvelteComponent {
      */
     ref?: null | HTMLButtonElement;
   };
+}
+
+export class DropdownSkeleton extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the inline variant
+     * @default false
+     */
+    inline?: boolean;
+  };
+}
+
+export class ExpandableTile extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to expand the tile
+     * @default false
+     */
+    expanded?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Specify the max height of the tile  (number of pixels)
+     * @default 0
+     */
+    tileMaxHeight?: number;
+
+    /**
+     * Specify the padding of the tile (number of pixels)
+     * @default 0
+     */
+    tilePadding?: number;
+
+    /**
+     * Specify the icon text of the collapsed tile
+     * @default "Interact to expand Tile"
+     */
+    tileCollapsedIconText?: string;
+
+    /**
+     * Specify the icon text of the expanded tile
+     * @default "Interact to collapse Tile"
+     */
+    tileExpandedIconText?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Set an id for the top-level div element
+     */
+    id?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLElement;
+  };
+
+  $$slot_def: { above: {}; below: {} };
 }
 
 export class FileUploader extends SvelteComponent {
@@ -1523,76 +1429,6 @@ export class FormLabel extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-type ColumnSize = boolean | number;
-
-interface ColumnSizeDescriptor {
-  span?: ColumnSize;
-  offset: number;
-}
-
-type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
-
-export class Column extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to render a custom HTML element
-     * Props are destructured as `props` in the default slot (e.g. <Column let:props><article {...props}>...</article></Column>)
-     * @default false
-     */
-    as?: boolean;
-
-    /**
-     * Set to `true` to remove the gutter
-     * @default false
-     */
-    noGutter?: boolean;
-
-    /**
-     * Set to `true` to remove the left gutter
-     * @default false
-     */
-    noGutterLeft?: boolean;
-
-    /**
-     * Set to `true` to remove the right gutter
-     * @default false
-     */
-    noGutterRight?: boolean;
-
-    /**
-     * Specify the aspect ratio of the column
-     */
-    aspectRatio?: "2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1";
-
-    /**
-     *
-     */
-    sm?: boolean | number;
-
-    /**
-     *
-     */
-    md?: ColumnBreakpoint;
-
-    /**
-     *
-     */
-    lg?: ColumnBreakpoint;
-
-    /**
-     *
-     */
-    xlg?: ColumnBreakpoint;
-
-    /**
-     *
-     */
-    max?: ColumnBreakpoint;
-  };
-
-  $$slot_def: { default: {} };
-}
-
 export class Grid extends SvelteComponent {
   $$prop_def: {
     /**
@@ -1642,57 +1478,185 @@ export class Grid extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Row extends SvelteComponent {
+export class Header extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` to render a custom HTML element
-     * Props are destructured as `props` in the default slot (e.g. <Row let:props><section {...props}>...</section></Row>)
-     * @default false
+     * Set to `false` to hide the side nav by default
+     * @default true
      */
-    as?: boolean;
+    expandedByDefault?: boolean;
 
     /**
-     * Set to `true` to use the condensed variant
+     * Set to `true` to open the side nav
      * @default false
      */
-    condensed?: boolean;
+    isSideNavOpen?: boolean;
 
     /**
-     * Set to `true` to use the narrow variant
-     * @default false
+     * Specify the ARIA label for the header
      */
-    narrow?: boolean;
+    uiShellAriaLabel?: string;
 
     /**
-     * Set to `true` to remove the gutter
-     * @default false
+     * Specify the `href` attribute
      */
-    noGutter?: boolean;
+    href?: string;
 
     /**
-     * Set to `true` to remove the left gutter
-     * @default false
+     * Specify the company name
      */
-    noGutterLeft?: boolean;
+    company?: string;
 
     /**
-     * Set to `true` to remove the right gutter
+     * Specify the platform name
+     * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
+     */
+    platformName?: string;
+  };
+
+  $$slot_def: { "skip-to-content": {}; platform: {}; default: {} };
+}
+
+export class HeaderAction extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to open the panel
      * @default false
      */
-    noGutterRight?: boolean;
+    isOpen?: boolean;
+
+    /**
+     * Specify the icon props
+     */
+    icon?: {
+      render: typeof import("carbon-icons-svelte/lib/Add16").default;
+      skeleton: boolean;
+    };
+
+    /**
+     * Specify the text
+     * Alternatively, use the named slot "text" (e.g. <div slot="text">...</div>)
+     */
+    text?: string;
+
+    /**
+     * Obtain a reference to the button HTML element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
+  };
+
+  $$slot_def: { text: {}; default: {} };
+}
+
+export class HeaderActionLink extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the active state
+     * @default false
+     */
+    linkIsActive?: boolean;
+
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+
+    /**
+     * Specify the icon props
+     */
+    icon?: {
+      render: typeof import("carbon-icons-svelte/lib/Add16").default;
+      skeleton: boolean;
+    };
+  };
+}
+
+export class HeaderActionSearch extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to focus the search
+     * @default false
+     */
+    searchIsActive?: boolean;
+  };
+}
+
+export class HeaderNav extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the ARIA label for the nav
+     */
+    ariaLabel?: string;
   };
 
   $$slot_def: { default: {} };
 }
 
-export class IconSkeleton extends SvelteComponent {
+export class HeaderNavItem extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set the size of the icon
-     * @default 16
+     * Specify the `href` attribute
      */
-    size?: number;
+    href?: string;
+
+    /**
+     * Specify the text
+     */
+    text?: string;
   };
+}
+
+export class HeaderNavMenu extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to toggle the expanded state
+     * @default false
+     */
+    expanded?: boolean;
+
+    /**
+     * Specify the `href` attribute
+     * @default "/"
+     */
+    href?: string;
+
+    /**
+     * Specify the text
+     */
+    text?: string;
+
+    /**
+     * Specify the ARIA label for the chevron icon
+     * @default "Expand/Collapse"
+     */
+    iconDescription?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class HeaderPanelDivider extends SvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class HeaderPanelLink extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class HeaderPanelLinks extends SvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class HeaderUtilities extends SvelteComponent {
+  $$slot_def: { default: {} };
 }
 
 export class Icon extends SvelteComponent {
@@ -1708,6 +1672,16 @@ export class Icon extends SvelteComponent {
      * @default false
      */
     skeleton?: boolean;
+  };
+}
+
+export class IconSkeleton extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the size of the icon
+     * @default 16
+     */
+    size?: number;
   };
 }
 
@@ -1735,6 +1709,66 @@ export class InlineLoading extends SvelteComponent {
      */
     successDelay?: number;
   };
+}
+
+export class InlineNotification extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the type of notification
+     * @default "inline"
+     */
+    notificationType?: "toast" | "inline";
+
+    /**
+     * Specify the kind of notification
+     * @default "error"
+     */
+    kind?:
+      | "error"
+      | "info"
+      | "info-square"
+      | "success"
+      | "warning"
+      | "warning-alt";
+
+    /**
+     * Set to `true` to use the low contrast variant
+     * @default false
+     */
+    lowContrast?: boolean;
+
+    /**
+     * Set the `role` attribute
+     * @default "alert"
+     */
+    role?: string;
+
+    /**
+     * Specify the title text
+     * @default "Title"
+     */
+    title?: string;
+
+    /**
+     * Specify the subtitle text
+     * @default ""
+     */
+    subtitle?: string;
+
+    /**
+     * Set to `true` to hide the close button
+     * @default false
+     */
+    hideCloseButton?: boolean;
+
+    /**
+     * Specify the ARIA label for the icon
+     * @default "Closes notification"
+     */
+    iconDescription?: string;
+  };
+
+  $$slot_def: { default: {}; actions: {} };
 }
 
 export class Link extends SvelteComponent {
@@ -2079,6 +2113,112 @@ export class Modal extends SvelteComponent {
   $$slot_def: { label: {}; heading: {}; default: {} };
 }
 
+export class ModalBody extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` if the modal contains form elements
+     * @default false
+     */
+    hasForm?: boolean;
+
+    /**
+     * Set to `true` if the modal contains scrolling content
+     * @default false
+     */
+    hasScrollingContent?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ModalFooter extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the primary button text
+     * @default ""
+     */
+    primaryButtonText?: string;
+
+    /**
+     * Set to `true` to disable the primary button
+     * @default false
+     */
+    primaryButtonDisabled?: boolean;
+
+    /**
+     * Specify a class for the primary button
+     */
+    primaryClass?: string;
+
+    /**
+     * Specify the secondary button text
+     * @default ""
+     */
+    secondaryButtonText?: string;
+
+    /**
+     * Specify a class for the secondary button
+     */
+    secondaryClass?: string;
+
+    /**
+     * Set to `true` to use the danger variant
+     * @default false
+     */
+    danger?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ModalHeader extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the modal title
+     * @default ""
+     */
+    title?: string;
+
+    /**
+     * Specify the modal label
+     * @default ""
+     */
+    label?: string;
+
+    /**
+     * Specify the label class
+     * @default ""
+     */
+    labelClass?: string;
+
+    /**
+     * Specify the title class
+     * @default ""
+     */
+    titleClass?: string;
+
+    /**
+     * Specify the close class
+     * @default ""
+     */
+    closeClass?: string;
+
+    /**
+     * Specify the close icon class
+     * @default ""
+     */
+    closeIconClass?: string;
+
+    /**
+     * Specify the ARIA label for the close icon
+     * @default "Close"
+     */
+    iconDescription?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
 type MultiSelectItemId = string;
 
 type MultiSelectItemText = string;
@@ -2229,66 +2369,6 @@ export class MultiSelect extends SvelteComponent {
   };
 }
 
-export class InlineNotification extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set the type of notification
-     * @default "inline"
-     */
-    notificationType?: "toast" | "inline";
-
-    /**
-     * Specify the kind of notification
-     * @default "error"
-     */
-    kind?:
-      | "error"
-      | "info"
-      | "info-square"
-      | "success"
-      | "warning"
-      | "warning-alt";
-
-    /**
-     * Set to `true` to use the low contrast variant
-     * @default false
-     */
-    lowContrast?: boolean;
-
-    /**
-     * Set the `role` attribute
-     * @default "alert"
-     */
-    role?: string;
-
-    /**
-     * Specify the title text
-     * @default "Title"
-     */
-    title?: string;
-
-    /**
-     * Specify the subtitle text
-     * @default ""
-     */
-    subtitle?: string;
-
-    /**
-     * Set to `true` to hide the close button
-     * @default false
-     */
-    hideCloseButton?: boolean;
-
-    /**
-     * Specify the ARIA label for the icon
-     * @default "Closes notification"
-     */
-    iconDescription?: string;
-  };
-
-  $$slot_def: { default: {}; actions: {} };
-}
-
 export class NotificationActionButton extends SvelteComponent {
   $$slot_def: { default: {} };
 }
@@ -2375,88 +2455,6 @@ export class NotificationTextDetails extends SvelteComponent {
   };
 
   $$slot_def: { default: {} };
-}
-
-export class ToastNotification extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set the type of notification
-     * @default "toast"
-     */
-    notificationType?: "toast" | "inline";
-
-    /**
-     * Specify the kind of notification
-     * @default "error"
-     */
-    kind?:
-      | "error"
-      | "info"
-      | "info-square"
-      | "success"
-      | "warning"
-      | "warning-alt";
-
-    /**
-     * Set to `true` to use the low contrast variant
-     * @default false
-     */
-    lowContrast?: boolean;
-
-    /**
-     * Set the timeout duration (ms) to hide the notification after closing it
-     * @default 0
-     */
-    timeout?: number;
-
-    /**
-     * Set the `role` attribute
-     * @default "alert"
-     */
-    role?: string;
-
-    /**
-     * Specify the title text
-     * @default "Title"
-     */
-    title?: string;
-
-    /**
-     * Specify the subtitle text
-     * @default ""
-     */
-    subtitle?: string;
-
-    /**
-     * Specify the caption text
-     * @default "Caption"
-     */
-    caption?: string;
-
-    /**
-     * Specify the ARIA label for the icon
-     * @default "Closes notification"
-     */
-    iconDescription?: string;
-
-    /**
-     * Set to `true` to hide the close button
-     * @default false
-     */
-    hideCloseButton?: boolean;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class NumberInputSkeleton extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to hide the label text
-     * @default false
-     */
-    hideLabel?: boolean;
-  };
 }
 
 type NumberInputTranslationId = "increment" | "decrement";
@@ -2584,6 +2582,16 @@ export class NumberInput extends SvelteComponent {
   };
 
   $$slot_def: { label: {} };
+}
+
+export class NumberInputSkeleton extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+  };
 }
 
 export class OrderedList extends SvelteComponent {
@@ -2714,8 +2722,6 @@ export class OverflowMenuItem extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class PaginationSkeleton extends SvelteComponent {}
-
 export class Pagination extends SvelteComponent {
   $$prop_def: {
     /**
@@ -2844,13 +2850,112 @@ export class PaginationNav extends SvelteComponent {
   };
 }
 
-export class ProgressIndicatorSkeleton extends SvelteComponent {
+export class PaginationSkeleton extends SvelteComponent {}
+
+export class PasswordInput extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` to use the vertical variant
+     * Set the size of the input
+     */
+    size?: "sm" | "xl";
+
+    /**
+     * Specify the input value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the input type
+     * @default "password"
+     */
+    type?: string;
+
+    /**
+     * Specify the placeholder text
+     * @default ""
+     */
+    placeholder?: string;
+
+    /**
+     * Specify the hide password label text
+     * @default "Hide password"
+     */
+    hidePasswordLabel?: string;
+
+    /**
+     * Specify the show password label text
+     * @default "Show password"
+     */
+    showPasswordLabel?: string;
+
+    /**
+     * Set the alignment of the tooltip relative to the icon
+     */
+    tooltipAlignment?: "start" | "center" | "end";
+
+    /**
+     * Set the position of the tooltip relative to the icon
+     */
+    tooltipPosition?: "top" | "right" | "bottom" | "left";
+
+    /**
+     * Set to `true` to enable the light variant
      * @default false
      */
-    vertical?: boolean;
+    light?: boolean;
+
+    /**
+     * Set to `true` to disable the input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the helper text
+     * @default ""
+     */
+    helperText?: string;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the text for the invalid state
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
 }
 
@@ -2870,6 +2975,16 @@ export class ProgressIndicator extends SvelteComponent {
   };
 
   $$slot_def: { default: {} };
+}
+
+export class ProgressIndicatorSkeleton extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the vertical variant
+     * @default false
+     */
+    vertical?: boolean;
+  };
 }
 
 export class ProgressStep extends SvelteComponent {
@@ -2924,8 +3039,6 @@ export class ProgressStep extends SvelteComponent {
 
   $$slot_def: { default: { props: any } };
 }
-
-export class RadioButtonSkeleton extends SvelteComponent {}
 
 export class RadioButton extends SvelteComponent {
   $$prop_def: {
@@ -3013,14 +3126,96 @@ export class RadioButtonGroup extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class SearchSkeleton extends SvelteComponent {
+export class RadioButtonSkeleton extends SvelteComponent {}
+
+export class RadioTile extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` to use the small variant
+     * Set to `true` to check the tile
      * @default false
      */
-    small?: boolean;
+    checked?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Specify the value of the radio input
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Specify the ARIA label for the radio tile checkmark icon
+     * @default "Tile checkmark"
+     */
+    iconDescription?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     * @default ""
+     */
+    name?: string;
   };
+
+  $$slot_def: { default: {} };
+}
+
+export class Row extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to render a custom HTML element
+     * Props are destructured as `props` in the default slot (e.g. <Row let:props><section {...props}>...</section></Row>)
+     * @default false
+     */
+    as?: boolean;
+
+    /**
+     * Set to `true` to use the condensed variant
+     * @default false
+     */
+    condensed?: boolean;
+
+    /**
+     * Set to `true` to use the narrow variant
+     * @default false
+     */
+    narrow?: boolean;
+
+    /**
+     * Set to `true` to remove the gutter
+     * @default false
+     */
+    noGutter?: boolean;
+
+    /**
+     * Set to `true` to remove the left gutter
+     * @default false
+     */
+    noGutterLeft?: boolean;
+
+    /**
+     * Set to `true` to remove the right gutter
+     * @default false
+     */
+    noGutterRight?: boolean;
+  };
+
+  $$slot_def: { default: {} };
 }
 
 export class Search extends SvelteComponent {
@@ -3103,13 +3298,13 @@ export class Search extends SvelteComponent {
   };
 }
 
-export class SelectSkeleton extends SvelteComponent {
+export class SearchSkeleton extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` to hide the label text
+     * Set to `true` to use the small variant
      * @default false
      */
-    hideLabel?: boolean;
+    small?: boolean;
   };
 }
 
@@ -3245,6 +3440,174 @@ export class SelectItemGroup extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
+export class SelectSkeleton extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+  };
+}
+
+export class SelectableTile extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to select the tile
+     * @default false
+     */
+    selected?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Specify the title of the selectable tile
+     * @default "title"
+     */
+    title?: string;
+
+    /**
+     * Specify the value of the selectable tile
+     * @default "value"
+     */
+    value?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Specify the ARIA label for the selectable tile checkmark icon
+     * @default "Tile checkmark"
+     */
+    iconDescription?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     * @default ""
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class SideNav extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the fixed variant
+     * @default false
+     */
+    fixed?: boolean;
+
+    /**
+     * Specify the ARIA label for the nav
+     */
+    ariaLabel?: string;
+
+    /**
+     * Set to `true` to toggle the expanded state
+     * @default false
+     */
+    isOpen?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class SideNavItems extends SvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class SideNavLink extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to select the current link
+     * @default false
+     */
+    isSelected?: boolean;
+
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+
+    /**
+     * Specify the text
+     */
+    text?: string;
+
+    /**
+     * Specify the icon props
+     */
+    icon?: {
+      render: typeof import("carbon-icons-svelte/lib/Add16").default;
+      skeleton: boolean;
+    };
+  };
+}
+
+export class SideNavMenu extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to toggle the expanded state
+     * @default false
+     */
+    expanded?: boolean;
+
+    /**
+     * Specify the text
+     */
+    text?: string;
+
+    /**
+     * Specify the icon props
+     */
+    icon?: {
+      render: typeof import("carbon-icons-svelte/lib/Add16").default;
+      skeleton: boolean;
+    };
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class SideNavMenuItem extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to select the item
+     */
+    isSelected?: boolean;
+
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+
+    /**
+     * Specify the item text
+     */
+    text?: string;
+  };
+}
+
 export class SkeletonPlaceholder extends SvelteComponent {}
 
 export class SkeletonText extends SvelteComponent {
@@ -3275,14 +3638,22 @@ export class SkeletonText extends SvelteComponent {
   };
 }
 
-export class SliderSkeleton extends SvelteComponent {
+export class SkipToContent extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` to hide the label text
-     * @default false
+     * Specify the `href` attribute
+     * @default "#main-content"
      */
-    hideLabel?: boolean;
+    href?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
   };
+
+  $$slot_def: { default: {} };
 }
 
 export class Slider extends SvelteComponent {
@@ -3390,19 +3761,13 @@ export class Slider extends SvelteComponent {
   };
 }
 
-export class StructuredListSkeleton extends SvelteComponent {
+export class SliderSkeleton extends SvelteComponent {
   $$prop_def: {
     /**
-     * Specify the number of rows
-     * @default 5
-     */
-    rows?: number;
-
-    /**
-     * Set to `true` to use the bordered variant
+     * Set to `true` to hide the label text
      * @default false
      */
-    border?: boolean;
+    hideLabel?: boolean;
   };
 }
 
@@ -3518,6 +3883,58 @@ export class StructuredListRow extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
+export class StructuredListSkeleton extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the number of rows
+     * @default 5
+     */
+    rows?: number;
+
+    /**
+     * Set to `true` to use the bordered variant
+     * @default false
+     */
+    border?: boolean;
+  };
+}
+
+export class Switch extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the switch text
+     * Alternatively, use the named slot "text" (e.g. <span slot="text">...</span>)
+     * @default "Provide text"
+     */
+    text?: string;
+
+    /**
+     * Set to `true` for the switch to be selected
+     * @default false
+     */
+    selected?: boolean;
+
+    /**
+     * Set to `true` to disable the switch
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set an id for the button element
+     */
+    id?: string;
+
+    /**
+     * Obtain a reference to the button HTML element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
 export class Tab extends SvelteComponent {
   $$prop_def: {
     /**
@@ -3571,6 +3988,117 @@ export class TabContent extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
+export class Table extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the size of the table
+     */
+    size?: "compact" | "short" | "tall";
+
+    /**
+     * Set to `true` to use zebra styles
+     * @default false
+     */
+    zebra?: boolean;
+
+    /**
+     * Set to `true` to use static width
+     * @default false
+     */
+    useStaticWidth?: boolean;
+
+    /**
+     * Set to `true` for the bordered variant
+     * @default false
+     */
+    shouldShowBorder?: boolean;
+
+    /**
+     * Set to `true` for the sortable variant
+     * @default false
+     */
+    sortable?: boolean;
+
+    /**
+     * Set to `true` to enable a sticky header
+     * @default false
+     */
+    stickyHeader?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class TableBody extends SvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class TableCell extends SvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class TableContainer extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the title of the data table
+     * @default ""
+     */
+    title?: string;
+
+    /**
+     * Specify the description of the data table
+     * @default ""
+     */
+    description?: string;
+
+    /**
+     * Set to `true` to enable a sticky header
+     * @default false
+     */
+    stickyHeader?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class TableHead extends SvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class TableHeader extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the `scope` attribute
+     * @default "col"
+     */
+    scope?: string;
+
+    /**
+     * Override the default id translations
+     */
+    translateWithId?: () => string;
+
+    /**
+     * Set an id for the top-level element
+     */
+    id?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class TableRow extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to select the row
+     * @default false
+     */
+    isSelected?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
 export class Tabs extends SvelteComponent {
   $$prop_def: {
     /**
@@ -3610,8 +4138,6 @@ export class TabsSkeleton extends SvelteComponent {
     count?: number;
   };
 }
-
-export class TagSkeleton extends SvelteComponent {}
 
 export class Tag extends SvelteComponent {
   $$prop_def: {
@@ -3664,15 +4190,7 @@ export class Tag extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TextAreaSkeleton extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to visually hide the label text
-     * @default false
-     */
-    hideLabel?: boolean;
-  };
-}
+export class TagSkeleton extends SvelteComponent {}
 
 export class TextArea extends SvelteComponent {
   $$prop_def: {
@@ -3760,117 +4278,10 @@ export class TextArea extends SvelteComponent {
   };
 }
 
-export class PasswordInput extends SvelteComponent {
+export class TextAreaSkeleton extends SvelteComponent {
   $$prop_def: {
-    /**
-     * Set the size of the input
-     */
-    size?: "sm" | "xl";
-
-    /**
-     * Specify the input value
-     * @default ""
-     */
-    value?: string;
-
-    /**
-     * Specify the input type
-     * @default "password"
-     */
-    type?: string;
-
-    /**
-     * Specify the placeholder text
-     * @default ""
-     */
-    placeholder?: string;
-
-    /**
-     * Specify the hide password label text
-     * @default "Hide password"
-     */
-    hidePasswordLabel?: string;
-
-    /**
-     * Specify the show password label text
-     * @default "Show password"
-     */
-    showPasswordLabel?: string;
-
-    /**
-     * Set the alignment of the tooltip relative to the icon
-     */
-    tooltipAlignment?: "start" | "center" | "end";
-
-    /**
-     * Set the position of the tooltip relative to the icon
-     */
-    tooltipPosition?: "top" | "right" | "bottom" | "left";
-
-    /**
-     * Set to `true` to enable the light variant
-     * @default false
-     */
-    light?: boolean;
-
-    /**
-     * Set to `true` to disable the input
-     * @default false
-     */
-    disabled?: boolean;
-
-    /**
-     * Specify the helper text
-     * @default ""
-     */
-    helperText?: string;
-
-    /**
-     * Specify the label text
-     * @default ""
-     */
-    labelText?: string;
-
     /**
      * Set to `true` to visually hide the label text
-     * @default false
-     */
-    hideLabel?: boolean;
-
-    /**
-     * Set to `true` to indicate an invalid state
-     * @default false
-     */
-    invalid?: boolean;
-
-    /**
-     * Specify the text for the invalid state
-     * @default ""
-     */
-    invalidText?: string;
-
-    /**
-     * Set an id for the input element
-     */
-    id?: string;
-
-    /**
-     * Specify a name attribute for the input
-     */
-    name?: string;
-
-    /**
-     * Obtain a reference to the input HTML element
-     * @default null
-     */
-    ref?: null | HTMLInputElement;
-  };
-}
-
-export class TextInputSkeleton extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to hide the label text
      * @default false
      */
     hideLabel?: boolean;
@@ -3962,187 +4373,14 @@ export class TextInput extends SvelteComponent {
   };
 }
 
-export class ClickableTile extends SvelteComponent {
+export class TextInputSkeleton extends SvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` to click the tile
+     * Set to `true` to hide the label text
      * @default false
      */
-    clicked?: boolean;
-
-    /**
-     * Set to `true` to enable the light variant
-     * @default false
-     */
-    light?: boolean;
+    hideLabel?: boolean;
   };
-
-  $$slot_def: { default: {} };
-}
-
-export class ExpandableTile extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to expand the tile
-     * @default false
-     */
-    expanded?: boolean;
-
-    /**
-     * Set to `true` to enable the light variant
-     * @default false
-     */
-    light?: boolean;
-
-    /**
-     * Specify the max height of the tile  (number of pixels)
-     * @default 0
-     */
-    tileMaxHeight?: number;
-
-    /**
-     * Specify the padding of the tile (number of pixels)
-     * @default 0
-     */
-    tilePadding?: number;
-
-    /**
-     * Specify the icon text of the collapsed tile
-     * @default "Interact to expand Tile"
-     */
-    tileCollapsedIconText?: string;
-
-    /**
-     * Specify the icon text of the expanded tile
-     * @default "Interact to collapse Tile"
-     */
-    tileExpandedIconText?: string;
-
-    /**
-     * Specify the tabindex
-     * @default "0"
-     */
-    tabindex?: string;
-
-    /**
-     * Set an id for the top-level div element
-     */
-    id?: string;
-
-    /**
-     * Obtain a reference to the input HTML element
-     * @default null
-     */
-    ref?: null | HTMLElement;
-  };
-
-  $$slot_def: { above: {}; below: {} };
-}
-
-export class RadioTile extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to check the tile
-     * @default false
-     */
-    checked?: boolean;
-
-    /**
-     * Set to `true` to enable the light variant
-     * @default false
-     */
-    light?: boolean;
-
-    /**
-     * Specify the value of the radio input
-     * @default ""
-     */
-    value?: string;
-
-    /**
-     * Specify the tabindex
-     * @default "0"
-     */
-    tabindex?: string;
-
-    /**
-     * Specify the ARIA label for the radio tile checkmark icon
-     * @default "Tile checkmark"
-     */
-    iconDescription?: string;
-
-    /**
-     * Set an id for the input element
-     */
-    id?: string;
-
-    /**
-     * Specify a name attribute for the input
-     * @default ""
-     */
-    name?: string;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class SelectableTile extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to select the tile
-     * @default false
-     */
-    selected?: boolean;
-
-    /**
-     * Set to `true` to enable the light variant
-     * @default false
-     */
-    light?: boolean;
-
-    /**
-     * Specify the title of the selectable tile
-     * @default "title"
-     */
-    title?: string;
-
-    /**
-     * Specify the value of the selectable tile
-     * @default "value"
-     */
-    value?: string;
-
-    /**
-     * Specify the tabindex
-     * @default "0"
-     */
-    tabindex?: string;
-
-    /**
-     * Specify the ARIA label for the selectable tile checkmark icon
-     * @default "Tile checkmark"
-     */
-    iconDescription?: string;
-
-    /**
-     * Set an id for the input element
-     */
-    id?: string;
-
-    /**
-     * Specify a name attribute for the input
-     * @default ""
-     */
-    name?: string;
-
-    /**
-     * Obtain a reference to the input HTML element
-     * @default null
-     */
-    ref?: null | HTMLInputElement;
-  };
-
-  $$slot_def: { default: {} };
 }
 
 export class Tile extends SvelteComponent {
@@ -4320,19 +4558,76 @@ export class TimePickerSelect extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ToggleSkeleton extends SvelteComponent {
+export class ToastNotification extends SvelteComponent {
   $$prop_def: {
     /**
-     * Specify the label text
-     * @default ""
+     * Set the type of notification
+     * @default "toast"
      */
-    labelText?: string;
+    notificationType?: "toast" | "inline";
 
     /**
-     * Set an id for the input element
+     * Specify the kind of notification
+     * @default "error"
      */
-    id?: string;
+    kind?:
+      | "error"
+      | "info"
+      | "info-square"
+      | "success"
+      | "warning"
+      | "warning-alt";
+
+    /**
+     * Set to `true` to use the low contrast variant
+     * @default false
+     */
+    lowContrast?: boolean;
+
+    /**
+     * Set the timeout duration (ms) to hide the notification after closing it
+     * @default 0
+     */
+    timeout?: number;
+
+    /**
+     * Set the `role` attribute
+     * @default "alert"
+     */
+    role?: string;
+
+    /**
+     * Specify the title text
+     * @default "Title"
+     */
+    title?: string;
+
+    /**
+     * Specify the subtitle text
+     * @default ""
+     */
+    subtitle?: string;
+
+    /**
+     * Specify the caption text
+     * @default "Caption"
+     */
+    caption?: string;
+
+    /**
+     * Specify the ARIA label for the icon
+     * @default "Closes notification"
+     */
+    iconDescription?: string;
+
+    /**
+     * Set to `true` to hide the close button
+     * @default false
+     */
+    hideCloseButton?: boolean;
   };
+
+  $$slot_def: { default: {} };
 }
 
 export class Toggle extends SvelteComponent {
@@ -4379,7 +4674,7 @@ export class Toggle extends SvelteComponent {
   };
 }
 
-export class ToggleSmallSkeleton extends SvelteComponent {
+export class ToggleSkeleton extends SvelteComponent {
   $$prop_def: {
     /**
      * Specify the label text
@@ -4435,6 +4730,21 @@ export class ToggleSmall extends SvelteComponent {
      * Specify a name attribute for the checkbox input
      */
     name?: string;
+  };
+}
+
+export class ToggleSmallSkeleton extends SvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
   };
 }
 
@@ -4585,316 +4895,6 @@ export class TooltipIcon extends SvelteComponent {
      * @default null
      */
     ref?: null | HTMLButtonElement;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class Content extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the id for the main element
-     * @default "main-content"
-     */
-    id?: string;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class Header extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `false` to hide the side nav by default
-     * @default true
-     */
-    expandedByDefault?: boolean;
-
-    /**
-     * Set to `true` to open the side nav
-     * @default false
-     */
-    isSideNavOpen?: boolean;
-
-    /**
-     * Specify the ARIA label for the header
-     */
-    uiShellAriaLabel?: string;
-
-    /**
-     * Specify the `href` attribute
-     */
-    href?: string;
-
-    /**
-     * Specify the company name
-     */
-    company?: string;
-
-    /**
-     * Specify the platform name
-     * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
-     */
-    platformName?: string;
-  };
-
-  $$slot_def: { "skip-to-content": {}; platform: {}; default: {} };
-}
-
-export class HeaderAction extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to open the panel
-     * @default false
-     */
-    isOpen?: boolean;
-
-    /**
-     * Specify the icon props
-     */
-    icon?: {
-      render: typeof import("carbon-icons-svelte/lib/Add16").default;
-      skeleton: boolean;
-    };
-
-    /**
-     * Specify the text
-     * Alternatively, use the named slot "text" (e.g. <div slot="text">...</div>)
-     */
-    text?: string;
-
-    /**
-     * Obtain a reference to the button HTML element
-     * @default null
-     */
-    ref?: null | HTMLButtonElement;
-  };
-
-  $$slot_def: { text: {}; default: {} };
-}
-
-export class HeaderActionLink extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to use the active state
-     * @default false
-     */
-    linkIsActive?: boolean;
-
-    /**
-     * Specify the `href` attribute
-     */
-    href?: string;
-
-    /**
-     * Specify the icon props
-     */
-    icon?: {
-      render: typeof import("carbon-icons-svelte/lib/Add16").default;
-      skeleton: boolean;
-    };
-  };
-}
-
-export class HeaderActionSearch extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to focus the search
-     * @default false
-     */
-    searchIsActive?: boolean;
-  };
-}
-
-export class HeaderNav extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the ARIA label for the nav
-     */
-    ariaLabel?: string;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class HeaderNavItem extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the `href` attribute
-     */
-    href?: string;
-
-    /**
-     * Specify the text
-     */
-    text?: string;
-  };
-}
-
-export class HeaderNavMenu extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to toggle the expanded state
-     * @default false
-     */
-    expanded?: boolean;
-
-    /**
-     * Specify the `href` attribute
-     * @default "/"
-     */
-    href?: string;
-
-    /**
-     * Specify the text
-     */
-    text?: string;
-
-    /**
-     * Specify the ARIA label for the chevron icon
-     * @default "Expand/Collapse"
-     */
-    iconDescription?: string;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class HeaderPanelDivider extends SvelteComponent {
-  $$slot_def: { default: {} };
-}
-
-export class HeaderPanelLink extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the `href` attribute
-     */
-    href?: string;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class HeaderPanelLinks extends SvelteComponent {
-  $$slot_def: { default: {} };
-}
-
-export class HeaderUtilities extends SvelteComponent {
-  $$slot_def: { default: {} };
-}
-
-export class SideNav extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to use the fixed variant
-     * @default false
-     */
-    fixed?: boolean;
-
-    /**
-     * Specify the ARIA label for the nav
-     */
-    ariaLabel?: string;
-
-    /**
-     * Set to `true` to toggle the expanded state
-     * @default false
-     */
-    isOpen?: boolean;
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class SideNavItems extends SvelteComponent {
-  $$slot_def: { default: {} };
-}
-
-export class SideNavLink extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to select the current link
-     * @default false
-     */
-    isSelected?: boolean;
-
-    /**
-     * Specify the `href` attribute
-     */
-    href?: string;
-
-    /**
-     * Specify the text
-     */
-    text?: string;
-
-    /**
-     * Specify the icon props
-     */
-    icon?: {
-      render: typeof import("carbon-icons-svelte/lib/Add16").default;
-      skeleton: boolean;
-    };
-  };
-}
-
-export class SideNavMenu extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to toggle the expanded state
-     * @default false
-     */
-    expanded?: boolean;
-
-    /**
-     * Specify the text
-     */
-    text?: string;
-
-    /**
-     * Specify the icon props
-     */
-    icon?: {
-      render: typeof import("carbon-icons-svelte/lib/Add16").default;
-      skeleton: boolean;
-    };
-  };
-
-  $$slot_def: { default: {} };
-}
-
-export class SideNavMenuItem extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to select the item
-     */
-    isSelected?: boolean;
-
-    /**
-     * Specify the `href` attribute
-     */
-    href?: string;
-
-    /**
-     * Specify the item text
-     */
-    text?: string;
-  };
-}
-
-export class SkipToContent extends SvelteComponent {
-  $$prop_def: {
-    /**
-     * Specify the `href` attribute
-     * @default "#main-content"
-     */
-    href?: string;
-
-    /**
-     * Specify the tabindex
-     * @default "0"
-     */
-    tabindex?: string;
   };
 
   $$slot_def: { default: {} };
