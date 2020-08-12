@@ -177,7 +177,7 @@
       class:bx--tooltip--a11y={true}
       class="{tooltipPosition && `bx--tooltip--${tooltipPosition}`}
       {tooltipAlignment && `bx--tooltip--align-${tooltipAlignment}`}"
-      on:click={() => {
+      on:click|stopPropagation={() => {
         type = type === 'password' ? 'text' : 'password';
       }}>
       <span class:bx--assistive-text={true}>
