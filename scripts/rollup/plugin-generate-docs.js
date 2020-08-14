@@ -4,6 +4,7 @@ import pkg from "../../package.json";
 import { format } from "prettier";
 import { parseComponent } from "./parse-component";
 import { generateTypes } from "./generate-types";
+import { generateIndex } from "./generate-index";
 
 /**
  * Rollup plugin to generate library TypeScript definitions and documentation.
@@ -59,9 +60,13 @@ function pluginGenerateDocs() {
     },
     writeBundle() {
       const { code: types } = generateTypes(components, pkg);
-      const definitions = format(types, { parser: "typescript" });
+      fs.writeFileSync(pkg.types, format(types, { parser: "typescript" }));
 
-      fs.writeFileSync(pkg.types, definitions);
+      const { code: index } = generateIndex(components, groups, pkg);
+      fs.writeFileSync(
+        "./COMPONENT_INDEX.md",
+        format(index, { parser: "markdown" })
+      );
     },
   };
 }

@@ -31,12 +31,6 @@
   export let aspectRatio = undefined;
 
   /**
-   * @typedef {boolean | number} ColumnSize
-   * @typedef {{span?: ColumnSize; offset: number;}} ColumnSizeDescriptor
-   * @typedef {ColumnSize | ColumnSizeDescriptor} ColumnBreakpoint
-   */
-
-  /**
    * Set the small breakpoint
    * @type {ColumnBreakpoint} [sm]
    */
@@ -65,6 +59,12 @@
    * @type {ColumnBreakpoint} [max]
    */
   export let max = undefined;
+
+  /**
+   * @typedef {boolean | number} ColumnSize
+   * @typedef {{span?: ColumnSize; offset: number;}} ColumnSizeDescriptor
+   * @typedef {ColumnSize | ColumnSizeDescriptor} ColumnBreakpoint
+   */
 
   /**
    * Column breakpoints

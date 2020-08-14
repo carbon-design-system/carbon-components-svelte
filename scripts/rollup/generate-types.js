@@ -8,7 +8,7 @@ export function generateTypes(components, pkg) {
     // Type definitions for ${pkg.name} ${pkg.version}
     // Project: ${pkg.homepage}
 
-    class SvelteComponent {
+    export class CarbonSvelteComponent {
       $$prop_def: {};
 
       $$slot_def: {};
@@ -34,6 +34,10 @@ export function generateTypes(components, pkg) {
       prop.description.split("\n").forEach((line) => {
         $$prop_def += "* " + line + "\n";
       });
+
+      if (prop.kind === "const") {
+        $$prop_def += "* @constant\n";
+      }
 
       if (prop.value !== undefined) {
         $$prop_def += "* @default " + prop.value + "\n";
@@ -67,7 +71,7 @@ export function generateTypes(components, pkg) {
     });
 
     code += `
-      export class ${moduleName} extends SvelteComponent {
+      export class ${moduleName} extends CarbonSvelteComponent {
         ${!!$$prop_def ? "$$prop_def: {" + $$prop_def + "}\n" : ""}
         
         ${!!$$slot_def ? "$$slot_def: {" + $$slot_def + "}\n" : ""}

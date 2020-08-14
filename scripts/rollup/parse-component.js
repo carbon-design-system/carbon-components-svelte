@@ -40,10 +40,16 @@ export function parseComponent(source, hooks) {
 
           let value = undefined;
           let type = undefined;
+          let kind = node.declaration.kind;
           let description = null;
 
           if (init != null) {
-            value = init.raw;
+            if (init.type === "ObjectExpression") {
+              value = source.slice(init.start, init.end).replace(/\n/g, " ");
+              type = value;
+            } else {
+              value = init.raw;
+            }
           }
 
           const general_comments = commentParser(source);
@@ -60,14 +66,15 @@ export function parseComponent(source, hooks) {
             );
 
             description = comment[0].description;
-            type = comment[0].tags[0].type;
+
+            type = comment[0].tags[comment[0].tags.length - 1].type;
           } else {
             throw Error(
               `[${hooks.component}] property \`${id.name}\` should be annotated.`
             );
           }
 
-          exported_props.set(id.name, { value, type, description });
+          exported_props.set(id.name, { kind, value, type, description });
           break;
         case "Slot":
           let slot_name = null;
@@ -82,10 +89,17 @@ export function parseComponent(source, hooks) {
             }
           });
 
+          let default_value = "";
+
+          node.children.forEach((child) => {
+            default_value += `${source.slice(child.start, child.end)}\n`;
+          });
+
           slots.set(slot_name == null ? "default" : slot_name, {
             attributes: node.attributes,
             children: node.children,
             default: slot_name == null,
+            default_value,
           });
           break;
         case "EventHandler":
@@ -102,9 +116,11 @@ export function parseComponent(source, hooks) {
       if (node.name === dispatcher_name) {
         const [name, detail] = node.parent.arguments;
 
-        dispatched_events.set(name.raw, {
-          detail: detail ? source.slice(detail.start, detail.end) : undefined,
-        });
+        if (name.value !== undefined) {
+          dispatched_events.set(name.value, {
+            detail: detail ? source.slice(detail.start, detail.end) : undefined,
+          });
+        }
       }
     });
   }

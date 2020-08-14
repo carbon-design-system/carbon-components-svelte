@@ -1,7 +1,7 @@
 // Type definitions for carbon-components-svelte 0.9.4
 // Project: https://github.com/IBM/carbon-components-svelte
 
-class SvelteComponent {
+export class CarbonSvelteComponent {
   $$prop_def: {};
 
   $$slot_def: {};
@@ -10,7 +10,7 @@ class SvelteComponent {
   $on(eventname: string, handler: (e: Event) => any): () => void;
 }
 
-export class Accordion extends SvelteComponent {
+export class Accordion extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify alignment of accordion item chevron icon
@@ -28,7 +28,7 @@ export class Accordion extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class AccordionItem extends SvelteComponent {
+export class AccordionItem extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the title of the accordion item heading
@@ -53,7 +53,7 @@ export class AccordionItem extends SvelteComponent {
   $$slot_def: { title: {}; default: {} };
 }
 
-export class AccordionSkeleton extends SvelteComponent {
+export class AccordionSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the number of accordion items to render
@@ -69,7 +69,7 @@ export class AccordionSkeleton extends SvelteComponent {
   };
 }
 
-export class Breadcrumb extends SvelteComponent {
+export class Breadcrumb extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to hide the breadcrumb trailing slash
@@ -87,7 +87,7 @@ export class Breadcrumb extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class BreadcrumbItem extends SvelteComponent {
+export class BreadcrumbItem extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the `href` to use an anchor link
@@ -104,7 +104,7 @@ export class BreadcrumbItem extends SvelteComponent {
   $$slot_def: { default: { props: any } };
 }
 
-export class BreadcrumbSkeleton extends SvelteComponent {
+export class BreadcrumbSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to hide the breadcrumb trailing slash
@@ -120,7 +120,7 @@ export class BreadcrumbSkeleton extends SvelteComponent {
   };
 }
 
-export class Button extends SvelteComponent {
+export class Button extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the kind of button
@@ -207,11 +207,11 @@ export class Button extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ButtonSet extends SvelteComponent {
+export class ButtonSet extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ButtonSkeleton extends SvelteComponent {
+export class ButtonSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the `href` to use an anchor link
@@ -226,7 +226,7 @@ export class ButtonSkeleton extends SvelteComponent {
   };
 }
 
-export class Checkbox extends SvelteComponent {
+export class Checkbox extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify whether the checkbox is checked
@@ -294,9 +294,9 @@ export class Checkbox extends SvelteComponent {
   };
 }
 
-export class CheckboxSkeleton extends SvelteComponent {}
+export class CheckboxSkeleton extends CarbonSvelteComponent {}
 
-export class ClickableTile extends SvelteComponent {
+export class ClickableTile extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to click the tile
@@ -314,7 +314,7 @@ export class ClickableTile extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class CodeSnippet extends SvelteComponent {
+export class CodeSnippet extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the type of code snippet
@@ -409,7 +409,7 @@ export class CodeSnippet extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class CodeSnippetSkeleton extends SvelteComponent {
+export class CodeSnippetSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the type of code snippet
@@ -428,7 +428,7 @@ interface ColumnSizeDescriptor {
 
 type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 
-export class Column extends SvelteComponent {
+export class Column extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to render a custom HTML element
@@ -461,9 +461,9 @@ export class Column extends SvelteComponent {
     aspectRatio?: "2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1";
 
     /**
-     *
+     * Set the small breakpoint
      */
-    sm?: boolean | number;
+    sm?: ColumnBreakpoint;
 
     /**
      * Set the medium breakpoint
@@ -494,12 +494,12 @@ interface ComboBoxItem {
   text: string;
 }
 
-export class ComboBox extends SvelteComponent {
+export class ComboBox extends CarbonSvelteComponent {
   $$prop_def: {
     /**
-     *
+     * Set the combobox items
      */
-    items?: { id: string; text: string };
+    items?: ComboBoxItem[];
 
     /**
      * Override the display of a combobox item
@@ -598,7 +598,7 @@ export class ComboBox extends SvelteComponent {
   };
 }
 
-export class ComposedModal extends SvelteComponent {
+export class ComposedModal extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the size of the composed modal
@@ -639,7 +639,7 @@ export class ComposedModal extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Content extends SvelteComponent {
+export class Content extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the id for the main element
@@ -651,7 +651,7 @@ export class Content extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ContentSwitcher extends SvelteComponent {
+export class ContentSwitcher extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the selected index of the switch item
@@ -669,7 +669,7 @@ export class ContentSwitcher extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Copy extends SvelteComponent {
+export class Copy extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the feedback text shown after clicking the button
@@ -693,7 +693,7 @@ export class Copy extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class CopyButton extends SvelteComponent {
+export class CopyButton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the title and ARIA label for the copy button
@@ -703,7 +703,7 @@ export class CopyButton extends SvelteComponent {
   };
 }
 
-export class DataTable extends SvelteComponent {
+export class DataTable extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the data table headers
@@ -755,7 +755,7 @@ export class DataTable extends SvelteComponent {
   $$slot_def: { default: { props: any } };
 }
 
-export class DataTableSkeleton extends SvelteComponent {
+export class DataTableSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the number of columns
@@ -789,7 +789,7 @@ export class DataTableSkeleton extends SvelteComponent {
   };
 }
 
-export class DatePicker extends SvelteComponent {
+export class DatePicker extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the date picker type
@@ -853,7 +853,7 @@ export class DatePicker extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class DatePickerInput extends SvelteComponent {
+export class DatePickerInput extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the size of the input
@@ -941,12 +941,12 @@ interface DropdownItem {
   text: DropdownItemText;
 }
 
-export class Dropdown extends SvelteComponent {
+export class Dropdown extends CarbonSvelteComponent {
   $$prop_def: {
     /**
-     *
+     * Set the dropdown items
      */
-    items?: string;
+    items?: DropdownItem[];
 
     /**
      * Override the display of a dropdown item
@@ -1045,7 +1045,7 @@ export class Dropdown extends SvelteComponent {
   };
 }
 
-export class DropdownSkeleton extends SvelteComponent {
+export class DropdownSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the inline variant
@@ -1055,7 +1055,7 @@ export class DropdownSkeleton extends SvelteComponent {
   };
 }
 
-export class ExpandableTile extends SvelteComponent {
+export class ExpandableTile extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to expand the tile
@@ -1114,7 +1114,7 @@ export class ExpandableTile extends SvelteComponent {
   $$slot_def: { above: {}; below: {} };
 }
 
-export class FileUploader extends SvelteComponent {
+export class FileUploader extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the file uploader status
@@ -1140,6 +1140,7 @@ export class FileUploader extends SvelteComponent {
 
     /**
      * Override the default behavior of clearing the array of uploaded files
+     * @constant
      */
     clearFiles?: () => any;
 
@@ -1181,7 +1182,7 @@ export class FileUploader extends SvelteComponent {
   };
 }
 
-export class FileUploaderButton extends SvelteComponent {
+export class FileUploaderButton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the accepted file types
@@ -1251,10 +1252,10 @@ export class FileUploaderButton extends SvelteComponent {
 
 type Files = string[];
 
-export class FileUploaderDropContainer extends SvelteComponent {
+export class FileUploaderDropContainer extends CarbonSvelteComponent {
   $$prop_def: {
     /**
-     *
+     * Specify the accepted file types
      */
     accept?: string[];
 
@@ -1313,7 +1314,7 @@ export class FileUploaderDropContainer extends SvelteComponent {
   };
 }
 
-export class FileUploaderItem extends SvelteComponent {
+export class FileUploaderItem extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the file uploader status
@@ -1358,7 +1359,7 @@ export class FileUploaderItem extends SvelteComponent {
   };
 }
 
-export class Filename extends SvelteComponent {
+export class Filename extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the file name status
@@ -1380,11 +1381,11 @@ export class Filename extends SvelteComponent {
   };
 }
 
-export class Form extends SvelteComponent {
+export class Form extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class FormGroup extends SvelteComponent {
+export class FormGroup extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to indicate an invalid state
@@ -1414,11 +1415,11 @@ export class FormGroup extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class FormItem extends SvelteComponent {
+export class FormItem extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class FormLabel extends SvelteComponent {
+export class FormLabel extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set an id to be used by the label element
@@ -1429,7 +1430,7 @@ export class FormLabel extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Grid extends SvelteComponent {
+export class Grid extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to render a custom HTML element
@@ -1478,7 +1479,7 @@ export class Grid extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Header extends SvelteComponent {
+export class Header extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `false` to hide the side nav by default
@@ -1517,7 +1518,7 @@ export class Header extends SvelteComponent {
   $$slot_def: { "skip-to-content": {}; platform: {}; default: {} };
 }
 
-export class HeaderAction extends SvelteComponent {
+export class HeaderAction extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to open the panel
@@ -1549,7 +1550,7 @@ export class HeaderAction extends SvelteComponent {
   $$slot_def: { text: {}; default: {} };
 }
 
-export class HeaderActionLink extends SvelteComponent {
+export class HeaderActionLink extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the active state
@@ -1572,7 +1573,7 @@ export class HeaderActionLink extends SvelteComponent {
   };
 }
 
-export class HeaderActionSearch extends SvelteComponent {
+export class HeaderActionSearch extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to focus the search
@@ -1582,7 +1583,7 @@ export class HeaderActionSearch extends SvelteComponent {
   };
 }
 
-export class HeaderNav extends SvelteComponent {
+export class HeaderNav extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the ARIA label for the nav
@@ -1593,7 +1594,7 @@ export class HeaderNav extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class HeaderNavItem extends SvelteComponent {
+export class HeaderNavItem extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the `href` attribute
@@ -1607,7 +1608,7 @@ export class HeaderNavItem extends SvelteComponent {
   };
 }
 
-export class HeaderNavMenu extends SvelteComponent {
+export class HeaderNavMenu extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to toggle the expanded state
@@ -1636,11 +1637,11 @@ export class HeaderNavMenu extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class HeaderPanelDivider extends SvelteComponent {
+export class HeaderPanelDivider extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class HeaderPanelLink extends SvelteComponent {
+export class HeaderPanelLink extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the `href` attribute
@@ -1651,15 +1652,15 @@ export class HeaderPanelLink extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class HeaderPanelLinks extends SvelteComponent {
+export class HeaderPanelLinks extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class HeaderUtilities extends SvelteComponent {
+export class HeaderUtilities extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Icon extends SvelteComponent {
+export class Icon extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the icon from `carbon-icons-svelte` to render
@@ -1675,7 +1676,7 @@ export class Icon extends SvelteComponent {
   };
 }
 
-export class IconSkeleton extends SvelteComponent {
+export class IconSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the size of the icon
@@ -1685,7 +1686,7 @@ export class IconSkeleton extends SvelteComponent {
   };
 }
 
-export class InlineLoading extends SvelteComponent {
+export class InlineLoading extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the loading status
@@ -1711,7 +1712,7 @@ export class InlineLoading extends SvelteComponent {
   };
 }
 
-export class InlineNotification extends SvelteComponent {
+export class InlineNotification extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the type of notification
@@ -1771,7 +1772,7 @@ export class InlineNotification extends SvelteComponent {
   $$slot_def: { default: {}; actions: {} };
 }
 
-export class Link extends SvelteComponent {
+export class Link extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the inline variant
@@ -1795,7 +1796,7 @@ export class Link extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ListBox extends SvelteComponent {
+export class ListBox extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the size of the list box
@@ -1844,7 +1845,7 @@ export class ListBox extends SvelteComponent {
 
 type ListBoxFieldTranslationId = "close" | "open";
 
-export class ListBoxField extends SvelteComponent {
+export class ListBoxField extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to disable the list box field
@@ -1865,9 +1866,11 @@ export class ListBoxField extends SvelteComponent {
     tabindex?: string;
 
     /**
-     *
+     * Default translation ids
+     * @constant
+     * @default { close: "close", open: "open" }
      */
-    translationIds?: "close" | "open";
+    translationIds?: { close: "close"; open: "open" };
 
     /**
      * Override the default translation ids
@@ -1889,7 +1892,7 @@ export class ListBoxField extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ListBoxMenu extends SvelteComponent {
+export class ListBoxMenu extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set an id for the top-level element
@@ -1902,7 +1905,7 @@ export class ListBoxMenu extends SvelteComponent {
 
 type ListBoxMenuIconTranslationId = "close" | "open";
 
-export class ListBoxMenuIcon extends SvelteComponent {
+export class ListBoxMenuIcon extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to open the list box menu icon
@@ -1912,17 +1915,19 @@ export class ListBoxMenuIcon extends SvelteComponent {
 
     /**
      * Default translation ids
+     * @constant
+     * @default { close: "close", open: "open" }
      */
-    translationIds?: undefined;
+    translationIds?: { close: "close"; open: "open" };
 
     /**
-     *
+     * Override the default translation ids
      */
-    translateWithId?: "close" | "open";
+    translateWithId?: (id: ListBoxMenuIconTranslationId) => string;
   };
 }
 
-export class ListBoxMenuItem extends SvelteComponent {
+export class ListBoxMenuItem extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to enable the active state
@@ -1942,7 +1947,7 @@ export class ListBoxMenuItem extends SvelteComponent {
 
 type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 
-export class ListBoxSelection extends SvelteComponent {
+export class ListBoxSelection extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the number of selected items
@@ -1956,9 +1961,11 @@ export class ListBoxSelection extends SvelteComponent {
     disabled?: boolean;
 
     /**
-     *
+     * Default translation ids
+     * @constant
+     * @default {     clearAll: "clearAll",     clearSelection: "clearSelection",   }
      */
-    translationIds?: "clearAll" | "clearSelection";
+    translationIds?: { clearAll: "clearAll"; clearSelection: "clearSelection" };
 
     /**
      * Override the default translation ids
@@ -1973,11 +1980,11 @@ export class ListBoxSelection extends SvelteComponent {
   };
 }
 
-export class ListItem extends SvelteComponent {
+export class ListItem extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Loading extends SvelteComponent {
+export class Loading extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the small variant
@@ -2010,7 +2017,7 @@ export class Loading extends SvelteComponent {
   };
 }
 
-export class Modal extends SvelteComponent {
+export class Modal extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the size of the modal
@@ -2113,7 +2120,7 @@ export class Modal extends SvelteComponent {
   $$slot_def: { label: {}; heading: {}; default: {} };
 }
 
-export class ModalBody extends SvelteComponent {
+export class ModalBody extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` if the modal contains form elements
@@ -2131,7 +2138,7 @@ export class ModalBody extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ModalFooter extends SvelteComponent {
+export class ModalFooter extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the primary button text
@@ -2171,7 +2178,7 @@ export class ModalFooter extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ModalHeader extends SvelteComponent {
+export class ModalHeader extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the modal title
@@ -2228,7 +2235,7 @@ interface MultiSelectItem {
   text: MultiSelectItemText;
 }
 
-export class MultiSelect extends SvelteComponent {
+export class MultiSelect extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the multiselect items
@@ -2369,11 +2376,11 @@ export class MultiSelect extends SvelteComponent {
   };
 }
 
-export class NotificationActionButton extends SvelteComponent {
+export class NotificationActionButton extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class NotificationButton extends SvelteComponent {
+export class NotificationButton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the type of notification
@@ -2399,7 +2406,7 @@ export class NotificationButton extends SvelteComponent {
   };
 }
 
-export class NotificationIcon extends SvelteComponent {
+export class NotificationIcon extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the kind of notification icon
@@ -2427,7 +2434,7 @@ export class NotificationIcon extends SvelteComponent {
   };
 }
 
-export class NotificationTextDetails extends SvelteComponent {
+export class NotificationTextDetails extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the type of notification
@@ -2459,7 +2466,7 @@ export class NotificationTextDetails extends SvelteComponent {
 
 type NumberInputTranslationId = "increment" | "decrement";
 
-export class NumberInput extends SvelteComponent {
+export class NumberInput extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the size of the input
@@ -2555,14 +2562,16 @@ export class NumberInput extends SvelteComponent {
     hideLabel?: boolean;
 
     /**
-     *
+     * Override the default translation ids
      */
-    translateWithId?: "increment" | "decrement";
+    translateWithId?: (id: NumberInputTranslationId) => string;
 
     /**
      * Default translation ids
+     * @constant
+     * @default {     increment: "increment",     decrement: "decrement",   }
      */
-    translationIds?: undefined;
+    translationIds?: { increment: "increment"; decrement: "decrement" };
 
     /**
      * Set an id for the input element
@@ -2584,7 +2593,7 @@ export class NumberInput extends SvelteComponent {
   $$slot_def: { label: {} };
 }
 
-export class NumberInputSkeleton extends SvelteComponent {
+export class NumberInputSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to hide the label text
@@ -2594,7 +2603,7 @@ export class NumberInputSkeleton extends SvelteComponent {
   };
 }
 
-export class OrderedList extends SvelteComponent {
+export class OrderedList extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the nested variant
@@ -2606,7 +2615,7 @@ export class OrderedList extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class OverflowMenu extends SvelteComponent {
+export class OverflowMenu extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the direction of the overflow menu relative to the button
@@ -2662,7 +2671,7 @@ export class OverflowMenu extends SvelteComponent {
   $$slot_def: { menu: {}; default: {} };
 }
 
-export class OverflowMenuItem extends SvelteComponent {
+export class OverflowMenuItem extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the item text
@@ -2722,7 +2731,7 @@ export class OverflowMenuItem extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Pagination extends SvelteComponent {
+export class Pagination extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the current page index
@@ -2810,7 +2819,7 @@ export class Pagination extends SvelteComponent {
   };
 }
 
-export class PaginationNav extends SvelteComponent {
+export class PaginationNav extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the current page index
@@ -2850,9 +2859,9 @@ export class PaginationNav extends SvelteComponent {
   };
 }
 
-export class PaginationSkeleton extends SvelteComponent {}
+export class PaginationSkeleton extends CarbonSvelteComponent {}
 
-export class PasswordInput extends SvelteComponent {
+export class PasswordInput extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the size of the input
@@ -2959,7 +2968,7 @@ export class PasswordInput extends SvelteComponent {
   };
 }
 
-export class ProgressIndicator extends SvelteComponent {
+export class ProgressIndicator extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the current step index
@@ -2977,7 +2986,7 @@ export class ProgressIndicator extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ProgressIndicatorSkeleton extends SvelteComponent {
+export class ProgressIndicatorSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the vertical variant
@@ -2987,7 +2996,7 @@ export class ProgressIndicatorSkeleton extends SvelteComponent {
   };
 }
 
-export class ProgressStep extends SvelteComponent {
+export class ProgressStep extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` for the complete variant
@@ -3040,7 +3049,7 @@ export class ProgressStep extends SvelteComponent {
   $$slot_def: { default: { props: any } };
 }
 
-export class RadioButton extends SvelteComponent {
+export class RadioButton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the value of the radio button
@@ -3097,7 +3106,7 @@ export class RadioButton extends SvelteComponent {
   };
 }
 
-export class RadioButtonGroup extends SvelteComponent {
+export class RadioButtonGroup extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the selected radio button value
@@ -3126,9 +3135,9 @@ export class RadioButtonGroup extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class RadioButtonSkeleton extends SvelteComponent {}
+export class RadioButtonSkeleton extends CarbonSvelteComponent {}
 
-export class RadioTile extends SvelteComponent {
+export class RadioTile extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to check the tile
@@ -3175,7 +3184,7 @@ export class RadioTile extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Row extends SvelteComponent {
+export class Row extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to render a custom HTML element
@@ -3218,7 +3227,7 @@ export class Row extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Search extends SvelteComponent {
+export class Search extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the small variant
@@ -3298,7 +3307,7 @@ export class Search extends SvelteComponent {
   };
 }
 
-export class SearchSkeleton extends SvelteComponent {
+export class SearchSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the small variant
@@ -3308,7 +3317,7 @@ export class SearchSkeleton extends SvelteComponent {
   };
 }
 
-export class Select extends SvelteComponent {
+export class Select extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the selected item value
@@ -3394,7 +3403,7 @@ export class Select extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class SelectItem extends SvelteComponent {
+export class SelectItem extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the option value
@@ -3422,7 +3431,7 @@ export class SelectItem extends SvelteComponent {
   };
 }
 
-export class SelectItemGroup extends SvelteComponent {
+export class SelectItemGroup extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to disable the optgroup element
@@ -3440,7 +3449,7 @@ export class SelectItemGroup extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class SelectSkeleton extends SvelteComponent {
+export class SelectSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to hide the label text
@@ -3450,7 +3459,7 @@ export class SelectSkeleton extends SvelteComponent {
   };
 }
 
-export class SelectableTile extends SvelteComponent {
+export class SelectableTile extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to select the tile
@@ -3509,7 +3518,7 @@ export class SelectableTile extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class SideNav extends SvelteComponent {
+export class SideNav extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the fixed variant
@@ -3532,11 +3541,11 @@ export class SideNav extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class SideNavItems extends SvelteComponent {
+export class SideNavItems extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class SideNavLink extends SvelteComponent {
+export class SideNavLink extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to select the current link
@@ -3564,7 +3573,7 @@ export class SideNavLink extends SvelteComponent {
   };
 }
 
-export class SideNavMenu extends SvelteComponent {
+export class SideNavMenu extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to toggle the expanded state
@@ -3589,7 +3598,7 @@ export class SideNavMenu extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class SideNavMenuItem extends SvelteComponent {
+export class SideNavMenuItem extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to select the item
@@ -3608,9 +3617,9 @@ export class SideNavMenuItem extends SvelteComponent {
   };
 }
 
-export class SkeletonPlaceholder extends SvelteComponent {}
+export class SkeletonPlaceholder extends CarbonSvelteComponent {}
 
-export class SkeletonText extends SvelteComponent {
+export class SkeletonText extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the number of lines to render
@@ -3638,7 +3647,7 @@ export class SkeletonText extends SvelteComponent {
   };
 }
 
-export class SkipToContent extends SvelteComponent {
+export class SkipToContent extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the `href` attribute
@@ -3656,7 +3665,7 @@ export class SkipToContent extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Slider extends SvelteComponent {
+export class Slider extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the value of the slider
@@ -3761,7 +3770,7 @@ export class Slider extends SvelteComponent {
   };
 }
 
-export class SliderSkeleton extends SvelteComponent {
+export class SliderSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to hide the label text
@@ -3771,7 +3780,7 @@ export class SliderSkeleton extends SvelteComponent {
   };
 }
 
-export class StructuredList extends SvelteComponent {
+export class StructuredList extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the selected structured list row value
@@ -3794,11 +3803,11 @@ export class StructuredList extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class StructuredListBody extends SvelteComponent {
+export class StructuredListBody extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class StructuredListCell extends SvelteComponent {
+export class StructuredListCell extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use as a header
@@ -3816,11 +3825,11 @@ export class StructuredListCell extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class StructuredListHead extends SvelteComponent {
+export class StructuredListHead extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class StructuredListInput extends SvelteComponent {
+export class StructuredListInput extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to check the input
@@ -3859,7 +3868,7 @@ export class StructuredListInput extends SvelteComponent {
   };
 }
 
-export class StructuredListRow extends SvelteComponent {
+export class StructuredListRow extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use as a header
@@ -3883,7 +3892,7 @@ export class StructuredListRow extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class StructuredListSkeleton extends SvelteComponent {
+export class StructuredListSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the number of rows
@@ -3899,7 +3908,7 @@ export class StructuredListSkeleton extends SvelteComponent {
   };
 }
 
-export class Switch extends SvelteComponent {
+export class Switch extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the switch text
@@ -3935,7 +3944,7 @@ export class Switch extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Tab extends SvelteComponent {
+export class Tab extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the tab label
@@ -3977,7 +3986,7 @@ export class Tab extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TabContent extends SvelteComponent {
+export class TabContent extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set an id for the top-level element
@@ -3988,7 +3997,7 @@ export class TabContent extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Table extends SvelteComponent {
+export class Table extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the size of the table
@@ -4029,15 +4038,15 @@ export class Table extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TableBody extends SvelteComponent {
+export class TableBody extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TableCell extends SvelteComponent {
+export class TableCell extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TableContainer extends SvelteComponent {
+export class TableContainer extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the title of the data table
@@ -4061,11 +4070,11 @@ export class TableContainer extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TableHead extends SvelteComponent {
+export class TableHead extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TableHeader extends SvelteComponent {
+export class TableHeader extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the `scope` attribute
@@ -4087,7 +4096,7 @@ export class TableHeader extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TableRow extends SvelteComponent {
+export class TableRow extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to select the row
@@ -4099,7 +4108,7 @@ export class TableRow extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Tabs extends SvelteComponent {
+export class Tabs extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the selected tab index
@@ -4129,7 +4138,7 @@ export class Tabs extends SvelteComponent {
   $$slot_def: { default: {}; content: {} };
 }
 
-export class TabsSkeleton extends SvelteComponent {
+export class TabsSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the number of tabs to render
@@ -4139,7 +4148,7 @@ export class TabsSkeleton extends SvelteComponent {
   };
 }
 
-export class Tag extends SvelteComponent {
+export class Tag extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the type of tag
@@ -4190,9 +4199,9 @@ export class Tag extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TagSkeleton extends SvelteComponent {}
+export class TagSkeleton extends CarbonSvelteComponent {}
 
-export class TextArea extends SvelteComponent {
+export class TextArea extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the textarea value
@@ -4278,7 +4287,7 @@ export class TextArea extends SvelteComponent {
   };
 }
 
-export class TextAreaSkeleton extends SvelteComponent {
+export class TextAreaSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to visually hide the label text
@@ -4288,7 +4297,7 @@ export class TextAreaSkeleton extends SvelteComponent {
   };
 }
 
-export class TextInput extends SvelteComponent {
+export class TextInput extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the size of the input
@@ -4373,7 +4382,7 @@ export class TextInput extends SvelteComponent {
   };
 }
 
-export class TextInputSkeleton extends SvelteComponent {
+export class TextInputSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to hide the label text
@@ -4383,7 +4392,7 @@ export class TextInputSkeleton extends SvelteComponent {
   };
 }
 
-export class Tile extends SvelteComponent {
+export class Tile extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to enable the light variant
@@ -4395,7 +4404,7 @@ export class Tile extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TileGroup extends SvelteComponent {
+export class TileGroup extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the selected tile value
@@ -4418,7 +4427,7 @@ export class TileGroup extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TimePicker extends SvelteComponent {
+export class TimePicker extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the input value
@@ -4506,7 +4515,7 @@ export class TimePicker extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TimePickerSelect extends SvelteComponent {
+export class TimePickerSelect extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the select value
@@ -4558,7 +4567,7 @@ export class TimePickerSelect extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class ToastNotification extends SvelteComponent {
+export class ToastNotification extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the type of notification
@@ -4630,7 +4639,7 @@ export class ToastNotification extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class Toggle extends SvelteComponent {
+export class Toggle extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to toggle the checkbox input
@@ -4674,7 +4683,7 @@ export class Toggle extends SvelteComponent {
   };
 }
 
-export class ToggleSkeleton extends SvelteComponent {
+export class ToggleSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the label text
@@ -4689,7 +4698,7 @@ export class ToggleSkeleton extends SvelteComponent {
   };
 }
 
-export class ToggleSmall extends SvelteComponent {
+export class ToggleSmall extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to toggle the checkbox input
@@ -4733,7 +4742,7 @@ export class ToggleSmall extends SvelteComponent {
   };
 }
 
-export class ToggleSmallSkeleton extends SvelteComponent {
+export class ToggleSmallSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the label text
@@ -4748,7 +4757,7 @@ export class ToggleSmallSkeleton extends SvelteComponent {
   };
 }
 
-export class Tooltip extends SvelteComponent {
+export class Tooltip extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the direction of the tooltip relative to the button
@@ -4830,7 +4839,7 @@ export class Tooltip extends SvelteComponent {
   $$slot_def: { triggerText: {}; icon: {}; default: {} };
 }
 
-export class TooltipDefinition extends SvelteComponent {
+export class TooltipDefinition extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the tooltip text
@@ -4865,7 +4874,7 @@ export class TooltipDefinition extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class TooltipIcon extends SvelteComponent {
+export class TooltipIcon extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the tooltip text
@@ -4900,7 +4909,7 @@ export class TooltipIcon extends SvelteComponent {
   $$slot_def: { default: {} };
 }
 
-export class UnorderedList extends SvelteComponent {
+export class UnorderedList extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set to `true` to use the nested variant
