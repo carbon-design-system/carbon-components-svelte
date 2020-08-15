@@ -1,4 +1,4 @@
-// Type definitions for carbon-components-svelte 0.9.4
+// Type definitions for carbon-components-svelte 0.9.6
 // Project: https://github.com/IBM/carbon-components-svelte
 
 export class CarbonSvelteComponent {

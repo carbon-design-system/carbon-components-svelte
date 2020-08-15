@@ -3,7 +3,7 @@
   const { modalBody } = $$props;
 
   import { Button } from "../Button";
-  import { TextInput, PasswordInput } from "../TextInput"
+  import { TextInput, PasswordInput } from "../TextInput";
   import ComposedModal from "./ComposedModal.svelte";
   import ModalHeader from "./ModalHeader.svelte";
   import ModalBody from "./ModalBody.svelte";
@@ -14,16 +14,25 @@
 </script>
 
 {#if story === undefined}
-  <ComposedModal {...$$props.composedModal} on:click={(e) => {
-    console.log(e.target)
-  }}>
+  <ComposedModal
+    {...$$props.composedModal}
+    on:click={(e) => {
+      console.log(e.target);
+    }}>
     <ModalHeader {...$$props.modalHeader} />
     <ModalBody
       {...$$props.modalBody}
       aria-label={modalBody.hasScrollingContent ? 'Modal content' : undefined}>
       <div>
         <PasswordInput bind:type placeholder="Password Input" aria-level="" />
-        <Button kind="ghost" size="field" on:click="{() => {type = type === 'password' ? 'text' : 'password'}}">Programmatically toggle password</Button>
+        <Button
+          kind="ghost"
+          size="field"
+          on:click={() => {
+            type = type === 'password' ? 'text' : 'password';
+          }}>
+          Programmatically toggle password
+        </Button>
       </div>
       <p>
         Please see ModalWrapper for more examples and demo of the functionality.

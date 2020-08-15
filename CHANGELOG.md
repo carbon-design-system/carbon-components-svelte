@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.9.6](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.6) - 2020-08-15
+
+- use svelte compiler to generate TypeScript definitions, documentation (issue #227, PR #228)
+- fix `DatePicker` to use default imports (reverts 6d5f1e5; issue #232)
+
 ## [0.9.5](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.5) - 2020-08-12
 
 - fix `Modal` and `ComposedModal` to prevent modal from closing unexpectedly ([PR #231](https://github.com/IBM/carbon-components-svelte/pull/231))
