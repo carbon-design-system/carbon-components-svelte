@@ -7,6 +7,7 @@
 
   /**
    * Set to `true` to use the vertical variant
+   * @type {boolean} [vertical=false]
    */
   export let vertical = false;
 

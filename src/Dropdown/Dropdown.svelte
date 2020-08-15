@@ -1,11 +1,5 @@
 <script>
   /**
-   * @typedef {string} DropdownItemId
-   * @typedef {string} DropdownItemText
-   * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
-   */
-
-  /**
    * Set the dropdown items
    * @type {DropdownItem[]} [items=[]]
    */
@@ -112,6 +106,12 @@
    * @type {null | HTMLButtonElement} [ref=null]
    */
   export let ref = null;
+
+  /**
+   * @typedef {string} DropdownItemId
+   * @typedef {string} DropdownItemText
+   * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
+   */
 
   import { setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

@@ -18,10 +18,6 @@
   export let tabindex = "-1";
 
   /**
-   * @typedef {"close" | "open"} ListBoxFieldTranslationId
-   */
-
-  /**
    * Default translation ids
    * @constant
    * @type {{ close: "close"; open: "open"; }}
@@ -45,6 +41,10 @@
    * @type {null | HTMLElement} [ref=null]
    */
   export let ref = null;
+
+  /**
+   * @typedef {"close" | "open"} ListBoxFieldTranslationId
+   */
 
   import { getContext } from "svelte";
 

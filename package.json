@@ -10,11 +10,12 @@
   "scripts": {
     "start": "start-storybook -p 9090",
     "build": "build-storybook",
+    "prettier": "prettier --write './**/*.svelte'",
     "prepack": "rollup -c"
   },
   "sideEffects": false,
   "dependencies": {
-    "carbon-icons-svelte": "^10.14.0",
+    "carbon-icons-svelte": "^10.15.0",
     "flatpickr": "4.6.3"
   },
   "devDependencies": {
@@ -26,12 +27,17 @@
     "@storybook/addon-storysource": "^5.3.19",
     "@storybook/cli": "^5.3.19",
     "@storybook/svelte": "^5.3.19",
+    "@tsconfig/svelte": "^1.0.8",
     "babel-loader": "^8.0.6",
+    "comment-parser": "^0.7.5",
+    "prettier": "^2.0.5",
+    "prettier-plugin-svelte": "^1.1.0",
     "rollup": "^2.22.1",
     "rollup-plugin-svelte": "^5.2.3",
     "rollup-plugin-terser": "^6.1.0",
     "svelte": "^3.24.1",
-    "svelte-loader": "^2.13.6"
+    "svelte-loader": "^2.13.6",
+    "typescript": "^3.9.7"
   },
   "babel": {
     "presets": [
@@ -40,10 +46,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ibm/carbon-components-svelte.git"
+    "url": "https://github.com/IBM/carbon-components-svelte.git"
   },
-  "homepage": "https://github.com/ibm/carbon-components-svelte",
-  "bugs": "https://github.com/ibm/carbon-components-svelte/issues",
+  "homepage": "https://github.com/IBM/carbon-components-svelte",
+  "bugs": "https://github.com/IBM/carbon-components-svelte/issues",
   "keywords": [
     "carbon",
     "carbon components",

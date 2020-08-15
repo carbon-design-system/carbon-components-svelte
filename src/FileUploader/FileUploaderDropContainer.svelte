@@ -1,9 +1,5 @@
 <script>
   /**
-   * @typedef {string[]} Files
-   */
-
-  /**
    * Specify the accepted file types
    * @type {string[]} [accept=[]]
    */
@@ -63,6 +59,10 @@
    * @type {null | HTMLInputElement} [ref=null]
    */
   export let ref = null;
+
+  /**
+   * @typedef {string[]} Files
+   */
 
   import { createEventDispatcher } from "svelte";
 

@@ -13,14 +13,14 @@
   export const translationIds = { close: "close", open: "open" };
 
   /**
-   * @typedef {"close" | "open"} ListBoxMenuIconTranslationId
-   */
-
-  /**
    * Override the default translation ids
    * @type {(id: ListBoxMenuIconTranslationId) => string} [translateWithId = (id) => string]
    */
   export let translateWithId = (id) => defaultTranslations[id];
+
+  /**
+   * @typedef {"close" | "open"} ListBoxMenuIconTranslationId
+   */
 
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
 

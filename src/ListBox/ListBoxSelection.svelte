@@ -12,10 +12,6 @@
   export let disabled = false;
 
   /**
-   * @typedef {"clearAll" | "clearSelection"} ListBoxSelectionTranslationId
-   */
-
-  /**
    * Default translation ids
    * @constant
    * @type {{ clearAll: "clearAll"; clearSelection: "clearSelection" }}
@@ -36,6 +32,10 @@
    * @type {null | HTMLElement} [ref=null]
    */
   export let ref = null;
+
+  /**
+   * @typedef {"clearAll" | "clearSelection"} ListBoxSelectionTranslationId
+   */
 
   import { createEventDispatcher, getContext } from "svelte";
   import Close16 from "carbon-icons-svelte/lib/Close16";

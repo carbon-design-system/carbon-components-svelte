@@ -31,25 +31,40 @@
   export let aspectRatio = undefined;
 
   /**
+   * Set the small breakpoint
+   * @type {ColumnBreakpoint} [sm]
+   */
+  export let sm = undefined;
+
+  /**
+   * Set the medium breakpoint
+   * @type {ColumnBreakpoint} [md]
+   */
+  export let md = undefined;
+
+  /**
+   * Set the large breakpoint
+   * @type {ColumnBreakpoint} [lg]
+   */
+  export let lg = undefined;
+
+  /**
+   * Set the extra large breakpoint
+   * @type {ColumnBreakpoint} [xlg]
+   */
+  export let xlg = undefined;
+
+  /**
+   * Set the maximum breakpoint
+   * @type {ColumnBreakpoint} [max]
+   */
+  export let max = undefined;
+
+  /**
    * @typedef {boolean | number} ColumnSize
    * @typedef {{span?: ColumnSize; offset: number;}} ColumnSizeDescriptor
    * @typedef {ColumnSize | ColumnSizeDescriptor} ColumnBreakpoint
    */
-
-  /** @type {ColumnBreakpoint} [sm] */
-  export let sm = undefined;
-
-  /** @type {ColumnBreakpoint} [md] */
-  export let md = undefined;
-
-  /** @type {ColumnBreakpoint} [lg] */
-  export let lg = undefined;
-
-  /** @type {ColumnBreakpoint} [xlg] */
-  export let xlg = undefined;
-
-  /** @type {ColumnBreakpoint} [max] */
-  export let max = undefined;
 
   /**
    * Column breakpoints

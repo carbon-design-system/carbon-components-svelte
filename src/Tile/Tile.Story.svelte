@@ -11,7 +11,7 @@
   const radioTiles = [
     { value: "standard", id: "tile-1", labelText: "Selectable Tile" },
     { value: "default-selected", id: "tile-2", labelText: "Selectable Tile" },
-    { value: "selected", id: "tile-3", labelText: "Selectable Tile" }
+    { value: "selected", id: "tile-3", labelText: "Selectable Tile" },
   ];
 
   $: selected = radioTiles[1].value;

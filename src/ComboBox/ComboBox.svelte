@@ -1,9 +1,5 @@
 <script>
   /**
-   * @typedef {{ id: string; text: string; }} ComboBoxItem
-   */
-
-  /**
    * Set the combobox items
    * @type {ComboBoxItem[]} [items=[]]
    */
@@ -110,6 +106,10 @@
    * @type {null | HTMLInputElement} [ref=null]
    */
   export let ref = null;
+
+  /**
+   * @typedef {{ id: string; text: string; }} ComboBoxItem
+   */
 
   import { createEventDispatcher, afterUpdate } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

@@ -1,470 +1,421 @@
-// Type definitions for carbon-components-svelte 0.9
-// https://github.com/IBM/carbon-components-svelte
+// Type definitions for carbon-components-svelte 0.9.4
+// Project: https://github.com/IBM/carbon-components-svelte
 
-// Carbon Icon type from carbon-icons-svelte 10.14
-// https://github.com/IBM/carbon-icons-svelte
-declare class CarbonIcon {
+export class CarbonSvelteComponent {
+  $$prop_def: {};
+
+  $$slot_def: {};
+
+  // stub all `on:{eventname}` directives
+  $on(eventname: string, handler: (e: Event) => any): () => void;
+}
+
+export class Accordion extends CarbonSvelteComponent {
   $$prop_def: {
-    id?: string;
-    class?: string;
-    tabindex?: string;
-    focusable?: boolean;
+    /**
+     * Specify alignment of accordion item chevron icon
+     * @default "end"
+     */
+    align?: "start" | "end";
+
+    /**
+     * Set to `true` to display the skeleton state
+     * @default false
+     */
+    skeleton?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class AccordionItem extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the title of the accordion item heading
+     * Alternatively, use the named slot "title" (e.g. <div slot="title">...</div>)
+     * @default "title"
+     */
     title?: string;
-    style?: string;
-    fill?: string;
-    stroke?: string;
-    width?: string;
-    height?: string;
-  };
-  $$slot_def: {
-    default?: {};
-  };
-}
 
-export class AccordionSkeleton {
-  $$prop_def: {
-    count?: number; // default: 4
-    open?: boolean; // default: true
-  };
-}
+    /**
+     * Set to `true` to open the first accordion item
+     * @default false
+     */
+    open?: boolean;
 
-export class Accordion {
-  $$prop_def: {
-    align?: "start" | "end"; // default: "end"
-    skeleton?: boolean; // default: false
-  };
-}
-
-export class AccordionItem {
-  $$prop_def: {
-    title?: string; // default: "title"
-    open?: boolean; // default: false
-    iconDescription?: string; // default: "Expand/Collapse"
-  };
-}
-
-export class BreadcrumbSkeleton {
-  $$prop_def: {
-    noTrailingSlash?: boolean; // default: false
-    count?: number; // default: 3
-  };
-}
-
-export class Breadcrumb {
-  $$prop_def: {
-    noTrailingSlash?: boolean; // default: false
-    skeleton?: boolean; // default: false
-  };
-}
-
-export class BreadcrumbItem {
-  $$prop_def: {
-    href?: string;
-    isCurrentPage?: boolean; // default: false
-  };
-}
-
-export class ButtonSkeleton {
-  $$prop_def: {
-    href?: string;
-    small?: boolean; // default: false
-  };
-}
-
-export class Button {
-  $$prop_def: {
-    kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger"; // default: "primary"
-    size?: "default" | "field" | "small"; // default: "default"
-    hasIconOnly?: boolean; // default: false
-    icon?: CarbonIcon;
+    /**
+     * Specify the ARIA label for the accordion item chevron icon
+     * @default "Expand/Collapse"
+     */
     iconDescription?: string;
-    tooltipAlignment?: "start" | "center" | "end";
-    tooltipPosition?: "top" | "right" | "bottom" | "left";
-    as?: boolean; // default: false
-    skeleton?: boolean; // default: false
-    disabled?: boolean; // default: false
+  };
+
+  $$slot_def: { title: {}; default: {} };
+}
+
+export class AccordionSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the number of accordion items to render
+     * @default 4
+     */
+    count?: number;
+
+    /**
+     * Set to `false` to close the first accordion item
+     * @default true
+     */
+    open?: boolean;
+  };
+}
+
+export class Breadcrumb extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to hide the breadcrumb trailing slash
+     * @default false
+     */
+    noTrailingSlash?: boolean;
+
+    /**
+     * Set to `true` to display skeleton state
+     * @default false
+     */
+    skeleton?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class BreadcrumbItem extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the `href` to use an anchor link
+     */
     href?: string;
-    tabindex?: string; // default: "0"
-    type?: string; // default: "button"
-    ref?: null | HTMLAnchorElement | HTMLButtonElement; // default: null
+
+    /**
+     * Set to `true` if the breadcrumb item represents the current page
+     * @default false
+     */
+    isCurrentPage?: boolean;
+  };
+
+  $$slot_def: { default: { props: any } };
+}
+
+export class BreadcrumbSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to hide the breadcrumb trailing slash
+     * @default false
+     */
+    noTrailingSlash?: boolean;
+
+    /**
+     * Specify the number of breadcrumb items to render
+     * @default 3
+     */
+    count?: number;
   };
 }
 
-export class CheckboxSkeleton {
-  $$prop_def: {};
+export class Button extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the kind of button
+     * @default "primary"
+     */
+    kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger";
+
+    /**
+     * Specify the size of button
+     * @default "default"
+     */
+    size?: "default" | "field" | "small";
+
+    /**
+     * Set to `true` for the icon-only variant
+     * @default false
+     */
+    hasIconOnly?: boolean;
+
+    /**
+     * Specify the icon from `carbon-icons-svelte` to render
+     */
+    icon?: typeof import("carbon-icons-svelte/lib/Add16").default;
+
+    /**
+     * Specify the ARIA label for the button icon
+     */
+    iconDescription?: string;
+
+    /**
+     * Set the alignment of the tooltip relative to the icon
+     * `hasIconOnly` must be set to `true`
+     */
+    tooltipAlignment?: "start" | "center" | "end";
+
+    /**
+     * Set the position of the tooltip relative to the icon
+     */
+    tooltipPosition?: "top" | "right" | "bottom" | "left";
+
+    /**
+     * Set to `true` to render a custom HTML element
+     * Props are destructured as `props` in the default slot (e.g. <Button let:props><div {...props}>...</div></Button>)
+     * @default false
+     */
+    as?: boolean;
+
+    /**
+     * Set to `true` to display the skeleton state
+     * @default false
+     */
+    skeleton?: boolean;
+
+    /**
+     * Set to `true` to disable the button
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set the `href` to use an anchor link
+     */
+    href?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Specify the `type` attribute for the button element
+     * @default "button"
+     */
+    type?: string;
+
+    /**
+     * Obtain a reference to the HTML element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement | HTMLButtonElement;
+  };
+
+  $$slot_def: { default: {} };
 }
 
-export class Checkbox {
+export class ButtonSet extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class ButtonSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
-    checked?: boolean; // default: false
-    indeterminate?: boolean; // default: false
-    skeleton?: boolean; // default: false
-    readonly?: boolean; // default: false
-    disabled?: boolean; // default: false
-    labelText?: string; // default: ""
-    hideLabel?: boolean; // default: false
-    name?: string; // default: ""
+    /**
+     * Set the `href` to use an anchor link
+     */
+    href?: string;
+
+    /**
+     * Set to `true` to use the small variant
+     * @default false
+     */
+    small?: boolean;
+  };
+}
+
+export class Checkbox extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify whether the checkbox is checked
+     * @default false
+     */
+    checked?: boolean;
+
+    /**
+     * Specify whether the checkbox is indeterminate
+     * @default false
+     */
+    indeterminate?: boolean;
+
+    /**
+     * Set to `true` to display the skeleton state
+     * @default false
+     */
+    skeleton?: boolean;
+
+    /**
+     * Set to `true` for the checkbox to be read-only
+     * @default false
+     */
+    readonly?: boolean;
+
+    /**
+     * Set to `true` to disable the checkbox
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Set a name for the input element
+     * @default ""
+     */
+    name?: string;
+
+    /**
+     * Specify the title attribute for the label element
+     */
     title?: string;
+
+    /**
+     * Set an id for the input label
+     */
     id?: string;
-    ref?: null | HTMLInputElement; // default: null
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
 }
 
-export class CodeSnippetSkeleton {
+export class CheckboxSkeleton extends CarbonSvelteComponent {}
+
+export class ClickableTile extends CarbonSvelteComponent {
   $$prop_def: {
-    type?: "single" | "inline" | "multi"; // default: "single"
+    /**
+     * Set to `true` to click the tile
+     * @default false
+     */
+    clicked?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class CodeSnippet {
+export class CodeSnippet extends CarbonSvelteComponent {
   $$prop_def: {
-    type?: "single" | "inline" | "multi"; // default: "single"
+    /**
+     * Set the type of code snippet
+     * @default "single"
+     */
+    type?: "single" | "inline" | "multi";
+
+    /**
+     * Set the code snippet text
+     * Alternatively, use the default slot (e.g. <CodeSnippet>{`code`}</CodeSnippet>)
+     */
     code?: string;
-    expanded?: boolean; // default: false
-    light?: boolean; // default: false
-    skeleton?: boolean; // default: false
+
+    /**
+     * Set to `true` to expand a multi-line code snippet (type="multi")
+     * @default false
+     */
+    expanded?: boolean;
+
+    /**
+     * Set to `true` to hide the copy button
+     * @default false
+     */
+    hideCopyButton?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to display the skeleton state
+     * @default false
+     */
+    skeleton?: boolean;
+
+    /**
+     * Specify the ARIA label for the copy button icon
+     */
     copyButtonDescription?: string;
+
+    /**
+     * Specify the ARIA label of the copy button
+     */
     copyLabel?: string;
-    feedback?: string; // default: "Copied!"
-    feedbackTimeout?: number; // default: 2000
-    showLessText?: string; // default: "Show more"
-    showMoreLess?: boolean; // default: false
+
+    /**
+     * Specify the feedback text displayed when clicking the snippet
+     * @default "Copied!"
+     */
+    feedback?: string;
+
+    /**
+     * Set the timeout duration (ms) to display feedback text
+     * @default 2000
+     */
+    feedbackTimeout?: number;
+
+    /**
+     * Specify the show less text
+     * `type` must be "multi"
+     * @default "Show less"
+     */
+    showLessText?: string;
+
+    /**
+     * Specify the show more text
+     * `type` must be "multi"
+     * @default "Show more"
+     */
+    showMoreText?: string;
+
+    /**
+     * Set to `true` to enable the show more/less button
+     * @default false
+     */
+    showMoreLess?: boolean;
+
+    /**
+     * Set an id for the code element
+     */
     id?: string;
-    ref?: null | HTMLPreElement; // default: null
+
+    /**
+     * Obtain a reference to the pre HTML element
+     * @default null
+     */
+    ref?: null | HTMLPreElement;
   };
+
+  $$slot_def: { default: {} };
 }
 
-interface ComboBoxItem {
-  id: string;
-  text: string;
-}
-
-export class ComboBox {
+export class CodeSnippetSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
-    items?: ComboBoxItem[]; // default: []
-    itemToString?: (item: ComboBoxItem) => string; // default: (item: ComboBoxItem) => string
-    selectedIndex?: number; // default: -1
-    value?: string; // default: ""
-    size?: "sm" | "xl";
-    disabled?: boolean; // default: false
-    titleText?: string; // default: ""
-    placeholder?: string; // default: ""
-    helperText?: string; // default: ""
-    invalidText?: string; // default: ""
-    invalid?: boolean; // default: false
-    light?: boolean; // default: false
-    open?: boolean; // default: false
-    shouldFilterItem?: (item: ComboBoxItem, value: string) => boolean; // default: () => true
-    translateWithId?: (id: any) => string;
-    id?: string;
-    name?: string;
-    ref?: null | HTMLInputElement; // default: null
-  };
-}
-
-export class ComposedModal {
-  $$prop_def: {
-    size?: "xs" | "sm" | "lg";
-    open?: boolean; // default: false
-    danger?: boolean; // default: false
-    containerClass?: string; // default: ""
-    selectorPrimaryFocus?: string; // default: "[data-modal-primary-focus]"
-    ref?: null | HTMLElement; // default: null
-  };
-}
-
-export class ModalBody {
-  $$prop_def: {
-    hasForm?: boolean; // default: false
-    hasScrollingContent?: boolean; // default: false
-  };
-}
-
-export class ModalFooter {
-  $$prop_def: {
-    primaryButtonText?: string; // default: ""
-    primaryButtonDisabled?: boolean; // default: false
-    primaryClass?: string;
-    secondaryButtonText?: string; // default: ""
-    secondaryClass?: string;
-    danger?: boolean; // default: false
-  };
-}
-
-export class ModalHeader {
-  $$prop_def: {
-    title?: string; // default: ""
-    label?: string; // default: ""
-    labelClass?: string; // default: ""
-    titleClass?: string; // default: ""
-    closeClass?: string; // default: ""
-    closeIconClass?: string; // default: ""
-    iconDescription?: string; // default: "Close"
-  };
-}
-
-export class ContentSwitcher {
-  $$prop_def: {
-    selectedIndex?: number; // default: 0
-    light?: boolean; // default: false
-  };
-}
-
-export class Switch {
-  $$prop_def: {
-    text?: string; // default: "Provide text"
-    selected?: boolean; // default: false
-    disabled?: boolean; // default: false
-    id?: string;
-    ref?: null | HTMLButtonElement; // default: null
-  };
-}
-
-export class Copy {
-  $$prop_def: {
-    feedback?: string; // default: "Copied!"
-    feedbackTimeout?: number; // default: 2000
-    ref?: null | HTMLButtonElement; // default: null
-  };
-}
-
-export class CopyButton {
-  $$prop_def: {
-    iconDescription?: string; // default: "Copy to clipboard"
-  };
-}
-
-export class DataTable {
-  $$prop_def: {
-    headers?: { key: string; value: string }; // default: []
-    rows?: Object[]; // default: []
-    size?: "compact" | "short" | "tall";
-    title?: string; // default: ""
-    description?: string; // default: ""
-    zebra?: boolean; // default: false
-    sortable?: boolean; // default: false
-    stickyHeader?: boolean; // default: false
-  };
-}
-
-export class Table {
-  $$prop_def: {
-    size?: "compact" | "short" | "tall";
-    zebra?: boolean; // default: false
-    useStaticWidth?: boolean; // default: false
-    shouldShowBorder?: boolean; // default: false
-    sortable?: boolean; // default: false
-    stickyHeader?: boolean; // default: false
-  };
-}
-
-export class TableBody {
-  $$prop_def: {};
-}
-
-export class TableCell {
-  $$prop_def: {};
-}
-
-export class TableContainer {
-  $$prop_def: {
-    title?: string; // default: ""
-    description?: string; // default: ""
-    stickyHeader?: boolean; // default: false
-  };
-}
-
-export class TableHead {
-  $$prop_def: {};
-}
-
-export class TableHeader {
-  $$prop_def: {
-    scope?: string; // default: "col"
-    translateWithId?: () => string; // default: () => ""
-    id?: string;
-  };
-}
-
-export class TableRow {
-  $$prop_def: {
-    isSelected?: boolean; // default: false
-  };
-}
-
-export class DataTableSkeleton {
-  $$prop_def: {
-    columns?: number; // default: 5
-    rows?: number; // default: 5
-    compact?: boolean; // default: false
-    zebra?: boolean; // default: false
-    headers?: string[]; // default: []
-  };
-}
-
-export class DatePickerSkeleton {
-  $$prop_def: {
-    range?: boolean; // default: false
-    id?: string;
-  };
-}
-
-export class DatePicker {
-  $$prop_def: {
-    datePickerType?: "simple" | "single" | "range"; // default: "simple"
-    value?: string; // default: ""
-    appendTo?: HTMLElement; // default: document.body
-    dateFormat?: string; // default: "m/d/Y"
-    maxDate?: null | string | Date; // default: null
-    minDate?: null | string | Date; // default: null
-    locale?: string; // default: "en"
-    short?: boolean; // default: false
-    light?: boolean; // default: false
-    id?: string;
-  };
-}
-
-export class DatePickerInput {
-  $$prop_def: {
-    size?: "sm" | "xl";
-    type?: string; // default: "text"
-    placeholder?: string; // default: ""
-    iconDescription?: string; // default: ""
-    id?: string;
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: ""
-    ref?: null | HTMLInputElement; // default: null
-  };
-}
-
-export class DropdownSkeleton {
-  $$prop_def: {
-    inline?: boolean; // default: false
-  };
-}
-
-type DropdownItemId = string;
-
-type DropdownItemText = string;
-
-interface DropdownItem {
-  id: DropdownItemId;
-  text: DropdownItemText;
-}
-
-export class Dropdown {
-  $$prop_def: {
-    items?: DropdownItem[]; // default: []
-    itemToString?: (item: DropdownItem) => string; // default: (item: DropdownItem) => DropdownItemText | DropdownItemId
-    selectedIndex?: number; // default: -1
-    type?: "default" | "inline"; // default: "default"
-    size?: "sm" | "lg" | "xl";
-    open?: boolean; // default: false
-    inline?: boolean; // default: false
-    light?: boolean; // default: false
-    disabled?: boolean; // default: false
-    titleText?: string; // default: ""
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: ""
-    helperText?: string; // default: ""
-    label?: string;
-    translateWithId?: (id: any) => string;
-    id?: string;
-    name?: string;
-    ref?: null | HTMLButtonElement; // default: null
-  };
-}
-
-export class FileUploaderSkeleton {
-  $$prop_def: {};
-}
-
-export class FileUploader {
-  $$prop_def: {
-    status?: "uploading" | "edit" | "complete"; // default: "uploading"
-    accept?: string[]; // default: []
-    files?: string[]; // default: []
-    multiple?: boolean; // default: false
-    clearFiles?: () => any; // default: () => void
-    labelDescription?: string; // default: ""
-    labelTitle?: string; // default: ""
-    kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger"; // default: "primary"
-    buttonLabel?: string; // default: ""
-    iconDescription?: string; // default: ""
-    name?: string;
-  };
-}
-
-export class FileUploaderButton {
-  $$prop_def: {
-    accept?: string[]; // default: []
-    multiple?: boolean; // default: false
-    disabled?: boolean; // default: false
-    disableLabelChanges?: boolean; // default: false
-    kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger"; // default: "primary"
-    labelText?: string; // default: "Add file"
-    role?: string; // default: "button"
-    tabindex?: string; // default: "0"
-    id?: string;
-    name?: string;
-    ref?: null | HTMLInputElement; // default: null
-  };
-}
-
-type Files = string[];
-
-export class FileUploaderDropContainer {
-  $$prop_def: {
-    accept?: string[]; // default: []
-    multiple?: boolean; // default: false
-    validateFiles?: (files: Files) => Files; // default: (files: Files) => Files
-    labelText?: string; // default: "Add file"
-    role?: string; // default: "button"
-    disabled?: boolean; // default: false
-    tabindex?: string; // default: "0"
-    id?: string;
-    name?: string; // default: ""
-    ref?: null | HTMLInputElement; // default: null
-  };
-}
-
-export class FileUploaderItem {
-  $$prop_def: {
-    status?: "uploading" | "edit" | "complete"; // default: "uploading"
-    iconDescription?: string; // default: ""
-    invalid?: boolean; // default: false
-    errorSubject?: string; // default: ""
-    errorBody?: string; // default: ""
-    id?: string;
-    name?: string; // default: ""
-  };
-}
-
-export class Filename {
-  $$prop_def: {
-    status?: "uploading" | "edit" | "complete"; // default: "uploading"
-    iconDescription?: string; // default: ""
-    invalid?: boolean; // default: false
-  };
-}
-
-export class Form {
-  $$prop_def: {};
-}
-
-export class FormGroup {
-  $$prop_def: {
-    invalid?: boolean; // default: false
-  };
-}
-
-export class FormItem {
-  $$prop_def: {};
-}
-
-export class FormLabel {
-  $$prop_def: {
-    id?: string;
+    /**
+     * Set the type of code snippet
+     * @default "single"
+     */
+    type?: "single" | "inline" | "multi";
   };
 }
 
@@ -477,166 +428,1802 @@ interface ColumnSizeDescriptor {
 
 type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 
-export class Column {
+export class Column extends CarbonSvelteComponent {
   $$prop_def: {
-    as?: boolean; // default: false
-    noGutter?: boolean; // default: false
-    noGutterLeft?: boolean; // default: false
-    noGutterRight?: boolean; // default: false
+    /**
+     * Set to `true` to render a custom HTML element
+     * Props are destructured as `props` in the default slot (e.g. <Column let:props><article {...props}>...</article></Column>)
+     * @default false
+     */
+    as?: boolean;
+
+    /**
+     * Set to `true` to remove the gutter
+     * @default false
+     */
+    noGutter?: boolean;
+
+    /**
+     * Set to `true` to remove the left gutter
+     * @default false
+     */
+    noGutterLeft?: boolean;
+
+    /**
+     * Set to `true` to remove the right gutter
+     * @default false
+     */
+    noGutterRight?: boolean;
+
+    /**
+     * Specify the aspect ratio of the column
+     */
     aspectRatio?: "2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1";
+
+    /**
+     * Set the small breakpoint
+     */
     sm?: ColumnBreakpoint;
+
+    /**
+     * Set the medium breakpoint
+     */
     md?: ColumnBreakpoint;
+
+    /**
+     * Set the large breakpoint
+     */
     lg?: ColumnBreakpoint;
+
+    /**
+     * Set the extra large breakpoint
+     */
     xlg?: ColumnBreakpoint;
+
+    /**
+     * Set the maximum breakpoint
+     */
     max?: ColumnBreakpoint;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class Grid {
-  $$prop_def: {
-    as?: boolean; // default: false
-    condensed?: boolean; // default: false
-    narrow?: boolean; // default: false
-    fullWidth?: boolean; // default: false
-    noGutter?: boolean; // default: false
-    noGutterLeft?: boolean; // default: false
-    noGutterRight?: boolean; // default: false
-  };
+interface ComboBoxItem {
+  id: string;
+  text: string;
 }
 
-export class Row {
+export class ComboBox extends CarbonSvelteComponent {
   $$prop_def: {
-    as?: boolean; // default: false
-    condensed?: boolean; // default: false
-    narrow?: boolean; // default: false
-    noGutter?: boolean; // default: false
-    noGutterLeft?: boolean; // default: false
-    noGutterRight?: boolean; // default: false
-  };
-}
+    /**
+     * Set the combobox items
+     */
+    items?: ComboBoxItem[];
 
-export class IconSkeleton {
-  $$prop_def: {
-    size?: number; // default: 16
-  };
-}
+    /**
+     * Override the display of a combobox item
+     */
+    itemToString?: (item: ComboBoxItem) => string;
 
-export class Icon {
-  $$prop_def: {
-    render?: CarbonIcon;
-    skeleton?: boolean; // default: false
-  };
-}
+    /**
+     * Set the selected item by value index
+     */
+    selectedIndex?: number;
 
-export class InlineLoading {
-  $$prop_def: {
-    status?: "active" | "inactive" | "finished" | "error"; // default: "active"
-    description?: string;
-    iconDescription?: string; // default: "Expand/Collapse"
-    successDelay?: number; // default: 1500
-  };
-}
+    /**
+     * Specify the selected combobox value
+     * @default ""
+     */
+    value?: string;
 
-export class Link {
-  $$prop_def: {
-    inline?: boolean; // default: false
-    disabled?: boolean; // default: false
-    ref?: null | HTMLAnchorElement | HTMLParagraphElement; // default: null
-  };
-}
-
-export class ListBox {
-  $$prop_def: {
+    /**
+     * Set the size of the combobox
+     */
     size?: "sm" | "xl";
-    type?: "default" | "inline"; // default: "default"
-    open?: boolean; // default: false
-    light?: boolean; // default: false
-    disable?: boolean; // default: false
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: ""
+
+    /**
+     * Set to `true` to disable the combobox
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the title text of the combobox
+     * @default ""
+     */
+    titleText?: string;
+
+    /**
+     * Specify the placeholder text
+     * @default ""
+     */
+    placeholder?: string;
+
+    /**
+     * Specify the helper text
+     * @default ""
+     */
+    helperText?: string;
+
+    /**
+     * Specify the invalid state text
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to open the combobox menu dropdown
+     * @default false
+     */
+    open?: boolean;
+
+    /**
+     * Determine if an item should be filtered given the current combobox value
+     */
+    shouldFilterItem?: (item: ComboBoxItem, value: string) => boolean;
+
+    /**
+     * Override the default translation ids
+     */
+    translateWithId?: (id: any) => string;
+
+    /**
+     * Set an id for the list box component
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
+}
+
+export class ComposedModal extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the size of the composed modal
+     */
+    size?: "xs" | "sm" | "lg";
+
+    /**
+     * Set to `true` to open the modal
+     * @default false
+     */
+    open?: boolean;
+
+    /**
+     * Set to `true` to use the danger variant
+     * @default false
+     */
+    danger?: boolean;
+
+    /**
+     * Specify a class for the inner modal
+     * @default ""
+     */
+    containerClass?: string;
+
+    /**
+     * Specify a selector to be focused when opening the modal
+     * @default "[data-modal-primary-focus]"
+     */
+    selectorPrimaryFocus?: string;
+
+    /**
+     * Obtain a reference to the top-level HTML element
+     * @default null
+     */
+    ref?: null | HTMLElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class Content extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the id for the main element
+     * @default "main-content"
+     */
+    id?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ContentSwitcher extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the selected index of the switch item
+     * @default 0
+     */
+    selectedIndex?: number;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class Copy extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the feedback text shown after clicking the button
+     * @default "Copied!"
+     */
+    feedback?: string;
+
+    /**
+     * Set the timeout duration (ms) to display feedback text
+     * @default 2000
+     */
+    feedbackTimeout?: number;
+
+    /**
+     * Obtain a reference to the button HTML element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class CopyButton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the title and ARIA label for the copy button
+     * @default "Copy to clipboard"
+     */
+    iconDescription?: string;
+  };
+}
+
+export class DataTable extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the data table headers
+     */
+    headers?: { key: string; value: string };
+
+    /**
+     * Specify the rows the data table should render
+     * keys defined in `headers` are used for the row ids
+     */
+    rows?: Object[];
+
+    /**
+     * Set the size of the data table
+     */
+    size?: "compact" | "short" | "tall";
+
+    /**
+     * Specify the title of the data table
+     * @default ""
+     */
+    title?: string;
+
+    /**
+     * Specify the description of the data table
+     * @default ""
+     */
+    description?: string;
+
+    /**
+     * Set to `true` to use zebra styles
+     * @default false
+     */
+    zebra?: boolean;
+
+    /**
+     * Set to `true` for the sortable variant
+     * @default false
+     */
+    sortable?: boolean;
+
+    /**
+     * Set to `true` to enable a sticky header
+     * @default false
+     */
+    stickyHeader?: boolean;
+  };
+
+  $$slot_def: { default: { props: any } };
+}
+
+export class DataTableSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the number of columns
+     * @default 5
+     */
+    columns?: number;
+
+    /**
+     * Specify the number of rows
+     * @default 5
+     */
+    rows?: number;
+
+    /**
+     * Set to `true` to use the compact variant
+     * @default false
+     */
+    compact?: boolean;
+
+    /**
+     * Set to `true` to apply zebra styles to the datatable rows
+     * @default false
+     */
+    zebra?: boolean;
+
+    /**
+     * Set the column headers
+     * If `headers` has one more items, `count` is ignored
+     */
+    headers?: string[];
+  };
+}
+
+export class DatePicker extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the date picker type
+     * @default "simple"
+     */
+    datePickerType?: "simple" | "single" | "range";
+
+    /**
+     * Specify the date picker input value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the element to append the calendar to
+     */
+    appendTo?: HTMLElement;
+
+    /**
+     * Specify the date format
+     * @default "m/d/Y"
+     */
+    dateFormat?: string;
+
+    /**
+     * Specify the maximum date
+     * @default null
+     */
+    maxDate?: null | string | Date;
+
+    /**
+     * Specify the minimum date
+     * @default null
+     */
+    minDate?: null | string | Date;
+
+    /**
+     * Specify the locale
+     * @default "en"
+     */
+    locale?: string;
+
+    /**
+     * Set to `true` to use the short variant
+     * @default false
+     */
+    short?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set an id for the date picker element
+     */
+    id?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class DatePickerInput extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the size of the input
+     */
+    size?: "sm" | "xl";
+
+    /**
+     * Specify the input type
+     * @default "text"
+     */
+    type?: string;
+
+    /**
+     * Specify the input placeholder text
+     * @default ""
+     */
+    placeholder?: string;
+
+    /**
+     * Specify the Regular Expression for the input value
+     * @default "\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
+     */
+    pattern?: string;
+
+    /**
+     * Set to `true` to disable the input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the ARIA label for the calendar icon
+     * @default ""
+     */
+    iconDescription?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the invalid state text
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Set a name for the input element
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
+  };
+}
+
+type DropdownItemId = string;
+
+type DropdownItemText = string;
+
+interface DropdownItem {
+  id: DropdownItemId;
+  text: DropdownItemText;
+}
+
+export class Dropdown extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the dropdown items
+     */
+    items?: DropdownItem[];
+
+    /**
+     * Override the display of a dropdown item
+     */
+    itemToString?: (item: DropdownItem) => string;
+
+    /**
+     * Specify the selected item index
+     */
+    selectedIndex?: number;
+
+    /**
+     * Specify the type of dropdown
+     * @default "default"
+     */
+    type?: "default" | "inline";
+
+    /**
+     * Specify the size of the dropdown field
+     */
+    size?: "sm" | "lg" | "xl";
+
+    /**
+     * Set to `true` to open the dropdown
+     * @default false
+     */
+    open?: boolean;
+
+    /**
+     * Set to `true` to use the inline variant
+     * @default false
+     */
+    inline?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to disable the dropdown
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the title text
+     * @default ""
+     */
+    titleText?: string;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the invalid state text
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Specify the helper text
+     * @default ""
+     */
+    helperText?: string;
+
+    /**
+     * Specify the list box label
+     */
+    label?: string;
+
+    /**
+     * Override the default translation ids
+     */
+    translateWithId?: (id: any) => string;
+
+    /**
+     * Set an id for the list box component
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the list box
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the button HTML element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
+  };
+}
+
+export class DropdownSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the inline variant
+     * @default false
+     */
+    inline?: boolean;
+  };
+}
+
+export class ExpandableTile extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to expand the tile
+     * @default false
+     */
+    expanded?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Specify the max height of the tile  (number of pixels)
+     * @default 0
+     */
+    tileMaxHeight?: number;
+
+    /**
+     * Specify the padding of the tile (number of pixels)
+     * @default 0
+     */
+    tilePadding?: number;
+
+    /**
+     * Specify the icon text of the collapsed tile
+     * @default "Interact to expand Tile"
+     */
+    tileCollapsedIconText?: string;
+
+    /**
+     * Specify the icon text of the expanded tile
+     * @default "Interact to collapse Tile"
+     */
+    tileExpandedIconText?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Set an id for the top-level div element
+     */
+    id?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLElement;
+  };
+
+  $$slot_def: { above: {}; below: {} };
+}
+
+export class FileUploader extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the file uploader status
+     * @default "uploading"
+     */
+    status?: "uploading" | "edit" | "complete";
+
+    /**
+     * Specify the accepted file types
+     */
+    accept?: string[];
+
+    /**
+     * Obtain the uploaded file names
+     */
+    files?: string[];
+
+    /**
+     * Set to `true` to allow multiple files
+     * @default false
+     */
+    multiple?: boolean;
+
+    /**
+     * Override the default behavior of clearing the array of uploaded files
+     * @constant
+     */
+    clearFiles?: () => any;
+
+    /**
+     * Specify the label description
+     * @default ""
+     */
+    labelDescription?: string;
+
+    /**
+     * Specify the label title
+     * @default ""
+     */
+    labelTitle?: string;
+
+    /**
+     * Specify the kind of file uploader button
+     * @default "primary"
+     */
+    kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger";
+
+    /**
+     * Specify the button label
+     * @default ""
+     */
+    buttonLabel?: string;
+
+    /**
+     * Specify the ARIA label used for the status icons
+     * @default "Provide icon description"
+     */
+    iconDescription?: string;
+
+    /**
+     * Specify a name attribute for the file button uploader input
+     * @default ""
+     */
+    name?: string;
+  };
+}
+
+export class FileUploaderButton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the accepted file types
+     */
+    accept?: string[];
+
+    /**
+     * Set to `true` to allow multiple files
+     * @default false
+     */
+    multiple?: boolean;
+
+    /**
+     * Set to `true` to disable the input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set to `true` to disable label changes
+     * @default false
+     */
+    disableLabelChanges?: boolean;
+
+    /**
+     * Specify the kind of file uploader button
+     * @default "primary"
+     */
+    kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger";
+
+    /**
+     * Specify the label text
+     * @default "Add file"
+     */
+    labelText?: string;
+
+    /**
+     * Specify the label role
+     * @default "button"
+     */
+    role?: string;
+
+    /**
+     * Specify `tabindex` attribute
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     * @default ""
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
+  };
+}
+
+type Files = string[];
+
+export class FileUploaderDropContainer extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the accepted file types
+     */
+    accept?: string[];
+
+    /**
+     * Set to `true` to allow multiple files
+     * @default false
+     */
+    multiple?: boolean;
+
+    /**
+     * Override the default behavior of validating uploaded files
+     * The default behavior does not validate files
+     */
+    validateFiles?: (files: Files) => Files;
+
+    /**
+     * Specify the label text
+     * @default "Add file"
+     */
+    labelText?: string;
+
+    /**
+     * Specify the `role` attribute of the drop container
+     * @default "button"
+     */
+    role?: string;
+
+    /**
+     * Set to `true` to disable the input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify `tabindex` attribute
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     * @default ""
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
+  };
+}
+
+export class FileUploaderItem extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the file uploader status
+     * @default "uploading"
+     */
+    status?: "uploading" | "edit" | "complete";
+
+    /**
+     * Specify the ARIA label used for the status icons
+     * @default ""
+     */
+    iconDescription?: string;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the error subject text
+     * @default ""
+     */
+    errorSubject?: string;
+
+    /**
+     * Specify the error body text
+     * @default ""
+     */
+    errorBody?: string;
+
+    /**
+     * Set an id for the top-level element
+     */
+    id?: string;
+
+    /**
+     * Specify the file uploader name
+     * @default ""
+     */
+    name?: string;
+  };
+}
+
+export class Filename extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the file name status
+     * @default "uploading"
+     */
+    status?: "uploading" | "edit" | "complete";
+
+    /**
+     * Specify the ARIA label used for the status icons
+     * @default ""
+     */
+    iconDescription?: string;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+  };
+}
+
+export class Form extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class FormGroup extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Set to `true` to render a form requirement
+     * @default false
+     */
+    message?: boolean;
+
+    /**
+     * Specify the message text
+     * @default ""
+     */
+    messageText?: string;
+
+    /**
+     * Specify the legend text
+     * @default ""
+     */
+    legendText?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class FormItem extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class FormLabel extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set an id to be used by the label element
+     */
+    id?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class Grid extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to render a custom HTML element
+     * Props are destructured as `props` in the default slot (e.g. <Grid let:props><header {...props}>...</header></Grid>)
+     * @default false
+     */
+    as?: boolean;
+
+    /**
+     * Set to `true` to use the condensed variant
+     * @default false
+     */
+    condensed?: boolean;
+
+    /**
+     * Set to `true` to use the narrow variant
+     * @default false
+     */
+    narrow?: boolean;
+
+    /**
+     * Set to `true` to use the fullWidth variant
+     * @default false
+     */
+    fullWidth?: boolean;
+
+    /**
+     * Set to `true` to remove the gutter
+     * @default false
+     */
+    noGutter?: boolean;
+
+    /**
+     * Set to `true` to remove the left gutter
+     * @default false
+     */
+    noGutterLeft?: boolean;
+
+    /**
+     * Set to `true` to remove the right gutter
+     * @default false
+     */
+    noGutterRight?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class Header extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `false` to hide the side nav by default
+     * @default true
+     */
+    expandedByDefault?: boolean;
+
+    /**
+     * Set to `true` to open the side nav
+     * @default false
+     */
+    isSideNavOpen?: boolean;
+
+    /**
+     * Specify the ARIA label for the header
+     */
+    uiShellAriaLabel?: string;
+
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+
+    /**
+     * Specify the company name
+     */
+    company?: string;
+
+    /**
+     * Specify the platform name
+     * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
+     */
+    platformName?: string;
+  };
+
+  $$slot_def: { "skip-to-content": {}; platform: {}; default: {} };
+}
+
+export class HeaderAction extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to open the panel
+     * @default false
+     */
+    isOpen?: boolean;
+
+    /**
+     * Specify the icon props
+     */
+    icon?: {
+      render: typeof import("carbon-icons-svelte/lib/Add16").default;
+      skeleton: boolean;
+    };
+
+    /**
+     * Specify the text
+     * Alternatively, use the named slot "text" (e.g. <div slot="text">...</div>)
+     */
+    text?: string;
+
+    /**
+     * Obtain a reference to the button HTML element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
+  };
+
+  $$slot_def: { text: {}; default: {} };
+}
+
+export class HeaderActionLink extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the active state
+     * @default false
+     */
+    linkIsActive?: boolean;
+
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+
+    /**
+     * Specify the icon props
+     */
+    icon?: {
+      render: typeof import("carbon-icons-svelte/lib/Add16").default;
+      skeleton: boolean;
+    };
+  };
+}
+
+export class HeaderActionSearch extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to focus the search
+     * @default false
+     */
+    searchIsActive?: boolean;
+  };
+}
+
+export class HeaderNav extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the ARIA label for the nav
+     */
+    ariaLabel?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class HeaderNavItem extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+
+    /**
+     * Specify the text
+     */
+    text?: string;
+  };
+}
+
+export class HeaderNavMenu extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to toggle the expanded state
+     * @default false
+     */
+    expanded?: boolean;
+
+    /**
+     * Specify the `href` attribute
+     * @default "/"
+     */
+    href?: string;
+
+    /**
+     * Specify the text
+     */
+    text?: string;
+
+    /**
+     * Specify the ARIA label for the chevron icon
+     * @default "Expand/Collapse"
+     */
+    iconDescription?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class HeaderPanelDivider extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class HeaderPanelLink extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class HeaderPanelLinks extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class HeaderUtilities extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class Icon extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the icon from `carbon-icons-svelte` to render
+     * Icon size must be 16px (e.g. `Add16`, `Task16`)
+     */
+    render?: typeof import("carbon-icons-svelte/lib/Add16").default;
+
+    /**
+     * Set to `true` to display the skeleton state
+     * @default false
+     */
+    skeleton?: boolean;
+  };
+}
+
+export class IconSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the size of the icon
+     * @default 16
+     */
+    size?: number;
+  };
+}
+
+export class InlineLoading extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the loading status
+     * @default "active"
+     */
+    status?: "active" | "inactive" | "finished" | "error";
+
+    /**
+     * Set the loading description
+     */
+    description?: string;
+
+    /**
+     * Specify the ARIA label for the loading icon
+     */
+    iconDescription?: string;
+
+    /**
+     * Specify the timeout delay (ms) after `status` is set to "success"
+     * @default 1500
+     */
+    successDelay?: number;
+  };
+}
+
+export class InlineNotification extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the type of notification
+     * @default "inline"
+     */
+    notificationType?: "toast" | "inline";
+
+    /**
+     * Specify the kind of notification
+     * @default "error"
+     */
+    kind?:
+      | "error"
+      | "info"
+      | "info-square"
+      | "success"
+      | "warning"
+      | "warning-alt";
+
+    /**
+     * Set to `true` to use the low contrast variant
+     * @default false
+     */
+    lowContrast?: boolean;
+
+    /**
+     * Set the `role` attribute
+     * @default "alert"
+     */
+    role?: string;
+
+    /**
+     * Specify the title text
+     * @default "Title"
+     */
+    title?: string;
+
+    /**
+     * Specify the subtitle text
+     * @default ""
+     */
+    subtitle?: string;
+
+    /**
+     * Set to `true` to hide the close button
+     * @default false
+     */
+    hideCloseButton?: boolean;
+
+    /**
+     * Specify the ARIA label for the icon
+     * @default "Closes notification"
+     */
+    iconDescription?: string;
+  };
+
+  $$slot_def: { default: {}; actions: {} };
+}
+
+export class Link extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the inline variant
+     * @default false
+     */
+    inline?: boolean;
+
+    /**
+     * Set to `true` to disable the checkbox
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Obtain a reference to the top-level HTML element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement | HTMLParagraphElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ListBox extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the size of the list box
+     */
+    size?: "sm" | "xl";
+
+    /**
+     * Set the type of the list box
+     * @default "default"
+     */
+    type?: "default" | "inline";
+
+    /**
+     * Set to `true` to open the list box
+     * @default false
+     */
+    open?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to disable the list box
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the invalid state text
+     * @default ""
+     */
+    invalidText?: string;
+  };
+
+  $$slot_def: { default: {} };
 }
 
 type ListBoxFieldTranslationId = "close" | "open";
 
-export class ListBoxField {
+export class ListBoxField extends CarbonSvelteComponent {
   $$prop_def: {
-    disabled?: boolean; // default: false
-    role?: string; // default: "combobox"
-    tabindex?: string; // default: "-1"
-    translateWithId?: (id: ListBoxFieldTranslationId) => string; // default: (id) => string
+    /**
+     * Set to `true` to disable the list box field
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the role attribute
+     * @default "combobox"
+     */
+    role?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "-1"
+     */
+    tabindex?: string;
+
+    /**
+     * Default translation ids
+     * @constant
+     * @default { close: "close", open: "open" }
+     */
+    translationIds?: { close: "close"; open: "open" };
+
+    /**
+     * Override the default translation ids
+     */
+    translateWithId?: (id: ListBoxFieldTranslationId) => string;
+
+    /**
+     * Set an id for the top-level element
+     */
     id?: string;
-    ref?: null | HTMLElement; // default: null
+
+    /**
+     * Obtain a reference to the top-level HTML element
+     * @default null
+     */
+    ref?: null | HTMLElement;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class ListBoxMenu {
+export class ListBoxMenu extends CarbonSvelteComponent {
   $$prop_def: {
+    /**
+     * Set an id for the top-level element
+     */
     id?: string;
   };
+
+  $$slot_def: { default: {} };
 }
 
 type ListBoxMenuIconTranslationId = "close" | "open";
 
-export class ListBoxMenuIcon {
+export class ListBoxMenuIcon extends CarbonSvelteComponent {
   $$prop_def: {
-    open?: boolean; // default: false
-    translateWithId?: (id: ListBoxMenuIconTranslationId) => string; // default: (id) => string
+    /**
+     * Set to `true` to open the list box menu icon
+     * @default false
+     */
+    open?: boolean;
+
+    /**
+     * Default translation ids
+     * @constant
+     * @default { close: "close", open: "open" }
+     */
+    translationIds?: { close: "close"; open: "open" };
+
+    /**
+     * Override the default translation ids
+     */
+    translateWithId?: (id: ListBoxMenuIconTranslationId) => string;
   };
 }
 
-export class ListBoxMenuItem {
+export class ListBoxMenuItem extends CarbonSvelteComponent {
   $$prop_def: {
-    active?: boolean; // default: false
-    highlighted?: boolean; // default: false
+    /**
+     * Set to `true` to enable the active state
+     * @default false
+     */
+    active?: boolean;
+
+    /**
+     * Set to `true` to enable the highlighted state
+     * @default false
+     */
+    highlighted?: boolean;
   };
+
+  $$slot_def: { default: {} };
 }
 
 type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 
-export class ListBoxSelection {
+export class ListBoxSelection extends CarbonSvelteComponent {
   $$prop_def: {
+    /**
+     * Specify the number of selected items
+     */
     selectionCount?: any;
-    disabled?: boolean; // default: false
-    translateWithId?: (id: ListBoxSelectionTranslationId) => string; // default: (id) => string
-    ref?: null | HTMLElement; // default: null
+
+    /**
+     * Set to `true` to disable the list box selection
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Default translation ids
+     * @constant
+     * @default {     clearAll: "clearAll",     clearSelection: "clearSelection",   }
+     */
+    translationIds?: { clearAll: "clearAll"; clearSelection: "clearSelection" };
+
+    /**
+     * Override the default translation ids
+     */
+    translateWithId?: (id: ListBoxSelectionTranslationId) => string;
+
+    /**
+     * Obtain a reference to the top-level HTML element
+     * @default null
+     */
+    ref?: null | HTMLElement;
   };
 }
 
-export class ListItem {
-  $$prop_def: {};
+export class ListItem extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
 }
 
-export class Loading {
+export class Loading extends CarbonSvelteComponent {
   $$prop_def: {
-    small?: boolean; // default: false
-    active?: boolean; // default: true
-    withOverlay?: boolean; // default: false
-    description?: string; // default: "Active loading indicator"
+    /**
+     * Set to `true` to use the small variant
+     * @default false
+     */
+    small?: boolean;
+
+    /**
+     * Set to `false` to disable the active state
+     * @default true
+     */
+    active?: boolean;
+
+    /**
+     * Set to `false` to disable the overlay
+     * @default true
+     */
+    withOverlay?: boolean;
+
+    /**
+     * Specify the label description
+     * @default "Active loading indicator"
+     */
+    description?: string;
+
+    /**
+     * Set an id for the label element
+     */
     id?: string;
   };
 }
 
-export class Modal {
+export class Modal extends CarbonSvelteComponent {
   $$prop_def: {
+    /**
+     * Set the size of the modal
+     */
     size?: "xs" | "sm" | "lg";
-    open?: boolean; // default: false
-    danger?: boolean; // default: false
-    passiveModal?: boolean; // default: false
+
+    /**
+     * Set to `true` to open the modal
+     * @default false
+     */
+    open?: boolean;
+
+    /**
+     * Set to `true` to use the danger variant
+     * @default false
+     */
+    danger?: boolean;
+
+    /**
+     * Set to `true` to use the passive variant
+     * @default false
+     */
+    passiveModal?: boolean;
+
+    /**
+     * Specify the modal heading
+     */
     modalHeading?: string;
+
+    /**
+     * Specify the modal label
+     */
     modalLabel?: string;
+
+    /**
+     * Specify the ARIA label for the modal
+     */
     modalAriaLabel?: string;
-    iconDescription?: string; // default: "Close the modal"
-    hasForm?: boolean; // default: false
-    hasScrollingContent?: boolean; // default: false
-    primaryButtonText?: string; // default: ""
-    primaryButtonDisabled?: boolean; // default: false
-    shouldSubmitOnEnter?: boolean; // default: true
-    secondaryButtonText?: string; // default: ""
-    selectorPrimaryFocus?: string; // default: "[data-modal-primary-focus]"
+
+    /**
+     * Specify the ARIA label for the close icon
+     * @default "Close the modal"
+     */
+    iconDescription?: string;
+
+    /**
+     * Set to `true` if the modal contains form elements
+     * @default false
+     */
+    hasForm?: boolean;
+
+    /**
+     * Set to `true` if the modal contains scrolling content
+     * @default false
+     */
+    hasScrollingContent?: boolean;
+
+    /**
+     * Specify the primary button text
+     * @default ""
+     */
+    primaryButtonText?: string;
+
+    /**
+     * Set to `true` to disable the primary button
+     * @default false
+     */
+    primaryButtonDisabled?: boolean;
+
+    /**
+     * Set to `true` for the primary button to be triggered when pressing "Enter"
+     * @default true
+     */
+    shouldSubmitOnEnter?: boolean;
+
+    /**
+     * Specify the secondary button text
+     * @default ""
+     */
+    secondaryButtonText?: string;
+
+    /**
+     * Specify a selector to be focused when opening the modal
+     * @default "[data-modal-primary-focus]"
+     */
+    selectorPrimaryFocus?: string;
+
+    /**
+     * Set an id for the top-level element
+     */
     id?: string;
-    ref?: null | HTMLElement; // default: null
+
+    /**
+     * Obtain a reference to the top-level HTML element
+     * @default null
+     */
+    ref?: null | HTMLElement;
   };
+
+  $$slot_def: { label: {}; heading: {}; default: {} };
+}
+
+export class ModalBody extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` if the modal contains form elements
+     * @default false
+     */
+    hasForm?: boolean;
+
+    /**
+     * Set to `true` if the modal contains scrolling content
+     * @default false
+     */
+    hasScrollingContent?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ModalFooter extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the primary button text
+     * @default ""
+     */
+    primaryButtonText?: string;
+
+    /**
+     * Set to `true` to disable the primary button
+     * @default false
+     */
+    primaryButtonDisabled?: boolean;
+
+    /**
+     * Specify a class for the primary button
+     */
+    primaryClass?: string;
+
+    /**
+     * Specify the secondary button text
+     * @default ""
+     */
+    secondaryButtonText?: string;
+
+    /**
+     * Specify a class for the secondary button
+     */
+    secondaryClass?: string;
+
+    /**
+     * Set to `true` to use the danger variant
+     * @default false
+     */
+    danger?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ModalHeader extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the modal title
+     * @default ""
+     */
+    title?: string;
+
+    /**
+     * Specify the modal label
+     * @default ""
+     */
+    label?: string;
+
+    /**
+     * Specify the label class
+     * @default ""
+     */
+    labelClass?: string;
+
+    /**
+     * Specify the title class
+     * @default ""
+     */
+    titleClass?: string;
+
+    /**
+     * Specify the close class
+     * @default ""
+     */
+    closeClass?: string;
+
+    /**
+     * Specify the close icon class
+     * @default ""
+     */
+    closeIconClass?: string;
+
+    /**
+     * Specify the ARIA label for the close icon
+     * @default "Close"
+     */
+    iconDescription?: string;
+  };
+
+  $$slot_def: { default: {} };
 }
 
 type MultiSelectItemId = string;
@@ -648,453 +2235,1924 @@ interface MultiSelectItem {
   text: MultiSelectItemText;
 }
 
-export class MultiSelect {
+export class MultiSelect extends CarbonSvelteComponent {
   $$prop_def: {
-    items?: MultiSelectItem[]; // default: []
-    itemToString?: (item: MultiSelectItem) => string; // default: (item: MultiSelectItem) =>  MultiSelectItemText | MultiSelectItemId
-    selectedIds?: MultiSelectItemId[]; // default: []
-    value?: string; // default: ""
+    /**
+     * Set the multiselect items
+     */
+    items?: MultiSelectItem[];
+
+    /**
+     * Override the display of a multiselect item
+     */
+    itemToString?: (item: MultiSelectItem) => string;
+
+    /**
+     * Set the selected ids
+     */
+    selectedIds?: MultiSelectItemId[];
+
+    /**
+     * Specify the multiselect value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Set the size of the combobox
+     */
     size?: "sm" | "lg" | "xl";
-    type?: "default" | "inline"; // default: "default"
-    selectionFeedback?: "top" | "fixed" | "top-after-reopen"; // default: "top-after-reopen"
-    disabled?: boolean; // default: false
-    filterable?: boolean; // default: false
-    filterItem?: (item: MultiSelectItem, value: string) => string; // default: (item: MultiSelectItem, value: string) => string
-    open?: boolean; // default: false
-    light?: boolean; // default: false
-    locale?: string; // default: "en"
-    placeholder?: string; // default: ""
-    sortItem?: (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem; // default: (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem
+
+    /**
+     * Specify the type of multiselect
+     * @default "default"
+     */
+    type?: "default" | "inline";
+
+    /**
+     * Specify the selection feedback after selecting items
+     * @default "top-after-reopen"
+     */
+    selectionFeedback?: "top" | "fixed" | "top-after-reopen";
+
+    /**
+     * Set to `true` to disable the dropdown
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set to `true` to filter items
+     * @default false
+     */
+    filterable?: boolean;
+
+    /**
+     * Override the filtering logic
+     * The default filtering is an exact string comparison
+     */
+    filterItem?: (item: MultiSelectItem, value: string) => string;
+
+    /**
+     * Set to `true` to open the dropdown
+     * @default false
+     */
+    open?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Specify the locale
+     * @default "en"
+     */
+    locale?: string;
+
+    /**
+     * Specify the placeholder text
+     * @default ""
+     */
+    placeholder?: string;
+
+    /**
+     * Override the sorting logic
+     * The default sorting compare the item text value
+     */
+    sortItem?: (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem;
+
+    /**
+     * Override the default translation ids
+     */
     translateWithId?: (id: any) => string;
-    titleText?: string; // default: ""
-    useTitleInItem?: boolean; // default: false
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: ""
-    helperText?: string; // default: ""
+
+    /**
+     * Specify the title text
+     * @default ""
+     */
+    titleText?: string;
+
+    /**
+     * Set to `true` to pass the item to `itemToString` in the checkbox
+     * @default false
+     */
+    useTitleInItem?: boolean;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the invalid state text
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Specify the helper text
+     * @default ""
+     */
+    helperText?: string;
+
+    /**
+     * Specify the list box label
+     * @default ""
+     */
     label?: string;
+
+    /**
+     * Set an id for the list box component
+     */
     id?: string;
+
+    /**
+     * Specify a name attribute for the select
+     */
     name?: string;
   };
 }
 
-export class InlineNotification {
+export class NotificationActionButton extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class NotificationButton extends CarbonSvelteComponent {
   $$prop_def: {
-    notificationType?: "toast" | "inline"; // default: "toast"
+    /**
+     * Set the type of notification
+     * @default "toast"
+     */
+    notificationType?: "toast" | "inline";
+
+    /**
+     * Specify the icon from `carbon-icons-svelte` to render
+     */
+    renderIcon?: typeof import("carbon-icons-svelte/lib/Add16").default;
+
+    /**
+     * Specify the title of the icon
+     */
+    title?: string;
+
+    /**
+     * Specify the ARIA label for the icon
+     * @default "Close icon"
+     */
+    iconDescription?: string;
+  };
+}
+
+export class NotificationIcon extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the kind of notification icon
+     * @default "error"
+     */
     kind?:
       | "error"
       | "info"
       | "info-square"
       | "success"
       | "warning"
-      | "warning-alt"; // default: "error"
-    lowContrast?: boolean; // default: false
-    role?: string; // default: "alert"
-    title?: string; // default: "Title"
-    subtitle?: string; // default: ""
-    hideCloseButton?: boolean; // default: false
-    iconDescription?: string; // default: "Closes notification"
+      | "warning-alt";
+
+    /**
+     * Set the type of notification
+     * @default "toast"
+     */
+    notificationType?: "toast" | "inline";
+
+    /**
+     * Specify the ARIA label for the icon
+     * @default "Closes notification"
+     */
+    iconDescription?: string;
   };
 }
 
-export class NotificationActionButton {
-  $$prop_def: {};
-}
-
-export class NotificationButton {
+export class NotificationTextDetails extends CarbonSvelteComponent {
   $$prop_def: {
-    notificationType?: "toast" | "inline"; // default: "toast"
-    renderIcon?: CarbonIcon;
-    iconDescription?: string; // default: "Close icon"
-  };
-}
+    /**
+     * Set the type of notification
+     * @default "toast"
+     */
+    notificationType?: "toast" | "inline";
 
-export class NotificationIcon {
-  $$prop_def: {
-    kind?:
-      | "error"
-      | "info"
-      | "info-square"
-      | "success"
-      | "warning"
-      | "warning-alt"; // default: "error"
-    notificationType?: "toast" | "inline"; // default: "toast"
-    iconDescription?: string; // default: "Closes notification"
-  };
-}
+    /**
+     * Specify the title text
+     * @default "Title"
+     */
+    title?: string;
 
-export class NotificationTextDetails {
-  $$prop_def: {
-    notificationType?: "toast" | "inline"; // default: "toast"
-    title?: string; // default: "Title"
-    subtitle?: string; // default: ""
-    caption?: string; // default: "Caption"
-  };
-}
+    /**
+     * Specify the subtitle text
+     * @default ""
+     */
+    subtitle?: string;
 
-export class ToastNotification {
-  $$prop_def: {
-    notificationType?: "toast" | "inline"; // default: "toast"
-    kind?:
-      | "error"
-      | "info"
-      | "info-square"
-      | "success"
-      | "warning"
-      | "warning-alt"; // default: "error"
-    lowContrast?: boolean; // default: false
-    timeout?: number; // default: 0
-    role?: string; // default: "alert"
-    title?: string; // default: "Title"
-    subtitle?: string; // default: ""
-    caption?: string; // default: "Caption"
-    iconDescription?: string; // default: "Closes notification"
-    hideCloseButton?: boolean; // default: false
+    /**
+     * Specify the caption text
+     * @default "Caption"
+     */
+    caption?: string;
   };
-}
 
-export class NumberInputSkeleton {
-  $$prop_def: {
-    hideLabel?: boolean; // default: false
-  };
+  $$slot_def: { default: {} };
 }
 
 type NumberInputTranslationId = "increment" | "decrement";
 
-export class NumberInput {
+export class NumberInput extends CarbonSvelteComponent {
   $$prop_def: {
+    /**
+     * Set the size of the input
+     */
     size?: "sm" | "xl";
-    value?: string; // default: ""
-    step?: number; // default: 1
+
+    /**
+     * Specify the input value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the step increment
+     * @default 1
+     */
+    step?: number;
+
+    /**
+     * Specify the maximum value
+     */
     max?: number;
+
+    /**
+     * Specify the minimum value
+     */
     min?: number;
-    light?: boolean; // default: false
-    readonly?: boolean; // default: false
-    mobile?: boolean; // default: false
-    allowEmpty?: boolean; // default: false
-    disabled?: boolean; // default: false
-    iconDescription?: string; // default: ""
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: "Provide invalidText"
-    helperText?: string; // default: ""
-    label?: string; // default: ""
-    hideLabel?: boolean; // default: false
-    translateWithId?: (id: NumberInputTranslationId) => string; // default: (id: NumberInputTranslationId) => string
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` for the input to be read-only
+     * @default false
+     */
+    readonly?: boolean;
+
+    /**
+     * Set to `true` to enable the mobile variant
+     * @default false
+     */
+    mobile?: boolean;
+
+    /**
+     * Set to `true` to allow for an empty value
+     * @default false
+     */
+    allowEmpty?: boolean;
+
+    /**
+     * Set to `true` to disable the input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the ARIA label for the increment icons
+     * @default ""
+     */
+    iconDescription?: string;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the invalid state text
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Specify the helper text
+     * @default ""
+     */
+    helperText?: string;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    label?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Override the default translation ids
+     */
+    translateWithId?: (id: NumberInputTranslationId) => string;
+
+    /**
+     * Default translation ids
+     * @constant
+     * @default {     increment: "increment",     decrement: "decrement",   }
+     */
+    translationIds?: { increment: "increment"; decrement: "decrement" };
+
+    /**
+     * Set an id for the input element
+     */
     id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     */
     name?: string;
-    ref?: null | HTMLInputElement; // default: null
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
+  };
+
+  $$slot_def: { label: {} };
+}
+
+export class NumberInputSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
   };
 }
 
-export class OrderedList {
+export class OrderedList extends CarbonSvelteComponent {
   $$prop_def: {
-    nested?: boolean; // default: false
+    /**
+     * Set to `true` to use the nested variant
+     * @default false
+     */
+    nested?: boolean;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class OverflowMenu {
+export class OverflowMenu extends CarbonSvelteComponent {
   $$prop_def: {
-    direction?: "top" | "bottom"; // default: "bottom"
-    open?: boolean; // default: false
-    light?: boolean; // default: false
-    flipped?: boolean; // default: false
+    /**
+     * Specify the direction of the overflow menu relative to the button
+     * @default "bottom"
+     */
+    direction?: "top" | "bottom";
+
+    /**
+     * Set to `true` to open the menu
+     * @default false
+     */
+    open?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to flip the menu relative to the button
+     * @default false
+     */
+    flipped?: boolean;
+
+    /**
+     * Specify the menu options class
+     */
     menuOptionsClass?: string;
-    icon?: CarbonIcon;
+
+    /**
+     * Specify the icon from `carbon-icons-svelte` to render
+     */
+    icon?: typeof import("carbon-icons-svelte/lib/Add16").default;
+
+    /**
+     * Specify the icon class
+     */
     iconClass?: string;
-    iconDescription?: string; // default: "Open and close list of options"
+
+    /**
+     * Specify the ARIA label for the icon
+     * @default "Open and close list of options"
+     */
+    iconDescription?: string;
+
+    /**
+     * Set an id for the button element
+     */
+    id?: string;
+  };
+
+  $$slot_def: { menu: {}; default: {} };
+}
+
+export class OverflowMenuItem extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the item text
+     * Alternatively, use the default slot for a custom element
+     * @default "Provide text"
+     */
+    text?: string;
+
+    /**
+     * Specify the `href` attribute if the item is a link
+     * @default ""
+     */
+    href?: string;
+
+    /**
+     * Set to `true` if the item should be focused when opening the menu
+     * @default false
+     */
+    primaryFocus?: boolean;
+
+    /**
+     * Set to `true` to disable the item
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set to `true` to include a divider
+     * @default false
+     */
+    hasDivider?: boolean;
+
+    /**
+     * Set to `true` to use the danger variant
+     * @default false
+     */
+    danger?: boolean;
+
+    /**
+     * Set to `false` to omit the button `title` attribute
+     * @default true
+     */
+    requireTitle?: boolean;
+
+    /**
+     * Set an id for the top-level element
+     */
+    id?: string;
+
+    /**
+     * Obtain a reference to the HTML element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement | HTMLButtonElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class Pagination extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the current page index
+     * @default 1
+     */
+    page?: number;
+
+    /**
+     * Specify the total number of items
+     * @default 0
+     */
+    totalItems?: number;
+
+    /**
+     * Set to `true` to disable the pagination
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the forward button text
+     * @default "Next page"
+     */
+    forwardText?: string;
+
+    /**
+     * Specify the backward button text
+     * @default "Previous page"
+     */
+    backwardText?: string;
+
+    /**
+     * Specify the items per page text
+     * @default "Items per page:"
+     */
+    itemsPerPageText?: string;
+
+    /**
+     * Override the item text
+     */
+    itemText?: (min: number, max: number) => string;
+
+    /**
+     * Override the item range text
+     */
+    itemRangeText?: (min: number, max: number, total: number) => string;
+
+    /**
+     * Set to `true` to disable the page input
+     * @default false
+     */
+    pageInputDisabled?: boolean;
+
+    /**
+     * Specify the number of items to display in a page
+     * @default 10
+     */
+    pageSize?: number;
+
+    /**
+     * Specify the available page sizes
+     */
+    pageSizes?: number[];
+
+    /**
+     * Set to `true` if the number of pages is unknown
+     * @default false
+     */
+    pagesUnknown?: boolean;
+
+    /**
+     * Override the page text
+     */
+    pageText?: (page: number) => string;
+
+    /**
+     * Override the page range text
+     */
+    pageRangeText?: (current: number, total: number) => string;
+
+    /**
+     * Set an id for the top-level element
+     */
     id?: string;
   };
 }
 
-export class OverflowMenuItem {
+export class PaginationNav extends CarbonSvelteComponent {
   $$prop_def: {
-    text?: string; // default: "Provide text"
-    href?: string; // default: ""
-    primaryFocus?: boolean; // default: false
-    disabled?: boolean; // default: false
-    hasDivider?: boolean; // default: false
-    danger?: boolean; // default: false
-    requireTitle?: boolean; // default: false
-    id?: string;
-    ref?: null | HTMLAnchorElement | HTMLButtonElement; // default: null
+    /**
+     * Specify the current page index
+     * @default 0
+     */
+    page?: number;
+
+    /**
+     * Specify the total number of pages
+     * @default 10
+     */
+    total?: number;
+
+    /**
+     * Specify the total number of pages to show
+     * @default 10
+     */
+    shown?: number;
+
+    /**
+     * Set to `true` to loop the navigation
+     * @default false
+     */
+    loop?: boolean;
+
+    /**
+     * Specify the forward button text
+     * @default "Next page"
+     */
+    forwardText?: string;
+
+    /**
+     * Specify the backward button text
+     * @default "Previous page"
+     */
+    backwardText?: string;
   };
 }
 
-export class PaginationSkeleton {
-  $$prop_def: {};
-}
+export class PaginationSkeleton extends CarbonSvelteComponent {}
 
-export class Pagination {
+export class PasswordInput extends CarbonSvelteComponent {
   $$prop_def: {
-    page?: number; // default: 1
-    total?: number; // default: 0
-    disabled?: boolean; // default: false
-    forwardText?: string; // default: "Next page"
-    backwardText?: string; // default: "Previous page"
-    itemsPerPageText?: string; // default: "Items per page:"
-    itemText?: (min: number, max: number) => string; // default: (min: number, max: number) => string
-    itemRangeText?: (min: number, max: number, total: number) => string; // default: (min: number, max: number, total: number) => string
-    pageInputDisabled?: boolean; // default: false
-    pageSize?: number; // default: 10
-    pageSizes?: number[]; // default: [10]
-    pagesUnknown?: boolean; // default: false
-    pageText?: (page: number) => string; // default: (current: number) => string
-    pageRangeText?: (current: number, total: number) => string; // default: (current: number, total: number) => string
-    id?: string;
-  };
-}
-
-export class PaginationItem {
-  $$prop_def: {
-    page?: number; // default: 0
-    active?: boolean; // default: false
-  };
-}
-
-export class PaginationNav {
-  $$prop_def: {
-    page?: number; // default: 0
-    total?: number; // default: 10
-    shown?: number; // default: 10
-    loop?: boolean; // default: false
-    forwardText?: string; // default: "Next page"
-    backwardText?: string; // default: "Next page"
-  };
-}
-
-export class PaginationOverflow {
-  $$prop_def: {
-    fromIndex?: number; // default: 0
-    count?: number; // default: 0
-  };
-}
-
-export class ProgressIndicatorSkeleton {
-  $$prop_def: {};
-}
-
-export class ProgressIndicator {
-  $$prop_def: {
-    currentIndex?: number; // default: 0
-  };
-}
-
-export class ProgressStep {
-  $$prop_def: {
-    complete?: boolean; // default: false
-    current?: boolean; // default: false
-    disabled?: boolean; // default: false
-    invalid?: boolean; // default: false
-    descripton?: string; // default: ""
-    label?: string; // default: ""
-    secondaryLabel?: string; // default: ""
-    id?: string;
-  };
-}
-
-export class RadioButtonSkeleton {
-  $$prop_def: {};
-}
-
-export class RadioButton {
-  $$prop_def: {
-    value?: string; // default: ""
-    checked?: boolean; // default: false
-    disabled?: boolean; // default: false
-    labelPosition?: "right" | "left"; // default: "right"
-    labelText?: string; // default: ""
-    hideLabel?: boolean; // default: false
-    id?: string;
-    name?: string; // default: ""
-    ref?: null | HTMLInputElement; // default: null
-  };
-}
-
-export class RadioButtonGroup {
-  $$prop_def: {
-    selected?: string;
-    disabled?: boolean; // default: false
-    labelPosition?: "right" | "left"; // default: "right"
-    orientation?: "horizontal" | "vertical"; // default: "horizontal"
-  };
-}
-
-export class SearchSkeleton {
-  $$prop_def: {
-    small?: boolean; // default: false
-  };
-}
-
-export class Search {
-  $$prop_def: {
-    small?: boolean; // default: false
-    size?: "sm" | "lg";
-    skeleton?: boolean; // default: false
-    light?: boolean; // default: false
-    value?: string; // default: "text"
-    type?: string; // default: "text"
-    placeholder?: string; // default: "Search..."
-    autocomplete?: "on" | "off"; // default: "off"
-    autofocus?: boolean; // default: false
-    closeButtonLabelText?: string; // default: "Clear search input"
-    labelText?: string; // default: ""
-    id?: string;
-    ref?: null | HTMLInputElement; // default: null
-  };
-}
-
-export class SelectSkeleton {
-  $$prop_def: {
-    hideLabel?: boolean; // default: false
-  };
-}
-
-export class Select {
-  $$prop_def: {
-    selected?: string;
+    /**
+     * Set the size of the input
+     */
     size?: "sm" | "xl";
-    inline?: boolean; // default: false
-    light?: boolean; // default: false
-    disabled?: boolean; // default: false
+
+    /**
+     * Specify the input value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the input type
+     * @default "password"
+     */
+    type?: string;
+
+    /**
+     * Specify the placeholder text
+     * @default ""
+     */
+    placeholder?: string;
+
+    /**
+     * Specify the hide password label text
+     * @default "Hide password"
+     */
+    hidePasswordLabel?: string;
+
+    /**
+     * Specify the show password label text
+     * @default "Show password"
+     */
+    showPasswordLabel?: string;
+
+    /**
+     * Set the alignment of the tooltip relative to the icon
+     */
+    tooltipAlignment?: "start" | "center" | "end";
+
+    /**
+     * Set the position of the tooltip relative to the icon
+     */
+    tooltipPosition?: "top" | "right" | "bottom" | "left";
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to disable the input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the helper text
+     * @default ""
+     */
+    helperText?: string;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the text for the invalid state
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Set an id for the input element
+     */
     id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     */
     name?: string;
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: ""
-    helperText?: string; // default: ""
-    noLabel?: boolean; // default: false
-    labelText?: string; // default: ""
-    hideLabel?: boolean; // default: false
-    ref?: null | HTMLSelectElement; // default: null
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
 }
 
-export class SelectItem {
-  $$prop_def: {};
+export class ProgressIndicator extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the current step index
+     * @default 0
+     */
+    currentIndex?: number;
+
+    /**
+     * Set to `true` to use the vertical variant
+     * @default false
+     */
+    vertical?: boolean;
+  };
+
+  $$slot_def: { default: {} };
 }
 
-export class SelectItemGroup {
+export class ProgressIndicatorSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
-    disabled?: boolean; // default: false
-    label?: string; // default: "Provide label"
+    /**
+     * Set to `true` to use the vertical variant
+     * @default false
+     */
+    vertical?: boolean;
   };
 }
 
-export class SkeletonPlaceholder {
-  $$prop_def: {};
-}
-
-export class SkeletonText {
+export class ProgressStep extends CarbonSvelteComponent {
   $$prop_def: {
-    lines?: number; // default: 3
-    heading?: boolean; // default: false
-    paragraph?: boolean; // default: false
-    width?: string; // default: "100%"
-  };
-}
+    /**
+     * Set to `true` for the complete variant
+     * @default false
+     */
+    complete?: boolean;
 
-export class SliderSkeleton {
-  $$prop_def: {
-    hideLabel?: boolean; // default: false
-  };
-}
+    /**
+     * Set to `true` to use the current variant
+     * @default false
+     */
+    current?: boolean;
 
-export class Slider {
-  $$prop_def: {
+    /**
+     * Set to `true` to disable the progress step
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the step description
+     * @default ""
+     */
+    description?: string;
+
+    /**
+     * Specify the step label
+     * @default ""
+     */
+    label?: string;
+
+    /**
+     * Specify the step secondary label
+     * @default ""
+     */
+    secondaryLabel?: string;
+
+    /**
+     * Set an id for the top-level element
+     */
     id?: string;
-    invalid?: boolean; // default: false
-    labelText?: string; // default: ""
-    light?: boolean; // default: false
-    name?: string; // default: ""
-    ref?: null | HTMLElement; // default: null
+  };
+
+  $$slot_def: { default: { props: any } };
+}
+
+export class RadioButton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the value of the radio button
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Set to `true` to check the radio button
+     * @default false
+     */
+    checked?: boolean;
+
+    /**
+     * Set to `true` to disable the radio button
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the label position
+     * @default "right"
+     */
+    labelPosition?: "right" | "left";
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the checkbox input
+     * @default ""
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
 }
 
-export class StructuredListSkeleton {
+export class RadioButtonGroup extends CarbonSvelteComponent {
   $$prop_def: {
-    rows?: number; // default: 5
-    border?: boolean; // default: false
-  };
-}
-
-export class StructuredList {
-  $$prop_def: {
+    /**
+     * Set the selected radio button value
+     */
     selected?: string;
-    border?: boolean; // default: false
-    selection?: boolean; // default: false
+
+    /**
+     * Set to `true` to disable the radio buttons
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the label position
+     * @default "right"
+     */
+    labelPosition?: "right" | "left";
+
+    /**
+     * Specify the orientation of the radio buttons
+     * @default "horizontal"
+     */
+    orientation?: "horizontal" | "vertical";
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class StructuredListBody {
-  $$prop_def: {};
-}
+export class RadioButtonSkeleton extends CarbonSvelteComponent {}
 
-export class StructuredListCell {
+export class RadioTile extends CarbonSvelteComponent {
   $$prop_def: {
-    head?: boolean; // default: false
-    noWrap?: boolean; // default: false
-  };
-}
+    /**
+     * Set to `true` to check the tile
+     * @default false
+     */
+    checked?: boolean;
 
-export class StructuredListHead {
-  $$prop_def: {};
-}
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
 
-export class StructuredListInput {
-  $$prop_def: {
-    checked?: boolean; // default: false
-    title?: string; // default: "title"
-    value?: string; // default: "value"
+    /**
+     * Specify the value of the radio input
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Specify the ARIA label for the radio tile checkmark icon
+     * @default "Tile checkmark"
+     */
+    iconDescription?: string;
+
+    /**
+     * Set an id for the input element
+     */
     id?: string;
-    name?: string; // default: ""
-    ref?: null | HTMLInputElement; // default: null
+
+    /**
+     * Specify a name attribute for the input
+     * @default ""
+     */
+    name?: string;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class StructuredListRow {
+export class Row extends CarbonSvelteComponent {
   $$prop_def: {
-    head?: boolean; // default: false
-    label?: boolean; // default: false
-    tabindex?: string; // default: "0"
+    /**
+     * Set to `true` to render a custom HTML element
+     * Props are destructured as `props` in the default slot (e.g. <Row let:props><section {...props}>...</section></Row>)
+     * @default false
+     */
+    as?: boolean;
+
+    /**
+     * Set to `true` to use the condensed variant
+     * @default false
+     */
+    condensed?: boolean;
+
+    /**
+     * Set to `true` to use the narrow variant
+     * @default false
+     */
+    narrow?: boolean;
+
+    /**
+     * Set to `true` to remove the gutter
+     * @default false
+     */
+    noGutter?: boolean;
+
+    /**
+     * Set to `true` to remove the left gutter
+     * @default false
+     */
+    noGutterLeft?: boolean;
+
+    /**
+     * Set to `true` to remove the right gutter
+     * @default false
+     */
+    noGutterRight?: boolean;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class Tab {
+export class Search extends CarbonSvelteComponent {
   $$prop_def: {
-    label?: string; // default: ""
-    href?: string; // default: "#"
-    disabled?: boolean; // default: false
-    tabindex?: string; // default: "0"
+    /**
+     * Set to `true` to use the small variant
+     * @default false
+     */
+    small?: boolean;
+
+    /**
+     * Specify the size of the search input
+     */
+    size?: "sm" | "lg";
+
+    /**
+     * Set to `true` to display the skeleton state
+     * @default false
+     */
+    skeleton?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Specify the value of the search input
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the `type` attribute of the search input
+     * @default "text"
+     */
+    type?: string;
+
+    /**
+     * Specify the `placeholder` attribute of the search input
+     * @default "Search..."
+     */
+    placeholder?: string;
+
+    /**
+     * Specify the `autocomplete` attribute
+     * @default "off"
+     */
+    autocomplete?: "on" | "off";
+
+    /**
+     * Set to `true` to auto focus the search element
+     * @default false
+     */
+    autofocus?: boolean;
+
+    /**
+     * Specify the close button label text
+     * @default "Clear search input"
+     */
+    closeButtonLabelText?: string;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set an id for the input element
+     */
     id?: string;
-    ref?: null | HTMLAnchorElement; // default: null
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
 }
 
-export class TabContent {
+export class SearchSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
+    /**
+     * Set to `true` to use the small variant
+     * @default false
+     */
+    small?: boolean;
+  };
+}
+
+export class Select extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the selected item value
+     */
+    selected?: string;
+
+    /**
+     * Set the size of the select input
+     */
+    size?: "sm" | "xl";
+
+    /**
+     * Set to `true` to use the inline variant
+     * @default false
+     */
+    inline?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to disable the select element
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set an id for the select element
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the select element
+     */
+    name?: string;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the invalid state text
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Specify the helper text
+     * @default ""
+     */
+    helperText?: string;
+
+    /**
+     * Set to `true` to not render a label
+     * @default false
+     */
+    noLabel?: boolean;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Obtain a reference to the select HTML element
+     * @default null
+     */
+    ref?: null | HTMLSelectElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class SelectItem extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the option value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the option text
+     * @default ""
+     */
+    text?: string;
+
+    /**
+     * Set to `true` to hide the option
+     * @default false
+     */
+    hidden?: boolean;
+
+    /**
+     * Set to `true` to disable the option
+     * @default false
+     */
+    disabled?: boolean;
+  };
+}
+
+export class SelectItemGroup extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to disable the optgroup element
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the label attribute of the optgroup element
+     * @default "Provide label"
+     */
+    label?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class SelectSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+  };
+}
+
+export class SelectableTile extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to select the tile
+     * @default false
+     */
+    selected?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Specify the title of the selectable tile
+     * @default "title"
+     */
+    title?: string;
+
+    /**
+     * Specify the value of the selectable tile
+     * @default "value"
+     */
+    value?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Specify the ARIA label for the selectable tile checkmark icon
+     * @default "Tile checkmark"
+     */
+    iconDescription?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     * @default ""
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class SideNav extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the fixed variant
+     * @default false
+     */
+    fixed?: boolean;
+
+    /**
+     * Specify the ARIA label for the nav
+     */
+    ariaLabel?: string;
+
+    /**
+     * Set to `true` to toggle the expanded state
+     * @default false
+     */
+    isOpen?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class SideNavItems extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class SideNavLink extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to select the current link
+     * @default false
+     */
+    isSelected?: boolean;
+
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+
+    /**
+     * Specify the text
+     */
+    text?: string;
+
+    /**
+     * Specify the icon props
+     */
+    icon?: {
+      render: typeof import("carbon-icons-svelte/lib/Add16").default;
+      skeleton: boolean;
+    };
+  };
+}
+
+export class SideNavMenu extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to toggle the expanded state
+     * @default false
+     */
+    expanded?: boolean;
+
+    /**
+     * Specify the text
+     */
+    text?: string;
+
+    /**
+     * Specify the icon props
+     */
+    icon?: {
+      render: typeof import("carbon-icons-svelte/lib/Add16").default;
+      skeleton: boolean;
+    };
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class SideNavMenuItem extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to select the item
+     */
+    isSelected?: boolean;
+
+    /**
+     * Specify the `href` attribute
+     */
+    href?: string;
+
+    /**
+     * Specify the item text
+     */
+    text?: string;
+  };
+}
+
+export class SkeletonPlaceholder extends CarbonSvelteComponent {}
+
+export class SkeletonText extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the number of lines to render
+     * @default 3
+     */
+    lines?: number;
+
+    /**
+     * Set to `true` to use the heading size variant
+     * @default false
+     */
+    heading?: boolean;
+
+    /**
+     * Set to `true` to use the paragraph size variant
+     * @default false
+     */
+    paragraph?: boolean;
+
+    /**
+     * Specify the width of the text (% or px)
+     * @default "100%"
+     */
+    width?: string;
+  };
+}
+
+export class SkipToContent extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the `href` attribute
+     * @default "#main-content"
+     */
+    href?: string;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class Slider extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the value of the slider
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Set the maximum slider value
+     * @default 100
+     */
+    max?: number;
+
+    /**
+     * Specify the label for the max value
+     * @default ""
+     */
+    maxLabel?: string;
+
+    /**
+     * Set the minimum slider value
+     * @default 0
+     */
+    min?: number;
+
+    /**
+     * Specify the label for the min value
+     * @default ""
+     */
+    minLabel?: string;
+
+    /**
+     * Set the step value
+     * @default 1
+     */
+    step?: number;
+
+    /**
+     * Set the step multiplier value
+     * @default 4
+     */
+    stepMultiplier?: number;
+
+    /**
+     * Set to `true` to require a value
+     * @default false
+     */
+    required?: boolean;
+
+    /**
+     * Specify the input type
+     * @default "number"
+     */
+    inputType?: string;
+
+    /**
+     * Set to `true` to disable the slider
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to hide the text input
+     * @default false
+     */
+    hideTextInput?: boolean;
+
+    /**
+     * Set an id for the slider div element
+     */
+    id?: string;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set a name for the slider element
+     * @default ""
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the HTML element
+     * @default null
+     */
+    ref?: null | HTMLElement;
+  };
+}
+
+export class SliderSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+  };
+}
+
+export class StructuredList extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the selected structured list row value
+     */
+    selected?: string;
+
+    /**
+     * Set to `true` to use the bordered variant
+     * @default false
+     */
+    border?: boolean;
+
+    /**
+     * Set to `true` to use the selection variant
+     * @default false
+     */
+    selection?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class StructuredListBody extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class StructuredListCell extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use as a header
+     * @default false
+     */
+    head?: boolean;
+
+    /**
+     * Set to `true` to prevent wrapping
+     * @default false
+     */
+    noWrap?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class StructuredListHead extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class StructuredListInput extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to check the input
+     * @default false
+     */
+    checked?: boolean;
+
+    /**
+     * Specify the title of the input
+     * @default "title"
+     */
+    title?: string;
+
+    /**
+     * Specify the value of the input
+     * @default "value"
+     */
+    value?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     * @default ""
+     */
+    name?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
+  };
+}
+
+export class StructuredListRow extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use as a header
+     * @default false
+     */
+    head?: boolean;
+
+    /**
+     * Set to `true` to render a label slot
+     * @default false
+     */
+    label?: boolean;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class StructuredListSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the number of rows
+     * @default 5
+     */
+    rows?: number;
+
+    /**
+     * Set to `true` to use the bordered variant
+     * @default false
+     */
+    border?: boolean;
+  };
+}
+
+export class Switch extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the switch text
+     * Alternatively, use the named slot "text" (e.g. <span slot="text">...</span>)
+     * @default "Provide text"
+     */
+    text?: string;
+
+    /**
+     * Set to `true` for the switch to be selected
+     * @default false
+     */
+    selected?: boolean;
+
+    /**
+     * Set to `true` to disable the switch
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set an id for the button element
+     */
+    id?: string;
+
+    /**
+     * Obtain a reference to the button HTML element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class Tab extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the tab label
+     * Alternatively, use the default slot (e.g. <Tab><span>Label</span></Tab>)
+     * @default ""
+     */
+    label?: string;
+
+    /**
+     * Specify the href attribute
+     * @default "#"
+     */
+    href?: string;
+
+    /**
+     * Set to `true` to disable the tab
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Set an id for the top-level element
+     */
+    id?: string;
+
+    /**
+     * Obtain a reference to the anchor HTML element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class TabContent extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set an id for the top-level element
+     */
     id?: string;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class Tabs {
+export class Table extends CarbonSvelteComponent {
   $$prop_def: {
-    selected?: number; // default: 0
-    type?: "default" | "container"; // default: "default"
-    iconDescription?: string; // default: "Expand/Collapse"
-    triggerHref?: string; // default: "#"
+    /**
+     * Set the size of the table
+     */
+    size?: "compact" | "short" | "tall";
+
+    /**
+     * Set to `true` to use zebra styles
+     * @default false
+     */
+    zebra?: boolean;
+
+    /**
+     * Set to `true` to use static width
+     * @default false
+     */
+    useStaticWidth?: boolean;
+
+    /**
+     * Set to `true` for the bordered variant
+     * @default false
+     */
+    shouldShowBorder?: boolean;
+
+    /**
+     * Set to `true` for the sortable variant
+     * @default false
+     */
+    sortable?: boolean;
+
+    /**
+     * Set to `true` to enable a sticky header
+     * @default false
+     */
+    stickyHeader?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class TableBody extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class TableCell extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class TableContainer extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the title of the data table
+     * @default ""
+     */
+    title?: string;
+
+    /**
+     * Specify the description of the data table
+     * @default ""
+     */
+    description?: string;
+
+    /**
+     * Set to `true` to enable a sticky header
+     * @default false
+     */
+    stickyHeader?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class TableHead extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class TableHeader extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the `scope` attribute
+     * @default "col"
+     */
+    scope?: string;
+
+    /**
+     * Override the default id translations
+     */
+    translateWithId?: () => string;
+
+    /**
+     * Set an id for the top-level element
+     */
+    id?: string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class TableRow extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to select the row
+     * @default false
+     */
+    isSelected?: boolean;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class Tabs extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the selected tab index
+     * @default 0
+     */
+    selected?: number;
+
+    /**
+     * Specify the type of tabs
+     * @default "default"
+     */
+    type?: "default" | "container";
+
+    /**
+     * Specify the ARIA label for the chevron icon
+     * @default "Show menu options"
+     */
+    iconDescription?: string;
+
+    /**
+     * Specify the tab trigger href attribute
+     * @default "#"
+     */
+    triggerHref?: string;
+  };
+
+  $$slot_def: { default: {}; content: {} };
+}
+
+export class TabsSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the number of tabs to render
+     * @default 4
+     */
+    count?: number;
   };
 }
 
-export class TabsSkeleton {
+export class Tag extends CarbonSvelteComponent {
   $$prop_def: {
-    count?: number; // default: 4
-  };
-}
-
-export class TagSkeleton {
-  $$prop_def: {};
-}
-
-export class Tag {
-  $$prop_def: {
+    /**
+     * Specify the type of tag
+     */
     type?:
       | "red"
       | "magenta"
@@ -1107,381 +4165,758 @@ export class Tag {
       | "cool-gray"
       | "warm-gray"
       | "high-contrast";
-    filter?: boolean; // default: false
-    disabled?: boolean; // default: false
-    skeleton?: boolean; // default: false
-    title?: string; // default: "Clear filter"
+
+    /**
+     * Set to `true` to use filterable variant
+     * @default false
+     */
+    filter?: boolean;
+
+    /**
+     * Set to `true` to disable a filterable tag
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Set to `true` to display the skeleton state
+     * @default false
+     */
+    skeleton?: boolean;
+
+    /**
+     * Set the title for the close button in a filterable tag
+     * @default "Clear filter"
+     */
+    title?: string;
+
+    /**
+     * Set an id for the filterable tag
+     */
     id?: string;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class TextAreaSkeleton {
-  $$prop_def: {
-    hideLabel?: boolean; // default: false
-  };
-}
+export class TagSkeleton extends CarbonSvelteComponent {}
 
-export class TextArea {
+export class TextArea extends CarbonSvelteComponent {
   $$prop_def: {
-    value?: string; // default: ""
-    placeholder?: string; // default: ""
-    cols?: number; // default: 50
-    rows?: number; // default: 4
-    light?: boolean; // default: false
-    disabled?: boolean; // default: false
-    helperText?: string; // default: ""
-    labelText?: string; // default: ""
-    hideLabel?: boolean; // default: false
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: ""
+    /**
+     * Specify the textarea value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the placeholder text
+     * @default ""
+     */
+    placeholder?: string;
+
+    /**
+     * Specify the number of cols
+     * @default 50
+     */
+    cols?: number;
+
+    /**
+     * Specify the number of rows
+     * @default 4
+     */
+    rows?: number;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to disable the input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the helper text
+     * @default ""
+     */
+    helperText?: string;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the text for the invalid state
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Set an id for the textarea element
+     */
     id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     */
     name?: string;
-    ref?: null | HTMLTextAreaElement; // default: null
+
+    /**
+     * Obtain a reference to the textarea HTML element
+     * @default null
+     */
+    ref?: null | HTMLTextAreaElement;
   };
 }
 
-export class PasswordInput {
+export class TextAreaSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+  };
+}
+
+export class TextInput extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the size of the input
+     */
     size?: "sm" | "xl";
-    value?: string; // default: ""
-    type?: string; // default: "password"
-    placeholder?: string; // default: ""
-    hidePasswordLabel?: string; // default: "Hide password"
-    showPasswordLabel?: string; // default: "Show password"
-    tooltipAlignment?: "start" | "center" | "end"; // default: "center"
-    tooltipPosition?: "top" | "right" | "bottom" | "left"; // default: "bottom"
-    light?: boolean; // default: false
-    disabled?: boolean; // default: false
-    helperText?: string; // default: ""
-    labelText?: string; // default: ""
-    hideLabel?: boolean; // default: false
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: ""
+
+    /**
+     * Specify the input value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the input type
+     * @default ""
+     */
+    type?: string;
+
+    /**
+     * Specify the placeholder text
+     * @default ""
+     */
+    placeholder?: string;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to disable the input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the helper text
+     * @default ""
+     */
+    helperText?: string;
+
+    /**
+     * Set an id for the input element
+     */
     id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     */
     name?: string;
-    ref?: null | HTMLInputElement; // default: null
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the invalid state text
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
 }
 
-export class TextInputSkeleton {
+export class TextInputSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
-    hideLabel?: boolean; // default: false
+    /**
+     * Set to `true` to hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
   };
 }
 
-export class TextInput {
+export class Tile extends CarbonSvelteComponent {
   $$prop_def: {
-    size?: "sm" | "xl";
-    value?: string; // default: ""
-    type?: string; // default: ""
-    placeholder?: string; // default: ""
-    light?: boolean; // default: false
-    disabled?: boolean; // default: false
-    helperText?: string; // default: ""
-    id?: string;
-    name?: string;
-    labelText?: string; // default: ""
-    hideLabel?: boolean; // default: false
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: ""
-    ref?: null | HTMLInputElement; // default: null
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class ClickableTile {
+export class TileGroup extends CarbonSvelteComponent {
   $$prop_def: {
-    clicked?: boolean; // default: false
-    light?: boolean; // default: false
-  };
-}
-
-export class ExpandableTile {
-  $$prop_def: {
-    expanded?: boolean; // default: false
-    light?: boolean; // default: false
-    tileMaxHeight?: number; // default: 0
-    tilePadding?: number; // default: 0
-    tileCollapsedIconText?: string; // default: "Interact to expand Tile"
-    tileExpandedIconText?: string; // default: "Interact to collapse Tile"
-    tabindex?: string; // default: "0"
-    id?: string;
-    ref?: null | HTMLElement; // default: null
-  };
-}
-
-export class RadioTile {
-  $$prop_def: {
-    checked?: boolean; // default: false
-    light?: boolean; // default: false
-    value?: string; // default: ""
-    tabindex?: string; // default: "0"
-    iconDescription?: string; // default: "Tile checkmark"
-    id?: string;
-    name?: string; // default: ""
-  };
-}
-
-export class SelectableTile {
-  $$prop_def: {
-    selected?: boolean; // default: false
-    light?: boolean; // default: false
-    title?: string; // default: "title"
-    value?: string; // default: "value"
-    tabindex?: string; // default: "0"
-    iconDescription?: string; // default: "Tile checkmark"
-    id?: string;
-    name?: string; // default: ""
-    ref?: null | HTMLInputElement; // default: null
-  };
-}
-
-export class Tile {
-  $$prop_def: {
-    light?: boolean; // default: false
-  };
-}
-
-export class TileGroup {
-  $$prop_def: {
+    /**
+     * Specify the selected tile value
+     */
     selected?: string;
-    disabled?: boolean; // default: false
+
+    /**
+     * Set to `true` to disable the tile group
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the legend text
+     * @default ""
+     */
     legend?: string;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class TimePicker {
+export class TimePicker extends CarbonSvelteComponent {
   $$prop_def: {
-    value?: string; // default: ""
-    type?: string; // default: "text"
-    placeholder?: string; // default: "hh=mm"
-    pattern?: string; // default: "(1[012]|[1-9]):[0-5][0-9](\\s)?"
-    maxLength?: number; // default: 5
-    light?: boolean; // default: false
-    disabled?: boolean; // default: false
-    labelText?: string; // default: ""
-    hideLabel?: boolean; // default: false
-    invalid?: boolean; // default: false
-    invalidText?: string; // default: "Invalid time format."
+    /**
+     * Specify the input value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Specify the input type
+     * @default "text"
+     */
+    type?: string;
+
+    /**
+     * Specify the input placeholder text
+     * @default "hh=mm"
+     */
+    placeholder?: string;
+
+    /**
+     * Specify the `pattern` attribute for the input element
+     * @default "(1[012]|[1-9]):[0-5][0-9](\\s)?"
+     */
+    pattern?: string;
+
+    /**
+     * Specify the `maxlength` input attribute
+     * @default 5
+     */
+    maxlength?: number;
+
+    /**
+     * Set to `true` to enable the light variant
+     * @default false
+     */
+    light?: boolean;
+
+    /**
+     * Set to `true` to disable the input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Set to `true` to indicate an invalid state
+     * @default false
+     */
+    invalid?: boolean;
+
+    /**
+     * Specify the invalid state text
+     * @default ""
+     */
+    invalidText?: string;
+
+    /**
+     * Set an id for the input element
+     */
     id?: string;
+
+    /**
+     * Specify a name attribute for the input
+     */
     name?: string;
-    ref?: null | HTMLInputElement; // default: null
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class TimePickerSelect {
+export class TimePickerSelect extends CarbonSvelteComponent {
   $$prop_def: {
-    value?: string; // default: ""
-    disabled?: boolean; // default: false
-    iconDescription?: string; // default: "Expand/Collapse"
-    labelText?: string; // default: ""
-    hideLabel?: boolean; // default: false
+    /**
+     * Specify the select value
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Set to `true` to disable the select
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the ARIA label for the chevron icon
+     * @default "Open list of options"
+     */
+    iconDescription?: string;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set to `true` to visually hide the label text
+     * @default false
+     */
+    hideLabel?: boolean;
+
+    /**
+     * Set an id for the select element
+     */
     id?: string;
+
+    /**
+     * Specify a name attribute for the select element
+     */
     name?: string;
-    ref?: null | HTMLSelectElement; // default: null
+
+    /**
+     * Obtain a reference to the select HTML element
+     * @default null
+     */
+    ref?: null | HTMLSelectElement;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class ToggleSkeleton {
+export class ToastNotification extends CarbonSvelteComponent {
   $$prop_def: {
-    labelText?: string; // default: ""
-    id?: string;
+    /**
+     * Set the type of notification
+     * @default "toast"
+     */
+    notificationType?: "toast" | "inline";
+
+    /**
+     * Specify the kind of notification
+     * @default "error"
+     */
+    kind?:
+      | "error"
+      | "info"
+      | "info-square"
+      | "success"
+      | "warning"
+      | "warning-alt";
+
+    /**
+     * Set to `true` to use the low contrast variant
+     * @default false
+     */
+    lowContrast?: boolean;
+
+    /**
+     * Set the timeout duration (ms) to hide the notification after closing it
+     * @default 0
+     */
+    timeout?: number;
+
+    /**
+     * Set the `role` attribute
+     * @default "alert"
+     */
+    role?: string;
+
+    /**
+     * Specify the title text
+     * @default "Title"
+     */
+    title?: string;
+
+    /**
+     * Specify the subtitle text
+     * @default ""
+     */
+    subtitle?: string;
+
+    /**
+     * Specify the caption text
+     * @default "Caption"
+     */
+    caption?: string;
+
+    /**
+     * Specify the ARIA label for the icon
+     * @default "Closes notification"
+     */
+    iconDescription?: string;
+
+    /**
+     * Set to `true` to hide the close button
+     * @default false
+     */
+    hideCloseButton?: boolean;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class Toggle {
+export class Toggle extends CarbonSvelteComponent {
   $$prop_def: {
-    toggled?: boolean; // default: false
-    disabled?: boolean; // default: false
-    labelA?: string; // default: "Off"
-    labelB?: string; // default: "On"
-    labelText?: string; // default: ""
+    /**
+     * Set to `true` to toggle the checkbox input
+     * @default false
+     */
+    toggled?: boolean;
+
+    /**
+     * Set to `true` to disable checkbox input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the label for the untoggled state
+     * @default "Off"
+     */
+    labelA?: string;
+
+    /**
+     * Specify the label for the toggled state
+     * @default "On"
+     */
+    labelB?: string;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set an id for the input element
+     */
     id?: string;
+
+    /**
+     * Specify a name attribute for the checkbox input
+     */
     name?: string;
   };
 }
 
-export class ToggleSmallSkeleton {
+export class ToggleSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
-    labelText?: string; // default: ""
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set an id for the input element
+     */
     id?: string;
   };
 }
 
-export class ToggleSmall {
+export class ToggleSmall extends CarbonSvelteComponent {
   $$prop_def: {
-    toggled?: boolean; // default: false
-    disabled?: boolean; // default: false
-    labelA?: string; // default: "Off"
-    labelB?: string; // default: "On"
-    labelText?: string; // default: ""
+    /**
+     * Set to `true` to toggle the checkbox input
+     * @default false
+     */
+    toggled?: boolean;
+
+    /**
+     * Set to `true` to disable checkbox input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
+     * Specify the label for the untoggled state
+     * @default "Off"
+     */
+    labelA?: string;
+
+    /**
+     * Specify the label for the toggled state
+     * @default "On"
+     */
+    labelB?: string;
+
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set an id for the input element
+     */
     id?: string;
+
+    /**
+     * Specify a name attribute for the checkbox input
+     */
     name?: string;
   };
 }
 
-export class Tooltip {
+export class ToggleSmallSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
-    direction?: "top" | "right" | "bottom" | "left"; // default: "bottom"
-    open?: boolean; // default: false
-    hideIcon?: boolean; // default: false
-    icon?: CarbonIcon; // default: Information16
-    iconDescription?: string; // default: ""
-    iconName?: string; // default: ""
-    tabindex?: string; // default: "0"
+    /**
+     * Specify the label text
+     * @default ""
+     */
+    labelText?: string;
+
+    /**
+     * Set an id for the input element
+     */
+    id?: string;
+  };
+}
+
+export class Tooltip extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set the direction of the tooltip relative to the button
+     * @default "bottom"
+     */
+    direction?: "top" | "right" | "bottom" | "left";
+
+    /**
+     * Set to `true` to open the tooltip
+     * @default false
+     */
+    open?: boolean;
+
+    /**
+     * Set to `true` to hide the tooltip icon
+     * @default false
+     */
+    hideIcon?: boolean;
+
+    /**
+     * Specify the icon from `carbon-icons-svelte` to render for the tooltip button
+     * Icon size must be 16px (e.g. `Add16`, `Task16`)
+     */
+    icon?: typeof import("carbon-icons-svelte/lib/Add16").default;
+
+    /**
+     * Specify the ARIA label for the tooltip button
+     * @default ""
+     */
+    iconDescription?: string;
+
+    /**
+     * Specify the icon name attribute
+     * @default ""
+     */
+    iconName?: string;
+
+    /**
+     * Set the button tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Set an id for the tooltip
+     */
     tooltipId?: string;
+
+    /**
+     * Set an id for the tooltip button
+     */
     triggerId?: string;
-    triggerText?: string; // default: ""
-    ref?: null | HTMLElement; // default: null
+
+    /**
+     * Set the tooltip button text
+     * @default ""
+     */
+    triggerText?: string;
+
+    /**
+     * Obtain a reference to the trigger text HTML element
+     * @default null
+     */
+    ref?: null | HTMLElement;
+
+    /**
+     * Obtain a reference to the tooltip HTML element
+     * @default null
+     */
+    refTooltip?: null | HTMLElement;
+
+    /**
+     * Obtain a reference to the icon HTML element
+     * @default null
+     */
+    refIcon?: null | HTMLElement;
   };
+
+  $$slot_def: { triggerText: {}; icon: {}; default: {} };
 }
 
-export class TooltipDefinition {
+export class TooltipDefinition extends CarbonSvelteComponent {
   $$prop_def: {
-    tooltipText?: string; // default: ""
-    align?: "start" | "center" | "end"; // default: "center"
-    direction?: "top" | "bottom"; // default: "bottom"
+    /**
+     * Specify the tooltip text
+     * @default ""
+     */
+    tooltipText?: string;
+
+    /**
+     * Set the alignment of the tooltip relative to the icon
+     * @default "center"
+     */
+    align?: "start" | "center" | "end";
+
+    /**
+     * Set the direction of the tooltip relative to the icon
+     * @default "bottom"
+     */
+    direction?: "top" | "bottom";
+
+    /**
+     * Set an id for the tooltip div element
+     */
     id?: string;
-    ref?: null | HTMLButtonElement; // default: null
+
+    /**
+     * Obtain a reference to the button HTML element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class TooltipIcon {
+export class TooltipIcon extends CarbonSvelteComponent {
   $$prop_def: {
-    tooltipText?: string; // default: ""
-    align?: "start" | "center" | "end"; // default: "center"
-    direction?: "top" | "right" | "bottom" | "left"; // default: "bottom"
+    /**
+     * Specify the tooltip text
+     * @default ""
+     */
+    tooltipText?: string;
+
+    /**
+     * Set the alignment of the tooltip relative to the icon
+     * @default "center"
+     */
+    align?: "start" | "center" | "end";
+
+    /**
+     * Set the direction of the tooltip relative to the icon
+     * @default "bottom"
+     */
+    direction?: "top" | "right" | "bottom" | "left";
+
+    /**
+     * Set an id for the span element
+     */
     id?: string;
-    ref?: null | HTMLButtonElement; // default: null
+
+    /**
+     * Obtain a reference to the button HTML element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
   };
+
+  $$slot_def: { default: {} };
 }
 
-export class Content {
+export class UnorderedList extends CarbonSvelteComponent {
   $$prop_def: {
-    id?: string; // default: "main-content"
+    /**
+     * Set to `true` to use the nested variant
+     * @default false
+     */
+    nested?: boolean;
   };
-}
 
-export class SkipToContent {
-  $$prop_def: {
-    href?: string; // default: "#main-content"
-    tabindex?: string; // default: "0"
-  };
-}
-
-export class UnorderedList {
-  $$prop_def: {
-    nested?: boolean; // default: false
-  };
-}
-
-export class Header {
-  $$prop_def: {
-    isSideNavOpen?: boolean; // default: false
-    uiShellAriaLabel?: string;
-    href?: string;
-    company?: string;
-    platformName?: string;
-  };
-}
-
-export class HeaderAction {
-  $$prop_def: {
-    isOpen?: boolean; // default: false
-    icon?: { render: CarbonIcon; skeleton: boolean };
-    text?: string;
-    ref?: null | HTMLButtonElement; // default: null
-  };
-}
-
-export class HeaderActionLink {
-  $$prop_def: {
-    linkIsActive?: boolean; // default: false
-    href?: string;
-    icon?: { render: CarbonIcon; skeleton: boolean };
-  };
-}
-
-export class HeaderActionSearch {
-  $$prop_def: {
-    searchIsActive?: boolean; // default: false
-  };
-}
-
-export class HeaderNav {
-  $$prop_def: {
-    ariaLabel?: string;
-  };
-}
-
-export class HeaderNavItem {
-  $$prop_def: {
-    href?: string;
-    text?: string;
-  };
-}
-
-export class HeaderNavMenu {
-  $$prop_def: {
-    expanded?: boolean; // default: false
-    href?: string; // default: "/"
-    text?: string;
-    iconDescription?: string; // default: "Expand/Collapse"
-  };
-}
-
-export class HeaderPanelDivider {
-  $$prop_def: {};
-}
-
-export class HeaderPanelLink {
-  $$prop_def: {
-    href?: string;
-  };
-}
-
-export class HeaderPanelLinks {
-  $$prop_def: {};
-}
-
-export class HeaderUtilities {
-  $$prop_def: {};
-}
-
-export class HamburgerMenu {
-  $$prop_def: {
-    ariaLabel?: string;
-    isOpen?: boolean; // default: false
-  };
-}
-
-export class SideNav {
-  $$prop_def: {
-    ariaLabel?: string;
-    isOpen?: boolean; // default: false
-  };
-}
-
-export class SideNavItems {
-  $$prop_def: {};
-}
-
-export class SideNavLink {
-  $$prop_def: {
-    isSelected?: boolean; // default: false
-    href?: string;
-    text?: string;
-    icon?: { render: CarbonIcon; skeleton: boolean };
-  };
-}
-
-export class SideNavMenu {
-  $$prop_def: {
-    expanded?: boolean;
-    text?: string;
-    icon?: { render: CarbonIcon; skeleton: boolean };
-  };
-}
-
-export class SideNavMenuItem {
-  $$prop_def: {};
+  $$slot_def: { default: {} };
 }

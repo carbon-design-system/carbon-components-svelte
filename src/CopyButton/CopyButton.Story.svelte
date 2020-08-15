@@ -7,6 +7,6 @@
   on:click={() => {
     console.log('click');
   }}
-  on:animationend={e => {
+  on:animationend={(e) => {
     console.log('animation end', e.animationName);
   }} />

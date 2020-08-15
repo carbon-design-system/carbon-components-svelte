@@ -96,10 +96,6 @@
   export let hideLabel = false;
 
   /**
-   * @typedef {"increment" | "decrement"} NumberInputTranslationId
-   */
-
-  /**
    * Override the default translation ids
    * @type {(id: NumberInputTranslationId) => string} [translateWithId = (id: NumberInputTranslationId) => string]
    */
@@ -132,6 +128,10 @@
    * @type {null | HTMLInputElement} [ref=null]
    */
   export let ref = null;
+
+  /**
+   * @typedef {"increment" | "decrement"} NumberInputTranslationId
+   */
 
   import { createEventDispatcher, afterUpdate } from "svelte";
   import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";

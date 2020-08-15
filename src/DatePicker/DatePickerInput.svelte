@@ -16,7 +16,17 @@
    * @type {string} [placeholder=""]
    */
   export let placeholder = "";
+
+  /**
+   * Specify the Regular Expression for the input value
+   * @type {string} [placeholder="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"]
+   */
   export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
+
+  /**
+   * Set to `true` to disable the input
+   * @type {boolean} [disabled=false]
+   */
   export let disabled = false;
 
   /**
@@ -30,7 +40,17 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify the label text
+   * @type {string} [labelText=""]
+   */
   export let labelText = "";
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @type {boolean} [hideLabel=false]
+   */
   export let hideLabel = false;
 
   /**
@@ -45,6 +65,10 @@
    */
   export let invalidText = "";
 
+  /**
+   * Set a name for the input element
+   * @type {string} [name=""]
+   */
   export let name = undefined;
 
   /**
