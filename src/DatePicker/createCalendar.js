@@ -1,6 +1,6 @@
-import * as flatpickr from "flatpickr";
-import * as l10n from "flatpickr/dist/l10n/index.js";
-import * as rangePlugin from "flatpickr/dist/plugins/rangePlugin";
+import flatpickr from "flatpickr";
+import l10n from "flatpickr/dist/l10n/index.js";
+import rangePlugin from "flatpickr/dist/plugins/rangePlugin";
 
 function updateClasses(instance) {
   const {
@@ -50,14 +50,14 @@ function updateMonthNode(instance) {
 function createCalendar({ options, base, input, dispatch }) {
   let locale = options.locale;
 
-  if (options.locale === "en" && l10n.default && l10n.default.en) {
-    l10n.default.en.weekdays.shorthand.forEach((_, index) => {
+  if (options.locale === "en" && l10n && l10n.en) {
+    l10n.en.weekdays.shorthand.forEach((_, index) => {
       const shorthand = _.slice(0, 2);
-      l10n.default.en.weekdays.shorthand[index] =
+      l10n.en.weekdays.shorthand[index] =
         shorthand === "Th" ? "Th" : shorthand.charAt(0);
     });
 
-    locale = l10n.default.en;
+    locale = l10n.en;
   }
 
   return new flatpickr(base, {
