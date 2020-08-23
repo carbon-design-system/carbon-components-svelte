@@ -18,7 +18,7 @@
   export let lowContrast = false;
 
   /**
-   * Set the timeout duration (ms) to hide the notification after closing it
+   * Set the timeout duration (ms) to hide the notification after opening it
    * @type {number} [timeout=0]
    */
   export let timeout = 0;
@@ -69,11 +69,14 @@
   let open = true;
   let timeoutId = undefined;
 
+  function close() {
+    open = false;
+    dispatch('close');
+  }
+
   onMount(() => {
     if (timeout) {
-      timeoutId = setTimeout(() => {
-        open = false;
-      }, timeout);
+      timeoutId = setTimeout(() => close(), timeout);
     }
 
     return () => {
@@ -102,10 +105,7 @@
       <NotificationButton
         {iconDescription}
         {notificationType}
-        on:click={() => {
-          open = false;
-          dispatch('close');
-        }} />
+        on:click={close()} />
     {/if}
   </div>
 {/if}
