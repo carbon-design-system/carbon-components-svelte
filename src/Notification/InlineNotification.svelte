@@ -53,7 +53,7 @@
    */
   export let iconDescription = "Closes notification";
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
   import NotificationTextDetails from "./NotificationTextDetails.svelte";
   import NotificationButton from "./NotificationButton.svelte";
@@ -103,7 +103,7 @@
       <NotificationButton
         {iconDescription}
         {notificationType}
-        on:click={close()} />
+        on:click={close} />
     {/if}
   </div>
 {/if}
