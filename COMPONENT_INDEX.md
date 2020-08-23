@@ -2011,6 +2011,7 @@ import { InlineNotification } from "carbon-components-svelte";
 | notificationType | <code>"toast" &#124; "inline"</code>                                                                           | "inline"              |
 | kind             | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | "error"               |
 | lowContrast      | <code>boolean</code>                                                                                           | false                 |
+| timeout          | <code>number</code>                                                                                            | 0                     |
 | role             | <code>string</code>                                                                                            | "alert"               |
 | title            | <code>string</code>                                                                                            | "Title"               |
 | subtitle         | <code>string</code>                                                                                            | ""                    |

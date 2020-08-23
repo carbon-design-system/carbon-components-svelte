@@ -1739,6 +1739,12 @@ export class InlineNotification extends CarbonSvelteComponent {
     lowContrast?: boolean;
 
     /**
+     * Set the timeout duration (ms) to hide the notification after opening it
+     * @default 0
+     */
+    timeout?: number;
+
+    /**
      * Set the `role` attribute
      * @default "alert"
      */
@@ -4594,7 +4600,7 @@ export class ToastNotification extends CarbonSvelteComponent {
     lowContrast?: boolean;
 
     /**
-     * Set the timeout duration (ms) to hide the notification after closing it
+     * Set the timeout duration (ms) to hide the notification after opening it
      * @default 0
      */
     timeout?: number;
