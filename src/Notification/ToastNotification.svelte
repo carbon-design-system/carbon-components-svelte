@@ -105,7 +105,7 @@
       <NotificationButton
         {iconDescription}
         {notificationType}
-        on:click={close()} />
+        on:click={close} />
     {/if}
   </div>
 {/if}
