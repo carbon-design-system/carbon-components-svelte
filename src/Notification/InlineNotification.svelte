@@ -18,6 +18,12 @@
   export let lowContrast = false;
 
   /**
+   * Set the timeout duration (ms) to hide the notification after opening it
+   * @type {number} [timeout=0]
+   */
+  export let timeout = 0;
+
+  /**
    * Set the `role` attribute
    * @type {string} [role="alert"]
    */
@@ -47,14 +53,30 @@
    */
   export let iconDescription = "Closes notification";
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
   import NotificationTextDetails from "./NotificationTextDetails.svelte";
   import NotificationButton from "./NotificationButton.svelte";
 
   const dispatch = createEventDispatcher();
 
-  $: open = true;
+  let open = true;
+  let timeoutId = undefined;
+
+  function close() {
+    open = false;
+    dispatch('close');
+  }
+
+  onMount(() => {
+    if (timeout) {
+      timeoutId = setTimeout(() => close(), timeout);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  });
 </script>
 
 {#if open}
@@ -81,10 +103,7 @@
       <NotificationButton
         {iconDescription}
         {notificationType}
-        on:click={() => {
-          open = false;
-          dispatch('close');
-        }} />
+        on:click={close} />
     {/if}
   </div>
 {/if}
