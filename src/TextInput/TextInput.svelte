@@ -83,6 +83,12 @@
    */
   export let ref = null;
 
+  /**
+   * Set to `true` to mark the field as required
+   * @type {boolean} [required="false"]
+   */
+   export let required = false;
+
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
 
   $: errorId = `error-${id}`;
@@ -129,6 +135,7 @@
       {placeholder}
       {type}
       {value}
+      {required}
       class:bx--text-input={true}
       class:bx--text-input--light={light}
       class:bx--text-input--invalid={invalid}
