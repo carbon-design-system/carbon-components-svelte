@@ -27,7 +27,7 @@
     "@storybook/addon-storysource": "^5.3.19",
     "@storybook/cli": "^5.3.19",
     "@storybook/svelte": "^5.3.19",
-    "@tsconfig/svelte": "^1.0.8",
+    "@tsconfig/svelte": "^1.0.10",
     "babel-loader": "^8.0.6",
     "comment-parser": "^0.7.5",
     "prettier": "^2.1.1",
@@ -37,7 +37,7 @@
     "rollup-plugin-terser": "^6.1.0",
     "svelte": "^3.24.1",
     "svelte-loader": "^2.13.6",
-    "typescript": "^3.9.7"
+    "typescript": "^4.0.2"
   },
   "babel": {
     "presets": [
