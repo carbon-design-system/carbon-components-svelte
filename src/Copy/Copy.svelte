@@ -37,8 +37,7 @@
   class:bx--copy-btn--animating={animation}
   aria-label={animation ? feedback : undefined}
   {...$$restProps}
-  class="{$$restProps.class}
-  {animation && `bx--copy-btn--${animation}`}"
+  class="{$$restProps.class} {animation && `bx--copy-btn--${animation}`}"
   on:click
   on:click={() => {
     if (animation === 'fade-in') return;

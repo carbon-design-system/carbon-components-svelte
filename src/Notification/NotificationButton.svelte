@@ -41,5 +41,5 @@
     this={renderIcon}
     {title}
     class="{notificationType === 'toast' && 'bx--toast-notification__close-icon'}
-    {notificationType === 'inline' && 'bx--inline-notification__close-icon'}" />
+      {notificationType === 'inline' && 'bx--inline-notification__close-icon'}" />
 </button>

@@ -72,9 +72,7 @@
     }}>
     <Icon {...icon} />
     <slot name="text">
-      {#if text}
-        <span>{text}</span>
-      {/if}
+      {#if text}<span>{text}</span>{/if}
     </slot>
   </button>
   {#if isOpen}

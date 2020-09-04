@@ -55,8 +55,7 @@
       class:bx--tag--disabled={disabled}
       class:bx--tag--filter={filter}
       {...$$restProps}
-      class="{type && `bx--tag--${type}`}
-      {$$restProps.class}">
+      class="{type && `bx--tag--${type}`} {$$restProps.class}">
       <slot props={{ class: 'bx--tag__label' }}>
         <span class:bx--tag__label={true}>{type}</span>
       </slot>
@@ -77,8 +76,7 @@
       class:bx--tag={true}
       class:bx--tag--disabled={disabled}
       {...$$restProps}
-      class="{type && `bx--tag--${type}`}
-      {$$restProps.class}"
+      class="{type && `bx--tag--${type}`} {$$restProps.class}"
       on:click
       on:mouseover
       on:mouseenter

@@ -13,9 +13,7 @@
   on:mouseover
   on:mouseenter
   on:mouseleave>
-  {#if !hideLabel}
-    <span class:bx--label={true} class:bx--skeleton={true} />
-  {/if}
+  {#if !hideLabel}<span class:bx--label={true} class:bx--skeleton={true} />{/if}
   <div class:bx--slider-container={true} class:bx--skeleton={true}>
     <span class:bx--slider__range-label={true} />
     <div class:bx--slider={true}>

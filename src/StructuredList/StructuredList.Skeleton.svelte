@@ -25,15 +25,9 @@
     <div
       class:bx--structured-list-row={true}
       class:bx--structured-list-row--header-row={true}>
-      <div class:bx--structured-list-th={true}>
-        <span />
-      </div>
-      <div class:bx--structured-list-th={true}>
-        <span />
-      </div>
-      <div class:bx--structured-list-th={true}>
-        <span />
-      </div>
+      <div class:bx--structured-list-th={true}><span /></div>
+      <div class:bx--structured-list-th={true}><span /></div>
+      <div class:bx--structured-list-th={true}><span /></div>
     </div>
   </div>
   <div class:bx--structured-list-tbody={true}>

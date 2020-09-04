@@ -117,10 +117,10 @@
     {#if hideCopyButton}
       <span
         class="bx--snippet {type && `bx--snippet--${type}`}
-        {type === 'inline' && 'bx--btn--copy'}
-        {expanded && 'bx--snippet--expand'}
-        {light && 'bx--snippet--light'}
-        {hideCopyButton && 'bx--snippet--no-copy'}"
+          {type === 'inline' && 'bx--btn--copy'}
+          {expanded && 'bx--snippet--expand'}
+          {light && 'bx--snippet--light'}
+          {hideCopyButton && 'bx--snippet--no-copy'}"
         {...$$restProps}>
         <code {id}>
           <slot>{code}</slot>
@@ -133,10 +133,10 @@
         {feedback}
         {feedbackTimeout}
         class="bx--snippet {type && `bx--snippet--${type}`}
-        {type === 'inline' && 'bx--btn--copy'}
-        {expanded && 'bx--snippet--expand'}
-        {light && 'bx--snippet--light'}
-        {hideCopyButton && 'bx--snippet--no-copy'}"
+          {type === 'inline' && 'bx--btn--copy'}
+          {expanded && 'bx--snippet--expand'}
+          {light && 'bx--snippet--light'}
+          {hideCopyButton && 'bx--snippet--no-copy'}"
         {...$$restProps}
         on:click
         on:mouseover
@@ -155,8 +155,7 @@
       class:bx--snippet--light={light}
       class:bx--snippet--no-copy={hideCopyButton}
       {...$$restProps}
-      class="{type && `bx--snippet--${type}`}
-      {$$restProps.class}"
+      class="{type && `bx--snippet--${type}`} {$$restProps.class}"
       on:mouseover
       on:mouseenter
       on:mouseleave>

@@ -133,8 +133,7 @@
       <SkipToContent />
     </div>
     <span slot="platform" class="platform-name">
-      Platform Name
-      <small>1.12.2</small>
+      Platform Name <small>1.12.2</small>
     </span>
   </Header>
 {:else if story === 'sidenav'}

@@ -282,10 +282,10 @@
     {light}
     {size}
     class="bx--multi-select {filterable && 'bx--combo-box'}
-    {filterable && 'bx--multi-select--filterable'}
-    {invalid && 'bx--multi-select--invalid'}
-    {inline && 'bx--multi-select--inline'}
-    {checked.length > 0 && 'bx--multi-select--selected'}">
+      {filterable && 'bx--multi-select--filterable'}
+      {invalid && 'bx--multi-select--invalid'}
+      {inline && 'bx--multi-select--inline'}
+      {checked.length > 0 && 'bx--multi-select--selected'}">
     {#if invalid}
       <WarningFilled16 class="bx--list-box__invalid-icon" />
     {/if}

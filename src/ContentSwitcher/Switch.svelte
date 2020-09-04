@@ -76,7 +76,6 @@
       ctx.change(-1);
     }
   }}>
-
   <span class:bx--content-switcher__label={true}>
     <slot>{text}</slot>
   </span>

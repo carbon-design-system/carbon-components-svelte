@@ -33,7 +33,6 @@
 </Carbon.Row>
 
 <div class="component-grid">
-
   <Carbon.Row class="scope">
     <Carbon.Column noGutter>
       <TileCard title="Accordion">

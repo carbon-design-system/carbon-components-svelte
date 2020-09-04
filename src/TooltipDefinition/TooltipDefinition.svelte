@@ -60,7 +60,7 @@
     class:bx--tooltip--hidden={hidden}
     class:bx--tooltip--visible={visible}
     class="{direction && `bx--tooltip--${direction}`}
-    {align && `bx--tooltip--align-${align}`}"
+      {align && `bx--tooltip--align-${align}`}"
     on:click
     on:mouseover
     on:mouseenter

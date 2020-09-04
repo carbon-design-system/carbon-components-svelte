@@ -177,10 +177,10 @@
     {name}
     aria-label={$$props['aria-label']}
     class="bx--dropdown {invalid && 'bx--dropdown--invalid'}
-    {open && 'bx--dropdown--open'}
-    {inline && 'bx--dropdown--inline'}
-    {disabled && 'bx--dropdown--disabled'}
-    {light && 'bx--dropdown--light'}"
+      {open && 'bx--dropdown--open'}
+      {inline && 'bx--dropdown--inline'}
+      {disabled && 'bx--dropdown--disabled'}
+      {light && 'bx--dropdown--light'}"
     on:click={({ target }) => {
       open = ref.contains(target) ? !open : false;
     }}

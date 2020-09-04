@@ -47,8 +47,8 @@
   class:bx--tooltip--hidden={hidden}
   {...$$restProps}
   class="{direction && `bx--tooltip--${direction}`}
-  {align && `bx--tooltip--align-${align}`}
-  {$$restProps.class}"
+    {align && `bx--tooltip--align-${align}`}
+    {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter

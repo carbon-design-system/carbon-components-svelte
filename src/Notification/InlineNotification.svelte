@@ -65,7 +65,7 @@
 
   function close() {
     open = false;
-    dispatch('close');
+    dispatch("close");
   }
 
   onMount(() => {

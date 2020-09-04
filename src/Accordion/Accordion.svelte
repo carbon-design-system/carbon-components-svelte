@@ -25,8 +25,7 @@
   <ul
     class:bx--accordion={true}
     {...$$restProps}
-    class="bx--accordion--{align}
-    {$$restProps.class}"
+    class="bx--accordion--{align} {$$restProps.class}"
     on:click
     on:mouseover
     on:mouseenter

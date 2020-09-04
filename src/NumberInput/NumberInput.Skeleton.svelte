@@ -13,8 +13,6 @@
   on:mouseover
   on:mouseenter
   on:mouseleave>
-  {#if !hideLabel}
-    <span class:bx--label={true} class:bx--skeleton={true} />
-  {/if}
+  {#if !hideLabel}<span class:bx--label={true} class:bx--skeleton={true} />{/if}
   <div class:bx--number={true} class:bx--skeleton={true} />
 </div>

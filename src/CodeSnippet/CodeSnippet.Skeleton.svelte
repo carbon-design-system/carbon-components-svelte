@@ -19,10 +19,6 @@
   <div class:bx--snippet-container={true}>
     {#if type === 'single'}
       <span />
-    {:else if type === 'multi'}
-      <span />
-      <span />
-      <span />
-    {/if}
+    {:else if type === 'multi'}<span /> <span /> <span />{/if}
   </div>
 </div>

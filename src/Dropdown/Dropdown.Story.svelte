@@ -22,10 +22,11 @@
   </div>
 {:else}
   <p>
-    <code>items</code>
-    must be an array of objects; mandatory fields are `id` and `text`.
+    <code>items</code> must be an array of objects; mandatory fields are `id` and
+    `text`.
   </p>
-  <pre style="margin-top: 1rem;">
+  <pre
+    style="margin-top: 1rem;">
     <code>{'items = Array<{ id: string; text: string; }>'}</code>
   </pre>
   <div style="margin-top: 2rem; margin-bottom: 2rem;">

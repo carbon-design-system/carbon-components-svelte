@@ -41,9 +41,7 @@
     </AccordionItem>
     <AccordionItem>
       <div slot="title">
-        Section 4 title (
-        <em>the title can be a node</em>
-        )
+        Section 4 title ( <em>the title can be a node</em> )
       </div>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

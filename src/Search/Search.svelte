@@ -96,8 +96,7 @@
     class:bx--search={true}
     class:bx--search--light={light}
     {...$$restProps}
-    class="bx--search--{size}
-    {$$restProps.class}">
+    class="bx--search--{size} {$$restProps.class}">
     <Search16 class="bx--search-magnifier" />
     <label for={id} class:bx--label={true}>{labelText}</label>
     <!-- svelte-ignore a11y-autofocus -->

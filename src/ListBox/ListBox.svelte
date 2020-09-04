@@ -52,8 +52,7 @@
   class:bx--list-box--expanded={open}
   class:bx--list-box--light={light}
   {...$$restProps}
-  class="{size && `bx--list-box--${size}`}
-  {$$restProps.class}"
+  class="{size && `bx--list-box--${size}`} {$$restProps.class}"
   on:keydown
   on:keydown={(e) => {
     if (e.key === 'Escape') {

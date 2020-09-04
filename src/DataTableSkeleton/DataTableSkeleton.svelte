@@ -56,9 +56,7 @@
   <tbody>
     <tr>
       {#each cols as col, i (col)}
-        <td>
-          <span />
-        </td>
+        <td><span /></td>
       {/each}
     </tr>
     {#each Array.from({ length: rows - 1 }, (_, i) => i) as row, i (row)}

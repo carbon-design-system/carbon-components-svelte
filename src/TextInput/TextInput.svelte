@@ -87,7 +87,7 @@
    * Set to `true` to mark the field as required
    * @type {boolean} [required=false]
    */
-   export let required = false;
+  export let required = false;
 
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
 
