@@ -95,8 +95,8 @@
 </script>
 
 <div
-  class:bx--form-item={true}
-  class:bx--text-input-wrapper={true}
+  class:bx--form-item="{true}"
+  class:bx--text-input-wrapper="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -104,52 +104,52 @@
   on:mouseleave>
   {#if labelText}
     <label
-      for={id}
-      class:bx--label={true}
-      class:bx--visually-hidden={hideLabel}
-      class:bx--label--disabled={disabled}>
+      for="{id}"
+      class:bx--label="{true}"
+      class:bx--visually-hidden="{hideLabel}"
+      class:bx--label--disabled="{disabled}">
       {labelText}
     </label>
   {/if}
   {#if helperText}
     <div
-      class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}>
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}">
       {helperText}
     </div>
   {/if}
   <div
-    data-invalid={invalid || undefined}
-    class:bx--text-input__field-wrapper={true}>
+    data-invalid="{invalid || undefined}"
+    class:bx--text-input__field-wrapper="{true}">
     {#if invalid}
       <WarningFilled16 class="bx--text-input__invalid-icon" />
     {/if}
     <input
-      bind:this={ref}
-      data-invalid={invalid || undefined}
-      aria-invalid={invalid || undefined}
-      aria-describedby={invalid ? errorId : undefined}
-      {disabled}
-      {id}
-      {name}
-      {placeholder}
-      {type}
-      {value}
-      {required}
-      class:bx--text-input={true}
-      class:bx--text-input--light={light}
-      class:bx--text-input--invalid={invalid}
-      class={size && `bx--text-input--${size}`}
+      bind:this="{ref}"
+      data-invalid="{invalid || undefined}"
+      aria-invalid="{invalid || undefined}"
+      aria-describedby="{invalid ? errorId : undefined}"
+      disabled="{disabled}"
+      id="{id}"
+      name="{name}"
+      placeholder="{placeholder}"
+      type="{type}"
+      value="{value}"
+      required="{required}"
+      class:bx--text-input="{true}"
+      class:bx--text-input--light="{light}"
+      class:bx--text-input--invalid="{invalid}"
+      class="{size && `bx--text-input--${size}`}"
       on:change
       on:input
-      on:input={({ target }) => {
+      on:input="{({ target }) => {
         value = target.value;
-      }}
+      }}"
       on:keydown
       on:focus
       on:blur />
   </div>
   {#if invalid}
-    <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
+    <div class:bx--form-requirement="{true}" id="{errorId}">{invalidText}</div>
   {/if}
 </div>

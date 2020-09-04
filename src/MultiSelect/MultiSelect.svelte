@@ -246,41 +246,44 @@
 </script>
 
 <svelte:body
-  on:click={({ target }) => {
+  on:click="{({ target }) => {
     if (open && multiSelectRef && !multiSelectRef.contains(target)) {
       open = false;
     }
-  }} />
+  }}" />
 
 <div
-  bind:this={multiSelectRef}
-  class:bx--multi-select__wrapper={true}
-  class:bx--list-box__wrapper={true}
-  class:bx--multi-select__wrapper--inline={inline}
-  class:bx--list-box__wrapper--inline={inline}
-  class:bx--multi-select__wrapper--inline--invalid={inline && invalid}
+  bind:this="{multiSelectRef}"
+  class:bx--multi-select__wrapper="{true}"
+  class:bx--list-box__wrapper="{true}"
+  class:bx--multi-select__wrapper--inline="{inline}"
+  class:bx--list-box__wrapper--inline="{inline}"
+  class:bx--multi-select__wrapper--inline--invalid="{inline && invalid}"
   {...$$restProps}>
   {#if titleText}
-    <label for={id} class:bx--label={true} class:bx--label--disabled={disabled}>
+    <label
+      for="{id}"
+      class:bx--label="{true}"
+      class:bx--label--disabled="{disabled}">
       {titleText}
     </label>
   {/if}
   {#if !inline && helperText}
     <div
-      class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}>
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}">
       {helperText}
     </div>
   {/if}
   <ListBox
-    aria-label={ariaLabel}
-    {id}
-    {disabled}
-    {invalid}
-    {invalidText}
-    {open}
-    {light}
-    {size}
+    aria-label="{ariaLabel}"
+    id="{id}"
+    disabled="{disabled}"
+    invalid="{invalid}"
+    invalidText="{invalidText}"
+    open="{open}"
+    light="{light}"
+    size="{size}"
     class="bx--multi-select {filterable && 'bx--combo-box'}
       {filterable && 'bx--multi-select--filterable'}
       {invalid && 'bx--multi-select--invalid'}
@@ -292,16 +295,16 @@
     <ListBoxField
       role="button"
       tabindex="0"
-      aria-expanded={open}
-      on:click={() => {
+      aria-expanded="{open}"
+      on:click="{() => {
         if (filterable) {
           open = true;
           inputRef.focus();
         } else {
           open = !open;
         }
-      }}
-      on:keydown={({ key }) => {
+      }}"
+      on:keydown="{({ key }) => {
         if (filterable) {
           return;
         }
@@ -323,46 +326,46 @@
             sortedItems[highlightedIndex].checked = !sortedItems[highlightedIndex].checked;
           }
         }
-      }}
-      on:blur={({ relatedTarget }) => {
+      }}"
+      on:blur="{({ relatedTarget }) => {
         if (relatedTarget && relatedTarget.getAttribute('role') !== 'button') {
           fieldRef.focus();
         }
-      }}
-      {id}
-      {disabled}
-      {translateWithId}>
+      }}"
+      id="{id}"
+      disabled="{disabled}"
+      translateWithId="{translateWithId}">
       {#if checked.length > 0}
         <ListBoxSelection
-          selectionCount={checked.length}
-          on:clear={() => {
+          selectionCount="{checked.length}"
+          on:clear="{() => {
             sortedItems = sortedItems.map((item) => ({
               ...item,
               checked: false,
             }));
             fieldRef.blur();
-          }}
-          {translateWithId}
-          {disabled} />
+          }}"
+          translateWithId="{translateWithId}"
+          disabled="{disabled}" />
       {/if}
       {#if filterable}
         <input
-          bind:this={inputRef}
+          bind:this="{inputRef}"
           role="combobox"
           tabindex="0"
           autocomplete="off"
           aria-autocomplete="list"
-          aria-expanded={open}
-          aria-activedescendant={highlightedId}
-          aria-disabled={disabled}
-          aria-controls={menuId}
-          class:bx--text-input={true}
-          class:bx--text-input--empty={inputValue === ''}
-          on:input={({ target }) => {
+          aria-expanded="{open}"
+          aria-activedescendant="{highlightedId}"
+          aria-disabled="{disabled}"
+          aria-controls="{menuId}"
+          class:bx--text-input="{true}"
+          class:bx--text-input--empty="{inputValue === ''}"
+          on:input="{({ target }) => {
             inputValue = target.value;
-          }}
+          }}"
           on:keydown
-          on:keydown|stopPropagation={({ key }) => {
+          on:keydown|stopPropagation="{({ key }) => {
             if (key === 'Enter') {
               if (highlightedIndex > -1) {
                 sortedItems[highlightedIndex].checked = !sortedItems[highlightedIndex].checked;
@@ -374,69 +377,69 @@
             } else if (key === 'ArrowUp') {
               change(-1);
             }
-          }}
+          }}"
           on:focus
           on:blur
-          on:blur={({ relatedTarget }) => {
+          on:blur="{({ relatedTarget }) => {
             if (relatedTarget && relatedTarget.getAttribute('role') !== 'button') {
               inputRef.focus();
             }
-          }}
-          {disabled}
-          {placeholder}
-          {id}
-          {name}
-          value={inputValue} />
+          }}"
+          disabled="{disabled}"
+          placeholder="{placeholder}"
+          id="{id}"
+          name="{name}"
+          value="{inputValue}" />
         {#if invalid}
           <WarningFilled16 class="bx--list-box__invalid-icon" />
         {/if}
         {#if inputValue}
           <ListBoxSelection
-            on:clear={() => {
+            on:clear="{() => {
               inputValue = '';
               open = false;
-            }}
-            {translateWithId}
-            {disabled}
-            {open} />
+            }}"
+            translateWithId="{translateWithId}"
+            disabled="{disabled}"
+            open="{open}" />
         {/if}
         <ListBoxMenuIcon
-          on:click={() => {
+          on:click="{() => {
             open = !open;
-          }}
-          {translateWithId}
-          {open} />
+          }}"
+          translateWithId="{translateWithId}"
+          open="{open}" />
       {/if}
       {#if !filterable}
         <span class="bx--list-box__label">{label}</span>
-        <ListBoxMenuIcon {open} {translateWithId} />
+        <ListBoxMenuIcon open="{open}" translateWithId="{translateWithId}" />
       {/if}
     </ListBoxField>
     {#if open}
-      <ListBoxMenu aria-label={ariaLabel} {id}>
+      <ListBoxMenu aria-label="{ariaLabel}" id="{id}">
         {#each filterable ? filteredItems : sortedItems as item, i (item.id || i)}
           <ListBoxMenuItem
-            id={item.id}
-            active={item.checked}
-            highlighted={highlightedIndex === i}
-            on:click={() => {
+            id="{item.id}"
+            active="{item.checked}"
+            highlighted="{highlightedIndex === i}"
+            on:click="{() => {
               sortedItems = sortedItems.map((_) =>
                 _.id === item.id ? { ..._, checked: !_.checked } : _
               );
               fieldRef.focus();
-            }}
-            on:mouseenter={() => {
+            }}"
+            on:mouseenter="{() => {
               highlightedIndex = i;
-            }}>
+            }}">
             <Checkbox
               readonly
               tabindex="-1"
               id="checkbox-{item.id}"
-              title={useTitleInItem ? itemToString(item) : undefined}
-              name={itemToString(item)}
-              labelText={itemToString(item)}
-              checked={item.checked}
-              {disabled} />
+              title="{useTitleInItem ? itemToString(item) : undefined}"
+              name="{itemToString(item)}"
+              labelText="{itemToString(item)}"
+              checked="{item.checked}"
+              disabled="{disabled}" />
           </ListBoxMenuItem>
         {/each}
       </ListBoxMenu>

@@ -16,8 +16,8 @@
   <a
     role="menuitem"
     tabindex="0"
-    {href}
-    class:bx--header__menu-item={true}
+    href="{href}"
+    class:bx--header__menu-item="{true}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -27,6 +27,6 @@
     on:keydown
     on:focus
     on:blur>
-    <span class:bx--text-truncate--end={true}>{text}</span>
+    <span class:bx--text-truncate--end="{true}">{text}</span>
   </a>
 </li>

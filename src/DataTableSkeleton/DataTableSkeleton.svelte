@@ -37,10 +37,10 @@
 </script>
 
 <table
-  class:bx--skeleton={true}
-  class:bx--data-table={true}
-  class:bx--data-table--zebra={zebra}
-  class:bx--data-table--compact={compact}
+  class:bx--skeleton="{true}"
+  class:bx--data-table="{true}"
+  class:bx--data-table--zebra="{zebra}"
+  class:bx--data-table--compact="{compact}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -56,13 +56,13 @@
   <tbody>
     <tr>
       {#each cols as col, i (col)}
-        <td><span /></td>
+        <td><span></span></td>
       {/each}
     </tr>
     {#each Array.from({ length: rows - 1 }, (_, i) => i) as row, i (row)}
       <tr>
         {#each cols as col, j (col)}
-          <td />
+          <td></td>
         {/each}
       </tr>
     {/each}

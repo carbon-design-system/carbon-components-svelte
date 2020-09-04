@@ -32,37 +32,37 @@
 
 {#if $tableSortable}
   <th
-    aria-sort={active ? $sortHeader.sortDirection : 'none'}
-    {scope}
-    {id}
+    aria-sort="{active ? $sortHeader.sortDirection : 'none'}"
+    scope="{scope}"
+    id="{id}"
     {...$$restProps}
     on:mouseover
     on:mouseenter
     on:mouseleave>
     <button
-      class:bx--table-sort={true}
-      class:bx--table-sort--active={active}
-      class:bx--table-sort--ascending={active && $sortHeader.sortDirection === 'descending'}
+      class:bx--table-sort="{true}"
+      class:bx--table-sort--active="{active}"
+      class:bx--table-sort--ascending="{active && $sortHeader.sortDirection === 'descending'}"
       on:click>
-      <span class:bx--table-header-label={true}>
+      <span class:bx--table-header-label="{true}">
         <slot />
       </span>
-      <ArrowUp20 aria-label={ariaLabel} class="bx--table-sort__icon" />
+      <ArrowUp20 aria-label="{ariaLabel}" class="bx--table-sort__icon" />
       <ArrowsVertical20
-        aria-label={ariaLabel}
+        aria-label="{ariaLabel}"
         class="bx--table-sort__icon-unsorted" />
     </button>
   </th>
 {:else}
   <th
-    {scope}
-    {id}
+    scope="{scope}"
+    id="{id}"
     {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave>
-    <span class:bx--table-header-label={true}>
+    <span class:bx--table-header-label="{true}">
       <slot />
     </span>
   </th>

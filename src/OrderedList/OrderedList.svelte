@@ -7,8 +7,8 @@
 </script>
 
 <ol
-  class:bx--list--ordered={true}
-  class:bx--list--nested={nested}
+  class:bx--list--ordered="{true}"
+  class:bx--list--nested="{nested}"
   {...$$restProps}
   on:click
   on:mouseover

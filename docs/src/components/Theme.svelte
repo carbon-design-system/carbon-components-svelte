@@ -21,7 +21,7 @@
   }
 </style>
 
-<Select inline labelText="Theme" bind:selected={theme}>
+<Select inline labelText="Theme" bind:selected="{theme}">
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g90" text="Gray 90" />

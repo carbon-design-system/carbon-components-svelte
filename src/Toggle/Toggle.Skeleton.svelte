@@ -13,7 +13,7 @@
 </script>
 
 <div
-  class:bx--form-item={true}
+  class:bx--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -21,19 +21,19 @@
   on:mouseleave>
   <input
     type="checkbox"
-    {id}
-    class:bx--toggle={true}
-    class:bx--skeleton={true} />
+    id="{id}"
+    class:bx--toggle="{true}"
+    class:bx--skeleton="{true}" />
   <label
-    aria-label={labelText ? undefined : $$props['aria-label'] || 'Toggle is loading'}
-    for={id}
-    class:bx--toggle__label={true}
-    class:bx--skeleton={true}>
+    aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle is loading'}"
+    for="{id}"
+    class:bx--toggle__label="{true}"
+    class:bx--skeleton="{true}">
     {#if labelText}
-      <span class:bx--toggle__label-text={true}>{labelText}</span>
+      <span class:bx--toggle__label-text="{true}">{labelText}</span>
     {/if}
-    <span class:bx--toggle__text--left={true} />
-    <span class:bx--toggle__appearance={true} />
-    <span class:bx--toggle__text--right={true} />
+    <span class:bx--toggle__text--left="{true}"></span>
+    <span class:bx--toggle__appearance="{true}"></span>
+    <span class:bx--toggle__text--right="{true}"></span>
   </label>
 </div>

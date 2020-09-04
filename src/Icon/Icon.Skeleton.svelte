@@ -7,10 +7,10 @@
 </script>
 
 <div
-  class:bx--icon--skeleton={true}
+  class:bx--icon--skeleton="{true}"
   {...$$restProps}
   style="{$$restProps.style}; width: {size}px; height: {size}px"
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave />
+  on:mouseleave></div>

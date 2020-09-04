@@ -58,28 +58,28 @@
 </style>
 
 {#if segment !== 'examples'}
-  <GlobalHeader {segment} />
+  <GlobalHeader segment="{segment}" />
   <SideNav isOpen>
     <SideNavItems>
       <SideNavLink
         text="Getting Started"
         href="getting-started"
         rel="prefetch"
-        isSelected={segment === 'getting-started'} />
+        isSelected="{segment === 'getting-started'}" />
       <SideNavMenu
         text="Components"
-        expanded={segment === 'components'}
-        isSelected={segment === 'components' && !$tail}>
+        expanded="{segment === 'components'}"
+        isSelected="{segment === 'components' && !$tail}">
         <SideNavMenuItem
           text="Index"
           href="components"
           rel="prefetch"
-          isSelected={segment === 'components' && $tail && $tail.slug === 'index'} />
+          isSelected="{segment === 'components' && $tail && $tail.slug === 'index'}" />
         <SideNavMenuItem
           text="Button"
           href="components/button"
           rel="prefetch"
-          isSelected={segment === 'components' && $tail && $tail.slug === 'button'} />
+          isSelected="{segment === 'components' && $tail && $tail.slug === 'button'}" />
       </SideNavMenu>
     </SideNavItems>
   </SideNav>
@@ -90,11 +90,11 @@
           style="display: flex; align-items: center; justify-content:
           space-between;">
           <Breadcrumb>
-            <BreadcrumbItem href="." isCurrentPage={!$tail && !segment}>
+            <BreadcrumbItem href="." isCurrentPage="{!$tail && !segment}">
               Home
             </BreadcrumbItem>
             {#if segment && $tail}
-              <BreadcrumbItem href={segment} isCurrentPage={!$tail}>
+              <BreadcrumbItem href="{segment}" isCurrentPage="{!$tail}">
                 {urlIds[segment]}
               </BreadcrumbItem>
             {/if}

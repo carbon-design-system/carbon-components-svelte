@@ -173,7 +173,7 @@
 </script>
 
 <svelte:body
-  on:click={({ target }) => {
+  on:click="{({ target }) => {
     if (!calendar || !calendar.isOpen) {
       return;
     }
@@ -183,21 +183,21 @@
     if (!calendar.calendarContainer.contains(target)) {
       calendar.close();
     }
-  }} />
+  }}" />
 
 <div
-  class:bx--form-item={true}
+  class:bx--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave>
   <div
-    bind:this={datePickerRef}
-    {id}
-    class:bx--date-picker={true}
-    class:bx--date-picker--short={short}
-    class:bx--date-picker--light={light}
+    bind:this="{datePickerRef}"
+    id="{id}"
+    class:bx--date-picker="{true}"
+    class:bx--date-picker--short="{short}"
+    class:bx--date-picker--light="{light}"
     class="{datePickerType && `bx--date-picker--${datePickerType}`}
       {datePickerType === 'range' && $labelTextEmpty && 'bx--date-picker--nolabel'}">
     <slot />

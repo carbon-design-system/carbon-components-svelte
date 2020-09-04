@@ -31,10 +31,10 @@
 </style>
 
 <a
-  class:bx--header__action={true}
-  class:bx--header__action--active={linkIsActive}
-  class:action-link={true}
+  class:bx--header__action="{true}"
+  class:bx--header__action--active="{linkIsActive}"
+  class:action-link="{true}"
   {...$$restProps}
-  {href}>
+  href="{href}">
   <Icon {...icon} />
 </a>

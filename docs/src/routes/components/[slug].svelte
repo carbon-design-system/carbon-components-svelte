@@ -96,35 +96,35 @@
 <Row noGutter>
   <div class="preview">
     {#if component}
-      <svelte:component this={component.default} {...defaultProps} />
+      <svelte:component this="{component.default}" {...defaultProps} />
     {/if}
   </div>
 </Row>
 
 <Row>
-  <Column md={3} lg={4}>
+  <Column md="{3}" lg="{4}">
     {#each Object.keys(props) as key}
       {#if Array.isArray(props[key].values)}
-        <FormGroup legendText={key}>
+        <FormGroup legendText="{key}">
           <RadioButtonGroup
-            selected={props[key].default}
-            on:change={({ detail }) => {
+            selected="{props[key].default}"
+            on:change="{({ detail }) => {
               defaultProps = { ...defaultProps, [key]: detail };
-            }}>
+            }}">
             {#each props[key].values as value}
-              <RadioButton {value} id={value} labelText={value} />
+              <RadioButton value="{value}" id="{value}" labelText="{value}" />
             {/each}
           </RadioButtonGroup>
         </FormGroup>
       {/if}
     {/each}
   </Column>
-  <Column md={5}>
+  <Column md="{5}">
     <CodeSnippet
       type="multi"
-      code={data.source}
-      on:click={() => {
+      code="{data.source}"
+      on:click="{() => {
         copy(data.source);
-      }} />
+      }}" />
   </Column>
 </Row>

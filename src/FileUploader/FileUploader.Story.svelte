@@ -19,36 +19,36 @@
   {:else if story === 'drop container'}
     <FileUploaderDropContainer
       {...$$props}
-      on:add={({ detail }) => {
+      on:add="{({ detail }) => {
         console.log(detail);
-      }} />
+      }}" />
   {:else if story === 'item'}
     <FileUploaderItem
       {...$$props}
-      on:delete={({ detail }) => {
+      on:delete="{({ detail }) => {
         console.log(detail);
-      }}
-      on:click={() => {
+      }}"
+      on:click="{() => {
         console.log('click');
-      }} />
+      }}" />
   {:else if story === 'uploader'}
     <div class="bx--file__container">
       <FileUploader
-        bind:this={fileUploader}
+        bind:this="{fileUploader}"
         {...$$props}
         bind:files
-        on:add={({ detail }) => {
+        on:add="{({ detail }) => {
           console.log('add', detail);
-        }}
-        on:remove={({ detail }) => {
+        }}"
+        on:remove="{({ detail }) => {
           console.log('remove', detail);
-        }} />
+        }}" />
       <Button
         kind="secondary"
         size="small"
         style="margin-top: 1rem"
-        {disabled}
-        on:click={fileUploader.clearFiles}>
+        disabled="{disabled}"
+        on:click="{fileUploader.clearFiles}">
         Clear File{files.length === 1 ? '' : 's'}
       </Button>
     </div>

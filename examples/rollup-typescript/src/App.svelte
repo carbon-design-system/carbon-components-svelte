@@ -4,9 +4,9 @@
 
 <Button
   kind="primary"
-  on:click={() => {
+  on:click="{() => {
     console.log('click');
-  }}>
+  }}">
   Primary button
 </Button>
 

@@ -1,3 +1,3 @@
-<div class:bx--btn-set={true} {...$$restProps}>
+<div class:bx--btn-set="{true}" {...$$restProps}>
   <slot />
 </div>

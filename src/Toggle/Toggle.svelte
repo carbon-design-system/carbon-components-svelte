@@ -43,7 +43,7 @@
 </script>
 
 <div
-  class:bx--form-item={true}
+  class:bx--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -51,34 +51,36 @@
   on:mouseleave>
   <input
     type="checkbox"
-    class:bx--toggle-input={true}
-    checked={toggled}
+    class:bx--toggle-input="{true}"
+    checked="{toggled}"
     on:change
-    on:change={() => {
+    on:change="{() => {
       toggled = !toggled;
-    }}
+    }}"
     on:keyup
-    on:keyup={(e) => {
+    on:keyup="{(e) => {
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         toggled = !toggled;
       }
-    }}
+    }}"
     on:focus
     on:blur
-    {disabled}
-    {id}
-    {name} />
+    disabled="{disabled}"
+    id="{id}"
+    name="{name}" />
   <label
-    aria-label={labelText ? undefined : $$props['aria-label'] || 'Toggle'}
-    for={id}
-    class:bx--toggle-input__label={true}>
+    aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle'}"
+    for="{id}"
+    class:bx--toggle-input__label="{true}">
     {labelText}
-    <span class:bx--toggle__switch={true}>
-      <span aria-hidden="true" class:bx--toggle__text--off={true}>
+    <span class:bx--toggle__switch="{true}">
+      <span aria-hidden="true" class:bx--toggle__text--off="{true}">
         {labelA}
       </span>
-      <span aria-hidden="true" class:bx--toggle__text--on={true}>{labelB}</span>
+      <span
+        aria-hidden="true"
+        class:bx--toggle__text--on="{true}">{labelB}</span>
     </span>
   </label>
 </div>

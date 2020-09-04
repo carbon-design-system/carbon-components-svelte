@@ -17,7 +17,7 @@
   platformName="Components Svelte"
   href="."
   rel="prefetch"
-  aria-current={segment === undefined ? 'page' : undefined}>
+  aria-current="{segment === undefined ? 'page' : undefined}">
   <SkipToContent />
   <!-- <HeaderNav>
     <HeaderNavItem

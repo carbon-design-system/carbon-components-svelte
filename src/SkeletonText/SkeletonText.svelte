@@ -47,19 +47,19 @@
   <div {...$$restProps} on:click on:mouseover on:mouseenter on:mouseleave>
     {#each rows as { width }, i (width)}
       <p
-        class:bx--skeleton__text={true}
-        class:bx--skeleton__heading={heading}
-        style="width: {width}" />
+        class:bx--skeleton__text="{true}"
+        class:bx--skeleton__heading="{heading}"
+        style="width: {width}"></p>
     {/each}
   </div>
 {:else}
   <p
-    class:bx--skeleton__text={true}
-    class:bx--skeleton__heading={heading}
+    class:bx--skeleton__text="{true}"
+    class:bx--skeleton__heading="{heading}"
     {...$$restProps}
     style="width: {width};{$$restProps.style}"
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave></p>
 {/if}

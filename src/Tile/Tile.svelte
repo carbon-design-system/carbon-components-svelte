@@ -7,8 +7,8 @@
 </script>
 
 <div
-  class:bx--tile={true}
-  class:bx--tile--light={light}
+  class:bx--tile="{true}"
+  class:bx--tile--light="{light}"
   {...$$restProps}
   on:click
   on:mouseover

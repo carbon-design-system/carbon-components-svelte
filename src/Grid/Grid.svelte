@@ -60,7 +60,7 @@
 </script>
 
 {#if as}
-  <slot {props} />
+  <slot props="{props}" />
 {:else}
   <div {...props}>
     <slot />

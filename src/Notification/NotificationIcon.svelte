@@ -35,6 +35,6 @@
 </script>
 
 <svelte:component
-  this={icons[kind]}
-  title={iconDescription}
+  this="{icons[kind]}"
+  title="{iconDescription}"
   class="bx--{notificationType}-notification__icon" />

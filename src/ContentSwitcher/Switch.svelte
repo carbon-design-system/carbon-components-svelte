@@ -52,31 +52,31 @@
 </script>
 
 <button
-  bind:this={ref}
+  bind:this="{ref}"
   role="tab"
-  tabindex={selected ? '0' : '-1'}
-  aria-selected={selected}
-  {disabled}
-  {id}
-  class:bx--content-switcher-btn={true}
-  class:bx--content-switcher--selected={selected}
+  tabindex="{selected ? '0' : '-1'}"
+  aria-selected="{selected}"
+  disabled="{disabled}"
+  id="{id}"
+  class:bx--content-switcher-btn="{true}"
+  class:bx--content-switcher--selected="{selected}"
   {...$$restProps}
   on:click
-  on:click|preventDefault={() => {
+  on:click|preventDefault="{() => {
     ctx.update(id);
-  }}
+  }}"
   on:mouseover
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={({ key }) => {
+  on:keydown="{({ key }) => {
     if (key === 'ArrowRight') {
       ctx.change(1);
     } else if (key === 'ArrowLeft') {
       ctx.change(-1);
     }
-  }}>
-  <span class:bx--content-switcher__label={true}>
+  }}">
+  <span class:bx--content-switcher__label="{true}">
     <slot>{text}</slot>
   </span>
 </button>

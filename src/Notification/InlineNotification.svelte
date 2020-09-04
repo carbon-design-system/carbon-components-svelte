@@ -81,29 +81,35 @@
 
 {#if open}
   <div
-    {role}
-    {kind}
-    class:bx--inline-notification={true}
-    class:bx--inline-notification--low-contrast={lowContrast}
-    class:bx--inline-notification--hide-close-button={hideCloseButton}
-    class={kind && `bx--inline-notification--${kind}`}
+    role="{role}"
+    kind="{kind}"
+    class:bx--inline-notification="{true}"
+    class:bx--inline-notification--low-contrast="{lowContrast}"
+    class:bx--inline-notification--hide-close-button="{hideCloseButton}"
+    class="{kind && `bx--inline-notification--${kind}`}"
     {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave>
-    <div class:bx--inline-notification__details={true}>
-      <NotificationIcon {notificationType} {kind} {iconDescription} />
-      <NotificationTextDetails {title} {subtitle} {notificationType}>
+    <div class:bx--inline-notification__details="{true}">
+      <NotificationIcon
+        notificationType="{notificationType}"
+        kind="{kind}"
+        iconDescription="{iconDescription}" />
+      <NotificationTextDetails
+        title="{title}"
+        subtitle="{subtitle}"
+        notificationType="{notificationType}">
         <slot />
       </NotificationTextDetails>
     </div>
     <slot name="actions" />
     {#if !hideCloseButton}
       <NotificationButton
-        {iconDescription}
-        {notificationType}
-        on:click={close} />
+        iconDescription="{iconDescription}"
+        notificationType="{notificationType}"
+        on:click="{close}" />
     {/if}
   </div>
 {/if}

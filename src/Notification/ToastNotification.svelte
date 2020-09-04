@@ -87,25 +87,32 @@
 
 {#if open}
   <div
-    {role}
-    {kind}
-    class:bx--toast-notification={true}
-    class:bx--toast-notification--low-contrast={lowContrast}
-    class={kind && `bx--toast-notification--${kind}`}
+    role="{role}"
+    kind="{kind}"
+    class:bx--toast-notification="{true}"
+    class:bx--toast-notification--low-contrast="{lowContrast}"
+    class="{kind && `bx--toast-notification--${kind}`}"
     {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave>
-    <NotificationIcon {notificationType} {kind} {iconDescription} />
-    <NotificationTextDetails {title} {subtitle} {caption} {notificationType}>
+    <NotificationIcon
+      notificationType="{notificationType}"
+      kind="{kind}"
+      iconDescription="{iconDescription}" />
+    <NotificationTextDetails
+      title="{title}"
+      subtitle="{subtitle}"
+      caption="{caption}"
+      notificationType="{notificationType}">
       <slot />
     </NotificationTextDetails>
     {#if !hideCloseButton}
       <NotificationButton
-        {iconDescription}
-        {notificationType}
-        on:click={close} />
+        iconDescription="{iconDescription}"
+        notificationType="{notificationType}"
+        on:click="{close}" />
     {/if}
   </div>
 {/if}

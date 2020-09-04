@@ -128,7 +128,7 @@
 </style>
 
 {#if story === 'header'}
-  <Header {...$$props} company={undefined}>
+  <Header {...$$props} company="{undefined}">
     <div slot="skip-to-content">
       <SkipToContent />
     </div>
@@ -137,21 +137,21 @@
     </span>
   </Header>
 {:else if story === 'sidenav'}
-  <SideNav isOpen={true}>
+  <SideNav isOpen="{true}">
     <SideNavItems>
-      <SideNavMenu text="Menu 01" icon={iCatalog}>
+      <SideNavMenu text="Menu 01" icon="{iCatalog}">
         <SideNavMenuItem text="Sub 01" href="/" />
         <SideNavMenuItem text="Sub 02" href="/" />
         <SideNavMenuItem text="Sub 03" href="/" />
         <SideNavMenuItem text="Sub 04" href="/" />
       </SideNavMenu>
-      <SideNavMenu text="Menu 02" icon={iAdjust}>
+      <SideNavMenu text="Menu 02" icon="{iAdjust}">
         <SideNavMenuItem text="Sub 01" href="/" />
         <SideNavMenuItem text="Sub 02" href="/" />
         <SideNavMenuItem text="Sub 03" href="/" />
         <SideNavMenuItem text="Sub 04" href="/" />
       </SideNavMenu>
-      <SideNavLink text="Menu 03" href="/" icon={iProtection} />
+      <SideNavLink text="Menu 03" href="/" icon="{iProtection}" />
     </SideNavItems>
   </SideNav>
 {:else if story === 'header-with-nav'}
@@ -171,18 +171,21 @@
   <Header {...$$props}>
     <HeaderUtilities>
       <HeaderActionSearch />
-      <HeaderAction type="Settings" icon={iSettings}>
+      <HeaderAction type="Settings" icon="{iSettings}">
         <HeaderPanelLinks>
           <HeaderPanelDivider>Settings</HeaderPanelDivider>
         </HeaderPanelLinks>
       </HeaderAction>
-      <HeaderActionLink type="Help" icon={iHelp} />
-      <HeaderAction type="Notifications" icon={iNotifications} isOpen={true}>
+      <HeaderActionLink type="Help" icon="{iHelp}" />
+      <HeaderAction
+        type="Notifications"
+        icon="{iNotifications}"
+        isOpen="{true}">
         <HeaderPanelLinks>
           <HeaderPanelDivider>Notifications</HeaderPanelDivider>
         </HeaderPanelLinks>
       </HeaderAction>
-      <HeaderActionLink type="Account" icon={iAccount} />
+      <HeaderActionLink type="Account" icon="{iAccount}" />
     </HeaderUtilities>
   </Header>
 {:else if story === 'header-with-switcher'}
@@ -190,14 +193,14 @@
     <HeaderUtilities>
       <HeaderAction
         type="Switcher"
-        icon={isOpen ? iAccount : iSwitcher}
+        icon="{isOpen ? iAccount : iSwitcher}"
         bind:isOpen
-        on:open={() => {
+        on:open="{() => {
           console.log('on:open');
-        }}
-        on:close={() => {
+        }}"
+        on:close="{() => {
           console.log('on:close');
-        }}>
+        }}">
         <HeaderPanelLinks>
           <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
           <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
@@ -212,22 +215,22 @@
     </HeaderUtilities>
   </Header>
 {:else if story === 'header-and-sidenav'}
-  <Header expandedByDefault={false} bind:isSideNavOpen {...$$props}>
-    <SideNav fixed bind:isOpen={isSideNavOpen}>
+  <Header expandedByDefault="{false}" bind:isSideNavOpen {...$$props}>
+    <SideNav fixed bind:isOpen="{isSideNavOpen}">
       <SideNavItems>
-        <SideNavMenu text="Menu 01" icon={iCatalog}>
+        <SideNavMenu text="Menu 01" icon="{iCatalog}">
           <SideNavMenuItem text="Sub 01" href="/" />
           <SideNavMenuItem text="Sub 02" href="/" />
           <SideNavMenuItem text="Sub 03" href="/" />
           <SideNavMenuItem text="Sub 04" href="/" />
         </SideNavMenu>
-        <SideNavMenu text="Menu 02" icon={iAdjust}>
+        <SideNavMenu text="Menu 02" icon="{iAdjust}">
           <SideNavMenuItem text="Sub 01" href="/" />
           <SideNavMenuItem text="Sub 02" href="/" />
           <SideNavMenuItem text="Sub 03" href="/" />
           <SideNavMenuItem text="Sub 04" href="/" />
         </SideNavMenu>
-        <SideNavLink text="Menu 03" href="/" icon={iProtection} />
+        <SideNavLink text="Menu 03" href="/" icon="{iProtection}" />
       </SideNavItems>
     </SideNav>
   </Header>

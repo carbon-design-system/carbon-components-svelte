@@ -85,52 +85,52 @@
 </script>
 
 <div
-  class:bx--form-item={true}
+  class:bx--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave>
   <div
-    class:bx--time-picker={true}
-    class:bx--time-picker--light={light}
-    class:bx--select--light={light}>
-    <div class:bx--time-picker__input={true}>
+    class:bx--time-picker="{true}"
+    class:bx--time-picker--light="{light}"
+    class:bx--select--light="{light}">
+    <div class:bx--time-picker__input="{true}">
       {#if labelText}
         <label
-          for={id}
-          class:bx--label={true}
-          class:bx--visually-hidden={hideLabel}
-          class:bx--label--disabled={disabled}>
+          for="{id}"
+          class:bx--label="{true}"
+          class:bx--visually-hidden="{hideLabel}"
+          class:bx--label--disabled="{disabled}">
           {labelText}
         </label>
       {/if}
       <input
-        bind:this={ref}
-        data-invalid={invalid || undefined}
-        {pattern}
-        {placeholder}
-        {maxlength}
-        {id}
-        {name}
-        {type}
-        {value}
-        {disabled}
-        class:bx--time-picker__input-field={true}
-        class:bx--text-input={true}
-        class:bx--text-input--light={light}
-        class:bx--text-input--invalid={invalid}
+        bind:this="{ref}"
+        data-invalid="{invalid || undefined}"
+        pattern="{pattern}"
+        placeholder="{placeholder}"
+        maxlength="{maxlength}"
+        id="{id}"
+        name="{name}"
+        type="{type}"
+        value="{value}"
+        disabled="{disabled}"
+        class:bx--time-picker__input-field="{true}"
+        class:bx--text-input="{true}"
+        class:bx--text-input--light="{light}"
+        class:bx--text-input--invalid="{invalid}"
         on:change
         on:input
-        on:input={({ target }) => {
+        on:input="{({ target }) => {
           value = target.value;
-        }}
+        }}"
         on:focus
         on:blur />
     </div>
     <slot />
   </div>
   {#if invalid}
-    <div class:bx--form-requirement={true}>{invalidText}</div>
+    <div class:bx--form-requirement="{true}">{invalidText}</div>
   {/if}
 </div>

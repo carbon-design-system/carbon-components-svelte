@@ -1,5 +1,5 @@
 <div
-  class:bx--structured-list-thead={true}
+  class:bx--structured-list-thead="{true}"
   {...$$restProps}
   on:click
   on:mouseover

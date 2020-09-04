@@ -20,9 +20,9 @@
 <div>
   <Button
     size="small"
-    on:click={() => {
+    on:click="{() => {
       selectedIds = selectedIds.length > 0 ? [] : [items[1].id, items[2].id];
-    }}>
+    }}">
     {selectedIds.length > 0 ? 'Clear' : 'Set initial'} selected items
   </Button>
 </div>

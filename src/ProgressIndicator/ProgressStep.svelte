@@ -63,54 +63,54 @@
 </script>
 
 <li
-  aria-disabled={disabled}
-  {id}
-  class:bx--progress-step={true}
-  class:bx--progress-step--current={current}
-  class:bx--progress-step--complete={complete}
-  class:bx--progress-step--incomplete={!complete && !current}
-  class:bx--progress-step--disabled={disabled}
+  aria-disabled="{disabled}"
+  id="{id}"
+  class:bx--progress-step="{true}"
+  class:bx--progress-step--current="{current}"
+  class:bx--progress-step--complete="{complete}"
+  class:bx--progress-step--incomplete="{!complete && !current}"
+  class:bx--progress-step--disabled="{disabled}"
   {...$$restProps}>
   <div
     role="button"
-    tabindex={current ? '-1' : '0'}
-    class:bx--progress-step-button={true}
-    class:bx--progress-step-button--unclickable={current}
-    on:click={() => {
+    tabindex="{current ? '-1' : '0'}"
+    class:bx--progress-step-button="{true}"
+    class:bx--progress-step-button--unclickable="{current}"
+    on:click="{() => {
       change(step.index);
-    }}
+    }}"
     on:mouseover
     on:mouseenter
     on:mouseleave
     on:keydown
-    on:keydown={(e) => {
+    on:keydown="{(e) => {
       if (e.key === ' ' || e.key === 'Enter') {
         change(step.index);
       }
-    }}>
+    }}">
     {#if invalid}
       <Warning16 class="bx--progress__warning" />
     {:else if current}
       <svg>
-        <path d="M 7, 7 m -7, 0 a 7,7 0 1,0 14,0 a 7,7 0 1,0 -14,0" />
+        <path d="M 7, 7 m -7, 0 a 7,7 0 1,0 14,0 a 7,7 0 1,0 -14,0"></path>
         <title>{description}</title>
       </svg>
     {:else if complete}
-      <CheckmarkOutline16 title={description} />
+      <CheckmarkOutline16 title="{description}" />
     {:else}
       <svg>
         <title>{description}</title>
         <path
           d="M8 1C4.1 1 1 4.1 1 8s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7zm0 13c-3.3
-          0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z" />
+          0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"></path>
       </svg>
     {/if}
-    <slot props={{ class: 'bx--progress-label' }}>
-      <p class:bx--progress-label={true}>{label}</p>
+    <slot props="{{ class: 'bx--progress-label' }}">
+      <p class:bx--progress-label="{true}">{label}</p>
     </slot>
     {#if secondaryLabel}
-      <p class:bx--progress-optional={true}>{secondaryLabel}</p>
+      <p class:bx--progress-optional="{true}">{secondaryLabel}</p>
     {/if}
-    <span class:bx--progress-line={true} />
+    <span class:bx--progress-line="{true}"></span>
   </div>
 </li>

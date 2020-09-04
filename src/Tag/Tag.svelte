@@ -49,21 +49,21 @@
 {:else}
   {#if filter}
     <div
-      aria-label={title}
-      {id}
-      class:bx--tag={true}
-      class:bx--tag--disabled={disabled}
-      class:bx--tag--filter={filter}
+      aria-label="{title}"
+      id="{id}"
+      class:bx--tag="{true}"
+      class:bx--tag--disabled="{disabled}"
+      class:bx--tag--filter="{filter}"
       {...$$restProps}
       class="{type && `bx--tag--${type}`} {$$restProps.class}">
-      <slot props={{ class: 'bx--tag__label' }}>
-        <span class:bx--tag__label={true}>{type}</span>
+      <slot props="{{ class: 'bx--tag__label' }}">
+        <span class:bx--tag__label="{true}">{type}</span>
       </slot>
       <button
-        aria-labelledby={id}
-        class:bx--tag__close-icon={true}
-        {disabled}
-        {title}
+        aria-labelledby="{id}"
+        class:bx--tag__close-icon="{true}"
+        disabled="{disabled}"
+        title="{title}"
         on:click|stopPropagation
         on:mouseover
         on:mouseenter
@@ -73,8 +73,8 @@
     </div>
   {:else}
     <span
-      class:bx--tag={true}
-      class:bx--tag--disabled={disabled}
+      class:bx--tag="{true}"
+      class:bx--tag--disabled="{disabled}"
       {...$$restProps}
       class="{type && `bx--tag--${type}`} {$$restProps.class}"
       on:click

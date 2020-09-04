@@ -23,7 +23,7 @@
     on:mouseleave />
 {:else}
   <ul
-    class:bx--accordion={true}
+    class:bx--accordion="{true}"
     {...$$restProps}
     class="bx--accordion--{align} {$$restProps.class}"
     on:click

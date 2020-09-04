@@ -11,9 +11,9 @@
   {#if story === 'links'}
     <OverflowMenu
       {...$$props.menu}
-      on:close={({ detail }) => {
+      on:close="{({ detail }) => {
         console.log('close', detail);
-      }}>
+      }}">
       <OverflowMenuItem
         {...$$props.menuItem}
         href="https://ibm.com"
@@ -43,9 +43,9 @@
   {:else if story === 'trigger'}
     <OverflowMenu
       {...$$props.menu}
-      on:close={({ detail }) => {
+      on:close="{({ detail }) => {
         console.log('close', detail);
-      }}
+      }}"
       style="width: auto">
       <div slot="menu" style="padding: 0 1rem">Menu</div>
       <OverflowMenuItem
@@ -64,9 +64,9 @@
   {:else}
     <OverflowMenu
       {...$$props.menu}
-      on:close={({ detail }) => {
+      on:close="{({ detail }) => {
         console.log('close', detail);
-      }}>
+      }}">
       <OverflowMenuItem
         {...$$props.menuItem}
         text="Option 1"

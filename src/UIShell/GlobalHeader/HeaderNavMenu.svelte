@@ -29,7 +29,7 @@
 </script>
 
 <svelte:window
-  on:mouseup={({ target }) => {
+  on:mouseup="{({ target }) => {
     if (ref.contains(target) || target === ref) {
       expanded = !expanded;
     } else {
@@ -37,26 +37,26 @@
         expanded = false;
       }
     }
-  }} />
+  }}" />
 
-<li class:bx--header__submenu={true} title={iconDescription}>
+<li class:bx--header__submenu="{true}" title="{iconDescription}">
   <a
-    bind:this={ref}
+    bind:this="{ref}"
     role="menuitem"
     tabindex="0"
     aria-haspopup="menu"
-    aria-expanded={expanded}
-    aria-label={text}
-    {href}
-    class:bx--header__menu-item={true}
-    class:bx--header__menu-title={true}
+    aria-expanded="{expanded}"
+    aria-label="{text}"
+    href="{href}"
+    class:bx--header__menu-item="{true}"
+    class:bx--header__menu-title="{true}"
     {...$$restProps}
     on:keydown
-    on:keydown={({ key }) => {
+    on:keydown="{({ key }) => {
       if (key === 'Enter') {
         expanded = !expanded;
       }
-    }}
+    }}"
     on:click|preventDefault
     on:mouseover
     on:mouseenter
@@ -66,10 +66,10 @@
     on:blur>
     {text}
     <ChevronDown16
-      aria-label={iconDescription}
+      aria-label="{iconDescription}"
       class="bx--header__menu-arrow" />
   </a>
-  <ul role="menu" aria-label={text} class:bx--header__menu={true}>
+  <ul role="menu" aria-label="{text}" class:bx--header__menu="{true}">
     <slot />
   </ul>
 </li>

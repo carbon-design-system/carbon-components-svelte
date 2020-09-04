@@ -8,10 +8,10 @@
   <Button
     {...$$props}
     kind="primary"
-    on:click={() => console.log('click')}
-    on:mouseover={() => console.log('mouseover')}
-    on:mouseenter={() => console.log('mouseenter')}
-    on:mouseleave={() => console.log('mouseleave')}>
+    on:click="{() => console.log('click')}"
+    on:mouseover="{() => console.log('mouseover')}"
+    on:mouseenter="{() => console.log('mouseenter')}"
+    on:mouseleave="{() => console.log('mouseleave')}">
     Primary button
   </Button>
 
@@ -26,15 +26,15 @@
 
 <div>
   <h4>Buttons with Icons</h4>
-  <Button {...$$props} kind="primary" icon={Add16}>Primary</Button>
+  <Button {...$$props} kind="primary" icon="{Add16}">Primary</Button>
 
-  <Button {...$$props} kind="secondary" icon={Add16}>Secondary</Button>
+  <Button {...$$props} kind="secondary" icon="{Add16}">Secondary</Button>
 
-  <Button {...$$props} kind="tertiary" icon={Add16}>Tertiary</Button>
+  <Button {...$$props} kind="tertiary" icon="{Add16}">Tertiary</Button>
 
-  <Button {...$$props} kind="ghost" icon={Add16}>Ghost</Button>
+  <Button {...$$props} kind="ghost" icon="{Add16}">Ghost</Button>
 
-  <Button {...$$props} kind="danger" icon={Add16}>Danger</Button>
+  <Button {...$$props} kind="danger" icon="{Add16}">Danger</Button>
 </div>
 
 <div>
@@ -43,7 +43,7 @@
     {...$$props}
     kind="primary"
     hasIconOnly
-    icon={Add16}
+    icon="{Add16}"
     iconDescription="Primary"
     tooltipPosition="bottom"
     tooltipAlignment="center" />
@@ -52,7 +52,7 @@
     {...$$props}
     kind="secondary"
     hasIconOnly
-    icon={Add16}
+    icon="{Add16}"
     iconDescription="Secondary"
     tooltipPosition="bottom"
     tooltipAlignment="center" />
@@ -61,7 +61,7 @@
     {...$$props}
     kind="tertiary"
     hasIconOnly
-    icon={Add16}
+    icon="{Add16}"
     iconDescription="Tertiary"
     tooltipPosition="bottom"
     tooltipAlignment="center" />
@@ -70,7 +70,7 @@
     {...$$props}
     kind="ghost"
     hasIconOnly
-    icon={Add16}
+    icon="{Add16}"
     iconDescription="Ghost"
     tooltipPosition="bottom"
     tooltipAlignment="center" />
@@ -79,7 +79,7 @@
     {...$$props}
     kind="danger"
     hasIconOnly
-    icon={Add16}
+    icon="{Add16}"
     iconDescription="Danger"
     tooltipPosition="bottom"
     tooltipAlignment="center" />

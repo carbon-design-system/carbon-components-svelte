@@ -11,8 +11,8 @@
 
 <Copy
   class="bx--copy-btn"
-  aria-label={iconDescription}
-  title={iconDescription}
+  aria-label="{iconDescription}"
+  title="{iconDescription}"
   {...$$restProps}
   on:click
   on:animationend>

@@ -1,5 +1,5 @@
 <form
-  class:bx--form={true}
+  class:bx--form="{true}"
   {...$$restProps}
   on:click
   on:mouseover

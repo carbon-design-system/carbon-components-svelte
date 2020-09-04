@@ -182,50 +182,50 @@
 </script>
 
 <svelte:body
-  on:click={({ target }) => {
+  on:click="{({ target }) => {
     if (!programmatic && open && refTooltip && !refTooltip.contains(target)) {
       open = false;
     }
-  }} />
+  }}" />
 
 <div {...$$restProps} style="{$$restProps.style}; position: relative;">
   {#if !hideIcon}
-    <div bind:this={ref} id={triggerId} class:bx--tooltip__label={true}>
+    <div bind:this="{ref}" id="{triggerId}" class:bx--tooltip__label="{true}">
       <slot name="triggerText">{triggerText}</slot>
       <div
-        bind:this={refIcon}
+        bind:this="{refIcon}"
         {...buttonProps}
-        on:click|preventDefault|stopPropagation={openMenu}
-        on:focus={openMenu}
-        on:blur={onBlur}
-        on:keydown={onKeydown}>
+        on:click|preventDefault|stopPropagation="{openMenu}"
+        on:focus="{openMenu}"
+        on:blur="{onBlur}"
+        on:keydown="{onKeydown}">
         <slot name="icon">
-          <svelte:component this={icon} name={iconName} />
+          <svelte:component this="{icon}" name="{iconName}" />
         </slot>
       </div>
     </div>
   {:else}
     <div
-      bind:this={ref}
+      bind:this="{ref}"
       {...buttonProps}
-      on:click|preventDefault|stopPropagation={openMenu}
-      on:focus={openMenu}
-      on:blur={onBlur}
-      on:keydown={onKeydown}>
+      on:click|preventDefault|stopPropagation="{openMenu}"
+      on:focus="{openMenu}"
+      on:blur="{onBlur}"
+      on:keydown="{onKeydown}">
       <slot name="triggerText">{triggerText}</slot>
     </div>
   {/if}
   {#if open}
     <div
-      bind:this={refTooltip}
+      bind:this="{refTooltip}"
       role="tooltip"
       tabindex="0"
-      id={tooltipId}
-      data-floating-menu-direction={direction}
-      class:bx--tooltip={true}
-      class:bx--tooltip--shown={open}
-      on:blur={closeMenu}>
-      <span class:bx--tooltip__caret={true} />
+      id="{tooltipId}"
+      data-floating-menu-direction="{direction}"
+      class:bx--tooltip="{true}"
+      class:bx--tooltip--shown="{open}"
+      on:blur="{closeMenu}">
+      <span class:bx--tooltip__caret="{true}"></span>
       <slot />
     </div>
   {/if}

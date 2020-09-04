@@ -76,22 +76,22 @@
   <h6>Responsive Grid</h6>
   <Grid>
     <Row>
-      <Column sm={1} md={4} lg={8}>
+      <Column sm="{1}" md="{4}" lg="{8}">
         <div class="outside">
           <div class="inside">sm: 1/4, md: 1/2, lg: 2/3</div>
         </div>
       </Column>
-      <Column sm={1} md={2} lg={2}>
+      <Column sm="{1}" md="{2}" lg="{2}">
         <div class="outside">
           <div class="inside">sm: 1/4, md: 1/4, lg: 1/6</div>
         </div>
       </Column>
-      <Column sm={1} md={1} lg={1}>
+      <Column sm="{1}" md="{1}" lg="{1}">
         <div class="outside">
           <div class="inside">sm: 1/4, md: 1/8, lg: 1/12</div>
         </div>
       </Column>
-      <Column sm={1} md={1} lg={1}>
+      <Column sm="{1}" md="{1}" lg="{1}">
         <div class="outside">
           <div class="inside">sm: 1/4, md: 1/8, lg: 1/12</div>
         </div>
@@ -102,22 +102,22 @@
   <h6>Columns with Offset</h6>
   <Grid>
     <Row>
-      <Column sm={{ span: 1, offset: 3 }}>
+      <Column sm="{{ span: 1, offset: 3 }}">
         <div class="outside">
           <div class="inside">Small Screen Offset 3</div>
         </div>
       </Column>
-      <Column sm={{ span: 2, offset: 2 }}>
+      <Column sm="{{ span: 2, offset: 2 }}">
         <div class="outside">
           <div class="inside">Small Screen Offset 2</div>
         </div>
       </Column>
-      <Column sm={{ span: 3, offset: 1 }}>
+      <Column sm="{{ span: 3, offset: 1 }}">
         <div class="outside">
           <div class="inside">Small Screen Offset 1</div>
         </div>
       </Column>
-      <Column sm={{ span: 4, offset: 0 }}>
+      <Column sm="{{ span: 4, offset: 0 }}">
         <div class="outside">
           <div class="inside">Small Screen Offset 0</div>
         </div>

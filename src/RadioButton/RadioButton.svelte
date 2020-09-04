@@ -69,26 +69,26 @@
 </script>
 
 <div
-  class:bx--radio-button-wrapper={true}
-  class:bx--radio-button-wrapper--label-left={labelPosition === 'left'}
+  class:bx--radio-button-wrapper="{true}"
+  class:bx--radio-button-wrapper--label-left="{labelPosition === 'left'}"
   {...$$restProps}>
   <input
-    bind:this={ref}
+    bind:this="{ref}"
     type="radio"
-    {id}
-    {name}
-    {checked}
-    {disabled}
-    {value}
-    class:bx--radio-button={true}
+    id="{id}"
+    name="{name}"
+    checked="{checked}"
+    disabled="{disabled}"
+    value="{value}"
+    class:bx--radio-button="{true}"
     on:change
-    on:change={() => {
+    on:change="{() => {
       if (ctx) {
         ctx.update(value);
       }
-    }} />
-  <label class:bx--radio-button__label={true} for={id}>
-    <span class:bx--radio-button__appearance={true} />
-    <span class:bx--visually-hidden={hideLabel}>{labelText}</span>
+    }}" />
+  <label class:bx--radio-button__label="{true}" for="{id}">
+    <span class:bx--radio-button__appearance="{true}"></span>
+    <span class:bx--visually-hidden="{hideLabel}">{labelText}</span>
   </label>
 </div>

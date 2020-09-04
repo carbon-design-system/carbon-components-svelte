@@ -58,8 +58,8 @@
 
 <div
   role="tablist"
-  class:bx--content-switcher={true}
-  class:bx--content-switcher--light={light}
+  class:bx--content-switcher="{true}"
+  class:bx--content-switcher--light="{light}"
   {...$$restProps}
   on:click
   on:mouseover

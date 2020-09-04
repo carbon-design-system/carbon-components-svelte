@@ -28,7 +28,7 @@
 
 <Carbon.Row>
   <Carbon.Column>
-    <Carbon.ToggleSmall bind:toggled={skeleton} labelText="Skeleton state" />
+    <Carbon.ToggleSmall bind:toggled="{skeleton}" labelText="Skeleton state" />
   </Carbon.Column>
 </Carbon.Row>
 
@@ -36,8 +36,11 @@
   <Carbon.Row class="scope">
     <Carbon.Column noGutter>
       <TileCard title="Accordion">
-        <Carbon.Accordion count={3} {skeleton} open={accordionItemOpen}>
-          <Carbon.AccordionItem title="Title 1" bind:open={accordionItemOpen}>
+        <Carbon.Accordion
+          count="{3}"
+          skeleton="{skeleton}"
+          open="{accordionItemOpen}">
+          <Carbon.AccordionItem title="Title 1" bind:open="{accordionItemOpen}">
             Content 1
           </Carbon.AccordionItem>
           <Carbon.AccordionItem title="Title 2">Content 2</Carbon.AccordionItem>
@@ -47,7 +50,7 @@
     </Carbon.Column>
     <Carbon.Column noGutter>
       <TileCard title="Breadcrumb">
-        <Carbon.Breadcrumb {skeleton}>
+        <Carbon.Breadcrumb skeleton="{skeleton}">
           <Carbon.BreadcrumbItem href="/">Breadcrumb 1</Carbon.BreadcrumbItem>
           <Carbon.BreadcrumbItem href="/">Breadcrumb 2</Carbon.BreadcrumbItem>
           <Carbon.BreadcrumbItem href="/">Breadcrumb 3</Carbon.BreadcrumbItem>
@@ -59,27 +62,33 @@
   <Carbon.Row class="scope">
     <Carbon.Column noGutter>
       <TileCard title="Primary button">
-        <Carbon.Button {skeleton}>Primary</Carbon.Button>
+        <Carbon.Button skeleton="{skeleton}">Primary</Carbon.Button>
       </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
       <TileCard title="Secondary button">
-        <Carbon.Button kind="secondary" {skeleton}>Secondary</Carbon.Button>
+        <Carbon.Button kind="secondary" skeleton="{skeleton}">
+          Secondary
+        </Carbon.Button>
       </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
       <TileCard title="Tertiary button">
-        <Carbon.Button kind="tertiary" {skeleton}>Tertiary</Carbon.Button>
+        <Carbon.Button kind="tertiary" skeleton="{skeleton}">
+          Tertiary
+        </Carbon.Button>
       </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
       <TileCard title="Ghost button">
-        <Carbon.Button kind="ghost" {skeleton}>Ghost</Carbon.Button>
+        <Carbon.Button kind="ghost" skeleton="{skeleton}">Ghost</Carbon.Button>
       </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
       <TileCard title="Danger button">
-        <Carbon.Button kind="danger" {skeleton}>Danger</Carbon.Button>
+        <Carbon.Button kind="danger" skeleton="{skeleton}">
+          Danger
+        </Carbon.Button>
       </TileCard>
     </Carbon.Column>
   </Carbon.Row>
@@ -87,50 +96,52 @@
   <Carbon.Row class="scope">
     <Carbon.Column noGutter>
       <TileCard title="Primary button with icon">
-        <Carbon.Button icon={Add16} {skeleton}>With icon</Carbon.Button>
+        <Carbon.Button icon="{Add16}" skeleton="{skeleton}">
+          With icon
+        </Carbon.Button>
       </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
       <TileCard title="Icon-only buttons">
         <Carbon.Button
-          icon={Add16}
+          icon="{Add16}"
           hasIconOnly
           iconDescription="Primary"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          {skeleton} />
+          skeleton="{skeleton}" />
         <Carbon.Button
-          icon={Add16}
+          icon="{Add16}"
           hasIconOnly
           kind="secondary"
           iconDescription="Secondary"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          {skeleton} />
+          skeleton="{skeleton}" />
         <Carbon.Button
-          icon={Add16}
+          icon="{Add16}"
           hasIconOnly
           kind="tertiary"
           iconDescription="Tertiary"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          {skeleton} />
+          skeleton="{skeleton}" />
         <Carbon.Button
-          icon={Add16}
+          icon="{Add16}"
           hasIconOnly
           kind="ghost"
           iconDescription="Ghost"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          {skeleton} />
+          skeleton="{skeleton}" />
         <Carbon.Button
-          icon={Add16}
+          icon="{Add16}"
           hasIconOnly
           kind="danger"
           iconDescription="Danger"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          {skeleton} />
+          skeleton="{skeleton}" />
       </TileCard>
     </Carbon.Column>
   </Carbon.Row>
@@ -140,9 +151,9 @@
       <TileCard title="Checkbox">
         <fieldset class="bx--fieldset">
           <legend class="bx--label">Checkbox heading</legend>
-          <Carbon.Checkbox {skeleton} labelText="Checkbox label" />
-          <Carbon.Checkbox {skeleton} labelText="Checkbox label" />
-          <Carbon.Checkbox {skeleton} labelText="Checkbox label" />
+          <Carbon.Checkbox skeleton="{skeleton}" labelText="Checkbox label" />
+          <Carbon.Checkbox skeleton="{skeleton}" labelText="Checkbox label" />
+          <Carbon.Checkbox skeleton="{skeleton}" labelText="Checkbox label" />
         </fieldset>
       </TileCard>
     </Carbon.Column>
@@ -152,11 +163,11 @@
           <legend class="bx--label">Checkbox heading</legend>
           <Carbon.Checkbox
             indeterminate
-            {skeleton}
+            skeleton="{skeleton}"
             labelText="Checkbox label" />
           <Carbon.Checkbox
             indeterminate
-            {skeleton}
+            skeleton="{skeleton}"
             labelText="Checkbox label" />
         </fieldset>
       </TileCard>
@@ -166,21 +177,21 @@
   <Carbon.Row class="scope">
     <Carbon.Column noGutter>
       <TileCard title="Inline Code Snippet">
-        <Carbon.CodeSnippet type="inline" light {skeleton}>
+        <Carbon.CodeSnippet type="inline" light skeleton="{skeleton}">
           {`node -v`}
         </Carbon.CodeSnippet>
       </TileCard>
     </Carbon.Column>
     <Carbon.Column noGutter>
       <TileCard title="Single-line Code Snippet">
-        <Carbon.CodeSnippet type="single" light {skeleton}>
+        <Carbon.CodeSnippet type="single" light skeleton="{skeleton}">
           {`tsc -c tsconfig.json`}
         </Carbon.CodeSnippet>
       </TileCard>
     </Carbon.Column>
-    <Carbon.Column lg={8} noGutter>
+    <Carbon.Column lg="{8}" noGutter>
       <TileCard title="Multi-line Code Snippet">
-        <Carbon.CodeSnippet type="multi" light {skeleton}>
+        <Carbon.CodeSnippet type="multi" light skeleton="{skeleton}">
           {`* {
 margin: 0;
 padding: 0;

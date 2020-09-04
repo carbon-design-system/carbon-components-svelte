@@ -13,9 +13,9 @@
 </script>
 
 <div
-  class:bx--structured-list-th={head}
-  class:bx--structured-list-td={!head}
-  class:bx--structured-list-content--nowrap={noWrap}
+  class:bx--structured-list-th="{head}"
+  class:bx--structured-list-td="{!head}"
+  class:bx--structured-list-content--nowrap="{noWrap}"
   {...$$restProps}
   on:click
   on:mouseover

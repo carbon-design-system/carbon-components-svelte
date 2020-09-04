@@ -47,16 +47,16 @@
 </script>
 
 <input
-  bind:this={ref}
+  bind:this="{ref}"
   type="radio"
   tabindex="-1"
-  {checked}
-  {id}
-  {name}
-  {title}
-  {value}
-  class:bx--structured-list-input={true}
+  checked="{checked}"
+  id="{id}"
+  name="{name}"
+  title="{title}"
+  value="{value}"
+  class:bx--structured-list-input="{true}"
   {...$$restProps}
-  on:change={() => {
+  on:change="{() => {
     update(value);
-  }} />
+  }}" />

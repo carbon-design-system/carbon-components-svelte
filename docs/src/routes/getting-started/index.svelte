@@ -27,10 +27,11 @@
         <div slot="content" class="content">
           <TabContent>
             <CopyableCodeSnippet
-              code={`yarn add -D carbon-components-svelte`} />
+              code="{`yarn add -D carbon-components-svelte`}" />
           </TabContent>
           <TabContent>
-            <CopyableCodeSnippet code={`npm -i -D carbon-components-svelte`} />
+            <CopyableCodeSnippet
+              code="{`npm -i -D carbon-components-svelte`}" />
           </TabContent>
         </div>
       </Tabs>

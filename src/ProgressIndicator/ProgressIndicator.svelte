@@ -41,8 +41,8 @@
 </script>
 
 <ul
-  class:bx--progress={true}
-  class:bx--progress--vertical={vertical}
+  class:bx--progress="{true}"
+  class:bx--progress--vertical="{vertical}"
   {...$$restProps}
   on:click
   on:mouseover

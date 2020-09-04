@@ -25,27 +25,27 @@
   <PasswordInput
     {...$$props}
     aria-level=""
-    on:keydown={(e) => {
+    on:keydown="{(e) => {
       console.log('on:keydown', e);
-    }} />
+    }}" />
 {:else if story === 'controlled'}
   <PasswordInput
     {...$$props}
-    {type}
-    on:keydown={(e) => {
+    type="{type}"
+    on:keydown="{(e) => {
       console.log('on:keydown', e);
-    }} />
+    }}" />
   <div>
     <button
-      on:click={() => {
+      on:click="{() => {
         type = 'text';
-      }}>
+      }}">
       Show password
     </button>
     <button
-      on:click={() => {
+      on:click="{() => {
         type = 'password';
-      }}>
+      }}">
       Hide password
     </button>
   </div>
@@ -54,10 +54,10 @@
     bind:ref
     {...$$props}
     bind:value
-    on:keydown={(e) => {
+    on:keydown="{(e) => {
       console.log('on:keydown', e);
-    }}
-    on:change={() => {
+    }}"
+    on:change="{() => {
       console.log('change');
-    }} />
+    }}" />
 {/if}

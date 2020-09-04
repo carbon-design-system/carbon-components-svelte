@@ -36,9 +36,9 @@
 
 <section
   aria-label="Structured list section"
-  class:bx--structured-list={true}
-  class:bx--structured-list--border={border}
-  class:bx--structured-list--selection={selection}
+  class:bx--structured-list="{true}"
+  class:bx--structured-list--border="{border}"
+  class:bx--structured-list--selection="{selection}"
   {...$$restProps}
   on:click
   on:mouseover

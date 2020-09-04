@@ -25,10 +25,10 @@
 
 {#if status === 'uploading'}
   <Loading
-    description={iconDescription}
+    description="{iconDescription}"
     {...$$restProps}
     small
-    withOverlay={false} />
+    withOverlay="{false}" />
 {/if}
 
 {#if status === 'edit'}
@@ -36,8 +36,8 @@
     <WarningFilled16 class="bx--file-invalid" />
   {/if}
   <Close16
-    aria-label={iconDescription}
-    title={iconDescription}
+    aria-label="{iconDescription}"
+    title="{iconDescription}"
     class="bx--file-close"
     {...$$restProps}
     on:click
@@ -46,8 +46,8 @@
 
 {#if status === 'complete'}
   <CheckmarkFilled16
-    aria-label={iconDescription}
-    title={iconDescription}
+    aria-label="{iconDescription}"
+    title="{iconDescription}"
     class="bx--file-complete"
     {...$$restProps} />
 {/if}

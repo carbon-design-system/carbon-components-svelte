@@ -15,9 +15,9 @@
 </script>
 
 <Form
-  on:submit={(event) => {
+  on:submit="{(event) => {
     console.log('on:submit', event);
-  }}>
+  }}">
   <FormGroup {...$$props}>
     <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
     <Checkbox id="checkbox-1" labelText="Checkbox Label" />
@@ -26,10 +26,10 @@
   <NumberInput
     id="number-input-1"
     label="Number Input"
-    min={0}
-    max={100}
-    value={50}
-    step={10} />
+    min="{0}"
+    max="{100}"
+    value="{50}"
+    step="{10}" />
   <FormGroup legendText="Toggle heading">
     <Toggle id="toggle-1" />
     <Toggle id="toggle-2" disabled />
@@ -93,7 +93,7 @@
     id="text-area"
     labelText="Text Area label"
     placeholder="Placeholder text"
-    rows={4}
-    cols={50} />
+    rows="{4}"
+    cols="{50}" />
   <Button type="submit">Submit</Button>
 </Form>

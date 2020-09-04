@@ -20,15 +20,15 @@
 <button
   type="button"
   title="Open menu"
-  aria-label={ariaLabel}
-  class:bx--header__action={true}
-  class:bx--header__menu-trigger={true}
-  class:bx--header__menu-toggle={true}
+  aria-label="{ariaLabel}"
+  class:bx--header__action="{true}"
+  class:bx--header__menu-trigger="{true}"
+  class:bx--header__menu-toggle="{true}"
   {...$$restProps}
-  transition:fly={{ x: -200, delay: 50, duration: 250 }}
+  transition:fly="{{ x: -200, delay: 50, duration: 250 }}"
   on:click
-  on:click={() => (isOpen = !isOpen)}>
+  on:click="{() => (isOpen = !isOpen)}">
   <Icon
-    title={isOpen ? 'Close' : 'Open Menu'}
-    render={isOpen ? Close20 : Menu20} />
+    title="{isOpen ? 'Close' : 'Open Menu'}"
+    render="{isOpen ? Close20 : Menu20}" />
 </button>

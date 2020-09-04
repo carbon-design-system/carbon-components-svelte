@@ -16,21 +16,21 @@
 {#if story === undefined}
   <ComposedModal
     {...$$props.composedModal}
-    on:click={(e) => {
+    on:click="{(e) => {
       console.log(e.target);
-    }}>
+    }}">
     <ModalHeader {...$$props.modalHeader} />
     <ModalBody
       {...$$props.modalBody}
-      aria-label={modalBody.hasScrollingContent ? 'Modal content' : undefined}>
+      aria-label="{modalBody.hasScrollingContent ? 'Modal content' : undefined}">
       <div>
         <PasswordInput bind:type placeholder="Password Input" aria-level="" />
         <Button
           kind="ghost"
           size="field"
-          on:click={() => {
+          on:click="{() => {
             type = type === 'password' ? 'text' : 'password';
-          }}>
+          }}">
           Programmatically toggle password
         </Button>
       </div>
@@ -58,7 +58,7 @@
     </ModalHeader>
     <ModalBody
       {...$$props.modalBody}
-      aria-label={modalBody.hasScrollingContent ? 'Modal content' : undefined}>
+      aria-label="{modalBody.hasScrollingContent ? 'Modal content' : undefined}">
       <p>
         Please see ModalWrapper for more examples and demo of the functionality.
       </p>
@@ -74,7 +74,7 @@
     </ModalBody>
     <ModalFooter>
       <Button kind="secondary">Cancel</Button>
-      <Button kind={$$props.composedModal.danger ? 'danger' : 'primary'}>
+      <Button kind="{$$props.composedModal.danger ? 'danger' : 'primary'}">
         Primary
       </Button>
     </ModalFooter>
@@ -85,8 +85,8 @@
   <ComposedModal
     {...$$props.composedModal}
     open
-    on:close={() => {}}
-    on:submit={() => {}}>
+    on:close="{() => {}}"
+    on:submit="{() => {}}">
     <ModalHeader
       {...$$props.modalHeader}
       title="Passive modal title as the message. Should be direct and 3 lines or
@@ -99,20 +99,20 @@
 {#if story === 'trigger'}
   <div>
     <Button
-      on:click={() => {
+      on:click="{() => {
         open = true;
-      }}>
+      }}">
       Launch composed modal
     </Button>
   </div>
   <ComposedModal
     {...$$props.composedModal}
-    {open}
-    on:close={() => (open = false)}>
+    open="{open}"
+    on:close="{() => (open = false)}">
     <ModalHeader {...$$props.modalHeader} />
     <ModalBody
       {...$$props.modalBody}
-      aria-label={modalBody.hasScrollingContent ? 'Modal content' : undefined}>
+      aria-label="{modalBody.hasScrollingContent ? 'Modal content' : undefined}">
       <p>
         Please see ModalWrapper for more examples and demo of the functionality.
       </p>

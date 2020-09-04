@@ -33,9 +33,9 @@
 </script>
 
 <div
-  class:bx--list-box__menu-icon={true}
-  class:bx--list-box__menu-icon--open={open}
+  class:bx--list-box__menu-icon="{true}"
+  class:bx--list-box__menu-icon--open="{open}"
   {...$$restProps}
   on:click|preventDefault|stopPropagation>
-  <ChevronDown16 aria-label={description} title={description} />
+  <ChevronDown16 aria-label="{description}" title="{description}" />
 </div>

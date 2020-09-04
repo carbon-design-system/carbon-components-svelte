@@ -160,84 +160,87 @@
 </script>
 
 <div
-  class:bx--form-item={true}
+  class:bx--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave>
-  <label for={id} class:bx--label={true} class:bx--label--disabled={disabled}>
+  <label
+    for="{id}"
+    class:bx--label="{true}"
+    class:bx--label--disabled="{disabled}">
     {labelText}
   </label>
-  <div class:bx--slider-container={true}>
-    <span class:bx--slider__range-label={true}>{minLabel || min}</span>
+  <div class:bx--slider-container="{true}">
+    <span class:bx--slider__range-label="{true}">{minLabel || min}</span>
     <div
-      bind:this={ref}
+      bind:this="{ref}"
       role="presentation"
       tabindex="-1"
-      class:bx--slider={true}
-      class:bx--slider--disabled={disabled}
-      on:click={startDragging}
-      on:mousemove={() => {
+      class:bx--slider="{true}"
+      class:bx--slider--disabled="{disabled}"
+      on:click="{startDragging}"
+      on:mousemove="{() => {
         if (holding) {
           startDragging();
         }
-      }}
-      on:touchmove={() => {
+      }}"
+      on:touchmove="{() => {
         if (holding) {
           startDragging();
         }
-      }}
-      on:mouseup={stopHolding}
-      on:touchup={stopHolding}
-      on:touchend={stopHolding}
-      on:touchcancel={stopHolding}>
+      }}"
+      on:mouseup="{stopHolding}"
+      on:touchup="{stopHolding}"
+      on:touchend="{stopHolding}"
+      on:touchcancel="{stopHolding}">
       <div
         role="slider"
         tabindex="0"
-        class:bx--slider__thumb={true}
+        class:bx--slider__thumb="{true}"
         style="left: {left}%"
-        aria-valuemax={max}
-        aria-valuemin={min}
-        aria-valuenow={value}
-        on:mousedown={startHolding}
-        on:touchstart={startHolding}
-        on:keydown={({ shiftKey, key }) => {
+        aria-valuemax="{max}"
+        aria-valuemin="{min}"
+        aria-valuenow="{value}"
+        on:mousedown="{startHolding}"
+        on:touchstart="{startHolding}"
+        on:keydown="{({ shiftKey, key }) => {
           const keys = { ArrowDown: -1, ArrowLeft: -1, ArrowRight: 1, ArrowUp: 1 };
           if (keys[key]) {
             value += step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
           }
-        }}
-        {id} />
-      <div bind:this={trackRef} class:bx--slider__track={true} />
+        }}"
+        id="{id}"></div>
+      <div bind:this="{trackRef}" class:bx--slider__track="{true}"></div>
       <div
-        class:bx--slider__filled-track={true}
-        style="transform: translate(0, -50%) scaleX({left / 100})" />
+        class:bx--slider__filled-track="{true}"
+        style="transform: translate(0, -50%) scaleX({left / 100})"></div>
       <input
         type="hidden"
-        class:bx--slider__input={true}
-        {name}
-        {value}
-        {required}
-        {min}
-        {max}
-        {step} />
+        class:bx--slider__input="{true}"
+        name="{name}"
+        value="{value}"
+        required="{required}"
+        min="{min}"
+        max="{max}"
+        step="{step}" />
     </div>
-    <span class:bx--slider__range-label={true}>{maxLabel || max}</span>
+    <span class:bx--slider__range-label="{true}">{maxLabel || max}</span>
     {#if !hideTextInput}
       <input
-        type={inputType}
+        type="{inputType}"
         id="input-{id}"
-        aria-label={$$props['aria-label'] || 'Slider number input'}
-        class:bx--text-input={true}
-        class:bx--slider-text-input={true}
-        class:bx--text-input--light={light}
-        class:bx--text-input--invalid={invalid}
-        on:change={({ target }) => {
+        aria-label="{$$props['aria-label'] || 'Slider number input'}"
+        class:bx--text-input="{true}"
+        class:bx--slider-text-input="{true}"
+        class:bx--text-input--light="{light}"
+        class:bx--text-input--invalid="{invalid}"
+        on:change="{({ target }) => {
           value = Number(target.value);
-        }}
-        {disabled}
-        {value} />
+        }}"
+        disabled="{disabled}"
+        value="{value}" />
     {/if}
   </div>
 </div>

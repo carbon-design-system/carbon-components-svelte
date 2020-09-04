@@ -20,10 +20,10 @@
 
 {#if disabled}
   <p
-    bind:this={ref}
-    class:bx--link={true}
-    class:bx--link--disabled={disabled}
-    class:bx--link--inline={inline}
+    bind:this="{ref}"
+    class:bx--link="{true}"
+    class:bx--link--disabled="{disabled}"
+    class:bx--link--inline="{inline}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -34,10 +34,10 @@
 {:else}
   <!-- svelte-ignore a11y-missing-attribute -->
   <a
-    bind:this={ref}
-    class:bx--link={true}
-    class:bx--link--disabled={disabled}
-    class:bx--link--inline={inline}
+    bind:this="{ref}"
+    class:bx--link="{true}"
+    class:bx--link--disabled="{disabled}"
+    class:bx--link--inline="{inline}"
     {...$$restProps}
     on:click
     on:mouseover

@@ -41,18 +41,18 @@
   const { closeModal, submit } = getContext("ComposedModal");
 </script>
 
-<div class:bx--modal-footer={true} {...$$restProps}>
+<div class:bx--modal-footer="{true}" {...$$restProps}>
   {#if secondaryButtonText}
-    <Button kind="secondary" class={secondaryClass} on:click={closeModal}>
+    <Button kind="secondary" class="{secondaryClass}" on:click="{closeModal}">
       {secondaryButtonText}
     </Button>
   {/if}
   {#if primaryButtonText}
     <Button
-      kind={danger ? 'danger' : 'primary'}
-      disabled={primaryButtonDisabled}
-      class={primaryClass}
-      on:click={submit}>
+      kind="{danger ? 'danger' : 'primary'}"
+      disabled="{primaryButtonDisabled}"
+      class="{primaryClass}"
+      on:click="{submit}">
       {primaryButtonText}
     </Button>
   {/if}
