@@ -193,12 +193,17 @@
         <label
           for="{id}"
           class:bx--label="{true}"
+          class:bx--label--disabled="{disabled}"
           class:bx--visually-hidden="{hideLabel}">
           <slot name="label">{label}</slot>
         </label>
       {/if}
       {#if helperText}
-        <div class:bx--form__helper-text="{true}">{helperText}</div>
+        <div
+          class:bx--form__helper-text="{true}"
+          class:bx--form__helper-text--disabled="{disabled}">
+          {helperText}
+        </div>
       {/if}
       <div class:bx--number__input-wrapper="{true}">
         <button
@@ -252,12 +257,17 @@
         <label
           for="{id}"
           class:bx--label="{true}"
+          class:bx--label--disabled="{disabled}"
           class:bx--visually-hidden="{hideLabel}">
           <slot name="label">{label}</slot>
         </label>
       {/if}
       {#if helperText}
-        <div class:bx--form__helper-text="{true}">{helperText}</div>
+        <div
+          class:bx--form__helper-text="{true}"
+          class:bx--form__helper-text--disabled="{disabled}">
+          {helperText}
+        </div>
       {/if}
       <div class:bx--number__input-wrapper="{true}">
         <input
