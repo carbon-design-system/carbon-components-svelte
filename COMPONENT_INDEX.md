@@ -1,6 +1,6 @@
 # Component Index
 
-> 143 components exported from carbon-components-svelte 0.9.6
+> 143 components exported from carbon-components-svelte 0.10.0
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -430,7 +430,9 @@ import { ButtonSet } from "carbon-components-svelte";
 
 ### Props
 
-No exported props.
+| Prop name | Type                 | Default value |
+| :-------- | :------------------- | :------------ |
+| stacked   | <code>boolean</code> | false         |
 
 ### Slots
 
@@ -4637,6 +4639,7 @@ import { TextInput } from "carbon-components-svelte";
 | invalid     | <code>boolean</code>                      | false         |
 | invalidText | <code>string</code>                       | ""            |
 | ref         | <code>null &#124; HTMLInputElement</code> | null          |
+| required    | <code>boolean</code>                      | false         |
 
 ### Slots
 

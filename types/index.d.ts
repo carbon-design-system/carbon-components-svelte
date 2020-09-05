@@ -1,4 +1,4 @@
-// Type definitions for carbon-components-svelte 0.9.6
+// Type definitions for carbon-components-svelte 0.10.0
 // Project: https://github.com/IBM/carbon-components-svelte
 
 export class CarbonSvelteComponent {
@@ -208,6 +208,14 @@ export class Button extends CarbonSvelteComponent {
 }
 
 export class ButtonSet extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to stack the buttons vertically
+     * @default false
+     */
+    stacked?: boolean;
+  };
+
   $$slot_def: { default: {} };
 }
 
@@ -4385,6 +4393,12 @@ export class TextInput extends CarbonSvelteComponent {
      * @default null
      */
     ref?: null | HTMLInputElement;
+
+    /**
+     * Set to `true` to mark the field as required
+     * @default false
+     */
+    required?: boolean;
   };
 }
 

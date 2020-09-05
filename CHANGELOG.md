@@ -9,6 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.10.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.10.0) - 2020-09-05
+
+**Features**
+
+- UI Shell: add Close/AppSwitcher as default icons for `HeaderAction` component (5f62cde)
+- ButtonSet: add `stacked` prop (c8e0a59)
+- Link: set `rel` attribute to "noopener noreferrer" if `target` is "_blank" (4b7d254)
+
+**Fixes**
+
+- TextInput: add missing `required` prop to input (PR #237), thanks [@kamil-murtaza](https://github.com/kamil-murtaza))
+- StructuredList: change element semantics from `section` to `div` to avoid accessibility error (117dbcf)
+- MultiSelect: add `light` variant to text input (6a955b1)
+- NumberInput: disable label, helper text if `disabled` is set to `true` (37c7f07)
+- Pagination: use singular page range text if `total` is 1 (3d64fb2)
+
+**Housekeeping**
+
+- add `.prettierrc` and enable `svelteStrictMode` (42b8159)
+- remove documentation of non-existent `small` Button prop (41a533d)
+- upgrade TypeScript to version >=4 (e7e67f3)
+- bump prettier, prettier-plugin-svelte (322b238)
+- bump rollup, rollup plugins (00b9068)
+- require node >=12 for development/CI (bf0f11a)
+
 ## [0.9.7](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.9.7) - 2020-08-23
 
 - Fix `InlineNotification` and `ToastNotification` timeout
