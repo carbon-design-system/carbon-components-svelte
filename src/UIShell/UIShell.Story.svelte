@@ -193,7 +193,6 @@
     <HeaderUtilities>
       <HeaderAction
         type="Switcher"
-        icon="{isOpen ? iAccount : iSwitcher}"
         bind:isOpen
         on:open="{() => {
           console.log('on:open');

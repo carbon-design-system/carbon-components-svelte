@@ -24,9 +24,11 @@
    */
   export let ref = null;
 
-  import { Icon } from "../../Icon";
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
+  import Close20 from "carbon-icons-svelte/lib/Close20";
+  import AppSwitcher20 from "carbon-icons-svelte/lib/AppSwitcher20";
+  import { Icon } from "../../Icon";
 
   const dispatch = createEventDispatcher();
 
@@ -70,7 +72,7 @@
       isOpen = !isOpen;
       dispatch(isOpen ? 'open' : 'close');
     }}">
-    <Icon {...icon} />
+    <Icon render="{isOpen ? Close20 : AppSwitcher20}" {...icon} />
     <slot name="text">
       {#if text}<span>{text}</span>{/if}
     </slot>
