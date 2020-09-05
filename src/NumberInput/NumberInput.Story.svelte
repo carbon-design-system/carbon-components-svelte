@@ -15,7 +15,7 @@
     id="number-input-id"
     name="number-input-id"
     bind:value
-    on:change={({ detail }) => {
+    on:change="{({ detail }) => {
       console.log('on:change', detail);
-    }} />
+    }}" />
 {/if}

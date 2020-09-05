@@ -27,13 +27,13 @@
       {...$$props}
       bind:ref
       bind:open
-      on:open={() => {
+      on:open="{() => {
         console.log('on:open');
-      }}
-      on:close={() => {
+      }}"
+      on:close="{() => {
         console.log('on:close');
-      }}>
-      <div slot="icon" class="custom-icon-class" />
+      }}">
+      <div slot="icon" class="custom-icon-class"></div>
       <p>
         This is some tooltip text. This box shows the maximum amount of text
         that should appear inside. If more room is needed please use a modal
@@ -47,16 +47,16 @@
   {:else if story === 'uncontrolled'}
     <Button
       style="padding: 15px 20px; margin: 4px 20px"
-      on:click={() => {
+      on:click="{() => {
         open = false;
-      }}>
+      }}">
       Hide
     </Button>
     <Button
       style="padding: 15px 20px; margin: 4px 20px"
-      on:click={() => {
+      on:click="{() => {
         open = true;
-      }}>
+      }}">
       Show
     </Button>
     <div style="padding: 15px 20px; margin: 4px 20px">
@@ -70,13 +70,13 @@
       {...$$props}
       bind:ref
       bind:open
-      on:open={() => {
+      on:open="{() => {
         console.log('on:open');
-      }}
-      on:close={() => {
+      }}"
+      on:close="{() => {
         console.log('on:close');
-      }}
-      icon={story === 'custom icon only' ? OverflowMenuVertical16 : undefined}>
+      }}"
+      icon="{story === 'custom icon only' ? OverflowMenuVertical16 : undefined}">
       <p>
         This is some tooltip text. This box shows the maximum amount of text
         that should appear inside. If more room is needed please use a modal

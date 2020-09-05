@@ -11,11 +11,11 @@
 
 {#if story === 'skeleton'}
   <div style="width: 500px">
-    <AccordionSkeleton {open} {count} />
+    <AccordionSkeleton open="{open}" count="{count}" />
   </div>
 {:else}
   <Accordion {...$$restProps}>
-    <AccordionItem {title} {open}>
+    <AccordionItem title="{title}" open="{open}">
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
@@ -41,9 +41,7 @@
     </AccordionItem>
     <AccordionItem>
       <div slot="title">
-        Section 4 title (
-        <em>the title can be a node</em>
-        )
+        Section 4 title ( <em>the title can be a node</em> )
       </div>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

@@ -17,22 +17,22 @@
       {...$$props.datePicker}
       bind:value
       datePickerType="single"
-      on:change={({ detail }) => {
+      on:change="{({ detail }) => {
         console.log('change', detail);
-      }}>
+      }}">
       <DatePickerInput
         {...$$props.datePickerInput}
-        on:close={() => {
+        on:close="{() => {
           console.log('on:close');
-        }}
-        on:input={() => {
+        }}"
+        on:input="{() => {
           console.log('on:input');
-        }} />
+        }}" />
     </DatePicker>
     <button
-      on:click|preventDefault={() => {
+      on:click|preventDefault="{() => {
         value = '12/12/2020';
-      }}
+      }}"
       style="margin-top: 1rem">
       Set date to 12/12/2020
     </button>
@@ -53,9 +53,9 @@
     {...$$props.datePicker}
     bind:datePickerType
     bind:value
-    on:change={({ detail }) => {
+    on:change="{({ detail }) => {
       console.log('on:change', detail);
-    }}>
+    }}">
     <DatePickerInput {...$$props.datePickerInput} />
   </DatePicker>
 {/if}

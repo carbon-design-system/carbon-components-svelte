@@ -14,21 +14,21 @@
 
 <!-- svelte-ignore a11y-missing-attribute -->
 <a
-  class:bx--tile={true}
-  class:bx--tile--clickable={true}
-  class:bx--tile--is-clicked={clicked}
-  class:bx--tile--light={light}
+  class:bx--tile="{true}"
+  class:bx--tile--clickable="{true}"
+  class:bx--tile--is-clicked="{clicked}"
+  class:bx--tile--light="{light}"
   {...$$restProps}
   on:click
-  on:click={() => {
+  on:click="{() => {
     clicked = !clicked;
-  }}
+  }}"
   on:keydown
-  on:keydown={({ key }) => {
+  on:keydown="{({ key }) => {
     if (key === ' ' || key === 'Enter') {
       clicked = !clicked;
     }
-  }}
+  }}"
   on:mouseover
   on:mouseenter
   on:mouseleave>

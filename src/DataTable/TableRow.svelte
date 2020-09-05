@@ -9,7 +9,7 @@
 </script>
 
 <tr
-  class:bx--data-table--selected={isSelected}
+  class:bx--data-table--selected="{isSelected}"
   {...$$restProps}
   on:click
   on:mouseover

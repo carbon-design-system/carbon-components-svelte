@@ -115,14 +115,18 @@
   };
 </script>
 
-<slot {props}>
-  <TableContainer {title} {description} {...$$restProps}>
-    <Table {zebra} {size} {stickyHeader} {sortable}>
+<slot props="{props}">
+  <TableContainer title="{title}" description="{description}" {...$$restProps}>
+    <Table
+      zebra="{zebra}"
+      size="{size}"
+      stickyHeader="{stickyHeader}"
+      sortable="{sortable}">
       <TableHead>
         <TableRow>
           {#each headers as header, i (header.key)}
             <TableHeader
-              on:click={() => {
+              on:click="{() => {
                 dispatch('click', { header });
                 let active = header.key === $sortHeader.key;
                 let currentSortDirection = active ? $sortHeader.sortDirection : 'none';
@@ -133,7 +137,7 @@
                   key: header.key,
                   sortDirection,
                 });
-              }}>
+              }}">
               {header.value}
             </TableHeader>
           {/each}
@@ -142,16 +146,16 @@
       <TableBody>
         {#each sorting ? sortedRows : rows as row, i (row.id)}
           <TableRow
-            on:click={() => {
+            on:click="{() => {
               dispatch('click', { row });
               dispatch('click:row', row);
-            }}>
+            }}">
             {#each row.cells as cell, j (cell.key)}
               <TableCell
-                on:click={() => {
+                on:click="{() => {
                   dispatch('click', { row, cell });
                   dispatch('click:cell', cell);
-                }}>
+                }}">
                 {cell.value}
               </TableCell>
             {/each}

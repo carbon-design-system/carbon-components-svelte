@@ -31,10 +31,10 @@
 </script>
 
 <p>
-  <code>items</code>
-  must be an array of objects; mandatory fields are `id` and `text`.
+  <code>items</code> must be an array of objects; mandatory fields are `id` and `text`.
 </p>
-<pre style="margin-top: 1rem;">
+<pre
+  style="margin-top: 1rem;">
   <code>{'items = Array<{ id: string; text: string; }>'}</code>
 </pre>
 <div style="margin-top: 2rem;">
@@ -44,9 +44,9 @@
     style="margin-top: 1rem;" />
   <Button
     size="small"
-    on:click={() => {
+    on:click="{() => {
       selectedIndex = 1;
-    }}
+    }}"
     style="margin-top: 1rem;">
     Set item to "Option 2"
   </Button>
@@ -58,12 +58,12 @@
     bind:ref
     bind:value
     bind:selectedIndex
-    on:select={({ detail }) => {
+    on:select="{({ detail }) => {
       console.log('on:select', detail);
-    }}
-    on:clear={() => {
+    }}"
+    on:clear="{() => {
       console.log('on:clear');
-    }}
-    {items}
-    {shouldFilterItem} />
+    }}"
+    items="{items}"
+    shouldFilterItem="{shouldFilterItem}" />
 </div>

@@ -85,80 +85,83 @@
     .slice(startOffset + front, (back + 1) * -1);
 </script>
 
-<nav aria-label="pagination" class:bx--pagination-nav={true} {...$$restProps}>
-  <ul class:bx--pagination-nav__list={true}>
-    <li class:bx--pagination-nav__list-item={true}>
+<nav aria-label="pagination" class:bx--pagination-nav="{true}" {...$$restProps}>
+  <ul class:bx--pagination-nav__list="{true}">
+    <li class:bx--pagination-nav__list-item="{true}">
       <Button
         hasIconOnly
         kind="ghost"
         tooltipAlignment="center"
         tooltipPosition="bottom"
-        iconDescription={backwardText}
-        disabled={!loop && page === 0}
-        icon={CaretLeft16}
-        on:click={() => {
+        iconDescription="{backwardText}"
+        disabled="{!loop && page === 0}"
+        icon="{CaretLeft16}"
+        on:click="{() => {
           if (page - 1 < 0) {
             if (loop) page = total - 1;
           } else {
             page--;
           }
           dispatch('click:button--previous', { page });
-        }} />
+        }}" />
     </li>
     {#if fit > MIN || (fit <= MIN && page <= 1)}
-      <PaginationItem page={1} active={page === 0} on:click={() => (page = 0)}>
+      <PaginationItem
+        page="{1}"
+        active="{page === 0}"
+        on:click="{() => (page = 0)}">
         {page === 0 ? 'Active, Page' : 'Page'}
       </PaginationItem>
     {/if}
     <PaginationOverflow
-      fromIndex={startOffset}
-      count={front}
-      on:select={({ detail }) => (page = detail.index)} />
+      fromIndex="{startOffset}"
+      count="{front}"
+      on:select="{({ detail }) => (page = detail.index)}" />
     {#each items as item}
       <PaginationItem
-        page={item + 1}
-        active={page === item}
-        on:click={() => (page = item)}>
+        page="{item + 1}"
+        active="{page === item}"
+        on:click="{() => (page = item)}">
         {page === item ? 'Active, Page' : 'Page'}
       </PaginationItem>
     {/each}
     <PaginationOverflow
-      fromIndex={total - back - 1}
-      count={back}
-      on:select={({ detail }) => {
+      fromIndex="{total - back - 1}"
+      count="{back}"
+      on:select="{({ detail }) => {
         page = detail.index;
-      }} />
+      }}" />
     {#if total > 1}
       <PaginationItem
-        page={total}
-        active={page === total - 1}
-        on:click={() => (page = total - 1)}>
+        page="{total}"
+        active="{page === total - 1}"
+        on:click="{() => (page = total - 1)}">
         {page === total - 1 ? 'Active, Page' : 'Page'}
       </PaginationItem>
     {/if}
-    <li class:bx--pagination-nav__list-item={true}>
+    <li class:bx--pagination-nav__list-item="{true}">
       <Button
         hasIconOnly
         kind="ghost"
         tooltipAlignment="center"
         tooltipPosition="bottom"
-        iconDescription={forwardText}
-        disabled={!loop && page === total - 1}
-        icon={CaretRight16}
-        on:click={() => {
+        iconDescription="{forwardText}"
+        disabled="{!loop && page === total - 1}"
+        icon="{CaretRight16}"
+        on:click="{() => {
           if (page + 1 >= total) {
             if (loop) page = 0;
           } else {
             page++;
           }
           dispatch('click:button--next', { page });
-        }} />
+        }}" />
     </li>
   </ul>
   <div
     aria-live="polite"
     aria-atomic="true"
-    class:bx--pagination-nav__accessibility-label={true}>
+    class:bx--pagination-nav__accessibility-label="{true}">
     Page {page + 1} of {total}
   </div>
 </nav>

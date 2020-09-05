@@ -78,7 +78,7 @@
 </script>
 
 {#if story === 'composed'}
-  <DataTable {...$$props} {rows} {headers} let:props>
+  <DataTable {...$$props} rows="{rows}" headers="{headers}" let:props>
     <TableContainer
       title="DataTable"
       description="With default options"
@@ -108,44 +108,44 @@
 {:else if story === 'sortable'}
   <DataTable
     bind:sortable
-    title={$$props.title}
-    description={$$props.description}
-    zebra={$$props.zebra}
-    size={$$props.size}
-    stickyHeader={$$props.stickyHeader}
-    on:click={({ detail }) => {
+    title="{$$props.title}"
+    description="{$$props.description}"
+    zebra="{$$props.zebra}"
+    size="{$$props.size}"
+    stickyHeader="{$$props.stickyHeader}"
+    on:click="{({ detail }) => {
       console.log('on:click', detail);
-    }}
-    on:click:header={({ detail }) => {
+    }}"
+    on:click:header="{({ detail }) => {
       console.log('on:click:header', detail);
-    }}
-    on:click:row={({ detail }) => {
+    }}"
+    on:click:row="{({ detail }) => {
       console.log('on:click:row', detail);
-    }}
-    on:click:cell={({ detail }) => {
+    }}"
+    on:click:cell="{({ detail }) => {
       console.log('on:click:cell', detail);
-    }}
-    {rows}
-    {headers} />
+    }}"
+    rows="{rows}"
+    headers="{headers}" />
 {:else}
   <DataTable
-    title={$$props.title}
-    description={$$props.description}
-    zebra={$$props.zebra}
-    size={$$props.size}
-    stickyHeader={$$props.stickyHeader}
-    on:click={({ detail }) => {
+    title="{$$props.title}"
+    description="{$$props.description}"
+    zebra="{$$props.zebra}"
+    size="{$$props.size}"
+    stickyHeader="{$$props.stickyHeader}"
+    on:click="{({ detail }) => {
       console.log('on:click', detail);
-    }}
-    on:click:header={({ detail }) => {
+    }}"
+    on:click:header="{({ detail }) => {
       console.log('on:click:header', detail);
-    }}
-    on:click:row={({ detail }) => {
+    }}"
+    on:click:row="{({ detail }) => {
       console.log('on:click:row', detail);
-    }}
-    on:click:cell={({ detail }) => {
+    }}"
+    on:click:cell="{({ detail }) => {
       console.log('on:click:cell', detail);
-    }}
-    {rows}
-    {headers} />
+    }}"
+    rows="{rows}"
+    headers="{headers}" />
 {/if}

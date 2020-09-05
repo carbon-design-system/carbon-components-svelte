@@ -14,7 +14,7 @@
     {...$$props}
     id="slider-id"
     bind:value
-    on:change={({ detail }) => {
+    on:change="{({ detail }) => {
       console.log('on:change', detail);
-    }} />
+    }}" />
 {/if}

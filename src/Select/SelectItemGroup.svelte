@@ -12,6 +12,10 @@
   export let label = "Provide label";
 </script>
 
-<optgroup {label} {disabled} class:bx--select-optgroup={true} {...$$restProps}>
+<optgroup
+  label="{label}"
+  disabled="{disabled}"
+  class:bx--select-optgroup="{true}"
+  {...$$restProps}>
   <slot />
 </optgroup>

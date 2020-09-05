@@ -13,9 +13,9 @@
 
 {#if story === 'skeleton'}
   <div>
-    <IconSkeleton size={16} style="margin: 2rem;" />
-    <IconSkeleton size={32} style="margin: 2rem" />
+    <IconSkeleton size="{16}" style="margin: 2rem;" />
+    <IconSkeleton size="{32}" style="margin: 2rem" />
   </div>
 {:else}
-  <Icon {...$$props} render={icons[$$props.icon]} />
+  <Icon {...$$props} render="{icons[$$props.icon]}" />
 {/if}

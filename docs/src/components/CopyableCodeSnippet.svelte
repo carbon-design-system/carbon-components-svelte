@@ -7,7 +7,7 @@
 
 <CodeSnippet
   {...$$restProps}
-  {code}
-  on:click={() => {
+  code="{code}"
+  on:click="{() => {
     copy(code);
-  }} />
+  }}" />

@@ -18,11 +18,11 @@
 
 <div
   role="tabpanel"
-  aria-labelledby={tabId}
-  aria-hidden={!selected}
-  hidden={selected ? undefined : ''}
-  {id}
-  class:bx--tab-content={true}
+  aria-labelledby="{tabId}"
+  aria-hidden="{!selected}"
+  hidden="{selected ? undefined : ''}"
+  id="{id}"
+  class:bx--tab-content="{true}"
   {...$$restProps}>
   <slot />
 </div>

@@ -44,7 +44,7 @@
         hasIconOnly
         kind="ghost"
         size="small"
-        icon={Code16}
+        icon="{Code16}"
         iconDescription="Usage"
         tooltipAlignment="center"
         tooltipPosition="top" />
@@ -52,7 +52,7 @@
         hasIconOnly
         kind="ghost"
         size="small"
-        icon={Code16}
+        icon="{Code16}"
         iconDescription="Usage"
         tooltipAlignment="center"
         tooltipPosition="top" />

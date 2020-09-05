@@ -73,33 +73,33 @@
 </script>
 
 <div
-  bind:this={ref}
-  {id}
-  {tabindex}
-  class:bx--tile={true}
-  class:bx--tile--expandable={true}
-  class:bx--tile--is-expanded={expanded}
-  class:bx--tile--light={light}
+  bind:this="{ref}"
+  id="{id}"
+  tabindex="{tabindex}"
+  class:bx--tile="{true}"
+  class:bx--tile--expandable="{true}"
+  class:bx--tile--is-expanded="{expanded}"
+  class:bx--tile--light="{light}"
   {...$$restProps}
-  style={expanded ? $$restProps.style : `${$$restProps.style}; max-height: ${tileMaxHeight + tilePadding}px`}
+  style="{expanded ? $$restProps.style : `${$$restProps.style}; max-height: ${tileMaxHeight + tilePadding}px`}"
   on:click
-  on:click={() => {
+  on:click="{() => {
     expanded = !expanded;
-  }}
+  }}"
   on:keypress
-  on:keypress={(e) => {
+  on:keypress="{(e) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       expanded = !expanded;
     }
-  }}
+  }}"
   on:mouseover
   on:mouseenter
   on:mouseleave>
-  <div bind:this={refContent}>
-    <div bind:this={refAbove} class:bx--tile-content={true}>
+  <div bind:this="{refContent}">
+    <div bind:this="{refAbove}" class:bx--tile-content="{true}">
       <span
-        class:bx--tile-content__above-the-fold={true}
+        class:bx--tile-content__above-the-fold="{true}"
         on:click
         on:mouseover
         on:mouseenter
@@ -108,18 +108,18 @@
       </span>
     </div>
     <button
-      aria-expanded={expanded}
-      aria-label={expanded ? tileExpandedIconText : tileCollapsedIconText}
-      class:bx--tile__chevron={true}>
+      aria-expanded="{expanded}"
+      aria-label="{expanded ? tileExpandedIconText : tileCollapsedIconText}"
+      class:bx--tile__chevron="{true}">
       <ChevronDown16 />
     </button>
-    <div class:bx--tile-content={true}>
+    <div class:bx--tile-content="{true}">
       <span
         on:click
         on:mouseover
         on:mouseenter
         on:mouseleave
-        class:bx--tile-content__below-the-fold={true}>
+        class:bx--tile-content__below-the-fold="{true}">
         <slot name="below" />
       </span>
     </div>

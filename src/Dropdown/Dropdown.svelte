@@ -145,60 +145,63 @@
 </script>
 
 <svelte:body
-  on:click={({ target }) => {
+  on:click="{({ target }) => {
     if (open && ref && !ref.contains(target)) {
       open = false;
     }
-  }} />
+  }}" />
 
 <div
-  class:bx--dropdown__wrapper={true}
-  class:bx--list-box__wrapper={true}
-  class:bx--dropdown__wrapper--inline={inline}
-  class:bx--list-box__wrapper--inline={inline}
-  class:bx--dropdown__wrapper--inline--invalid={inline && invalid}
+  class:bx--dropdown__wrapper="{true}"
+  class:bx--list-box__wrapper="{true}"
+  class:bx--dropdown__wrapper--inline="{inline}"
+  class:bx--list-box__wrapper--inline="{inline}"
+  class:bx--dropdown__wrapper--inline--invalid="{inline && invalid}"
   {...$$restProps}>
   {#if titleText}
-    <label for={id} class:bx--label={true} class:bx--label--disabled={disabled}>
+    <label
+      for="{id}"
+      class:bx--label="{true}"
+      class:bx--label--disabled="{disabled}">
       {titleText}
     </label>
   {/if}
   {#if !inline && helperText}
     <div
-      class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}>
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}">
       {helperText}
     </div>
   {/if}
   <ListBox
-    {type}
-    {size}
-    {id}
-    {name}
-    aria-label={$$props['aria-label']}
+    type="{type}"
+    size="{size}"
+    id="{id}"
+    name="{name}"
+    aria-label="{$$props['aria-label']}"
     class="bx--dropdown {invalid && 'bx--dropdown--invalid'}
-    {open && 'bx--dropdown--open'}
-    {inline && 'bx--dropdown--inline'}
-    {disabled && 'bx--dropdown--disabled'}
-    {light && 'bx--dropdown--light'}"
-    on:click={({ target }) => {
+      {open && 'bx--dropdown--open'}
+      {inline && 'bx--dropdown--inline'}
+      {disabled && 'bx--dropdown--disabled'}
+      {light && 'bx--dropdown--light'}"
+    on:click="{({ target }) => {
       open = ref.contains(target) ? !open : false;
-    }}
-    {disabled}
-    {open}
-    {invalid}
-    {invalidText}
-    {light}>
+    }}"
+    disabled="{disabled}"
+    open="{open}"
+    invalid="{invalid}"
+    invalidText="{invalidText}"
+    light="{light}">
     {#if invalid}
       <WarningFilled16 class="bx--list-box__invalid-icon" />
     {/if}
     <button
-      bind:this={ref}
-      class:bx--list-box__field={true}
+      bind:this="{ref}"
+      class:bx--list-box__field="{true}"
       tabindex="0"
       role="button"
-      aria-expanded={open}
-      on:keydown={({ key }) => {
+      aria-expanded="{open}"
+      on:keydown="{({ key }) => {
         if (key === 'Enter') {
           open = !open;
           if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
@@ -213,34 +216,34 @@
         } else if (key === 'ArrowUp') {
           change(-1);
         }
-      }}
-      on:blur={({ relatedTarget }) => {
+      }}"
+      on:blur="{({ relatedTarget }) => {
         if (relatedTarget) {
           ref.focus();
         }
-      }}
-      {disabled}
-      {translateWithId}
-      {id}>
+      }}"
+      disabled="{disabled}"
+      translateWithId="{translateWithId}"
+      id="{id}">
       <span class="bx--list-box__label">
         {#if selectedItem}{itemToString(selectedItem)}{:else}{label}{/if}
       </span>
-      <ListBoxMenuIcon {open} {translateWithId} />
+      <ListBoxMenuIcon open="{open}" translateWithId="{translateWithId}" />
     </button>
     {#if open}
-      <ListBoxMenu aria-labelledby={id} {id}>
+      <ListBoxMenu aria-labelledby="{id}" id="{id}">
         {#each items as item, i (item.id || i)}
           <ListBoxMenuItem
-            id={item.id}
-            active={selectedIndex === i || selectedId === item.id}
-            highlighted={highlightedIndex === i || selectedIndex === i}
-            on:click={() => {
+            id="{item.id}"
+            active="{selectedIndex === i || selectedId === item.id}"
+            highlighted="{highlightedIndex === i || selectedIndex === i}"
+            on:click="{() => {
               selectedId = item.id;
               selectedIndex = i;
-            }}
-            on:mouseenter={() => {
+            }}"
+            on:mouseenter="{() => {
               highlightedIndex = i;
-            }}>
+            }}">
             {itemToString(item)}
           </ListBoxMenuItem>
         {/each}

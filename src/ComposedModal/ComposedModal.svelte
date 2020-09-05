@@ -95,36 +95,35 @@
 </script>
 
 <div
-  bind:this={ref}
+  bind:this="{ref}"
   role="presentation"
   tabindex="-1"
-  class:bx--modal={true}
-  class:is-visible={open}
-  class:bx--modal--danger={danger}
+  class:bx--modal="{true}"
+  class:is-visible="{open}"
+  class:bx--modal--danger="{danger}"
   {...$$restProps}
   on:click
-  on:click={() => {
+  on:click="{() => {
     if (!didClickInnerModal) open = false;
     didClickInnerModal = false;
-  }}
+  }}"
   on:mouseover
   on:mouseenter
   on:mouseleave
   on:transitionend
-  on:transitionend={({ currentTarget }) => {
+  on:transitionend="{({ currentTarget }) => {
     if (didOpen) {
       focus(currentTarget);
       didOpen = false;
     }
-  }}>
+  }}">
   <div
-    bind:this={innerModal}
-    class:bx--modal-container={true}
-    class="{size && `bx--modal-container--${size}`}
-    {containerClass}"
-    on:click={() => {
+    bind:this="{innerModal}"
+    class:bx--modal-container="{true}"
+    class="{size && `bx--modal-container--${size}`} {containerClass}"
+    on:click="{() => {
       didClickInnerModal = true;
-    }}>
+    }}">
     <slot />
   </div>
 </div>

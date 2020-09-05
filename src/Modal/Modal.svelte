@@ -146,17 +146,17 @@
 </script>
 
 <div
-  bind:this={ref}
+  bind:this="{ref}"
   role="presentation"
   tabindex="-1"
-  {id}
-  class:bx--modal={true}
-  class:bx--modal-tall={!passiveModal}
-  class:is-visible={open}
-  class:bx--modal--danger={danger}
+  id="{id}"
+  class:bx--modal="{true}"
+  class:bx--modal-tall="{!passiveModal}"
+  class:is-visible="{open}"
+  class:bx--modal--danger="{danger}"
   {...$$restProps}
   on:keydown
-  on:keydown={({ key }) => {
+  on:keydown="{({ key }) => {
     if (open) {
       if (key === 'Escape') {
         open = false;
@@ -164,89 +164,93 @@
         dispatch('submit');
       }
     }
-  }}
+  }}"
   on:click
-  on:click={() => {
+  on:click="{() => {
     if (!didClickInnerModal) open = false;
     didClickInnerModal = false;
-  }}
+  }}"
   on:mouseover
   on:mouseenter
   on:mouseleave>
   <div
-    bind:this={innerModal}
+    bind:this="{innerModal}"
     role="dialog"
     aria-modal="true"
-    aria-label={ariaLabel}
-    class:bx--modal-container={true}
-    class={size && `bx--modal-container--${size}`}
-    on:click={() => {
+    aria-label="{ariaLabel}"
+    class:bx--modal-container="{true}"
+    class="{size && `bx--modal-container--${size}`}"
+    on:click="{() => {
       didClickInnerModal = true;
-    }}>
-    <div class:bx--modal-header={true}>
+    }}">
+    <div class:bx--modal-header="{true}">
       {#if passiveModal}
         <button
-          bind:this={buttonRef}
+          bind:this="{buttonRef}"
           type="button"
-          aria-label={iconDescription}
-          title={iconDescription}
+          aria-label="{iconDescription}"
+          title="{iconDescription}"
           class="bx--modal-close"
-          on:click={() => {
+          on:click="{() => {
             open = false;
-          }}>
-          <Close20 aria-label={iconDescription} class="bx--modal-close__icon" />
+          }}">
+          <Close20
+            aria-label="{iconDescription}"
+            class="bx--modal-close__icon" />
         </button>
       {/if}
       {#if modalLabel}
-        <h2 id={modalLabelId} class:bx--modal-header__label={true}>
+        <h2 id="{modalLabelId}" class:bx--modal-header__label="{true}">
           <slot name="label">{modalLabel}</slot>
         </h2>
       {/if}
-      <h3 id={modalHeadingId} class:bx--modal-header__heading={true}>
+      <h3 id="{modalHeadingId}" class:bx--modal-header__heading="{true}">
         <slot name="heading">{modalHeading}</slot>
       </h3>
       {#if !passiveModal}
         <button
-          bind:this={buttonRef}
+          bind:this="{buttonRef}"
           type="button"
-          aria-label={iconDescription}
-          title={iconDescription}
-          class:bx--modal-close={true}
-          on:click={() => {
+          aria-label="{iconDescription}"
+          title="{iconDescription}"
+          class:bx--modal-close="{true}"
+          on:click="{() => {
             open = false;
-          }}>
-          <Close20 aria-label={iconDescription} class="bx--modal-close__icon" />
+          }}">
+          <Close20
+            aria-label="{iconDescription}"
+            class="bx--modal-close__icon" />
         </button>
       {/if}
     </div>
     <div
-      class:bx--modal-content={true}
-      class:bx--modal-content--with-form={hasForm}
-      class:bx--modal-scroll-content={hasScrollingContent}
-      tabindex={hasScrollingContent ? '0' : undefined}
-      role={hasScrollingContent ? 'region' : undefined}
-      aria-label={hasScrollingContent ? ariaLabel : undefined}
-      aria-labelledby={modalLabel ? modalLabelId : modalHeadingId}>
+      class:bx--modal-content="{true}"
+      class:bx--modal-content--with-form="{hasForm}"
+      class:bx--modal-scroll-content="{hasScrollingContent}"
+      tabindex="{hasScrollingContent ? '0' : undefined}"
+      role="{hasScrollingContent ? 'region' : undefined}"
+      aria-label="{hasScrollingContent ? ariaLabel : undefined}"
+      aria-labelledby="{modalLabel ? modalLabelId : modalHeadingId}">
       <slot />
     </div>
     {#if hasScrollingContent}
-      <div class:bx--modal-content--overflow-indicator={true} />
+      <div class:bx--modal-content--overflow-indicator="{true}"></div>
     {/if}
     {#if !passiveModal}
-      <div class:bx--modal-footer={true}>
+      <div class:bx--modal-footer="{true}">
         <Button
           kind="secondary"
-          on:click={() => {
+          on:click="{() => {
             dispatch('click:button--secondary');
-          }}>
+          }}">
           {secondaryButtonText}
         </Button>
         <Button
-          kind={danger ? 'danger' : 'primary'}
-          disabled={primaryButtonDisabled}
-          on:click={() => {
+          kind="{danger ? 'danger' : 'primary'}"
+          disabled="{primaryButtonDisabled}"
+          on:click="{() => {
             dispatch('submit');
-          }}>
+          }}">
           {primaryButtonText}
         </Button>
       </div>

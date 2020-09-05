@@ -54,7 +54,7 @@
   on:mouseover
   on:mouseenter
   on:mouseleave>
-  <div class:bx--inline-loading__animation={true}>
+  <div class:bx--inline-loading__animation="{true}">
     {#if status === 'error'}
       <Error20 class="bx--inline-loading--error" />
     {:else if status === 'finished'}
@@ -62,12 +62,12 @@
     {:else if status === 'inactive' || status === 'active'}
       <Loading
         small
-        description={iconDescription}
-        withOverlay={false}
-        active={status === 'active'} />
+        description="{iconDescription}"
+        withOverlay="{false}"
+        active="{status === 'active'}" />
     {/if}
   </div>
   {#if description}
-    <div class:bx--inline-loading__text={true}>{description}</div>
+    <div class:bx--inline-loading__text="{true}">{description}</div>
   {/if}
 </div>

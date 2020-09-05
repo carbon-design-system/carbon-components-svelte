@@ -10,9 +10,9 @@
   {#if story === 'filter'}
     <Tag
       {...$$restProps}
-      on:click={() => {
+      on:click="{() => {
         console.log('click');
-      }}>
+      }}">
       {slot}
     </Tag>
   {:else if story === 'skeleton'}

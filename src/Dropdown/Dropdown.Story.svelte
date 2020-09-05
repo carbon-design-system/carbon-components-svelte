@@ -22,22 +22,23 @@
   </div>
 {:else}
   <p>
-    <code>items</code>
-    must be an array of objects; mandatory fields are `id` and `text`.
+    <code>items</code> must be an array of objects; mandatory fields are `id` and
+    `text`.
   </p>
-  <pre style="margin-top: 1rem;">
+  <pre
+    style="margin-top: 1rem;">
     <code>{'items = Array<{ id: string; text: string; }>'}</code>
   </pre>
   <div style="margin-top: 2rem; margin-bottom: 2rem;">
     <Button
       size="small"
-      on:click={() => {
+      on:click="{() => {
         selectedIndex = selectedIndex > -1 ? -1 : 1;
-      }}>
+      }}">
       {selectedIndex > -1 ? 'Clear selected item' : 'Set item to "Option 2"'}
     </Button>
   </div>
   <div style="width: 300px">
-    <Dropdown {...$$props} bind:selectedIndex {items} />
+    <Dropdown {...$$props} bind:selectedIndex items="{items}" />
   </div>
 {/if}

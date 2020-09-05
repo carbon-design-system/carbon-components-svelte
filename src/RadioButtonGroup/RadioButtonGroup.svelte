@@ -46,17 +46,17 @@
 </script>
 
 <div
-  class:bx--form-item={true}
+  class:bx--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave>
   <div
-    class:bx--radio-button-group={true}
-    class:bx--radio-button-group--vertical={orientation === 'vertical'}
-    class={labelPosition && `bx--radio-button-group--label-${labelPosition}`}
-    {disabled}>
+    class:bx--radio-button-group="{true}"
+    class:bx--radio-button-group--vertical="{orientation === 'vertical'}"
+    class="{labelPosition && `bx--radio-button-group--label-${labelPosition}`}"
+    disabled="{disabled}">
     <slot />
   </div>
 </div>

@@ -63,15 +63,15 @@
 </script>
 
 <div
-  bind:this={ref}
-  role={ariaExpanded ? 'combobox' : role}
-  aria-expanded={ariaExpanded}
-  aria-owns={(ariaExpanded && menuId) || undefined}
-  aria-controls={(ariaExpanded && menuId) || undefined}
-  aria-disabled={disabled}
-  aria-label={ariaExpanded ? translateWithId('close') : translateWithId('open')}
-  tabindex={disabled ? '-1' : tabindex}
-  class:bx--list-box__field={true}
+  bind:this="{ref}"
+  role="{ariaExpanded ? 'combobox' : role}"
+  aria-expanded="{ariaExpanded}"
+  aria-owns="{(ariaExpanded && menuId) || undefined}"
+  aria-controls="{(ariaExpanded && menuId) || undefined}"
+  aria-disabled="{disabled}"
+  aria-label="{ariaExpanded ? translateWithId('close') : translateWithId('open')}"
+  tabindex="{disabled ? '-1' : tabindex}"
+  class:bx--list-box__field="{true}"
   {...$$restProps}
   on:click
   on:mouseover

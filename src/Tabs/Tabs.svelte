@@ -109,37 +109,37 @@
 
 <div
   role="navigation"
-  class:bx--tabs={true}
-  class:bx--tabs--container={type === 'container'}
+  class:bx--tabs="{true}"
+  class:bx--tabs--container="{type === 'container'}"
   {...$$restProps}>
   <div
     role="listbox"
     tabindex="0"
-    class:bx--tabs-trigger={true}
-    aria-label={$$props['aria-label'] || 'listbox'}
-    on:click={() => {
+    class:bx--tabs-trigger="{true}"
+    aria-label="{$$props['aria-label'] || 'listbox'}"
+    on:click="{() => {
       dropdownHidden = !dropdownHidden;
-    }}
+    }}"
     on:keypress
-    on:keypress={() => {
+    on:keypress="{() => {
       dropdownHidden = !dropdownHidden;
-    }}>
+    }}">
     <a
       tabindex="-1"
-      class:bx--tabs-trigger-text={true}
-      href={triggerHref}
+      class:bx--tabs-trigger-text="{true}"
+      href="{triggerHref}"
       on:click
-      on:click={() => {
+      on:click="{() => {
         dropdownHidden = !dropdownHidden;
-      }}>
+      }}">
       {#if currentTab}{currentTab.label}{/if}
     </a>
-    <ChevronDownGlyph aria-hidden="true" title={iconDescription} />
+    <ChevronDownGlyph aria-hidden="true" title="{iconDescription}" />
   </div>
   <ul
     role="tablist"
-    class:bx--tabs__nav={true}
-    class:bx--tabs__nav--hidden={dropdownHidden}>
+    class:bx--tabs__nav="{true}"
+    class:bx--tabs__nav--hidden="{dropdownHidden}">
     <slot />
   </ul>
 </div>

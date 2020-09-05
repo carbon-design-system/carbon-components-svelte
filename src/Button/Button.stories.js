@@ -24,7 +24,6 @@ export const Default = () => ({
     disabled: boolean("Disabled (disabled)", false),
     size: select("Button size (size)", sizes, "default"),
     iconDescription: text("Icon description (iconDescription)", "Button icon"),
-    small: boolean("Small (small) - Deprecated in favor of `size`", false),
   },
 });
 
@@ -54,7 +53,7 @@ export const SetOfButtons = () => ({
   props: {
     story: "set of buttons",
     disabled: boolean("Disabled (disabled)", false),
-    small: boolean("Small (small)", false),
+    stacked: boolean("Stacked (stacked)", false),
     size: select("Button size (size)", sizes, "default"),
     iconDescription: text("Icon description (iconDescription)", "Button icon"),
   },

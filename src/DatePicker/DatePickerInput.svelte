@@ -100,58 +100,58 @@
 </script>
 
 <div
-  class:bx--date-picker-container={true}
-  class:bx--date-picker--nolabel={!labelText}
+  class:bx--date-picker-container="{true}"
+  class:bx--date-picker--nolabel="{!labelText}"
   {...$$restProps}>
   {#if labelText}
     <label
-      for={id}
-      class:bx--label={true}
-      class:bx--visually-hidden={hideLabel}
-      class:bx--label--disabled={disabled}>
+      for="{id}"
+      class:bx--label="{true}"
+      class:bx--visually-hidden="{hideLabel}"
+      class:bx--label--disabled="{disabled}">
       {labelText}
     </label>
   {/if}
-  <div class:bx--date-picker-input__wrapper={true}>
+  <div class:bx--date-picker-input__wrapper="{true}">
     <input
-      bind:this={ref}
-      data-invalid={invalid || undefined}
-      value={!$range ? $inputValue : undefined}
-      {id}
-      {name}
-      {placeholder}
-      {type}
-      {pattern}
-      {disabled}
-      class:bx--date-picker__input={true}
-      class={size && `bx--date-picker__input--${size}`}
+      bind:this="{ref}"
+      data-invalid="{invalid || undefined}"
+      value="{!$range ? $inputValue : undefined}"
+      id="{id}"
+      name="{name}"
+      placeholder="{placeholder}"
+      type="{type}"
+      pattern="{pattern}"
+      disabled="{disabled}"
+      class:bx--date-picker__input="{true}"
+      class="{size && `bx--date-picker__input--${size}`}"
       on:input
-      on:input={({ target }) => {
+      on:input="{({ target }) => {
         updateValue({ type: 'input', value: target.value });
-      }}
-      on:change={({ target }) => {
+      }}"
+      on:change="{({ target }) => {
         updateValue({ type: 'change', value: target.value });
-      }}
+      }}"
       on:keydown
-      on:keydown={({ key }) => {
+      on:keydown="{({ key }) => {
         if (key === 'ArrowDown') {
           focusCalendar();
         }
-      }}
+      }}"
       on:blur
-      on:blur={({ relatedTarget }) => {
+      on:blur="{({ relatedTarget }) => {
         blurInput(relatedTarget);
-      }} />
+      }}" />
     {#if $hasCalendar}
       <Calendar16
         role="img"
         class="bx--date-picker__icon"
-        aria-label={iconDescription}
-        title={iconDescription}
-        on:click={openCalendar} />
+        aria-label="{iconDescription}"
+        title="{iconDescription}"
+        on:click="{openCalendar}" />
     {/if}
   </div>
   {#if invalid}
-    <div class:bx--form-requirement={true}>{invalidText}</div>
+    <div class:bx--form-requirement="{true}">{invalidText}</div>
   {/if}
 </div>

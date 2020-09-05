@@ -9,39 +9,39 @@
 
 <div>
   <Button
-    on:click={() => {
+    on:click="{() => {
       open = true;
-    }}>
+    }}">
     Launch modal
   </Button>
 </div>
 <Modal
   {...$$props}
   bind:open
-  on:click={(e) => {
+  on:click="{(e) => {
     console.log(e.target);
-  }}
-  on:click:button--secondary={() => {
+  }}"
+  on:click:button--secondary="{() => {
     console.log('click button secondary');
     open = false;
-  }}
-  on:open={() => {
+  }}"
+  on:open="{() => {
     console.log('open');
-  }}
-  on:close={() => {
+  }}"
+  on:close="{() => {
     console.log('close');
-  }}
-  on:submit={() => {
+  }}"
+  on:submit="{() => {
     console.log('submit');
-  }}>
+  }}">
   <div>
     <PasswordInput bind:type placeholder="Password Input" aria-level="" />
     <Button
       kind="ghost"
       size="field"
-      on:click={() => {
+      on:click="{() => {
         type = type === 'password' ? 'text' : 'password';
-      }}>
+      }}">
       Programmatically toggle password
     </Button>
   </div>

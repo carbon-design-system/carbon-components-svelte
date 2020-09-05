@@ -85,7 +85,7 @@
 
 {#if skeleton}
   <SearchSkeleton
-    {small}
+    small="{small}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -93,40 +93,39 @@
     on:mouseleave />
 {:else}
   <div
-    class:bx--search={true}
-    class:bx--search--light={light}
+    class:bx--search="{true}"
+    class:bx--search--light="{light}"
     {...$$restProps}
-    class="bx--search--{size}
-    {$$restProps.class}">
+    class="bx--search--{size} {$$restProps.class}">
     <Search16 class="bx--search-magnifier" />
-    <label for={id} class:bx--label={true}>{labelText}</label>
+    <label for="{id}" class:bx--label="{true}">{labelText}</label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
-      bind:this={ref}
+      bind:this="{ref}"
       role="searchbox"
-      class:bx--search-input={true}
-      {autofocus}
-      {autocomplete}
-      {id}
-      {placeholder}
-      {type}
-      {value}
+      class:bx--search-input="{true}"
+      autofocus="{autofocus}"
+      autocomplete="{autocomplete}"
+      id="{id}"
+      placeholder="{placeholder}"
+      type="{type}"
+      value="{value}"
       on:change
       on:input
-      on:input={({ target }) => {
+      on:input="{({ target }) => {
         value = target.value;
-      }} />
+      }}" />
     <button
       type="button"
-      aria-label={closeButtonLabelText}
-      class:bx--search-close={true}
-      class:bx--search-close--hidden={value === ''}
+      aria-label="{closeButtonLabelText}"
+      class:bx--search-close="{true}"
+      class:bx--search-close--hidden="{value === ''}"
       on:click
-      on:click={() => {
+      on:click="{() => {
         value = '';
         ref.focus();
-      }}>
-      <svelte:component this={size === 'xl' ? Close20 : Close16} />
+      }}">
+      <svelte:component this="{size === 'xl' ? Close20 : Close16}" />
     </button>
   </div>
 {/if}

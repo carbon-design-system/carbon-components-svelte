@@ -33,33 +33,33 @@
 </script>
 
 <svelte:body
-  on:keydown={({ key }) => {
+  on:keydown="{({ key }) => {
     if (key === 'Escape') {
       hidden = true;
     }
-  }} />
+  }}" />
 
 <button
-  bind:this={ref}
-  aria-describedby={id}
-  class:bx--tooltip__trigger={true}
-  class:bx--tooltip--a11y={true}
-  class:bx--tooltip--hidden={hidden}
+  bind:this="{ref}"
+  aria-describedby="{id}"
+  class:bx--tooltip__trigger="{true}"
+  class:bx--tooltip--a11y="{true}"
+  class:bx--tooltip--hidden="{hidden}"
   {...$$restProps}
   class="{direction && `bx--tooltip--${direction}`}
-  {align && `bx--tooltip--align-${align}`}
-  {$$restProps.class}"
+    {align && `bx--tooltip--align-${align}`}
+    {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseenter={() => {
+  on:mouseenter="{() => {
     hidden = false;
-  }}
+  }}"
   on:mouseleave
   on:focus
-  on:focus={() => {
+  on:focus="{() => {
     hidden = false;
-  }}>
-  <span {id} class:bx--assistive-text={true}>{tooltipText}</span>
+  }}">
+  <span id="{id}" class:bx--assistive-text="{true}">{tooltipText}</span>
   <slot />
 </button>

@@ -9,9 +9,9 @@
 {#if story === 'inline'}
   <InlineNotification
     {...$$props}
-    on:close={() => {
+    on:close="{() => {
       console.log('on:close');
-    }}>
+    }}">
     <div slot="actions">
       <NotificationActionButton>{$$props.action}</NotificationActionButton>
     </div>
@@ -19,8 +19,8 @@
 {:else if story === 'toast'}
   <ToastNotification
     {...$$props}
-    on:close={() => {
+    on:close="{() => {
       console.log('on:close');
-    }}
+    }}"
     style="min-width: 30rem; margin-bottom: .5rem" />
 {/if}

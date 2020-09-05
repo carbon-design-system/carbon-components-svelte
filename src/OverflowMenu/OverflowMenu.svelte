@@ -151,35 +151,35 @@
 </svelte:head>
 
 <svelte:body
-  on:click={({ target }) => {
+  on:click="{({ target }) => {
     if (buttonRef && buttonRef.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
       open = false;
     }
-  }} />
+  }}" />
 
 <button
-  bind:this={buttonRef}
+  bind:this="{buttonRef}"
   tabindex="0"
   aria-haspopup
-  aria-expanded={open}
-  aria-label={ariaLabel}
-  {id}
-  class:bx--overflow-menu={true}
-  class:bx--overflow-menu--open={open}
-  class:bx--overflow-menu--light={light}
+  aria-expanded="{open}"
+  aria-label="{ariaLabel}"
+  id="{id}"
+  class:bx--overflow-menu="{true}"
+  class:bx--overflow-menu--open="{open}"
+  class:bx--overflow-menu--light="{light}"
   {...$$restProps}
   on:click
-  on:click={({ target }) => {
+  on:click="{({ target }) => {
     if (!(menuRef && menuRef.contains(target))) {
       open = !open;
     }
-  }}
+  }}"
   on:mouseover
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={(e) => {
+  on:keydown="{(e) => {
     if (open) {
       if (['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(e.key)) {
         e.preventDefault();
@@ -188,25 +188,25 @@
         open = false;
       }
     }
-  }}>
+  }}">
   <slot name="menu">
     <svelte:component
-      this={icon}
-      aria-label={iconDescription}
-      title={iconDescription}
+      this="{icon}"
+      aria-label="{iconDescription}"
+      title="{iconDescription}"
       class="bx--overflow-menu__icon {iconClass}" />
   </slot>
   {#if open}
     <ul
-      bind:this={menuRef}
+      bind:this="{menuRef}"
       role="menu"
       tabindex="-1"
-      aria-label={ariaLabel}
-      data-floating-menu-direction={direction}
-      class:bx--overflow-menu-options={true}
-      class:bx--overflow-menu--flip={flipped}
-      class:bx--overflow-menu-options--open={open}
-      class:bx--overflow-menu-options--light={light}
+      aria-label="{ariaLabel}"
+      data-floating-menu-direction="{direction}"
+      class:bx--overflow-menu-options="{true}"
+      class:bx--overflow-menu--flip="{flipped}"
+      class:bx--overflow-menu-options--open="{open}"
+      class:bx--overflow-menu-options--light="{light}"
       class:menuOptionsClass>
       <slot />
     </ul>

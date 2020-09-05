@@ -29,13 +29,13 @@
         {...$$props}
         id="tile-1"
         name="tiles"
-        bind:selected={selectedTile1}
-        on:select={({ detail }) => {
+        bind:selected="{selectedTile1}"
+        on:select="{({ detail }) => {
           console.log('on:select', detail);
-        }}
-        on:deselect={({ detail }) => {
+        }}"
+        on:deselect="{({ detail }) => {
           console.log('on:deselect', detail);
-        }}>
+        }}">
         Multi-select Tile
       </SelectableTile>
       <SelectableTile {...$$props} id="tile-2" name="tiles">
@@ -48,7 +48,11 @@
   {:else if story === 'selectable'}
     <TileGroup legend="Selectable Tile Group" bind:selected>
       {#each radioTiles as { value, id, labelText }, i (id)}
-        <RadioTile {...$$props} {value} {id} {labelText}>
+        <RadioTile
+          {...$$props}
+          value="{value}"
+          id="{id}"
+          labelText="{labelText}">
           Selectable Tile
         </RadioTile>
       {/each}

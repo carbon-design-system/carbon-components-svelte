@@ -14,11 +14,11 @@
 
 {#if href}
   <a
-    {href}
+    href="{href}"
     role="button"
-    class:bx--skeleton={true}
-    class:bx--btn={true}
-    class:bx--btn--sm={small}
+    class:bx--skeleton="{true}"
+    class:bx--btn="{true}"
+    class:bx--btn--sm="{small}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -28,12 +28,12 @@
   </a>
 {:else}
   <div
-    class:bx--skeleton={true}
-    class:bx--btn={true}
-    class:bx--btn--sm={small}
+    class:bx--skeleton="{true}"
+    class:bx--btn="{true}"
+    class:bx--btn--sm="{small}"
     {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave></div>
 {/if}

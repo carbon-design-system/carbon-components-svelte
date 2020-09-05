@@ -20,7 +20,7 @@
 
 {#if skeleton}
   <IconSkeleton
-    {size}
+    size="{size}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -28,7 +28,7 @@
     on:mouseleave />
 {:else}
   <svelte:component
-    this={render}
+    this="{render}"
     {...$$restProps}
     on:click
     on:mouseover

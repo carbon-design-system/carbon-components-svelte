@@ -37,15 +37,15 @@
 
 {#if story === 'ux-example'}
   <div style="display: flex; width: 300px">
-    <Button kind="secondary" {disabled}>Cancel</Button>
+    <Button kind="secondary" disabled="{disabled}">Cancel</Button>
     {#if disabled}
       <InlineLoading
         style="margin-left: 1rem;"
-        description={loadingDescription}
-        status={success ? 'finished' : 'active'}
-        aria-live={ariaLive} />
+        description="{loadingDescription}"
+        status="{success ? 'finished' : 'active'}"
+        aria-live="{ariaLive}" />
     {:else}
-      <Button on:click={handleSubmit}>Submit</Button>
+      <Button on:click="{handleSubmit}">Submit</Button>
     {/if}
   </div>
 {:else}

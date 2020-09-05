@@ -13,7 +13,7 @@
 </script>
 
 <div
-  class:bx--form-item={true}
+  class:bx--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -21,26 +21,26 @@
   on:mouseleave>
   <input
     type="checkbox"
-    {id}
-    class:bx--toggle={true}
-    class:bx--toggle--small={true}
-    class:bx--skeleton={true} />
+    id="{id}"
+    class:bx--toggle="{true}"
+    class:bx--toggle--small="{true}"
+    class:bx--skeleton="{true}" />
   <label
-    aria-label={labelText ? undefined : $$props['aria-label'] || 'Toggle is loading'}
-    class:bx--toggle__label={true}
-    class:bx--skeleton={true}
-    for={id}>
+    aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle is loading'}"
+    class:bx--toggle__label="{true}"
+    class:bx--skeleton="{true}"
+    for="{id}">
     {#if labelText}
-      <span class:bx--toggle__label-text={true}>{labelText}</span>
+      <span class:bx--toggle__label-text="{true}">{labelText}</span>
     {/if}
-    <span class:bx--toggle__appearance={true}>
+    <span class:bx--toggle__appearance="{true}">
       <svg
-        class:bx--toggle__check={true}
+        class:bx--toggle__check="{true}"
         width="6"
         height="5"
         viewBox="0 0 6 5">
         <path
-          d="M2.2403 2.7299L4.9245 0 6 1.1117 2.2384 5 0 2.6863 1.0612 1.511z" />
+          d="M2.2403 2.7299L4.9245 0 6 1.1117 2.2384 5 0 2.6863 1.0612 1.511z"></path>
       </svg>
     </span>
   </label>

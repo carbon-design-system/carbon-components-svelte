@@ -6,6 +6,6 @@
   export let id = "main-content";
 </script>
 
-<main {id} class:bx--content={true} {...$$restProps}>
+<main id="{id}" class:bx--content="{true}" {...$$restProps}>
   <slot />
 </main>

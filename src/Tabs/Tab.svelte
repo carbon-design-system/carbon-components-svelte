@@ -51,19 +51,19 @@
 <li
   tabindex="-1"
   role="presentation"
-  class:bx--tabs__nav-item={true}
-  class:bx--tabs__nav-item--disabled={disabled}
-  class:bx--tabs__nav-item--selected={selected}
+  class:bx--tabs__nav-item="{true}"
+  class:bx--tabs__nav-item--disabled="{disabled}"
+  class:bx--tabs__nav-item--selected="{selected}"
   {...$$restProps}
-  on:click|preventDefault={() => {
+  on:click|preventDefault="{() => {
     if (!disabled) {
       update(id);
     }
-  }}
+  }}"
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:keydown={({ key }) => {
+  on:keydown="{({ key }) => {
     if (!disabled) {
       if (key === 'ArrowRight') {
         change(1);
@@ -73,16 +73,16 @@
         update(id);
       }
     }
-  }}>
+  }}">
   <a
-    bind:this={ref}
+    bind:this="{ref}"
     role="tab"
-    tabindex={disabled ? '-1' : tabindex}
-    aria-selected={selected}
-    aria-disabled={disabled}
-    {id}
-    {href}
-    class:bx--tabs__nav-link={true}>
+    tabindex="{disabled ? '-1' : tabindex}"
+    aria-selected="{selected}"
+    aria-disabled="{disabled}"
+    id="{id}"
+    href="{href}"
+    class:bx--tabs__nav-link="{true}">
     <slot>{label}</slot>
   </a>
 </li>

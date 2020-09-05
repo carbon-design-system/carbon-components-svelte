@@ -172,63 +172,66 @@
 </script>
 
 <svelte:body
-  on:click={({ target }) => {
+  on:click="{({ target }) => {
     if (open && ref && !ref.contains(target)) {
       open = false;
     }
-  }} />
+  }}" />
 
-<div class:bx--list-box__wrapper={true} {...$$restProps}>
+<div class:bx--list-box__wrapper="{true}" {...$$restProps}>
   {#if titleText}
-    <label for={id} class:bx--label={true} class:bx--label--disabled={disabled}>
+    <label
+      for="{id}"
+      class:bx--label="{true}"
+      class:bx--label--disabled="{disabled}">
       {titleText}
     </label>
   {/if}
   {#if helperText}
     <div
-      class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}>
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}">
       {helperText}
     </div>
   {/if}
   <ListBox
     class="bx--combo-box"
-    id={comboId}
-    aria-label={ariaLabel}
-    {disabled}
-    {invalid}
-    {invalidText}
-    {open}
-    {light}
-    {size}>
+    id="{comboId}"
+    aria-label="{ariaLabel}"
+    disabled="{disabled}"
+    invalid="{invalid}"
+    invalidText="{invalidText}"
+    open="{open}"
+    light="{light}"
+    size="{size}">
     <ListBoxField
       role="button"
-      aria-expanded={open}
-      on:click={() => {
+      aria-expanded="{open}"
+      on:click="{() => {
         open = true;
-      }}
-      {id}
-      {name}
-      {disabled}
-      {translateWithId}>
+      }}"
+      id="{id}"
+      name="{name}"
+      disabled="{disabled}"
+      translateWithId="{translateWithId}">
       <input
-        bind:this={ref}
+        bind:this="{ref}"
         tabindex="0"
         autocomplete="off"
         aria-autocomplete="list"
-        aria-expanded={open}
-        aria-activedescendant={highlightedId}
-        aria-labelledby={comboId}
-        aria-disabled={disabled}
-        aria-controls={open ? menuId : undefined}
-        aria-owns={open ? menuId : undefined}
-        class:bx--text-input={true}
-        class:bx--text-input--empty={inputValue === ''}
-        on:input={({ target }) => {
+        aria-expanded="{open}"
+        aria-activedescendant="{highlightedId}"
+        aria-labelledby="{comboId}"
+        aria-disabled="{disabled}"
+        aria-controls="{open ? menuId : undefined}"
+        aria-owns="{open ? menuId : undefined}"
+        class:bx--text-input="{true}"
+        class:bx--text-input--empty="{inputValue === ''}"
+        on:input="{({ target }) => {
           inputValue = target.value;
-        }}
+        }}"
         on:keydown
-        on:keydown|stopPropagation={({ key }) => {
+        on:keydown|stopPropagation="{({ key }) => {
           if (key === 'Enter') {
             open = !open;
             if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
@@ -244,56 +247,56 @@
           } else if (key === 'Escape') {
             open = false;
           }
-        }}
+        }}"
         on:focus
         on:blur
-        on:blur={({ relatedTarget }) => {
+        on:blur="{({ relatedTarget }) => {
           if (relatedTarget && relatedTarget.getAttribute('role') !== 'button') {
             ref.focus();
           }
-        }}
-        {disabled}
-        {placeholder}
-        {id}
-        value={inputValue} />
+        }}"
+        disabled="{disabled}"
+        placeholder="{placeholder}"
+        id="{id}"
+        value="{inputValue}" />
       {#if invalid}
         <WarningFilled16 class="bx--list-box__invalid-icon" />
       {/if}
       {#if inputValue}
         <ListBoxSelection
           on:clear
-          on:clear={() => {
+          on:clear="{() => {
             selectedIndex = -1;
             open = false;
             ref.focus();
-          }}
-          {translateWithId}
-          {disabled}
-          {open} />
+          }}"
+          translateWithId="{translateWithId}"
+          disabled="{disabled}"
+          open="{open}" />
       {/if}
       <ListBoxMenuIcon
-        on:click={() => {
+        on:click="{() => {
           open = !open;
-        }}
-        {translateWithId}
-        {open} />
+        }}"
+        translateWithId="{translateWithId}"
+        open="{open}" />
     </ListBoxField>
     {#if open}
-      <ListBoxMenu aria-label={ariaLabel} {id}>
+      <ListBoxMenu aria-label="{ariaLabel}" id="{id}">
         {#each filteredItems as item, i (item.id || i)}
           <ListBoxMenuItem
-            id={item.id}
-            active={selectedIndex === i || selectedId === item.id}
-            highlighted={highlightedIndex === i || selectedIndex === i}
-            on:click={() => {
+            id="{item.id}"
+            active="{selectedIndex === i || selectedId === item.id}"
+            highlighted="{highlightedIndex === i || selectedIndex === i}"
+            on:click="{() => {
               selectedIndex = items
                 .map(({ id }) => id)
                 .indexOf(filteredItems[i].id);
               open = false;
-            }}
-            on:mouseenter={() => {
+            }}"
+            on:mouseenter="{() => {
               highlightedIndex = i;
-            }}>
+            }}">
             {itemToString(item)}
           </ListBoxMenuItem>
         {/each}
