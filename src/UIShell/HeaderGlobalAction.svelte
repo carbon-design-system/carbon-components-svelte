@@ -1,0 +1,33 @@
+<script>
+  /**
+   * Set to `true` to use the active variant
+   * @type {boolean} [isActive=false]
+   */
+  export let isActive = false;
+
+  /**
+   * Specify the icon to render
+   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [icon]
+   */
+  export let icon = undefined;
+
+  /**
+   * Obtain a reference to the HTML button element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
+  export let ref = null;
+</script>
+
+<button
+  type="button"
+  ref="{ref}"
+  class:bx--header__action="{true}"
+  class:bx--header__action--active="{isActive}"
+  {...$$restProps}
+  on:click>
+  <slot>
+    {#if icon}
+      <svelte:component this="{icon}" />
+    {/if}
+  </slot>
+</button>

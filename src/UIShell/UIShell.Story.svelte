@@ -27,6 +27,7 @@
   import HeaderPanelLinks from "./GlobalHeader/HeaderPanelLinks.svelte";
   import Content from "./Content.svelte";
   import SkipToContent from "./SkipToContent.svelte";
+  import HeaderGlobalAction from "./HeaderGlobalAction.svelte";
 
   let isSideNavOpen = undefined;
 
@@ -186,6 +187,15 @@
         </HeaderPanelLinks>
       </HeaderAction>
       <HeaderActionLink type="Account" icon="{iAccount}" />
+    </HeaderUtilities>
+  </Header>
+{:else if story === 'header-global-action'}
+  <Header {...$$props}>
+    <HeaderUtilities>
+      <HeaderGlobalAction isActive>
+        <AppSwitcher20 />
+      </HeaderGlobalAction>
+      <HeaderGlobalAction icon="{AppSwitcher20}" />
     </HeaderUtilities>
   </Header>
 {:else if story === 'header-with-switcher'}

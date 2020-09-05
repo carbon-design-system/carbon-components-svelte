@@ -124,5 +124,6 @@ export {
   SideNavMenuItem,
   Content,
   SkipToContent,
+  HeaderGlobalAction,
 } from "./UIShell";
 export { UnorderedList } from "./UnorderedList";

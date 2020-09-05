@@ -1,6 +1,6 @@
 # Component Index
 
-> 143 components exported from carbon-components-svelte 0.10.0
+> 144 components exported from carbon-components-svelte 0.10.0
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -171,6 +171,7 @@
   - [HeaderPanelLink](#headerpanellink)
   - [HeaderPanelLinks](#headerpanellinks)
   - [HeaderUtilities](#headerutilities)
+  - [HeaderGlobalAction](#headerglobalaction)
   - [SideNav](#sidenav)
   - [SideNavItems](#sidenavitems)
   - [SideNavLink](#sidenavlink)
@@ -1690,6 +1691,36 @@ No forwarded events.
 - `on:focusInputSearch`
 - `on:focusOutInputSearch`
 - `on:inputSearch`
+
+---
+
+## HeaderGlobalAction
+
+### Import path
+
+```js
+import { HeaderGlobalAction } from "carbon-components-svelte";
+```
+
+### Props
+
+| Prop name | Type                                                                | Default value |
+| :-------- | :------------------------------------------------------------------ | :------------ |
+| isActive  | <code>boolean</code>                                                | false         |
+| icon      | <code>typeof import("carbon-icons-svelte/lib/Add16").default</code> | --            |
+| ref       | <code>null &#124; HTMLButtonElement</code>                          | null          |
+
+### Slots
+
+- `<slot>...</slot>`
+
+### Forwarded events
+
+- `on:click`
+
+### Dispatched events
+
+No dispatched events.
 
 ---
 

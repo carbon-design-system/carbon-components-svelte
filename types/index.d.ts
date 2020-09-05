@@ -1591,6 +1591,29 @@ export class HeaderActionSearch extends CarbonSvelteComponent {
   };
 }
 
+export class HeaderGlobalAction extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the active variant
+     * @default false
+     */
+    isActive?: boolean;
+
+    /**
+     * Specify the icon to render
+     */
+    icon?: typeof import("carbon-icons-svelte/lib/Add16").default;
+
+    /**
+     * Obtain a reference to the HTML button element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
+  };
+
+  $$slot_def: { default: {} };
+}
+
 export class HeaderNav extends CarbonSvelteComponent {
   $$prop_def: {
     /**
