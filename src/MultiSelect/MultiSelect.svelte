@@ -361,6 +361,7 @@
           aria-controls="{menuId}"
           class:bx--text-input="{true}"
           class:bx--text-input--empty="{inputValue === ''}"
+          class:bx--text-input--light="{light}"
           on:input="{({ target }) => {
             inputValue = target.value;
           }}"
