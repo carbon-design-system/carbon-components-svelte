@@ -4,7 +4,7 @@
 
 This project uses Node.js and Yarn.
 
-- [Node.js](https://nodejs.org/en/download/package-manager/#macos) (version >=10)
+- [Node.js](https://nodejs.org/en/download/package-manager/#macos) (version >=12)
 - [Yarn](https://yarnpkg.com/en/docs/install#mac-stable)
 
 ## Fork and Clone

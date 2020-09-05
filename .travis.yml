@@ -1,7 +1,6 @@
 language: node_js
-node_js: 10
+node_js: 12
 cache: yarn
 script:
   - yarn prepack
   - yarn build
-  - cd docs && yarn && yarn test
