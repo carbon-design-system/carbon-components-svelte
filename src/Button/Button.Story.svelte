@@ -14,6 +14,7 @@
     small,
     tooltipPosition,
     tooltipAlignment,
+    stacked,
   } = $$props;
 
   const regularProps = {
@@ -35,7 +36,7 @@
     tooltipAlignment,
   };
 
-  const setProps = { disabled, small, size, iconDescription };
+  const setProps = { stacked, disabled, small, size, iconDescription };
 </script>
 
 <div>
@@ -50,7 +51,7 @@
   {:else if story === 'icon-only buttons'}
     <Button {...iconOnlyProps} />
   {:else if story === 'set of buttons'}
-    <ButtonSet>
+    <ButtonSet stacked="{setProps.stacked}">
       <Button kind="ghost" {...setProps}>Ghost button</Button>
       <Button kind="secondary" {...setProps}>Secondary button</Button>
       <Button kind="primary" {...setProps}>Primary button</Button>
