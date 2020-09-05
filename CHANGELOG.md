@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.11.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.11.0) - 2020-09-05
+
+**Features**
+
+- UI Shell: add `HeaderGlobalAction` component (7b3c111)
+
 ## [0.10.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.10.0) - 2020-09-05
 
 **Features**
