@@ -82,7 +82,8 @@
    * Override the page range text
    * @type {(current: number, total: number) => string} [pageRangeText = (current: number, total: number) => string]
    */
-  export let pageRangeText = (current, total) => `of ${total} pages`;
+  export let pageRangeText = (current, total) =>
+    `of ${total} page${total === 1 ? "" : "s"}`;
 
   /**
    * Set an id for the top-level element
