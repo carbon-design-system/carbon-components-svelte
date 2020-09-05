@@ -38,6 +38,7 @@
     class:bx--link="{true}"
     class:bx--link--disabled="{disabled}"
     class:bx--link--inline="{inline}"
+    rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
     {...$$restProps}
     on:click
     on:mouseover
