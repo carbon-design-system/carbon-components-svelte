@@ -34,7 +34,7 @@
   $: dispatch("change", $selectedValue);
 </script>
 
-<section
+<div
   aria-label="Structured list section"
   class:bx--structured-list="{true}"
   class:bx--structured-list--border="{border}"
@@ -45,4 +45,4 @@
   on:mouseenter
   on:mouseleave>
   <slot />
-</section>
+</div>

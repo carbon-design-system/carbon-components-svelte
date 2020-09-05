@@ -12,7 +12,7 @@
   export let border = false;
 </script>
 
-<section
+<div
   class:bx--skeleton="{true}"
   class:bx--structured-list="{true}"
   class:bx--structured-list--border="{border}"
@@ -39,4 +39,4 @@
       </div>
     {/each}
   </div>
-</section>
+</div>
