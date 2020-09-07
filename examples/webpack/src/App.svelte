@@ -15,10 +15,10 @@
   import Header from "./components/Header.svelte";
   import Theme from "./components/Theme.svelte";
 
-  let theme = "white";
+  let theme = "g10";
 </script>
 
-<Theme theme="{theme}">
+<Theme persist bind:theme>
   <Header />
   <Content style="background: none; padding: 1rem">
     <Grid>
