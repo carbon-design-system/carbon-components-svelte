@@ -38,7 +38,6 @@
     "svelte": "^3.24.1",
     "svelte-loader": "^2.13.6",
     "typescript": "^4.0.2",
-    "cssnano": "^4.1.10",
     "@carbon/themes": "^10.18.0",
     "autoprefixer": "^9.8.6",
     "carbon-components-10.18": "npm:carbon-components@10.18",
