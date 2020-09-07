@@ -19,9 +19,13 @@
     theme = value;
   });
 
+  let _document = null;
+
   setContext("Theme", {
     updateVar: (name, value) => {
-      document.documentElement.style.setProperty(name, value);
+      if (_document != null) {
+        _document.documentElement.style.setProperty(name, value);
+      }
     },
     carbon_theme,
     dark,
@@ -29,6 +33,8 @@
   });
 
   onMount(() => {
+    _document = window.document;
+
     try {
       const persisted_theme = localStorage.getItem(persistKey);
 
@@ -46,7 +52,9 @@
 
   afterUpdate(() => {
     if (isValidTheme(theme)) {
-      document.documentElement.setAttribute("theme", theme);
+      if (_document != null) {
+        _document.documentElement.setAttribute("theme", theme);
+      }
 
       if (persist) {
         localStorage.setItem(persistKey, theme);
