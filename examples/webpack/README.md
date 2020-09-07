@@ -1,16 +1,6 @@
 # webpack
 
-> Example webpack set-up using pre-compiled CSS shipped with `carbon-components-svelte`.
-
-## Getting started
-
-Quickly scaffold a new project using [degit](https://github.com/Rich-Harris/degit):
-
-```sh
-npx degit ibm/carbon-components-svelte/examples/webpack svelte-app
-cd svelte-app
-yarn install
-```
+> Example set-up using [webpack](https://github.com/webpack/webpack).
 
 ## Available scripts
 
