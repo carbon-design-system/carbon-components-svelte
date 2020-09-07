@@ -4,6 +4,10 @@ const autoprefixer = require("autoprefixer");
 const postcss = require("postcss");
 const cssnano = require("cssnano");
 const path = require("path");
+const { promisify } = require("util");
+
+const writeFile = promisify(fs.writeFile);
+const sassRender = promisify(sass.render);
 
 const shared = {
   globals: `
@@ -55,7 +59,6 @@ const shared = {
     @import "node_modules/carbon-components-10.19/scss/components/skeleton/skeleton";
     @import "node_modules/carbon-components-10.19/scss/components/slider/slider";
     @import "node_modules/carbon-components-10.19/scss/components/structured-list/structured-list";
-    @import "node_modules/carbon-components-10.18/scss/components/tabs/tabs";
     @import "node_modules/carbon-components-10.19/scss/components/tag/tag";
     @import "node_modules/carbon-components-10.19/scss/components/text-area/text-area";
     @import "node_modules/carbon-components-10.19/scss/components/text-input/text-input";
@@ -65,6 +68,8 @@ const shared = {
     @import "node_modules/carbon-components-10.19/scss/components/toolbar/toolbar";
     @import "node_modules/carbon-components-10.19/scss/components/tooltip/tooltip";
     @import "node_modules/carbon-components-10.19/scss/components/ui-shell/ui-shell";
+
+    @import "node_modules/carbon-components-10.18/scss/components/tabs/tabs";
   `,
 };
 
@@ -114,7 +119,7 @@ async function buildCss() {
   Object.keys(themes).forEach(async (theme) => {
     try {
       const outFile = path.resolve("css", theme + ".css");
-      const { css } = sass.renderSync({
+      const { css } = await sassRender({
         data: `
           $feature-flags: (
             enable-css-custom-properties: ${theme === "all"},
@@ -132,14 +137,11 @@ async function buildCss() {
 
       const prefixed = await postcss([
         autoprefixer({
-          overrideBrowserslist: ["last 1 version", "ie >= 11"],
+          overrideBrowserslist: ["last 1 version", "ie >= 11", "Firefox ESR"],
         }),
-        cssnano({ preset: "default" }),
-      ]).process(css, {
-        from: undefined,
-      });
+      ]).process(css, { from: undefined });
 
-      fs.writeFileSync(outFile, prefixed.css);
+      await writeFile(outFile, prefixed.css);
     } catch (e) {
       console.log(e);
     }
