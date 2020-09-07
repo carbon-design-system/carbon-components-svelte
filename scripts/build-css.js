@@ -2,7 +2,6 @@ const fs = require("fs");
 const sass = require("node-sass");
 const autoprefixer = require("autoprefixer");
 const postcss = require("postcss");
-const cssnano = require("cssnano");
 const path = require("path");
 const { promisify } = require("util");
 
