@@ -13,7 +13,7 @@
   let theme = "g10";
 </script>
 
-<style global>
+<style lang="scss" global>
   @import "carbon-components-svelte/css/all";
 </style>
 

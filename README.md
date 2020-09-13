@@ -91,7 +91,7 @@ const svelteOptions = {
 
 ```html
 <!-- App.svelte -->
-<style global>
+<style lang="scss" global>
   /** Gray 10 theme **/
   @import "carbon-components-svelte/css/g10";
 </style>
