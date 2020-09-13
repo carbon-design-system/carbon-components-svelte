@@ -6,6 +6,7 @@ import { terser } from "rollup-plugin-terser";
 import copy from "rollup-plugin-copy";
 import fs from "fs";
 import replace from "@rollup/plugin-replace";
+import postcss from "rollup-plugin-postcss";
 import { spassr } from "spassr";
 import { version } from "../package.json";
 
@@ -63,6 +64,10 @@ function baseConfig(config, ctx) {
         flatten: false,
       }),
       replace({ "process.env.VERSION": JSON.stringify(version) }),
+      postcss({
+        extract: "bundle.css",
+        extensions: [".css"],
+      }),
       svelte(svelteWrapper(svelteConfig, ctx)),
       resolve({
         browser: true,

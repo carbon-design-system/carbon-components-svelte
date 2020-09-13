@@ -5,10 +5,6 @@
   import Theme from "../components/Theme.svelte";
 </script>
 
-<style lang="scss" global>
-  @import "carbon-components-svelte/css/all";
-</style>
-
 <Theme persist theme="g10">
   <Navigation />
   <Content style="background: none; padding: 1rem">

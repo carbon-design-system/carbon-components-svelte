@@ -1,7 +1,6 @@
 import { createRollupConfigs } from "./scripts/base.config.js";
 import slug from "remark-slug";
 import { mdsvex } from "mdsvex";
-import autoPreprocess from "svelte-preprocess";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -13,10 +12,7 @@ export const config = {
   production,
   rollupWrapper: (cfg) => cfg,
   svelteWrapper: (svelte) => {
-    svelte.preprocess = [
-      autoPreprocess(),
-      mdsvex({ remarkPlugins: [slug], extension: "md" }),
-    ];
+    svelte.preprocess = [mdsvex({ remarkPlugins: [slug], extension: "md" })];
     svelte.extensions = [".svelte", ".md"];
     return svelte;
   },
