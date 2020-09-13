@@ -21,6 +21,7 @@
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
+    "@carbon/themes": "^10.18.0",
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@storybook/addon-knobs": "^5.3.19",
@@ -28,8 +29,14 @@
     "@storybook/cli": "^5.3.19",
     "@storybook/svelte": "^5.3.19",
     "@tsconfig/svelte": "^1.0.10",
+    "autoprefixer": "^9.8.6",
     "babel-loader": "^8.0.6",
+    "carbon-components-10.18": "npm:carbon-components@10.18",
+    "carbon-components-10.19": "npm:carbon-components@10.19",
     "comment-parser": "^0.7.5",
+    "gh-pages": "^3.1.0",
+    "node-sass": "^4.14.1",
+    "postcss": "^7.0.32",
     "prettier": "^2.1.1",
     "prettier-plugin-svelte": "^1.2.1",
     "rollup": "^2.26.10",
@@ -37,13 +44,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "svelte": "^3.24.1",
     "svelte-loader": "^2.13.6",
-    "typescript": "^4.0.2",
-    "@carbon/themes": "^10.18.0",
-    "autoprefixer": "^9.8.6",
-    "carbon-components-10.18": "npm:carbon-components@10.18",
-    "carbon-components-10.19": "npm:carbon-components@10.19",
-    "node-sass": "^4.14.1",
-    "postcss": "^7.0.32"
+    "typescript": "^4.0.2"
   },
   "babel": {
     "presets": [
