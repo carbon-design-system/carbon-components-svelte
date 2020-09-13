@@ -6,6 +6,8 @@ const { promisify } = require("util");
 const ghPublish = promisify(ghpages.publish);
 
 async function publishExample(name) {
+  ghpages.clean();
+
   try {
     const folder_path = path.join("examples", name);
     await ghPublish(folder_path, {
@@ -20,8 +22,6 @@ async function publishExample(name) {
 }
 
 (async () => {
-  ghpages.clean();
-
   await publishExample("rollup");
   await publishExample("rollup-typescript");
   await publishExample("routify");
