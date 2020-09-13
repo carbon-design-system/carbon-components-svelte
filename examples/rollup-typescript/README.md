@@ -2,9 +2,17 @@
 
 > Example Rollup/TypeScript set-up scaffolded from the official [Svelte template](https://github.com/sveltejs/template).
 
-This example project is used to validate the TypeScript definitions of `carbon-components-svelte`.
+## Getting started
 
-## Available Scripts
+Scaffold a new project using [degit](https://github.com/Rich-Harris/degit):
+
+```sh
+npx degit ibm/carbon-components-svelte#rollup-typescript svelte-app
+cd svelte-app
+yarn install
+```
+
+## Available scripts
 
 ### `yarn dev`
 
@@ -13,7 +21,3 @@ Starts the app in development mode.
 ### `yarn build`
 
 Builds the app for production.
-
-### `yarn validate`
-
-Runs [svelte-check](https://github.com/sveltejs/language-tools#svelte-check) from the Svelte [Language Tools](https://github.com/sveltejs/language-tools) which type checks the app code.
