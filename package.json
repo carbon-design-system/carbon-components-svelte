@@ -10,8 +10,9 @@
   "scripts": {
     "start": "start-storybook -p 9090",
     "build": "build-storybook",
-    "prettier": "prettier --write './**/*.svelte'",
-    "prepack": "node scripts/build-css && rollup -c"
+    "prettier": "prettier --write './**/*.{svelte,js,md}'",
+    "prepack": "node scripts/build-css && rollup -c",
+    "publish-examples": "node scripts/publish-examples"
   },
   "sideEffects": false,
   "dependencies": {
