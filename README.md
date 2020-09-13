@@ -7,7 +7,7 @@
 
 ## Getting started
 
-`carbon-components-svelte` can be installed as a development dependency.
+Install `carbon-components-svelte` as a development dependency.
 
 ```bash
 yarn add -D carbon-components-svelte
@@ -17,12 +17,12 @@ npm -i -D carbon-components-svelte
 
 ## Usage
 
-The quickest way to start is to use a template from the [examples](examples/) folder.
+The quickest way to get started is to customize a template from the [examples](examples/) folder.
 
 Example set-ups demonstrate usage with popular application bundlers and frameworks. They feature a mix of Singe-page Applications (SPA), Server-side rendering (SSR) and statically exported approaches.
 
 - **[rollup](examples/rollup/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup)
-- **[rollup-typescript](examples/rollup-typescript/)**: SPA bundled using Rollup with TypeScript support
+- **[rollup-typescript](examples/rollup-typescript/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup) with TypeScript support
 - **[routify](examples/routify/)**: SPA + static export using [Routify](https://github.com/roxiness/routify)
 - **[sapper](examples/sapper/)**: SSR + static export using [Sapper](https://github.com/sveltejs/sapper)
 - **[svite](examples/svite/)**: SPA developed with Svite, bundled with [Rollup](https://github.com/rollup/rollup)
@@ -59,7 +59,7 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 </Accordion>
 ```
 
-Refer to [COMPONENT_INDEX.md](COMPONENT_INDEX.md) for component documentation.
+**Refer to [COMPONENT_INDEX.md](COMPONENT_INDEX.md) for component API documentation.**
 
 ### Precompiled CSS StyleSheets
 
@@ -74,6 +74,8 @@ Refer to [COMPONENT_INDEX.md](COMPONENT_INDEX.md) for component documentation.
 Each StyleSheet is [generated](scripts/build-css.js) from the flagship [carbon-components](https://github.com/carbon-design-system/carbon/tree/master/packages/components) library.
 
 The [examples](examples/) use `all.css` for dynamic theming through CSS variables.
+
+Because the CSS is precompiled, it includes all Carbon design styles. One method to optimize the CSS is to ship only the CSS that is used. This can be accomplished using [PurgeCSS](https://github.com/FullHuman/purgecss) with a Carbon style extractor (WIP).
 
 #### Usage
 
