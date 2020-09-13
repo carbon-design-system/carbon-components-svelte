@@ -4,10 +4,7 @@ describe("Button", () => {
   });
 
   it("clicks", () => {
-    cy.get(".bx--btn--primary")
-      .first()
-      .as("btn")
-      .contains("Primary button");
+    cy.get(".bx--btn--primary").first().as("btn").contains("Primary button");
 
     cy.get("@btn").trigger("click");
     cy.get("@log").should("be.calledWith", "click");

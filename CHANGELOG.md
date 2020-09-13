@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.12.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.12.0) - 2020-09-13
+
+**Features**
+
+- css: ship precompiled CSS StyleSheets for each Carbon theme (70e0875)
+
+**Documentation**
+
+- examples: add example set-ups using popular bundlers/frameworks
+- update README guidance on consuming the library
+
 ## [0.11.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.11.0) - 2020-09-05
 
 **Features**
@@ -21,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - UI Shell: add Close/AppSwitcher as default icons for `HeaderAction` component (5f62cde)
 - ButtonSet: add `stacked` prop (c8e0a59)
-- Link: set `rel` attribute to "noopener noreferrer" if `target` is "_blank" (4b7d254)
+- Link: set `rel` attribute to "noopener noreferrer" if `target` is "\_blank" (4b7d254)
 
 **Fixes**
 
@@ -123,7 +134,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.8.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.8.0) - 2020-07-19
 
-- use $$restProps API (requires Svelte version >=3.20)
+- use \$\$restProps API (requires Svelte version >=3.20)
 - upgrade `carbon-icons-svelte` to version >=10.13.0
 - use svelte class:{value} API instead of `cx`
 - add ref prop to "interactive" components like text inputs, anchor links... ([Issue #196](https://github.com/IBM/carbon-components-svelte/issues/196))

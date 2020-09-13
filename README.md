@@ -21,12 +21,12 @@ The quickest way to get started is to customize a template from the [examples](e
 
 Example set-ups demonstrate usage with popular application bundlers and frameworks. They feature a mix of Singe-page Applications (SPA), Server-side rendering (SSR) and statically exported approaches.
 
-- **[rollup](examples/rollup/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup)
-- **[rollup-typescript](examples/rollup-typescript/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup) with TypeScript support
-- **[routify](examples/routify/)**: SPA + static export using [Routify](https://github.com/roxiness/routify)
-- **[sapper](examples/sapper/)**: SSR + static export using [Sapper](https://github.com/sveltejs/sapper)
-- **[svite](examples/svite/)**: SPA developed with Svite, bundled with [Rollup](https://github.com/rollup/rollup)
-- **[webpack](examples/webpack/)**: SPA bundled with [webpack](https://github.com/webpack/webpack)
+- **[examples/rollup](examples/rollup/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup)
+- **[examples/rollup-typescript](examples/rollup-typescript/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup) with TypeScript support
+- **[examples/routify](examples/routify/)**: SPA + static export using [Routify](https://github.com/roxiness/routify)
+- **[examples/sapper](examples/sapper/)**: SSR + static export using [Sapper](https://github.com/sveltejs/sapper)
+- **[examples/svite](examples/svite/)**: SPA developed with Svite, bundled with [Rollup](https://github.com/rollup/rollup)
+- **[examples/webpack](examples/webpack/)**: SPA bundled with [webpack](https://github.com/webpack/webpack)
 
 ### Scaffolding
 

@@ -1,4 +1,4 @@
-// Type definitions for carbon-components-svelte 0.11.0
+// Type definitions for carbon-components-svelte 0.12.0
 // Project: https://github.com/IBM/carbon-components-svelte
 
 export class CarbonSvelteComponent {
@@ -1484,7 +1484,7 @@ export class Grid extends CarbonSvelteComponent {
     noGutterRight?: boolean;
   };
 
-  $$slot_def: { default: { } };
+  $$slot_def: { default: {} };
 }
 
 export class Header extends CarbonSvelteComponent {
