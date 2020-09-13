@@ -1484,7 +1484,7 @@ export class Grid extends CarbonSvelteComponent {
     noGutterRight?: boolean;
   };
 
-  $$slot_def: { default: {} };
+  $$slot_def: { default: { } };
 }
 
 export class Header extends CarbonSvelteComponent {
