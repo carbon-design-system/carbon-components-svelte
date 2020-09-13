@@ -1001,10 +1001,10 @@ caniuse-lite@^1.0.30001124:
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001124.tgz#5d9998190258e11630d674fc50ea8e579ae0ced2"
   integrity sha512-zQW8V3CdND7GHRH6rxm6s59Ww4g/qGWTheoboW9nfeMg7sUoopIfKCcNZUjwYRCOrvereh3kwDpZj4VLQ7zGtA==
 
-carbon-components-svelte@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/carbon-components-svelte/-/carbon-components-svelte-0.11.0.tgz#3fd824f2cf605aef9d62baf519aa998fe5172d94"
-  integrity sha512-Ie41yTcvi7l2GC3nHLHt2upgWp/k5hlvv4wh1yRxpy/r8B+WqJHonqB222z89axzayE41dgAF3+Ke2p9dretbQ==
+carbon-components-svelte@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.npmjs.org/carbon-components-svelte/-/carbon-components-svelte-0.12.0.tgz#d35e9b4f573dba324a134aabbd53dd93805c7c28"
+  integrity sha512-VLDzz3Kqq7bxBrPM6ogLbYSnYl3m1PYzehy3lwiH2vSqT1+1FqvBG4z/rt00TV2IXgdNxbbrnOu6QOYsqaOdqg==
   dependencies:
     carbon-icons-svelte "^10.15.0"
     flatpickr "4.6.3"
