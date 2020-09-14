@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.12.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.12.2) - 2020-09-14
+
+**Fixes**
+
+- Dropdown: allow event propagation when clicking the chevron icon (73861e2)
+
 ## [0.12.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.12.1) - 2020-09-14
 
 **Fixes**
