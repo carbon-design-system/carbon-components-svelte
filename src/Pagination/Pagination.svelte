@@ -91,17 +91,13 @@
    */
   export let id = "ccs-" + Math.random().toString(36);
 
-  import { afterUpdate, createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import CaretLeft16 from "carbon-icons-svelte/lib/CaretLeft16";
   import CaretRight16 from "carbon-icons-svelte/lib/CaretRight16";
   import { Button } from "../Button";
   import { Select, SelectItem } from "../Select";
 
   const dispatch = createEventDispatcher();
-
-  afterUpdate(() => {
-    dispatch("update", { pageSize, page });
-  });
 
   $: {
     if (typeof page !== "number") {
@@ -111,6 +107,8 @@
     if (typeof pageSize !== "number") {
       pageSize = Number(pageSize);
     }
+
+    dispatch("update", { pageSize, page });
   }
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = Array.from({ length: totalPages }, (_, i) => i);
