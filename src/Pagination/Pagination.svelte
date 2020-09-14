@@ -100,9 +100,18 @@
   const dispatch = createEventDispatcher();
 
   afterUpdate(() => {
-    dispatch("update", { pageSize: parseInt(pageSize), page: parseInt(page) });
+    dispatch("update", { pageSize, page });
   });
 
+  $: {
+    if (typeof page !== "number") {
+      page = Number(page);
+    }
+
+    if (typeof pageSize !== "number") {
+      pageSize = Number(pageSize);
+    }
+  }
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = Array.from({ length: totalPages }, (_, i) => i);
   $: backButtonDisabled = disabled || page === 1;

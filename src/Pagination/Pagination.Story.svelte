@@ -12,6 +12,12 @@
   {:else if story === 'skeleton'}
     <PaginationSkeleton />
   {:else}
-    <Pagination {...$$props}>Pagination</Pagination>
+    <Pagination
+      {...$$props}
+      on:update="{({ detail }) => {
+        console.log(detail);
+      }}">
+      Pagination
+    </Pagination>
   {/if}
 </div>
