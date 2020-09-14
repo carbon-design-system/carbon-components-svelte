@@ -77,6 +77,7 @@
     tabindex="{!current && !disabled ? '0' : '-1'}"
     class:bx--progress-step-button="{true}"
     class:bx--progress-step-button--unclickable="{current}"
+    on:click
     on:click="{() => {
       change(step.index);
     }}"
