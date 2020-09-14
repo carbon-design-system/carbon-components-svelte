@@ -1,6 +1,6 @@
 # Component Index
 
-> 144 components exported from carbon-components-svelte 0.12.0
+> 144 components exported from carbon-components-svelte 0.12.1
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -3158,6 +3158,7 @@ import { ProgressStep } from "carbon-components-svelte";
 
 ### Forwarded events
 
+- `on:click`
 - `on:mouseover`
 - `on:mouseenter`
 - `on:mouseleave`
@@ -3295,11 +3296,11 @@ import { RadioTile } from "carbon-components-svelte";
 ### Forwarded events
 
 - `on:change`
+- `on:keydown`
 - `on:click`
 - `on:mouseover`
 - `on:mouseenter`
 - `on:mouseleave`
-- `on:keydown`
 
 ### Dispatched events
 

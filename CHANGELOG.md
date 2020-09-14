@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.12.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.12.1) - 2020-09-14
+
+**Fixes**
+
+- Pagination: ensure `page`, `pageSize` values are numbers (0138910)
+- Pagination: dispatch "update" event only when `pageSize` or `page` values update (458d1b5)
+- Pagination: use correct size carbon icons for buttons (size `16` instead of `24`) (192f98d)
+- ProgressStep: use button element; set negative `tabindex` if `disabled` is `true` (3202f39)
+- ProgressStep: forward click event (6cb877e)
+- SideNavMenu, SideNavMenuItem: remove "role", "aria-haspopup" attributes causing a11y warnings
+- RadioTile: move `keydown`, `tabindex` to input element (17d97d1)
+
 ## [0.12.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.12.0) - 2020-09-13
 
 **Features**
