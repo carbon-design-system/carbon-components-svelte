@@ -24,7 +24,6 @@
 <li class:bx--side-nav__item="{true}" class:bx--side-nav__item--icon="{icon}">
   <button
     type="button"
-    aria-haspopup="true"
     aria-expanded="{expanded}"
     class:bx--side-nav__submenu="{true}"
     {...$$restProps}
