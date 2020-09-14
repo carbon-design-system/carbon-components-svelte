@@ -91,17 +91,25 @@
    */
   export let id = "ccs-" + Math.random().toString(36);
 
-  import CaretLeft24 from "carbon-icons-svelte/lib/CaretLeft24";
-  import CaretRight24 from "carbon-icons-svelte/lib/CaretRight24";
+  import { createEventDispatcher } from "svelte";
+  import CaretLeft16 from "carbon-icons-svelte/lib/CaretLeft16";
+  import CaretRight16 from "carbon-icons-svelte/lib/CaretRight16";
+  import { Button } from "../Button";
   import { Select, SelectItem } from "../Select";
-  import { afterUpdate, createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
-  afterUpdate(() => {
-    dispatch("update", { pageSize: parseInt(pageSize), page: parseInt(page) });
-  });
+  $: {
+    if (typeof page !== "number") {
+      page = Number(page);
+    }
 
+    if (typeof pageSize !== "number") {
+      pageSize = Number(pageSize);
+    }
+
+    dispatch("update", { pageSize, page });
+  }
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = Array.from({ length: totalPages }, (_, i) => i);
   $: backButtonDisabled = disabled || page === 1;
@@ -154,29 +162,29 @@
         {:else}{pageRangeText(page, totalPages)}{/if}
       </span>
     {/if}
-    <button
-      type="button"
-      aria-label="{backwardText}"
+    <Button
+      hasIconOnly
+      kind="ghost"
+      tooltipAlignment="center"
+      tooltipPosition="top"
+      icon="{CaretLeft16}"
+      iconDescription="{backwardText}"
       disabled="{backButtonDisabled}"
-      class:bx--pagination__button="{true}"
-      class:bx--pagination__button--backward="{true}"
-      class:bx--pagination__button--no-index="{backButtonDisabled}"
+      class="bx--pagination__button bx--pagination__button--backward {backButtonDisabled ? 'bx--pagination__button--no-index' : ''}"
       on:click="{() => {
         page--;
-      }}">
-      <CaretLeft24 />
-    </button>
-    <button
-      type="button"
-      aria-label="{forwardText}"
+      }}" />
+    <Button
+      hasIconOnly
+      kind="ghost"
+      tooltipAlignment="end"
+      tooltipPosition="top"
+      icon="{CaretRight16}"
+      iconDescription="{forwardText}"
       disabled="{forwardButtonDisabled}"
-      class:bx--pagination__button="{true}"
-      class:bx--pagination__button--forward="{true}"
-      class:bx--pagination__button--no-index="{forwardButtonDisabled}"
+      class="bx--pagination__button bx--pagination__button--forward {forwardButtonDisabled ? 'bx--pagination__button--no-index' : ''}"
       on:click="{() => {
         page++;
-      }}">
-      <CaretRight24 />
-    </button>
+      }}" />
   </div>
 </div>

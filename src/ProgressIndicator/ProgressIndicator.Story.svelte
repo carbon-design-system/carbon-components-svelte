@@ -26,7 +26,10 @@
       <ProgressStep
         label="First step"
         description="Step 1: Getting started with Carbon Design System"
-        secondaryLabel="Optional label" />
+        secondaryLabel="Optional label"
+        on:click="{() => {
+          console.log('click');
+        }}" />
       <ProgressStep
         label="Second step with tooltip"
         description="Step 2: Getting started with Carbon Design System"

@@ -71,11 +71,13 @@
   class:bx--progress-step--incomplete="{!complete && !current}"
   class:bx--progress-step--disabled="{disabled}"
   {...$$restProps}>
-  <div
-    role="button"
-    tabindex="{current ? '-1' : '0'}"
+  <button
+    disabled="{disabled}"
+    aria-disabled="{disabled}"
+    tabindex="{!current && !disabled ? '0' : '-1'}"
     class:bx--progress-step-button="{true}"
     class:bx--progress-step-button--unclickable="{current}"
+    on:click
     on:click="{() => {
       change(step.index);
     }}"
@@ -112,5 +114,5 @@
       <p class:bx--progress-optional="{true}">{secondaryLabel}</p>
     {/if}
     <span class:bx--progress-line="{true}"></span>
-  </div>
+  </button>
 </li>
