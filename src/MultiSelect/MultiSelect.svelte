@@ -405,7 +405,8 @@
             open="{open}" />
         {/if}
         <ListBoxMenuIcon
-          on:click="{() => {
+          on:click="{(e) => {
+            e.stopPropagation();
             open = !open;
           }}"
           translateWithId="{translateWithId}"
