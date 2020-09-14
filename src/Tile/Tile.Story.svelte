@@ -52,7 +52,10 @@
           {...$$props}
           value="{value}"
           id="{id}"
-          labelText="{labelText}">
+          labelText="{labelText}"
+          on:keydown="{() => {
+            console.log('keydown');
+          }}">
           Selectable Tile
         </RadioTile>
       {/each}
