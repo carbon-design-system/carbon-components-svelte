@@ -317,6 +317,11 @@ export class ClickableTile extends CarbonSvelteComponent {
      * @default false
      */
     light?: boolean;
+
+    /**
+     * Set the `href`
+     */
+    href?: string;
   };
 
   $$slot_def: { default: {} };
