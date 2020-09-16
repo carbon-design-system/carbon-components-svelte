@@ -1,6 +1,6 @@
 # Component Index
 
-> 144 components exported from carbon-components-svelte 0.12.2
+> 144 components exported from carbon-components-svelte 0.12.3
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -566,6 +566,7 @@ import { ClickableTile } from "carbon-components-svelte";
 | :-------- | :------------------- | :------------ |
 | clicked   | <code>boolean</code> | false         |
 | light     | <code>boolean</code> | false         |
+| href      | <code>string</code>  | --            |
 
 ### Slots
 
