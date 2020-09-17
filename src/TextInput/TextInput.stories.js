@@ -17,6 +17,7 @@ export const Default = () => ({
     light: boolean("Light variant (light)", false),
     hideLabel: boolean("No label (hideLabel)", false),
     labelText: text("Label text (labelText)", "Text Input label"),
+    helperText: text("Helper text (helperText)", "Optional helper text here"),
     invalid: boolean("Show form validation UI (invalid)", false),
     invalidText: text(
       "Content of form validation UI (invalidText)",
@@ -76,6 +77,7 @@ export const ControlledTogglePasswordVisibility = () => ({
     light: boolean("Light variant (light)", false),
     hideLabel: boolean("No label (hideLabel)", false),
     labelText: text("Label text (labelText)", "Text Input label"),
+    helperText: text("Helper text (helperText)", "Optional helper text here"),
     invalid: boolean("Show form validation UI (invalid)", false),
     invalidText: text(
       "Content of form validation UI (invalidText)",
