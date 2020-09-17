@@ -10,6 +10,12 @@
    * @type {boolean} [light=false]
    */
   export let light = false;
+
+  /**
+   * Set the `href`
+   * @type {string} [href]
+   */
+  export let href = undefined;
 </script>
 
 <!-- svelte-ignore a11y-missing-attribute -->
@@ -19,6 +25,7 @@
   class:bx--tile--is-clicked="{clicked}"
   class:bx--tile--light="{light}"
   {...$$restProps}
+  href="{href}"
   on:click
   on:click="{() => {
     clicked = !clicked;

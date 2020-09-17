@@ -1,4 +1,4 @@
-// Type definitions for carbon-components-svelte 0.12.2
+// Type definitions for carbon-components-svelte 0.12.3
 // Project: https://github.com/IBM/carbon-components-svelte
 
 export class CarbonSvelteComponent {
@@ -317,6 +317,11 @@ export class ClickableTile extends CarbonSvelteComponent {
      * @default false
      */
     light?: boolean;
+
+    /**
+     * Set the `href`
+     */
+    href?: string;
   };
 
   $$slot_def: { default: {} };
