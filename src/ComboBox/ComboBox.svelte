@@ -187,13 +187,6 @@
       {titleText}
     </label>
   {/if}
-  {#if helperText}
-    <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}">
-      {helperText}
-    </div>
-  {/if}
   <ListBox
     class="bx--combo-box"
     id="{comboId}"
@@ -304,4 +297,11 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
+  {#if !invalid && helperText}
+    <div
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}">
+      {helperText}
+    </div>
+  {/if}
 </div>
