@@ -118,13 +118,6 @@
         {labelText}
       </label>
     {/if}
-    {#if !inline && helperText}
-      <div
-        class:bx--form__helper-text="{true}"
-        class:bx--form__helper-text--disabled="{disabled}">
-        {helperText}
-      </div>
-    {/if}
     {#if inline}
       <div class:bx--select-input--inline__wrapper="{true}">
         <div
@@ -188,6 +181,13 @@
           <WarningFilled16 class="bx--select__invalid-icon" />
         {/if}
       </div>
+      {#if !invalid && helperText}
+        <div
+          class:bx--form__helper-text="{true}"
+          class:bx--form__helper-text--disabled="{disabled}">
+          {helperText}
+        </div>
+      {/if}
       {#if invalid}
         <div id="{errorId}" class:bx--form-requirement="{true}">
           {invalidText}

@@ -27,6 +27,7 @@ export const Default = () => ({
         "A valid value is required"
       ),
       labelText: text("Label text (helperText)", "Select"),
+      helperText: text("Helper text (helperText)", "Optional helper text here"),
       id: text("Select id", "select-id"),
       name: text("Select name", "select-name"),
     },
