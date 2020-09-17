@@ -20,6 +20,7 @@ export const Default = () => ({
     id: text("MultiSelect id", "multi-select-id"),
     name: text("MultiSelect name", "multi-select-name"),
     titleText: text("Title (titleText)", "Multiselect Title"),
+    helperText: text("Helper text (helperText)", "Optional helper text here"),
     filterable: boolean("Filterable (filterable)", false),
     selectionFeedback: select(
       "Selection feedback (selectionFeedback)",
