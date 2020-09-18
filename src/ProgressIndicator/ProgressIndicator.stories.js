@@ -8,6 +8,7 @@ export const Default = () => ({
   props: {
     currentIndex: number("Current progress (currentIndex)", 1),
     vertical: boolean("Vertical orientation (vertical)", false),
+    spaceEqually: boolean("Space Equally", false),
   },
 });
 

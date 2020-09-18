@@ -11,6 +11,12 @@
    */
   export let vertical = false;
 
+  /**
+   * Set to `true` to specify whether the progress steps should be split equally in size in the div
+   * @type {boolean} [spaceEqually=false]
+   */
+  export let spaceEqually = false;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
 
@@ -43,6 +49,7 @@
 <ul
   class:bx--progress="{true}"
   class:bx--progress--vertical="{vertical}"
+  class:bx--progress--space-equal="{spaceEqually && !vertical}"
   {...$$restProps}
   on:click
   on:mouseover
