@@ -26,6 +26,7 @@ export const Default = () => ({
     disabled: boolean("Disabled (disabled)", false),
     light: boolean("Light variant (light)", false),
     titleText: text("Title (titleText)", "This is not a dropdown title."),
+    helperText: text("Helper text (helperText)", "Optional helper text here"),
     invalid: boolean("Show form validation UI (invalid)", false),
     invalidText: text(
       "Form validation UI content (invalidText)",

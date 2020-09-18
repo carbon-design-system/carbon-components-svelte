@@ -13,6 +13,7 @@ export const Default = () => ({
     hideLabel: boolean("No label (hideLabel)", false),
     labelText: text("Label text (labelText)", "Text Area label"),
     invalid: boolean("Show form validation UI (invalid)", false),
+    helperText: text("Helper text (helperText)", "Optional helper text here"),
     invalidText: text(
       "Content of form validation UI (invalidText)",
       "A valid value is required"

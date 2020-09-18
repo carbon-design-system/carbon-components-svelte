@@ -166,13 +166,6 @@
       {titleText}
     </label>
   {/if}
-  {#if !inline && helperText}
-    <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}">
-      {helperText}
-    </div>
-  {/if}
   <ListBox
     type="{type}"
     size="{size}"
@@ -250,4 +243,11 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
+  {#if !inline && !invalid && helperText}
+    <div
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}">
+      {helperText}
+    </div>
+  {/if}
 </div>

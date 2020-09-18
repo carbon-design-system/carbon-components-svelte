@@ -198,13 +198,6 @@
           <slot name="label">{label}</slot>
         </label>
       {/if}
-      {#if helperText}
-        <div
-          class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}">
-          {helperText}
-        </div>
-      {/if}
       <div class:bx--number__input-wrapper="{true}">
         <button
           type="button"
@@ -262,13 +255,6 @@
           <slot name="label">{label}</slot>
         </label>
       {/if}
-      {#if helperText}
-        <div
-          class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}">
-          {helperText}
-        </div>
-      {/if}
       <div class:bx--number__input-wrapper="{true}">
         <input
           bind:this="{ref}"
@@ -322,6 +308,13 @@
             <CaretDownGlyph class="down-icon" />
           </button>
         </div>
+      </div>
+    {/if}
+    {#if !error && helperText}
+      <div
+        class:bx--form__helper-text="{true}"
+        class:bx--form__helper-text--disabled="{disabled}">
+        {helperText}
       </div>
     {/if}
     {#if error}

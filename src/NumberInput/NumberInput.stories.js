@@ -30,6 +30,7 @@ export const Default = () => ({
     disabled: boolean("Disabled (disabled)", false),
     readonly: boolean("Read only (readonly)", false),
     invalid: boolean("Show form validation UI (invalid)", false),
+    helperText: text("Helper text (helperText)", "Optional helper text here"),
     mobile: boolean("Mobile variant (mobile)", false),
     invalidText: text(
       "Form validation UI content (invalidText)",

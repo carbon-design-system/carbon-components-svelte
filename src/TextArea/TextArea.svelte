@@ -103,13 +103,6 @@
       {labelText}
     </label>
   {/if}
-  {#if helperText}
-    <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}">
-      {helperText}
-    </div>
-  {/if}
   <div
     class:bx--text-area__wrapper="{true}"
     data-invalid="{invalid || undefined}">
@@ -139,6 +132,13 @@
       on:focus
       on:blur></textarea>
   </div>
+  {#if !invalid && helperText}
+    <div
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}">
+      {helperText}
+    </div>
+  {/if}
   {#if invalid}
     <div id="{errorId}" class:bx--form-requirement="{true}">{invalidText}</div>
   {/if}
