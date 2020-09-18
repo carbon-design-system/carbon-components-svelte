@@ -25,10 +25,10 @@
 
   /**
    * @deprecated The `hideLabel` prop for `TimePickerSelect` is no longer needed and has been deprecated. It will be removed in the next major release.
-   * Set to `true` to visually hide the label text
-   * @type {boolean} [hideLabel=false]
+   * Set to `false` to show the label text
+   * @type {boolean} [hideLabel=true]
    */
-  export let hideLabel = false;
+  export let hideLabel = true;
 
   /**
    * Set an id for the select element
