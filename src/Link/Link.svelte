@@ -12,6 +12,12 @@
   export let disabled = false;
 
   /**
+   * Set to `true` to allow visited styles
+   * @type {boolean} [visited=false]
+   */
+  export let visited = false;
+
+  /**
    * Obtain a reference to the top-level HTML element
    * @type {null | HTMLAnchorElement | HTMLParagraphElement} [ref=null]
    */
@@ -24,6 +30,7 @@
     class:bx--link="{true}"
     class:bx--link--disabled="{disabled}"
     class:bx--link--inline="{inline}"
+    class:bx--link--visited="{visited}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -38,6 +45,7 @@
     class:bx--link="{true}"
     class:bx--link--disabled="{disabled}"
     class:bx--link--inline="{inline}"
+    class:bx--link--visited="{visited}"
     rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
     {...$$restProps}
     on:click
