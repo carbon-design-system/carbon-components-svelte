@@ -36,7 +36,6 @@ export const Default = () => ({
     },
     select: {
       disabled: boolean("Disabled (disabled in <TimePickerSelect>)", false),
-      hideLabel: boolean("No label (hideLabel in <TimePickerSelect>)", true),
       labelText: text(
         "Label text (labelText in <TimePickerSelect>)",
         "Please select"
