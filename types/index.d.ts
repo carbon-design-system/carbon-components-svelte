@@ -1,4 +1,4 @@
-// Type definitions for carbon-components-svelte 0.12.3
+// Type definitions for carbon-components-svelte 0.13.0
 // Project: https://github.com/IBM/carbon-components-svelte
 
 export class CarbonSvelteComponent {
@@ -1829,6 +1829,12 @@ export class Link extends CarbonSvelteComponent {
     disabled?: boolean;
 
     /**
+     * Set to `true` to allow visited styles
+     * @default false
+     */
+    visited?: boolean;
+
+    /**
      * Obtain a reference to the top-level HTML element
      * @default null
      */
@@ -3023,6 +3029,12 @@ export class ProgressIndicator extends CarbonSvelteComponent {
      * @default false
      */
     vertical?: boolean;
+
+    /**
+     * Set to `true` to specify whether the progress steps should be split equally in size in the div
+     * @default false
+     */
+    spaceEqually?: boolean;
   };
 
   $$slot_def: { default: {} };
@@ -4590,8 +4602,8 @@ export class TimePickerSelect extends CarbonSvelteComponent {
     labelText?: string;
 
     /**
-     * Set to `true` to visually hide the label text
-     * @default false
+     *
+     * @default true
      */
     hideLabel?: boolean;
 

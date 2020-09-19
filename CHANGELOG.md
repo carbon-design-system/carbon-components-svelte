@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.13.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.13.0) - 2020-09-18
+
+**Features**
+
+- Move helper text below form inputs in `ComboBox`, `Dropdown`, `MultiSelect`, `TextArea`, `NumberInput`, `TextInput`, `Select` ([PR #256](https://github.com/IBM/carbon-components-svelte/pull/256), [issue #255](https://github.com/IBM/carbon-components-svelte/issues/255))
+
+- ProgressIndicator: add `spaceEqual` prop and functionality ([PR #263](https://github.com/IBM/carbon-components-svelte/pull/263), [issue #262](https://github.com/IBM/carbon-components-svelte/issues/262))
+
+**Fixes**
+
+- Link: remove visited styles by default ([PR #259](https://github.com/IBM/carbon-components-svelte/pull/259), [issue #258](https://github.com/IBM/carbon-components-svelte/issues/258))
+
+- TimePickerSelect: deprecate `hideLabel` prop to match spec and set default value to `true` ([PR #261](https://github.com/IBM/carbon-components-svelte/pull/261), [issue #260](https://github.com/IBM/carbon-components-svelte/issues/260))
+
+**Breaking Changes**
+
+- TimePickerSelect: `hideLabel` prop is `true` by default
+
 ## [0.12.3](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.12.3) - 2020-09-16
 
 **Fixes**

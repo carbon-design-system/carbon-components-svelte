@@ -1,6 +1,6 @@
 # Component Index
 
-> 144 components exported from carbon-components-svelte 0.12.3
+> 144 components exported from carbon-components-svelte 0.13.0
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -2083,6 +2083,7 @@ import { Link } from "carbon-components-svelte";
 | :-------- | :--------------------------------------------------------------------- | :------------ |
 | inline    | <code>boolean</code>                                                   | false         |
 | disabled  | <code>boolean</code>                                                   | false         |
+| visited   | <code>boolean</code>                                                   | false         |
 | ref       | <code>null &#124; HTMLAnchorElement &#124; HTMLParagraphElement</code> | null          |
 
 ### Slots
@@ -3083,6 +3084,7 @@ import { ProgressIndicator } from "carbon-components-svelte";
 | :----------- | :------------------- | :------------ |
 | currentIndex | <code>number</code>  | 0             |
 | vertical     | <code>boolean</code> | false         |
+| spaceEqually | <code>boolean</code> | false         |
 
 ### Slots
 
@@ -4852,7 +4854,7 @@ import { TimePickerSelect } from "carbon-components-svelte";
 | disabled        | <code>boolean</code>                       | false                  |
 | iconDescription | <code>string</code>                        | "Open list of options" |
 | labelText       | <code>string</code>                        | ""                     |
-| hideLabel       | <code>boolean</code>                       | false                  |
+| hideLabel       | <code>boolean</code>                       | true                   |
 | id              | <code>string</code>                        | --                     |
 | name            | <code>string</code>                        | --                     |
 | ref             | <code>null &#124; HTMLSelectElement</code> | null                   |
