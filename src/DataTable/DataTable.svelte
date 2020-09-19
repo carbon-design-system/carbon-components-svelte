@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the data table headers
-   * @type {{key: string; value: string;}} [headers=[]]
+   * @type {{key: string; value: string;}[]} [headers=[]]
    */
   export let headers = [];
 
