@@ -21,6 +21,10 @@ export const Default = () => ({
         "[data-modal-primary-focus]"
       ),
       size: select("Size (size)", sizes, "sm"),
+      preventCloseOnClickOutside: boolean(
+        "Prevent the modal from closing when clicking outside (preventCloseOnClickOutside)",
+        false
+      ),
     },
     modalHeader: {
       label: text("Optional Label (label in <ModalHeader>)", "Optional Label"),

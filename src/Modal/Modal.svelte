@@ -90,6 +90,12 @@
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
   /**
+   * Set to `true` to prevent the modal from closing when clicking outside
+   * @type {boolean} [preventCloseOnClickOutside=false]
+   */
+  export let preventCloseOnClickOutside = false;
+
+  /**
    * Set an id for the top-level element
    * @type {string} [id]
    */
@@ -167,7 +173,7 @@
   }}"
   on:click
   on:click="{() => {
-    if (!didClickInnerModal) open = false;
+    if (!didClickInnerModal && !preventCloseOnClickOutside) open = false;
     didClickInnerModal = false;
   }}"
   on:mouseover
