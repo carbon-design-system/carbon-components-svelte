@@ -18,6 +18,12 @@
   export let danger = false;
 
   /**
+   * Set to `true` to prevent the modal from closing when clicking outside
+   * @type {boolean} [preventCloseOnClickOutside=false]
+   */
+  export let preventCloseOnClickOutside = false;
+
+  /**
    * Specify a class for the inner modal
    * @type {string} [containerClass=""]
    */
@@ -104,7 +110,7 @@
   {...$$restProps}
   on:click
   on:click="{() => {
-    if (!didClickInnerModal) open = false;
+    if (!didClickInnerModal && !preventCloseOnClickOutside) open = false;
     didClickInnerModal = false;
   }}"
   on:mouseover

@@ -44,6 +44,10 @@ export const Default = () => ({
       "[data-modal-primary-focus]"
     ),
     size: select("Size (size)", sizes),
+    preventCloseOnClickOutside: boolean(
+      "Prevent the modal from closing when clicking outside (preventCloseOnClickOutside)",
+      false
+    ),
     iconDescription: text(
       "Close icon description (iconDescription)",
       "Close the modal"
