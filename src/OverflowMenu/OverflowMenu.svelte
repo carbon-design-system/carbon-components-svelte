@@ -125,7 +125,6 @@
     }
 
     if (didOpen && !open) {
-      buttonRef.focus();
       items.set([]);
       currentId.set(undefined);
       currentIndex.set(0);
@@ -186,6 +185,7 @@
       } else if (e.key === 'Escape') {
         e.stopPropagation();
         open = false;
+        buttonRef.focus();
       }
     }
   }}">
