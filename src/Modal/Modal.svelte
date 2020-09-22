@@ -18,6 +18,12 @@
   export let danger = false;
 
   /**
+   * Set to `true` to enable alert mode
+   * @type {boolean} [alert=false]
+   */
+  export let alert = false;
+
+  /**
    * Set to `true` to use the passive variant
    * @type {boolean} [passiveModal=false]
    */
@@ -147,8 +153,19 @@
 
   $: modalLabelId = `bx--modal-header__label--modal-${id}`;
   $: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
+  $: modalBodyId = `bx--modal-body--${id}`;
   $: ariaLabel =
     modalLabel || $$props["aria-label"] || modalAriaLabel || modalHeading;
+
+  let alertDialogProps = {};
+  $: if (alert) {
+    if (passiveModal) {
+      alertDialogProps.role = "alert";
+    } else if (!passiveModal) {
+      alertDialogProps.role = "alertdialog";
+      alertDialogProps["aria-describedby"] = modalBodyId;
+    }
+  }
 </script>
 
 <div
@@ -182,6 +199,7 @@
   <div
     bind:this="{innerModal}"
     role="dialog"
+    {...alertDialogProps}
     aria-modal="true"
     aria-label="{ariaLabel}"
     class:bx--modal-container="{true}"
@@ -230,6 +248,7 @@
       {/if}
     </div>
     <div
+      id="{modalBodyId}"
       class:bx--modal-content="{true}"
       class:bx--modal-content--with-form="{hasForm}"
       class:bx--modal-scroll-content="{hasScrollingContent}"
