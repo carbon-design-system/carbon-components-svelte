@@ -23,6 +23,11 @@ export const Default = () => ({
       "Content of form validation UI (invalidText)",
       "A valid value is required"
     ),
+    warn: boolean('Show warning state (warn)', false),
+    warnText: text(
+      'Warning state text (warnText)',
+      'This will overwrite your current settings'
+    ),
     placeholder: text("Placeholder text (placeholder)", "Placeholder text."),
     id: text("TextInput id", "text-input-id"),
     name: text("TextInput name", "text-input-name"),
