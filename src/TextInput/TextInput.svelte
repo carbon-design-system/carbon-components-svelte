@@ -85,7 +85,7 @@
 
   /**
    * Specify the warning state text
-   * @type {string} [invalidText=""]
+   * @type {string} [warnText=""]
    */
   export let warnText = "";
 
@@ -141,7 +141,8 @@
       bind:this="{ref}"
       data-invalid="{invalid || undefined}"
       aria-invalid="{invalid || undefined}"
-      aria-describedby="{invalid ? errorId : undefined}"
+      data-warn="{warn || undefined}"
+      aria-describedby="{invalid ? errorId : warn ? warnId : undefined}"
       disabled="{disabled}"
       id="{id}"
       name="{name}"
@@ -152,6 +153,7 @@
       class:bx--text-input="{true}"
       class:bx--text-input--light="{light}"
       class:bx--text-input--invalid="{invalid}"
+      class:bx--text-input--warn="{warn}"
       class="{size && `bx--text-input--${size}`}"
       on:change
       on:input
@@ -162,7 +164,7 @@
       on:focus
       on:blur />
   </div>
-  {#if !invalid && helperText}
+  {#if !invalid && !warn && helperText}
     <div
       class:bx--form__helper-text="{true}"
       class:bx--form__helper-text--disabled="{disabled}">
