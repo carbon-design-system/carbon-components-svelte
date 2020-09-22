@@ -161,7 +161,8 @@
   $: if (alert) {
     if (passiveModal) {
       alertDialogProps.role = "alert";
-    } else if (!passiveModal) {
+    }
+    if (!passiveModal) {
       alertDialogProps.role = "alertdialog";
       alertDialogProps["aria-describedby"] = modalBodyId;
     }
