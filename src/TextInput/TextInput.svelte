@@ -78,6 +78,18 @@
   export let invalidText = "";
 
   /**
+   * Set to `true` to indicate an warning state
+   * @type {boolean} [warn=false]
+   */
+  export let warn = false;
+
+  /**
+   * Specify the warning state text
+   * @type {string} [warnText=""]
+   */
+  export let warnText = "";
+
+  /**
    * Obtain a reference to the input HTML element
    * @type {null | HTMLInputElement} [ref=null]
    */
@@ -90,8 +102,10 @@
   export let required = false;
 
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
+  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16";
 
   $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
 </script>
 
 <div
@@ -113,15 +127,22 @@
   {/if}
   <div
     data-invalid="{invalid || undefined}"
+    data-warn="{warn || undefined}"
     class:bx--text-input__field-wrapper="{true}">
     {#if invalid}
       <WarningFilled16 class="bx--text-input__invalid-icon" />
+    {/if}
+    {#if !invalid && warn}
+      <WarningAltFilled16
+        class="bx--text-input__invalid-icon
+          bx--text-input__invalid-icon--warning" />
     {/if}
     <input
       bind:this="{ref}"
       data-invalid="{invalid || undefined}"
       aria-invalid="{invalid || undefined}"
-      aria-describedby="{invalid ? errorId : undefined}"
+      data-warn="{warn || undefined}"
+      aria-describedby="{invalid ? errorId : warn ? warnId : undefined}"
       disabled="{disabled}"
       id="{id}"
       name="{name}"
@@ -132,6 +153,7 @@
       class:bx--text-input="{true}"
       class:bx--text-input--light="{light}"
       class:bx--text-input--invalid="{invalid}"
+      class:bx--text-input--warn="{warn}"
       class="{size && `bx--text-input--${size}`}"
       on:change
       on:input
@@ -142,7 +164,7 @@
       on:focus
       on:blur />
   </div>
-  {#if !invalid && helperText}
+  {#if !invalid && !warn && helperText}
     <div
       class:bx--form__helper-text="{true}"
       class:bx--form__helper-text--disabled="{disabled}">
@@ -151,5 +173,8 @@
   {/if}
   {#if invalid}
     <div class:bx--form-requirement="{true}" id="{errorId}">{invalidText}</div>
+  {/if}
+  {#if !invalid && warn}
+    <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
   {/if}
 </div>
