@@ -789,10 +789,9 @@ export class DataTableSkeleton extends CarbonSvelteComponent {
     rows?: number;
 
     /**
-     * Set to `true` to use the compact variant
-     * @default false
+     * Set the size of the data table
      */
-    compact?: boolean;
+    size?: "compact" | "short" | "tall";
 
     /**
      * Set to `true` to apply zebra styles to the datatable rows

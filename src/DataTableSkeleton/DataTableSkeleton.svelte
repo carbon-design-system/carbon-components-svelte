@@ -12,10 +12,10 @@
   export let rows = 5;
 
   /**
-   * Set to `true` to use the compact variant
-   * @type {boolean} [compact=false]
+   * Set the size of the data table
+   * @type {"compact" | "short" | "tall"} [size]
    */
-  export let compact = false;
+   export let size = undefined;
 
   /**
    * Set to `true` to apply zebra styles to the datatable rows
@@ -68,8 +68,10 @@
   <table
     class:bx--skeleton="{true}"
     class:bx--data-table="{true}"
+    class:bx--data-table--compact="{size === 'compact'}"
+    class:bx--data-table--short="{size === 'short'}"
+    class:bx--data-table--tall="{size === 'tall'}"
     class:bx--data-table--zebra="{zebra}"
-    class:bx--data-table--compact="{compact}"
     {...$$restProps}
     on:click
     on:mouseover
