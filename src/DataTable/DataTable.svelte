@@ -121,7 +121,8 @@
       zebra="{zebra}"
       size="{size}"
       stickyHeader="{stickyHeader}"
-      sortable="{sortable}">
+      sortable="{sortable}"
+    >
       <TableHead>
         <TableRow>
           {#each headers as header, i (header.key)}
@@ -137,7 +138,8 @@
                   key: header.key,
                   sortDirection,
                 });
-              }}">
+              }}"
+            >
               {header.value}
             </TableHeader>
           {/each}
@@ -149,13 +151,15 @@
             on:click="{() => {
               dispatch('click', { row });
               dispatch('click:row', row);
-            }}">
+            }}"
+          >
             {#each row.cells as cell, j (cell.key)}
               <TableCell
                 on:click="{() => {
                   dispatch('click', { row, cell });
                   dispatch('click:cell', cell);
-                }}">
+                }}"
+              >
                 {cell.value}
               </TableCell>
             {/each}

@@ -90,18 +90,21 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div
     class:bx--time-picker="{true}"
     class:bx--time-picker--light="{light}"
-    class:bx--select--light="{light}">
+    class:bx--select--light="{light}"
+  >
     <div class:bx--time-picker__input="{true}">
       {#if labelText}
         <label
           for="{id}"
           class:bx--label="{true}"
           class:bx--visually-hidden="{hideLabel}"
-          class:bx--label--disabled="{disabled}">
+          class:bx--label--disabled="{disabled}"
+        >
           {labelText}
         </label>
       {/if}
@@ -126,7 +129,8 @@
           value = target.value;
         }}"
         on:focus
-        on:blur />
+        on:blur
+      />
     </div>
     <slot />
   </div>

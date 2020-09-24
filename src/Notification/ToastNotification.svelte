@@ -96,23 +96,27 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <NotificationIcon
       notificationType="{notificationType}"
       kind="{kind}"
-      iconDescription="{iconDescription}" />
+      iconDescription="{iconDescription}"
+    />
     <NotificationTextDetails
       title="{title}"
       subtitle="{subtitle}"
       caption="{caption}"
-      notificationType="{notificationType}">
+      notificationType="{notificationType}"
+    >
       <slot />
     </NotificationTextDetails>
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription="{iconDescription}"
         notificationType="{notificationType}"
-        on:click="{close}" />
+        on:click="{close}"
+      />
     {/if}
   </div>
 {/if}

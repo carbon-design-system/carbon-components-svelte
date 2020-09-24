@@ -45,7 +45,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave
+  />
 {:else}
   {#if filter}
     <div
@@ -55,7 +56,8 @@
       class:bx--tag--disabled="{disabled}"
       class:bx--tag--filter="{filter}"
       {...$$restProps}
-      class="{type && `bx--tag--${type}`} {$$restProps.class}">
+      class="{type && `bx--tag--${type}`} {$$restProps.class}"
+    >
       <slot props="{{ class: 'bx--tag__label' }}">
         <span class:bx--tag__label="{true}">{type}</span>
       </slot>
@@ -67,7 +69,8 @@
         on:click|stopPropagation
         on:mouseover
         on:mouseenter
-        on:mouseleave>
+        on:mouseleave
+      >
         <Close16 />
       </button>
     </div>
@@ -80,7 +83,8 @@
       on:click
       on:mouseover
       on:mouseenter
-      on:mouseleave>
+      on:mouseleave
+    >
       <slot />
     </span>
   {/if}

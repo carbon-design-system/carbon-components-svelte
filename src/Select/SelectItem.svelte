@@ -45,6 +45,7 @@
   selected="{selected}"
   class:bx--select-option="{true}"
   class="{$$restProps.class}"
-  style="{$$restProps.style}">
+  style="{$$restProps.style}"
+>
   {text || value}
 </option>

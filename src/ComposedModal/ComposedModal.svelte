@@ -122,14 +122,16 @@
       focus(currentTarget);
       didOpen = false;
     }
-  }}">
+  }}"
+>
   <div
     bind:this="{innerModal}"
     class:bx--modal-container="{true}"
     class="{size && `bx--modal-container--${size}`} {containerClass}"
     on:click="{() => {
       didClickInnerModal = true;
-    }}">
+    }}"
+  >
     <slot />
   </div>
 </div>

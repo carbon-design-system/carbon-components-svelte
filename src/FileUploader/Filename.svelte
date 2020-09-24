@@ -28,7 +28,8 @@
     description="{iconDescription}"
     {...$$restProps}
     small
-    withOverlay="{false}" />
+    withOverlay="{false}"
+  />
 {/if}
 
 {#if status === 'edit'}
@@ -41,7 +42,8 @@
     class="bx--file-close"
     {...$$restProps}
     on:click
-    on:keydown />
+    on:keydown
+  />
 {/if}
 
 {#if status === 'complete'}
@@ -49,5 +51,6 @@
     aria-label="{iconDescription}"
     title="{iconDescription}"
     class="bx--file-complete"
-    {...$$restProps} />
+    {...$$restProps}
+  />
 {/if}

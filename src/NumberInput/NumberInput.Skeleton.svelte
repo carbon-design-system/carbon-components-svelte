@@ -12,7 +12,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   {#if !hideLabel}
     <span class:bx--label="{true}" class:bx--skeleton="{true}"></span>
   {/if}

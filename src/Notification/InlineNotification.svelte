@@ -91,16 +91,19 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <div class:bx--inline-notification__details="{true}">
       <NotificationIcon
         notificationType="{notificationType}"
         kind="{kind}"
-        iconDescription="{iconDescription}" />
+        iconDescription="{iconDescription}"
+      />
       <NotificationTextDetails
         title="{title}"
         subtitle="{subtitle}"
-        notificationType="{notificationType}">
+        notificationType="{notificationType}"
+      >
         <slot />
       </NotificationTextDetails>
     </div>
@@ -109,7 +112,8 @@
       <NotificationButton
         iconDescription="{iconDescription}"
         notificationType="{notificationType}"
-        on:click="{close}" />
+        on:click="{close}"
+      />
     {/if}
   </div>
 {/if}

@@ -15,6 +15,7 @@
   title="{iconDescription}"
   {...$$restProps}
   on:click
-  on:animationend>
+  on:animationend
+>
   <Copy16 class="bx--snippet__icon" />
 </Copy>

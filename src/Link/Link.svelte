@@ -35,7 +35,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <slot />
   </p>
 {:else}
@@ -51,7 +52,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <slot />
   </a>
 {/if}

@@ -38,6 +38,7 @@
   }}"
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <slot />
 </a>

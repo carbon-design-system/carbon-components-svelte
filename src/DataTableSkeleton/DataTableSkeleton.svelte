@@ -15,7 +15,7 @@
    * Set the size of the data table
    * @type {"compact" | "short" | "tall"} [size]
    */
-   export let size = undefined;
+  export let size = undefined;
 
   /**
    * Set to `true` to apply zebra styles to the datatable rows
@@ -61,7 +61,8 @@
         <span
           class:bx--skeleton="{true}"
           class:bx--btn="{true}"
-          class:bx--btn--sm="{true}"></span>
+          class:bx--btn--sm="{true}"
+        ></span>
       </div>
     </section>
   {/if}
@@ -76,7 +77,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <thead>
       <tr>
         {#each cols as col, i (col)}

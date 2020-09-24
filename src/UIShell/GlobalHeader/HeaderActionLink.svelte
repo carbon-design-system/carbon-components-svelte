@@ -35,6 +35,7 @@
   class:bx--header__action--active="{linkIsActive}"
   class:action-link="{true}"
   {...$$restProps}
-  href="{href}">
+  href="{href}"
+>
   <Icon {...icon} />
 </a>

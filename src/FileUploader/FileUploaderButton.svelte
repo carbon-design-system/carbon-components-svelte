@@ -79,7 +79,8 @@
     if (key === ' ' || key === 'Enter') {
       ref.click();
     }
-  }}">
+  }}"
+>
   <span role="{role}">{labelText}</span>
 </label>
 <input
@@ -104,4 +105,5 @@
   on:click
   on:click="{({ target }) => {
     target.value = null;
-  }}" />
+  }}"
+/>

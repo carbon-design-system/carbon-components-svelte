@@ -13,7 +13,8 @@
     {...$$props}
     id="toggle-small-id"
     name="toggle-small-name"
-    bind:toggled />
+    bind:toggled
+  />
 {:else if story === 'skeleton'}
   <ToggleSmallSkeleton />
 {:else}

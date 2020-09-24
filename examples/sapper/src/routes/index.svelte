@@ -41,7 +41,8 @@
                 <Select
                   labelText="Carbon theme"
                   bind:selected="{$carbon_theme}"
-                  style="margin-bottom: 1rem">
+                  style="margin-bottom: 1rem"
+                >
                   <SelectItem value="white" text="White" />
                   <SelectItem value="g10" text="Gray 10" />
                   <SelectItem value="g90" text="Gray 90" />

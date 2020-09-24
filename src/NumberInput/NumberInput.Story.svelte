@@ -17,5 +17,6 @@
     bind:value
     on:change="{({ detail }) => {
       console.log('on:change', detail);
-    }}" />
+    }}"
+  />
 {/if}

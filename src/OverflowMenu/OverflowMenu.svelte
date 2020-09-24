@@ -188,13 +188,15 @@
         buttonRef.focus();
       }
     }
-  }}">
+  }}"
+>
   <slot name="menu">
     <svelte:component
       this="{icon}"
       aria-label="{iconDescription}"
       title="{iconDescription}"
-      class="bx--overflow-menu__icon {iconClass}" />
+      class="bx--overflow-menu__icon {iconClass}"
+    />
   </slot>
   {#if open}
     <ul
@@ -207,7 +209,8 @@
       class:bx--overflow-menu--flip="{flipped}"
       class:bx--overflow-menu-options--open="{open}"
       class:bx--overflow-menu-options--light="{light}"
-      class:menuOptionsClass>
+      class:menuOptionsClass
+    >
       <slot />
     </ul>
   {/if}

@@ -110,7 +110,8 @@
             selected="{props[key].default}"
             on:change="{({ detail }) => {
               defaultProps = { ...defaultProps, [key]: detail };
-            }}">
+            }}"
+          >
             {#each props[key].values as value}
               <RadioButton value="{value}" id="{value}" labelText="{value}" />
             {/each}
@@ -125,6 +126,7 @@
       code="{data.source}"
       on:click="{() => {
         copy(data.source);
-      }}" />
+      }}"
+    />
   </Column>
 </Row>

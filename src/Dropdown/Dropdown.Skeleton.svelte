@@ -16,7 +16,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div role="button" class:bx--list-box__field="{true}">
     <span class:bx--list-box__label="{true}"></span>
   </div>

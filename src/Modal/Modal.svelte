@@ -196,7 +196,8 @@
   }}"
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div
     bind:this="{innerModal}"
     role="dialog"
@@ -207,7 +208,8 @@
     class="{size && `bx--modal-container--${size}`}"
     on:click="{() => {
       didClickInnerModal = true;
-    }}">
+    }}"
+  >
     <div class:bx--modal-header="{true}">
       {#if passiveModal}
         <button
@@ -218,10 +220,12 @@
           class="bx--modal-close"
           on:click="{() => {
             open = false;
-          }}">
+          }}"
+        >
           <Close20
             aria-label="{iconDescription}"
-            class="bx--modal-close__icon" />
+            class="bx--modal-close__icon"
+          />
         </button>
       {/if}
       {#if modalLabel}
@@ -241,10 +245,12 @@
           class:bx--modal-close="{true}"
           on:click="{() => {
             open = false;
-          }}">
+          }}"
+        >
           <Close20
             aria-label="{iconDescription}"
-            class="bx--modal-close__icon" />
+            class="bx--modal-close__icon"
+          />
         </button>
       {/if}
     </div>
@@ -256,7 +262,8 @@
       tabindex="{hasScrollingContent ? '0' : undefined}"
       role="{hasScrollingContent ? 'region' : undefined}"
       aria-label="{hasScrollingContent ? ariaLabel : undefined}"
-      aria-labelledby="{modalLabel ? modalLabelId : modalHeadingId}">
+      aria-labelledby="{modalLabel ? modalLabelId : modalHeadingId}"
+    >
       <slot />
     </div>
     {#if hasScrollingContent}
@@ -268,7 +275,8 @@
           kind="secondary"
           on:click="{() => {
             dispatch('click:button--secondary');
-          }}">
+          }}"
+        >
           {secondaryButtonText}
         </Button>
         <Button
@@ -276,7 +284,8 @@
           disabled="{primaryButtonDisabled}"
           on:click="{() => {
             dispatch('submit');
-          }}">
+          }}"
+        >
           {primaryButtonText}
         </Button>
       </div>

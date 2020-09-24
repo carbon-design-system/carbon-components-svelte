@@ -183,7 +183,8 @@
     <label
       for="{id}"
       class:bx--label="{true}"
-      class:bx--label--disabled="{disabled}">
+      class:bx--label--disabled="{disabled}"
+    >
       {titleText}
     </label>
   {/if}
@@ -196,7 +197,8 @@
     invalidText="{invalidText}"
     open="{open}"
     light="{light}"
-    size="{size}">
+    size="{size}"
+  >
     <ListBoxField
       role="button"
       aria-expanded="{open}"
@@ -206,7 +208,8 @@
       id="{id}"
       name="{name}"
       disabled="{disabled}"
-      translateWithId="{translateWithId}">
+      translateWithId="{translateWithId}"
+    >
       <input
         bind:this="{ref}"
         tabindex="0"
@@ -251,7 +254,8 @@
         disabled="{disabled}"
         placeholder="{placeholder}"
         id="{id}"
-        value="{inputValue}" />
+        value="{inputValue}"
+      />
       {#if invalid}
         <WarningFilled16 class="bx--list-box__invalid-icon" />
       {/if}
@@ -265,7 +269,8 @@
           }}"
           translateWithId="{translateWithId}"
           disabled="{disabled}"
-          open="{open}" />
+          open="{open}"
+        />
       {/if}
       <ListBoxMenuIcon
         on:click="{(e) => {
@@ -273,7 +278,8 @@
           open = !open;
         }}"
         translateWithId="{translateWithId}"
-        open="{open}" />
+        open="{open}"
+      />
     </ListBoxField>
     {#if open}
       <ListBoxMenu aria-label="{ariaLabel}" id="{id}">
@@ -290,7 +296,8 @@
             }}"
             on:mouseenter="{() => {
               highlightedIndex = i;
-            }}">
+            }}"
+          >
             {itemToString(item)}
           </ListBoxMenuItem>
         {/each}
@@ -300,7 +307,8 @@
   {#if !invalid && helperText}
     <div
       class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}">
+      class:bx--form__helper-text--disabled="{disabled}"
+    >
       {helperText}
     </div>
   {/if}

@@ -22,7 +22,8 @@
     size="small"
     on:click="{() => {
       selectedIds = selectedIds.length > 0 ? [] : [items[1].id, items[2].id];
-    }}">
+    }}"
+  >
     {selectedIds.length > 0 ? 'Clear' : 'Set initial'} selected items
   </Button>
 </div>
@@ -34,5 +35,6 @@
     placeholder="Filter..."
     bind:selectedIds
     bind:items
-    bind:value />
+    bind:value
+  />
 </div>

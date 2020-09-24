@@ -33,21 +33,23 @@
 <p>
   <code>items</code> must be an array of objects; mandatory fields are `id` and `text`.
 </p>
-<pre
-  style="margin-top: 1rem;">
-  <code>{'items = Array<{ id: string; text: string; }>'}</code>
+<pre style="margin-top: 1rem;">
+  <code
+  >{'items = Array<{ id: string; text: string; }>'}</code>
 </pre>
 <div style="margin-top: 2rem;">
   <ToggleSmall
     labelText="Enable filtering"
     bind:toggled
-    style="margin-top: 1rem;" />
+    style="margin-top: 1rem;"
+  />
   <Button
     size="small"
     on:click="{() => {
       selectedIndex = 1;
     }}"
-    style="margin-top: 1rem;">
+    style="margin-top: 1rem;"
+  >
     Set item to "Option 2"
   </Button>
 </div>
@@ -65,5 +67,6 @@
       console.log('on:clear');
     }}"
     items="{items}"
-    shouldFilterItem="{shouldFilterItem}" />
+    shouldFilterItem="{shouldFilterItem}"
+  />
 </div>

@@ -17,7 +17,8 @@
   role="{hasScrollingContent ? 'region' : undefined}"
   class:bx--modal-content="{true}"
   class:bx--modal-content--with-form="{hasForm}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   <slot />
 </div>
 {#if hasScrollingContent}

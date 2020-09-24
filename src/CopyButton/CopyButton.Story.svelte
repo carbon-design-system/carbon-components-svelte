@@ -9,4 +9,5 @@
   }}"
   on:animationend="{(e) => {
     console.log('animation end', e.animationName);
-  }}" />
+  }}"
+/>

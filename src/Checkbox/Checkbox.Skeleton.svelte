@@ -6,8 +6,10 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <span
     class:bx--checkbox-label-text="{true}"
-    class:bx--skeleton="{true}"></span>
+    class:bx--skeleton="{true}"
+  ></span>
 </div>

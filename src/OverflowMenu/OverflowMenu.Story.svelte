@@ -13,32 +13,38 @@
       {...$$props.menu}
       on:close="{({ detail }) => {
         console.log('close', detail);
-      }}">
+      }}"
+    >
       <OverflowMenuItem
         {...$$props.menuItem}
         href="https://ibm.com"
         text="Option 1"
-        bind:primaryFocus />
+        bind:primaryFocus
+      />
       <OverflowMenuItem
         {...$$props.menuItem}
         href="https://ibm.com"
         text="Option 2 is an example of a really long string and how we
         recommend handling this"
-        requireTitle />
+        requireTitle
+      />
       <OverflowMenuItem
         {...$$props.menuItem}
         href="https://ibm.com"
         text="Option 3"
-        disabled />
+        disabled
+      />
       <OverflowMenuItem
         {...$$props.menuItem}
         href="https://ibm.com"
-        text="Option 4" />
+        text="Option 4"
+      />
       <OverflowMenuItem
         {...$$props.menuItem}
         href="https://ibm.com"
         text="Danger option"
-        danger />
+        danger
+      />
     </OverflowMenu>
   {:else if story === 'trigger'}
     <OverflowMenu
@@ -46,17 +52,20 @@
       on:close="{({ detail }) => {
         console.log('close', detail);
       }}"
-      style="width: auto">
+      style="width: auto"
+    >
       <div slot="menu" style="padding: 0 1rem">Menu</div>
       <OverflowMenuItem
         {...$$props.menuItem}
         text="Option 1"
-        bind:primaryFocus />
+        bind:primaryFocus
+      />
       <OverflowMenuItem
         {...$$props.menuItem}
         text="Option 2 is an example of a really long string and how we
         recommend handling this"
-        requireTitle />
+        requireTitle
+      />
       <OverflowMenuItem {...$$props.menuItem} text="Option 3" disabled />
       <OverflowMenuItem {...$$props.menuItem} text="Option 4" />
       <OverflowMenuItem {...$$props.menuItem} text="Danger option" danger />
@@ -66,16 +75,19 @@
       {...$$props.menu}
       on:close="{({ detail }) => {
         console.log('close', detail);
-      }}">
+      }}"
+    >
       <OverflowMenuItem
         {...$$props.menuItem}
         text="Option 1"
-        bind:primaryFocus />
+        bind:primaryFocus
+      />
       <OverflowMenuItem
         {...$$props.menuItem}
         text="Option 2 is an example of a really long string and how we
         recommend handling this"
-        requireTitle />
+        requireTitle
+      />
       <OverflowMenuItem {...$$props.menuItem} text="Option 3" disabled />
       <OverflowMenuItem {...$$props.menuItem} text="Option 4" />
       <OverflowMenuItem {...$$props.menuItem} text="Danger option" danger />

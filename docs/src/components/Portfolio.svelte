@@ -39,7 +39,8 @@
         <Carbon.Accordion
           count="{3}"
           skeleton="{skeleton}"
-          open="{accordionItemOpen}">
+          open="{accordionItemOpen}"
+        >
           <Carbon.AccordionItem title="Title 1" bind:open="{accordionItemOpen}">
             Content 1
           </Carbon.AccordionItem>
@@ -109,7 +110,8 @@
           iconDescription="Primary"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          skeleton="{skeleton}" />
+          skeleton="{skeleton}"
+        />
         <Carbon.Button
           icon="{Add16}"
           hasIconOnly
@@ -117,7 +119,8 @@
           iconDescription="Secondary"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          skeleton="{skeleton}" />
+          skeleton="{skeleton}"
+        />
         <Carbon.Button
           icon="{Add16}"
           hasIconOnly
@@ -125,7 +128,8 @@
           iconDescription="Tertiary"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          skeleton="{skeleton}" />
+          skeleton="{skeleton}"
+        />
         <Carbon.Button
           icon="{Add16}"
           hasIconOnly
@@ -133,7 +137,8 @@
           iconDescription="Ghost"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          skeleton="{skeleton}" />
+          skeleton="{skeleton}"
+        />
         <Carbon.Button
           icon="{Add16}"
           hasIconOnly
@@ -141,7 +146,8 @@
           iconDescription="Danger"
           tooltipPosition="bottom"
           tooltipAlignment="center"
-          skeleton="{skeleton}" />
+          skeleton="{skeleton}"
+        />
       </TileCard>
     </Carbon.Column>
   </Carbon.Row>
@@ -164,11 +170,13 @@
           <Carbon.Checkbox
             indeterminate
             skeleton="{skeleton}"
-            labelText="Checkbox label" />
+            labelText="Checkbox label"
+          />
           <Carbon.Checkbox
             indeterminate
             skeleton="{skeleton}"
-            labelText="Checkbox label" />
+            labelText="Checkbox label"
+          />
         </fieldset>
       </TileCard>
     </Carbon.Column>

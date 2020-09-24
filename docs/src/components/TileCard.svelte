@@ -47,7 +47,8 @@
         icon="{Code16}"
         iconDescription="Usage"
         tooltipAlignment="center"
-        tooltipPosition="top" />
+        tooltipPosition="top"
+      />
       <Button
         hasIconOnly
         kind="ghost"
@@ -55,7 +56,8 @@
         icon="{Code16}"
         iconDescription="Usage"
         tooltipAlignment="center"
-        tooltipPosition="top" />
+        tooltipPosition="top"
+      />
     </div>
   </div>
 </Tile>

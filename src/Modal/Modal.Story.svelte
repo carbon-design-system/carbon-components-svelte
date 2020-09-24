@@ -11,7 +11,8 @@
   <Button
     on:click="{() => {
       open = true;
-    }}">
+    }}"
+  >
     Launch modal
   </Button>
 </div>
@@ -33,7 +34,8 @@
   }}"
   on:submit="{() => {
     console.log('submit');
-  }}">
+  }}"
+>
   <div>
     <PasswordInput bind:type placeholder="Password Input" aria-level="" />
     <Button
@@ -41,7 +43,8 @@
       size="field"
       on:click="{() => {
         type = type === 'password' ? 'text' : 'password';
-      }}">
+      }}"
+    >
       Programmatically toggle password
     </Button>
   </div>

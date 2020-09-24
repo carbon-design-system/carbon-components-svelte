@@ -41,7 +41,8 @@
       bind:checked
       on:check="{({ detail }) => {
         console.log('on:check', detail);
-      }}" />
+      }}"
+    />
     <Checkbox {...checkboxProps} id="checkbox-label-2" checked />
   </fieldset>
 {/if}

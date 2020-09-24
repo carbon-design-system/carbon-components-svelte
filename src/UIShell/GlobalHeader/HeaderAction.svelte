@@ -71,7 +71,8 @@
     on:click|stopPropagation="{() => {
       isOpen = !isOpen;
       dispatch(isOpen ? 'open' : 'close');
-    }}">
+    }}"
+  >
     <Icon render="{isOpen ? Close20 : AppSwitcher20}" {...icon} />
     <slot name="text">
       {#if text}<span>{text}</span>{/if}
@@ -82,7 +83,8 @@
       bind:this="{refPanel}"
       class:bx--header-panel="{true}"
       class:bx--header-panel--expanded="{true}"
-      transition:slide="{{ duration: 200 }}">
+      transition:slide="{{ duration: 200 }}"
+    >
       <slot />
     </div>
   {/if}

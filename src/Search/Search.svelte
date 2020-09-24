@@ -90,13 +90,15 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave
+  />
 {:else}
   <div
     class:bx--search="{true}"
     class:bx--search--light="{light}"
     {...$$restProps}
-    class="bx--search--{size} {$$restProps.class}">
+    class="bx--search--{size} {$$restProps.class}"
+  >
     <Search16 class="bx--search-magnifier" />
     <label for="{id}" class:bx--label="{true}">{labelText}</label>
     <!-- svelte-ignore a11y-autofocus -->
@@ -114,7 +116,8 @@
       on:input
       on:input="{({ target }) => {
         value = target.value;
-      }}" />
+      }}"
+    />
     <button
       type="button"
       aria-label="{closeButtonLabelText}"
@@ -124,7 +127,8 @@
       on:click="{() => {
         value = '';
         ref.focus();
-      }}">
+      }}"
+    >
       <svelte:component this="{size === 'xl' ? Close20 : Close16}" />
     </button>
   </div>

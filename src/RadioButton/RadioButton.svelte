@@ -71,7 +71,8 @@
 <div
   class:bx--radio-button-wrapper="{true}"
   class:bx--radio-button-wrapper--label-left="{labelPosition === 'left'}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   <input
     bind:this="{ref}"
     type="radio"
@@ -86,7 +87,8 @@
       if (ctx) {
         ctx.update(value);
       }
-    }}" />
+    }}"
+  />
   <label class:bx--radio-button__label="{true}" for="{id}">
     <span class:bx--radio-button__appearance="{true}"></span>
     <span class:bx--visually-hidden="{hideLabel}">{labelText}</span>

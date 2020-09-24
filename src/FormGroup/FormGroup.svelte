@@ -31,7 +31,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <legend class:bx--label="{true}">{legendText}</legend>
   <slot />
   {#if message}

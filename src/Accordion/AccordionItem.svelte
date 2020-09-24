@@ -31,7 +31,8 @@
   on:animationend
   on:animationend="{() => {
     animation = undefined;
-  }}">
+  }}"
+>
   <button
     type="button"
     class:bx--accordion__heading="{true}"
@@ -50,10 +51,12 @@
       if (open && key === 'Escape') {
         open = false;
       }
-    }}">
+    }}"
+  >
     <ChevronRight16
       class="bx--accordion__arrow"
-      aria-label="{iconDescription}" />
+      aria-label="{iconDescription}"
+    />
     <div class="bx--accordion__title">
       <slot name="title">{title}</slot>
     </div>

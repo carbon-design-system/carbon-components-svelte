@@ -16,6 +16,7 @@
   label="{label}"
   disabled="{disabled}"
   class:bx--select-optgroup="{true}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   <slot />
 </optgroup>

@@ -54,7 +54,8 @@
   {...$$restProps}
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <p class:bx--file-filename="{true}">{name}</p>
   <span class:bx--file__state-container="{true}">
     <Filename
@@ -68,7 +69,8 @@
       }}"
       iconDescription="{iconDescription}"
       status="{status}"
-      invalid="{invalid}" />
+      invalid="{invalid}"
+    />
   </span>
   {#if invalid && errorSubject}
     <div class:bx--form-requirement="{true}">

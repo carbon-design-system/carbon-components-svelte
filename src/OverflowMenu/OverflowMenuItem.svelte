@@ -83,7 +83,8 @@
   class:bx--overflow-menu--divider="{hasDivider}"
   class:bx--overflow-menu-options__option--danger="{danger}"
   class:bx--overflow-menu-options__option--disabled="{disabled}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   {#if href}
     <!-- svelte-ignore a11y-missing-attribute -->
     <a
@@ -100,7 +101,8 @@
         } else if (key === 'ArrowUp') {
           change(-1);
         }
-      }}">
+      }}"
+    >
       <slot>
         <div class:bx--overflow-menu-options__option-content="{true}">
           {text}
@@ -122,7 +124,8 @@
         } else if (key === 'ArrowUp') {
           change(-1);
         }
-      }}">
+      }}"
+    >
       <slot>
         <div class:bx--overflow-menu-options__option-content="{true}">
           {text}

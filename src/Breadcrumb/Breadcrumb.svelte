@@ -20,7 +20,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave
+  />
 {:else}
   <nav
     aria-label="Breadcrumb"
@@ -28,10 +29,12 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <ol
       class:bx--breadcrumb="{true}"
-      class:bx--breadcrumb--no-trailing-slash="{noTrailingSlash}">
+      class:bx--breadcrumb--no-trailing-slash="{noTrailingSlash}"
+    >
       <slot />
     </ol>
   </nav>

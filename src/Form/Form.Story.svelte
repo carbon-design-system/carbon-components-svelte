@@ -17,7 +17,8 @@
 <Form
   on:submit="{(event) => {
     console.log('on:submit', event);
-  }}">
+  }}"
+>
   <FormGroup {...$$props}>
     <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
     <Checkbox id="checkbox-1" labelText="Checkbox Label" />
@@ -29,7 +30,8 @@
     min="{0}"
     max="{100}"
     value="{50}"
-    step="{10}" />
+    step="{10}"
+  />
   <FormGroup legendText="Toggle heading">
     <Toggle id="toggle-1" />
     <Toggle id="toggle-2" disabled />
@@ -38,29 +40,35 @@
     <FileUploader
       id="file-1"
       buttonLabel="Add files"
-      labelDescription="Choose Files..." />
+      labelDescription="Choose Files..."
+    />
   </FormGroup>
   <FormGroup legendText="Radio Button heading">
     <RadioButtonGroup
       name="radio-button-group"
-      defaultSelected="default-selected">
+      defaultSelected="default-selected"
+    >
       <RadioButton
         id="radio-1"
         value="standard"
-        labelText="Standard Radio Button" />
+        labelText="Standard Radio Button"
+      />
       <RadioButton
         id="radio-2"
         value="default-selected"
-        labelText="Default Selected Radio Button" />
+        labelText="Default Selected Radio Button"
+      />
       <RadioButton
         id="radio-3"
         value="blue"
-        labelText="Standard Radio Button" />
+        labelText="Standard Radio Button"
+      />
       <RadioButton
         id="radio-4"
         value="disabled"
         labelText="Disabled Radio Button"
-        disabled />
+        disabled
+      />
     </RadioButtonGroup>
   </FormGroup>
   <FormGroup legendText="Search">
@@ -71,7 +79,8 @@
       disabled
       hidden
       value="placeholder-item"
-      text="Choose an option" />
+      text="Choose an option"
+    />
     <SelectItem value="option-1" text="Option 1" />
     <SelectItem value="option-2" text="Option 2" />
     <SelectItem value="option-3" text="Option 3" />
@@ -79,7 +88,8 @@
   <TextInput
     id="text-input-1"
     labelText="Text Input label"
-    placeholder="Placeholder text" />
+    placeholder="Placeholder text"
+  />
   <TextInput id="text-input-2" type="password" labelText="Password" required />
   <TextInput
     id="text-input-3"
@@ -88,12 +98,14 @@
     invalidText="Your password must be at least 6 characters as well as contain
     at least one uppercase, one lowercase, and one number."
     required
-    invalid />
+    invalid
+  />
   <TextArea
     id="text-area"
     labelText="Text Area label"
     placeholder="Placeholder text"
     rows="{4}"
-    cols="{50}" />
+    cols="{50}"
+  />
   <Button type="submit">Submit</Button>
 </Form>

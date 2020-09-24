@@ -22,11 +22,13 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   {#if open}
     <li
       class:bx--accordion__item="{true}"
-      class:bx--accordion__item--active="{true}">
+      class:bx--accordion__item--active="{true}"
+    >
       <span class:bx--accordion__heading="{true}">
         <ChevronRight16 class="bx--accordion__arrow" />
         <SkeletonText class="bx--accordion__title" />

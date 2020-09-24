@@ -30,7 +30,8 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
-    on:keydown>
+    on:keydown
+  >
     <slot />
   </label>
 {:else}
@@ -41,7 +42,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <slot />
   </div>
 {/if}

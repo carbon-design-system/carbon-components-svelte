@@ -1,1 +1,1 @@
-{ "svelteStrictMode": true }
+{ "svelteStrictMode": true, "svelteBracketNewLine": true }

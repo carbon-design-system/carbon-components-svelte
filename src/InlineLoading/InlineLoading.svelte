@@ -53,7 +53,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div class:bx--inline-loading__animation="{true}">
     {#if status === 'error'}
       <Error20 class="bx--inline-loading--error" />
@@ -64,7 +65,8 @@
         small
         description="{iconDescription}"
         withOverlay="{false}"
-        active="{status === 'active'}" />
+        active="{status === 'active'}"
+      />
     {/if}
   </div>
   {#if description}

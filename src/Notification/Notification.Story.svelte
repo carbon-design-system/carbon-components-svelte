@@ -11,7 +11,8 @@
     {...$$props}
     on:close="{() => {
       console.log('on:close');
-    }}">
+    }}"
+  >
     <div slot="actions">
       <NotificationActionButton>{$$props.action}</NotificationActionButton>
     </div>
@@ -22,5 +23,6 @@
     on:close="{() => {
       console.log('on:close');
     }}"
-    style="min-width: 30rem; margin-bottom: .5rem" />
+    style="min-width: 30rem; margin-bottom: .5rem"
+  />
 {/if}

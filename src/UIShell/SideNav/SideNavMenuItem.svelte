@@ -24,7 +24,8 @@
     href="{href}"
     class:bx--side-nav__link="{true}"
     {...$$restProps}
-    on:click>
+    on:click
+  >
     <span class:bx--side-nav__link-text="{true}">{text}</span>
   </a>
 </li>

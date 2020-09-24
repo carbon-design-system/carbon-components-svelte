@@ -165,11 +165,13 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <label
     for="{id}"
     class:bx--label="{true}"
-    class:bx--label--disabled="{disabled}">
+    class:bx--label--disabled="{disabled}"
+  >
     {labelText}
   </label>
   <div class:bx--slider-container="{true}">
@@ -194,7 +196,8 @@
       on:mouseup="{stopHolding}"
       on:touchup="{stopHolding}"
       on:touchend="{stopHolding}"
-      on:touchcancel="{stopHolding}">
+      on:touchcancel="{stopHolding}"
+    >
       <div
         role="slider"
         tabindex="0"
@@ -211,11 +214,13 @@
             value += step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
           }
         }}"
-        id="{id}"></div>
+        id="{id}"
+      ></div>
       <div bind:this="{trackRef}" class:bx--slider__track="{true}"></div>
       <div
         class:bx--slider__filled-track="{true}"
-        style="transform: translate(0, -50%) scaleX({left / 100})"></div>
+        style="transform: translate(0, -50%) scaleX({left / 100})"
+      ></div>
       <input
         type="hidden"
         class:bx--slider__input="{true}"
@@ -224,7 +229,8 @@
         required="{required}"
         min="{min}"
         max="{max}"
-        step="{step}" />
+        step="{step}"
+      />
     </div>
     <span class:bx--slider__range-label="{true}">{maxLabel || max}</span>
     {#if !hideTextInput}
@@ -240,7 +246,8 @@
           value = Number(target.value);
         }}"
         disabled="{disabled}"
-        value="{value}" />
+        value="{value}"
+      />
     {/if}
   </div>
 </div>

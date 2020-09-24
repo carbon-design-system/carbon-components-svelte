@@ -49,7 +49,8 @@
       <p
         class:bx--skeleton__text="{true}"
         class:bx--skeleton__heading="{heading}"
-        style="width: {width}"></p>
+        style="width: {width}"
+      ></p>
     {/each}
   </div>
 {:else}
@@ -61,5 +62,6 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave></p>
+    on:mouseleave
+  ></p>
 {/if}

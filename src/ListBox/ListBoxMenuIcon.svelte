@@ -36,6 +36,7 @@
   class:bx--list-box__menu-icon="{true}"
   class:bx--list-box__menu-icon--open="{open}"
   {...$$restProps}
-  on:click|preventDefault>
+  on:click|preventDefault
+>
   <ChevronDown16 aria-label="{description}" title="{description}" />
 </div>

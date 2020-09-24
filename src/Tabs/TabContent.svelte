@@ -23,6 +23,7 @@
   hidden="{selected ? undefined : ''}"
   id="{id}"
   class:bx--tab-content="{true}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   <slot />
 </div>

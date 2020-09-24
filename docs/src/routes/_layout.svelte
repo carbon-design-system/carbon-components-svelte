@@ -65,21 +65,25 @@
         text="Getting Started"
         href="getting-started"
         rel="prefetch"
-        isSelected="{segment === 'getting-started'}" />
+        isSelected="{segment === 'getting-started'}"
+      />
       <SideNavMenu
         text="Components"
         expanded="{segment === 'components'}"
-        isSelected="{segment === 'components' && !$tail}">
+        isSelected="{segment === 'components' && !$tail}"
+      >
         <SideNavMenuItem
           text="Index"
           href="components"
           rel="prefetch"
-          isSelected="{segment === 'components' && $tail && $tail.slug === 'index'}" />
+          isSelected="{segment === 'components' && $tail && $tail.slug === 'index'}"
+        />
         <SideNavMenuItem
           text="Button"
           href="components/button"
           rel="prefetch"
-          isSelected="{segment === 'components' && $tail && $tail.slug === 'button'}" />
+          isSelected="{segment === 'components' && $tail && $tail.slug === 'button'}"
+        />
       </SideNavMenu>
     </SideNavItems>
   </SideNav>
@@ -88,7 +92,8 @@
       <Row>
         <Column
           style="display: flex; align-items: center; justify-content:
-          space-between;">
+          space-between;"
+        >
           <Breadcrumb>
             <BreadcrumbItem href="." isCurrentPage="{!$tail && !segment}">
               Home

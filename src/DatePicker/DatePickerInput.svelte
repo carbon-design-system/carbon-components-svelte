@@ -102,13 +102,15 @@
 <div
   class:bx--date-picker-container="{true}"
   class:bx--date-picker--nolabel="{!labelText}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   {#if labelText}
     <label
       for="{id}"
       class:bx--label="{true}"
       class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}">
+      class:bx--label--disabled="{disabled}"
+    >
       {labelText}
     </label>
   {/if}
@@ -141,14 +143,16 @@
       on:blur
       on:blur="{({ relatedTarget }) => {
         blurInput(relatedTarget);
-      }}" />
+      }}"
+    />
     {#if $hasCalendar}
       <Calendar16
         role="img"
         class="bx--date-picker__icon"
         aria-label="{iconDescription}"
         title="{iconDescription}"
-        on:click="{openCalendar}" />
+        on:click="{openCalendar}"
+      />
     {/if}
   </div>
   {#if invalid}

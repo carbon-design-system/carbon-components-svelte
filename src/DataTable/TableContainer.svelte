@@ -21,7 +21,8 @@
 <div
   class:bx--data-table-container="{true}"
   class:bx--data-table--max-width="{stickyHeader}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   {#if title}
     <div class:bx--data-table-header="{true}">
       <h4 class:bx--data-table-header__title="{true}">{title}</h4>

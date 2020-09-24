@@ -73,7 +73,8 @@
         update(id);
       }
     }
-  }}">
+  }}"
+>
   <a
     bind:this="{ref}"
     role="tab"
@@ -82,7 +83,8 @@
     aria-disabled="{disabled}"
     id="{id}"
     href="{href}"
-    class:bx--tabs__nav-link="{true}">
+    class:bx--tabs__nav-link="{true}"
+  >
     <slot>{label}</slot>
   </a>
 </li>

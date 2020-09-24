@@ -24,7 +24,8 @@
   class:bx--header__action="{true}"
   class:bx--header__action--active="{isActive}"
   {...$$restProps}
-  on:click>
+  on:click
+>
   <slot>
     {#if icon}
       <svelte:component this="{icon}" />

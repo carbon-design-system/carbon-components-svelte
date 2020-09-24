@@ -9,6 +9,6 @@ export const Default = () => ({
     href: text("The link href (href)", "#"),
     inline: boolean("Use the in-line variant (inline)", false),
     disabled: boolean("Disabled (disabled)", false),
-    visited: boolean('Allow visited styles', false),
+    visited: boolean("Allow visited styles", false),
   },
 });

@@ -111,7 +111,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave
+  />
 {:else}
   {#if type === 'inline'}
     {#if hideCopyButton}
@@ -121,7 +122,8 @@
           {expanded && 'bx--snippet--expand'}
           {light && 'bx--snippet--light'}
           {hideCopyButton && 'bx--snippet--no-copy'}"
-        {...$$restProps}>
+        {...$$restProps}
+      >
         <code id="{id}">
           <slot>{code}</slot>
         </code>
@@ -141,7 +143,8 @@
         on:click
         on:mouseover
         on:mouseenter
-        on:mouseleave>
+        on:mouseleave
+      >
         <code id="{id}">
           <slot>{code}</slot>
         </code>
@@ -158,12 +161,14 @@
       class="{type && `bx--snippet--${type}`} {$$restProps.class}"
       on:mouseover
       on:mouseenter
-      on:mouseleave>
+      on:mouseleave
+    >
       <div
         role="{type === 'single' ? 'textbox' : undefined}"
         tabindex="{type === 'single' ? '0' : undefined}"
         class:bx--snippet-container="{true}"
-        aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}">
+        aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
+      >
         <code>
           <pre bind:this="{ref}">
             <slot>{code}</slot>
@@ -176,7 +181,8 @@
           feedbackTimeout="{feedbackTimeout}"
           iconDescription="{copyButtonDescription}"
           on:click
-          on:animationend />
+          on:animationend
+        />
       {/if}
       {#if showMoreLess}
         <Button
@@ -185,11 +191,13 @@
           class="bx--snippet-btn--expand"
           on:click="{() => {
             expanded = !expanded;
-          }}">
+          }}"
+        >
           <span class:bx--snippet-btn--text="{true}">{expandText}</span>
           <ChevronDown16
             class="bx--icon-chevron--down bx--snippet__icon"
-            aria-label="{expandText}" />
+            aria-label="{expandText}"
+          />
         </Button>
       {/if}
     </div>

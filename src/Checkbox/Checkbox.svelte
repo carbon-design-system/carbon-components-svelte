@@ -79,7 +79,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave
+  />
 {:else}
   <div
     class:bx--form-item="{true}"
@@ -88,7 +89,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <input
       bind:this="{ref}"
       type="checkbox"
@@ -102,11 +104,13 @@
       on:change
       on:change="{() => {
         checked = !checked;
-      }}" />
+      }}"
+    />
     <label for="{id}" title="{title}" class:bx--checkbox-label="{true}">
       <span
         class:bx--checkbox-label-text="{true}"
-        class:bx--visually-hidden="{hideLabel}">
+        class:bx--visually-hidden="{hideLabel}"
+      >
         {labelText}
       </span>
     </label>

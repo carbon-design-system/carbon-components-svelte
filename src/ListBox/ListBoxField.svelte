@@ -78,6 +78,7 @@
   on:mouseenter
   on:mouseleave
   on:keydown|preventDefault|stopPropagation
-  on:blur>
+  on:blur
+>
   <slot />
 </div>
