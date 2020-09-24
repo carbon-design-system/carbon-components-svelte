@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.14.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.14.0) - 2020-09-23
+
+**Features**
+
+- `Modal`, `ComposedModal`: add `preventCloseOnClickOutside` prop
+- `Modal`: add `alert` prop to support alertdialog ARIA role ([PR #273](https://github.com/IBM/carbon-components-svelte/pull/273), thanks [@josefaidt](https://github.com/josefaidt))
+- `TextInput`: add `warn` prop ([PR #275](https://github.com/IBM/carbon-components-svelte/pull/275), thanks [@josefaidt](https://github.com/josefaidt))
+- `TextInput`: add `inline` prop ([PR #277](https://github.com/IBM/carbon-components-svelte/pull/277), thanks [@josefaidt](https://github.com/josefaidt))
+
+**Fixes**
+
+- `DataTableSkeleton`: add `showHeader`, `showToolbar` props
+- `OverflowMenu`: focus menu button on escape key only
+- `DataTable`: fix `headers` JSDoc type annotation ([PR #271](https://github.com/IBM/carbon-components-svelte/pull/271), thanks [@albertms10](https://github.com/albertms10))
+
+**Breaking Changes**
+
+- `DataTableSkeleton`: `showHeader` and `showToolbar` are `true` by default
+
 ## [0.13.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.13.0) - 2020-09-18
 
 **Features**

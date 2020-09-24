@@ -1,6 +1,6 @@
 # Component Index
 
-> 144 components exported from carbon-components-svelte 0.13.0
+> 144 components exported from carbon-components-svelte 0.14.0
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -780,14 +780,15 @@ import { ComposedModal } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name            | Type                                      | Default value                |
-| :------------------- | :---------------------------------------- | :--------------------------- |
-| size                 | <code>"xs" &#124; "sm" &#124; "lg"</code> | --                           |
-| open                 | <code>boolean</code>                      | false                        |
-| danger               | <code>boolean</code>                      | false                        |
-| containerClass       | <code>string</code>                       | ""                           |
-| selectorPrimaryFocus | <code>string</code>                       | "[data-modal-primary-focus]" |
-| ref                  | <code>null &#124; HTMLElement</code>      | null                         |
+| Prop name                  | Type                                      | Default value                |
+| :------------------------- | :---------------------------------------- | :--------------------------- |
+| size                       | <code>"xs" &#124; "sm" &#124; "lg"</code> | --                           |
+| open                       | <code>boolean</code>                      | false                        |
+| danger                     | <code>boolean</code>                      | false                        |
+| preventCloseOnClickOutside | <code>boolean</code>                      | false                        |
+| containerClass             | <code>string</code>                       | ""                           |
+| selectorPrimaryFocus       | <code>string</code>                       | "[data-modal-primary-focus]" |
+| ref                        | <code>null &#124; HTMLElement</code>      | null                         |
 
 ### Slots
 
@@ -941,7 +942,7 @@ import { DataTable } from "carbon-components-svelte";
 
 | Prop name    | Type                                                | Default value |
 | :----------- | :-------------------------------------------------- | :------------ |
-| headers      | <code>{key: string; value: string;}</code>          | --            |
+| headers      | <code>{key: string; value: string;}[]</code>        | --            |
 | rows         | <code>Object[]</code>                               | --            |
 | size         | <code>"compact" &#124; "short" &#124; "tall"</code> | --            |
 | title        | <code>string</code>                                 | ""            |
@@ -977,13 +978,15 @@ import { DataTableSkeleton } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name | Type                  | Default value |
-| :-------- | :-------------------- | :------------ |
-| columns   | <code>number</code>   | 5             |
-| rows      | <code>number</code>   | 5             |
-| compact   | <code>boolean</code>  | false         |
-| zebra     | <code>boolean</code>  | false         |
-| headers   | <code>string[]</code> | --            |
+| Prop name   | Type                  | Default value |
+| :---------- | :-------------------- | :------------ |
+| columns     | <code>number</code>   | 5             |
+| rows        | <code>number</code>   | 5             |
+| compact     | <code>boolean</code>  | false         |
+| zebra       | <code>boolean</code>  | false         |
+| showHeader  | <code>boolean</code>  | true          |
+| headers     | <code>string[]</code> | --            |
+| showToolbar | <code>boolean</code>  | true          |
 
 ### Slots
 
@@ -2387,25 +2390,27 @@ import { Modal } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name             | Type                                      | Default value                |
-| :-------------------- | :---------------------------------------- | :--------------------------- |
-| size                  | <code>"xs" &#124; "sm" &#124; "lg"</code> | --                           |
-| open                  | <code>boolean</code>                      | false                        |
-| danger                | <code>boolean</code>                      | false                        |
-| passiveModal          | <code>boolean</code>                      | false                        |
-| modalHeading          | <code>string</code>                       | --                           |
-| modalLabel            | <code>string</code>                       | --                           |
-| modalAriaLabel        | <code>string</code>                       | --                           |
-| iconDescription       | <code>string</code>                       | "Close the modal"            |
-| hasForm               | <code>boolean</code>                      | false                        |
-| hasScrollingContent   | <code>boolean</code>                      | false                        |
-| primaryButtonText     | <code>string</code>                       | ""                           |
-| primaryButtonDisabled | <code>boolean</code>                      | false                        |
-| shouldSubmitOnEnter   | <code>boolean</code>                      | true                         |
-| secondaryButtonText   | <code>string</code>                       | ""                           |
-| selectorPrimaryFocus  | <code>string</code>                       | "[data-modal-primary-focus]" |
-| id                    | <code>string</code>                       | --                           |
-| ref                   | <code>null &#124; HTMLElement</code>      | null                         |
+| Prop name                  | Type                                      | Default value                |
+| :------------------------- | :---------------------------------------- | :--------------------------- |
+| size                       | <code>"xs" &#124; "sm" &#124; "lg"</code> | --                           |
+| open                       | <code>boolean</code>                      | false                        |
+| danger                     | <code>boolean</code>                      | false                        |
+| alert                      | <code>boolean</code>                      | false                        |
+| passiveModal               | <code>boolean</code>                      | false                        |
+| modalHeading               | <code>string</code>                       | --                           |
+| modalLabel                 | <code>string</code>                       | --                           |
+| modalAriaLabel             | <code>string</code>                       | --                           |
+| iconDescription            | <code>string</code>                       | "Close the modal"            |
+| hasForm                    | <code>boolean</code>                      | false                        |
+| hasScrollingContent        | <code>boolean</code>                      | false                        |
+| primaryButtonText          | <code>string</code>                       | ""                           |
+| primaryButtonDisabled      | <code>boolean</code>                      | false                        |
+| shouldSubmitOnEnter        | <code>boolean</code>                      | true                         |
+| secondaryButtonText        | <code>string</code>                       | ""                           |
+| selectorPrimaryFocus       | <code>string</code>                       | "[data-modal-primary-focus]" |
+| preventCloseOnClickOutside | <code>boolean</code>                      | false                        |
+| id                         | <code>string</code>                       | --                           |
+| ref                        | <code>null &#124; HTMLElement</code>      | null                         |
 
 ### Slots
 
@@ -4673,8 +4678,11 @@ import { TextInput } from "carbon-components-svelte";
 | hideLabel   | <code>boolean</code>                      | false         |
 | invalid     | <code>boolean</code>                      | false         |
 | invalidText | <code>string</code>                       | ""            |
+| warn        | <code>boolean</code>                      | false         |
+| warnText    | <code>string</code>                       | ""            |
 | ref         | <code>null &#124; HTMLInputElement</code> | null          |
 | required    | <code>boolean</code>                      | false         |
+| inline      | <code>boolean</code>                      | false         |
 
 ### Slots
 

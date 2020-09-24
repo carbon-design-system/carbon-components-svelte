@@ -1,4 +1,4 @@
-// Type definitions for carbon-components-svelte 0.13.0
+// Type definitions for carbon-components-svelte 0.14.0
 // Project: https://github.com/IBM/carbon-components-svelte
 
 export class CarbonSvelteComponent {
@@ -631,6 +631,12 @@ export class ComposedModal extends CarbonSvelteComponent {
     danger?: boolean;
 
     /**
+     * Set to `true` to prevent the modal from closing when clicking outside
+     * @default false
+     */
+    preventCloseOnClickOutside?: boolean;
+
+    /**
      * Specify a class for the inner modal
      * @default ""
      */
@@ -795,10 +801,22 @@ export class DataTableSkeleton extends CarbonSvelteComponent {
     zebra?: boolean;
 
     /**
+     * Set to `false` to hide the header
+     * @default true
+     */
+    showHeader?: boolean;
+
+    /**
      * Set the column headers
      * If `headers` has one more items, `count` is ignored
      */
     headers?: string[];
+
+    /**
+     * Set to `false` to hide the toolbar
+     * @default true
+     */
+    showToolbar?: boolean;
   };
 }
 
@@ -2085,6 +2103,12 @@ export class Modal extends CarbonSvelteComponent {
     danger?: boolean;
 
     /**
+     * Set to `true` to enable alert mode
+     * @default false
+     */
+    alert?: boolean;
+
+    /**
      * Set to `true` to use the passive variant
      * @default false
      */
@@ -2152,6 +2176,12 @@ export class Modal extends CarbonSvelteComponent {
      * @default "[data-modal-primary-focus]"
      */
     selectorPrimaryFocus?: string;
+
+    /**
+     * Set to `true` to prevent the modal from closing when clicking outside
+     * @default false
+     */
+    preventCloseOnClickOutside?: boolean;
 
     /**
      * Set an id for the top-level element
@@ -4429,6 +4459,18 @@ export class TextInput extends CarbonSvelteComponent {
     invalidText?: string;
 
     /**
+     * Set to `true` to indicate an warning state
+     * @default false
+     */
+    warn?: boolean;
+
+    /**
+     * Specify the warning state text
+     * @default ""
+     */
+    warnText?: string;
+
+    /**
      * Obtain a reference to the input HTML element
      * @default null
      */
@@ -4439,6 +4481,12 @@ export class TextInput extends CarbonSvelteComponent {
      * @default false
      */
     required?: boolean;
+
+    /**
+     * Set to `true` to use inline version
+     * @default false
+     */
+    inline?: boolean;
   };
 }
 
