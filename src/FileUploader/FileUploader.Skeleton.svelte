@@ -9,7 +9,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <SkeletonText heading width="100px" />
   <SkeletonText width="225px" class="bx--label-description" />
   <ButtonSkeleton />

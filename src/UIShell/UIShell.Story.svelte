@@ -181,7 +181,8 @@
       <HeaderAction
         type="Notifications"
         icon="{iNotifications}"
-        isOpen="{true}">
+        isOpen="{true}"
+      >
         <HeaderPanelLinks>
           <HeaderPanelDivider>Notifications</HeaderPanelDivider>
         </HeaderPanelLinks>
@@ -209,7 +210,8 @@
         }}"
         on:close="{() => {
           console.log('on:close');
-        }}">
+        }}"
+      >
         <HeaderPanelLinks>
           <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
           <HeaderPanelLink>Switcher item 1</HeaderPanelLink>

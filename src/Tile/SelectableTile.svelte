@@ -70,7 +70,8 @@
   id="{id}"
   value="{value}"
   name="{name}"
-  title="{title}" />
+  title="{title}"
+/>
 <label
   for="{id}"
   tabindex="{tabindex}"
@@ -92,11 +93,13 @@
       e.preventDefault();
       selected = !selected;
     }
-  }}">
+  }}"
+>
   <span class:bx--tile__checkmark="{true}">
     <CheckmarkFilled16
       aria-label="{iconDescription}"
-      title="{iconDescription}" />
+      title="{iconDescription}"
+    />
   </span>
   <span class:bx--tile-content="{true}">
     <slot />

@@ -19,7 +19,8 @@
     light="{light}"
     on:change="{({ detail }) => {
       console.log('on:change', detail);
-    }}">
+    }}"
+  >
     <Switch {...$$props} text="First section" />
     <Switch {...$$props} text="Second section" selected />
     <Switch {...$$props} text="Third section" />
@@ -30,7 +31,8 @@
     bind:selectedIndex
     on:change="{({ detail }) => {
       console.log('on:change', detail);
-    }}">
+    }}"
+  >
     <Switch {...$$props} text="First section" />
     <Switch {...$$props} text="Second section" />
     <Switch {...$$props}>
@@ -44,7 +46,8 @@
     style="margin-top: 1.5rem"
     on:click="{() => {
       selectedIndex = 1;
-    }}">
+    }}"
+  >
     Programmatically set to second index
   </div>
 {/if}

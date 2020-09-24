@@ -48,7 +48,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <input
     type="checkbox"
     checked="{toggled}"
@@ -69,18 +70,21 @@
       }
     }}"
     on:focus
-    on:blur />
+    on:blur
+  />
   <label
     aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle'}"
     for="{id}"
-    class:bx--toggle-input__label="{true}">
+    class:bx--toggle-input__label="{true}"
+  >
     {labelText}
     <span class:bx--toggle__switch="{true}">
       <svg
         width="6"
         height="5"
         viewBox="0 0 6 5"
-        class:bx--toggle__check="{true}">
+        class:bx--toggle__check="{true}"
+      >
         <path d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"></path>
       </svg>
       <span aria-hidden="true" class:bx--toggle__text--off="{true}">
@@ -88,7 +92,8 @@
       </span>
       <span
         aria-hidden="true"
-        class:bx--toggle__text--on="{true}">{labelB}</span>
+        class:bx--toggle__text--on="{true}"
+      >{labelB}</span>
     </span>
   </label>
 </div>

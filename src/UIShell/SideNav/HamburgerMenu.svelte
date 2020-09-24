@@ -27,8 +27,10 @@
   {...$$restProps}
   transition:fly="{{ x: -200, delay: 50, duration: 250 }}"
   on:click
-  on:click="{() => (isOpen = !isOpen)}">
+  on:click="{() => (isOpen = !isOpen)}"
+>
   <Icon
     title="{isOpen ? 'Close' : 'Open Menu'}"
-    render="{isOpen ? Close20 : Menu20}" />
+    render="{isOpen ? Close20 : Menu20}"
+  />
 </button>

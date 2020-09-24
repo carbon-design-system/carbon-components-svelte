@@ -36,10 +36,12 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <svelte:component
     this="{renderIcon}"
     title="{title}"
     class="{notificationType === 'toast' && 'bx--toast-notification__close-icon'}
-      {notificationType === 'inline' && 'bx--inline-notification__close-icon'}" />
+      {notificationType === 'inline' && 'bx--inline-notification__close-icon'}"
+  />
 </button>

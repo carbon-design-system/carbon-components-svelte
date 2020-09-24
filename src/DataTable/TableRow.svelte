@@ -14,6 +14,7 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <slot />
 </tr>

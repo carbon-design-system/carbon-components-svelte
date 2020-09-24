@@ -48,7 +48,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <input
     type="checkbox"
     class:bx--toggle-input="{true}"
@@ -68,11 +69,13 @@
     on:blur
     disabled="{disabled}"
     id="{id}"
-    name="{name}" />
+    name="{name}"
+  />
   <label
     aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle'}"
     for="{id}"
-    class:bx--toggle-input__label="{true}">
+    class:bx--toggle-input__label="{true}"
+  >
     {labelText}
     <span class:bx--toggle__switch="{true}">
       <span aria-hidden="true" class:bx--toggle__text--off="{true}">
@@ -80,7 +83,8 @@
       </span>
       <span
         aria-hidden="true"
-        class:bx--toggle__text--on="{true}">{labelB}</span>
+        class:bx--toggle__text--on="{true}"
+      >{labelB}</span>
     </span>
   </label>
 </div>

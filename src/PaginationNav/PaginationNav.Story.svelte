@@ -17,7 +17,8 @@
     }}"
     on:click:button--next="{({ detail }) => {
       console.log('button--next', detail);
-    }}" />
+    }}"
+  />
   <div style="margin-top: 1.5rem">Bound page index: {page}</div>
   <Button
     kind="tertiary"
@@ -25,7 +26,8 @@
     style="margin-top: 1rem;"
     on:click="{() => {
       page = 3;
-    }}">
+    }}"
+  >
     Set page to index 3
   </Button>
 </div>

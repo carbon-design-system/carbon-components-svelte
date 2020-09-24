@@ -26,7 +26,8 @@
     on:keyup
     on:keydown
     on:focus
-    on:blur>
+    on:blur
+  >
     <span class:bx--text-truncate--end="{true}">{text}</span>
   </a>
 </li>

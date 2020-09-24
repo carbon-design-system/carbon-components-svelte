@@ -51,12 +51,14 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div
     class:bx--radio-button-group="{true}"
     class:bx--radio-button-group--vertical="{orientation === 'vertical'}"
     class="{labelPosition && `bx--radio-button-group--label-${labelPosition}`}"
-    disabled="{disabled}">
+    disabled="{disabled}"
+  >
     <slot />
   </div>
 </div>

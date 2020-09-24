@@ -95,7 +95,8 @@
   }}"
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div bind:this="{refContent}">
     <div bind:this="{refAbove}" class:bx--tile-content="{true}">
       <span
@@ -103,14 +104,16 @@
         on:click
         on:mouseover
         on:mouseenter
-        on:mouseleave>
+        on:mouseleave
+      >
         <slot name="above" />
       </span>
     </div>
     <button
       aria-expanded="{expanded}"
       aria-label="{expanded ? tileExpandedIconText : tileCollapsedIconText}"
-      class:bx--tile__chevron="{true}">
+      class:bx--tile__chevron="{true}"
+    >
       <ChevronDown16 />
     </button>
     <div class:bx--tile-content="{true}">
@@ -119,7 +122,8 @@
         on:mouseover
         on:mouseenter
         on:mouseleave
-        class:bx--tile-content__below-the-fold="{true}">
+        class:bx--tile-content__below-the-fold="{true}"
+      >
         <slot name="below" />
       </span>
     </div>

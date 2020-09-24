@@ -14,7 +14,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <span class:bx--label="{true}"></span>
   <div class:bx--search-input="{true}"></div>
 </div>

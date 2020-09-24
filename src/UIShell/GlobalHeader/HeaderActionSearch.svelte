@@ -141,19 +141,22 @@
         isSearchFocus = false;
       }
     }
-  }}" />
+  }}"
+/>
 
 <div
   bind:this="{elTypeSearch}"
   role="search"
   class="search-wrapper"
   class:search-wrapper-hidden="{!searchIsActive}"
-  class:search-focus="{isSearchFocus || searchIsActive}">
+  class:search-focus="{isSearchFocus || searchIsActive}"
+>
   <div
     id="right-panel-action-search"
     class="search-wrapper-2"
     role="combobox"
-    aria-expanded="{searchIsActive}">
+    aria-expanded="{searchIsActive}"
+  >
     <button
       tabindex="{searchTabIndex}"
       aria-label="Search"
@@ -170,7 +173,8 @@
         if (key === 'Enter') {
           searchIsActive = !searchIsActive;
         }
-      }}">
+      }}"
+    >
       <Icon title="Search" tabindex="0" render="{Search20}" />
     </button>
     <input
@@ -184,7 +188,8 @@
       placeholder="Search"
       on:focus="{() => dispatch('focusInputSearch')}"
       on:focusout="{() => dispatch('focusOutInputSearch')}"
-      on:input="{dispatchInputs}" />
+      on:input="{dispatchInputs}"
+    />
     <button
       id="right-panel-close-search"
       tabindex="{closeTabIndex}"
@@ -202,7 +207,8 @@
         if (key === 'Enter') {
           searchIsActive = !searchIsActive;
         }
-      }}">
+      }}"
+    >
       <Icon title="Close" tabindex="0" render="{Close20}" />
     </button>
   </div>

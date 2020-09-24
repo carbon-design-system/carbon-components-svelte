@@ -69,7 +69,8 @@
       e.preventDefault();
       update(value);
     }
-  }}" />
+  }}"
+/>
 <label
   for="{id}"
   class:bx--tile="{true}"
@@ -80,11 +81,13 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <span class:bx--tile__checkmark="{true}">
     <CheckmarkFilled16
       aria-label="{iconDescription}"
-      title="{iconDescription}" />
+      title="{iconDescription}"
+    />
   </span>
   <span class:bx--tile-content="{true}">
     <slot />

@@ -43,7 +43,8 @@
         style="margin-left: 1rem;"
         description="{loadingDescription}"
         status="{success ? 'finished' : 'active'}"
-        aria-live="{ariaLive}" />
+        aria-live="{ariaLive}"
+      />
     {:else}
       <Button on:click="{handleSubmit}">Submit</Button>
     {/if}

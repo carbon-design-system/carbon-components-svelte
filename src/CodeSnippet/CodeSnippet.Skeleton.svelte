@@ -15,7 +15,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div class:bx--snippet-container="{true}">
     {#if type === 'single'}
       <span></span>

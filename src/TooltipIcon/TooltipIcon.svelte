@@ -59,7 +59,8 @@
   on:focus
   on:focus="{() => {
     hidden = false;
-  }}">
+  }}"
+>
   <span id="{id}" class:bx--assistive-text="{true}">{tooltipText}</span>
   <slot />
 </button>

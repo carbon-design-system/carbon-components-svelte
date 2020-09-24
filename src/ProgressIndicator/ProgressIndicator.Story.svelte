@@ -16,10 +16,12 @@
       </ProgressStep>
       <ProgressStep
         label="Really long label"
-        description="The progress indicator will listen for clicks on the steps" />
+        description="The progress indicator will listen for clicks on the steps"
+      />
       <ProgressStep
         label="Tooltip and really long label"
-        description="The progress indicator will listen for clicks on the steps" />
+        description="The progress indicator will listen for clicks on the steps"
+      />
     </ProgressIndicator>
   {:else}
     <ProgressIndicator {...$$props}>
@@ -29,23 +31,28 @@
         secondaryLabel="Optional label"
         on:click="{() => {
           console.log('click');
-        }}" />
+        }}"
+      />
       <ProgressStep
         label="Second step with tooltip"
         description="Step 2: Getting started with Carbon Design System"
-        secondaryLabel="Optional label" />
+        secondaryLabel="Optional label"
+      />
       <ProgressStep
         label="Third step with tooltip"
-        description="Step 3: Getting started with Carbon Design System" />
+        description="Step 3: Getting started with Carbon Design System"
+      />
       <ProgressStep
         label="Fourth step"
         description="Step 4: Getting started with Carbon Design System"
         secondaryLabel="Example invalid step"
-        invalid />
+        invalid
+      />
       <ProgressStep
         label="Fifth step"
         description="Step 5: Getting started with Carbon Design System"
-        disabled />
+        disabled
+      />
     </ProgressIndicator>
   {/if}
 </div>

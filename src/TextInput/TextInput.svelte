@@ -122,7 +122,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   {#if inline}
     <div class="bx--text-input__label-helper-wrapper">
       {#if labelText}
@@ -132,7 +133,8 @@
           class:bx--visually-hidden="{hideLabel}"
           class:bx--label--disabled="{disabled}"
           class:bx--label--inline="{inline}"
-          class="{inline && !!size && `bx--label--inline--${size}`}">
+          class="{inline && !!size && `bx--label--inline--${size}`}"
+        >
           {labelText}
         </label>
       {/if}
@@ -140,7 +142,8 @@
         <div
           class:bx--form__helper-text="{true}"
           class:bx--form__helper-text--disabled="{disabled}"
-          class:bx--form__helper-text--inline="{inline}">
+          class:bx--form__helper-text--inline="{inline}"
+        >
           {helperText}
         </div>
       {/if}
@@ -153,24 +156,28 @@
       class:bx--visually-hidden="{hideLabel}"
       class:bx--label--disabled="{disabled}"
       class:bx--label--inline="{inline}"
-      class="{inline && !!size && `bx--label--inline--${size}`}">
+      class="{inline && !!size && `bx--label--inline--${size}`}"
+    >
       {labelText}
     </label>
   {/if}
   <div
     class:bx--text-input__field-outer-wrapper="{true}"
-    class:bx--text-input__field-outer-wrapper--inline="{inline}">
+    class:bx--text-input__field-outer-wrapper--inline="{inline}"
+  >
     <div
       data-invalid="{invalid || undefined}"
       data-warn="{warn || undefined}"
-      class:bx--text-input__field-wrapper="{true}">
+      class:bx--text-input__field-wrapper="{true}"
+    >
       {#if invalid}
         <WarningFilled16 class="bx--text-input__invalid-icon" />
       {/if}
       {#if !invalid && warn}
         <WarningAltFilled16
           class="bx--text-input__invalid-icon
-            bx--text-input__invalid-icon--warning" />
+            bx--text-input__invalid-icon--warning"
+        />
       {/if}
       <input
         bind:this="{ref}"
@@ -197,13 +204,15 @@
         }}"
         on:keydown
         on:focus
-        on:blur />
+        on:blur
+      />
     </div>
     {#if !invalid && !warn && !inline && helperText}
       <div
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
-        class:bx--form__helper-text--inline="{inline}">
+        class:bx--form__helper-text--inline="{inline}"
+      >
         {helperText}
       </div>
     {/if}

@@ -108,13 +108,15 @@
     class:bx--select--inline="{inline}"
     class:bx--select--light="{light}"
     class:bx--select--invalid="{invalid}"
-    class:bx--select--disabled="{disabled}">
+    class:bx--select--disabled="{disabled}"
+  >
     {#if !noLabel}
       <label
         for="{id}"
         class:bx--label="{true}"
         class:bx--visually-hidden="{hideLabel}"
-        class:bx--label--disabled="{disabled}">
+        class:bx--label--disabled="{disabled}"
+      >
         {labelText}
       </label>
     {/if}
@@ -122,7 +124,8 @@
       <div class:bx--select-input--inline__wrapper="{true}">
         <div
           class:bx--select-input__wrapper="{true}"
-          data-invalid="{invalid || undefined}">
+          data-invalid="{invalid || undefined}"
+        >
           <select
             bind:this="{ref}"
             aria-describedby="{invalid ? errorId : undefined}"
@@ -135,7 +138,8 @@
             on:change="{({ target }) => {
               selectedValue.set(target.value);
             }}"
-            on:blur>
+            on:blur
+          >
             <slot />
           </select>
           <ChevronDown16 class="bx--select__arrow" />
@@ -152,7 +156,8 @@
       {#if helperText}
         <div
           class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}">
+          class:bx--form__helper-text--disabled="{disabled}"
+        >
           {helperText}
         </div>
       {/if}
@@ -160,7 +165,8 @@
     {#if !inline}
       <div
         class:bx--select-input__wrapper="{true}"
-        data-invalid="{invalid || undefined}">
+        data-invalid="{invalid || undefined}"
+      >
         <select
           bind:this="{ref}"
           id="{id}"
@@ -173,7 +179,8 @@
           on:change="{({ target }) => {
             selectedValue.set(target.value);
           }}"
-          on:blur>
+          on:blur
+        >
           <slot />
         </select>
         <ChevronDown16 class="bx--select__arrow" />
@@ -184,7 +191,8 @@
       {#if !invalid && helperText}
         <div
           class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}">
+          class:bx--form__helper-text--disabled="{disabled}"
+        >
           {helperText}
         </div>
       {/if}

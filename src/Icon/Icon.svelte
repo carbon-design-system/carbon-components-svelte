@@ -25,7 +25,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave
+  />
 {:else}
   <svelte:component
     this="{render}"
@@ -33,5 +34,6 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave
+  />
 {/if}

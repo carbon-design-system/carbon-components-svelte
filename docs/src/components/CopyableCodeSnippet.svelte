@@ -10,4 +10,5 @@
   code="{code}"
   on:click="{() => {
     copy(code);
-  }}" />
+  }}"
+/>

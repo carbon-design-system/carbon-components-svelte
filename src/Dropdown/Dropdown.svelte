@@ -157,12 +157,14 @@
   class:bx--dropdown__wrapper--inline="{inline}"
   class:bx--list-box__wrapper--inline="{inline}"
   class:bx--dropdown__wrapper--inline--invalid="{inline && invalid}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   {#if titleText}
     <label
       for="{id}"
       class:bx--label="{true}"
-      class:bx--label--disabled="{disabled}">
+      class:bx--label--disabled="{disabled}"
+    >
       {titleText}
     </label>
   {/if}
@@ -184,7 +186,8 @@
     open="{open}"
     invalid="{invalid}"
     invalidText="{invalidText}"
-    light="{light}">
+    light="{light}"
+  >
     {#if invalid}
       <WarningFilled16 class="bx--list-box__invalid-icon" />
     {/if}
@@ -217,7 +220,8 @@
       }}"
       disabled="{disabled}"
       translateWithId="{translateWithId}"
-      id="{id}">
+      id="{id}"
+    >
       <span class="bx--list-box__label">
         {#if selectedItem}{itemToString(selectedItem)}{:else}{label}{/if}
       </span>
@@ -236,7 +240,8 @@
             }}"
             on:mouseenter="{() => {
               highlightedIndex = i;
-            }}">
+            }}"
+          >
             {itemToString(item)}
           </ListBoxMenuItem>
         {/each}
@@ -246,7 +251,8 @@
   {#if !inline && !invalid && helperText}
     <div
       class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}">
+      class:bx--form__helper-text--disabled="{disabled}"
+    >
       {helperText}
     </div>
   {/if}

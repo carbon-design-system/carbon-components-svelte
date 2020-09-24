@@ -82,7 +82,8 @@
     <TableContainer
       title="DataTable"
       description="With default options"
-      {...props.getTableContainerProps()}>
+      {...props.getTableContainerProps()}
+    >
       <Table {...props.getTableProps()}>
         <TableHead>
           <TableRow>
@@ -126,7 +127,8 @@
       console.log('on:click:cell', detail);
     }}"
     rows="{rows}"
-    headers="{headers}" />
+    headers="{headers}"
+  />
 {:else}
   <DataTable
     title="{$$props.title}"
@@ -147,5 +149,6 @@
       console.log('on:click:cell', detail);
     }}"
     rows="{rows}"
-    headers="{headers}" />
+    headers="{headers}"
+  />
 {/if}

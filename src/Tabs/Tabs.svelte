@@ -111,7 +111,8 @@
   role="navigation"
   class:bx--tabs="{true}"
   class:bx--tabs--container="{type === 'container'}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   <div
     role="listbox"
     tabindex="0"
@@ -123,7 +124,8 @@
     on:keypress
     on:keypress="{() => {
       dropdownHidden = !dropdownHidden;
-    }}">
+    }}"
+  >
     <a
       tabindex="-1"
       class:bx--tabs-trigger-text="{true}"
@@ -131,7 +133,8 @@
       on:click
       on:click="{() => {
         dropdownHidden = !dropdownHidden;
-      }}">
+      }}"
+    >
       {#if currentTab}{currentTab.label}{/if}
     </a>
     <ChevronDownGlyph aria-hidden="true" title="{iconDescription}" />
@@ -139,7 +142,8 @@
   <ul
     role="tablist"
     class:bx--tabs__nav="{true}"
-    class:bx--tabs__nav--hidden="{dropdownHidden}">
+    class:bx--tabs__nav--hidden="{dropdownHidden}"
+  >
     <slot />
   </ul>
 </div>

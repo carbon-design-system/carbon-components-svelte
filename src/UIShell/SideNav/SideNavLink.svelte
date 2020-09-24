@@ -33,11 +33,13 @@
     class:bx--side-nav__link="{true}"
     class:bx--side-nav__link--current="{isSelected}"
     {...$$restProps}
-    on:click>
+    on:click
+  >
     {#if icon}
       <div
         class:bx--side-nav__icon="{true}"
-        class:bx--side-nav__icon--small="{true}">
+        class:bx--side-nav__icon--small="{true}"
+      >
         <Icon {...icon} />
       </div>
     {/if}

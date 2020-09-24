@@ -47,7 +47,8 @@
       class:bx--data-table--zebra="{zebra}"
       class:bx--data-table--static="{useStaticWidth}"
       class:bx--data-table--no-border="{!shouldShowBorder}"
-      class:bx--data-table--sticky-header="{stickyHeader}">
+      class:bx--data-table--sticky-header="{stickyHeader}"
+    >
       <slot />
     </table>
   </section>
@@ -62,7 +63,8 @@
     class:bx--data-table--static="{useStaticWidth}"
     class:bx--data-table--no-border="{!shouldShowBorder}"
     class:bx--data-table--sticky-header="{stickyHeader}"
-    {...$$restProps}>
+    {...$$restProps}
+  >
     <slot />
   </table>
 {/if}

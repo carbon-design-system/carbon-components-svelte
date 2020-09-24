@@ -259,12 +259,14 @@
   class:bx--multi-select__wrapper--inline="{inline}"
   class:bx--list-box__wrapper--inline="{inline}"
   class:bx--multi-select__wrapper--inline--invalid="{inline && invalid}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   {#if titleText}
     <label
       for="{id}"
       class:bx--label="{true}"
-      class:bx--label--disabled="{disabled}">
+      class:bx--label--disabled="{disabled}"
+    >
       {titleText}
     </label>
   {/if}
@@ -281,7 +283,8 @@
       {filterable && 'bx--multi-select--filterable'}
       {invalid && 'bx--multi-select--invalid'}
       {inline && 'bx--multi-select--inline'}
-      {checked.length > 0 && 'bx--multi-select--selected'}">
+      {checked.length > 0 && 'bx--multi-select--selected'}"
+  >
     {#if invalid}
       <WarningFilled16 class="bx--list-box__invalid-icon" />
     {/if}
@@ -327,7 +330,8 @@
       }}"
       id="{id}"
       disabled="{disabled}"
-      translateWithId="{translateWithId}">
+      translateWithId="{translateWithId}"
+    >
       {#if checked.length > 0}
         <ListBoxSelection
           selectionCount="{checked.length}"
@@ -339,7 +343,8 @@
             fieldRef.blur();
           }}"
           translateWithId="{translateWithId}"
-          disabled="{disabled}" />
+          disabled="{disabled}"
+        />
       {/if}
       {#if filterable}
         <input
@@ -383,7 +388,8 @@
           placeholder="{placeholder}"
           id="{id}"
           name="{name}"
-          value="{inputValue}" />
+          value="{inputValue}"
+        />
         {#if invalid}
           <WarningFilled16 class="bx--list-box__invalid-icon" />
         {/if}
@@ -395,7 +401,8 @@
             }}"
             translateWithId="{translateWithId}"
             disabled="{disabled}"
-            open="{open}" />
+            open="{open}"
+          />
         {/if}
         <ListBoxMenuIcon
           on:click="{(e) => {
@@ -403,7 +410,8 @@
             open = !open;
           }}"
           translateWithId="{translateWithId}"
-          open="{open}" />
+          open="{open}"
+        />
       {/if}
       {#if !filterable}
         <span class="bx--list-box__label">{label}</span>
@@ -425,7 +433,8 @@
             }}"
             on:mouseenter="{() => {
               highlightedIndex = i;
-            }}">
+            }}"
+          >
             <Checkbox
               readonly
               tabindex="-1"
@@ -434,7 +443,8 @@
               name="{itemToString(item)}"
               labelText="{itemToString(item)}"
               checked="{item.checked}"
-              disabled="{disabled}" />
+              disabled="{disabled}"
+            />
           </ListBoxMenuItem>
         {/each}
       </ListBoxMenu>
@@ -443,7 +453,8 @@
   {#if !inline && !invalid && helperText}
     <div
       class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}">
+      class:bx--form__helper-text--disabled="{disabled}"
+    >
       {helperText}
     </div>
   {/if}

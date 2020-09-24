@@ -93,19 +93,22 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  class:bx--form-item="{true}">
+  class:bx--form-item="{true}"
+>
   {#if labelText && !hideLabel}
     <label
       for="{id}"
       class:bx--label="{true}"
       class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}">
+      class:bx--label--disabled="{disabled}"
+    >
       {labelText}
     </label>
   {/if}
   <div
     class:bx--text-area__wrapper="{true}"
-    data-invalid="{invalid || undefined}">
+    data-invalid="{invalid || undefined}"
+  >
     {#if invalid}
       <WarningFilled16 class="bx--text-area__invalid-icon" />
     {/if}
@@ -130,12 +133,14 @@
         value = target.value;
       }}"
       on:focus
-      on:blur></textarea>
+      on:blur
+    ></textarea>
   </div>
   {#if !invalid && helperText}
     <div
       class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}">
+      class:bx--form__helper-text--disabled="{disabled}"
+    >
       {helperText}
     </div>
   {/if}

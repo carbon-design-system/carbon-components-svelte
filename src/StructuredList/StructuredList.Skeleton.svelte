@@ -20,11 +20,13 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div class:bx--structured-list-thead="{true}">
     <div
       class:bx--structured-list-row="{true}"
-      class:bx--structured-list-row--header-row="{true}">
+      class:bx--structured-list-row--header-row="{true}"
+    >
       <div class:bx--structured-list-th="{true}"><span></span></div>
       <div class:bx--structured-list-th="{true}"><span></span></div>
       <div class:bx--structured-list-th="{true}"><span></span></div>

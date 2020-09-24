@@ -75,7 +75,8 @@
     if (!disabled && e.key === 'Enter') {
       dispatch('clear', e);
     }
-  }}">
+  }}"
+>
   {#if selectionCount}{selectionCount}{/if}
   <Close16 />
 </div>

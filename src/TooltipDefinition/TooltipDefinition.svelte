@@ -50,7 +50,8 @@
   }}"
   on:mouseleave="{() => {
     visible = false;
-  }}">
+  }}"
+>
   <button
     bind:this="{ref}"
     aria-describedby="{id}"
@@ -68,7 +69,8 @@
     on:focus
     on:focus="{() => {
       hidden = false;
-    }}">
+    }}"
+  >
     <slot />
   </button>
   <div role="tooltip" id="{id}" class:bx--assistive-text="{true}">

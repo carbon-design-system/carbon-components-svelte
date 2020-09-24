@@ -51,14 +51,16 @@
     if (animationName === 'hide-feedback') {
       animation = undefined;
     }
-  }}">
+  }}"
+>
   <slot>
     {#if animation}{feedback || $$restProps['aria-label']}{/if}
   </slot>
   <span
     aria-hidden="true"
     class:bx--assistive-text="{true}"
-    class:bx--copy-btn__feedback="{true}">
+    class:bx--copy-btn__feedback="{true}"
+  >
     {feedback}
   </span>
 </button>

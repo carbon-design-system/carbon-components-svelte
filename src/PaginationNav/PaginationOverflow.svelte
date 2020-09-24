@@ -32,7 +32,8 @@
         on:change="{({ target }) => {
           value = '';
           dispatch('select', { index: Number(target.value) });
-        }}">
+        }}"
+      >
         <option value="" hidden></option>
         {#each Array.from({ length: count }, (_, i) => i) as i}
           <option value="{fromIndex + i}" data-page="{fromIndex + i + 1}">
@@ -50,7 +51,8 @@
     page="{fromIndex + 1}"
     on:click="{() => {
       dispatch('select', { index: fromIndex });
-    }}">
+    }}"
+  >
     Page
   </PaginationItem>
 {/if}

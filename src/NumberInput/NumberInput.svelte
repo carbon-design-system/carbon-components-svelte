@@ -178,7 +178,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div
     data-invalid="{error || undefined}"
     class:bx--number="{true}"
@@ -187,14 +188,16 @@
     class:bx--number--light="{light}"
     class:bx--number--nolabel="{hideLabel}"
     class:bx--number--mobile="{mobile}"
-    class="{size && `bx--number--${size}`}">
+    class="{size && `bx--number--${size}`}"
+  >
     {#if mobile}
       {#if label}
         <label
           for="{id}"
           class:bx--label="{true}"
           class:bx--label--disabled="{disabled}"
-          class:bx--visually-hidden="{hideLabel}">
+          class:bx--visually-hidden="{hideLabel}"
+        >
           <slot name="label">{label}</slot>
         </label>
       {/if}
@@ -210,7 +213,8 @@
           on:click="{() => {
             updateValue(-1);
           }}"
-          disabled="{disabled}">
+          disabled="{disabled}"
+        >
           <CaretDownGlyph class="down-icon" />
         </button>
         <input
@@ -229,7 +233,8 @@
           min="{min}"
           step="{step}"
           value="{value}"
-          readonly="{readonly}" />
+          readonly="{readonly}"
+        />
         <button
           type="button"
           aria-live="polite"
@@ -241,7 +246,8 @@
           on:click="{() => {
             updateValue(1);
           }}"
-          disabled="{disabled}">
+          disabled="{disabled}"
+        >
           <CaretUpGlyph class="up-icon" />
         </button>
       </div>
@@ -251,7 +257,8 @@
           for="{id}"
           class:bx--label="{true}"
           class:bx--label--disabled="{disabled}"
-          class:bx--visually-hidden="{hideLabel}">
+          class:bx--visually-hidden="{hideLabel}"
+        >
           <slot name="label">{label}</slot>
         </label>
       {/if}
@@ -274,7 +281,8 @@
           min="{min}"
           step="{step}"
           value="{value}"
-          readonly="{readonly}" />
+          readonly="{readonly}"
+        />
         {#if invalid}
           <WarningFilled16 class="bx--number__invalid" />
         {/if}
@@ -290,7 +298,8 @@
             on:click="{() => {
               updateValue(1);
             }}"
-            disabled="{disabled}">
+            disabled="{disabled}"
+          >
             <CaretUpGlyph class="up-icon" />
           </button>
           <button
@@ -304,7 +313,8 @@
             on:click="{() => {
               updateValue(-1);
             }}"
-            disabled="{disabled}">
+            disabled="{disabled}"
+          >
             <CaretDownGlyph class="down-icon" />
           </button>
         </div>
@@ -313,7 +323,8 @@
     {#if !error && helperText}
       <div
         class:bx--form__helper-text="{true}"
-        class:bx--form__helper-text--disabled="{disabled}">
+        class:bx--form__helper-text--disabled="{disabled}"
+      >
         {helperText}
       </div>
     {/if}

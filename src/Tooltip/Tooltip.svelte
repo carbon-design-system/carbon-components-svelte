@@ -198,7 +198,8 @@
         on:click|preventDefault|stopPropagation="{openMenu}"
         on:focus="{openMenu}"
         on:blur="{onBlur}"
-        on:keydown="{onKeydown}">
+        on:keydown="{onKeydown}"
+      >
         <slot name="icon">
           <svelte:component this="{icon}" name="{iconName}" />
         </slot>
@@ -211,7 +212,8 @@
       on:click|preventDefault|stopPropagation="{openMenu}"
       on:focus="{openMenu}"
       on:blur="{onBlur}"
-      on:keydown="{onKeydown}">
+      on:keydown="{onKeydown}"
+    >
       <slot name="triggerText">{triggerText}</slot>
     </div>
   {/if}
@@ -224,7 +226,8 @@
       data-floating-menu-direction="{direction}"
       class:bx--tooltip="{true}"
       class:bx--tooltip--shown="{open}"
-      on:blur="{closeMenu}">
+      on:blur="{closeMenu}"
+    >
       <span class:bx--tooltip__caret="{true}"></span>
       <slot />
     </div>

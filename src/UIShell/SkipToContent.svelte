@@ -17,6 +17,7 @@
   tabindex="{tabindex}"
   class:bx--skip-to-content="{true}"
   {...$$restProps}
-  on:click>
+  on:click
+>
   <slot>Skip to main content</slot>
 </a>

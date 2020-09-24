@@ -103,25 +103,29 @@
             page--;
           }
           dispatch('click:button--previous', { page });
-        }}" />
+        }}"
+      />
     </li>
     {#if fit > MIN || (fit <= MIN && page <= 1)}
       <PaginationItem
         page="{1}"
         active="{page === 0}"
-        on:click="{() => (page = 0)}">
+        on:click="{() => (page = 0)}"
+      >
         {page === 0 ? 'Active, Page' : 'Page'}
       </PaginationItem>
     {/if}
     <PaginationOverflow
       fromIndex="{startOffset}"
       count="{front}"
-      on:select="{({ detail }) => (page = detail.index)}" />
+      on:select="{({ detail }) => (page = detail.index)}"
+    />
     {#each items as item}
       <PaginationItem
         page="{item + 1}"
         active="{page === item}"
-        on:click="{() => (page = item)}">
+        on:click="{() => (page = item)}"
+      >
         {page === item ? 'Active, Page' : 'Page'}
       </PaginationItem>
     {/each}
@@ -130,12 +134,14 @@
       count="{back}"
       on:select="{({ detail }) => {
         page = detail.index;
-      }}" />
+      }}"
+    />
     {#if total > 1}
       <PaginationItem
         page="{total}"
         active="{page === total - 1}"
-        on:click="{() => (page = total - 1)}">
+        on:click="{() => (page = total - 1)}"
+      >
         {page === total - 1 ? 'Active, Page' : 'Page'}
       </PaginationItem>
     {/if}
@@ -155,13 +161,15 @@
             page++;
           }
           dispatch('click:button--next', { page });
-        }}" />
+        }}"
+      />
     </li>
   </ul>
   <div
     aria-live="polite"
     aria-atomic="true"
-    class:bx--pagination-nav__accessibility-label="{true}">
+    class:bx--pagination-nav__accessibility-label="{true}"
+  >
     Page {page + 1} of {total}
   </div>
 </nav>

@@ -16,7 +16,8 @@
       {...$$props}
       on:update="{({ detail }) => {
         console.log(detail);
-      }}">
+      }}"
+    >
       Pagination
     </Pagination>
   {/if}

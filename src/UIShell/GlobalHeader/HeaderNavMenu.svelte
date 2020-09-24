@@ -37,7 +37,8 @@
         expanded = false;
       }
     }
-  }}" />
+  }}"
+/>
 
 <li class:bx--header__submenu="{true}" title="{iconDescription}">
   <a
@@ -63,11 +64,13 @@
     on:mouseleave
     on:keyup
     on:focus
-    on:blur>
+    on:blur
+  >
     {text}
     <ChevronDown16
       aria-label="{iconDescription}"
-      class="bx--header__menu-arrow" />
+      class="bx--header__menu-arrow"
+    />
   </a>
   <ul role="menu" aria-label="{text}" class:bx--header__menu="{true}">
     <slot />

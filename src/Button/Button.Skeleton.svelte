@@ -23,7 +23,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     {''}
   </a>
 {:else}
@@ -35,5 +36,6 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave></div>
+    on:mouseleave
+  ></div>
 {/if}

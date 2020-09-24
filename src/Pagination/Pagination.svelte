@@ -121,7 +121,8 @@
     <label
       id="bx--pagination-select-{id}-count-label"
       for="bx--pagination-select-{id}"
-      class:bx--pagination__text="{true}">
+      class:bx--pagination__text="{true}"
+    >
       {itemsPerPageText}
     </label>
     <Select
@@ -130,7 +131,8 @@
       hideLabel
       noLabel
       inline
-      bind:selected="{pageSize}">
+      bind:selected="{pageSize}"
+    >
       {#each pageSizes as size, i (size)}
         <SelectItem value="{size}" text="{size.toString()}" />
       {/each}
@@ -151,7 +153,8 @@
         labelText="Page number, of {totalPages} pages"
         inline
         hideLabel
-        bind:selected="{page}">
+        bind:selected="{page}"
+      >
         {#each selectItems as size, i (size)}
           <SelectItem value="{size + 1}" text="{(size + 1).toString()}" />
         {/each}
@@ -173,7 +176,8 @@
       class="bx--pagination__button bx--pagination__button--backward {backButtonDisabled ? 'bx--pagination__button--no-index' : ''}"
       on:click="{() => {
         page--;
-      }}" />
+      }}"
+    />
     <Button
       hasIconOnly
       kind="ghost"
@@ -185,6 +189,7 @@
       class="bx--pagination__button bx--pagination__button--forward {forwardButtonDisabled ? 'bx--pagination__button--no-index' : ''}"
       on:click="{() => {
         page++;
-      }}" />
+      }}"
+    />
   </div>
 </div>

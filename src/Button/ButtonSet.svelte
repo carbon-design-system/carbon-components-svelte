@@ -9,6 +9,7 @@
 <div
   class:bx--btn-set="{true}"
   class:bx--btn-set--stacked="{stacked}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   <slot />
 </div>

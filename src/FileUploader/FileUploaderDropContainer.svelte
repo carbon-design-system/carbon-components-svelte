@@ -94,7 +94,8 @@
       over = false;
       dispatch('add', validateFiles(dataTransfer.files));
     }
-  }}">
+  }}"
+>
   <label
     for="{id}"
     tabindex="{tabindex}"
@@ -105,11 +106,13 @@
       if (key === ' ' || key === 'Enter') {
         ref.click();
       }
-    }}">
+    }}"
+  >
     <div
       role="{role}"
       class:bx--file__drop-container="{true}"
-      class:bx--file__drop-container--drag-over="{over}">
+      class:bx--file__drop-container--drag-over="{over}"
+    >
       {labelText}
       <input
         bind:this="{ref}"
@@ -128,7 +131,8 @@
         on:click
         on:click="{({ target }) => {
           target.value = null;
-        }}" />
+        }}"
+      />
     </div>
   </label>
 </div>

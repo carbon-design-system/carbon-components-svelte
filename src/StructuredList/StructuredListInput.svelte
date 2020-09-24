@@ -59,4 +59,5 @@
   {...$$restProps}
   on:change="{() => {
     update(value);
-  }}" />
+  }}"
+/>

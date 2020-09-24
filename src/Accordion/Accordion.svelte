@@ -20,7 +20,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave
+  />
 {:else}
   <ul
     class:bx--accordion="{true}"
@@ -29,7 +30,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <slot />
   </ul>
 {/if}

@@ -52,7 +52,8 @@
       kind="{danger ? 'danger' : 'primary'}"
       disabled="{primaryButtonDisabled}"
       class="{primaryClass}"
-      on:click="{submit}">
+      on:click="{submit}"
+    >
       {primaryButtonText}
     </Button>
   {/if}

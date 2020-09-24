@@ -14,14 +14,17 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   {#each [0, 1, 2, 3] as item, i (item)}
     <li
       class:bx--progress-step="{true}"
-      class:bx--progress-step--incomplete="{true}">
+      class:bx--progress-step--incomplete="{true}"
+    >
       <div
         class:bx--progress-step-button="{true}"
-        class:bx--progress-step-button--unclickable="{true}">
+        class:bx--progress-step-button--unclickable="{true}"
+      >
         <svg>
           <path d="M 7, 7 m -7, 0 a 7,7 0 1,0 14,0 a 7,7 0 1,0 -14,0"></path>
         </svg>

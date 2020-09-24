@@ -16,7 +16,7 @@ export const Default = () => ({
     open: boolean("Open (open)", true),
     passiveModal: boolean("Without footer (passiveModal)", false),
     danger: boolean("Danger mode (danger)", false),
-    alert: boolean('Alert mode (alert)', false),
+    alert: boolean("Alert mode (alert)", false),
     shouldSubmitOnEnter: boolean(
       "Enter key to submit (shouldSubmitOnEnter)",
       false

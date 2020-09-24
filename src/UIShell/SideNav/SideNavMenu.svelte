@@ -30,7 +30,8 @@
     on:click
     on:click="{() => {
       expanded = !expanded;
-    }}">
+    }}"
+  >
     {#if icon}
       <div class:bx--side-nav__icon="{true}">
         <Icon {...icon} />
@@ -40,7 +41,8 @@
     <div
       class:bx--side-nav__icon="{true}"
       class:bx--side-nav__icon--small="{true}"
-      class:bx--side-nav__submenu-chevron="{true}">
+      class:bx--side-nav__submenu-chevron="{true}"
+    >
       <Icon title="Open Menu" tabindex="0" render="{ChevronDown16}" />
     </div>
   </button>

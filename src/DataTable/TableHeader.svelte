@@ -38,19 +38,22 @@
     {...$$restProps}
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <button
       class:bx--table-sort="{true}"
       class:bx--table-sort--active="{active}"
       class:bx--table-sort--ascending="{active && $sortHeader.sortDirection === 'descending'}"
-      on:click>
+      on:click
+    >
       <span class:bx--table-header-label="{true}">
         <slot />
       </span>
       <ArrowUp20 aria-label="{ariaLabel}" class="bx--table-sort__icon" />
       <ArrowsVertical20
         aria-label="{ariaLabel}"
-        class="bx--table-sort__icon-unsorted" />
+        class="bx--table-sort__icon-unsorted"
+      />
     </button>
   </th>
 {:else}
@@ -61,7 +64,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave>
+    on:mouseleave
+  >
     <span class:bx--table-header-label="{true}">
       <slot />
     </span>

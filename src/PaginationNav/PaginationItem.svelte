@@ -18,7 +18,8 @@
     aria-current="{active ? 'page' : undefined}"
     class:bx--pagination-nav__page="{true}"
     class:bx--pagination-nav__page--active="{active}"
-    on:click>
+    on:click
+  >
     <span class:bx--pagination-nav__accessibility-label="{true}">
       <slot />
     </span>

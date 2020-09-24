@@ -20,7 +20,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   {#each Array.from({ length: count }, (_, i) => i) as item, i (item)}
     <div class:bx--breadcrumb-item="{true}">
       <span class:bx--link="{true}">&nbsp;</span>

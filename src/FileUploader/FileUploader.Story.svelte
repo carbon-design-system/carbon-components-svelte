@@ -21,7 +21,8 @@
       {...$$props}
       on:add="{({ detail }) => {
         console.log(detail);
-      }}" />
+      }}"
+    />
   {:else if story === 'item'}
     <FileUploaderItem
       {...$$props}
@@ -30,7 +31,8 @@
       }}"
       on:click="{() => {
         console.log('click');
-      }}" />
+      }}"
+    />
   {:else if story === 'uploader'}
     <div class="bx--file__container">
       <FileUploader
@@ -42,13 +44,15 @@
         }}"
         on:remove="{({ detail }) => {
           console.log('remove', detail);
-        }}" />
+        }}"
+      />
       <Button
         kind="secondary"
         size="small"
         style="margin-top: 1rem"
         disabled="{disabled}"
-        on:click="{fileUploader.clearFiles}">
+        on:click="{fileUploader.clearFiles}"
+      >
         Clear File{files.length === 1 ? '' : 's'}
       </Button>
     </div>

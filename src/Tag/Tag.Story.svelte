@@ -12,7 +12,8 @@
       {...$$restProps}
       on:click="{() => {
         console.log('click');
-      }}">
+      }}"
+    >
       {slot}
     </Tag>
   {:else if story === 'skeleton'}

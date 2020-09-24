@@ -19,7 +19,8 @@
   {...$$restProps}
   on:click
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div class:bx--list-box__menu-item__option="{true}">
     <slot />
   </div>

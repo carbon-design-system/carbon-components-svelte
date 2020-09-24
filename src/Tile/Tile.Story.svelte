@@ -35,7 +35,8 @@
         }}"
         on:deselect="{({ detail }) => {
           console.log('on:deselect', detail);
-        }}">
+        }}"
+      >
         Multi-select Tile
       </SelectableTile>
       <SelectableTile {...$$props} id="tile-2" name="tiles">
@@ -55,7 +56,8 @@
           labelText="{labelText}"
           on:keydown="{() => {
             console.log('keydown');
-          }}">
+          }}"
+        >
           Selectable Tile
         </RadioTile>
       {/each}

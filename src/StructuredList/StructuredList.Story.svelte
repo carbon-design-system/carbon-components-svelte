@@ -44,12 +44,14 @@
               id="row-{i}"
               value="row-{i}-value"
               title="row-{i}-title"
-              name="row-{i}-name" />
+              name="row-{i}-name"
+            />
             <StructuredListCell>
               <CheckmarkFilled16
                 class="bx--structured-list-svg"
                 aria-label="select an option"
-                title="select an option" />
+                title="select an option"
+              />
             </StructuredListCell>
           </StructuredListRow>
         {/each}

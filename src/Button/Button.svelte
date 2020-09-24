@@ -129,7 +129,8 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave />
+    on:mouseleave
+  />
 {:else}
   {#if as}
     <slot props="{buttonProps}" />
@@ -141,7 +142,8 @@
       on:click
       on:mouseover
       on:mouseenter
-      on:mouseleave>
+      on:mouseleave
+    >
       {#if hasIconOnly}
         <span class:bx--assistive-text="{true}">{iconDescription}</span>
       {/if}
@@ -151,7 +153,8 @@
           this="{icon}"
           aria-hidden="true"
           class="bx--btn__icon"
-          aria-label="{iconDescription}" />
+          aria-label="{iconDescription}"
+        />
       {/if}
     </a>
   {:else}
@@ -161,7 +164,8 @@
       on:click
       on:mouseover
       on:mouseenter
-      on:mouseleave>
+      on:mouseleave
+    >
       {#if hasIconOnly}
         <span class:bx--assistive-text="{true}">{iconDescription}</span>
       {/if}
@@ -171,7 +175,8 @@
           this="{icon}"
           aria-hidden="true"
           class="bx--btn__icon"
-          aria-label="{iconDescription}" />
+          aria-label="{iconDescription}"
+        />
       {/if}
     </button>
   {/if}

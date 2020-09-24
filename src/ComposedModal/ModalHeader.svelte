@@ -52,7 +52,8 @@
     <p
       class:bx--modal-header__label="{true}"
       class:bx--type-delta="{true}"
-      class:labelClass>
+      class:labelClass
+    >
       {label}
     </p>
   {/if}
@@ -60,7 +61,8 @@
     <p
       class:bx--modal-header__heading="{true}"
       class:bx--type-beta="{true}"
-      class:titleClass>
+      class:titleClass
+    >
       {title}
     </p>
   {/if}
@@ -72,7 +74,8 @@
     class:bx--modal-close="{true}"
     class:closeClass
     on:click
-    on:click="{closeModal}">
+    on:click="{closeModal}"
+  >
     <Close20 class="bx--modal-close__icon {closeIconClass}" />
   </button>
 </div>

@@ -122,19 +122,22 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   {#if labelText}
     <label
       for="{id}"
       class:bx--label="{true}"
       class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}">
+      class:bx--label--disabled="{disabled}"
+    >
       {labelText}
     </label>
   {/if}
   <div
     class:bx--text-input__field-wrapper="{true}"
-    data-invalid="{invalid || undefined}">
+    data-invalid="{invalid || undefined}"
+  >
     {#if invalid}
       <WarningFilled16 class="bx--text-input__invalid-icon" />
     {/if}
@@ -161,7 +164,8 @@
       }}"
       on:keydown
       on:focus
-      on:blur />
+      on:blur
+    />
     <button
       type="button"
       class:bx--text-input--password__visibility__toggle="{true}"
@@ -172,7 +176,8 @@
         {tooltipAlignment && `bx--tooltip--align-${tooltipAlignment}`}"
       on:click="{() => {
         type = type === 'password' ? 'text' : 'password';
-      }}">
+      }}"
+    >
       <span class:bx--assistive-text="{true}">
         {#if type === 'text'}{hidePasswordLabel}{:else}{showPasswordLabel}{/if}
       </span>
@@ -186,7 +191,8 @@
   {#if !invalid && helperText}
     <div
       class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}">
+      class:bx--form__helper-text--disabled="{disabled}"
+    >
       {helperText}
     </div>
   {/if}

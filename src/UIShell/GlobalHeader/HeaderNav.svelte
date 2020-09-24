@@ -10,7 +10,8 @@
   <ul
     role="menubar"
     aria-label="{ariaLabel}"
-    class:bx--header__menu-bar="{true}">
+    class:bx--header__menu-bar="{true}"
+  >
     <slot />
   </ul>
 </nav>

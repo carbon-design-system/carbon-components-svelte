@@ -67,12 +67,14 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   {#if labelText}
     <label
       for="{id}"
       class:bx--label="{true}"
-      class:bx--visually-hidden="{hideLabel}">
+      class:bx--visually-hidden="{hideLabel}"
+    >
       <!-- TODO: set to always be `true` after `hideLabel` is deprecated -->
       {labelText}
     </label>
@@ -87,11 +89,13 @@
     class:bx--select-input="{true}"
     on:change="{({ target }) => {
       selectedValue.set(target.value);
-    }}">
+    }}"
+  >
     <slot />
   </select>
   <ChevronDownGlyph
     aria-label="{iconDescription}"
     title="{iconDescription}"
-    class="bx--select__arrow" />
+    class="bx--select__arrow"
+  />
 </div>

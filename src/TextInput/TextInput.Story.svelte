@@ -16,7 +16,8 @@
     aria-label="loading text input"
     aria-live="assertive"
     role="status"
-    tabindex="0">
+    tabindex="0"
+  >
     <TextInputSkeleton />
     <br />
     <TextInputSkeleton hideLabel />
@@ -27,25 +28,29 @@
     aria-level=""
     on:keydown="{(e) => {
       console.log('on:keydown', e);
-    }}" />
+    }}"
+  />
 {:else if story === 'controlled'}
   <PasswordInput
     {...$$props}
     type="{type}"
     on:keydown="{(e) => {
       console.log('on:keydown', e);
-    }}" />
+    }}"
+  />
   <div>
     <button
       on:click="{() => {
         type = 'text';
-      }}">
+      }}"
+    >
       Show password
     </button>
     <button
       on:click="{() => {
         type = 'password';
-      }}">
+      }}"
+    >
       Hide password
     </button>
   </div>
@@ -59,5 +64,6 @@
     }}"
     on:change="{() => {
       console.log('change');
-    }}" />
+    }}"
+  />
 {/if}

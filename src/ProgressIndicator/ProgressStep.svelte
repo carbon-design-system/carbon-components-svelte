@@ -70,7 +70,8 @@
   class:bx--progress-step--complete="{complete}"
   class:bx--progress-step--incomplete="{!complete && !current}"
   class:bx--progress-step--disabled="{disabled}"
-  {...$$restProps}>
+  {...$$restProps}
+>
   <button
     disabled="{disabled}"
     aria-disabled="{disabled}"
@@ -89,7 +90,8 @@
       if (e.key === ' ' || e.key === 'Enter') {
         change(step.index);
       }
-    }}">
+    }}"
+  >
     {#if invalid}
       <Warning16 class="bx--progress__warning" />
     {:else if current}
@@ -104,7 +106,8 @@
         <title>{description}</title>
         <path
           d="M8 1C4.1 1 1 4.1 1 8s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7zm0 13c-3.3
-          0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"></path>
+          0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"
+        ></path>
       </svg>
     {/if}
     <slot props="{{ class: 'bx--progress-label' }}">

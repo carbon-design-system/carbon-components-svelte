@@ -13,7 +13,8 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave>
+  on:mouseleave
+>
   <div class:bx--tabs-trigger="{true}">
     <div class:bx--tabs-trigger-text="{true}">&nbsp;</div>
     <svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd">

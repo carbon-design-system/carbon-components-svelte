@@ -11,7 +11,8 @@
     on:click="{() => console.log('click')}"
     on:mouseover="{() => console.log('mouseover')}"
     on:mouseenter="{() => console.log('mouseenter')}"
-    on:mouseleave="{() => console.log('mouseleave')}">
+    on:mouseleave="{() => console.log('mouseleave')}"
+  >
     Primary button
   </Button>
 
@@ -46,7 +47,8 @@
     icon="{Add16}"
     iconDescription="Primary"
     tooltipPosition="bottom"
-    tooltipAlignment="center" />
+    tooltipAlignment="center"
+  />
 
   <Button
     {...$$props}
@@ -55,7 +57,8 @@
     icon="{Add16}"
     iconDescription="Secondary"
     tooltipPosition="bottom"
-    tooltipAlignment="center" />
+    tooltipAlignment="center"
+  />
 
   <Button
     {...$$props}
@@ -64,7 +67,8 @@
     icon="{Add16}"
     iconDescription="Tertiary"
     tooltipPosition="bottom"
-    tooltipAlignment="center" />
+    tooltipAlignment="center"
+  />
 
   <Button
     {...$$props}
@@ -73,7 +77,8 @@
     icon="{Add16}"
     iconDescription="Ghost"
     tooltipPosition="bottom"
-    tooltipAlignment="center" />
+    tooltipAlignment="center"
+  />
 
   <Button
     {...$$props}
@@ -82,5 +87,6 @@
     icon="{Add16}"
     iconDescription="Danger"
     tooltipPosition="bottom"
-    tooltipAlignment="center" />
+    tooltipAlignment="center"
+  />
 </div>
