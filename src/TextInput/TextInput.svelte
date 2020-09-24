@@ -101,6 +101,12 @@
    */
   export let required = false;
 
+  /**
+   * Set to `true` to use inline version
+   * @type {boolean} [inline=false]
+   */
+  export let inline = false;
+
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16";
 
@@ -111,70 +117,103 @@
 <div
   class:bx--form-item="{true}"
   class:bx--text-input-wrapper="{true}"
+  class:bx--text-input-wrapper--inline="{inline}"
   {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave>
-  {#if labelText}
+  {#if inline}
+    <div class="bx--text-input__label-helper-wrapper">
+      {#if labelText}
+        <label
+          for="{id}"
+          class:bx--label="{true}"
+          class:bx--visually-hidden="{hideLabel}"
+          class:bx--label--disabled="{disabled}"
+          class:bx--label--inline="{inline}"
+          class="{inline && !!size && `bx--label--inline--${size}`}">
+          {labelText}
+        </label>
+      {/if}
+      {#if helperText}
+        <div
+          class:bx--form__helper-text="{true}"
+          class:bx--form__helper-text--disabled="{disabled}"
+          class:bx--form__helper-text--inline="{inline}">
+          {helperText}
+        </div>
+      {/if}
+    </div>
+  {/if}
+  {#if !inline && labelText}
     <label
       for="{id}"
       class:bx--label="{true}"
       class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}">
+      class:bx--label--disabled="{disabled}"
+      class:bx--label--inline="{inline}"
+      class="{inline && !!size && `bx--label--inline--${size}`}">
       {labelText}
     </label>
   {/if}
   <div
-    data-invalid="{invalid || undefined}"
-    data-warn="{warn || undefined}"
-    class:bx--text-input__field-wrapper="{true}">
+    class:bx--text-input__field-outer-wrapper="{true}"
+    class:bx--text-input__field-outer-wrapper--inline="{inline}">
+    <div
+      data-invalid="{invalid || undefined}"
+      data-warn="{warn || undefined}"
+      class:bx--text-input__field-wrapper="{true}">
+      {#if invalid}
+        <WarningFilled16 class="bx--text-input__invalid-icon" />
+      {/if}
+      {#if !invalid && warn}
+        <WarningAltFilled16
+          class="bx--text-input__invalid-icon
+            bx--text-input__invalid-icon--warning" />
+      {/if}
+      <input
+        bind:this="{ref}"
+        data-invalid="{invalid || undefined}"
+        aria-invalid="{invalid || undefined}"
+        data-warn="{warn || undefined}"
+        aria-describedby="{invalid ? errorId : warn ? warnId : undefined}"
+        disabled="{disabled}"
+        id="{id}"
+        name="{name}"
+        placeholder="{placeholder}"
+        type="{type}"
+        value="{value}"
+        required="{required}"
+        class:bx--text-input="{true}"
+        class:bx--text-input--light="{light}"
+        class:bx--text-input--invalid="{invalid}"
+        class:bx--text-input--warn="{warn}"
+        class="{size && `bx--text-input--${size}`}"
+        on:change
+        on:input
+        on:input="{({ target }) => {
+          value = target.value;
+        }}"
+        on:keydown
+        on:focus
+        on:blur />
+    </div>
+    {#if !invalid && !warn && !inline && helperText}
+      <div
+        class:bx--form__helper-text="{true}"
+        class:bx--form__helper-text--disabled="{disabled}"
+        class:bx--form__helper-text--inline="{inline}">
+        {helperText}
+      </div>
+    {/if}
     {#if invalid}
-      <WarningFilled16 class="bx--text-input__invalid-icon" />
+      <div class:bx--form-requirement="{true}" id="{errorId}">
+        {invalidText}
+      </div>
     {/if}
     {#if !invalid && warn}
-      <WarningAltFilled16
-        class="bx--text-input__invalid-icon
-          bx--text-input__invalid-icon--warning" />
+      <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
     {/if}
-    <input
-      bind:this="{ref}"
-      data-invalid="{invalid || undefined}"
-      aria-invalid="{invalid || undefined}"
-      data-warn="{warn || undefined}"
-      aria-describedby="{invalid ? errorId : warn ? warnId : undefined}"
-      disabled="{disabled}"
-      id="{id}"
-      name="{name}"
-      placeholder="{placeholder}"
-      type="{type}"
-      value="{value}"
-      required="{required}"
-      class:bx--text-input="{true}"
-      class:bx--text-input--light="{light}"
-      class:bx--text-input--invalid="{invalid}"
-      class:bx--text-input--warn="{warn}"
-      class="{size && `bx--text-input--${size}`}"
-      on:change
-      on:input
-      on:input="{({ target }) => {
-        value = target.value;
-      }}"
-      on:keydown
-      on:focus
-      on:blur />
   </div>
-  {#if !invalid && !warn && helperText}
-    <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}">
-      {helperText}
-    </div>
-  {/if}
-  {#if invalid}
-    <div class:bx--form-requirement="{true}" id="{errorId}">{invalidText}</div>
-  {/if}
-  {#if !invalid && warn}
-    <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
-  {/if}
 </div>

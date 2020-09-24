@@ -29,6 +29,7 @@ export const Default = () => ({
       'This will overwrite your current settings'
     ),
     placeholder: text("Placeholder text (placeholder)", "Placeholder text."),
+    inline: boolean('Inline variant (inline)', false),
     id: text("TextInput id", "text-input-id"),
     name: text("TextInput name", "text-input-name"),
   },
