@@ -18,10 +18,6 @@
   let theme: "g10" = "g10";
 </script>
 
-<style lang="scss" global>
-  @import "carbon-components-svelte/css/all";
-</style>
-
 <Theme persist bind:theme>
   <Header />
   <Content style="background: none; padding: 1rem">
