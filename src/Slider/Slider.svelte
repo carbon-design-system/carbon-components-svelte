@@ -101,7 +101,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, afterUpdate } from "svelte";
+  import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -144,12 +144,6 @@
     value = nextValue;
   }
 
-  afterUpdate(() => {
-    if (!holding) {
-      dispatch("change", value);
-    }
-  });
-
   $: range = max - min;
   $: left = ((value - min) / range) * 100;
   $: {
@@ -162,6 +156,10 @@
     if (dragging) {
       calcValue(event);
       dragging = false;
+    }
+
+    if (!holding) {
+      dispatch("change", value);
     }
   }
 </script>
