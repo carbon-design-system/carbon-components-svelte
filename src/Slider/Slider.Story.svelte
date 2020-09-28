@@ -4,7 +4,7 @@
   import Slider from "./Slider.svelte";
   import SliderSkeleton from "./Slider.Skeleton.svelte";
 
-  $: value = 50;
+  let value = 50;
 </script>
 
 {#if story === 'skeleton'}

@@ -129,6 +129,8 @@
   }
 
   function calcValue(e) {
+    if (disabled) return;
+
     const offsetX = e.touches ? e.touches[0].clientX : e.clientX;
     const { left, width } = trackRef.getBoundingClientRect();
     let nextValue =
@@ -158,7 +160,7 @@
       dragging = false;
     }
 
-    if (!holding) {
+    if (!holding && !disabled) {
       dispatch("change", value);
     }
   }
