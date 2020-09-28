@@ -1,9 +1,9 @@
 <script>
   /**
    * Specify the value of the slider
-   * @type {string} [value=""]
+   * @type {number} [value=0]
    */
-  export let value = "";
+  export let value = 0;
 
   /**
    * Set the maximum slider value
@@ -119,6 +119,13 @@
 
   function stopHolding() {
     holding = false;
+    dragging = false;
+  }
+
+  function move() {
+    if (holding) {
+      startDragging();
+    }
   }
 
   function calcValue(e) {
@@ -159,6 +166,13 @@
   }
 </script>
 
+<svelte:body
+  on:mousemove="{move}"
+  on:touchmove="{move}"
+  on:mouseup="{stopHolding}"
+  on:touchend="{stopHolding}"
+  on:touchcancel="{stopHolding}" />
+
 <div
   class:bx--form-item="{true}"
   {...$$restProps}
@@ -182,21 +196,15 @@
       tabindex="-1"
       class:bx--slider="{true}"
       class:bx--slider--disabled="{disabled}"
-      on:click="{startDragging}"
-      on:mousemove="{() => {
-        if (holding) {
-          startDragging();
+      on:mousedown="{startDragging}"
+      on:mousedown="{startHolding}"
+      on:touchstart="{startHolding}"
+      on:keydown="{({ shiftKey, key }) => {
+        const keys = { ArrowDown: -1, ArrowLeft: -1, ArrowRight: 1, ArrowUp: 1 };
+        if (keys[key]) {
+          value += step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
         }
       }}"
-      on:touchmove="{() => {
-        if (holding) {
-          startDragging();
-        }
-      }}"
-      on:mouseup="{stopHolding}"
-      on:touchup="{stopHolding}"
-      on:touchend="{stopHolding}"
-      on:touchcancel="{stopHolding}"
     >
       <div
         role="slider"
@@ -206,14 +214,6 @@
         aria-valuemax="{max}"
         aria-valuemin="{min}"
         aria-valuenow="{value}"
-        on:mousedown="{startHolding}"
-        on:touchstart="{startHolding}"
-        on:keydown="{({ shiftKey, key }) => {
-          const keys = { ArrowDown: -1, ArrowLeft: -1, ArrowRight: 1, ArrowUp: 1 };
-          if (keys[key]) {
-            value += step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
-          }
-        }}"
         id="{id}"
       ></div>
       <div bind:this="{trackRef}" class:bx--slider__track="{true}"></div>
