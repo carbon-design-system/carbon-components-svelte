@@ -3,6 +3,9 @@
   import FluidForm from "./FluidForm.svelte";
 
   $: value = null;
+  // remove props on publish
+  export let inputInvalid = false;
+  export let passwordInvalid = false;
 </script>
 
 <FluidForm
@@ -17,6 +20,7 @@
     labelText="Text Input label"
     placeholder="Placeholder text"
     bind:value
+    invalid="{inputInvalid}"
     on:keydown="{(e) => {
       console.log('on:keydown', e);
     }}"
@@ -29,7 +33,7 @@
     type="password"
     id="test4"
     labelText="Password"
-    invalid
+    invalid="{passwordInvalid}"
     invalidText="Your password must be at least 6 characters as well as contain at least one uppercase, one lowercase, and one number."
     on:keydown="{(e) => {
       console.log('on:keydown', e);
