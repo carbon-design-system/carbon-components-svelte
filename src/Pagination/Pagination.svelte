@@ -55,6 +55,12 @@
   export let pageInputDisabled = false;
 
   /**
+   * Set to `true` to disable the page size input
+   * @type {boolean} [pageSizeInputDisabled=false]
+   */
+  export let pageSizeInputDisabled = false;
+
+  /**
    * Specify the number of items to display in a page
    * @type {number} [pageSize=10]
    */
@@ -118,6 +124,7 @@
 
 <div id="{id}" class:bx--pagination="{true}" {...$$restProps}>
   <div class:bx--pagination__left="{true}">
+    {#if !pageSizeInputDisabled}
     <label
       id="bx--pagination-select-{id}-count-label"
       for="bx--pagination-select-{id}"
@@ -137,7 +144,8 @@
         <SelectItem value="{size}" text="{size.toString()}" />
       {/each}
     </Select>
-    <span class:bx--pagination__text="{true}">
+    {/if}
+    <span class:bx--pagination__text="{!pageSizeInputDisabled}">
       {#if pagesUnknown}
         {itemText(pageSize * (page - 1) + 1, page * pageSize)}
       {:else}
