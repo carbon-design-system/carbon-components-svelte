@@ -107,17 +107,21 @@
    */
   export let ref = null;
 
+  import { getContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
   import View16 from "carbon-icons-svelte/lib/View16";
   import ViewOff16 from "carbon-icons-svelte/lib/ViewOff16";
 
+  const ctx = getContext("Form");
+
+  $: isFluid = !!ctx && ctx.isFluid;
   $: errorId = `error-${id}`;
 </script>
 
 <div
   class:bx--form-item="{true}"
   class:bx--text-input-wrapper="{true}"
-  class:bx--password-input-wrapper="{true}"
+  class:bx--password-input-wrapper="{!isFluid}"
   {...$$restProps}
   on:click
   on:mouseover
