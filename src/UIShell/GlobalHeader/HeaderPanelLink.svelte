@@ -7,7 +7,7 @@
 </script>
 
 <li class:bx--switcher__item="{true}">
-  <a href="{href}" class:bx--switcher__item-link="{true}" {...$$restProps}>
+  <a href="{href}" class:bx--switcher__item-link="{true}" {...$$restProps} on:click>
     <slot />
   </a>
 </li>
