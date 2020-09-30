@@ -211,7 +211,7 @@
         on:blur
       />
       {#if isFluid}
-        <hr className="bx--text-input__divider" />
+        <hr class:bx--text-input__divider="{true}" />
       {/if}
       {#if isFluid && !inline && invalid}
         <div class:bx--form-requirement="{true}" id="{errorId}">
