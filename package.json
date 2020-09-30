@@ -36,6 +36,8 @@
     "carbon-components-10.19": "npm:carbon-components@10.19",
     "comment-parser": "^0.7.5",
     "gh-pages": "^3.1.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
     "node-sass": "^4.14.1",
     "postcss": "^7.0.32",
     "prettier": "^2.1.1",
@@ -80,5 +82,15 @@
       "name": "Adan Ulloa",
       "email": "adanug@mx1.ibm.com"
     }
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn prepack && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{svelte,md,js,json}": [
+      "prettier --write"
+    ]
+  }
 }
