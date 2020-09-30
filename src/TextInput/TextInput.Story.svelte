@@ -1,6 +1,7 @@
 <script>
   export let story = undefined;
 
+  import { FluidForm } from "../FluidForm";
   import PasswordInput from "./PasswordInput.svelte";
   import TextInput from "./TextInput.svelte";
   import TextInputSkeleton from "./TextInput.Skeleton.svelte";
@@ -54,6 +55,20 @@
       Hide password
     </button>
   </div>
+{:else if story === 'fluid'}
+  <FluidForm>
+    <TextInput
+      bind:ref
+      {...$$props}
+      bind:value
+      on:keydown="{(e) => {
+        console.log('on:keydown', e);
+      }}"
+      on:change="{() => {
+        console.log('change');
+      }}"
+    />
+  </FluidForm>
 {:else}
   <TextInput
     bind:ref

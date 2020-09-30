@@ -107,9 +107,13 @@
    */
   export let inline = false;
 
+  import { getContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16";
 
+  const ctx = getContext("Form");
+
+  $: isFluid = !!ctx && ctx.isFluid;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
 </script>
@@ -138,7 +142,7 @@
           {labelText}
         </label>
       {/if}
-      {#if helperText}
+      {#if !isFluid && helperText}
         <div
           class:bx--form__helper-text="{true}"
           class:bx--form__helper-text--disabled="{disabled}"
@@ -206,8 +210,19 @@
         on:focus
         on:blur
       />
+      {#if isFluid}
+        <hr class:bx--text-input__divider="{true}" />
+      {/if}
+      {#if isFluid && !inline && invalid}
+        <div class:bx--form-requirement="{true}" id="{errorId}">
+          {invalidText}
+        </div>
+      {/if}
+      {#if isFluid && !inline && warn}
+        <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
+      {/if}
     </div>
-    {#if !invalid && !warn && !inline && helperText}
+    {#if !invalid && !warn && !isFluid && !inline && helperText}
       <div
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
@@ -216,12 +231,12 @@
         {helperText}
       </div>
     {/if}
-    {#if invalid}
+    {#if !isFluid && invalid}
       <div class:bx--form-requirement="{true}" id="{errorId}">
         {invalidText}
       </div>
     {/if}
-    {#if !invalid && warn}
+    {#if !isFluid && !invalid && warn}
       <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
     {/if}
   </div>

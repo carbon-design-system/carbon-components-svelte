@@ -34,6 +34,7 @@ export {
   Filename,
 } from "./FileUploader";
 export { Form } from "./Form";
+export { FluidForm } from "./FluidForm";
 export { FormGroup } from "./FormGroup";
 export { FormItem } from "./FormItem";
 export { FormLabel } from "./FormLabel";
