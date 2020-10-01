@@ -17,6 +17,12 @@
    */
   export let icon = undefined;
 
+  /**
+   * Obtain a reference to the HTML button element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
+  export let ref = null;
+
   import { Icon } from "../../Icon";
 </script>
 
@@ -31,6 +37,7 @@
 </style>
 
 <a
+  bind:this="{ref}"
   class:bx--header__action="{true}"
   class:bx--header__action--active="{linkIsActive}"
   class:action-link="{true}"

@@ -20,7 +20,7 @@
 
 <button
   type="button"
-  ref="{ref}"
+  bind:this="{ref}"
   class:bx--header__action="{true}"
   class:bx--header__action--active="{isActive}"
   {...$$restProps}

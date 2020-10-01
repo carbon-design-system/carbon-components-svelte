@@ -17,6 +17,12 @@
    */
   export let icon = undefined;
 
+  /**
+   * Obtain a reference to the HTML button element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
+  export let ref = null;
+
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
   import { Icon } from "../../Icon";
 </script>
@@ -24,6 +30,7 @@
 <li class:bx--side-nav__item="{true}" class:bx--side-nav__item--icon="{icon}">
   <button
     type="button"
+    bind:this="{ref}"
     aria-expanded="{expanded}"
     class:bx--side-nav__submenu="{true}"
     {...$$restProps}

@@ -18,14 +18,18 @@
   export let text = undefined;
 
   /**
+   * Obtain a reference to the HTML button element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
+  export let ref = null;
+
+  /**
    * Specify the ARIA label for the chevron icon
    * @type {string} [iconDescription="Expand/Collapse"]
    */
   export let iconDescription = "Expand/Collapse";
 
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
-
-  let ref = null;
 </script>
 
 <svelte:window

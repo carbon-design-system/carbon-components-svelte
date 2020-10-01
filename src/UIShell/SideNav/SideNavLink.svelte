@@ -23,11 +23,18 @@
    */
   export let icon = undefined;
 
+  /**
+   * Obtain a reference to the HTML button element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
+  export let ref = null;
+
   import { Icon } from "../../Icon";
 </script>
 
 <li class:bx--side-nav__item="{true}">
   <a
+    bind:this="{ref}"
     aria-current="{isSelected ? 'page' : undefined}"
     href="{href}"
     class:bx--side-nav__link="{true}"
