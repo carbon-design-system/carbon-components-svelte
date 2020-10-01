@@ -16,12 +16,6 @@
    * @type {boolean} [isOpen=false]
    */
   export let isOpen = false;
-
-  /**
-   * Obtain a reference to the HTML button element
-   * @type {null | HTMLButtonElement} [ref=null]
-   */
-  export let ref = null;
 </script>
 
 {#if fixed}
@@ -34,7 +28,6 @@
   ></div>
 {/if}
 <nav
-  bind:this="{ref}"
   aria-label="{ariaLabel}"
   class:bx--side-nav__navigation="{true}"
   class:bx--side-nav="{true}"

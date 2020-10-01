@@ -12,8 +12,8 @@
   export let text = undefined;
 
   /**
-   * Obtain a reference to the HTML button element
-   * @type {null | HTMLButtonElement} [ref=null]
+   * Obtain a reference to the HTML anchor element
+   * @type {null | HTMLAnchorElement} [ref=null]
    */
   export let ref = null;
 </script>
