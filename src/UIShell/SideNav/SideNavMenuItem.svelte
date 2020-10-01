@@ -16,10 +16,17 @@
    * @type {string} [text]
    */
   export let text = undefined;
+
+  /**
+   * Obtain a reference to the HTML anchor element
+   * @type {null | HTMLAnchorElement} [ref=null]
+   */
+  export let ref = null;
 </script>
 
 <li class:bx--side-nav__menu-item="{true}">
   <a
+    bind:this="{ref}"
     aria-current="{isSelected ? 'page' : undefined}"
     href="{href}"
     class:bx--side-nav__link="{true}"

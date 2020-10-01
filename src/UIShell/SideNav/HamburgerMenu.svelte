@@ -11,6 +11,12 @@
    */
   export let isOpen = false;
 
+  /**
+   * Obtain a reference to the HTML button element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
+  export let ref = null;
+
   import { fly } from "svelte/transition";
   import Close20 from "carbon-icons-svelte/lib/Close20";
   import Menu20 from "carbon-icons-svelte/lib/Menu20";
@@ -19,6 +25,7 @@
 
 <button
   type="button"
+  bind:this="{ref}"
   title="Open menu"
   aria-label="{ariaLabel}"
   class:bx--header__action="{true}"

@@ -36,6 +36,12 @@
    */
   export let platformName = undefined;
 
+  /**
+   * Obtain a reference to the HTML anchor element
+   * @type {null | HTMLAnchorElement} [ref=null]
+   */
+  export let ref = null;
+
   import HamburgerMenu from "../SideNav/HamburgerMenu.svelte";
 
   let winWidth = undefined;
@@ -53,7 +59,13 @@
   {#if winWidth < 1056}
     <HamburgerMenu bind:isOpen="{isSideNavOpen}" />
   {/if}
-  <a href="{href}" class:bx--header__name="{true}" {...$$restProps} on:click>
+  <a
+    href="{href}"
+    class:bx--header__name="{true}"
+    bind:this="{ref}"
+    {...$$restProps}
+    on:click
+  >
     {#if company}
       <span class:bx--header__name--prefix="{true}">{company}&nbsp;</span>
     {/if}

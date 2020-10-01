@@ -10,10 +10,17 @@
    * @type {string} [text]
    */
   export let text = undefined;
+
+  /**
+   * Obtain a reference to the HTML anchor element
+   * @type {null | HTMLAnchorElement} [ref=null]
+   */
+  export let ref = null;
 </script>
 
 <li>
   <a
+    bind:this="{ref}"
     role="menuitem"
     tabindex="0"
     href="{href}"
