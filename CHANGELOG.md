@@ -9,6 +9,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.15.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.15.0) - 2020-10-01
+
+**Features**
+
+- DataTableSkeleton: add `size` prop to support "compact", "small", "tall" row heights ([PR #279](https://github.com/IBM/carbon-components-svelte/pull/279), thanks [@albertms10](https://github.com/albertms10))
+
+- HeaderPanelLink: forward click event ([PR #286](https://github.com/IBM/carbon-components-svelte/pull/286), thanks [@weaseldotro](https://github.com/weaseldotro))
+
+- FluidForm: add `FluidForm` component and support fluid variants for `TextInput`, `PasswordInput` ([PR #293](https://github.com/IBM/carbon-components-svelte/pull/293), thanks [@josefaidt](https://github.com/josefaidt))
+
+- UI Shell: add `ref` prop to interactive (i.e. anchor links, buttons) UI Shell elements ([PR #297](https://github.com/IBM/carbon-components-svelte/pull/297), thanks [@josefaidt](https://github.com/josefaidt))
+
+**Fixes**
+
+- Slider: attach mousemove/touch events to document body, not slider input ([issue #288](https://github.com/IBM/carbon-components-svelte/issues/288))
+
+- Slider: `value` prop type should be a `number`, not a `string` ([issue #289](https://github.com/IBM/carbon-components-svelte/issues/289))
+
+- Slider: input value should not update if `disabled` is `true`
+
+- Slider: `change` event should only be dispatched if the value changes
+
+- UI Shell: correctly bind `ref` prop in `HeaderGlobalAction` ([PR #297](https://github.com/IBM/carbon-components-svelte/pull/297), thanks [@josefaidt](https://github.com/josefaidt))
+
+- export `DatePickerSkeleton`, `FileUploaderSkeleton` components
+
+**Breaking Changes**
+
+- DataTableSkeleton: `compact` prop is removed in favor of `size="compact"`
+
+**Dependencies**
+
+- upgrade `carbon-icons-svelte` to version ^10.17.0
+
+**Housekeeping**
+
+- prettier: enable `svelteBracketNewLine` for improved readability ([PR #281](https://github.com/IBM/carbon-components-svelte/pull/281), thanks [@josefaidt](https://github.com/josefaidt))
+
+- git: add husky, lint-staged to development workflow ([PR #295](https://github.com/IBM/carbon-components-svelte/pull/295), thanks [@josefaidt](https://github.com/josefaidt))
+
 ## [0.14.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.14.0) - 2020-09-23
 
 **Features**
