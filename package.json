@@ -16,7 +16,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "carbon-icons-svelte": "^10.15.0",
+    "carbon-icons-svelte": "^10.17.0",
     "flatpickr": "4.6.3"
   },
   "devDependencies": {

@@ -3203,10 +3203,10 @@ capture-stack-trace@^1.0.0:
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
 
-carbon-icons-svelte@^10.15.0:
-  version "10.15.0"
-  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.15.0.tgz#2e4a7f7e8c71c260239c8210d0506d023efc824f"
-  integrity sha512-8J9+EHA+r1gp/8upFC8PD/mpreIvC61vkqhkOgxnCVVFixidd8XK8SIaMSlUJeovjImAh2Zj4AB4aMPsl/Xubg==
+carbon-icons-svelte@^10.17.0:
+  version "10.17.0"
+  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.17.0.tgz#f7559f58be9c789097ea4035e52dbc4c12691d45"
+  integrity sha512-as1RN87YLvF7iepGAGWQOk2oleyb4w17BoHSYyQgE3MceOla04YdSWASK5c22XZZnmMJbbrT17Z34Cl70niz0Q==
 
 case-sensitive-paths-webpack-plugin@^2.2.0:
   version "2.3.0"
