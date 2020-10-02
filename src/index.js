@@ -24,7 +24,7 @@ export {
   TableRow,
 } from "./DataTable";
 export { DataTableSkeleton } from "./DataTableSkeleton";
-export { DatePicker, DatePickerInput } from "./DatePicker";
+export { DatePicker, DatePickerInput, DatePickerSkeleton } from "./DatePicker";
 export { Dropdown, DropdownSkeleton } from "./Dropdown";
 export {
   FileUploader,
@@ -32,6 +32,7 @@ export {
   FileUploaderItem,
   FileUploaderDropContainer,
   Filename,
+  FileUploaderSkeleton,
 } from "./FileUploader";
 export { Form } from "./Form";
 export { FluidForm } from "./FluidForm";

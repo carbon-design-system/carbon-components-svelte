@@ -962,6 +962,21 @@ export class DatePickerInput extends CarbonSvelteComponent {
   };
 }
 
+export class DatePickerSkeleton extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Set to `true` to use the range variant
+     * @default false
+     */
+    range?: boolean;
+
+    /**
+     * Set an id to be used by the label element
+     */
+    id?: string;
+  };
+}
+
 type DropdownItemId = string;
 
 type DropdownItemText = string;
@@ -1389,6 +1404,8 @@ export class FileUploaderItem extends CarbonSvelteComponent {
   };
 }
 
+export class FileUploaderSkeleton extends CarbonSvelteComponent {}
+
 export class Filename extends CarbonSvelteComponent {
   $$prop_def: {
     /**
@@ -1409,6 +1426,10 @@ export class Filename extends CarbonSvelteComponent {
      */
     invalid?: boolean;
   };
+}
+
+export class FluidForm extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
 }
 
 export class Form extends CarbonSvelteComponent {
@@ -1543,6 +1564,12 @@ export class Header extends CarbonSvelteComponent {
      * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
      */
     platformName?: string;
+
+    /**
+     * Obtain a reference to the HTML anchor element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement;
   };
 
   $$slot_def: { "skip-to-content": {}; platform: {}; default: {} };
@@ -1600,6 +1627,12 @@ export class HeaderActionLink extends CarbonSvelteComponent {
       render: typeof import("carbon-icons-svelte/lib/Add16").default;
       skeleton: boolean;
     };
+
+    /**
+     * Obtain a reference to the HTML anchor element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement;
   };
 }
 
@@ -1658,6 +1691,12 @@ export class HeaderNavItem extends CarbonSvelteComponent {
      * Specify the text
      */
     text?: string;
+
+    /**
+     * Obtain a reference to the HTML anchor element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement;
   };
 }
 
@@ -1681,6 +1720,12 @@ export class HeaderNavMenu extends CarbonSvelteComponent {
     text?: string;
 
     /**
+     * Obtain a reference to the HTML anchor element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement;
+
+    /**
      * Specify the ARIA label for the chevron icon
      * @default "Expand/Collapse"
      */
@@ -1700,6 +1745,12 @@ export class HeaderPanelLink extends CarbonSvelteComponent {
      * Specify the `href` attribute
      */
     href?: string;
+
+    /**
+     * Obtain a reference to the HTML anchor element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement;
   };
 
   $$slot_def: { default: {} };
@@ -3653,6 +3704,12 @@ export class SideNavLink extends CarbonSvelteComponent {
       render: typeof import("carbon-icons-svelte/lib/Add16").default;
       skeleton: boolean;
     };
+
+    /**
+     * Obtain a reference to the HTML anchor element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement;
   };
 }
 
@@ -3676,6 +3733,12 @@ export class SideNavMenu extends CarbonSvelteComponent {
       render: typeof import("carbon-icons-svelte/lib/Add16").default;
       skeleton: boolean;
     };
+
+    /**
+     * Obtain a reference to the HTML button element
+     * @default null
+     */
+    ref?: null | HTMLButtonElement;
   };
 
   $$slot_def: { default: {} };
@@ -3697,6 +3760,12 @@ export class SideNavMenuItem extends CarbonSvelteComponent {
      * Specify the item text
      */
     text?: string;
+
+    /**
+     * Obtain a reference to the HTML anchor element
+     * @default null
+     */
+    ref?: null | HTMLAnchorElement;
   };
 }
 
@@ -3752,9 +3821,9 @@ export class Slider extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the value of the slider
-     * @default ""
+     * @default 0
      */
-    value?: string;
+    value?: number;
 
     /**
      * Set the maximum slider value

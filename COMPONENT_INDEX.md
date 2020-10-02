@@ -1,6 +1,6 @@
 # Component Index
 
-> 144 components exported from carbon-components-svelte 0.14.0
+> 147 components exported from carbon-components-svelte 0.14.0
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -42,17 +42,20 @@
   - [TableRow](#tablerow)
 - [DataTableSkeleton](#datatableskeleton)
 - DatePicker
+  - [DatePickerSkeleton](#datepickerskeleton)
   - [DatePicker](#datepicker)
   - [DatePickerInput](#datepickerinput)
 - Dropdown
   - [DropdownSkeleton](#dropdownskeleton)
   - [Dropdown](#dropdown)
 - FileUploader
+  - [FileUploaderSkeleton](#fileuploaderskeleton)
   - [FileUploader](#fileuploader)
   - [FileUploaderButton](#fileuploaderbutton)
   - [FileUploaderDropContainer](#fileuploaderdropcontainer)
   - [FileUploaderItem](#fileuploaderitem)
   - [Filename](#filename)
+- [FluidForm](#fluidform)
 - [Form](#form)
 - [FormGroup](#formgroup)
 - [FormItem](#formitem)
@@ -978,15 +981,15 @@ import { DataTableSkeleton } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name   | Type                  | Default value |
-| :---------- | :-------------------- | :------------ |
-| columns     | <code>number</code>   | 5             |
-| rows        | <code>number</code>   | 5             |
-| compact     | <code>boolean</code>  | false         |
-| zebra       | <code>boolean</code>  | false         |
-| showHeader  | <code>boolean</code>  | true          |
-| headers     | <code>string[]</code> | --            |
-| showToolbar | <code>boolean</code>  | true          |
+| Prop name   | Type                                                | Default value |
+| :---------- | :-------------------------------------------------- | :------------ |
+| columns     | <code>number</code>                                 | 5             |
+| rows        | <code>number</code>                                 | 5             |
+| size        | <code>"compact" &#124; "short" &#124; "tall"</code> | --            |
+| zebra       | <code>boolean</code>                                | false         |
+| showHeader  | <code>boolean</code>                                | true          |
+| headers     | <code>string[]</code>                               | --            |
+| showToolbar | <code>boolean</code>                                | true          |
 
 ### Slots
 
@@ -1080,6 +1083,38 @@ No slots.
 - `on:input`
 - `on:keydown`
 - `on:blur`
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## DatePickerSkeleton
+
+### Import path
+
+```js
+import { DatePickerSkeleton } from "carbon-components-svelte";
+```
+
+### Props
+
+| Prop name | Type                 | Default value |
+| :-------- | :------------------- | :------------ |
+| range     | <code>boolean</code> | false         |
+| id        | <code>string</code>  | --            |
+
+### Slots
+
+No slots.
+
+### Forwarded events
+
+- `on:click`
+- `on:mouseover`
+- `on:mouseenter`
+- `on:mouseleave`
 
 ### Dispatched events
 
@@ -1385,6 +1420,35 @@ No slots.
 
 ---
 
+## FileUploaderSkeleton
+
+### Import path
+
+```js
+import { FileUploaderSkeleton } from "carbon-components-svelte";
+```
+
+### Props
+
+No exported props.
+
+### Slots
+
+No slots.
+
+### Forwarded events
+
+- `on:click`
+- `on:mouseover`
+- `on:mouseenter`
+- `on:mouseleave`
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
 ## Filename
 
 ### Import path
@@ -1409,6 +1473,32 @@ No slots.
 
 - `on:click`
 - `on:keydown`
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## FluidForm
+
+### Import path
+
+```js
+import { FluidForm } from "carbon-components-svelte";
+```
+
+### Props
+
+No exported props.
+
+### Slots
+
+- `<slot>...</slot>`
+
+### Forwarded events
+
+No forwarded events.
 
 ### Dispatched events
 
@@ -1584,14 +1674,15 @@ import { Header } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name         | Type                 | Default value |
-| :---------------- | :------------------- | :------------ |
-| expandedByDefault | <code>boolean</code> | true          |
-| isSideNavOpen     | <code>boolean</code> | false         |
-| uiShellAriaLabel  | <code>string</code>  | --            |
-| href              | <code>string</code>  | --            |
-| company           | <code>string</code>  | --            |
-| platformName      | <code>string</code>  | --            |
+| Prop name         | Type                                       | Default value |
+| :---------------- | :----------------------------------------- | :------------ |
+| expandedByDefault | <code>boolean</code>                       | true          |
+| isSideNavOpen     | <code>boolean</code>                       | false         |
+| uiShellAriaLabel  | <code>string</code>                        | --            |
+| href              | <code>string</code>                        | --            |
+| company           | <code>string</code>                        | --            |
+| platformName      | <code>string</code>                        | --            |
+| ref               | <code>null &#124; HTMLAnchorElement</code> | null          |
 
 ### Slots
 
@@ -1653,6 +1744,7 @@ import { HeaderActionLink } from "carbon-components-svelte";
 | linkIsActive | <code>boolean</code>                                                                                | false         |
 | href         | <code>string</code>                                                                                 | --            |
 | icon         | <code>{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }</code> | --            |
+| ref          | <code>null &#124; HTMLAnchorElement</code>                                                          | null          |
 
 ### Slots
 
@@ -1766,10 +1858,11 @@ import { HeaderNavItem } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name | Type                | Default value |
-| :-------- | :------------------ | :------------ |
-| href      | <code>string</code> | --            |
-| text      | <code>string</code> | --            |
+| Prop name | Type                                       | Default value |
+| :-------- | :----------------------------------------- | :------------ |
+| href      | <code>string</code>                        | --            |
+| text      | <code>string</code>                        | --            |
+| ref       | <code>null &#124; HTMLAnchorElement</code> | null          |
 
 ### Slots
 
@@ -1802,12 +1895,13 @@ import { HeaderNavMenu } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name       | Type                 | Default value     |
-| :-------------- | :------------------- | :---------------- |
-| expanded        | <code>boolean</code> | false             |
-| href            | <code>string</code>  | "/"               |
-| text            | <code>string</code>  | --                |
-| iconDescription | <code>string</code>  | "Expand/Collapse" |
+| Prop name       | Type                                       | Default value     |
+| :-------------- | :----------------------------------------- | :---------------- |
+| expanded        | <code>boolean</code>                       | false             |
+| href            | <code>string</code>                        | "/"               |
+| text            | <code>string</code>                        | --                |
+| ref             | <code>null &#124; HTMLAnchorElement</code> | null              |
+| iconDescription | <code>string</code>                        | "Expand/Collapse" |
 
 ### Slots
 
@@ -1866,9 +1960,10 @@ import { HeaderPanelLink } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name | Type                | Default value |
-| :-------- | :------------------ | :------------ |
-| href      | <code>string</code> | --            |
+| Prop name | Type                                       | Default value |
+| :-------- | :----------------------------------------- | :------------ |
+| href      | <code>string</code>                        | --            |
+| ref       | <code>null &#124; HTMLAnchorElement</code> | null          |
 
 ### Slots
 
@@ -1876,7 +1971,7 @@ import { HeaderPanelLink } from "carbon-components-svelte";
 
 ### Forwarded events
 
-No forwarded events.
+- `on:click`
 
 ### Dispatched events
 
@@ -3669,6 +3764,7 @@ import { SideNavLink } from "carbon-components-svelte";
 | href       | <code>string</code>                                                                                 | --            |
 | text       | <code>string</code>                                                                                 | --            |
 | icon       | <code>{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }</code> | --            |
+| ref        | <code>null &#124; HTMLAnchorElement</code>                                                          | null          |
 
 ### Slots
 
@@ -3699,6 +3795,7 @@ import { SideNavMenu } from "carbon-components-svelte";
 | expanded  | <code>boolean</code>                                                                                | false         |
 | text      | <code>string</code>                                                                                 | --            |
 | icon      | <code>{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }</code> | --            |
+| ref       | <code>null &#124; HTMLButtonElement</code>                                                          | null          |
 
 ### Slots
 
@@ -3724,11 +3821,12 @@ import { SideNavMenuItem } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name  | Type                 | Default value |
-| :--------- | :------------------- | :------------ |
-| isSelected | <code>boolean</code> | --            |
-| href       | <code>string</code>  | --            |
-| text       | <code>string</code>  | --            |
+| Prop name  | Type                                       | Default value |
+| :--------- | :----------------------------------------- | :------------ |
+| isSelected | <code>boolean</code>                       | --            |
+| href       | <code>string</code>                        | --            |
+| text       | <code>string</code>                        | --            |
+| ref        | <code>null &#124; HTMLAnchorElement</code> | null          |
 
 ### Slots
 
@@ -3848,7 +3946,7 @@ import { Slider } from "carbon-components-svelte";
 
 | Prop name      | Type                                 | Default value |
 | :------------- | :----------------------------------- | :------------ |
-| value          | <code>string</code>                  | ""            |
+| value          | <code>number</code>                  | 0             |
 | max            | <code>number</code>                  | 100           |
 | maxLabel       | <code>string</code>                  | ""            |
 | min            | <code>number</code>                  | 0             |
