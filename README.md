@@ -9,7 +9,7 @@
 
 A design system can facilitate frontend development and prototyping because it is encourages reuse, consistency, and extensibility.
 
-## [Documentation](https://carbon-components-svelte.mybluemix.net/)
+## [Documentation](http://ibm.biz/carbon-svelte)
 
 ## Getting started
 
