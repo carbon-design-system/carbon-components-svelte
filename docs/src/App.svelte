@@ -1,6 +1,8 @@
 <script>
-  import { Router } from "@sveltech/routify";
+  import { Router, basepath } from "@sveltech/routify";
   import { routes } from "../.routify/routes";
+
+  $basepath = "/carbon-components-svelte";
 </script>
 
 <style lang="scss" global>

@@ -164,7 +164,6 @@
 
 <svelte:body
   on:mouseover="{async (e) => {
-    return;
     if (process.env.NODE_ENV === 'development') return;
     if (!e.target.href || !e.target
         .getAttribute('class')
@@ -179,7 +178,7 @@
 <Theme persist>
   <Header
     aria-label="Navigation"
-    href="/"
+    href="{$url('/')}"
     expandedByDefault="{true}"
     bind:isSideNavOpen
   >

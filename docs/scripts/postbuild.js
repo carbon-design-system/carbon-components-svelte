@@ -19,12 +19,7 @@ async function scrape(page, url = "") {
 
 function relativePaths(depth = 0) {
   const asset_extension = new RegExp(/.(js|css|ico)$/);
-  let relative_path =
-    depth > 0
-      ? Array.from({ length: depth }, (_, i) => "../")
-          .join("")
-          .slice(0, -1)
-      : ".";
+  let relative_path = "";
 
   return (tree) => {
     tree.match(
