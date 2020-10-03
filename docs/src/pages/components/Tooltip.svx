@@ -1,0 +1,57 @@
+<script>
+  import { Tooltip, Link, Button } from "carbon-components-svelte";
+  import Catalog16 from "carbon-icons-svelte/lib/Catalog16";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (icon-only, "bottom" direction)
+
+<Tooltip>
+  <p>
+    Resources are provisioned based on your account's organization.
+  </p>
+</Tooltip>
+
+### With trigger text
+
+<Tooltip triggerText="Resource list">
+  <p>
+    Resources are provisioned based on your account's organization.
+  </p>
+</Tooltip>
+
+### Directions
+
+<Tooltip triggerText="Top" direction="top"><p>Top</p></Tooltip>
+<Tooltip triggerText="Right" direction="right"><p>Right</p></Tooltip>
+<Tooltip triggerText="Bottom" direction="bottom"><p>Bottom</p></Tooltip>
+<Tooltip triggerText="Left" direction="left"><p>Left</p></Tooltip>
+
+### Interactive
+
+<Tooltip triggerText="Resource list">
+  <p>
+    Resources are provisioned based on your account's organization.
+  </p>
+  <div class="bx--tooltip__footer">
+    <Link href="/">Learn more</Link>
+    <Button size="small">Manage</Button>
+  </div>
+</Tooltip>
+
+### Custom icon (component)
+
+<Tooltip triggerText="Resource list" icon={Catalog16}>
+  <p>
+    Resources are provisioned based on your account's organization.
+  </p>
+</Tooltip>
+
+### Custom icon (slot)
+
+<Tooltip triggerText="Resource list">
+  <div slot="icon" style="width: 1rem; height: 1rem; outline: 1px solid red;"></div>
+  <p>
+    Resources are provisioned based on your account's organization.
+  </p>
+</Tooltip>

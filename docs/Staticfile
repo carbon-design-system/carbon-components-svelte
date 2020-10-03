@@ -1,3 +1,2 @@
-root: public
-location_include: includes/*.conf
+root: dist
 force_https: true

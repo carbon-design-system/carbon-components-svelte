@@ -1,0 +1,19 @@
+<script>
+  import { InlineLoading } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<InlineLoading />
+
+### With description
+
+<InlineLoading description="Loading metrics..." />
+
+### Status states
+
+<InlineLoading status="active" />
+<InlineLoading status="inactive" />
+<InlineLoading status="finished" />
+<InlineLoading status="error" />

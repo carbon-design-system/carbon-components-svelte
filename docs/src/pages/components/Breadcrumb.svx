@@ -1,0 +1,26 @@
+<script>
+  import {
+    Breadcrumb,
+    BreadcrumbItem,
+  } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<Breadcrumb>
+  <BreadcrumbItem href="/">Dashboard</BreadcrumbItem>
+  <BreadcrumbItem href="/reports">Annual reports</BreadcrumbItem>
+  <BreadcrumbItem href="/reports/2019" isCurrentPage>2019</BreadcrumbItem>
+</Breadcrumb>
+
+### No trailing slash
+
+<Breadcrumb noTrailingSlash>
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/profile" isCurrentPage>Profile</BreadcrumbItem>
+</Breadcrumb>
+
+### Skeleton
+
+<Breadcrumb skeleton count={3} />

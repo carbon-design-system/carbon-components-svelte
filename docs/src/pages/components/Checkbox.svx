@@ -1,0 +1,28 @@
+<script>
+  import { Checkbox } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (unchecked)
+
+<Checkbox labelText="Label text" />
+
+### Checked
+
+<Checkbox labelText="Label text" checked />
+
+### Indeterminate
+
+<Checkbox labelText="Label text" indeterminate />
+
+### Hidden label
+
+<Checkbox labelText="Label text" hideLabel />
+
+### Disabled
+
+<Checkbox labelText="Label text" disabled />
+
+### Skeleton
+
+<Checkbox skeleton />

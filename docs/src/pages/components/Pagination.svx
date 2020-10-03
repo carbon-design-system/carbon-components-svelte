@@ -1,0 +1,24 @@
+<script>
+  import { Pagination, PaginationSkeleton } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<Pagination totalItems={102} pageSizes="{[10, 15, 20]}" />
+
+### Current page
+
+<Pagination totalItems={102} page={4} />
+
+### Custom page sizes
+
+<Pagination totalItems={102} pageSizes="{[16, 36, 99]}" pageSize="{36}" />
+
+### Hidden page input
+
+<Pagination totalItems={102} pageInputDisabled />
+
+### Skeleton
+
+<PaginationSkeleton />

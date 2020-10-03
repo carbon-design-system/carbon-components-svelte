@@ -1,0 +1,43 @@
+<script>
+  import { TimePicker, TimePickerSelect, SelectItem } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<TimePicker labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="PM">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="PDT">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
+### Light variant
+
+<TimePicker light labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="PM">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="PDT">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
+### Disabled
+
+<TimePicker labelText="Cron job" placeholder="hh:mm" disabled>
+  <TimePickerSelect value="PM" disabled>
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="PDT" disabled>
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>

@@ -1,0 +1,42 @@
+---
+source: Notification/InlineNotification.svelte
+---
+
+<script>
+  import { InlineNotification, NotificationActionButton } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (error)
+
+<InlineNotification on:close />
+
+### Hidden close button
+
+<InlineNotification hideCloseButton kind="warning" title="Upcoming scheduled maintenance" />
+
+### With actions
+
+<InlineNotification kind="warning" title="Upcoming scheduled maintenance">
+  <div slot="actions">
+    <NotificationActionButton>Learn more</NotificationActionButton>
+  </div>
+</InlineNotification>
+
+### Notification variants
+
+<InlineNotification kind="error" />
+<InlineNotification kind="info" />
+<InlineNotification kind="info-square" />
+<InlineNotification kind="success" />
+<InlineNotification kind="warning" />
+<InlineNotification kind="warning-alt" />
+
+### Low contrast
+
+<InlineNotification lowContrast kind="error" />
+<InlineNotification lowContrast kind="info" />
+<InlineNotification lowContrast kind="info-square" />
+<InlineNotification lowContrast kind="success" />
+<InlineNotification lowContrast kind="warning" />
+<InlineNotification lowContrast kind="warning-alt" />

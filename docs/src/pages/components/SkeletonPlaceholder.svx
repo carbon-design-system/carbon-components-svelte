@@ -1,0 +1,12 @@
+<script>
+  import { SkeletonPlaceholder } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<SkeletonPlaceholder />
+
+### Custom size
+
+<SkeletonPlaceholder style="height: 12rem; width: 12rem;" />

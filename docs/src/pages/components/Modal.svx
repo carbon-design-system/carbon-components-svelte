@@ -1,0 +1,34 @@
+<script>
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (transactional)
+
+<FileSource src="/framed/Modal/Modal" />
+
+### Danger modal
+
+<FileSource src="/framed/Modal/DangerModal" />
+
+### Passive modal
+
+<FileSource src="/framed/Modal/PassiveModal" />
+
+### Extra-small size
+
+<FileSource src="/framed/Modal/ModalExtraSmall" />
+
+### Small size
+
+<FileSource src="/framed/Modal/ModalSmall" />
+
+### Large size
+
+<FileSource src="/framed/Modal/ModalLarge" />
+
+### Prevent close on outside click
+
+`preventCloseOnClickOutside` prevents the modal from being closed when clicking outside of an open modal. This prop is intended to be used for transactional modals.
+
+<FileSource src="/framed/Modal/ModalPreventOutsideClick" />
+

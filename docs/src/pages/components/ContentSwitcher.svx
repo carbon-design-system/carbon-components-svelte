@@ -1,0 +1,39 @@
+<script>
+  import { ContentSwitcher, Switch } from "carbon-components-svelte";
+  import Add16 from "carbon-icons-svelte/lib/Add16";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<ContentSwitcher>
+  <Switch text="Switch 1" />
+  <Switch text="Switch 2" />
+  <Switch text="Switch 3" />
+</ContentSwitcher>
+
+### Light variant
+
+<ContentSwitcher light>
+  <Switch text="Switch 1" />
+  <Switch text="Switch 2" />
+  <Switch text="Switch 3" />
+</ContentSwitcher>
+
+### Custom switch slot
+
+<ContentSwitcher>
+  <Switch>
+    <div style="display: flex; align-items: center;">
+        Third section <Add16 style="margin-left: .25rem;" />
+     </div>
+  </Switch>
+  <Switch text="Switch 2" />
+</ContentSwitcher>
+
+### Disabled
+
+<ContentSwitcher>
+  <Switch text="Switch 1" disabled />
+  <Switch text="Switch 2" disabled />
+</ContentSwitcher>

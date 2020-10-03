@@ -1,0 +1,56 @@
+<script>
+  import { DatePicker, DatePickerSkeleton, DatePickerInput } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (simple)
+
+<DatePicker>
+  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Hidden label
+
+<DatePicker>
+  <DatePickerInput hideLabel labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Light variant
+
+<DatePicker light>
+  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Extra-large size
+
+<DatePicker>
+  <DatePickerInput size="xl" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Small size
+
+<DatePicker>
+  <DatePickerInput size="sm" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Invalid state
+
+<DatePicker>
+  <DatePickerInput invalid invalidText="Invalid date" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Disabled state
+
+<DatePicker>
+  <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Single
+
+<DatePicker datePickerType="single">
+  <DatePickerInput labelText="Schedule a meeting" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Skeleton
+
+<DatePickerSkeleton />

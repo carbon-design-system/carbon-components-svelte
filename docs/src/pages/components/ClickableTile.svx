@@ -1,0 +1,16 @@
+---
+source: Tile/ClickableTile.svelte
+---
+
+<script>
+  import { ClickableTile } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<ClickableTile href="https://www.carbondesignsystem.com/">Carbon Design System</ClickableTile>
+
+### Light variant
+
+<ClickableTile light href="https://www.carbondesignsystem.com/">Carbon Design System</ClickableTile>

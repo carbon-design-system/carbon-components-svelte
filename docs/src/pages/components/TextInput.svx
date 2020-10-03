@@ -1,0 +1,48 @@
+<script>
+  import { TextInput, TextInputSkeleton } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<TextInput labelText="User name" placeholder="Enter user name..." />
+
+### With helper text
+
+<TextInput labelText="User name" helperText="Your user name is associated with your email" placeholder="Enter user name..." />
+
+### Hidden label
+
+<TextInput hideLabel labelText="User name" placeholder="Enter user name..." />
+
+### Light variant
+
+<TextInput light labelText="User name" placeholder="Enter user name..." />
+
+### Inline
+
+<TextInput inline labelText="User name" placeholder="Enter user name..." />
+
+### Extra-large size
+
+<TextInput size="xl" labelText="User name" placeholder="Enter user name..." />
+
+### Small size
+
+<TextInput size="sm" labelText="User name" placeholder="Enter user name..." />
+
+### Invalid state
+
+<TextInput invalid invalidText="User name is already taken. Please try another." labelText="User name" placeholder="Enter user name..." />
+
+### Disabled state
+
+<TextInput disabled labelText="User name" placeholder="Enter user name..." />
+
+### Skeleton
+
+<TextInputSkeleton />
+
+### Skeleton without label
+
+<TextInputSkeleton hideLabel />

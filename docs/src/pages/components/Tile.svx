@@ -1,0 +1,16 @@
+---
+source: Tile/Tile.svelte
+---
+
+<script>
+  import { Tile } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<Tile>Content</Tile>
+
+### Light variant
+
+<Tile light>Content</Tile>

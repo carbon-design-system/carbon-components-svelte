@@ -1,0 +1,32 @@
+<script>
+  import { TileGroup, SelectableTile } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Multi-selectable tiles
+
+<div role="group" aria-label="selectable tiles">
+  <SelectableTile selected>
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile selected>
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile>
+    Multi-select Tile
+  </SelectableTile>
+</div>
+
+### Light variant
+
+<div role="group" aria-label="selectable tiles">
+  <SelectableTile light selected>
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile light selected>
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile light>
+    Multi-select Tile
+  </SelectableTile>
+</div>

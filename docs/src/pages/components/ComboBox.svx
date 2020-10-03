@@ -1,0 +1,53 @@
+<script>
+  import { ComboBox } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<ComboBox titleText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Selected index
+
+<ComboBox titleText="Contact" placeholder="Select contact method"
+selectedIndex={1}
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Extra-large size
+
+<ComboBox titleText="Contact" placeholder="Select contact method"
+size="xl"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Small size
+
+<ComboBox titleText="Contact" placeholder="Select contact method"
+size="sm"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Disabled
+
+<ComboBox titleText="Contact" placeholder="Select contact method"
+disabled
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />

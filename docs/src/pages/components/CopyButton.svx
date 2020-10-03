@@ -1,0 +1,14 @@
+<script>
+  import { CopyButton, InlineNotification } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+<InlineNotification svx-ignore lowContrast title="Note:" subtitle="By design, the copy button does not copy text to the clipboard. You will need to write your own logic." kind="info" hideCloseButton />
+
+### Default
+
+<CopyButton on:click />
+
+### Custom feedback
+
+<CopyButton on:click feedback="Copied to clipboard" />

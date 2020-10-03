@@ -1,0 +1,30 @@
+<script>
+  import { Tag } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<Tag>IBM Cloud</Tag>
+
+### Tag types
+
+<Tag type="red">red</Tag>
+<Tag type="magenta">magenta</Tag>
+<Tag type="purple">purple</Tag>
+<Tag type="blue">blue</Tag>
+<Tag type="cyan">cyan</Tag>
+<Tag type="teal">teal</Tag>
+<Tag type="green">green</Tag>
+<Tag type="gray">gray</Tag>
+<Tag type="cool-gray">cool-gray</Tag>
+<Tag type="warm-gray">warm-gray</Tag>
+<Tag type="high-contrast">high-contrast</Tag>
+
+### Filterable
+
+<Tag filter on:click>Filterable</Tag>
+
+### Skeleton
+
+<Tag skeleton />

@@ -1,0 +1,71 @@
+---
+description: High-level description
+---
+
+<script>
+  import { Button } from "carbon-components-svelte";
+  import Add16 from "carbon-icons-svelte/lib/Add16";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Primary button
+
+<Button>Primary button</Button>
+
+### Secondary button
+
+<Button kind="secondary">Secondary button</Button>
+
+### Tertiary button
+
+<Button kind="tertiary">Tertiary button</Button>
+
+### Ghost button
+
+<Button kind="ghost">Ghost button</Button>
+
+### Danger button
+
+<Button kind="danger">Danger button</Button>
+
+### Button with icon
+
+<Button icon={Add16}>With icon</Button>
+
+### Icon-only button
+
+<Button icon={Add16} hasIconOnly tooltipPosition="bottom" tooltipAlignment="center" iconDescription="Tooltip text" />
+
+### Link button
+
+<Button href="#">Link button</Button>
+
+### Custom element
+
+<Button as let:props>
+  <p {...props}>Custom element</p>
+</Button>
+
+### Field button
+
+<Button size="field">Primary</Button>
+<Button size="field" kind="secondary">Secondary</Button>
+<Button size="field" kind="tertiary">Tertiary</Button>
+<Button size="field" kind="ghost">Ghost</Button>
+<Button size="field" kind="danger">Danger</Button>
+
+### Small button
+
+<Button size="small">Primary</Button>
+<Button size="small" kind="secondary">Secondary</Button>
+<Button size="small" kind="tertiary">Tertiary</Button>
+<Button size="small" kind="ghost">Ghost</Button>
+<Button size="small" kind="danger">Danger</Button>
+
+### Disabled button
+
+<Button disabled>Disabled button</Button>
+
+### Skeleton
+
+<Button skeleton />

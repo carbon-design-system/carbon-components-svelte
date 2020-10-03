@@ -1,29 +1,24 @@
 <script>
-  import { onMount } from "svelte";
-  import { Select, SelectItem } from "carbon-components-svelte";
+  export let persist = false;
+  export let persistKey = "carbon-theme";
+  export const themes = ["white", "g10", "g90", "g100"];
 
-  let theme = undefined;
+  import { onMount, afterUpdate } from "svelte";
+  import { theme } from "../store";
+
+  const isValidTheme = (value) => themes.includes(value);
 
   onMount(() => {
-    theme = localStorage.getItem("theme") || "g10";
+    const persisted_theme = localStorage.getItem(persistKey);
+    if (isValidTheme(persisted_theme)) theme.set(persisted_theme);
   });
 
-  $: if (theme) {
-    localStorage.setItem("theme", theme);
-    document.documentElement.setAttribute("carbon-theme", theme);
-  }
+  afterUpdate(() => {
+    if (isValidTheme($theme)) {
+      document.documentElement.setAttribute("theme", $theme);
+      if (persist) localStorage.setItem(persistKey, $theme);
+    }
+  });
 </script>
 
-<style>
-  :global(.bx--select-input) {
-    width: auto;
-    min-width: 0;
-  }
-</style>
-
-<Select inline labelText="Theme" bind:selected="{theme}">
-  <SelectItem value="white" text="White" />
-  <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g90" text="Gray 90" />
-  <SelectItem value="g100" text="Gray 100" />
-</Select>
+<slot />

@@ -1,0 +1,16 @@
+<script>
+  import { TooltipDefinition } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default ("bottom" direction, "center" aligned)
+
+<TooltipDefinition tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
+  Armonk
+</TooltipDefinition>
+
+### Custom direction, alignment
+
+<TooltipDefinition direction="top" align="start" tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
+  Armonk
+</TooltipDefinition>

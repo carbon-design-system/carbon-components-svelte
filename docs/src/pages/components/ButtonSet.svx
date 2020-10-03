@@ -1,0 +1,22 @@
+---
+source: Button/ButtonSet.svelte
+---
+
+<script>
+  import { Button, ButtonSet } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (juxtaposed)
+
+<ButtonSet>
+  <Button kind="secondary">Cancel</Button>
+  <Button>Submit</Button>
+</ButtonSet>
+
+### Stacked
+
+<ButtonSet stacked>
+  <Button>Login</Button>
+  <Button kind="ghost">Sign up</Button>
+</ButtonSet>

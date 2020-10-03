@@ -1,0 +1,29 @@
+---
+source: Tile/ExpandableTile.svelte
+---
+
+<script>
+  import { ExpandableTile } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (unexpanded)
+
+<ExpandableTile>
+  <div slot="above" style="height: 10rem">Above the fold content here</div>
+  <div slot="below" style="height: 10rem">Below the fold content here</div>
+</ExpandableTile>
+
+### Expanded
+
+<ExpandableTile expanded>
+  <div slot="above" style="height: 10rem">Above the fold content here</div>
+  <div slot="below" style="height: 10rem">Below the fold content here</div>
+</ExpandableTile>
+
+### Light variant
+
+<ExpandableTile light>
+  <div slot="above" style="height: 10rem">Above the fold content here</div>
+  <div slot="below" style="height: 10rem">Below the fold content here</div>
+</ExpandableTile>

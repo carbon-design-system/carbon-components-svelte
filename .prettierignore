@@ -8,3 +8,4 @@
 /**/client
 /**/build
 .storybook
+*.svx

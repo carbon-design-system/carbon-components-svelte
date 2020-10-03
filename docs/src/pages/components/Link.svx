@@ -1,0 +1,23 @@
+<script>
+  import { Link } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<Link href="https://www.carbondesignsystem.com/">Carbon Design System</Link>
+
+### Inline variant
+
+<div>
+  Visit the
+  <Link inline href="https://www.carbondesignsystem.com/">Carbon Design System</Link>.
+</div>
+
+### Disabled
+
+<Link disabled href="https://www.carbondesignsystem.com/">Carbon Design System</Link>
+
+### Visited styles
+
+<Link visited href="https://www.carbondesignsystem.com/">Carbon Design System</Link>

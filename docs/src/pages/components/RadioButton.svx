@@ -1,0 +1,54 @@
+<script>
+  import { FormGroup, RadioButton, RadioButtonSkeleton, RadioButtonGroup } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<FormGroup legendText="Storage tier (disk)">
+  <RadioButtonGroup selected="standard">
+    <RadioButton labelText="Free (1 GB)" value="free" />
+    <RadioButton labelText="Standard (10 GB)" value="standard" />
+    <RadioButton labelText="Pro (128 GB)" value="pro" />
+  </RadioButtonGroup>
+</FormGroup>
+
+### Label text aligned left
+
+<FormGroup legendText="Storage tier (disk)">
+  <RadioButtonGroup labelPosition="left" selected="standard">
+    <RadioButton labelText="Free (1 GB)" value="free" />
+    <RadioButton labelText="Standard (10 GB)" value="standard" />
+    <RadioButton labelText="Pro (128 GB)" value="pro" />
+  </RadioButtonGroup>
+</FormGroup>
+
+### Vertical orientation
+
+<FormGroup legendText="Storage tier (disk)">
+  <RadioButtonGroup orientation="vertical" selected="standard">
+    <RadioButton labelText="Free (1 GB)" value="free" />
+    <RadioButton labelText="Standard (10 GB)" value="standard" />
+    <RadioButton labelText="Pro (128 GB)" value="pro" />
+  </RadioButtonGroup>
+</FormGroup>
+
+### Skeleton
+
+<FormGroup legendText="Storage tier (disk)">
+  <RadioButtonGroup>
+    <RadioButtonSkeleton />
+    <RadioButtonSkeleton />
+    <RadioButtonSkeleton />
+  </RadioButtonGroup>
+</FormGroup>
+
+### Skeleton (vertical orientation)
+
+<FormGroup legendText="Storage tier (disk)">
+  <RadioButtonGroup orientation="vertical">
+    <RadioButtonSkeleton />
+    <RadioButtonSkeleton />
+    <RadioButtonSkeleton />
+  </RadioButtonGroup>
+</FormGroup>

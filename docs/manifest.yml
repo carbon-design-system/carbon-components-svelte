@@ -1,7 +1,7 @@
 ---
 applications:
-  - name: carbon-svelte
-    memory: 32M
-    disk_quota: 32M
+  - name: carbon-components-svelte
+    memory: 64M
+    disk_quota: 64M
     buildpacks:
       - https://github.com/cloudfoundry/staticfile-buildpack.git

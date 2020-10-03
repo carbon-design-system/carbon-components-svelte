@@ -1,0 +1,7 @@
+<script>
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Composed modal
+
+<FileSource src="/framed/Modal/ComposedModal" />

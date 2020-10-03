@@ -1,0 +1,59 @@
+<script>
+  import { ProgressIndicator, ProgressStep, ProgressIndicatorSkeleton } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (horizontal)
+
+<ProgressIndicator>
+  <ProgressStep
+    label="Really long label"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep
+    label="Really long label"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep
+    label="Really long label"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+</ProgressIndicator>
+
+### Spaced-equally
+
+<ProgressIndicator spaceEqually>
+  <ProgressStep
+    label="Really long label"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep
+    label="Really long label"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep
+    label="Really long label"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+</ProgressIndicator>
+
+### Vertical
+
+<ProgressIndicator vertical>
+  <ProgressStep
+    label="Really long label"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep
+    label="Really long label"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep
+    label="Really long label"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+</ProgressIndicator>
+
+### Skeleton
+
+<ProgressIndicatorSkeleton />

@@ -1,0 +1,32 @@
+<script>
+  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### File uploader (button-only)
+
+<FileUploaderButton labelText="Add files" />
+
+### File uploader
+
+<FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
+
+### Item (uploading)
+
+<FileUploaderItem name="README.md" status="uploading" />
+
+### Item (complete)
+
+<FileUploaderItem name="README.md" status="complete" />
+
+### Item (invalid)
+
+<FileUploaderItem invalid name="README.md" status="edit" />
+
+### Drop container
+
+<FileUploaderDropContainer labelText="Drag and drop files here or click to upload" multiple />
+
+### Skeleton
+
+<FileUploaderSkeleton />

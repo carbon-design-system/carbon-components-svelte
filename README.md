@@ -5,6 +5,12 @@
 
 > Svelte implementation of the [Carbon Design System](https://github.com/carbon-design-system)
 
+`carbon-components-svelte` is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
+
+A design system can facilitate frontend development and prototyping because it is encourages reuse, consistency, and extensibility.
+
+## [Documentation](https://carbon-components-svelte.mybluemix.net/)
+
 ## Getting started
 
 Install `carbon-components-svelte` as a development dependency.

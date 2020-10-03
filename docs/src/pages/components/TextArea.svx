@@ -1,0 +1,40 @@
+<script>
+  import { TextArea, TextAreaSkeleton } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<TextArea labelText="App description" placeholder="Enter a description..." />
+
+### With helper text
+
+<TextArea labelText="App description" helperText="A rich description helps us better recommend related products and services" placeholder="Enter a description..." />
+
+### Hidden label
+
+<TextArea hideLabel labelText="App description" placeholder="Enter a description..." />
+
+### Light variant
+
+<TextArea light labelText="App description" placeholder="Enter a description..." />
+
+### Custom rows
+
+<TextArea rows={10} labelText="App description" placeholder="Enter a description..." />
+
+### Invalid state
+
+<TextArea invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
+
+### Disabled state
+
+<TextArea disabled labelText="App description" placeholder="Enter a description..." />
+
+### Skeleton
+
+<TextAreaSkeleton />
+
+### Skeleton without label
+
+<TextAreaSkeleton hideLabel />

@@ -1,0 +1,52 @@
+<script>
+  import { NumberInput, NumberInputSkeleton } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<NumberInput label="Clusters" />
+
+### With helper text
+
+<NumberInput label="Clusters" helperText="Clusters provisioned in your region" />
+
+### Minimum and maximum values
+
+<NumberInput min="{4}" max="{20}" value="{4}" invalidText="Number must be between 4 and 20." helperText="Clusters provisioned in your region" label="Clusters (4 min, 20 max)" />
+
+### Hidden label
+
+<NumberInput hideLabel label="Clusters" />
+
+### Light variant
+
+<NumberInput light label="Clusters" />
+
+### Mobile variant
+
+<NumberInput mobile label="Clusters" />
+
+### Extra-large size
+
+<NumberInput size="xl" label="Clusters" />
+
+### Small size
+
+<NumberInput size="sm" label="Clusters" />
+
+### Invalid state
+
+<NumberInput invalid invalidText="An error occurred" label="Clusters" />
+
+### Disabled state
+
+<NumberInput disabled label="Clusters" />
+
+### Skeleton
+
+<NumberInputSkeleton />
+
+### Skeleton without label
+
+<NumberInputSkeleton hideLabel />

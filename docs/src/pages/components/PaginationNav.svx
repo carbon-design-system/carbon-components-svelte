@@ -1,0 +1,12 @@
+<script>
+  import { PaginationNav } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<PaginationNav />
+
+### Loopable
+
+<PaginationNav total={3} loop />

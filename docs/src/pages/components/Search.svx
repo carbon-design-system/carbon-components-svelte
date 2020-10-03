@@ -1,0 +1,28 @@
+<script>
+  import { Search } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<Search />
+
+### Default value
+
+<Search placeholder="Search catalog..." value="Cloud functions" />
+
+### Light variant
+
+<Search light />
+
+### Large size
+
+<Search size="lg" />
+
+### Small size
+
+<Search size="sm" />
+
+### Skeleton
+
+<Search skeleton />

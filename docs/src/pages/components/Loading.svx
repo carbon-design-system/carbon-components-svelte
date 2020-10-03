@@ -1,0 +1,16 @@
+<script>
+  import { Loading } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (with overlay)
+
+<FileSource src="/framed/Loading/Loading" />
+
+### No overlay
+
+<Loading withOverlay={false} />
+
+### Small size
+
+<Loading withOverlay={false} small />

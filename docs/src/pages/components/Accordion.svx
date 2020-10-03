@@ -1,0 +1,72 @@
+<script>
+  import {
+    Accordion,
+    AccordionItem,
+  } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<Accordion>
+  <AccordionItem title="Title 1">
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
+### Chevron aligned left
+
+<Accordion align="start">
+  <AccordionItem title="Title 1">
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
+### Custom title slot
+
+<Accordion>
+  <AccordionItem>
+    <h5 slot="title" style="color: red;">Custom title slot</h5>
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
+### First item open
+
+<Accordion>
+  <AccordionItem title="Title 1" open>
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
+### Skeleton
+
+<Accordion skeleton count={3} />
+
+### Skeleton (closed)
+
+<Accordion skeleton open={false} count={3} />

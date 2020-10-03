@@ -1,0 +1,47 @@
+<script>
+  import { OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<OverflowMenu>
+  <OverflowMenuItem text="Manage credentials" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem danger text="Delete service" />
+</OverflowMenu>
+
+### Flipped
+
+<OverflowMenu open flipped>
+  <OverflowMenuItem text="Manage credentials" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem danger text="Delete service" />
+</OverflowMenu>
+
+### Menu direction top
+
+<OverflowMenu flipped direction="top">
+  <OverflowMenuItem text="Manage credentials" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem danger text="Delete service" />
+</OverflowMenu>
+
+### Custom primary focus
+
+By default, the first overflow menu item is focused when opening the dropdown.
+
+<OverflowMenu>
+  <OverflowMenuItem text="Manage credentials" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem primaryFocus danger text="Delete service" />
+</OverflowMenu>
+
+### Custom trigger slot
+
+<OverflowMenu style="width: auto;">
+  <div slot="menu" style="padding: 1rem; color: red;">Custom trigger</div>
+  <OverflowMenuItem text="Manage credentials" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem danger text="Delete service" />
+</OverflowMenu>

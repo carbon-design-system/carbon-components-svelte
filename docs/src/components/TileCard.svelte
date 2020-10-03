@@ -1,63 +1,86 @@
 <script>
+  export let href = undefined;
   export let title = "";
+  export let subtitle = "";
+  export let borderRight = false;
+  export let borderBottom = false;
 
-  import { Tile, Button, ButtonSet } from "carbon-components-svelte";
-  import Code16 from "carbon-icons-svelte/lib/Code16";
+  import { ClickableTile, Tile } from "carbon-components-svelte";
+  import AspectRatio from "./AspectRatio.svelte";
+  import LogoGithub32 from "carbon-icons-svelte/lib/LogoGithub32";
+  import Launch20 from "carbon-icons-svelte/lib/Launch20";
+
+  $: tileComponent = href ? ClickableTile : Tile;
 </script>
 
 <style>
-  :global(.tile-card) {
+  .card-wrapper {
+    border-right: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+  }
+
+  .borderRight {
+    border-right: 1px solid var(--cds-ui-03);
+  }
+
+  .borderBottom {
+    border-bottom: 1px solid var(--cds-ui-03);
+  }
+
+  .card {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     height: 100%;
-    min-height: 12rem;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
   }
 
   .title {
-    font-size: 0.75rem;
+    margin-top: calc(-1 * var(--cds-spacing-02));
+    margin-bottom: var(--cds-spacing-01);
   }
 
-  .tile-card__preview {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 0;
+  .subtitle {
+    color: var(--cds-text-02);
   }
 
-  .tile-card__actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: -1rem;
-    margin-bottom: -1rem;
+  @media (max-width: 671px) {
+    .card-wrapper,
+    .borderRight {
+      border-right: 0;
+      border-bottom: 1px solid var(--cds-ui-03);
+    }
   }
 </style>
 
-<Tile class="tile-card">
-  <div class="title">{title}</div>
-  <div class="tile-card__preview">
-    <slot />
-  </div>
-  <div class="tile-card__actions">
-    <div>
-      <Button
-        hasIconOnly
-        kind="ghost"
-        size="small"
-        icon="{Code16}"
-        iconDescription="Usage"
-        tooltipAlignment="center"
-        tooltipPosition="top"
-      />
-      <Button
-        hasIconOnly
-        kind="ghost"
-        size="small"
-        icon="{Code16}"
-        iconDescription="Usage"
-        tooltipAlignment="center"
-        tooltipPosition="top"
-      />
-    </div>
-  </div>
-</Tile>
+<div class="card-wrapper" class:borderRight class:borderBottom>
+  <AspectRatio>
+    <svelte:component
+      this="{tileComponent}"
+      href="{href}"
+      {...$$restProps}
+      style="height: 100%;"
+    >
+      <div class="card">
+        <div>
+          <h5 class="title">{title}</h5>
+          {#if subtitle}
+            <div class="subtitle">{subtitle}</div>
+          {/if}
+        </div>
+        <div class="card-footer">
+          <svelte:component
+            this="{LogoGithub32}"
+            style="fill: var(--cds-icon-01)"
+          />
+          <Launch20 style="fill: var(--cds-icon-01)" />
+        </div>
+      </div>
+    </svelte:component>
+  </AspectRatio>
+</div>

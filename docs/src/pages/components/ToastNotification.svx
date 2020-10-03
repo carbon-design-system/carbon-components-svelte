@@ -1,0 +1,34 @@
+---
+source: Notification/ToastNotification.svelte
+---
+
+<script>
+  import { ToastNotification } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (error)
+
+<ToastNotification />
+
+### Hidden close button
+
+<ToastNotification hideCloseButton kind="warning" title="Upcoming scheduled maintenance" />
+
+### Notification variants
+
+<ToastNotification kind="error" />
+<ToastNotification kind="info" />
+<ToastNotification kind="info-square" />
+<ToastNotification kind="success" />
+<ToastNotification kind="warning" />
+<ToastNotification kind="warning-alt" />
+
+### Low contrast
+
+<ToastNotification lowContrast kind="error" />
+<ToastNotification lowContrast kind="info" />
+<ToastNotification lowContrast kind="info-square" />
+<ToastNotification lowContrast kind="success" />
+<ToastNotification lowContrast kind="warning" />
+<ToastNotification lowContrast kind="warning-alt" />

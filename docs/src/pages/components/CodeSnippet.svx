@@ -1,0 +1,44 @@
+<script>
+  import { CodeSnippet, InlineNotification } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+
+  let code = `// helpers.js
+  
+export function multiply(a: number, b: number) {
+  return a * b;
+}
+
+export function divide(a: number, b: number) {
+  return a / b;
+}
+
+export function add(a: number, b: number) {
+  return a + b;
+}
+
+export function subtract(a: number, b: number) {
+  return a - b;
+}`;
+</script>
+
+<InlineNotification svx-ignore lowContrast title="Note:" subtitle="By design, the copy button does not copy text to the clipboard. You will need to write your own logic." kind="info" hideCloseButton />
+
+### Default (single-line)
+
+<CodeSnippet>yarn add -D carbon-components-svelte</CodeSnippet>
+
+### Inline
+
+<CodeSnippet type="inline">rm -rf node_modules/</CodeSnippet>
+
+### Multi-line
+
+<CodeSnippet type="multi" {code} />
+
+### Hidden copy button
+
+<CodeSnippet type="multi" {code} hideCopyButton />
+
+### Skeleton
+
+<CodeSnippet skeleton />

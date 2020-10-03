@@ -1,0 +1,28 @@
+<script>
+  import { Slider, SliderSkeleton } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<Slider />
+
+### Custom minimum, maximum values
+
+<Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} />
+
+### Custom step value
+
+<Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+
+### Light variant
+
+<Slider light labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
+
+### Skeleton
+
+<SliderSkeleton />
+
+### Skeleton (hidden label)
+
+<SliderSkeleton hideLabel />

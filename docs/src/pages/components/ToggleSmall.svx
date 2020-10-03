@@ -1,0 +1,24 @@
+<script>
+  import { ToggleSmall, ToggleSmallSkeleton } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default (untoggled)
+
+<ToggleSmall labelText="Push notifications" />
+
+### Toggled
+
+<ToggleSmall labelText="Push notifications" toggled />
+
+### Custom labels
+
+<ToggleSmall labelText="Push notifications" labelA="No" labelB="Yes" />
+
+### Disabled
+
+<ToggleSmall labelText="Push notifications" disabled />
+
+### Skeleton
+
+<ToggleSmallSkeleton />

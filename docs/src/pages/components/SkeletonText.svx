@@ -1,0 +1,24 @@
+<script>
+  import { SkeletonText } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+<SkeletonText />
+
+### Heading variant
+
+<SkeletonText heading />
+
+### Heading variant
+
+<SkeletonText heading />
+
+### Paragraph variant
+
+<SkeletonText paragraph />
+
+### Paragraph with max width
+
+<SkeletonText paragraph width="50%" />

@@ -1,0 +1,19 @@
+<script>
+  import { FluidForm, FormGroup, TextInput, PasswordInput, Button,} from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Fluid form
+
+<FluidForm>
+  <TextInput
+    labelText="User name"
+    placeholder="Enter user name..."
+    required />
+  <PasswordInput
+    required
+    type="password"
+    labelText="Password"
+    placeholder="Enter password..."
+  />
+</FluidForm>

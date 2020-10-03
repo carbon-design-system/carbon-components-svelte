@@ -1,0 +1,15 @@
+<script>
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Header with side navigation
+
+<FileSource src="/framed/UIShell/HeaderNav" />
+
+### Header with app switcher
+
+<FileSource src="/framed/UIShell/HeaderSwitcher" />
+
+### Header with utilities
+
+<FileSource src="/framed/UIShell/HeaderUtilities" />
