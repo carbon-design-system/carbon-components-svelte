@@ -1,2 +1,4 @@
 include:
   - _.js
+  - _*.js
+  - *_.js
