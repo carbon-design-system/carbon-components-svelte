@@ -2,3 +2,6 @@ include:
   - _.js
   - _*.js
   - *_.js
+  - assets
+  - assets/*_.js
+  - assets/*.js
