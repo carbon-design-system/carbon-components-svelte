@@ -147,6 +147,7 @@ export class Button extends CarbonSvelteComponent {
 
     /**
      * Specify the position of the icon
+     * @default "right"
      */
     iconPosition?: "left" | "right";
 

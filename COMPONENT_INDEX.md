@@ -396,6 +396,7 @@ import { Button } from "carbon-components-svelte";
 | size             | <code>"default" &#124; "field" &#124; "small"</code>                                       | "default"     |
 | hasIconOnly      | <code>boolean</code>                                                                       | false         |
 | icon             | <code>typeof import("carbon-icons-svelte/lib/Add16").default</code>                        | --            |
+| iconPosition     | <code>"left" &#124; "right"</code>                                                         | "right"       |
 | iconDescription  | <code>string</code>                                                                        | --            |
 | tooltipAlignment | <code>"start" &#124; "center" &#124; "end"</code>                                          | --            |
 | tooltipPosition  | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                            | --            |
