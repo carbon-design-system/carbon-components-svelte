@@ -150,7 +150,7 @@
       on:mouseenter
       on:mouseleave
     >
-      {#if icon && iconPosition === "left"}
+      {#if icon && iconPosition === 'left'}
         <svelte:component
           this="{icon}"
           aria-hidden="true"
@@ -162,7 +162,7 @@
         <span class:bx--assistive-text="{true}">{iconDescription}</span>
       {/if}
       <slot />
-      {#if icon && iconPosition === "right"}
+      {#if icon && iconPosition === 'right'}
         <svelte:component
           this="{icon}"
           aria-hidden="true"
@@ -180,7 +180,7 @@
       on:mouseenter
       on:mouseleave
     >
-      {#if icon && iconPosition=== "left"}
+      {#if icon && iconPosition === 'left'}
         <svelte:component
           this="{icon}"
           aria-hidden="true"
@@ -192,7 +192,7 @@
         <span class:bx--assistive-text="{true}">{iconDescription}</span>
       {/if}
       <slot />
-      {#if icon && iconPosition=== "right"}
+      {#if icon && iconPosition === 'right'}
         <svelte:component
           this="{icon}"
           aria-hidden="true"
