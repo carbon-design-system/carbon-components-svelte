@@ -1,5 +1,11 @@
 <script>
   /**
+   * Specify href value
+   * @type {string} [href]
+   */
+  export let href;
+
+  /**
    * Set to `true` to use the inline variant
    * @type {boolean} [inline=false]
    */
@@ -48,6 +54,7 @@
     class:bx--link--inline="{inline}"
     class:bx--link--visited="{visited}"
     rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
+    {href}
     {...$$restProps}
     on:click
     on:mouseover
