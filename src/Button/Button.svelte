@@ -24,6 +24,12 @@
   export let icon = undefined;
 
   /**
+   * Specify the position of the icon
+   * @type {"left" | "right"} [iconPosition="right"]
+   */
+  export let iconPosition = undefined;
+
+  /**
    * Specify the ARIA label for the button icon
    * @type {string} [iconDescription]
    */
@@ -144,11 +150,19 @@
       on:mouseenter
       on:mouseleave
     >
+      {#if icon && iconPosition === "left"}
+        <svelte:component
+          this="{icon}"
+          aria-hidden="true"
+          class="bx--btn__icon"
+          aria-label="{iconDescription}"
+        />
+      {/if}
       {#if hasIconOnly}
         <span class:bx--assistive-text="{true}">{iconDescription}</span>
       {/if}
       <slot />
-      {#if icon}
+      {#if icon && iconPosition === "right"}
         <svelte:component
           this="{icon}"
           aria-hidden="true"
@@ -166,11 +180,19 @@
       on:mouseenter
       on:mouseleave
     >
+      {#if icon && iconPosition=== "left"}
+        <svelte:component
+          this="{icon}"
+          aria-hidden="true"
+          class="bx--btn__icon"
+          aria-label="{iconDescription}"
+        />
+      {/if}
       {#if hasIconOnly}
         <span class:bx--assistive-text="{true}">{iconDescription}</span>
       {/if}
       <slot />
-      {#if icon}
+      {#if icon && iconPosition=== "right"}
         <svelte:component
           this="{icon}"
           aria-hidden="true"

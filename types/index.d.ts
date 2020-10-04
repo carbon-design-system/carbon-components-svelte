@@ -146,6 +146,11 @@ export class Button extends CarbonSvelteComponent {
     icon?: typeof import("carbon-icons-svelte/lib/Add16").default;
 
     /**
+     * Specify the position of the icon
+     */
+    iconPosition?: "left" | "right";
+
+    /**
      * Specify the ARIA label for the button icon
      */
     iconDescription?: string;
