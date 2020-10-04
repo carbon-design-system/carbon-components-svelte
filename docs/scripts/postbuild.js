@@ -30,7 +30,7 @@ async function processHtml(html, { dir, outfilePath }) {
     );
   }
 
-  console.log("Prerendered:", outfilePath);
+  console.log("Prerendered path:", outfilePath);
 }
 
 const app = polka()
@@ -101,16 +101,6 @@ const app = polka()
 
     const __index = await scrape(page);
     await processHtml(__index, { outfilePath: `${OUT_DIR}/index.html` });
-
-    await fs.writeFile(
-      path.join(OUT_DIR, "_config.yml"),
-      `include:
-  - _.js
-  - _*.js
-  - assets
-  - assets/*_.js
-  - assets/*.js`
-    );
 
     await browser.close();
     await app.server.close();
