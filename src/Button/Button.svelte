@@ -27,7 +27,7 @@
    * Specify the position of the icon
    * @type {"left" | "right"} [iconPosition="right"]
    */
-  export let iconPosition = undefined;
+  export let iconPosition = "right";
 
   /**
    * Specify the ARIA label for the button icon
