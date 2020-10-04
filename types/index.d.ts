@@ -1885,6 +1885,11 @@ export class InlineNotification extends CarbonSvelteComponent {
 export class Link extends CarbonSvelteComponent {
   $$prop_def: {
     /**
+     * Specify the href value
+     */
+    href?: string;
+
+    /**
      * Set to `true` to use the inline variant
      * @default false
      */
