@@ -17,7 +17,6 @@
     SideNavItems,
     SideNavMenu,
     SideNavMenuItem,
-    SideNavLink,
   } from "carbon-components-svelte";
   import LogoGithub20 from "carbon-icons-svelte/lib/LogoGithub20";
   import Theme from "../components/Theme.svelte";

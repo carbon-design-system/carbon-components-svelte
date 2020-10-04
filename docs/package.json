@@ -6,7 +6,7 @@
     "dev:svite": "svite",
     "build": "run-s build:*",
     "build:routify": "routify run -b",
-    "build:svite": "svite build --base=/carbon-components-svelte --assetsDir=assets",
+    "build:svite": "svite build --assetsDir=assets",
     "postbuild": "node scripts/postbuild",
     "deploy": "npx gh-pages -d dist"
   },
