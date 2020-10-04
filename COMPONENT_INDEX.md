@@ -2179,6 +2179,7 @@ import { Link } from "carbon-components-svelte";
 
 | Prop name | Type                                                                   | Default value |
 | :-------- | :--------------------------------------------------------------------- | :------------ |
+| href      | <code>string</code>                                                    | --            |
 | inline    | <code>boolean</code>                                                   | false         |
 | disabled  | <code>boolean</code>                                                   | false         |
 | visited   | <code>boolean</code>                                                   | false         |

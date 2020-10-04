@@ -1,9 +1,9 @@
 <script>
   /**
-   * Specify href value
+   * Specify the href value
    * @type {string} [href]
    */
-  export let href;
+  export let href = undefined;
 
   /**
    * Set to `true` to use the inline variant
