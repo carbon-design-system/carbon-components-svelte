@@ -143,7 +143,7 @@
         kind="ghost"
         target="_blank"
         size="field"
-        href="{src}"
+        href="{$url(src)}"
         icon="{Launch16}"
       >
         Open in new tab

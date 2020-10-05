@@ -2919,6 +2919,12 @@ export class Pagination extends CarbonSvelteComponent {
     pageInputDisabled?: boolean;
 
     /**
+     * Set to `true` to disable the page size input
+     * @default false
+     */
+    pageSizeInputDisabled?: boolean;
+
+    /**
      * Specify the number of items to display in a page
      * @default 10
      */

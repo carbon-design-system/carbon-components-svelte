@@ -1,13 +1,14 @@
 # carbon-components-svelte
 
+> `carbon-components-svelte` is a Svelte component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
+
+> A design system can facilitate frontend development and prototyping because it is encourages reuse, consistency, and extensibility.
+
 [![NPM][npm]][npm-url]
 [![Build][build]][build-badge]
-
-> Svelte implementation of the [Carbon Design System](https://github.com/carbon-design-system)
-
-`carbon-components-svelte` is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
-
-A design system can facilitate frontend development and prototyping because it is encourages reuse, consistency, and extensibility.
+<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank">
+<img height="32px" src="./.assets/powered-by-vercel.svg" alt="Deploys by Vercel" />
+</a>
 
 ## [Documentation](http://ibm.biz/carbon-svelte)
 

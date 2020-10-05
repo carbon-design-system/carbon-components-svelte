@@ -17,10 +17,10 @@
     SideNavItems,
     SideNavMenu,
     SideNavMenuItem,
-    SideNavLink,
   } from "carbon-components-svelte";
   import LogoGithub20 from "carbon-icons-svelte/lib/LogoGithub20";
   import Theme from "../components/Theme.svelte";
+  import Footer from "../components/Footer.svelte";
 
   let isOpen = false;
   let isSideNavOpen = true;
@@ -164,7 +164,6 @@
 
 <svelte:body
   on:mouseover="{async (e) => {
-    return;
     if (process.env.NODE_ENV === 'development') return;
     if (!e.target.href || !e.target
         .getAttribute('class')
@@ -179,7 +178,7 @@
 <Theme persist>
   <Header
     aria-label="Navigation"
-    href="/"
+    href="{$url('/')}"
     expandedByDefault="{true}"
     bind:isSideNavOpen
   >
@@ -240,4 +239,5 @@
     </SideNavItems>
   </SideNav>
   <slot />
+  <Footer />
 </Theme>

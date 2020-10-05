@@ -3022,23 +3022,24 @@ import { Pagination } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name         | Type                                                             | Default value     |
-| :---------------- | :--------------------------------------------------------------- | :---------------- |
-| page              | <code>number</code>                                              | 1                 |
-| totalItems        | <code>number</code>                                              | 0                 |
-| disabled          | <code>boolean</code>                                             | false             |
-| forwardText       | <code>string</code>                                              | "Next page"       |
-| backwardText      | <code>string</code>                                              | "Previous page"   |
-| itemsPerPageText  | <code>string</code>                                              | "Items per page:" |
-| itemText          | <code>(min: number, max: number) => string</code>                | --                |
-| itemRangeText     | <code>(min: number, max: number, total: number) => string</code> | --                |
-| pageInputDisabled | <code>boolean</code>                                             | false             |
-| pageSize          | <code>number</code>                                              | 10                |
-| pageSizes         | <code>number[]</code>                                            | --                |
-| pagesUnknown      | <code>boolean</code>                                             | false             |
-| pageText          | <code>(page: number) => string</code>                            | --                |
-| pageRangeText     | <code>(current: number, total: number) => string</code>          | --                |
-| id                | <code>string</code>                                              | --                |
+| Prop name             | Type                                                             | Default value     |
+| :-------------------- | :--------------------------------------------------------------- | :---------------- |
+| page                  | <code>number</code>                                              | 1                 |
+| totalItems            | <code>number</code>                                              | 0                 |
+| disabled              | <code>boolean</code>                                             | false             |
+| forwardText           | <code>string</code>                                              | "Next page"       |
+| backwardText          | <code>string</code>                                              | "Previous page"   |
+| itemsPerPageText      | <code>string</code>                                              | "Items per page:" |
+| itemText              | <code>(min: number, max: number) => string</code>                | --                |
+| itemRangeText         | <code>(min: number, max: number, total: number) => string</code> | --                |
+| pageInputDisabled     | <code>boolean</code>                                             | false             |
+| pageSizeInputDisabled | <code>boolean</code>                                             | false             |
+| pageSize              | <code>number</code>                                              | 10                |
+| pageSizes             | <code>number[]</code>                                            | --                |
+| pagesUnknown          | <code>boolean</code>                                             | false             |
+| pageText              | <code>(page: number) => string</code>                            | --                |
+| pageRangeText         | <code>(current: number, total: number) => string</code>          | --                |
+| id                    | <code>string</code>                                              | --                |
 
 ### Slots
 
