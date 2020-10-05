@@ -7,7 +7,7 @@
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
+   * @type {null | HTMLDivElement} [ref=null]
    */
    export let ref = null;
 </script>
