@@ -20,6 +20,7 @@
   } from "carbon-components-svelte";
   import LogoGithub20 from "carbon-icons-svelte/lib/LogoGithub20";
   import Theme from "../components/Theme.svelte";
+  import Footer from "../components/Footer.svelte";
 
   let isOpen = false;
   let isSideNavOpen = true;
@@ -238,4 +239,5 @@
     </SideNavItems>
   </SideNav>
   <slot />
+  <Footer />
 </Theme>
