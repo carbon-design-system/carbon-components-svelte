@@ -222,6 +222,7 @@
         aria-controls="{open ? menuId : undefined}"
         aria-owns="{open ? menuId : undefined}"
         class:bx--text-input="{true}"
+        class:bx--text-input--light="{light}"
         class:bx--text-input--empty="{inputValue === ''}"
         on:input="{({ target }) => {
           inputValue = target.value;
