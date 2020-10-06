@@ -23,6 +23,12 @@
    */
   export let orientation = "horizontal";
 
+  /**
+   * Set an id for the container div element
+   * @type {string} [id]
+   */
+   export let id
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
 
@@ -46,6 +52,7 @@
 </script>
 
 <div
+  {id}
   class:bx--form-item="{true}"
   {...$$restProps}
   on:click
