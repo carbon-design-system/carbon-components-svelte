@@ -1,50 +1,79 @@
 # Contributing
 
+Note: before submitting a pull request (PR), it is recommended to first [file an issue](https://github.com/IBM/carbon-components-svelte/issues).
+
 ## Prerequisites
 
-This project uses Node.js and Yarn.
+This project requires Node.js (version 12 or greater) and Yarn (version 1 or greater).
 
-- [Node.js](https://nodejs.org/en/download/package-manager/#macos) (version >=12)
-- [Yarn](https://yarnpkg.com/en/docs/install#mac-stable)
+- [Node.js](https://nodejs.org/en/download/package-manager/)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install)
 
-## Fork and Clone
+## Project set-up
 
 Fork the repo and clone your fork:
 
-```bash
+```sh
 git clone <YOUR_FORK>
 cd carbon-components-svelte
 ```
 
-Set the original repo as the upstream:
+Set the original repository as the upstream:
 
-```bash
+```sh
 git remote add upstream git@github.com:IBM/carbon-components-svelte.git
 # verify that the upstream is added
 git remote -v
 ```
 
-## Install
+### Install
 
 Install the project dependencies:
 
-```bash
+```sh
+# carbon-components-svelte/
+yarn install
+```
+
+## Documentation set-up
+
+Component documentation is located in the `docs` folder. The website is built using svite, routify, and MDsveX. You will need to create a symbolic project link in order to see live changes reflected when developing locally.
+
+First, create a symbolic link at the root of the project folder:
+
+```sh
+# carbon-components-svelte/
+yarn link
+```
+
+Go into the `docs` folder:
+
+```sh
+cd docs
+```
+
+Link `"carbon-components-svelte"`:
+
+```sh
+yarn link "carbon-components-svelte"
 yarn install
 ```
 
 ---
 
-## Workflow
+## Development workflow
 
-### Develop
+Preview changes to components from the `src` folder in the documentation website located in `docs/`.
 
-This project uses Storybook for UI development and "live" documentation.
+In the `docs` folder, run:
 
-Run the following command to start the Storybook:
-
-```bash
-yarn start
+```sh
+yarn dev
 ```
+
+The site should be served at `http://localhost:3000/` (or the next available port).
+
+### Editing a component
 
 #### Component Format
 
@@ -55,27 +84,29 @@ src/Component
 │
 └───Component.svelte // main component
 └───Component.Skeleton.svelte // Skeleton component (if any)
-└───Component.Story.svelte // wrapper for individual stories
-└───Component.stories.js // Storybook stories
 └───index.js // export components (e.g. `Component.svelte`, `Component.Skeleton.svelte`)
 ```
 
+### Creating a component
+
+[Submit an issue](https://github.com/IBM/carbon-components-svelte/issues).
+
 ### Build
 
-#### Component Library
+Verify that you can build the library by running the following command at the project root:
 
-To build the component library, run `yarn build`.
+```sh
+# carbon-components-svelte/
+yarn prepack
+```
 
-The library should be compiled in two formats:
+This does several things:
 
-- **ES**: `lib/index.mjs`
-- **UMD**: `lib/index.js`
-
-#### Storybook
-
-To build the Storybook, run `yarn build`.
-
-The Storybook should be outputted to the `storybook-static` folder.
+- uses `node-sass` to pre-compile CSS StyleSheets in the `css` folder
+- uses Rollup to bundle the Svelte components in `src` in ESM/UMD formats; emitted to `lib`
+- uses a Rollup plugin to:
+  - generate component documentation in Markdown format (`COMPONENT_INDEX.md`)
+  - generate TypeScript definitions (`types/index.d.ts`)
 
 ## Submit a Pull Request
 
@@ -83,7 +114,7 @@ The Storybook should be outputted to the `storybook-static` folder.
 
 Before submitting a pull request, make sure your fork is up to date with the latest upstream changes.
 
-```bash
+```sh
 git fetch upstream
 git checkout master
 git merge upstream/master
