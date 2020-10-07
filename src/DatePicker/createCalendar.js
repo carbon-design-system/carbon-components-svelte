@@ -1,4 +1,5 @@
 import flatpickr from "flatpickr";
+import l10n from "flatpickr/dist/l10n/index.js";
 import rangePlugin from "flatpickr/dist/plugins/rangePlugin";
 
 function updateClasses(instance) {
