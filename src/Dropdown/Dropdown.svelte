@@ -113,7 +113,6 @@
    * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
    */
 
-  import { setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
   import {
     ListBox,
