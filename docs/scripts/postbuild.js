@@ -43,6 +43,7 @@ const app = polka()
 
     const browser = await chromium.launch({
       headless: true,
+      chromiumSandbox: false,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const context = await browser.newContext();

@@ -7,7 +7,7 @@
     "build": "run-s build:*",
     "build:routify": "routify run -b",
     "build:svite": "svite build",
-    "postbuild": "node scripts/postbuild"
+    "postbuild": "DEBUG=pw:api node scripts/postbuild"
   },
   "devDependencies": {
     "@sveltech/routify": "^1.9.9",
