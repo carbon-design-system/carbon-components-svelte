@@ -41,7 +41,7 @@ const app = polka()
       process.exit(1);
     }
 
-    const browser = await playwright.launchChromium();
+    const browser = await playwright.launchChromium({ headless: true });
     const context = await browser.newContext();
     const page = await context.newPage();
 
