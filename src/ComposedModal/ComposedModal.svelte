@@ -90,12 +90,12 @@
       if (!open) {
         opened = false;
         dispatch("close");
-        document.body.classList.add("bx--body--with-modal-open");
+        document.body.classList.remove("bx--body--with-modal-open");
       }
     } else if (open) {
       opened = true;
       dispatch("open");
-      document.body.classList.remove("bx--body--with-modal-open");
+      document.body.classList.add("bx--body--with-modal-open");
     }
   });
 </script>
