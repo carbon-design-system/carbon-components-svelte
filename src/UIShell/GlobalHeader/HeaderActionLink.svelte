@@ -41,8 +41,9 @@
   class:bx--header__action="{true}"
   class:bx--header__action--active="{linkIsActive}"
   class:action-link="{true}"
-  {...$$restProps}
   href="{href}"
+  rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
+  {...$$restProps}
 >
   <Icon {...icon} />
 </a>

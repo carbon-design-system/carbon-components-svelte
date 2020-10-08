@@ -16,6 +16,7 @@
   <a
     bind:this="{ref}"
     href="{href}"
+    rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
     class:bx--switcher__item-link="{true}"
     {...$$restProps}
     on:click

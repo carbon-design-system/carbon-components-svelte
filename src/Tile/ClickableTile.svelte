@@ -26,6 +26,7 @@
   class:bx--tile--light="{light}"
   {...$$restProps}
   href="{href}"
+  rel=""
   on:click
   on:click="{() => {
     clicked = !clicked;

@@ -54,7 +54,7 @@
     class:bx--link--inline="{inline}"
     class:bx--link--visited="{visited}"
     rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
-    {href}
+    href="{href}"
     {...$$restProps}
     on:click
     on:mouseover
