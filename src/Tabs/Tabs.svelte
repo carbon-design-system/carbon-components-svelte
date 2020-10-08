@@ -23,6 +23,12 @@
    */
   export let triggerHref = "#";
 
+  /**
+   * Specify whether or not to use the light component variant
+   * @type {boolean} [light=false]
+   */
+  export let light = false;
+
   import { createEventDispatcher, afterUpdate, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
   import ChevronDownGlyph from "carbon-icons-svelte/lib/ChevronDownGlyph";
@@ -111,6 +117,7 @@
   role="navigation"
   class:bx--tabs="{true}"
   class:bx--tabs--container="{type === 'container'}"
+  class:bx--tabs--light="{light}"
   {...$$restProps}
 >
   <div

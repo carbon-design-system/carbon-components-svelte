@@ -13,7 +13,7 @@ export const Default = () => ({
       tabindex: text("Tab index (tabindex in <Tab>)", "0"),
     },
     tabsProps: {
-      className: "some-class",
+      class: "some-class",
       selected: number("The index of the selected tab (selected in <Tabs>)", 1),
       triggerHref: text(
         "The href of trigger button for narrow mode (triggerHref in <Tabs>)",
@@ -27,6 +27,10 @@ export const Default = () => ({
       tabContentClassName: text(
         "The className for the child `<TabContent>` components",
         "tab-content"
+      ),
+      light: boolean(
+        "Specify whether or not to use the light component variant",
+        false
       ),
     },
   },
