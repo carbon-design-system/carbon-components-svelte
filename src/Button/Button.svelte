@@ -123,7 +123,6 @@
 {#if skeleton}
   <ButtonSkeleton
     href="{href}"
-    rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
     small="{size === 'small'}"
     {...$$restProps}
     style="{hasIconOnly && 'width: 3rem;'}"
