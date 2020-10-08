@@ -6,7 +6,7 @@
   import Tabs from "./Tabs.svelte";
   import TabsSkeleton from "./TabsSkeleton.svelte";
 
-  const { tabProps, ...tabsProps } = $$props;
+  const { tabProps, tabsProps } = $$props;
 
   $: selected = 0;
 </script>
