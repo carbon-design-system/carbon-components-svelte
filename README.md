@@ -7,7 +7,7 @@
 [![NPM][npm]][npm-url]
 [![Build][build]][build-badge]
 <a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank">
-<img height="32px" src="./.assets/powered-by-vercel.svg" alt="Deploys by Vercel" />
+<img height="32px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" />
 </a>
 
 ## [Documentation](http://ibm.biz/carbon-svelte)

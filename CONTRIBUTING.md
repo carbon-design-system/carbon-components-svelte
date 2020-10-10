@@ -1,52 +1,81 @@
 # Contributing
 
+Note: before submitting a pull request (PR), it is recommended to first [file an issue](https://github.com/IBM/carbon-components-svelte/issues).
+
 ## Prerequisites
 
-This project uses Node.js and Yarn.
+This project requires Node.js (version 12 or greater) and Yarn (version 1 or greater).
 
-- [Node.js](https://nodejs.org/en/download/package-manager/#macos) (version >=12)
-- [Yarn](https://yarnpkg.com/en/docs/install#mac-stable)
+- [Node.js](https://nodejs.org/en/download/package-manager/)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install)
 
-## Fork and Clone
+## Project set-up
 
 Fork the repo and clone your fork:
 
-```bash
+```sh
 git clone <YOUR_FORK>
 cd carbon-components-svelte
 ```
 
-Set the original repo as the upstream:
+Set the original repository as the upstream:
 
-```bash
+```sh
 git remote add upstream git@github.com:IBM/carbon-components-svelte.git
 # verify that the upstream is added
 git remote -v
 ```
 
-## Install
+### Install
 
 Install the project dependencies:
 
-```bash
+```sh
+# carbon-components-svelte/
 yarn install
 ```
 
----
+## Documentation set-up
 
-## Workflow
+Component documentation is located in the `docs` folder. The website is built using svite, routify, and MDsveX. You will need to create a symbolic project link in order to see live changes reflected when developing locally.
 
-### Develop
+First, create a symbolic link at the root of the project folder:
 
-This project uses Storybook for UI development and "live" documentation.
-
-Run the following command to start the Storybook:
-
-```bash
-yarn start
+```sh
+# carbon-components-svelte/
+yarn link
 ```
 
-#### Component Format
+Go into the `docs` folder:
+
+```sh
+cd docs
+```
+
+Link `"carbon-components-svelte"`:
+
+```sh
+yarn link "carbon-components-svelte"
+yarn install
+```
+
+If linked correctly, any change to a component in the `src` folder should be reflected in the `docs` site.
+
+---
+
+## Development workflow
+
+Preview changes to components from the `src` folder in the documentation website located in `docs/`.
+
+In the `docs` folder, run:
+
+```sh
+yarn dev
+```
+
+The site should be served at `http://localhost:3000/` (or the next available port).
+
+### Component Format
 
 Each component should adopt the following structure:
 
@@ -55,27 +84,55 @@ src/Component
 │
 └───Component.svelte // main component
 └───Component.Skeleton.svelte // Skeleton component (if any)
-└───Component.Story.svelte // wrapper for individual stories
-└───Component.stories.js // Storybook stories
 └───index.js // export components (e.g. `Component.svelte`, `Component.Skeleton.svelte`)
+```
+
+### Editing a component
+
+If adding or editing an exported component prop, be sure to annotate its value using [JSDoc](https://jsdoc.app/) conventions.
+
+```js
+/**
+ * Set to `true` to disable the tab
+ * @type {boolean} [disabled=false]
+ */
+export let disabled = false;
+```
+
+### Creating a component
+
+First, [submit an issue](https://github.com/IBM/carbon-components-svelte/issues).
+
+If creating a new component, don't forget it from `src/index.js`:
+
+```diff
+export { CopyButton } from "./CopyButton";
+export { ComboBox } from "./ComboBox";
++ export { FixedComboBox } from "./FixedComboBox";
+export {
+  ComposedModal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "./ComposedModal";
 ```
 
 ### Build
 
-#### Component Library
+Verify that you can build the library by running the following command at the project root:
 
-To build the component library, run `yarn build`.
+```sh
+# carbon-components-svelte/
+yarn prepack
+```
 
-The library should be compiled in two formats:
+This does several things:
 
-- **ES**: `lib/index.mjs`
-- **UMD**: `lib/index.js`
-
-#### Storybook
-
-To build the Storybook, run `yarn build`.
-
-The Storybook should be outputted to the `storybook-static` folder.
+- uses `node-sass` to pre-compile CSS StyleSheets in the `css` folder
+- uses Rollup to bundle the Svelte components in `src` in ESM/UMD formats; emitted to `lib`
+- uses a Rollup plugin to:
+  - generate component documentation in Markdown format (`COMPONENT_INDEX.md`)
+  - generate TypeScript definitions (`types/index.d.ts`)
 
 ## Submit a Pull Request
 
@@ -83,7 +140,7 @@ The Storybook should be outputted to the `storybook-static` folder.
 
 Before submitting a pull request, make sure your fork is up to date with the latest upstream changes.
 
-```bash
+```sh
 git fetch upstream
 git checkout master
 git merge upstream/master
