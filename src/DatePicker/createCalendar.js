@@ -1,6 +1,8 @@
 import flatpickr from "flatpickr";
 import rangePlugin from "flatpickr/dist/plugins/rangePlugin";
 
+var l10n
+
 function updateClasses(instance) {
   const {
     calendarContainer,
