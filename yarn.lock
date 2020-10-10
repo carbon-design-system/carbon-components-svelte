@@ -3185,19 +3185,10 @@ capture-stack-trace@^1.0.0:
   resolved "https://registry.npmjs.org/capture-stack-trace/-/capture-stack-trace-1.0.1.tgz#a6c0bbe1f38f3aa0b92238ecb6ff42c344d4135d"
   integrity sha512-mYQLZnx5Qt1JgB1WEiMCf2647plpGeQ2NMR/5L0HNZzGQo4fuSPnK+wjfPnKZV0aiJDgzmWqqkV/g7JD+DW0qw==
 
-"carbon-components-10.18@npm:carbon-components@10.18":
-  version "10.18.0"
-  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.18.0.tgz#23b61ecb7cba766f47c7e0e96278a4d4bb37e8f2"
-  integrity sha512-BZE1PaWP8KrmbV1JSfPEsIWBeNz255eQ2hGP4Uo5Rh4uaL891BJjVTWjhnHEIeu1VXXjtxZ3Vk6qPcCGYL7brw==
-  dependencies:
-    flatpickr "4.6.1"
-    lodash.debounce "^4.0.8"
-    warning "^3.0.0"
-
-"carbon-components-10.19@npm:carbon-components@10.19":
-  version "10.19.0"
-  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.19.0.tgz#276924da9d8ba792d6f4c3964b77e26d1ee7619d"
-  integrity sha512-lQ3L9VyR8nYq+YkSBfH+b10TfTRrE7oamAaxcoKr2m2M0Mi6tW5jxZlxq86kIJxjdgY2LnzApP7rlra+Yq16fg==
+"carbon-components-10.21@npm:carbon-components@10.21":
+  version "10.21.0"
+  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.21.0.tgz#3e7f79530af79039aab7bf937f0f129642806316"
+  integrity sha512-IS8WPFGg74g6ZyWpJc4cDlkhqGeNZ1sJshAVTftkb7Nur9W58lSRcu6G9cRMgeL+I/YAia3Q+X4lPh/X16JsGw==
   dependencies:
     flatpickr "4.6.1"
     lodash.debounce "^4.0.8"

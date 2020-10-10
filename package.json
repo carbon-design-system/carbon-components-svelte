@@ -11,6 +11,7 @@
     "start": "start-storybook -p 9090",
     "build": "build-storybook",
     "prettier": "prettier --write './**/*.{svelte,js,md}'",
+    "build:css": "node scripts/build-css",
     "prepack": "node scripts/build-css && rollup -c",
     "publish-examples": "node scripts/publish-examples"
   },
@@ -32,8 +33,7 @@
     "@tsconfig/svelte": "^1.0.10",
     "autoprefixer": "^9.8.6",
     "babel-loader": "^8.0.6",
-    "carbon-components-10.18": "npm:carbon-components@10.18",
-    "carbon-components-10.19": "npm:carbon-components@10.19",
+    "carbon-components-10.21": "npm:carbon-components@10.21",
     "comment-parser": "^0.7.5",
     "gh-pages": "^3.1.0",
     "husky": "^4.3.0",
