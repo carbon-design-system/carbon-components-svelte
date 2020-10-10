@@ -59,6 +59,8 @@ yarn link "carbon-components-svelte"
 yarn install
 ```
 
+If linked correctly, any change to a component in the `src` folder should be reflected in the `docs` site.
+
 ---
 
 ## Development workflow
@@ -73,9 +75,7 @@ yarn dev
 
 The site should be served at `http://localhost:3000/` (or the next available port).
 
-### Editing a component
-
-#### Component Format
+### Component Format
 
 Each component should adopt the following structure:
 
@@ -87,9 +87,35 @@ src/Component
 └───index.js // export components (e.g. `Component.svelte`, `Component.Skeleton.svelte`)
 ```
 
+### Editing a component
+
+If adding or editing an exported component prop, be sure to annotate its value using [JSDoc](https://jsdoc.app/) conventions.
+
+```js
+/**
+ * Set to `true` to disable the tab
+ * @type {boolean} [disabled=false]
+ */
+export let disabled = false;
+```
+
 ### Creating a component
 
-[Submit an issue](https://github.com/IBM/carbon-components-svelte/issues).
+First, [submit an issue](https://github.com/IBM/carbon-components-svelte/issues).
+
+If creating a new component, don't forget it from `src/index.js`:
+
+```diff
+export { CopyButton } from "./CopyButton";
+export { ComboBox } from "./ComboBox";
++ export { FixedComboBox } from "./FixedComboBox";
+export {
+  ComposedModal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "./ComposedModal";
+```
 
 ### Build
 
