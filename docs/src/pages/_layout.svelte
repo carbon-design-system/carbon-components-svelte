@@ -114,7 +114,7 @@
     margin-bottom: var(--cds-layout-02);
   }
 
-  .bx--content {
+  main.bx--content {
     background: none;
   }
 
