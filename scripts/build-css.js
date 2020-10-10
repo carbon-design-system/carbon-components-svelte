@@ -46,11 +46,11 @@ const themes = {
     @include carbon--theme();
   `,
   all: `
-    :root[theme="white"] {
+    :root {
       @include carbon--theme($carbon--theme--white, true);
     }
-    
-    :root {
+
+    :root[theme="g10"] {
       @include carbon--theme($carbon--theme--g10, true);
     }
     
