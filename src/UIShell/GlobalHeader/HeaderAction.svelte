@@ -51,7 +51,7 @@
   }
 </style>
 
-<svelte:body
+<svelte:window
   on:click="{({ target }) => {
     if (isOpen && !ref.contains(target) && !refPanel.contains(target)) {
       isOpen = false;
