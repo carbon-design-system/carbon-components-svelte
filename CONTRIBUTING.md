@@ -35,12 +35,6 @@ Install the project dependencies:
 yarn install
 ```
 
-Build the CSS used in the documentation site:
-
-```sh
-yarn build:css
-```
-
 ## Documentation set-up
 
 Component documentation is located in the `docs` folder. The website is built using svite, routify, and MDsveX. You will need to create a symbolic project link in order to see live changes reflected when developing locally.

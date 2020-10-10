@@ -3,4 +3,45 @@
   import { routes } from "../.routify/routes";
 </script>
 
+<style lang="scss" global>
+  $feature-flags: (
+    ui-shell: true,
+    enable-css-custom-properties: true,
+    grid-columns-16: true
+  );
+
+  @import "@carbon/themes/scss/themes";
+
+  :root {
+    @include carbon--theme($carbon--theme--white, true);
+  }
+
+  :root[theme="g10"] {
+    @include carbon--theme($carbon--theme--g10, true);
+  }
+
+  :root[theme="g90"] {
+    @include carbon--theme($carbon--theme--g90, true);
+  }
+
+  :root[theme="g100"] {
+    @include carbon--theme($carbon--theme--g100, true);
+  }
+
+  $css--font-face: true;
+  $css--helpers: true;
+  $css--body: true;
+  $css--use-layer: true;
+  $css--reset: true;
+  $css--default-type: true;
+  $css--plex: true;
+
+  @import "carbon-components/scss/globals/scss/_css--reset.scss";
+  @import "carbon-components/scss/globals/scss/_css--font-face.scss";
+  @import "carbon-components/scss/globals/scss/_css--helpers.scss";
+  @import "carbon-components/scss/globals/scss/_css--body.scss";
+  @import "carbon-components/scss/globals/grid/_grid.scss";
+  @import "carbon-components/scss/globals/scss/styles.scss";
+</style>
+
 <Router routes="{routes}" />

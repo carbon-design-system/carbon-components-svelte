@@ -7,6 +7,7 @@ const { format } = require("prettier");
 const pkg = require("../package.json");
 const fs = require("fs");
 const Prism = require("prismjs");
+const { replace, postcss } = require("svelte-preprocess");
 require("prism-svelte");
 
 function createImports(source) {
@@ -126,11 +127,16 @@ module.exports = {
   extensions: [".svelte", ".svx"],
   hydratable: NODE_ENV === "production",
   preprocess: [
-    require("svelte-preprocess")({
-      sourcemap: false,
-      replace: [
-        ["process.env.VERSION", JSON.stringify(pkg.version)],
-        ["process.env.NODE_ENV", JSON.stringify(NODE_ENV)],
+    require("svelte-preprocess")(),
+    replace([
+      ["process.env.VERSION", JSON.stringify(pkg.version)],
+      ["process.env.NODE_ENV", JSON.stringify(NODE_ENV)],
+    ]),
+    postcss({
+      plugins: [
+        require("autoprefixer")({
+          overrideBrowserslist: ["last 1 version", "ie >= 11"],
+        }),
       ],
     }),
     mdsvex({
