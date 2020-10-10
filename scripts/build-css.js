@@ -18,58 +18,14 @@ const shared = {
     $css--default-type: true;
     $css--plex: true;
     
-    @import "node_modules/carbon-components-10.19/scss/globals/scss/_css--reset.scss";
-    @import "node_modules/carbon-components-10.19/scss/globals/scss/_css--font-face.scss";
-    @import "node_modules/carbon-components-10.19/scss/globals/scss/_css--helpers.scss";
-    @import "node_modules/carbon-components-10.19/scss/globals/scss/_css--body.scss";
-    @import "node_modules/carbon-components-10.19/scss/globals/grid/_grid.scss";
+    @import "node_modules/carbon-components-10.21/scss/globals/scss/_css--reset.scss";
+    @import "node_modules/carbon-components-10.21/scss/globals/scss/_css--font-face.scss";
+    @import "node_modules/carbon-components-10.21/scss/globals/scss/_css--helpers.scss";
+    @import "node_modules/carbon-components-10.21/scss/globals/scss/_css--body.scss";
+    @import "node_modules/carbon-components-10.21/scss/globals/grid/_grid.scss";
+    @import "node_modules/carbon-components-10.21/scss/globals/scss/styles.scss";
   `,
-  components: `
-    @import "node_modules/carbon-components-10.19/scss/components/accordion/accordion";
-    @import "node_modules/carbon-components-10.19/scss/components/breadcrumb/breadcrumb";
-    @import "node_modules/carbon-components-10.19/scss/components/button/button";
-    @import "node_modules/carbon-components-10.19/scss/components/checkbox/checkbox";
-    @import "node_modules/carbon-components-10.19/scss/components/code-snippet/code-snippet";
-    @import "node_modules/carbon-components-10.19/scss/components/combo-box/combo-box";
-    @import "node_modules/carbon-components-10.19/scss/components/content-switcher/content-switcher";
-    @import "node_modules/carbon-components-10.19/scss/components/copy-button/copy-button";
-    @import "node_modules/carbon-components-10.19/scss/components/data-table/data-table";
-    @import "node_modules/carbon-components-10.19/scss/components/date-picker/date-picker";
-    @import "node_modules/carbon-components-10.19/scss/components/dropdown/dropdown";
-    @import "node_modules/carbon-components-10.19/scss/components/file-uploader/file-uploader";
-    @import "node_modules/carbon-components-10.19/scss/components/form/form";
-    @import "node_modules/carbon-components-10.19/scss/components/inline-loading/inline-loading";
-    @import "node_modules/carbon-components-10.19/scss/components/link/link";
-    @import "node_modules/carbon-components-10.19/scss/components/list/list";
-    @import "node_modules/carbon-components-10.19/scss/components/list-box/list-box";
-    @import "node_modules/carbon-components-10.19/scss/components/loading/loading";
-    @import "node_modules/carbon-components-10.19/scss/components/modal/modal";
-    @import "node_modules/carbon-components-10.19/scss/components/multi-select/multi-select";
-    @import "node_modules/carbon-components-10.19/scss/components/notification/inline-notification";
-    @import "node_modules/carbon-components-10.19/scss/components/notification/toast-notification";
-    @import "node_modules/carbon-components-10.19/scss/components/number-input/number-input";
-    @import "node_modules/carbon-components-10.19/scss/components/overflow-menu/overflow-menu";
-    @import "node_modules/carbon-components-10.19/scss/components/pagination/pagination";
-    @import "node_modules/carbon-components-10.19/scss/components/pagination-nav/pagination-nav";
-    @import "node_modules/carbon-components-10.19/scss/components/progress-indicator/progress-indicator";
-    @import "node_modules/carbon-components-10.19/scss/components/radio-button/radio-button";
-    @import "node_modules/carbon-components-10.19/scss/components/search/search";
-    @import "node_modules/carbon-components-10.19/scss/components/select/select";
-    @import "node_modules/carbon-components-10.19/scss/components/skeleton/skeleton";
-    @import "node_modules/carbon-components-10.19/scss/components/slider/slider";
-    @import "node_modules/carbon-components-10.19/scss/components/structured-list/structured-list";
-    @import "node_modules/carbon-components-10.19/scss/components/tag/tag";
-    @import "node_modules/carbon-components-10.19/scss/components/text-area/text-area";
-    @import "node_modules/carbon-components-10.19/scss/components/text-input/text-input";
-    @import "node_modules/carbon-components-10.19/scss/components/tile/tile";
-    @import "node_modules/carbon-components-10.19/scss/components/time-picker/time-picker";
-    @import "node_modules/carbon-components-10.19/scss/components/toggle/toggle";
-    @import "node_modules/carbon-components-10.19/scss/components/toolbar/toolbar";
-    @import "node_modules/carbon-components-10.19/scss/components/tooltip/tooltip";
-    @import "node_modules/carbon-components-10.19/scss/components/ui-shell/ui-shell";
-
-    @import "node_modules/carbon-components-10.18/scss/components/tabs/tabs";
-  `,
+  components: ``,
 };
 
 const themes = {
@@ -90,11 +46,11 @@ const themes = {
     @include carbon--theme();
   `,
   all: `
-    :root[theme="white"] {
+    :root {
       @include carbon--theme($carbon--theme--white, true);
     }
-    
-    :root {
+
+    :root[theme="g10"] {
       @include carbon--theme($carbon--theme--g10, true);
     }
     
