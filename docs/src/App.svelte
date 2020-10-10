@@ -5,7 +5,6 @@
 
 <style lang="scss" global>
   $feature-flags: (
-    ui-shell: true,
     enable-css-custom-properties: true,
     grid-columns-16: true
   );
