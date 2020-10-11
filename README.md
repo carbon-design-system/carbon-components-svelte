@@ -19,7 +19,7 @@ Install `carbon-components-svelte` as a development dependency.
 ```bash
 yarn add -D carbon-components-svelte
 # OR
-npm -i -D carbon-components-svelte
+npm i -D carbon-components-svelte
 ```
 
 ## Usage
