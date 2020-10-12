@@ -9,6 +9,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.16.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.16.0) - 2020-10-12
+
+**Features**
+
+- Pagination: add `pageSizeInputDisabled` prop to hide page size buttons (default is `false`) ([PR #292](https://github.com/IBM/carbon-components-svelte/pull/292))
+- ListBoxMenu: add `ref` prop ([PR #303](https://github.com/IBM/carbon-components-svelte/pull/303))
+- Pre-compiled CSS: upgrade `carbon-components` to version 10.21
+
+**Fixes**
+
+- Link: explicitly define `href` prop to fix TypeScript errors ([PR #301](https://github.com/IBM/carbon-components-svelte/pull/301))
+- RadioButtonGroup: explicitly define `id` prop to fix TypeScript errors ([PR #303](https://github.com/IBM/carbon-components-svelte/pull/303))
+- ComboBox: `light` prop should use the light variant ([PR #303](https://github.com/IBM/carbon-components-svelte/pull/303))
+- ComposedModal: class "bx--body--with-modal-open" should be removed when closing the modal ([PR #306](https://github.com/IBM/carbon-components-svelte/pull/306))
+- Dropdown: remove unused `setContext` import ([PR #308](https://github.com/IBM/carbon-components-svelte/pull/308))
+- `css/all.css`: default theme should be "white," not "g10" ([PR #322](https://github.com/IBM/carbon-components-svelte/pull/322))
+- UI Shell: `HeaderAction` menu should close when clicking in the window, not just the document body ([PR #323](https://github.com/IBM/carbon-components-svelte/pull/323))
+
+**Performance**
+
+- DatePicker: remove default i10n locales import to reduce bundle size by ~42 kB ([PR #316](https://github.com/IBM/carbon-components-svelte/pull/316))
+
+**Breaking Changes**
+
+- DatePicker: default i10n locales are no longer imported
+- if using `css/all.css`, set the "theme" attribute on the HTML element to "g10" in order to use the Gray 10 theme
+
+**Documentation**
+
+- Redesign component documentation website (Short link: [ibm.biz/carbon-svelte](http://ibm.biz/carbon-svelte)); deployments sponsored by Vercel
+- Update development workflow in `CONTRIBUTING.md`
+- Typo fixes in `README.md` ([PR #324](https://github.com/IBM/carbon-components-svelte/pull/324), [PR #325](https://github.com/IBM/carbon-components-svelte/pull/325))
+
+**Housekeeping**
+
+- Git hooks: only lint staged files in the pre-commit Git hook ([PR #319](https://github.com/IBM/carbon-components-svelte/pull/319))
+
 ## [0.15.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.15.0) - 2020-10-01
 
 **Features**

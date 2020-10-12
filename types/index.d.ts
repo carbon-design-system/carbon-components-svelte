@@ -1,4 +1,4 @@
-// Type definitions for carbon-components-svelte 0.15.0
+// Type definitions for carbon-components-svelte 0.16.0
 // Project: https://github.com/IBM/carbon-components-svelte
 
 export class CarbonSvelteComponent {
@@ -2019,6 +2019,12 @@ export class ListBoxMenu extends CarbonSvelteComponent {
      * Set an id for the top-level element
      */
     id?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLDivElement;
   };
 
   $$slot_def: { default: {} };
@@ -3275,6 +3281,11 @@ export class RadioButtonGroup extends CarbonSvelteComponent {
      * @default "horizontal"
      */
     orientation?: "horizontal" | "vertical";
+
+    /**
+     * Set an id for the container div element
+     */
+    id?: string;
   };
 
   $$slot_def: { default: {} };

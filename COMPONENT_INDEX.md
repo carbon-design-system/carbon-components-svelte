@@ -1,6 +1,6 @@
 # Component Index
 
-> 147 components exported from carbon-components-svelte 0.15.0
+> 147 components exported from carbon-components-svelte 0.16.0
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -2292,9 +2292,10 @@ import { ListBoxMenu } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name | Type                | Default value |
-| :-------- | :------------------ | :------------ |
-| id        | <code>string</code> | --            |
+| Prop name | Type                                    | Default value |
+| :-------- | :-------------------------------------- | :------------ |
+| id        | <code>string</code>                     | --            |
+| ref       | <code>null &#124; HTMLDivElement</code> | null          |
 
 ### Slots
 
@@ -3327,6 +3328,7 @@ import { RadioButtonGroup } from "carbon-components-svelte";
 | disabled      | <code>boolean</code>                        | false         |
 | labelPosition | <code>"right" &#124; "left"</code>          | "right"       |
 | orientation   | <code>"horizontal" &#124; "vertical"</code> | "horizontal"  |
+| id            | <code>string</code>                         | --            |
 
 ### Slots
 
