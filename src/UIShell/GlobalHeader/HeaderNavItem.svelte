@@ -24,6 +24,7 @@
     role="menuitem"
     tabindex="0"
     href="{href}"
+    rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
     class:bx--header__menu-item="{true}"
     {...$$restProps}
     on:click

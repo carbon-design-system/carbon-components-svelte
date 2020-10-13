@@ -15,6 +15,7 @@
 {#if href}
   <a
     href="{href}"
+    rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
     role="button"
     class:bx--skeleton="{true}"
     class:bx--btn="{true}"

@@ -24,6 +24,7 @@
   class:bx--tile--clickable="{true}"
   class:bx--tile--is-clicked="{clicked}"
   class:bx--tile--light="{light}"
+  rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
   {...$$restProps}
   href="{href}"
   on:click
