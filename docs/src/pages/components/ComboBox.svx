@@ -22,6 +22,15 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+### Light variant
+
+<ComboBox light titleText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
 ### Extra-large size
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
