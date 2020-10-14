@@ -38,7 +38,7 @@ export const Default = () => ({
 export const Fluid = () => ({
   Component,
   props: {
-    story: 'fluid',
+    story: "fluid",
     size: select("Field size (size)", sizes, undefined) || undefined,
     disabled: boolean("Disabled (disabled)", false),
     light: boolean("Light variant (light)", false),

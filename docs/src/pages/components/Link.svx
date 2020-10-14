@@ -7,6 +7,16 @@
 
 <Link href="https://www.carbondesignsystem.com/">Carbon Design System</Link>
 
+### Target _blank
+
+Setting `target` to `"_blank"` opens the link in a new tab.
+
+If `target="_blank"`, the `Link` component will automatically set `rel="noopener noreferrer"` to guard against [potential cross-origin security exploits](https://web.dev/external-anchors-use-rel-noopener/).
+
+You can override the `rel` attribute with a custom value.
+
+<Link href="https://www.carbondesignsystem.com/" target="_blank">Carbon Design System</Link>
+
 ### Inline variant
 
 <div>

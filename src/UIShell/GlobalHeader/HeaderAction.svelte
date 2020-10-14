@@ -57,7 +57,8 @@
       isOpen = false;
       dispatch('close');
     }
-  }}" />
+  }}"
+/>
 
 <div>
   <button

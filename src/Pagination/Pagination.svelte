@@ -125,25 +125,25 @@
 <div id="{id}" class:bx--pagination="{true}" {...$$restProps}>
   <div class:bx--pagination__left="{true}">
     {#if !pageSizeInputDisabled}
-    <label
-      id="bx--pagination-select-{id}-count-label"
-      for="bx--pagination-select-{id}"
-      class:bx--pagination__text="{true}"
-    >
-      {itemsPerPageText}
-    </label>
-    <Select
-      id="bx--pagination-select-{id}"
-      class="bx--select__item-count"
-      hideLabel
-      noLabel
-      inline
-      bind:selected="{pageSize}"
-    >
-      {#each pageSizes as size, i (size)}
-        <SelectItem value="{size}" text="{size.toString()}" />
-      {/each}
-    </Select>
+      <label
+        id="bx--pagination-select-{id}-count-label"
+        for="bx--pagination-select-{id}"
+        class:bx--pagination__text="{true}"
+      >
+        {itemsPerPageText}
+      </label>
+      <Select
+        id="bx--pagination-select-{id}"
+        class="bx--select__item-count"
+        hideLabel
+        noLabel
+        inline
+        bind:selected="{pageSize}"
+      >
+        {#each pageSizes as size, i (size)}
+          <SelectItem value="{size}" text="{size.toString()}" />
+        {/each}
+      </Select>
     {/if}
     <span class:bx--pagination__text="{!pageSizeInputDisabled}">
       {#if pagesUnknown}

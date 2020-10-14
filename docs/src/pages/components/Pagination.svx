@@ -19,6 +19,10 @@
 
 <Pagination totalItems={102} pageInputDisabled />
 
+### Hidden page size
+
+<Pagination totalItems={102} pageSizeInputDisabled />
+
 ### Skeleton
 
 <PaginationSkeleton />

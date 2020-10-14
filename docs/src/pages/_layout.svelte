@@ -1,7 +1,3 @@
-<script context="module">
-  const fetched = new Set();
-</script>
-
 <script>
   import { isActive, url, layout, beforeUrlChange } from "@sveltech/routify";
   import {
@@ -161,17 +157,6 @@
     max-height: 120rem;
   }
 </style>
-
-<svelte:body
-  on:mouseover="{async (e) => {
-    if (process.env.NODE_ENV === 'development') return;
-    if (!e.target.href || !e.target
-        .getAttribute('class')
-        .includes('bx--side-nav__link')) return;
-    if (fetched.has(e.target.href)) return;
-    fetched.add(e.target.href);
-    await fetch(e.target.href);
-  }}" />
 
 <svelte:window bind:innerWidth />
 

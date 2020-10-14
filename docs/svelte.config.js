@@ -7,7 +7,6 @@ const { format } = require("prettier");
 const pkg = require("../package.json");
 const fs = require("fs");
 const Prism = require("prismjs");
-const { replace, postcss } = require("svelte-preprocess");
 require("prism-svelte");
 
 function createImports(source) {
@@ -57,6 +56,7 @@ function createImports(source) {
 function plugin() {
   function visitor(node) {
     if (
+      node.lang !== "svelte" &&
       !node.value.startsWith("<FileSource") &&
       !node.value.startsWith("<script>") &&
       !node.value.match(/svx-ignore/g)
@@ -125,19 +125,19 @@ const NODE_ENV = process.env.NODE_ENV || "production";
 
 module.exports = {
   extensions: [".svelte", ".svx"],
-  hydratable: NODE_ENV === "production",
   preprocess: [
-    require("svelte-preprocess")(),
-    replace([
-      ["process.env.VERSION", JSON.stringify(pkg.version)],
-      ["process.env.NODE_ENV", JSON.stringify(NODE_ENV)],
-    ]),
-    postcss({
-      plugins: [
-        require("autoprefixer")({
-          overrideBrowserslist: ["last 1 version", "ie >= 11"],
-        }),
+    require("svelte-preprocess")({
+      replace: [
+        ["process.env.VERSION", JSON.stringify(pkg.version)],
+        ["process.env.NODE_ENV", JSON.stringify(NODE_ENV)],
       ],
+      postcss: {
+        plugins: [
+          require("autoprefixer")({
+            overrideBrowserslist: ["last 1 version", "ie >= 11"],
+          }),
+        ],
+      },
     }),
     mdsvex({
       remarkPlugins: [plugin, slug, carbonify],

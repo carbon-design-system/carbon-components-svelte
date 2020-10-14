@@ -20,7 +20,10 @@ export const Default = () => ({
       false
     ),
     pageInputDisabled: boolean("Disable page input (pageInputDisabled)", false),
-    pageSizeInputDisabled: boolean("Disable page size input (pageSizeInputDisabled)", false),
+    pageSizeInputDisabled: boolean(
+      "Disable page size input (pageSizeInputDisabled)",
+      false
+    ),
     backwardText: text(
       "The description for the backward icon (backwardText)",
       "Previous page"
@@ -50,7 +53,10 @@ export const Multiple = () => ({
       false
     ),
     pageInputDisabled: boolean("Disable page input (pageInputDisabled)", false),
-    pageSizeInputDisabled: boolean("Disable page size input (pageSizeInputDisabled)", false),
+    pageSizeInputDisabled: boolean(
+      "Disable page size input (pageSizeInputDisabled)",
+      false
+    ),
     backwardText: text(
       "The description for the backward icon (backwardText)",
       "Previous page"
