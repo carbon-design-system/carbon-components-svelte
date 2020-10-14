@@ -3464,6 +3464,7 @@ import { Search } from "carbon-components-svelte";
 | size                 | <code>"sm" &#124; "lg"</code>             | --                   |
 | skeleton             | <code>boolean</code>                      | false                |
 | light                | <code>boolean</code>                      | false                |
+| disabled             | <code>boolean</code>                      | false                |
 | value                | <code>string</code>                       | ""                   |
 | type                 | <code>string</code>                       | "text"               |
 | placeholder          | <code>string</code>                       | "Search..."          |

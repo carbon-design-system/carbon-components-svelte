@@ -3409,6 +3409,12 @@ export class Search extends CarbonSvelteComponent {
     light?: boolean;
 
     /**
+     * Set to `true` to disable the search input
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
      * Specify the value of the search input
      * @default ""
      */
