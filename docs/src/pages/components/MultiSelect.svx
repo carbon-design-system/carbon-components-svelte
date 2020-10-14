@@ -5,10 +5,23 @@
 
 ### Default
 
+By default, items will be ordered alphabetically based on the `item.text` value. To prevent this, see [#no-alphabetical-ordering](#no-alphabetical-ordering).
+
 <MultiSelect titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}" selectedIds="{["0", "1"]}"
+  />
+
+### No alphabetical ordering
+
+To prevent alphabetical item ordering, pass an empty function to the `sortItem` prop.
+
+<MultiSelect titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}" selectedIds="{["0", "1"]}"
+    sortItem="{() => {}}"
   />
 
 ### Light variant
