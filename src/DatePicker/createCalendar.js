@@ -1,7 +1,7 @@
 import flatpickr from "flatpickr";
 import rangePlugin from "flatpickr/dist/plugins/rangePlugin";
 
-let l10n
+let l10n;
 
 function updateClasses(instance) {
   const {

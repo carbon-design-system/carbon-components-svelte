@@ -1,1 +1,1 @@
-export { default as FluidForm } from './FluidForm.svelte'
+export { default as FluidForm } from "./FluidForm.svelte";

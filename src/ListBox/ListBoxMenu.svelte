@@ -9,11 +9,11 @@
    * Obtain a reference to the input HTML element
    * @type {null | HTMLDivElement} [ref=null]
    */
-   export let ref = null;
+  export let ref = null;
 </script>
 
 <div
-  bind:this={ref}
+  bind:this="{ref}"
   role="listbox"
   id="menu-{id}"
   class:bx--list-box__menu="{true}"
