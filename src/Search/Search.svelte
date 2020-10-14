@@ -24,6 +24,12 @@
   export let light = false;
 
   /**
+   * Set to `true` to disable the search input
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
    * Specify the value of the search input
    * @type {string} [value="text"]
    */
@@ -96,6 +102,7 @@
   <div
     class:bx--search="{true}"
     class:bx--search--light="{light}"
+    class:bx--search--disabled="{disabled}"
     {...$$restProps}
     class="bx--search--{size} {$$restProps.class}"
   >
@@ -108,6 +115,7 @@
       class:bx--search-input="{true}"
       autofocus="{autofocus}"
       autocomplete="{autocomplete}"
+      disabled="{disabled}"
       id="{id}"
       placeholder="{placeholder}"
       type="{type}"
@@ -121,6 +129,7 @@
     <button
       type="button"
       aria-label="{closeButtonLabelText}"
+      disabled="{disabled}"
       class:bx--search-close="{true}"
       class:bx--search-close--hidden="{value === ''}"
       on:click
