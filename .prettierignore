@@ -1,11 +1,9 @@
 /coverage
 /lib
-/storybook-static
 /css
 /**/__sapper__
 /**/.routify
 /**/dist
 /**/client
 /**/build
-.storybook
 *.svx

@@ -1,7 +1,6 @@
 /coverage
 /lib
 /node_modules
-/storybook-static
 /css
 .DS_Store
 yarn-debug.log*
