@@ -203,6 +203,7 @@
       role="button"
       aria-expanded="{open}"
       on:click="{() => {
+        if (disabled) return;
         open = true;
       }}"
       id="{id}"
