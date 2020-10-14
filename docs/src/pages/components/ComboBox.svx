@@ -22,6 +22,10 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+### Filterable
+
+<FileSource src="/framed/ComboBox/FilterableComboBox" />
+
 ### Light variant
 
 <ComboBox light titleText="Contact" placeholder="Select contact method"
