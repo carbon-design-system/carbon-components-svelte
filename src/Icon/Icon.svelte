@@ -13,14 +13,10 @@
   export let skeleton = false;
 
   import IconSkeleton from "./Icon.Skeleton.svelte";
-
-  $: iconName = render.toString().split(" ")[1];
-  $: size = parseInt(iconName.slice(-2), 10);
 </script>
 
 {#if skeleton}
   <IconSkeleton
-    size="{size}"
     {...$$restProps}
     on:click
     on:mouseover
