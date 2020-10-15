@@ -227,7 +227,13 @@ export class ButtonSkeleton extends CarbonSvelteComponent {
     href?: string;
 
     /**
-     * Set to `true` to use the small variant
+     * Specify the size of button skeleton
+     * @default "default"
+     */
+    size?: "default" | "field" | "small";
+
+    /**
+     *
      * @default false
      */
     small?: boolean;
@@ -3144,6 +3150,12 @@ export class ProgressIndicatorSkeleton extends CarbonSvelteComponent {
      * @default false
      */
     vertical?: boolean;
+
+    /**
+     * Specify the number of steps to render
+     * @default 4
+     */
+    count?: number;
   };
 }
 

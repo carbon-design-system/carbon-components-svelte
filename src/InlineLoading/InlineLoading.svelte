@@ -48,6 +48,7 @@
 </script>
 
 <div
+  class:bx--inline-loading="{true}"
   aria-live="assertive"
   {...$$restProps}
   on:click

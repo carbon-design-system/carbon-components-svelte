@@ -16,6 +16,7 @@
 
 {#if skeleton}
   <BreadcrumbSkeleton
+    noTrailingSlash="{noTrailingSlash}"
     {...$$restProps}
     on:click
     on:mouseover

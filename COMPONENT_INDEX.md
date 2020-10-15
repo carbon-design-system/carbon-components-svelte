@@ -462,10 +462,11 @@ import { ButtonSkeleton } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name | Type                 | Default value |
-| :-------- | :------------------- | :------------ |
-| href      | <code>string</code>  | --            |
-| small     | <code>boolean</code> | false         |
+| Prop name | Type                                                 | Default value |
+| :-------- | :--------------------------------------------------- | :------------ |
+| href      | <code>string</code>                                  | --            |
+| size      | <code>"default" &#124; "field" &#124; "small"</code> | "default"     |
+| small     | <code>boolean</code>                                 | false         |
 
 ### Slots
 
@@ -3219,6 +3220,7 @@ import { ProgressIndicatorSkeleton } from "carbon-components-svelte";
 | Prop name | Type                 | Default value |
 | :-------- | :------------------- | :------------ |
 | vertical  | <code>boolean</code> | false         |
+| count     | <code>number</code>  | 4             |
 
 ### Slots
 

@@ -19,6 +19,10 @@
 
 <SkeletonText paragraph />
 
+### Paragraph with custom line count
+
+<SkeletonText paragraph lines={8} />
+
 ### Paragraph with max width
 
 <SkeletonText paragraph width="50%" />

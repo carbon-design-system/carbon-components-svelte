@@ -4,6 +4,12 @@
    * @type {boolean} [vertical=false]
    */
   export let vertical = false;
+
+  /**
+   * Specify the number of steps to render
+   * @type {number} [count=4]
+   */
+  export let count = 4;
 </script>
 
 <ul
@@ -16,7 +22,7 @@
   on:mouseenter
   on:mouseleave
 >
-  {#each [0, 1, 2, 3] as item, i (item)}
+  {#each Array.from({ length: count }, (_, i) => i) as item, i (item)}
     <li
       class:bx--progress-step="{true}"
       class:bx--progress-step--incomplete="{true}"
