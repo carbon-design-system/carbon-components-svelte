@@ -23,6 +23,7 @@
 {#if skeleton}
   <AccordionSkeleton
     {...$$restProps}
+    align="{align}"
     on:click
     on:mouseover
     on:mouseenter

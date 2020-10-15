@@ -93,8 +93,17 @@
 
 ### Skeleton
 
+<Accordion skeleton />
+
+### Skeleton (chevron aligned left)
+
+<Accordion skeleton align="start" />
+
+### Skeleton (custom count)
+
 <Accordion skeleton count={3} />
 
 ### Skeleton (closed)
 
-<Accordion skeleton open={false} count={3} />
+<Accordion skeleton open={false} />
+

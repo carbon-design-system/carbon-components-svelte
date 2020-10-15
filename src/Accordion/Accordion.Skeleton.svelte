@@ -6,6 +6,12 @@
   export let count = 4;
 
   /**
+   * Specify alignment of accordion item chevron icon
+   * @type {"start" | "end"} [align="end"]
+   */
+  export let align = "end";
+
+  /**
    * Set to `false` to close the first accordion item
    * @type {boolean} [open=true]
    */
@@ -19,6 +25,7 @@
   class:bx--accordion="{true}"
   class:bx--skeleton="{true}"
   {...$$restProps}
+  class="bx--accordion--{align} {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter
