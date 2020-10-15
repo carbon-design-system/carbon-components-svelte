@@ -6,6 +6,12 @@
   export let align = "end";
 
   /**
+   * Specify the size of the accordion
+   * @type {"sm" | "lg"} [size]
+   */
+  export let size = undefined;
+
+  /**
    * Set to `true` to display the skeleton state
    * @type {boolean} [skeleton=false]
    */
@@ -26,7 +32,9 @@
   <ul
     class:bx--accordion="{true}"
     {...$$restProps}
-    class="bx--accordion--{align} {$$restProps.class}"
+    class="bx--accordion--{align}
+      {size && `bx--accordion--${size}`}
+      {$$restProps.class}"
     on:click
     on:mouseover
     on:mouseenter
