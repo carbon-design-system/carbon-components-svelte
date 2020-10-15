@@ -19,6 +19,17 @@ export class Accordion extends CarbonSvelteComponent {
     align?: "start" | "end";
 
     /**
+     * Specify the size of the accordion
+     */
+    size?: "sm" | "xl";
+
+    /**
+     * Set to `true` to disable the accordion
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
      * Set to `true` to display the skeleton state
      * @default false
      */
@@ -44,6 +55,12 @@ export class AccordionItem extends CarbonSvelteComponent {
     open?: boolean;
 
     /**
+     * Set to `true` to disable the accordion item
+     * @default false
+     */
+    disabled?: boolean;
+
+    /**
      * Specify the ARIA label for the accordion item chevron icon
      * @default "Expand/Collapse"
      */
@@ -60,6 +77,17 @@ export class AccordionSkeleton extends CarbonSvelteComponent {
      * @default 4
      */
     count?: number;
+
+    /**
+     * Specify alignment of accordion item chevron icon
+     * @default "end"
+     */
+    align?: "start" | "end";
+
+    /**
+     * Specify the size of the accordion
+     */
+    size?: "sm" | "xl";
 
     /**
      * Set to `false` to close the first accordion item

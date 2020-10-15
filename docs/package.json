@@ -12,7 +12,7 @@
     "@carbon/themes": "^10.20.0",
     "@sveltech/routify": "^1.9.9",
     "autoprefixer": "^10.0.1",
-    "carbon-components": "^10.21.0",
+    "carbon-components": "^10.22.0",
     "carbon-components-svelte": "../",
     "clipboard-copy": "^3.1.0",
     "fs-extra": "^9.0.1",

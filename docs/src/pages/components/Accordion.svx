@@ -63,10 +63,83 @@
   </AccordionItem>
 </Accordion>
 
+### Extra-large size
+
+<Accordion size="xl">
+  <AccordionItem title="Title 1">
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
+### Small size
+
+<Accordion size="sm">
+  <AccordionItem title="Title 1">
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
+### Disabled
+
+<Accordion disabled>
+  <AccordionItem title="Title 1">
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
+### Disabled (item)
+
+<Accordion>
+  <AccordionItem disabled title="Title 1">
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
 ### Skeleton
+
+<Accordion skeleton />
+
+### Skeleton (chevron aligned left)
+
+<Accordion skeleton align="start" />
+
+### Skeleton (custom count)
 
 <Accordion skeleton count={3} />
 
 ### Skeleton (closed)
 
-<Accordion skeleton open={false} count={3} />
+<Accordion skeleton open={false} />
+
+### Skeleton (extra-large)
+
+<Accordion skeleton size="xl" />
+
+### Skeleton (small)
+
+<Accordion skeleton size="sm" />
+
