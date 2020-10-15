@@ -91,6 +91,34 @@
   </AccordionItem>
 </Accordion>
 
+### Disabled
+
+<Accordion disabled>
+  <AccordionItem title="Title 1">
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
+### Disabled (item)
+
+<Accordion>
+  <AccordionItem disabled title="Title 1">
+    Content 1
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+    Content 2
+  </AccordionItem>
+  <AccordionItem title="Title 3">
+    Content 3
+  </AccordionItem>
+</Accordion>
+
 ### Skeleton
 
 <Accordion skeleton />

@@ -12,12 +12,26 @@
   export let size = undefined;
 
   /**
+   * Set to `true` to disable the accordion
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
    * Set to `true` to display the skeleton state
    * @type {boolean} [skeleton=false]
    */
   export let skeleton = false;
 
+  import { setContext } from "svelte";
+  import { writable } from "svelte/store";
   import AccordionSkeleton from "./Accordion.Skeleton.svelte";
+
+  const disableItems = writable(disabled);
+
+  $: disableItems.set(disabled);
+
+  setContext("Accordion", { disableItems });
 </script>
 
 {#if skeleton}

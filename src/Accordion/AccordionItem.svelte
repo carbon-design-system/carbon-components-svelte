@@ -13,21 +13,43 @@
   export let open = false;
 
   /**
+   * Set to `true` to disable the accordion item
+   * @type {boolean} [disabled=false]
+   */
+  export let disabled = false;
+
+  /**
    * Specify the ARIA label for the accordion item chevron icon
    * @type {string} [iconDescription="Expand/Collapse"]
    */
   export let iconDescription = "Expand/Collapse";
 
+  import { onMount, getContext } from "svelte";
   import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16";
 
-  $: animation = undefined;
+  let initialDisabled = disabled;
+
+  const ctx = getContext("Accordion");
+  const unsubscribe = ctx.disableItems.subscribe((value) => {
+    if (!value && initialDisabled) return;
+    disabled = value;
+  });
+
+  let animation = undefined;
+
+  onMount(() => {
+    return () => {
+      unsubscribe();
+    };
+  });
 </script>
 
 <li
   class:bx--accordion__item="{true}"
   class:bx--accordion__item--active="{open}"
-  class="bx--accordion__item--${animation}"
+  class:bx--accordion__item--disabled="{disabled}"
   {...$$restProps}
+  class="bx--accordion__item--${animation} {$$restProps.class}"
   on:animationend
   on:animationend="{() => {
     animation = undefined;
@@ -38,6 +60,7 @@
     class:bx--accordion__heading="{true}"
     title="{iconDescription}"
     aria-expanded="{open}"
+    disabled="{disabled}"
     on:click
     on:click="{() => {
       open = !open;

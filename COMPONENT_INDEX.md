@@ -199,6 +199,7 @@ import { Accordion } from "carbon-components-svelte";
 | :-------- | :-------------------------------- | :------------ |
 | align     | <code>"start" &#124; "end"</code> | "end"         |
 | size      | <code>"sm" &#124; "xl"</code>     | --            |
+| disabled  | <code>boolean</code>              | false         |
 | skeleton  | <code>boolean</code>              | false         |
 
 ### Slots
@@ -232,6 +233,7 @@ import { AccordionItem } from "carbon-components-svelte";
 | :-------------- | :------------------- | :---------------- |
 | title           | <code>string</code>  | "title"           |
 | open            | <code>boolean</code> | false             |
+| disabled        | <code>boolean</code> | false             |
 | iconDescription | <code>string</code>  | "Expand/Collapse" |
 
 ### Slots
