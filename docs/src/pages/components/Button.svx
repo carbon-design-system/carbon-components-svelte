@@ -69,3 +69,5 @@ description: High-level description
 ### Skeleton
 
 <Button skeleton />
+<Button skeleton size="field" />
+<Button skeleton size="small" />

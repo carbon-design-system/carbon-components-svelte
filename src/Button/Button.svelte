@@ -123,7 +123,7 @@
 {#if skeleton}
   <ButtonSkeleton
     href="{href}"
-    small="{size === 'small'}"
+    size="{size}"
     {...$$restProps}
     style="{hasIconOnly && 'width: 3rem;'}"
     on:click
