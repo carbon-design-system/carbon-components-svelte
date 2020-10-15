@@ -388,6 +388,13 @@ export class CodeSnippet extends CarbonSvelteComponent {
     hideCopyButton?: boolean;
 
     /**
+     * Set to `true` to wrap the text
+     * Note that `type` must be "multi"
+     * @default false
+     */
+    wrapText?: boolean;
+
+    /**
      * Set to `true` to enable the light variant
      * @default false
      */

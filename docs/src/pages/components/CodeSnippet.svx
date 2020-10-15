@@ -19,6 +19,12 @@ export function add(a: number, b: number) {
 export function subtract(a: number, b: number) {
   return a - b;
 }`;
+
+let comment = `
+> \`carbon-components-svelte\` is a Svelte component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
+
+> A design system can facilitate frontend development and prototyping because it is encourages reuse, consistency, and extensibility.
+`
 </script>
 
 <InlineNotification svx-ignore lowContrast title="Note:" subtitle="By design, the copy button does not copy text to the clipboard. You will need to write your own logic." kind="info" hideCloseButton />
@@ -38,6 +44,12 @@ export function subtract(a: number, b: number) {
 ### Hidden copy button
 
 <CodeSnippet type="multi" {code} hideCopyButton />
+
+### Wrap text
+
+Note that `wrapText` only applies to the `"multi"` type.
+
+<CodeSnippet wrapText type="multi" code="{comment}" />
 
 ### Skeleton
 

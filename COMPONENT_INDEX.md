@@ -611,6 +611,7 @@ import { CodeSnippet } from "carbon-components-svelte";
 | code                  | <code>string</code>                                  | --            |
 | expanded              | <code>boolean</code>                                 | false         |
 | hideCopyButton        | <code>boolean</code>                                 | false         |
+| wrapText              | <code>boolean</code>                                 | false         |
 | light                 | <code>boolean</code>                                 | false         |
 | skeleton              | <code>boolean</code>                                 | false         |
 | copyButtonDescription | <code>string</code>                                  | --            |
