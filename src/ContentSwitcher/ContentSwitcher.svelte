@@ -11,6 +11,12 @@
    */
   export let light = false;
 
+  /**
+   * Specify the size of the content switcher
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
 
@@ -61,6 +67,7 @@
   class:bx--content-switcher="{true}"
   class:bx--content-switcher--light="{light}"
   {...$$restProps}
+  class="{size && `bx--content-switcher--${size}`} {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter

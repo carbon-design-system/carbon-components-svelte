@@ -31,6 +31,22 @@
   <Switch text="Switch 2" />
 </ContentSwitcher>
 
+### Extra-large size
+
+<ContentSwitcher size="xl">
+  <Switch text="Switch 1" />
+  <Switch text="Switch 2" />
+  <Switch text="Switch 3" />
+</ContentSwitcher>
+
+### Small size
+
+<ContentSwitcher size="sm">
+  <Switch text="Switch 1" />
+  <Switch text="Switch 2" />
+  <Switch text="Switch 3" />
+</ContentSwitcher>
+
 ### Disabled
 
 <ContentSwitcher>

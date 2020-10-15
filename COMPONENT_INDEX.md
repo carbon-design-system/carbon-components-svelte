@@ -857,10 +857,11 @@ import { ContentSwitcher } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name     | Type                 | Default value |
-| :------------ | :------------------- | :------------ |
-| selectedIndex | <code>number</code>  | 0             |
-| light         | <code>boolean</code> | false         |
+| Prop name     | Type                          | Default value |
+| :------------ | :---------------------------- | :------------ |
+| selectedIndex | <code>number</code>           | 0             |
+| light         | <code>boolean</code>          | false         |
+| size          | <code>"sm" &#124; "xl"</code> | --            |
 
 ### Slots
 
