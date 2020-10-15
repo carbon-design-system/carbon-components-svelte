@@ -261,7 +261,7 @@ export class ButtonSkeleton extends CarbonSvelteComponent {
     size?: "default" | "field" | "small";
 
     /**
-     *
+     * Set to `true` to use the small variant
      * @default false
      */
     small?: boolean;
@@ -717,6 +717,11 @@ export class ContentSwitcher extends CarbonSvelteComponent {
      * @default false
      */
     light?: boolean;
+
+    /**
+     * Specify the size of the content switcher
+     */
+    size?: "sm" | "xl";
   };
 
   $$slot_def: { default: {} };
