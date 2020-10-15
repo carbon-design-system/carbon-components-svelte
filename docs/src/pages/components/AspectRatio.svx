@@ -1,0 +1,56 @@
+<script>
+  import { AspectRatio, Tile } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+The `AspectRatio` component is useful for constraining fluid content within an aspect ratio. To demo this, resize your browser for the examples below.
+
+Supported aspect ratios: `"2x1"`, `"16x9"`, `"4x3"`, `"1x1"`, `"3x4"`, `"9x16"`, `"1x2"`
+
+### Default (2x1)
+
+<AspectRatio style="outline: 1px solid var(--cds-interactive-04)">
+  2x1
+</AspectRatio>
+
+### Ratio 16x9
+
+<AspectRatio ratio="16x9" style="outline: 1px solid var(--cds-interactive-04)">
+  16x9
+</AspectRatio>
+
+### Ratio 4x3
+
+<AspectRatio ratio="4x3" style="outline: 1px solid var(--cds-interactive-04)">
+  4x3
+</AspectRatio>
+
+### Ratio 1x1
+
+<AspectRatio ratio="1x1" style="outline: 1px solid var(--cds-interactive-04)">
+  1x1
+</AspectRatio>
+
+### Ratio 3x4
+
+<AspectRatio ratio="3x4" style="outline: 1px solid var(--cds-interactive-04)">
+  3x4
+</AspectRatio>
+
+### Ratio 9x16
+
+<AspectRatio ratio="9x16" style="outline: 1px solid var(--cds-interactive-04)">
+  9x16
+</AspectRatio>
+
+### Ratio 1x2
+
+<AspectRatio ratio="1x2" style="outline: 1px solid var(--cds-interactive-04)">
+  1x2
+</AspectRatio>
+
+### Tile (16x9)
+
+<AspectRatio ratio="16x9">
+  <Tile style="height: 100%">Content</Tile>
+</AspectRatio>

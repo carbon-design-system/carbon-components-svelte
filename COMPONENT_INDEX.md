@@ -1,11 +1,12 @@
 # Component Index
 
-> 147 components exported from carbon-components-svelte 0.16.0
+> 148 components exported from carbon-components-svelte 0.16.0
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
   - [Accordion](#accordion)
   - [AccordionItem](#accordionitem)
+- [AspectRatio](#aspectratio)
 - Breadcrumb
   - [BreadcrumbSkeleton](#breadcrumbskeleton)
   - [Breadcrumb](#breadcrumb)
@@ -282,6 +283,34 @@ No slots.
 - `on:mouseover`
 - `on:mouseenter`
 - `on:mouseleave`
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## AspectRatio
+
+### Import path
+
+```js
+import { AspectRatio } from "carbon-components-svelte";
+```
+
+### Props
+
+| Prop name | Type                                                                                               | Default value |
+| :-------- | :------------------------------------------------------------------------------------------------- | :------------ |
+| ratio     | <code>"2x1" &#124; "16x9" &#124; "4x3" &#124; "1x1" &#124; "3x4" &#124; "9x16" &#124; "1x2"</code> | "2x1"         |
+
+### Slots
+
+- `<slot>...</slot>`
+
+### Forwarded events
+
+No forwarded events.
 
 ### Dispatched events
 
