@@ -25,6 +25,13 @@
   export let hideCopyButton = false;
 
   /**
+   * Set to `true` to wrap the text
+   * Note that `type` must be "multi"
+   * @type {boolean} [wrapText=false]
+   */
+  export let wrapText = false;
+
+  /**
    * Set to `true` to enable the light variant
    * @type {boolean} [light=false]
    */
@@ -121,7 +128,8 @@
           {type === 'inline' && 'bx--btn--copy'}
           {expanded && 'bx--snippet--expand'}
           {light && 'bx--snippet--light'}
-          {hideCopyButton && 'bx--snippet--no-copy'}"
+          {hideCopyButton && 'bx--snippet--no-copy'}
+          {wrapText && 'bx--snippet--wraptext'}"
         {...$$restProps}
       >
         <code id="{id}">
@@ -138,7 +146,8 @@
           {type === 'inline' && 'bx--btn--copy'}
           {expanded && 'bx--snippet--expand'}
           {light && 'bx--snippet--light'}
-          {hideCopyButton && 'bx--snippet--no-copy'}"
+          {hideCopyButton && 'bx--snippet--no-copy'}
+          {wrapText && 'bx--snippet--wraptext'}"
         {...$$restProps}
         on:click
         on:mouseover
@@ -157,6 +166,7 @@
       class:bx--snippet--expand="{expanded}"
       class:bx--snippet--light="{light}"
       class:bx--snippet--no-copy="{hideCopyButton}"
+      class:bx--snippet--wraptext="{wrapText}"
       {...$$restProps}
       class="{type && `bx--snippet--${type}`} {$$restProps.class}"
       on:mouseover
