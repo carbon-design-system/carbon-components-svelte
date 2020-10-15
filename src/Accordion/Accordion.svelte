@@ -7,7 +7,7 @@
 
   /**
    * Specify the size of the accordion
-   * @type {"sm" | "lg"} [size]
+   * @type {"sm" | "xl"} [size]
    */
   export let size = undefined;
 
@@ -24,6 +24,7 @@
   <AccordionSkeleton
     {...$$restProps}
     align="{align}"
+    size="{size}"
     on:click
     on:mouseover
     on:mouseenter

@@ -198,6 +198,7 @@ import { Accordion } from "carbon-components-svelte";
 | Prop name | Type                              | Default value |
 | :-------- | :-------------------------------- | :------------ |
 | align     | <code>"start" &#124; "end"</code> | "end"         |
+| size      | <code>"sm" &#124; "xl"</code>     | --            |
 | skeleton  | <code>boolean</code>              | false         |
 
 ### Slots
@@ -262,10 +263,12 @@ import { AccordionSkeleton } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name | Type                 | Default value |
-| :-------- | :------------------- | :------------ |
-| count     | <code>number</code>  | 4             |
-| open      | <code>boolean</code> | true          |
+| Prop name | Type                              | Default value |
+| :-------- | :-------------------------------- | :------------ |
+| count     | <code>number</code>               | 4             |
+| align     | <code>"start" &#124; "end"</code> | "end"         |
+| size      | <code>"sm" &#124; "xl"</code>     | --            |
+| open      | <code>boolean</code>              | true          |
 
 ### Slots
 

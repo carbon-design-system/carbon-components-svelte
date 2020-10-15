@@ -12,6 +12,12 @@
   export let align = "end";
 
   /**
+   * Specify the size of the accordion
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
    * Set to `false` to close the first accordion item
    * @type {boolean} [open=true]
    */
@@ -25,7 +31,9 @@
   class:bx--accordion="{true}"
   class:bx--skeleton="{true}"
   {...$$restProps}
-  class="bx--accordion--{align} {$$restProps.class}"
+  class="bx--accordion--{align}
+    {size && `bx--accordion--${size}`}
+    {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter

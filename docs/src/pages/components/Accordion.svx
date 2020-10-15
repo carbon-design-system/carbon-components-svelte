@@ -63,9 +63,9 @@
   </AccordionItem>
 </Accordion>
 
-### Large size
+### Extra-large size
 
-<Accordion size="lg">
+<Accordion size="xl">
   <AccordionItem title="Title 1">
     Content 1
   </AccordionItem>
@@ -106,4 +106,12 @@
 ### Skeleton (closed)
 
 <Accordion skeleton open={false} />
+
+### Skeleton (extra-large)
+
+<Accordion skeleton size="xl" />
+
+### Skeleton (small)
+
+<Accordion skeleton size="sm" />
 
