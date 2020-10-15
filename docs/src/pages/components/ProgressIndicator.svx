@@ -56,4 +56,4 @@
 
 ### Skeleton
 
-<ProgressIndicatorSkeleton />
+<ProgressIndicatorSkeleton count={3} />
