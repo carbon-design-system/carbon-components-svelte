@@ -45,7 +45,7 @@
 
 {#if paragraph}
   <div {...$$restProps} on:click on:mouseover on:mouseenter on:mouseleave>
-    {#each rows as { width }, i (width)}
+    {#each rows as { width }}
       <p
         class:bx--skeleton__text="{true}"
         class:bx--skeleton__heading="{heading}"
