@@ -10,12 +10,21 @@
   } from "carbon-components-svelte";
   import Code16 from "carbon-icons-svelte/lib/Code16";
   import { page, metatags } from "@sveltech/routify";
+  import { onMount } from "svelte";
   import { theme } from "../store";
 
   export let component = $page.title;
   export let source = "";
 
   metatags.title = $page.title;
+
+  onMount(() => {
+    const currentTheme = window.location.search.split("?theme=")[1];
+
+    if (["white", "g10", "g90", "g100"].includes(currentTheme)) {
+      theme.set(currentTheme);
+    }
+  });
 
   // TODO: [refactor] read from package.json value
   $: sourceCode = `https://github.com/IBM/carbon-components-svelte/tree/master/src/${
