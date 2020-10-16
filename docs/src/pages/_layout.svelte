@@ -26,6 +26,7 @@
   $: components = $layout.children.filter(
     (child) => child.title === "components"
   )[0];
+  $: recipes = $layout.children.filter((child) => child.title === "recipes")[0];
 
   $beforeUrlChange(() => {
     if (isMobile) isSideNavOpen = false;
@@ -215,8 +216,20 @@
 
   <SideNav bind:isOpen="{isSideNavOpen}">
     <SideNavItems>
-      <SideNavMenu expanded text="Components">
+      <SideNavMenu
+        expanded="{$isActive($url('/components'))}"
+        text="Components"
+      >
         {#each components.children as child, i (child.path)}
+          <SideNavMenuItem
+            text="{child.title}"
+            href="{$url(child.path)}"
+            isSelected="{$isActive($url(child.path))}"
+          />
+        {/each}
+      </SideNavMenu>
+      <SideNavMenu expanded="{$isActive($url('/recipes'))}" text="Recipes">
+        {#each recipes.children as child, i (child.path)}
           <SideNavMenuItem
             text="{child.title}"
             href="{$url(child.path)}"
