@@ -7,6 +7,7 @@
     Button,
     Select,
     SelectItem,
+    InlineNotification,
   } from "carbon-components-svelte";
   import Code16 from "carbon-icons-svelte/lib/Code16";
   import { page, metatags } from "@sveltech/routify";
@@ -15,6 +16,8 @@
 
   export let component = $page.title;
   export let source = "";
+  export let unreleased = false;
+  export let unstable = false;
 
   metatags.title = $page.title;
 
@@ -118,6 +121,24 @@
             Source code
           </Button>
         </div>
+        {#if unreleased}
+          <InlineNotification
+            lowContrast
+            kind="info"
+            title="Unreleased"
+            subtitle="This component has not been released yet."
+            hideCloseButton
+          />
+        {/if}
+        {#if unstable}
+          <InlineNotification
+            lowContrast
+            kind="warning"
+            title="Unstable component"
+            subtitle="Expect the API of this component to change. Use at your own risk."
+            hideCloseButton
+          />
+        {/if}
       </Column>
     </Row>
 
