@@ -18,12 +18,12 @@ const shared = {
     $css--default-type: true;
     $css--plex: true;
     
-    @import "node_modules/carbon-components-10.21/scss/globals/scss/_css--reset.scss";
-    @import "node_modules/carbon-components-10.21/scss/globals/scss/_css--font-face.scss";
-    @import "node_modules/carbon-components-10.21/scss/globals/scss/_css--helpers.scss";
-    @import "node_modules/carbon-components-10.21/scss/globals/scss/_css--body.scss";
-    @import "node_modules/carbon-components-10.21/scss/globals/grid/_grid.scss";
-    @import "node_modules/carbon-components-10.21/scss/globals/scss/styles.scss";
+    @import "node_modules/carbon-components-10.22/scss/globals/scss/_css--reset.scss";
+    @import "node_modules/carbon-components-10.22/scss/globals/scss/_css--font-face.scss";
+    @import "node_modules/carbon-components-10.22/scss/globals/scss/_css--helpers.scss";
+    @import "node_modules/carbon-components-10.22/scss/globals/scss/_css--body.scss";
+    @import "node_modules/carbon-components-10.22/scss/globals/grid/_grid.scss";
+    @import "node_modules/carbon-components-10.22/scss/globals/scss/styles.scss";
   `,
   components: ``,
 };

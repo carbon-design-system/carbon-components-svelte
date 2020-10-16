@@ -25,7 +25,7 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@tsconfig/svelte": "^1.0.10",
     "autoprefixer": "^9.8.6",
-    "carbon-components-10.21": "npm:carbon-components@10.21",
+    "carbon-components-10.22": "npm:carbon-components@10.22",
     "comment-parser": "^0.7.5",
     "gh-pages": "^3.1.0",
     "husky": "^4.3.0",
