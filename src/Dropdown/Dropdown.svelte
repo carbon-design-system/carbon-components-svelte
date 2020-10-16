@@ -113,6 +113,7 @@
    * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
    */
 
+  import { createEventDispatcher } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
   import {
     ListBox,
@@ -120,6 +121,8 @@
     ListBoxMenuIcon,
     ListBoxMenuItem,
   } from "../ListBox";
+
+  const dispatch = createEventDispatcher();
 
   let selectedId = undefined;
   let highlightedIndex = -1;
@@ -136,6 +139,9 @@
     highlightedIndex = index;
   }
 
+  $: if (selectedIndex > -1) {
+    dispatch("select", { selectedId, selectedIndex, selectedItem });
+  }
   $: inline = type === "inline";
   $: selectedItem = items[selectedIndex];
   $: if (!open) {
@@ -143,7 +149,7 @@
   }
 </script>
 
-<svelte:body
+<svelte:window
   on:click="{({ target }) => {
     if (open && ref && !ref.contains(target)) {
       open = false;
