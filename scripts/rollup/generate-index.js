@@ -20,7 +20,7 @@ export function generateIndex(components, groups, pkg) {
   groups.forEach((group, component_group) => {
     if (group.length > 1) {
       code += `- ${component_group}\n`;
-      group.forEach((component) => {
+      group.sort().forEach((component) => {
         code += `  - ${toMdLink(component)}\n`;
       });
     } else {

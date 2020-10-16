@@ -3,24 +3,24 @@
 > 148 components exported from carbon-components-svelte 0.17.0
 
 - Accordion
-  - [AccordionSkeleton](#accordionskeleton)
   - [Accordion](#accordion)
   - [AccordionItem](#accordionitem)
+  - [AccordionSkeleton](#accordionskeleton)
 - [AspectRatio](#aspectratio)
 - Breadcrumb
-  - [BreadcrumbSkeleton](#breadcrumbskeleton)
   - [Breadcrumb](#breadcrumb)
   - [BreadcrumbItem](#breadcrumbitem)
+  - [BreadcrumbSkeleton](#breadcrumbskeleton)
 - Button
-  - [ButtonSkeleton](#buttonskeleton)
   - [Button](#button)
   - [ButtonSet](#buttonset)
+  - [ButtonSkeleton](#buttonskeleton)
 - Checkbox
-  - [CheckboxSkeleton](#checkboxskeleton)
   - [Checkbox](#checkbox)
+  - [CheckboxSkeleton](#checkboxskeleton)
 - CodeSnippet
-  - [CodeSnippetSkeleton](#codesnippetskeleton)
   - [CodeSnippet](#codesnippet)
+  - [CodeSnippetSkeleton](#codesnippetskeleton)
 - [ComboBox](#combobox)
 - ComposedModal
   - [ComposedModal](#composedmodal)
@@ -43,18 +43,18 @@
   - [TableRow](#tablerow)
 - [DataTableSkeleton](#datatableskeleton)
 - DatePicker
-  - [DatePickerSkeleton](#datepickerskeleton)
   - [DatePicker](#datepicker)
   - [DatePickerInput](#datepickerinput)
+  - [DatePickerSkeleton](#datepickerskeleton)
 - Dropdown
-  - [DropdownSkeleton](#dropdownskeleton)
   - [Dropdown](#dropdown)
+  - [DropdownSkeleton](#dropdownskeleton)
 - FileUploader
-  - [FileUploaderSkeleton](#fileuploaderskeleton)
   - [FileUploader](#fileuploader)
   - [FileUploaderButton](#fileuploaderbutton)
   - [FileUploaderDropContainer](#fileuploaderdropcontainer)
   - [FileUploaderItem](#fileuploaderitem)
+  - [FileUploaderSkeleton](#fileuploaderskeleton)
   - [Filename](#filename)
 - [FluidForm](#fluidform)
 - [Form](#form)
@@ -66,8 +66,8 @@
   - [Grid](#grid)
   - [Row](#row)
 - Icon
-  - [IconSkeleton](#iconskeleton)
   - [Icon](#icon)
+  - [IconSkeleton](#iconskeleton)
 - [InlineLoading](#inlineloading)
 - [Link](#link)
 - ListBox
@@ -89,60 +89,60 @@
   - [NotificationTextDetails](#notificationtextdetails)
   - [ToastNotification](#toastnotification)
 - NumberInput
-  - [NumberInputSkeleton](#numberinputskeleton)
   - [NumberInput](#numberinput)
+  - [NumberInputSkeleton](#numberinputskeleton)
 - [OrderedList](#orderedlist)
 - OverflowMenu
   - [OverflowMenu](#overflowmenu)
   - [OverflowMenuItem](#overflowmenuitem)
 - Pagination
-  - [PaginationSkeleton](#paginationskeleton)
   - [Pagination](#pagination)
+  - [PaginationSkeleton](#paginationskeleton)
 - [PaginationNav](#paginationnav)
 - ProgressIndicator
-  - [ProgressIndicatorSkeleton](#progressindicatorskeleton)
   - [ProgressIndicator](#progressindicator)
+  - [ProgressIndicatorSkeleton](#progressindicatorskeleton)
   - [ProgressStep](#progressstep)
 - RadioButton
-  - [RadioButtonSkeleton](#radiobuttonskeleton)
   - [RadioButton](#radiobutton)
+  - [RadioButtonSkeleton](#radiobuttonskeleton)
 - [RadioButtonGroup](#radiobuttongroup)
 - Search
-  - [SearchSkeleton](#searchskeleton)
   - [Search](#search)
+  - [SearchSkeleton](#searchskeleton)
 - Select
-  - [SelectSkeleton](#selectskeleton)
   - [Select](#select)
   - [SelectItem](#selectitem)
   - [SelectItemGroup](#selectitemgroup)
+  - [SelectSkeleton](#selectskeleton)
 - [SkeletonPlaceholder](#skeletonplaceholder)
 - [SkeletonText](#skeletontext)
 - Slider
-  - [SliderSkeleton](#sliderskeleton)
   - [Slider](#slider)
+  - [SliderSkeleton](#sliderskeleton)
 - StructuredList
-  - [StructuredListSkeleton](#structuredlistskeleton)
   - [StructuredList](#structuredlist)
   - [StructuredListBody](#structuredlistbody)
   - [StructuredListCell](#structuredlistcell)
   - [StructuredListHead](#structuredlisthead)
   - [StructuredListInput](#structuredlistinput)
   - [StructuredListRow](#structuredlistrow)
+  - [StructuredListSkeleton](#structuredlistskeleton)
 - Tabs
   - [Tab](#tab)
   - [TabContent](#tabcontent)
   - [Tabs](#tabs)
   - [TabsSkeleton](#tabsskeleton)
 - Tag
-  - [TagSkeleton](#tagskeleton)
   - [Tag](#tag)
+  - [TagSkeleton](#tagskeleton)
 - TextArea
-  - [TextAreaSkeleton](#textareaskeleton)
   - [TextArea](#textarea)
+  - [TextAreaSkeleton](#textareaskeleton)
 - TextInput
   - [PasswordInput](#passwordinput)
-  - [TextInputSkeleton](#textinputskeleton)
   - [TextInput](#textinput)
+  - [TextInputSkeleton](#textinputskeleton)
 - Tile
   - [ClickableTile](#clickabletile)
   - [ExpandableTile](#expandabletile)
@@ -154,11 +154,11 @@
   - [TimePicker](#timepicker)
   - [TimePickerSelect](#timepickerselect)
 - Toggle
-  - [ToggleSkeleton](#toggleskeleton)
   - [Toggle](#toggle)
+  - [ToggleSkeleton](#toggleskeleton)
 - ToggleSmall
-  - [ToggleSmallSkeleton](#togglesmallskeleton)
   - [ToggleSmall](#togglesmall)
+  - [ToggleSmallSkeleton](#togglesmallskeleton)
 - [Tooltip](#tooltip)
 - [TooltipDefinition](#tooltipdefinition)
 - [TooltipIcon](#tooltipicon)
@@ -168,6 +168,7 @@
   - [HeaderAction](#headeraction)
   - [HeaderActionLink](#headeractionlink)
   - [HeaderActionSearch](#headeractionsearch)
+  - [HeaderGlobalAction](#headerglobalaction)
   - [HeaderNav](#headernav)
   - [HeaderNavItem](#headernavitem)
   - [HeaderNavMenu](#headernavmenu)
@@ -175,7 +176,6 @@
   - [HeaderPanelLink](#headerpanellink)
   - [HeaderPanelLinks](#headerpanellinks)
   - [HeaderUtilities](#headerutilities)
-  - [HeaderGlobalAction](#headerglobalaction)
   - [SideNav](#sidenav)
   - [SideNavItems](#sidenavitems)
   - [SideNavLink](#sidenavlink)
