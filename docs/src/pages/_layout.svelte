@@ -174,7 +174,8 @@
     </div>
 
     <span slot="platform" class="platform-name">
-      Carbon Components Svelte <code>v{process.env.VERSION || ''}</code>
+      Carbon Components Svelte
+      <code>v{process.env.VERSION || ''}</code>
     </span>
 
     <HeaderUtilities>
