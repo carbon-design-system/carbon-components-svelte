@@ -4,6 +4,8 @@ const toMdLink = (text) => `[${text}](#${toLink(text)})`;
 
 const formatType = (type) => `<code>${type.replace(/\|/g, "&#124;")}</code>`;
 
+const escapeHtml = (text) => text.replace(/\</g, "&lt;").replace(/\>/g, "&gt;");
+
 const HEADER_PROPS =
   "| Prop name | Type | Default value | Description |\n| :- | :- | :- | :- |\n";
 
@@ -64,8 +66,8 @@ export function generateIndex(components, groups, pkg) {
         code += `| ${name}${
           prop.kind === "const" ? " (`constant`)" : ""
         } | ${formatType(prop.type)} | ${
-          prop.value || "--"
-        } | ${prop.description.replace(/\n/g, ". ")} |\n`;
+          prop.value ? "`" + prop.value + "`" : "--"
+        } | ${escapeHtml(prop.description).replace(/\n/g, ". ")}. |\n`;
       });
     } else {
       code += "No exported props.\n\n";
