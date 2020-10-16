@@ -159,6 +159,7 @@
   }
 </style>
 
+<!-- routify:options bundle=true -->
 <svelte:window bind:innerWidth />
 
 <Theme persist>
