@@ -112,6 +112,7 @@
 
   main.bx--content {
     background: none;
+    min-height: calc(100vh - 3rem - 3rem);
   }
 
   @media (max-width: 1056px) {
@@ -158,6 +159,7 @@
   }
 </style>
 
+<!-- routify:options bundle=true -->
 <svelte:window bind:innerWidth />
 
 <Theme persist>

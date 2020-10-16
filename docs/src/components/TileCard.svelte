@@ -5,8 +5,7 @@
   export let borderRight = false;
   export let borderBottom = false;
 
-  import { ClickableTile, Tile } from "carbon-components-svelte";
-  import AspectRatio from "./AspectRatio.svelte";
+  import { AspectRatio, ClickableTile, Tile } from "carbon-components-svelte";
   import LogoGithub32 from "carbon-icons-svelte/lib/LogoGithub32";
   import Launch20 from "carbon-icons-svelte/lib/Launch20";
 

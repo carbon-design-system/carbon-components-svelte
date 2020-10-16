@@ -107,11 +107,12 @@
   }
 
   .preview-viewer.framed {
-    min-height: 22rem;
+    min-height: 20rem;
   }
 
   .framed-header {
     display: flex;
+    align-items: center;
   }
 
   iframe {
@@ -121,23 +122,16 @@
     width: 100%;
     height: 100%;
   }
-
-  .loader {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 </style>
 
 <div class="preview">
   {#if framed}
     <div class="framed-header">
-      <div></div>
+      <div style="margin-left: var(--cds-spacing-03)">
+        {#if framed && !success}
+          <InlineLoading description="Loading..." />
+        {/if}
+      </div>
       <Button
         style="margin-left: auto;"
         kind="ghost"
@@ -151,11 +145,6 @@
     </div>
   {/if}
   <div class="preview-viewer" class:framed>
-    {#if framed && !success}
-      <div class="loader">
-        <InlineLoading />
-      </div>
-    {/if}
     {#if framed}
       <iframe
         on:load="{() => {
