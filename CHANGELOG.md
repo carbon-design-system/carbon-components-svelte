@@ -9,6 +9,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable/expandable `DataTable`
 
+## [0.17.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.17.0) - 2020-10-16
+
+**Features**
+
+- feat: set `rel="nooopener noreferrer"` if `target="_blank"` on link components ([PR #321](https://github.com/IBM/carbon-components-svelte/pull/321))
+- feat: support `Search` disabled state ([PR #330](https://github.com/IBM/carbon-components-svelte/pull/330))
+- feat(button-skeleton): add size prop consistent with Button ([PR #332](https://github.com/IBM/carbon-components-svelte/pull/332))
+- feat(progress-indicator-skeleton): add count prop ([PR #332](https://github.com/IBM/carbon-components-svelte/pull/332))
+- feat(accordion): add disabled prop for `Accordion` and `AccordionItem` ([PR #333](https://github.com/IBM/carbon-components-svelte/pull/333))
+- feat(accordion): add "sm", "xl" size variants to `Accordion` and `AccordionSkeleton` ([PR #333](https://github.com/IBM/carbon-components-svelte/pull/333))
+- feat(content-switcher): add "sm", "xl" size variants ([PR #334](https://github.com/IBM/carbon-components-svelte/pull/334))
+- feat(code-snippet): add wrapText prop for "multi" type CodeSnippet ([PR #335](https://github.com/IBM/carbon-components-svelte/pull/335))
+- feat(aspect-ratio): add AspectRatio component ([PR #336](https://github.com/IBM/carbon-components-svelte/pull/336))
+- feat(dropdown): dispatch select event, use window instead of body for click events ([PR #339](https://github.com/IBM/carbon-components-svelte/pull/339))
+
+**Fixes**
+
+- fix(combo-box): disabled combobox should not open ([PR #329](https://github.com/IBM/carbon-components-svelte/pull/329))
+- fix(inline-loading): add wrapper class "bx--inline-loading" ([PR #332](https://github.com/IBM/carbon-components-svelte/pull/332))
+- fix(breadcrumb): forward noTrailingSlash to skeleton ([PR #332](https://github.com/IBM/carbon-components-svelte/pull/332))
+- fix(skeleton-text): unkey paragraph rows due to high collision rate ([PR #332](https://github.com/IBM/carbon-components-svelte/pull/332))
+- fix(accordion-skeleton): forward align prop ([PR #333](https://github.com/IBM/carbon-components-svelte/pull/333))
+
+**Refactoring**
+
+- refactor(icon): remove old logic that inferred icon size from function name ([PR #332](https://github.com/IBM/carbon-components-svelte/pull/332))
+
+**Documentation**
+
+- AspectRatio (new component): demo all ratios
+- Breadcrumb: use `noTrailingSlash` in skeleton example
+- Button: demo skeleton size variants
+- CodeSnippet: add example "Wrap text"
+- ComboBox: add examples "Light variant," "Filterable"
+- ContentSwitcher: add examples "Extra-large size" and "Small size"
+- SkeletonText: add example "Paragraph with custom line count"
+- Pagination: add example "Hidden page size"
+- ProgressIndicator: demo custom step count for skeleton
+- Link: add example `Target _blank`
+- MultiSelect: add example "No alphabetical sorting"
+- Accordion: add examples for "Extra-large" and "Small" size variants
+- Accordion: add examples for "Disabled" and "Disabled (item)"
+- AccordionSkeleton: add examples "Skeleton (chevron aligned left)" and size variants
+
+**Housekeeping**
+
+- chore(deps-dev): bump carbon-components to ^v10.22 ([PR #337](https://github.com/IBM/carbon-components-svelte/pull/337))
+- retire Storybook by removing Storybook-related dependencies, set-up and stories ([PR #331](https://github.com/IBM/carbon-components-svelte/pull/331))
+- use `npm-run-all` to run `build:css` and `build:lib` in parallel ([PR #331](https://github.com/IBM/carbon-components-svelte/pull/331))
+
 ## [0.16.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.16.0) - 2020-10-12
 
 **Features**

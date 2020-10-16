@@ -1,6 +1,6 @@
 # Component Index
 
-> 148 components exported from carbon-components-svelte 0.16.0
+> 148 components exported from carbon-components-svelte 0.17.0
 
 - Accordion
   - [AccordionSkeleton](#accordionskeleton)
@@ -1213,7 +1213,7 @@ No forwarded events.
 
 ### Dispatched events
 
-No dispatched events.
+- `on:select`
 
 ---
 

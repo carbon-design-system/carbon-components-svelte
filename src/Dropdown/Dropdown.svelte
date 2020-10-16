@@ -154,7 +154,8 @@
     if (open && ref && !ref.contains(target)) {
       open = false;
     }
-  }}" />
+  }}"
+/>
 
 <div
   class:bx--dropdown__wrapper="{true}"
