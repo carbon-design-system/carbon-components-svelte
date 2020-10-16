@@ -230,13 +230,12 @@ import { AccordionItem } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                                    | Type                 | Default value     | Description                                                |
-| :--------------------------------------------------------------------------- | :------------------- | :---------------- | :--------------------------------------------------------- |
-| title                                                                        | <code>string</code>  | "title"           | Specify the title of the accordion item heading            |
-| Alternatively, use the named slot "title" (e.g. <div slot="title">...</div>) |
-| open                                                                         | <code>boolean</code> | false             | Set to `true` to open the first accordion item             |
-| disabled                                                                     | <code>boolean</code> | false             | Set to `true` to disable the accordion item                |
-| iconDescription                                                              | <code>string</code>  | "Expand/Collapse" | Specify the ARIA label for the accordion item chevron icon |
+| Prop name       | Type                 | Default value     | Description                                                                                                                   |
+| :-------------- | :------------------- | :---------------- | :---------------------------------------------------------------------------------------------------------------------------- |
+| title           | <code>string</code>  | "title"           | Specify the title of the accordion item heading. Alternatively, use the named slot "title" (e.g. <div slot="title">...</div>) |
+| open            | <code>boolean</code> | false             | Set to `true` to open the first accordion item                                                                                |
+| disabled        | <code>boolean</code> | false             | Set to `true` to disable the accordion item                                                                                   |
+| iconDescription | <code>string</code>  | "Expand/Collapse" | Specify the ARIA label for the accordion item chevron icon                                                                    |
 
 ### Slots
 
@@ -425,24 +424,22 @@ import { Button } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                                                                         | Type                                                                                       | Default value | Description                                           |
-| :---------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- | :------------ | :---------------------------------------------------- |
-| kind                                                                                                              | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger"</code> | "primary"     | Specify the kind of button                            |
-| size                                                                                                              | <code>"default" &#124; "field" &#124; "small"</code>                                       | "default"     | Specify the size of button                            |
-| hasIconOnly                                                                                                       | <code>boolean</code>                                                                       | false         | Set to `true` for the icon-only variant               |
-| icon                                                                                                              | <code>typeof import("carbon-icons-svelte/lib/Add16").default</code>                        | --            | Specify the icon from `carbon-icons-svelte` to render |
-| iconDescription                                                                                                   | <code>string</code>                                                                        | --            | Specify the ARIA label for the button icon            |
-| tooltipAlignment                                                                                                  | <code>"start" &#124; "center" &#124; "end"</code>                                          | --            | Set the alignment of the tooltip relative to the icon |
-| `hasIconOnly` must be set to `true`                                                                               |
-| tooltipPosition                                                                                                   | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                            | --            | Set the position of the tooltip relative to the icon  |
-| as                                                                                                                | <code>boolean</code>                                                                       | false         | Set to `true` to render a custom HTML element         |
-| Props are destructured as `props` in the default slot (e.g. <Button let:props><div {...props}>...</div></Button>) |
-| skeleton                                                                                                          | <code>boolean</code>                                                                       | false         | Set to `true` to display the skeleton state           |
-| disabled                                                                                                          | <code>boolean</code>                                                                       | false         | Set to `true` to disable the button                   |
-| href                                                                                                              | <code>string</code>                                                                        | --            | Set the `href` to use an anchor link                  |
-| tabindex                                                                                                          | <code>string</code>                                                                        | "0"           | Specify the tabindex                                  |
-| type                                                                                                              | <code>string</code>                                                                        | "button"      | Specify the `type` attribute for the button element   |
-| ref                                                                                                               | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code>                        | null          | Obtain a reference to the HTML element                |
+| Prop name        | Type                                                                                       | Default value | Description                                                                                                                                                      |
+| :--------------- | :----------------------------------------------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| kind             | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger"</code> | "primary"     | Specify the kind of button                                                                                                                                       |
+| size             | <code>"default" &#124; "field" &#124; "small"</code>                                       | "default"     | Specify the size of button                                                                                                                                       |
+| hasIconOnly      | <code>boolean</code>                                                                       | false         | Set to `true` for the icon-only variant                                                                                                                          |
+| icon             | <code>typeof import("carbon-icons-svelte/lib/Add16").default</code>                        | --            | Specify the icon from `carbon-icons-svelte` to render                                                                                                            |
+| iconDescription  | <code>string</code>                                                                        | --            | Specify the ARIA label for the button icon                                                                                                                       |
+| tooltipAlignment | <code>"start" &#124; "center" &#124; "end"</code>                                          | --            | Set the alignment of the tooltip relative to the icon. `hasIconOnly` must be set to `true`                                                                       |
+| tooltipPosition  | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                            | --            | Set the position of the tooltip relative to the icon                                                                                                             |
+| as               | <code>boolean</code>                                                                       | false         | Set to `true` to render a custom HTML element. Props are destructured as `props` in the default slot (e.g. <Button let:props><div {...props}>...</div></Button>) |
+| skeleton         | <code>boolean</code>                                                                       | false         | Set to `true` to display the skeleton state                                                                                                                      |
+| disabled         | <code>boolean</code>                                                                       | false         | Set to `true` to disable the button                                                                                                                              |
+| href             | <code>string</code>                                                                        | --            | Set the `href` to use an anchor link                                                                                                                             |
+| tabindex         | <code>string</code>                                                                        | "0"           | Specify the tabindex                                                                                                                                             |
+| type             | <code>string</code>                                                                        | "button"      | Specify the `type` attribute for the button element                                                                                                              |
+| ref              | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code>                        | null          | Obtain a reference to the HTML element                                                                                                                           |
 
 ### Slots
 
@@ -637,28 +634,24 @@ import { CodeSnippet } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                                      | Type                                                 | Default value | Description                                                      |
-| :----------------------------------------------------------------------------- | :--------------------------------------------------- | :------------ | :--------------------------------------------------------------- |
-| type                                                                           | <code>"single" &#124; "inline" &#124; "multi"</code> | "single"      | Set the type of code snippet                                     |
-| code                                                                           | <code>string</code>                                  | --            | Set the code snippet text                                        |
-| Alternatively, use the default slot (e.g. <CodeSnippet>{`code`}</CodeSnippet>) |
-| expanded                                                                       | <code>boolean</code>                                 | false         | Set to `true` to expand a multi-line code snippet (type="multi") |
-| hideCopyButton                                                                 | <code>boolean</code>                                 | false         | Set to `true` to hide the copy button                            |
-| wrapText                                                                       | <code>boolean</code>                                 | false         | Set to `true` to wrap the text                                   |
-| Note that `type` must be "multi"                                               |
-| light                                                                          | <code>boolean</code>                                 | false         | Set to `true` to enable the light variant                        |
-| skeleton                                                                       | <code>boolean</code>                                 | false         | Set to `true` to display the skeleton state                      |
-| copyButtonDescription                                                          | <code>string</code>                                  | --            | Specify the ARIA label for the copy button icon                  |
-| copyLabel                                                                      | <code>string</code>                                  | --            | Specify the ARIA label of the copy button                        |
-| feedback                                                                       | <code>string</code>                                  | "Copied!"     | Specify the feedback text displayed when clicking the snippet    |
-| feedbackTimeout                                                                | <code>number</code>                                  | 2000          | Set the timeout duration (ms) to display feedback text           |
-| showLessText                                                                   | <code>string</code>                                  | "Show less"   | Specify the show less text                                       |
-| `type` must be "multi"                                                         |
-| showMoreText                                                                   | <code>string</code>                                  | "Show more"   | Specify the show more text                                       |
-| `type` must be "multi"                                                         |
-| showMoreLess                                                                   | <code>boolean</code>                                 | false         | Set to `true` to enable the show more/less button                |
-| id                                                                             | <code>string</code>                                  | --            | Set an id for the code element                                   |
-| ref                                                                            | <code>null &#124; HTMLPreElement</code>              | null          | Obtain a reference to the pre HTML element                       |
+| Prop name             | Type                                                 | Default value | Description                                                                                               |
+| :-------------------- | :--------------------------------------------------- | :------------ | :-------------------------------------------------------------------------------------------------------- |
+| type                  | <code>"single" &#124; "inline" &#124; "multi"</code> | "single"      | Set the type of code snippet                                                                              |
+| code                  | <code>string</code>                                  | --            | Set the code snippet text. Alternatively, use the default slot (e.g. <CodeSnippet>{`code`}</CodeSnippet>) |
+| expanded              | <code>boolean</code>                                 | false         | Set to `true` to expand a multi-line code snippet (type="multi")                                          |
+| hideCopyButton        | <code>boolean</code>                                 | false         | Set to `true` to hide the copy button                                                                     |
+| wrapText              | <code>boolean</code>                                 | false         | Set to `true` to wrap the text. Note that `type` must be "multi"                                          |
+| light                 | <code>boolean</code>                                 | false         | Set to `true` to enable the light variant                                                                 |
+| skeleton              | <code>boolean</code>                                 | false         | Set to `true` to display the skeleton state                                                               |
+| copyButtonDescription | <code>string</code>                                  | --            | Specify the ARIA label for the copy button icon                                                           |
+| copyLabel             | <code>string</code>                                  | --            | Specify the ARIA label of the copy button                                                                 |
+| feedback              | <code>string</code>                                  | "Copied!"     | Specify the feedback text displayed when clicking the snippet                                             |
+| feedbackTimeout       | <code>number</code>                                  | 2000          | Set the timeout duration (ms) to display feedback text                                                    |
+| showLessText          | <code>string</code>                                  | "Show less"   | Specify the show less text. `type` must be "multi"                                                        |
+| showMoreText          | <code>string</code>                                  | "Show more"   | Specify the show more text. `type` must be "multi"                                                        |
+| showMoreLess          | <code>boolean</code>                                 | false         | Set to `true` to enable the show more/less button                                                         |
+| id                    | <code>string</code>                                  | --            | Set an id for the code element                                                                            |
+| ref                   | <code>null &#124; HTMLPreElement</code>              | null          | Obtain a reference to the pre HTML element                                                                |
 
 ### Slots
 
@@ -732,19 +725,18 @@ interface ColumnSizeDescriptor {
 type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 ```
 
-| Prop name                                                                                                                 | Type                                                                                               | Default value | Description                                   |
-| :------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------- | :------------ | :-------------------------------------------- |
-| as                                                                                                                        | <code>boolean</code>                                                                               | false         | Set to `true` to render a custom HTML element |
-| Props are destructured as `props` in the default slot (e.g. <Column let:props><article {...props}>...</article></Column>) |
-| noGutter                                                                                                                  | <code>boolean</code>                                                                               | false         | Set to `true` to remove the gutter            |
-| noGutterLeft                                                                                                              | <code>boolean</code>                                                                               | false         | Set to `true` to remove the left gutter       |
-| noGutterRight                                                                                                             | <code>boolean</code>                                                                               | false         | Set to `true` to remove the right gutter      |
-| aspectRatio                                                                                                               | <code>"2x1" &#124; "16x9" &#124; "9x16" &#124; "1x2" &#124; "4x3" &#124; "3x4" &#124; "1x1"</code> | --            | Specify the aspect ratio of the column        |
-| sm                                                                                                                        | <code>ColumnBreakpoint</code>                                                                      | --            | Set the small breakpoint                      |
-| md                                                                                                                        | <code>ColumnBreakpoint</code>                                                                      | --            | Set the medium breakpoint                     |
-| lg                                                                                                                        | <code>ColumnBreakpoint</code>                                                                      | --            | Set the large breakpoint                      |
-| xlg                                                                                                                       | <code>ColumnBreakpoint</code>                                                                      | --            | Set the extra large breakpoint                |
-| max                                                                                                                       | <code>ColumnBreakpoint</code>                                                                      | --            | Set the maximum breakpoint                    |
+| Prop name     | Type                                                                                               | Default value | Description                                                                                                                                                              |
+| :------------ | :------------------------------------------------------------------------------------------------- | :------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| as            | <code>boolean</code>                                                                               | false         | Set to `true` to render a custom HTML element. Props are destructured as `props` in the default slot (e.g. <Column let:props><article {...props}>...</article></Column>) |
+| noGutter      | <code>boolean</code>                                                                               | false         | Set to `true` to remove the gutter                                                                                                                                       |
+| noGutterLeft  | <code>boolean</code>                                                                               | false         | Set to `true` to remove the left gutter                                                                                                                                  |
+| noGutterRight | <code>boolean</code>                                                                               | false         | Set to `true` to remove the right gutter                                                                                                                                 |
+| aspectRatio   | <code>"2x1" &#124; "16x9" &#124; "9x16" &#124; "1x2" &#124; "4x3" &#124; "3x4" &#124; "1x1"</code> | --            | Specify the aspect ratio of the column                                                                                                                                   |
+| sm            | <code>ColumnBreakpoint</code>                                                                      | --            | Set the small breakpoint                                                                                                                                                 |
+| md            | <code>ColumnBreakpoint</code>                                                                      | --            | Set the medium breakpoint                                                                                                                                                |
+| lg            | <code>ColumnBreakpoint</code>                                                                      | --            | Set the large breakpoint                                                                                                                                                 |
+| xlg           | <code>ColumnBreakpoint</code>                                                                      | --            | Set the extra large breakpoint                                                                                                                                           |
+| max           | <code>ColumnBreakpoint</code>                                                                      | --            | Set the maximum breakpoint                                                                                                                                               |
 
 ### Slots
 
@@ -988,17 +980,16 @@ import { DataTable } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                          | Type                                                | Default value | Description                                   |
-| :------------------------------------------------- | :-------------------------------------------------- | :------------ | :-------------------------------------------- |
-| headers                                            | <code>{key: string; value: string;}[]</code>        | --            | Specify the data table headers                |
-| rows                                               | <code>Object[]</code>                               | --            | Specify the rows the data table should render |
-| keys defined in `headers` are used for the row ids |
-| size                                               | <code>"compact" &#124; "short" &#124; "tall"</code> | --            | Set the size of the data table                |
-| title                                              | <code>string</code>                                 | ""            | Specify the title of the data table           |
-| description                                        | <code>string</code>                                 | ""            | Specify the description of the data table     |
-| zebra                                              | <code>boolean</code>                                | false         | Set to `true` to use zebra styles             |
-| sortable                                           | <code>boolean</code>                                | false         | Set to `true` for the sortable variant        |
-| stickyHeader                                       | <code>boolean</code>                                | false         | Set to `true` to enable a sticky header       |
+| Prop name    | Type                                                | Default value | Description                                                                                       |
+| :----------- | :-------------------------------------------------- | :------------ | :------------------------------------------------------------------------------------------------ |
+| headers      | <code>{key: string; value: string;}[]</code>        | --            | Specify the data table headers                                                                    |
+| rows         | <code>Object[]</code>                               | --            | Specify the rows the data table should render. keys defined in `headers` are used for the row ids |
+| size         | <code>"compact" &#124; "short" &#124; "tall"</code> | --            | Set the size of the data table                                                                    |
+| title        | <code>string</code>                                 | ""            | Specify the title of the data table                                                               |
+| description  | <code>string</code>                                 | ""            | Specify the description of the data table                                                         |
+| zebra        | <code>boolean</code>                                | false         | Set to `true` to use zebra styles                                                                 |
+| sortable     | <code>boolean</code>                                | false         | Set to `true` for the sortable variant                                                            |
+| stickyHeader | <code>boolean</code>                                | false         | Set to `true` to enable a sticky header                                                           |
 
 ### Slots
 
@@ -1027,16 +1018,15 @@ import { DataTableSkeleton } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                           | Type                                                | Default value | Description                                               |
-| :-------------------------------------------------- | :-------------------------------------------------- | :------------ | :-------------------------------------------------------- |
-| columns                                             | <code>number</code>                                 | 5             | Specify the number of columns                             |
-| rows                                                | <code>number</code>                                 | 5             | Specify the number of rows                                |
-| size                                                | <code>"compact" &#124; "short" &#124; "tall"</code> | --            | Set the size of the data table                            |
-| zebra                                               | <code>boolean</code>                                | false         | Set to `true` to apply zebra styles to the datatable rows |
-| showHeader                                          | <code>boolean</code>                                | true          | Set to `false` to hide the header                         |
-| headers                                             | <code>string[]</code>                               | --            | Set the column headers                                    |
-| If `headers` has one more items, `count` is ignored |
-| showToolbar                                         | <code>boolean</code>                                | true          | Set to `false` to hide the toolbar                        |
+| Prop name   | Type                                                | Default value | Description                                                                 |
+| :---------- | :-------------------------------------------------- | :------------ | :-------------------------------------------------------------------------- |
+| columns     | <code>number</code>                                 | 5             | Specify the number of columns                                               |
+| rows        | <code>number</code>                                 | 5             | Specify the number of rows                                                  |
+| size        | <code>"compact" &#124; "short" &#124; "tall"</code> | --            | Set the size of the data table                                              |
+| zebra       | <code>boolean</code>                                | false         | Set to `true` to apply zebra styles to the datatable rows                   |
+| showHeader  | <code>boolean</code>                                | true          | Set to `false` to hide the header                                           |
+| headers     | <code>string[]</code>                               | --            | Set the column headers. If `headers` has one more items, `count` is ignored |
+| showToolbar | <code>boolean</code>                                | true          | Set to `false` to hide the toolbar                                          |
 
 ### Slots
 
@@ -1399,19 +1389,18 @@ import { FileUploaderDropContainer } from "carbon-components-svelte";
 type Files = string[];
 ```
 
-| Prop name                                    | Type                                      | Default value | Description                                                |
-| :------------------------------------------- | :---------------------------------------- | :------------ | :--------------------------------------------------------- |
-| accept                                       | <code>string[]</code>                     | --            | Specify the accepted file types                            |
-| multiple                                     | <code>boolean</code>                      | false         | Set to `true` to allow multiple files                      |
-| validateFiles                                | <code>(files: Files) => Files</code>      | --            | Override the default behavior of validating uploaded files |
-| The default behavior does not validate files |
-| labelText                                    | <code>string</code>                       | "Add file"    | Specify the label text                                     |
-| role                                         | <code>string</code>                       | "button"      | Specify the `role` attribute of the drop container         |
-| disabled                                     | <code>boolean</code>                      | false         | Set to `true` to disable the input                         |
-| tabindex                                     | <code>string</code>                       | "0"           | Specify `tabindex` attribute                               |
-| id                                           | <code>string</code>                       | --            | Set an id for the input element                            |
-| name                                         | <code>string</code>                       | ""            | Specify a name attribute for the input                     |
-| ref                                          | <code>null &#124; HTMLInputElement</code> | null          | Obtain a reference to the input HTML element               |
+| Prop name     | Type                                      | Default value | Description                                                                                              |
+| :------------ | :---------------------------------------- | :------------ | :------------------------------------------------------------------------------------------------------- |
+| accept        | <code>string[]</code>                     | --            | Specify the accepted file types                                                                          |
+| multiple      | <code>boolean</code>                      | false         | Set to `true` to allow multiple files                                                                    |
+| validateFiles | <code>(files: Files) => Files</code>      | --            | Override the default behavior of validating uploaded files. The default behavior does not validate files |
+| labelText     | <code>string</code>                       | "Add file"    | Specify the label text                                                                                   |
+| role          | <code>string</code>                       | "button"      | Specify the `role` attribute of the drop container                                                       |
+| disabled      | <code>boolean</code>                      | false         | Set to `true` to disable the input                                                                       |
+| tabindex      | <code>string</code>                       | "0"           | Specify `tabindex` attribute                                                                             |
+| id            | <code>string</code>                       | --            | Set an id for the input element                                                                          |
+| name          | <code>string</code>                       | ""            | Specify a name attribute for the input                                                                   |
+| ref           | <code>null &#124; HTMLInputElement</code> | null          | Obtain a reference to the input HTML element                                                             |
 
 ### Slots
 
@@ -1688,16 +1677,15 @@ import { Grid } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                                                                           | Type                 | Default value | Description                                   |
-| :------------------------------------------------------------------------------------------------------------------ | :------------------- | :------------ | :-------------------------------------------- |
-| as                                                                                                                  | <code>boolean</code> | false         | Set to `true` to render a custom HTML element |
-| Props are destructured as `props` in the default slot (e.g. <Grid let:props><header {...props}>...</header></Grid>) |
-| condensed                                                                                                           | <code>boolean</code> | false         | Set to `true` to use the condensed variant    |
-| narrow                                                                                                              | <code>boolean</code> | false         | Set to `true` to use the narrow variant       |
-| fullWidth                                                                                                           | <code>boolean</code> | false         | Set to `true` to use the fullWidth variant    |
-| noGutter                                                                                                            | <code>boolean</code> | false         | Set to `true` to remove the gutter            |
-| noGutterLeft                                                                                                        | <code>boolean</code> | false         | Set to `true` to remove the left gutter       |
-| noGutterRight                                                                                                       | <code>boolean</code> | false         | Set to `true` to remove the right gutter      |
+| Prop name     | Type                 | Default value | Description                                                                                                                                                        |
+| :------------ | :------------------- | :------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| as            | <code>boolean</code> | false         | Set to `true` to render a custom HTML element. Props are destructured as `props` in the default slot (e.g. <Grid let:props><header {...props}>...</header></Grid>) |
+| condensed     | <code>boolean</code> | false         | Set to `true` to use the condensed variant                                                                                                                         |
+| narrow        | <code>boolean</code> | false         | Set to `true` to use the narrow variant                                                                                                                            |
+| fullWidth     | <code>boolean</code> | false         | Set to `true` to use the fullWidth variant                                                                                                                         |
+| noGutter      | <code>boolean</code> | false         | Set to `true` to remove the gutter                                                                                                                                 |
+| noGutterLeft  | <code>boolean</code> | false         | Set to `true` to remove the left gutter                                                                                                                            |
+| noGutterRight | <code>boolean</code> | false         | Set to `true` to remove the right gutter                                                                                                                           |
 
 ### Slots
 
@@ -1723,16 +1711,15 @@ import { Header } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                                            | Type                                       | Default value | Description                                    |
-| :----------------------------------------------------------------------------------- | :----------------------------------------- | :------------ | :--------------------------------------------- |
-| expandedByDefault                                                                    | <code>boolean</code>                       | true          | Set to `false` to hide the side nav by default |
-| isSideNavOpen                                                                        | <code>boolean</code>                       | false         | Set to `true` to open the side nav             |
-| uiShellAriaLabel                                                                     | <code>string</code>                        | --            | Specify the ARIA label for the header          |
-| href                                                                                 | <code>string</code>                        | --            | Specify the `href` attribute                   |
-| company                                                                              | <code>string</code>                        | --            | Specify the company name                       |
-| platformName                                                                         | <code>string</code>                        | --            | Specify the platform name                      |
-| Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>) |
-| ref                                                                                  | <code>null &#124; HTMLAnchorElement</code> | null          | Obtain a reference to the HTML anchor element  |
+| Prop name         | Type                                       | Default value | Description                                                                                                     |
+| :---------------- | :----------------------------------------- | :------------ | :-------------------------------------------------------------------------------------------------------------- |
+| expandedByDefault | <code>boolean</code>                       | true          | Set to `false` to hide the side nav by default                                                                  |
+| isSideNavOpen     | <code>boolean</code>                       | false         | Set to `true` to open the side nav                                                                              |
+| uiShellAriaLabel  | <code>string</code>                        | --            | Specify the ARIA label for the header                                                                           |
+| href              | <code>string</code>                        | --            | Specify the `href` attribute                                                                                    |
+| company           | <code>string</code>                        | --            | Specify the company name                                                                                        |
+| platformName      | <code>string</code>                        | --            | Specify the platform name. Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>) |
+| ref               | <code>null &#124; HTMLAnchorElement</code> | null          | Obtain a reference to the HTML anchor element                                                                   |
 
 ### Slots
 
@@ -1758,13 +1745,12 @@ import { HeaderAction } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                                  | Type                                                                                                | Default value | Description                                   |
-| :------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- | :------------ | :-------------------------------------------- |
-| isOpen                                                                     | <code>boolean</code>                                                                                | false         | Set to `true` to open the panel               |
-| icon                                                                       | <code>{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }</code> | --            | Specify the icon props                        |
-| text                                                                       | <code>string</code>                                                                                 | --            | Specify the text                              |
-| Alternatively, use the named slot "text" (e.g. <div slot="text">...</div>) |
-| ref                                                                        | <code>null &#124; HTMLButtonElement</code>                                                          | null          | Obtain a reference to the button HTML element |
+| Prop name | Type                                                                                                | Default value | Description                                                                                  |
+| :-------- | :-------------------------------------------------------------------------------------------------- | :------------ | :------------------------------------------------------------------------------------------- |
+| isOpen    | <code>boolean</code>                                                                                | false         | Set to `true` to open the panel                                                              |
+| icon      | <code>{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }</code> | --            | Specify the icon props                                                                       |
+| text      | <code>string</code>                                                                                 | --            | Specify the text. Alternatively, use the named slot "text" (e.g. <div slot="text">...</div>) |
+| ref       | <code>null &#124; HTMLButtonElement</code>                                                          | null          | Obtain a reference to the button HTML element                                                |
 
 ### Slots
 
@@ -2092,11 +2078,10 @@ import { Icon } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                       | Type                                                                | Default value | Description                                           |
-| :---------------------------------------------- | :------------------------------------------------------------------ | :------------ | :---------------------------------------------------- |
-| render                                          | <code>typeof import("carbon-icons-svelte/lib/Add16").default</code> | --            | Specify the icon from `carbon-icons-svelte` to render |
-| Icon size must be 16px (e.g. `Add16`, `Task16`) |
-| skeleton                                        | <code>boolean</code>                                                | false         | Set to `true` to display the skeleton state           |
+| Prop name | Type                                                                | Default value | Description                                                                                            |
+| :-------- | :------------------------------------------------------------------ | :------------ | :----------------------------------------------------------------------------------------------------- |
+| render    | <code>typeof import("carbon-icons-svelte/lib/Add16").default</code> | --            | Specify the icon from `carbon-icons-svelte` to render. Icon size must be 16px (e.g. `Add16`, `Task16`) |
+| skeleton  | <code>boolean</code>                                                | false         | Set to `true` to display the skeleton state                                                            |
 
 ### Slots
 
@@ -2701,34 +2686,32 @@ interface MultiSelectItem {
 }
 ```
 
-| Prop name                                           | Type                                                                     | Default value      | Description                                                      |
-| :-------------------------------------------------- | :----------------------------------------------------------------------- | :----------------- | :--------------------------------------------------------------- |
-| items                                               | <code>MultiSelectItem[]</code>                                           | --                 | Set the multiselect items                                        |
-| itemToString                                        | <code>(item: MultiSelectItem) => string</code>                           | --                 | Override the display of a multiselect item                       |
-| selectedIds                                         | <code>MultiSelectItemId[]</code>                                         | --                 | Set the selected ids                                             |
-| value                                               | <code>string</code>                                                      | ""                 | Specify the multiselect value                                    |
-| size                                                | <code>"sm" &#124; "lg" &#124; "xl"</code>                                | --                 | Set the size of the combobox                                     |
-| type                                                | <code>"default" &#124; "inline"</code>                                   | "default"          | Specify the type of multiselect                                  |
-| selectionFeedback                                   | <code>"top" &#124; "fixed" &#124; "top-after-reopen"</code>              | "top-after-reopen" | Specify the selection feedback after selecting items             |
-| disabled                                            | <code>boolean</code>                                                     | false              | Set to `true` to disable the dropdown                            |
-| filterable                                          | <code>boolean</code>                                                     | false              | Set to `true` to filter items                                    |
-| filterItem                                          | <code>(item: MultiSelectItem, value: string) => string</code>            | --                 | Override the filtering logic                                     |
-| The default filtering is an exact string comparison |
-| open                                                | <code>boolean</code>                                                     | false              | Set to `true` to open the dropdown                               |
-| light                                               | <code>boolean</code>                                                     | false              | Set to `true` to enable the light variant                        |
-| locale                                              | <code>string</code>                                                      | "en"               | Specify the locale                                               |
-| placeholder                                         | <code>string</code>                                                      | ""                 | Specify the placeholder text                                     |
-| sortItem                                            | <code>(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem</code> | --                 | Override the sorting logic                                       |
-| The default sorting compare the item text value     |
-| translateWithId                                     | <code>(id: any) => string</code>                                         | --                 | Override the default translation ids                             |
-| titleText                                           | <code>string</code>                                                      | ""                 | Specify the title text                                           |
-| useTitleInItem                                      | <code>boolean</code>                                                     | false              | Set to `true` to pass the item to `itemToString` in the checkbox |
-| invalid                                             | <code>boolean</code>                                                     | false              | Set to `true` to indicate an invalid state                       |
-| invalidText                                         | <code>string</code>                                                      | ""                 | Specify the invalid state text                                   |
-| helperText                                          | <code>string</code>                                                      | ""                 | Specify the helper text                                          |
-| label                                               | <code>string</code>                                                      | ""                 | Specify the list box label                                       |
-| id                                                  | <code>string</code>                                                      | --                 | Set an id for the list box component                             |
-| name                                                | <code>string</code>                                                      | --                 | Specify a name attribute for the select                          |
+| Prop name         | Type                                                                     | Default value      | Description                                                                       |
+| :---------------- | :----------------------------------------------------------------------- | :----------------- | :-------------------------------------------------------------------------------- |
+| items             | <code>MultiSelectItem[]</code>                                           | --                 | Set the multiselect items                                                         |
+| itemToString      | <code>(item: MultiSelectItem) => string</code>                           | --                 | Override the display of a multiselect item                                        |
+| selectedIds       | <code>MultiSelectItemId[]</code>                                         | --                 | Set the selected ids                                                              |
+| value             | <code>string</code>                                                      | ""                 | Specify the multiselect value                                                     |
+| size              | <code>"sm" &#124; "lg" &#124; "xl"</code>                                | --                 | Set the size of the combobox                                                      |
+| type              | <code>"default" &#124; "inline"</code>                                   | "default"          | Specify the type of multiselect                                                   |
+| selectionFeedback | <code>"top" &#124; "fixed" &#124; "top-after-reopen"</code>              | "top-after-reopen" | Specify the selection feedback after selecting items                              |
+| disabled          | <code>boolean</code>                                                     | false              | Set to `true` to disable the dropdown                                             |
+| filterable        | <code>boolean</code>                                                     | false              | Set to `true` to filter items                                                     |
+| filterItem        | <code>(item: MultiSelectItem, value: string) => string</code>            | --                 | Override the filtering logic. The default filtering is an exact string comparison |
+| open              | <code>boolean</code>                                                     | false              | Set to `true` to open the dropdown                                                |
+| light             | <code>boolean</code>                                                     | false              | Set to `true` to enable the light variant                                         |
+| locale            | <code>string</code>                                                      | "en"               | Specify the locale                                                                |
+| placeholder       | <code>string</code>                                                      | ""                 | Specify the placeholder text                                                      |
+| sortItem          | <code>(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem</code> | --                 | Override the sorting logic. The default sorting compare the item text value       |
+| translateWithId   | <code>(id: any) => string</code>                                         | --                 | Override the default translation ids                                              |
+| titleText         | <code>string</code>                                                      | ""                 | Specify the title text                                                            |
+| useTitleInItem    | <code>boolean</code>                                                     | false              | Set to `true` to pass the item to `itemToString` in the checkbox                  |
+| invalid           | <code>boolean</code>                                                     | false              | Set to `true` to indicate an invalid state                                        |
+| invalidText       | <code>string</code>                                                      | ""                 | Specify the invalid state text                                                    |
+| helperText        | <code>string</code>                                                      | ""                 | Specify the helper text                                                           |
+| label             | <code>string</code>                                                      | ""                 | Specify the list box label                                                        |
+| id                | <code>string</code>                                                      | --                 | Set an id for the list box component                                              |
+| name              | <code>string</code>                                                      | --                 | Specify a name attribute for the select                                           |
 
 ### Slots
 
@@ -3040,18 +3023,17 @@ import { OverflowMenuItem } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                | Type                                                                | Default value  | Description                                                       |
-| :------------------------------------------------------- | :------------------------------------------------------------------ | :------------- | :---------------------------------------------------------------- |
-| text                                                     | <code>string</code>                                                 | "Provide text" | Specify the item text                                             |
-| Alternatively, use the default slot for a custom element |
-| href                                                     | <code>string</code>                                                 | ""             | Specify the `href` attribute if the item is a link                |
-| primaryFocus                                             | <code>boolean</code>                                                | false          | Set to `true` if the item should be focused when opening the menu |
-| disabled                                                 | <code>boolean</code>                                                | false          | Set to `true` to disable the item                                 |
-| hasDivider                                               | <code>boolean</code>                                                | false          | Set to `true` to include a divider                                |
-| danger                                                   | <code>boolean</code>                                                | false          | Set to `true` to use the danger variant                           |
-| requireTitle                                             | <code>boolean</code>                                                | true           | Set to `false` to omit the button `title` attribute               |
-| id                                                       | <code>string</code>                                                 | --             | Set an id for the top-level element                               |
-| ref                                                      | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code> | null           | Obtain a reference to the HTML element                            |
+| Prop name    | Type                                                                | Default value  | Description                                                                     |
+| :----------- | :------------------------------------------------------------------ | :------------- | :------------------------------------------------------------------------------ |
+| text         | <code>string</code>                                                 | "Provide text" | Specify the item text. Alternatively, use the default slot for a custom element |
+| href         | <code>string</code>                                                 | ""             | Specify the `href` attribute if the item is a link                              |
+| primaryFocus | <code>boolean</code>                                                | false          | Set to `true` if the item should be focused when opening the menu               |
+| disabled     | <code>boolean</code>                                                | false          | Set to `true` to disable the item                                               |
+| hasDivider   | <code>boolean</code>                                                | false          | Set to `true` to include a divider                                              |
+| danger       | <code>boolean</code>                                                | false          | Set to `true` to use the danger variant                                         |
+| requireTitle | <code>boolean</code>                                                | true           | Set to `false` to omit the button `title` attribute                             |
+| id           | <code>string</code>                                                 | --             | Set an id for the top-level element                                             |
+| ref          | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code> | null           | Obtain a reference to the HTML element                                          |
 
 ### Slots
 
@@ -3481,15 +3463,14 @@ import { Row } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                                                                           | Type                 | Default value | Description                                   |
-| :------------------------------------------------------------------------------------------------------------------ | :------------------- | :------------ | :-------------------------------------------- |
-| as                                                                                                                  | <code>boolean</code> | false         | Set to `true` to render a custom HTML element |
-| Props are destructured as `props` in the default slot (e.g. <Row let:props><section {...props}>...</section></Row>) |
-| condensed                                                                                                           | <code>boolean</code> | false         | Set to `true` to use the condensed variant    |
-| narrow                                                                                                              | <code>boolean</code> | false         | Set to `true` to use the narrow variant       |
-| noGutter                                                                                                            | <code>boolean</code> | false         | Set to `true` to remove the gutter            |
-| noGutterLeft                                                                                                        | <code>boolean</code> | false         | Set to `true` to remove the left gutter       |
-| noGutterRight                                                                                                       | <code>boolean</code> | false         | Set to `true` to remove the right gutter      |
+| Prop name     | Type                 | Default value | Description                                                                                                                                                        |
+| :------------ | :------------------- | :------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| as            | <code>boolean</code> | false         | Set to `true` to render a custom HTML element. Props are destructured as `props` in the default slot (e.g. <Row let:props><section {...props}>...</section></Row>) |
+| condensed     | <code>boolean</code> | false         | Set to `true` to use the condensed variant                                                                                                                         |
+| narrow        | <code>boolean</code> | false         | Set to `true` to use the narrow variant                                                                                                                            |
+| noGutter      | <code>boolean</code> | false         | Set to `true` to remove the gutter                                                                                                                                 |
+| noGutterLeft  | <code>boolean</code> | false         | Set to `true` to remove the left gutter                                                                                                                            |
+| noGutterRight | <code>boolean</code> | false         | Set to `true` to remove the right gutter                                                                                                                           |
 
 ### Slots
 
@@ -4306,14 +4287,13 @@ import { Switch } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                                    | Type                                       | Default value  | Description                                   |
-| :--------------------------------------------------------------------------- | :----------------------------------------- | :------------- | :-------------------------------------------- |
-| text                                                                         | <code>string</code>                        | "Provide text" | Specify the switch text                       |
-| Alternatively, use the named slot "text" (e.g. <span slot="text">...</span>) |
-| selected                                                                     | <code>boolean</code>                       | false          | Set to `true` for the switch to be selected   |
-| disabled                                                                     | <code>boolean</code>                       | false          | Set to `true` to disable the switch           |
-| id                                                                           | <code>string</code>                        | --             | Set an id for the button element              |
-| ref                                                                          | <code>null &#124; HTMLButtonElement</code> | null           | Obtain a reference to the button HTML element |
+| Prop name | Type                                       | Default value  | Description                                                                                           |
+| :-------- | :----------------------------------------- | :------------- | :---------------------------------------------------------------------------------------------------- |
+| text      | <code>string</code>                        | "Provide text" | Specify the switch text. Alternatively, use the named slot "text" (e.g. <span slot="text">...</span>) |
+| selected  | <code>boolean</code>                       | false          | Set to `true` for the switch to be selected                                                           |
+| disabled  | <code>boolean</code>                       | false          | Set to `true` to disable the switch                                                                   |
+| id        | <code>string</code>                        | --             | Set an id for the button element                                                                      |
+| ref       | <code>null &#124; HTMLButtonElement</code> | null           | Obtain a reference to the button HTML element                                                         |
 
 ### Slots
 
@@ -4343,15 +4323,14 @@ import { Tab } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                                                | Type                                       | Default value | Description                                   |
-| :----------------------------------------------------------------------- | :----------------------------------------- | :------------ | :-------------------------------------------- |
-| label                                                                    | <code>string</code>                        | ""            | Specify the tab label                         |
-| Alternatively, use the default slot (e.g. <Tab><span>Label</span></Tab>) |
-| href                                                                     | <code>string</code>                        | "#"           | Specify the href attribute                    |
-| disabled                                                                 | <code>boolean</code>                       | false         | Set to `true` to disable the tab              |
-| tabindex                                                                 | <code>string</code>                        | "0"           | Specify the tabindex                          |
-| id                                                                       | <code>string</code>                        | --            | Set an id for the top-level element           |
-| ref                                                                      | <code>null &#124; HTMLAnchorElement</code> | null          | Obtain a reference to the anchor HTML element |
+| Prop name | Type                                       | Default value | Description                                                                                     |
+| :-------- | :----------------------------------------- | :------------ | :---------------------------------------------------------------------------------------------- |
+| label     | <code>string</code>                        | ""            | Specify the tab label. Alternatively, use the default slot (e.g. <Tab><span>Label</span></Tab>) |
+| href      | <code>string</code>                        | "#"           | Specify the href attribute                                                                      |
+| disabled  | <code>boolean</code>                       | false         | Set to `true` to disable the tab                                                                |
+| tabindex  | <code>string</code>                        | "0"           | Specify the tabindex                                                                            |
+| id        | <code>string</code>                        | --            | Set an id for the top-level element                                                             |
+| ref       | <code>null &#124; HTMLAnchorElement</code> | null          | Obtain a reference to the anchor HTML element                                                   |
 
 ### Slots
 
@@ -5242,22 +5221,21 @@ import { Tooltip } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name                                       | Type                                                                | Default value | Description                                                                  |
-| :---------------------------------------------- | :------------------------------------------------------------------ | :------------ | :--------------------------------------------------------------------------- |
-| direction                                       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>     | "bottom"      | Set the direction of the tooltip relative to the button                      |
-| open                                            | <code>boolean</code>                                                | false         | Set to `true` to open the tooltip                                            |
-| hideIcon                                        | <code>boolean</code>                                                | false         | Set to `true` to hide the tooltip icon                                       |
-| icon                                            | <code>typeof import("carbon-icons-svelte/lib/Add16").default</code> | --            | Specify the icon from `carbon-icons-svelte` to render for the tooltip button |
-| Icon size must be 16px (e.g. `Add16`, `Task16`) |
-| iconDescription                                 | <code>string</code>                                                 | ""            | Specify the ARIA label for the tooltip button                                |
-| iconName                                        | <code>string</code>                                                 | ""            | Specify the icon name attribute                                              |
-| tabindex                                        | <code>string</code>                                                 | "0"           | Set the button tabindex                                                      |
-| tooltipId                                       | <code>string</code>                                                 | --            | Set an id for the tooltip                                                    |
-| triggerId                                       | <code>string</code>                                                 | --            | Set an id for the tooltip button                                             |
-| triggerText                                     | <code>string</code>                                                 | ""            | Set the tooltip button text                                                  |
-| ref                                             | <code>null &#124; HTMLElement</code>                                | null          | Obtain a reference to the trigger text HTML element                          |
-| refTooltip                                      | <code>null &#124; HTMLElement</code>                                | null          | Obtain a reference to the tooltip HTML element                               |
-| refIcon                                         | <code>null &#124; HTMLElement</code>                                | null          | Obtain a reference to the icon HTML element                                  |
+| Prop name       | Type                                                                | Default value | Description                                                                                                                   |
+| :-------------- | :------------------------------------------------------------------ | :------------ | :---------------------------------------------------------------------------------------------------------------------------- |
+| direction       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>     | "bottom"      | Set the direction of the tooltip relative to the button                                                                       |
+| open            | <code>boolean</code>                                                | false         | Set to `true` to open the tooltip                                                                                             |
+| hideIcon        | <code>boolean</code>                                                | false         | Set to `true` to hide the tooltip icon                                                                                        |
+| icon            | <code>typeof import("carbon-icons-svelte/lib/Add16").default</code> | --            | Specify the icon from `carbon-icons-svelte` to render for the tooltip button. Icon size must be 16px (e.g. `Add16`, `Task16`) |
+| iconDescription | <code>string</code>                                                 | ""            | Specify the ARIA label for the tooltip button                                                                                 |
+| iconName        | <code>string</code>                                                 | ""            | Specify the icon name attribute                                                                                               |
+| tabindex        | <code>string</code>                                                 | "0"           | Set the button tabindex                                                                                                       |
+| tooltipId       | <code>string</code>                                                 | --            | Set an id for the tooltip                                                                                                     |
+| triggerId       | <code>string</code>                                                 | --            | Set an id for the tooltip button                                                                                              |
+| triggerText     | <code>string</code>                                                 | ""            | Set the tooltip button text                                                                                                   |
+| ref             | <code>null &#124; HTMLElement</code>                                | null          | Obtain a reference to the trigger text HTML element                                                                           |
+| refTooltip      | <code>null &#124; HTMLElement</code>                                | null          | Obtain a reference to the tooltip HTML element                                                                                |
+| refIcon         | <code>null &#124; HTMLElement</code>                                | null          | Obtain a reference to the icon HTML element                                                                                   |
 
 ### Slots
 

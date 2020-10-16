@@ -63,9 +63,9 @@ export function generateIndex(components, groups, pkg) {
       exported_props.forEach((prop, name) => {
         code += `| ${name}${
           prop.kind === "const" ? " (`constant`)" : ""
-        } | ${formatType(prop.type)} | ${prop.value || "--"} | ${
-          prop.description
-        } |\n`;
+        } | ${formatType(prop.type)} | ${
+          prop.value || "--"
+        } | ${prop.description.replace(/\n/g, ". ")} |\n`;
       });
     } else {
       code += "No exported props.\n\n";
