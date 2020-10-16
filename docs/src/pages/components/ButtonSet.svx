@@ -4,6 +4,7 @@ source: Button/ButtonSet.svelte
 
 <script>
   import { Button, ButtonSet } from "carbon-components-svelte";
+  import Login16 from "carbon-icons-svelte/lib/Login16";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -17,6 +18,6 @@ source: Button/ButtonSet.svelte
 ### Stacked
 
 <ButtonSet stacked>
-  <Button>Login</Button>
+  <Button icon={Login16}>Log in</Button>
   <Button kind="ghost">Sign up</Button>
 </ButtonSet>
