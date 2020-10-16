@@ -6,6 +6,9 @@
     Column,
     CodeSnippet,
     Link,
+    Tabs,
+    Tab,
+    TabContent,
   } from "carbon-components-svelte";
   import TileCard from "../components/TileCard.svelte";
   import { metatags } from "@sveltech/routify";
@@ -16,6 +19,7 @@
     "The Svelte implementation of the Carbon Design System featuring UI components, icons, pictograms, and charts.";
 
   const installYarn = "yarn add -D carbon-components-svelte";
+  const installNpm = "npm i -D carbon-components-svelte";
 </script>
 
 <Content>
@@ -51,12 +55,31 @@
     </Row>
     <Row noGutter style="margin-bottom: var(--cds-layout-02)">
       <Column>
-        <CodeSnippet
-          code="{installYarn}"
-          on:click="{() => {
-            copy(installYarn);
-          }}"
-        />
+        <Tabs>
+          <Tab label="Yarn" />
+          <Tab label="npm" />
+          <div
+            slot="content"
+            style="margin-left: calc(-1 * var(--cds-spacing-05)); margin-right: calc(-1 * var(--cds-spacing-05));"
+          >
+            <TabContent>
+              <CodeSnippet
+                code="{installYarn}"
+                on:click="{() => {
+                  copy(installYarn);
+                }}"
+              />
+            </TabContent>
+            <TabContent>
+              <CodeSnippet
+                code="{installNpm}"
+                on:click="{() => {
+                  copy(installNpm);
+                }}"
+              />
+            </TabContent>
+          </div>
+        </Tabs>
       </Column>
     </Row>
     <Row>
