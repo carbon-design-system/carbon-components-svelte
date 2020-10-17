@@ -773,7 +773,7 @@ interface ComboBoxItem {
 
 | Prop name        | Type                                                        | Default value | Description                                                               |
 | :--------------- | :---------------------------------------------------------- | :------------ | :------------------------------------------------------------------------ |
-| items            | <code>ComboBoxItem[]</code>                                 | --            | Set the combobox items.                                                   |
+| items            | <code>ComboBoxItem[]</code>                                 | `[]`          | Set the combobox items.                                                   |
 | itemToString     | <code>(item: ComboBoxItem) => string</code>                 | --            | Override the display of a combobox item.                                  |
 | selectedIndex    | <code>number</code>                                         | --            | Set the selected item by value index.                                     |
 | value            | <code>string</code>                                         | `""`          | Specify the selected combobox value.                                      |
@@ -982,8 +982,8 @@ import { DataTable } from "carbon-components-svelte";
 
 | Prop name      | Type                                                | Default value | Description                                                                                          |
 | :------------- | :-------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------- |
-| headers        | <code>{key: string; value: string;}[]</code>        | --            | Specify the data table headers.                                                                      |
-| rows           | <code>Object[]</code>                               | --            | Specify the rows the data table should render. keys defined in `headers` are used for the row ids.   |
+| headers        | <code>{key: string; value: string;}[]</code>        | `[]`          | Specify the data table headers.                                                                      |
+| rows           | <code>Object[]</code>                               | `[]`          | Specify the rows the data table should render. keys defined in `headers` are used for the row ids.   |
 | size           | <code>"compact" &#124; "short" &#124; "tall"</code> | --            | Set the size of the data table.                                                                      |
 | title          | <code>string</code>                                 | `""`          | Specify the title of the data table.                                                                 |
 | description    | <code>string</code>                                 | `""`          | Specify the description of the data table.                                                           |
@@ -991,7 +991,7 @@ import { DataTable } from "carbon-components-svelte";
 | sortable       | <code>boolean</code>                                | `false`       | Set to `true` for the sortable variant.                                                              |
 | expandable     | <code>boolean</code>                                | `false`       | Set to `true` for the expandable variant. Automatically set to `true` if `batchExpansion` is `true`. |
 | batchExpansion | <code>boolean</code>                                | `false`       | Set to `true` to enable batch expansion.                                                             |
-| expandedRowIds | <code>string[]</code>                               | --            | Specify the row ids to be expanded.                                                                  |
+| expandedRowIds | <code>string[]</code>                               | `[]`          | Specify the row ids to be expanded.                                                                  |
 | stickyHeader   | <code>boolean</code>                                | `false`       | Set to `true` to enable a sticky header.                                                             |
 
 ### Slots
@@ -1030,7 +1030,7 @@ import { DataTableSkeleton } from "carbon-components-svelte";
 | size        | <code>"compact" &#124; "short" &#124; "tall"</code> | --            | Set the size of the data table.                                              |
 | zebra       | <code>boolean</code>                                | `false`       | Set to `true` to apply zebra styles to the datatable rows.                   |
 | showHeader  | <code>boolean</code>                                | `true`        | Set to `false` to hide the header.                                           |
-| headers     | <code>string[]</code>                               | --            | Set the column headers. If `headers` has one more items, `count` is ignored. |
+| headers     | <code>string[]</code>                               | `[]`          | Set the column headers. If `headers` has one more items, `count` is ignored. |
 | showToolbar | <code>boolean</code>                                | `true`        | Set to `false` to hide the toolbar.                                          |
 
 ### Slots
@@ -1189,7 +1189,7 @@ interface DropdownItem {
 
 | Prop name       | Type                                        | Default value | Description                                    |
 | :-------------- | :------------------------------------------ | :------------ | :--------------------------------------------- |
-| items           | <code>DropdownItem[]</code>                 | --            | Set the dropdown items.                        |
+| items           | <code>DropdownItem[]</code>                 | `[]`          | Set the dropdown items.                        |
 | itemToString    | <code>(item: DropdownItem) => string</code> | --            | Override the display of a dropdown item.       |
 | selectedIndex   | <code>number</code>                         | --            | Specify the selected item index.               |
 | type            | <code>"default" &#124; "inline"</code>      | `"default"`   | Specify the type of dropdown.                  |
@@ -1307,8 +1307,8 @@ import { FileUploader } from "carbon-components-svelte";
 | Prop name               | Type                                                                                       | Default value                | Description                                                            |
 | :---------------------- | :----------------------------------------------------------------------------------------- | :--------------------------- | :--------------------------------------------------------------------- |
 | status                  | <code>"uploading" &#124; "edit" &#124; "complete"</code>                                   | `"uploading"`                | Specify the file uploader status.                                      |
-| accept                  | <code>string[]</code>                                                                      | --                           | Specify the accepted file types.                                       |
-| files                   | <code>string[]</code>                                                                      | --                           | Obtain the uploaded file names.                                        |
+| accept                  | <code>string[]</code>                                                                      | `[]`                         | Specify the accepted file types.                                       |
+| files                   | <code>string[]</code>                                                                      | `[]`                         | Obtain the uploaded file names.                                        |
 | multiple                | <code>boolean</code>                                                                       | `false`                      | Set to `true` to allow multiple files.                                 |
 | clearFiles (`constant`) | <code>() => any</code>                                                                     | --                           | Override the default behavior of clearing the array of uploaded files. |
 | labelDescription        | <code>string</code>                                                                        | `""`                         | Specify the label description.                                         |
@@ -1350,7 +1350,7 @@ import { FileUploaderButton } from "carbon-components-svelte";
 
 | Prop name           | Type                                                                                       | Default value | Description                                   |
 | :------------------ | :----------------------------------------------------------------------------------------- | :------------ | :-------------------------------------------- |
-| accept              | <code>string[]</code>                                                                      | --            | Specify the accepted file types.              |
+| accept              | <code>string[]</code>                                                                      | `[]`          | Specify the accepted file types.              |
 | multiple            | <code>boolean</code>                                                                       | `false`       | Set to `true` to allow multiple files.        |
 | disabled            | <code>boolean</code>                                                                       | `false`       | Set to `true` to disable the input.           |
 | disableLabelChanges | <code>boolean</code>                                                                       | `false`       | Set to `true` to disable label changes.       |
@@ -1396,7 +1396,7 @@ type Files = string[];
 
 | Prop name     | Type                                      | Default value | Description                                                                                               |
 | :------------ | :---------------------------------------- | :------------ | :-------------------------------------------------------------------------------------------------------- |
-| accept        | <code>string[]</code>                     | --            | Specify the accepted file types.                                                                          |
+| accept        | <code>string[]</code>                     | `[]`          | Specify the accepted file types.                                                                          |
 | multiple      | <code>boolean</code>                      | `false`       | Set to `true` to allow multiple files.                                                                    |
 | validateFiles | <code>(files: Files) => Files</code>      | --            | Override the default behavior of validating uploaded files. The default behavior does not validate files. |
 | labelText     | <code>string</code>                       | `"Add file"`  | Specify the label text.                                                                                   |
@@ -2693,9 +2693,9 @@ interface MultiSelectItem {
 
 | Prop name         | Type                                                                     | Default value        | Description                                                                        |
 | :---------------- | :----------------------------------------------------------------------- | :------------------- | :--------------------------------------------------------------------------------- |
-| items             | <code>MultiSelectItem[]</code>                                           | --                   | Set the multiselect items.                                                         |
+| items             | <code>MultiSelectItem[]</code>                                           | `[]`                 | Set the multiselect items.                                                         |
 | itemToString      | <code>(item: MultiSelectItem) => string</code>                           | --                   | Override the display of a multiselect item.                                        |
-| selectedIds       | <code>MultiSelectItemId[]</code>                                         | --                   | Set the selected ids.                                                              |
+| selectedIds       | <code>MultiSelectItemId[]</code>                                         | `[]`                 | Set the selected ids.                                                              |
 | value             | <code>string</code>                                                      | `""`                 | Specify the multiselect value.                                                     |
 | size              | <code>"sm" &#124; "lg" &#124; "xl"</code>                                | --                   | Set the size of the combobox.                                                      |
 | type              | <code>"default" &#124; "inline"</code>                                   | `"default"`          | Specify the type of multiselect.                                                   |
@@ -3078,7 +3078,7 @@ import { Pagination } from "carbon-components-svelte";
 | pageInputDisabled     | <code>boolean</code>                                             | `false`             | Set to `true` to disable the page input.          |
 | pageSizeInputDisabled | <code>boolean</code>                                             | `false`             | Set to `true` to disable the page size input.     |
 | pageSize              | <code>number</code>                                              | `10`                | Specify the number of items to display in a page. |
-| pageSizes             | <code>number[]</code>                                            | --                  | Specify the available page sizes.                 |
+| pageSizes             | <code>number[]</code>                                            | `[10]`              | Specify the available page sizes.                 |
 | pagesUnknown          | <code>boolean</code>                                             | `false`             | Set to `true` if the number of pages is unknown.  |
 | pageText              | <code>(page: number) => string</code>                            | --                  | Override the page text.                           |
 | pageRangeText         | <code>(current: number, total: number) => string</code>          | --                  | Override the page range text.                     |

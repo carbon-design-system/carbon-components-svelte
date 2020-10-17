@@ -1800,6 +1800,7 @@
           "items",
           {
             "kind": "let",
+            "value": "[]",
             "type": "ComboBoxItem[]",
             "description": "Set the combobox items"
           }
@@ -2510,6 +2511,7 @@
           "headers",
           {
             "kind": "let",
+            "value": "[]",
             "type": "{key: string; value: string;}[]",
             "description": "Specify the data table headers"
           }
@@ -2518,6 +2520,7 @@
           "rows",
           {
             "kind": "let",
+            "value": "[]",
             "type": "Object[]",
             "description": "Specify the rows the data table should render\nkeys defined in `headers` are used for the row ids"
           }
@@ -2588,6 +2591,7 @@
           "expandedRowIds",
           {
             "kind": "let",
+            "value": "[]",
             "type": "string[]",
             "description": "Specify the row ids to be expanded"
           }
@@ -2749,6 +2753,7 @@
           "headers",
           {
             "kind": "let",
+            "value": "[]",
             "type": "string[]",
             "description": "Set the column headers\nIf `headers` has one more items, `count` is ignored"
           }
@@ -3203,6 +3208,7 @@
           "items",
           {
             "kind": "let",
+            "value": "[]",
             "type": "DropdownItem[]",
             "description": "Set the dropdown items"
           }
@@ -3638,6 +3644,7 @@
           "accept",
           {
             "kind": "let",
+            "value": "[]",
             "type": "string[]",
             "description": "Specify the accepted file types"
           }
@@ -3646,6 +3653,7 @@
           "files",
           {
             "kind": "let",
+            "value": "[]",
             "type": "string[]",
             "description": "Obtain the uploaded file names"
           }
@@ -3813,6 +3821,7 @@
           "accept",
           {
             "kind": "let",
+            "value": "[]",
             "type": "string[]",
             "description": "Specify the accepted file types"
           }
@@ -3952,6 +3961,7 @@
           "accept",
           {
             "kind": "let",
+            "value": "[]",
             "type": "string[]",
             "description": "Specify the accepted file types"
           }
@@ -7251,6 +7261,7 @@
           "items",
           {
             "kind": "let",
+            "value": "[]",
             "type": "MultiSelectItem[]",
             "description": "Set the multiselect items"
           }
@@ -7267,6 +7278,7 @@
           "selectedIds",
           {
             "kind": "let",
+            "value": "[]",
             "type": "MultiSelectItemId[]",
             "description": "Set the selected ids"
           }
@@ -8793,6 +8805,7 @@
           "pageSizes",
           {
             "kind": "let",
+            "value": "[10]",
             "type": "number[]",
             "description": "Specify the available page sizes"
           }
