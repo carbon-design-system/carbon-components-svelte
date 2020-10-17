@@ -1,5 +1,5 @@
 {
-  "version": "0.17.0",
+  "version": "0.18.0",
   "components": {
     "Accordion": {
       "moduleName": "Accordion",
@@ -2608,18 +2608,265 @@
       ],
       "slots": [
         [
-          "expanded-row",
+          "cell-header",
           {
             "attributes": [
               {
-                "start": 7597,
-                "end": 7616,
+                "start": 5357,
+                "end": 5375,
                 "type": "Attribute",
                 "name": "name",
                 "value": [
                   {
-                    "start": 7603,
-                    "end": 7615,
+                    "start": 5363,
+                    "end": 5374,
+                    "type": "Text",
+                    "raw": "cell-header",
+                    "data": "cell-header"
+                  }
+                ]
+              },
+              {
+                "start": 5376,
+                "end": 5393,
+                "type": "Attribute",
+                "name": "header",
+                "value": [
+                  {
+                    "start": 5384,
+                    "end": 5392,
+                    "type": "MustacheTag",
+                    "expression": {
+                      "type": "Identifier",
+                      "start": 5385,
+                      "end": 5391,
+                      "loc": {
+                        "start": {
+                          "line": 188,
+                          "column": 46
+                        },
+                        "end": {
+                          "line": 188,
+                          "column": 52
+                        }
+                      },
+                      "name": "header"
+                    }
+                  }
+                ]
+              }
+            ],
+            "children": [
+              {
+                "start": 5394,
+                "end": 5408,
+                "type": "MustacheTag",
+                "expression": {
+                  "type": "MemberExpression",
+                  "start": 5395,
+                  "end": 5407,
+                  "loc": {
+                    "start": {
+                      "line": 188,
+                      "column": 56
+                    },
+                    "end": {
+                      "line": 188,
+                      "column": 68
+                    }
+                  },
+                  "object": {
+                    "type": "Identifier",
+                    "start": 5395,
+                    "end": 5401,
+                    "loc": {
+                      "start": {
+                        "line": 188,
+                        "column": 56
+                      },
+                      "end": {
+                        "line": 188,
+                        "column": 62
+                      }
+                    },
+                    "name": "header"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 5402,
+                    "end": 5407,
+                    "loc": {
+                      "start": {
+                        "line": 188,
+                        "column": 63
+                      },
+                      "end": {
+                        "line": 188,
+                        "column": 68
+                      }
+                    },
+                    "name": "value"
+                  },
+                  "computed": false,
+                  "optional": false
+                }
+              }
+            ],
+            "default": false,
+            "default_value": "{header.value}\n"
+          }
+        ],
+        [
+          "cell",
+          {
+            "attributes": [
+              {
+                "start": 7112,
+                "end": 7123,
+                "type": "Attribute",
+                "name": "name",
+                "value": [
+                  {
+                    "start": 7118,
+                    "end": 7122,
+                    "type": "Text",
+                    "raw": "cell",
+                    "data": "cell"
+                  }
+                ]
+              },
+              {
+                "start": 7124,
+                "end": 7135,
+                "type": "Attribute",
+                "name": "row",
+                "value": [
+                  {
+                    "start": 7129,
+                    "end": 7134,
+                    "type": "MustacheTag",
+                    "expression": {
+                      "type": "Identifier",
+                      "start": 7130,
+                      "end": 7133,
+                      "loc": {
+                        "start": {
+                          "line": 234,
+                          "column": 38
+                        },
+                        "end": {
+                          "line": 234,
+                          "column": 41
+                        }
+                      },
+                      "name": "row"
+                    }
+                  }
+                ]
+              },
+              {
+                "start": 7136,
+                "end": 7149,
+                "type": "Attribute",
+                "name": "cell",
+                "value": [
+                  {
+                    "start": 7142,
+                    "end": 7148,
+                    "type": "MustacheTag",
+                    "expression": {
+                      "type": "Identifier",
+                      "start": 7143,
+                      "end": 7147,
+                      "loc": {
+                        "start": {
+                          "line": 234,
+                          "column": 51
+                        },
+                        "end": {
+                          "line": 234,
+                          "column": 55
+                        }
+                      },
+                      "name": "cell"
+                    }
+                  }
+                ]
+              }
+            ],
+            "children": [
+              {
+                "start": 7150,
+                "end": 7162,
+                "type": "MustacheTag",
+                "expression": {
+                  "type": "MemberExpression",
+                  "start": 7151,
+                  "end": 7161,
+                  "loc": {
+                    "start": {
+                      "line": 234,
+                      "column": 59
+                    },
+                    "end": {
+                      "line": 234,
+                      "column": 69
+                    }
+                  },
+                  "object": {
+                    "type": "Identifier",
+                    "start": 7151,
+                    "end": 7155,
+                    "loc": {
+                      "start": {
+                        "line": 234,
+                        "column": 59
+                      },
+                      "end": {
+                        "line": 234,
+                        "column": 63
+                      }
+                    },
+                    "name": "cell"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 7156,
+                    "end": 7161,
+                    "loc": {
+                      "start": {
+                        "line": 234,
+                        "column": 64
+                      },
+                      "end": {
+                        "line": 234,
+                        "column": 69
+                      }
+                    },
+                    "name": "value"
+                  },
+                  "computed": false,
+                  "optional": false
+                }
+              }
+            ],
+            "default": false,
+            "default_value": "{cell.value}\n"
+          }
+        ],
+        [
+          "expanded-row",
+          {
+            "attributes": [
+              {
+                "start": 7698,
+                "end": 7717,
+                "type": "Attribute",
+                "name": "name",
+                "value": [
+                  {
+                    "start": 7704,
+                    "end": 7716,
                     "type": "Text",
                     "raw": "expanded-row",
                     "data": "expanded-row"
@@ -2627,19 +2874,19 @@
                 ]
               },
               {
-                "start": 7617,
-                "end": 7628,
+                "start": 7718,
+                "end": 7729,
                 "type": "Attribute",
                 "name": "row",
                 "value": [
                   {
-                    "start": 7622,
-                    "end": 7627,
+                    "start": 7723,
+                    "end": 7728,
                     "type": "MustacheTag",
                     "expression": {
                       "type": "Identifier",
-                      "start": 7623,
-                      "end": 7626,
+                      "start": 7724,
+                      "end": 7727,
                       "loc": {
                         "start": {
                           "line": 252,

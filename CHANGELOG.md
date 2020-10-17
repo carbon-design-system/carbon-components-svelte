@@ -7,7 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-- Selectable/expandable `DataTable`
+- Selectable `DataTable`
+
+## [0.18.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.18.0) - 2020-10-17
+
+**Features**
+
+- DataTable: support individual, batch row expansion ([PR 341](https://github.com/IBM/carbon-components-svelte/pull/341))
+- DataTable: make header, row cells slottable ([PR 342](https://github.com/IBM/carbon-components-svelte/pull/342))
+
+**Fixes**
+
+- fix(data-table): fix misaligned tall row table headers ([PR 340](https://github.com/IBM/carbon-components-svelte/pull/340))
+- Documentation generator: parse `ArrayExpression` in exported props ([PR 341](https://github.com/IBM/carbon-components-svelte/pull/341))
+
+**Documentation**
+
+- add Component API metadata ([PR 340](https://github.com/IBM/carbon-components-svelte/pull/340))
+- DataTable: add expandable, batch expandable examples ([PR 341](https://github.com/IBM/carbon-components-svelte/pull/341))
+- DataTable: add slottable cells example ([PR 342](https://github.com/IBM/carbon-components-svelte/pull/342))
+
+**Breaking Changes**
+
+- Remove top-level slot in `DataTable` in favor of named slots ([PR 341](https://github.com/IBM/carbon-components-svelte/pull/341))
 
 ## [0.17.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.17.0) - 2020-10-16
 

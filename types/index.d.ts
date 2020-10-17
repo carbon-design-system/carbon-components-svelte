@@ -1,4 +1,4 @@
-// Type definitions for carbon-components-svelte 0.17.0
+// Type definitions for carbon-components-svelte 0.18.0
 // Project: https://github.com/IBM/carbon-components-svelte
 
 export class CarbonSvelteComponent {
@@ -851,7 +851,11 @@ export class DataTable extends CarbonSvelteComponent {
     stickyHeader?: boolean;
   };
 
-  $$slot_def: { "expanded-row": { row: any } };
+  $$slot_def: {
+    "cell-header": { header: any };
+    cell: { row: any; cell: any };
+    "expanded-row": { row: any };
+  };
 }
 
 export class DataTableSkeleton extends CarbonSvelteComponent {

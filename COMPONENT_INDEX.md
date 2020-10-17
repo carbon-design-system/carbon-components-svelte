@@ -1,6 +1,6 @@
 # Component Index
 
-> 148 components exported from carbon-components-svelte 0.17.0
+> 148 components exported from carbon-components-svelte 0.18.0
 
 - Accordion
   - [Accordion](#accordion)
@@ -996,6 +996,8 @@ import { DataTable } from "carbon-components-svelte";
 
 ### Slots
 
+- `<slot name="cell-header">...</slot>`
+- `<slot name="cell">...</slot>`
 - `<slot name="expanded-row">...</slot>`
 
 ### Forwarded events
