@@ -55,68 +55,72 @@
 
 <h3 id="props">Props</h3>
 
-<div class="overflow">
-  <StructuredList
-    style="margin-left: calc(-1 * var(--cds-spacing-05)); margin-right: calc(-1 * var(--cds-spacing-05))"
-  >
-    <StructuredListHead>
-      <StructuredListRow head>
-        <StructuredListCell head>Prop name</StructuredListCell>
-        <StructuredListCell head>Type</StructuredListCell>
-        <StructuredListCell head noWrap>Default value</StructuredListCell>
-        <StructuredListCell head>Description</StructuredListCell>
-      </StructuredListRow>
-    </StructuredListHead>
-    <StructuredListBody>
-      {#each component.props as prop}
-        <StructuredListRow>
-          <StructuredListCell noWrap>
-            <InlineSnippet code="{prop[0]}" />
-          </StructuredListCell>
-          <StructuredListCell>
-            {#each prop[1].type.split(' | ') as type, i (type)}
-              <div
-                class="cell"
-                style="z-index: {prop[1].type.split(' | ').length - i}"
-              >
-                {#if type.startsWith('typeof')}
-                  <TooltipDefinition
-                    direction="top"
-                    align="start"
-                    tooltipText="{`From "carbon-icons-svelte"`}"
-                  >
-                    Carbon Svelte icon
-                  </TooltipDefinition>
-                {:else if type.startsWith('HTML')}
-                  <Link
-                    href="{mdn_api}{type}"
-                    target="_blank"
-                    style="white-space: nowrap"
-                  >
-                    {type}
-                    <Launch16 />
-                  </Link>
-                {:else if type in typeMap}
-                  <code>{typeMap[type]}</code>
-                {:else if type.startsWith('(')}
-                  <code>{type}</code>
-                {:else}
-                  <InlineSnippet code="{type}" />
-                {/if}
-              </div>
-            {/each}
-          </StructuredListCell>
-          <StructuredListCell><code>{prop[1].value}</code></StructuredListCell>
-          <StructuredListCell>
-            {#each prop[1].description.split('\n') as line}
-              <div class="description">{line}.</div>
-            {/each}
-          </StructuredListCell>
+{#if component.props.length > 0}
+  <div class="overflow">
+    <StructuredList
+      style="margin-left: calc(-1 * var(--cds-spacing-05)); margin-right: calc(-1 * var(--cds-spacing-05))"
+    >
+      <StructuredListHead>
+        <StructuredListRow head>
+          <StructuredListCell head>Prop name</StructuredListCell>
+          <StructuredListCell head>Type</StructuredListCell>
+          <StructuredListCell head noWrap>Default value</StructuredListCell>
+          <StructuredListCell head>Description</StructuredListCell>
         </StructuredListRow>
-      {/each}
-    </StructuredListBody>
-  </StructuredList>
-</div>
+      </StructuredListHead>
+      <StructuredListBody>
+        {#each component.props as prop}
+          <StructuredListRow>
+            <StructuredListCell noWrap>
+              <InlineSnippet code="{prop[0]}" />
+            </StructuredListCell>
+            <StructuredListCell>
+              {#each prop[1].type.split(' | ') as type, i (type)}
+                <div
+                  class="cell"
+                  style="z-index: {prop[1].type.split(' | ').length - i}"
+                >
+                  {#if type.startsWith('typeof')}
+                    <TooltipDefinition
+                      direction="top"
+                      align="start"
+                      tooltipText="{`From "carbon-icons-svelte"`}"
+                    >
+                      Carbon Svelte icon
+                    </TooltipDefinition>
+                  {:else if type.startsWith('HTML')}
+                    <Link
+                      href="{mdn_api}{type}"
+                      target="_blank"
+                      style="white-space: nowrap"
+                    >
+                      {type}
+                      <Launch16 />
+                    </Link>
+                  {:else if type in typeMap}
+                    <code>{typeMap[type]}</code>
+                  {:else if type.startsWith('(')}
+                    <code>{type}</code>
+                  {:else}
+                    <InlineSnippet code="{type}" />
+                  {/if}
+                </div>
+              {/each}
+            </StructuredListCell>
+            <StructuredListCell>
+              <code>{prop[1].value}</code>
+            </StructuredListCell>
+            <StructuredListCell>
+              {#each prop[1].description.split('\n') as line}
+                <div class="description">{line}.</div>
+              {/each}
+            </StructuredListCell>
+          </StructuredListRow>
+        {/each}
+      </StructuredListBody>
+    </StructuredList>
+  </div>
+{:else}No props.{/if}
 <h3 id="slots">Slots</h3>
 {#if component.slots.length > 0}
   <UnorderedList class="my-layout-01-03">

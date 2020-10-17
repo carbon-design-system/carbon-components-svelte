@@ -44,7 +44,10 @@ export function parseComponent(source, hooks) {
           let description = null;
 
           if (init != null) {
-            if (init.type === "ObjectExpression") {
+            if (
+              init.type === "ObjectExpression" ||
+              init.type === "ArrayExpression"
+            ) {
               value = source.slice(init.start, init.end).replace(/\n/g, " ");
               type = value;
             } else {

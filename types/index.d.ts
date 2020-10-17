@@ -564,6 +564,7 @@ export class ComboBox extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the combobox items
+     * @default []
      */
     items?: ComboBoxItem[];
 
@@ -784,12 +785,14 @@ export class DataTable extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the data table headers
+     * @default []
      */
     headers?: { key: string; value: string }[];
 
     /**
      * Specify the rows the data table should render
      * keys defined in `headers` are used for the row ids
+     * @default []
      */
     rows?: Object[];
 
@@ -823,13 +826,32 @@ export class DataTable extends CarbonSvelteComponent {
     sortable?: boolean;
 
     /**
+     * Set to `true` for the expandable variant
+     * Automatically set to `true` if `batchExpansion` is `true`
+     * @default false
+     */
+    expandable?: boolean;
+
+    /**
+     * Set to `true` to enable batch expansion
+     * @default false
+     */
+    batchExpansion?: boolean;
+
+    /**
+     * Specify the row ids to be expanded
+     * @default []
+     */
+    expandedRowIds?: string[];
+
+    /**
      * Set to `true` to enable a sticky header
      * @default false
      */
     stickyHeader?: boolean;
   };
 
-  $$slot_def: { default: { props: any } };
+  $$slot_def: { "expanded-row": { row: any } };
 }
 
 export class DataTableSkeleton extends CarbonSvelteComponent {
@@ -866,6 +888,7 @@ export class DataTableSkeleton extends CarbonSvelteComponent {
     /**
      * Set the column headers
      * If `headers` has one more items, `count` is ignored
+     * @default []
      */
     headers?: string[];
 
@@ -1048,6 +1071,7 @@ export class Dropdown extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the dropdown items
+     * @default []
      */
     items?: DropdownItem[];
 
@@ -1227,11 +1251,13 @@ export class FileUploader extends CarbonSvelteComponent {
 
     /**
      * Specify the accepted file types
+     * @default []
      */
     accept?: string[];
 
     /**
      * Obtain the uploaded file names
+     * @default []
      */
     files?: string[];
 
@@ -1289,6 +1315,7 @@ export class FileUploaderButton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the accepted file types
+     * @default []
      */
     accept?: string[];
 
@@ -1359,6 +1386,7 @@ export class FileUploaderDropContainer extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Specify the accepted file types
+     * @default []
      */
     accept?: string[];
 
@@ -2436,6 +2464,7 @@ export class MultiSelect extends CarbonSvelteComponent {
   $$prop_def: {
     /**
      * Set the multiselect items
+     * @default []
      */
     items?: MultiSelectItem[];
 
@@ -2446,6 +2475,7 @@ export class MultiSelect extends CarbonSvelteComponent {
 
     /**
      * Set the selected ids
+     * @default []
      */
     selectedIds?: MultiSelectItemId[];
 
@@ -2996,6 +3026,7 @@ export class Pagination extends CarbonSvelteComponent {
 
     /**
      * Specify the available page sizes
+     * @default [10]
      */
     pageSizes?: number[];
 
