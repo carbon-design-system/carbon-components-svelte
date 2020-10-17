@@ -57,7 +57,7 @@
 
   /**
    * Specify the row ids to be expanded
-   * @type {boolean} [expandedRowIds=[]]
+   * @type {string[]} [expandedRowIds=[]]
    */
   export let expandedRowIds = [];
 

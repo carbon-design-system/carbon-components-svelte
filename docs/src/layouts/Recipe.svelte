@@ -13,7 +13,6 @@
   import { theme } from "../store";
 
   export let component = $page.title;
-  export let source = "";
 
   metatags.title = $page.title;
 

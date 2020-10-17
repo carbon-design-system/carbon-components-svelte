@@ -823,13 +823,31 @@ export class DataTable extends CarbonSvelteComponent {
     sortable?: boolean;
 
     /**
+     * Set to `true` for the expandable variant
+     * Automatically set to `true` if `batchExpansion` is `true`
+     * @default false
+     */
+    expandable?: boolean;
+
+    /**
+     * Set to `true` to enable batch expansion
+     * @default false
+     */
+    batchExpansion?: boolean;
+
+    /**
+     * Specify the row ids to be expanded
+     */
+    expandedRowIds?: string[];
+
+    /**
      * Set to `true` to enable a sticky header
      * @default false
      */
     stickyHeader?: boolean;
   };
 
-  $$slot_def: { default: { props: any } };
+  $$slot_def: { "expanded-row": { row: any } };
 }
 
 export class DataTableSkeleton extends CarbonSvelteComponent {
