@@ -185,7 +185,7 @@
               });
             }}"
           >
-            {header.value}
+            <slot name="cell-header" header="{header}">{header.value}</slot>
           </TableHeader>
         {/each}
       </TableRow>
@@ -231,7 +231,7 @@
                 dispatch('click:cell', cell);
               }}"
             >
-              {cell.value}
+              <slot name="cell" row="{row}" cell="{cell}">{cell.value}</slot>
             </TableCell>
           {/each}
         </TableRow>
