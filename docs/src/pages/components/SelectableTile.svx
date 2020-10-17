@@ -1,3 +1,7 @@
+---
+components: ["TileGroup", "SelectableTile"]
+---
+
 <script>
   import { TileGroup, SelectableTile } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

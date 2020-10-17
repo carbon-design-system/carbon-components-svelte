@@ -1,3 +1,7 @@
+---
+components: ["TimePicker", "TimePickerSelect", "SelectItem"]
+---
+
 <script>
   import { TimePicker, TimePickerSelect, SelectItem } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

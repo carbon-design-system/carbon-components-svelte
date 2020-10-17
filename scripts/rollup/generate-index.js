@@ -4,7 +4,10 @@ const toMdLink = (text) => `[${text}](#${toLink(text)})`;
 
 const formatType = (type) => `<code>${type.replace(/\|/g, "&#124;")}</code>`;
 
-const HEADER_PROPS = "| Prop name | Type | Default value |\n| :- | :- | :- |\n";
+const escapeHtml = (text) => text.replace(/\</g, "&lt;").replace(/\>/g, "&gt;");
+
+const HEADER_PROPS =
+  "| Prop name | Type | Default value | Description |\n| :- | :- | :- | :- |\n";
 
 /**
  * Use library component metadata to generate component documentation in markdown format.
@@ -20,7 +23,7 @@ export function generateIndex(components, groups, pkg) {
   groups.forEach((group, component_group) => {
     if (group.length > 1) {
       code += `- ${component_group}\n`;
-      group.forEach((component) => {
+      group.sort().forEach((component) => {
         code += `  - ${toMdLink(component)}\n`;
       });
     } else {
@@ -62,7 +65,9 @@ export function generateIndex(components, groups, pkg) {
       exported_props.forEach((prop, name) => {
         code += `| ${name}${
           prop.kind === "const" ? " (`constant`)" : ""
-        } | ${formatType(prop.type)} | ${prop.value || "--"}|\n`;
+        } | ${formatType(prop.type)} | ${
+          prop.value ? "`" + prop.value + "`" : "--"
+        } | ${escapeHtml(prop.description).replace(/\n/g, ". ")}. |\n`;
       });
     } else {
       code += "No exported props.\n\n";

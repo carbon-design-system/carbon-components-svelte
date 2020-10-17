@@ -1,3 +1,27 @@
+
+
+---
+components: ["Header",
+"HeaderAction",
+"HeaderActionLink",
+"HeaderActionSearch",
+"HeaderNav",
+"HeaderNavItem",
+"HeaderNavMenu",
+"HeaderPanelDivider",
+"HeaderPanelLink",
+"HeaderPanelLinks",
+"HeaderUtilities",
+"SideNav",
+"SideNavItems",
+"SideNavLink",
+"SideNavMenu",
+"SideNavMenuItem",
+"Content",
+"SkipToContent",
+"HeaderGlobalAction"]
+---
+
 <script>
   import Preview from "../../components/Preview.svelte";
 </script>

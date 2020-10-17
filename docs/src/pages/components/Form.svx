@@ -1,3 +1,7 @@
+---
+components: ["Form", "FormGroup"]
+---
+
 <script>
   import { Form,
     FormGroup,

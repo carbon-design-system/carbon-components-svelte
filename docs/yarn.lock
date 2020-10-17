@@ -771,7 +771,7 @@ caniuse-lite@^1.0.30001135, caniuse-lite@^1.0.30001137:
   integrity sha512-VAy5RHDfTJhpxnDdp2n40GPPLp3KqNrXz1QqFv4J64HvArKs8nuNMOWkB3ICOaBTU/Aj4rYAo/ytdQDDFF/Pug==
 
 carbon-components-svelte@../:
-  version "0.16.0"
+  version "0.17.0"
   dependencies:
     carbon-icons-svelte "^10.17.0"
     flatpickr "4.6.3"
@@ -1673,7 +1673,7 @@ fresh@0.5.2, fresh@~0.5.2:
   resolved "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
   integrity sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=
 
-fs-extra@^9.0.0, fs-extra@^9.0.1:
+fs-extra@^9.0.0:
   version "9.0.1"
   resolved "https://registry.npmjs.org/fs-extra/-/fs-extra-9.0.1.tgz#910da0062437ba4c39fedd863f1675ccfefcb9fc"
   integrity sha512-h2iAoN838FqAFJY2/qVpzFXy+EBxfVE220PalAqQLDVsFOHLJrZvut5puAbCdNv6WJk+B8ihI+k0c7JK5erwqQ==
@@ -3300,10 +3300,10 @@ prelude-ls@~1.1.2:
   resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
-prettier-plugin-svelte@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/prettier-plugin-svelte/-/prettier-plugin-svelte-1.4.0.tgz#bb992759fb77ec2c3545d454a7c60f7a258cb745"
-  integrity sha512-KXO2He7Kql0Lz4DdlzVli1j2JTDUR9jPV/DqyfnJmY1pCeSV1qZkxgdsyYma35W6OLrCAr/G6yKdmzo+75u2Ng==
+prettier-plugin-svelte@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.npmjs.org/prettier-plugin-svelte/-/prettier-plugin-svelte-1.4.1.tgz#2f0f7a149190f476dc9b4ba9da8d482bd196f1e2"
+  integrity sha512-6y0m37Xw01GRf/WIHau+Kp3uXj2JB1agtEmNVKb9opMy34A6OMOYhfneVpNIlrghQSw/jIV+t3e5Ngt4up2CMA==
 
 prettier@^2.1.2:
   version "2.1.2"

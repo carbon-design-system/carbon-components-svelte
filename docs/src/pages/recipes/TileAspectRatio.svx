@@ -1,0 +1,16 @@
+---
+layout: recipe
+---
+
+<script>
+  import { AspectRatio, Tile, Column } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+## Tile (16x9 ratio)
+
+<Column lg={8}>
+<AspectRatio ratio="16x9">
+  <Tile style="height: 100%">Content</Tile>
+</AspectRatio>
+</Column>

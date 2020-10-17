@@ -1,3 +1,7 @@
+---
+components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter", "Checkbox"]
+---
+
 <script>
   import Preview from "../../components/Preview.svelte";
 </script>

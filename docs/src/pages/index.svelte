@@ -28,7 +28,8 @@
       <Column>
         <h1>Carbon Components Svelte</h1>
         <p class="big-paragraph">
-          <code>carbon-components-svelte</code> is a
+          <code>carbon-components-svelte</code>
+          is a
           <Link
             inline
             class="big-link"

@@ -1,3 +1,7 @@
+---
+components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "StructuredListHead", "StructuredListCell", "StructuredListRow", "StructuredListInput"]
+---
+
 <script>
   import { StructuredList, StructuredListSkeleton, StructuredListBody, StructuredListHead, StructuredListCell ,StructuredListRow, StructuredListInput } from "carbon-components-svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";

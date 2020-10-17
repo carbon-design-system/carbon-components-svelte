@@ -1,3 +1,7 @@
+---
+components: ["NumberInput", "NumberInputSkeleton"]
+---
+
 <script>
   import { NumberInput, NumberInputSkeleton } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

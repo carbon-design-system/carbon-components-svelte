@@ -26,6 +26,7 @@
   $: components = $layout.children.filter(
     (child) => child.title === "components"
   )[0];
+  $: recipes = $layout.children.filter((child) => child.title === "recipes")[0];
 
   $beforeUrlChange(() => {
     if (isMobile) isSideNavOpen = false;
@@ -174,7 +175,8 @@
     </div>
 
     <span slot="platform" class="platform-name">
-      Carbon Components Svelte <code>v{process.env.VERSION || ''}</code>
+      Carbon Components Svelte
+      <code>v{process.env.VERSION || ''}</code>
     </span>
 
     <HeaderUtilities>
@@ -182,7 +184,6 @@
         icon="{{ render: LogoGithub20 }}"
         href="https://github.com/IBM/carbon-components-svelte"
         target="_blank"
-        rel="noopener"
       />
       <HeaderAction bind:isOpen>
         <HeaderPanelLinks>
@@ -214,8 +215,20 @@
 
   <SideNav bind:isOpen="{isSideNavOpen}">
     <SideNavItems>
-      <SideNavMenu expanded text="Components">
+      <SideNavMenu
+        expanded="{$isActive($url('')) || $isActive($url('/components'))}"
+        text="Components"
+      >
         {#each components.children as child, i (child.path)}
+          <SideNavMenuItem
+            text="{child.title}"
+            href="{$url(child.path)}"
+            isSelected="{$isActive($url(child.path))}"
+          />
+        {/each}
+      </SideNavMenu>
+      <SideNavMenu expanded="{$isActive($url('/recipes'))}" text="Recipes">
+        {#each recipes.children as child, i (child.path)}
           <SideNavMenuItem
             text="{child.title}"
             href="{$url(child.path)}"

@@ -141,13 +141,55 @@ module.exports = {
     }),
     mdsvex({
       remarkPlugins: [plugin, slug, carbonify],
-      layout: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
+      layout: {
+        recipe: path.join(__dirname, "src/layouts/Recipe.svelte"),
+        _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
+      },
     }),
     {
       markup({ content, filename }) {
+        if (filename.endsWith(".svx") && filename.match(/pages\/(recipes)/)) {
+          const toc = [];
+
+          walk(parse(content), {
+            enter(node) {
+              if (node.type === "Element") {
+                if (node.name === "h2") {
+                  const id = node.attributes.find(
+                    (attribute) => attribute.name === "id"
+                  );
+                  toc.push({
+                    id: id.value[0].raw,
+                    text: node.children[0].raw,
+                  });
+                }
+              }
+            },
+          });
+
+          return {
+            code: content.replace(
+              "</Layout_MDSVEX_DEFAULT>",
+              `<div slot="aside">
+                <ul class="bx--list--unordered">
+                ${toc
+                  .map((item) => {
+                    return `
+                      <li class="bx--list__item">
+                        <a class="bx--link" href="\#${item.id}">${item.text}</a>
+                      </li>`;
+                  })
+                  .join("")}
+                </ul>
+              </div>
+            </Layout_MDSVEX_DEFAULT>`
+            ),
+          };
+        }
+
         if (
-          filename.includes("pages/components") &&
-          filename.endsWith(".svx")
+          filename.endsWith(".svx") &&
+          filename.match(/pages\/(components)/)
         ) {
           const toc = [];
 
@@ -183,6 +225,23 @@ module.exports = {
                           </li>`;
                       })
                       .join("")}
+                    </ul>
+                  </li>
+                  <li class="bx--list__item">
+                    <a class="bx--link" href="#component-api">Component API</a>
+                    <ul class="bx--list--unordered bx--list--nested">
+                      <li class="bx--list__item">
+                        <a class="bx--link" href="#props">Props</a>
+                      </li>
+                      <li class="bx--list__item">
+                        <a class="bx--link" href="#slots">Slots</a>
+                      </li>
+                      <li class="bx--list__item">
+                        <a class="bx--link" href="#forwarded-events">Forwarded events</a>
+                      </li>
+                      <li class="bx--list__item">
+                        <a class="bx--link" href="#dispatched-events">Dispatched events</a>
+                      </li>
                     </ul>
                   </li>
                 </ul>

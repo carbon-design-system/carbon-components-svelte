@@ -87,6 +87,10 @@
     color: #bb8eff;
   }
 
+  .token.comment {
+    color: #bebebe;
+  }
+
   .code-override {
     border: 1px solid #262626;
   }

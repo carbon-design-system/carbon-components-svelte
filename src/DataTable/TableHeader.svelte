@@ -46,9 +46,9 @@
       class:bx--table-sort--ascending="{active && $sortHeader.sortDirection === 'descending'}"
       on:click
     >
-      <span class:bx--table-header-label="{true}">
+      <div class:bx--table-header-label="{true}">
         <slot />
-      </span>
+      </div>
       <ArrowUp20 aria-label="{ariaLabel}" class="bx--table-sort__icon" />
       <ArrowsVertical20
         aria-label="{ariaLabel}"
@@ -66,8 +66,8 @@
     on:mouseenter
     on:mouseleave
   >
-    <span class:bx--table-header-label="{true}">
+    <div class:bx--table-header-label="{true}">
       <slot />
-    </span>
+    </div>
   </th>
 {/if}

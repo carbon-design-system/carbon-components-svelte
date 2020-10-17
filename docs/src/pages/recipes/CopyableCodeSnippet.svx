@@ -1,0 +1,15 @@
+---
+layout: recipe
+---
+
+<script>
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+The [CodeSnippet](/components/CodeSnippet) and [CopyButton](/components/CopyButton) do not include logic to copy the supplied `code` text.
+
+## clipboard-copy
+
+This example uses [clipboard-copy](https://www.npmjs.com/package/clipboard-copy), a lightweight module designed for the web.
+
+<FileSource src="/framed/CopyableCodeSnippet/CopyableCodeSnippet" />

@@ -1,10 +1,14 @@
 import fs from "fs";
 import path from "path";
+import { promisify } from "util";
 import pkg from "../../package.json";
 import { format } from "prettier";
 import { parseComponent } from "./parse-component";
 import { generateTypes } from "./generate-types";
 import { generateIndex } from "./generate-index";
+import { generatePublicAPI } from "./generate-public-api";
+
+const writeFile = promisify(fs.writeFile);
 
 /**
  * Rollup plugin to generate library TypeScript definitions and documentation.
@@ -58,14 +62,20 @@ function pluginGenerateDocs() {
         }
       }
     },
-    writeBundle() {
+    async writeBundle() {
       const { code: types } = generateTypes(components, pkg);
-      fs.writeFileSync(pkg.types, format(types, { parser: "typescript" }));
+      await writeFile(pkg.types, format(types, { parser: "typescript" }));
 
       const { code: index } = generateIndex(components, groups, pkg);
-      fs.writeFileSync(
+      await writeFile(
         "./COMPONENT_INDEX.md",
         format(index, { parser: "markdown" })
+      );
+
+      const { code: json } = generatePublicAPI(components, groups, pkg);
+      await writeFile(
+        "./docs/src/PUBLIC_API.json",
+        JSON.stringify(json, null, 2)
       );
     },
   };

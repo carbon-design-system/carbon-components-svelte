@@ -1,3 +1,7 @@
+---
+components: ["Dropdown", "DropdownSkeleton"]
+---
+
 <script>
   import { Dropdown, DropdownSkeleton } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

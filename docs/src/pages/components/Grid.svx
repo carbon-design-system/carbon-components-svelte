@@ -1,3 +1,7 @@
+---
+components: ["Grid", "Row", "Column"]
+---
+
 <script>
   import Preview from "../../components/Preview.svelte";
 </script>
