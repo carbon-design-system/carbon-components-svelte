@@ -180,7 +180,8 @@
             target="_blank"
           >
             auto-generated
-          </Link>.
+          </Link>
+          from a build script.
         </p>
       </Column>
     </Row>

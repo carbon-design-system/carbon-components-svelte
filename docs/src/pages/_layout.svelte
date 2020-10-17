@@ -36,34 +36,28 @@
 
 <style global>
   .bx--col > h1 {
-    font-size: var(--cds-productive-heading-07-font-size);
-    font-weight: var(--cds-productive-heading-07-font-weight);
-    letter-spacing: var(--cds-productive-heading-07-letter-spacing);
-    line-height: var(--cds-productive-heading-07-line-height);
+    font-size: var(--cds-display-01-font-size);
+    font-weight: var(--cds-display-01-font-weight);
+    letter-spacing: var(--cds-display-01-letter-spacing);
+    line-height: var(--cds-display-01-line-height);
     margin-bottom: var(--cds-layout-01);
   }
 
   .big-paragraph {
-    font-size: 1.5rem;
-    font-weight: var(--cds-productive-heading-03-font-weight);
-    letter-spacing: var(--cds-productive-heading-03-letter-spacing);
-    line-height: var(--cds-productive-heading-03-line-height);
+    font-size: var(--cds-expressive-heading-03-font-size);
+    font-weight: var(--cds-expressive-heading-03-font-weight);
+    letter-spacing: var(--cds-expressive-heading-03-letter-spacing);
+    line-height: var(--cds-expressive-heading-03-line-height);
     margin-top: var(--cds-layout-03);
-    margin-bottom: var(--cds-layout-05);
+    margin-bottom: var(--cds-layout-06);
   }
 
+  .big-link,
   .bx--col > .big-paragraph > code {
-    font-size: var(--cds-productive-heading-03-font-size);
-    font-weight: var(--cds-productive-heading-03-font-weight);
-    letter-spacing: var(--cds-productive-heading-03-letter-spacing);
-    line-height: var(--cds-productive-heading-03-line-height);
-  }
-
-  .big-link {
-    font-size: 1.5rem;
-    font-weight: var(--cds-productive-heading-03-font-weight);
-    letter-spacing: var(--cds-productive-heading-03-letter-spacing);
-    line-height: var(--cds-productive-heading-03-line-height);
+    font-size: var(--cds-expressive-heading-03-font-size);
+    font-weight: var(--cds-expressive-heading-03-font-weight);
+    letter-spacing: var(--cds-expressive-heading-03-letter-spacing);
+    line-height: var(--cds-expressive-heading-03-line-height);
   }
 
   .bx--col > p {
@@ -81,28 +75,28 @@
   }
 
   .bx--col > h2 {
-    font-size: var(--cds-productive-heading-06-font-size);
-    font-weight: var(--cds-productive-heading-06-font-weight);
-    letter-spacing: var(--cds-productive-heading-06-letter-spacing);
-    line-height: var(--cds-productive-heading-06-line-height);
-    padding-top: var(--cds-layout-03);
+    font-size: var(--cds-expressive-heading-05-font-size);
+    font-weight: var(--cds-expressive-heading-05-font-weight);
+    letter-spacing: var(--cds-expressive-heading-05-letter-spacing);
+    line-height: var(--cds-expressive-heading-05-line-height);
+    padding-top: var(--cds-layout-04);
     margin-bottom: var(--cds-layout-01);
   }
 
   .bx--col > h3 {
-    font-size: var(--cds-productive-heading-04-font-size);
-    font-weight: var(--cds-productive-heading-04-font-weight);
-    letter-spacing: var(--cds-productive-heading-04-letter-spacing);
-    line-height: var(--cds-productive-heading-04-line-height);
-    padding-top: var(--cds-layout-03);
-    margin-bottom: var(--cds-layout-02);
+    font-size: var(--cds-expressive-heading-04-font-size);
+    font-weight: var(--cds-expressive-heading-04-font-weight);
+    letter-spacing: var(--cds-expressive-heading-04-letter-spacing);
+    line-height: var(--cds-expressive-heading-04-line-height);
+    padding-top: var(--cds-layout-04);
+    margin-bottom: var(--cds-layout-01);
   }
 
   .bx--col > h4 {
-    font-size: var(--cds-productive-heading-02-font-size);
-    font-weight: var(--cds-productive-heading-02-font-weight);
-    letter-spacing: var(--cds-productive-heading-02-letter-spacing);
-    line-height: var(--cds-productive-heading-02-line-height);
+    font-size: var(--cds-expressive-heading-02-font-size);
+    font-weight: var(--cds-expressive-heading-02-font-weight);
+    letter-spacing: var(--cds-expressive-heading-02-letter-spacing);
+    line-height: var(--cds-expressive-heading-02-line-height);
     padding-top: var(--cds-layout-04);
     margin-bottom: var(--cds-layout-01);
   }
