@@ -1,3 +1,7 @@
+---
+components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
+---
+
 <script>
   import {
     Accordion,

@@ -1,3 +1,7 @@
+---
+components: ["Pagination", "PaginationSkeleton"]
+---
+
 <script>
   import { Pagination, PaginationSkeleton } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

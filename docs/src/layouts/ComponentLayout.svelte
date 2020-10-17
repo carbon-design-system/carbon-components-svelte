@@ -1,6 +1,7 @@
 <script>
   import {
     Grid,
+    Link,
     Row,
     Column,
     Content,
@@ -8,18 +9,32 @@
     Select,
     SelectItem,
     InlineNotification,
+    Tabs,
+    Tab,
+    TabContent,
+    StructuredList,
+    StructuredListHead,
+    StructuredListRow,
+    StructuredListCell,
+    StructuredListBody,
   } from "carbon-components-svelte";
   import Code16 from "carbon-icons-svelte/lib/Code16";
   import { page, metatags } from "@sveltech/routify";
   import { onMount } from "svelte";
   import { theme } from "../store";
+  import ComponentApi from "../components/ComponentApi.svelte";
+  import API from "../PUBLIC_API.json";
 
   export let component = $page.title;
+  export let components = [component];
   export let source = "";
   export let unreleased = false;
   export let unstable = false;
 
   metatags.title = $page.title;
+
+  $: api = components.map((_) => API.components[_]).filter(Boolean);
+  $: multiple = api.length > 1;
 
   onMount(() => {
     const currentTheme = window.location.search.split("?theme=")[1];
@@ -36,6 +51,12 @@
 </script>
 
 <style global>
+  .override-tabs a.bx--tabs__nav-link,
+  .override-tabs a.bx--tabs__nav-link:focus,
+  .override-tabs a.bx--tabs__nav-link:active {
+    width: auto !important;
+  }
+
   #select-theme {
     width: auto;
   }
@@ -150,6 +171,38 @@
         </div>
         <h2 id="usage">Usage</h2>
         <slot />
+        <h2 id="component-api">Component API</h2>
+        <p>
+          Component API documentation is
+          <Link
+            inline
+            href="https://github.com/IBM/carbon-components-svelte/blob/master/scripts/rollup/plugin-generate-docs.js"
+            target="_blank"
+          >
+            auto-generated
+          </Link>.
+        </p>
+      </Column>
+    </Row>
+
+    <Row>
+      <Column class="prose" noGutter="{multiple}">
+        {#if multiple}
+          <Tabs class="override-tabs">
+            {#each api as component, i (component.moduleName)}
+              <Tab label="{component.moduleName}" />
+            {/each}
+            <div slot="content" style="padding-top: var(--cds-spacing-06)">
+              {#each api as component, i (component.moduleName)}
+                <TabContent>
+                  <ComponentApi component="{component}" />
+                </TabContent>
+              {/each}
+            </div>
+          </Tabs>
+        {:else}
+          <ComponentApi component="{api[0]}" />
+        {/if}
       </Column>
     </Row>
   </Grid>

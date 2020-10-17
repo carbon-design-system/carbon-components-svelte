@@ -1,3 +1,7 @@
+---
+components: ["OverflowMenu", "OverflowMenuItem"]
+---
+
 <script>
   import { OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

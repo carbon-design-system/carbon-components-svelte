@@ -1,3 +1,7 @@
+---
+components: ["ToggleSmall", "ToggleSmallSkeleton"]
+---
+
 <script>
   import { ToggleSmall, ToggleSmallSkeleton } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

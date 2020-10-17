@@ -1,3 +1,7 @@
+---
+components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", "FileUploaderItem", "FileUploaderSkeleton"]
+---
+
 <script>
   import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

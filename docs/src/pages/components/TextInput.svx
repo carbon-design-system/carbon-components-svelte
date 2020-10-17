@@ -1,3 +1,7 @@
+---
+components: ["TextInput", "TextInputSkeleton"]
+---
+
 <script>
   import { TextInput, TextInputSkeleton } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

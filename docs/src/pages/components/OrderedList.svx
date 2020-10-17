@@ -1,3 +1,7 @@
+---
+components: ["OrderedList", "ListItem"]
+---
+
 <script>
   import { OrderedList, ListItem, Link } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

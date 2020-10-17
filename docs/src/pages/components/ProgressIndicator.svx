@@ -1,3 +1,7 @@
+---
+components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
+---
+
 <script>
   import { ProgressIndicator, ProgressStep, ProgressIndicatorSkeleton } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

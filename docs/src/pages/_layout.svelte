@@ -184,7 +184,6 @@
         icon="{{ render: LogoGithub20 }}"
         href="https://github.com/IBM/carbon-components-svelte"
         target="_blank"
-        rel="noopener"
       />
       <HeaderAction bind:isOpen>
         <HeaderPanelLinks>
@@ -217,7 +216,7 @@
   <SideNav bind:isOpen="{isSideNavOpen}">
     <SideNavItems>
       <SideNavMenu
-        expanded="{$isActive($url('/components'))}"
+        expanded="{$isActive($url('')) || $isActive($url('/components'))}"
         text="Components"
       >
         {#each components.children as child, i (child.path)}

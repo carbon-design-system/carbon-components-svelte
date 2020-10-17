@@ -1,3 +1,7 @@
+---
+components: ["Breadcrumb", "BreadcrumbItem"]
+---
+
 <script>
   import {
     Breadcrumb,

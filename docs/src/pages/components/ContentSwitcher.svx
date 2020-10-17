@@ -1,3 +1,7 @@
+---
+components: ["ContentSwitcher", "Switch"]
+---
+
 <script>
   import { ContentSwitcher, Switch } from "carbon-components-svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16";
