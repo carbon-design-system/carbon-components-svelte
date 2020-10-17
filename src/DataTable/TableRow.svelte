@@ -5,7 +5,7 @@
    */
   export let isSelected = false;
 
-  // TODO: include ariaLabel, onExpand, isExpanded, isSelected
+  // TODO: include ariaLabel, isSelected
 </script>
 
 <tr
