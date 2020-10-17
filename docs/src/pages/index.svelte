@@ -49,7 +49,7 @@
         </p>
         <p>
           A design system can facilitate frontend development and prototyping
-          because it is encourages reuse, consistency, and extensibility.
+          because it encourages reuse, consistency, and extensibility.
         </p>
         <h3>Install</h3>
       </Column>
