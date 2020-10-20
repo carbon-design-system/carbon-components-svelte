@@ -3,13 +3,17 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default ("bottom" direction, "center" aligned)
+### Default
 
 <TooltipDefinition tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk
 </TooltipDefinition>
 
-### Custom direction, alignment
+### Custom tooltip direction and alignment
+
+Customize the tooltip menu direction and alignment through the `direction` and `align` props.
+
+By default, `direction` is `"bottom"` and `align` is `"center"`.
 
 <TooltipDefinition direction="top" align="start" tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk

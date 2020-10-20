@@ -29,28 +29,28 @@
    */
   export let ref = null;
 
-  $: hidden = false;
-  $: visible = false;
+  let visible = false;
+
+  function hide() {
+    visible = false;
+  }
+
+  function show() {
+    visible = true;
+  }
 </script>
 
 <svelte:body
   on:keydown="{({ key }) => {
-    if (key === 'Escape') {
-      hidden = true;
-    }
+    if (key === 'Escape') hide();
   }}" />
 
 <div
   class:bx--tooltip--definition="{true}"
   class:bx--tooltip--a11y="{true}"
   {...$$restProps}
-  on:mouseenter="{() => {
-    hidden = false;
-    visible = true;
-  }}"
-  on:mouseleave="{() => {
-    visible = false;
-  }}"
+  on:mouseenter="{show}"
+  on:mouseleave="{hide}"
 >
   <button
     bind:this="{ref}"
@@ -58,7 +58,7 @@
     class:bx--tooltip--a11y="{true}"
     class:bx--tooltip__trigger="{true}"
     class:bx--tooltip__trigger--definition="{true}"
-    class:bx--tooltip--hidden="{hidden}"
+    class:bx--tooltip--hidden="{!visible}"
     class:bx--tooltip--visible="{visible}"
     class="{direction && `bx--tooltip--${direction}`}
       {align && `bx--tooltip--align-${align}`}"
@@ -67,9 +67,8 @@
     on:mouseenter
     on:mouseleave
     on:focus
-    on:focus="{() => {
-      hidden = false;
-    }}"
+    on:focus="{show}"
+    on:blur="{hide}"
   >
     <slot />
   </button>
