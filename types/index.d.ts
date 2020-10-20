@@ -5174,7 +5174,7 @@ export class TooltipDefinition extends CarbonSvelteComponent {
     ref?: null | HTMLButtonElement;
   };
 
-  $$slot_def: { default: {} };
+  $$slot_def: { default: {}; tooltip: {} };
 }
 
 export class TooltipIcon extends CarbonSvelteComponent {

@@ -18,3 +18,12 @@ By default, `direction` is `"bottom"` and `align` is `"center"`.
 <TooltipDefinition direction="top" align="start" tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk
 </TooltipDefinition>
+
+### Custom tooltip slot
+
+<TooltipDefinition>
+  Armonk
+  <span slot="tooltip" style="color: red">
+    IBM Corporate Headquarters is based in Armonk, New York.
+  </span>
+</TooltipDefinition>

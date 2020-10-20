@@ -73,6 +73,6 @@
     <slot />
   </button>
   <div role="tooltip" id="{id}" class:bx--assistive-text="{true}">
-    {tooltipText}
+    <slot name="tooltip">{tooltipText}</slot>
   </div>
 </div>
