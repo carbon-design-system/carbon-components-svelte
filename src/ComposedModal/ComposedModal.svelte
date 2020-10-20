@@ -47,6 +47,7 @@
     setContext,
     onMount,
     afterUpdate,
+    onDestroy,
   } from "svelte";
 
   const dispatch = createEventDispatcher();
@@ -79,11 +80,11 @@
   onMount(async () => {
     await tick();
     focus();
-
-    return () => {
-      document.body.classList.remove("bx--body--with-modal-open");
-    };
   });
+
+  onDestroy(() => {
+    document.body.classList.remove("bx--body--with-modal-open");
+  })
 
   afterUpdate(() => {
     if (opened) {
