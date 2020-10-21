@@ -3227,11 +3227,12 @@ import { ProgressIndicator } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name    | Type                 | Default value | Description                                                                                     |
-| :----------- | :------------------- | :------------ | :---------------------------------------------------------------------------------------------- |
-| currentIndex | <code>number</code>  | `0`           | Specify the current step index.                                                                 |
-| vertical     | <code>boolean</code> | `false`       | Set to `true` to use the vertical variant.                                                      |
-| spaceEqually | <code>boolean</code> | `false`       | Set to `true` to specify whether the progress steps should be split equally in size in the div. |
+| Prop name            | Type                 | Default value | Description                                                                                     |
+| :------------------- | :------------------- | :------------ | :---------------------------------------------------------------------------------------------- |
+| currentIndex         | <code>number</code>  | `0`           | Specify the current step index.                                                                 |
+| vertical             | <code>boolean</code> | `false`       | Set to `true` to use the vertical variant.                                                      |
+| spaceEqually         | <code>boolean</code> | `false`       | Set to `true` to specify whether the progress steps should be split equally in size in the div. |
+| preventChangeOnClick | <code>boolean</code> | `false`       | Set to `true` to prevent updating `currentIndex`.                                               |
 
 ### Slots
 

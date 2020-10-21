@@ -9,17 +9,46 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
 
 ### Default (horizontal)
 
-<ProgressIndicator>
-  <ProgressStep
-    label="Really long label"
+<ProgressIndicator currentIndex={2}>
+  <ProgressStep complete
+    label="Step 1"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep complete
+    label="Step 2"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep complete
+    label="Step 3"
     description="The progress indicator will listen for clicks on the steps"
   />
   <ProgressStep
-    label="Really long label"
+    label="Step 4"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+</ProgressIndicator>
+
+### Prevent change on click
+
+By default, clicking any step that is complete will update the current step index.
+
+Set `preventChangeOnClick` to `true` to prevent this behavior.
+
+<ProgressIndicator preventChangeOnClick currentIndex={2}>
+  <ProgressStep complete
+    label="Step 1"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep complete
+    label="Step 2"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep complete
+    label="Step 3"
     description="The progress indicator will listen for clicks on the steps"
   />
   <ProgressStep
-    label="Really long label"
+    label="Step 4"
     description="The progress indicator will listen for clicks on the steps"
   />
 </ProgressIndicator>

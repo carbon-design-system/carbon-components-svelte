@@ -2089,8 +2089,8 @@
         [
           "click",
           {
-            "start": 2342,
-            "end": 2350,
+            "start": 2355,
+            "end": 2363,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -2100,8 +2100,8 @@
         [
           "mouseover",
           {
-            "start": 2486,
-            "end": 2498,
+            "start": 2499,
+            "end": 2511,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -2111,8 +2111,8 @@
         [
           "mouseenter",
           {
-            "start": 2501,
-            "end": 2514,
+            "start": 2514,
+            "end": 2527,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -2122,8 +2122,8 @@
         [
           "mouseleave",
           {
-            "start": 2517,
-            "end": 2530,
+            "start": 2530,
+            "end": 2543,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -2133,8 +2133,8 @@
         [
           "transitionend",
           {
-            "start": 2533,
-            "end": 2549,
+            "start": 2546,
+            "end": 2562,
             "type": "EventHandler",
             "name": "transitionend",
             "modifiers": [],
@@ -9529,6 +9529,15 @@
             "type": "boolean",
             "description": "Set to `true` to specify whether the progress steps should be split equally in size in the div"
           }
+        ],
+        [
+          "preventChangeOnClick",
+          {
+            "kind": "let",
+            "value": "false",
+            "type": "boolean",
+            "description": "Set to `true` to prevent updating `currentIndex`"
+          }
         ]
       ],
       "slots": [
@@ -9546,8 +9555,8 @@
         [
           "click",
           {
-            "start": 1278,
-            "end": 1286,
+            "start": 1640,
+            "end": 1648,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -9557,8 +9566,8 @@
         [
           "mouseover",
           {
-            "start": 1289,
-            "end": 1301,
+            "start": 1651,
+            "end": 1663,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -9568,8 +9577,8 @@
         [
           "mouseenter",
           {
-            "start": 1304,
-            "end": 1317,
+            "start": 1666,
+            "end": 1679,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -9579,8 +9588,8 @@
         [
           "mouseleave",
           {
-            "start": 1320,
-            "end": 1333,
+            "start": 1682,
+            "end": 1695,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -9749,41 +9758,41 @@
           {
             "attributes": [
               {
-                "start": 2725,
-                "end": 2766,
+                "start": 2759,
+                "end": 2800,
                 "type": "Attribute",
                 "name": "props",
                 "value": [
                   {
-                    "start": 2732,
-                    "end": 2765,
+                    "start": 2766,
+                    "end": 2799,
                     "type": "MustacheTag",
                     "expression": {
                       "type": "ObjectExpression",
-                      "start": 2733,
-                      "end": 2764,
+                      "start": 2767,
+                      "end": 2798,
                       "loc": {
                         "start": {
-                          "line": 113,
+                          "line": 114,
                           "column": 18
                         },
                         "end": {
-                          "line": 113,
+                          "line": 114,
                           "column": 49
                         }
                       },
                       "properties": [
                         {
                           "type": "Property",
-                          "start": 2735,
-                          "end": 2762,
+                          "start": 2769,
+                          "end": 2796,
                           "loc": {
                             "start": {
-                              "line": 113,
+                              "line": 114,
                               "column": 20
                             },
                             "end": {
-                              "line": 113,
+                              "line": 114,
                               "column": 47
                             }
                           },
@@ -9792,15 +9801,15 @@
                           "computed": false,
                           "key": {
                             "type": "Identifier",
-                            "start": 2735,
-                            "end": 2740,
+                            "start": 2769,
+                            "end": 2774,
                             "loc": {
                               "start": {
-                                "line": 113,
+                                "line": 114,
                                 "column": 20
                               },
                               "end": {
-                                "line": 113,
+                                "line": 114,
                                 "column": 25
                               }
                             },
@@ -9808,15 +9817,15 @@
                           },
                           "value": {
                             "type": "Literal",
-                            "start": 2742,
-                            "end": 2762,
+                            "start": 2776,
+                            "end": 2796,
                             "loc": {
                               "start": {
-                                "line": 113,
+                                "line": 114,
                                 "column": 27
                               },
                               "end": {
-                                "line": 113,
+                                "line": 114,
                                 "column": 47
                               }
                             },
@@ -9833,35 +9842,35 @@
             ],
             "children": [
               {
-                "start": 2767,
-                "end": 2774,
+                "start": 2801,
+                "end": 2808,
                 "type": "Text",
                 "raw": "\n      ",
                 "data": "\n      "
               },
               {
-                "start": 2774,
-                "end": 2822,
+                "start": 2808,
+                "end": 2856,
                 "type": "Element",
                 "name": "p",
                 "attributes": [
                   {
-                    "start": 2777,
-                    "end": 2810,
+                    "start": 2811,
+                    "end": 2844,
                     "type": "Class",
                     "name": "bx--progress-label",
                     "modifiers": [],
                     "expression": {
                       "type": "Literal",
-                      "start": 2804,
-                      "end": 2808,
+                      "start": 2838,
+                      "end": 2842,
                       "loc": {
                         "start": {
-                          "line": 114,
+                          "line": 115,
                           "column": 36
                         },
                         "end": {
-                          "line": 114,
+                          "line": 115,
                           "column": 40
                         }
                       },
@@ -9872,20 +9881,20 @@
                 ],
                 "children": [
                   {
-                    "start": 2811,
-                    "end": 2818,
+                    "start": 2845,
+                    "end": 2852,
                     "type": "MustacheTag",
                     "expression": {
                       "type": "Identifier",
-                      "start": 2812,
-                      "end": 2817,
+                      "start": 2846,
+                      "end": 2851,
                       "loc": {
                         "start": {
-                          "line": 114,
+                          "line": 115,
                           "column": 44
                         },
                         "end": {
-                          "line": 114,
+                          "line": 115,
                           "column": 49
                         }
                       },
@@ -9895,8 +9904,8 @@
                 ]
               },
               {
-                "start": 2822,
-                "end": 2827,
+                "start": 2856,
+                "end": 2861,
                 "type": "Text",
                 "raw": "\n    ",
                 "data": "\n    "
@@ -9922,8 +9931,8 @@
         [
           "mouseover",
           {
-            "start": 1981,
-            "end": 1993,
+            "start": 2015,
+            "end": 2027,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -9933,8 +9942,8 @@
         [
           "mouseenter",
           {
-            "start": 1998,
-            "end": 2011,
+            "start": 2032,
+            "end": 2045,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -9944,8 +9953,8 @@
         [
           "mouseleave",
           {
-            "start": 2016,
-            "end": 2029,
+            "start": 2050,
+            "end": 2063,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -9955,8 +9964,8 @@
         [
           "keydown",
           {
-            "start": 2034,
-            "end": 2044,
+            "start": 2068,
+            "end": 2078,
             "type": "EventHandler",
             "name": "keydown",
             "modifiers": [],
