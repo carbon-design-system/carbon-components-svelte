@@ -980,19 +980,19 @@ import { DataTable } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name      | Type                                                | Default value | Description                                                                                          |
-| :------------- | :-------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------- |
-| headers        | <code>{key: string; value: string;}[]</code>        | `[]`          | Specify the data table headers.                                                                      |
-| rows           | <code>Object[]</code>                               | `[]`          | Specify the rows the data table should render. keys defined in `headers` are used for the row ids.   |
-| size           | <code>"compact" &#124; "short" &#124; "tall"</code> | --            | Set the size of the data table.                                                                      |
-| title          | <code>string</code>                                 | `""`          | Specify the title of the data table.                                                                 |
-| description    | <code>string</code>                                 | `""`          | Specify the description of the data table.                                                           |
-| zebra          | <code>boolean</code>                                | `false`       | Set to `true` to use zebra styles.                                                                   |
-| sortable       | <code>boolean</code>                                | `false`       | Set to `true` for the sortable variant.                                                              |
-| expandable     | <code>boolean</code>                                | `false`       | Set to `true` for the expandable variant. Automatically set to `true` if `batchExpansion` is `true`. |
-| batchExpansion | <code>boolean</code>                                | `false`       | Set to `true` to enable batch expansion.                                                             |
-| expandedRowIds | <code>string[]</code>                               | `[]`          | Specify the row ids to be expanded.                                                                  |
-| stickyHeader   | <code>boolean</code>                                | `false`       | Set to `true` to enable a sticky header.                                                             |
+| Prop name      | Type                                                                                             | Default value | Description                                                                                          |
+| :------------- | :----------------------------------------------------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------- |
+| headers        | <code>{key: string; value: string; display?: (item) => string; sort?: (a, b) => number}[]</code> | `[]`          | Specify the data table headers.                                                                      |
+| rows           | <code>Object[]</code>                                                                            | `[]`          | Specify the rows the data table should render. keys defined in `headers` are used for the row ids.   |
+| size           | <code>"compact" &#124; "short" &#124; "tall"</code>                                              | --            | Set the size of the data table.                                                                      |
+| title          | <code>string</code>                                                                              | `""`          | Specify the title of the data table.                                                                 |
+| description    | <code>string</code>                                                                              | `""`          | Specify the description of the data table.                                                           |
+| zebra          | <code>boolean</code>                                                                             | `false`       | Set to `true` to use zebra styles.                                                                   |
+| sortable       | <code>boolean</code>                                                                             | `false`       | Set to `true` for the sortable variant.                                                              |
+| expandable     | <code>boolean</code>                                                                             | `false`       | Set to `true` for the expandable variant. Automatically set to `true` if `batchExpansion` is `true`. |
+| batchExpansion | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable batch expansion.                                                             |
+| expandedRowIds | <code>string[]</code>                                                                            | `[]`          | Specify the row ids to be expanded.                                                                  |
+| stickyHeader   | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable a sticky header.                                                             |
 
 ### Slots
 

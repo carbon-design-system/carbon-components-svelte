@@ -787,7 +787,12 @@ export class DataTable extends CarbonSvelteComponent {
      * Specify the data table headers
      * @default []
      */
-    headers?: { key: string; value: string }[];
+    headers?: {
+      key: string;
+      value: string;
+      display?: (item) => string;
+      sort?: (a, b) => number;
+    }[];
 
     /**
      * Specify the rows the data table should render
