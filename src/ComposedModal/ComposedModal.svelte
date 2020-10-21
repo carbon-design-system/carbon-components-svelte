@@ -71,7 +71,7 @@
   function focus(element) {
     const node =
       (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
-    node.focus();
+    if (node != null) node.focus();
   }
 
   $: opened = false;
@@ -84,7 +84,7 @@
 
   onDestroy(() => {
     document.body.classList.remove("bx--body--with-modal-open");
-  })
+  });
 
   afterUpdate(() => {
     if (opened) {
