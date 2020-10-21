@@ -15506,14 +15506,61 @@
             "default": true,
             "default_value": ""
           }
+        ],
+        [
+          "tooltip",
+          {
+            "attributes": [
+              {
+                "start": 1681,
+                "end": 1695,
+                "type": "Attribute",
+                "name": "name",
+                "value": [
+                  {
+                    "start": 1687,
+                    "end": 1694,
+                    "type": "Text",
+                    "raw": "tooltip",
+                    "data": "tooltip"
+                  }
+                ]
+              }
+            ],
+            "children": [
+              {
+                "start": 1696,
+                "end": 1709,
+                "type": "MustacheTag",
+                "expression": {
+                  "type": "Identifier",
+                  "start": 1697,
+                  "end": 1708,
+                  "loc": {
+                    "start": {
+                      "line": 76,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 76,
+                      "column": 37
+                    }
+                  },
+                  "name": "tooltipText"
+                }
+              }
+            ],
+            "default": false,
+            "default_value": "{tooltipText}\n"
+          }
         ]
       ],
       "forwarded_events": [
         [
           "click",
           {
-            "start": 1480,
-            "end": 1488,
+            "start": 1457,
+            "end": 1465,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -15523,8 +15570,8 @@
         [
           "mouseover",
           {
-            "start": 1493,
-            "end": 1505,
+            "start": 1470,
+            "end": 1482,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -15534,8 +15581,8 @@
         [
           "mouseenter",
           {
-            "start": 1510,
-            "end": 1523,
+            "start": 1487,
+            "end": 1500,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -15545,8 +15592,8 @@
         [
           "mouseleave",
           {
-            "start": 1528,
-            "end": 1541,
+            "start": 1505,
+            "end": 1518,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -15556,8 +15603,8 @@
         [
           "focus",
           {
-            "start": 1546,
-            "end": 1554,
+            "start": 1523,
+            "end": 1531,
             "type": "EventHandler",
             "name": "focus",
             "modifiers": [],
