@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the data table headers
-   * @type {{key: string; value: string;}[]} [headers=[]]
+   * @type {{key: string; value: string; display?: (item) => string; sort?: (a, b) => number}[]} [headers=[]]
    */
   export let headers = [];
 
@@ -85,7 +85,12 @@
   };
   const dispatch = createEventDispatcher();
   const tableSortable = writable(sortable);
-  const sortHeader = writable({ id: null, key: null, sortDirection: "none" });
+  const sortHeader = writable({
+    id: null,
+    key: null,
+    sort: undefined,
+    sortDirection: "none",
+  });
   const headerItems = writable([]);
   const thKeys = derived(headerItems, () =>
     headers
@@ -123,18 +128,22 @@
     if ($sortHeader.sortDirection === "none") {
       sortedRows = rows;
     } else {
-      sortedRows = [...rows].sort((a, b) => {
-        const itemA = ascending ? a[sortKey] : b[sortKey];
-        const itemB = ascending ? b[sortKey] : a[sortKey];
+      sortedRows = [...rows].sort(
+        $sortHeader.sort
+          ? $sortHeader.sort
+          : (a, b) => {
+              const itemA = ascending ? a[sortKey] : b[sortKey];
+              const itemB = ascending ? b[sortKey] : a[sortKey];
 
-        if (typeof itemA === "number" && typeof itemB === "number") {
-          return itemA - itemB;
-        }
+              if (typeof itemA === "number" && typeof itemB === "number") {
+                return itemA - itemB;
+              }
 
-        return itemA
-          .toString()
-          .localeCompare(itemB.toString(), "en", { numeric: true });
-      });
+              return itemA
+                .toString()
+                .localeCompare(itemB.toString(), "en", { numeric: true });
+            }
+      );
     }
   }
 </script>
@@ -181,6 +190,7 @@
               sortHeader.set({
                 id: sortDirection === 'none' ? null : $thKeys[header.key],
                 key: header.key,
+                sort: header.sort,
                 sortDirection,
               });
             }}"
@@ -231,7 +241,9 @@
                 dispatch('click:cell', cell);
               }}"
             >
-              <slot name="cell" row="{row}" cell="{cell}">{cell.value}</slot>
+              <slot name="cell" row="{row}" cell="{cell}">
+                {headers[j].display ? headers[j].display(cell.value) : cell.value}
+              </slot>
             </TableCell>
           {/each}
         </TableRow>
