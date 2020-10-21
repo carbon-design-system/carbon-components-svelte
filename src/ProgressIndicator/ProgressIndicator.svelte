@@ -17,6 +17,12 @@
    */
   export let spaceEqually = false;
 
+  /**
+   * Set to `true` to prevent updating `currentIndex`
+   * @type {boolean} [preventChangeOnClick=false]
+   */
+  export let preventChangeOnClick = false;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
 
@@ -41,6 +47,14 @@
       ]);
     },
     change: (index) => {
+      if (preventChangeOnClick) return;
+      currentIndex = index;
+      steps.update((_) =>
+        [..._].map((step, i) => ({
+          ...step,
+          current: i === index,
+        }))
+      );
       dispatch("change", index);
     },
   });

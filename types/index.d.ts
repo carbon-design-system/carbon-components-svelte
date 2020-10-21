@@ -3225,6 +3225,12 @@ export class ProgressIndicator extends CarbonSvelteComponent {
      * @default false
      */
     spaceEqually?: boolean;
+
+    /**
+     * Set to `true` to prevent updating `currentIndex`
+     * @default false
+     */
+    preventChangeOnClick?: boolean;
   };
 
   $$slot_def: { default: {} };
