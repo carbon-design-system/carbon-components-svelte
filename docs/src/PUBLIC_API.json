@@ -2089,8 +2089,8 @@
         [
           "click",
           {
-            "start": 2355,
-            "end": 2363,
+            "start": 2373,
+            "end": 2381,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -2100,8 +2100,8 @@
         [
           "mouseover",
           {
-            "start": 2499,
-            "end": 2511,
+            "start": 2517,
+            "end": 2529,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -2111,8 +2111,8 @@
         [
           "mouseenter",
           {
-            "start": 2514,
-            "end": 2527,
+            "start": 2532,
+            "end": 2545,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -2122,8 +2122,8 @@
         [
           "mouseleave",
           {
-            "start": 2530,
-            "end": 2543,
+            "start": 2548,
+            "end": 2561,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -2133,8 +2133,8 @@
         [
           "transitionend",
           {
-            "start": 2546,
-            "end": 2562,
+            "start": 2564,
+            "end": 2580,
             "type": "EventHandler",
             "name": "transitionend",
             "modifiers": [],
@@ -9555,8 +9555,8 @@
         [
           "click",
           {
-            "start": 1640,
-            "end": 1648,
+            "start": 1639,
+            "end": 1647,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -9566,8 +9566,8 @@
         [
           "mouseover",
           {
-            "start": 1651,
-            "end": 1663,
+            "start": 1650,
+            "end": 1662,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -9577,8 +9577,8 @@
         [
           "mouseenter",
           {
-            "start": 1666,
-            "end": 1679,
+            "start": 1665,
+            "end": 1678,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -9588,8 +9588,8 @@
         [
           "mouseleave",
           {
-            "start": 1682,
-            "end": 1695,
+            "start": 1681,
+            "end": 1694,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
