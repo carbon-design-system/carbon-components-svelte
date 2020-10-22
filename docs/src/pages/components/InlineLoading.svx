@@ -17,3 +17,7 @@
 <InlineLoading status="inactive" />
 <InlineLoading status="finished" />
 <InlineLoading status="error" />
+
+### UX example
+
+<FileSource src="/framed/InlineLoading/InlineLoadingUx" />
