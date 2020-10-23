@@ -3506,8 +3506,8 @@ import { Search } from "carbon-components-svelte";
 
 | Prop name            | Type                                      | Default value          | Description                                              |
 | :------------------- | :---------------------------------------- | :--------------------- | :------------------------------------------------------- |
-| small                | <code>boolean</code>                      | `false`                | Set to `true` to use the small variant.                  |
-| size                 | <code>"sm" &#124; "lg"</code>             | --                     | Specify the size of the search input.                    |
+| small                | <code>boolean</code>                      | `false`                | .                                                        |
+| size                 | <code>"sm" &#124; "lg" &#124; "xl"</code> | `"xl"`                 | Specify the size of the search input.                    |
 | skeleton             | <code>boolean</code>                      | `false`                | Set to `true` to display the skeleton state.             |
 | light                | <code>boolean</code>                      | `false`                | Set to `true` to enable the light variant.               |
 | disabled             | <code>boolean</code>                      | `false`                | Set to `true` to disable the search input.               |
@@ -3550,9 +3550,10 @@ import { SearchSkeleton } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name | Type                 | Default value | Description                             |
-| :-------- | :------------------- | :------------ | :-------------------------------------- |
-| small     | <code>boolean</code> | `false`       | Set to `true` to use the small variant. |
+| Prop name | Type                                      | Default value | Description                           |
+| :-------- | :---------------------------------------- | :------------ | :------------------------------------ |
+| small     | <code>boolean</code>                      | `false`       | .                                     |
+| size      | <code>"sm" &#124; "lg" &#124; "xl"</code> | `"xl"`        | Specify the size of the search input. |
 
 ### Slots
 

@@ -1,15 +1,23 @@
 <script>
   /**
+   * @deprecated this prop will be removed in the next major release
    * Set to `true` to use the small variant
    * @type {boolean} [small=false]
    */
   export let small = false;
+
+  /**
+   * Specify the size of the search input
+   * @type {"sm" | "lg" | "xl"} [size="xl"]
+   */
+  export let size = "xl";
 </script>
 
 <div
   class:bx--skeleton="{true}"
-  class:bx--search--xl="{!small}"
-  class:bx--search--sm="{small}"
+  class:bx--search--sm="{size === 'sm' || small}"
+  class:bx--search--lg="{size === 'lg'}"
+  class:bx--search--xl="{size === 'xl'}"
   {...$$restProps}
   on:click
   on:mouseover
