@@ -5,6 +5,8 @@
 
 ### Default
 
+The `Search` component is extra-large by default. There are [large](#large-size) and [small](#small-size) size variants.
+
 <Search />
 
 ### Default value

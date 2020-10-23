@@ -5,7 +5,7 @@
   const descriptionMap = {
     active: "Submitting...",
     finished: "Success",
-    inactive: "Cancelled",
+    inactive: "Cancelling...",
   };
 
   const stateMap = {

@@ -62,6 +62,10 @@
     color: #3ddbd9; /* teal 30 */
   }
 
+  .token.function {
+    color: #9ef0f0;
+  }
+
   .token.token.language-javascript,
   .token.attr-value {
     color: #d4bbff; /* purple 30 */
