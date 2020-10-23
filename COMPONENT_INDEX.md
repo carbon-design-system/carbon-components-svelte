@@ -1,6 +1,6 @@
 # Component Index
 
-> 148 components exported from carbon-components-svelte 0.18.0
+> 148 components exported from carbon-components-svelte 0.19.0
 
 - Accordion
   - [Accordion](#accordion)

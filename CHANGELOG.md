@@ -9,6 +9,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Selectable `DataTable`
 
+## [0.19.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.19.0) - 2020-10-23
+
+**Features**
+
+- DataTable: add optional display and sort methods in header object ([PR #352](https://github.com/IBM/carbon-components-svelte/pull/352))
+- ProgressIndicator: add preventChangeOnClick; default value is `false` ([PR #351](https://github.com/IBM/carbon-components-svelte/pull/351))
+- TooltipDefinition: make tooltip text slottable through `slot="tooltip"`
+
+**Fixes**
+
+- ProgressIndicator: make `currentIndex` reactive ([PR #351](https://github.com/IBM/carbon-components-svelte/pull/351))
+- ComposedModal: use `onDestroy` for destroy logic due to async usage of `onMount`([PR #348](https://github.com/IBM/carbon-components-svelte/pull/348))
+- Search: forward `size` prop to Search skeleton
+
+**Refactoring**
+
+- TooltipDefinition: remove redundant `hidden` reactive variable
+
+**Breaking Changes**
+
+- ProgressIndicator: clicking a completed step will update `currentIndex`; to opt out of this default behavior, set `preventChangeOnClick` to `true`
+
+**Documentation**
+
+- ContentSwitcher: add "Selected index" example
+- CodeSnippet: add multi-line skeleton example
+- InlineLoading: add UX example showcasing various statuses
+
 ## [0.18.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.18.0) - 2020-10-17
 
 **Features**
@@ -21,15 +49,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix(data-table): fix misaligned tall row table headers ([PR 340](https://github.com/IBM/carbon-components-svelte/pull/340))
 - Documentation generator: parse `ArrayExpression` in exported props ([PR 341](https://github.com/IBM/carbon-components-svelte/pull/341))
 
+**Breaking Changes**
+
+- Remove top-level slot in `DataTable` in favor of named slots ([PR 341](https://github.com/IBM/carbon-components-svelte/pull/341))
+
 **Documentation**
 
 - add Component API metadata ([PR 340](https://github.com/IBM/carbon-components-svelte/pull/340))
 - DataTable: add expandable, batch expandable examples ([PR 341](https://github.com/IBM/carbon-components-svelte/pull/341))
 - DataTable: add slottable cells example ([PR 342](https://github.com/IBM/carbon-components-svelte/pull/342))
-
-**Breaking Changes**
-
-- Remove top-level slot in `DataTable` in favor of named slots ([PR 341](https://github.com/IBM/carbon-components-svelte/pull/341))
 
 ## [0.17.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.17.0) - 2020-10-16
 

@@ -1,5 +1,5 @@
 {
-  "version": "0.18.0",
+  "version": "0.19.0",
   "components": {
     "Accordion": {
       "moduleName": "Accordion",
@@ -10853,8 +10853,8 @@
         [
           "click",
           {
-            "start": 3370,
-            "end": 3378,
+            "start": 3375,
+            "end": 3383,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -10897,8 +10897,8 @@
         [
           "change",
           {
-            "start": 3063,
-            "end": 3072,
+            "start": 3068,
+            "end": 3077,
             "type": "EventHandler",
             "name": "change",
             "modifiers": [],
@@ -10908,8 +10908,8 @@
         [
           "input",
           {
-            "start": 3079,
-            "end": 3087,
+            "start": 3084,
+            "end": 3092,
             "type": "EventHandler",
             "name": "input",
             "modifiers": [],
@@ -10946,8 +10946,8 @@
         [
           "click",
           {
-            "start": 520,
-            "end": 528,
+            "start": 521,
+            "end": 529,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -10957,8 +10957,8 @@
         [
           "mouseover",
           {
-            "start": 531,
-            "end": 543,
+            "start": 532,
+            "end": 544,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -10968,8 +10968,8 @@
         [
           "mouseenter",
           {
-            "start": 546,
-            "end": 559,
+            "start": 547,
+            "end": 560,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -10979,8 +10979,8 @@
         [
           "mouseleave",
           {
-            "start": 562,
-            "end": 575,
+            "start": 563,
+            "end": 576,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
