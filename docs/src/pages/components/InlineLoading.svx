@@ -13,7 +13,11 @@
 
 ### Status states
 
-<InlineLoading status="active" />
-<InlineLoading status="inactive" />
-<InlineLoading status="finished" />
-<InlineLoading status="error" />
+<InlineLoading status="active" description="Submitting..." />
+<InlineLoading status="inactive" description="Cancelling..." />
+<InlineLoading status="finished" description="Success" />
+<InlineLoading status="error" description="An error occurred" />
+
+### UX example
+
+<FileSource src="/framed/InlineLoading/InlineLoadingUx" />

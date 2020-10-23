@@ -4,24 +4,31 @@ components: ["ContentSwitcher", "Switch"]
 
 <script>
   import { ContentSwitcher, Switch } from "carbon-components-svelte";
-  import Add16 from "carbon-icons-svelte/lib/Add16";
+  import Bullhorn16 from "carbon-icons-svelte/lib/Bullhorn16";
+  import Analytics16 from "carbon-icons-svelte/lib/Analytics16";
   import Preview from "../../components/Preview.svelte";
 </script>
 
 ### Default
 
 <ContentSwitcher>
-  <Switch text="Switch 1" />
-  <Switch text="Switch 2" />
-  <Switch text="Switch 3" />
+  <Switch text="Latest news" />
+  <Switch text="Trending" />
+</ContentSwitcher>
+
+### Initial selected index
+
+<ContentSwitcher selectedIndex={1}>
+  <Switch text="Latest news" />
+  <Switch text="Trending" />
+  <Switch text="Recommended" />
 </ContentSwitcher>
 
 ### Light variant
 
 <ContentSwitcher light>
-  <Switch text="Switch 1" />
-  <Switch text="Switch 2" />
-  <Switch text="Switch 3" />
+  <Switch text="Latest news" />
+  <Switch text="Trending" />
 </ContentSwitcher>
 
 ### Custom switch slot
@@ -29,31 +36,33 @@ components: ["ContentSwitcher", "Switch"]
 <ContentSwitcher>
   <Switch>
     <div style="display: flex; align-items: center;">
-        Third section <Add16 style="margin-left: .25rem;" />
-     </div>
+      <Bullhorn16 style="margin-right: 0.5rem;" /> Latest news
+    </div>
   </Switch>
-  <Switch text="Switch 2" />
+  <Switch>
+    <div style="display: flex; align-items: center;">
+      <Analytics16 style="margin-right: 0.5rem;" /> Trending
+    </div>
+  </Switch>
 </ContentSwitcher>
 
 ### Extra-large size
 
 <ContentSwitcher size="xl">
-  <Switch text="Switch 1" />
-  <Switch text="Switch 2" />
-  <Switch text="Switch 3" />
+  <Switch text="All" />
+  <Switch text="Archived" />
 </ContentSwitcher>
 
 ### Small size
 
 <ContentSwitcher size="sm">
-  <Switch text="Switch 1" />
-  <Switch text="Switch 2" />
-  <Switch text="Switch 3" />
+  <Switch text="All" />
+  <Switch text="Archived" />
 </ContentSwitcher>
 
 ### Disabled
 
 <ContentSwitcher>
-  <Switch text="Switch 1" disabled />
-  <Switch text="Switch 2" disabled />
+  <Switch disabled text="All" />
+  <Switch disabled text="Archived" />
 </ContentSwitcher>

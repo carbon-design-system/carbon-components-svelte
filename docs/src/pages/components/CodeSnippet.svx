@@ -45,12 +45,18 @@ let comment = `
 
 <CodeSnippet type="multi" {code} hideCopyButton />
 
-### Wrap text
+### Wrapped text
 
-Note that `wrapText` only applies to the `"multi"` type.
+`wrapText` only applies to the `"multi"` type.
 
 <CodeSnippet wrapText type="multi" code="{comment}" />
 
 ### Skeleton
 
+The default skeleton type is `"single"`.
+
 <CodeSnippet skeleton />
+
+### Skeleton (multi-line)
+
+<CodeSnippet type="multi" skeleton />
