@@ -128,22 +128,19 @@
     if ($sortHeader.sortDirection === "none") {
       sortedRows = rows;
     } else {
-      sortedRows = [...rows].sort(
-        $sortHeader.sort
-          ? $sortHeader.sort
-          : (a, b) => {
-              const itemA = ascending ? a[sortKey] : b[sortKey];
-              const itemB = ascending ? b[sortKey] : a[sortKey];
+      sortedRows = [...rows].sort((a, b) => {
+        const itemA = ascending ? a[sortKey] : b[sortKey];
+        const itemB = ascending ? b[sortKey] : a[sortKey];
 
-              if (typeof itemA === "number" && typeof itemB === "number") {
-                return itemA - itemB;
-              }
+        if ($sortHeader.sort) return $sortHeader.sort(itemA, itemB);
 
-              return itemA
-                .toString()
-                .localeCompare(itemB.toString(), "en", { numeric: true });
-            }
-      );
+        if (typeof itemA === "number" && typeof itemB === "number")
+          return itemA - itemB;
+
+        return itemA
+          .toString()
+          .localeCompare(itemB.toString(), "en", { numeric: true });
+      });
     }
   }
 </script>
