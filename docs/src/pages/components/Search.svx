@@ -32,3 +32,11 @@ The `Search` component is extra-large by default. There are [large](#large-size)
 ### Skeleton
 
 <Search skeleton />
+
+### Skeleton (large)
+
+<Search size="lg" skeleton />
+
+### Skeleton (small)
+
+<Search size="sm" skeleton />

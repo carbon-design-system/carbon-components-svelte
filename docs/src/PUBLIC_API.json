@@ -10728,14 +10728,15 @@
             "kind": "let",
             "value": "false",
             "type": "boolean",
-            "description": "Set to `true` to use the small variant"
+            "description": ""
           }
         ],
         [
           "size",
           {
             "kind": "let",
-            "type": "\"sm\" | \"lg\"",
+            "value": "\"xl\"",
+            "type": "\"sm\" | \"lg\" | \"xl\"",
             "description": "Specify the size of the search input"
           }
         ],
@@ -10852,8 +10853,8 @@
         [
           "click",
           {
-            "start": 3204,
-            "end": 3212,
+            "start": 3370,
+            "end": 3378,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -10863,8 +10864,8 @@
         [
           "mouseover",
           {
-            "start": 2197,
-            "end": 2209,
+            "start": 2281,
+            "end": 2293,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -10874,8 +10875,8 @@
         [
           "mouseenter",
           {
-            "start": 2214,
-            "end": 2227,
+            "start": 2298,
+            "end": 2311,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -10885,8 +10886,8 @@
         [
           "mouseleave",
           {
-            "start": 2232,
-            "end": 2245,
+            "start": 2316,
+            "end": 2329,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -10896,8 +10897,8 @@
         [
           "change",
           {
-            "start": 2897,
-            "end": 2906,
+            "start": 3063,
+            "end": 3072,
             "type": "EventHandler",
             "name": "change",
             "modifiers": [],
@@ -10907,8 +10908,8 @@
         [
           "input",
           {
-            "start": 2913,
-            "end": 2921,
+            "start": 3079,
+            "end": 3087,
             "type": "EventHandler",
             "name": "input",
             "modifiers": [],
@@ -10927,7 +10928,16 @@
             "kind": "let",
             "value": "false",
             "type": "boolean",
-            "description": "Set to `true` to use the small variant"
+            "description": ""
+          }
+        ],
+        [
+          "size",
+          {
+            "kind": "let",
+            "value": "\"xl\"",
+            "type": "\"sm\" | \"lg\" | \"xl\"",
+            "description": "Specify the size of the search input"
           }
         ]
       ],
@@ -10936,8 +10946,8 @@
         [
           "click",
           {
-            "start": 262,
-            "end": 270,
+            "start": 520,
+            "end": 528,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -10947,8 +10957,8 @@
         [
           "mouseover",
           {
-            "start": 273,
-            "end": 285,
+            "start": 531,
+            "end": 543,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -10958,8 +10968,8 @@
         [
           "mouseenter",
           {
-            "start": 288,
-            "end": 301,
+            "start": 546,
+            "end": 559,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -10969,8 +10979,8 @@
         [
           "mouseleave",
           {
-            "start": 304,
-            "end": 317,
+            "start": 562,
+            "end": 575,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],

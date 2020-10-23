@@ -3496,15 +3496,16 @@ export class Row extends CarbonSvelteComponent {
 export class Search extends CarbonSvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` to use the small variant
+     *
      * @default false
      */
     small?: boolean;
 
     /**
      * Specify the size of the search input
+     * @default "xl"
      */
-    size?: "sm" | "lg";
+    size?: "sm" | "lg" | "xl";
 
     /**
      * Set to `true` to display the skeleton state
@@ -3582,10 +3583,16 @@ export class Search extends CarbonSvelteComponent {
 export class SearchSkeleton extends CarbonSvelteComponent {
   $$prop_def: {
     /**
-     * Set to `true` to use the small variant
+     *
      * @default false
      */
     small?: boolean;
+
+    /**
+     * Specify the size of the search input
+     * @default "xl"
+     */
+    size?: "sm" | "lg" | "xl";
   };
 }
 

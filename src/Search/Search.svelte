@@ -1,5 +1,6 @@
 <script>
   /**
+   * @deprecated this prop will be removed in the next major release
    * Set to `true` to use the small variant
    * @type {boolean} [small=false]
    */
@@ -7,9 +8,9 @@
 
   /**
    * Specify the size of the search input
-   * @type {"sm" | "lg"} [size]
+   * @type {"sm" | "lg" | "xl"} [size="xl"]
    */
-  export let size = small ? "sm" : "xl";
+  export let size = "xl";
 
   /**
    * Set to `true` to display the skeleton state
@@ -92,6 +93,7 @@
 {#if skeleton}
   <SearchSkeleton
     small="{small}"
+    size="{size}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -103,8 +105,10 @@
     class:bx--search="{true}"
     class:bx--search--light="{light}"
     class:bx--search--disabled="{disabled}"
+    class:bx--search--sm="{size === 'sm' || small}"
+    class:bx--search--lg="{size === 'lg'}"
+    class:bx--search--xl="{size === 'xl'}"
     {...$$restProps}
-    class="bx--search--{size} {$$restProps.class}"
   >
     <Search16 class="bx--search-magnifier" />
     <label for="{id}" class:bx--label="{true}">{labelText}</label>
