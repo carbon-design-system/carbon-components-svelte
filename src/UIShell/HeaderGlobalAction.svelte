@@ -27,8 +27,6 @@
   on:click
 >
   <slot>
-    {#if icon}
-      <svelte:component this="{icon}" />
-    {/if}
+    <svelte:component this="{icon}" />
   </slot>
 </button>
