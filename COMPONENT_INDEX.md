@@ -1,6 +1,6 @@
 # Component Index
 
-> 150 components exported from carbon-components-svelte 0.19.0
+> 152 components exported from carbon-components-svelte 0.19.0
 
 - Accordion
   - [Accordion](#accordion)
@@ -42,6 +42,8 @@
   - [TableHeader](#tableheader)
   - [TableRow](#tablerow)
   - [Toolbar](#toolbar)
+  - [ToolbarBatchActions](#toolbarbatchactions)
+  - [ToolbarContent](#toolbarcontent)
   - [ToolbarSearch](#toolbarsearch)
 - [DataTableSkeleton](#datatableskeleton)
 - DatePicker
@@ -982,19 +984,23 @@ import { DataTable } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name      | Type                                                                                             | Default value | Description                                                                                          |
-| :------------- | :----------------------------------------------------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------- |
-| headers        | <code>{key: string; value: string; display?: (item) => string; sort?: (a, b) => number}[]</code> | `[]`          | Specify the data table headers.                                                                      |
-| rows           | <code>Object[]</code>                                                                            | `[]`          | Specify the rows the data table should render. keys defined in `headers` are used for the row ids.   |
-| size           | <code>"compact" &#124; "short" &#124; "tall"</code>                                              | --            | Set the size of the data table.                                                                      |
-| title          | <code>string</code>                                                                              | `""`          | Specify the title of the data table.                                                                 |
-| description    | <code>string</code>                                                                              | `""`          | Specify the description of the data table.                                                           |
-| zebra          | <code>boolean</code>                                                                             | `false`       | Set to `true` to use zebra styles.                                                                   |
-| sortable       | <code>boolean</code>                                                                             | `false`       | Set to `true` for the sortable variant.                                                              |
-| expandable     | <code>boolean</code>                                                                             | `false`       | Set to `true` for the expandable variant. Automatically set to `true` if `batchExpansion` is `true`. |
-| batchExpansion | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable batch expansion.                                                             |
-| expandedRowIds | <code>string[]</code>                                                                            | `[]`          | Specify the row ids to be expanded.                                                                  |
-| stickyHeader   | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable a sticky header.                                                             |
+| Prop name      | Type                                                                                             | Default value | Description                                                                                                      |
+| :------------- | :----------------------------------------------------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------------------- |
+| headers        | <code>{key: string; value: string; display?: (item) => string; sort?: (a, b) => number}[]</code> | `[]`          | Specify the data table headers.                                                                                  |
+| rows           | <code>Object[]</code>                                                                            | `[]`          | Specify the rows the data table should render. keys defined in `headers` are used for the row ids.               |
+| size           | <code>"compact" &#124; "short" &#124; "tall"</code>                                              | --            | Set the size of the data table.                                                                                  |
+| title          | <code>string</code>                                                                              | `""`          | Specify the title of the data table.                                                                             |
+| description    | <code>string</code>                                                                              | `""`          | Specify the description of the data table.                                                                       |
+| zebra          | <code>boolean</code>                                                                             | `false`       | Set to `true` to use zebra styles.                                                                               |
+| sortable       | <code>boolean</code>                                                                             | `false`       | Set to `true` for the sortable variant.                                                                          |
+| expandable     | <code>boolean</code>                                                                             | `false`       | Set to `true` for the expandable variant. Automatically set to `true` if `batchExpansion` is `true`.             |
+| batchExpansion | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable batch expansion.                                                                         |
+| expandedRowIds | <code>string[]</code>                                                                            | `[]`          | Specify the row ids to be expanded.                                                                              |
+| radio          | <code>boolean</code>                                                                             | `false`       | Set to `true` for the radio selection variant.                                                                   |
+| selectable     | <code>boolean</code>                                                                             | `false`       | Set to `true` for the selectable variant. Automatically set to `true` if `radio` or `batchSelection` are `true`. |
+| batchSelection | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable batch selection.                                                                         |
+| selectedRowIds | <code>string[]</code>                                                                            | `[]`          | Specify the row ids to be selected.                                                                              |
+| stickyHeader   | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable a sticky header.                                                                         |
 
 ### Slots
 
@@ -5235,6 +5241,60 @@ import { Toolbar } from "carbon-components-svelte";
 | Prop name | Type                               | Default value | Description               |
 | :-------- | :--------------------------------- | :------------ | :------------------------ |
 | size      | <code>"sm" &#124; "default"</code> | `"default"`   | Specify the toolbar size. |
+
+### Slots
+
+- `<slot>...</slot>`
+
+### Forwarded events
+
+No forwarded events.
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## ToolbarBatchActions
+
+### Import path
+
+```js
+import { ToolbarBatchActions } from "carbon-components-svelte";
+```
+
+### Props
+
+| Prop name           | Type                                           | Default value | Description                             |
+| :------------------ | :--------------------------------------------- | :------------ | :-------------------------------------- |
+| formatTotalSelected | <code>(totalSelected: number) => string</code> | --            | Override the total items selected text. |
+
+### Slots
+
+- `<slot>...</slot>`
+
+### Forwarded events
+
+No forwarded events.
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## ToolbarContent
+
+### Import path
+
+```js
+import { ToolbarContent } from "carbon-components-svelte";
+```
+
+### Props
+
+No exported props.
 
 ### Slots
 

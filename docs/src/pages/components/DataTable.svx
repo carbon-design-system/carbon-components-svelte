@@ -1,9 +1,9 @@
 ---
-components: ["DataTable", "Toolbar", "ToolbarSearch"]
+components: ["DataTable", "Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarBatchActions"]
 ---
 
 <script>
-  import { DataTable, DataTableSkeleton, Toolbar, ToolbarSearch, Button, Link } from "carbon-components-svelte";
+  import { DataTable, DataTableSkeleton, Toolbar, ToolbarContent, ToolbarSearch, Button, Link } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
   import Preview from "../../components/Preview.svelte";
 </script>
@@ -247,8 +247,10 @@ The slot name for the table header cells is `"cell-header"`.
   ]}"
 >
   <Toolbar>
-    <ToolbarSearch />
-    <Button>Create</Button>
+    <ToolbarContent>
+      <ToolbarSearch />
+      <Button>Create</Button>
+    </ToolbarContent>
   </Toolbar>
 </DataTable>
 
@@ -307,8 +309,10 @@ The slot name for the table header cells is `"cell-header"`.
   ]}"
 >
   <Toolbar size="sm">
-    <ToolbarSearch />
-    <Button size="small">Create</Button>
+    <ToolbarContent>
+      <ToolbarSearch />
+      <Button>Create</Button>
+    </ToolbarContent>
   </Toolbar>
 </DataTable>
 
@@ -586,6 +590,23 @@ The slot name for the table header cells is `"cell-header"`.
     },
   ]}"
 />
+
+
+### Selectable
+
+<FileSource src="/framed/DataTable/SelectableDataTable" />
+
+### Initial selected rows
+
+<FileSource src="/framed/DataTable/DataTableBatchSelection" />
+
+### Selectable with batch actions
+
+<FileSource src="/framed/DataTable/DataTableBatchSelectionToolbar" />
+
+### Selectable (radio)
+
+<FileSource src="/framed/DataTable/RadioSelectableDataTable" />
 
 ### Expandable
 

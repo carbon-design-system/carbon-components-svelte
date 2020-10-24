@@ -24,7 +24,9 @@ export {
   TableHeader,
   TableRow,
   Toolbar,
+  ToolbarContent,
   ToolbarSearch,
+  ToolbarBatchActions,
 } from "./DataTable";
 export { DataTableSkeleton } from "./DataTableSkeleton";
 export { DatePicker, DatePickerInput, DatePickerSkeleton } from "./DatePicker";

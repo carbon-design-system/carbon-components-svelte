@@ -850,6 +850,31 @@ export class DataTable extends CarbonSvelteComponent {
     expandedRowIds?: string[];
 
     /**
+     * Set to `true` for the radio selection variant
+     * @default false
+     */
+    radio?: boolean;
+
+    /**
+     * Set to `true` for the selectable variant
+     * Automatically set to `true` if `radio` or `batchSelection` are `true`
+     * @default false
+     */
+    selectable?: boolean;
+
+    /**
+     * Set to `true` to enable batch selection
+     * @default false
+     */
+    batchSelection?: boolean;
+
+    /**
+     * Specify the row ids to be selected
+     * @default []
+     */
+    selectedRowIds?: string[];
+
+    /**
      * Set to `true` to enable a sticky header
      * @default false
      */
@@ -5088,6 +5113,21 @@ export class Toolbar extends CarbonSvelteComponent {
     size?: "sm" | "default";
   };
 
+  $$slot_def: { default: {} };
+}
+
+export class ToolbarBatchActions extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Override the total items selected text
+     */
+    formatTotalSelected?: (totalSelected: number) => string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ToolbarContent extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 
