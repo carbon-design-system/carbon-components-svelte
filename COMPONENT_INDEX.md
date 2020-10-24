@@ -1737,7 +1737,7 @@ import { Header } from "carbon-components-svelte";
 | uiShellAriaLabel  | <code>string</code>                        | --            | Specify the ARIA label for the header.                                                                                       |
 | href              | <code>string</code>                        | --            | Specify the `href` attribute.                                                                                                |
 | company           | <code>string</code>                        | --            | Specify the company name.                                                                                                    |
-| platformName      | <code>string</code>                        | --            | Specify the platform name. Alternatively, use the named slot "platform" (e.g. &lt;span slot="platform"&gt;...&lt;/span&gt;). |
+| platformName      | <code>string</code>                        | `""`          | Specify the platform name. Alternatively, use the named slot "platform" (e.g. &lt;span slot="platform"&gt;...&lt;/span&gt;). |
 | ref               | <code>null &#124; HTMLAnchorElement</code> | `null`        | Obtain a reference to the HTML anchor element.                                                                               |
 
 ### Slots
