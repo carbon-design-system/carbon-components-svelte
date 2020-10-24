@@ -194,7 +194,7 @@ The slot name for the table header cells is `"cell-header"`.
 
 ### With custom display and sort methods
 
-<DataTable title="Load balancers" description="Your organization's active load balancers."
+<DataTable sortable title="Load balancers" description="Your organization's active load balancers."
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
