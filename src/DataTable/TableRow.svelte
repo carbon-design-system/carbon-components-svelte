@@ -1,20 +1,3 @@
-<script>
-  /**
-   * Set to `true` to select the row
-   * @type {boolean} [isSelected=false]
-   */
-  export let isSelected = false;
-
-  // TODO: include ariaLabel, isSelected
-</script>
-
-<tr
-  class:bx--data-table--selected="{isSelected}"
-  {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
->
+<tr {...$$restProps} on:click on:mouseover on:mouseenter on:mouseleave>
   <slot />
 </tr>

@@ -120,7 +120,9 @@
       </StructuredListBody>
     </StructuredList>
   </div>
-{:else}No props.{/if}
+{:else}
+  <p class="my-layout-01-03">No props.</p>
+{/if}
 <h3 id="slots">Slots</h3>
 {#if component.slots.length > 0}
   <UnorderedList class="my-layout-01-03">

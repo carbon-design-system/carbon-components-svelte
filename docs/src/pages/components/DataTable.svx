@@ -1,5 +1,9 @@
+---
+components: ["DataTable", "Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarBatchActions"]
+---
+
 <script>
-  import { DataTable, DataTableSkeleton, Link } from "carbon-components-svelte";
+  import { DataTable, DataTableSkeleton, Toolbar, ToolbarContent, ToolbarSearch, Button, Link } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
   import Preview from "../../components/Preview.svelte";
 </script>
@@ -187,6 +191,130 @@ The slot name for the table header cells is `"cell-header"`.
     },
   ]}"
 />
+
+### With toolbar
+
+<DataTable title="Load balancers" description="Your organization's active load balancers."
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+>
+  <Toolbar>
+    <ToolbarContent>
+      <ToolbarSearch />
+      <Button>Create</Button>
+    </ToolbarContent>
+  </Toolbar>
+</DataTable>
+
+### With toolbar (small size)
+
+<DataTable size="short" title="Load balancers" description="Your organization's active load balancers."
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+>
+  <Toolbar size="sm">
+    <ToolbarContent>
+      <ToolbarSearch />
+      <Button>Create</Button>
+    </ToolbarContent>
+  </Toolbar>
+</DataTable>
 
 ### Zebra stripes
 
@@ -462,6 +590,23 @@ The slot name for the table header cells is `"cell-header"`.
     },
   ]}"
 />
+
+
+### Selectable
+
+<FileSource src="/framed/DataTable/SelectableDataTable" />
+
+### Initial selected rows
+
+<FileSource src="/framed/DataTable/DataTableBatchSelection" />
+
+### Selectable with batch actions
+
+<FileSource src="/framed/DataTable/DataTableBatchSelectionToolbar" />
+
+### Selectable (radio)
+
+<FileSource src="/framed/DataTable/RadioSelectableDataTable" />
 
 ### Expandable
 

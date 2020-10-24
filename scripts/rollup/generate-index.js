@@ -77,13 +77,15 @@ export function generateIndex(components, groups, pkg) {
 
     if (slots.size > 0) {
       if (slots.get("default")) {
-        code += "- `<slot>...</slot>`\n";
-      } else {
-        slots.forEach((slot, name) => {
-          if (slot.default) return;
-          code += `- \`<slot name="${name}">...</slot>\`\n`;
-        });
+        code += "- **default**: `<div>...</div>`\n";
       }
+
+      slots.forEach((slot, name) => {
+        if (slot.default) return;
+        code += `- **"${name}"**: \`<div name="${name}" ${slot.attributes
+          .map((attr) => `let:${attr.name}`)
+          .join(" ")}>...</div>\`\n`;
+      });
     } else {
       code += "No slots.\n\n";
     }

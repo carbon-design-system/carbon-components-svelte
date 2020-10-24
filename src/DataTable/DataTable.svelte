@@ -62,6 +62,31 @@
   export let expandedRowIds = [];
 
   /**
+   * Set to `true` for the radio selection variant
+   * @type {boolean} [radio=false]
+   */
+  export let radio = false;
+
+  /**
+   * Set to `true` for the selectable variant
+   * Automatically set to `true` if `radio` or `batchSelection` are `true`
+   * @type {boolean} [selectable=false]
+   */
+  export let selectable = false;
+
+  /**
+   * Set to `true` to enable batch selection
+   * @type {boolean} [batchSelection=false]
+   */
+  export let batchSelection = false;
+
+  /**
+   * Specify the row ids to be selected
+   * @type {string[]} [selectedRowIds=[]]
+   */
+  export let selectedRowIds = [];
+
+  /**
    * Set to `true` to enable a sticky header
    * @type {boolean} [stickyHeader=false]
    */
@@ -70,6 +95,8 @@
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
   import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16";
+  import { InlineCheckbox } from "../Checkbox";
+  import { RadioButton } from "../RadioButton";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
   import TableCell from "./TableCell.svelte";
@@ -84,6 +111,7 @@
     descending: "none",
   };
   const dispatch = createEventDispatcher();
+  const batchSelectedIds = writable(false);
   const tableSortable = writable(sortable);
   const sortHeader = writable({
     id: null,
@@ -101,6 +129,10 @@
   setContext("DataTable", {
     sortHeader,
     tableSortable,
+    batchSelectedIds,
+    resetSelectedRowIds: () => {
+      selectedRowIds = [];
+    },
     add: (id) => {
       headerItems.update((_) => [..._, id]);
     },
@@ -113,7 +145,13 @@
     (a, id) => ({ ...a, [id]: true }),
     {}
   );
+
+  let selectAll = false;
+  $: batchSelectedIds.set(selectedRowIds);
+  $: indeterminate =
+    selectedRowIds.length > 0 && selectedRowIds.length < rows.length;
   $: if (batchExpansion) expandable = true;
+  $: if (radio || batchSelection) selectable = true;
   $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
   $: rows = rows.map((row) => ({
@@ -149,6 +187,7 @@
 </script>
 
 <TableContainer title="{title}" description="{description}" {...$$restProps}>
+  <slot />
   <Table
     zebra="{zebra}"
     size="{size}"
@@ -179,6 +218,32 @@
             {/if}
           </th>
         {/if}
+        {#if selectable && !batchSelection}
+          <th scope="col"></th>
+        {/if}
+        {#if batchSelection && !radio}
+          <th scope="col" class:bx--table-column-checkbox="{true}">
+            <InlineCheckbox
+              aria-label="Select all rows"
+              checked="{selectAll}"
+              indeterminate="{indeterminate}"
+              on:change="{(e) => {
+                if (indeterminate) {
+                  e.target.checked = false;
+                  selectAll = false;
+                  selectedRowIds = [];
+                  return;
+                }
+
+                if (e.target.checked) {
+                  selectedRowIds = rows.map((row) => row.id);
+                } else {
+                  selectedRowIds = [];
+                }
+              }}"
+            />
+          </th>
+        {/if}
         {#each headers as header, i (header.key)}
           <TableHeader
             on:click="{() => {
@@ -203,10 +268,17 @@
     <TableBody>
       {#each sorting ? sortedRows : rows as row, i (row.id)}
         <TableRow
-          class="{expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable ? 'bx--parent-row' : ''} {expandable && parentRowId === row.id ? 'bx--expandable-row--hover' : ''}"
+          id="row-{row.id}"
+          class="{selectedRowIds.includes(row.id) ? 'bx--data-table--selected' : ''} {expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable ? 'bx--parent-row' : ''} {expandable && parentRowId === row.id ? 'bx--expandable-row--hover' : ''}"
           on:click="{() => {
             dispatch('click', { row });
             dispatch('click:row', row);
+          }}"
+          on:mouseenter="{() => {
+            dispatch('mouseenter:row', row);
+          }}"
+          on:mouseleave="{() => {
+            dispatch('mouseleave:row', row);
           }}"
         >
           {#if expandable}
@@ -233,6 +305,34 @@
                 <ChevronRight16 class="bx--table-expand__svg" />
               </button>
             </TableCell>
+          {/if}
+          {#if selectable}
+            <td
+              class:bx--table-column-checkbox="{true}"
+              class:bx--table-column-radio="{radio}"
+            >
+              {#if radio}
+                <RadioButton
+                  name="select-row-{row.id}"
+                  checked="{selectedRowIds.includes(row.id)}"
+                  on:change="{() => {
+                    selectedRowIds = [row.id];
+                  }}"
+                />
+              {:else}
+                <InlineCheckbox
+                  name="select-row-{row.id}"
+                  checked="{selectedRowIds.includes(row.id)}"
+                  on:change="{() => {
+                    if (selectedRowIds.includes(row.id)) {
+                      selectedRowIds = selectedRowIds.filter((id) => id !== row.id);
+                    } else {
+                      selectedRowIds = [...selectedRowIds, row.id];
+                    }
+                  }}"
+                />
+              {/if}
+            </td>
           {/if}
           {#each row.cells as cell, j (cell.key)}
             <TableCell

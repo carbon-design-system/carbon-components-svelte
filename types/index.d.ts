@@ -850,6 +850,31 @@ export class DataTable extends CarbonSvelteComponent {
     expandedRowIds?: string[];
 
     /**
+     * Set to `true` for the radio selection variant
+     * @default false
+     */
+    radio?: boolean;
+
+    /**
+     * Set to `true` for the selectable variant
+     * Automatically set to `true` if `radio` or `batchSelection` are `true`
+     * @default false
+     */
+    selectable?: boolean;
+
+    /**
+     * Set to `true` to enable batch selection
+     * @default false
+     */
+    batchSelection?: boolean;
+
+    /**
+     * Specify the row ids to be selected
+     * @default []
+     */
+    selectedRowIds?: string[];
+
+    /**
      * Set to `true` to enable a sticky header
      * @default false
      */
@@ -857,6 +882,7 @@ export class DataTable extends CarbonSvelteComponent {
   };
 
   $$slot_def: {
+    default: {};
     "cell-header": { header: any };
     cell: { row: any; cell: any };
     "expanded-row": { row: any };
@@ -4394,14 +4420,6 @@ export class TableHeader extends CarbonSvelteComponent {
 }
 
 export class TableRow extends CarbonSvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to select the row
-     * @default false
-     */
-    isSelected?: boolean;
-  };
-
   $$slot_def: { default: {} };
 }
 
@@ -5075,6 +5093,67 @@ export class ToggleSmallSkeleton extends CarbonSvelteComponent {
      * Set an id for the input element
      */
     id?: string;
+  };
+}
+
+export class Toolbar extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the toolbar size
+     * @default "default"
+     */
+    size?: "sm" | "default";
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ToolbarBatchActions extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Override the total items selected text
+     */
+    formatTotalSelected?: (totalSelected: number) => string;
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ToolbarContent extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class ToolbarSearch extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the value of the search input
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Set to `true` to expand the search bar
+     * @default false
+     */
+    expanded?: boolean;
+
+    /**
+     * Set to `true` to keep the search bar expanded
+     * @default false
+     */
+    persistent?: boolean;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
 }
 

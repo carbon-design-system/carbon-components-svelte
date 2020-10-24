@@ -1,6 +1,6 @@
 # Component Index
 
-> 148 components exported from carbon-components-svelte 0.19.0
+> 152 components exported from carbon-components-svelte 0.19.0
 
 - Accordion
   - [Accordion](#accordion)
@@ -41,6 +41,10 @@
   - [TableHead](#tablehead)
   - [TableHeader](#tableheader)
   - [TableRow](#tablerow)
+  - [Toolbar](#toolbar)
+  - [ToolbarBatchActions](#toolbarbatchactions)
+  - [ToolbarContent](#toolbarcontent)
+  - [ToolbarSearch](#toolbarsearch)
 - [DataTableSkeleton](#datatableskeleton)
 - DatePicker
   - [DatePicker](#datepicker)
@@ -205,7 +209,7 @@ import { Accordion } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -239,7 +243,8 @@ import { AccordionItem } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"title"**: `<div name="title" let:name>...</div>`
 
 ### Forwarded events
 
@@ -306,7 +311,7 @@ import { AspectRatio } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -335,7 +340,7 @@ import { Breadcrumb } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -367,7 +372,7 @@ import { BreadcrumbItem } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -443,7 +448,7 @@ import { Button } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -474,7 +479,7 @@ import { ButtonSet } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -608,7 +613,7 @@ import { ClickableTile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -655,7 +660,7 @@ import { CodeSnippet } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -740,7 +745,7 @@ type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -831,7 +836,7 @@ import { ComposedModal } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -865,7 +870,7 @@ import { Content } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -895,7 +900,7 @@ import { ContentSwitcher } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -928,7 +933,7 @@ import { Copy } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -980,25 +985,30 @@ import { DataTable } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name      | Type                                                                                             | Default value | Description                                                                                          |
-| :------------- | :----------------------------------------------------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------- |
-| headers        | <code>{key: string; value: string; display?: (item) => string; sort?: (a, b) => number}[]</code> | `[]`          | Specify the data table headers.                                                                      |
-| rows           | <code>Object[]</code>                                                                            | `[]`          | Specify the rows the data table should render. keys defined in `headers` are used for the row ids.   |
-| size           | <code>"compact" &#124; "short" &#124; "tall"</code>                                              | --            | Set the size of the data table.                                                                      |
-| title          | <code>string</code>                                                                              | `""`          | Specify the title of the data table.                                                                 |
-| description    | <code>string</code>                                                                              | `""`          | Specify the description of the data table.                                                           |
-| zebra          | <code>boolean</code>                                                                             | `false`       | Set to `true` to use zebra styles.                                                                   |
-| sortable       | <code>boolean</code>                                                                             | `false`       | Set to `true` for the sortable variant.                                                              |
-| expandable     | <code>boolean</code>                                                                             | `false`       | Set to `true` for the expandable variant. Automatically set to `true` if `batchExpansion` is `true`. |
-| batchExpansion | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable batch expansion.                                                             |
-| expandedRowIds | <code>string[]</code>                                                                            | `[]`          | Specify the row ids to be expanded.                                                                  |
-| stickyHeader   | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable a sticky header.                                                             |
+| Prop name      | Type                                                                                             | Default value | Description                                                                                                      |
+| :------------- | :----------------------------------------------------------------------------------------------- | :------------ | :--------------------------------------------------------------------------------------------------------------- |
+| headers        | <code>{key: string; value: string; display?: (item) => string; sort?: (a, b) => number}[]</code> | `[]`          | Specify the data table headers.                                                                                  |
+| rows           | <code>Object[]</code>                                                                            | `[]`          | Specify the rows the data table should render. keys defined in `headers` are used for the row ids.               |
+| size           | <code>"compact" &#124; "short" &#124; "tall"</code>                                              | --            | Set the size of the data table.                                                                                  |
+| title          | <code>string</code>                                                                              | `""`          | Specify the title of the data table.                                                                             |
+| description    | <code>string</code>                                                                              | `""`          | Specify the description of the data table.                                                                       |
+| zebra          | <code>boolean</code>                                                                             | `false`       | Set to `true` to use zebra styles.                                                                               |
+| sortable       | <code>boolean</code>                                                                             | `false`       | Set to `true` for the sortable variant.                                                                          |
+| expandable     | <code>boolean</code>                                                                             | `false`       | Set to `true` for the expandable variant. Automatically set to `true` if `batchExpansion` is `true`.             |
+| batchExpansion | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable batch expansion.                                                                         |
+| expandedRowIds | <code>string[]</code>                                                                            | `[]`          | Specify the row ids to be expanded.                                                                              |
+| radio          | <code>boolean</code>                                                                             | `false`       | Set to `true` for the radio selection variant.                                                                   |
+| selectable     | <code>boolean</code>                                                                             | `false`       | Set to `true` for the selectable variant. Automatically set to `true` if `radio` or `batchSelection` are `true`. |
+| batchSelection | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable batch selection.                                                                         |
+| selectedRowIds | <code>string[]</code>                                                                            | `[]`          | Specify the row ids to be selected.                                                                              |
+| stickyHeader   | <code>boolean</code>                                                                             | `false`       | Set to `true` to enable a sticky header.                                                                         |
 
 ### Slots
 
-- `<slot name="cell-header">...</slot>`
-- `<slot name="cell">...</slot>`
-- `<slot name="expanded-row">...</slot>`
+- **default**: `<div>...</div>`
+- **"cell-header"**: `<div name="cell-header" let:name let:header>...</div>`
+- **"cell"**: `<div name="cell" let:name let:row let:cell>...</div>`
+- **"expanded-row"**: `<div name="expanded-row" let:name let:row>...</div>`
 
 ### Forwarded events
 
@@ -1010,6 +1020,8 @@ No forwarded events.
 - `on:click`
 - `on:click:header`
 - `on:click:row`
+- `on:mouseenter:row`
+- `on:mouseleave:row`
 - `on:click:row--expand`
 - `on:click:cell`
 
@@ -1077,7 +1089,7 @@ import { DatePicker } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1279,8 +1291,8 @@ import { ExpandableTile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot name="above">...</slot>`
-- `<slot name="below">...</slot>`
+- **"above"**: `<div name="above" let:name>...</div>`
+- **"below"**: `<div name="below" let:name>...</div>`
 
 ### Forwarded events
 
@@ -1538,7 +1550,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1564,7 +1576,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1599,7 +1611,7 @@ import { FormGroup } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1628,7 +1640,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1659,7 +1671,7 @@ import { FormLabel } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1696,7 +1708,7 @@ import { Grid } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1730,7 +1742,9 @@ import { Header } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"skip-to-content"**: `<div name="skip-to-content" let:name>...</div>`
+- **"platform"**: `<div name="platform" let:name>...</div>`
 
 ### Forwarded events
 
@@ -1761,7 +1775,8 @@ import { HeaderAction } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"text"**: `<div name="text" let:name>...</div>`
 
 ### Forwarded events
 
@@ -1852,7 +1867,7 @@ import { HeaderGlobalAction } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1880,7 +1895,7 @@ import { HeaderNav } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1949,7 +1964,7 @@ import { HeaderNavMenu } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1982,7 +1997,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2011,7 +2026,7 @@ import { HeaderPanelLink } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2037,7 +2052,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2063,7 +2078,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2196,7 +2211,8 @@ import { InlineNotification } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"actions"**: `<div name="actions" let:name>...</div>`
 
 ### Forwarded events
 
@@ -2231,7 +2247,7 @@ import { Link } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2268,7 +2284,7 @@ import { ListBox } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2309,7 +2325,7 @@ type ListBoxFieldTranslationId = "close" | "open";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2343,7 +2359,7 @@ import { ListBoxMenu } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2408,7 +2424,7 @@ import { ListBoxMenuItem } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2474,7 +2490,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2555,7 +2571,9 @@ import { Modal } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"label"**: `<div name="label" let:name>...</div>`
+- **"heading"**: `<div name="heading" let:name>...</div>`
 
 ### Forwarded events
 
@@ -2591,7 +2609,7 @@ import { ModalBody } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2624,7 +2642,7 @@ import { ModalFooter } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2658,7 +2676,7 @@ import { ModalHeader } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2750,7 +2768,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2848,7 +2866,7 @@ import { NotificationTextDetails } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2902,7 +2920,7 @@ type NumberInputTranslationId = "increment" | "decrement";
 
 ### Slots
 
-- `<slot name="label">...</slot>`
+- **"label"**: `<div name="label" let:name>...</div>`
 
 ### Forwarded events
 
@@ -2965,7 +2983,7 @@ import { OrderedList } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3004,7 +3022,8 @@ import { OverflowMenu } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"menu"**: `<div name="menu" let:name>...</div>`
 
 ### Forwarded events
 
@@ -3044,7 +3063,7 @@ import { OverflowMenuItem } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3236,7 +3255,7 @@ import { ProgressIndicator } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3306,7 +3325,7 @@ import { ProgressStep } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3378,7 +3397,7 @@ import { RadioButtonGroup } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3444,7 +3463,7 @@ import { RadioTile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3482,7 +3501,7 @@ import { Row } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3533,6 +3552,8 @@ No slots.
 - `on:mouseleave`
 - `on:change`
 - `on:input`
+- `on:focus`
+- `on:blur`
 
 ### Dispatched events
 
@@ -3601,7 +3622,7 @@ import { Select } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3661,7 +3682,7 @@ import { SelectItemGroup } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3728,7 +3749,7 @@ import { SelectableTile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3762,7 +3783,7 @@ import { SideNav } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3788,7 +3809,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3851,7 +3872,7 @@ import { SideNavMenu } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3974,7 +3995,7 @@ import { SkipToContent } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4082,7 +4103,7 @@ import { StructuredList } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4111,7 +4132,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4143,7 +4164,7 @@ import { StructuredListCell } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4172,7 +4193,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4238,7 +4259,7 @@ import { StructuredListRow } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4306,7 +4327,7 @@ import { Switch } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4343,7 +4364,7 @@ import { Tab } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4373,7 +4394,7 @@ import { TabContent } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4406,7 +4427,7 @@ import { Table } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4432,7 +4453,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4458,7 +4479,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4491,7 +4512,7 @@ import { TableContainer } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4517,7 +4538,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4550,7 +4571,7 @@ import { TableHeader } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4575,13 +4596,11 @@ import { TableRow } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name  | Type                 | Default value | Description                      |
-| :--------- | :------------------- | :------------ | :------------------------------- |
-| isSelected | <code>boolean</code> | `false`       | Set to `true` to select the row. |
+No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4615,7 +4634,8 @@ import { Tabs } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"content"**: `<div name="content" let:name>...</div>`
 
 ### Forwarded events
 
@@ -4680,7 +4700,7 @@ import { Tag } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4903,7 +4923,7 @@ import { Tile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4936,7 +4956,7 @@ import { TileGroup } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4977,7 +4997,7 @@ import { TimePicker } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5019,7 +5039,7 @@ import { TimePickerSelect } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5059,7 +5079,7 @@ import { ToastNotification } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5220,6 +5240,123 @@ No dispatched events.
 
 ---
 
+## Toolbar
+
+### Import path
+
+```js
+import { Toolbar } from "carbon-components-svelte";
+```
+
+### Props
+
+| Prop name | Type                               | Default value | Description               |
+| :-------- | :--------------------------------- | :------------ | :------------------------ |
+| size      | <code>"sm" &#124; "default"</code> | `"default"`   | Specify the toolbar size. |
+
+### Slots
+
+- **default**: `<div>...</div>`
+
+### Forwarded events
+
+No forwarded events.
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## ToolbarBatchActions
+
+### Import path
+
+```js
+import { ToolbarBatchActions } from "carbon-components-svelte";
+```
+
+### Props
+
+| Prop name           | Type                                           | Default value | Description                             |
+| :------------------ | :--------------------------------------------- | :------------ | :-------------------------------------- |
+| formatTotalSelected | <code>(totalSelected: number) => string</code> | --            | Override the total items selected text. |
+
+### Slots
+
+- **default**: `<div>...</div>`
+
+### Forwarded events
+
+No forwarded events.
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## ToolbarContent
+
+### Import path
+
+```js
+import { ToolbarContent } from "carbon-components-svelte";
+```
+
+### Props
+
+No exported props.
+
+### Slots
+
+- **default**: `<div>...</div>`
+
+### Forwarded events
+
+No forwarded events.
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## ToolbarSearch
+
+### Import path
+
+```js
+import { ToolbarSearch } from "carbon-components-svelte";
+```
+
+### Props
+
+| Prop name  | Type                                      | Default value | Description                                    |
+| :--------- | :---------------------------------------- | :------------ | :--------------------------------------------- |
+| value      | <code>string</code>                       | `""`          | Specify the value of the search input.         |
+| expanded   | <code>boolean</code>                      | `false`       | Set to `true` to expand the search bar.        |
+| persistent | <code>boolean</code>                      | `false`       | Set to `true` to keep the search bar expanded. |
+| tabindex   | <code>string</code>                       | `"0"`         | Specify the tabindex.                          |
+| ref        | <code>null &#124; HTMLInputElement</code> | `null`        | Obtain a reference to the input HTML element.  |
+
+### Slots
+
+No slots.
+
+### Forwarded events
+
+- `on:change`
+- `on:input`
+- `on:focus`
+- `on:blur`
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
 ## Tooltip
 
 ### Import path
@@ -5248,7 +5385,9 @@ import { Tooltip } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"triggerText"**: `<div name="triggerText" let:name>...</div>`
+- **"icon"**: `<div name="icon" let:name>...</div>`
 
 ### Forwarded events
 
@@ -5280,7 +5419,8 @@ import { TooltipDefinition } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"tooltip"**: `<div name="tooltip" let:name>...</div>`
 
 ### Forwarded events
 
@@ -5316,7 +5456,7 @@ import { TooltipIcon } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5348,7 +5488,7 @@ import { UnorderedList } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
