@@ -32,7 +32,7 @@
 
   /**
    * Specify the value of the search input
-   * @type {string} [value="text"]
+   * @type {string} [value=""]
    */
   export let value = "";
 
@@ -124,11 +124,14 @@
       placeholder="{placeholder}"
       type="{type}"
       value="{value}"
+      aria-hidden="{$$props['aria-hidden']}"
       on:change
       on:input
       on:input="{({ target }) => {
         value = target.value;
       }}"
+      on:focus
+      on:blur
     />
     <button
       type="button"

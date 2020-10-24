@@ -6,3 +6,5 @@ export { default as TableContainer } from "./TableContainer.svelte";
 export { default as TableHead } from "./TableHead.svelte";
 export { default as TableHeader } from "./TableHeader.svelte";
 export { default as TableRow } from "./TableRow.svelte";
+export { default as Toolbar } from "./Toolbar.svelte";
+export { default as ToolbarSearch } from "./ToolbarSearch.svelte";

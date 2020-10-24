@@ -23,6 +23,8 @@ export {
   TableHead,
   TableHeader,
   TableRow,
+  Toolbar,
+  ToolbarSearch,
 } from "./DataTable";
 export { DataTableSkeleton } from "./DataTableSkeleton";
 export { DatePicker, DatePickerInput, DatePickerSkeleton } from "./DatePicker";

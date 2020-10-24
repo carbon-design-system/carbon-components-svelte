@@ -1,6 +1,6 @@
 # Component Index
 
-> 148 components exported from carbon-components-svelte 0.19.0
+> 150 components exported from carbon-components-svelte 0.19.0
 
 - Accordion
   - [Accordion](#accordion)
@@ -41,6 +41,8 @@
   - [TableHead](#tablehead)
   - [TableHeader](#tableheader)
   - [TableRow](#tablerow)
+  - [Toolbar](#toolbar)
+  - [ToolbarSearch](#toolbarsearch)
 - [DataTableSkeleton](#datatableskeleton)
 - DatePicker
   - [DatePicker](#datepicker)
@@ -996,9 +998,7 @@ import { DataTable } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot name="cell-header">...</slot>`
-- `<slot name="cell">...</slot>`
-- `<slot name="expanded-row">...</slot>`
+- `<slot>...</slot>`
 
 ### Forwarded events
 
@@ -3533,6 +3533,8 @@ No slots.
 - `on:mouseleave`
 - `on:change`
 - `on:input`
+- `on:focus`
+- `on:blur`
 
 ### Dispatched events
 
@@ -5213,6 +5215,69 @@ No slots.
 - `on:mouseover`
 - `on:mouseenter`
 - `on:mouseleave`
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## Toolbar
+
+### Import path
+
+```js
+import { Toolbar } from "carbon-components-svelte";
+```
+
+### Props
+
+| Prop name | Type                               | Default value | Description               |
+| :-------- | :--------------------------------- | :------------ | :------------------------ |
+| size      | <code>"sm" &#124; "default"</code> | `"default"`   | Specify the toolbar size. |
+
+### Slots
+
+- `<slot>...</slot>`
+
+### Forwarded events
+
+No forwarded events.
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## ToolbarSearch
+
+### Import path
+
+```js
+import { ToolbarSearch } from "carbon-components-svelte";
+```
+
+### Props
+
+| Prop name  | Type                                      | Default value | Description                                    |
+| :--------- | :---------------------------------------- | :------------ | :--------------------------------------------- |
+| value      | <code>string</code>                       | `""`          | Specify the value of the search input.         |
+| expanded   | <code>boolean</code>                      | `false`       | Set to `true` to expand the search bar.        |
+| persistent | <code>boolean</code>                      | `false`       | Set to `true` to keep the search bar expanded. |
+| tabindex   | <code>string</code>                       | `"0"`         | Specify the tabindex.                          |
+| ref        | <code>null &#124; HTMLInputElement</code> | `null`        | Obtain a reference to the input HTML element.  |
+
+### Slots
+
+No slots.
+
+### Forwarded events
+
+- `on:change`
+- `on:input`
+- `on:focus`
+- `on:blur`
 
 ### Dispatched events
 

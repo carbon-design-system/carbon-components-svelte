@@ -149,6 +149,7 @@
 </script>
 
 <TableContainer title="{title}" description="{description}" {...$$restProps}>
+  <slot />
   <Table
     zebra="{zebra}"
     size="{size}"

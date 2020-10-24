@@ -857,6 +857,7 @@ export class DataTable extends CarbonSvelteComponent {
   };
 
   $$slot_def: {
+    default: {};
     "cell-header": { header: any };
     cell: { row: any; cell: any };
     "expanded-row": { row: any };
@@ -5075,6 +5076,52 @@ export class ToggleSmallSkeleton extends CarbonSvelteComponent {
      * Set an id for the input element
      */
     id?: string;
+  };
+}
+
+export class Toolbar extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the toolbar size
+     * @default "default"
+     */
+    size?: "sm" | "default";
+  };
+
+  $$slot_def: { default: {} };
+}
+
+export class ToolbarSearch extends CarbonSvelteComponent {
+  $$prop_def: {
+    /**
+     * Specify the value of the search input
+     * @default ""
+     */
+    value?: string;
+
+    /**
+     * Set to `true` to expand the search bar
+     * @default false
+     */
+    expanded?: boolean;
+
+    /**
+     * Set to `true` to keep the search bar expanded
+     * @default false
+     */
+    persistent?: boolean;
+
+    /**
+     * Specify the tabindex
+     * @default "0"
+     */
+    tabindex?: string;
+
+    /**
+     * Obtain a reference to the input HTML element
+     * @default null
+     */
+    ref?: null | HTMLInputElement;
   };
 }
 
