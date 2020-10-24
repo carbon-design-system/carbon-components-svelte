@@ -192,6 +192,73 @@ The slot name for the table header cells is `"cell-header"`.
   ]}"
 />
 
+### With custom display and sort methods
+
+<DataTable sortable title="Load balancers" description="Your organization's active load balancers."
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "cost", value: "Cost", display: (cost) => cost + " €" },
+    {
+      key: "expireDate",
+      value: "Expire date",
+      display: (date) => new Date(date).toLocaleString(),
+      sort: (a, b) => (new Date(a) <= new Date(b) ? -1 : 1),
+    },
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      cost: 100,
+      expireDate: "2020-10-21",
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      cost: 200,
+      expireDate: "2020-09-10",
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      cost: 150,
+      expireDate: "2020-11-24",
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      cost: 250,
+      expireDate: "2020-12-01",
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      cost: 550,
+      expireDate: "2021-03-21",
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      cost: 400,
+      expireDate: "2020-11-14",
+    },
+  ]}"
+/>
+
 ### With toolbar
 
 <DataTable title="Load balancers" description="Your organization's active load balancers."
