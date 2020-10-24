@@ -209,7 +209,7 @@ import { Accordion } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -243,7 +243,8 @@ import { AccordionItem } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"title"**: `<div name="title" let:name>...</div>`
 
 ### Forwarded events
 
@@ -310,7 +311,7 @@ import { AspectRatio } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -339,7 +340,7 @@ import { Breadcrumb } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -371,7 +372,7 @@ import { BreadcrumbItem } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -447,7 +448,7 @@ import { Button } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -478,7 +479,7 @@ import { ButtonSet } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -612,7 +613,7 @@ import { ClickableTile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -659,7 +660,7 @@ import { CodeSnippet } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -744,7 +745,7 @@ type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -835,7 +836,7 @@ import { ComposedModal } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -869,7 +870,7 @@ import { Content } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -899,7 +900,7 @@ import { ContentSwitcher } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -932,7 +933,7 @@ import { Copy } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1004,7 +1005,10 @@ import { DataTable } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"cell-header"**: `<div name="cell-header" let:name let:header>...</div>`
+- **"cell"**: `<div name="cell" let:name let:row let:cell>...</div>`
+- **"expanded-row"**: `<div name="expanded-row" let:name let:row>...</div>`
 
 ### Forwarded events
 
@@ -1083,7 +1087,7 @@ import { DatePicker } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1285,8 +1289,8 @@ import { ExpandableTile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot name="above">...</slot>`
-- `<slot name="below">...</slot>`
+- **"above"**: `<div name="above" let:name>...</div>`
+- **"below"**: `<div name="below" let:name>...</div>`
 
 ### Forwarded events
 
@@ -1544,7 +1548,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1570,7 +1574,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1605,7 +1609,7 @@ import { FormGroup } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1634,7 +1638,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1665,7 +1669,7 @@ import { FormLabel } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1702,7 +1706,7 @@ import { Grid } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1736,7 +1740,9 @@ import { Header } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"skip-to-content"**: `<div name="skip-to-content" let:name>...</div>`
+- **"platform"**: `<div name="platform" let:name>...</div>`
 
 ### Forwarded events
 
@@ -1767,7 +1773,8 @@ import { HeaderAction } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"text"**: `<div name="text" let:name>...</div>`
 
 ### Forwarded events
 
@@ -1858,7 +1865,7 @@ import { HeaderGlobalAction } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1886,7 +1893,7 @@ import { HeaderNav } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1955,7 +1962,7 @@ import { HeaderNavMenu } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -1988,7 +1995,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2017,7 +2024,7 @@ import { HeaderPanelLink } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2043,7 +2050,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2069,7 +2076,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2202,7 +2209,8 @@ import { InlineNotification } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"actions"**: `<div name="actions" let:name>...</div>`
 
 ### Forwarded events
 
@@ -2237,7 +2245,7 @@ import { Link } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2274,7 +2282,7 @@ import { ListBox } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2315,7 +2323,7 @@ type ListBoxFieldTranslationId = "close" | "open";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2349,7 +2357,7 @@ import { ListBoxMenu } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2414,7 +2422,7 @@ import { ListBoxMenuItem } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2480,7 +2488,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2561,7 +2569,9 @@ import { Modal } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"label"**: `<div name="label" let:name>...</div>`
+- **"heading"**: `<div name="heading" let:name>...</div>`
 
 ### Forwarded events
 
@@ -2597,7 +2607,7 @@ import { ModalBody } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2630,7 +2640,7 @@ import { ModalFooter } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2664,7 +2674,7 @@ import { ModalHeader } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2756,7 +2766,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2854,7 +2864,7 @@ import { NotificationTextDetails } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -2908,7 +2918,7 @@ type NumberInputTranslationId = "increment" | "decrement";
 
 ### Slots
 
-- `<slot name="label">...</slot>`
+- **"label"**: `<div name="label" let:name>...</div>`
 
 ### Forwarded events
 
@@ -2971,7 +2981,7 @@ import { OrderedList } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3010,7 +3020,8 @@ import { OverflowMenu } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"menu"**: `<div name="menu" let:name>...</div>`
 
 ### Forwarded events
 
@@ -3050,7 +3061,7 @@ import { OverflowMenuItem } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3242,7 +3253,7 @@ import { ProgressIndicator } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3312,7 +3323,7 @@ import { ProgressStep } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3384,7 +3395,7 @@ import { RadioButtonGroup } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3450,7 +3461,7 @@ import { RadioTile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3488,7 +3499,7 @@ import { Row } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3609,7 +3620,7 @@ import { Select } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3669,7 +3680,7 @@ import { SelectItemGroup } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3736,7 +3747,7 @@ import { SelectableTile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3770,7 +3781,7 @@ import { SideNav } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3796,7 +3807,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3859,7 +3870,7 @@ import { SideNavMenu } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -3982,7 +3993,7 @@ import { SkipToContent } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4090,7 +4101,7 @@ import { StructuredList } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4119,7 +4130,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4151,7 +4162,7 @@ import { StructuredListCell } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4180,7 +4191,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4246,7 +4257,7 @@ import { StructuredListRow } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4314,7 +4325,7 @@ import { Switch } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4351,7 +4362,7 @@ import { Tab } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4381,7 +4392,7 @@ import { TabContent } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4414,7 +4425,7 @@ import { Table } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4440,7 +4451,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4466,7 +4477,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4499,7 +4510,7 @@ import { TableContainer } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4525,7 +4536,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4558,7 +4569,7 @@ import { TableHeader } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4589,7 +4600,7 @@ import { TableRow } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4623,7 +4634,8 @@ import { Tabs } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"content"**: `<div name="content" let:name>...</div>`
 
 ### Forwarded events
 
@@ -4688,7 +4700,7 @@ import { Tag } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4911,7 +4923,7 @@ import { Tile } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4944,7 +4956,7 @@ import { TileGroup } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -4985,7 +4997,7 @@ import { TimePicker } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5027,7 +5039,7 @@ import { TimePickerSelect } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5067,7 +5079,7 @@ import { ToastNotification } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5244,7 +5256,7 @@ import { Toolbar } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5272,7 +5284,7 @@ import { ToolbarBatchActions } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5298,7 +5310,7 @@ No exported props.
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5373,7 +5385,9 @@ import { Tooltip } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"triggerText"**: `<div name="triggerText" let:name>...</div>`
+- **"icon"**: `<div name="icon" let:name>...</div>`
 
 ### Forwarded events
 
@@ -5405,7 +5419,8 @@ import { TooltipDefinition } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
+- **"tooltip"**: `<div name="tooltip" let:name>...</div>`
 
 ### Forwarded events
 
@@ -5441,7 +5456,7 @@ import { TooltipIcon } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
@@ -5473,7 +5488,7 @@ import { UnorderedList } from "carbon-components-svelte";
 
 ### Slots
 
-- `<slot>...</slot>`
+- **default**: `<div>...</div>`
 
 ### Forwarded events
 
