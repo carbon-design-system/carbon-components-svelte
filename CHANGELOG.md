@@ -5,9 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+<!-- ## Unreleased -->
 
-- Selectable `DataTable`
+## [0.20.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.20.0) - 2020-10-24
+
+**Features**
+
+- DataTable: add `Toolbar`, `ToolbarContent`, `ToolbarSearch`, `ToolbarBatchActions`
+- DataTable: support row selection, batch selection, radio selection
+- DataTable: dispatch "mouseenter", "mouseleave" events on table rows
+- Search: forward "focus", "blur" events to search input; dispatch "clear" event
+
+**Fixes**
+
+- DataTable: include sort direction with custom sort method ([PR #356](https://github.com/IBM/carbon-components-svelte/pull/356))
+- fix: allow item ids in ComboBox, Dropdown, MultiSelect to be numbers
+- fix(ui-shell): initialize `platformName` as empty string to prevent rendering as "undefined"
+
+**Refactoring**
+
+- refactor(ui-shell): remove redundant conditional in HeaderGlobalAction
+
+**Documentation**
+
+- new DataTable examples:
+  - [With custom display and sort methods](https://carbon-svelte.vercel.app/components/DataTable#with-custom-display-and-sort-methods)
+  - [With toolbar](https://carbon-svelte.vercel.app/components/DataTable#with-toolbar)
+  - [With toolbar (small size)](https://carbon-svelte.vercel.app/components/DataTable#with-toolbar-small-size)
+  - [Selectable](https://carbon-svelte.vercel.app/components/DataTable#selectable)
+  - [Initial selected rows](https://carbon-svelte.vercel.app/components/DataTable#initial-selected-rows)
+  - [Selectable with batch actions](https://carbon-svelte.vercel.app/components/DataTable#selectable-with-batch-actions)
+  - [Selectable (radio)](https://carbon-svelte.vercel.app/components/DataTable#selectable-radio)
+- fix(docgen): list both default and named slots in `COMPONENT_INDEX.md`
 
 ## [0.19.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.19.0) - 2020-10-23
 
