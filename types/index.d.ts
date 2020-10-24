@@ -4420,14 +4420,6 @@ export class TableHeader extends CarbonSvelteComponent {
 }
 
 export class TableRow extends CarbonSvelteComponent {
-  $$prop_def: {
-    /**
-     * Set to `true` to select the row
-     * @default false
-     */
-    isSelected?: boolean;
-  };
-
   $$slot_def: { default: {} };
 }
 

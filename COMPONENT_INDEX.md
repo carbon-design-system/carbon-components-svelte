@@ -1020,6 +1020,8 @@ No forwarded events.
 - `on:click`
 - `on:click:header`
 - `on:click:row`
+- `on:mouseenter:row`
+- `on:mouseleave:row`
 - `on:click:row--expand`
 - `on:click:cell`
 
@@ -4594,9 +4596,7 @@ import { TableRow } from "carbon-components-svelte";
 
 ### Props
 
-| Prop name  | Type                 | Default value | Description                      |
-| :--------- | :------------------- | :------------ | :------------------------------- |
-| isSelected | <code>boolean</code> | `false`       | Set to `true` to select the row. |
+No exported props.
 
 ### Slots
 
