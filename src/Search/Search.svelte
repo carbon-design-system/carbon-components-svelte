@@ -84,10 +84,13 @@
    */
   export let ref = null;
 
+  import { createEventDispatcher } from "svelte";
   import Close16 from "carbon-icons-svelte/lib/Close16";
   import Close20 from "carbon-icons-svelte/lib/Close20";
   import Search16 from "carbon-icons-svelte/lib/Search16";
   import SearchSkeleton from "./Search.Skeleton.svelte";
+
+  const dispatch = createEventDispatcher();
 </script>
 
 {#if skeleton}
@@ -143,6 +146,7 @@
       on:click="{() => {
         value = '';
         ref.focus();
+        dispatch('clear');
       }}"
     >
       <svelte:component this="{size === 'xl' ? Close20 : Close16}" />

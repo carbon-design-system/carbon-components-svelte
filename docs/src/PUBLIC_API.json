@@ -10910,8 +10910,8 @@
         [
           "click",
           {
-            "start": 3445,
-            "end": 3453,
+            "start": 3540,
+            "end": 3548,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -10921,8 +10921,8 @@
         [
           "mouseover",
           {
-            "start": 2277,
-            "end": 2289,
+            "start": 2372,
+            "end": 2384,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -10932,8 +10932,8 @@
         [
           "mouseenter",
           {
-            "start": 2294,
-            "end": 2307,
+            "start": 2389,
+            "end": 2402,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -10943,8 +10943,8 @@
         [
           "mouseleave",
           {
-            "start": 2312,
-            "end": 2325,
+            "start": 2407,
+            "end": 2420,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -10954,8 +10954,8 @@
         [
           "change",
           {
-            "start": 3109,
-            "end": 3118,
+            "start": 3204,
+            "end": 3213,
             "type": "EventHandler",
             "name": "change",
             "modifiers": [],
@@ -10965,8 +10965,8 @@
         [
           "input",
           {
-            "start": 3125,
-            "end": 3133,
+            "start": 3220,
+            "end": 3228,
             "type": "EventHandler",
             "name": "input",
             "modifiers": [],
@@ -10976,8 +10976,8 @@
         [
           "focus",
           {
-            "start": 3215,
-            "end": 3223,
+            "start": 3310,
+            "end": 3318,
             "type": "EventHandler",
             "name": "focus",
             "modifiers": [],
@@ -10987,8 +10987,8 @@
         [
           "blur",
           {
-            "start": 3230,
-            "end": 3237,
+            "start": 3325,
+            "end": 3332,
             "type": "EventHandler",
             "name": "blur",
             "modifiers": [],
@@ -10996,7 +10996,7 @@
           }
         ]
       ],
-      "dispatched_events": []
+      "dispatched_events": [["clear", {}]]
     },
     "SearchSkeleton": {
       "moduleName": "SearchSkeleton",
@@ -13425,8 +13425,8 @@
         [
           "click",
           {
-            "start": 25,
-            "end": 33,
+            "start": 21,
+            "end": 29,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -13436,8 +13436,8 @@
         [
           "mouseover",
           {
-            "start": 36,
-            "end": 48,
+            "start": 30,
+            "end": 42,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -13447,8 +13447,8 @@
         [
           "mouseenter",
           {
-            "start": 51,
-            "end": 64,
+            "start": 43,
+            "end": 56,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -13458,8 +13458,8 @@
         [
           "mouseleave",
           {
-            "start": 67,
-            "end": 80,
+            "start": 57,
+            "end": 70,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],

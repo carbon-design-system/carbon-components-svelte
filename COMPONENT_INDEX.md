@@ -3557,7 +3557,7 @@ No slots.
 
 ### Dispatched events
 
-No dispatched events.
+- `on:clear`
 
 ---
 
