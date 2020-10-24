@@ -235,7 +235,7 @@
     </button>
     {#if open}
       <ListBoxMenu aria-labelledby="{id}" id="{id}">
-        {#each items as item, i (item.id || i)}
+        {#each items as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"
             active="{selectedIndex === i || selectedId === item.id}"
