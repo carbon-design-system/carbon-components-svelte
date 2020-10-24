@@ -32,9 +32,9 @@
   /**
    * Specify the platform name
    * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
-   * @type {string} [platformName]
+   * @type {string} [platformName=""]
    */
-  export let platformName = undefined;
+  export let platformName = "";
 
   /**
    * Obtain a reference to the HTML anchor element

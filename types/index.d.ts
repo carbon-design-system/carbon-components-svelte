@@ -1683,6 +1683,7 @@ export class Header extends CarbonSvelteComponent {
     /**
      * Specify the platform name
      * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
+     * @default ""
      */
     platformName?: string;
 

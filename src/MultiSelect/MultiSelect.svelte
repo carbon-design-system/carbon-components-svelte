@@ -420,7 +420,7 @@
     </ListBoxField>
     {#if open}
       <ListBoxMenu aria-label="{ariaLabel}" id="{id}">
-        {#each filterable ? filteredItems : sortedItems as item, i (item.id || i)}
+        {#each filterable ? filteredItems : sortedItems as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"
             active="{item.checked}"

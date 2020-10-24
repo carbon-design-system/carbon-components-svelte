@@ -285,7 +285,7 @@
     </ListBoxField>
     {#if open}
       <ListBoxMenu aria-label="{ariaLabel}" id="{id}">
-        {#each filteredItems as item, i (item.id || i)}
+        {#each filteredItems as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"
             active="{selectedIndex === i || selectedId === item.id}"

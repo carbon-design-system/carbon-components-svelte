@@ -5361,6 +5361,7 @@
           "platformName",
           {
             "kind": "let",
+            "value": "\"\"",
             "type": "string",
             "description": "Specify the platform name\nAlternatively, use the named slot \"platform\" (e.g. <span slot=\"platform\">...</span>)"
           }
@@ -5381,14 +5382,14 @@
           {
             "attributes": [
               {
-                "start": 1398,
-                "end": 1420,
+                "start": 1394,
+                "end": 1416,
                 "type": "Attribute",
                 "name": "name",
                 "value": [
                   {
-                    "start": 1404,
-                    "end": 1419,
+                    "start": 1400,
+                    "end": 1415,
                     "type": "Text",
                     "raw": "skip-to-content",
                     "data": "skip-to-content"
@@ -5406,14 +5407,14 @@
           {
             "attributes": [
               {
-                "start": 1740,
-                "end": 1755,
+                "start": 1736,
+                "end": 1751,
                 "type": "Attribute",
                 "name": "name",
                 "value": [
                   {
-                    "start": 1746,
-                    "end": 1754,
+                    "start": 1742,
+                    "end": 1750,
                     "type": "Text",
                     "raw": "platform",
                     "data": "platform"
@@ -5423,13 +5424,13 @@
             ],
             "children": [
               {
-                "start": 1756,
-                "end": 1770,
+                "start": 1752,
+                "end": 1766,
                 "type": "MustacheTag",
                 "expression": {
                   "type": "Identifier",
-                  "start": 1757,
-                  "end": 1769,
+                  "start": 1753,
+                  "end": 1765,
                   "loc": {
                     "start": {
                       "line": 72,
@@ -5462,8 +5463,8 @@
         [
           "click",
           {
-            "start": 1614,
-            "end": 1622,
+            "start": 1610,
+            "end": 1618,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -5743,61 +5744,38 @@
               },
               {
                 "start": 608,
-                "end": 669,
-                "type": "IfBlock",
+                "end": 642,
+                "type": "InlineComponent",
+                "name": "svelte:component",
+                "attributes": [],
+                "children": [],
                 "expression": {
                   "type": "Identifier",
-                  "start": 613,
-                  "end": 617,
+                  "start": 633,
+                  "end": 637,
                   "loc": {
                     "start": {
                       "line": 30,
-                      "column": 9
+                      "column": 29
                     },
                     "end": {
                       "line": 30,
-                      "column": 13
+                      "column": 33
                     }
                   },
                   "name": "icon"
-                },
-                "children": [
-                  {
-                    "start": 625,
-                    "end": 659,
-                    "type": "InlineComponent",
-                    "name": "svelte:component",
-                    "attributes": [],
-                    "children": [],
-                    "expression": {
-                      "type": "Identifier",
-                      "start": 650,
-                      "end": 654,
-                      "loc": {
-                        "start": {
-                          "line": 31,
-                          "column": 31
-                        },
-                        "end": {
-                          "line": 31,
-                          "column": 35
-                        }
-                      },
-                      "name": "icon"
-                    }
-                  }
-                ]
+                }
               },
               {
-                "start": 669,
-                "end": 672,
+                "start": 642,
+                "end": 645,
                 "type": "Text",
                 "raw": "\n  ",
                 "data": "\n  "
               }
             ],
             "default": true,
-            "default_value": "\n    \n{#if icon}\n      <svelte:component this=\"{icon}\" />\n    {/if}\n\n  \n"
+            "default_value": "\n    \n<svelte:component this=\"{icon}\" />\n\n  \n"
           }
         ]
       ],
