@@ -4,18 +4,11 @@
   export let src = "";
   export let framed = false;
 
-  import { CodeSnippet, Button, InlineLoading } from "carbon-components-svelte";
+  import { CodeSnippet, Button } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
   import copy from "clipboard-copy";
   import { url, beforeUrlChange } from "@sveltech/routify";
   import { theme } from "../store";
-
-  let success = false;
-
-  $beforeUrlChange(() => {
-    if (success) success = false;
-    return true;
-  });
 </script>
 
 <style global>
@@ -135,10 +128,10 @@
 <div class="preview">
   {#if framed}
     <div class="framed-header">
-      <div style="margin-left: var(--cds-spacing-03)">
-        {#if framed && !success}
-          <InlineLoading description="Loading..." />
-        {/if}
+      <div
+        style="margin-left: var(--cds-spacing-05); color: var(--cds-text-02)"
+      >
+        Content loaded in an iframe
       </div>
       <Button
         style="margin-left: auto;"
@@ -155,9 +148,6 @@
   <div class="preview-viewer" class:framed>
     {#if framed}
       <iframe
-        on:load="{() => {
-          success = true;
-        }}"
         title="{src.split('/').pop()}"
         src="{$url(`${src}?theme=${$theme}`)}"
       ></iframe>
