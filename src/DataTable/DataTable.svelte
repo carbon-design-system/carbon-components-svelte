@@ -268,10 +268,17 @@
     <TableBody>
       {#each sorting ? sortedRows : rows as row, i (row.id)}
         <TableRow
-          class="{expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable ? 'bx--parent-row' : ''} {expandable && parentRowId === row.id ? 'bx--expandable-row--hover' : ''}"
+          id="row-{row.id}"
+          class="{selectedRowIds.includes(row.id) ? 'bx--data-table--selected' : ''} {expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable ? 'bx--parent-row' : ''} {expandable && parentRowId === row.id ? 'bx--expandable-row--hover' : ''}"
           on:click="{() => {
             dispatch('click', { row });
             dispatch('click:row', row);
+          }}"
+          on:mouseenter="{() => {
+            dispatch('mouseenter:row', row);
+          }}"
+          on:mouseleave="{() => {
+            dispatch('mouseleave:row', row);
           }}"
         >
           {#if expandable}
