@@ -199,7 +199,7 @@ The slot name for the table header cells is `"cell-header"`.
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
     { key: "port", value: "Port" },
-    { key: "cost", value: "Cost", display: (cost) => `${cost} €` },
+    { key: "cost", value: "Cost", display: (cost) => cost + " €" },
     {
       key: "expireDate",
       value: "Expire date",
