@@ -109,7 +109,7 @@
   
 	/**
 	 * Obtain a reference to the list HTML element
-	 * @type {null | HTMLElement} [ref=null]
+	 * @type {null | HTMLDivElement} [ref=null]
 	 */
 	export let listRef = null  
 
