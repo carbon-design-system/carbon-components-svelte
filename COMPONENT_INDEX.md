@@ -1,6 +1,6 @@
 # Component Index
 
-> 152 components exported from carbon-components-svelte 0.20.0
+> 154 components exported from carbon-components-svelte 0.20.0
 
 - Accordion
   - [Accordion](#accordion)
@@ -44,6 +44,8 @@
   - [Toolbar](#toolbar)
   - [ToolbarBatchActions](#toolbarbatchactions)
   - [ToolbarContent](#toolbarcontent)
+  - [ToolbarMenu](#toolbarmenu)
+  - [ToolbarMenuItem](#toolbarmenuitem)
   - [ToolbarSearch](#toolbarsearch)
 - [DataTableSkeleton](#datatableskeleton)
 - DatePicker
@@ -796,6 +798,7 @@ interface ComboBoxItem {
 | id               | <code>string</code>                                         | --            | Set an id for the list box component.                                     |
 | name             | <code>string</code>                                         | --            | Specify a name attribute for the input.                                   |
 | ref              | <code>null &#124; HTMLInputElement</code>                   | `null`        | Obtain a reference to the input HTML element.                             |
+| listRef          | <code>null &#124; HTMLDivElement</code>                     | `null`        | Obtain a reference to the list HTML element.                              |
 
 ### Slots
 
@@ -807,6 +810,7 @@ No slots.
 - `on:focus`
 - `on:blur`
 - `on:clear`
+- `on:scroll`
 
 ### Dispatched events
 
@@ -2363,7 +2367,7 @@ import { ListBoxMenu } from "carbon-components-svelte";
 
 ### Forwarded events
 
-No forwarded events.
+- `on:scroll`
 
 ### Dispatched events
 
@@ -3019,6 +3023,8 @@ import { OverflowMenu } from "carbon-components-svelte";
 | iconClass        | <code>string</code>                                                 | --                                 | Specify the icon class.                                            |
 | iconDescription  | <code>string</code>                                                 | `"Open and close list of options"` | Specify the ARIA label for the icon.                               |
 | id               | <code>string</code>                                                 | --                                 | Set an id for the button element.                                  |
+| buttonRef        | <code>null &#124; HTMLButtonElement</code>                          | `null`                             | Obtain a reference to the trigger button element.                  |
+| menuRef          | <code>null &#124; HTMLUListElement</code>                           | `null`                             | Obtain a reference to the overflow menu element.                   |
 
 ### Slots
 
@@ -5315,6 +5321,59 @@ No exported props.
 ### Forwarded events
 
 No forwarded events.
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## ToolbarMenu
+
+### Import path
+
+```js
+import { ToolbarMenu } from "carbon-components-svelte";
+```
+
+### Props
+
+No exported props.
+
+### Slots
+
+- **default**: `<div>...</div>`
+
+### Forwarded events
+
+No forwarded events.
+
+### Dispatched events
+
+No dispatched events.
+
+---
+
+## ToolbarMenuItem
+
+### Import path
+
+```js
+import { ToolbarMenuItem } from "carbon-components-svelte";
+```
+
+### Props
+
+No exported props.
+
+### Slots
+
+- **default**: `<div>...</div>`
+
+### Forwarded events
+
+- `on:click`
+- `on:keydown`
 
 ### Dispatched events
 

@@ -4,6 +4,8 @@
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
+    ToolbarMenu,
+    ToolbarMenuItem,
     ToolbarBatchActions,
     Button,
   } from "carbon-components-svelte";
@@ -36,7 +38,14 @@
     </ToolbarBatchActions>
     <ToolbarContent>
       <ToolbarSearch />
-      <Button>Create</Button>
+      <ToolbarMenu>
+        <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
+        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">
+          API Documentation
+        </ToolbarMenuItem>
+        <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
+      </ToolbarMenu>
+      <Button>Create balancer</Button>
     </ToolbarContent>
   </Toolbar>
 </DataTable>

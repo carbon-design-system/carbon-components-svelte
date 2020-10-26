@@ -106,12 +106,12 @@
    * @type {null | HTMLInputElement} [ref=null]
    */
   export let ref = null;
-  
-	/**
-	 * Obtain a reference to the list HTML element
-	 * @type {null | HTMLDivElement} [ref=null]
-	 */
-	export let listRef = null  
+
+  /**
+   * Obtain a reference to the list HTML element
+   * @type {null | HTMLDivElement} [ref=null]
+   */
+  export let listRef = null;
 
   /**
    * @typedef {{ id: string; text: string; }} ComboBoxItem
@@ -290,7 +290,12 @@
       />
     </ListBoxField>
     {#if open}
-      <ListBoxMenu aria-label="{ariaLabel}" id="{id}" on:scroll bind:ref={listRef}>
+      <ListBoxMenu
+        aria-label="{ariaLabel}"
+        id="{id}"
+        on:scroll
+        bind:ref="{listRef}"
+      >
         {#each filteredItems as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"

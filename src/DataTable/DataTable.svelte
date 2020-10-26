@@ -131,7 +131,9 @@
     tableSortable,
     batchSelectedIds,
     resetSelectedRowIds: () => {
+      selectAll = false;
       selectedRowIds = [];
+      if (refSelectAll) refSelectAll.checked = false;
     },
     add: (id) => {
       headerItems.update((_) => [..._, id]);
@@ -147,6 +149,8 @@
   );
 
   let selectAll = false;
+  let refSelectAll = null;
+
   $: batchSelectedIds.set(selectedRowIds);
   $: indeterminate =
     selectedRowIds.length > 0 && selectedRowIds.length < rows.length;
@@ -221,6 +225,7 @@
         {#if batchSelection && !radio}
           <th scope="col" class:bx--table-column-checkbox="{true}">
             <InlineCheckbox
+              bind:ref="{refSelectAll}"
               aria-label="Select all rows"
               checked="{selectAll}"
               indeterminate="{indeterminate}"

@@ -1,9 +1,9 @@
 ---
-components: ["DataTable", "Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarBatchActions"]
+components: ["DataTable", "Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions"]
 ---
 
 <script>
-  import { DataTable, DataTableSkeleton, Toolbar, ToolbarContent, ToolbarSearch, Button, Link } from "carbon-components-svelte";
+  import { DataTable, DataTableSkeleton, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
   import Preview from "../../components/Preview.svelte";
 </script>
@@ -316,7 +316,12 @@ The slot name for the table header cells is `"cell-header"`.
   <Toolbar>
     <ToolbarContent>
       <ToolbarSearch />
-      <Button>Create</Button>
+      <ToolbarMenu>
+        <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
+        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API Documentation</ToolbarMenuItem>
+        <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
+      </ToolbarMenu>
+      <Button>Create balancer</Button>
     </ToolbarContent>
   </Toolbar>
 </DataTable>
@@ -378,7 +383,12 @@ The slot name for the table header cells is `"cell-header"`.
   <Toolbar size="sm">
     <ToolbarContent>
       <ToolbarSearch />
-      <Button>Create</Button>
+      <ToolbarMenu>
+        <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
+        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API Documentation</ToolbarMenuItem>
+        <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
+      </ToolbarMenu>
+      <Button>Create balancer</Button>
     </ToolbarContent>
   </Toolbar>
 </DataTable>

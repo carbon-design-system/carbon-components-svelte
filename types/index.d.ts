@@ -662,6 +662,12 @@ export class ComboBox extends CarbonSvelteComponent {
      * @default null
      */
     ref?: null | HTMLInputElement;
+
+    /**
+     * Obtain a reference to the list HTML element
+     * @default null
+     */
+    listRef?: null | HTMLDivElement;
   };
 }
 
@@ -2929,6 +2935,18 @@ export class OverflowMenu extends CarbonSvelteComponent {
      * Set an id for the button element
      */
     id?: string;
+
+    /**
+     * Obtain a reference to the trigger button element
+     * @default null
+     */
+    buttonRef?: null | HTMLButtonElement;
+
+    /**
+     * Obtain a reference to the overflow menu element
+     * @default null
+     */
+    menuRef?: null | HTMLUListElement;
   };
 
   $$slot_def: { menu: {}; default: {} };
@@ -5121,6 +5139,14 @@ export class ToolbarBatchActions extends CarbonSvelteComponent {
 }
 
 export class ToolbarContent extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class ToolbarMenu extends CarbonSvelteComponent {
+  $$slot_def: { default: {} };
+}
+
+export class ToolbarMenuItem extends CarbonSvelteComponent {
   $$slot_def: { default: {} };
 }
 

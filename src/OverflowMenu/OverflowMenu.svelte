@@ -53,6 +53,18 @@
    */
   export let id = "ccs-" + Math.random().toString(36);
 
+  /**
+   * Obtain a reference to the trigger button element
+   * @type {null | HTMLButtonElement} [ref=null]
+   */
+  export let buttonRef = null;
+
+  /**
+   * Obtain a reference to the overflow menu element
+   * @type {null | HTMLUListElement} [ref=null]
+   */
+  export let menuRef = null;
+
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";
   import { writable } from "svelte/store";
   import OverflowMenuVertical16 from "carbon-icons-svelte/lib/OverflowMenuVertical16";
@@ -64,10 +76,8 @@
   const focusedId = writable(undefined);
   const currentIndex = writable(-1);
 
-  $: buttonRef = undefined;
-  $: buttonWidth = undefined;
-  $: menuRef = undefined;
-  $: didOpen = false;
+  let buttonWidth = undefined;
+  let didOpen = false;
 
   setContext("OverflowMenu", {
     focusedId,

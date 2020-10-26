@@ -22,9 +22,16 @@
    * @type {string} [id]
    */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement} [ref=null]
+   */
+  export let ref = null;
 </script>
 
 <input
+  bind:this="{ref}"
   type="checkbox"
   class:bx--checkbox="{true}"
   checked="{indeterminate ? false : checked}"
