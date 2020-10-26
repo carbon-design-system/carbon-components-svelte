@@ -41,7 +41,7 @@
       <ToolbarMenu>
         <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
         <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">
-          API Documentation
+          API documentation
         </ToolbarMenuItem>
         <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
       </ToolbarMenu>

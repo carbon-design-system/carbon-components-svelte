@@ -798,6 +798,8 @@ export class DataTable extends CarbonSvelteComponent {
       value: string;
       display?: (item) => string;
       sort?: (a, b) => number;
+      empty?: boolean;
+      columnMenu?: boolean;
     }[];
 
     /**
