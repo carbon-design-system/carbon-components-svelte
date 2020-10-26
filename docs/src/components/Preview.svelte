@@ -7,8 +7,10 @@
   import { CodeSnippet, Button } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
   import copy from "clipboard-copy";
-  import { url, beforeUrlChange } from "@sveltech/routify";
+  import { url } from "@sveltech/routify";
   import { theme } from "../store";
+
+  $: themedSrcUrl = $url(`${src}?theme=${$theme}`);
 </script>
 
 <style global>
@@ -84,6 +86,10 @@
     color: #bb8eff;
   }
 
+  .token.number {
+    color: #a7f0ba;
+  }
+
   .token.comment {
     color: #bebebe;
   }
@@ -138,7 +144,7 @@
         kind="ghost"
         target="_blank"
         size="field"
-        href="{$url(src)}"
+        href="{themedSrcUrl}"
         icon="{Launch16}"
       >
         Open in new tab
@@ -147,10 +153,7 @@
   {/if}
   <div class="preview-viewer" class:framed>
     {#if framed}
-      <iframe
-        title="{src.split('/').pop()}"
-        src="{$url(`${src}?theme=${$theme}`)}"
-      ></iframe>
+      <iframe title="{src.split('/').pop()}" src="{themedSrcUrl}"></iframe>
     {:else}
       <slot />
     {/if}
