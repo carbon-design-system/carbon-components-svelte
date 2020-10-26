@@ -25,7 +25,7 @@
 <DataTable sortable headers="{headers}" rows="{rows}">
   <span slot="cell" let:cell>
     {#if cell.key === 'overflow'}
-      <OverflowMenu open flipped>
+      <OverflowMenu flipped>
         <OverflowMenuItem text="Restart" />
         <OverflowMenuItem
           href="https://cloud.ibm.com/docs/loadbalancer-service"
