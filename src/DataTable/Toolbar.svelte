@@ -6,18 +6,17 @@
   export let size = "default";
 
   import { setContext } from "svelte";
+  import { writable } from "svelte/store";
 
   let ref = null;
 
+  const overflowVisible = writable(false);
+
   setContext("Toolbar", {
-    setOverflow: (toggled) => {
-      if (ref) {
-        if (toggled) {
-          ref.style.overflow = "visible";
-        } else {
-          ref.removeAttribute("style");
-        }
-      }
+    overflowVisible,
+    setOverflowVisible: (visible) => {
+      overflowVisible.set(visible);
+      if (ref) ref.style.overflow = visible ? "visible" : "inherit";
     },
   });
 </script>

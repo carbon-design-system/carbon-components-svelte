@@ -18,27 +18,41 @@
     batchSelectedIds = value;
   });
 
-  onMount(() => unsubscribe);
+  let overflowVisible = false;
+
+  const ctxToolbar = getContext("Toolbar");
+  const unsubscribeOverflow = ctxToolbar.overflowVisible.subscribe((value) => {
+    overflowVisible = value;
+  });
+
+  onMount(() => {
+    return () => {
+      unsubscribe();
+      unsubscribeOverflow();
+    };
+  });
 </script>
 
-<div
-  class:bx--batch-actions="{true}"
-  class:bx--batch-actions--active="{showActions}"
-  {...$$restProps}
->
-  <div class:bx--batch-summary="{true}">
-    <p class:bx--batch-summary__para="{true}">
-      <span> {formatTotalSelected(batchSelectedIds.length)} </span>
-    </p>
+{#if !overflowVisible}
+  <div
+    class:bx--batch-actions="{true}"
+    class:bx--batch-actions--active="{showActions}"
+    {...$$restProps}
+  >
+    <div class:bx--batch-summary="{true}">
+      <p class:bx--batch-summary__para="{true}">
+        <span> {formatTotalSelected(batchSelectedIds.length)} </span>
+      </p>
+    </div>
+    <div class:bx--action-list="{true}">
+      <slot />
+      <Button
+        class="bx--batch-summary__cancel"
+        tabindex="{showActions ? '0' : '-1'}"
+        on:click="{ctx.resetSelectedRowIds}"
+      >
+        Cancel
+      </Button>
+    </div>
   </div>
-  <div class:bx--action-list="{true}">
-    <slot />
-    <Button
-      class="bx--batch-summary__cancel"
-      tabindex="{showActions ? '0' : '-1'}"
-      on:click="{ctx.resetSelectedRowIds}"
-    >
-      Cancel
-    </Button>
-  </div>
-</div>
+{/if}

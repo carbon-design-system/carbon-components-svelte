@@ -5372,7 +5372,8 @@ No exported props.
 
 ### Forwarded events
 
-No forwarded events.
+- `on:click`
+- `on:keydown`
 
 ### Dispatched events
 

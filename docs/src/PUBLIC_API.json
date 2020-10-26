@@ -1966,8 +1966,8 @@
         [
           "keydown",
           {
-            "start": 5616,
-            "end": 5626,
+            "start": 5618,
+            "end": 5628,
             "type": "EventHandler",
             "name": "keydown",
             "modifiers": [],
@@ -1977,8 +1977,8 @@
         [
           "focus",
           {
-            "start": 6203,
-            "end": 6211,
+            "start": 6205,
+            "end": 6213,
             "type": "EventHandler",
             "name": "focus",
             "modifiers": [],
@@ -1988,8 +1988,8 @@
         [
           "blur",
           {
-            "start": 6220,
-            "end": 6227,
+            "start": 6222,
+            "end": 6229,
             "type": "EventHandler",
             "name": "blur",
             "modifiers": [],
@@ -1999,8 +1999,8 @@
         [
           "clear",
           {
-            "start": 6678,
-            "end": 6686,
+            "start": 6680,
+            "end": 6688,
             "type": "EventHandler",
             "name": "clear",
             "modifiers": [],
@@ -2010,8 +2010,8 @@
         [
           "scroll",
           {
-            "start": 7220,
-            "end": 7229,
+            "start": 7246,
+            "end": 7255,
             "type": "EventHandler",
             "name": "scroll",
             "modifiers": [],
@@ -15644,7 +15644,30 @@
           }
         ]
       ],
-      "forwarded_events": [],
+      "forwarded_events": [
+        [
+          "click",
+          {
+            "start": 109,
+            "end": 117,
+            "type": "EventHandler",
+            "name": "click",
+            "modifiers": [],
+            "expression": null
+          }
+        ],
+        [
+          "keydown",
+          {
+            "start": 118,
+            "end": 128,
+            "type": "EventHandler",
+            "name": "keydown",
+            "modifiers": [],
+            "expression": null
+          }
+        ]
+      ],
       "dispatched_events": []
     },
     "ToolbarSearch": {

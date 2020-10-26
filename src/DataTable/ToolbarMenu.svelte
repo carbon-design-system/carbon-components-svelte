@@ -7,7 +7,7 @@
 
   let menuRef = null;
 
-  $: ctx.setOverflow(menuRef != null);
+  $: ctx.setOverflowVisible(menuRef != null);
   $: if (menuRef) menuRef.style.top = "100%";
 </script>
 
