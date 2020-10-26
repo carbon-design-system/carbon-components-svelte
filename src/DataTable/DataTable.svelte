@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the data table headers
-   * @type {{key: string; value: string; display?: (item) => string; sort?: (a, b) => number}[]} [headers=[]]
+   * @type {{ key: string; value: string; display?: (item) => string; sort?: (a, b) => number; empty?: boolean; columnMenu?: boolean; }[]} [headers=[]]
    */
   export let headers = [];
 
@@ -247,23 +247,27 @@
           </th>
         {/if}
         {#each headers as header, i (header.key)}
-          <TableHeader
-            on:click="{() => {
-              dispatch('click', { header });
-              let active = header.key === $sortHeader.key;
-              let currentSortDirection = active ? $sortHeader.sortDirection : 'none';
-              let sortDirection = sortDirectionMap[currentSortDirection];
-              dispatch('click:header', { header, sortDirection });
-              sortHeader.set({
-                id: sortDirection === 'none' ? null : $thKeys[header.key],
-                key: header.key,
-                sort: header.sort,
-                sortDirection,
-              });
-            }}"
-          >
-            <slot name="cell-header" header="{header}">{header.value}</slot>
-          </TableHeader>
+          {#if header.empty}
+            <th scope="col"></th>
+          {:else}
+            <TableHeader
+              on:click="{() => {
+                dispatch('click', { header });
+                let active = header.key === $sortHeader.key;
+                let currentSortDirection = active ? $sortHeader.sortDirection : 'none';
+                let sortDirection = sortDirectionMap[currentSortDirection];
+                dispatch('click:header', { header, sortDirection });
+                sortHeader.set({
+                  id: sortDirection === 'none' ? null : $thKeys[header.key],
+                  key: header.key,
+                  sort: header.sort,
+                  sortDirection,
+                });
+              }}"
+            >
+              <slot name="cell-header" header="{header}">{header.value}</slot>
+            </TableHeader>
+          {/if}
         {/each}
       </TableRow>
     </TableHead>
@@ -337,16 +341,24 @@
             </td>
           {/if}
           {#each row.cells as cell, j (cell.key)}
-            <TableCell
-              on:click="{() => {
-                dispatch('click', { row, cell });
-                dispatch('click:cell', cell);
-              }}"
-            >
-              <slot name="cell" row="{row}" cell="{cell}">
-                {headers[j].display ? headers[j].display(cell.value) : cell.value}
-              </slot>
-            </TableCell>
+            {#if headers[j].empty}
+              <td class:bx--table-column-menu="{headers[j].columnMenu}">
+                <slot name="cell" row="{row}" cell="{cell}">
+                  {headers[j].display ? headers[j].display(cell.value) : cell.value}
+                </slot>
+              </td>
+            {:else}
+              <TableCell
+                on:click="{() => {
+                  dispatch('click', { row, cell });
+                  dispatch('click:cell', cell);
+                }}"
+              >
+                <slot name="cell" row="{row}" cell="{cell}">
+                  {headers[j].display ? headers[j].display(cell.value) : cell.value}
+                </slot>
+              </TableCell>
+            {/if}
           {/each}
         </TableRow>
 

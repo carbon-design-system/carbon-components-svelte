@@ -318,7 +318,7 @@ The slot name for the table header cells is `"cell-header"`.
       <ToolbarSearch />
       <ToolbarMenu>
         <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
-        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API Documentation</ToolbarMenuItem>
+        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API documentation</ToolbarMenuItem>
         <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
       </ToolbarMenu>
       <Button>Create balancer</Button>
@@ -385,7 +385,7 @@ The slot name for the table header cells is `"cell-header"`.
       <ToolbarSearch />
       <ToolbarMenu>
         <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
-        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API Documentation</ToolbarMenuItem>
+        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API documentation</ToolbarMenuItem>
         <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
       </ToolbarMenu>
       <Button>Create balancer</Button>
@@ -668,6 +668,15 @@ The slot name for the table header cells is `"cell-header"`.
   ]}"
 />
 
+### Empty column with overflow menu
+
+Some use cases require an empty column in the table body without a corresponding table header.
+
+For an object in the `headers` array, set `empty` to `true` to render an empty column.
+
+In the following example, each row in the sortable data table has an overflow menu. There isn't a separate, useless table header column for the overflow menu.
+
+<FileSource src="/framed/DataTable/DataTableAppendColumns" />
 
 ### Selectable
 
