@@ -30,7 +30,5 @@
   class:bx--table-toolbar--normal="{size === 'default'}"
   {...$$restProps}
 >
-  <div class:bx--toolbar-content="{true}">
-    <slot />
-  </div>
+  <slot />
 </section>
