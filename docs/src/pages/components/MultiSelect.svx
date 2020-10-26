@@ -40,6 +40,22 @@ To prevent alphabetical item ordering, pass an empty function to the `sortItem` 
     {id: "2", text: "Fax"}]}"
   />
 
+### Extra-large size
+
+<MultiSelect size="xl" titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+### Small size
+
+<MultiSelect size="sm" titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ### Filterable
 
 <MultiSelect filterable titleText="Contact" placeholder="Filter contact methods..."
