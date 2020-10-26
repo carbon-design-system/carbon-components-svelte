@@ -47,12 +47,13 @@
   tabindex="-1"
   data-invalid="{invalid || undefined}"
   class:bx--list-box="{true}"
+  class:bx--list-box--sm="{size === 'sm'}"
+  class:bx--list-box--xl="{size === 'xl'}"
   class:bx--list-box--inline="{type === 'inline'}"
   class:bx--list-box--disabled="{disabled}"
   class:bx--list-box--expanded="{open}"
   class:bx--list-box--light="{light}"
   {...$$restProps}
-  class="{size && `bx--list-box--${size}`} {$$restProps.class}"
   on:keydown
   on:keydown="{(e) => {
     if (e.key === 'Escape') {

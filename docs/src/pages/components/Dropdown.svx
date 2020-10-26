@@ -25,6 +25,18 @@ components: ["Dropdown", "DropdownSkeleton"]
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Extra-large size
+
+<Dropdown size="xl" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Small size
+
+<Dropdown size="sm" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ### Disabled state
 
 <Dropdown disabled titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},

@@ -182,6 +182,8 @@
     aria-label="{$$props['aria-label']}"
     class="bx--dropdown {invalid && 'bx--dropdown--invalid'}
       {open && 'bx--dropdown--open'}
+      {size === 'sm' && 'bx--dropdown--sm'}
+      {size === 'xl' && 'bx--dropdown--xl'}
       {inline && 'bx--dropdown--inline'}
       {disabled && 'bx--dropdown--disabled'}
       {light && 'bx--dropdown--light'}"
