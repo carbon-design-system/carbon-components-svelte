@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.21.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.21.0) - 2020-10-26
+
+**Features**
+
+- ListBoxMenu: forward "scroll" event ([PR #366](https://github.com/IBM/carbon-components-svelte/pull/366))
+- ComboBox: export reference to list box menu ([PR #366](https://github.com/IBM/carbon-components-svelte/pull/366))
+- DataTable: add `ToolbarMenu`, `ToolbarMenuItem` ([PR #369](https://github.com/IBM/carbon-components-svelte/pull/369))
+- DataTable: support empty table body columns by adding optional `empty` key to `headers` prop ([PR #370](https://github.com/IBM/carbon-components-svelte/pull/370))
+- Dropdown: support "sm", "xl" field sizes
+
+**Fixes**
+
+- DataTable: cancelling batch selection should deselect "select all rows" checkbox
+- Toolbar: remove duplicate "bx--toolbar-content" element
+
+**Documentation**
+
+- DataTable: add example ["Empty column with overflow menu"](https://carbon-svelte.vercel.app/components/DataTable#empty-column-with-overflow-menu)
+- hand off current theme for examples opened in a new tab
+- add field size examples for `Dropdown`, `MultiSelect`, `Select`
+
 ## [0.20.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.20.0) - 2020-10-24
 
 **Features**
