@@ -4987,6 +4987,7 @@ import { TimePicker } from "carbon-components-svelte";
 
 | Prop name   | Type                                      | Default value | Description                                    |
 | :---------- | :---------------------------------------- | :------------ | :--------------------------------------------- |
+| size        | <code>"sm" &#124; "xl"</code>             | --            | Specify the size of the input.                 |
 | value       | <code>string</code>                       | `""`          | Specify the input value.                       |
 | type        | <code>string</code>                       | `"text"`      | Specify the input type.                        |
 | placeholder | <code>string</code>                       | `"hh=mm"`     | Specify the input placeholder text.            |

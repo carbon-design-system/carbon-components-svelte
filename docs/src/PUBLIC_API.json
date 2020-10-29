@@ -14582,6 +14582,14 @@
       "moduleName": "TimePicker",
       "props": [
         [
+          "size",
+          {
+            "kind": "let",
+            "type": "\"sm\" | \"xl\"",
+            "description": "Specify the size of the input"
+          }
+        ],
+        [
           "value",
           {
             "kind": "let",
@@ -14721,8 +14729,8 @@
         [
           "click",
           {
-            "start": 1853,
-            "end": 1861,
+            "start": 1965,
+            "end": 1973,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -14732,8 +14740,8 @@
         [
           "mouseover",
           {
-            "start": 1864,
-            "end": 1876,
+            "start": 1976,
+            "end": 1988,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -14743,8 +14751,8 @@
         [
           "mouseenter",
           {
-            "start": 1879,
-            "end": 1892,
+            "start": 1991,
+            "end": 2004,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -14754,8 +14762,8 @@
         [
           "mouseleave",
           {
-            "start": 1895,
-            "end": 1908,
+            "start": 2007,
+            "end": 2020,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -14765,8 +14773,8 @@
         [
           "change",
           {
-            "start": 2830,
-            "end": 2839,
+            "start": 3036,
+            "end": 3045,
             "type": "EventHandler",
             "name": "change",
             "modifiers": [],
@@ -14776,8 +14784,8 @@
         [
           "input",
           {
-            "start": 2848,
-            "end": 2856,
+            "start": 3054,
+            "end": 3062,
             "type": "EventHandler",
             "name": "input",
             "modifiers": [],
@@ -14787,8 +14795,8 @@
         [
           "focus",
           {
-            "start": 2946,
-            "end": 2954,
+            "start": 3152,
+            "end": 3160,
             "type": "EventHandler",
             "name": "focus",
             "modifiers": [],
@@ -14798,8 +14806,8 @@
         [
           "blur",
           {
-            "start": 2963,
-            "end": 2970,
+            "start": 3169,
+            "end": 3176,
             "type": "EventHandler",
             "name": "blur",
             "modifiers": [],

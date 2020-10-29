@@ -33,6 +33,32 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   </TimePickerSelect>
 </TimePicker>
 
+### Extra-large size
+
+<TimePicker size="xl" labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="PM">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="PDT">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
+### Small size
+
+<TimePicker size="sm" labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="PM">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="PDT">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
 ### Disabled
 
 <TimePicker labelText="Cron job" placeholder="hh:mm" disabled>

@@ -4795,6 +4795,11 @@ export class TileGroup extends CarbonSvelteComponent {
 export class TimePicker extends CarbonSvelteComponent {
   $$prop_def: {
     /**
+     * Specify the size of the input
+     */
+    size?: "sm" | "xl";
+
+    /**
      * Specify the input value
      * @default ""
      */
