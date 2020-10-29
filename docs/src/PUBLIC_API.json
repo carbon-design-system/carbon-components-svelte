@@ -6603,6 +6603,14 @@
       "moduleName": "Link",
       "props": [
         [
+          "size",
+          {
+            "kind": "let",
+            "type": "\"sm\" | \"lg\"",
+            "description": "Specify the size of the link"
+          }
+        ],
+        [
           "href",
           {
             "kind": "let",
@@ -6662,8 +6670,8 @@
         [
           "click",
           {
-            "start": 1308,
-            "end": 1316,
+            "start": 1500,
+            "end": 1508,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -6673,8 +6681,8 @@
         [
           "mouseover",
           {
-            "start": 1321,
-            "end": 1333,
+            "start": 1513,
+            "end": 1525,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -6684,8 +6692,8 @@
         [
           "mouseenter",
           {
-            "start": 1338,
-            "end": 1351,
+            "start": 1530,
+            "end": 1543,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -6695,8 +6703,8 @@
         [
           "mouseleave",
           {
-            "start": 1356,
-            "end": 1369,
+            "start": 1548,
+            "end": 1561,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -14729,8 +14737,8 @@
         [
           "click",
           {
-            "start": 1965,
-            "end": 1973,
+            "start": 1964,
+            "end": 1972,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -14740,8 +14748,8 @@
         [
           "mouseover",
           {
-            "start": 1976,
-            "end": 1988,
+            "start": 1975,
+            "end": 1987,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -14751,8 +14759,8 @@
         [
           "mouseenter",
           {
-            "start": 1991,
-            "end": 2004,
+            "start": 1990,
+            "end": 2003,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -14762,8 +14770,8 @@
         [
           "mouseleave",
           {
-            "start": 2007,
-            "end": 2020,
+            "start": 2006,
+            "end": 2019,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -14773,8 +14781,8 @@
         [
           "change",
           {
-            "start": 3036,
-            "end": 3045,
+            "start": 3037,
+            "end": 3046,
             "type": "EventHandler",
             "name": "change",
             "modifiers": [],
@@ -14784,8 +14792,8 @@
         [
           "input",
           {
-            "start": 3054,
-            "end": 3062,
+            "start": 3055,
+            "end": 3063,
             "type": "EventHandler",
             "name": "input",
             "modifiers": [],
@@ -14795,8 +14803,8 @@
         [
           "focus",
           {
-            "start": 3152,
-            "end": 3160,
+            "start": 3153,
+            "end": 3161,
             "type": "EventHandler",
             "name": "focus",
             "modifiers": [],
@@ -14806,8 +14814,8 @@
         [
           "blur",
           {
-            "start": 3169,
-            "end": 3176,
+            "start": 3170,
+            "end": 3177,
             "type": "EventHandler",
             "name": "blur",
             "modifiers": [],

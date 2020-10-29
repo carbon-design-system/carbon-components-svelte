@@ -2243,6 +2243,7 @@ import { Link } from "carbon-components-svelte";
 
 | Prop name | Type                                                                   | Default value | Description                                       |
 | :-------- | :--------------------------------------------------------------------- | :------------ | :------------------------------------------------ |
+| size      | <code>"sm" &#124; "lg"</code>                                          | --            | Specify the size of the link.                     |
 | href      | <code>string</code>                                                    | --            | Specify the href value.                           |
 | inline    | <code>boolean</code>                                                   | `false`       | Set to `true` to use the inline variant.          |
 | disabled  | <code>boolean</code>                                                   | `false`       | Set to `true` to disable the checkbox.            |

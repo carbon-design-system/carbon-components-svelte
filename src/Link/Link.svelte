@@ -1,5 +1,11 @@
 <script>
   /**
+   * Specify the size of the link
+   * @type {"sm" | "lg"} [size]
+   */
+  export let size = undefined;
+
+  /**
    * Specify the href value
    * @type {string} [href]
    */
@@ -53,6 +59,8 @@
     class:bx--link--disabled="{disabled}"
     class:bx--link--inline="{inline}"
     class:bx--link--visited="{visited}"
+    class:bx--link--sm="{size === 'sm'}"
+    class:bx--link--lg="{size === 'lg'}"
     rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
     href="{href}"
     {...$$restProps}
