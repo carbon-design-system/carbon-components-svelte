@@ -2889,6 +2889,11 @@ export class OrderedList extends CarbonSvelteComponent {
 export class OverflowMenu extends CarbonSvelteComponent {
   $$prop_def: {
     /**
+     * Specify the size of the overflow menu
+     */
+    size?: "sm" | "xl";
+
+    /**
      * Specify the direction of the overflow menu relative to the button
      * @default "bottom"
      */

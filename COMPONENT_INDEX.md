@@ -3014,6 +3014,7 @@ import { OverflowMenu } from "carbon-components-svelte";
 
 | Prop name        | Type                                                                | Default value                      | Description                                                        |
 | :--------------- | :------------------------------------------------------------------ | :--------------------------------- | :----------------------------------------------------------------- |
+| size             | <code>"sm" &#124; "xl"</code>                                       | --                                 | Specify the size of the overflow menu.                             |
 | direction        | <code>"top" &#124; "bottom"</code>                                  | `"bottom"`                         | Specify the direction of the overflow menu relative to the button. |
 | open             | <code>boolean</code>                                                | `false`                            | Set to `true` to open the menu.                                    |
 | light            | <code>boolean</code>                                                | `false`                            | Set to `true` to enable the light variant.                         |

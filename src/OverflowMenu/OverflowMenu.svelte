@@ -1,5 +1,11 @@
 <script>
   /**
+   * Specify the size of the overflow menu
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
    * Specify the direction of the overflow menu relative to the button
    * @type {"top" | "bottom"} [direction="bottom"]
    */
@@ -131,6 +137,8 @@
       if (direction === "top") {
         menuRef.style.top = "auto";
         menuRef.style.bottom = height + "px";
+      } else if (direction === "bottom") {
+        menuRef.style.top = height + "px";
       }
     }
 
@@ -149,7 +157,7 @@
   $: if ($items[$currentIndex]) {
     focusedId.set($items[$currentIndex].id);
   }
-  $: dynamicPseudoWidth = `.bx--overflow-menu-options.bx--overflow-menu-options:after {
+  $: dynamicPseudoWidth = `#${id} .bx--overflow-menu-options.bx--overflow-menu-options:after {
       width: ${buttonWidth ? buttonWidth + "px" : "2rem"};
     }`;
   $: styles = formatStyle(dynamicPseudoWidth);
@@ -177,6 +185,8 @@
   class:bx--overflow-menu="{true}"
   class:bx--overflow-menu--open="{open}"
   class:bx--overflow-menu--light="{light}"
+  class:bx--overflow-menu--sm="{size === 'sm'}"
+  class:bx--overflow-menu--xl="{size === 'xl'}"
   {...$$restProps}
   on:click
   on:click="{({ target }) => {
@@ -219,6 +229,8 @@
       class:bx--overflow-menu--flip="{flipped}"
       class:bx--overflow-menu-options--open="{open}"
       class:bx--overflow-menu-options--light="{light}"
+      class:bx--overflow-menu-options--sm="{size === 'sm'}"
+      class:bx--overflow-menu-options--xl="{size === 'xl'}"
       class:menuOptionsClass
     >
       <slot />

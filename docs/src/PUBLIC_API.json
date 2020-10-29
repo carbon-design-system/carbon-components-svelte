@@ -8757,6 +8757,14 @@
       "moduleName": "OverflowMenu",
       "props": [
         [
+          "size",
+          {
+            "kind": "let",
+            "type": "\"sm\" | \"xl\"",
+            "description": "Specify the size of the overflow menu"
+          }
+        ],
+        [
           "direction",
           {
             "kind": "let",
@@ -8858,14 +8866,14 @@
           {
             "attributes": [
               {
-                "start": 4805,
-                "end": 4816,
+                "start": 5113,
+                "end": 5124,
                 "type": "Attribute",
                 "name": "name",
                 "value": [
                   {
-                    "start": 4811,
-                    "end": 4815,
+                    "start": 5119,
+                    "end": 5123,
                     "type": "Text",
                     "raw": "menu",
                     "data": "menu"
@@ -8875,39 +8883,39 @@
             ],
             "children": [
               {
-                "start": 4817,
-                "end": 4822,
+                "start": 5125,
+                "end": 5130,
                 "type": "Text",
                 "raw": "\n    ",
                 "data": "\n    "
               },
               {
-                "start": 4822,
-                "end": 4985,
+                "start": 5130,
+                "end": 5293,
                 "type": "InlineComponent",
                 "name": "svelte:component",
                 "attributes": [
                   {
-                    "start": 4866,
-                    "end": 4896,
+                    "start": 5174,
+                    "end": 5204,
                     "type": "Attribute",
                     "name": "aria-label",
                     "value": [
                       {
-                        "start": 4878,
-                        "end": 4895,
+                        "start": 5186,
+                        "end": 5203,
                         "type": "MustacheTag",
                         "expression": {
                           "type": "Identifier",
-                          "start": 4879,
-                          "end": 4894,
+                          "start": 5187,
+                          "end": 5202,
                           "loc": {
                             "start": {
-                              "line": 206,
+                              "line": 216,
                               "column": 19
                             },
                             "end": {
-                              "line": 206,
+                              "line": 216,
                               "column": 34
                             }
                           },
@@ -8917,26 +8925,26 @@
                     ]
                   },
                   {
-                    "start": 4903,
-                    "end": 4928,
+                    "start": 5211,
+                    "end": 5236,
                     "type": "Attribute",
                     "name": "title",
                     "value": [
                       {
-                        "start": 4910,
-                        "end": 4927,
+                        "start": 5218,
+                        "end": 5235,
                         "type": "MustacheTag",
                         "expression": {
                           "type": "Identifier",
-                          "start": 4911,
-                          "end": 4926,
+                          "start": 5219,
+                          "end": 5234,
                           "loc": {
                             "start": {
-                              "line": 207,
+                              "line": 217,
                               "column": 14
                             },
                             "end": {
-                              "line": 207,
+                              "line": 217,
                               "column": 29
                             }
                           },
@@ -8946,33 +8954,33 @@
                     ]
                   },
                   {
-                    "start": 4935,
-                    "end": 4978,
+                    "start": 5243,
+                    "end": 5286,
                     "type": "Attribute",
                     "name": "class",
                     "value": [
                       {
-                        "start": 4942,
-                        "end": 4967,
+                        "start": 5250,
+                        "end": 5275,
                         "type": "Text",
                         "raw": "bx--overflow-menu__icon ",
                         "data": "bx--overflow-menu__icon "
                       },
                       {
-                        "start": 4966,
-                        "end": 4977,
+                        "start": 5274,
+                        "end": 5285,
                         "type": "MustacheTag",
                         "expression": {
                           "type": "Identifier",
-                          "start": 4967,
-                          "end": 4976,
+                          "start": 5275,
+                          "end": 5284,
                           "loc": {
                             "start": {
-                              "line": 208,
+                              "line": 218,
                               "column": 38
                             },
                             "end": {
-                              "line": 208,
+                              "line": 218,
                               "column": 47
                             }
                           },
@@ -8985,15 +8993,15 @@
                 "children": [],
                 "expression": {
                   "type": "Identifier",
-                  "start": 4853,
-                  "end": 4857,
+                  "start": 5161,
+                  "end": 5165,
                   "loc": {
                     "start": {
-                      "line": 205,
+                      "line": 215,
                       "column": 13
                     },
                     "end": {
-                      "line": 205,
+                      "line": 215,
                       "column": 17
                     }
                   },
@@ -9001,8 +9009,8 @@
                 }
               },
               {
-                "start": 4985,
-                "end": 4988,
+                "start": 5293,
+                "end": 5296,
                 "type": "Text",
                 "raw": "\n  ",
                 "data": "\n  "
@@ -9026,8 +9034,8 @@
         [
           "click",
           {
-            "start": 4327,
-            "end": 4335,
+            "start": 4635,
+            "end": 4643,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -9037,8 +9045,8 @@
         [
           "mouseover",
           {
-            "start": 4451,
-            "end": 4463,
+            "start": 4759,
+            "end": 4771,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -9048,8 +9056,8 @@
         [
           "mouseenter",
           {
-            "start": 4466,
-            "end": 4479,
+            "start": 4774,
+            "end": 4787,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -9059,8 +9067,8 @@
         [
           "mouseleave",
           {
-            "start": 4482,
-            "end": 4495,
+            "start": 4790,
+            "end": 4803,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -9070,8 +9078,8 @@
         [
           "keydown",
           {
-            "start": 4498,
-            "end": 4508,
+            "start": 4806,
+            "end": 4816,
             "type": "EventHandler",
             "name": "keydown",
             "modifiers": [],
