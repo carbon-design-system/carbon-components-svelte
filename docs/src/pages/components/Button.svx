@@ -28,6 +28,14 @@ description: High-level description
 
 <Button kind="danger">Danger button</Button>
 
+### Danger tertiary button
+
+<Button kind="danger-tertiary">Danger tertiary button</Button>
+
+### Danger ghost button
+
+<Button kind="danger-ghost">Danger ghost button</Button>
+
 ### Button with icon
 
 <Button icon={Add16}>With icon</Button>

@@ -791,7 +791,7 @@
           {
             "kind": "let",
             "value": "\"primary\"",
-            "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"danger\"",
+            "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"danger\" | \"danger-tertiary\" | \"danger-ghost\"",
             "description": "Specify the kind of button"
           }
         ],
@@ -923,8 +923,8 @@
         [
           "click",
           {
-            "start": 3947,
-            "end": 3955,
+            "start": 3984,
+            "end": 3992,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -934,8 +934,8 @@
         [
           "mouseover",
           {
-            "start": 3962,
-            "end": 3974,
+            "start": 3999,
+            "end": 4011,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -945,8 +945,8 @@
         [
           "mouseenter",
           {
-            "start": 3981,
-            "end": 3994,
+            "start": 4018,
+            "end": 4031,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -956,8 +956,8 @@
         [
           "mouseleave",
           {
-            "start": 4001,
-            "end": 4014,
+            "start": 4038,
+            "end": 4051,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
