@@ -8883,14 +8883,14 @@
           {
             "attributes": [
               {
-                "start": 5113,
-                "end": 5124,
+                "start": 5098,
+                "end": 5109,
                 "type": "Attribute",
                 "name": "name",
                 "value": [
                   {
-                    "start": 5119,
-                    "end": 5123,
+                    "start": 5104,
+                    "end": 5108,
                     "type": "Text",
                     "raw": "menu",
                     "data": "menu"
@@ -8900,39 +8900,39 @@
             ],
             "children": [
               {
-                "start": 5125,
-                "end": 5130,
+                "start": 5110,
+                "end": 5115,
                 "type": "Text",
                 "raw": "\n    ",
                 "data": "\n    "
               },
               {
-                "start": 5130,
-                "end": 5293,
+                "start": 5115,
+                "end": 5278,
                 "type": "InlineComponent",
                 "name": "svelte:component",
                 "attributes": [
                   {
-                    "start": 5174,
-                    "end": 5204,
+                    "start": 5159,
+                    "end": 5189,
                     "type": "Attribute",
                     "name": "aria-label",
                     "value": [
                       {
-                        "start": 5186,
-                        "end": 5203,
+                        "start": 5171,
+                        "end": 5188,
                         "type": "MustacheTag",
                         "expression": {
                           "type": "Identifier",
-                          "start": 5187,
-                          "end": 5202,
+                          "start": 5172,
+                          "end": 5187,
                           "loc": {
                             "start": {
-                              "line": 216,
+                              "line": 215,
                               "column": 19
                             },
                             "end": {
-                              "line": 216,
+                              "line": 215,
                               "column": 34
                             }
                           },
@@ -8942,26 +8942,26 @@
                     ]
                   },
                   {
-                    "start": 5211,
-                    "end": 5236,
+                    "start": 5196,
+                    "end": 5221,
                     "type": "Attribute",
                     "name": "title",
                     "value": [
                       {
-                        "start": 5218,
-                        "end": 5235,
+                        "start": 5203,
+                        "end": 5220,
                         "type": "MustacheTag",
                         "expression": {
                           "type": "Identifier",
-                          "start": 5219,
-                          "end": 5234,
+                          "start": 5204,
+                          "end": 5219,
                           "loc": {
                             "start": {
-                              "line": 217,
+                              "line": 216,
                               "column": 14
                             },
                             "end": {
-                              "line": 217,
+                              "line": 216,
                               "column": 29
                             }
                           },
@@ -8971,33 +8971,33 @@
                     ]
                   },
                   {
-                    "start": 5243,
-                    "end": 5286,
+                    "start": 5228,
+                    "end": 5271,
                     "type": "Attribute",
                     "name": "class",
                     "value": [
                       {
-                        "start": 5250,
-                        "end": 5275,
+                        "start": 5235,
+                        "end": 5260,
                         "type": "Text",
                         "raw": "bx--overflow-menu__icon ",
                         "data": "bx--overflow-menu__icon "
                       },
                       {
-                        "start": 5274,
-                        "end": 5285,
+                        "start": 5259,
+                        "end": 5270,
                         "type": "MustacheTag",
                         "expression": {
                           "type": "Identifier",
-                          "start": 5275,
-                          "end": 5284,
+                          "start": 5260,
+                          "end": 5269,
                           "loc": {
                             "start": {
-                              "line": 218,
+                              "line": 217,
                               "column": 38
                             },
                             "end": {
-                              "line": 218,
+                              "line": 217,
                               "column": 47
                             }
                           },
@@ -9010,15 +9010,15 @@
                 "children": [],
                 "expression": {
                   "type": "Identifier",
-                  "start": 5161,
-                  "end": 5165,
+                  "start": 5146,
+                  "end": 5150,
                   "loc": {
                     "start": {
-                      "line": 215,
+                      "line": 214,
                       "column": 13
                     },
                     "end": {
-                      "line": 215,
+                      "line": 214,
                       "column": 17
                     }
                   },
@@ -9026,8 +9026,8 @@
                 }
               },
               {
-                "start": 5293,
-                "end": 5296,
+                "start": 5278,
+                "end": 5281,
                 "type": "Text",
                 "raw": "\n  ",
                 "data": "\n  "
@@ -9051,8 +9051,8 @@
         [
           "click",
           {
-            "start": 4635,
-            "end": 4643,
+            "start": 4620,
+            "end": 4628,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -9062,8 +9062,8 @@
         [
           "mouseover",
           {
-            "start": 4759,
-            "end": 4771,
+            "start": 4744,
+            "end": 4756,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -9073,8 +9073,8 @@
         [
           "mouseenter",
           {
-            "start": 4774,
-            "end": 4787,
+            "start": 4759,
+            "end": 4772,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -9084,8 +9084,8 @@
         [
           "mouseleave",
           {
-            "start": 4790,
-            "end": 4803,
+            "start": 4775,
+            "end": 4788,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -9095,8 +9095,8 @@
         [
           "keydown",
           {
-            "start": 4806,
-            "end": 4816,
+            "start": 4791,
+            "end": 4801,
             "type": "EventHandler",
             "name": "keydown",
             "modifiers": [],
