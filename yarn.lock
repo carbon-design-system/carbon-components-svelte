@@ -38,10 +38,10 @@
   resolved "https://registry.npmjs.org/@carbon/layout/-/layout-10.14.0.tgz#abeb9a01c5ee70fe1e5f8dc3b0d5a6e423cea935"
   integrity sha512-P9ueDQWpq3pF98iHGsCKL4fR/mP8Xhqe3qhBQfA5zgi7/RPy76lKGZR+SUoGX/QCC72vkA/zhJ4+7/I26LhMhQ==
 
-"@carbon/themes@^10.22.0":
-  version "10.22.0"
-  resolved "https://registry.npmjs.org/@carbon/themes/-/themes-10.22.0.tgz#6bd6363faa0eaadd535d815d0b523115f84e0694"
-  integrity sha512-ep8SRzu5C1lf4JYEcksFr87iO5V9M0KgYL/gpztEKXvXfrslJTU1mewaSFuQCQWN7vMONl1cupqnWix9i5kVQg==
+"@carbon/themes@^10.22.1":
+  version "10.22.1"
+  resolved "https://registry.npmjs.org/@carbon/themes/-/themes-10.22.1.tgz#aba08e5463aaa8120ae376c70660afb4213022a7"
+  integrity sha512-O133H/8FmcZJ7A3pd2ztv7MTJmn1Ao9nNkTPxijTCFwLQEYcvxxqkzuBCqTJeyXKZCXf4isiYnBuUz5L1l+mRg==
   dependencies:
     "@carbon/colors" "^10.15.0"
     "@carbon/layout" "^10.14.0"
@@ -386,10 +386,10 @@ caniuse-lite@^1.0.30001109:
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001124.tgz#5d9998190258e11630d674fc50ea8e579ae0ced2"
   integrity sha512-zQW8V3CdND7GHRH6rxm6s59Ww4g/qGWTheoboW9nfeMg7sUoopIfKCcNZUjwYRCOrvereh3kwDpZj4VLQ7zGtA==
 
-"carbon-components-10.23@npm:carbon-components@10.23":
-  version "10.23.0"
-  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.23.0.tgz#56bdfffa95f518237a0bee2961b955c367a8b4c4"
-  integrity sha512-Meq//PMtSnAwoMKr2BpiOmjAivpSzc1D2Q0r3mudkQsz9dhYOzBQAsfEfoh8WKbDiD7rHWUM2fNkw0yQl4dahA==
+"carbon-components-10.23@npm:carbon-components@10.23.1":
+  version "10.23.1"
+  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.23.1.tgz#cf649a09aa25eac14dc158f0fb79ba625730026c"
+  integrity sha512-izeyNCo9cPfdw9358y5VPsDRzmGAO1wAjSnkD5gGEQO46P2HBdQcgXV1IqjAbFuit+TgfG/MrP38u+pmjp4zyQ==
   dependencies:
     flatpickr "4.6.1"
     lodash.debounce "^4.0.8"

@@ -20,12 +20,12 @@
     "flatpickr": "4.6.3"
   },
   "devDependencies": {
-    "@carbon/themes": "^10.22.0",
+    "@carbon/themes": "^10.22.1",
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@tsconfig/svelte": "^1.0.10",
     "autoprefixer": "^9.8.6",
-    "carbon-components-10.23": "npm:carbon-components@10.23",
+    "carbon-components-10.23": "npm:carbon-components@10.23.1",
     "comment-parser": "^0.7.6",
     "gh-pages": "^3.1.0",
     "husky": "^4.3.0",
