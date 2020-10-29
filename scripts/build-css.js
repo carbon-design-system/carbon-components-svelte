@@ -18,12 +18,12 @@ const shared = {
     $css--default-type: true;
     $css--plex: true;
     
-    @import "node_modules/carbon-components-10.22/scss/globals/scss/_css--reset.scss";
-    @import "node_modules/carbon-components-10.22/scss/globals/scss/_css--font-face.scss";
-    @import "node_modules/carbon-components-10.22/scss/globals/scss/_css--helpers.scss";
-    @import "node_modules/carbon-components-10.22/scss/globals/scss/_css--body.scss";
-    @import "node_modules/carbon-components-10.22/scss/globals/grid/_grid.scss";
-    @import "node_modules/carbon-components-10.22/scss/globals/scss/styles.scss";
+    @import "node_modules/carbon-components-10.23/scss/globals/scss/_css--reset.scss";
+    @import "node_modules/carbon-components-10.23/scss/globals/scss/_css--font-face.scss";
+    @import "node_modules/carbon-components-10.23/scss/globals/scss/_css--helpers.scss";
+    @import "node_modules/carbon-components-10.23/scss/globals/scss/_css--body.scss";
+    @import "node_modules/carbon-components-10.23/scss/globals/grid/_grid.scss";
+    @import "node_modules/carbon-components-10.23/scss/globals/scss/styles.scss";
   `,
   components: ``,
 };
@@ -76,11 +76,13 @@ async function buildCss() {
       const outFile = path.resolve("css", theme + ".css");
       const { css } = await sassRender({
         data: `
+        @import "node_modules/carbon-components-10.23/scss/globals/scss/_theme.scss";
+
           $feature-flags: (
             enable-css-custom-properties: ${theme === "all"},
             grid-columns-16: true,
           );
-          @import "node_modules/@carbon/themes/scss/themes";
+          
           ${themes[theme]}
           ${shared.globals}
           ${shared.components}
