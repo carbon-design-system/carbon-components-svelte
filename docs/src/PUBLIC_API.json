@@ -6603,6 +6603,14 @@
       "moduleName": "Link",
       "props": [
         [
+          "size",
+          {
+            "kind": "let",
+            "type": "\"sm\" | \"lg\"",
+            "description": "Specify the size of the link"
+          }
+        ],
+        [
           "href",
           {
             "kind": "let",
@@ -6662,8 +6670,8 @@
         [
           "click",
           {
-            "start": 1308,
-            "end": 1316,
+            "start": 1500,
+            "end": 1508,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -6673,8 +6681,8 @@
         [
           "mouseover",
           {
-            "start": 1321,
-            "end": 1333,
+            "start": 1513,
+            "end": 1525,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -6684,8 +6692,8 @@
         [
           "mouseenter",
           {
-            "start": 1338,
-            "end": 1351,
+            "start": 1530,
+            "end": 1543,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -6695,8 +6703,8 @@
         [
           "mouseleave",
           {
-            "start": 1356,
-            "end": 1369,
+            "start": 1548,
+            "end": 1561,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -8757,6 +8765,14 @@
       "moduleName": "OverflowMenu",
       "props": [
         [
+          "size",
+          {
+            "kind": "let",
+            "type": "\"sm\" | \"xl\"",
+            "description": "Specify the size of the overflow menu"
+          }
+        ],
+        [
           "direction",
           {
             "kind": "let",
@@ -8858,14 +8874,14 @@
           {
             "attributes": [
               {
-                "start": 4805,
-                "end": 4816,
+                "start": 5113,
+                "end": 5124,
                 "type": "Attribute",
                 "name": "name",
                 "value": [
                   {
-                    "start": 4811,
-                    "end": 4815,
+                    "start": 5119,
+                    "end": 5123,
                     "type": "Text",
                     "raw": "menu",
                     "data": "menu"
@@ -8875,39 +8891,39 @@
             ],
             "children": [
               {
-                "start": 4817,
-                "end": 4822,
+                "start": 5125,
+                "end": 5130,
                 "type": "Text",
                 "raw": "\n    ",
                 "data": "\n    "
               },
               {
-                "start": 4822,
-                "end": 4985,
+                "start": 5130,
+                "end": 5293,
                 "type": "InlineComponent",
                 "name": "svelte:component",
                 "attributes": [
                   {
-                    "start": 4866,
-                    "end": 4896,
+                    "start": 5174,
+                    "end": 5204,
                     "type": "Attribute",
                     "name": "aria-label",
                     "value": [
                       {
-                        "start": 4878,
-                        "end": 4895,
+                        "start": 5186,
+                        "end": 5203,
                         "type": "MustacheTag",
                         "expression": {
                           "type": "Identifier",
-                          "start": 4879,
-                          "end": 4894,
+                          "start": 5187,
+                          "end": 5202,
                           "loc": {
                             "start": {
-                              "line": 206,
+                              "line": 216,
                               "column": 19
                             },
                             "end": {
-                              "line": 206,
+                              "line": 216,
                               "column": 34
                             }
                           },
@@ -8917,26 +8933,26 @@
                     ]
                   },
                   {
-                    "start": 4903,
-                    "end": 4928,
+                    "start": 5211,
+                    "end": 5236,
                     "type": "Attribute",
                     "name": "title",
                     "value": [
                       {
-                        "start": 4910,
-                        "end": 4927,
+                        "start": 5218,
+                        "end": 5235,
                         "type": "MustacheTag",
                         "expression": {
                           "type": "Identifier",
-                          "start": 4911,
-                          "end": 4926,
+                          "start": 5219,
+                          "end": 5234,
                           "loc": {
                             "start": {
-                              "line": 207,
+                              "line": 217,
                               "column": 14
                             },
                             "end": {
-                              "line": 207,
+                              "line": 217,
                               "column": 29
                             }
                           },
@@ -8946,33 +8962,33 @@
                     ]
                   },
                   {
-                    "start": 4935,
-                    "end": 4978,
+                    "start": 5243,
+                    "end": 5286,
                     "type": "Attribute",
                     "name": "class",
                     "value": [
                       {
-                        "start": 4942,
-                        "end": 4967,
+                        "start": 5250,
+                        "end": 5275,
                         "type": "Text",
                         "raw": "bx--overflow-menu__icon ",
                         "data": "bx--overflow-menu__icon "
                       },
                       {
-                        "start": 4966,
-                        "end": 4977,
+                        "start": 5274,
+                        "end": 5285,
                         "type": "MustacheTag",
                         "expression": {
                           "type": "Identifier",
-                          "start": 4967,
-                          "end": 4976,
+                          "start": 5275,
+                          "end": 5284,
                           "loc": {
                             "start": {
-                              "line": 208,
+                              "line": 218,
                               "column": 38
                             },
                             "end": {
-                              "line": 208,
+                              "line": 218,
                               "column": 47
                             }
                           },
@@ -8985,15 +9001,15 @@
                 "children": [],
                 "expression": {
                   "type": "Identifier",
-                  "start": 4853,
-                  "end": 4857,
+                  "start": 5161,
+                  "end": 5165,
                   "loc": {
                     "start": {
-                      "line": 205,
+                      "line": 215,
                       "column": 13
                     },
                     "end": {
-                      "line": 205,
+                      "line": 215,
                       "column": 17
                     }
                   },
@@ -9001,8 +9017,8 @@
                 }
               },
               {
-                "start": 4985,
-                "end": 4988,
+                "start": 5293,
+                "end": 5296,
                 "type": "Text",
                 "raw": "\n  ",
                 "data": "\n  "
@@ -9026,8 +9042,8 @@
         [
           "click",
           {
-            "start": 4327,
-            "end": 4335,
+            "start": 4635,
+            "end": 4643,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -9037,8 +9053,8 @@
         [
           "mouseover",
           {
-            "start": 4451,
-            "end": 4463,
+            "start": 4759,
+            "end": 4771,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -9048,8 +9064,8 @@
         [
           "mouseenter",
           {
-            "start": 4466,
-            "end": 4479,
+            "start": 4774,
+            "end": 4787,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -9059,8 +9075,8 @@
         [
           "mouseleave",
           {
-            "start": 4482,
-            "end": 4495,
+            "start": 4790,
+            "end": 4803,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -9070,8 +9086,8 @@
         [
           "keydown",
           {
-            "start": 4498,
-            "end": 4508,
+            "start": 4806,
+            "end": 4816,
             "type": "EventHandler",
             "name": "keydown",
             "modifiers": [],
@@ -14574,6 +14590,14 @@
       "moduleName": "TimePicker",
       "props": [
         [
+          "size",
+          {
+            "kind": "let",
+            "type": "\"sm\" | \"xl\"",
+            "description": "Specify the size of the input"
+          }
+        ],
+        [
           "value",
           {
             "kind": "let",
@@ -14713,8 +14737,8 @@
         [
           "click",
           {
-            "start": 1853,
-            "end": 1861,
+            "start": 1964,
+            "end": 1972,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -14724,8 +14748,8 @@
         [
           "mouseover",
           {
-            "start": 1864,
-            "end": 1876,
+            "start": 1975,
+            "end": 1987,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -14735,8 +14759,8 @@
         [
           "mouseenter",
           {
-            "start": 1879,
-            "end": 1892,
+            "start": 1990,
+            "end": 2003,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -14746,8 +14770,8 @@
         [
           "mouseleave",
           {
-            "start": 1895,
-            "end": 1908,
+            "start": 2006,
+            "end": 2019,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -14757,8 +14781,8 @@
         [
           "change",
           {
-            "start": 2830,
-            "end": 2839,
+            "start": 3037,
+            "end": 3046,
             "type": "EventHandler",
             "name": "change",
             "modifiers": [],
@@ -14768,8 +14792,8 @@
         [
           "input",
           {
-            "start": 2848,
-            "end": 2856,
+            "start": 3055,
+            "end": 3063,
             "type": "EventHandler",
             "name": "input",
             "modifiers": [],
@@ -14779,8 +14803,8 @@
         [
           "focus",
           {
-            "start": 2946,
-            "end": 2954,
+            "start": 3153,
+            "end": 3161,
             "type": "EventHandler",
             "name": "focus",
             "modifiers": [],
@@ -14790,8 +14814,8 @@
         [
           "blur",
           {
-            "start": 2963,
-            "end": 2970,
+            "start": 3170,
+            "end": 3177,
             "type": "EventHandler",
             "name": "blur",
             "modifiers": [],

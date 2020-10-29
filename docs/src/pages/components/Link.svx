@@ -24,6 +24,14 @@ You can override the `rel` attribute with a custom value.
   <Link inline href="https://www.carbondesignsystem.com/">Carbon Design System</Link>.
 </div>
 
+### Large size
+
+<Link size="lg" href="https://www.carbondesignsystem.com/">Carbon Design System</Link>
+
+### Small size
+
+<Link size="sm" href="https://www.carbondesignsystem.com/">Carbon Design System</Link>
+
 ### Disabled
 
 <Link disabled href="https://www.carbondesignsystem.com/">Carbon Design System</Link>

@@ -1,5 +1,11 @@
 <script>
   /**
+   * Specify the size of the input
+   * @type {"sm" | "xl"} [size]
+   */
+  export let size = undefined;
+
+  /**
    * Specify the input value
    * @type {string} [value=""]
    */
@@ -95,6 +101,8 @@
   <div
     class:bx--time-picker="{true}"
     class:bx--time-picker--light="{light}"
+    class:bx--time-picker--sm="{size === 'sm'}"
+    class:bx--time-picker--xl="{size === 'xl'}"
     class:bx--select--light="{light}"
   >
     <div class:bx--time-picker__input="{true}">
