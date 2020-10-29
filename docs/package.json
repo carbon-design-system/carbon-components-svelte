@@ -9,7 +9,6 @@
     "build:svite": "svite build"
   },
   "devDependencies": {
-    "@carbon/themes": "^10.20.0",
     "@sveltech/routify": "^1.9.9",
     "autoprefixer": "^10.0.1",
     "carbon-components": "^10.23.0",
