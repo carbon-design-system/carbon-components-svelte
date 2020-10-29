@@ -4,7 +4,7 @@
 </script>
 
 <style lang="scss" global>
-  @import "carbon-components/scss/globals/scss/_theme.scss";
+  @import "@carbon/themes/scss/themes";
 
   $feature-flags: (
     enable-css-custom-properties: true,

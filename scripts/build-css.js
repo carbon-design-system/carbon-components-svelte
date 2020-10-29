@@ -76,7 +76,7 @@ async function buildCss() {
       const outFile = path.resolve("css", theme + ".css");
       const { css } = await sassRender({
         data: `
-        @import "node_modules/carbon-components-10.23/scss/globals/scss/_theme.scss";
+        @import "node_modules/@carbon/themes/scss/themes";
 
           $feature-flags: (
             enable-css-custom-properties: ${theme === "all"},

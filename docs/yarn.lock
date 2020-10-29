@@ -37,38 +37,38 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@carbon/colors@^10.14.0":
-  version "10.14.0"
-  resolved "https://registry.npmjs.org/@carbon/colors/-/colors-10.14.0.tgz#daf40ec57ff28d7ade9f245ba5fdff08c7f890ce"
-  integrity sha512-BxmiXJxv+wULW0OA2SL2fz3aYlIKQ/BqU9Bb4ji/o+K2k4yjFYPLYRZuzR88tx79kipTOwPomY1mPYMbvK3kBQ==
+"@carbon/colors@^10.15.0":
+  version "10.15.0"
+  resolved "https://registry.npmjs.org/@carbon/colors/-/colors-10.15.0.tgz#1a7f211a9e92b51c838995f5f3ffae002a3fed8b"
+  integrity sha512-z6Ur7unTO6XoVVujXnGcvxxDaX1g5ccCqImlb/HtJHtF7WFCQVjpxKKn76XcmI3PRZ2tbc9q+ENpfbS5Ry/NBQ==
 
 "@carbon/import-once@^10.3.0":
   version "10.3.0"
   resolved "https://registry.npmjs.org/@carbon/import-once/-/import-once-10.3.0.tgz#58617da4efb6d7a11352d8e6b7209da1d39f364d"
   integrity sha512-PFk3FhMe3psihYtCg3JsyPHismqglnbUqIpz1DCG5Gn/kt0HdVKhGvHdEq7E305rGoBUCKzMn/4xoY9v9mcmlg==
 
-"@carbon/layout@^10.13.0":
-  version "10.13.0"
-  resolved "https://registry.npmjs.org/@carbon/layout/-/layout-10.13.0.tgz#fd7ecaf1502f4d4ef1598816d9316dd6c84be5da"
-  integrity sha512-OgLe9/27zffC019rOGjWd4lavZO7BAkgUyKG+0Mg8IpzqqmGt7v8k4viMH5ThMt8y7Qk1LQfno/4ZzBItWi5Ow==
+"@carbon/layout@^10.14.0":
+  version "10.14.0"
+  resolved "https://registry.npmjs.org/@carbon/layout/-/layout-10.14.0.tgz#abeb9a01c5ee70fe1e5f8dc3b0d5a6e423cea935"
+  integrity sha512-P9ueDQWpq3pF98iHGsCKL4fR/mP8Xhqe3qhBQfA5zgi7/RPy76lKGZR+SUoGX/QCC72vkA/zhJ4+7/I26LhMhQ==
 
-"@carbon/themes@^10.20.0":
-  version "10.20.0"
-  resolved "https://registry.npmjs.org/@carbon/themes/-/themes-10.20.0.tgz#74c95ee6a81cf695e39c75b0bc58ab38eb504719"
-  integrity sha512-N8IMk7AtOQy2kiO81Y47Ngktc03D696xzlb4MpW/4pMJ9DfyndjslSmnj1j8j7SrpMSqT9lbOSPc4FZ9/F5G1Q==
+"@carbon/themes@^10.22.0":
+  version "10.22.0"
+  resolved "https://registry.npmjs.org/@carbon/themes/-/themes-10.22.0.tgz#6bd6363faa0eaadd535d815d0b523115f84e0694"
+  integrity sha512-ep8SRzu5C1lf4JYEcksFr87iO5V9M0KgYL/gpztEKXvXfrslJTU1mewaSFuQCQWN7vMONl1cupqnWix9i5kVQg==
   dependencies:
-    "@carbon/colors" "^10.14.0"
-    "@carbon/layout" "^10.13.0"
-    "@carbon/type" "^10.16.0"
+    "@carbon/colors" "^10.15.0"
+    "@carbon/layout" "^10.14.0"
+    "@carbon/type" "^10.17.0"
     color "^3.1.2"
 
-"@carbon/type@^10.16.0":
-  version "10.16.0"
-  resolved "https://registry.npmjs.org/@carbon/type/-/type-10.16.0.tgz#0f85209852f5c1a0e0128b7408d9c71e588a4ca7"
-  integrity sha512-Qf2TfUJTFFcrCyFT9sH9wsETAVHKPGID0e3k9KjGrBjvbgeqny1jPHM7B7Gpl29NtOVDY2+K7AvGiBIH7SP/jQ==
+"@carbon/type@^10.17.0":
+  version "10.17.0"
+  resolved "https://registry.npmjs.org/@carbon/type/-/type-10.17.0.tgz#8901768d2dbeb12936c50ea81b9e5025f2346f30"
+  integrity sha512-fxutYwh6wNtcE0usO5d7ogoVLOTEOc34q4Xe1KT8IQVfDlnmdtLsdKvCxZrCk5KiAQZILCmXmyySiLdJfQcRJw==
   dependencies:
     "@carbon/import-once" "^10.3.0"
-    "@carbon/layout" "^10.13.0"
+    "@carbon/layout" "^10.14.0"
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
