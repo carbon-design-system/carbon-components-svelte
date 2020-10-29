@@ -4,12 +4,12 @@
 </script>
 
 <style lang="scss" global>
+  @import "carbon-components/scss/globals/scss/_theme.scss";
+
   $feature-flags: (
     enable-css-custom-properties: true,
     grid-columns-16: true
   );
-
-  @import "@carbon/themes/scss/themes";
 
   :root {
     @include carbon--theme($carbon--theme--white, true);

@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the kind of button
-   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"} [kind="primary"]
+   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost"} [kind="primary"]
    */
   export let kind = "primary";
 
