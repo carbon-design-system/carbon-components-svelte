@@ -2893,6 +2893,12 @@ export class OrderedList extends CarbonSvelteComponent {
      * @default false
      */
     nested?: boolean;
+
+    /**
+     * Set to `true` to use native list styles
+     * @default false
+     */
+    native?: boolean;
   };
 
   $$slot_def: { default: {} };

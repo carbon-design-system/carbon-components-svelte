@@ -2985,6 +2985,7 @@ import { OrderedList } from "carbon-components-svelte";
 | Prop name | Type                 | Default value | Description                              |
 | :-------- | :------------------- | :------------ | :--------------------------------------- |
 | nested    | <code>boolean</code> | `false`       | Set to `true` to use the nested variant. |
+| native    | <code>boolean</code> | `false`       | Set to `true` to use native list styles. |
 
 ### Slots
 

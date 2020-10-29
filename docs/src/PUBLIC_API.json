@@ -8700,6 +8700,15 @@
             "type": "boolean",
             "description": "Set to `true` to use the nested variant"
           }
+        ],
+        [
+          "native",
+          {
+            "kind": "let",
+            "value": "false",
+            "type": "boolean",
+            "description": "Set to `true` to use native list styles"
+          }
         ]
       ],
       "slots": [
@@ -8717,8 +8726,8 @@
         [
           "click",
           {
-            "start": 238,
-            "end": 246,
+            "start": 409,
+            "end": 417,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -8728,8 +8737,8 @@
         [
           "mouseover",
           {
-            "start": 249,
-            "end": 261,
+            "start": 420,
+            "end": 432,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -8739,8 +8748,8 @@
         [
           "mouseenter",
           {
-            "start": 264,
-            "end": 277,
+            "start": 435,
+            "end": 448,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -8750,8 +8759,8 @@
         [
           "mouseleave",
           {
-            "start": 280,
-            "end": 293,
+            "start": 451,
+            "end": 464,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],

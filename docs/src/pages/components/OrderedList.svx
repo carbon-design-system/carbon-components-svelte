@@ -48,3 +48,23 @@ components: ["OrderedList", "ListItem"]
   <ListItem>Ordered list level 1</ListItem>
   <ListItem>Ordered list level 1</ListItem>
 </OrderedList>
+
+### Native list styles
+
+<OrderedList native>
+  <ListItem>
+    Ordered list level 1
+    <OrderedList nested>
+      <ListItem>Ordered list level 2</ListItem>
+      <ListItem>
+        Ordered list level 3
+        <OrderedList nested>
+          <ListItem>Ordered list level 3</ListItem>
+          <ListItem>Ordered list level 3</ListItem>
+        </OrderedList>
+      </ListItem>
+    </OrderedList>
+  </ListItem>
+  <ListItem>Ordered list level 1</ListItem>
+  <ListItem>Ordered list level 1</ListItem>
+</OrderedList>
