@@ -13,6 +13,16 @@ components: ["Dropdown", "DropdownSkeleton"]
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Format item display text
+
+Use the `itemToString` prop to format the display of individual items.
+
+<Dropdown itemToString={item => {
+  return item.text + ' (' + item.id +')'
+}} titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ### Light variant
 
 <Dropdown light titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},

@@ -153,7 +153,7 @@
    * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
    */
 
-  import { afterUpdate, setContext } from "svelte";
+  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
   import { Checkbox } from "../Checkbox";
   import {
@@ -165,15 +165,16 @@
     ListBoxSelection,
   } from "../ListBox";
 
+  const dispatch = createEventDispatcher();
+
   let multiSelectRef = null;
   let fieldRef = null;
   let selectionRef = null;
   let inputRef = null;
-
-  $: inputValue = "";
-  $: initialSorted = false;
-  $: highlightedIndex = -1;
-  $: prevChecked = [];
+  let inputValue = "";
+  let initialSorted = false;
+  let highlightedIndex = -1;
+  let prevChecked = [];
 
   setContext("MultiSelect", {
     declareRef: ({ key, ref }) => {
@@ -214,6 +215,11 @@
       }
       prevChecked = checked;
       selectedIds = checked.map(({ id }) => id);
+      dispatch("select", {
+        selectedIds,
+        selected: checked,
+        unselected: unchecked,
+      });
     }
 
     if (!open) {
@@ -335,6 +341,7 @@
       {#if checked.length > 0}
         <ListBoxSelection
           selectionCount="{checked.length}"
+          on:clear
           on:clear="{() => {
             sortedItems = sortedItems.map((item) => ({
               ...item,
