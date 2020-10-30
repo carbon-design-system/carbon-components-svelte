@@ -2749,6 +2749,7 @@ No slots.
 
 ### Forwarded events
 
+- `on:clear`
 - `on:keydown`
 - `on:focus`
 - `on:blur`

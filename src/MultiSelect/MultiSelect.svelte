@@ -169,11 +169,10 @@
   let fieldRef = null;
   let selectionRef = null;
   let inputRef = null;
-
-  $: inputValue = "";
-  $: initialSorted = false;
-  $: highlightedIndex = -1;
-  $: prevChecked = [];
+  let inputValue = "";
+  let initialSorted = false;
+  let highlightedIndex = -1;
+  let prevChecked = [];
 
   setContext("MultiSelect", {
     declareRef: ({ key, ref }) => {
@@ -335,6 +334,7 @@
       {#if checked.length > 0}
         <ListBoxSelection
           selectionCount="{checked.length}"
+          on:clear
           on:clear="{() => {
             sortedItems = sortedItems.map((item) => ({
               ...item,

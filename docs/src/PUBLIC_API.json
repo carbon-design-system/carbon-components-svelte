@@ -8052,10 +8052,21 @@
       "slots": [],
       "forwarded_events": [
         [
+          "clear",
+          {
+            "start": 8393,
+            "end": 8401,
+            "type": "EventHandler",
+            "name": "clear",
+            "modifiers": [],
+            "expression": null
+          }
+        ],
+        [
           "keydown",
           {
-            "start": 9267,
-            "end": 9277,
+            "start": 9289,
+            "end": 9299,
             "type": "EventHandler",
             "name": "keydown",
             "modifiers": [],
@@ -8065,8 +8076,8 @@
         [
           "focus",
           {
-            "start": 9769,
-            "end": 9777,
+            "start": 9791,
+            "end": 9799,
             "type": "EventHandler",
             "name": "focus",
             "modifiers": [],
@@ -8076,8 +8087,8 @@
         [
           "blur",
           {
-            "start": 9788,
-            "end": 9795,
+            "start": 9810,
+            "end": 9817,
             "type": "EventHandler",
             "name": "blur",
             "modifiers": [],
