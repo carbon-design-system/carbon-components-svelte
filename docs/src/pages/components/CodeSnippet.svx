@@ -51,6 +51,20 @@ let comment = `
 
 <CodeSnippet wrapText type="multi" code="{comment}" />
 
+### Dynamic multi-line code
+
+For dynamically updated code, you must use the `code` prop instead of the default slot.
+
+<FileSource src="/framed/CodeSnippet/DynamicCodeSnippet" />
+
+### Hidden multi-line code
+
+There may be cases where your code snippet is hidden in the DOM. The logic to render the "Show more" button relies on the element's computed height. For hidden content, the button will not appear because the computed height is `0`.
+
+The recommended workaround is to re-render the component. See the example below.
+
+<FileSource src="/framed/CodeSnippet/HiddenCodeSnippet" />
+
 ### Skeleton
 
 The default skeleton type is `"single"`.

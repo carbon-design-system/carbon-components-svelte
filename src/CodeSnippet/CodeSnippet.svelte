@@ -99,15 +99,22 @@
    */
   export let ref = null;
 
+  import { tick } from "svelte";
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
   import { Button } from "../Button";
   import { Copy } from "../Copy";
   import { CopyButton } from "../CopyButton";
   import CodeSnippetSkeleton from "./CodeSnippet.Skeleton.svelte";
 
+  function setShowMoreLess() {
+    const { height } = ref.getBoundingClientRect();
+    if (height > 0) showMoreLess = ref.getBoundingClientRect().height > 255;
+  }
+
   $: expandText = expanded ? showLessText : showMoreText;
   $: if (type === "multi" && ref) {
-    showMoreLess = ref.getBoundingClientRect().height > 255;
+    if (code === undefined) setShowMoreLess();
+    if (code) tick().then(setShowMoreLess);
   }
 </script>
 
