@@ -10,7 +10,7 @@ By default, items will be ordered alphabetically based on the `item.text` value.
 <MultiSelect titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}" selectedIds="{["0", "1"]}"
+    {id: "2", text: "Fax"}]}"
   />
 
 ### No alphabetical ordering
@@ -20,7 +20,32 @@ To prevent alphabetical item ordering, pass an empty function to the `sortItem` 
 <MultiSelect titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}" selectedIds="{["0", "1"]}"
+    {id: "2", text: "Fax"}]}" 
+    sortItem="{() => {}}"
+  />
+
+### Initial selected items
+
+To select (or bind) items, pass an array of item ids to `selectedIds`.
+
+<MultiSelect selectedIds="{["0", "1"]}" titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}" 
+  />
+
+
+
+### Format item display text
+
+Use the `itemToString` prop to format the display of individual items.
+
+<MultiSelect itemToString={item => {
+  return item.text + ' (' + item.id +')'
+}} titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
     sortItem="{() => {}}"
   />
 
