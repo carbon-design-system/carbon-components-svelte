@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.22.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.22.0) - 2020-10-30
+
+**Features**
+
+- Button: add "danger-tertiary", "danger-ghost" kinds
+- OverflowMenu: support "sm", "xl" size variants
+- TimePicker: support "sm", "xl" size variants
+- Link: support "sm", "lg" size variants
+- OrderedList: support native list styles
+- MultiSelect: forward "clear" event
+- MultiSelect: dispatch "select" event to be consistent with ComboBox, Dropdown
+
+**Fixes**
+
+- OverflowMenu: dynamic menu shadow width should be scoped to component instance; remove `tabindex` attribute from trigger button
+- CodeSnippet: `showMoreLess` should be re-computed if `code` is dynamically updated
+
+**Documentation**
+
+- Document `itemToString` prop for Dropdown, MultiSelect
+- MultiSelect: add example for "Initial selected items"
+- CodeSnippet: add example for dynamically updating `code`
+- CodeSnippet: add example for "Hidden code snippet" edge case (issue #373)
+- OverflowMenu: add example for "Custom trigger icon"
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.23.1, `@carbon/themes` to v10.22.1
+- bump/patch development dependencies
+
 ## [0.21.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.21.0) - 2020-10-26
 
 **Features**

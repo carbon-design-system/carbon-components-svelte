@@ -1,5 +1,5 @@
 {
-  "version": "0.21.0",
+  "version": "0.22.0",
   "components": {
     "Accordion": {
       "moduleName": "Accordion",
@@ -1544,20 +1544,20 @@
             "attributes": [],
             "children": [
               {
-                "start": 4853,
-                "end": 4859,
+                "start": 5081,
+                "end": 5087,
                 "type": "MustacheTag",
                 "expression": {
                   "type": "Identifier",
-                  "start": 4854,
-                  "end": 4858,
+                  "start": 5082,
+                  "end": 5086,
                   "loc": {
                     "start": {
-                      "line": 184,
+                      "line": 191,
                       "column": 19
                     },
                     "end": {
-                      "line": 184,
+                      "line": 191,
                       "column": 23
                     }
                   },
@@ -1574,8 +1574,8 @@
         [
           "click",
           {
-            "start": 5101,
-            "end": 5109,
+            "start": 5329,
+            "end": 5337,
             "type": "EventHandler",
             "name": "click",
             "modifiers": [],
@@ -1585,8 +1585,8 @@
         [
           "mouseover",
           {
-            "start": 4467,
-            "end": 4479,
+            "start": 4695,
+            "end": 4707,
             "type": "EventHandler",
             "name": "mouseover",
             "modifiers": [],
@@ -1596,8 +1596,8 @@
         [
           "mouseenter",
           {
-            "start": 4486,
-            "end": 4499,
+            "start": 4714,
+            "end": 4727,
             "type": "EventHandler",
             "name": "mouseenter",
             "modifiers": [],
@@ -1607,8 +1607,8 @@
         [
           "mouseleave",
           {
-            "start": 4506,
-            "end": 4519,
+            "start": 4734,
+            "end": 4747,
             "type": "EventHandler",
             "name": "mouseleave",
             "modifiers": [],
@@ -1618,8 +1618,8 @@
         [
           "animationend",
           {
-            "start": 5120,
-            "end": 5135,
+            "start": 5348,
+            "end": 5363,
             "type": "EventHandler",
             "name": "animationend",
             "modifiers": [],
