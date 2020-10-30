@@ -153,7 +153,7 @@
    * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
    */
 
-  import { afterUpdate, setContext } from "svelte";
+  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
   import { Checkbox } from "../Checkbox";
   import {
@@ -164,6 +164,8 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox";
+
+  const dispatch = createEventDispatcher();
 
   let multiSelectRef = null;
   let fieldRef = null;
@@ -213,6 +215,11 @@
       }
       prevChecked = checked;
       selectedIds = checked.map(({ id }) => id);
+      dispatch("select", {
+        selectedIds,
+        selected: checked,
+        unselected: unchecked,
+      });
     }
 
     if (!open) {

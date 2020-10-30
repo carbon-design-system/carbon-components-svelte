@@ -8054,8 +8054,8 @@
         [
           "clear",
           {
-            "start": 8393,
-            "end": 8401,
+            "start": 8577,
+            "end": 8585,
             "type": "EventHandler",
             "name": "clear",
             "modifiers": [],
@@ -8065,8 +8065,8 @@
         [
           "keydown",
           {
-            "start": 9289,
-            "end": 9299,
+            "start": 9473,
+            "end": 9483,
             "type": "EventHandler",
             "name": "keydown",
             "modifiers": [],
@@ -8076,8 +8076,8 @@
         [
           "focus",
           {
-            "start": 9791,
-            "end": 9799,
+            "start": 9975,
+            "end": 9983,
             "type": "EventHandler",
             "name": "focus",
             "modifiers": [],
@@ -8087,8 +8087,8 @@
         [
           "blur",
           {
-            "start": 9810,
-            "end": 9817,
+            "start": 9994,
+            "end": 10001,
             "type": "EventHandler",
             "name": "blur",
             "modifiers": [],
@@ -8096,7 +8096,14 @@
           }
         ]
       ],
-      "dispatched_events": []
+      "dispatched_events": [
+        [
+          "select",
+          {
+            "detail": "{\n        selectedIds,\n        selected: checked,\n        unselected: unchecked,\n      }"
+          }
+        ]
+      ]
     },
     "NotificationActionButton": {
       "moduleName": "NotificationActionButton",
