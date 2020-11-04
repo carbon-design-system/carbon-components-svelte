@@ -1,19 +1,13 @@
 <script>
-  /**
-   * Set the feedback text shown after clicking the button
-   * @type {string} [feedback="Copied!"]
-   */
+  /** Set the feedback text shown after clicking the button */
   export let feedback = "Copied!";
 
-  /**
-   * Set the timeout duration (ms) to display feedback text
-   * @type {number} [feedbackTimeout=2000]
-   */
+  /** Set the timeout duration (ms) to display feedback text */
   export let feedbackTimeout = 2000;
 
   /**
    * Obtain a reference to the button HTML element
-   * @type {null | HTMLButtonElement} [ref=null]
+   * @type {null | HTMLButtonElement}
    */
   export let ref = null;
 

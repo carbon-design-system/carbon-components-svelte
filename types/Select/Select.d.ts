@@ -5,7 +5,7 @@ export default class Select {
     /**
      * Specify the selected item value
      */
-    selected?: string;
+    selected?: undefined;
 
     /**
      * Set the size of the select input

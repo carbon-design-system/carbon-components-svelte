@@ -15,7 +15,7 @@ export default class RadioButton {
     checked?: boolean;
 
     /**
-     * Set to `true` to disable the radio button
+     * et to `true` to disable the radio button
      * @default false
      */
     disabled?: boolean;

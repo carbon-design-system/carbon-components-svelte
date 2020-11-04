@@ -1,44 +1,37 @@
 <script>
-  /**
-   * Set to `false` to hide the side nav by default
-   * @type {boolean} [expandedByDefault=true]
-   */
+  /** Set to `false` to hide the side nav by default */
   export let expandedByDefault = true;
 
-  /**
-   * Set to `true` to open the side nav
-   * @type {boolean} [isSideNavOpen=false]
-   */
+  /** Set to `true` to open the side nav */
   export let isSideNavOpen = false;
 
   /**
    * Specify the ARIA label for the header
-   * @type {string} [uiShellAriaLabel]
+   * @type {string}
    */
   export let uiShellAriaLabel = undefined;
 
   /**
    * Specify the `href` attribute
-   * @type {string} [href]
+   * @type {string}
    */
   export let href = undefined;
 
   /**
    * Specify the company name
-   * @type {string} [company]
+   * @type {string}
    */
   export let company = undefined;
 
   /**
    * Specify the platform name
    * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
-   * @type {string} [platformName=""]
    */
   export let platformName = "";
 
   /**
    * Obtain a reference to the HTML anchor element
-   * @type {null | HTMLAnchorElement} [ref=null]
+   * @type {null | HTMLAnchorElement}
    */
   export let ref = null;
 

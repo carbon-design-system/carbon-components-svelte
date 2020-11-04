@@ -1,13 +1,15 @@
 /// <reference types="svelte" />
 
-type Headers = {
+interface Header {
   key: string;
   value: string;
   display?: (item) => string;
   sort?: (a, b) => number;
   empty?: boolean;
   columnMenu?: boolean;
-}[];
+}
+
+type Headers = Header[];
 
 export default class DataTable {
   $$prop_def: {
@@ -106,17 +108,24 @@ export default class DataTable {
 
   $$slot_def: {
     default: {};
-    cell: { row: any; cell: any };
-    ["expanded-row"]: { row: any };
+    ["expanded-row"]: { row: Object };
+    ["cell-header"]: { header: Header };
+    cell: { row: Object; cell: Object };
   };
 
-  $on(eventname: "click:header--expand", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "click", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "click:header", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "click:row", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "mouseenter:row", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "mouseleave:row", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "click:row--expand", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "click:cell", cb: (event: CustomEvent<any>) => void): () => void;
+  $on(
+    eventname: "click",
+    cb: (event: CustomEvent<{ header?: Header; row?: Object; cell?: Object }>) => void
+  ): () => void;
+  $on(eventname: "click:header--expand", cb: (event: CustomEvent<{ expanded: boolean }>) => void): () => void;
+  $on(
+    eventname: "click:header",
+    cb: (event: CustomEvent<{ header: Header; sortDirection: "ascending" | "descending" | "none" }>) => void
+  ): () => void;
+  $on(eventname: "click:row", cb: (event: CustomEvent<Object>) => void): () => void;
+  $on(eventname: "mouseenter:row", cb: (event: CustomEvent<Object>) => void): () => void;
+  $on(eventname: "mouseleave:row", cb: (event: CustomEvent<Object>) => void): () => void;
+  $on(eventname: "click:row--expand", cb: (event: CustomEvent<{ expanded: boolean; row: Object }>) => void): () => void;
+  $on(eventname: "click:cell", cb: (event: CustomEvent<Object>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

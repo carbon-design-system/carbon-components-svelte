@@ -1,7 +1,7 @@
 <script>
   /**
    * Override the total items selected text
-   * @type {(totalSelected: number) => string} [formatTotalSelected = (totalSelected: number) => string]
+   * @type {(totalSelected: number) => string}
    */
   export let formatTotalSelected = (totalSelected) =>
     `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;

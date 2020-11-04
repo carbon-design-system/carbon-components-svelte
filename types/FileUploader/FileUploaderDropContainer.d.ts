@@ -8,7 +8,7 @@ export default class FileUploaderDropContainer {
      * Specify the accepted file types
      * @default []
      */
-    accept?: string[];
+    accept?: Files;
 
     /**
      * Set to `true` to allow multiple files
@@ -67,12 +67,12 @@ export default class FileUploaderDropContainer {
 
   $$slot_def: {};
 
+  $on(eventname: "add", cb: (event: CustomEvent<Files>) => void): () => void;
   $on(eventname: "dragover", cb: (event: WindowEventMap["dragover"]) => void): () => void;
   $on(eventname: "dragleave", cb: (event: WindowEventMap["dragleave"]) => void): () => void;
   $on(eventname: "drop", cb: (event: WindowEventMap["drop"]) => void): () => void;
   $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
   $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "add", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

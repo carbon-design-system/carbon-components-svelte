@@ -1,70 +1,58 @@
 <script>
   /**
+   * @typedef {string[]} Files
+   * @event {Files} add
+   * @event {Files} remove
+   */
+
+  /**
    * Specify the file uploader status
-   * @type {"uploading" | "edit" | "complete"} [status="uploading"]
+   * @type {"uploading" | "edit" | "complete"}
    */
   export let status = "uploading";
 
   /**
    * Specify the accepted file types
-   * @type {string[]} [accept=[]]
+   * @type {Files}
    */
   export let accept = [];
 
   /**
    * Obtain the uploaded file names
-   * @type {string[]} [files=[]]
+   * @type {Files}
    */
   export let files = [];
 
-  /**
-   * Set to `true` to allow multiple files
-   * @type {boolean} [multiple=false]
-   */
+  /** Set to `true` to allow multiple files */
   export let multiple = false;
 
   /**
    * Override the default behavior of clearing the array of uploaded files
-   * @type {() => any} [clearFiles = () => void]
+   * @type {() => void}
    */
   export const clearFiles = () => {
     files = [];
   };
 
-  /**
-   * Specify the label description
-   * @type {string} [labelDescription=""]
-   */
+  /** Specify the label description */
   export let labelDescription = "";
 
-  /**
-   * Specify the label title
-   * @type {string} [labelTitle=""]
-   */
+  /** Specify the label title */
   export let labelTitle = "";
 
   /**
    * Specify the kind of file uploader button
-   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"} [kind="primary"]
+   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"}
    */
   export let kind = "primary";
 
-  /**
-   * Specify the button label
-   * @type {string} [buttonLabel=""]
-   */
+  /** Specify the button label */
   export let buttonLabel = "";
 
-  /**
-   * Specify the ARIA label used for the status icons
-   * @type {string} [iconDescription=""]
-   */
+  /** Specify the ARIA label used for the status icons */
   export let iconDescription = "Provide icon description";
 
-  /**
-   * Specify a name attribute for the file button uploader input
-   * @type {string} [name]
-   */
+  /** Specify a name attribute for the file button uploader input */
   export let name = "";
 
   import { createEventDispatcher, afterUpdate } from "svelte";

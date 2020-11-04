@@ -1,44 +1,26 @@
 <script>
-  /**
-   * Set to `true` to check the tile
-   * @type {boolean} [checked=false]
-   */
+  /** Set to `true` to check the tile */
   export let checked = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Specify the value of the radio input
-   * @type {string} [value=""]
-   */
+  /** Specify the value of the radio input */
   export let value = "";
 
-  /**
-   * Specify the tabindex
-   * @type {string} [tabindex="0"]
-   */
+  /** Specify the tabindex */
   export let tabindex = "0";
 
-  /**
-   * Specify the ARIA label for the radio tile checkmark icon
-   * @type {string} [iconDescription="Tile checkmark"]
-   */
+  /** Specify the ARIA label for the radio tile checkmark icon */
   export let iconDescription = "Tile checkmark";
 
   /**
    * Set an id for the input element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the input
-   * @type {string} [name=""]
-   */
+  /** Specify a name attribute for the input */
   export let name = "";
 
   import { getContext } from "svelte";

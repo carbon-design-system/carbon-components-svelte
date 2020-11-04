@@ -1,14 +1,8 @@
 <script>
-  /**
-   * Set to `true` to enable the active state
-   * @type {boolean} [active=false]
-   */
+  /** Set to `true` to enable the active state */
   export let active = false;
 
-  /**
-   * Set to `true` to enable the highlighted state
-   * @type {boolean} [highlighted=false]
-   */
+  /** Set to `true` to enable the highlighted state */
   export let highlighted = false;
 </script>
 

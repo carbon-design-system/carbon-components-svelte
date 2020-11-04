@@ -1,20 +1,14 @@
 <script>
   /**
    * Specify the selected tile value
-   * @type {string} [selected]
+   * @type {string}
    */
   export let selected = undefined;
 
-  /**
-   * Set to `true` to disable the tile group
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the tile group */
   export let disabled = false;
 
-  /**
-   * Specify the legend text
-   * @type {string} [legend]
-   */
+  /** Specify the legend text */
   export let legend = "";
 
   import { createEventDispatcher, setContext } from "svelte";

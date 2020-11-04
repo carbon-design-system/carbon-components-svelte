@@ -8,7 +8,7 @@ export default class ListBoxMenu {
     id?: string;
 
     /**
-     * Obtain a reference to the input HTML element
+     * Obtain a reference to the HTML element
      * @default null
      */
     ref?: null | HTMLDivElement;

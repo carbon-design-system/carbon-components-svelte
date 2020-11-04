@@ -1,19 +1,16 @@
 <script>
-  /**
-   * Set to `true` to use the active variant
-   * @type {boolean} [isActive=false]
-   */
+  /** Set to `true` to use the active variant */
   export let isActive = false;
 
   /**
    * Specify the icon to render
-   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [icon]
+   * @type {typeof import("carbon-icons-svelte/lib/Add16").default}
    */
   export let icon = undefined;
 
   /**
    * Obtain a reference to the HTML button element
-   * @type {null | HTMLButtonElement} [ref=null]
+   * @type {null | HTMLButtonElement}
    */
   export let ref = null;
 </script>

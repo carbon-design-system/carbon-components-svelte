@@ -69,11 +69,11 @@ export default class Checkbox {
 
   $$slot_def: {};
 
+  $on(eventname: "check", cb: (event: CustomEvent<boolean>) => void): () => void;
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
   $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
   $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
   $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
   $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
-  $on(eventname: "check", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

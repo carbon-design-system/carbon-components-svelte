@@ -1,74 +1,57 @@
 <script>
   /**
+   * @typedef {string[]} Files
+   * @event {Files} add
+   */
+
+  /**
    * Specify the accepted file types
-   * @type {string[]} [accept=[]]
+   * @type {Files}
    */
   export let accept = [];
 
-  /**
-   * Set to `true` to allow multiple files
-   * @type {boolean} [multiple=false]
-   */
+  /** Set to `true` to allow multiple files */
   export let multiple = false;
 
   /**
    * Override the default behavior of validating uploaded files
    * The default behavior does not validate files
-   * @type {(files: Files) => Files} [validateFiles = (files: Files) => Files]
+   * @type {(files: Files) => Files}
    */
   export let validateFiles = (files) => files;
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText="Add file"]
-   */
+  /** Specify the label text */
   export let labelText = "Add file";
 
-  /**
-   * Specify the `role` attribute of the drop container
-   * @type {string} [role="button"]
-   */
+  /** Specify the `role` attribute of the drop container */
   export let role = "button";
 
-  /**
-   * Set to `true` to disable the input
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the input */
   export let disabled = false;
 
-  /**
-   * Specify `tabindex` attribute
-   * @type {string} [tabindex="0"]
-   */
+  /** Specify `tabindex` attribute */
   export let tabindex = "0";
 
   /**
    * Set an id for the input element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the input
-   * @type {string} [name=""]
-   */
+  /** Specify a name attribute for the input */
   export let name = "";
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
-
-  /**
-   * @typedef {string[]} Files
-   */
 
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
-  $: over = false;
+  let over = false;
 </script>
 
 <div

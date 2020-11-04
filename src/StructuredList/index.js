@@ -1,5 +1,5 @@
 export { default as StructuredList } from "./StructuredList.svelte";
-export { default as StructuredListSkeleton } from "./StructuredList.Skeleton.svelte";
+export { default as StructuredListSkeleton } from "./StructuredListSkeleton.svelte";
 export { default as StructuredListBody } from "./StructuredListBody.svelte";
 export { default as StructuredListHead } from "./StructuredListHead.svelte";
 export { default as StructuredListCell } from "./StructuredListCell.svelte";

@@ -1,21 +1,18 @@
 <script>
   /**
+   * @typedef {"clearAll" | "clearSelection"} ListBoxSelectionTranslationId
+   */
+
+  /**
    * Specify the number of selected items
-   * @type {any} [selectionCount]
+   * @type {any}
    */
   export let selectionCount = undefined;
 
-  /**
-   * Set to `true` to disable the list box selection
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the list box selection */
   export let disabled = false;
 
-  /**
-   * Default translation ids
-   * @constant
-   * @type {{ clearAll: "clearAll"; clearSelection: "clearSelection" }}
-   */
+  /** Default translation ids */
   export const translationIds = {
     clearAll: "clearAll",
     clearSelection: "clearSelection",
@@ -23,19 +20,15 @@
 
   /**
    * Override the default translation ids
-   * @type {(id: ListBoxSelectionTranslationId) => string} [translateWithId = (id) => string]
+   * @type {(id: ListBoxSelectionTranslationId) => string}
    */
   export let translateWithId = (id) => defaultTranslations[id];
 
   /**
    * Obtain a reference to the top-level HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * @type {null | HTMLElement}
    */
   export let ref = null;
-
-  /**
-   * @typedef {"clearAll" | "clearSelection"} ListBoxSelectionTranslationId
-   */
 
   import { createEventDispatcher, getContext } from "svelte";
   import Close16 from "carbon-icons-svelte/lib/Close16";

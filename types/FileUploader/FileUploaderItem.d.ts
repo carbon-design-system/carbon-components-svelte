@@ -46,9 +46,9 @@ export default class FileUploaderItem {
 
   $$slot_def: {};
 
+  $on(eventname: "delete", cb: (event: CustomEvent<string>) => void): () => void;
   $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
   $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
   $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "delete", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

@@ -1,26 +1,23 @@
 <script>
   /**
    * Set the loading status
-   * @type {"active" | "inactive" | "finished" | "error"} [status="active"]
+   * @type {"active" | "inactive" | "finished" | "error"}
    */
   export let status = "active";
 
   /**
    * Set the loading description
-   * @type {string} [description]
+   * @type {string}
    */
   export let description = undefined;
 
   /**
    * Specify the ARIA label for the loading icon
-   * @type {string} [iconDescription="Expand/Collapse"]
+   * @type {string}
    */
   export let iconDescription = undefined;
 
-  /**
-   * Specify the timeout delay (ms) after `status` is set to "success"
-   * @type {number} [successDelay=1500]
-   */
+  /** Specify the timeout delay (ms) after `status` is set to "success" */
   export let successDelay = 1500;
 
   import { createEventDispatcher, afterUpdate, onMount } from "svelte";

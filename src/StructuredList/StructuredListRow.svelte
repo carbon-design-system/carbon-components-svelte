@@ -1,20 +1,11 @@
 <script>
-  /**
-   * Set to `true` to use as a header
-   * @type {boolean} [head=false]
-   */
+  /** Set to `true` to use as a header */
   export let head = false;
 
-  /**
-   * Set to `true` to render a label slot
-   * @type {boolean} [label=false]
-   */
+  /** Set to `true` to render a label slot */
   export let label = false;
 
-  /**
-   * Specify the tabindex
-   * @type {string} [tabindex="0"]
-   */
+  /** Specify the tabindex */
   export let tabindex = "0";
 </script>
 

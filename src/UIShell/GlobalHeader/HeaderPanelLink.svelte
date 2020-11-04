@@ -1,13 +1,13 @@
 <script>
   /**
    * Specify the `href` attribute
-   * @type {string} [href]
+   * @type {string}
    */
   export let href = undefined;
 
   /**
    * Obtain a reference to the HTML anchor element
-   * @type {null | HTMLAnchorElement} [ref=null]
+   * @type {null | HTMLAnchorElement}
    */
   export let ref = null;
 </script>

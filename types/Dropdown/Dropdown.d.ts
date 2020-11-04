@@ -116,6 +116,9 @@ export default class Dropdown {
 
   $$slot_def: {};
 
-  $on(eventname: "select", cb: (event: CustomEvent<any>) => void): () => void;
+  $on(
+    eventname: "select",
+    cb: (event: CustomEvent<{ selectedId: DropdownItemId; selectedIndex: number; selectedItem: DropdownItem }>) => void
+  ): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

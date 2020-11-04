@@ -1,43 +1,28 @@
 <script>
-  /**
-   * Set to `true` to toggle the checkbox input
-   * @type {boolean} [toggled=false]
-   */
+  /** Set to `true` to toggle the checkbox input */
   export let toggled = false;
 
-  /**
-   * Set to `true` to disable checkbox input
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable checkbox input */
   export let disabled = false;
 
-  /**
-   * Specify the label for the untoggled state
-   * @type {string} [labelA="Off"]
-   */
+  /** Specify the label for the untoggled state */
   export let labelA = "Off";
 
-  /**
-   * Specify the label for the toggled state
-   * @type {string} [labelB="On"]
-   */
+  /** Specify the label for the toggled state */
   export let labelB = "On";
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
   /**
    * Set an id for the input element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the checkbox input
-   * @type {string} [name]
+   * @type {string}
    */
   export let name = undefined;
 </script>

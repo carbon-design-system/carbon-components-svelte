@@ -1,45 +1,30 @@
 <script>
-  /**
-   * Specify the number of columns
-   * @type {number} [columns=5]
-   */
+  /** Specify the number of columns */
   export let columns = 5;
 
-  /**
-   * Specify the number of rows
-   * @type {number} [rows=5]
-   */
+  /** Specify the number of rows */
   export let rows = 5;
 
   /**
    * Set the size of the data table
-   * @type {"compact" | "short" | "tall"} [size]
+   * @type {"compact" | "short" | "tall"}
    */
   export let size = undefined;
 
-  /**
-   * Set to `true` to apply zebra styles to the datatable rows
-   * @type {boolean} [zebra=false]
-   */
+  /** Set to `true` to apply zebra styles to the datatable rows */
   export let zebra = false;
 
-  /**
-   * Set to `false` to hide the header
-   * @type {boolean} [showHeader=true]
-   */
+  /** Set to `false` to hide the header */
   export let showHeader = true;
 
   /**
    * Set the column headers
    * If `headers` has one more items, `count` is ignored
-   * @type {string[]} [headers=[]]
+   * @type {string[]}
    */
   export let headers = [];
 
-  /**
-   * Set to `false` to hide the toolbar
-   * @type {boolean} [showToolbar=true]
-   */
+  /** Set to `false` to hide the toolbar */
   export let showToolbar = true;
 
   $: cols = Array.from(

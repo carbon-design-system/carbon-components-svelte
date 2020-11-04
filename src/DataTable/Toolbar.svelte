@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the toolbar size
-   * @type {"sm" | "default"} [size="default"]
+   * @type {"sm" | "default"}
    */
   export let size = "default";
 

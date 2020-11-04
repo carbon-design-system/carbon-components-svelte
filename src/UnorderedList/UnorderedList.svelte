@@ -1,8 +1,5 @@
 <script>
-  /**
-   * Set to `true` to use the nested variant
-   * @type {boolean} [nested=false]
-   */
+  /** Set to `true` to use the nested variant */
   export let nested = false;
 </script>
 

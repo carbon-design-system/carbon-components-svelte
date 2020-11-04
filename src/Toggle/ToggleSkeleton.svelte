@@ -1,13 +1,10 @@
 <script>
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
   /**
    * Set an id for the input element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 </script>
@@ -24,29 +21,19 @@
     type="checkbox"
     id="{id}"
     class:bx--toggle="{true}"
-    class:bx--toggle--small="{true}"
     class:bx--skeleton="{true}"
   />
   <label
     aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle is loading'}"
+    for="{id}"
     class:bx--toggle__label="{true}"
     class:bx--skeleton="{true}"
-    for="{id}"
   >
     {#if labelText}
       <span class:bx--toggle__label-text="{true}">{labelText}</span>
     {/if}
-    <span class:bx--toggle__appearance="{true}">
-      <svg
-        class:bx--toggle__check="{true}"
-        width="6"
-        height="5"
-        viewBox="0 0 6 5"
-      >
-        <path
-          d="M2.2403 2.7299L4.9245 0 6 1.1117 2.2384 5 0 2.6863 1.0612 1.511z"
-        ></path>
-      </svg>
-    </span>
+    <span class:bx--toggle__text--left="{true}"></span>
+    <span class:bx--toggle__appearance="{true}"></span>
+    <span class:bx--toggle__text--right="{true}"></span>
   </label>
 </div>

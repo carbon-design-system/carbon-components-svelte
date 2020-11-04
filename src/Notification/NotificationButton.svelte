@@ -1,26 +1,23 @@
 <script>
   /**
    * Set the type of notification
-   * @type {"toast" | "inline"} [notificationType="toast"]
+   * @type {"toast" | "inline"}
    */
   export let notificationType = "toast";
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render
-   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [renderIcon]
+   * @type {typeof import("carbon-icons-svelte/lib/Add16").default}
    */
   export let renderIcon = Close20;
 
   /**
    * Specify the title of the icon
-   * @type {string} [title]
+   * @type {string}
    */
   export let title = undefined;
 
-  /**
-   * Specify the ARIA label for the icon
-   * @type {string} [iconDescription="Close icon"]
-   */
+  /** Specify the ARIA label for the icon */
   export let iconDescription = "Close icon";
 
   import Close20 from "carbon-icons-svelte/lib/Close20";

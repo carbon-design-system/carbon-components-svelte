@@ -1,20 +1,17 @@
 <script>
   /**
    * Set the `href` to use an anchor link
-   * @type {string} [href]
+   * @type {string}
    */
   export let href = undefined;
 
   /**
    * Specify the size of button skeleton
-   * @type {"default" | "field" | "small"} [size="default"]
+   * @type {"default" | "field" | "small"}
    */
   export let size = "default";
 
-  /**
-   * Set to `true` to use the small variant
-   * @type {boolean} [small=false]
-   */
+  /** Set to `true` to use the small variant */
   export let small = false;
 </script>
 

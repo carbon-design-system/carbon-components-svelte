@@ -1,14 +1,8 @@
 <script>
-  /**
-   * Set to `true` to disable the optgroup element
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the optgroup element */
   export let disabled = false;
 
-  /**
-   * Specify the label attribute of the optgroup element
-   * @type {string} [label="Provide label"]
-   */
+  /** Specify the label attribute of the optgroup element */
   export let label = "Provide label";
 </script>
 

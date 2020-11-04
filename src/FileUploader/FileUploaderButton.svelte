@@ -1,67 +1,50 @@
 <script>
   /**
+   * @typedef {string[]} Files
+   */
+
+  /**
    * Specify the accepted file types
-   * @type {string[]} [accept=[]]
+   * @type {Files}
    */
   export let accept = [];
 
-  /**
-   * Set to `true` to allow multiple files
-   * @type {boolean} [multiple=false]
-   */
+  /** Set to `true` to allow multiple files */
   export let multiple = false;
 
-  /**
-   * Set to `true` to disable the input
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the input */
   export let disabled = false;
 
-  /**
-   * Set to `true` to disable label changes
-   * @type {boolean} [disableLabelChanges=false]
-   */
+  /** Set to `true` to disable label changes */
   export let disableLabelChanges = false;
 
   /**
    * Specify the kind of file uploader button
-   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"} [kind="primary"]
+   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"}]
    */
   export let kind = "primary";
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText="Add file"]
-   */
+  /** Specify the label text */
   export let labelText = "Add file";
 
-  /**
-   * Specify the label role
-   * @type {string} [role="button"]
-   */
+  /** Specify the label role */
   export let role = "button";
 
-  /**
-   * Specify `tabindex` attribute
-   * @type {string} [tabindex="0"]
-   */
+  /** Specify `tabindex` attribute */
   export let tabindex = "0";
 
   /**
    * Set an id for the input element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the input
-   * @type {string} [name]
-   */
+  /** Specify a name attribute for the input */
   export let name = "";
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
 </script>

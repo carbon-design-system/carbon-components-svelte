@@ -1,38 +1,26 @@
 <script>
-  /**
-   * Specify the primary button text
-   * @type {string} [primaryButtonText=""]
-   */
+  /** Specify the primary button text */
   export let primaryButtonText = "";
 
-  /**
-   * Set to `true` to disable the primary button
-   * @type {boolean} [primaryButtonDisabled=false]
-   */
+  /**  Set to `true` to disable the primary button */
   export let primaryButtonDisabled = false;
 
   /**
    * Specify a class for the primary button
-   * @type {string} [primaryClass]
+   * @type {string}
    */
   export let primaryClass = undefined;
 
-  /**
-   * Specify the secondary button text
-   * @type {string} [secondaryButtonText=""]
-   */
+  /** Specify the secondary button text */
   export let secondaryButtonText = "";
 
   /**
    * Specify a class for the secondary button
-   * @type {string} [secondaryClass]
+   * @type {string}
    */
   export let secondaryClass = undefined;
 
-  /**
-   * Set to `true` to use the danger variant
-   * @type {boolean} [danger=false]
-   */
+  /** Set to `true` to use the danger variant */
   export let danger = false;
 
   import { getContext } from "svelte";

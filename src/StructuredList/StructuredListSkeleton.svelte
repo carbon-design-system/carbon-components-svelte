@@ -1,14 +1,8 @@
 <script>
-  /**
-   * Specify the number of rows
-   * @type {number} [rows=5]
-   */
+  /** Specify the number of rows */
   export let rows = 5;
 
-  /**
-   * Set to `true` to use the bordered variant
-   * @type {boolean} [border=false]
-   */
+  /** Set to `true` to use the bordered variant */
   export let border = false;
 </script>
 

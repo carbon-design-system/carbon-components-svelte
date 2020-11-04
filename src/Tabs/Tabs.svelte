@@ -1,26 +1,20 @@
 <script>
-  /**
-   * Specify the selected tab index
-   * @type {number} [selected=0]
-   */
+  /** Specify the selected tab index */
   export let selected = 0;
 
   /**
    * Specify the type of tabs
-   * @type {"default" | "container"} [type="default"]
+   * @type {"default" | "container"}
    */
   export let type = "default";
 
   /**
    * Specify the ARIA label for the chevron icon
-   * @type {string} [iconDescription="Expand/Collapse"]
+   * @type {string}
    */
   export let iconDescription = "Show menu options";
 
-  /**
-   * Specify the tab trigger href attribute
-   * @type {string} [triggerHref="#"]
-   */
+  /** Specify the tab trigger href attribute */
   export let triggerHref = "#";
 
   import { createEventDispatcher, afterUpdate, setContext } from "svelte";

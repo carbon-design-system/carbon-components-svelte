@@ -68,7 +68,7 @@ export default class Column {
   };
 
   $$slot_def: {
-    default: { props: undefined };
+    default: { props?: { class: string } };
   };
 
   $on(eventname: string, cb: (event: Event) => void): () => void;

@@ -1,19 +1,17 @@
 <script>
   /**
-   * Set the selected index of the switch item
-   * @type {number} [selectedIndex=0]
+   * @event {number} change
    */
+
+  /** Set the selected index of the switch item */
   export let selectedIndex = 0;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
   /**
    * Specify the size of the content switcher
-   * @type {"sm" | "xl"} [size]
+   * @type {"sm" | "xl"}
    */
   export let size = undefined;
 

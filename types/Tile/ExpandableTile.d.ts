@@ -50,10 +50,10 @@ export default class ExpandableTile {
     id?: string;
 
     /**
-     * Obtain a reference to the input HTML element
+     * Obtain a reference to the top-level element
      * @default null
      */
-    ref?: null | HTMLElement;
+    ref?: null | HTMLDivElement;
   };
 
   $$slot_def: {

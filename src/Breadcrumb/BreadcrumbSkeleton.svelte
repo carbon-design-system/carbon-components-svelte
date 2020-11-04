@@ -1,14 +1,8 @@
 <script>
-  /**
-   * Set to `true` to hide the breadcrumb trailing slash
-   * @type {boolean} [noTrailingSlash=false]
-   */
+  /** Set to `true` to hide the breadcrumb trailing slash */
   export let noTrailingSlash = false;
 
-  /**
-   * Specify the number of breadcrumb items to render
-   * @type {number} [count=3]
-   */
+  /** Specify the number of breadcrumb items to render */
   export let count = 3;
 </script>
 

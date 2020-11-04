@@ -1,121 +1,95 @@
 <script>
   /**
+   * @typedef {{ id: string; text: string; }} ComboBoxItem
+   * @event {{ selectedId: string; selectedIndex: number; selectedItem: ComboBoxItem }} select
+   */
+
+  /**
    * Set the combobox items
-   * @type {ComboBoxItem[]} [items=[]]
+   * @type {ComboBoxItem[]}
    */
   export let items = [];
 
   /**
    * Override the display of a combobox item
-   * @type {(item: ComboBoxItem) => string} [itemToString = (item: ComboBoxItem) => string]
+   * @type {(item: ComboBoxItem) => string}
    */
   export let itemToString = (item) => item.text || item.id;
 
   /**
    * Set the selected item by value index
-   * @type {number} [selectedIndex=-1]
+   * @type {number}
    */
   export let selectedIndex = -1;
 
-  /**
-   * Specify the selected combobox value
-   * @type {string} [value=""]
-   */
+  /** Specify the selected combobox value */
   export let value = "";
 
   /**
    * Set the size of the combobox
-   * @type {"sm" | "xl"} [size]
+   * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
-  /**
-   * Set to `true` to disable the combobox
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the combobox */
   export let disabled = false;
 
-  /**
-   * Specify the title text of the combobox
-   * @type {string} [titleText=""]
-   */
+  /** Specify the title text of the combobox */
   export let titleText = "";
 
-  /**
-   * Specify the placeholder text
-   * @type {string} [placeholder=""]
-   */
+  /** Specify the placeholder text */
   export let placeholder = "";
 
-  /**
-   * Specify the helper text
-   * @type {string} [helperText=""]
-   */
+  /** Specify the helper text */
   export let helperText = "";
 
-  /**
-   * Specify the invalid state text
-   * @type {string} [invalidText=""]
-   */
+  /** Specify the invalid state text */
   export let invalidText = "";
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to open the combobox menu dropdown
-   * @type {boolean} [open=false]
-   */
+  /** Set to `true` to open the combobox menu dropdown */
   export let open = false;
 
   /**
    * Determine if an item should be filtered given the current combobox value
-   * @type {(item: ComboBoxItem, value: string) => boolean} [shouldFilterItem=() => true]
+   * @type {(item: ComboBoxItem, value: string) => boolean}
    */
   export let shouldFilterItem = () => true;
 
   /**
    * Override the default translation ids
-   * @type {(id: any) => string} [translateWithId]
+   * @type {(id: any) => string}
    */
   export let translateWithId = undefined;
 
   /**
    * Set an id for the list box component
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the input
-   * @type {string} [name]
+   * @type {string}
    */
   export let name = undefined;
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
 
   /**
    * Obtain a reference to the list HTML element
-   * @type {null | HTMLDivElement} [ref=null]
+   * @type {null | HTMLDivElement}
    */
   export let listRef = null;
-
-  /**
-   * @typedef {{ id: string; text: string; }} ComboBoxItem
-   */
 
   import { createEventDispatcher, afterUpdate } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

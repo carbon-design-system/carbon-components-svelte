@@ -2,13 +2,12 @@
   /**
    * @deprecated this prop will be removed in the next major release
    * Set to `true` to use the small variant
-   * @type {boolean} [small=false]
    */
   export let small = false;
 
   /**
    * Specify the size of the search input
-   * @type {"sm" | "lg" | "xl"} [size="xl"]
+   * @type {"sm" | "lg" | "xl"}
    */
   export let size = "xl";
 </script>

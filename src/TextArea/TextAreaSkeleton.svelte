@@ -1,8 +1,5 @@
 <script>
-  /**
-   * Set to `true` to hide the label text
-   * @type {boolean} [hideLabel=false]
-   */
+  /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 </script>
 

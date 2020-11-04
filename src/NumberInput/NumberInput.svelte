@@ -1,109 +1,69 @@
 <script>
   /**
    * Set the size of the input
-   * @type {"sm" | "xl"} [size]
+   * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
-  /**
-   * Specify the input value
-   * @type {string} [value=""]
-   */
+  /** Specify the input value */
   export let value = "";
 
-  /**
-   * Specify the step increment
-   * @type {number} [step=1]
-   */
+  /** Specify the step increment */
   export let step = 1;
 
   /**
    * Specify the maximum value
-   * @type {number} [max]
+   * @type {number}
    */
   export let max = undefined;
 
   /**
    * Specify the minimum value
-   * @type {number} [min]
+   * @type {number}
    */
   export let min = undefined;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` for the input to be read-only
-   * @type {boolean} [readonly=false]
-   */
+  /** Set to `true` for the input to be read-only */
   export let readonly = false;
 
-  /**
-   * Set to `true` to enable the mobile variant
-   * @type {boolean} [mobile=false]
-   */
+  /** Set to `true` to enable the mobile variant */
   export let mobile = false;
 
-  /**
-   * Set to `true` to allow for an empty value
-   * @type {boolean} [allowEmpty=false]
-   */
+  /** Set to `true` to allow for an empty value */
   export let allowEmpty = false;
 
-  /**
-   * Set to `true` to disable the input
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the input */
   export let disabled = false;
 
-  /**
-   * Specify the ARIA label for the increment icons
-   * @type {string} [iconDescription=""]
-   */
+  /** Specify the ARIA label for the increment icons */
   export let iconDescription = "";
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the invalid state text
-   * @type {string} [invalidText="Provide invalidText"]
-   */
+  /** Specify the invalid state text */
   export let invalidText = "";
 
-  /**
-   * Specify the helper text
-   * @type {string} [helperText=""]
-   */
+  /** Specify the helper text */
   export let helperText = "";
 
-  /**
-   * Specify the label text
-   * @type {string} [label=""]
-   */
+  /** Specify the label text */
   export let label = "";
 
-  /**
-   * Set to `true` to visually hide the label text
-   * @type {boolean} [hideLabel=false]
-   */
+  /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
   /**
    * Override the default translation ids
-   * @type {(id: NumberInputTranslationId) => string} [translateWithId = (id: NumberInputTranslationId) => string]
+   * @type {(id: NumberInputTranslationId) => string}
    */
   export let translateWithId = (id) => defaultTranslations[id];
 
   /**
    * Default translation ids
-   * @constant
    * @type {{ increment: "increment"; decrement: "decrement" }}
    */
   export const translationIds = {
@@ -113,13 +73,13 @@
 
   /**
    * Set an id for the input element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the input
-   * @type {string} [name]
+   * @type {string}
    */
   export let name = undefined;
 

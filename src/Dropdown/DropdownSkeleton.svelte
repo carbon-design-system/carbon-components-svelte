@@ -1,8 +1,5 @@
 <script>
-  /**
-   * Set to `true` to use the inline variant
-   * @type {boolean} [inline=false]
-   */
+  /** Set to `true` to use the inline variant */
   export let inline = false;
 </script>
 

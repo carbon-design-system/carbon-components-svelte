@@ -1,7 +1,7 @@
 <script>
   /**
    * Set the type of code snippet
-   * @type {"single" | "inline" | "multi"} [type="single"]
+   * @type {"single" | "inline" | "multi"}
    */
   export let type = "single";
 </script>

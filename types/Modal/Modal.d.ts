@@ -109,7 +109,7 @@ export default class Modal {
      * Obtain a reference to the top-level HTML element
      * @default null
      */
-    ref?: null | HTMLElement;
+    ref?: null | HTMLDivElement;
   };
 
   $$slot_def: {

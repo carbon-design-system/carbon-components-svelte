@@ -1,55 +1,34 @@
 <script>
-  /**
-   * Set to `true` to expand the tile
-   * @type {boolean} [expanded=false]
-   */
+  /** Set to `true` to expand the tile */
   export let expanded = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Specify the max height of the tile  (number of pixels)
-   * @type {number} [tileMaxHeight=0]
-   */
+  /** Specify the max height of the tile  (number of pixels) */
   export let tileMaxHeight = 0;
 
-  /**
-   * Specify the padding of the tile (number of pixels)
-   * @type {number} [tilePadding=0]
-   */
+  /** Specify the padding of the tile (number of pixels) */
   export let tilePadding = 0;
 
-  /**
-   * Specify the icon text of the collapsed tile
-   * @type {string} [tileCollapsedIconText="Interact to expand Tile"]
-   */
+  /** Specify the icon text of the collapsed tile */
   export let tileCollapsedIconText = "Interact to expand Tile";
 
-  /**
-   * Specify the icon text of the expanded tile
-   * @type {string} [tileExpandedIconText="Interact to collapse Tile"]
-   */
+  /** Specify the icon text of the expanded tile */
   export let tileExpandedIconText = "Interact to collapse Tile";
 
-  /**
-   * Specify the tabindex
-   * @type {string} [tabindex="0"]
-   */
+  /** Specify the tabindex */
   export let tabindex = "0";
 
   /**
    * Set an id for the top-level div element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * Obtain a reference to the top-level element
+   * @type {null | HTMLDivElement}
    */
   export let ref = null;
 

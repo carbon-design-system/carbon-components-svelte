@@ -47,7 +47,7 @@ export default class Grid {
   };
 
   $$slot_def: {
-    default: { props: undefined };
+    default: { props?: { class: string } };
   };
 
   $on(eventname: string, cb: (event: Event) => void): () => void;

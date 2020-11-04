@@ -1,31 +1,25 @@
 <script>
-  /**
-   * Specify whether the checkbox is checked
-   * @type {boolean} [checked=false]
-   */
+  /** Specify whether the checkbox is checked */
   export let checked = false;
 
-  /**
-   * Specify whether the checkbox is indeterminate
-   * @type {boolean} [indeterminate=false]
-   */
+  /** Specify whether the checkbox is indeterminate */
   export let indeterminate = false;
 
   /**
    * Specify the title attribute for the label element
-   * @type {string} [title]
+   * @type {string}
    */
   export let title = undefined;
 
   /**
    * Set an id for the input label
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
 </script>

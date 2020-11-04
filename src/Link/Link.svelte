@@ -1,37 +1,28 @@
 <script>
   /**
    * Specify the size of the link
-   * @type {"sm" | "lg"} [size]
+   * @type {"sm" | "lg"}
    */
   export let size = undefined;
 
   /**
    * Specify the href value
-   * @type {string} [href]
+   * @type {string}
    */
   export let href = undefined;
 
-  /**
-   * Set to `true` to use the inline variant
-   * @type {boolean} [inline=false]
-   */
+  /** Set to `true` to use the inline variant */
   export let inline = false;
 
-  /**
-   * Set to `true` to disable the checkbox
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the checkbox */
   export let disabled = false;
 
-  /**
-   * Set to `true` to allow visited styles
-   * @type {boolean} [visited=false]
-   */
+  /** Set to `true` to allow visited styles */
   export let visited = false;
 
   /**
    * Obtain a reference to the top-level HTML element
-   * @type {null | HTMLAnchorElement | HTMLParagraphElement} [ref=null]
+   * @type {null | HTMLAnchorElement | HTMLParagraphElement}
    */
   export let ref = null;
 </script>

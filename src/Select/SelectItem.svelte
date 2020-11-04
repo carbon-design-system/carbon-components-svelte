@@ -1,26 +1,14 @@
 <script>
-  /**
-   * Specify the option value
-   * @type {string} [value=""]
-   */
+  /** Specify the option value */
   export let value = "";
 
-  /**
-   * Specify the option text
-   * @type {string} [text=""]
-   */
+  /** Specify the option text */
   export let text = "";
 
-  /**
-   * Set to `true` to hide the option
-   * @type {boolean} [hidden=false]
-   */
+  /** Set to `true` to hide the option */
   export let hidden = false;
 
-  /**
-   * Set to `true` to disable the option
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the option */
   export let disabled = false;
 
   import { getContext, onDestroy } from "svelte";

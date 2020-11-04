@@ -2,37 +2,27 @@
   /**
    * Specify the tab label
    * Alternatively, use the default slot (e.g. <Tab><span>Label</span></Tab>)
-   * @type {string} [label=""]
    */
   export let label = "";
 
-  /**
-   * Specify the href attribute
-   * @type {string} [href="#"]
-   */
+  /** Specify the href attribute */
   export let href = "#";
 
-  /**
-   * Set to `true` to disable the tab
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the tab */
   export let disabled = false;
 
-  /**
-   * Specify the tabindex
-   * @type {string} [tabindex="0"]
-   */
+  /** Specify the tabindex */
   export let tabindex = "0";
 
   /**
    * Set an id for the top-level element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Obtain a reference to the anchor HTML element
-   * @type {null | HTMLAnchorElement} [ref=null]
+   * @type {null | HTMLAnchorElement}
    */
   export let ref = null;
 

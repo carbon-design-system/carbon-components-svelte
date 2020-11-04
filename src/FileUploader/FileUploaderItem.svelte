@@ -1,44 +1,33 @@
 <script>
   /**
+   * @event {string} delete
+   */
+
+  /**
    * Specify the file uploader status
-   * @type {"uploading" | "edit" | "complete"} [status="uploading"]
+   * @type {"uploading" | "edit" | "complete"}
    */
   export let status = "uploading";
 
-  /**
-   * Specify the ARIA label used for the status icons
-   * @type {string} [iconDescription=""]
-   */
+  /** Specify the ARIA label used for the status icons */
   export let iconDescription = "";
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the error subject text
-   * @type {string} [errorSubject=""]
-   */
+  /** Specify the error subject text */
   export let errorSubject = "";
 
-  /**
-   * Specify the error body text
-   * @type {string} [errorBody=""]
-   */
+  /** Specify the error body text */
   export let errorBody = "";
 
   /**
    * Set an id for the top-level element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify the file uploader name
-   * @type {string} [name=""]
-   */
+  /** Specify the file uploader name */
   export let name = "";
 
   import { createEventDispatcher } from "svelte";

@@ -1,101 +1,77 @@
 <script>
   /**
    * Set the type of code snippet
-   * @type {"single" | "inline" | "multi"} [type="single"]
+   * @type {"single" | "inline" | "multi"}
    */
   export let type = "single";
 
   /**
    * Set the code snippet text
    * Alternatively, use the default slot (e.g. <CodeSnippet>{`code`}</CodeSnippet>)
-   * @type {string} [code]
+   * @type {string}
    */
   export let code = undefined;
 
-  /**
-   * Set to `true` to expand a multi-line code snippet (type="multi")
-   * @type {boolean} [expanded=false]
-   */
+  /** Set to `true` to expand a multi-line code snippet (type="multi") */
   export let expanded = false;
 
-  /**
-   * Set to `true` to hide the copy button
-   * @type {boolean} [hideCopyButton=false]
-   */
+  /** Set to `true` to hide the copy button */
   export let hideCopyButton = false;
 
   /**
    * Set to `true` to wrap the text
    * Note that `type` must be "multi"
-   * @type {boolean} [wrapText=false]
    */
   export let wrapText = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to display the skeleton state
-   * @type {boolean} [skeleton=false]
-   */
+  /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
   /**
    * Specify the ARIA label for the copy button icon
-   * @type {string} [copyButtonDescription]
+   * @type {string}
    */
   export let copyButtonDescription = undefined;
 
   /**
    * Specify the ARIA label of the copy button
-   * @type {string} [copyLabel]
+   * @type {string}
    */
   export let copyLabel = undefined;
 
-  /**
-   * Specify the feedback text displayed when clicking the snippet
-   * @type {string} [feedback="Copied!"]
-   */
+  /** Specify the feedback text displayed when clicking the snippet */
   export let feedback = "Copied!";
 
-  /**
-   * Set the timeout duration (ms) to display feedback text
-   * @type {number} [feedbackTimeout=2000]
-   */
+  /** Set the timeout duration (ms) to display feedback text */
   export let feedbackTimeout = 2000;
 
   /**
    * Specify the show less text
    * `type` must be "multi"
-   * @type {string} [showLessText="Show less"]
    */
   export let showLessText = "Show less";
 
   /**
    * Specify the show more text
    * `type` must be "multi"
-   * @type {string} [showLessText="Show more"]
    */
   export let showMoreText = "Show more";
 
-  /**
-   * Set to `true` to enable the show more/less button
-   * @type {boolean} [showMoreLess=false]
-   */
+  /** Set to `true` to enable the show more/less button */
   export let showMoreLess = false;
 
   /**
    * Set an id for the code element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Obtain a reference to the pre HTML element
-   * @type {null | HTMLPreElement} [ref=null]
+   * @type {null | HTMLPreElement}
    */
   export let ref = null;
 
@@ -104,7 +80,7 @@
   import { Button } from "../Button";
   import { Copy } from "../Copy";
   import { CopyButton } from "../CopyButton";
-  import CodeSnippetSkeleton from "./CodeSnippet.Skeleton.svelte";
+  import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   function setShowMoreLess() {
     const { height } = ref.getBoundingClientRect();

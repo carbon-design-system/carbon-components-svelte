@@ -1,38 +1,23 @@
 <script>
   /**
    * Set the size of the table
-   * @type {"compact" | "short" | "tall"} [size]
+   * @type {"compact" | "short" | "tall"}
    */
   export let size = undefined;
 
-  /**
-   * Set to `true` to use zebra styles
-   * @type {boolean} [zebra=false]
-   */
+  /** Set to `true` to use zebra styles */
   export let zebra = false;
 
-  /**
-   * Set to `true` to use static width
-   * @type {boolean} [useStaticWidth=false]
-   */
+  /** Set to `true` to use static width */
   export let useStaticWidth = false;
 
-  /**
-   * Set to `true` for the bordered variant
-   * @type {boolean} [shouldShowBorder=false]
-   */
+  /**  Set to `true` for the bordered variant */
   export let shouldShowBorder = false;
 
-  /**
-   * Set to `true` for the sortable variant
-   * @type {boolean} [sortable=false]
-   */
+  /** Set to `true` for the sortable variant */
   export let sortable = false;
 
-  /**
-   * Set to `true` to enable a sticky header
-   * @type {boolean} [stickyHeader=false]
-   */
+  /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 </script>
 

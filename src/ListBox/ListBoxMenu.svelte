@@ -1,13 +1,13 @@
 <script>
   /**
    * Set an id for the top-level element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLDivElement} [ref=null]
+   * Obtain a reference to the HTML element
+   * @type {null | HTMLDivElement}
    */
   export let ref = null;
 </script>

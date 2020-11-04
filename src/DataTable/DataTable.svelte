@@ -1,95 +1,87 @@
 <script>
   /**
+   * @typedef {{ key: string; value: string; display?: (item) => string; sort?: (a, b) => number; empty?: boolean; columnMenu?: boolean; }} Header
+   * @typedef {Header[]} Headers
+   * @slot {{ row: Object; }} expanded-row
+   * @slot {{ header: Header}} cell-header
+   * @slot {{ row: Object; cell: Object; }} cell
+   * @event {{ header?: Header; row?: Object; cell?: Object; }} click
+   * @event {{ expanded: boolean; }} click:header--expand
+   * @event {{ header: Header; sortDirection: "ascending" | "descending" | "none" }} click:header
+   * @event {Object} click:row
+   * @event {Object} mouseenter:row
+   * @event {Object} mouseleave:row
+   * @event {{ expanded: boolean; row: Object; }} click:row--expand
+   * @event {Object} click:cell
+   */
+
+  /**
    * Specify the data table headers
-   * @type {{ key: string; value: string; display?: (item) => string; sort?: (a, b) => number; empty?: boolean; columnMenu?: boolean; }[]} [headers=[]]
+   * @type {Headers}
    */
   export let headers = [];
 
   /**
    * Specify the rows the data table should render
    * keys defined in `headers` are used for the row ids
-   * @type {Object[]} [rows=[]]
+   * @type {Object[]}
    */
   export let rows = [];
 
   /**
    * Set the size of the data table
-   * @type {"compact" | "short" | "tall"} [size]
+   * @type {"compact" | "short" | "tall"}
    */
   export let size = undefined;
 
-  /**
-   * Specify the title of the data table
-   * @type {string} [title=""]
-   */
+  /** Specify the title of the data table */
   export let title = "";
 
-  /**
-   * Specify the description of the data table
-   * @type {string} [description=""]
-   */
+  /** Specify the description of the data table */
   export let description = "";
 
-  /**
-   * Set to `true` to use zebra styles
-   * @type {boolean} [zebra=false]
-   */
+  /** Set to `true` to use zebra styles */
   export let zebra = false;
 
-  /**
-   * Set to `true` for the sortable variant
-   * @type {boolean} [sortable=false]
-   */
+  /** Set to `true` for the sortable variant */
   export let sortable = false;
 
   /**
    * Set to `true` for the expandable variant
    * Automatically set to `true` if `batchExpansion` is `true`
-   * @type {boolean} [expandable=false]
    */
   export let expandable = false;
 
   /**
    * Set to `true` to enable batch expansion
-   * @type {boolean} [batchExpansion=false]
    */
   export let batchExpansion = false;
 
   /**
    * Specify the row ids to be expanded
-   * @type {string[]} [expandedRowIds=[]]
+   * @type {string[]}
    */
   export let expandedRowIds = [];
 
-  /**
-   * Set to `true` for the radio selection variant
-   * @type {boolean} [radio=false]
-   */
+  /** Set to `true` for the radio selection variant */
   export let radio = false;
 
   /**
    * Set to `true` for the selectable variant
    * Automatically set to `true` if `radio` or `batchSelection` are `true`
-   * @type {boolean} [selectable=false]
    */
   export let selectable = false;
 
-  /**
-   * Set to `true` to enable batch selection
-   * @type {boolean} [batchSelection=false]
-   */
+  /** Set to `true` to enable batch selection */
   export let batchSelection = false;
 
   /**
    * Specify the row ids to be selected
-   * @type {string[]} [selectedRowIds=[]]
+   * @type {string[]}
    */
   export let selectedRowIds = [];
 
-  /**
-   * Set to `true` to enable a sticky header
-   * @type {boolean} [stickyHeader=false]
-   */
+  /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
   import { createEventDispatcher, setContext } from "svelte";

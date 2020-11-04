@@ -1,14 +1,8 @@
 <script>
-  /**
-   * Specify the pivot start index
-   * @type {number} [fromIndex=0]
-   */
+  /** Specify the pivot start index */
   export let fromIndex = 0;
 
-  /**
-   * Specify the pivot end index
-   * @type {number} [count=0]
-   */
+  /** Specify the pivot end index */
   export let count = 0;
 
   import { createEventDispatcher } from "svelte";

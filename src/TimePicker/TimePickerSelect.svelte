@@ -1,50 +1,37 @@
 <script>
-  /**
-   * Specify the select value
-   * @type {string} [value=""]
-   */
+  /** Specify the select value */
   export let value = "";
 
-  /**
-   * Set to `true` to disable the select
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the select */
   export let disabled = false;
 
-  /**
-   * Specify the ARIA label for the chevron icon
-   * @type {string} [iconDescription="Expand/Collapse"]
-   */
+  /** Specify the ARIA label for the chevron icon */
   export let iconDescription = "Open list of options";
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
   /**
    * @deprecated The `hideLabel` prop for `TimePickerSelect` is no longer needed and has been deprecated. It will be removed in the next major release.
    * Set to `false` to show the label text
-   * @type {boolean} [hideLabel=true]
    */
   export let hideLabel = true;
 
   /**
    * Set an id for the select element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the select element
-   * @type {string} [name]
+   * @type {string}
    */
   export let name = undefined;
 
   /**
    * Obtain a reference to the select HTML element
-   * @type {null | HTMLSelectElement} [ref=null]
+   * @type {null | HTMLSelectElement}
    */
   export let ref = null;
 

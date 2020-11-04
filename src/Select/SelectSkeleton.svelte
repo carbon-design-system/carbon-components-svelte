@@ -1,8 +1,5 @@
 <script>
-  /**
-   * Set to `true` to hide the label text
-   * @type {boolean} [hideLabel=false]
-   */
+  /** Set to `true` to hide the label text */
   export let hideLabel = false;
 </script>
 
@@ -17,5 +14,7 @@
   {#if !hideLabel}
     <span class:bx--label="{true}" class:bx--skeleton="{true}"></span>
   {/if}
-  <div class:bx--number="{true}" class:bx--skeleton="{true}"></div>
+  <div class:bx--select="{true}" class:bx--skeleton="{true}">
+    <div class:bx--select-input="{true}"></div>
+  </div>
 </div>

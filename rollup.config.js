@@ -22,7 +22,9 @@ export default ["es", "umd"].map((format) => {
       resolve(),
       commonjs(),
       UMD && terser(),
-      !UMD && generateDocs(),
+
+      // TODO: replace
+      // !UMD && generateDocs(),
     ],
   };
 });

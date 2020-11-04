@@ -1,37 +1,25 @@
 <script>
-  /**
-   * Set to `true` to check the input
-   * @type {boolean} [checked=false]
-   */
+  /** Set to `true` to check the input */
   export let checked = false;
 
-  /**
-   * Specify the title of the input
-   * @type {string} [title="title"]
-   */
+  /** Specify the title of the input */
   export let title = "title";
 
-  /**
-   * Specify the value of the input
-   * @type {string} [value="value"]
-   */
+  /** Specify the value of the input */
   export let value = "value";
 
   /**
    * Set an id for the input element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the input
-   * @type {string} [name=""]
-   */
+  /** Specify a name attribute for the input */
   export let name = "";
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
 

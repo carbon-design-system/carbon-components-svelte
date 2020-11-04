@@ -1,43 +1,28 @@
 <script>
   /**
    * Set the size of the composed modal
-   * @type {"xs" | "sm" | "lg"} [size]
+   * @type {"xs" | "sm" | "lg"}
    */
   export let size = undefined;
 
-  /**
-   * Set to `true` to open the modal
-   * @type {boolean} [open=false]
-   */
+  /** Set to `true` to open the modal */
   export let open = false;
 
-  /**
-   * Set to `true` to use the danger variant
-   * @type {boolean} [danger=false]
-   */
+  /** Set to `true` to use the danger variant */
   export let danger = false;
 
-  /**
-   * Set to `true` to prevent the modal from closing when clicking outside
-   * @type {boolean} [preventCloseOnClickOutside=false]
-   */
+  /** Set to `true` to prevent the modal from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
-  /**
-   * Specify a class for the inner modal
-   * @type {string} [containerClass=""]
-   */
+  /** Specify a class for the inner modal */
   export let containerClass = "";
 
-  /**
-   * Specify a selector to be focused when opening the modal
-   * @type {string} [selectorPrimaryFocus="[data-modal-primary-focus]"]
-   */
+  /** Specify a selector to be focused when opening the modal */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
   /**
    * Obtain a reference to the top-level HTML element
-   * @type {null | HTMLElement} [ref=null]
+   * @type {null | HTMLDivElement}
    */
   export let ref = null;
 

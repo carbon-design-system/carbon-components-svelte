@@ -1,55 +1,37 @@
 <script>
-  /**
-   * Set to `true` to select the tile
-   * @type {boolean} [selected=false]
-   */
+  /** Set to `true` to select the tile */
   export let selected = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Specify the title of the selectable tile
-   * @type {string} [title="title"]
-   */
+  /** Specify the title of the selectable tile */
   export let title = "title";
 
-  /**
-   * Specify the value of the selectable tile
-   * @type {string} [value="value"]
-   */
+  /** Specify the value of the selectable tile */
   export let value = "value";
 
-  /**
-   * Specify the tabindex
-   * @type {string} [tabindex="0"]
-   */
+  /** Specify the tabindex */
   export let tabindex = "0";
 
-  /**
-   * Specify the ARIA label for the selectable tile checkmark icon
-   * @type {string} [iconDescription="Tile checkmark"]
-   */
+  /** Specify the ARIA label for the selectable tile checkmark icon */
   export let iconDescription = "Tile checkmark";
 
   /**
    * Set an id for the input element
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the input
-   * @type {string} [name=""]
+   * @type {string}
    */
   export let name = "";
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
 

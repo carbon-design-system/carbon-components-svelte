@@ -1,117 +1,94 @@
 <script>
   /**
+   * @typedef {string} DropdownItemId
+   * @typedef {string} DropdownItemText
+   * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
+   * @event {{ selectedId: DropdownItemId, selectedIndex: number, selectedItem: DropdownItem }} select
+   */
+
+  /**
    * Set the dropdown items
-   * @type {DropdownItem[]} [items=[]]
+   * @type {DropdownItem[]}
    */
   export let items = [];
 
   /**
    * Override the display of a dropdown item
-   * @type {(item: DropdownItem) => string} [itemToString = (item: DropdownItem) => DropdownItemText | DropdownItemId]
+   * @type {(item: DropdownItem) => string}
    */
   export let itemToString = (item) => item.text || item.id;
 
   /**
    * Specify the selected item index
-   * @type {number} [selectedIndex=-1]
+   * @type {number}
    */
   export let selectedIndex = -1;
 
   /**
    * Specify the type of dropdown
-   * @type {"default" | "inline"} [type="default"]
+   * @type {"default" | "inline"}
    */
   export let type = "default";
 
   /**
    * Specify the size of the dropdown field
-   * @type {"sm" | "lg" | "xl"} [size]
+   * @type {"sm" | "lg" | "xl"}
    */
   export let size = undefined;
 
-  /**
-   * Set to `true` to open the dropdown
-   * @type {boolean} [open=false]
-   */
+  /** Set to `true` to open the dropdown */
   export let open = false;
 
-  /**
-   * Set to `true` to use the inline variant
-   * @type {boolean} [inline=false]
-   */
+  /** Set to `true` to use the inline variant */
   export let inline = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to disable the dropdown
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the dropdown */
   export let disabled = false;
 
-  /**
-   * Specify the title text
-   * @type {string} [titleText=""]
-   */
+  /** Specify the title text */
   export let titleText = "";
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the invalid state text
-   * @type {string} [invalidText=""]
-   */
+  /** Specify the invalid state text */
   export let invalidText = "";
 
-  /**
-   * Specify the helper text
-   * @type {string} [helperText=""]
-   */
+  /** Specify the helper text */
   export let helperText = "";
 
   /**
    * Specify the list box label
-   * @type {string} [label]
+   * @type {string}
    */
   export let label = undefined;
 
   /**
    * Override the default translation ids
-   * @type {(id: any) => string} [translateWithId]
+   * @type {(id: any) => string}
    */
   export let translateWithId = undefined;
 
   /**
    * Set an id for the list box component
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the list box
-   * @type {string} [name]
+   * @type {string}
    */
   export let name = undefined;
 
   /**
    * Obtain a reference to the button HTML element
-   * @type {null | HTMLButtonElement} [ref=null]
+   * @type {null | HTMLButtonElement}
    */
   export let ref = null;
-
-  /**
-   * @typedef {string} DropdownItemId
-   * @typedef {string} DropdownItemText
-   * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
-   */
 
   import { createEventDispatcher } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

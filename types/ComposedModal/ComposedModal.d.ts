@@ -41,7 +41,7 @@ export default class ComposedModal {
      * Obtain a reference to the top-level HTML element
      * @default null
      */
-    ref?: null | HTMLElement;
+    ref?: null | HTMLDivElement;
   };
 
   $$slot_def: {

@@ -1,12 +1,14 @@
 /// <reference types="svelte" />
 
+type Files = string[];
+
 export default class FileUploaderButton {
   $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> & {
     /**
      * Specify the accepted file types
      * @default []
      */
-    accept?: string[];
+    accept?: Files;
 
     /**
      * Set to `true` to allow multiple files

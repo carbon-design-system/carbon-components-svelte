@@ -1,72 +1,52 @@
 <script>
   /**
-   * Specify whether the checkbox is checked
-   * @type {boolean} [checked=false]
+   * @event {boolean} check
    */
+
+  /** Specify whether the checkbox is checked */
   export let checked = false;
 
-  /**
-   * Specify whether the checkbox is indeterminate
-   * @type {boolean} [indeterminate=false]
-   */
+  /** Specify whether the checkbox is indeterminate */
   export let indeterminate = false;
 
-  /**
-   * Set to `true` to display the skeleton state
-   * @type {boolean} [skeleton=false]
-   */
+  /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
-  /**
-   * Set to `true` for the checkbox to be read-only
-   * @type {boolean} [readonly=false]
-   */
+  /** Set to `true` for the checkbox to be read-only */
   export let readonly = false;
 
-  /**
-   * Set to `true` to disable the checkbox
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the checkbox */
   export let disabled = false;
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
-  /**
-   * Set to `true` to visually hide the label text
-   * @type {boolean} [hideLabel=false]
-   */
+  /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
-  /**
-   * Set a name for the input element
-   * @type {string} [name=""]
-   */
+  /** Set a name for the input element */
   export let name = "";
 
   /**
    * Specify the title attribute for the label element
-   * @type {string} [title]
+   * @type {string}
    */
   export let title = undefined;
 
   /**
    * Set an id for the input label
-   * @type {string} [id]
+   * @type {string}
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import CheckboxSkeleton from "./Checkbox.Skeleton.svelte";
+  import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
 

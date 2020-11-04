@@ -1,25 +1,25 @@
 <script>
   /**
    * Set to `true` to select the item
-   * @type {boolean} [isSelected]
+   * @type {boolean}
    */
   export let isSelected = undefined;
 
   /**
    * Specify the `href` attribute
-   * @type {string} [href]
+   * @type {string}
    */
   export let href = undefined;
 
   /**
    * Specify the item text
-   * @type {string} [text]
+   * @type {string}
    */
   export let text = undefined;
 
   /**
    * Obtain a reference to the HTML anchor element
-   * @type {null | HTMLAnchorElement} [ref=null]
+   * @type {null | HTMLAnchorElement}
    */
   export let ref = null;
 </script>

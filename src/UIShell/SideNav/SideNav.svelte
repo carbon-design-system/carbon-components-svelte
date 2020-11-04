@@ -1,20 +1,14 @@
 <script>
-  /**
-   * Set to `true` to use the fixed variant
-   * @type {boolean} [fixed=false]
-   */
+  /** Set to `true` to use the fixed variant */
   export let fixed = false;
 
   /**
    * Specify the ARIA label for the nav
-   * @type {string} [ariaLabel]
+   * @type {string}
    */
   export let ariaLabel = undefined;
 
-  /**
-   * Set to `true` to toggle the expanded state
-   * @type {boolean} [isOpen=false]
-   */
+  /** Set to `true` to toggle the expanded state */
   export let isOpen = false;
 </script>
 

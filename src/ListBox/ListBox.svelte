@@ -1,44 +1,29 @@
 <script>
   /**
    * Set the size of the list box
-   * @type {"sm" | "xl"} [size]
+   * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
   /**
    * Set the type of the list box
-   * @type {"default" | "inline"} [type="default"]
+   * @type {"default" | "inline"}
    */
   export let type = "default";
 
-  /**
-   * Set to `true` to open the list box
-   * @type {boolean} [open=false]
-   */
+  /** Set to `true` to open the list box */
   export let open = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to disable the list box
-   * @type {boolean} [disable=false]
-   */
+  /** Set to `true` to disable the list box */
   export let disabled = false;
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the invalid state text
-   * @type {string} [invalidText=""]
-   */
+  /** Specify the invalid state text */
   export let invalidText = "";
 </script>
 
