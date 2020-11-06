@@ -1,48 +1,50 @@
 /// <reference types="svelte" />
 
+export interface ToggleProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set to `true` to toggle the checkbox input
+   * @default false
+   */
+  toggled?: boolean;
+
+  /**
+   * Set to `true` to disable checkbox input
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
+   * Specify the label for the untoggled state
+   * @default "Off"
+   */
+  labelA?: string;
+
+  /**
+   * Specify the label for the toggled state
+   * @default "On"
+   */
+  labelB?: string;
+
+  /**
+   * Specify the label text
+   * @default ""
+   */
+  labelText?: string;
+
+  /**
+   * Set an id for the input element
+   * @default "ccs-" + Math.random().toString(36)
+   */
+  id?: string;
+
+  /**
+   * Specify a name attribute for the checkbox input
+   */
+  name?: string;
+}
+
 export default class Toggle {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set to `true` to toggle the checkbox input
-     * @default false
-     */
-    toggled?: boolean;
-
-    /**
-     * Set to `true` to disable checkbox input
-     * @default false
-     */
-    disabled?: boolean;
-
-    /**
-     * Specify the label for the untoggled state
-     * @default "Off"
-     */
-    labelA?: string;
-
-    /**
-     * Specify the label for the toggled state
-     * @default "On"
-     */
-    labelB?: string;
-
-    /**
-     * Specify the label text
-     * @default ""
-     */
-    labelText?: string;
-
-    /**
-     * Set an id for the input element
-     */
-    id?: string;
-
-    /**
-     * Specify a name attribute for the checkbox input
-     */
-    name?: string;
-  };
-
+  $$prop_def: ToggleProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

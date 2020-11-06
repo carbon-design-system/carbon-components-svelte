@@ -16,7 +16,7 @@
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render
-   * @type {typeof import("carbon-icons-svelte/lib/Add16").default}
+   * @type {import("carbon-icons-svelte").CarbonIcon}
    */
   export let icon = undefined;
 
@@ -63,10 +63,7 @@
   /** Specify the `type` attribute for the button element */
   export let type = "button";
 
-  /**
-   * Obtain a reference to the HTML element
-   * @type {null | HTMLAnchorElement | HTMLButtonElement}
-   */
+  /** Obtain a reference to the HTML element */
   export let ref = null;
 
   import { getContext } from "svelte";

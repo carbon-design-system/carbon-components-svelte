@@ -63,16 +63,10 @@
   /** Set to `true` to enable the show more/less button */
   export let showMoreLess = false;
 
-  /**
-   * Set an id for the code element
-   * @type {string}
-   */
+  /** Set an id for the code element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the pre HTML element
-   * @type {null | HTMLPreElement}
-   */
+  /** Obtain a reference to the pre HTML element */
   export let ref = null;
 
   import { tick } from "svelte";

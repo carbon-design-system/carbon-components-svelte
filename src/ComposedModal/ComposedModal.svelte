@@ -20,10 +20,7 @@
   /** Specify a selector to be focused when opening the modal */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
-  /**
-   * Obtain a reference to the top-level HTML element
-   * @type {null | HTMLDivElement}
-   */
+  /** Obtain a reference to the top-level HTML element */
   export let ref = null;
 
   import {

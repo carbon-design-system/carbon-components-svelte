@@ -1,14 +1,15 @@
 /// <reference types="svelte" />
 
-export default class SliderSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set to `true` to hide the label text
-     * @default false
-     */
-    hideLabel?: boolean;
-  };
+export interface SliderSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set to `true` to hide the label text
+   * @default false
+   */
+  hideLabel?: boolean;
+}
 
+export default class SliderSkeleton {
+  $$prop_def: SliderSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

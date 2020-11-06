@@ -33,16 +33,10 @@
    */
   export let title = undefined;
 
-  /**
-   * Set an id for the input label
-   * @type {string}
-   */
+  /** Set an id for the input label */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement}
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

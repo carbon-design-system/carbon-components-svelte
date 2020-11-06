@@ -14,16 +14,10 @@
   /** Specify the tabindex */
   export let tabindex = "0";
 
-  /**
-   * Set an id for the top-level element
-   * @type {string}
-   */
+  /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the anchor HTML element
-   * @type {null | HTMLAnchorElement}
-   */
+  /** Obtain a reference to the anchor HTML element */
   export let ref = null;
 
   import { getContext } from "svelte";

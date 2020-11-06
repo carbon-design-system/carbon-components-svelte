@@ -1,89 +1,90 @@
 /// <reference types="svelte" />
 
+export interface ButtonProps {
+  /**
+   * Specify the kind of button
+   * @default "primary"
+   */
+  kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost";
+
+  /**
+   * Specify the size of button
+   * @default "default"
+   */
+  size?: "default" | "field" | "small";
+
+  /**
+   * Set to `true` for the icon-only variant
+   * @default false
+   */
+  hasIconOnly?: boolean;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   */
+  icon?: import("carbon-icons-svelte").CarbonIcon;
+
+  /**
+   * Specify the ARIA label for the button icon
+   */
+  iconDescription?: string;
+
+  /**
+   * Set the alignment of the tooltip relative to the icon
+   * `hasIconOnly` must be set to `true`
+   */
+  tooltipAlignment?: "start" | "center" | "end";
+
+  /**
+   * Set the position of the tooltip relative to the icon
+   */
+  tooltipPosition?: "top" | "right" | "bottom" | "left";
+
+  /**
+   * Set to `true` to render a custom HTML element
+   * Props are destructured as `props` in the default slot (e.g. <Button let:props><div {...props}>...</div></Button>)
+   * @default false
+   */
+  as?: boolean;
+
+  /**
+   * Set to `true` to display the skeleton state
+   * @default false
+   */
+  skeleton?: boolean;
+
+  /**
+   * Set to `true` to disable the button
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
+   * Set the `href` to use an anchor link
+   */
+  href?: string;
+
+  /**
+   * Specify the tabindex
+   * @default "0"
+   */
+  tabindex?: string;
+
+  /**
+   * Specify the `type` attribute for the button element
+   * @default "button"
+   */
+  type?: string;
+
+  /**
+   * Obtain a reference to the HTML element
+   * @default null
+   */
+  ref?: null | HTMLAnchorElement | HTMLButtonElement;
+}
+
 export default class Button {
-  $$prop_def: {
-    /**
-     * Specify the kind of button
-     * @default "primary"
-     */
-    kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost";
-
-    /**
-     * Specify the size of button
-     * @default "default"
-     */
-    size?: "default" | "field" | "small";
-
-    /**
-     * Set to `true` for the icon-only variant
-     * @default false
-     */
-    hasIconOnly?: boolean;
-
-    /**
-     * Specify the icon from `carbon-icons-svelte` to render
-     */
-    icon?: typeof import("carbon-icons-svelte/lib/Add16").default;
-
-    /**
-     * Specify the ARIA label for the button icon
-     */
-    iconDescription?: string;
-
-    /**
-     * Set the alignment of the tooltip relative to the icon
-     * `hasIconOnly` must be set to `true`
-     */
-    tooltipAlignment?: "start" | "center" | "end";
-
-    /**
-     * Set the position of the tooltip relative to the icon
-     */
-    tooltipPosition?: "top" | "right" | "bottom" | "left";
-
-    /**
-     * Set to `true` to render a custom HTML element
-     * Props are destructured as `props` in the default slot (e.g. <Button let:props><div {...props}>...</div></Button>)
-     * @default false
-     */
-    as?: boolean;
-
-    /**
-     * Set to `true` to display the skeleton state
-     * @default false
-     */
-    skeleton?: boolean;
-
-    /**
-     * Set to `true` to disable the button
-     * @default false
-     */
-    disabled?: boolean;
-
-    /**
-     * Set the `href` to use an anchor link
-     */
-    href?: string;
-
-    /**
-     * Specify the tabindex
-     * @default "0"
-     */
-    tabindex?: string;
-
-    /**
-     * Specify the `type` attribute for the button element
-     * @default "button"
-     */
-    type?: string;
-
-    /**
-     * Obtain a reference to the HTML element
-     * @default null
-     */
-    ref?: null | HTMLAnchorElement | HTMLButtonElement;
-  };
-
+  $$prop_def: ButtonProps;
   $$slot_def: {
     default: { props: undefined };
   };

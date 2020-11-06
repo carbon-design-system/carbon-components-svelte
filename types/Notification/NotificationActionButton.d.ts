@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class NotificationActionButton {
-  $$prop_def: {};
+export interface NotificationActionButtonProps {}
 
+export default class NotificationActionButton {
+  $$prop_def: NotificationActionButtonProps;
   $$slot_def: {
     default: {};
   };

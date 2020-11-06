@@ -1,24 +1,25 @@
 /// <reference types="svelte" />
 
+export interface HeaderNavItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+  /**
+   * Specify the `href` attribute
+   */
+  href?: string;
+
+  /**
+   * Specify the text
+   */
+  text?: string;
+
+  /**
+   * Obtain a reference to the HTML anchor element
+   * @default null
+   */
+  ref?: null | HTMLAnchorElement;
+}
+
 export default class HeaderNavItem {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> & {
-    /**
-     * Specify the `href` attribute
-     */
-    href?: string;
-
-    /**
-     * Specify the text
-     */
-    text?: string;
-
-    /**
-     * Obtain a reference to the HTML anchor element
-     * @default null
-     */
-    ref?: null | HTMLAnchorElement;
-  };
-
+  $$prop_def: HeaderNavItemProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

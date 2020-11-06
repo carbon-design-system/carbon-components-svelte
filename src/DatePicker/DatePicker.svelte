@@ -42,10 +42,7 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set an id for the date picker element
-   * @type {string}
-   */
+  /** Set an id for the date picker element */
   export let id = "ccs-" + Math.random().toString(36);
 
   import {

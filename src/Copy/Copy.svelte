@@ -5,10 +5,7 @@
   /** Set the timeout duration (ms) to display feedback text */
   export let feedbackTimeout = 2000;
 
-  /**
-   * Obtain a reference to the button HTML element
-   * @type {null | HTMLButtonElement}
-   */
+  /** Obtain a reference to the button HTML element */
   export let ref = null;
 
   import { onMount } from "svelte";

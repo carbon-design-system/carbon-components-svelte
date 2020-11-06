@@ -1,14 +1,15 @@
 /// <reference types="svelte" />
 
-export default class DropdownSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set to `true` to use the inline variant
-     * @default false
-     */
-    inline?: boolean;
-  };
+export interface DropdownSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set to `true` to use the inline variant
+   * @default false
+   */
+  inline?: boolean;
+}
 
+export default class DropdownSkeleton {
+  $$prop_def: DropdownSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

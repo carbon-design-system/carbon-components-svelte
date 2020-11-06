@@ -1,33 +1,34 @@
 /// <reference types="svelte" />
 
+export interface AccordionItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+  /**
+   * Specify the title of the accordion item heading
+   * Alternatively, use the named slot "title" (e.g. <div slot="title">...</div>)
+   * @default "title"
+   */
+  title?: string;
+
+  /**
+   * Set to `true` to open the first accordion item
+   * @default false
+   */
+  open?: boolean;
+
+  /**
+   * Set to `true` to disable the accordion item
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
+   * Specify the ARIA label for the accordion item chevron icon
+   * @default "Expand/Collapse"
+   */
+  iconDescription?: string;
+}
+
 export default class AccordionItem {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> & {
-    /**
-     * Specify the title of the accordion item heading
-     * Alternatively, use the named slot "title" (e.g. <div slot="title">...</div>)
-     * @default "title"
-     */
-    title?: string;
-
-    /**
-     * Set to `true` to open the first accordion item
-     * @default false
-     */
-    open?: boolean;
-
-    /**
-     * Set to `true` to disable the accordion item
-     * @default false
-     */
-    disabled?: boolean;
-
-    /**
-     * Specify the ARIA label for the accordion item chevron icon
-     * @default "Expand/Collapse"
-     */
-    iconDescription?: string;
-  };
-
+  $$prop_def: AccordionItemProps;
   $$slot_def: {
     default: {};
     title: {};

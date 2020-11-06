@@ -29,10 +29,7 @@
    */
   export let platformName = "";
 
-  /**
-   * Obtain a reference to the HTML anchor element
-   * @type {null | HTMLAnchorElement}
-   */
+  /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
   import HamburgerMenu from "../SideNav/HamburgerMenu.svelte";

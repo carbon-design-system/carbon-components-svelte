@@ -1,14 +1,15 @@
 /// <reference types="svelte" />
 
-export default class CodeSnippetSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set the type of code snippet
-     * @default "single"
-     */
-    type?: "single" | "inline" | "multi";
-  };
+export interface CodeSnippetSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set the type of code snippet
+   * @default "single"
+   */
+  type?: "single" | "inline" | "multi";
+}
 
+export default class CodeSnippetSkeleton {
+  $$prop_def: CodeSnippetSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

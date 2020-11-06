@@ -1,19 +1,20 @@
 /// <reference types="svelte" />
 
+export interface SearchSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * @default false
+   */
+  small?: boolean;
+
+  /**
+   * Specify the size of the search input
+   * @default "xl"
+   */
+  size?: "sm" | "lg" | "xl";
+}
+
 export default class SearchSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * @default false
-     */
-    small?: boolean;
-
-    /**
-     * Specify the size of the search input
-     * @default "xl"
-     */
-    size?: "sm" | "lg" | "xl";
-  };
-
+  $$prop_def: SearchSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

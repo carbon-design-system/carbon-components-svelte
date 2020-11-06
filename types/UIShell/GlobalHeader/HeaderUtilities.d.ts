@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class HeaderUtilities {
-  $$prop_def: {};
+export interface HeaderUtilitiesProps {}
 
+export default class HeaderUtilities {
+  $$prop_def: HeaderUtilitiesProps;
   $$slot_def: {
     default: {};
   };

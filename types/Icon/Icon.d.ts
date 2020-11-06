@@ -1,20 +1,21 @@
 /// <reference types="svelte" />
 
+export interface IconProps {
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * Icon size must be 16px (e.g. `Add16`, `Task16`)
+   */
+  render?: import("carbon-icons-svelte").CarbonIcon;
+
+  /**
+   * Set to `true` to display the skeleton state
+   * @default false
+   */
+  skeleton?: boolean;
+}
+
 export default class Icon {
-  $$prop_def: {
-    /**
-     * Specify the icon from `carbon-icons-svelte` to render
-     * Icon size must be 16px (e.g. `Add16`, `Task16`)
-     */
-    render?: typeof import("carbon-icons-svelte/lib/Add16").default;
-
-    /**
-     * Set to `true` to display the skeleton state
-     * @default false
-     */
-    skeleton?: boolean;
-  };
-
+  $$prop_def: IconProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

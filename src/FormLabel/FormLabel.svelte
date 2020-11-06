@@ -1,8 +1,5 @@
 <script>
-  /**
-   * Set an id to be used by the label element
-   * @type {string}
-   */
+  /** Set an id to be used by the label element */
   export let id = "ccs-" + Math.random().toString(36);
 </script>
 

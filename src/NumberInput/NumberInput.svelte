@@ -1,5 +1,9 @@
 <script>
   /**
+   * @typedef {"increment" | "decrement"} NumberInputTranslationId
+   */
+
+  /**
    * Set the size of the input
    * @type {"sm" | "xl"}
    */
@@ -71,10 +75,7 @@
     decrement: "decrement",
   };
 
-  /**
-   * Set an id for the input element
-   * @type {string}
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
@@ -83,15 +84,8 @@
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
-
-  /**
-   * @typedef {"increment" | "decrement"} NumberInputTranslationId
-   */
 
   import { createEventDispatcher, afterUpdate } from "svelte";
   import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";

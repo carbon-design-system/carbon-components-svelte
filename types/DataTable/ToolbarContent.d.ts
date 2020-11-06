@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class ToolbarContent {
-  $$prop_def: {};
+export interface ToolbarContentProps {}
 
+export default class ToolbarContent {
+  $$prop_def: ToolbarContentProps;
   $$slot_def: {
     default: {};
   };

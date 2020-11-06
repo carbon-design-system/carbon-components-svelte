@@ -1,25 +1,26 @@
 /// <reference types="svelte" />
 
+export interface ContentSwitcherProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set the selected index of the switch item
+   * @default 0
+   */
+  selectedIndex?: number;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @default false
+   */
+  light?: boolean;
+
+  /**
+   * Specify the size of the content switcher
+   */
+  size?: "sm" | "xl";
+}
+
 export default class ContentSwitcher {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set the selected index of the switch item
-     * @default 0
-     */
-    selectedIndex?: number;
-
-    /**
-     * Set to `true` to enable the light variant
-     * @default false
-     */
-    light?: boolean;
-
-    /**
-     * Specify the size of the content switcher
-     */
-    size?: "sm" | "xl";
-  };
-
+  $$prop_def: ContentSwitcherProps;
   $$slot_def: {
     default: {};
   };

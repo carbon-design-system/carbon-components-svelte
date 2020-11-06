@@ -1,26 +1,27 @@
 /// <reference types="svelte" />
 
+export interface NotificationIconProps {
+  /**
+   * Specify the kind of notification icon
+   * @default "error"
+   */
+  kind?: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt";
+
+  /**
+   * Set the type of notification
+   * @default "toast"
+   */
+  notificationType?: "toast" | "inline";
+
+  /**
+   * Specify the ARIA label for the icon
+   * @default "Closes notification"
+   */
+  iconDescription?: string;
+}
+
 export default class NotificationIcon {
-  $$prop_def: {
-    /**
-     * Specify the kind of notification icon
-     * @default "error"
-     */
-    kind?: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt";
-
-    /**
-     * Set the type of notification
-     * @default "toast"
-     */
-    notificationType?: "toast" | "inline";
-
-    /**
-     * Specify the ARIA label for the icon
-     * @default "Closes notification"
-     */
-    iconDescription?: string;
-  };
-
+  $$prop_def: NotificationIconProps;
   $$slot_def: {};
 
   $on(eventname: string, cb: (event: Event) => void): () => void;

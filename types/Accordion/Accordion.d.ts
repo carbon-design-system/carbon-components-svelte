@@ -1,31 +1,32 @@
 /// <reference types="svelte" />
 
+export interface AccordionProps {
+  /**
+   * Specify alignment of accordion item chevron icon
+   * @default "end"
+   */
+  align?: "start" | "end";
+
+  /**
+   * Specify the size of the accordion
+   */
+  size?: "sm" | "xl";
+
+  /**
+   * Set to `true` to disable the accordion
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
+   * Set to `true` to display the skeleton state
+   * @default false
+   */
+  skeleton?: boolean;
+}
+
 export default class Accordion {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> & {
-    /**
-     * Specify alignment of accordion item chevron icon
-     * @default "end"
-     */
-    align?: "start" | "end";
-
-    /**
-     * Specify the size of the accordion
-     */
-    size?: "sm" | "xl";
-
-    /**
-     * Set to `true` to disable the accordion
-     * @default false
-     */
-    disabled?: boolean;
-
-    /**
-     * Set to `true` to display the skeleton state
-     * @default false
-     */
-    skeleton?: boolean;
-  };
-
+  $$prop_def: AccordionProps;
   $$slot_def: {
     default: {};
   };

@@ -23,16 +23,10 @@
   /** Set to `false` to omit the button `title` attribute */
   export let requireTitle = true;
 
-  /**
-   * Set an id for the top-level element
-   * @type {string}
-   */
+  /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the HTML element
-   * @type {null | HTMLAnchorElement | HTMLButtonElement}
-   */
+  /** Obtain a reference to the HTML element */
   export let ref = null;
 
   import { getContext, afterUpdate } from "svelte";

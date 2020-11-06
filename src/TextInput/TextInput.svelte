@@ -23,10 +23,7 @@
   /** Specify the helper text */
   export let helperText = "";
 
-  /**
-   * Set an id for the input element
-   * @type {string}
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
@@ -53,10 +50,7 @@
   /** Specify the warning state text */
   export let warnText = "";
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement}
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 
   /** Set to `true` to mark the field as required */

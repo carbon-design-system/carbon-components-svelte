@@ -1,20 +1,21 @@
 /// <reference types="svelte" />
 
+export interface ListBoxMenuItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set to `true` to enable the active state
+   * @default false
+   */
+  active?: boolean;
+
+  /**
+   * Set to `true` to enable the highlighted state
+   * @default false
+   */
+  highlighted?: boolean;
+}
+
 export default class ListBoxMenuItem {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set to `true` to enable the active state
-     * @default false
-     */
-    active?: boolean;
-
-    /**
-     * Set to `true` to enable the highlighted state
-     * @default false
-     */
-    highlighted?: boolean;
-  };
-
+  $$prop_def: ListBoxMenuItemProps;
   $$slot_def: {
     default: {};
   };

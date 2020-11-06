@@ -32,10 +32,7 @@
   /** Specify the text for the invalid state */
   export let invalidText = "";
 
-  /**
-   * Set an id for the textarea element
-   * @type {string}
-   */
+  /** Set an id for the textarea element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
@@ -44,10 +41,7 @@
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the textarea HTML element
-   * @type {null | HTMLTextAreaElement}
-   */
+  /** Obtain a reference to the textarea HTML element */
   export let ref = null;
 
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

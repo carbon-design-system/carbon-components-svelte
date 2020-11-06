@@ -1,14 +1,15 @@
 /// <reference types="svelte" />
 
-export default class Content {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["main"]> & {
-    /**
-     * Specify the id for the main element
-     * @default "main-content"
-     */
-    id?: string;
-  };
+export interface ContentProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["main"]> {
+  /**
+   * Specify the id for the main element
+   * @default "main-content"
+   */
+  id?: string;
+}
 
+export default class Content {
+  $$prop_def: ContentProps;
   $$slot_def: {
     default: {};
   };

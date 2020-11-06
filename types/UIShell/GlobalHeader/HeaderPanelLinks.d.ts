@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class HeaderPanelLinks {
-  $$prop_def: {};
+export interface HeaderPanelLinksProps {}
 
+export default class HeaderPanelLinks {
+  $$prop_def: HeaderPanelLinksProps;
   $$slot_def: {
     default: {};
   };

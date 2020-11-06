@@ -17,10 +17,7 @@
    */
   export let hideLabel = true;
 
-  /**
-   * Set an id for the select element
-   * @type {string}
-   */
+  /** Set an id for the select element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
@@ -29,10 +26,7 @@
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the select HTML element
-   * @type {null | HTMLSelectElement}
-   */
+  /** Obtain a reference to the select HTML element */
   export let ref = null;
 
   import { setContext } from "svelte";

@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class RadioButtonSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {};
+export interface RadioButtonSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
+export default class RadioButtonSkeleton {
+  $$prop_def: RadioButtonSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

@@ -18,10 +18,7 @@
    */
   export let itemToString = (item) => item.text || item.id;
 
-  /**
-   * Specify the selected item index
-   * @type {number}
-   */
+  /** Specify the selected item index */
   export let selectedIndex = -1;
 
   /**
@@ -72,10 +69,7 @@
    */
   export let translateWithId = undefined;
 
-  /**
-   * Set an id for the list box component
-   * @type {string}
-   */
+  /** Set an id for the list box component */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
@@ -84,10 +78,7 @@
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the button HTML element
-   * @type {null | HTMLButtonElement}
-   */
+  /** Obtain a reference to the button HTML element */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

@@ -61,10 +61,7 @@
   export let pageRangeText = (current, total) =>
     `of ${total} page${total === 1 ? "" : "s"}`;
 
-  /**
-   * Set an id for the top-level element
-   * @type {string}
-   */
+  /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
   import { createEventDispatcher } from "svelte";

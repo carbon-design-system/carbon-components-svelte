@@ -33,19 +33,13 @@
   /** Specify `tabindex` attribute */
   export let tabindex = "0";
 
-  /**
-   * Set an id for the input element
-   * @type {string}
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /** Specify a name attribute for the input */
   export let name = "";
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement}
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 </script>
 

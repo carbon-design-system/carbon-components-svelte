@@ -20,10 +20,7 @@
   /** Set to `true` to allow visited styles */
   export let visited = false;
 
-  /**
-   * Obtain a reference to the top-level HTML element
-   * @type {null | HTMLAnchorElement | HTMLParagraphElement}
-   */
+  /** Obtain a reference to the top-level HTML element */
   export let ref = null;
 </script>
 

@@ -2,10 +2,7 @@
   /** Set to `true` to use the range variant */
   export let range = false;
 
-  /**
-   * Set an id to be used by the label element
-   * @type {string}
-   */
+  /** Set an id to be used by the label element */
   export let id = "ccs-" + Math.random().toString(36);
 </script>
 

@@ -1,30 +1,31 @@
 /// <reference types="svelte" />
 
+export interface NotificationButtonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
+  /**
+   * Set the type of notification
+   * @default "toast"
+   */
+  notificationType?: "toast" | "inline";
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   */
+  renderIcon?: import("carbon-icons-svelte").CarbonIcon;
+
+  /**
+   * Specify the title of the icon
+   */
+  title?: string;
+
+  /**
+   * Specify the ARIA label for the icon
+   * @default "Close icon"
+   */
+  iconDescription?: string;
+}
+
 export default class NotificationButton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> & {
-    /**
-     * Set the type of notification
-     * @default "toast"
-     */
-    notificationType?: "toast" | "inline";
-
-    /**
-     * Specify the icon from `carbon-icons-svelte` to render
-     */
-    renderIcon?: typeof import("carbon-icons-svelte/lib/Add16").default;
-
-    /**
-     * Specify the title of the icon
-     */
-    title?: string;
-
-    /**
-     * Specify the ARIA label for the icon
-     * @default "Close icon"
-     */
-    iconDescription?: string;
-  };
-
+  $$prop_def: NotificationButtonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

@@ -1,19 +1,20 @@
 /// <reference types="svelte" />
 
+export interface BreadcrumbItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+  /**
+   * Set the `href` to use an anchor link
+   */
+  href?: string;
+
+  /**
+   * Set to `true` if the breadcrumb item represents the current page
+   * @default false
+   */
+  isCurrentPage?: boolean;
+}
+
 export default class BreadcrumbItem {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> & {
-    /**
-     * Set the `href` to use an anchor link
-     */
-    href?: string;
-
-    /**
-     * Set to `true` if the breadcrumb item represents the current page
-     * @default false
-     */
-    isCurrentPage?: boolean;
-  };
-
+  $$prop_def: BreadcrumbItemProps;
   $$slot_def: {
     default: {};
   };

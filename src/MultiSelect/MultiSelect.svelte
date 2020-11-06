@@ -96,10 +96,7 @@
   /** Specify the list box label */
   export let label = "";
 
-  /**
-   * Set an id for the list box component
-   * @type {string}
-   */
+  /** Set an id for the list box component */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**

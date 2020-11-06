@@ -20,19 +20,13 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
-  /**
-   * Set an id for the input element
-   * @type {string}
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /** Specify a name attribute for the checkbox input */
   export let name = "";
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement}
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 
   import { getContext } from "svelte";

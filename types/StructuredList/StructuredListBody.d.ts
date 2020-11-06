@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class StructuredListBody {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {};
+export interface StructuredListBodyProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
+export default class StructuredListBody {
+  $$prop_def: StructuredListBodyProps;
   $$slot_def: {
     default: {};
   };

@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class StructuredListHead {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {};
+export interface StructuredListHeadProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
+export default class StructuredListHead {
+  $$prop_def: StructuredListHeadProps;
   $$slot_def: {
     default: {};
   };

@@ -16,14 +16,11 @@
 
   /**
    * Specify the icon props
-   * @type {{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }}
+   * @type {{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }}
    */
   export let icon = undefined;
 
-  /**
-   * Obtain a reference to the HTML anchor element
-   * @type {null | HTMLAnchorElement}
-   */
+  /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
   import { Icon } from "../../Icon";

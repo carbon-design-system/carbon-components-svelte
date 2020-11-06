@@ -1,20 +1,21 @@
 /// <reference types="svelte" />
 
+export interface BreadcrumbProps {
+  /**
+   * Set to `true` to hide the breadcrumb trailing slash
+   * @default false
+   */
+  noTrailingSlash?: boolean;
+
+  /**
+   * Set to `true` to display skeleton state
+   * @default false
+   */
+  skeleton?: boolean;
+}
+
 export default class Breadcrumb {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> & {
-    /**
-     * Set to `true` to hide the breadcrumb trailing slash
-     * @default false
-     */
-    noTrailingSlash?: boolean;
-
-    /**
-     * Set to `true` to display skeleton state
-     * @default false
-     */
-    skeleton?: boolean;
-  };
-
+  $$prop_def: BreadcrumbProps;
   $$slot_def: {
     default: {};
   };

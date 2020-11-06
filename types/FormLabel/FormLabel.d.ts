@@ -1,13 +1,15 @@
 /// <reference types="svelte" />
 
-export default class FormLabel {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> & {
-    /**
-     * Set an id to be used by the label element
-     */
-    id?: string;
-  };
+export interface FormLabelProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
+  /**
+   * Set an id to be used by the label element
+   * @default "ccs-" + Math.random().toString(36)
+   */
+  id?: string;
+}
 
+export default class FormLabel {
+  $$prop_def: FormLabelProps;
   $$slot_def: {
     default: {};
   };

@@ -1,32 +1,33 @@
 /// <reference types="svelte" />
 
+export interface FormGroupProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> {
+  /**
+   * Set to `true` to indicate an invalid state
+   * @default false
+   */
+  invalid?: boolean;
+
+  /**
+   * Set to `true` to render a form requirement
+   * @default false
+   */
+  message?: boolean;
+
+  /**
+   * Specify the message text
+   * @default ""
+   */
+  messageText?: string;
+
+  /**
+   * Specify the legend text
+   * @default ""
+   */
+  legendText?: string;
+}
+
 export default class FormGroup {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> & {
-    /**
-     * Set to `true` to indicate an invalid state
-     * @default false
-     */
-    invalid?: boolean;
-
-    /**
-     * Set to `true` to render a form requirement
-     * @default false
-     */
-    message?: boolean;
-
-    /**
-     * Specify the message text
-     * @default ""
-     */
-    messageText?: string;
-
-    /**
-     * Specify the legend text
-     * @default ""
-     */
-    legendText?: string;
-  };
-
+  $$prop_def: FormGroupProps;
   $$slot_def: {
     default: {};
   };

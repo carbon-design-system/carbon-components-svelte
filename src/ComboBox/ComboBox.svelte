@@ -16,10 +16,7 @@
    */
   export let itemToString = (item) => item.text || item.id;
 
-  /**
-   * Set the selected item by value index
-   * @type {number}
-   */
+  /** Set the selected item by value index */
   export let selectedIndex = -1;
 
   /** Specify the selected combobox value */
@@ -67,10 +64,7 @@
    */
   export let translateWithId = undefined;
 
-  /**
-   * Set an id for the list box component
-   * @type {string}
-   */
+  /** Set an id for the list box component */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
@@ -79,10 +73,7 @@
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement}
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 
   /**

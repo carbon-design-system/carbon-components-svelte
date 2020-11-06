@@ -8,10 +8,7 @@
   /** Set to `true` to toggle the open state */
   export let isOpen = false;
 
-  /**
-   * Obtain a reference to the HTML button element
-   * @type {null | HTMLButtonElement}
-   */
+  /** Obtain a reference to the HTML button element */
   export let ref = null;
 
   import { fly } from "svelte/transition";

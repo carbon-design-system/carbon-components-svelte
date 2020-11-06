@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class CheckboxSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {};
+export interface CheckboxSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
+export default class CheckboxSkeleton {
+  $$prop_def: CheckboxSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

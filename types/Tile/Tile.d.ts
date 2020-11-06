@@ -1,14 +1,15 @@
 /// <reference types="svelte" />
 
-export default class Tile {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set to `true` to enable the light variant
-     * @default false
-     */
-    light?: boolean;
-  };
+export interface TileProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set to `true` to enable the light variant
+   * @default false
+   */
+  light?: boolean;
+}
 
+export default class Tile {
+  $$prop_def: TileProps;
   $$slot_def: {
     default: {};
   };

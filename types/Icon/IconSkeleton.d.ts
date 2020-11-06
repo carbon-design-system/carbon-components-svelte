@@ -1,14 +1,15 @@
 /// <reference types="svelte" />
 
-export default class IconSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set the size of the icon
-     * @default 16
-     */
-    size?: number;
-  };
+export interface IconSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set the size of the icon
+   * @default 16
+   */
+  size?: number;
+}
 
+export default class IconSkeleton {
+  $$prop_def: IconSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

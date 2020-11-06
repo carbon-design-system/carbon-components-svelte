@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class HeaderPanelDivider {
-  $$prop_def: {};
+export interface HeaderPanelDividerProps {}
 
+export default class HeaderPanelDivider {
+  $$prop_def: HeaderPanelDividerProps;
   $$slot_def: {
     default: {};
   };

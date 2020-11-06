@@ -1,14 +1,15 @@
 /// <reference types="svelte" />
 
-export default class TextAreaSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set to `true` to visually hide the label text
-     * @default false
-     */
-    hideLabel?: boolean;
-  };
+export interface TextAreaSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set to `true` to visually hide the label text
+   * @default false
+   */
+  hideLabel?: boolean;
+}
 
+export default class TextAreaSkeleton {
+  $$prop_def: TextAreaSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

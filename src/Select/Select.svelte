@@ -17,10 +17,7 @@
   /** Set to `true` to disable the select element */
   export let disabled = false;
 
-  /**
-   * Set an id for the select element
-   * @type {string}
-   */
+  /** Set an id for the select element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
@@ -47,10 +44,7 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
-  /**
-   * Obtain a reference to the select HTML element
-   * @type {null | HTMLSelectElement}
-   */
+  /** Obtain a reference to the select HTML element */
   export let ref = null;
 
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";

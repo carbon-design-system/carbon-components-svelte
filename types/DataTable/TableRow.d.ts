@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class TableRow {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["tr"]> & {};
+export interface TableRowProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["tr"]> {}
 
+export default class TableRow {
+  $$prop_def: TableRowProps;
   $$slot_def: {
     default: {};
   };

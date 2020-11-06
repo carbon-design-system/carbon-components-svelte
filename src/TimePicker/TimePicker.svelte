@@ -44,10 +44,7 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
-  /**
-   * Set an id for the input element
-   * @type {string}
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
@@ -56,10 +53,7 @@
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement}
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 </script>
 

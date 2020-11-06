@@ -1,42 +1,43 @@
 /// <reference types="svelte" />
 
+export interface LinkProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["p"]> {
+  /**
+   * Specify the size of the link
+   */
+  size?: "sm" | "lg";
+
+  /**
+   * Specify the href value
+   */
+  href?: string;
+
+  /**
+   * Set to `true` to use the inline variant
+   * @default false
+   */
+  inline?: boolean;
+
+  /**
+   * Set to `true` to disable the checkbox
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
+   * Set to `true` to allow visited styles
+   * @default false
+   */
+  visited?: boolean;
+
+  /**
+   * Obtain a reference to the top-level HTML element
+   * @default null
+   */
+  ref?: null | HTMLAnchorElement | HTMLParagraphElement;
+}
+
 export default class Link {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> & {
-    /**
-     * Specify the size of the link
-     */
-    size?: "sm" | "lg";
-
-    /**
-     * Specify the href value
-     */
-    href?: string;
-
-    /**
-     * Set to `true` to use the inline variant
-     * @default false
-     */
-    inline?: boolean;
-
-    /**
-     * Set to `true` to disable the checkbox
-     * @default false
-     */
-    disabled?: boolean;
-
-    /**
-     * Set to `true` to allow visited styles
-     * @default false
-     */
-    visited?: boolean;
-
-    /**
-     * Obtain a reference to the top-level HTML element
-     * @default null
-     */
-    ref?: null | HTMLAnchorElement | HTMLParagraphElement;
-  };
-
+  $$prop_def: LinkProps;
   $$slot_def: {
     default: {};
   };

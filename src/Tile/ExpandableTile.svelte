@@ -20,16 +20,10 @@
   /** Specify the tabindex */
   export let tabindex = "0";
 
-  /**
-   * Set an id for the top-level div element
-   * @type {string}
-   */
+  /** Set an id for the top-level div element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the top-level element
-   * @type {null | HTMLDivElement}
-   */
+  /** Obtain a reference to the top-level element */
   export let ref = null;
 
   import { afterUpdate } from "svelte";

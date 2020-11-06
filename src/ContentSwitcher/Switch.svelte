@@ -11,16 +11,10 @@
   /** Set to `true` to disable the switch */
   export let disabled = false;
 
-  /**
-   * Set an id for the button element
-   * @type {string}
-   */
+  /** Set an id for the button element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the button HTML element
-   * @type {null | HTMLButtonElement}
-   */
+  /** Obtain a reference to the button HTML element */
   export let ref = null;
 
   import { afterUpdate, getContext, onDestroy } from "svelte";

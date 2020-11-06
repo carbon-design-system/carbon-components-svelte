@@ -1,20 +1,21 @@
 /// <reference types="svelte" />
 
+export interface StructuredListCellProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set to `true` to use as a header
+   * @default false
+   */
+  head?: boolean;
+
+  /**
+   * Set to `true` to prevent wrapping
+   * @default false
+   */
+  noWrap?: boolean;
+}
+
 export default class StructuredListCell {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set to `true` to use as a header
-     * @default false
-     */
-    head?: boolean;
-
-    /**
-     * Set to `true` to prevent wrapping
-     * @default false
-     */
-    noWrap?: boolean;
-  };
-
+  $$prop_def: StructuredListCellProps;
   $$slot_def: {
     default: {};
   };

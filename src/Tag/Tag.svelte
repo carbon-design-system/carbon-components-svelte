@@ -29,10 +29,7 @@
    */
   export let title = "Clear filter";
 
-  /**
-   * Set an id for the filterable tag
-   * @type {string}
-   */
+  /** Set an id for the filterable tag */
   export let id = "ccs-" + Math.random().toString(36);
 
   import Close16 from "carbon-icons-svelte/lib/Close16";

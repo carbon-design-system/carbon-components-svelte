@@ -14,16 +14,10 @@
    */
   export let direction = "bottom";
 
-  /**
-   * Set an id for the tooltip div element
-   * @type {string}
-   */
+  /** Set an id for the tooltip div element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the button HTML element
-   * @type {null | HTMLButtonElement}
-   */
+  /** Obtain a reference to the button HTML element */
   export let ref = null;
 
   let visible = false;

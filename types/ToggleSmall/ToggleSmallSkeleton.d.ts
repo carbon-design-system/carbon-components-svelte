@@ -1,19 +1,21 @@
 /// <reference types="svelte" />
 
+export interface ToggleSmallSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Specify the label text
+   * @default ""
+   */
+  labelText?: string;
+
+  /**
+   * Set an id for the input element
+   * @default "ccs-" + Math.random().toString(36)
+   */
+  id?: string;
+}
+
 export default class ToggleSmallSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Specify the label text
-     * @default ""
-     */
-    labelText?: string;
-
-    /**
-     * Set an id for the input element
-     */
-    id?: string;
-  };
-
+  $$prop_def: ToggleSmallSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

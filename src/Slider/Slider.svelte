@@ -35,10 +35,7 @@
   /** Set to `true` to hide the text input */
   export let hideTextInput = false;
 
-  /**
-   * Set an id for the slider div element
-   * @type {string}
-   */
+  /** Set an id for the slider div element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /** Set to `true` to indicate an invalid state */
@@ -50,10 +47,7 @@
   /** Set a name for the slider element */
   export let name = "";
 
-  /**
-   * Obtain a reference to the HTML element
-   * @type {null | HTMLElement}
-   */
+  /** Obtain a reference to the HTML element */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

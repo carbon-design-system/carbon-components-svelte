@@ -11,10 +11,7 @@
   /** Specify the label description */
   export let description = "Active loading indicator";
 
-  /**
-   * Set an id for the label element
-   * @type {string}
-   */
+  /** Set an id for the label element */
   export let id = "ccs-" + Math.random().toString(36);
 
   $: spinnerRadius = small ? "26.8125" : "37.5";

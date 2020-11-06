@@ -1,25 +1,27 @@
 /// <reference types="svelte" />
 
+export interface TableHeaderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["th"]> {
+  /**
+   * Specify the `scope` attribute
+   * @default "col"
+   */
+  scope?: string;
+
+  /**
+   * Override the default id translations
+   * @default () => ""
+   */
+  translateWithId?: () => string;
+
+  /**
+   * Set an id for the top-level element
+   * @default "ccs-" + Math.random().toString(36)
+   */
+  id?: string;
+}
+
 export default class TableHeader {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["th"]> & {
-    /**
-     * Specify the `scope` attribute
-     * @default "col"
-     */
-    scope?: string;
-
-    /**
-     * Override the default id translations
-     * @default () => ""
-     */
-    translateWithId?: () => string;
-
-    /**
-     * Set an id for the top-level element
-     */
-    id?: string;
-  };
-
+  $$prop_def: TableHeaderProps;
   $$slot_def: {
     default: {};
   };

@@ -20,7 +20,7 @@
   /**
    * Specify the icon from `carbon-icons-svelte` to render for the tooltip button
    * Icon size must be 16px (e.g. `Add16`, `Task16`)
-   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [icon=Information16]
+   * @type {import("carbon-icons-svelte").CarbonIcon} [icon=Information16]
    */
   export let icon = Information16;
 
@@ -48,22 +48,13 @@
   /** Set the tooltip button text */
   export let triggerText = "";
 
-  /**
-   * Obtain a reference to the trigger text HTML element
-   * @type {null | HTMLElement}
-   */
+  /** Obtain a reference to the trigger text HTML element */
   export let ref = null;
 
-  /**
-   * Obtain a reference to the tooltip HTML element
-   * @type {null | HTMLElement}
-   */
+  /** Obtain a reference to the tooltip HTML element */
   export let refTooltip = null;
 
-  /**
-   * Obtain a reference to the icon HTML element
-   * @type {null | HTMLElement}
-   */
+  /** Obtain a reference to the icon HTML element */
   export let refIcon = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";

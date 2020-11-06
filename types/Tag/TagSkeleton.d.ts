@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class TagSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> & {};
+export interface TagSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {}
 
+export default class TagSkeleton {
+  $$prop_def: TagSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

@@ -1,32 +1,33 @@
 /// <reference types="svelte" />
 
+export interface ProgressIndicatorProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
+  /**
+   * Specify the current step index
+   * @default 0
+   */
+  currentIndex?: number;
+
+  /**
+   * Set to `true` to use the vertical variant
+   * @default false
+   */
+  vertical?: boolean;
+
+  /**
+   * Set to `true` to specify whether the progress steps should be split equally in size in the div
+   * @default false
+   */
+  spaceEqually?: boolean;
+
+  /**
+   * Set to `true` to prevent updating `currentIndex`
+   * @default false
+   */
+  preventChangeOnClick?: boolean;
+}
+
 export default class ProgressIndicator {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> & {
-    /**
-     * Specify the current step index
-     * @default 0
-     */
-    currentIndex?: number;
-
-    /**
-     * Set to `true` to use the vertical variant
-     * @default false
-     */
-    vertical?: boolean;
-
-    /**
-     * Set to `true` to specify whether the progress steps should be split equally in size in the div
-     * @default false
-     */
-    spaceEqually?: boolean;
-
-    /**
-     * Set to `true` to prevent updating `currentIndex`
-     * @default false
-     */
-    preventChangeOnClick?: boolean;
-  };
-
+  $$prop_def: ProgressIndicatorProps;
   $$slot_def: {
     default: {};
   };

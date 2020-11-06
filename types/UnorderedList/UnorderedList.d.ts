@@ -1,14 +1,15 @@
 /// <reference types="svelte" />
 
-export default class UnorderedList {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> & {
-    /**
-     * Set to `true` to use the nested variant
-     * @default false
-     */
-    nested?: boolean;
-  };
+export interface UnorderedListProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
+  /**
+   * Set to `true` to use the nested variant
+   * @default false
+   */
+  nested?: boolean;
+}
 
+export default class UnorderedList {
+  $$prop_def: UnorderedListProps;
   $$slot_def: {
     default: {};
   };

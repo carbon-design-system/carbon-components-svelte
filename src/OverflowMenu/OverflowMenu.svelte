@@ -28,7 +28,7 @@
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render
-   * @type {typeof import("carbon-icons-svelte/lib/Add16").default}
+   * @type {import("carbon-icons-svelte").CarbonIcon}
    */
   export let icon = OverflowMenuVertical16;
 
@@ -41,22 +41,13 @@
   /** Specify the ARIA label for the icon */
   export let iconDescription = "Open and close list of options";
 
-  /**
-   * Set an id for the button element
-   * @type {string}
-   */
+  /** Set an id for the button element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the trigger button element
-   * @type {null | HTMLButtonElement}
-   */
+  /** Obtain a reference to the trigger button element */
   export let buttonRef = null;
 
-  /**
-   * Obtain a reference to the overflow menu element
-   * @type {null | HTMLUListElement}
-   */
+  /** Obtain a reference to the overflow menu element */
   export let menuRef = null;
 
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";

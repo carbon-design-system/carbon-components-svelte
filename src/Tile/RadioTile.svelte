@@ -14,10 +14,7 @@
   /** Specify the ARIA label for the radio tile checkmark icon */
   export let iconDescription = "Tile checkmark";
 
-  /**
-   * Set an id for the input element
-   * @type {string}
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /** Specify a name attribute for the input */

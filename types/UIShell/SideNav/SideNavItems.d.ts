@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class SideNavItems {
-  $$prop_def: {};
+export interface SideNavItemsProps {}
 
+export default class SideNavItems {
+  $$prop_def: SideNavItemsProps;
   $$slot_def: {
     default: {};
   };

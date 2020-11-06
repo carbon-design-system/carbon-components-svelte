@@ -1,14 +1,15 @@
 /// <reference types="svelte" />
 
-export default class TextInputSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Set to `true` to hide the label text
-     * @default false
-     */
-    hideLabel?: boolean;
-  };
+export interface TextInputSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Set to `true` to hide the label text
+   * @default false
+   */
+  hideLabel?: boolean;
+}
 
+export default class TextInputSkeleton {
+  $$prop_def: TextInputSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

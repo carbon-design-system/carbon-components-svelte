@@ -1,25 +1,26 @@
 /// <reference types="svelte" />
 
+export interface ClickableTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+  /**
+   * Set to `true` to click the tile
+   * @default false
+   */
+  clicked?: boolean;
+
+  /**
+   * Set to `true` to enable the light variant
+   * @default false
+   */
+  light?: boolean;
+
+  /**
+   * Set the `href`
+   */
+  href?: string;
+}
+
 export default class ClickableTile {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> & {
-    /**
-     * Set to `true` to click the tile
-     * @default false
-     */
-    clicked?: boolean;
-
-    /**
-     * Set to `true` to enable the light variant
-     * @default false
-     */
-    light?: boolean;
-
-    /**
-     * Set the `href`
-     */
-    href?: string;
-  };
-
+  $$prop_def: ClickableTileProps;
   $$slot_def: {
     default: {};
   };

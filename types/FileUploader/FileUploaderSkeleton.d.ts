@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class FileUploaderSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {};
+export interface FileUploaderSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
+export default class FileUploaderSkeleton {
+  $$prop_def: FileUploaderSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

@@ -4,14 +4,11 @@
 
   /**
    * Specify the icon to render
-   * @type {typeof import("carbon-icons-svelte/lib/Add16").default}
+   * @type {import("carbon-icons-svelte").CarbonIcon}
    */
   export let icon = undefined;
 
-  /**
-   * Obtain a reference to the HTML button element
-   * @type {null | HTMLButtonElement}
-   */
+  /** Obtain a reference to the HTML button element */
   export let ref = null;
 </script>
 

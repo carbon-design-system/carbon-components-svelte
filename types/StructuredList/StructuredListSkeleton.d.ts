@@ -1,20 +1,21 @@
 /// <reference types="svelte" />
 
+export interface StructuredListSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  /**
+   * Specify the number of rows
+   * @default 5
+   */
+  rows?: number;
+
+  /**
+   * Set to `true` to use the bordered variant
+   * @default false
+   */
+  border?: boolean;
+}
+
 export default class StructuredListSkeleton {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {
-    /**
-     * Specify the number of rows
-     * @default 5
-     */
-    rows?: number;
-
-    /**
-     * Set to `true` to use the bordered variant
-     * @default false
-     */
-    border?: boolean;
-  };
-
+  $$prop_def: StructuredListSkeletonProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

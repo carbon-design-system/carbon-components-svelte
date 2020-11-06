@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class SkeletonPlaceholder {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {};
+export interface SkeletonPlaceholderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
+export default class SkeletonPlaceholder {
+  $$prop_def: SkeletonPlaceholderProps;
   $$slot_def: {};
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

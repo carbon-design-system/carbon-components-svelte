@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class FormItem {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> & {};
+export interface FormItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
+export default class FormItem {
+  $$prop_def: FormItemProps;
   $$slot_def: {
     default: {};
   };

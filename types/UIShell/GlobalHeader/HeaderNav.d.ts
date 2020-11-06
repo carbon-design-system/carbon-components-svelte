@@ -1,13 +1,14 @@
 /// <reference types="svelte" />
 
-export default class HeaderNav {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> & {
-    /**
-     * Specify the ARIA label for the nav
-     */
-    ariaLabel?: string;
-  };
+export interface HeaderNavProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
+  /**
+   * Specify the ARIA label for the nav
+   */
+  ariaLabel?: string;
+}
 
+export default class HeaderNav {
+  $$prop_def: HeaderNavProps;
   $$slot_def: {
     default: {};
   };

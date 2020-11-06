@@ -1,8 +1,9 @@
 /// <reference types="svelte" />
 
-export default class ListItem {
-  $$prop_def: svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> & {};
+export interface ListItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {}
 
+export default class ListItem {
+  $$prop_def: ListItemProps;
   $$slot_def: {
     default: {};
   };
