@@ -132,7 +132,9 @@
 
   onMount(() => {
     return () => {
-      document.body.classList.remove("bx--body--with-modal-open");
+      if(document.querySelectorAll('.bx--modal.is-visible').length === 0) {
+        document.body.classList.remove("bx--body--with-modal-open");
+      }
     };
   });
 
@@ -141,7 +143,9 @@
       if (!open) {
         opened = false;
         dispatch("close");
-        document.body.classList.remove("bx--body--with-modal-open");
+        if(document.querySelectorAll('.bx--modal.is-visible').length === 0) {
+            document.body.classList.remove("bx--body--with-modal-open");
+        }
       }
     } else if (open) {
       opened = true;
