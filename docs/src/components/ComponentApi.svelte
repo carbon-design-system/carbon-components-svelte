@@ -112,7 +112,9 @@
             </StructuredListCell>
             <StructuredListCell>
               {#each prop[1].description.split('\n') as line}
-                <div class="description">{line}.</div>
+                <div class="description">
+                  {@html line.replace(/`(.*?)`/g, '<code>$1</code>')}.
+                </div>
               {/each}
             </StructuredListCell>
           </StructuredListRow>
