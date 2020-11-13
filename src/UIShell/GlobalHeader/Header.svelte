@@ -53,7 +53,7 @@
   let winWidth = undefined;
 
   $: isSideNavOpen =
-    expandedByDefault && winWidth >= 1056 && persistentHamburgerMenu !== true;
+    expandedByDefault && winWidth >= 1056 && !persistentHamburgerMenu;
   $: ariaLabel = company
     ? `${company} `
     : "" + (uiShellAriaLabel || $$props["aria-label"] || platformName);
@@ -63,7 +63,7 @@
 
 <header role="banner" aria-label="{ariaLabel}" class:bx--header="{true}">
   <slot name="skip-to-content" />
-  {#if winWidth < 1056 || persistentHamburgerMenu === true}
+  {#if winWidth < 1056 || persistentHamburgerMenu}
     <HamburgerMenu bind:isOpen="{isSideNavOpen}" />
   {/if}
   <a
