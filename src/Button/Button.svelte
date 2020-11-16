@@ -1,5 +1,9 @@
 <script>
   /**
+   * @slot {{ props?: { role: "button"; type?: string; tabindex: string; disabled: boolean; href?: string; class: string; [key: string]: any; } }}
+   */
+
+  /**
    * Specify the kind of button
    * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost"}
    */

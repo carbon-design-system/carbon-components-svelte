@@ -42,7 +42,7 @@ export interface RowProps {
 export default class Row {
   $$prop_def: RowProps;
   $$slot_def: {
-    default: { props?: { class: string } };
+    default: { props?: { class: string; [key: string]: any } };
   };
 
   $on(eventname: string, cb: (event: Event) => void): () => void;

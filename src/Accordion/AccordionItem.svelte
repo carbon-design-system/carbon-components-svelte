@@ -39,7 +39,7 @@
   class:bx--accordion__item--active="{open}"
   class:bx--accordion__item--disabled="{disabled}"
   {...$$restProps}
-  class="bx--accordion__item--${animation} {$$restProps.class}"
+  class="bx--accordion__item--{animation} {$$restProps.class}"
   on:animationend
   on:animationend="{() => {
     animation = undefined;

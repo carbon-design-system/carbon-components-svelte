@@ -1,6 +1,6 @@
 <script>
   /**
-   * @slot {{ props?: { class: string; } }}
+   * @slot {{ props?: { class: string; [key: string]: any; } }}
    */
 
   /**

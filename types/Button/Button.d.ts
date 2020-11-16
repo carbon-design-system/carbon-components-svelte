@@ -86,7 +86,17 @@ export interface ButtonProps {
 export default class Button {
   $$prop_def: ButtonProps;
   $$slot_def: {
-    default: { props: undefined };
+    default: {
+      props?: {
+        role: "button";
+        type?: string;
+        tabindex: string;
+        disabled: boolean;
+        href?: string;
+        class: string;
+        [key: string]: any;
+      };
+    };
   };
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
