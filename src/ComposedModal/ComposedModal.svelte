@@ -69,7 +69,7 @@
   });
 
   function focus(element) {
-    if(selectorPrimaryFocus === null) {
+    if(selectorPrimaryFocus == null) {
       return
     }
     const node =
