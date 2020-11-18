@@ -19,7 +19,12 @@
   let isSideNavOpen = false;
 </script>
 
-<Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header
+  persistentHamburgerMenu="{true}"
+  company="IBM"
+  platformName="Carbon Svelte"
+  bind:isSideNavOpen
+>
   <div slot="skip-to-content">
     <SkipToContent />
   </div>
