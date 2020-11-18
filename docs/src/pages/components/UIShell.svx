@@ -37,3 +37,7 @@ components: ["Header",
 ### Header with utilities
 
 <FileSource src="/framed/UIShell/HeaderUtilities" />
+
+### Header with persisted hamburger menu
+
+<FileSource src="/framed/UIShell/PersistedHamburgerMenu" />

@@ -37,6 +37,12 @@
   export let platformName = "";
 
   /**
+   * Specify Hamburger Menu persistance
+   * @type {boolean} [persistentHamburgerMenu=false]
+   */
+  export let persistentHamburgerMenu = false;
+
+  /**
    * Obtain a reference to the HTML anchor element
    * @type {null | HTMLAnchorElement} [ref=null]
    */
@@ -46,7 +52,8 @@
 
   let winWidth = undefined;
 
-  $: isSideNavOpen = expandedByDefault && winWidth >= 1056;
+  $: isSideNavOpen =
+    expandedByDefault && winWidth >= 1056 && !persistentHamburgerMenu;
   $: ariaLabel = company
     ? `${company} `
     : "" + (uiShellAriaLabel || $$props["aria-label"] || platformName);
@@ -56,7 +63,7 @@
 
 <header role="banner" aria-label="{ariaLabel}" class:bx--header="{true}">
   <slot name="skip-to-content" />
-  {#if winWidth < 1056}
+  {#if winWidth < 1056 || persistentHamburgerMenu}
     <HamburgerMenu bind:isOpen="{isSideNavOpen}" />
   {/if}
   <a

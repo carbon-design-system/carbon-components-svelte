@@ -33,7 +33,7 @@
   class:bx--side-nav="{true}"
   class:bx--side-nav--ux="{true}"
   class:bx--side-nav--expanded="{isOpen}"
-  class:bx--side-nav--collapsed="{!isOpen && fixed}"
+  class:bx--side-nav--collapsed="{!isOpen}"
   {...$$restProps}
 >
   <slot />
