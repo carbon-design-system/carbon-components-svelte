@@ -35,6 +35,9 @@ export default ["es", "umd"].map((format) => {
             },
           },
           json: true,
+          jsonOptions: {
+            outFile: "docs/src/COMPONENT_API.json",
+          },
         }),
     ],
   };

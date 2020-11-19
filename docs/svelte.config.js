@@ -242,6 +242,9 @@ module.exports = {
                       <li class="bx--list__item">
                         <a class="bx--link" href="#dispatched-events">Dispatched events</a>
                       </li>
+                      <li class="bx--list__item">
+                        <a class="bx--link" href="#rest-props">$$restProps</a>
+                      </li>
                     </ul>
                   </li>
                 </ul>
