@@ -63,9 +63,9 @@
 </style>
 
 <p style="margin-bottom: var(--cds-layout-02)">
-  View component
-  <Link href="{source}" target="_blank">
-    source code
+  Component source code:
+  <Link size="lg" href="{source}" target="_blank">
+    {component.filePath}
     <Launch16 />
   </Link>
 </p>
@@ -138,7 +138,9 @@
             <StructuredListCell>
               {#if prop.description}
                 {#each prop.description.split('\n') as line}
-                  <div class="description">{@html line.replace(/`(.*?)`/g, '<code>$1</code>')}.</div>
+                  <div class="description">
+                    {@html line.replace(/`(.*?)`/g, '<code>$1</code>')}.
+                  </div>
                 {/each}
               {:else}
                 <div class="description">No description available.</div>

@@ -1347,15 +1347,16 @@ None.
 
 ### Props
 
-| Prop name         | Kind             | Reactive | Type                                       | Default value      | Description                                                                                                                     |
-| :---------------- | :--------------- | :------- | :----------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| ref               | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>  | Obtain a reference to the HTML anchor element                                                                                   |
-| isSideNavOpen     | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code> | Set to `true` to open the side nav                                                                                              |
-| expandedByDefault | <code>let</code> | No       | <code>boolean</code>                       | <code>true</code>  | Set to `false` to hide the side nav by default                                                                                  |
-| uiShellAriaLabel  | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the ARIA label for the header                                                                                           |
-| href              | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the `href` attribute                                                                                                    |
-| company           | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the company name                                                                                                        |
-| platformName      | <code>let</code> | No       | <code>string</code>                        | <code>""</code>    | Specify the platform name<br />Alternatively, use the named slot "platform" (e.g. &lt;span slot="platform"&gt;...&lt;/span&gt;) |
+| Prop name               | Kind             | Reactive | Type                                       | Default value      | Description                                                                                                                     |
+| :---------------------- | :--------------- | :------- | :----------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| ref                     | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>  | Obtain a reference to the HTML anchor element                                                                                   |
+| isSideNavOpen           | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code> | Set to `true` to open the side nav                                                                                              |
+| expandedByDefault       | <code>let</code> | No       | <code>boolean</code>                       | <code>true</code>  | Set to `false` to hide the side nav by default                                                                                  |
+| uiShellAriaLabel        | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the ARIA label for the header                                                                                           |
+| href                    | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the `href` attribute                                                                                                    |
+| company                 | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the company name                                                                                                        |
+| platformName            | <code>let</code> | No       | <code>string</code>                        | <code>""</code>    | Specify the platform name<br />Alternatively, use the named slot "platform" (e.g. &lt;span slot="platform"&gt;...&lt;/span&gt;) |
+| persistentHamburgerMenu | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code> | Set to `true` to persist the hamburger menu                                                                                     |
 
 ### Slots
 

@@ -36,6 +36,12 @@ export interface HeaderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNam
   platformName?: string;
 
   /**
+   * Set to `true` to persist the hamburger menu
+   * @default false
+   */
+  persistentHamburgerMenu?: boolean;
+
+  /**
    * Obtain a reference to the HTML anchor element
    * @default null
    */
