@@ -1,19 +1,13 @@
 <script>
-  /**
-   * Set to `true` to click the tile
-   * @type {boolean} [clicked=false]
-   */
+  /** Set to `true` to click the tile */
   export let clicked = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
   /**
    * Set the `href`
-   * @type {string} [href]
+   * @type {string}
    */
   export let href = undefined;
 </script>

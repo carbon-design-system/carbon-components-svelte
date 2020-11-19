@@ -6,7 +6,6 @@
     Content,
     Select,
     SelectItem,
-    InlineNotification,
   } from "carbon-components-svelte";
   import { page, metatags } from "@sveltech/routify";
   import { onMount } from "svelte";

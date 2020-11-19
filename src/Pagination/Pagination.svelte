@@ -1,100 +1,67 @@
 <script>
-  /**
-   * Specify the current page index
-   * @type {number} [page=1]
-   */
+  /** Specify the current page index */
   export let page = 1;
 
-  /**
-   * Specify the total number of items
-   * @type {number} [total=0]
-   */
+  /** Specify the total number of items */
   export let totalItems = 0;
 
-  /**
-   * Set to `true` to disable the pagination
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the pagination */
   export let disabled = false;
 
-  /**
-   * Specify the forward button text
-   * @type {string} [forwardText="Next page"]
-   */
+  /** Specify the forward button text */
   export let forwardText = "Next page";
 
-  /**
-   * Specify the backward button text
-   * @type {string} [backwardText="Previous page"]
-   */
+  /** Specify the backward button text */
   export let backwardText = "Previous page";
 
-  /**
-   * Specify the items per page text
-   * @type {string} [itemsPerPageText="Items per page:"]
-   */
+  /** Specify the items per page text */
   export let itemsPerPageText = "Items per page:";
 
   /**
    * Override the item text
-   * @type {(min: number, max: number) => string} [itemText = (min: number, max: number) => string]
+   * @type {(min: number, max: number) => string}
    */
   export let itemText = (min, max) => `${min}–${max} items`;
 
   /**
    * Override the item range text
-   * @type {(min: number, max: number, total: number) => string} [itemRangeText = (min: number, max: number, total: number) => string]
+   * @type {(min: number, max: number, total: number) => string}
    */
   export let itemRangeText = (min, max, total) =>
     `${min}–${max} of ${total} items`;
 
-  /**
-   * Set to `true` to disable the page input
-   * @type {boolean} [pageInputDisabled=false]
-   */
+  /** Set to `true` to disable the page input */
   export let pageInputDisabled = false;
 
-  /**
-   * Set to `true` to disable the page size input
-   * @type {boolean} [pageSizeInputDisabled=false]
-   */
+  /** Set to `true` to disable the page size input */
   export let pageSizeInputDisabled = false;
 
-  /**
-   * Specify the number of items to display in a page
-   * @type {number} [pageSize=10]
-   */
+  /** Specify the number of items to display in a page */
   export let pageSize = 10;
 
   /**
    * Specify the available page sizes
-   * @type {number[]} [pageSizes=[10]]
+   * @type {number[]}
    */
   export let pageSizes = [10];
 
-  /**
-   * Set to `true` if the number of pages is unknown
-   * @type {boolean} [pagesUnknown=false]
-   */
+  /** Set to `true` if the number of pages is unknown */
   export let pagesUnknown = false;
 
   /**
    * Override the page text
-   * @type {(page: number) => string} [pageText = (current: number) => string]
+   * @type {(page: number) => string}
    */
   export let pageText = (page) => `page ${page}`;
 
   /**
    * Override the page range text
-   * @type {(current: number, total: number) => string} [pageRangeText = (current: number, total: number) => string]
+   * @type {(current: number, total: number) => string}
    */
   export let pageRangeText = (current, total) =>
     `of ${total} page${total === 1 ? "" : "s"}`;
 
-  /**
-   * Set an id for the top-level element
-   * @type {string} [id]
-   */
+  /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
   import { createEventDispatcher } from "svelte";

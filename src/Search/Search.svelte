@@ -50,45 +50,30 @@
 
   /**
    * Specify the `autocomplete` attribute
-   * @type {"on" | "off"} [autocomplete="off"]
+   * @type {"on" | "off"}
    */
   export let autocomplete = "off";
 
-  /**
-   * Set to `true` to auto focus the search element
-   * @type {boolean} [autofocus=false]
-   */
+  /** Set to `true` to auto focus the search element */
   export let autofocus = false;
 
-  /**
-   * Specify the close button label text
-   * @type {string} [closeButtonLabelText="Clear search input"]
-   */
+  /** Specify the close button label text */
   export let closeButtonLabelText = "Clear search input";
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
-  /**
-   * Set an id for the input element
-   * @type {string} [id]
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
   import Close16 from "carbon-icons-svelte/lib/Close16";
   import Close20 from "carbon-icons-svelte/lib/Close20";
   import Search16 from "carbon-icons-svelte/lib/Search16";
-  import SearchSkeleton from "./Search.Skeleton.svelte";
+  import SearchSkeleton from "./SearchSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
 </script>

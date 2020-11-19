@@ -1,26 +1,20 @@
 <script>
-  /**
-   * Set to `true` to use the active state
-   * @type {boolean} [linkIsActive=false]
-   */
+  /** Set to `true` to use the active state */
   export let linkIsActive = false;
 
   /**
    * Specify the `href` attribute
-   * @type {string} [href]
+   * @type {string}
    */
   export let href = undefined;
 
   /**
    * Specify the icon props
-   * @type {{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }} [icon]
+   * @type {{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }}
    */
   export let icon = undefined;
 
-  /**
-   * Obtain a reference to the HTML anchor element
-   * @type {null | HTMLAnchorElement} [ref=null]
-   */
+  /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
   import { Icon } from "../../Icon";

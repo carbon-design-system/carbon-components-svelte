@@ -1,33 +1,16 @@
 <script>
-  /**
-   * Specify the number of lines to render
-   * @type {number} [lines=3]
-   */
+  /** Specify the number of lines to render */
   export let lines = 3;
 
-  /**
-   * Set to `true` to use the heading size variant
-   * @type {boolean} [heading=false]
-   */
+  /** Set to `true` to use the heading size variant */
   export let heading = false;
 
-  /**
-   * Set to `true` to use the paragraph size variant
-   * @type {boolean} [paragraph=false]
-   */
+  /** Set to `true` to use the paragraph size variant */
   export let paragraph = false;
 
-  /**
-   * Specify the width of the text (% or px)
-   * @type {string} [width="100%"]
-   */
+  /** Specify the width of the text (% or px) */
   export let width = "100%";
 
-  /**
-   * Array of random numbers
-   * @constant
-   * @type {number[]}
-   */
   const RANDOM = [0.973, 0.153, 0.567];
 
   $: rows = [];

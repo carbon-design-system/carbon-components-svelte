@@ -1,33 +1,30 @@
 <script>
   /**
    * Set the selected radio button value
-   * @type {string} [selected]
+   * @type {string}
    */
   export let selected = undefined;
 
-  /**
-   * Set to `true` to disable the radio buttons
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the radio buttons */
   export let disabled = false;
 
   /**
    * Specify the label position
-   * @type {"right" | "left"} [labelPosition="right"]
+   * @type {"right" | "left"}
    */
   export let labelPosition = "right";
 
   /**
    * Specify the orientation of the radio buttons
-   * @type {"horizontal" | "vertical"} [orientation="horizontal"]
+   * @type {"horizontal" | "vertical"}
    */
   export let orientation = "horizontal";
 
   /**
    * Set an id for the container div element
-   * @type {string} [id]
+   * @type {string}
    */
-  export let id;
+  export let id = undefined;
 
   import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";

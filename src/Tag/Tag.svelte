@@ -1,42 +1,31 @@
 <script>
   /**
+   * @restProps {div | span}
+   */
+
+  /**
    * Specify the type of tag
    * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast"} [type]
    */
   export let type = undefined;
 
-  /**
-   * Set to `true` to use filterable variant
-   * @type {boolean} [filter=false]
-   */
+  /** Set to `true` to use filterable variant */
   export let filter = false;
 
-  /**
-   * Set to `true` to disable a filterable tag
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable a filterable tag */
   export let disabled = false;
 
-  /**
-   * Set to `true` to display the skeleton state
-   * @type {boolean} [skeleton=false]
-   */
+  /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
-  /**
-   * Set the title for the close button in a filterable tag
-   * @type {string} [title="Clear filter"]
-   */
+  /** Set the title for the close button in a filterable tag */
   export let title = "Clear filter";
 
-  /**
-   * Set an id for the filterable tag
-   * @type {string} [id]
-   */
+  /** Set an id for the filterable tag */
   export let id = "ccs-" + Math.random().toString(36);
 
   import Close16 from "carbon-icons-svelte/lib/Close16";
-  import TagSkeleton from "./Tag.Skeleton.svelte";
+  import TagSkeleton from "./TagSkeleton.svelte";
 </script>
 
 {#if skeleton}

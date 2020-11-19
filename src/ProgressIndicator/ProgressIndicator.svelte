@@ -1,26 +1,14 @@
 <script>
-  /**
-   * Specify the current step index
-   * @type {number} [currentIndex=0]
-   */
+  /** Specify the current step index */
   export let currentIndex = 0;
 
-  /**
-   * Set to `true` to use the vertical variant
-   * @type {boolean} [vertical=false]
-   */
+  /** Set to `true` to use the vertical variant */
   export let vertical = false;
 
-  /**
-   * Set to `true` to specify whether the progress steps should be split equally in size in the div
-   * @type {boolean} [spaceEqually=false]
-   */
+  /** Set to `true` to specify whether the progress steps should be split equally in size in the div */
   export let spaceEqually = false;
 
-  /**
-   * Set to `true` to prevent updating `currentIndex`
-   * @type {boolean} [preventChangeOnClick=false]
-   */
+  /** Set to `true` to prevent updating `currentIndex` */
   export let preventChangeOnClick = false;
 
   import { createEventDispatcher, setContext } from "svelte";

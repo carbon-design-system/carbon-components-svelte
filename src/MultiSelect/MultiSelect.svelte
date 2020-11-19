@@ -1,149 +1,107 @@
 <script>
   /**
    * Set the multiselect items
-   * @type {MultiSelectItem[]} [items=[]]
+   * @type {MultiSelectItem[]}
    */
   export let items = [];
 
   /**
    * Override the display of a multiselect item
-   * @type {(item: MultiSelectItem) => string} [itemToString = (item: MultiSelectItem) =>  MultiSelectItemText | MultiSelectItemId]
+   * @type {(item: MultiSelectItem) => string}
    */
   export let itemToString = (item) => item.text || item.id;
 
   /**
    * Set the selected ids
-   * @type {MultiSelectItemId[]} [selectedIds=[]]
+   * @type {MultiSelectItemId[]}
    */
   export let selectedIds = [];
 
-  /**
-   * Specify the multiselect value
-   * @type {string} [value=""]
-   */
+  /** Specify the multiselect value */
   export let value = "";
 
   /**
    * Set the size of the combobox
-   * @type {"sm" | "lg" | "xl"} [size]
+   * @type {"sm" | "lg" | "xl"}
    */
   export let size = undefined;
 
   /**
    * Specify the type of multiselect
-   * @type {"default" | "inline"} [type="default"]
+   * @type {"default" | "inline"}
    */
   export let type = "default";
 
   /**
    * Specify the selection feedback after selecting items
-   * @type {"top" | "fixed" | "top-after-reopen"} [selectionFeedback="top-after-reopen"]
+   * @type {"top" | "fixed" | "top-after-reopen"}
    */
   export let selectionFeedback = "top-after-reopen";
 
-  /**
-   * Set to `true` to disable the dropdown
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the dropdown */
   export let disabled = false;
 
-  /**
-   * Set to `true` to filter items
-   * @type {boolean} [filterable=false]
-   */
+  /** Set to `true` to filter items */
   export let filterable = false;
 
   /**
    * Override the filtering logic
    * The default filtering is an exact string comparison
-   * @type {(item: MultiSelectItem, value: string) => string} [filterItem = (item: MultiSelectItem, value: string) => string]
+   * @type {(item: MultiSelectItem, value: string) => string}
    */
   export let filterItem = (item, value) =>
     item.text.toLowerCase().includes(value.toLowerCase());
 
-  /**
-   * Set to `true` to open the dropdown
-   * @type {boolean} [open=false]
-   */
+  /** Set to `true` to open the dropdown */
   export let open = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Specify the locale
-   * @type {string} [locale="en"]
-   */
+  /** Specify the locale */
   export let locale = "en";
 
-  /**
-   * Specify the placeholder text
-   * @type {string} [placeholder=""]
-   */
+  /** Specify the placeholder text */
   export let placeholder = "";
 
   /**
    * Override the sorting logic
    * The default sorting compare the item text value
-   * @type {(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem} [sortItem = (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem]
+   * @type {((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)}
    */
   export let sortItem = (a, b) =>
     a.text.localeCompare(b.text, locale, { numeric: true });
 
   /**
    * Override the default translation ids
-   * @type {(id: any) => string} [translateWithId]
+   * @type {(id: any) => string}
    */
   export let translateWithId = undefined;
 
-  /**
-   * Specify the title text
-   * @type {string} [titleText=""]
-   */
+  /** Specify the title text */
   export let titleText = "";
 
-  /**
-   * Set to `true` to pass the item to `itemToString` in the checkbox
-   * @type {boolean} [useTitleInItem=false]
-   */
+  /** Set to `true` to pass the item to `itemToString` in the checkbox */
   export let useTitleInItem = false;
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the invalid state text
-   * @type {string} [invalidText=""]
-   */
+  /** Specify the invalid state text */
   export let invalidText = "";
 
-  /**
-   * Specify the helper text
-   * @type {string} [helperText=""]
-   */
+  /** Specify the helper text */
   export let helperText = "";
 
-  /**
-   * Specify the list box label
-   * @type {string} [label]
-   */
+  /** Specify the list box label */
   export let label = "";
 
-  /**
-   * Set an id for the list box component
-   * @type {string} [id]
-   */
+  /** Set an id for the list box component */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the select
-   * @type {string} [name]
+   * @type {string}
    */
   export let name = undefined;
 

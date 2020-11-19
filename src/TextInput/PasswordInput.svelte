@@ -1,110 +1,74 @@
 <script>
   /**
    * Set the size of the input
-   * @type {"sm" | "xl"} [size]
+   * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
   /**
    * Specify the input value
-   * @type {string} [value=""]
+   * @type {number | string}
    */
   export let value = "";
 
   /**
-   * Specify the input type
-   * @type {string} [type="password"]
+   * Set to `"text"` to toggle the password visibility
+   * @type {"text" | "password"}
    */
   export let type = "password";
 
-  /**
-   * Specify the placeholder text
-   * @type {string} [placeholder=""]
-   */
+  /** Specify the placeholder text */
   export let placeholder = "";
 
-  /**
-   * Specify the hide password label text
-   * @type {string} [hidePasswordLabel="Hide password"]
-   */
+  /** Specify the hide password label text */
   export let hidePasswordLabel = "Hide password";
 
-  /**
-   * Specify the show password label text
-   * @type {string} [showPasswordLabel="Show password"]
-   */
+  /** Specify the show password label text */
   export let showPasswordLabel = "Show password";
 
   /**
    * Set the alignment of the tooltip relative to the icon
-   * @type {"start" | "center" | "end"} [tooltipAlignment="center"]
+   * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = undefined;
 
   /**
    * Set the position of the tooltip relative to the icon
-   * @type {"top" | "right" | "bottom" | "left"} [tooltipPosition="bottom"]
+   * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = undefined;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to disable the input
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the input */
   export let disabled = false;
 
-  /**
-   * Specify the helper text
-   * @type {string} [helperText=""]
-   */
+  /** Specify the helper text */
   export let helperText = "";
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
-  /**
-   * Set to `true` to visually hide the label text
-   * @type {boolean} [hideLabel=false]
-   */
+  /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the text for the invalid state
-   * @type {string} [invalidText=""]
-   */
+  /** Specify the text for the invalid state */
   export let invalidText = "";
 
-  /**
-   * Set an id for the input element
-   * @type {string} [id]
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the input
-   * @type {string} [name]
+   * @type {string}
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 
   import { getContext } from "svelte";

@@ -1,31 +1,27 @@
 <script>
+  /** @extends {"./AccordionSkeleton"} AccordionSkeletonProps */
+
   /**
    * Specify alignment of accordion item chevron icon
-   * @type {"start" | "end"} [align="end"]
+   * @type {"start" | "end"}
    */
   export let align = "end";
 
   /**
    * Specify the size of the accordion
-   * @type {"sm" | "xl"} [size]
+   * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
-  /**
-   * Set to `true` to disable the accordion
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the accordion */
   export let disabled = false;
 
-  /**
-   * Set to `true` to display the skeleton state
-   * @type {boolean} [skeleton=false]
-   */
+  /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import AccordionSkeleton from "./Accordion.Skeleton.svelte";
+  import AccordionSkeleton from "./AccordionSkeleton.svelte";
 
   const disableItems = writable(disabled);
 

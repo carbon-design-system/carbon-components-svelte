@@ -1,8 +1,7 @@
 <script>
-  /**
-   * Set the title and ARIA label for the copy button
-   * @type {string} [iconDescription="Copy to clipboard"]
-   */
+  /** @extends {"../Copy/Copy"} CopyProps */
+
+  /** Set the title and ARIA label for the copy button */
   export let iconDescription = "Copy to clipboard";
 
   import { Copy } from "../Copy";

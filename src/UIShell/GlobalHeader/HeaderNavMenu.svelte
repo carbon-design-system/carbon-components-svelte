@@ -1,32 +1,20 @@
 <script>
-  /**
-   * Set to `true` to toggle the expanded state
-   * @type {boolean} [expanded=false]
-   */
+  /** Set to `true` to toggle the expanded state */
   export let expanded = false;
 
-  /**
-   * Specify the `href` attribute
-   * @type {string} [href="/"]
-   */
+  /** Specify the `href` attribute */
   export let href = "/";
 
   /**
    * Specify the text
-   * @type {string} [text]
+   * @type {string}
    */
   export let text = undefined;
 
-  /**
-   * Obtain a reference to the HTML anchor element
-   * @type {null | HTMLAnchorElement} [ref=null]
-   */
+  /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
-  /**
-   * Specify the ARIA label for the chevron icon
-   * @type {string} [iconDescription="Expand/Collapse"]
-   */
+  /** Specify the ARIA label for the chevron icon */
   export let iconDescription = "Expand/Collapse";
 
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";

@@ -1,92 +1,59 @@
 <script>
   /**
    * Specify the size of the input
-   * @type {"sm" | "xl"} [size]
+   * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
   /**
    * Specify the input value
-   * @type {string} [value=""]
+   * @type {string}
    */
   export let value = "";
 
   /**
    * Specify the input type
-   * @type {string} [type="text"]
+   * @type {string}
    */
   export let type = "text";
 
-  /**
-   * Specify the input placeholder text
-   * @type {string} [placeholder="hh=mm"]
-   */
+  /** Specify the input placeholder text */
   export let placeholder = "hh=mm";
 
-  /**
-   * Specify the `pattern` attribute for the input element
-   * @type {string} [pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"]
-   */
+  /** Specify the `pattern` attribute for the input element */
   export let pattern = "(1[012]|[1-9]):[0-5][0-9](\\s)?";
 
-  /**
-   * Specify the `maxlength` input attribute
-   * @type {number} [maxLength=5]
-   */
+  /** Specify the `maxlength` input attribute */
   export let maxlength = 5;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to disable the input
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the input */
   export let disabled = false;
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
-  /**
-   * Set to `true` to visually hide the label text
-   * @type {boolean} [hideLabel=false]
-   */
+  /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the invalid state text
-   * @type {string} [invalidText="Invalid time format."]
-   */
+  /** Specify the invalid state text */
   export let invalidText = "";
 
-  /**
-   * Set an id for the input element
-   * @type {string} [id]
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the input
-   * @type {string} [name]
+   * @type {string}
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 </script>
 

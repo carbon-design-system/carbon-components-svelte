@@ -1,20 +1,14 @@
 <script>
-  /**
-   * Specify the `scope` attribute
-   * @type {string} [scope="col"]
-   */
+  /** Specify the `scope` attribute */
   export let scope = "col";
 
   /**
    * Override the default id translations
-   * @type {() => string} [translateWithId = () => ""]
+   * @type {() => string}
    */
   export let translateWithId = () => "";
 
-  /**
-   * Set an id for the top-level element
-   * @type {string} [id]
-   */
+  /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
   import { getContext } from "svelte";

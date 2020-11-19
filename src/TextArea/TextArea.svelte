@@ -1,86 +1,47 @@
 <script>
-  /**
-   * Specify the textarea value
-   * @type {string} [value=""]
-   */
+  /** Specify the textarea value */
   export let value = "";
 
-  /**
-   * Specify the placeholder text
-   * @type {string} [placeholder=""]
-   */
+  /** Specify the placeholder text */
   export let placeholder = "";
 
-  /**
-   * Specify the number of cols
-   * @type {number} [cols=50]
-   */
+  /** Specify the number of cols */
   export let cols = 50;
 
-  /**
-   * Specify the number of rows
-   * @type {number} [rows=4]
-   */
+  /** Specify the number of rows */
   export let rows = 4;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to disable the input
-   * @type {boolean} [disabled=false]
-   */
+  /**  Set to `true` to disable the input */
   export let disabled = false;
 
-  /**
-   * Specify the helper text
-   * @type {string} [helperText=""]
-   */
+  /** Specify the helper text */
   export let helperText = "";
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
-  /**
-   * Set to `true` to visually hide the label text
-   * @type {boolean} [hideLabel=false]
-   */
+  /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the text for the invalid state
-   * @type {string} [invalidText=""]
-   */
+  /** Specify the text for the invalid state */
   export let invalidText = "";
 
-  /**
-   * Set an id for the textarea element
-   * @type {string} [id]
-   */
+  /** Set an id for the textarea element */
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
    * Specify a name attribute for the input
-   * @type {string} [name]
+   * @type {string}
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the textarea HTML element
-   * @type {null | HTMLTextAreaElement} [ref=null]
-   */
+  /** Obtain a reference to the textarea HTML element */
   export let ref = null;
 
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";

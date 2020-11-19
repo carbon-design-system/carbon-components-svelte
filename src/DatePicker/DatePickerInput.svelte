@@ -1,80 +1,47 @@
 <script>
   /**
    * Set the size of the input
-   * @type {"sm" | "xl"} [size]
+   * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
-  /**
-   * Specify the input type
-   * @type {string} [type="text"]
-   */
+  /** Specify the input type */
   export let type = "text";
 
-  /**
-   * Specify the input placeholder text
-   * @type {string} [placeholder=""]
-   */
+  /** Specify the input placeholder text */
   export let placeholder = "";
 
-  /**
-   * Specify the Regular Expression for the input value
-   * @type {string} [placeholder="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"]
-   */
+  /** Specify the Regular Expression for the input value */
   export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
 
-  /**
-   * Set to `true` to disable the input
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the input */
   export let disabled = false;
 
-  /**
-   * Specify the ARIA label for the calendar icon
-   * @type {string} [iconDescription=""]
-   */
+  /** Specify the ARIA label for the calendar icon */
   export let iconDescription = "";
 
-  /**
-   * Set an id for the input element
-   * @type {string} [id]
-   */
+  /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
-  /**
-   * Set to `true` to visually hide the label text
-   * @type {boolean} [hideLabel=false]
-   */
+  /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the invalid state text
-   * @type {string} [invalidText=""]
-   */
+  /** Specify the invalid state text */
   export let invalidText = "";
 
   /**
    * Set a name for the input element
-   * @type {string} [name=""]
+   * @type {string}
    */
   export let name = undefined;
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
-   */
+  /** Obtain a reference to the input HTML element */
   export let ref = null;
 
   import { getContext, onMount } from "svelte";

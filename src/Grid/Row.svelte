@@ -1,39 +1,28 @@
 <script>
   /**
+   * @restProps {div}
+   * @slot {{ props: { class: string; [key: string]: any; } }}
+   */
+
+  /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g. <Row let:props><section {...props}>...</section></Row>)
-   * @type {boolean} [as=false]
    */
   export let as = false;
 
-  /**
-   * Set to `true` to use the condensed variant
-   * @type {boolean} [condensed=false]
-   */
+  /** Set to `true` to use the condensed variant */
   export let condensed = false;
 
-  /**
-   * Set to `true` to use the narrow variant
-   * @type {boolean} [narrow=false]
-   */
+  /** Set to `true` to use the narrow variant */
   export let narrow = false;
 
-  /**
-   * Set to `true` to remove the gutter
-   * @type {boolean} [noGutter=false]
-   */
+  /** Set to `true` to remove the gutter */
   export let noGutter = false;
 
-  /**
-   * Set to `true` to remove the left gutter
-   * @type {boolean} [noGutterLeft=false]
-   */
+  /** Set to `true` to remove the left gutter */
   export let noGutterLeft = false;
 
-  /**
-   * Set to `true` to remove the right gutter
-   * @type {boolean} [noGutterRight=false]
-   */
+  /** Set to `true` to remove the right gutter */
   export let noGutterRight = false;
 
   $: props = {

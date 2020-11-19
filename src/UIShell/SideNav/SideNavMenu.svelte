@@ -1,26 +1,20 @@
 <script>
-  /**
-   * Set to `true` to toggle the expanded state
-   * @type {boolean} [expanded]
-   */
+  /** Set to `true` to toggle the expanded state */
   export let expanded = false;
 
   /**
    * Specify the text
-   * @type {string} [text]
+   * @type {string}
    */
   export let text = undefined;
 
   /**
    * Specify the icon props
-   * @type {{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }} [icon]
+   * @type {{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }}
    */
   export let icon = undefined;
 
-  /**
-   * Obtain a reference to the HTML button element
-   * @type {null | HTMLButtonElement} [ref=null]
-   */
+  /** Obtain a reference to the HTML button element */
   export let ref = null;
 
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";

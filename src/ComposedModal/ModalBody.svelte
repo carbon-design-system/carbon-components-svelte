@@ -1,14 +1,8 @@
 <script>
-  /**
-   * Set to `true` if the modal contains form elements
-   * @type {boolean} [hasForm=false]
-   */
+  /** Set to `true` if the modal contains form elements */
   export let hasForm = false;
 
-  /**
-   * Set to `true` if the modal contains scrolling content
-   * @type {boolean} [hasScrollingContent=false]
-   */
+  /** Set to `true` if the modal contains scrolling content */
   export let hasScrollingContent = false;
 </script>
 

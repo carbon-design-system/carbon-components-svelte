@@ -1,8 +1,5 @@
 <script>
-  /**
-   * Set to `true` to stack the buttons vertically
-   * @type {boolean} [stacked=false]
-   */
+  /** Set to `true` to stack the buttons vertically */
   export let stacked = false;
 </script>
 

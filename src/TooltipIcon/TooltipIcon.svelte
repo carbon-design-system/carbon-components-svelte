@@ -1,35 +1,26 @@
 <script>
-  /**
-   * Specify the tooltip text
-   * @type {string} [tooltipText=""]
-   */
+  /** Specify the tooltip text */
   export let tooltipText = "";
 
   /**
    * Set the alignment of the tooltip relative to the icon
-   * @type {"start" | "center" | "end"} [align="center"]
+   * @type {"start" | "center" | "end"}
    */
   export let align = "center";
 
   /**
    * Set the direction of the tooltip relative to the icon
-   * @type {"top" | "right" | "bottom" | "left"} [direction="bottom"]
+   * @type {"top" | "right" | "bottom" | "left"}
    */
   export let direction = "bottom";
 
-  /**
-   * Set an id for the span element
-   * @type {string} [id]
-   */
+  /** Set an id for the span element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the button HTML element
-   * @type {null | HTMLButtonElement} [ref=null]
-   */
+  /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  $: hidden = false;
+  let hidden = false;
 </script>
 
 <svelte:body

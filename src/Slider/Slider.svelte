@@ -1,104 +1,53 @@
 <script>
-  /**
-   * Specify the value of the slider
-   * @type {number} [value=0]
-   */
+  /** Specify the value of the slider */
   export let value = 0;
 
-  /**
-   * Set the maximum slider value
-   * @type {number} [max=100]
-   */
+  /** Set the maximum slider value */
   export let max = 100;
 
-  /**
-   * Specify the label for the max value
-   * @type {string} [maxLabel=""]
-   */
+  /** Specify the label for the max value */
   export let maxLabel = "";
 
-  /**
-   * Set the minimum slider value
-   * @type {number} [min=100]
-   */
+  /** Set the minimum slider value */
   export let min = 0;
 
-  /**
-   * Specify the label for the min value
-   * @type {string} [minLabel=""]
-   */
+  /** Specify the label for the min value */
   export let minLabel = "";
 
-  /**
-   * Set the step value
-   * @type {number} [step=1]
-   */
+  /** Set the step value */
   export let step = 1;
 
-  /**
-   * Set the step multiplier value
-   * @type {number} [stepMultiplier=4]
-   */
+  /** Set the step multiplier value */
   export let stepMultiplier = 4;
 
-  /**
-   * Set to `true` to require a value
-   * @type {boolean} [required=false]
-   */
+  /** Set to `true` to require a value */
   export let required = false;
 
-  /**
-   * Specify the input type
-   * @type {string} [inputType="number"]
-   */
+  /** Specify the input type */
   export let inputType = "number";
 
-  /**
-   * Set to `true` to disable the slider
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the slider */
   export let disabled = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to hide the text input
-   * @type {boolean} [hideTextInput=false]
-   */
+  /** Set to `true` to hide the text input */
   export let hideTextInput = false;
 
-  /**
-   * Set an id for the slider div element
-   * @type {string} [id]
-   */
+  /** Set an id for the slider div element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Specify the label text
-   * @type {string} [labelText=""]
-   */
+  /** Specify the label text */
   export let labelText = "";
 
-  /**
-   * Set a name for the slider element
-   * @type {string} [name=""]
-   */
+  /** Set a name for the slider element */
   export let name = "";
 
-  /**
-   * Obtain a reference to the HTML element
-   * @type {null | HTMLElement} [ref=null]
-   */
+  /** Obtain a reference to the HTML element */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

@@ -1,81 +1,60 @@
 <script>
   /**
    * Set the direction of the tooltip relative to the button
-   * @type {"top" | "right" | "bottom" | "left"} [direction="bottom"]
+   * @type {"top" | "right" | "bottom" | "left"}
    */
   export let direction = "bottom";
 
   /**
    * Set to `true` to open the tooltip
-   * @type {boolean} [open=false]
+   * @type {boolean}
    */
   export let open = false;
 
   /**
    * Set to `true` to hide the tooltip icon
-   * @type {boolean} [hideIcon=false]
+   * @type {boolean}
    */
   export let hideIcon = false;
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render for the tooltip button
    * Icon size must be 16px (e.g. `Add16`, `Task16`)
-   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [icon=Information16]
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
   export let icon = Information16;
 
-  /**
-   * Specify the ARIA label for the tooltip button
-   * @type {string} [iconDescription=""]
-   */
+  /** Specify the ARIA label for the tooltip button */
   export let iconDescription = "";
 
-  /**
-   * Specify the icon name attribute
-   * @type {string} [iconName=""]
-   */
+  /** Specify the icon name attribute */
   export let iconName = "";
 
-  /**
-   * Set the button tabindex
-   * @type {string} [tabindex="0"]
-   */
+  /** Set the button tabindex */
   export let tabindex = "0";
 
   /**
    * Set an id for the tooltip
-   * @type {string} [tooltipId]
+   * @type {string}
    */
   export let tooltipId = "ccs-" + Math.random().toString(36);
 
   /**
    * Set an id for the tooltip button
-   * @type {string} [triggerId]
+   * @type {string}
    */
   export let triggerId = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Set the tooltip button text
-   * @type {string} [triggerText=""]
-   */
+  /** Set the tooltip button text */
   export let triggerText = "";
 
-  /**
-   * Obtain a reference to the trigger text HTML element
-   * @type {null | HTMLElement} [ref=null]
-   */
+  /** Obtain a reference to the trigger text HTML element */
   export let ref = null;
 
-  /**
-   * Obtain a reference to the tooltip HTML element
-   * @type {null | HTMLElement} [ref=null]
-   */
+  /** Obtain a reference to the tooltip HTML element */
   export let refTooltip = null;
 
-  /**
-   * Obtain a reference to the icon HTML element
-   * @type {null | HTMLElement} [ref=null]
-   */
+  /** Obtain a reference to the icon HTML element */
   export let refIcon = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";
@@ -83,7 +62,7 @@
 
   const dispatch = createEventDispatcher();
 
-  $: programmatic = true;
+  let programmatic = true;
 
   function onKeydown(e) {
     if (e.key === "Escape") {

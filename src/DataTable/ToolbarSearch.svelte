@@ -1,31 +1,22 @@
 <script>
   /**
    * Specify the value of the search input
-   * @type {string} [value=""]
+   * @type {number | string}
    */
   export let value = "";
 
-  /**
-   * Set to `true` to expand the search bar
-   * @type {boolean} [expanded=false]
-   */
+  /** Set to `true` to expand the search bar */
   export let expanded = false;
 
-  /**
-   * Set to `true` to keep the search bar expanded
-   * @type {boolean} [persistent=false]
-   */
+  /** Set to `true` to keep the search bar expanded */
   export let persistent = false;
 
-  /**
-   * Specify the tabindex
-   * @type {string} [tabindex="0"]
-   */
+  /** Specify the tabindex */
   export let tabindex = "0";
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement} [ref=null]
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
 

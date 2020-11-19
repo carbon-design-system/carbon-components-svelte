@@ -1,116 +1,71 @@
 <script>
   /**
    * Set the size of the modal
-   * @type {"xs" | "sm" | "lg"} [size]
+   * @type {"xs" | "sm" | "lg"}
    */
   export let size = undefined;
 
-  /**
-   * Set to `true` to open the modal
-   * @type {boolean} [open=false]
-   */
+  /** Set to `true` to open the modal */
   export let open = false;
 
-  /**
-   * Set to `true` to use the danger variant
-   * @type {boolean} [danger=false]
-   */
+  /** Set to `true` to use the danger variant */
   export let danger = false;
 
-  /**
-   * Set to `true` to enable alert mode
-   * @type {boolean} [alert=false]
-   */
+  /** Set to `true` to enable alert mode */
   export let alert = false;
 
-  /**
-   * Set to `true` to use the passive variant
-   * @type {boolean} [passiveModal=false]
-   */
+  /** Set to `true` to use the passive variant */
   export let passiveModal = false;
 
   /**
    * Specify the modal heading
-   * @type {string} [modalHeading]
+   * @type {string}
    */
   export let modalHeading = undefined;
 
   /**
    * Specify the modal label
-   * @type {string} [modalLabel]
+   * @type {string}
    */
   export let modalLabel = undefined;
 
   /**
    * Specify the ARIA label for the modal
-   * @type {string} [modalAriaLabel]
+   * @type {string}
    */
   export let modalAriaLabel = undefined;
 
-  /**
-   * Specify the ARIA label for the close icon
-   * @type {string} [iconDescription="Close the modal"]
-   */
+  /** Specify the ARIA label for the close icon */
   export let iconDescription = "Close the modal";
 
-  /**
-   * Set to `true` if the modal contains form elements
-   * @type {boolean} [hasForm=false]
-   */
+  /** Set to `true` if the modal contains form elements */
   export let hasForm = false;
 
-  /**
-   * Set to `true` if the modal contains scrolling content
-   * @type {boolean} [hasScrollingContent=false]
-   */
+  /** Set to `true` if the modal contains scrolling content */
   export let hasScrollingContent = false;
 
-  /**
-   * Specify the primary button text
-   * @type {string} [primaryButtonText=""]
-   */
+  /** Specify the primary button text */
   export let primaryButtonText = "";
 
-  /**
-   * Set to `true` to disable the primary button
-   * @type {boolean} [primaryButtonDisabled=false]
-   */
+  /** Set to `true` to disable the primary button */
   export let primaryButtonDisabled = false;
 
-  /**
-   * Set to `true` for the primary button to be triggered when pressing "Enter"
-   * @type {boolean} [shouldSubmitOnEnter=true]
-   */
+  /** Set to `true` for the primary button to be triggered when pressing "Enter" */
   export let shouldSubmitOnEnter = true;
 
-  /**
-   * Specify the secondary button text
-   * @type {string} [secondaryButtonText=""]
-   */
+  /** Specify the secondary button text */
   export let secondaryButtonText = "";
 
-  /**
-   * Specify a selector to be focused when opening the modal
-   * @type {string} [selectorPrimaryFocus="[data-modal-primary-focus]"]
-   */
+  /** Specify a selector to be focused when opening the modal */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
-  /**
-   * Set to `true` to prevent the modal from closing when clicking outside
-   * @type {boolean} [preventCloseOnClickOutside=false]
-   */
+  /** Set to `true` to prevent the modal from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
-  /**
-   * Set an id for the top-level element
-   * @type {string} [id]
-   */
+  /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the top-level HTML element
-   * @type {null | HTMLElement} [ref=null]
-   */
+  /** Obtain a reference to the top-level HTML element */
   export let ref = null;
 
   import { createEventDispatcher, onMount, afterUpdate } from "svelte";

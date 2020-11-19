@@ -1,8 +1,5 @@
 <script>
-  /**
-   * Specify the number of tabs to render
-   * @type {number} [count=4]
-   */
+  /** Specify the number of tabs to render */
   export let count = 4;
 </script>
 

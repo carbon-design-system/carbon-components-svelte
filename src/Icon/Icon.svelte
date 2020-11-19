@@ -1,18 +1,19 @@
 <script>
   /**
+   * @extends {"./IconSkeleton"} IconSkeletonProps
+   * @restProps {svg}
+   */
+
+  /**
    * Specify the icon from `carbon-icons-svelte` to render
-   * Icon size must be 16px (e.g. `Add16`, `Task16`)
-   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [render]
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
   export let render = undefined;
 
-  /**
-   * Set to `true` to display the skeleton state
-   * @type {boolean} [skeleton=false]
-   */
+  /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
-  import IconSkeleton from "./Icon.Skeleton.svelte";
+  import IconSkeleton from "./IconSkeleton.svelte";
 </script>
 
 {#if skeleton}

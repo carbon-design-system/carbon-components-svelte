@@ -1,14 +1,8 @@
 <script>
-  /**
-   * Set to `true` to use the nested variant
-   * @type {boolean} [nested=false]
-   */
+  /** Set to `true` to use the nested variant */
   export let nested = false;
 
-  /**
-   * Set to `true` to use native list styles
-   * @type {boolean} [native=false]
-   */
+  /** Set to `true` to use native list styles */
   export let native = false;
 </script>
 

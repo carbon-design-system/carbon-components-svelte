@@ -1,14 +1,8 @@
 <script>
-  /**
-   * Specify the current page index
-   * @type {number} [page=0]
-   */
+  /** Specify the current page index */
   export let page = 0;
 
-  /**
-   * Set to `true` to use the active state
-   * @type {boolean} [active=false]
-   */
+  /** Set to `true` to use the active state */
   export let active = false;
 </script>
 

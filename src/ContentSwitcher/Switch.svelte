@@ -2,32 +2,19 @@
   /**
    * Specify the switch text
    * Alternatively, use the named slot "text" (e.g. <span slot="text">...</span>)
-   * @type {string} [text="Provide text"]
    */
   export let text = "Provide text";
 
-  /**
-   * Set to `true` for the switch to be selected
-   * @type {boolean} [selected=false]
-   */
+  /** Set to `true` for the switch to be selected */
   export let selected = false;
 
-  /**
-   * Set to `true` to disable the switch
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the switch */
   export let disabled = false;
 
-  /**
-   * Set an id for the button element
-   * @type {string} [id]
-   */
+  /** Set an id for the button element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the button HTML element
-   * @type {null | HTMLButtonElement} [ref=null]
-   */
+  /** Obtain a reference to the button HTML element */
   export let ref = null;
 
   import { afterUpdate, getContext, onDestroy } from "svelte";

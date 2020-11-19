@@ -2,26 +2,16 @@
   /**
    * Specify the title of the accordion item heading
    * Alternatively, use the named slot "title" (e.g. <div slot="title">...</div>)
-   * @type {string} [title="title"]
    */
   export let title = "title";
 
-  /**
-   * Set to `true` to open the first accordion item
-   * @type {boolean} [open=false]
-   */
+  /** Set to `true` to open the first accordion item */
   export let open = false;
 
-  /**
-   * Set to `true` to disable the accordion item
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the accordion item */
   export let disabled = false;
 
-  /**
-   * Specify the ARIA label for the accordion item chevron icon
-   * @type {string} [iconDescription="Expand/Collapse"]
-   */
+  /** Specify the ARIA label for the accordion item chevron icon */
   export let iconDescription = "Expand/Collapse";
 
   import { onMount, getContext } from "svelte";
@@ -49,7 +39,7 @@
   class:bx--accordion__item--active="{open}"
   class:bx--accordion__item--disabled="{disabled}"
   {...$$restProps}
-  class="bx--accordion__item--${animation} {$$restProps.class}"
+  class="bx--accordion__item--{animation} {$$restProps.class}"
   on:animationend
   on:animationend="{() => {
     animation = undefined;

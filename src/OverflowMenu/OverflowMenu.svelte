@@ -1,74 +1,53 @@
 <script>
   /**
    * Specify the size of the overflow menu
-   * @type {"sm" | "xl"} [size]
+   * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
   /**
    * Specify the direction of the overflow menu relative to the button
-   * @type {"top" | "bottom"} [direction="bottom"]
+   * @type {"top" | "bottom"}
    */
   export let direction = "bottom";
 
-  /**
-   * Set to `true` to open the menu
-   * @type {boolean} [open=false]
-   */
+  /** Set to `true` to open the menu */
   export let open = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to flip the menu relative to the button
-   * @type {boolean} [flipped=false]
-   */
+  /** Set to `true` to flip the menu relative to the button */
   export let flipped = false;
 
   /**
    * Specify the menu options class
-   * @type {string} [menuOptionsClass]
+   * @type {string}
    */
   export let menuOptionsClass = undefined;
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render
-   * @type {typeof import("carbon-icons-svelte/lib/Add16").default} [icon]
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
   export let icon = OverflowMenuVertical16;
 
   /**
    * Specify the icon class
-   * @type {string} [iconClass]
+   * @type {string}
    */
   export let iconClass = undefined;
 
-  /**
-   * Specify the ARIA label for the icon
-   * @type {string} [iconDescription="Open and close list of options"]
-   */
+  /** Specify the ARIA label for the icon */
   export let iconDescription = "Open and close list of options";
 
-  /**
-   * Set an id for the button element
-   * @type {string} [id]
-   */
+  /** Set an id for the button element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the trigger button element
-   * @type {null | HTMLButtonElement} [ref=null]
-   */
+  /** Obtain a reference to the trigger button element */
   export let buttonRef = null;
 
-  /**
-   * Obtain a reference to the overflow menu element
-   * @type {null | HTMLUListElement} [ref=null]
-   */
+  /** Obtain a reference to the overflow menu element */
   export let menuRef = null;
 
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";

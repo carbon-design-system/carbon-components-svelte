@@ -2,56 +2,31 @@
   /**
    * Specify the item text
    * Alternatively, use the default slot for a custom element
-   * @type {string} [text="Provide text"]
    */
   export let text = "Provide text";
 
-  /**
-   * Specify the `href` attribute if the item is a link
-   * @type {string} [href=""]
-   */
+  /** Specify the `href` attribute if the item is a link */
   export let href = "";
 
-  /**
-   * Set to `true` if the item should be focused when opening the menu
-   * @type {boolean} [primaryFocus=false]
-   */
+  /** Set to `true` if the item should be focused when opening the menu */
   export let primaryFocus = false;
 
-  /**
-   * Set to `true` to disable the item
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the item */
   export let disabled = false;
 
-  /**
-   * Set to `true` to include a divider
-   * @type {boolean} [hasDivider=false]
-   */
+  /** Set to `true` to include a divider */
   export let hasDivider = false;
 
-  /**
-   * Set to `true` to use the danger variant
-   * @type {boolean} [danger=false]
-   */
+  /** Set to `true` to use the danger variant */
   export let danger = false;
 
-  /**
-   * Set to `false` to omit the button `title` attribute
-   * @type {boolean} [requireTitle=false]
-   */
+  /** Set to `false` to omit the button `title` attribute */
   export let requireTitle = true;
 
-  /**
-   * Set an id for the top-level element
-   * @type {string} [id]
-   */
+  /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Obtain a reference to the HTML element
-   * @type {null | HTMLAnchorElement | HTMLButtonElement} [ref=null]
-   */
+  /** Obtain a reference to the HTML element */
   export let ref = null;
 
   import { getContext, afterUpdate } from "svelte";

@@ -2,8 +2,8 @@
   export let component = {
     props: [],
     slots: [],
-    forwarded_events: [],
-    dispatched_events: [],
+    events: [],
+    rest_props: undefined,
   };
 
   import {
@@ -16,6 +16,7 @@
     TooltipDefinition,
     UnorderedList,
     ListItem,
+    Tag,
   } from "carbon-components-svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
@@ -28,6 +29,14 @@
     null: "null",
     Date: "JavaScript Date",
   };
+
+  $: source = `https://github.com/IBM/carbon-components-svelte/tree/master${component.filePath}`;
+  $: forwarded_events = component.events.filter(
+    (event) => event.type === "forwarded"
+  );
+  $: dispatched_events = component.events.filter(
+    (event) => event.type === "dispatched"
+  );
 </script>
 
 <style>
@@ -53,6 +62,14 @@
   }
 </style>
 
+<p style="margin-bottom: var(--cds-layout-02)">
+  Component source code:
+  <Link size="lg" href="{source}" target="_blank">
+    {component.filePath}
+    <Launch16 />
+  </Link>
+</p>
+
 <h3 id="props">Props</h3>
 
 {#if component.props.length > 0}
@@ -69,16 +86,18 @@
         </StructuredListRow>
       </StructuredListHead>
       <StructuredListBody>
-        {#each component.props as prop}
+        {#each component.props.sort((a, b) => {
+          if (a.reactive > b.reactive) return -1;
+        }) as prop (prop.name)}
           <StructuredListRow>
             <StructuredListCell noWrap>
-              <InlineSnippet code="{prop[0]}" />
+              <InlineSnippet code="{prop.name}" />
             </StructuredListCell>
             <StructuredListCell>
-              {#each prop[1].type.split(' | ') as type, i (type)}
+              {#each prop.type.split(' | ') as type, i (type)}
                 <div
                   class="cell"
-                  style="z-index: {prop[1].type.split(' | ').length - i}"
+                  style="z-index: {prop.type.split(' | ').length - i}"
                 >
                   {#if type.startsWith('typeof')}
                     <TooltipDefinition
@@ -106,16 +125,26 @@
                   {/if}
                 </div>
               {/each}
-            </StructuredListCell>
-            <StructuredListCell>
-              <code>{prop[1].value}</code>
-            </StructuredListCell>
-            <StructuredListCell>
-              {#each prop[1].description.split('\n') as line}
-                <div class="description">
-                  {@html line.replace(/`(.*?)`/g, '<code>$1</code>')}.
+
+              {#if prop.reactive}
+                <div
+                  style="white-space: nowrap; margin-left: calc(-1 * var(--cds-spacing-03)); margin-top: var(--cds-spacing-05)"
+                >
+                  <Tag type="green">Reactive</Tag>
                 </div>
-              {/each}
+              {/if}
+            </StructuredListCell>
+            <StructuredListCell><code>{prop.value}</code></StructuredListCell>
+            <StructuredListCell>
+              {#if prop.description}
+                {#each prop.description.split('\n') as line}
+                  <div class="description">
+                    {@html line.replace(/`(.*?)`/g, '<code>$1</code>')}.
+                  </div>
+                {/each}
+              {:else}
+                <div class="description">No description available.</div>
+              {/if}
             </StructuredListCell>
           </StructuredListRow>
         {/each}
@@ -128,8 +157,8 @@
 <h3 id="slots">Slots</h3>
 {#if component.slots.length > 0}
   <UnorderedList class="my-layout-01-03">
-    {#each component.slots as slot}
-      <ListItem>{slot[0]}</ListItem>
+    {#each component.slots as slot (slot.name)}
+      <ListItem>{slot.default ? 'default' : slot.name}</ListItem>
     {/each}
   </UnorderedList>
 {:else}
@@ -137,10 +166,10 @@
 {/if}
 
 <h3 id="forwarded-events">Forwarded events</h3>
-{#if component.forwarded_events.length > 0}
+{#if forwarded_events.length > 0}
   <UnorderedList class="my-layout-01-03">
-    {#each component.forwarded_events as event}
-      <ListItem>on:{event[0]}</ListItem>
+    {#each forwarded_events as event (event.name)}
+      <ListItem>on:{event.name}</ListItem>
     {/each}
   </UnorderedList>
 {:else}
@@ -149,12 +178,27 @@
 
 <h3 id="dispatched-events">Dispatched events</h3>
 
-{#if component.dispatched_events.length > 0}
+{#if dispatched_events.length > 0}
   <UnorderedList class="my-layout-01-03">
-    {#each component.dispatched_events as event}
-      <ListItem>on:{event[0]}</ListItem>
+    {#each dispatched_events as event (event.name)}
+      <ListItem>on:{event.name}</ListItem>
     {/each}
   </UnorderedList>
 {:else}
   <p class="my-layout-01-03">No dispatched events.</p>
 {/if}
+
+<h3 id="rest-props">$$restProps</h3>
+
+<div class="my-layout-01-03">
+  {#if component.rest_props}
+    <code>{component.moduleName}</code>
+    spreads
+    <code>$$restProps</code>
+    to the
+    {#if component.rest_props.type === 'Element'}
+      <code>{component.rest_props.name}</code>
+      element.
+    {:else}<code>{component.rest_props.name}</code> component.{/if}
+  {:else}This component does not spread <code>restProps</code>{/if}
+</div>

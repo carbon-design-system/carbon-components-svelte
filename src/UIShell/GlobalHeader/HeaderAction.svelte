@@ -1,27 +1,21 @@
 <script>
-  /**
-   * Set to `true` to open the panel
-   * @type {boolean} [isOpen=false]
-   */
+  /** Set to `true` to open the panel */
   export let isOpen = false;
 
   /**
    * Specify the icon props
-   * @type {{ render: typeof import("carbon-icons-svelte/lib/Add16").default; skeleton: boolean; }} [icon]
+   * @type {{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }}
    */
   export let icon = undefined;
 
   /**
    * Specify the text
    * Alternatively, use the named slot "text" (e.g. <div slot="text">...</div>)
-   * @type {string} [text]
+   * @type {string}
    */
   export let text = undefined;
 
-  /**
-   * Obtain a reference to the button HTML element
-   * @type {null | HTMLButtonElement} [ref=null]
-   */
+  /** Obtain a reference to the button HTML element */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

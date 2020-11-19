@@ -1,8 +1,9 @@
 <script>
   /**
-   * Set to `true` to focus the search
-   * @type {boolean} [searchIsActive=false]
+   * @event {{ action: "search"; textInput: string; }} inputSearch
    */
+
+  /** Set to `true` to focus the search */
   export let searchIsActive = false;
 
   import { createEventDispatcher } from "svelte";
@@ -24,6 +25,7 @@
       action: "search",
       textInput: event.target.value,
     };
+
     dispatch("inputSearch", params);
   }
 

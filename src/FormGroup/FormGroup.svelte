@@ -1,26 +1,14 @@
 <script>
-  /**
-   * Set to `true` to indicate an invalid state
-   * @type {boolean} [invalid=false]
-   */
+  /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /**
-   * Set to `true` to render a form requirement
-   * @type {boolean} [message=false]
-   */
+  /** Set to `true` to render a form requirement */
   export let message = false;
 
-  /**
-   * Specify the message text
-   * @type {string} [messageText=""]
-   */
+  /** Specify the message text */
   export let messageText = "";
 
-  /**
-   * Specify the legend text
-   * @type {string} [legendText=""]
-   */
+  /** Specify the legend text */
   export let legendText = "";
 </script>
 
