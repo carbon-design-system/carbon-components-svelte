@@ -1,4 +1,10 @@
 <script>
+  /**
+   * Specify the toggle size
+   * @type {"default" | "sm"}
+   */
+  export let size = "default";
+
   /** Specify the label text */
   export let labelText = "";
 
@@ -18,6 +24,7 @@
     type="checkbox"
     id="{id}"
     class:bx--toggle="{true}"
+    class:bx--toggle--small="{size === 'sm'}"
     class:bx--skeleton="{true}"
   />
   <label

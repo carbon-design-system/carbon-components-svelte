@@ -3863,15 +3863,16 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                 | Default value                                    | Description                                     |
-| :-------- | :--------------- | :------- | :------------------- | ------------------------------------------------ | ----------------------------------------------- |
-| toggled   | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
-| disabled  | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to disable checkbox input         |
-| labelA    | <code>let</code> | No       | <code>string</code>  | <code>"Off"</code>                               | Specify the label for the untoggled state       |
-| labelB    | <code>let</code> | No       | <code>string</code>  | <code>"On"</code>                                | Specify the label for the toggled state         |
-| labelText | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the label text                          |
-| id        | <code>let</code> | No       | <code>string</code>  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
-| name      | <code>let</code> | No       | <code>string</code>  | --                                               | Specify a name attribute for the checkbox input |
+| Prop name | Kind             | Reactive | Type                               | Default value                                    | Description                                     |
+| :-------- | :--------------- | :------- | :--------------------------------- | ------------------------------------------------ | ----------------------------------------------- |
+| toggled   | <code>let</code> | Yes      | <code>boolean</code>               | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
+| size      | <code>let</code> | No       | <code>"default" &#124; "sm"</code> | <code>"default"</code>                           | Specify the toggle size                         |
+| disabled  | <code>let</code> | No       | <code>boolean</code>               | <code>false</code>                               | Set to `true` to disable checkbox input         |
+| labelA    | <code>let</code> | No       | <code>string</code>                | <code>"Off"</code>                               | Specify the label for the untoggled state       |
+| labelB    | <code>let</code> | No       | <code>string</code>                | <code>"On"</code>                                | Specify the label for the toggled state         |
+| labelText | <code>let</code> | No       | <code>string</code>                | <code>""</code>                                  | Specify the label text                          |
+| id        | <code>let</code> | No       | <code>string</code>                | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
+| name      | <code>let</code> | No       | <code>string</code>                | --                                               | Specify a name attribute for the checkbox input |
 
 ### Slots
 
@@ -3894,10 +3895,11 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                | Default value                                    | Description                     |
-| :-------- | :--------------- | :------- | :------------------ | ------------------------------------------------ | ------------------------------- |
-| labelText | <code>let</code> | No       | <code>string</code> | <code>""</code>                                  | Specify the label text          |
-| id        | <code>let</code> | No       | <code>string</code> | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element |
+| Prop name | Kind             | Reactive | Type                               | Default value                                    | Description                     |
+| :-------- | :--------------- | :------- | :--------------------------------- | ------------------------------------------------ | ------------------------------- |
+| size      | <code>let</code> | No       | <code>"default" &#124; "sm"</code> | <code>"default"</code>                           | Specify the toggle size         |
+| labelText | <code>let</code> | No       | <code>string</code>                | <code>""</code>                                  | Specify the label text          |
+| id        | <code>let</code> | No       | <code>string</code>                | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element |
 
 ### Slots
 

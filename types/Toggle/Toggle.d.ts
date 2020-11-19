@@ -2,6 +2,12 @@
 
 export interface ToggleProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
+   * Specify the toggle size
+   * @default "default"
+   */
+  size?: "default" | "sm";
+
+  /**
    * Set to `true` to toggle the checkbox input
    * @default false
    */

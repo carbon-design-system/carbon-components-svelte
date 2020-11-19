@@ -3,9 +3,15 @@ components: ["ToggleSmall", "ToggleSmallSkeleton"]
 ---
 
 <script>
-  import { ToggleSmall, ToggleSmallSkeleton } from "carbon-components-svelte";
+  import { ToggleSmall, ToggleSmallSkeleton, InlineNotification, Link } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
+
+<InlineNotification svx-ignore title="Deprecation warning" kind="warning" hideCloseButton>
+  <div>
+    This component will be removed in version 1.0.0. Use the <Link href="/components/Toggle#small-size">Toggle small variant</Link> instead.
+  </div>
+</InlineNotification>
 
 ### Default (untoggled)
 

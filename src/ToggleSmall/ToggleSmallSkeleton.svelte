@@ -1,4 +1,10 @@
 <script>
+  /**
+   * @deprecated
+   * This component will be removed in version 1.0.0.
+   * Use `<ToggleSkeleton size="sm" />` instead
+   */
+
   /** Specify the label text */
   export let labelText = "";
 

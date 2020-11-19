@@ -8957,6 +8957,16 @@
       "filePath": "/src/Toggle/Toggle.svelte",
       "props": [
         {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the toggle size",
+          "type": "\"default\" | \"sm\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "toggled",
           "kind": "let",
           "description": "Set to `true` to toggle the checkbox input",
@@ -9044,6 +9054,16 @@
       "moduleName": "ToggleSkeleton",
       "filePath": "/src/Toggle/ToggleSkeleton.svelte",
       "props": [
+        {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the toggle size",
+          "type": "\"default\" | \"sm\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
         {
           "name": "labelText",
           "kind": "let",

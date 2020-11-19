@@ -1,4 +1,10 @@
 <script>
+  /**
+   * @deprecated
+   * This component will be removed in version 1.0.0.
+   * Use `<Toggle size="sm" />` instead
+   */
+
   /** Set to `true` to toggle the checkbox input */
   export let toggled = false;
 
