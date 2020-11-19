@@ -10,7 +10,7 @@ export interface NotificationButtonProps extends svelte.JSX.HTMLAttributes<HTMLE
   /**
    * Specify the icon from `carbon-icons-svelte` to render
    */
-  renderIcon?: import("carbon-icons-svelte").CarbonIcon;
+  renderIcon?: typeof import("carbon-icons-svelte").CarbonIcon;
 
   /**
    * Specify the title of the icon

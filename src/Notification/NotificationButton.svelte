@@ -7,7 +7,7 @@
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render
-   * @type {import("carbon-icons-svelte").CarbonIcon}
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
   export let renderIcon = Close20;
 

@@ -2,7 +2,7 @@
   /**
    * Specify the icon from `carbon-icons-svelte` to render
    * Icon size must be 16px (e.g. `Add16`, `Task16`)
-   * @type {import("carbon-icons-svelte").CarbonIcon}
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
   export let render = undefined;
 

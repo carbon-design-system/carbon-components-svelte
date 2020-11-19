@@ -5,7 +5,7 @@ export interface IconProps {
    * Specify the icon from `carbon-icons-svelte` to render
    * Icon size must be 16px (e.g. `Add16`, `Task16`)
    */
-  render?: import("carbon-icons-svelte").CarbonIcon;
+  render?: typeof import("carbon-icons-svelte").CarbonIcon;
 
   /**
    * Set to `true` to display the skeleton state

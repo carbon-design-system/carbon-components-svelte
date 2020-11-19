@@ -38,7 +38,7 @@ export interface OverflowMenuProps extends svelte.JSX.HTMLAttributes<HTMLElement
   /**
    * Specify the icon from `carbon-icons-svelte` to render
    */
-  icon?: import("carbon-icons-svelte").CarbonIcon;
+  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
 
   /**
    * Specify the icon class

@@ -540,7 +540,7 @@
           "name": "icon",
           "kind": "let",
           "description": "Specify the icon from `carbon-icons-svelte` to render",
-          "type": "import(\"carbon-icons-svelte\").CarbonIcon",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -3001,7 +3001,7 @@
           "name": "icon",
           "kind": "let",
           "description": "Specify the icon from `carbon-icons-svelte` to render",
-          "type": "import(\"carbon-icons-svelte\").CarbonIcon",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -4839,7 +4839,7 @@
           "name": "render",
           "kind": "let",
           "description": "Specify the icon from `carbon-icons-svelte` to render\nIcon size must be 16px (e.g. `Add16`, `Task16`)",
-          "type": "import(\"carbon-icons-svelte\").CarbonIcon",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -5444,7 +5444,7 @@
           "name": "renderIcon",
           "kind": "let",
           "description": "Specify the icon from `carbon-icons-svelte` to render",
-          "type": "import(\"carbon-icons-svelte\").CarbonIcon",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -9189,7 +9189,7 @@
           "name": "icon",
           "kind": "let",
           "description": "Specify the icon from `carbon-icons-svelte` to render for the tooltip button\nIcon size must be 16px (e.g. `Add16`, `Task16`)",
-          "type": "import(\"carbon-icons-svelte\").CarbonIcon",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -10135,7 +10135,7 @@
           "name": "icon",
           "kind": "let",
           "description": "Specify the icon to render",
-          "type": "import(\"carbon-icons-svelte\").CarbonIcon",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false

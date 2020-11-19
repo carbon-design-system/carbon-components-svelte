@@ -4,7 +4,7 @@
 
   /**
    * Specify the icon to render
-   * @type {import("carbon-icons-svelte").CarbonIcon}
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
   export let icon = undefined;
 

@@ -338,7 +338,7 @@ None.
 | kind             | <code>let</code> | No       | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger" &#124; "danger-tertiary" &#124; "danger-ghost"</code> | <code>"primary"</code> | Specify the kind of button                                                                                                                                                                   |
 | size             | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small"</code>                                                                                      | <code>"default"</code> | Specify the size of button                                                                                                                                                                   |
 | hasIconOnly      | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` for the icon-only variant                                                                                                                                                      |
-| icon             | <code>let</code> | No       | <code>import("carbon-icons-svelte").CarbonIcon</code>                                                                                     | --                     | Specify the icon from `carbon-icons-svelte` to render                                                                                                                                        |
+| icon             | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>                                                                              | --                     | Specify the icon from `carbon-icons-svelte` to render                                                                                                                                        |
 | iconDescription  | <code>let</code> | No       | <code>string</code>                                                                                                                       | --                     | Specify the ARIA label for the button icon                                                                                                                                                   |
 | tooltipAlignment | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                                                                                         | --                     | Set the alignment of the tooltip relative to the icon<br />`hasIconOnly` must be set to `true`                                                                                               |
 | tooltipPosition  | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                                                                           | --                     | Set the position of the tooltip relative to the icon                                                                                                                                         |
@@ -1439,11 +1439,11 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                  | Default value      | Description                                   |
-| :-------- | :--------------- | :------- | :---------------------------------------------------- | ------------------ | --------------------------------------------- |
-| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>            | <code>null</code>  | Obtain a reference to the HTML button element |
-| isActive  | <code>let</code> | No       | <code>boolean</code>                                  | <code>false</code> | Set to `true` to use the active variant       |
-| icon      | <code>let</code> | No       | <code>import("carbon-icons-svelte").CarbonIcon</code> | --                 | Specify the icon to render                    |
+| Prop name | Kind             | Reactive | Type                                                         | Default value      | Description                                   |
+| :-------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------ | --------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                   | <code>null</code>  | Obtain a reference to the HTML button element |
+| isActive  | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code> | Set to `true` to use the active variant       |
+| icon      | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                 | Specify the icon to render                    |
 
 ### Slots
 
@@ -1606,10 +1606,10 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                  | Default value      | Description                                                                                                |
-| :-------- | :--------------- | :------- | :---------------------------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------- |
-| render    | <code>let</code> | No       | <code>import("carbon-icons-svelte").CarbonIcon</code> | --                 | Specify the icon from `carbon-icons-svelte` to render<br />Icon size must be 16px (e.g. `Add16`, `Task16`) |
-| skeleton  | <code>let</code> | No       | <code>boolean</code>                                  | <code>false</code> | Set to `true` to display the skeleton state                                                                |
+| Prop name | Kind             | Reactive | Type                                                         | Default value      | Description                                                                                                |
+| :-------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------- |
+| render    | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                 | Specify the icon from `carbon-icons-svelte` to render<br />Icon size must be 16px (e.g. `Add16`, `Task16`) |
+| skeleton  | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code> | Set to `true` to display the skeleton state                                                                |
 
 ### Slots
 
@@ -2133,12 +2133,12 @@ None.
 
 ### Props
 
-| Prop name        | Kind             | Reactive | Type                                                  | Default value             | Description                                           |
-| :--------------- | :--------------- | :------- | :---------------------------------------------------- | ------------------------- | ----------------------------------------------------- |
-| notificationType | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                  | <code>"toast"</code>      | Set the type of notification                          |
-| renderIcon       | <code>let</code> | No       | <code>import("carbon-icons-svelte").CarbonIcon</code> | --                        | Specify the icon from `carbon-icons-svelte` to render |
-| title            | <code>let</code> | No       | <code>string</code>                                   | --                        | Specify the title of the icon                         |
-| iconDescription  | <code>let</code> | No       | <code>string</code>                                   | <code>"Close icon"</code> | Specify the ARIA label for the icon                   |
+| Prop name        | Kind             | Reactive | Type                                                         | Default value             | Description                                           |
+| :--------------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------------- | ----------------------------------------------------- |
+| notificationType | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                         | <code>"toast"</code>      | Set the type of notification                          |
+| renderIcon       | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                        | Specify the icon from `carbon-icons-svelte` to render |
+| title            | <code>let</code> | No       | <code>string</code>                                          | --                        | Specify the title of the icon                         |
+| iconDescription  | <code>let</code> | No       | <code>string</code>                                          | <code>"Close icon"</code> | Specify the ARIA label for the icon                   |
 
 ### Slots
 
@@ -2292,20 +2292,20 @@ None.
 
 ### Props
 
-| Prop name        | Kind             | Reactive | Type                                                  | Default value                                    | Description                                                       |
-| :--------------- | :--------------- | :------- | :---------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
-| menuRef          | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>             | <code>null</code>                                | Obtain a reference to the overflow menu element                   |
-| buttonRef        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>            | <code>null</code>                                | Obtain a reference to the trigger button element                  |
-| open             | <code>let</code> | Yes      | <code>boolean</code>                                  | <code>false</code>                               | Set to `true` to open the menu                                    |
-| size             | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                         | --                                               | Specify the size of the overflow menu                             |
-| direction        | <code>let</code> | No       | <code>"top" &#124; "bottom"</code>                    | <code>"bottom"</code>                            | Specify the direction of the overflow menu relative to the button |
-| light            | <code>let</code> | No       | <code>boolean</code>                                  | <code>false</code>                               | Set to `true` to enable the light variant                         |
-| flipped          | <code>let</code> | No       | <code>boolean</code>                                  | <code>false</code>                               | Set to `true` to flip the menu relative to the button             |
-| menuOptionsClass | <code>let</code> | No       | <code>string</code>                                   | --                                               | Specify the menu options class                                    |
-| icon             | <code>let</code> | No       | <code>import("carbon-icons-svelte").CarbonIcon</code> | --                                               | Specify the icon from `carbon-icons-svelte` to render             |
-| iconClass        | <code>let</code> | No       | <code>string</code>                                   | --                                               | Specify the icon class                                            |
-| iconDescription  | <code>let</code> | No       | <code>string</code>                                   | <code>"Open and close list of options"</code>    | Specify the ARIA label for the icon                               |
-| id               | <code>let</code> | No       | <code>string</code>                                   | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                  |
+| Prop name        | Kind             | Reactive | Type                                                         | Default value                                    | Description                                                       |
+| :--------------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
+| menuRef          | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>                    | <code>null</code>                                | Obtain a reference to the overflow menu element                   |
+| buttonRef        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                   | <code>null</code>                                | Obtain a reference to the trigger button element                  |
+| open             | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to open the menu                                    |
+| size             | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                                | --                                               | Specify the size of the overflow menu                             |
+| direction        | <code>let</code> | No       | <code>"top" &#124; "bottom"</code>                           | <code>"bottom"</code>                            | Specify the direction of the overflow menu relative to the button |
+| light            | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the light variant                         |
+| flipped          | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to flip the menu relative to the button             |
+| menuOptionsClass | <code>let</code> | No       | <code>string</code>                                          | --                                               | Specify the menu options class                                    |
+| icon             | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                                               | Specify the icon from `carbon-icons-svelte` to render             |
+| iconClass        | <code>let</code> | No       | <code>string</code>                                          | --                                               | Specify the icon class                                            |
+| iconDescription  | <code>let</code> | No       | <code>string</code>                                          | <code>"Open and close list of options"</code>    | Specify the ARIA label for the icon                               |
+| id               | <code>let</code> | No       | <code>string</code>                                          | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                  |
 
 ### Slots
 
@@ -4069,7 +4069,7 @@ None.
 | open            | <code>let</code> | Yes      | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to open the tooltip                                                                                                 |
 | direction       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the button                                                                           |
 | hideIcon        | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to hide the tooltip icon                                                                                            |
-| icon            | <code>let</code> | No       | <code>import("carbon-icons-svelte").CarbonIcon</code>           | --                                               | Specify the icon from `carbon-icons-svelte` to render for the tooltip button<br />Icon size must be 16px (e.g. `Add16`, `Task16`) |
+| icon            | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>    | --                                               | Specify the icon from `carbon-icons-svelte` to render for the tooltip button<br />Icon size must be 16px (e.g. `Add16`, `Task16`) |
 | iconDescription | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the ARIA label for the tooltip button                                                                                     |
 | iconName        | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the icon name attribute                                                                                                   |
 | tabindex        | <code>let</code> | No       | <code>string</code>                                             | <code>"0"</code>                                 | Set the button tabindex                                                                                                           |

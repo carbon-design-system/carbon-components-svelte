@@ -28,6 +28,7 @@
 
   metatags.title = $page.title;
 
+  // TODO: `find` is not supported in IE
   $: api_components = components.map((i) =>
     COMPONENT_API.components.find((_) => _.moduleName === i)
   );
