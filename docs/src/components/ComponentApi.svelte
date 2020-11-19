@@ -138,7 +138,7 @@
             <StructuredListCell>
               {#if prop.description}
                 {#each prop.description.split('\n') as line}
-                  <div class="description">{line}.</div>
+                  <div class="description">{@html line.replace(/`(.*?)`/g, '<code>$1</code>')}.</div>
                 {/each}
               {:else}
                 <div class="description">No description available.</div>
