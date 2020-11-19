@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
 
-export interface TagProps {
+export interface TagProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]>,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
   /**
    * Specify the type of tag
    */

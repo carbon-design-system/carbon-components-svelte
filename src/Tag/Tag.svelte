@@ -1,32 +1,24 @@
 <script>
   /**
+   * @restProps {div | span}
+   */
+
+  /**
    * Specify the type of tag
    * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast"} [type]
    */
   export let type = undefined;
 
-  /**
-   * Set to `true` to use filterable variant
-   * @type {boolean}
-   */
+  /** Set to `true` to use filterable variant */
   export let filter = false;
 
-  /**
-   * Set to `true` to disable a filterable tag
-   * @type {boolean}
-   */
+  /** Set to `true` to disable a filterable tag */
   export let disabled = false;
 
-  /**
-   * Set to `true` to display the skeleton state
-   * @type {boolean}
-   */
+  /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
-  /**
-   * Set the title for the close button in a filterable tag
-   * @type {string}
-   */
+  /** Set the title for the close button in a filterable tag */
   export let title = "Clear filter";
 
   /** Set an id for the filterable tag */

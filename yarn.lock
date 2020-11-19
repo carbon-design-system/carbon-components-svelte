@@ -2728,10 +2728,10 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-sveld@^0.1.0-rc.5:
-  version "0.1.0-rc.5"
-  resolved "https://registry.npmjs.org/sveld/-/sveld-0.1.0-rc.5.tgz#32d35b3d2b9f2aaed28202da0e5f5adf69b6f181"
-  integrity sha512-TJY0mYN8vUPiPL8GGNn//IS6WicUF+MEbKCNzM6oXojIp6RSyBnJyJQsjIGFmfs6x5GIac+Sz8CjIFgQ40BfJQ==
+sveld@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/sveld/-/sveld-0.1.0.tgz#8cf208f21ba4f6af24462fcb48f279778bac7a67"
+  integrity sha512-JGUVJ6/GTmOeAnh3F+A+l0utszL8qDKQJ7wsTMupqA+vzqF4y+Bq8Khlt3MVBdgYmEClXIlzSLiMQ8g232h6Wg==
   dependencies:
     "@rollup/plugin-node-resolve" "^10.0.0"
     comment-parser "^0.7.6"
