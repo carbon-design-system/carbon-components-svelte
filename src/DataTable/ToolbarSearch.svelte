@@ -1,5 +1,8 @@
 <script>
-  /** Specify the value of the search input */
+  /**
+   * Specify the value of the search input
+   * @type {number | string}
+   */
   export let value = "";
 
   /** Set to `true` to expand the search bar */

@@ -1,6 +1,7 @@
 /// <reference types="svelte" />
+import { CopyProps } from "../Copy/Copy";
 
-export interface CopyButtonProps {
+export interface CopyButtonProps extends CopyProps {
   /**
    * Set the title and ARIA label for the copy button
    * @default "Copy to clipboard"

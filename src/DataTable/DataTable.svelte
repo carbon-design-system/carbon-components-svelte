@@ -1,30 +1,36 @@
 <script>
   /**
-   * @typedef {{ key: string; value: string; display?: (item) => string; sort?: (a, b) => number; empty?: boolean; columnMenu?: boolean; }} Header
-   * @typedef {Header[]} Headers
-   * @slot {{ row: Object; }} expanded-row
-   * @slot {{ header: Header}} cell-header
-   * @slot {{ row: Object; cell: Object; }} cell
-   * @event {{ header?: Header; row?: Object; cell?: Object; }} click
+   * @typedef {string} Key
+   * @typedef {any} Value
+   * @typedef {{ key: Key; empty: boolean; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }} EmptyHeader
+   * @typedef {{ key: Key; value: Value; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }} NonEmptyHeader
+   * @typedef {NonEmptyHeader | EmptyHeader} DataTableHeader
+   * @typedef {Record<Key, Value>} Row
+   * @typedef {string} RowId
+   * @typedef {{ key: Key; value: Value; }} Cell
+   * @slot {{ row: Row; }} expanded-row
+   * @slot {{ header: NonEmptyHeader; }} cell-header
+   * @slot {{ row: Row; cell: Cell; }} cell
+   * @event {{ header?: DataTableHeader; row?: Row; cell?: Cell; }} click
    * @event {{ expanded: boolean; }} click:header--expand
-   * @event {{ header: Header; sortDirection: "ascending" | "descending" | "none" }} click:header
-   * @event {Object} click:row
-   * @event {Object} mouseenter:row
-   * @event {Object} mouseleave:row
-   * @event {{ expanded: boolean; row: Object; }} click:row--expand
-   * @event {Object} click:cell
+   * @event {{ header: DataTableHeader; sortDirection: "ascending" | "descending" | "none" }} click:header
+   * @event {Row} click:row
+   * @event {Row} mouseenter:row
+   * @event {Row} mouseleave:row
+   * @event {{ expanded: boolean; row: Row; }} click:row--expand
+   * @event {Cell} click:cell
    */
 
   /**
    * Specify the data table headers
-   * @type {Headers}
+   * @type {DataTableHeader[]}
    */
   export let headers = [];
 
   /**
    * Specify the rows the data table should render
    * keys defined in `headers` are used for the row ids
-   * @type {Object[]}
+   * @type {Row[]}
    */
   export let rows = [];
 
@@ -59,7 +65,7 @@
 
   /**
    * Specify the row ids to be expanded
-   * @type {string[]}
+   * @type {RowId[]}
    */
   export let expandedRowIds = [];
 
@@ -77,7 +83,7 @@
 
   /**
    * Specify the row ids to be selected
-   * @type {string[]}
+   * @type {RowId[]}
    */
   export let selectedRowIds = [];
 

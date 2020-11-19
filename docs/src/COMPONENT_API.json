@@ -178,7 +178,11 @@
         }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "AccordionSkeleton" }
+      "rest_props": { "type": "InlineComponent", "name": "AccordionSkeleton" },
+      "extends": {
+        "interface": "AccordionSkeletonProps",
+        "import": "\"./AccordionSkeleton\""
+      }
     },
     {
       "moduleName": "AccordionItem",
@@ -349,7 +353,11 @@
         }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "BreadcrumbSkeleton" }
+      "rest_props": { "type": "InlineComponent", "name": "BreadcrumbSkeleton" },
+      "extends": {
+        "interface": "BreadcrumbSkeletonProps",
+        "import": "\"./BreadcrumbSkeleton\""
+      }
     },
     {
       "moduleName": "Link",
@@ -646,7 +654,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props?: { role: \"button\"; type?: string; tabindex: string; disabled: boolean; href?: string; class: string; [key: string]: any; } }"
+          "slot_props": "{ props: { role: \"button\"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }"
         }
       ],
       "events": [
@@ -668,7 +676,11 @@
         }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "ButtonSkeleton" }
+      "rest_props": { "type": "Element", "name": "button | a | div" },
+      "extends": {
+        "interface": "ButtonSkeletonProps",
+        "import": "\"./ButtonSkeleton\""
+      }
     },
     {
       "moduleName": "ButtonSet",
@@ -1031,7 +1043,8 @@
         { "type": "forwarded", "name": "animationend", "element": "Copy" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "Copy" }
+      "rest_props": { "type": "InlineComponent", "name": "Copy" },
+      "extends": { "interface": "CopyProps", "import": "\"../Copy/Copy\"" }
     },
     {
       "moduleName": "ListBox",
@@ -1654,7 +1667,7 @@
           "name": "selectorPrimaryFocus",
           "kind": "let",
           "description": "Specify a selector to be focused when opening the modal",
-          "type": "string",
+          "type": "null | string",
           "value": "\"[data-modal-primary-focus]\"",
           "isFunction": false,
           "constant": false,
@@ -2411,7 +2424,7 @@
           "name": "headers",
           "kind": "let",
           "description": "Specify the data table headers",
-          "type": "Headers",
+          "type": "DataTableHeader[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -2421,7 +2434,7 @@
           "name": "rows",
           "kind": "let",
           "description": "Specify the rows the data table should render\nkeys defined in `headers` are used for the row ids",
-          "type": "Object[]",
+          "type": "Row[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -2500,7 +2513,7 @@
           "name": "expandedRowIds",
           "kind": "let",
           "description": "Specify the row ids to be expanded",
-          "type": "string[]",
+          "type": "RowId[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -2540,7 +2553,7 @@
           "name": "selectedRowIds",
           "kind": "let",
           "description": "Specify the row ids to be selected",
-          "type": "string[]",
+          "type": "RowId[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -2563,25 +2576,25 @@
           "name": "cell",
           "default": false,
           "fallback": "{headers[j].display ? headers[j].display(cell.value) : cell.value}",
-          "slot_props": "{ row: Object; cell: Object; }"
+          "slot_props": "{ row: Row; cell: Cell; }"
         },
         {
           "name": "cell-header",
           "default": false,
           "fallback": "{header.value}",
-          "slot_props": "{ header: Header}"
+          "slot_props": "{ header: NonEmptyHeader; }"
         },
         {
           "name": "expanded-row",
           "default": false,
-          "slot_props": "{ row: Object; }"
+          "slot_props": "{ row: Row; }"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "click",
-          "detail": "{ header?: Header; row?: Object; cell?: Object; }"
+          "detail": "{ header?: DataTableHeader; row?: Row; cell?: Cell; }"
         },
         {
           "type": "dispatched",
@@ -2591,28 +2604,46 @@
         {
           "type": "dispatched",
           "name": "click:header",
-          "detail": "{ header: Header; sortDirection: \"ascending\" | \"descending\" | \"none\" }"
+          "detail": "{ header: DataTableHeader; sortDirection: \"ascending\" | \"descending\" | \"none\" }"
         },
-        { "type": "dispatched", "name": "click:row", "detail": "Object" },
-        { "type": "dispatched", "name": "mouseenter:row", "detail": "Object" },
-        { "type": "dispatched", "name": "mouseleave:row", "detail": "Object" },
+        { "type": "dispatched", "name": "click:row", "detail": "Row" },
+        { "type": "dispatched", "name": "mouseenter:row", "detail": "Row" },
+        { "type": "dispatched", "name": "mouseleave:row", "detail": "Row" },
         {
           "type": "dispatched",
           "name": "click:row--expand",
-          "detail": "{ expanded: boolean; row: Object; }"
+          "detail": "{ expanded: boolean; row: Row; }"
         },
-        { "type": "dispatched", "name": "click:cell", "detail": "Object" }
+        { "type": "dispatched", "name": "click:cell", "detail": "Cell" }
       ],
       "typedefs": [
+        { "type": "string", "name": "Key", "ts": "type Key = string" },
+        { "type": "any", "name": "Value", "ts": "type Value = any" },
         {
-          "type": "{ key: string; value: string; display?: (item) => string; sort?: (a, b) => number; empty?: boolean; columnMenu?: boolean; }",
-          "name": "Header",
-          "ts": "interface Header { key: string; value: string; display?: (item) => string; sort?: (a, b) => number; empty?: boolean; columnMenu?: boolean; }"
+          "type": "{ key: Key; empty: boolean; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }",
+          "name": "EmptyHeader",
+          "ts": "interface EmptyHeader { key: Key; empty: boolean; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }"
         },
         {
-          "type": "Header[]",
-          "name": "Headers",
-          "ts": "type Headers = Header[]"
+          "type": "{ key: Key; value: Value; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }",
+          "name": "NonEmptyHeader",
+          "ts": "interface NonEmptyHeader { key: Key; value: Value; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }"
+        },
+        {
+          "type": "NonEmptyHeader | EmptyHeader",
+          "name": "DataTableHeader",
+          "ts": "type DataTableHeader = NonEmptyHeader | EmptyHeader"
+        },
+        {
+          "type": "Record<Key, Value>",
+          "name": "Row",
+          "ts": "type Row = Record<Key, Value>"
+        },
+        { "type": "string", "name": "RowId", "ts": "type RowId = string" },
+        {
+          "type": "{ key: Key; value: Value; }",
+          "name": "Cell",
+          "ts": "interface Cell { key: Key; value: Value; }"
         }
       ],
       "rest_props": { "type": "InlineComponent", "name": "TableContainer" }
@@ -2858,7 +2889,7 @@
           "name": "value",
           "kind": "let",
           "description": "Specify the value of the search input",
-          "type": "string",
+          "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
           "constant": false,
@@ -3193,7 +3224,11 @@
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "OverflowMenu" }
+      "rest_props": { "type": "InlineComponent", "name": "OverflowMenu" },
+      "extends": {
+        "interface": "OverflowMenuProps",
+        "import": "\"../OverflowMenu/OverflowMenu\""
+      }
     },
     {
       "moduleName": "ToolbarMenuItem",
@@ -3209,7 +3244,11 @@
         }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "OverflowMenuItem" }
+      "rest_props": { "type": "InlineComponent", "name": "OverflowMenuItem" },
+      "extends": {
+        "interface": "OverflowMenuItemProps",
+        "import": "\"../OverflowMenu/OverflowMenuItem\""
+      }
     },
     {
       "moduleName": "DataTableSkeleton",
@@ -3313,7 +3352,7 @@
           "name": "value",
           "kind": "let",
           "description": "Specify the date picker input value",
-          "type": "string",
+          "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
           "constant": false,
@@ -4600,11 +4639,12 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props?: { class: string; } }"
+          "slot_props": "{ props: { class: string; [key: string]: any; } }"
         }
       ],
       "events": [],
-      "typedefs": []
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Row",
@@ -4675,11 +4715,12 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props?: { class: string; [key: string]: any; } }"
+          "slot_props": "{ props: { class: string; [key: string]: any; } }"
         }
       ],
       "events": [],
-      "typedefs": []
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Column",
@@ -4784,7 +4825,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props?: { class: string; } }"
+          "slot_props": "{props: { class: string; [key: string]: any; }}"
         }
       ],
       "events": [],
@@ -4804,7 +4845,8 @@
           "name": "ColumnBreakpoint",
           "ts": "type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor"
         }
-      ]
+      ],
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "IconSkeleton",
@@ -4838,7 +4880,7 @@
         {
           "name": "render",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render\nIcon size must be 16px (e.g. `Add16`, `Task16`)",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
           "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
@@ -4867,7 +4909,11 @@
         { "type": "forwarded", "name": "mouseleave", "element": "IconSkeleton" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "IconSkeleton" }
+      "rest_props": { "type": "Element", "name": "svg" },
+      "extends": {
+        "interface": "IconSkeletonProps",
+        "import": "\"./IconSkeleton\""
+      }
     },
     {
       "moduleName": "InlineLoading",
@@ -5084,7 +5130,7 @@
           "name": "sortItem",
           "kind": "let",
           "description": "Override the sorting logic\nThe default sorting compare the item text value",
-          "type": "(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem",
+          "type": "((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)",
           "value": "(a, b) =>     a.text.localeCompare(b.text, locale, { numeric: true })",
           "isFunction": true,
           "constant": false,
@@ -5823,7 +5869,7 @@
           "name": "value",
           "kind": "let",
           "description": "Specify the input value",
-          "type": "string",
+          "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
           "constant": false,
@@ -6110,6 +6156,7 @@
           "name": "selected",
           "kind": "let",
           "description": "Specify the selected item value",
+          "type": "string",
           "isFunction": false,
           "constant": false,
           "reactive": true
@@ -7832,7 +7879,7 @@
           "name": "value",
           "kind": "let",
           "description": "Specify the input value",
-          "type": "string",
+          "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
           "constant": false,
@@ -8055,7 +8102,7 @@
           "name": "value",
           "kind": "let",
           "description": "Specify the input value",
-          "type": "string",
+          "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
           "constant": false,
@@ -8064,8 +8111,8 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Specify the input type",
-          "type": "string",
+          "description": "Set to `\"text\"` to toggle the password visibility",
+          "type": "\"text\" | \"password\"",
           "value": "\"password\"",
           "isFunction": false,
           "constant": false,
@@ -8820,7 +8867,7 @@
           "name": "value",
           "kind": "let",
           "description": "Specify the select value",
-          "type": "string",
+          "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
           "constant": false,

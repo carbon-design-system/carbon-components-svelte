@@ -10,7 +10,7 @@ export interface TextInputProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
    * Specify the input value
    * @default ""
    */
-  value?: string;
+  value?: number | string;
 
   /**
    * Specify the input type

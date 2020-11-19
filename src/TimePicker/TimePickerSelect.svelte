@@ -1,5 +1,8 @@
 <script>
-  /** Specify the select value */
+  /**
+   * Specify the select value
+   * @type {number | string}
+   */
   export let value = "";
 
   /** Set to `true` to disable the select */

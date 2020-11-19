@@ -17,7 +17,10 @@
   /** Specify a class for the inner modal */
   export let containerClass = "";
 
-  /** Specify a selector to be focused when opening the modal */
+  /**
+   * Specify a selector to be focused when opening the modal
+   * @type {null | string}
+   */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
   /** Obtain a reference to the top-level HTML element */
@@ -51,8 +54,8 @@
   });
 
   function focus(element) {
-    if(selectorPrimaryFocus == null) {
-      return
+    if (selectorPrimaryFocus == null) {
+      return;
     }
     const node =
       (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;

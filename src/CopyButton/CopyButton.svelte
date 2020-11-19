@@ -1,4 +1,6 @@
 <script>
+  /** @extends {"../Copy/Copy"} CopyProps */
+
   /** Set the title and ARIA label for the copy button */
   export let iconDescription = "Copy to clipboard";
 

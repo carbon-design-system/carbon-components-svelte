@@ -1,4 +1,6 @@
 <script>
+  /** @extends {"../OverflowMenu/OverflowMenuItem"} OverflowMenuItemProps */
+
   import { OverflowMenuItem } from "../OverflowMenu";
 </script>
 

@@ -1,4 +1,6 @@
 <script>
+  /** @extends {"../OverflowMenu/OverflowMenu"} OverflowMenuProps */
+
   import { getContext } from "svelte";
   import Settings16 from "carbon-icons-svelte/lib/Settings16";
   import { OverflowMenu } from "../OverflowMenu";

@@ -99,7 +99,7 @@ export interface MultiSelectProps extends svelte.JSX.HTMLAttributes<HTMLElementT
    * The default sorting compare the item text value
    * @default (a, b) => a.text.localeCompare(b.text, locale, { numeric: true })
    */
-  sortItem?: (a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem;
+  sortItem?: ((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void);
 
   /**
    * Override the default translation ids

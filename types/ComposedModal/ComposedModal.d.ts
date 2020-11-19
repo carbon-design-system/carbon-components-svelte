@@ -34,7 +34,7 @@ export interface ComposedModalProps extends svelte.JSX.HTMLAttributes<HTMLElemen
    * Specify a selector to be focused when opening the modal
    * @default "[data-modal-primary-focus]"
    */
-  selectorPrimaryFocus?: string;
+  selectorPrimaryFocus?: null | string;
 
   /**
    * Obtain a reference to the top-level HTML element

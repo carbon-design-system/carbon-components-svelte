@@ -11,7 +11,7 @@ export interface DatePickerProps extends svelte.JSX.HTMLAttributes<HTMLElementTa
    * Specify the date picker input value
    * @default ""
    */
-  value?: string;
+  value?: number | string;
 
   /**
    * Specify the element to append the calendar to

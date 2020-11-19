@@ -1,4 +1,6 @@
 <script>
+  /** @extends {"./AccordionSkeleton"} AccordionSkeletonProps */
+
   /**
    * Specify alignment of accordion item chevron icon
    * @type {"start" | "end"}

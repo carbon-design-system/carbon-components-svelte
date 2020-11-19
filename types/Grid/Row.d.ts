@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-export interface RowProps {
+export interface RowProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g. <Row let:props><section {...props}>...</section></Row>)
@@ -42,7 +42,7 @@ export interface RowProps {
 export default class Row {
   $$prop_def: RowProps;
   $$slot_def: {
-    default: { props?: { class: string; [key: string]: any } };
+    default: { props: { class: string; [key: string]: any } };
   };
 
   $on(eventname: string, cb: (event: Event) => void): () => void;

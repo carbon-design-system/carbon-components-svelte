@@ -3,6 +3,8 @@
    * @typedef {boolean | number} ColumnSize
    * @typedef {{span?: ColumnSize; offset: number;}} ColumnSizeDescriptor
    * @typedef {ColumnSize | ColumnSizeDescriptor} ColumnBreakpoint
+   * @restProps {div}
+   * @slot {{props: { class: string; [key: string]: any; }}}
    */
 
   /**

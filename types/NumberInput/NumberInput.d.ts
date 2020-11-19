@@ -12,7 +12,7 @@ export interface NumberInputProps extends svelte.JSX.HTMLAttributes<HTMLElementT
    * Specify the input value
    * @default ""
    */
-  value?: string;
+  value?: number | string;
 
   /**
    * Specify the step increment

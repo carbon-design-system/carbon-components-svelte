@@ -5,7 +5,7 @@ export interface ToolbarSearchProps {
    * Specify the value of the search input
    * @default ""
    */
-  value?: string;
+  value?: number | string;
 
   /**
    * Set to `true` to expand the search bar

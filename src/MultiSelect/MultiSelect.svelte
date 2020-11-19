@@ -67,7 +67,7 @@
   /**
    * Override the sorting logic
    * The default sorting compare the item text value
-   * @type {(a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem}
+   * @type {((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)}
    */
   export let sortItem = (a, b) =>
     a.text.localeCompare(b.text, locale, { numeric: true });

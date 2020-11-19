@@ -5,7 +5,10 @@
    */
   export let size = undefined;
 
-  /** Specify the input value */
+  /**
+   * Specify the input value
+   * @type {number | string}
+   */
   export let value = "";
 
   /** Specify the input type */

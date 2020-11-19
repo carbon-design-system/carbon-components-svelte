@@ -1,6 +1,7 @@
 /// <reference types="svelte" />
+import { BreadcrumbSkeletonProps } from "./BreadcrumbSkeleton";
 
-export interface BreadcrumbProps {
+export interface BreadcrumbProps extends BreadcrumbSkeletonProps {
   /**
    * Set to `true` to hide the breadcrumb trailing slash
    * @default false

@@ -10,13 +10,13 @@ export interface PasswordInputProps extends svelte.JSX.HTMLAttributes<HTMLElemen
    * Specify the input value
    * @default ""
    */
-  value?: string;
+  value?: number | string;
 
   /**
-   * Specify the input type
+   * Set to `"text"` to toggle the password visibility
    * @default "password"
    */
-  type?: string;
+  type?: "text" | "password";
 
   /**
    * Specify the placeholder text

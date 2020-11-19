@@ -1,6 +1,7 @@
 <script>
   /**
-   * @slot {{ props?: { class: string; } }}
+   * @restProps {div}
+   * @slot {{ props: { class: string; [key: string]: any; } }}
    */
 
   /**

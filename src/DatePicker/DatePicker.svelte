@@ -9,7 +9,10 @@
    */
   export let datePickerType = "simple";
 
-  /** Specify the date picker input value */
+  /**
+   * Specify the date picker input value
+   * @type {number | string}
+   */
   export let value = "";
 
   /**

@@ -5,7 +5,7 @@ export interface TimePickerSelectProps extends svelte.JSX.HTMLAttributes<HTMLEle
    * Specify the select value
    * @default ""
    */
-  value?: string;
+  value?: number | string;
 
   /**
    * Set to `true` to disable the select

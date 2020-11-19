@@ -1,6 +1,11 @@
 /// <reference types="svelte" />
+import { ButtonSkeletonProps } from "./ButtonSkeleton";
 
-export interface ButtonProps {
+export interface ButtonProps
+  extends ButtonSkeletonProps,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]>,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]>,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the kind of button
    * @default "primary"
@@ -87,10 +92,10 @@ export default class Button {
   $$prop_def: ButtonProps;
   $$slot_def: {
     default: {
-      props?: {
+      props: {
         role: "button";
         type?: string;
-        tabindex: string;
+        tabindex: any;
         disabled: boolean;
         href?: string;
         class: string;

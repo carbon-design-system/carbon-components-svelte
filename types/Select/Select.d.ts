@@ -4,7 +4,7 @@ export interface SelectProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNam
   /**
    * Specify the selected item value
    */
-  selected?: undefined;
+  selected?: string;
 
   /**
    * Set the size of the select input

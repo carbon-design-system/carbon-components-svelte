@@ -1,6 +1,8 @@
 <script>
   /**
-   * @slot {{ props?: { role: "button"; type?: string; tabindex: string; disabled: boolean; href?: string; class: string; [key: string]: any; } }}
+   * @extends {"./ButtonSkeleton"} ButtonSkeletonProps
+   * @restProps {button | a | div}
+   * @slot {{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }}
    */
 
   /**

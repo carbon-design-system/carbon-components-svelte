@@ -1,9 +1,9 @@
 /// <reference types="svelte" />
+import { IconSkeletonProps } from "./IconSkeleton";
 
-export interface IconProps {
+export interface IconProps extends IconSkeletonProps, svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["svg"]> {
   /**
    * Specify the icon from `carbon-icons-svelte` to render
-   * Icon size must be 16px (e.g. `Add16`, `Task16`)
    */
   render?: typeof import("carbon-icons-svelte").CarbonIcon;
 

@@ -1,6 +1,7 @@
 /// <reference types="svelte" />
+import { OverflowMenuProps } from "../OverflowMenu/OverflowMenu";
 
-export interface ToolbarMenuProps {}
+export interface ToolbarMenuProps extends OverflowMenuProps {}
 
 export default class ToolbarMenu {
   $$prop_def: ToolbarMenuProps;

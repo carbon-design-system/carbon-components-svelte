@@ -1,6 +1,7 @@
 /// <reference types="svelte" />
+import { AccordionSkeletonProps } from "./AccordionSkeleton";
 
-export interface AccordionProps {
+export interface AccordionProps extends AccordionSkeletonProps {
   /**
    * Specify alignment of accordion item chevron icon
    * @default "end"

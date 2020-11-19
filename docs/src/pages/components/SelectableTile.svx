@@ -1,9 +1,9 @@
 ---
-components: ["TileGroup", "SelectableTile"]
+components: ["SelectableTile"]
 ---
 
 <script>
-  import { TileGroup, SelectableTile } from "carbon-components-svelte";
+  import { SelectableTile } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 

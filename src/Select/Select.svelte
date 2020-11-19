@@ -1,5 +1,8 @@
 <script>
-  /** Specify the selected item value */
+  /**
+   * Specify the selected item value
+   * @type {string}
+   */
   export let selected = undefined;
 
   /**
