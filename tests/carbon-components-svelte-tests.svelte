@@ -3,7 +3,7 @@
   import { Tag } from "../types";
 
   // example of a direct import
-  import TagSkeleton from "../types/Tag/Tag.Skeleton";
+  import TagSkeleton from "../types/Tag/TagSkeleton";
 </script>
 
 <!-- the "class", "style" attributes should not cause an error -->

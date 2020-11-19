@@ -88,6 +88,5 @@ export default class Tooltip {
     triggerText: {};
   };
 
-  $on(eventname: "undefined", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

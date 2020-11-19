@@ -3405,8 +3405,7 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "change" },
-        { "type": "dispatched" }
+        { "type": "dispatched", "name": "change" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -7631,7 +7630,7 @@
         { "type": "forwarded", "name": "mouseleave", "element": "TagSkeleton" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "TagSkeleton" }
+      "rest_props": { "type": "Element", "name": "div | span" }
     },
     {
       "moduleName": "TextArea",
@@ -8515,8 +8514,7 @@
         { "type": "forwarded", "name": "mouseover", "element": "label" },
         { "type": "forwarded", "name": "mouseenter", "element": "label" },
         { "type": "forwarded", "name": "mouseleave", "element": "label" },
-        { "type": "forwarded", "name": "keydown", "element": "label" },
-        { "type": "dispatched" }
+        { "type": "forwarded", "name": "keydown", "element": "label" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "label" }
@@ -9302,7 +9300,7 @@
           "slot_props": "{}"
         }
       ],
-      "events": [{ "type": "dispatched" }],
+      "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
@@ -9596,8 +9594,7 @@
       ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "button" },
-        { "type": "dispatched", "name": "close" },
-        { "type": "dispatched" }
+        { "type": "dispatched", "name": "close" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "button" }

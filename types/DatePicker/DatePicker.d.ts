@@ -72,6 +72,5 @@ export default class DatePicker {
   $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
   $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
   $on(eventname: "change", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "undefined", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

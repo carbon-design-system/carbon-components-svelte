@@ -34,6 +34,5 @@ export default class HeaderAction {
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
   $on(eventname: "close", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "undefined", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

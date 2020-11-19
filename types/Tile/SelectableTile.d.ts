@@ -67,6 +67,5 @@ export default class SelectableTile {
   $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
   $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
   $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "undefined", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

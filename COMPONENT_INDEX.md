@@ -870,7 +870,6 @@ None.
 | mouseenter | forwarded  | --     |
 | mouseleave | forwarded  | --     |
 | change     | dispatched | --     |
-| undefined  | dispatched | --     |
 
 ## `DatePickerInput`
 
@@ -1396,7 +1395,6 @@ None.
 | :--------- | :--------- | :----- |
 | click      | forwarded  | --     |
 | close      | dispatched | --     |
-| undefined  | dispatched | --     |
 
 ## `HeaderActionLink`
 
@@ -2861,14 +2859,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| undefined  | dispatched | --     |
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| click      | forwarded | --     |
+| mouseover  | forwarded | --     |
+| mouseenter | forwarded | --     |
+| mouseleave | forwarded | --     |
+| keydown    | forwarded | --     |
 
 ## `SideNav`
 
@@ -4090,9 +4087,7 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| undefined  | dispatched | --     |
+None.
 
 ## `TooltipDefinition`
 
