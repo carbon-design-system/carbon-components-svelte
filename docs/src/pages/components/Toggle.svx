@@ -23,6 +23,14 @@ components: ["Toggle", "ToggleSkeleton"]
 
 <Toggle labelText="Push notifications" disabled />
 
+### Small size
+
+<Toggle size="sm" labelText="Push notifications" />
+
 ### Skeleton
 
 <ToggleSkeleton />
+
+### Skeleton (small)
+
+<ToggleSkeleton size="sm" />

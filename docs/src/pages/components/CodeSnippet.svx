@@ -27,7 +27,7 @@ let comment = `
 `
 </script>
 
-<InlineNotification svx-ignore lowContrast title="Note:" subtitle="By design, the copy button does not copy text to the clipboard. You will need to write your own logic." kind="info" hideCloseButton />
+<InlineNotification svx-ignore title="Note:" subtitle="By design, the copy button does not copy text to the clipboard. You will need to write your own logic." kind="info" hideCloseButton />
 
 ### Default (single-line)
 

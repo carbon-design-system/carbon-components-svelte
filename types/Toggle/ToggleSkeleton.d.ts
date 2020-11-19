@@ -2,6 +2,12 @@
 
 export interface ToggleSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
+   * Specify the toggle size
+   * @default "default"
+   */
+  size?: "default" | "sm";
+
+  /**
    * Specify the label text
    * @default ""
    */

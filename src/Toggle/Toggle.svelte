@@ -1,4 +1,10 @@
 <script>
+  /**
+   * Specify the toggle size
+   * @type {"default" | "sm"}
+   */
+  export let size = "default";
+
   /** Set to `true` to toggle the checkbox input */
   export let toggled = false;
 
@@ -35,6 +41,7 @@
   <input
     type="checkbox"
     class:bx--toggle-input="{true}"
+    class:bx--toggle-input--small="{size === 'sm'}"
     checked="{toggled}"
     on:change
     on:change="{() => {
