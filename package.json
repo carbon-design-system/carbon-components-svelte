@@ -2,6 +2,7 @@
   "name": "carbon-components-svelte",
   "version": "0.22.0",
   "license": "Apache-2.0",
+  "author": "IBM",
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "./src/index.js",
   "main": "./lib/index.js",
@@ -76,19 +77,5 @@
     "src",
     "types",
     "css"
-  ],
-  "contributors": [
-    {
-      "name": "Eric Liu",
-      "email": "eric.young.liu@ibm.com"
-    },
-    {
-      "name": "Josef Aidt",
-      "email": "josef.aidt@gmail.com"
-    },
-    {
-      "name": "Adan Ulloa",
-      "email": "adanug@mx1.ibm.com"
-    }
   ]
 }

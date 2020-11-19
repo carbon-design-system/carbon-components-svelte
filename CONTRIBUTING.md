@@ -83,8 +83,8 @@ Each component should adopt the following structure:
 src/Component
 │
 └───Component.svelte // main component
-└───Component.Skeleton.svelte // Skeleton component (if any)
-└───index.js // export components (e.g. `Component.svelte`, `Component.Skeleton.svelte`)
+└───ComponentSkeleton.svelte // Skeleton component (if applicable)
+└───index.js // export components
 ```
 
 ### Editing a component
@@ -93,10 +93,10 @@ If adding or editing an exported component prop, be sure to annotate its value u
 
 ```js
 /**
- * Set to `true` to disable the tab
- * @type {boolean} [disabled=false]
+ * Specify the size of the component
+ * @type {"sm" | "default" | "lg"}
  */
-export let disabled = false;
+export let size = "default";
 ```
 
 ### Creating a component
