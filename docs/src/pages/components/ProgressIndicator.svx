@@ -95,4 +95,10 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
 
 ### Skeleton
 
-<ProgressIndicatorSkeleton count={3} />
+Use the `count` prop to specify the number of progress steps to render.
+
+<ProgressIndicatorSkeleton />
+
+### Skeleton (vertical)
+
+<ProgressIndicatorSkeleton vertical />
