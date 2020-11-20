@@ -8,7 +8,7 @@
   /** Set to `true` to specify whether the progress steps should be split equally in size in the div */
   export let spaceEqually = false;
 
-  /** Set to `true` to prevent updating `currentIndex` */
+  /** Set to `true` to prevent `currentIndex` from updating */
   export let preventChangeOnClick = false;
 
   import { createEventDispatcher, setContext } from "svelte";
@@ -24,28 +24,40 @@
     steps,
     stepsById,
     add: (step) => {
-      steps.update((_) => [
-        ..._,
-        {
-          ...step,
-          index: _.length,
-          current: _.length === currentIndex,
-          complete: _.length <= currentIndex,
-        },
-      ]);
+      steps.update((_) => {
+        if (step.id in $stepsById) {
+          return _.map((_step) => {
+            if (_step.id === step.id) return { ..._step, ...step };
+            return _step;
+          });
+        }
+
+        return [
+          ..._,
+          {
+            ...step,
+            index: _.length,
+            current: _.length === currentIndex,
+            complete: step.complete,
+          },
+        ];
+      });
     },
     change: (index) => {
       if (preventChangeOnClick) return;
       currentIndex = index;
-      steps.update((_) =>
-        [..._].map((step, i) => ({
-          ...step,
-          current: i === index,
-        }))
-      );
+
+      /** @event {number} change */
       dispatch("change", index);
     },
   });
+
+  $: steps.update((_) =>
+    _.map((step, i) => ({
+      ...step,
+      current: i === currentIndex,
+    }))
+  );
 </script>
 
 <ul

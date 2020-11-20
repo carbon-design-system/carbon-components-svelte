@@ -23,19 +23,29 @@
   /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  import { getContext } from "svelte";
+  import { onMount, getContext } from "svelte";
   import CheckmarkOutline16 from "carbon-icons-svelte/lib/CheckmarkOutline16";
   import Warning16 from "carbon-icons-svelte/lib/Warning16";
 
+  let step = {};
+
   const { stepsById, add, change } = getContext("ProgressIndicator");
 
-  add({ id, disabled });
+  $: add({ id, complete, disabled });
 
-  $: step = $stepsById[id];
-  $: {
-    current = step.current;
-    complete = step.complete;
-  }
+  const unsubscribe = stepsById.subscribe((value) => {
+    if (value[id]) {
+      step = value[id];
+      current = step.current;
+      complete = step.complete;
+    }
+  });
+
+  onMount(() => {
+    return () => {
+      unsubscribe();
+    };
+  });
 </script>
 
 <li
