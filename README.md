@@ -1,8 +1,8 @@
 # carbon-components-svelte
 
-> `carbon-components-svelte` is a Svelte component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
+carbon-components-svelte is a Svelte component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
 
-> A design system can facilitate frontend development and prototyping because it encourages reuse, consistency, and extensibility.
+A design system can facilitate frontend development and prototyping because it encourages reuse, consistency, and extensibility.
 
 [![NPM][npm]][npm-url]
 [![Build][build]][build-badge]
@@ -16,7 +16,7 @@
 
 Install `carbon-components-svelte` as a development dependency.
 
-```bash
+```sh
 yarn add -D carbon-components-svelte
 # OR
 npm i -D carbon-components-svelte

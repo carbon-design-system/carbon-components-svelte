@@ -92,6 +92,13 @@
           <StructuredListRow>
             <StructuredListCell noWrap>
               <InlineSnippet code="{prop.name}" />
+              {#if prop.reactive}
+                <div
+                  style="white-space: nowrap; margin-top: var(--cds-spacing-03)"
+                >
+                  <Tag type="cyan">Reactive</Tag>
+                </div>
+              {/if}
             </StructuredListCell>
             <StructuredListCell>
               {#each prop.type.split(' | ') as type, i (type)}
@@ -125,14 +132,6 @@
                   {/if}
                 </div>
               {/each}
-
-              {#if prop.reactive}
-                <div
-                  style="white-space: nowrap; margin-left: calc(-1 * var(--cds-spacing-03)); margin-top: var(--cds-spacing-05)"
-                >
-                  <Tag type="green">Reactive</Tag>
-                </div>
-              {/if}
             </StructuredListCell>
             <StructuredListCell><code>{prop.value}</code></StructuredListCell>
             <StructuredListCell>
