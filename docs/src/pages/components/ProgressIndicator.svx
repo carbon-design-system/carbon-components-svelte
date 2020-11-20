@@ -53,6 +53,12 @@ Set `preventChangeOnClick` to `true` to prevent this behavior.
   />
 </ProgressIndicator>
 
+### Programmatic usage
+
+When programmatically updating the `currentIndex`, keep in mind that only completed steps should be selectable.
+
+<FileSource src="/framed/ProgressIndicator/ProgrammaticProgressIndicator" />
+
 ### Spaced-equally
 
 <ProgressIndicator spaceEqually>
@@ -89,4 +95,10 @@ Set `preventChangeOnClick` to `true` to prevent this behavior.
 
 ### Skeleton
 
-<ProgressIndicatorSkeleton count={3} />
+Use the `count` prop to specify the number of progress steps to render.
+
+<ProgressIndicatorSkeleton />
+
+### Skeleton (vertical)
+
+<ProgressIndicatorSkeleton vertical />

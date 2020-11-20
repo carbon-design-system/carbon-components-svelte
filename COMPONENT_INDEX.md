@@ -2503,7 +2503,7 @@ None.
 | currentIndex         | <code>let</code> | Yes      | <code>number</code>  | <code>0</code>     | Specify the current step index                                                                 |
 | vertical             | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the vertical variant                                                      |
 | spaceEqually         | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to specify whether the progress steps should be split equally in size in the div |
-| preventChangeOnClick | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to prevent updating `currentIndex`                                               |
+| preventChangeOnClick | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to prevent `currentIndex` from updating                                          |
 
 ### Slots
 
@@ -2513,13 +2513,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| change     | dispatched | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| change     | dispatched | <code>number</code> |
+| click      | forwarded  | --                  |
+| mouseover  | forwarded  | --                  |
+| mouseenter | forwarded  | --                  |
+| mouseleave | forwarded  | --                  |
 
 ## `ProgressIndicatorSkeleton`
 
