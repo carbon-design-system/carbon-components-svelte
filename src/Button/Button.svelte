@@ -135,14 +135,12 @@
         <span class:bx--assistive-text="{true}">{iconDescription}</span>
       {/if}
       <slot />
-      {#if icon}
-        <svelte:component
-          this="{icon}"
-          aria-hidden="true"
-          class="bx--btn__icon"
-          aria-label="{iconDescription}"
-        />
-      {/if}
+      <svelte:component
+        this="{icon}"
+        aria-hidden="true"
+        class="bx--btn__icon"
+        aria-label="{iconDescription}"
+      />
     </a>
   {:else}
     <button
@@ -157,14 +155,12 @@
         <span class:bx--assistive-text="{true}">{iconDescription}</span>
       {/if}
       <slot />
-      {#if icon}
-        <svelte:component
-          this="{icon}"
-          aria-hidden="true"
-          class="bx--btn__icon"
-          aria-label="{iconDescription}"
-        />
-      {/if}
+      <svelte:component
+        this="{icon}"
+        aria-hidden="true"
+        class="bx--btn__icon"
+        aria-label="{iconDescription}"
+      />
     </button>
   {/if}
 {/if}
