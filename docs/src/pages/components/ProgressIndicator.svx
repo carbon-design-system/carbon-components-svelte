@@ -53,6 +53,12 @@ Set `preventChangeOnClick` to `true` to prevent this behavior.
   />
 </ProgressIndicator>
 
+### Programmatic usage
+
+When programmatically updating the `currentIndex`, keep in mind that only completed steps should be selectable.
+
+<FileSource src="/framed/ProgressIndicator/ProgrammaticProgressIndicator" />
+
 ### Spaced-equally
 
 <ProgressIndicator spaceEqually>

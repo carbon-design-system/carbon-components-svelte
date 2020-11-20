@@ -6,7 +6,7 @@
   } from "carbon-components-svelte";
 
   let currentIndex = 1;
-  let thirdStepComplete = false;
+  let thirdStepCurrent = false;
 </script>
 
 <ProgressIndicator bind:currentIndex>
@@ -21,7 +21,8 @@
     description="The progress indicator will listen for clicks on the steps"
   />
   <ProgressStep
-    complete="{thirdStepComplete}"
+    complete
+    bind:current="{thirdStepCurrent}"
     label="Step 3"
     description="The progress indicator will listen for clicks on the steps"
   />
@@ -33,20 +34,16 @@
 
 <div style="margin: var(--cds-layout-02) 0">
   <Button
+    kind="{currentIndex === 2 ? 'secondary' : 'primary'}"
     on:click="{() => {
-      currentIndex = 2;
+      currentIndex = currentIndex === 2 ? 0 : 2;
     }}"
   >
-    Set index to 2
-  </Button>
-  <Button
-    kind="ghost"
-    on:click="{() => {
-      thirdStepComplete = !thirdStepComplete;
-    }}"
-  >
-    Toggle step 3
+    Set currentIndex to
+    {currentIndex === 2 ? 0 : 2}
   </Button>
 </div>
 
 <h3>Current index: {currentIndex}</h3>
+
+<div>Is the third step currently selected? {thirdStepCurrent}</div>
