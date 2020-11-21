@@ -34,7 +34,9 @@ To select (or bind) items, pass an array of item ids to `selectedIds`.
     {id: "2", text: "Fax"}]}" 
   />
 
+### Multiple multi-select dropdowns
 
+<FileSource src="/framed/MultiSelect/MultipleMultiSelect" />
 
 ### Format item display text
 
