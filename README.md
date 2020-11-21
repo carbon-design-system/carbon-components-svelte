@@ -1,16 +1,15 @@
 # carbon-components-svelte
 
+[![NPM][npm]][npm-url]
+[![Build][build]][build-badge]
+
 carbon-components-svelte is a Svelte component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
 
 A design system can facilitate frontend development and prototyping because it encourages reuse, consistency, and extensibility.
 
-[![NPM][npm]][npm-url]
-[![Build][build]][build-badge]
-<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank">
-<img height="32px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" />
-</a>
-
 ## [Documentation](http://ibm.biz/carbon-svelte)
+
+<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="30px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
 
 ## Getting started
 
@@ -133,7 +132,7 @@ Refer to the [Contributing guidelines](CONTRIBUTING.md).
 
 [Apache 2.0](LICENSE)
 
-[npm]: https://img.shields.io/npm/v/carbon-components-svelte.svg?color=blue
+[npm]: https://img.shields.io/npm/v/carbon-components-svelte.svg?color=%230f62fe
 [npm-url]: https://npmjs.com/package/carbon-components-svelte
-[build]: https://travis-ci.com/ibm/carbon-components-svelte.svg?branch=master
+[build]: https://travis-ci.com/ibm/carbon-components-svelte.svg?branch=master&color=%230f62fe
 [build-badge]: https://travis-ci.com/ibm/carbon-components-svelte
