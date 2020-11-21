@@ -45,7 +45,7 @@
       e.stopPropagation();
     }
   }}"
-  on:click|preventDefault|stopPropagation
+  on:click|preventDefault
 >
   <slot />
 </div>

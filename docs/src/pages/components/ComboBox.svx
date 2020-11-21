@@ -22,6 +22,10 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+### Multiple combo boxes
+
+<FileSource src="/framed/ComboBox/MultipleComboBox" />
+
 ### Filterable
 
 <FileSource src="/framed/ComboBox/FilterableComboBox" />
