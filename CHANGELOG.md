@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.23.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.23.0) - 2020-11-20
+
+**Features**
+
+- Persist UI Shell Header hamburger menu if `persistentHamburgerMenu` is `true` ([PR #396](https://github.com/IBM/carbon-components-svelte/pull/396), [issue #374](https://github.com/IBM/carbon-components-svelte/issues/374), [rendered example](https://carbon-svelte.vercel.app/framed/UIShell/PersistedHamburgerMenu))
+- Disable auto focus in ComposedModal if `selectorPrimaryFocus` is `null` ([PR #393](https://github.com/IBM/carbon-components-svelte/pull/393))
+- Use small size Toggle variant if `size` is `"sm"`; deprecate ToggleSmall which will be removed in the next major release ([PR #401](https://github.com/IBM/carbon-components-svelte/pull/401))
+
+**Fixes**
+
+- Fix `currentIndex` reactivity in ProgressIndicator so that it can be programmatically updated ([PR #404](https://github.com/IBM/carbon-components-svelte/pull/404), [issue #399](https://github.com/IBM/carbon-components-svelte/issues/399))
+
+**Refactoring**
+
+- Rewrite TypeScript definitions with better type signatures for slots, dispatched events; fix IntrinsicAttributes errors ([PR #385](https://github.com/IBM/carbon-components-svelte/pull/385), [issue #304](https://github.com/IBM/carbon-components-svelte/issues/304))
+- Remove useless if statement that wraps `svelte:component` in Button; by design, `svelte:component` will not render falsy values ([PR #402](https://github.com/IBM/carbon-components-svelte/pull/402))
+
+**Documentation**
+
+- Update auto-generated Component API documentation with output from [sveld](https://github.com/IBM/sveld)
+- Label reactive component props and list them first
+- Replace back ticks in Component API prop descriptions with a `code` tag ([PR #392](https://github.com/IBM/carbon-components-svelte/pull/392), [issue #390](https://github.com/IBM/carbon-components-svelte/issues/390))
+- Simplify date sort method in ["Sortable with custom display and sort methods"](https://carbon-svelte.vercel.app/components/DataTable#sortable-with-custom-display-and-sort-methods) DataTable example ([PR #382](https://github.com/IBM/carbon-components-svelte/pull/382))
+- Add [programmatic ProgressIndicator](https://carbon-svelte.vercel.app/components/ProgressIndicator#programmatic-usage) example
+- Add [vertical ProgressIndicatorSkeleton](https://carbon-svelte.vercel.app/components/ProgressIndicator#skeleton-vertical) example
+- Add deprecation warning to the ToggleSmall component
+
+**Housekeeping**
+
+- Upgrade `carbon-icons-svelte` from version ^10.17 to ^10.21
+
+**Breaking Changes**
+
+- Internal component TypeScript interfaces are no longer exported to avoid polluting library exports
+
 ## [0.22.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.22.0) - 2020-10-30
 
 **Features**
