@@ -1,0 +1,13 @@
+---
+layout: recipe
+---
+
+<script>
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+## Expandable accordion
+
+This example expands and collapses all accordion items.
+
+<FileSource src="/framed/Accordion/ExpandableAccordion" />
