@@ -5,4 +5,4 @@
   import copy from "clipboard-copy";
 </script>
 
-<CodeSnippet on:click="{() => copy(code)}">{code}</CodeSnippet>
+<CodeSnippet on:click="{() => copy(code)}" code="{code}" />

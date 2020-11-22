@@ -1,5 +1,5 @@
 ---
-components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter", "Checkbox"]
+components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter"]
 ---
 
 <script>
