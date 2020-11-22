@@ -40,7 +40,7 @@
       }
     },
     update: (value) => {
-      selectedValue.set(value);
+      selected = value;
     },
   });
 
