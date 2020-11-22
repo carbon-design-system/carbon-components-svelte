@@ -26,7 +26,7 @@
    */
   export let id = undefined;
 
-  import { createEventDispatcher, setContext } from "svelte";
+  import { beforeUpdate, createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
@@ -44,7 +44,17 @@
     },
   });
 
-  $: selected = $selectedValue;
+  onMount(() => {
+    $selectedValue = selected
+  })
+
+  beforeUpdate(() => {
+    $selectedValue = selected
+  })
+
+  $: $selectedValue, (() => {
+    selected = $selectedValue
+  })
   $: dispatch("change", $selectedValue);
 </script>
 
