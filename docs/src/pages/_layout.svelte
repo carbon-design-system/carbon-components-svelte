@@ -35,6 +35,13 @@
 </script>
 
 <style global>
+  .body-short-01 {
+    font-size: var(--cds-body-short-01-font-size);
+    font-weight: var(--cds-body-short-01-font-weight);
+    letter-spacing: var(--cds-body-short-01-letter-spacing);
+    line-height: var(--cds-body-short-01-line-height);
+  }
+
   .bx--col > h1 {
     font-size: var(--cds-display-01-font-size);
     font-weight: var(--cds-display-01-font-weight);

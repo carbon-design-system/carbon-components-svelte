@@ -1,5 +1,5 @@
 <script>
-  import { CodeSnippet, InlineNotification } from "carbon-components-svelte";
+  import { CodeSnippet, InlineNotification, Link } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 
   let code = `// helpers.js
@@ -27,7 +27,9 @@ let comment = `
 `
 </script>
 
-<InlineNotification svx-ignore title="Note:" subtitle="By design, the copy button does not copy text to the clipboard. You will need to write your own logic." kind="info" hideCloseButton />
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">By design, the copy button does not copy text to the clipboard. You will need to write your own logic. Refer to the <Link href="/recipes/CopyableCodeSnippet">CopyableCodeSnippet recipe</Link> for an example.</div>
+</InlineNotification>
 
 ### Default (single-line)
 

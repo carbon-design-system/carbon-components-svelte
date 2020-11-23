@@ -6,10 +6,12 @@ layout: recipe
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The [CodeSnippet](/components/CodeSnippet) and [CopyButton](/components/CopyButton) do not include logic to copy the supplied `code` text.
+The [CodeSnippet](/components/CodeSnippet) and [CopyButton](/components/CopyButton) components do not include logic to copy the supplied `code` text.
+
+You can use a third party open source module like [clipboard-copy](https://www.npmjs.com/package/clipboard-copy) that is compatible with modern web browsers.
 
 ## clipboard-copy
 
-This example uses [clipboard-copy](https://www.npmjs.com/package/clipboard-copy), a lightweight module designed for the web.
+This documentation website uses [clipboard-copy](https://www.npmjs.com/package/clipboard-copy).
 
 <FileSource src="/framed/CopyableCodeSnippet/CopyableCodeSnippet" />

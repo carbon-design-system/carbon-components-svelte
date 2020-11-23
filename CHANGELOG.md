@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.23.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.23.1) - 2020-11-22
+
+**Fixes**
+
+- Fix `selected` prop reactivity in RadioButtonGroup so that it can be programmatically updated ([PR #407](https://github.com/IBM/carbon-components-svelte/pull/407), [issue #406](https://github.com/IBM/carbon-components-svelte/issues/406))
+- Allow click propagation in ListBox so that list box menus can close correctly; this fixes behavior in the ComboBox, Dropdown, and MultiSelect components ([PR #405](https://github.com/IBM/carbon-components-svelte/pull/405), [issue #388](https://github.com/IBM/carbon-components-svelte/issues/388))
+
+**Documentation**
+
+- Add [programmatic RadioButton example](https://carbon-svelte.vercel.app/components/RadioButton#programmatic-usage)
+- Add [multiple ComboBox example](https://carbon-svelte.vercel.app/components/ComboBox#multiple-combo-boxes)
+- Add [multiple Dropdown example](https://carbon-svelte.vercel.app/components/Dropdown#multiple-dropdowns)
+- Add [multiple MultiSelect example](https://carbon-svelte.vercel.app/components/MultiSelect#multiple-multi-select-dropdowns)
+- Add [ExpandableAccordion recipe](https://carbon-svelte.vercel.app/recipes/ExpandableAccordion#expandable-accordion)
+
 ## [0.23.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.23.0) - 2020-11-20
 
 **Features**

@@ -17,6 +17,12 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
   </RadioButtonGroup>
 </FormGroup>
 
+### Programmatic usage
+
+Bind the selected value using the `selected` prop.
+
+<FileSource src="/framed/RadioButton/ProgrammaticRadioButton" />
+
 ### Label text aligned left
 
 <FormGroup legendText="Storage tier (disk)">

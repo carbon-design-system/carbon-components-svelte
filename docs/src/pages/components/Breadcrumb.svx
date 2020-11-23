@@ -10,7 +10,7 @@ components: ["Breadcrumb", "BreadcrumbItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-See the [Breadcrumbs recipe](/recipes/Breadcrumbs) for building a reusable breadcrumbs component.
+See the [Breadcrumbs recipe](/recipes/Breadcrumbs) for a reusable breadcrumbs component.
 
 ### Default
 

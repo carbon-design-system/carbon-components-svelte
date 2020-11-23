@@ -10,6 +10,8 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+See the [ExpandableAccordion recipe](/recipes/ExpandableAccordion) for a toggleable accordion component.
+
 ### Default
 
 <Accordion>
