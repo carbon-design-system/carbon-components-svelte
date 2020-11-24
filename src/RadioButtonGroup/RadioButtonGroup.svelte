@@ -52,10 +52,10 @@
     $selectedValue = selected
   })
 
-  $: $selectedValue, (() => {
-    selected = $selectedValue
+  selectedValue.subscribe(value => {
+    selected = value
+    dispatch("change", value);
   })
-  $: dispatch("change", $selectedValue);
 </script>
 
 <div
