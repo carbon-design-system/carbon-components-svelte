@@ -1,13 +1,13 @@
 /// <reference types="svelte" />
 
-type ColumnSize = boolean | number;
+export type ColumnSize = boolean | number;
 
-interface ColumnSizeDescriptor {
+export interface ColumnSizeDescriptor {
   span?: ColumnSize;
   offset: number;
 }
 
-type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
+export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 
 export interface ColumnProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**

@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
 
-type DropdownItemId = string;
+export type DropdownItemId = string;
 
-type DropdownItemText = string;
+export type DropdownItemText = string;
 
-interface DropdownItem {
+export interface DropdownItem {
   id: DropdownItemId;
   text: DropdownItemText;
 }

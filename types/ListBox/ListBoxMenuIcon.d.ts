@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-type ListBoxMenuIconTranslationId = "close" | "open";
+export type ListBoxMenuIconTranslationId = "close" | "open";
 
 export interface ListBoxMenuIconProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**

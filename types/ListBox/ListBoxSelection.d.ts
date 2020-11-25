@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
+export type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 
 export interface ListBoxSelectionProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**

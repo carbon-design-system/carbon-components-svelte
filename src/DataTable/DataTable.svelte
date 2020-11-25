@@ -1,24 +1,24 @@
 <script>
   /**
-   * @typedef {string} Key
-   * @typedef {any} Value
-   * @typedef {{ key: Key; empty: boolean; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }} EmptyHeader
-   * @typedef {{ key: Key; value: Value; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }} NonEmptyHeader
-   * @typedef {NonEmptyHeader | EmptyHeader} DataTableHeader
-   * @typedef {Record<Key, Value>} Row
-   * @typedef {string} RowId
-   * @typedef {{ key: Key; value: Value; }} Cell
-   * @slot {{ row: Row; }} expanded-row
-   * @slot {{ header: NonEmptyHeader; }} cell-header
-   * @slot {{ row: Row; cell: Cell; }} cell
-   * @event {{ header?: DataTableHeader; row?: Row; cell?: Cell; }} click
+   * @typedef {string} DataTableKey
+   * @typedef {any} DataTableValue
+   * @typedef {{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }} DataTableEmptyHeader
+   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }} DataTableNonEmptyHeader
+   * @typedef {DataTableNonEmptyHeader | DataTableEmptyHeader} DataTableHeader
+   * @typedef {Record<DataTableKey, DataTableValue>} DataTableRow
+   * @typedef {string} DataTableRowId
+   * @typedef {{ key: DataTableKey; value: DataTableValue; }} DataTableCell
+   * @slot {{ row: DataTableRow; }} expanded-row
+   * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
+   * @slot {{ row: DataTableRow; cell: DataTableCell; }} cell
+   * @event {{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }} click
    * @event {{ expanded: boolean; }} click:header--expand
    * @event {{ header: DataTableHeader; sortDirection: "ascending" | "descending" | "none" }} click:header
-   * @event {Row} click:row
-   * @event {Row} mouseenter:row
-   * @event {Row} mouseleave:row
-   * @event {{ expanded: boolean; row: Row; }} click:row--expand
-   * @event {Cell} click:cell
+   * @event {DataTableRow} click:row
+   * @event {DataTableRow} mouseenter:row
+   * @event {DataTableRow} mouseleave:row
+   * @event {{ expanded: boolean; row: DataTableRow; }} click:row--expand
+   * @event {DataTableCell} click:cell
    */
 
   /**
@@ -30,7 +30,7 @@
   /**
    * Specify the rows the data table should render
    * keys defined in `headers` are used for the row ids
-   * @type {Row[]}
+   * @type {DataTableRow[]}
    */
   export let rows = [];
 
@@ -65,7 +65,7 @@
 
   /**
    * Specify the row ids to be expanded
-   * @type {RowId[]}
+   * @type {DataTableRowId[]}
    */
   export let expandedRowIds = [];
 
@@ -83,7 +83,7 @@
 
   /**
    * Specify the row ids to be selected
-   * @type {RowId[]}
+   * @type {DataTableRowId[]}
    */
   export let selectedRowIds = [];
 

@@ -26,7 +26,12 @@
    */
   export let id = undefined;
 
-  import { beforeUpdate, createEventDispatcher, onMount, setContext } from "svelte";
+  import {
+    beforeUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+  } from "svelte";
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
@@ -45,17 +50,17 @@
   });
 
   onMount(() => {
-    $selectedValue = selected
-  })
+    $selectedValue = selected;
+  });
 
   beforeUpdate(() => {
-    $selectedValue = selected
-  })
+    $selectedValue = selected;
+  });
 
-  selectedValue.subscribe(value => {
-    selected = value
+  selectedValue.subscribe((value) => {
+    selected = value;
     dispatch("change", value);
-  })
+  });
 </script>
 
 <div

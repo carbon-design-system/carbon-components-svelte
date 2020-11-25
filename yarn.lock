@@ -2105,11 +2105,6 @@ prettier-plugin-svelte@^1.4.1:
   resolved "https://registry.npmjs.org/prettier-plugin-svelte/-/prettier-plugin-svelte-1.4.1.tgz#2f0f7a149190f476dc9b4ba9da8d482bd196f1e2"
   integrity sha512-6y0m37Xw01GRf/WIHau+Kp3uXj2JB1agtEmNVKb9opMy34A6OMOYhfneVpNIlrghQSw/jIV+t3e5Ngt4up2CMA==
 
-prettier@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-2.1.2.tgz#3050700dae2e4c8b67c4c3f666cdb8af405e1ce5"
-  integrity sha512-16c7K+x4qVlJg9rEbXl7HEGmQyZlG4R9AgP+oHKRMsMsuk8s+ATStlf1NpDqyBI1HpVyfjLOeMhH2LvuNvV5Vg==
-
 prettier@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npmjs.org/prettier/-/prettier-2.2.0.tgz#8a03c7777883b29b37fb2c4348c66a78e980418b"
@@ -2733,18 +2728,18 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-sveld@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.npmjs.org/sveld/-/sveld-0.2.1.tgz#3294ba51d18905e260546d6ca088ceda015dcbb2"
-  integrity sha512-NEEXxKaOWt0JBXrxnpG/TNVzCUadW65YEyD3l/49IV9xo7/5Jkrm7At8wGPNFSYGlC6564tmP8NBhFQH/0mzBg==
+sveld@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/sveld/-/sveld-0.3.0.tgz#a1a8c188511a8d5674c72fd8b2987278fae0d062"
+  integrity sha512-aEuxRaeN11P+k0DvQ+32lEzRQNzv+dFO5qRC4wSM0p5MW9i6sxgPmnYV3xy5TSzaYXVmSI9JJRSMDd3C1ayw0w==
   dependencies:
     "@rollup/plugin-node-resolve" "^10.0.0"
     comment-parser "^0.7.6"
     fs-extra "^9.0.1"
-    prettier "^2.1.2"
+    prettier "^2.2.0"
     rollup "^2.33.3"
     rollup-plugin-svelte "^6.1.1"
-    svelte "^3.29.7"
+    svelte "^3.30.0"
 
 svelte-check@^1.1.15:
   version "1.1.15"
@@ -2787,6 +2782,11 @@ svelte@^3.29.7:
   version "3.29.7"
   resolved "https://registry.npmjs.org/svelte/-/svelte-3.29.7.tgz#e254eb2d0d609ce0fd60f052d444ac4a66d90f7d"
   integrity sha512-rx0g311kBODvEWUU01DFBUl3MJuJven04bvTVFUG/w0On/wuj0PajQY/QlXcJndFxG+W1s8iXKaB418tdHWc3A==
+
+svelte@^3.30.0:
+  version "3.30.0"
+  resolved "https://registry.npmjs.org/svelte/-/svelte-3.30.0.tgz#cbde341e96bf34f4ac73c8f14f8a014e03bfb7d6"
+  integrity sha512-z+hdIACb9TROGvJBQWcItMtlr4s0DBUgJss6qWrtFkOoIInkG+iAMo/FJZQFyDBQZc+dul2+TzYSi/tpTT5/Ag==
 
 tar@^2.0.0:
   version "2.2.2"

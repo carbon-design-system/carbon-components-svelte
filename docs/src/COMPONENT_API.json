@@ -2434,7 +2434,7 @@
           "name": "rows",
           "kind": "let",
           "description": "Specify the rows the data table should render\nkeys defined in `headers` are used for the row ids",
-          "type": "Row[]",
+          "type": "DataTableRow[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -2513,7 +2513,7 @@
           "name": "expandedRowIds",
           "kind": "let",
           "description": "Specify the row ids to be expanded",
-          "type": "RowId[]",
+          "type": "DataTableRowId[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -2553,7 +2553,7 @@
           "name": "selectedRowIds",
           "kind": "let",
           "description": "Specify the row ids to be selected",
-          "type": "RowId[]",
+          "type": "DataTableRowId[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -2576,25 +2576,25 @@
           "name": "cell",
           "default": false,
           "fallback": "{headers[j].display ? headers[j].display(cell.value) : cell.value}",
-          "slot_props": "{ row: Row; cell: Cell; }"
+          "slot_props": "{ row: DataTableRow; cell: DataTableCell; }"
         },
         {
           "name": "cell-header",
           "default": false,
           "fallback": "{header.value}",
-          "slot_props": "{ header: NonEmptyHeader; }"
+          "slot_props": "{ header: DataTableNonEmptyHeader; }"
         },
         {
           "name": "expanded-row",
           "default": false,
-          "slot_props": "{ row: Row; }"
+          "slot_props": "{ row: DataTableRow; }"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "click",
-          "detail": "{ header?: DataTableHeader; row?: Row; cell?: Cell; }"
+          "detail": "{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }"
         },
         {
           "type": "dispatched",
@@ -2606,44 +2606,68 @@
           "name": "click:header",
           "detail": "{ header: DataTableHeader; sortDirection: \"ascending\" | \"descending\" | \"none\" }"
         },
-        { "type": "dispatched", "name": "click:row", "detail": "Row" },
-        { "type": "dispatched", "name": "mouseenter:row", "detail": "Row" },
-        { "type": "dispatched", "name": "mouseleave:row", "detail": "Row" },
+        { "type": "dispatched", "name": "click:row", "detail": "DataTableRow" },
+        {
+          "type": "dispatched",
+          "name": "mouseenter:row",
+          "detail": "DataTableRow"
+        },
+        {
+          "type": "dispatched",
+          "name": "mouseleave:row",
+          "detail": "DataTableRow"
+        },
         {
           "type": "dispatched",
           "name": "click:row--expand",
-          "detail": "{ expanded: boolean; row: Row; }"
+          "detail": "{ expanded: boolean; row: DataTableRow; }"
         },
-        { "type": "dispatched", "name": "click:cell", "detail": "Cell" }
+        {
+          "type": "dispatched",
+          "name": "click:cell",
+          "detail": "DataTableCell"
+        }
       ],
       "typedefs": [
-        { "type": "string", "name": "Key", "ts": "type Key = string" },
-        { "type": "any", "name": "Value", "ts": "type Value = any" },
         {
-          "type": "{ key: Key; empty: boolean; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }",
-          "name": "EmptyHeader",
-          "ts": "interface EmptyHeader { key: Key; empty: boolean; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }"
+          "type": "string",
+          "name": "DataTableKey",
+          "ts": "type DataTableKey = string"
         },
         {
-          "type": "{ key: Key; value: Value; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }",
-          "name": "NonEmptyHeader",
-          "ts": "interface NonEmptyHeader { key: Key; value: Value; display?: (item: Value) => Value; sort?: (a: Value, b: Value) => (0 | -1 | 1); columnMenu?: boolean; }"
+          "type": "any",
+          "name": "DataTableValue",
+          "ts": "type DataTableValue = any"
         },
         {
-          "type": "NonEmptyHeader | EmptyHeader",
+          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }",
+          "name": "DataTableEmptyHeader",
+          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }"
+        },
+        {
+          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }",
+          "name": "DataTableNonEmptyHeader",
+          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }"
+        },
+        {
+          "type": "DataTableNonEmptyHeader | DataTableEmptyHeader",
           "name": "DataTableHeader",
-          "ts": "type DataTableHeader = NonEmptyHeader | EmptyHeader"
+          "ts": "type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader"
         },
         {
-          "type": "Record<Key, Value>",
-          "name": "Row",
-          "ts": "type Row = Record<Key, Value>"
+          "type": "Record<DataTableKey, DataTableValue>",
+          "name": "DataTableRow",
+          "ts": "type DataTableRow = Record<DataTableKey, DataTableValue>"
         },
-        { "type": "string", "name": "RowId", "ts": "type RowId = string" },
         {
-          "type": "{ key: Key; value: Value; }",
-          "name": "Cell",
-          "ts": "interface Cell { key: Key; value: Value; }"
+          "type": "string",
+          "name": "DataTableRowId",
+          "ts": "type DataTableRowId = string"
+        },
+        {
+          "type": "{ key: DataTableKey; value: DataTableValue; }",
+          "name": "DataTableCell",
+          "ts": "interface DataTableCell { key: DataTableKey; value: DataTableValue; }"
         }
       ],
       "rest_props": { "type": "InlineComponent", "name": "TableContainer" }
