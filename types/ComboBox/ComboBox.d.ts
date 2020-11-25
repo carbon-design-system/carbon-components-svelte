@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-interface ComboBoxItem {
+export interface ComboBoxItem {
   id: string;
   text: string;
 }

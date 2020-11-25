@@ -548,14 +548,14 @@ None.
 ### Types
 
 ```ts
-type ColumnSize = boolean | number;
+export type ColumnSize = boolean | number;
 
-interface ColumnSizeDescriptor {
+export interface ColumnSizeDescriptor {
   span?: ColumnSize;
   offset: number;
 }
 
-type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
+export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 ```
 
 ### Props
@@ -588,7 +588,7 @@ None.
 ### Types
 
 ```ts
-interface ComboBoxItem {
+export interface ComboBoxItem {
   id: string;
   text: string;
 }
@@ -722,9 +722,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                             |
-| :-------- | :------ | :---- | :----------------------------------------------------------------------------------- |
-| --        | Yes     | --    | <code>{#if animation}{feedback &#124;&#124; \$\$restProps['aria-label']}{/if}</code> |
+| Slot name | Default | Props | Fallback                                                                           |
+| :-------- | :------ | :---- | :--------------------------------------------------------------------------------- |
+| --        | Yes     | --    | <code>{#if animation}{feedback &#124;&#124; $$restProps['aria-label']}{/if}</code> |
 
 ### Events
 
@@ -757,35 +757,35 @@ None.
 ### Types
 
 ```ts
-type Key = string;
+export type DataTableKey = string;
 
-type Value = any;
+export type DataTableValue = any;
 
-interface EmptyHeader {
-  key: Key;
+export interface DataTableEmptyHeader {
+  key: DataTableKey;
   empty: boolean;
-  display?: (item: Value) => Value;
-  sort?: (a: Value, b: Value) => 0 | -1 | 1;
+  display?: (item: Value) => DataTableValue;
+  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
   columnMenu?: boolean;
 }
 
-interface NonEmptyHeader {
-  key: Key;
-  value: Value;
-  display?: (item: Value) => Value;
-  sort?: (a: Value, b: Value) => 0 | -1 | 1;
+export interface DataTableNonEmptyHeader {
+  key: DataTableKey;
+  value: DataTableValue;
+  display?: (item: Value) => DataTableValue;
+  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
   columnMenu?: boolean;
 }
 
-type DataTableHeader = NonEmptyHeader | EmptyHeader;
+export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;
 
-type Row = Record<Key, Value>;
+export type DataTableRow = Record<DataTableKey, DataTableValue>;
 
-type RowId = string;
+export type DataTableRowId = string;
 
-interface Cell {
-  key: Key;
-  value: Value;
+export interface DataTableCell {
+  key: DataTableKey;
+  value: DataTableValue;
 }
 ```
 
@@ -793,11 +793,11 @@ interface Cell {
 
 | Prop name      | Kind             | Reactive | Type                                                | Default value      | Description                                                                                                         |
 | :------------- | :--------------- | :------- | :-------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| selectedRowIds | <code>let</code> | Yes      | <code>RowId[]</code>                                | <code>[]</code>    | Specify the row ids to be selected                                                                                  |
+| selectedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                       | <code>[]</code>    | Specify the row ids to be selected                                                                                  |
 | selectable     | <code>let</code> | Yes      | <code>boolean</code>                                | <code>false</code> | Set to `true` for the selectable variant<br />Automatically set to `true` if `radio` or `batchSelection` are `true` |
-| expandedRowIds | <code>let</code> | Yes      | <code>RowId[]</code>                                | <code>[]</code>    | Specify the row ids to be expanded                                                                                  |
+| expandedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                       | <code>[]</code>    | Specify the row ids to be expanded                                                                                  |
 | expandable     | <code>let</code> | Yes      | <code>boolean</code>                                | <code>false</code> | Set to `true` for the expandable variant<br />Automatically set to `true` if `batchExpansion` is `true`             |
-| rows           | <code>let</code> | Yes      | <code>Row[]</code>                                  | <code>[]</code>    | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
+| rows           | <code>let</code> | Yes      | <code>DataTableRow[]</code>                         | <code>[]</code>    | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
 | headers        | <code>let</code> | No       | <code>DataTableHeader[]</code>                      | <code>[]</code>    | Specify the data table headers                                                                                      |
 | size           | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code> | --                 | Set the size of the data table                                                                                      |
 | title          | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>    | Specify the title of the data table                                                                                 |
@@ -811,25 +811,25 @@ interface Cell {
 
 ### Slots
 
-| Slot name    | Default | Props                                     | Fallback                                                                        |
-| :----------- | :------ | :---------------------------------------- | :------------------------------------------------------------------------------ |
-| --           | Yes     | --                                        | --                                                                              |
-| cell         | No      | <code>{ row: Row; cell: Cell; } </code>   | <code>{headers[j].display ? headers[j].display(cell.value) : cell.value}</code> |
-| cell-header  | No      | <code>{ header: NonEmptyHeader; } </code> | <code>{header.value}</code>                                                     |
-| expanded-row | No      | <code>{ row: Row; } </code>               | --                                                                              |
+| Slot name    | Default | Props                                                     | Fallback                                                                        |
+| :----------- | :------ | :-------------------------------------------------------- | :------------------------------------------------------------------------------ |
+| --           | Yes     | --                                                        | --                                                                              |
+| cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; } </code> | <code>{headers[j].display ? headers[j].display(cell.value) : cell.value}</code> |
+| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>        | <code>{header.value}</code>                                                     |
+| expanded-row | No      | <code>{ row: DataTableRow; } </code>                      | --                                                                              |
 
 ### Events
 
 | Event name           | Type       | Detail                                                                                                 |
 | :------------------- | :--------- | :----------------------------------------------------------------------------------------------------- |
-| click                | dispatched | <code>{ header?: DataTableHeader; row?: Row; cell?: Cell; }</code>                                     |
+| click                | dispatched | <code>{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }</code>                   |
 | click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                    |
 | click:header         | dispatched | <code>{ header: DataTableHeader; sortDirection: "ascending" &#124; "descending" &#124; "none" }</code> |
-| click:row            | dispatched | <code>Row</code>                                                                                       |
-| mouseenter:row       | dispatched | <code>Row</code>                                                                                       |
-| mouseleave:row       | dispatched | <code>Row</code>                                                                                       |
-| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                          |
-| click:cell           | dispatched | <code>Cell</code>                                                                                      |
+| click:row            | dispatched | <code>DataTableRow</code>                                                                              |
+| mouseenter:row       | dispatched | <code>DataTableRow</code>                                                                              |
+| mouseleave:row       | dispatched | <code>DataTableRow</code>                                                                              |
+| click:row--expand    | dispatched | <code>{ expanded: boolean; row: DataTableRow; }</code>                                                 |
+| click:cell           | dispatched | <code>DataTableCell</code>                                                                             |
 
 ## `DataTableSkeleton`
 
@@ -950,11 +950,11 @@ None.
 ### Types
 
 ```ts
-type DropdownItemId = string;
+export type DropdownItemId = string;
 
-type DropdownItemText = string;
+export type DropdownItemText = string;
 
-interface DropdownItem {
+export interface DropdownItem {
   id: DropdownItemId;
   text: DropdownItemText;
 }
@@ -1052,7 +1052,7 @@ None.
 ### Types
 
 ```ts
-type Files = string[];
+export type Files = string[];
 ```
 
 ### Props
@@ -1093,7 +1093,7 @@ None.
 ### Types
 
 ```ts
-type Files = string[];
+export type Files = string[];
 ```
 
 ### Props
@@ -1129,7 +1129,7 @@ None.
 ### Types
 
 ```ts
-type Files = string[];
+export type Files = string[];
 ```
 
 ### Props
@@ -1783,7 +1783,7 @@ None.
 ### Types
 
 ```ts
-type ListBoxFieldTranslationId = "close" | "open";
+export type ListBoxFieldTranslationId = "close" | "open";
 ```
 
 ### Props
@@ -1841,7 +1841,7 @@ type ListBoxFieldTranslationId = "close" | "open";
 ### Types
 
 ```ts
-type ListBoxMenuIconTranslationId = "close" | "open";
+export type ListBoxMenuIconTranslationId = "close" | "open";
 ```
 
 ### Props
@@ -1890,7 +1890,7 @@ None.
 ### Types
 
 ```ts
-type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
+export type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 ```
 
 ### Props
@@ -2075,11 +2075,11 @@ None.
 ### Types
 
 ```ts
-type MultiSelectItemId = string;
+export type MultiSelectItemId = string;
 
-type MultiSelectItemText = string;
+export type MultiSelectItemText = string;
 
-interface MultiSelectItem {
+export interface MultiSelectItem {
   id: MultiSelectItemId;
   text: MultiSelectItemText;
 }
@@ -2217,7 +2217,7 @@ None.
 ### Types
 
 ```ts
-type NumberInputTranslationId = "increment" | "decrement";
+export type NumberInputTranslationId = "increment" | "decrement";
 ```
 
 ### Props
@@ -2388,12 +2388,12 @@ None.
 | backwardText          | <code>let</code> | No       | <code>string</code>                                              | <code>"Previous page"</code>                                                   | Specify the backward button text                 |
 | itemsPerPageText      | <code>let</code> | No       | <code>string</code>                                              | <code>"Items per page:"</code>                                                 | Specify the items per page text                  |
 | itemText              | <code>let</code> | No       | <code>(min: number, max: number) => string</code>                | <code>(min, max) => \`${min}–${max} items\`</code>                             | Override the item text                           |
-| itemRangeText         | <code>let</code> | No       | <code>(min: number, max: number, total: number) => string</code> | <code>(min, max, total) => \`${min}–${max} of \${total} items\`</code>         | Override the item range text                     |
+| itemRangeText         | <code>let</code> | No       | <code>(min: number, max: number, total: number) => string</code> | <code>(min, max, total) => \`${min}–${max} of ${total} items\`</code>          | Override the item range text                     |
 | pageInputDisabled     | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                             | Set to `true` to disable the page input          |
 | pageSizeInputDisabled | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                             | Set to `true` to disable the page size input     |
 | pageSizes             | <code>let</code> | No       | <code>number[]</code>                                            | <code>[10]</code>                                                              | Specify the available page sizes                 |
 | pagesUnknown          | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                             | Set to `true` if the number of pages is unknown  |
-| pageText              | <code>let</code> | No       | <code>(page: number) => string</code>                            | <code>(page) => \`page \${page}\`</code>                                       | Override the page text                           |
+| pageText              | <code>let</code> | No       | <code>(page: number) => string</code>                            | <code>(page) => \`page ${page}\`</code>                                        | Override the page text                           |
 | pageRangeText         | <code>let</code> | No       | <code>(current: number, total: number) => string</code>          | <code>(current, total) => \`of ${total} page${total === 1 ? "" : "s"}\`</code> | Override the page range text                     |
 | id                    | <code>let</code> | No       | <code>string</code>                                              | <code>"ccs-" + Math.random().toString(36)</code>                               | Set an id for the top-level element              |
 

@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-type NumberInputTranslationId = "increment" | "decrement";
+export type NumberInputTranslationId = "increment" | "decrement";
 
 export interface NumberInputProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**

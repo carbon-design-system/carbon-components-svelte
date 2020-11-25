@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
 
-type MultiSelectItemId = string;
+export type MultiSelectItemId = string;
 
-type MultiSelectItemText = string;
+export type MultiSelectItemText = string;
 
-interface MultiSelectItem {
+export interface MultiSelectItem {
   id: MultiSelectItemId;
   text: MultiSelectItemText;
 }

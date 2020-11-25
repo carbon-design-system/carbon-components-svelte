@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-type ListBoxFieldTranslationId = "close" | "open";
+export type ListBoxFieldTranslationId = "close" | "open";
 
 export interface ListBoxFieldProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**

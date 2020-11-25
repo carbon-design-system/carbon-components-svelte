@@ -1,34 +1,34 @@
 /// <reference types="svelte" />
 
-type Key = string;
+export type DataTableKey = string;
 
-type Value = any;
+export type DataTableValue = any;
 
-interface EmptyHeader {
-  key: Key;
+export interface DataTableEmptyHeader {
+  key: DataTableKey;
   empty: boolean;
-  display?: (item: Value) => Value;
-  sort?: (a: Value, b: Value) => 0 | -1 | 1;
+  display?: (item: Value) => DataTableValue;
+  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
   columnMenu?: boolean;
 }
 
-interface NonEmptyHeader {
-  key: Key;
-  value: Value;
-  display?: (item: Value) => Value;
-  sort?: (a: Value, b: Value) => 0 | -1 | 1;
+export interface DataTableNonEmptyHeader {
+  key: DataTableKey;
+  value: DataTableValue;
+  display?: (item: Value) => DataTableValue;
+  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
   columnMenu?: boolean;
 }
 
-type DataTableHeader = NonEmptyHeader | EmptyHeader;
+export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;
 
-type Row = Record<Key, Value>;
+export type DataTableRow = Record<DataTableKey, DataTableValue>;
 
-type RowId = string;
+export type DataTableRowId = string;
 
-interface Cell {
-  key: Key;
-  value: Value;
+export interface DataTableCell {
+  key: DataTableKey;
+  value: DataTableValue;
 }
 
 export interface DataTableProps {
@@ -43,7 +43,7 @@ export interface DataTableProps {
    * keys defined in `headers` are used for the row ids
    * @default []
    */
-  rows?: Row[];
+  rows?: DataTableRow[];
 
   /**
    * Set the size of the data table
@@ -91,7 +91,7 @@ export interface DataTableProps {
    * Specify the row ids to be expanded
    * @default []
    */
-  expandedRowIds?: RowId[];
+  expandedRowIds?: DataTableRowId[];
 
   /**
    * Set to `true` for the radio selection variant
@@ -116,7 +116,7 @@ export interface DataTableProps {
    * Specify the row ids to be selected
    * @default []
    */
-  selectedRowIds?: RowId[];
+  selectedRowIds?: DataTableRowId[];
 
   /**
    * Set to `true` to enable a sticky header
@@ -129,24 +129,27 @@ export default class DataTable {
   $$prop_def: DataTableProps;
   $$slot_def: {
     default: {};
-    cell: { row: Row; cell: Cell };
-    ["cell-header"]: { header: NonEmptyHeader };
-    ["expanded-row"]: { row: Row };
+    cell: { row: DataTableRow; cell: DataTableCell };
+    ["cell-header"]: { header: DataTableNonEmptyHeader };
+    ["expanded-row"]: { row: DataTableRow };
   };
 
   $on(
     eventname: "click",
-    cb: (event: CustomEvent<{ header?: DataTableHeader; row?: Row; cell?: Cell }>) => void
+    cb: (event: CustomEvent<{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell }>) => void
   ): () => void;
   $on(eventname: "click:header--expand", cb: (event: CustomEvent<{ expanded: boolean }>) => void): () => void;
   $on(
     eventname: "click:header",
     cb: (event: CustomEvent<{ header: DataTableHeader; sortDirection: "ascending" | "descending" | "none" }>) => void
   ): () => void;
-  $on(eventname: "click:row", cb: (event: CustomEvent<Row>) => void): () => void;
-  $on(eventname: "mouseenter:row", cb: (event: CustomEvent<Row>) => void): () => void;
-  $on(eventname: "mouseleave:row", cb: (event: CustomEvent<Row>) => void): () => void;
-  $on(eventname: "click:row--expand", cb: (event: CustomEvent<{ expanded: boolean; row: Row }>) => void): () => void;
-  $on(eventname: "click:cell", cb: (event: CustomEvent<Cell>) => void): () => void;
+  $on(eventname: "click:row", cb: (event: CustomEvent<DataTableRow>) => void): () => void;
+  $on(eventname: "mouseenter:row", cb: (event: CustomEvent<DataTableRow>) => void): () => void;
+  $on(eventname: "mouseleave:row", cb: (event: CustomEvent<DataTableRow>) => void): () => void;
+  $on(
+    eventname: "click:row--expand",
+    cb: (event: CustomEvent<{ expanded: boolean; row: DataTableRow }>) => void
+  ): () => void;
+  $on(eventname: "click:cell", cb: (event: CustomEvent<DataTableCell>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

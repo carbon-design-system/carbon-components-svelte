@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-type Files = string[];
+export type Files = string[];
 
 export interface FileUploaderDropContainerProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
