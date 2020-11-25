@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface TableContainerProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -20,11 +21,4 @@ export interface TableContainerProps extends svelte.JSX.HTMLAttributes<HTMLEleme
   stickyHeader?: boolean;
 }
 
-export default class TableContainer {
-  $$prop_def: TableContainerProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class TableContainer extends SvelteComponent<TableContainerProps, {}, { default: {} }> {}

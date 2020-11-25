@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export type ListBoxFieldTranslationId = "close" | "open";
 
@@ -47,17 +48,15 @@ export interface ListBoxFieldProps extends svelte.JSX.HTMLAttributes<HTMLElement
   ref?: null | HTMLDivElement;
 }
 
-export default class ListBoxField {
-  $$prop_def: ListBoxFieldProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ListBoxField extends SvelteComponent<
+  ListBoxFieldProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    keydown: WindowEventMap["keydown"];
+    blur: WindowEventMap["blur"];
+  },
+  { default: {} }
+> {}

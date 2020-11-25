@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export type ColumnSize = boolean | number;
 
@@ -66,11 +67,8 @@ export interface ColumnProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNam
   max?: ColumnBreakpoint;
 }
 
-export default class Column {
-  $$prop_def: ColumnProps;
-  $$slot_def: {
-    default: { props: { class: string; [key: string]: any } };
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Column extends SvelteComponent<
+  ColumnProps,
+  {},
+  { default: { props: { class: string; [key: string]: any } } }
+> {}

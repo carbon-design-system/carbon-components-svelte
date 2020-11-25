@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface GridProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -45,11 +46,8 @@ export interface GridProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameM
   noGutterRight?: boolean;
 }
 
-export default class Grid {
-  $$prop_def: GridProps;
-  $$slot_def: {
-    default: { props: { class: string; [key: string]: any } };
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Grid extends SvelteComponent<
+  GridProps,
+  {},
+  { default: { props: { class: string; [key: string]: any } } }
+> {}

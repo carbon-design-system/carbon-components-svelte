@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface SelectableTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
   /**
@@ -56,16 +57,14 @@ export interface SelectableTileProps extends svelte.JSX.HTMLAttributes<HTMLEleme
   ref?: null | HTMLInputElement;
 }
 
-export default class SelectableTile {
-  $$prop_def: SelectableTileProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class SelectableTile extends SvelteComponent<
+  SelectableTileProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    keydown: WindowEventMap["keydown"];
+  },
+  { default: {} }
+> {}

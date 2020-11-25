@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface PaginationNavProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
   /**
@@ -38,12 +39,8 @@ export interface PaginationNavProps extends svelte.JSX.HTMLAttributes<HTMLElemen
   backwardText?: string;
 }
 
-export default class PaginationNav {
-  $$prop_def: PaginationNavProps;
-  $$slot_def: {};
-
-  $on(eventname: "click:button--previous", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "click:button--next", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "change", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class PaginationNav extends SvelteComponent<
+  PaginationNavProps,
+  { ["click:button--previous"]: CustomEvent<any>; ["click:button--next"]: CustomEvent<any>; change: CustomEvent<any> },
+  {}
+> {}

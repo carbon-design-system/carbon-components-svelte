@@ -1,12 +1,6 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface HeaderPanelLinksProps {}
 
-export default class HeaderPanelLinks {
-  $$prop_def: HeaderPanelLinksProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class HeaderPanelLinks extends SvelteComponent<HeaderPanelLinksProps, {}, { default: {} }> {}

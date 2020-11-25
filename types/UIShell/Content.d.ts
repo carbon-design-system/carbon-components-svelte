@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ContentProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["main"]> {
   /**
@@ -8,11 +9,4 @@ export interface ContentProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNa
   id?: string;
 }
 
-export default class Content {
-  $$prop_def: ContentProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Content extends SvelteComponent<ContentProps, {}, { default: {} }> {}

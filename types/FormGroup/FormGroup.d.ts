@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface FormGroupProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> {
   /**
@@ -26,15 +27,13 @@ export interface FormGroupProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
   legendText?: string;
 }
 
-export default class FormGroup {
-  $$prop_def: FormGroupProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class FormGroup extends SvelteComponent<
+  FormGroupProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: {} }
+> {}

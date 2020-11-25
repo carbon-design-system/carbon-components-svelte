@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface InlineNotificationProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -56,17 +57,14 @@ export interface InlineNotificationProps extends svelte.JSX.HTMLAttributes<HTMLE
   iconDescription?: string;
 }
 
-export default class InlineNotification {
-  $$prop_def: InlineNotificationProps;
-  $$slot_def: {
-    default: {};
-    actions: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "close", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class InlineNotification extends SvelteComponent<
+  InlineNotificationProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    close: CustomEvent<any>;
+  },
+  { default: {}; actions: {} }
+> {}

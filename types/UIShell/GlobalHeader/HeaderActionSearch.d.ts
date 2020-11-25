@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface HeaderActionSearchProps {
   /**
@@ -8,12 +9,12 @@ export interface HeaderActionSearchProps {
   searchIsActive?: boolean;
 }
 
-export default class HeaderActionSearch {
-  $$prop_def: HeaderActionSearchProps;
-  $$slot_def: {};
-
-  $on(eventname: "inputSearch", cb: (event: CustomEvent<{ action: "search"; textInput: string }>) => void): () => void;
-  $on(eventname: "focusInputSearch", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "focusOutInputSearch", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class HeaderActionSearch extends SvelteComponent<
+  HeaderActionSearchProps,
+  {
+    inputSearch: CustomEvent<{ action: "search"; textInput: string }>;
+    focusInputSearch: CustomEvent<any>;
+    focusOutInputSearch: CustomEvent<any>;
+  },
+  {}
+> {}

@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface DatePickerInputProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -78,12 +79,8 @@ export interface DatePickerInputProps extends svelte.JSX.HTMLAttributes<HTMLElem
   ref?: null | HTMLInputElement;
 }
 
-export default class DatePickerInput {
-  $$prop_def: DatePickerInputProps;
-  $$slot_def: {};
-
-  $on(eventname: "input", cb: (event: WindowEventMap["input"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class DatePickerInput extends SvelteComponent<
+  DatePickerInputProps,
+  { input: WindowEventMap["input"]; keydown: WindowEventMap["keydown"]; blur: WindowEventMap["blur"] },
+  {}
+> {}

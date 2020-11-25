@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface TooltipProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -80,13 +81,4 @@ export interface TooltipProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNa
   refIcon?: null | HTMLDivElement;
 }
 
-export default class Tooltip {
-  $$prop_def: TooltipProps;
-  $$slot_def: {
-    default: {};
-    icon: {};
-    triggerText: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Tooltip extends SvelteComponent<TooltipProps, {}, { default: {}; icon: {}; triggerText: {} }> {}

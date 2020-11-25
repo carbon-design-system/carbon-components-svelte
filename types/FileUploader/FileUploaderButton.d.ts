@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export type Files = string[];
 
@@ -70,12 +71,8 @@ export interface FileUploaderButtonProps extends svelte.JSX.HTMLAttributes<HTMLE
   ref?: null | HTMLInputElement;
 }
 
-export default class FileUploaderButton {
-  $$prop_def: FileUploaderButtonProps;
-  $$slot_def: {};
-
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class FileUploaderButton extends SvelteComponent<
+  FileUploaderButtonProps,
+  { keydown: WindowEventMap["keydown"]; change: WindowEventMap["change"]; click: WindowEventMap["click"] },
+  {}
+> {}

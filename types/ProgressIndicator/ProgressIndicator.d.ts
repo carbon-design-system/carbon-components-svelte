@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ProgressIndicatorProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
   /**
@@ -26,16 +27,14 @@ export interface ProgressIndicatorProps extends svelte.JSX.HTMLAttributes<HTMLEl
   preventChangeOnClick?: boolean;
 }
 
-export default class ProgressIndicator {
-  $$prop_def: ProgressIndicatorProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "change", cb: (event: CustomEvent<number>) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ProgressIndicator extends SvelteComponent<
+  ProgressIndicatorProps,
+  {
+    change: CustomEvent<number>;
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: {} }
+> {}

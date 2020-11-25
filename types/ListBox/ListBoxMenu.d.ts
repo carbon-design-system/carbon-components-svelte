@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ListBoxMenuProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -14,12 +15,8 @@ export interface ListBoxMenuProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   ref?: null | HTMLDivElement;
 }
 
-export default class ListBoxMenu {
-  $$prop_def: ListBoxMenuProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "scroll", cb: (event: WindowEventMap["scroll"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ListBoxMenu extends SvelteComponent<
+  ListBoxMenuProps,
+  { scroll: WindowEventMap["scroll"] },
+  { default: {} }
+> {}

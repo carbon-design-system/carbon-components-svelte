@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ToggleSmallSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -14,13 +15,13 @@ export interface ToggleSmallSkeletonProps extends svelte.JSX.HTMLAttributes<HTML
   id?: string;
 }
 
-export default class ToggleSmallSkeleton {
-  $$prop_def: ToggleSmallSkeletonProps;
-  $$slot_def: {};
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ToggleSmallSkeleton extends SvelteComponent<
+  ToggleSmallSkeletonProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  {}
+> {}

@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface SliderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -104,14 +105,14 @@ export interface SliderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNam
   ref?: null | HTMLDivElement;
 }
 
-export default class Slider {
-  $$prop_def: SliderProps;
-  $$slot_def: {};
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "change", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Slider extends SvelteComponent<
+  SliderProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    change: CustomEvent<any>;
+  },
+  {}
+> {}

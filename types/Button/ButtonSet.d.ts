@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ButtonSetProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -8,11 +9,4 @@ export interface ButtonSetProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
   stacked?: boolean;
 }
 
-export default class ButtonSet {
-  $$prop_def: ButtonSetProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ButtonSet extends SvelteComponent<ButtonSetProps, {}, { default: {} }> {}

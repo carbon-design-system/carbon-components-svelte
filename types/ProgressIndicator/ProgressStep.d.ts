@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ProgressStepProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
   /**
@@ -50,16 +51,14 @@ export interface ProgressStepProps extends svelte.JSX.HTMLAttributes<HTMLElement
   id?: string;
 }
 
-export default class ProgressStep {
-  $$prop_def: ProgressStepProps;
-  $$slot_def: {
-    default: { props: { class: "bx--progress-label" } };
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ProgressStep extends SvelteComponent<
+  ProgressStepProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    keydown: WindowEventMap["keydown"];
+  },
+  { default: { props: { class: "bx--progress-label" } } }
+> {}

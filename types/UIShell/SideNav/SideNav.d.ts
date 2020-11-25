@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface SideNavProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
   /**
@@ -19,11 +20,4 @@ export interface SideNavProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNa
   isOpen?: boolean;
 }
 
-export default class SideNav {
-  $$prop_def: SideNavProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class SideNav extends SvelteComponent<SideNavProps, {}, { default: {} }> {}

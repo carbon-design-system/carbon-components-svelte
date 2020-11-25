@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface HeaderNavProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
   /**
@@ -7,11 +8,4 @@ export interface HeaderNavProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
   ariaLabel?: string;
 }
 
-export default class HeaderNav {
-  $$prop_def: HeaderNavProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class HeaderNav extends SvelteComponent<HeaderNavProps, {}, { default: {} }> {}

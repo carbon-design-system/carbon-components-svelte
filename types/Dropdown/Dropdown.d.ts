@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export type DropdownItemId = string;
 
@@ -115,13 +116,8 @@ export interface DropdownProps extends svelte.JSX.HTMLAttributes<HTMLElementTagN
   ref?: null | HTMLButtonElement;
 }
 
-export default class Dropdown {
-  $$prop_def: DropdownProps;
-  $$slot_def: {};
-
-  $on(
-    eventname: "select",
-    cb: (event: CustomEvent<{ selectedId: DropdownItemId; selectedIndex: number; selectedItem: DropdownItem }>) => void
-  ): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Dropdown extends SvelteComponent<
+  DropdownProps,
+  { select: CustomEvent<{ selectedId: DropdownItemId; selectedIndex: number; selectedItem: DropdownItem }> },
+  {}
+> {}

@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface SelectItemGroupProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["optgroup"]> {
   /**
@@ -14,11 +15,4 @@ export interface SelectItemGroupProps extends svelte.JSX.HTMLAttributes<HTMLElem
   label?: string;
 }
 
-export default class SelectItemGroup {
-  $$prop_def: SelectItemGroupProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class SelectItemGroup extends SvelteComponent<SelectItemGroupProps, {}, { default: {} }> {}

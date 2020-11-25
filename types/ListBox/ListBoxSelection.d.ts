@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 
@@ -34,10 +35,4 @@ export interface ListBoxSelectionProps extends svelte.JSX.HTMLAttributes<HTMLEle
   ref?: null | HTMLDivElement;
 }
 
-export default class ListBoxSelection {
-  $$prop_def: ListBoxSelectionProps;
-  $$slot_def: {};
-
-  $on(eventname: "clear", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ListBoxSelection extends SvelteComponent<ListBoxSelectionProps, { clear: CustomEvent<any> }, {}> {}

@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ContentSwitcherProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -19,16 +20,14 @@ export interface ContentSwitcherProps extends svelte.JSX.HTMLAttributes<HTMLElem
   size?: "sm" | "xl";
 }
 
-export default class ContentSwitcher {
-  $$prop_def: ContentSwitcherProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "change", cb: (event: CustomEvent<number>) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ContentSwitcher extends SvelteComponent<
+  ContentSwitcherProps,
+  {
+    change: CustomEvent<number>;
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: {} }
+> {}

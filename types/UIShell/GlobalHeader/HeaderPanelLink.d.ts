@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface HeaderPanelLinkProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
@@ -13,12 +14,8 @@ export interface HeaderPanelLinkProps extends svelte.JSX.HTMLAttributes<HTMLElem
   ref?: null | HTMLAnchorElement;
 }
 
-export default class HeaderPanelLink {
-  $$prop_def: HeaderPanelLinkProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class HeaderPanelLink extends SvelteComponent<
+  HeaderPanelLinkProps,
+  { click: WindowEventMap["click"] },
+  { default: {} }
+> {}

@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ToolbarSearchProps {
   /**
@@ -32,13 +33,13 @@ export interface ToolbarSearchProps {
   ref?: null | HTMLInputElement;
 }
 
-export default class ToolbarSearch {
-  $$prop_def: ToolbarSearchProps;
-  $$slot_def: {};
-
-  $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
-  $on(eventname: "input", cb: (event: WindowEventMap["input"]) => void): () => void;
-  $on(eventname: "focus", cb: (event: WindowEventMap["focus"]) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ToolbarSearch extends SvelteComponent<
+  ToolbarSearchProps,
+  {
+    change: WindowEventMap["change"];
+    input: WindowEventMap["input"];
+    focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
+  },
+  {}
+> {}

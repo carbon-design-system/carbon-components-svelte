@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ToolbarBatchActionsProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -8,11 +9,4 @@ export interface ToolbarBatchActionsProps extends svelte.JSX.HTMLAttributes<HTML
   formatTotalSelected?: (totalSelected: number) => string;
 }
 
-export default class ToolbarBatchActions {
-  $$prop_def: ToolbarBatchActionsProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ToolbarBatchActions extends SvelteComponent<ToolbarBatchActionsProps, {}, { default: {} }> {}

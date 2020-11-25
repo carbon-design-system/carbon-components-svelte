@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface HeaderGlobalActionProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
@@ -19,12 +20,8 @@ export interface HeaderGlobalActionProps extends svelte.JSX.HTMLAttributes<HTMLE
   ref?: null | HTMLButtonElement;
 }
 
-export default class HeaderGlobalAction {
-  $$prop_def: HeaderGlobalActionProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class HeaderGlobalAction extends SvelteComponent<
+  HeaderGlobalActionProps,
+  { click: WindowEventMap["click"] },
+  { default: {} }
+> {}

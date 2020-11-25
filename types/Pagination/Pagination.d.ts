@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface PaginationProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -98,10 +99,4 @@ export interface PaginationProps extends svelte.JSX.HTMLAttributes<HTMLElementTa
   id?: string;
 }
 
-export default class Pagination {
-  $$prop_def: PaginationProps;
-  $$slot_def: {};
-
-  $on(eventname: "update", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Pagination extends SvelteComponent<PaginationProps, { update: CustomEvent<any> }, {}> {}

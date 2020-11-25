@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface NotificationIconProps {
   /**
@@ -20,9 +21,4 @@ export interface NotificationIconProps {
   iconDescription?: string;
 }
 
-export default class NotificationIcon {
-  $$prop_def: NotificationIconProps;
-  $$slot_def: {};
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class NotificationIcon extends SvelteComponent<NotificationIconProps, {}, {}> {}

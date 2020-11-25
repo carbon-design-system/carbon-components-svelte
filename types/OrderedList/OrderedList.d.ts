@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface OrderedListProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ol"]> {
   /**
@@ -14,15 +15,13 @@ export interface OrderedListProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   native?: boolean;
 }
 
-export default class OrderedList {
-  $$prop_def: OrderedListProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class OrderedList extends SvelteComponent<
+  OrderedListProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: {} }
+> {}

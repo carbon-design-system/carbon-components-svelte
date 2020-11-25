@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export type Files = string[];
 
@@ -65,16 +66,16 @@ export interface FileUploaderDropContainerProps extends svelte.JSX.HTMLAttribute
   ref?: null | HTMLInputElement;
 }
 
-export default class FileUploaderDropContainer {
-  $$prop_def: FileUploaderDropContainerProps;
-  $$slot_def: {};
-
-  $on(eventname: "add", cb: (event: CustomEvent<Files>) => void): () => void;
-  $on(eventname: "dragover", cb: (event: WindowEventMap["dragover"]) => void): () => void;
-  $on(eventname: "dragleave", cb: (event: WindowEventMap["dragleave"]) => void): () => void;
-  $on(eventname: "drop", cb: (event: WindowEventMap["drop"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class FileUploaderDropContainer extends SvelteComponent<
+  FileUploaderDropContainerProps,
+  {
+    add: CustomEvent<Files>;
+    dragover: WindowEventMap["dragover"];
+    dragleave: WindowEventMap["dragleave"];
+    drop: WindowEventMap["drop"];
+    keydown: WindowEventMap["keydown"];
+    change: WindowEventMap["change"];
+    click: WindowEventMap["click"];
+  },
+  {}
+> {}

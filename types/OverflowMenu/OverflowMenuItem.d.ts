@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface OverflowMenuItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
   /**
@@ -57,13 +58,8 @@ export interface OverflowMenuItemProps extends svelte.JSX.HTMLAttributes<HTMLEle
   ref?: null | HTMLAnchorElement | HTMLButtonElement;
 }
 
-export default class OverflowMenuItem {
-  $$prop_def: OverflowMenuItemProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class OverflowMenuItem extends SvelteComponent<
+  OverflowMenuItemProps,
+  { click: WindowEventMap["click"]; keydown: WindowEventMap["keydown"] },
+  { default: {} }
+> {}

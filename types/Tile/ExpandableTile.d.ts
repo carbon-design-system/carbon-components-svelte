@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ExpandableTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -56,17 +57,14 @@ export interface ExpandableTileProps extends svelte.JSX.HTMLAttributes<HTMLEleme
   ref?: null | HTMLDivElement;
 }
 
-export default class ExpandableTile {
-  $$prop_def: ExpandableTileProps;
-  $$slot_def: {
-    above: {};
-    below: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "keypress", cb: (event: WindowEventMap["keypress"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ExpandableTile extends SvelteComponent<
+  ExpandableTileProps,
+  {
+    click: WindowEventMap["click"];
+    keypress: WindowEventMap["keypress"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { above: {}; below: {} }
+> {}

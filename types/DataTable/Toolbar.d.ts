@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ToolbarProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["section"]> {
   /**
@@ -8,11 +9,4 @@ export interface ToolbarProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNa
   size?: "sm" | "default";
 }
 
-export default class Toolbar {
-  $$prop_def: ToolbarProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Toolbar extends SvelteComponent<ToolbarProps, {}, { default: {} }> {}

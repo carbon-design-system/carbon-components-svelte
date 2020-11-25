@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export type MultiSelectItemId = string;
 
@@ -154,14 +155,14 @@ export interface MultiSelectProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   name?: string;
 }
 
-export default class MultiSelect {
-  $$prop_def: MultiSelectProps;
-  $$slot_def: {};
-
-  $on(eventname: "clear", cb: (event: WindowEventMap["clear"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "focus", cb: (event: WindowEventMap["focus"]) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: "select", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class MultiSelect extends SvelteComponent<
+  MultiSelectProps,
+  {
+    clear: WindowEventMap["clear"];
+    keydown: WindowEventMap["keydown"];
+    focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
+    select: CustomEvent<any>;
+  },
+  {}
+> {}

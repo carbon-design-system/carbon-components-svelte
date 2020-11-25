@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface SideNavMenuProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
@@ -24,12 +25,8 @@ export interface SideNavMenuProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   ref?: null | HTMLButtonElement;
 }
 
-export default class SideNavMenu {
-  $$prop_def: SideNavMenuProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class SideNavMenu extends SvelteComponent<
+  SideNavMenuProps,
+  { click: WindowEventMap["click"] },
+  { default: {} }
+> {}

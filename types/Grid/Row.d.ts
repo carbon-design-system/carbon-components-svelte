@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface RowProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -39,11 +40,8 @@ export interface RowProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMa
   noGutterRight?: boolean;
 }
 
-export default class Row {
-  $$prop_def: RowProps;
-  $$slot_def: {
-    default: { props: { class: string; [key: string]: any } };
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Row extends SvelteComponent<
+  RowProps,
+  {},
+  { default: { props: { class: string; [key: string]: any } } }
+> {}

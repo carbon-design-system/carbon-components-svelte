@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponent } from "svelte";
 
 export interface ListBoxProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
@@ -43,13 +44,8 @@ export interface ListBoxProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNa
   invalidText?: string;
 }
 
-export default class ListBox {
-  $$prop_def: ListBoxProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ListBox extends SvelteComponent<
+  ListBoxProps,
+  { keydown: WindowEventMap["keydown"]; click: WindowEventMap["click"] },
+  { default: {} }
+> {}
