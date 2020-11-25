@@ -132,7 +132,7 @@ Refer to the [Contributing guidelines](CONTRIBUTING.md).
 
 [Apache 2.0](LICENSE)
 
-[npm]: https://img.shields.io/npm/v/carbon-components-svelte.svg?color=%230f62fe
+[npm]: https://img.shields.io/npm/v/carbon-components-svelte.svg?color=%23161616
 [npm-url]: https://npmjs.com/package/carbon-components-svelte
 [build]: https://travis-ci.com/ibm/carbon-components-svelte.svg?branch=master&color=%230f62fe
 [build-badge]: https://travis-ci.com/ibm/carbon-components-svelte

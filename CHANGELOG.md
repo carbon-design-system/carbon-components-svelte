@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.23.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.23.2) - 2020-11-25
+
+**Fixes**
+
+- Fix dispatched "change" event in RadioButtonGroup ([PR #408](https://github.com/IBM/carbon-components-svelte/pull/408))
+- Export component types and interfaces ([PR #411](https://github.com/IBM/carbon-components-svelte/pull/411), [issue #409](https://github.com/IBM/carbon-components-svelte/issues/409))
+
 ## [0.23.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.23.1) - 2020-11-22
 
 **Fixes**
