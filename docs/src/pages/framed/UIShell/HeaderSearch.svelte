@@ -7,45 +7,56 @@
     HeaderPanelLinks,
     HeaderPanelDivider,
     HeaderPanelLink,
-    SideNav,
-    SideNavItems,
-    SideNavMenu,
-    SideNavMenuItem,
-    SideNavLink,
     SkipToContent,
     Content,
     Grid,
     Row,
     Column,
+    Button,
   } from "carbon-components-svelte";
 
-  let isSideNavOpen = false;
-  let isOpen = false;
+  const data = [
+    {
+      href: "/",
+      text: "Kubernetes Service",
+      description:
+        "Deploy secure, highly available apps in a native Kubernetes experience. IBM Cloud Kubernetes Service creates a cluster of compute hosts and deploys highly available containers.",
+    },
+    {
+      href: "/",
+      text: "Red Hat OpenShift on IBM Cloud",
+      description:
+        "Deploy and secure enterprise workloads on native OpenShift with developer focused tools to run highly available apps. OpenShift clusters build on Kubernetes container orchestration that offers consistency and flexibility in operations.",
+    },
+    {
+      href: "/",
+      text: "Container Registry",
+      description:
+        "Securely store container images and monitor their vulnerabilities in a private registry.",
+    },
+    {
+      href: "/",
+      text: "Code Engine",
+      description:
+        "Run your application, job, or container on a managed serverless platform.",
+    },
+  ];
 
   let ref = null;
   let active = false;
   let value = "";
-  let selectedResultIndex = 1;
+  let selectedResultIndex = 0;
+  let events = [];
 
+  $: lowerCaseValue = value.toLowerCase();
   $: results =
-    value.length > 2
-      ? [
-          {
-            href: "/",
-            text: "Result 1",
-            description: "Result description",
-          },
-          {
-            href: "/",
-            text: "Result 2",
-            description: "Result description",
-          },
-          {
-            href: "/",
-            text: "Result 3",
-            description: "Result description",
-          },
-        ]
+    value.length > 0
+      ? data.filter((item) => {
+          return (
+            item.text.toLowerCase().includes(lowerCaseValue) ||
+            item.description.includes(lowerCaseValue)
+          );
+        })
       : [];
 
   $: console.log("ref", ref);
@@ -54,7 +65,7 @@
   $: console.log("selectedResultIndex", selectedResultIndex);
 </script>
 
-<Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header company="IBM" platformName="Carbon Svelte">
   <div slot="skip-to-content">
     <SkipToContent />
   </div>
@@ -64,47 +75,55 @@
       bind:active
       bind:value
       bind:selectedResultIndex
+      placeholder="Search services"
       results="{results}"
+      on:active="{() => {
+        events = [...events, { type: 'active' }];
+      }}"
+      on:inactive="{() => {
+        events = [...events, { type: 'inactive' }];
+      }}"
       on:clear="{() => {
-        console.log('on:clear');
+        events = [...events, { type: 'clear' }];
       }}"
       on:select="{(e) => {
-        console.log('on:select', e.detail);
+        events = [...events, { type: 'select', ...e.detail }];
       }}"
     />
-    <HeaderAction bind:isOpen>
-      <HeaderPanelLinks>
-        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 4</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 5</HeaderPanelLink>
-      </HeaderPanelLinks>
-    </HeaderAction>
   </HeaderUtilities>
 </Header>
-
-<SideNav bind:isOpen="{isSideNavOpen}">
-  <SideNavItems>
-    <SideNavLink text="Link 1" />
-    <SideNavLink text="Link 2" />
-    <SideNavLink text="Link 3" />
-    <SideNavMenu text="Menu">
-      <SideNavMenuItem href="/" text="Link 1" />
-      <SideNavMenuItem href="/" text="Link 2" />
-      <SideNavMenuItem href="/" text="Link 3" />
-    </SideNavMenu>
-  </SideNavItems>
-</SideNav>
 
 <Content>
   <Grid>
     <Row>
       <Column>
-        <h1>Welcome</h1>
+        <h1>HeaderSearch</h1>
+        <Button
+          on:click="{() => {
+            active = true;
+          }}"
+        >
+          Activate the search bar
+        </Button>
+        <h2>Reactive values</h2>
+        <p><strong>active</strong>: {active}</p>
+        <p><strong>value</strong>: {value}</p>
+        <p><strong>selectedResultIndex</strong>: {selectedResultIndex}</p>
+        <h2>Events</h2>
+        <p>
+          Click the button and search for something. Dispatched events are
+          logged below:
+        </p>
+        <div style="overflow-x: scroll;">
+          {#each events as { type, ...rest }}
+            <div style="display: block; margin-bottom: var(--cds-layout-01)">
+              <div><strong>on:{type}</strong></div>
+              {#if Object.keys(rest).length > 0}
+                <pre>{JSON.stringify(rest, null, 2)}</pre>
+              {/if}
+            </div>
+          {/each}
+        </div>
       </Column>
     </Row>
   </Grid>
