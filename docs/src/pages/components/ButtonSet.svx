@@ -8,7 +8,9 @@ source: Button/ButtonSet.svelte
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (juxtaposed)
+### Default
+
+Buttons in a button set are juxtaposed by default.
 
 <ButtonSet>
   <Button kind="secondary">Cancel</Button>
@@ -16,6 +18,8 @@ source: Button/ButtonSet.svelte
 </ButtonSet>
 
 ### Stacked
+
+Set `stacked` to `true` to use the stacked variant.
 
 <ButtonSet stacked>
   <Button icon={Login16}>Log in</Button>
