@@ -1,6 +1,6 @@
 # Component Index
 
-> 154 components exported from carbon-components-svelte@0.23.2.
+> 155 components exported from carbon-components-svelte@0.23.2.
 
 ## Components
 
@@ -57,6 +57,7 @@
 - [`HeaderPanelDivider`](#headerpaneldivider)
 - [`HeaderPanelLink`](#headerpanellink)
 - [`HeaderPanelLinks`](#headerpanellinks)
+- [`HeaderSearch`](#headersearch)
 - [`HeaderUtilities`](#headerutilities)
 - [`Icon`](#icon)
 - [`IconSkeleton`](#iconskeleton)
@@ -1608,6 +1609,47 @@ None.
 ### Events
 
 None.
+
+## `HeaderSearch`
+
+### Types
+
+```ts
+export interface HeaderSearchResult {
+  href: string;
+  text: string;
+  description?: string;
+}
+```
+
+### Props
+
+| Prop name           | Kind             | Reactive | Type                                      | Default value      | Description                                        |
+| :------------------ | :--------------- | :------- | :---------------------------------------- | ------------------ | -------------------------------------------------- |
+| selectedResultIndex | <code>let</code> | Yes      | <code>number</code>                       | <code>-1</code>    | Specify the selected result index                  |
+| ref                 | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>  | Obtain a reference to the input HTML element       |
+| active              | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to activate and focus the search bar |
+| value               | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>    | Specify the search input value                     |
+| results             | <code>let</code> | No       | <code>HeaderSearchResult[]</code>         | <code>[]</code>    | Render a list of search results                    |
+
+### Slots
+
+| Slot name | Default | Props                         | Fallback                                                                                                      |
+| :-------- | :------ | :---------------------------- | :------------------------------------------------------------------------------------------------------------ |
+| --        | Yes     | <code>{ result: any } </code> | <code>{result.text}<br /> {#if result.description}&lt;span&gt;– {result.description}&lt;/span&gt;{/if}</code> |
+
+### Events
+
+| Event name | Type       | Detail                                                                                          |
+| :--------- | :--------- | :---------------------------------------------------------------------------------------------- |
+| clear      | dispatched | <code>any</code>                                                                                |
+| search     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }</code> |
+| change     | forwarded  | --                                                                                              |
+| input      | forwarded  | --                                                                                              |
+| focus      | forwarded  | --                                                                                              |
+| blur       | forwarded  | --                                                                                              |
+| keydown    | forwarded  | --                                                                                              |
+| select     | dispatched | --                                                                                              |
 
 ## `HeaderUtilities`
 

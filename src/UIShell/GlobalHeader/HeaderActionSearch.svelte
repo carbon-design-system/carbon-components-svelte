@@ -1,5 +1,11 @@
 <script>
   /**
+   * @deprecated
+   * This component will be removed in version 1.0.0.
+   * Use `HeaderSearch` instead
+   */
+
+  /**
    * @event {{ action: "search"; textInput: string; }} inputSearch
    */
 

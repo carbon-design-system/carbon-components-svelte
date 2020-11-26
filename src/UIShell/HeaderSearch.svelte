@@ -1,0 +1,278 @@
+<script>
+  /**
+   * @typedef {{ href: string; text: string; description?: string; }} HeaderSearchResult
+   * @event {any} clear
+   * @event {{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }} search
+   */
+
+  /** Specify the search input value */
+  export let value = "";
+
+  /** Set to `true` to activate and focus the search bar */
+  export let active = false;
+
+  /** Obtain a reference to the input HTML element */
+  export let ref = null;
+
+  /**
+   * Render a list of search results
+   * @type {HeaderSearchResult[]}
+   */
+  export let results = [];
+
+  /** Specify the selected result index */
+  export let selectedResultIndex = -1;
+
+  import { createEventDispatcher } from "svelte";
+  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
+  import Search20 from "carbon-icons-svelte/lib/Search20/Search20.svelte";
+
+  const dispatch = createEventDispatcher();
+
+  let refSearch = null;
+
+  $: if (active && ref) ref.focus();
+  $: selectedResult = results[selectedResultIndex];
+  $: selectedId = selectedResult
+    ? `search-menuitem-${selectedResultIndex}`
+    : undefined;
+</script>
+
+<style>
+  label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border: 0;
+    visibility: inherit;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  [role="search"] {
+    position: relative;
+    display: flex;
+    max-width: 28rem;
+    width: 100%;
+    margin-left: 0.5rem;
+    height: 3rem;
+    background-color: #393939;
+    color: #fff;
+    transition: max-width 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
+      background 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+
+  [role="search"]:not(.active) {
+    max-width: 3rem;
+    background-color: #161616;
+  }
+
+  [role="search"].active {
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+  }
+
+  [role="combobox"] {
+    display: flex;
+    flex-grow: 1;
+    border-bottom: 1px solid #393939;
+  }
+
+  input {
+    width: 100%;
+    height: 3rem;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.375rem;
+    letter-spacing: 0;
+    color: #fff;
+    caret-color: #fff;
+    background-color: initial;
+    border: none;
+    outline: none;
+    transition: opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+
+  input:not(.active) {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  button {
+    width: 3rem;
+    height: 100%;
+    padding: 0;
+    flex-shrink: 0;
+    opacity: 1;
+    transition: background-color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
+      opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+
+  .disabled {
+    border: none;
+    pointer-events: none;
+  }
+
+  [aria-label="Clear search"]:hover {
+    background-color: #4c4c4c;
+  }
+
+  .hidden {
+    opacity: 0;
+    display: none;
+  }
+
+  ul {
+    position: absolute;
+    z-index: 10000;
+    padding: 1rem 0;
+    left: 0;
+    right: 0;
+    top: 3rem;
+    background-color: #161616;
+    border: 1px solid #393939;
+    border-top: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  [role="menuitem"] {
+    padding: 6px 1rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.29;
+    letter-spacing: 0.16px;
+    transition: all 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    display: block;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #c6c6c6;
+  }
+
+  .selected,
+  [role="menuitem"]:hover {
+    background-color: #353535;
+    color: #f4f4f4;
+  }
+
+  [role="menuitem"] span {
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.34;
+    letter-spacing: 0.32px;
+    text-transform: lowercase;
+    color: #c6c6c6;
+  }
+</style>
+
+<svelte:window
+  on:mouseup="{({ target }) => {
+    if (active && !refSearch.contains(target)) active = false;
+  }}"
+/>
+
+<div bind:this="{refSearch}" role="search" class:active>
+  <label for="search-input" id="search-label">Search</label>
+  <div role="combobox" aria-expanded="{active}">
+    <button
+      type="button"
+      aria-label="Search"
+      tabindex="{active ? '-1' : '0'}"
+      class:bx--header__action="{true}"
+      class:disabled="{active}"
+      on:click="{() => {
+        active = true;
+      }}"
+    >
+      <Search20 title="Search" />
+    </button>
+    <input
+      bind:this="{ref}"
+      type="text"
+      autocomplete="off"
+      placeholder="Search..."
+      tabindex="{active ? '0' : '-1'}"
+      class:active
+      {...$$restProps}
+      id="search-input"
+      aria-activedescendant="{selectedId}"
+      bind:value
+      on:change
+      on:input
+      on:focus
+      on:blur
+      on:keydown
+      on:keydown="{({ key }) => {
+        switch (key) {
+          case 'Enter':
+            active = false;
+            value = '';
+            dispatch('select', { value, selectedResultIndex, selectedResult });
+            break;
+          case 'ArrowDown':
+            if (selectedResultIndex === results.length - 1) {
+              selectedResultIndex = 0;
+            } else {
+              selectedResultIndex += 1;
+            }
+            break;
+          case 'ArrowUp':
+            if (selectedResultIndex === 0) {
+              selectedResultIndex = results.length - 1;
+            } else {
+              selectedResultIndex -= 1;
+            }
+            break;
+        }
+      }}"
+    />
+    <button
+      type="button"
+      aria-label="Clear search"
+      tabindex="{active ? '0' : '-1'}"
+      class:bx--header__action="{true}"
+      class:hidden="{!active}"
+      on:click="{() => {
+        active = false;
+        value = '';
+        dispatch('clear');
+      }}"
+    >
+      <Close20 title="Close" />
+    </button>
+  </div>
+
+  {#if active && results.length > 0}
+    <ul aria-labelledby="search-label" role="menu" id="search-menu">
+      {#each results as result, i}
+        <li>
+          <a
+            tabindex="-1"
+            id="search-menuitem-{i}"
+            role="menuitem"
+            href="{result.href}"
+            class:selected="{selectedId === `search-menuitem-${i}`}"
+            on:click|preventDefault="{() => {
+              dispatch('select', {
+                value,
+                selectedResultIndex,
+                selectedResult,
+              });
+            }}"
+          >
+            <slot result="{result}">
+              {result.text}
+              {#if result.description}<span>– {result.description}</span>{/if}
+            </slot>
+          </a>
+        </li>
+      {/each}
+    </ul>
+  {/if}
+</div>
