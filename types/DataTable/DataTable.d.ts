@@ -22,7 +22,10 @@ export interface DataTableNonEmptyHeader {
 
 export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;
 
-export type DataTableRow = Record<DataTableKey, DataTableValue>;
+export interface DataTableRow {
+  id: any;
+  [key: string]: DataTableValue;
+}
 
 export type DataTableRowId = string;
 

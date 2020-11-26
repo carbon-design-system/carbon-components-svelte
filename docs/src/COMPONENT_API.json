@@ -2655,9 +2655,9 @@
           "ts": "type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader"
         },
         {
-          "type": "Record<DataTableKey, DataTableValue>",
+          "type": "{ id: any; [key: string]: DataTableValue; }",
           "name": "DataTableRow",
-          "ts": "type DataTableRow = Record<DataTableKey, DataTableValue>"
+          "ts": "interface DataTableRow { id: any; [key: string]: DataTableValue; }"
         },
         {
           "type": "string",

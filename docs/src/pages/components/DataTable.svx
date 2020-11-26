@@ -10,6 +10,8 @@ components: ["DataTable", "Toolbar", "ToolbarContent", "ToolbarSearch", "Toolbar
 
 ### Default
 
+The `DataTable` is keyed for both rendering and sorting. You must define a "key" value per object in the `headers` property and an "id" value in `rows`.
+
 <DataTable
   headers="{[
     { key: "name", value: "Name" },
