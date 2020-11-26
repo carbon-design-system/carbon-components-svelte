@@ -73,7 +73,11 @@
       on:select="{(e) => {
         console.log('on:select', e.detail);
       }}"
-    />
+      let:result
+      let:index
+    >
+      <div>{result.text}{index}</div>
+    </HeaderSearch>
     <HeaderAction bind:isOpen>
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>

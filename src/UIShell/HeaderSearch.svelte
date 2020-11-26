@@ -5,6 +5,7 @@
    * @event {any} inactive
    * @event {any} clear
    * @event {{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }} select
+   * @slot {{ result: HeaderSearchResult; index: number }}
    */
 
   /** Specify the search input value */
@@ -271,7 +272,7 @@
             class:selected="{selectedId === `search-menuitem-${i}`}"
             on:click|preventDefault="{selectResult}"
           >
-            <slot result="{result}">
+            <slot result="{result}" index="{i}">
               {result.text}
               {#if result.description}<span>– {result.description}</span>{/if}
             </slot>
