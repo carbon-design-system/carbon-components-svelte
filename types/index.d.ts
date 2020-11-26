@@ -151,4 +151,5 @@ export { default as SideNavMenuItem } from "./UIShell/SideNav/SideNavMenuItem";
 export { default as Content } from "./UIShell/Content";
 export { default as SkipToContent } from "./UIShell/SkipToContent";
 export { default as HeaderGlobalAction } from "./UIShell/HeaderGlobalAction";
+export { default as HeaderSearch } from "./UIShell/HeaderSearch";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList";

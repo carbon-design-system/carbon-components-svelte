@@ -134,5 +134,6 @@ export {
   Content,
   SkipToContent,
   HeaderGlobalAction,
+  HeaderSearch,
 } from "./UIShell";
 export { UnorderedList } from "./UnorderedList";

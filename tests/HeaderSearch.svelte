@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import {
     Header,
     HeaderUtilities,
     HeaderAction,
-    HeaderGlobalAction,
+    HeaderSearch,
     HeaderPanelLinks,
     HeaderPanelDivider,
     HeaderPanelLink,
@@ -17,11 +17,41 @@
     Grid,
     Row,
     Column,
-  } from "carbon-components-svelte";
-  import SettingsAdjust20 from "carbon-icons-svelte/lib/SettingsAdjust20";
+  } from "../types";
 
   let isSideNavOpen = false;
   let isOpen = false;
+
+  let ref = null;
+  let active = false;
+  let value = "";
+  let selectedResultIndex = 1;
+
+  $: results =
+    value.length > 2
+      ? [
+          {
+            href: "/",
+            text: "Result 1",
+            description: "Result description",
+          },
+          {
+            href: "/",
+            text: "Result 2",
+            description: "Result description",
+          },
+          {
+            href: "/",
+            text: "Result 3",
+            description: "Result description",
+          },
+        ]
+      : [];
+
+  $: console.log("ref", ref);
+  $: console.log("active", active);
+  $: console.log("value", value);
+  $: console.log("selectedResultIndex", selectedResultIndex);
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
@@ -29,7 +59,25 @@
     <SkipToContent />
   </div>
   <HeaderUtilities>
-    <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust20}" />
+    <HeaderSearch
+      bind:ref
+      bind:active
+      bind:value
+      bind:selectedResultIndex
+      results="{results}"
+      on:active
+      on:inactive
+      on:clear="{() => {
+        console.log('on:clear');
+      }}"
+      on:select="{(e) => {
+        console.log('on:select', e.detail);
+      }}"
+      let:result
+      let:index
+    >
+      <div>{result.text}{index}</div>
+    </HeaderSearch>
     <HeaderAction bind:isOpen>
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>

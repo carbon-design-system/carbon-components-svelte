@@ -4,7 +4,7 @@
 components: ["Header",
 "HeaderAction",
 "HeaderActionLink",
-"HeaderActionSearch",
+"HeaderSearch",
 "HeaderNav",
 "HeaderNavItem",
 "HeaderNavMenu",
@@ -33,6 +33,10 @@ components: ["Header",
 ### Header with app switcher
 
 <FileSource src="/framed/UIShell/HeaderSwitcher" />
+
+### Header with global search
+
+<FileSource src="/framed/UIShell/HeaderSearch" />
 
 ### Header with utilities
 

@@ -17,3 +17,4 @@ export { default as SideNavMenuItem } from "./SideNav/SideNavMenuItem.svelte";
 export { default as Content } from "./Content.svelte";
 export { default as SkipToContent } from "./SkipToContent.svelte";
 export { default as HeaderGlobalAction } from "./HeaderGlobalAction.svelte";
+export { default as HeaderSearch } from "./HeaderSearch.svelte";
