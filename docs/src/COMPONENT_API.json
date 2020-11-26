@@ -10307,7 +10307,7 @@
           "kind": "let",
           "description": "Specify the selected result index",
           "type": "number",
-          "value": "-1",
+          "value": "0",
           "isFunction": false,
           "constant": false,
           "reactive": true
@@ -10318,10 +10318,12 @@
           "name": "__default__",
           "default": true,
           "fallback": "{result.text}\n              {#if result.description}<span>– {result.description}</span>{/if}",
-          "slot_props": "{ result: any }"
+          "slot_props": "{ result: HeaderSearchResult; index: number }"
         }
       ],
       "events": [
+        { "type": "dispatched", "name": "active", "detail": "any" },
+        { "type": "dispatched", "name": "inactive", "detail": "any" },
         { "type": "dispatched", "name": "clear", "detail": "any" },
         {
           "type": "dispatched",

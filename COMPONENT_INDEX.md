@@ -1626,7 +1626,7 @@ export interface HeaderSearchResult {
 
 | Prop name           | Kind             | Reactive | Type                                      | Default value      | Description                                        |
 | :------------------ | :--------------- | :------- | :---------------------------------------- | ------------------ | -------------------------------------------------- |
-| selectedResultIndex | <code>let</code> | Yes      | <code>number</code>                       | <code>-1</code>    | Specify the selected result index                  |
+| selectedResultIndex | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the selected result index                  |
 | ref                 | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>  | Obtain a reference to the input HTML element       |
 | active              | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to activate and focus the search bar |
 | value               | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>    | Specify the search input value                     |
@@ -1634,14 +1634,16 @@ export interface HeaderSearchResult {
 
 ### Slots
 
-| Slot name | Default | Props                         | Fallback                                                                                                      |
-| :-------- | :------ | :---------------------------- | :------------------------------------------------------------------------------------------------------------ |
-| --        | Yes     | <code>{ result: any } </code> | <code>{result.text}<br /> {#if result.description}&lt;span&gt;– {result.description}&lt;/span&gt;{/if}</code> |
+| Slot name | Default | Props                                                       | Fallback                                                                                                      |
+| :-------- | :------ | :---------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
+| --        | Yes     | <code>{ result: HeaderSearchResult; index: number } </code> | <code>{result.text}<br /> {#if result.description}&lt;span&gt;– {result.description}&lt;/span&gt;{/if}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                                                                                          |
 | :--------- | :--------- | :---------------------------------------------------------------------------------------------- |
+| active     | dispatched | <code>any</code>                                                                                |
+| inactive   | dispatched | <code>any</code>                                                                                |
 | clear      | dispatched | <code>any</code>                                                                                |
 | select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }</code> |
 | change     | forwarded  | --                                                                                              |

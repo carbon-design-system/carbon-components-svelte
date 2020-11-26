@@ -33,7 +33,7 @@ export interface HeaderSearchProps extends svelte.JSX.HTMLAttributes<HTMLElement
 
   /**
    * Specify the selected result index
-   * @default -1
+   * @default 0
    */
   selectedResultIndex?: number;
 }
@@ -41,9 +41,11 @@ export interface HeaderSearchProps extends svelte.JSX.HTMLAttributes<HTMLElement
 export default class HeaderSearch {
   $$prop_def: HeaderSearchProps;
   $$slot_def: {
-    default: { result: any };
+    default: { result: HeaderSearchResult; index: number };
   };
 
+  $on(eventname: "active", cb: (event: CustomEvent<any>) => void): () => void;
+  $on(eventname: "inactive", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: "clear", cb: (event: CustomEvent<any>) => void): () => void;
   $on(
     eventname: "select",
