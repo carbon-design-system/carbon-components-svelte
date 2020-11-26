@@ -42,9 +42,17 @@ description: High-level description
 
 ### Icon-only button
 
-<Button icon={Add16} hasIconOnly tooltipPosition="bottom" tooltipAlignment="center" iconDescription="Tooltip text" />
+Set `hasIconOnly` to `true` to use the icon-only button variant.
+
+**Note:** you must provide an `iconDescription` for the button tooltip.
+
+The tooltip position and alignment can be controlled by the `tooltipPosition`, `tooltipAlignment` props, respectively.
+
+<Button hasIconOnly tooltipPosition="bottom" tooltipAlignment="center" iconDescription="Tooltip text" icon={Add16} />
 
 ### Link button
+
+If an `href` value is specified, the component will render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) with a "button" role.
 
 <Button href="#">Link button</Button>
 

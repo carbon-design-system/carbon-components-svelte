@@ -127,6 +127,7 @@ module.exports = {
   extensions: [".svelte", ".svx"],
   preprocess: [
     require("svelte-preprocess")({
+      typescript: false,
       replace: [
         ["process.env.VERSION", JSON.stringify(pkg.version)],
         ["process.env.NODE_ENV", JSON.stringify(NODE_ENV)],
@@ -148,6 +149,7 @@ module.exports = {
     }),
     {
       markup({ content, filename }) {
+        if (/node_modules/.test(filename)) return null;
         if (filename.endsWith(".svx") && filename.match(/pages\/(recipes)/)) {
           const toc = [];
 

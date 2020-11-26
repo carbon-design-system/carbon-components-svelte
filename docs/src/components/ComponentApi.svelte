@@ -64,7 +64,7 @@
 
 <p style="margin-bottom: var(--cds-layout-02)">
   Component source code:
-  <Link size="lg" href="{source}" target="_blank">
+  <Link inline size="lg" href="{source}" target="_blank">
     {component.filePath}
     <Launch16 />
   </Link>

@@ -16,7 +16,11 @@
           href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss"
           target="_blank"
         >
-          <img src="/powered-by-vercel.svg" alt="Deploys by Vercel" />
+          <img
+            height="36px"
+            src="/powered-by-vercel.svg"
+            alt="Deploys by Vercel"
+          />
         </Link>
       </Column>
     </Row>

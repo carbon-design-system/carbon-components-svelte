@@ -1,6 +1,8 @@
 # carbon-components-svelte
 
 [![NPM][npm]][npm-url]
+![GitHub](https://img.shields.io/github/license/ibm/carbon-components-svelte?color=262626&style=for-the-badge)
+![npm downloads to date](https://img.shields.io/npm/dt/carbon-components-svelte?color=262626&style=for-the-badge)
 [![Build][build]][build-badge]
 
 carbon-components-svelte is a Svelte component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
@@ -9,7 +11,7 @@ A design system can facilitate frontend development and prototyping because it e
 
 ## [Documentation](http://ibm.biz/carbon-svelte)
 
-<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="30px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
+<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="32px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
 
 ## Getting started
 
@@ -132,7 +134,7 @@ Refer to the [Contributing guidelines](CONTRIBUTING.md).
 
 [Apache 2.0](LICENSE)
 
-[npm]: https://img.shields.io/npm/v/carbon-components-svelte.svg?color=%23161616
+[npm]: https://img.shields.io/npm/v/carbon-components-svelte.svg?color=262626&style=for-the-badge
 [npm-url]: https://npmjs.com/package/carbon-components-svelte
-[build]: https://travis-ci.com/ibm/carbon-components-svelte.svg?branch=master&color=%230f62fe
+[build]: https://img.shields.io/travis/com/ibm/carbon-components-svelte?color=24a148&style=for-the-badge
 [build-badge]: https://travis-ci.com/ibm/carbon-components-svelte
