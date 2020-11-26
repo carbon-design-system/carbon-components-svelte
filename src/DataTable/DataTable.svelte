@@ -5,7 +5,7 @@
    * @typedef {{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }} DataTableEmptyHeader
    * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }} DataTableNonEmptyHeader
    * @typedef {DataTableNonEmptyHeader | DataTableEmptyHeader} DataTableHeader
-   * @typedef {Record<DataTableKey, DataTableValue>} DataTableRow
+   * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
    * @typedef {string} DataTableRowId
    * @typedef {{ key: DataTableKey; value: DataTableValue; }} DataTableCell
    * @slot {{ row: DataTableRow; }} expanded-row

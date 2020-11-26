@@ -183,6 +183,13 @@
   rows="{10}"
 />
 
+<DataTableSkeleton
+  headers="{[{ value: 'Name' }, { value: 'Protocol' }, { value: 'Port' }, { value: 'Rule' }]}"
+  rows="{10}"
+/>
+
+<DataTableSkeleton headers="{headers}" rows="{10}" />
+
 <DataTableSkeleton showHeader="{false}" showToolbar="{false}" />
 
 <DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="tall" />

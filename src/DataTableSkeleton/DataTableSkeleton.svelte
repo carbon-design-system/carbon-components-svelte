@@ -1,5 +1,10 @@
 <script>
-  /** Specify the number of columns */
+  /** @extends {"../DataTable/DataTable"} DataTableHeader */
+
+  /**
+   * Specify the number of columns
+   * Superseded by `headers` if `headers` is a non-empty array
+   */
   export let columns = 5;
 
   /** Specify the number of rows */
@@ -19,14 +24,17 @@
 
   /**
    * Set the column headers
-   * If `headers` has one more items, `count` is ignored
-   * @type {string[]}
+   * Supersedes `columns` if value is a non-empty array
+   * @type {string[] | Partial<DataTableHeader>[]}
    */
   export let headers = [];
 
   /** Set to `false` to hide the toolbar */
   export let showToolbar = true;
 
+  $: values = headers.map((header) =>
+    header.value !== undefined ? header.value : header
+  );
   $: cols = Array.from(
     { length: headers.length > 0 ? headers.length : columns },
     (_, i) => i
@@ -66,20 +74,20 @@
   >
     <thead>
       <tr>
-        {#each cols as col, i (col)}
-          <th>{headers[col] || ''}</th>
+        {#each cols as col (col)}
+          <th>{values[col] || ''}</th>
         {/each}
       </tr>
     </thead>
     <tbody>
       <tr>
-        {#each cols as col, i (col)}
+        {#each cols as col (col)}
           <td><span></span></td>
         {/each}
       </tr>
-      {#each Array.from({ length: rows - 1 }, (_, i) => i) as row, i (row)}
+      {#each Array.from({ length: rows - 1 }, (_, i) => i) as row (row)}
         <tr>
-          {#each cols as col, j (col)}
+          {#each cols as col (col)}
             <td></td>
           {/each}
         </tr>

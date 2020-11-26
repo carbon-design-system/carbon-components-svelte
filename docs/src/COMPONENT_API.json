@@ -2655,9 +2655,9 @@
           "ts": "type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader"
         },
         {
-          "type": "Record<DataTableKey, DataTableValue>",
+          "type": "{ id: any; [key: string]: DataTableValue; }",
           "name": "DataTableRow",
-          "ts": "type DataTableRow = Record<DataTableKey, DataTableValue>"
+          "ts": "interface DataTableRow { id: any; [key: string]: DataTableValue; }"
         },
         {
           "type": "string",
@@ -3281,7 +3281,7 @@
         {
           "name": "columns",
           "kind": "let",
-          "description": "Specify the number of columns",
+          "description": "Specify the number of columns\nSuperseded by `headers` if `headers` is a non-empty array",
           "type": "number",
           "value": "5",
           "isFunction": false,
@@ -3330,8 +3330,8 @@
         {
           "name": "headers",
           "kind": "let",
-          "description": "Set the column headers\nIf `headers` has one more items, `count` is ignored",
-          "type": "string[]",
+          "description": "Set the column headers\nSupersedes `columns` if value is a non-empty array",
+          "type": "string[] | Partial<DataTableHeader>[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -3356,7 +3356,11 @@
         { "type": "forwarded", "name": "mouseleave", "element": "table" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "table" }
+      "rest_props": { "type": "Element", "name": "table" },
+      "extends": {
+        "interface": "DataTableHeader",
+        "import": "\"../DataTable/DataTable\""
+      }
     },
     {
       "moduleName": "DatePicker",

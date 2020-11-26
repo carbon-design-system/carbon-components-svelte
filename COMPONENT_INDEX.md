@@ -779,7 +779,10 @@ export interface DataTableNonEmptyHeader {
 
 export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;
 
-export type DataTableRow = Record<DataTableKey, DataTableValue>;
+export interface DataTableRow {
+  id: any;
+  [key: string]: DataTableValue;
+}
 
 export type DataTableRowId = string;
 
@@ -835,15 +838,15 @@ export interface DataTableCell {
 
 ### Props
 
-| Prop name   | Kind             | Reactive | Type                                                | Default value      | Description                                                                     |
-| :---------- | :--------------- | :------- | :-------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------- |
-| columns     | <code>let</code> | No       | <code>number</code>                                 | <code>5</code>     | Specify the number of columns                                                   |
-| rows        | <code>let</code> | No       | <code>number</code>                                 | <code>5</code>     | Specify the number of rows                                                      |
-| size        | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code> | --                 | Set the size of the data table                                                  |
-| zebra       | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to apply zebra styles to the datatable rows                       |
-| showHeader  | <code>let</code> | No       | <code>boolean</code>                                | <code>true</code>  | Set to `false` to hide the header                                               |
-| headers     | <code>let</code> | No       | <code>string[]</code>                               | <code>[]</code>    | Set the column headers<br />If `headers` has one more items, `count` is ignored |
-| showToolbar | <code>let</code> | No       | <code>boolean</code>                                | <code>true</code>  | Set to `false` to hide the toolbar                                              |
+| Prop name   | Kind             | Reactive | Type                                                    | Default value      | Description                                                                                  |
+| :---------- | :--------------- | :------- | :------------------------------------------------------ | ------------------ | -------------------------------------------------------------------------------------------- |
+| columns     | <code>let</code> | No       | <code>number</code>                                     | <code>5</code>     | Specify the number of columns<br />Superseded by `headers` if `headers` is a non-empty array |
+| rows        | <code>let</code> | No       | <code>number</code>                                     | <code>5</code>     | Specify the number of rows                                                                   |
+| size        | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code>     | --                 | Set the size of the data table                                                               |
+| zebra       | <code>let</code> | No       | <code>boolean</code>                                    | <code>false</code> | Set to `true` to apply zebra styles to the datatable rows                                    |
+| showHeader  | <code>let</code> | No       | <code>boolean</code>                                    | <code>true</code>  | Set to `false` to hide the header                                                            |
+| headers     | <code>let</code> | No       | <code>string[] &#124; Partial<DataTableHeader>[]</code> | <code>[]</code>    | Set the column headers<br />Supersedes `columns` if value is a non-empty array               |
+| showToolbar | <code>let</code> | No       | <code>boolean</code>                                    | <code>true</code>  | Set to `false` to hide the toolbar                                                           |
 
 ### Slots
 

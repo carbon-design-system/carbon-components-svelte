@@ -1,8 +1,12 @@
 /// <reference types="svelte" />
+import { DataTableHeader } from "../DataTable/DataTable";
 
-export interface DataTableSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["table"]> {
+export interface DataTableSkeletonProps
+  extends DataTableHeader,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["table"]> {
   /**
    * Specify the number of columns
+   * Superseded by `headers` if `headers` is a non-empty array
    * @default 5
    */
   columns?: number;
@@ -32,10 +36,10 @@ export interface DataTableSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLEl
 
   /**
    * Set the column headers
-   * If `headers` has one more items, `count` is ignored
+   * Supersedes `columns` if value is a non-empty array
    * @default []
    */
-  headers?: string[];
+  headers?: string[] | Partial<DataTableHeader>[];
 
   /**
    * Set to `false` to hide the toolbar

@@ -10,6 +10,8 @@ components: ["DataTable", "Toolbar", "ToolbarContent", "ToolbarSearch", "Toolbar
 
 ### Default
 
+The `DataTable` is keyed for both rendering and sorting. You must define a "key" value per object in the `headers` property and an "id" value in `rows`.
+
 <DataTable
   headers="{[
     { key: "name", value: "Name" },
@@ -823,6 +825,12 @@ In the following example, each row in the sortable data table has an overflow me
 ### Skeleton with headers, row count
 
 <DataTableSkeleton headers={["Name", "Protocol", "Port", "Rule"]} rows={10} />
+
+### Skeleton with object headers
+
+`headers` can also be an array of objects. The type is the same as the `headers` prop type used in `DataTable`.
+
+<DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}]} rows={10} />
 
 ### Skeleton without header, toolbar
 
