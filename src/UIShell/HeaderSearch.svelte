@@ -31,6 +31,12 @@
 
   let refSearch = null;
 
+  function selectResult() {
+    active = false;
+    value = "";
+    dispatch("select", { value, selectedResultIndex, selectedResult });
+  }
+
   $: if (active && ref) ref.focus();
   $: selectedResult = results[selectedResultIndex];
   $: selectedId = selectedResult
@@ -211,9 +217,7 @@
       on:keydown="{({ key }) => {
         switch (key) {
           case 'Enter':
-            active = false;
-            value = '';
-            dispatch('select', { value, selectedResultIndex, selectedResult });
+            selectResult();
             break;
           case 'ArrowDown':
             if (selectedResultIndex === results.length - 1) {
@@ -258,13 +262,7 @@
             role="menuitem"
             href="{result.href}"
             class:selected="{selectedId === `search-menuitem-${i}`}"
-            on:click|preventDefault="{() => {
-              dispatch('select', {
-                value,
-                selectedResultIndex,
-                selectedResult,
-              });
-            }}"
+            on:click|preventDefault="{selectResult}"
           >
             <slot result="{result}">
               {result.text}
