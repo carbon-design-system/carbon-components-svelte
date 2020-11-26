@@ -1,6 +1,8 @@
 <script>
   /**
    * @typedef {{ href: string; text: string; description?: string; }} HeaderSearchResult
+   * @event {any} active
+   * @event {any} inactive
    * @event {any} clear
    * @event {{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }} select
    */
@@ -21,7 +23,7 @@
   export let results = [];
 
   /** Specify the selected result index */
-  export let selectedResultIndex = -1;
+  export let selectedResultIndex = 0;
 
   import { createEventDispatcher } from "svelte";
   import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
@@ -31,13 +33,19 @@
 
   let refSearch = null;
 
-  function selectResult() {
+  function reset() {
     active = false;
     value = "";
+    selectedResultIndex = 0;
+  }
+
+  function selectResult() {
     dispatch("select", { value, selectedResultIndex, selectedResult });
+    reset();
   }
 
   $: if (active && ref) ref.focus();
+  $: dispatch(active ? "active" : "inactive");
   $: selectedResult = results[selectedResultIndex];
   $: selectedId = selectedResult
     ? `search-menuitem-${selectedResultIndex}`
@@ -243,8 +251,7 @@
       class:bx--header__action="{true}"
       class:hidden="{!active}"
       on:click="{() => {
-        active = false;
-        value = '';
+        reset();
         dispatch('clear');
       }}"
     >

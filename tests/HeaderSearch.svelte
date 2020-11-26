@@ -65,6 +65,8 @@
       bind:value
       bind:selectedResultIndex
       results="{results}"
+      on:active
+      on:inactive
       on:clear="{() => {
         console.log('on:clear');
       }}"
