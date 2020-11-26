@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.24.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.24.0) - 2020-11-26
+
+**Features**
+
+- Add HeaderSearch component for the UI Shell that can render user-provided search results ([PR #417](https://github.com/IBM/carbon-components-svelte/pull/417), [issue #395](https://github.com/IBM/carbon-components-svelte/issues/395)); HeaderActionSearch is deprecated in favor of HeaderSearch
+- Expand `headers` prop type in DataTableSkeleton to be consistent with that of the DataTable ([PR #415](https://github.com/IBM/carbon-components-svelte/pull/415), [issue #413](https://github.com/IBM/carbon-components-svelte/issues/413))
+
+**Fixes**
+
+- Update `DataTableRow` prop type in DataTable to require an "id" key and value ([PR #415](https://github.com/IBM/carbon-components-svelte/pull/415), [issue #414](https://github.com/IBM/carbon-components-svelte/issues/414))
+
+**Documentation**
+
+- Add example ["Skeleton with object headers"](https://carbon-svelte.vercel.app/components/DataTable#skeleton-with-object-headers) to the DataTable docs
+- Add example ["Header with global search"](https://carbon.vercel.app/components/UIShell#header-with-global-search) to the UI Shell docs
+- deprecate HeaderActionSearch in favor of HeaderSearch
+
 ## [0.23.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.23.2) - 2020-11-25
 
 **Fixes**
