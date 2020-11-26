@@ -10325,15 +10325,14 @@
         { "type": "dispatched", "name": "clear", "detail": "any" },
         {
           "type": "dispatched",
-          "name": "search",
+          "name": "select",
           "detail": "{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }"
         },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
-        { "type": "forwarded", "name": "keydown", "element": "input" },
-        { "type": "dispatched", "name": "select" }
+        { "type": "forwarded", "name": "keydown", "element": "input" }
       ],
       "typedefs": [
         {

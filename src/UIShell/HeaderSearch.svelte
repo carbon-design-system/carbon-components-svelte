@@ -2,7 +2,7 @@
   /**
    * @typedef {{ href: string; text: string; description?: string; }} HeaderSearchResult
    * @event {any} clear
-   * @event {{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }} search
+   * @event {{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }} select
    */
 
   /** Specify the search input value */

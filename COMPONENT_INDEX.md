@@ -1643,13 +1643,12 @@ export interface HeaderSearchResult {
 | Event name | Type       | Detail                                                                                          |
 | :--------- | :--------- | :---------------------------------------------------------------------------------------------- |
 | clear      | dispatched | <code>any</code>                                                                                |
-| search     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }</code> |
+| select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }</code> |
 | change     | forwarded  | --                                                                                              |
 | input      | forwarded  | --                                                                                              |
 | focus      | forwarded  | --                                                                                              |
 | blur       | forwarded  | --                                                                                              |
 | keydown    | forwarded  | --                                                                                              |
-| select     | dispatched | --                                                                                              |
 
 ## `HeaderUtilities`
 

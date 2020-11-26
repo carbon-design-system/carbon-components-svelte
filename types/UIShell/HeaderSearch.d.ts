@@ -46,7 +46,7 @@ export default class HeaderSearch {
 
   $on(eventname: "clear", cb: (event: CustomEvent<any>) => void): () => void;
   $on(
-    eventname: "search",
+    eventname: "select",
     cb: (event: CustomEvent<{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }>) => void
   ): () => void;
   $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
@@ -54,6 +54,5 @@ export default class HeaderSearch {
   $on(eventname: "focus", cb: (event: WindowEventMap["focus"]) => void): () => void;
   $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
   $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "select", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

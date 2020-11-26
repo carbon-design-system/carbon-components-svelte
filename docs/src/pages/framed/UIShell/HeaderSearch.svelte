@@ -63,17 +63,14 @@
       bind:ref
       bind:active
       bind:value
-      on:search="{(e) => {
-        console.log('on:search', e.detail);
-      }}"
+      bind:selectedResultIndex
+      results="{results}"
       on:clear="{() => {
         console.log('on:clear');
       }}"
       on:select="{(e) => {
         console.log('on:select', e.detail);
       }}"
-      results="{results}"
-      bind:selectedResultIndex
     />
     <HeaderAction bind:isOpen>
       <HeaderPanelLinks>
