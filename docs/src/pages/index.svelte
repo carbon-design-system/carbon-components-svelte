@@ -6,9 +6,6 @@
     Column,
     CodeSnippet,
     Link,
-    Tabs,
-    Tab,
-    TabContent,
   } from "carbon-components-svelte";
   import TileCard from "../components/TileCard.svelte";
   import { metatags } from "@sveltech/routify";
@@ -28,8 +25,7 @@
       <Column>
         <h1>Carbon Components Svelte</h1>
         <p class="big-paragraph">
-          <code>carbon-components-svelte</code>
-          is a
+          carbon-components-svelte is a
           <Link
             inline
             class="big-link"
@@ -51,36 +47,27 @@
           A design system can facilitate frontend development and prototyping
           because it encourages reuse, consistency, and extensibility.
         </p>
-        <h3>Install</h3>
       </Column>
     </Row>
-    <Row noGutter style="margin-bottom: var(--cds-layout-02)">
+    <Row style="margin-bottom: var(--cds-layout-02)">
       <Column>
-        <Tabs>
-          <Tab label="Yarn" />
-          <Tab label="npm" />
-          <div
-            slot="content"
-            style="margin-left: calc(-1 * var(--cds-spacing-05)); margin-right: calc(-1 * var(--cds-spacing-05));"
-          >
-            <TabContent>
-              <CodeSnippet
-                code="{installYarn}"
-                on:click="{() => {
-                  copy(installYarn);
-                }}"
-              />
-            </TabContent>
-            <TabContent>
-              <CodeSnippet
-                code="{installNpm}"
-                on:click="{() => {
-                  copy(installNpm);
-                }}"
-              />
-            </TabContent>
-          </div>
-        </Tabs>
+        <h3>Install</h3>
+        <h4>Installing with yarn:</h4>
+        <CodeSnippet
+          code="{installYarn}"
+          on:click="{() => {
+            copy(installYarn);
+          }}"
+        />
+
+        <h4>Using npm:</h4>
+
+        <CodeSnippet
+          code="{installNpm}"
+          on:click="{() => {
+            copy(installNpm);
+          }}"
+        />
       </Column>
     </Row>
     <Row>
