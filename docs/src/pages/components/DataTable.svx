@@ -824,6 +824,12 @@ In the following example, each row in the sortable data table has an overflow me
 
 <DataTableSkeleton headers={["Name", "Protocol", "Port", "Rule"]} rows={10} />
 
+### Skeleton with object headers
+
+`headers` can also be an array of objects. The type is the same as the `headers` prop type used in `DataTable`.
+
+<DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}]} rows={10} />
+
 ### Skeleton without header, toolbar
 
 <DataTableSkeleton showHeader={false} showToolbar={false} />
