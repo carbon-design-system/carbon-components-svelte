@@ -13,7 +13,7 @@
 
   /**
    * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot (e.g. <Column let:props><article {...props}>...</article></Column>)
+   * Props are destructured as `props` in the default slot (e.g., <Column let:props><article {...props}>...</article></Column>)
    */
   export let as = false;
 
@@ -26,14 +26,14 @@
   /** Set to `true` to remove the right gutter */
   export let noGutterRight = false;
 
+  /** Set to `true` to add top and bottom padding this column */
+  export let padding = false;
+
   /**
    * Specify the aspect ratio of the column
    * @type {"2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1"}
    */
   export let aspectRatio = undefined;
-
-  /** Set to `true` to add top and bottom padding this column */
-  export let padding = false;
 
   /**
    * Set the small breakpoint

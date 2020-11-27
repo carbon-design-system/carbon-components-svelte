@@ -11,22 +11,20 @@
   /** Obtain a reference to the HTML button element */
   export let ref = null;
 
-  import { fly } from "svelte/transition";
   import Close20 from "carbon-icons-svelte/lib/Close20";
   import Menu20 from "carbon-icons-svelte/lib/Menu20";
   import { Icon } from "../../Icon";
 </script>
 
 <button
-  type="button"
   bind:this="{ref}"
+  type="button"
   title="Open menu"
   aria-label="{ariaLabel}"
   class:bx--header__action="{true}"
   class:bx--header__menu-trigger="{true}"
   class:bx--header__menu-toggle="{true}"
   {...$$restProps}
-  transition:fly="{{ x: -200, delay: 50, duration: 250 }}"
   on:click
   on:click="{() => (isOpen = !isOpen)}"
 >

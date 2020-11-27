@@ -7,7 +7,7 @@
 
   /**
    * Set the code snippet text
-   * Alternatively, use the default slot (e.g. <CodeSnippet>{`code`}</CodeSnippet>)
+   * Alternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)
    * @type {string}
    */
   export let code = undefined;

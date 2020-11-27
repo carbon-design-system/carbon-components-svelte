@@ -3,7 +3,7 @@
 export interface SwitchProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
    * Specify the switch text
-   * Alternatively, use the named slot "text" (e.g. <span slot="text">...</span>)
+   * Alternatively, use the named slot "text" (e.g., <span slot="text">...</span>)
    * @default "Provide text"
    */
   text?: string;

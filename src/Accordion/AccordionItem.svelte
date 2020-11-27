@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the title of the accordion item heading
-   * Alternatively, use the named slot "title" (e.g. <div slot="title">...</div>)
+   * Alternatively, use the named slot "title" (e.g., <div slot="title">...</div>)
    */
   export let title = "title";
 

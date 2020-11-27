@@ -21,7 +21,7 @@ export interface TooltipProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNa
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render for the tooltip button
-   * Icon size must be 16px (e.g. `Add16`, `Task16`)
+   * Icon size must be 16px (e.g., `Add16`, `Task16`)
    */
   icon?: typeof import("carbon-icons-svelte").CarbonIcon;
 

@@ -1,5 +1,11 @@
 /// <reference types="svelte" />
 
+export interface HeaderActionSlideTransition {
+  delay?: number;
+  duration?: number;
+  easing?: (t: number) => number;
+}
+
 export interface HeaderActionProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
    * Set to `true` to open the panel
@@ -14,7 +20,7 @@ export interface HeaderActionProps extends svelte.JSX.HTMLAttributes<HTMLElement
 
   /**
    * Specify the text
-   * Alternatively, use the named slot "text" (e.g. <div slot="text">...</div>)
+   * Alternatively, use the named slot "text" (e.g., <div slot="text">...</div>)
    */
   text?: string;
 
@@ -23,6 +29,13 @@ export interface HeaderActionProps extends svelte.JSX.HTMLAttributes<HTMLElement
    * @default null
    */
   ref?: null | HTMLButtonElement;
+
+  /**
+   * Customize the panel transition (i.e., `transition:slide`)
+   * Set to `false` to disable the transition
+   * @default { duration: 200 }
+   */
+  transition?: false | HeaderActionSlideTransition;
 }
 
 export default class HeaderAction {

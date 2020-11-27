@@ -191,7 +191,7 @@
         {
           "name": "title",
           "kind": "let",
-          "description": "Specify the title of the accordion item heading\nAlternatively, use the named slot \"title\" (e.g. <div slot=\"title\">...</div>)",
+          "description": "Specify the title of the accordion item heading\nAlternatively, use the named slot \"title\" (e.g., <div slot=\"title\">...</div>)",
           "type": "string",
           "value": "\"title\"",
           "isFunction": false,
@@ -583,7 +583,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot (e.g. <Button let:props><div {...props}>...</div></Button>)",
+          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot (e.g., <Button let:props><div {...props}>...</div></Button>)",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -906,7 +906,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the switch text\nAlternatively, use the named slot \"text\" (e.g. <span slot=\"text\">...</span>)",
+          "description": "Specify the switch text\nAlternatively, use the named slot \"text\" (e.g., <span slot=\"text\">...</span>)",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
@@ -1918,7 +1918,7 @@
         {
           "name": "code",
           "kind": "let",
-          "description": "Set the code snippet text\nAlternatively, use the default slot (e.g. <CodeSnippet>{`code`}</CodeSnippet>)",
+          "description": "Set the code snippet text\nAlternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)",
           "type": "string",
           "isFunction": false,
           "constant": false,
@@ -4595,7 +4595,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot (e.g. <Grid let:props><header {...props}>...</header></Grid>)",
+          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot (e.g., <Grid let:props><header {...props}>...</header></Grid>)",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -4691,7 +4691,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot (e.g. <Row let:props><section {...props}>...</section></Row>)",
+          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot (e.g., <Row let:props><section {...props}>...</section></Row>)",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -4777,7 +4777,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot (e.g. <Column let:props><article {...props}>...</article></Column>)",
+          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot (e.g., <Column let:props><article {...props}>...</article></Column>)",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -4815,20 +4815,20 @@
           "reactive": false
         },
         {
-          "name": "aspectRatio",
-          "kind": "let",
-          "description": "Specify the aspect ratio of the column",
-          "type": "\"2x1\" | \"16x9\" | \"9x16\" | \"1x2\" | \"4x3\" | \"3x4\" | \"1x1\"",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "padding",
           "kind": "let",
           "description": "Set to `true` to add top and bottom padding this column",
           "type": "boolean",
           "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "aspectRatio",
+          "kind": "let",
+          "description": "Specify the aspect ratio of the column",
+          "type": "\"2x1\" | \"16x9\" | \"9x16\" | \"1x2\" | \"4x3\" | \"3x4\" | \"1x1\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -7524,7 +7524,7 @@
         {
           "name": "label",
           "kind": "let",
-          "description": "Specify the tab label\nAlternatively, use the default slot (e.g. <Tab><span>Label</span></Tab>)",
+          "description": "Specify the tab label\nAlternatively, use the default slot (e.g., <Tab><span>Label</span></Tab>)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -9313,7 +9313,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render for the tooltip button\nIcon size must be 16px (e.g. `Add16`, `Task16`)",
+          "description": "Specify the icon from `carbon-icons-svelte` to render for the tooltip button\nIcon size must be 16px (e.g., `Add16`, `Task16`)",
           "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
@@ -9623,7 +9623,7 @@
         {
           "name": "platformName",
           "kind": "let",
-          "description": "Specify the platform name\nAlternatively, use the named slot \"platform\" (e.g. <span slot=\"platform\">...</span>)",
+          "description": "Specify the platform name\nAlternatively, use the named slot \"platform\" (e.g., <span slot=\"platform\">...</span>)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -9691,7 +9691,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text\nAlternatively, use the named slot \"text\" (e.g. <div slot=\"text\">...</div>)",
+          "description": "Specify the text\nAlternatively, use the named slot \"text\" (e.g., <div slot=\"text\">...</div>)",
           "type": "string",
           "isFunction": false,
           "constant": false,
@@ -9706,6 +9706,16 @@
           "isFunction": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "transition",
+          "kind": "let",
+          "description": "Customize the panel transition (i.e., `transition:slide`)\nSet to `false` to disable the transition",
+          "type": "false | HeaderActionSlideTransition",
+          "value": "{ duration: 200 }",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [
@@ -9721,7 +9731,13 @@
         { "type": "forwarded", "name": "click", "element": "button" },
         { "type": "dispatched", "name": "close" }
       ],
-      "typedefs": [],
+      "typedefs": [
+        {
+          "type": "{ delay?: number; duration?: number; easing?: (t: number) => number; }",
+          "name": "HeaderActionSlideTransition",
+          "ts": "interface HeaderActionSlideTransition { delay?: number; duration?: number; easing?: (t: number) => number; }"
+        }
+      ],
       "rest_props": { "type": "Element", "name": "button" }
     },
     {

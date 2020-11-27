@@ -30,7 +30,7 @@ export interface HeaderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNam
 
   /**
    * Specify the platform name
-   * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
+   * Alternatively, use the named slot "platform" (e.g., <span slot="platform">...</span>)
    * @default ""
    */
   platformName?: string;

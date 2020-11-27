@@ -186,7 +186,7 @@
         href="https://github.com/IBM/carbon-components-svelte"
         target="_blank"
       />
-      <HeaderAction bind:isOpen>
+      <HeaderAction transition="{false}" bind:isOpen>
         <HeaderPanelLinks>
           <HeaderPanelDivider>Carbon Svelte portfolio</HeaderPanelDivider>
           <HeaderPanelLink href="https://github.com/IBM/carbon-icons-svelte">

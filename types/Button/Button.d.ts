@@ -47,7 +47,7 @@ export interface ButtonProps
 
   /**
    * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot (e.g. <Button let:props><div {...props}>...</div></Button>)
+   * Props are destructured as `props` in the default slot (e.g., <Button let:props><div {...props}>...</div></Button>)
    * @default false
    */
   as?: boolean;
