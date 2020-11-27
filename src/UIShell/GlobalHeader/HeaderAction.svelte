@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @typedef {{ delay?: number; duration?: number; easing?: (t: number) => number; }} HeaderActionSlideTransition
+   */
+
   /** Set to `true` to open the panel */
   export let isOpen = false;
 
@@ -10,13 +14,20 @@
 
   /**
    * Specify the text
-   * Alternatively, use the named slot "text" (e.g. <div slot="text">...</div>)
+   * Alternatively, use the named slot "text" (e.g., <div slot="text">...</div>)
    * @type {string}
    */
   export let text = undefined;
 
   /** Obtain a reference to the button HTML element */
   export let ref = null;
+
+  /**
+   * Customize the panel transition (i.e., `transition:slide`)
+   * Set to `false` to disable the transition
+   * @type {false | HeaderActionSlideTransition}
+   */
+  export let transition = { duration: 200 };
 
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
@@ -78,7 +89,7 @@
       bind:this="{refPanel}"
       class:bx--header-panel="{true}"
       class:bx--header-panel--expanded="{true}"
-      transition:slide="{{ duration: 200 }}"
+      transition:slide="{{ ...transition, duration: transition === false ? 0 : transition.duration }}"
     >
       <slot />
     </div>

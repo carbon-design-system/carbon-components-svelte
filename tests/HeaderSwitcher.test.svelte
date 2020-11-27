@@ -27,7 +27,7 @@
     <SkipToContent />
   </div>
   <HeaderUtilities>
-    <HeaderAction bind:isOpen>
+    <HeaderAction bind:isOpen transition="{false}">
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
