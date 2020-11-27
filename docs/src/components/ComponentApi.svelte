@@ -138,7 +138,10 @@
               {#if prop.description}
                 {#each prop.description.split('\n') as line}
                   <div class="description">
-                    {@html line.replace(/`(.*?)`/g, '<code>$1</code>')}.
+                    {@html line
+                      .replace(/\</g, '&lt;')
+                      .replace(/\>/g, '&gt;')
+                      .replace(/`(.*?)`/g, '<code>$1</code>')}.
                   </div>
                 {/each}
               {:else}
