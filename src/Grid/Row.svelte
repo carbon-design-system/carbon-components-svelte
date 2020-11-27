@@ -27,6 +27,7 @@
 
   /** Set to `true` to add top and bottom padding to all columns */
   export let padding = false;
+
   $: props = {
     ...$$restProps,
     class: [

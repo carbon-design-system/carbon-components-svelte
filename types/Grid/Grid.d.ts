@@ -1,7 +1,6 @@
 /// <reference types="svelte" />
 
-export interface GridProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface GridProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g. <Grid let:props><header {...props}>...</header></Grid>)
