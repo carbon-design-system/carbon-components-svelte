@@ -32,6 +32,9 @@
    */
   export let aspectRatio = undefined;
 
+  /** Set to `true` to add top and bottom padding this column */
+  export let padding = false;
+
   /**
    * Set the small breakpoint
    * @type {ColumnBreakpoint}
@@ -100,6 +103,7 @@
       noGutterLeft && "bx--no-gutter--left",
       noGutterRight && "bx--no-gutter--right",
       aspectRatio && `bx--aspect-ratio bx--aspect-ratio--${aspectRatio}`,
+      padding && "bx--col-padding",
     ]
       .filter(Boolean)
       .join(" "),

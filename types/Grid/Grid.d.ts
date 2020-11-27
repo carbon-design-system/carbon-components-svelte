@@ -1,6 +1,7 @@
 /// <reference types="svelte" />
 
-export interface GridProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface GridProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g. <Grid let:props><header {...props}>...</header></Grid>)
@@ -43,6 +44,12 @@ export interface GridProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameM
    * @default false
    */
   noGutterRight?: boolean;
+
+  /**
+   * Set to `true` to add top and bottom padding to all columns
+   * @default false
+   */
+  padding?: boolean;
 }
 
 export default class Grid {

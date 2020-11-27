@@ -1,6 +1,7 @@
 /// <reference types="svelte" />
 
-export interface RowProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface RowProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g. <Row let:props><section {...props}>...</section></Row>)
@@ -37,6 +38,12 @@ export interface RowProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMa
    * @default false
    */
   noGutterRight?: boolean;
+
+  /**
+   * Set to `true` to add top and bottom padding to all columns
+   * @default false
+   */
+  padding?: boolean;
 }
 
 export default class Row {
