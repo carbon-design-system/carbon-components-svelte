@@ -4142,7 +4142,7 @@
           "name": "files",
           "kind": "let",
           "description": "Obtain the uploaded file names",
-          "type": "string[]",
+          "type": "FileList",
           "value": "[]",
           "isFunction": false,
           "constant": false,

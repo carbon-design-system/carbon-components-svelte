@@ -18,7 +18,7 @@
 
   /**
    * Obtain the uploaded file names
-   * @type {string[]}
+   * @type {FileList}
    */
   export let files = [];
 

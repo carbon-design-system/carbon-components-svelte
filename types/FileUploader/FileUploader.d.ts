@@ -17,7 +17,7 @@ export interface FileUploaderProps extends svelte.JSX.HTMLAttributes<HTMLElement
    * Obtain the uploaded file names
    * @default []
    */
-  files?: string[];
+  files?: FileList;
 
   /**
    * Set to `true` to allow multiple files
