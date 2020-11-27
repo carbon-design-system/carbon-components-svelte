@@ -20,6 +20,7 @@
     Column,
   } from "../types";
   import SettingsAdjust20 from "carbon-icons-svelte/lib/SettingsAdjust20";
+  import { quintOut } from "svelte/easing";
 
   let isSideNavOpen = false;
   let isOpen = false;
@@ -32,7 +33,10 @@
   <HeaderUtilities>
     <HeaderActionSearch />
     <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust20}" />
-    <HeaderAction bind:isOpen>
+    <HeaderAction
+      bind:isOpen
+      transition="{{ duration: 400, easing: quintOut }}"
+    >
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
