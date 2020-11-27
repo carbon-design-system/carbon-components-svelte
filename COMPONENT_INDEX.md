@@ -1,6 +1,6 @@
 # Component Index
 
-> 155 components exported from carbon-components-svelte@0.24.0.
+> 155 components exported from carbon-components-svelte@0.25.0.
 
 ## Components
 
@@ -1054,19 +1054,13 @@ None.
 
 ## `FileUploader`
 
-### Types
-
-```ts
-export type Files = string[];
-```
-
 ### Props
 
 | Prop name        | Kind               | Reactive | Type                                                                                       | Default value                           | Description                                                           |
 | :--------------- | :----------------- | :------- | :----------------------------------------------------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------- |
-| files            | <code>let</code>   | Yes      | <code>Files</code>                                                                         | <code>[]</code>                         | Obtain the uploaded file names                                        |
+| files            | <code>let</code>   | Yes      | <code>FileList</code>                                                                      | <code>[]</code>                         | Obtain the uploaded file names                                        |
 | status           | <code>let</code>   | No       | <code>"uploading" &#124; "edit" &#124; "complete"</code>                                   | <code>"uploading"</code>                | Specify the file uploader status                                      |
-| accept           | <code>let</code>   | No       | <code>Files</code>                                                                         | <code>[]</code>                         | Specify the accepted file types                                       |
+| accept           | <code>let</code>   | No       | <code>string[]</code>                                                                      | <code>[]</code>                         | Specify the accepted file types                                       |
 | multiple         | <code>let</code>   | No       | <code>boolean</code>                                                                       | <code>false</code>                      | Set to `true` to allow multiple files                                 |
 | clearFiles       | <code>const</code> | No       | <code>() => void</code>                                                                    | <code>() => { files = []; }</code>      | Override the default behavior of clearing the array of uploaded files |
 | labelDescription | <code>let</code>   | No       | <code>string</code>                                                                        | <code>""</code>                         | Specify the label description                                         |
@@ -1082,24 +1076,18 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail             |
-| :--------- | :--------- | :----------------- |
-| add        | dispatched | <code>Files</code> |
-| remove     | dispatched | <code>Files</code> |
-| click      | forwarded  | --                 |
-| mouseover  | forwarded  | --                 |
-| mouseenter | forwarded  | --                 |
-| mouseleave | forwarded  | --                 |
-| change     | forwarded  | --                 |
-| keydown    | forwarded  | --                 |
+| Event name | Type       | Detail                |
+| :--------- | :--------- | :-------------------- |
+| add        | dispatched | <code>FileList</code> |
+| remove     | dispatched | <code>FileList</code> |
+| click      | forwarded  | --                    |
+| mouseover  | forwarded  | --                    |
+| mouseenter | forwarded  | --                    |
+| mouseleave | forwarded  | --                    |
+| change     | forwarded  | --                    |
+| keydown    | forwarded  | --                    |
 
 ## `FileUploaderButton`
-
-### Types
-
-```ts
-export type Files = string[];
-```
 
 ### Props
 
@@ -1107,7 +1095,7 @@ export type Files = string[];
 | :------------------ | :--------------- | :------- | :----------------------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------- |
 | ref                 | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                  | <code>null</code>                                | Obtain a reference to the input HTML element |
 | labelText           | <code>let</code> | Yes      | <code>string</code>                                                                        | <code>"Add file"</code>                          | Specify the label text                       |
-| accept              | <code>let</code> | No       | <code>Files</code>                                                                         | <code>[]</code>                                  | Specify the accepted file types              |
+| accept              | <code>let</code> | No       | <code>string[]</code>                                                                      | <code>[]</code>                                  | Specify the accepted file types              |
 | multiple            | <code>let</code> | No       | <code>boolean</code>                                                                       | <code>false</code>                               | Set to `true` to allow multiple files        |
 | disabled            | <code>let</code> | No       | <code>boolean</code>                                                                       | <code>false</code>                               | Set to `true` to disable the input           |
 | disableLabelChanges | <code>let</code> | No       | <code>boolean</code>                                                                       | <code>false</code>                               | Set to `true` to disable label changes       |
@@ -1131,26 +1119,20 @@ None.
 
 ## `FileUploaderDropContainer`
 
-### Types
-
-```ts
-export type Files = string[];
-```
-
 ### Props
 
-| Prop name     | Kind             | Reactive | Type                                      | Default value                                    | Description                                                                                                  |
-| :------------ | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| ref           | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element                                                                 |
-| accept        | <code>let</code> | No       | <code>Files</code>                        | <code>[]</code>                                  | Specify the accepted file types                                                                              |
-| multiple      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to allow multiple files                                                                        |
-| validateFiles | <code>let</code> | No       | <code>(files: Files) => Files</code>      | <code>(files) => files</code>                    | Override the default behavior of validating uploaded files<br />The default behavior does not validate files |
-| labelText     | <code>let</code> | No       | <code>string</code>                       | <code>"Add file"</code>                          | Specify the label text                                                                                       |
-| role          | <code>let</code> | No       | <code>string</code>                       | <code>"button"</code>                            | Specify the `role` attribute of the drop container                                                           |
-| disabled      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the input                                                                           |
-| tabindex      | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify `tabindex` attribute                                                                                 |
-| id            | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                                                              |
-| name          | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify a name attribute for the input                                                                       |
+| Prop name     | Kind             | Reactive | Type                                       | Default value                                    | Description                                                                                                  |
+| :------------ | :--------------- | :------- | :----------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| ref           | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>  | <code>null</code>                                | Obtain a reference to the input HTML element                                                                 |
+| accept        | <code>let</code> | No       | <code>string[]</code>                      | <code>[]</code>                                  | Specify the accepted file types                                                                              |
+| multiple      | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to allow multiple files                                                                        |
+| validateFiles | <code>let</code> | No       | <code>(files: FileList) => FileList</code> | <code>(files) => files</code>                    | Override the default behavior of validating uploaded files<br />The default behavior does not validate files |
+| labelText     | <code>let</code> | No       | <code>string</code>                        | <code>"Add file"</code>                          | Specify the label text                                                                                       |
+| role          | <code>let</code> | No       | <code>string</code>                        | <code>"button"</code>                            | Specify the `role` attribute of the drop container                                                           |
+| disabled      | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to disable the input                                                                           |
+| tabindex      | <code>let</code> | No       | <code>string</code>                        | <code>"0"</code>                                 | Specify `tabindex` attribute                                                                                 |
+| id            | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                                                              |
+| name          | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify a name attribute for the input                                                                       |
 
 ### Slots
 
@@ -1158,15 +1140,15 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail             |
-| :--------- | :--------- | :----------------- |
-| add        | dispatched | <code>Files</code> |
-| dragover   | forwarded  | --                 |
-| dragleave  | forwarded  | --                 |
-| drop       | forwarded  | --                 |
-| keydown    | forwarded  | --                 |
-| change     | forwarded  | --                 |
-| click      | forwarded  | --                 |
+| Event name | Type       | Detail                |
+| :--------- | :--------- | :-------------------- |
+| add        | dispatched | <code>FileList</code> |
+| dragover   | forwarded  | --                    |
+| dragleave  | forwarded  | --                    |
+| drop       | forwarded  | --                    |
+| keydown    | forwarded  | --                    |
+| change     | forwarded  | --                    |
+| click      | forwarded  | --                    |
 
 ## `FileUploaderItem`
 

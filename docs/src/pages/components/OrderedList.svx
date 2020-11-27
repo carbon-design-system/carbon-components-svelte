@@ -51,6 +51,8 @@ components: ["OrderedList", "ListItem"]
 
 ### Native list styles
 
+Use the `native` attribute to enable default browser list styles. This is useful for large lists (i.e., 1000 or more items) where the list number may overlap with the list item text.
+
 <OrderedList native>
   <ListItem>
     Ordered list level 1

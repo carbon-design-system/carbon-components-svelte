@@ -1,8 +1,7 @@
 <script>
   /**
-   * @typedef {string[]} Files
-   * @event {Files} add
-   * @event {Files} remove
+   * @event {FileList} add
+   * @event {FileList} remove
    */
 
   /**
@@ -13,13 +12,13 @@
 
   /**
    * Specify the accepted file types
-   * @type {Files}
+   * @type {string[]}
    */
   export let accept = [];
 
   /**
    * Obtain the uploaded file names
-   * @type {Files}
+   * @type {FileList}
    */
   export let files = [];
 

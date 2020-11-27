@@ -1,13 +1,11 @@
 /// <reference types="svelte" />
 
-export type Files = string[];
-
 export interface FileUploaderDropContainerProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the accepted file types
    * @default []
    */
-  accept?: Files;
+  accept?: string[];
 
   /**
    * Set to `true` to allow multiple files
@@ -20,7 +18,7 @@ export interface FileUploaderDropContainerProps extends svelte.JSX.HTMLAttribute
    * The default behavior does not validate files
    * @default (files) => files
    */
-  validateFiles?: (files: Files) => Files;
+  validateFiles?: (files: FileList) => FileList;
 
   /**
    * Specify the label text
@@ -69,7 +67,7 @@ export default class FileUploaderDropContainer {
   $$prop_def: FileUploaderDropContainerProps;
   $$slot_def: {};
 
-  $on(eventname: "add", cb: (event: CustomEvent<Files>) => void): () => void;
+  $on(eventname: "add", cb: (event: CustomEvent<FileList>) => void): () => void;
   $on(eventname: "dragover", cb: (event: WindowEventMap["dragover"]) => void): () => void;
   $on(eventname: "dragleave", cb: (event: WindowEventMap["dragleave"]) => void): () => void;
   $on(eventname: "drop", cb: (event: WindowEventMap["drop"]) => void): () => void;

@@ -5,13 +5,25 @@
 ![npm downloads to date](https://img.shields.io/npm/dt/carbon-components-svelte?color=262626&style=for-the-badge)
 [![Build][build]][build-badge]
 
-carbon-components-svelte is a Svelte component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
+Carbon Components Svelte is a [Svelte](https://github.com/sveltejs/svelte) component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
 
-A design system can facilitate frontend development and prototyping because it encourages reuse, consistency, and extensibility.
+Design systems facilitate design and development through reuse, consistency, and extensibility.
+
+The Carbon Svelte portfolio also includes:
+
+- **[Carbon Icons Svelte](https://github.com/IBM/carbon-icons-svelte)**: 5800+ Carbon icons as Svelte components
+- **[Carbon Pictograms Svelte](https://github.com/IBM/carbon-pictograms-svelte)**: 600+ Carbon pictograms as Svelte components
+- **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 16 chart types, powered by d3
 
 ## [Documentation](http://ibm.biz/carbon-svelte)
 
-<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="32px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
+<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="34px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
+
+The [documentation website](http://ibm.biz/carbon-svelte) contains live demos and examples. Other forms of documentation are auto-generated:
+
+- **[Component Index](COMPONENT_INDEX.md)**: Markdown file documenting component props, slots, and events
+- **[TypeScript definitions](types)**: Component TypeScript definitions
+- **[Component API](docs/src/COMPONENT_API.json)**: Component API metadata in JSON format
 
 ## Getting started
 

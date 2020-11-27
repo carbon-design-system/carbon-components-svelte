@@ -1,13 +1,11 @@
 /// <reference types="svelte" />
 
-export type Files = string[];
-
 export interface FileUploaderButtonProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Specify the accepted file types
    * @default []
    */
-  accept?: Files;
+  accept?: string[];
 
   /**
    * Set to `true` to allow multiple files
