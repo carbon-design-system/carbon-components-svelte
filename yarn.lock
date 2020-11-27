@@ -2728,7 +2728,7 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-sveld@^0.3.0:
+sveld@0.3.0:
   version "0.3.0"
   resolved "https://registry.npmjs.org/sveld/-/sveld-0.3.0.tgz#a1a8c188511a8d5674c72fd8b2987278fae0d062"
   integrity sha512-aEuxRaeN11P+k0DvQ+32lEzRQNzv+dFO5qRC4wSM0p5MW9i6sxgPmnYV3xy5TSzaYXVmSI9JJRSMDd3C1ayw0w==
