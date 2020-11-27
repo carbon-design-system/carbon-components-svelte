@@ -1,7 +1,5 @@
 /// <reference types="svelte" />
 
-export type Files = string[];
-
 export interface FileUploaderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the file uploader status
@@ -13,13 +11,13 @@ export interface FileUploaderProps extends svelte.JSX.HTMLAttributes<HTMLElement
    * Specify the accepted file types
    * @default []
    */
-  accept?: Files;
+  accept?: string[];
 
   /**
    * Obtain the uploaded file names
    * @default []
    */
-  files?: Files;
+  files?: string[];
 
   /**
    * Set to `true` to allow multiple files
@@ -75,8 +73,8 @@ export default class FileUploader {
   $$prop_def: FileUploaderProps;
   $$slot_def: {};
 
-  $on(eventname: "add", cb: (event: CustomEvent<Files>) => void): () => void;
-  $on(eventname: "remove", cb: (event: CustomEvent<Files>) => void): () => void;
+  $on(eventname: "add", cb: (event: CustomEvent<FileList>) => void): () => void;
+  $on(eventname: "remove", cb: (event: CustomEvent<FileList>) => void): () => void;
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
   $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
   $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;

@@ -120,11 +120,11 @@ export default class Modal {
     label: {};
   };
 
+  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
   $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
   $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
   $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
   $on(eventname: "submit", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: "click:button--secondary", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: "close", cb: (event: CustomEvent<any>) => void): () => void;
