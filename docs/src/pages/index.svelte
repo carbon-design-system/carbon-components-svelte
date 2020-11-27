@@ -94,7 +94,7 @@
         <TileCard
           borderBottom
           title="Carbon Icons Svelte"
-          subtitle="5000+ icons"
+          subtitle="5800+ icons"
           target="_blank"
           href="https://github.com/IBM/carbon-icons-svelte"
         />
@@ -113,7 +113,7 @@
       <Column xlg="{5}" lg="{8}" md="{4}">
         <TileCard
           title="Carbon Charts Svelte"
-          subtitle="13 chart types, powered by d3"
+          subtitle="16 chart types, powered by d3"
           target="_blank"
           href="https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte"
         />
