@@ -26,7 +26,7 @@
   /** Set to `true` to remove the right gutter */
   export let noGutterRight = false;
 
-  /** Set to `true` to add top and bottom padding this column */
+  /** Set to `true` to add top and bottom padding to the column */
   export let padding = false;
 
   /**

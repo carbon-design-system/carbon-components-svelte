@@ -36,7 +36,7 @@ export interface ColumnProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNam
   noGutterRight?: boolean;
 
   /**
-   * Set to `true` to add top and bottom padding this column
+   * Set to `true` to add top and bottom padding to the column
    * @default false
    */
   padding?: boolean;
