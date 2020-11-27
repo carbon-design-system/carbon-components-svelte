@@ -16,10 +16,28 @@
     Grid,
     Row,
     Column,
+    TileGroup,
+    RadioTile,
   } from "carbon-components-svelte";
+  import { expoIn } from "svelte/easing";
 
   let isSideNavOpen = false;
   let isOpen = false;
+  let selected = "0";
+  let transitions = {
+    "0": {
+      text: "Default (duration: 200ms)",
+      value: { duration: 200 },
+    },
+    "1": {
+      text: "Custom (duration: 600ms, delay: 50ms, easing: expoIn)",
+      value: { duration: 600, delay: 50, easing: expoIn },
+    },
+    "2": {
+      text: "Disabled",
+      value: false,
+    },
+  };
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
@@ -27,7 +45,7 @@
     <SkipToContent />
   </div>
   <HeaderUtilities>
-    <HeaderAction bind:isOpen>
+    <HeaderAction bind:isOpen transition="{transitions[selected].value}">
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
@@ -59,7 +77,16 @@
   <Grid>
     <Row>
       <Column>
-        <h1>Welcome</h1>
+        <h1>HeaderSwitcher</h1>
+        <p>
+          Select a transition option below and click on the App Switcher icon in
+          the top right.
+        </p>
+        <TileGroup legend="App switcher transitions" bind:selected>
+          {#each Object.keys(transitions) as key}
+            <RadioTile value="{key}">{transitions[key].text}</RadioTile>
+          {/each}
+        </TileGroup>
       </Column>
     </Row>
   </Grid>

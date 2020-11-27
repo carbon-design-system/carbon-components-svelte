@@ -32,6 +32,10 @@ components: ["Header",
 
 ### Header with app switcher
 
+The `HeaderAction` component uses the [transition:slide API](https://svelte.dev/docs#slide); you can customize the transition duration, delay, and easing with the `transition` prop.
+
+You can disable the `transition` by setting it to `false`.
+
 <FileSource src="/framed/UIShell/HeaderSwitcher" />
 
 ### Header with global search
