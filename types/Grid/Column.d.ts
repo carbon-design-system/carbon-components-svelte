@@ -12,7 +12,7 @@ export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 export interface ColumnProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot (e.g. <Column let:props><article {...props}>...</article></Column>)
+   * Props are destructured as `props` in the default slot (e.g., <Column let:props><article {...props}>...</article></Column>)
    * @default false
    */
   as?: boolean;

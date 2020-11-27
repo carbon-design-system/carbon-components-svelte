@@ -25,7 +25,7 @@
 
   /**
    * Specify the platform name
-   * Alternatively, use the named slot "platform" (e.g. <span slot="platform">...</span>)
+   * Alternatively, use the named slot "platform" (e.g., <span slot="platform">...</span>)
    */
   export let platformName = "";
 

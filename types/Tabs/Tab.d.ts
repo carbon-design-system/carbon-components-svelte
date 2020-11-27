@@ -3,7 +3,7 @@
 export interface TabProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
   /**
    * Specify the tab label
-   * Alternatively, use the default slot (e.g. <Tab><span>Label</span></Tab>)
+   * Alternatively, use the default slot (e.g., <Tab><span>Label</span></Tab>)
    * @default ""
    */
   label?: string;
