@@ -25,7 +25,7 @@
       <Column>
         <h1>Carbon Components Svelte</h1>
         <p class="big-paragraph">
-          carbon-components-svelte is a
+          Carbon Components Svelte is a
           <Link
             inline
             class="big-link"
@@ -44,8 +44,8 @@
           by IBM.
         </p>
         <p>
-          A design system can facilitate frontend development and prototyping
-          because it encourages reuse, consistency, and extensibility.
+          Design systems facilitate design and development through reuse,
+          consistency, and extensibility.
         </p>
       </Column>
     </Row>
@@ -74,8 +74,8 @@
       <Column>
         <h3>Portfolio</h3>
         <p>
-          The broader Carbon Svelte effort extends to the icons, pictograms, and
-          data visualization libraries.
+          The broader Carbon Svelte effort includes libraries for icons,
+          pictograms, and data visualization.
         </p>
       </Column>
     </Row>
