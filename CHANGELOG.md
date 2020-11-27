@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.25.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.25.0) - 2020-11-27
+
+**Features**
+
+- Add `padding` prop to Grid, Row, Column components ([PR #420](https://github.com/IBM/carbon-components-svelte/pull/420), [issue #410](https://github.com/IBM/carbon-components-svelte/issues/410))
+- Add `transition` prop to UI Shell `HeaderAction` to customize panel slide transition; by default, the slide duration is `200`ms ([PR #419](https://github.com/IBM/carbon-components-svelte/pull/419), [issue #384](https://github.com/IBM/carbon-components-svelte/issues/384))
+
+**Fixes**
+
+- fix `Files` type for FileUploader ([PR #422](https://github.com/IBM/carbon-components-svelte/pull/422), [issue #421](https://github.com/IBM/carbon-components-svelte/issues/421))
+- remove the fly transition from HamburgerMenu ([PR #419](https://github.com/IBM/carbon-components-svelte/pull/419), [issue #384](https://github.com/IBM/carbon-components-svelte/issues/384))
+
+**Documentation**
+
+- add ["Padded columns"](https://carbon-svelte.vercel.app/components/Grid#padded-columns) example to Grid docs
+- demo different transitions in ["Header with app switcher"](https://carbon-svelte.vercel.app/components/UIShell#header-with-app-switcher) example in UI Shell
+- describe use case for [using native styles in OrderedList](https://carbon-svelte.vercel.app/components/OrderedList#native-list-styles)
+
+**Housekeeping**
+
+- pin development dependency `sveld` to version 0.3.0
+
+---
+
+**Contributors**
+
+- [@ispyinternet](https://github.com/ispyinternet)
+- [@miedzikd](https://github.com/miedzikd)
+
 ## [0.24.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.24.0) - 2020-11-26
 
 **Features**

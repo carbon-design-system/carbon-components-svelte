@@ -1205,12 +1205,12 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        { "type": "forwarded", "name": "blur", "element": "div" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "keydown", "element": "div" }
+        { "type": "forwarded", "name": "keydown", "element": "div" },
+        { "type": "forwarded", "name": "blur", "element": "div" }
       ],
       "typedefs": [
         {
@@ -2896,10 +2896,10 @@
           "name": "mouseleave",
           "element": "SearchSkeleton"
         },
-        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "dispatched", "name": "clear" }
       ],
       "typedefs": [],
@@ -5511,11 +5511,11 @@
         }
       ],
       "events": [
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "forwarded", "name": "keydown", "element": "div" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "dispatched", "name": "submit" },
         { "type": "dispatched", "name": "click:button--secondary" },
         { "type": "dispatched", "name": "close" },
@@ -7881,10 +7881,10 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "blur", "element": "textarea" },
         { "type": "forwarded", "name": "change", "element": "textarea" },
         { "type": "forwarded", "name": "input", "element": "textarea" },
-        { "type": "forwarded", "name": "focus", "element": "textarea" }
+        { "type": "forwarded", "name": "focus", "element": "textarea" },
+        { "type": "forwarded", "name": "blur", "element": "textarea" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "textarea" }
@@ -8103,11 +8103,11 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
-        { "type": "forwarded", "name": "focus", "element": "input" }
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -8324,11 +8324,11 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
-        { "type": "forwarded", "name": "focus", "element": "input" }
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -8503,11 +8503,11 @@
         { "name": "below", "default": false, "slot_props": "{}" }
       ],
       "events": [
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "keypress", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" }
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -8903,10 +8903,10 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
-        { "type": "forwarded", "name": "focus", "element": "input" }
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -9094,8 +9094,8 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
@@ -9864,13 +9864,13 @@
       "slots": [],
       "events": [
         { "type": "forwarded", "name": "click", "element": "a" },
-        { "type": "forwarded", "name": "blur", "element": "a" },
         { "type": "forwarded", "name": "mouseover", "element": "a" },
         { "type": "forwarded", "name": "mouseenter", "element": "a" },
         { "type": "forwarded", "name": "mouseleave", "element": "a" },
         { "type": "forwarded", "name": "keyup", "element": "a" },
         { "type": "forwarded", "name": "keydown", "element": "a" },
-        { "type": "forwarded", "name": "focus", "element": "a" }
+        { "type": "forwarded", "name": "focus", "element": "a" },
+        { "type": "forwarded", "name": "blur", "element": "a" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "a" }
@@ -9931,14 +9931,14 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        { "type": "forwarded", "name": "blur", "element": "a" },
         { "type": "forwarded", "name": "keydown", "element": "a" },
         { "type": "forwarded", "name": "click", "element": "a" },
         { "type": "forwarded", "name": "mouseover", "element": "a" },
         { "type": "forwarded", "name": "mouseenter", "element": "a" },
         { "type": "forwarded", "name": "mouseleave", "element": "a" },
         { "type": "forwarded", "name": "keyup", "element": "a" },
-        { "type": "forwarded", "name": "focus", "element": "a" }
+        { "type": "forwarded", "name": "focus", "element": "a" },
+        { "type": "forwarded", "name": "blur", "element": "a" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "a" }
@@ -10370,11 +10370,11 @@
           "name": "select",
           "detail": "{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }"
         },
-        { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
-        { "type": "forwarded", "name": "blur", "element": "input" }
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" }
       ],
       "typedefs": [
         {
