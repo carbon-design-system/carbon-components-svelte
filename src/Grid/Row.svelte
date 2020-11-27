@@ -25,6 +25,9 @@
   /** Set to `true` to remove the right gutter */
   export let noGutterRight = false;
 
+  /** Set to `true` to add top and bottom padding to all columns */
+  export let padding = false;
+
   $: props = {
     ...$$restProps,
     class: [
@@ -35,6 +38,7 @@
       noGutter && "bx--no-gutter",
       noGutterLeft && "bx--no-gutter--left",
       noGutterRight && "bx--no-gutter--right",
+      padding && "bx--row-padding",
     ]
       .filter(Boolean)
       .join(" "),

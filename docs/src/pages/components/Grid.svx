@@ -33,3 +33,7 @@ components: ["Grid", "Row", "Column"]
 ### Aspect ratio columns
 
 <FileSource src="/framed/Grid/AspectRatioColumns" />
+
+### Padded columns
+
+<FileSource src="/framed/Grid/PaddedGrid" />

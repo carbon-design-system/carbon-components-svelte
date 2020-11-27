@@ -36,6 +36,12 @@ export interface ColumnProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNam
   noGutterRight?: boolean;
 
   /**
+   * Set to `true` to add top and bottom padding to the column
+   * @default false
+   */
+  padding?: boolean;
+
+  /**
    * Specify the aspect ratio of the column
    */
   aspectRatio?: "2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1";

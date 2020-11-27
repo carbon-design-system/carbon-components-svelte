@@ -37,6 +37,12 @@ export interface RowProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMa
    * @default false
    */
   noGutterRight?: boolean;
+
+  /**
+   * Set to `true` to add top and bottom padding to all columns
+   * @default false
+   */
+  padding?: boolean;
 }
 
 export default class Row {

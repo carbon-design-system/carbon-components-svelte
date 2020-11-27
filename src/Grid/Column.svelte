@@ -26,6 +26,9 @@
   /** Set to `true` to remove the right gutter */
   export let noGutterRight = false;
 
+  /** Set to `true` to add top and bottom padding to the column */
+  export let padding = false;
+
   /**
    * Specify the aspect ratio of the column
    * @type {"2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1"}
@@ -100,6 +103,7 @@
       noGutterLeft && "bx--no-gutter--left",
       noGutterRight && "bx--no-gutter--right",
       aspectRatio && `bx--aspect-ratio bx--aspect-ratio--${aspectRatio}`,
+      padding && "bx--col-padding",
     ]
       .filter(Boolean)
       .join(" "),
