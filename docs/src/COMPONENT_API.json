@@ -1205,12 +1205,12 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        { "type": "forwarded", "name": "blur", "element": "div" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "keydown", "element": "div" },
-        { "type": "forwarded", "name": "blur", "element": "div" }
+        { "type": "forwarded", "name": "keydown", "element": "div" }
       ],
       "typedefs": [
         {
@@ -2896,10 +2896,10 @@
           "name": "mouseleave",
           "element": "SearchSkeleton"
         },
+        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
-        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "dispatched", "name": "clear" }
       ],
       "typedefs": [],
@@ -3998,7 +3998,7 @@
           "name": "accept",
           "kind": "let",
           "description": "Specify the accepted file types",
-          "type": "Files",
+          "type": "string[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -4111,9 +4111,7 @@
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "click", "element": "input" }
       ],
-      "typedefs": [
-        { "type": "string[]", "name": "Files", "ts": "type Files = string[]" }
-      ],
+      "typedefs": [],
       "rest_props": { "type": "Element", "name": "input" }
     },
     {
@@ -4134,7 +4132,7 @@
           "name": "accept",
           "kind": "let",
           "description": "Specify the accepted file types",
-          "type": "Files",
+          "type": "string[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -4144,7 +4142,7 @@
           "name": "files",
           "kind": "let",
           "description": "Obtain the uploaded file names",
-          "type": "Files",
+          "type": "FileList",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -4233,8 +4231,8 @@
       ],
       "slots": [],
       "events": [
-        { "type": "dispatched", "name": "add", "detail": "Files" },
-        { "type": "dispatched", "name": "remove", "detail": "Files" },
+        { "type": "dispatched", "name": "add", "detail": "FileList" },
+        { "type": "dispatched", "name": "remove", "detail": "FileList" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
@@ -4246,9 +4244,7 @@
         },
         { "type": "forwarded", "name": "keydown", "element": "Filename" }
       ],
-      "typedefs": [
-        { "type": "string[]", "name": "Files", "ts": "type Files = string[]" }
-      ],
+      "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
     {
@@ -4344,7 +4340,7 @@
           "name": "accept",
           "kind": "let",
           "description": "Specify the accepted file types",
-          "type": "Files",
+          "type": "string[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -4364,7 +4360,7 @@
           "name": "validateFiles",
           "kind": "let",
           "description": "Override the default behavior of validating uploaded files\nThe default behavior does not validate files",
-          "type": "(files: Files) => Files",
+          "type": "(files: FileList) => FileList",
           "value": "(files) => files",
           "isFunction": true,
           "constant": false,
@@ -4443,7 +4439,7 @@
       ],
       "slots": [],
       "events": [
-        { "type": "dispatched", "name": "add", "detail": "Files" },
+        { "type": "dispatched", "name": "add", "detail": "FileList" },
         { "type": "forwarded", "name": "dragover", "element": "div" },
         { "type": "forwarded", "name": "dragleave", "element": "div" },
         { "type": "forwarded", "name": "drop", "element": "div" },
@@ -4451,9 +4447,7 @@
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "click", "element": "input" }
       ],
-      "typedefs": [
-        { "type": "string[]", "name": "Files", "ts": "type Files = string[]" }
-      ],
+      "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
     {
@@ -5517,11 +5511,11 @@
         }
       ],
       "events": [
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "forwarded", "name": "keydown", "element": "div" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "dispatched", "name": "submit" },
         { "type": "dispatched", "name": "click:button--secondary" },
         { "type": "dispatched", "name": "close" },
@@ -7887,10 +7881,10 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "blur", "element": "textarea" },
         { "type": "forwarded", "name": "change", "element": "textarea" },
         { "type": "forwarded", "name": "input", "element": "textarea" },
-        { "type": "forwarded", "name": "focus", "element": "textarea" },
-        { "type": "forwarded", "name": "blur", "element": "textarea" }
+        { "type": "forwarded", "name": "focus", "element": "textarea" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "textarea" }
@@ -8109,11 +8103,11 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
-        { "type": "forwarded", "name": "focus", "element": "input" },
-        { "type": "forwarded", "name": "blur", "element": "input" }
+        { "type": "forwarded", "name": "focus", "element": "input" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -8330,11 +8324,11 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
-        { "type": "forwarded", "name": "focus", "element": "input" },
-        { "type": "forwarded", "name": "blur", "element": "input" }
+        { "type": "forwarded", "name": "focus", "element": "input" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -8509,11 +8503,11 @@
         { "name": "below", "default": false, "slot_props": "{}" }
       ],
       "events": [
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "keypress", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
+        { "type": "forwarded", "name": "mouseenter", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -8909,10 +8903,10 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
-        { "type": "forwarded", "name": "focus", "element": "input" },
-        { "type": "forwarded", "name": "blur", "element": "input" }
+        { "type": "forwarded", "name": "focus", "element": "input" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -9100,8 +9094,8 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
@@ -9870,13 +9864,13 @@
       "slots": [],
       "events": [
         { "type": "forwarded", "name": "click", "element": "a" },
+        { "type": "forwarded", "name": "blur", "element": "a" },
         { "type": "forwarded", "name": "mouseover", "element": "a" },
         { "type": "forwarded", "name": "mouseenter", "element": "a" },
         { "type": "forwarded", "name": "mouseleave", "element": "a" },
         { "type": "forwarded", "name": "keyup", "element": "a" },
         { "type": "forwarded", "name": "keydown", "element": "a" },
-        { "type": "forwarded", "name": "focus", "element": "a" },
-        { "type": "forwarded", "name": "blur", "element": "a" }
+        { "type": "forwarded", "name": "focus", "element": "a" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "a" }
@@ -9937,14 +9931,14 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        { "type": "forwarded", "name": "blur", "element": "a" },
         { "type": "forwarded", "name": "keydown", "element": "a" },
         { "type": "forwarded", "name": "click", "element": "a" },
         { "type": "forwarded", "name": "mouseover", "element": "a" },
         { "type": "forwarded", "name": "mouseenter", "element": "a" },
         { "type": "forwarded", "name": "mouseleave", "element": "a" },
         { "type": "forwarded", "name": "keyup", "element": "a" },
-        { "type": "forwarded", "name": "focus", "element": "a" },
-        { "type": "forwarded", "name": "blur", "element": "a" }
+        { "type": "forwarded", "name": "focus", "element": "a" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "a" }
@@ -10376,11 +10370,11 @@
           "name": "select",
           "detail": "{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }"
         },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
-        { "type": "forwarded", "name": "blur", "element": "input" },
-        { "type": "forwarded", "name": "keydown", "element": "input" }
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [
         {

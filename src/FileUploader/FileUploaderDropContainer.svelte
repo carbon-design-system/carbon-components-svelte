@@ -1,12 +1,11 @@
 <script>
   /**
-   * @typedef {string[]} Files
-   * @event {Files} add
+   * @event {FileList} add
    */
 
   /**
    * Specify the accepted file types
-   * @type {Files}
+   * @type {string[]}
    */
   export let accept = [];
 
@@ -16,7 +15,7 @@
   /**
    * Override the default behavior of validating uploaded files
    * The default behavior does not validate files
-   * @type {(files: Files) => Files}
+   * @type {(files: FileList) => FileList}
    */
   export let validateFiles = (files) => files;
 

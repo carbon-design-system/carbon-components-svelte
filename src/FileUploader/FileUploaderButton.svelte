@@ -1,11 +1,7 @@
 <script>
   /**
-   * @typedef {string[]} Files
-   */
-
-  /**
    * Specify the accepted file types
-   * @type {Files}
+   * @type {string[]}
    */
   export let accept = [];
 
