@@ -223,12 +223,13 @@
       on:focus
       on:blur
       on:keydown
-      on:keydown="{({ key }) => {
-        switch (key) {
+      on:keydown="{(e) => {
+        switch (e.key) {
           case 'Enter':
             selectResult();
             break;
           case 'ArrowDown':
+            e.preventDefault();
             if (selectedResultIndex === results.length - 1) {
               selectedResultIndex = 0;
             } else {
@@ -236,6 +237,7 @@
             }
             break;
           case 'ArrowUp':
+            e.preventDefault();
             if (selectedResultIndex === 0) {
               selectedResultIndex = results.length - 1;
             } else {
