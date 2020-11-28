@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.25.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.25.1) - 2020-11-28
+
+**Fixes**
+
+- set `selectedResultIndex` in HeaderSearch when clicking a result ([PR #430](https://github.com/IBM/carbon-components-svelte/pull/430), [issue #429](https://github.com/IBM/carbon-components-svelte/issues/429))
+
 ## [0.25.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.25.0) - 2020-11-27
 
 **Features**
