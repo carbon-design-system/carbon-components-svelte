@@ -96,7 +96,7 @@ export {
   StructuredListRow,
   StructuredListInput,
 } from "./StructuredList";
-export { Tabs, Tab, TabContent, TabsSkeleton } from "./Tabs";
+export { Tabs, Tab, TabContent, TabsSkeleton, TabsV2 } from "./Tabs";
 export { Tag, TagSkeleton } from "./Tag";
 export { TextArea, TextAreaSkeleton } from "./TextArea";
 export { TextInput, TextInputSkeleton, PasswordInput } from "./TextInput";

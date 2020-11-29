@@ -1,6 +1,6 @@
 # Component Index
 
-> 155 components exported from carbon-components-svelte@0.25.1.
+> 156 components exported from carbon-components-svelte@0.25.1.
 
 ## Components
 
@@ -134,6 +134,7 @@
 - [`TableRow`](#tablerow)
 - [`Tabs`](#tabs)
 - [`TabsSkeleton`](#tabsskeleton)
+- [`TabsV2`](#tabsv2)
 - [`Tag`](#tag)
 - [`TagSkeleton`](#tagskeleton)
 - [`TextArea`](#textarea)
@@ -3581,6 +3582,44 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `TabsV2`
+
+### Types
+
+```ts
+export type TabsV2ItemId = number | string;
+
+export interface TabsV2Item {
+  id: TabsV2ItemId;
+  label?: string;
+  disabled?: boolean;
+}
+```
+
+### Props
+
+| Prop name       | Kind             | Reactive | Type                                      | Default value                    | Description                                 |
+| :-------------- | :--------------- | :------- | :---------------------------------------- | -------------------------------- | ------------------------------------------- |
+| selectedId      | <code>let</code> | Yes      | <code>TabsV2ItemId</code>                 | --                               | Specify the selected tab id                 |
+| selectedIndex   | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>                   | Specify the selected tab index              |
+| items           | <code>let</code> | No       | <code>TabsV2Item[]</code>                 | <code>[]</code>                  | Provide the tab items                       |
+| type            | <code>let</code> | No       | <code>"default" &#124; "container"</code> | <code>"default"</code>           | Specify the type of tabs                    |
+| iconDescription | <code>let</code> | No       | <code>string</code>                       | <code>"Show menu options"</code> | Specify the ARIA label for the chevron icon |
+| triggerHref     | <code>let</code> | No       | <code>string</code>                       | <code>"#"</code>                 | Specify the tab trigger href attribute      |
+
+### Slots
+
+| Slot name | Default | Props                                                                | Fallback                  |
+| :-------- | :------ | :------------------------------------------------------------------- | :------------------------ |
+| --        | Yes     | <code>{ id: TabsV2ItemId; index: number; item: TabsV2Item; } </code> | --                        |
+| tab       | No      | --                                                                   | <code>{item.label}</code> |
+
+### Events
+
+| Event name | Type       | Detail                                                                                    |
+| :--------- | :--------- | :---------------------------------------------------------------------------------------- |
+| change     | dispatched | <code>{ selectedIndex: number; selectedId: TabsV2ItemId; currentItem: TabsV2Item }</code> |
 
 ## `Tag`
 

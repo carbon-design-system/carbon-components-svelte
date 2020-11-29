@@ -110,6 +110,7 @@ export { default as Tabs } from "./Tabs/Tabs";
 export { default as Tab } from "./Tabs/Tab";
 export { default as TabContent } from "./Tabs/TabContent";
 export { default as TabsSkeleton } from "./Tabs/TabsSkeleton";
+export { default as TabsV2 } from "./Tabs/TabsV2";
 export { default as TagSkeleton } from "./Tag/TagSkeleton";
 export { default as Tag } from "./Tag/Tag";
 export { default as TextArea } from "./TextArea/TextArea";

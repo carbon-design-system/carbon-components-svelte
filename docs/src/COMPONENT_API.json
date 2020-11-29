@@ -1,5 +1,5 @@
 {
-  "total": 155,
+  "total": 156,
   "components": [
     {
       "moduleName": "SkeletonText",
@@ -7635,6 +7635,104 @@
         { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
+      "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "TabsV2",
+      "filePath": "/src/Tabs/TabsV2.svelte",
+      "props": [
+        {
+          "name": "items",
+          "kind": "let",
+          "description": "Provide the tab items",
+          "type": "TabsV2Item[]",
+          "value": "[]",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "selectedIndex",
+          "kind": "let",
+          "description": "Specify the selected tab index",
+          "type": "number",
+          "value": "0",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "selectedId",
+          "kind": "let",
+          "description": "Specify the selected tab id",
+          "type": "TabsV2ItemId",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "type",
+          "kind": "let",
+          "description": "Specify the type of tabs",
+          "type": "\"default\" | \"container\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "iconDescription",
+          "kind": "let",
+          "description": "Specify the ARIA label for the chevron icon",
+          "type": "string",
+          "value": "\"Show menu options\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "triggerHref",
+          "kind": "let",
+          "description": "Specify the tab trigger href attribute",
+          "type": "string",
+          "value": "\"#\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "slot_props": "{ id: TabsV2ItemId; index: number; item: TabsV2Item; }"
+        },
+        {
+          "name": "tab",
+          "default": false,
+          "fallback": "{item.label}",
+          "slot_props": "{}"
+        }
+      ],
+      "events": [
+        {
+          "type": "dispatched",
+          "name": "change",
+          "detail": "{ selectedIndex: number; selectedId: TabsV2ItemId; currentItem: TabsV2Item }"
+        }
+      ],
+      "typedefs": [
+        {
+          "type": "number | string",
+          "name": "TabsV2ItemId",
+          "ts": "type TabsV2ItemId = number | string"
+        },
+        {
+          "type": "{ id: TabsV2ItemId; label?: string; disabled?: boolean; }",
+          "name": "TabsV2Item",
+          "ts": "interface TabsV2Item { id: TabsV2ItemId; label?: string; disabled?: boolean; }"
+        }
+      ],
       "rest_props": { "type": "Element", "name": "div" }
     },
     {
