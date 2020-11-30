@@ -21,7 +21,7 @@
   const _selectedValues = writable(selectedValues);
 
   function newArray(value, selected) {
-    let a = $_selectedValues;
+    let a = [...$_selectedValues];
     const i = a.indexOf(value);
     if (selected && i === -1) {
       a = a.push([value]);
