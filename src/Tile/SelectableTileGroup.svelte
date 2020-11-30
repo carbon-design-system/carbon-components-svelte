@@ -28,7 +28,7 @@
     } else if (!selected && i > -1) {
       a = a.splice(i, 1);
     }
-    return [...a];
+    return a;
   }
 
   setContext("SelectableTileGroup", {
