@@ -59,7 +59,7 @@
   class:bx--tile--light="{light}"
   {...$$restProps}
   on:click
-  on:click|preventDefault="{() => update(value, !selected)}"
+  on:click|preventDefault="{() => update({ value, selected: !selected })}"
   on:mouseover
   on:mouseenter
   on:mouseleave
@@ -67,7 +67,7 @@
   on:keydown="{(e) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
-      update(value, !selected);
+      update({ value, selected: !selected });
     }
   }}"
 >

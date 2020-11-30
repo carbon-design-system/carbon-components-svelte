@@ -4,7 +4,7 @@ export interface RadioTileGroupProps extends svelte.JSX.HTMLAttributes<HTMLEleme
   /**
    * Specify the selected tile value
    */
-  selectedValue?: string;
+  selectedValue?: any;
 
   /**
    * Set to `true` to disable the tile group

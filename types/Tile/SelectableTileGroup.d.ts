@@ -5,7 +5,7 @@ export interface SelectableTileGroupProps extends svelte.JSX.HTMLAttributes<HTML
    * Specify the selected tile's
    * @default []
    */
-  selectedValues?: string;
+  selectedValues?: any[];
 
   /**
    * Set to `true` to disable the tile group

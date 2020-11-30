@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the selected tile's
-   * @type {string[]}
+   * @type {any[]}
    */
   export let selectedValues = [];
 

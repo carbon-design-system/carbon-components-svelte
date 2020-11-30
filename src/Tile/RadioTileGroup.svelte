@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the selected tile value
-   * @type {string}
+   * @type {any}
    */
   export let selectedValue = undefined;
 

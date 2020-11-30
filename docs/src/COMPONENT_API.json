@@ -8772,7 +8772,7 @@
           "name": "selectedValue",
           "kind": "let",
           "description": "Specify the selected tile value",
-          "type": "string",
+          "type": "any",
           "isFunction": false,
           "constant": false,
           "reactive": true
@@ -8811,7 +8811,7 @@
           "name": "selectedValues",
           "kind": "let",
           "description": "Specify the selected tile's",
-          "type": "string",
+          "type": "any[]",
           "value": "[]",
           "isFunction": false,
           "constant": false,
