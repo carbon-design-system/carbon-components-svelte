@@ -9,34 +9,34 @@ components: ["SelectableTile", "SelectableTileGroup"]
 
 ### Multi-selectable tiles
 
-<SelectableTileGroup legend="Select the options you require" light>
+<SelectableTileGroup legend="Select the options you require">
   <SelectableTile title="Option 1" selected>
     Option 1
   </SelectableTile>
   <SelectableTile title="Option 2" selected>
     Option 2
   </SelectableTile>
-  <SelectableTile title="Option 3£>
+  <SelectableTile title="Option 3">
     Option 3
   </SelectableTile>
-    <SelectableTile light title="Option 4£>
+    <SelectableTile light title="Option 4">
     Option 4 (light variant)
   </SelectableTile>
 </div>
 
 ### Multi-selectable tiles with light variant
 
-<SelectableTileGroup light legend="Select the options you require" light>
-  <SelectableTile title="Option 1" selected>
+<SelectableTileGroup  legend="Select the options you require" light>
+  <SelectableTile light title="Option 1" selected>
     Option 1
   </SelectableTile>
-  <SelectableTile title="Option 2" selected>
+  <SelectableTile light title="Option 2" selected>
     Option 2
   </SelectableTile>
-  <SelectableTile title="Option 3£>
+  <SelectableTile light title="Option 3">
     Option 3
   </SelectableTile>
-    <SelectableTile title="Option 4£>
+    <SelectableTile light title="Option 4">
     Option 4
   </SelectableTile>
 </div>

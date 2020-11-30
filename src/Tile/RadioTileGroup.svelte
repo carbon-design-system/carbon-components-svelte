@@ -8,9 +8,6 @@
   /** Set to `true` to disable the tile group */
   export let disabled = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /** Specify the legend text */
   export let legend = "";
 
@@ -21,7 +18,6 @@
   const _selectedValue = writable(selectedValue);
 
   setContext("RadioTileGroup", {
-    _light: light,
     selectedValue: _selectedValue,
     add: ({ checked, value }) => {
       if (checked) {

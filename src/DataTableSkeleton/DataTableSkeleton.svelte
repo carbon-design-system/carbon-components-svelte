@@ -41,11 +41,7 @@
   );
 </script>
 
-<div
-  class:bx--skeleton="{true}"
-  class:bx--data-table-container="{true}"
-  {...$$restProps}
->
+<div class:bx--skeleton="{true}" class:bx--data-table-container="{true}">
   {#if showHeader}
     <div class:bx--data-table-header="{true}">
       <div class:bx--data-table-header__title="{true}"></div>
@@ -64,6 +60,7 @@
     </section>
   {/if}
   <table
+    {...$$restProps}
     class:bx--skeleton="{true}"
     class:bx--data-table="{true}"
     class:bx--data-table--compact="{size === 'compact'}"
@@ -74,6 +71,7 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
+    {...$$restProps}
   >
     <thead>
       <tr>

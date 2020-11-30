@@ -2697,8 +2697,8 @@ None.
 | Prop name       | Kind             | Reactive | Type                                      | Default value                                    | Description                                              |
 | :-------------- | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | -------------------------------------------------------- |
 | ref             | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element             |
-| light           | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                |
 | checked         | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the tile                          |
+| light           | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                |
 | value           | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the value of the radio input                     |
 | title           | <code>let</code> | No       | <code>string</code>                       | <code>"title"</code>                             | Specify the title of the selectable tile                 |
 | tabindex        | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify the tabindex                                     |
@@ -2727,12 +2727,11 @@ None.
 
 ### Props
 
-| Prop name     | Kind             | Reactive | Type                 | Default value      | Description                               |
-| :------------ | :--------------- | :------- | :------------------- | ------------------ | ----------------------------------------- |
-| selectedValue | <code>let</code> | Yes      | <code>string</code>  | --                 | Specify the selected tile value           |
-| disabled      | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the tile group   |
-| light         | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the light variant |
-| legend        | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                   |
+| Prop name     | Kind             | Reactive | Type                 | Default value      | Description                             |
+| :------------ | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------- |
+| selectedValue | <code>let</code> | Yes      | <code>string</code>  | --                 | Specify the selected tile value         |
+| disabled      | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the tile group |
+| legend        | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                 |
 
 ### Slots
 
@@ -2931,8 +2930,8 @@ None.
 | Prop name       | Kind             | Reactive | Type                                      | Default value                                    | Description                                                   |
 | :-------------- | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------- |
 | ref             | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element                  |
-| light           | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                     |
 | selected        | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to select the tile                              |
+| light           | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                     |
 | title           | <code>let</code> | No       | <code>string</code>                       | <code>"title"</code>                             | Specify the title of the selectable tile                      |
 | value           | <code>let</code> | No       | <code>string</code>                       | <code>"value"</code>                             | Specify the value of the selectable tile                      |
 | tabindex        | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify the tabindex                                          |

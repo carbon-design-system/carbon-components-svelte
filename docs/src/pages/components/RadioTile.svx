@@ -29,14 +29,14 @@ components: ["RadioTileGroup", "RadioTile"]
 
 ### Light variant
 
-<RadioTileGroup light legend="Service pricing tiers">
-  <RadioTile value="0" checked>
+<RadioTileGroup legend="Service pricing tiers">
+  <RadioTile light  value="0" checked>
     Lite plan
   </RadioTile>
-  <RadioTile value="1">
+  <RadioTile light  value="1">
     Standard plan
   </RadioTile>
-  <RadioTile value="2">
+  <RadioTile light  value="2">
     Plus plan
   </RadioTile>
 </TileGroup>

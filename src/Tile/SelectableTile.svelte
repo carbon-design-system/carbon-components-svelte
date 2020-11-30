@@ -32,9 +32,7 @@
   import { getContext } from "svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
 
-  const { _light, update, selectedValues } = getContext("SelectableTileGroup");
-
-  light = light || _light;
+  const { update, selectedValues } = getContext("SelectableTileGroup");
 
   update({ value, selected });
 
