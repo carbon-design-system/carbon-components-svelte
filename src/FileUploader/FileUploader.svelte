@@ -95,11 +95,11 @@
     kind="{kind}"
     on:change
     on:change="{({ target }) => {
-      files = [...target.files].map(({ name }) => name);
+      files = [...target.files];
     }}"
   />
   <div class:bx--file-container="{true}">
-    {#each files as name, i (name)}
+    {#each files as { name }, i (name)}
       <span class:bx--file__selected-file="{true}">
         <p class:bx--file-filename="{true}">{name}</p>
         <span class:bx--file__state-container="{true}">
