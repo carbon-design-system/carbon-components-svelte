@@ -24,9 +24,9 @@
     let a = [...$_selectedValues];
     const i = a.indexOf(value);
     if (selected && i === -1) {
-      a = a.push([value]);
+      a.push([value]);
     } else if (!selected && i > -1) {
-      a = a.splice(i, 1);
+      a.splice(i, 1);
     }
     return a;
   }
