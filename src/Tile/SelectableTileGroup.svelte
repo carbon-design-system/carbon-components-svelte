@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the selected tile's
-   * @type {string}
+   * @type {string[]}
    */
   export let selectedValues = [];
 
@@ -26,7 +26,7 @@
     if (selected && i === -1) {
       a = a.concat([value]);
     } else if (!selected && i > -1) {
-      a = a.splice(index, 1);
+      a = a.splice(i, 1);
     }
     return a;
   }
