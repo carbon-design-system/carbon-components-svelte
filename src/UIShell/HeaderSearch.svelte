@@ -26,7 +26,7 @@
   /** Specify the selected result index */
   export let selectedResultIndex = 0;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, tick } from "svelte";
   import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
   import Search20 from "carbon-icons-svelte/lib/Search20/Search20.svelte";
 
@@ -223,12 +223,13 @@
       on:focus
       on:blur
       on:keydown
-      on:keydown="{({ key }) => {
-        switch (key) {
+      on:keydown="{(e) => {
+        switch (e.key) {
           case 'Enter':
             selectResult();
             break;
           case 'ArrowDown':
+            e.preventDefault();
             if (selectedResultIndex === results.length - 1) {
               selectedResultIndex = 0;
             } else {
@@ -236,6 +237,7 @@
             }
             break;
           case 'ArrowUp':
+            e.preventDefault();
             if (selectedResultIndex === 0) {
               selectedResultIndex = results.length - 1;
             } else {
@@ -270,7 +272,11 @@
             role="menuitem"
             href="{result.href}"
             class:selected="{selectedId === `search-menuitem-${i}`}"
-            on:click|preventDefault="{selectResult}"
+            on:click|preventDefault="{async () => {
+              selectedResultIndex = i;
+              await tick();
+              selectResult();
+            }}"
           >
             <slot result="{result}" index="{i}">
               {result.text}
