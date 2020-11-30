@@ -107,6 +107,8 @@ export {
   SelectableTile,
   RadioTile,
   TileGroup,
+  RadioTileGroup,
+  SelectableTileGroup,
 } from "./Tile";
 export { TimePicker, TimePickerSelect } from "./TimePicker";
 export { Toggle, ToggleSkeleton } from "./Toggle";

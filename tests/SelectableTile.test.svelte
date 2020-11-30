@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { SelectableTile } from "../types";
+  import { SelectableTileGroup, SelectableTile } from "../types";
 </script>
 
-<SelectableTile selected>Multi-select Tile</SelectableTile>
+<SelectableTileGroup legend="Service pricing tiers">
+  <SelectableTile value="0" checked>Lite plan</SelectableTile>
+  <SelectableTile value="1">Standard plan</SelectableTile>
+  <SelectableTile light value="2">Plus plan</SelectableTile>
+</SelectableTileGroup>
 
-<SelectableTile selected>Multi-select Tile</SelectableTile>
-
-<SelectableTile>Multi-select Tile</SelectableTile>
-
-<SelectableTile light selected>Multi-select Tile</SelectableTile>
-
-<SelectableTile light selected>Multi-select Tile</SelectableTile>
-
-<SelectableTile light>Multi-select Tile</SelectableTile>
+<SelectableTileGroup light legend="Service pricing tiers">
+  <SelectableTile value="0" checked>Lite plan</SelectableTile>
+  <SelectableTile value="1">Standard plan</SelectableTile>
+  <SelectableTile value="2">Plus plan</SelectableTile>
+</SelectableTileGroup>

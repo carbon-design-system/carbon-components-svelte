@@ -3,10 +3,13 @@
    * Specify the selected tile value
    * @type {string}
    */
-  export let selected = undefined;
+  export let selectedValue = undefined;
 
   /** Set to `true` to disable the tile group */
   export let disabled = false;
+
+  /** Set to `true` to enable the light variant */
+  export let light = false;
 
   /** Specify the legend text */
   export let legend = "";
@@ -15,22 +18,23 @@
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
-  const selectedValue = writable(selected);
+  const _selectedValue = writable(selectedValue);
 
   setContext("RadioTileGroup", {
-    selectedValue,
+    _light: light,
+    selectedValue: _selectedValue,
     add: ({ checked, value }) => {
       if (checked) {
-        selectedValue.set(value);
+        _selectedValue.set(value);
       }
     },
     update: (value) => {
-      selectedValue.set(value);
+      _selectedValue.set(value);
     },
   });
 
-  $: selected = $selectedValue;
-  $: dispatch("select", $selectedValue);
+  $: selectedValue = $_selectedValue;
+  $: dispatch("select", $_selectedValue);
 </script>
 
 <fieldset disabled="{disabled}" class:bx--tile-group="{true}" {...$$restProps}>

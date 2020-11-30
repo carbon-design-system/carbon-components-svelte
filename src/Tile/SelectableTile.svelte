@@ -29,12 +29,16 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { getContext } from "svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
 
-  const dispatch = createEventDispatcher();
+  const { _light, update, selectedValues } = getContext("SelectableTileGroup");
 
-  $: dispatch(selected ? "select" : "deselect", id);
+  light = light || _light;
+
+  update({ value, selected });
+
+  $: selected = $selectedValues.indexOf(value) > -1;
 </script>
 
 <input
@@ -57,9 +61,7 @@
   class:bx--tile--light="{light}"
   {...$$restProps}
   on:click
-  on:click|preventDefault="{() => {
-    selected = !selected;
-  }}"
+  on:click|preventDefault="{() => update(value, !selected)}"
   on:mouseover
   on:mouseenter
   on:mouseleave
@@ -67,7 +69,7 @@
   on:keydown="{(e) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
-      selected = !selected;
+      update(value, !selected);
     }
   }}"
 >

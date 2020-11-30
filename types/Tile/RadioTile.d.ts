@@ -20,6 +20,12 @@ export interface RadioTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
   value?: string;
 
   /**
+   * Specify the title of the selectable tile
+   * @default "title"
+   */
+  title?: string;
+
+  /**
    * Specify the tabindex
    * @default "0"
    */
@@ -42,6 +48,12 @@ export interface RadioTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
    * @default ""
    */
   name?: string;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @default null
+   */
+  ref?: null | HTMLInputElement;
 }
 
 export default class RadioTile {

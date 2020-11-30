@@ -8,6 +8,9 @@
   /** Specify the value of the radio input */
   export let value = "";
 
+  /** Specify the title of the selectable tile */
+  export let title = "title";
+
   /** Specify the tabindex */
   export let tabindex = "0";
 
@@ -20,10 +23,15 @@
   /** Specify a name attribute for the input */
   export let name = "";
 
+  /** Obtain a reference to the input HTML element */
+  export let ref = null;
+
   import { getContext } from "svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
 
-  const { add, update, selectedValue } = getContext("TileGroup");
+  const { _light, add, update, selectedValue } = getContext("RadioTileGroup");
+
+  light = light || _light;
 
   add({ value, checked });
 
@@ -31,13 +39,15 @@
 </script>
 
 <input
+  bind:this="{ref}"
   type="radio"
   id="{id}"
   name="{name}"
   value="{value}"
   checked="{checked}"
-  tabindex="{tabindex}"
+  tabindex="-1"
   class:bx--tile-input="{true}"
+  title="{title}"
   on:change
   on:change="{() => {
     update(value);
@@ -52,6 +62,7 @@
 />
 <label
   for="{id}"
+  tabindex="{tabindex}"
   class:bx--tile="{true}"
   class:bx--tile--selectable="{true}"
   class:bx--tile--is-selected="{checked}"

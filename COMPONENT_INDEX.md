@@ -1,6 +1,6 @@
 # Component Index
 
-> 155 components exported from carbon-components-svelte@0.25.1.
+> 157 components exported from carbon-components-svelte@0.25.1.
 
 ## Components
 
@@ -97,6 +97,7 @@
 - [`RadioButtonGroup`](#radiobuttongroup)
 - [`RadioButtonSkeleton`](#radiobuttonskeleton)
 - [`RadioTile`](#radiotile)
+- [`RadioTileGroup`](#radiotilegroup)
 - [`Row`](#row)
 - [`Search`](#search)
 - [`SearchSkeleton`](#searchskeleton)
@@ -105,6 +106,7 @@
 - [`SelectItemGroup`](#selectitemgroup)
 - [`SelectSkeleton`](#selectskeleton)
 - [`SelectableTile`](#selectabletile)
+- [`SelectableTileGroup`](#selectabletilegroup)
 - [`SideNav`](#sidenav)
 - [`SideNavItems`](#sidenavitems)
 - [`SideNavLink`](#sidenavlink)
@@ -2692,15 +2694,17 @@ None.
 
 ### Props
 
-| Prop name       | Kind             | Reactive | Type                 | Default value                                    | Description                                              |
-| :-------------- | :--------------- | :------- | :------------------- | ------------------------------------------------ | -------------------------------------------------------- |
-| checked         | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to check the tile                          |
-| light           | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to enable the light variant                |
-| value           | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the value of the radio input                     |
-| tabindex        | <code>let</code> | No       | <code>string</code>  | <code>"0"</code>                                 | Specify the tabindex                                     |
-| iconDescription | <code>let</code> | No       | <code>string</code>  | <code>"Tile checkmark"</code>                    | Specify the ARIA label for the radio tile checkmark icon |
-| id              | <code>let</code> | No       | <code>string</code>  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                          |
-| name            | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify a name attribute for the input                   |
+| Prop name       | Kind             | Reactive | Type                                      | Default value                                    | Description                                              |
+| :-------------- | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | -------------------------------------------------------- |
+| ref             | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element             |
+| light           | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                |
+| checked         | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the tile                          |
+| value           | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the value of the radio input                     |
+| title           | <code>let</code> | No       | <code>string</code>                       | <code>"title"</code>                             | Specify the title of the selectable tile                 |
+| tabindex        | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify the tabindex                                     |
+| iconDescription | <code>let</code> | No       | <code>string</code>                       | <code>"Tile checkmark"</code>                    | Specify the ARIA label for the radio tile checkmark icon |
+| id              | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                          |
+| name            | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify a name attribute for the input                   |
 
 ### Slots
 
@@ -2718,6 +2722,29 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `RadioTileGroup`
+
+### Props
+
+| Prop name     | Kind             | Reactive | Type                 | Default value      | Description                               |
+| :------------ | :--------------- | :------- | :------------------- | ------------------ | ----------------------------------------- |
+| selectedValue | <code>let</code> | Yes      | <code>string</code>  | --                 | Specify the selected tile value           |
+| disabled      | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the tile group   |
+| light         | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the light variant |
+| legend        | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                   |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| select     | dispatched | --     |
 
 ## `Row`
 
@@ -2904,8 +2931,8 @@ None.
 | Prop name       | Kind             | Reactive | Type                                      | Default value                                    | Description                                                   |
 | :-------------- | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------- |
 | ref             | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element                  |
+| light           | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                     |
 | selected        | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to select the tile                              |
-| light           | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                     |
 | title           | <code>let</code> | No       | <code>string</code>                       | <code>"title"</code>                             | Specify the title of the selectable tile                      |
 | value           | <code>let</code> | No       | <code>string</code>                       | <code>"value"</code>                             | Specify the value of the selectable tile                      |
 | tabindex        | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify the tabindex                                          |
@@ -2928,6 +2955,29 @@ None.
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
 | keydown    | forwarded | --     |
+
+## `SelectableTileGroup`
+
+### Props
+
+| Prop name      | Kind             | Reactive | Type                 | Default value      | Description                               |
+| :------------- | :--------------- | :------- | :------------------- | ------------------ | ----------------------------------------- |
+| selectedValues | <code>let</code> | Yes      | <code>string</code>  | <code>[]</code>    | Specify the selected tile's               |
+| disabled       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the tile group   |
+| light          | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the light variant |
+| legend         | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                   |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| select     | dispatched | --     |
 
 ## `SideNav`
 
