@@ -22,21 +22,7 @@ components: ["RadioTileGroup", "RadioTile"]
   <RadioTile value="1">
     Standard plan
   </RadioTile>
-  <RadioTile light value="2">
-    Plus plan (light variant)
-  </RadioTile>
-</TileGroup>
-
-### Light variant
-
-<RadioTileGroup legend="Service pricing tiers">
-  <RadioTile light  value="0" checked>
-    Lite plan
-  </RadioTile>
-  <RadioTile light  value="1">
-    Standard plan
-  </RadioTile>
-  <RadioTile light  value="2">
+  <RadioTile value="2">
     Plus plan
   </RadioTile>
-</TileGroup>
+</RadioTileGroup>
