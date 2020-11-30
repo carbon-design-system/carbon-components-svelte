@@ -8,9 +8,6 @@
   /** Set to `true` to disable the tile group */
   export let disabled = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
-
   /** Specify the legend text */
   export let legend = "";
 

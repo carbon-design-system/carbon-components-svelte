@@ -2959,12 +2959,11 @@ None.
 
 ### Props
 
-| Prop name      | Kind             | Reactive | Type                 | Default value      | Description                               |
-| :------------- | :--------------- | :------- | :------------------- | ------------------ | ----------------------------------------- |
-| selectedValues | <code>let</code> | Yes      | <code>any[]</code>   | <code>[]</code>    | Specify the selected tile's               |
-| disabled       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the tile group   |
-| light          | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the light variant |
-| legend         | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                   |
+| Prop name      | Kind             | Reactive | Type                 | Default value      | Description                             |
+| :------------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------- |
+| selectedValues | <code>let</code> | Yes      | <code>any[]</code>   | <code>[]</code>    | Specify the selected tile's             |
+| disabled       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the tile group |
+| legend         | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                 |
 
 ### Slots
 

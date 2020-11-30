@@ -14,12 +14,6 @@ export interface SelectableTileGroupProps extends svelte.JSX.HTMLAttributes<HTML
   disabled?: boolean;
 
   /**
-   * Set to `true` to enable the light variant
-   * @default false
-   */
-  light?: boolean;
-
-  /**
    * Specify the legend text
    * @default ""
    */
