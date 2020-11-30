@@ -26,7 +26,7 @@ components: ["SelectableTile", "SelectableTileGroup"]
 
 ### Multi-selectable tiles with light variant
 
-<SelectableTileGroup  legend="Select the options you require" light>
+<SelectableTileGroup  legend="Select the options you require">
   <SelectableTile light title="Option 1" selected>
     Option 1
   </SelectableTile>
