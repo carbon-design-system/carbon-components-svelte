@@ -33,6 +33,14 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   </div>
 </Tabs>
 
+### Re-rendering tabs
+
+Use the [`#key` block](https://svelte.dev/docs#key) to dynamically update tab items or content.
+
+The example below shows tabs and the bound `selected` index being programmatically updated.
+
+<FileSource src="/framed/Tabs/TabsDynamic" />
+
 ### Skeleton
 
 <TabsSkeleton count={3} />
