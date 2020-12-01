@@ -18,7 +18,7 @@
     selectedValues: _selectedValues,
     update: ({ selected, value }) =>
       _selectedValues.update((_) => {
-        if (_.includes(value)) {
+        if (_.includes(value) && !selected) {
           return _.filter((i) => i !== value);
         }
         return selected ? [..._, value] : _; // else no update
