@@ -16,21 +16,21 @@ components: ["SelectableTile", "SelectableTileGroup"]
   <SelectableTile title="Option 2" value="2" selected>
     Option 2
   </SelectableTile>
-  <SelectableTile title="Option 3" value="3">
-    Option 3
+  <SelectableTile light title="Option 3" value="3">
+    Option 3 (light variant)
   </SelectableTile>
 </SelectableTileGroup>
 
 ### Light variant
 
-<SelectableTileGroup legend="Select the options you require">
-  <SelectableTile light title="Option 1" value="option1" selected>
+<SelectableTileGroup light legend="Select the options you require">
+  <SelectableTile title="Option 1" value="1" selected>
     Option 1
   </SelectableTile>
-  <SelectableTile light title="Option 2" value="2" selected>
+  <SelectableTile title="Option 2" value="2" selected>
     Option 2
   </SelectableTile>
-  <SelectableTile light title="Option 3" value="3">
+  <SelectableTile title="Option 3" value="3">
     Option 3
   </SelectableTile>
 </SelectableTileGroup>

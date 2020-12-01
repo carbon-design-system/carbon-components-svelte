@@ -32,9 +32,13 @@
   import { getContext } from "svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
 
-  const { update, selectedValues } = getContext("SelectableTileGroup");
+  const { update, selectedValues, _light } = getContext("SelectableTileGroup");
 
-  update({ value, selected });
+  if (selected) {
+    update({ value, selected });
+  }
+
+  light = light || _light;
 
   $: selected = $selectedValues.indexOf(value) > -1;
 </script>
