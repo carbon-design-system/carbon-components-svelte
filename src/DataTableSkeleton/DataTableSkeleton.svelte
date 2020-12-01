@@ -41,7 +41,11 @@
   );
 </script>
 
-<div class:bx--skeleton="{true}" class:bx--data-table-container="{true}">
+<div
+  class:bx--skeleton="{true}"
+  class:bx--data-table-container="{true}"
+  {...$$restProps}
+>
   {#if showHeader}
     <div class:bx--data-table-header="{true}">
       <div class:bx--data-table-header__title="{true}"></div>
@@ -66,7 +70,6 @@
     class:bx--data-table--short="{size === 'short'}"
     class:bx--data-table--tall="{size === 'tall'}"
     class:bx--data-table--zebra="{zebra}"
-    {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
