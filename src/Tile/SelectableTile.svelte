@@ -46,7 +46,7 @@
 <input
   bind:this="{ref}"
   type="checkbox"
-  tabindex="-1"
+  tabindex="{tabindex}"
   class:bx--tile-input="{true}"
   checked="{selected}"
   id="{id}"
@@ -65,7 +65,6 @@
 />
 <label
   for="{id}"
-  tabindex="{tabindex}"
   class:bx--tile="{true}"
   class:bx--tile--selectable="{true}"
   class:bx--tile--is-selected="{selected}"
