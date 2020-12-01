@@ -8,12 +8,6 @@ export interface SelectableTileGroupProps extends svelte.JSX.HTMLAttributes<HTML
   selectedValues?: any[];
 
   /**
-   * Set to `true` to disable the tile group
-   * @default false
-   */
-  disabled?: boolean;
-
-  /**
    * Specify the legend text
    * @default ""
    */
