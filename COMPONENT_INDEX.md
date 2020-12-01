@@ -2693,16 +2693,15 @@ None.
 
 ### Props
 
-| Prop name       | Kind             | Reactive | Type                                      | Default value                                    | Description                                              |
-| :-------------- | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | -------------------------------------------------------- |
-| ref             | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element             |
-| checked         | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the tile                          |
-| light           | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                |
-| value           | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the value of the radio input                     |
-| tabindex        | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify the tabindex                                     |
-| iconDescription | <code>let</code> | No       | <code>string</code>                       | <code>"Tile checkmark"</code>                    | Specify the ARIA label for the radio tile checkmark icon |
-| id              | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                          |
-| name            | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify a name attribute for the input                   |
+| Prop name       | Kind             | Reactive | Type                 | Default value                                    | Description                                              |
+| :-------------- | :--------------- | :------- | :------------------- | ------------------------------------------------ | -------------------------------------------------------- |
+| checked         | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to check the tile                          |
+| light           | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to enable the light variant                |
+| value           | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the value of the radio input                     |
+| tabindex        | <code>let</code> | No       | <code>string</code>  | <code>"0"</code>                                 | Specify the tabindex                                     |
+| iconDescription | <code>let</code> | No       | <code>string</code>  | <code>"Tile checkmark"</code>                    | Specify the ARIA label for the radio tile checkmark icon |
+| id              | <code>let</code> | No       | <code>string</code>  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                          |
+| name            | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify a name attribute for the input                   |
 
 ### Slots
 

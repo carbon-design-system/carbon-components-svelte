@@ -8691,16 +8691,6 @@
           "isFunction": false,
           "constant": false,
           "reactive": false
-        },
-        {
-          "name": "ref",
-          "kind": "let",
-          "description": "Obtain a reference to the input HTML element",
-          "type": "null | HTMLInputElement",
-          "value": "null",
-          "isFunction": false,
-          "constant": false,
-          "reactive": true
         }
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],

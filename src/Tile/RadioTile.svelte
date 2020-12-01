@@ -20,9 +20,6 @@
   /** Specify a name attribute for the input */
   export let name = "";
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
-
   import { getContext } from "svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
 
@@ -34,13 +31,12 @@
 </script>
 
 <input
-  bind:this="{ref}"
   type="radio"
   id="{id}"
   name="{name}"
   value="{value}"
   checked="{checked}"
-  tabindex="-1"
+  tabindex="{tabindex}"
   class:bx--tile-input="{true}"
   on:change
   on:change="{() => {
@@ -56,7 +52,6 @@
 />
 <label
   for="{id}"
-  tabindex="{tabindex}"
   class:bx--tile="{true}"
   class:bx--tile--selectable="{true}"
   class:bx--tile--is-selected="{checked}"

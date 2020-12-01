@@ -42,12 +42,6 @@ export interface RadioTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
    * @default ""
    */
   name?: string;
-
-  /**
-   * Obtain a reference to the input HTML element
-   * @default null
-   */
-  ref?: null | HTMLInputElement;
 }
 
 export default class RadioTile {
