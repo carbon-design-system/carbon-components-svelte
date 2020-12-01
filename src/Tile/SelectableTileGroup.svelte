@@ -5,9 +5,6 @@
    */
   export let selectedValues = [];
 
-  /** Set to `true` to disable the tile group */
-  export let disabled = false;
-
   /** Specify the legend text */
   export let legend = "";
 
@@ -17,28 +14,22 @@
   const dispatch = createEventDispatcher();
   const _selectedValues = writable(selectedValues);
 
-  function newArray(value, selected) {
-    let a = [...$_selectedValues];
-    const i = a.indexOf(value);
-    if (selected && i === -1) {
-      a.push(value);
-    } else if (!selected && i > -1) {
-      a.splice(i, 1);
-    }
-    return a;
-  }
-
   setContext("SelectableTileGroup", {
     selectedValues: _selectedValues,
     update: ({ selected, value }) =>
-      _selectedValues.set(newArray(value, selected)),
+      _selectedValues.update((_) => {
+        if (_.includes(value)) {
+          return _.filter((i) => i !== value);
+        }
+        return [..._, value];
+      }),
   });
 
   $: selectedValues = $_selectedValues;
   $: dispatch("select", $_selectedValues);
 </script>
 
-<fieldset disabled="{disabled}" class:bx--tile-group="{true}" {...$$restProps}>
+<fieldset class:bx--tile-group="{true}" {...$$restProps}>
   {#if legend}
     <legend class:bx--label="{true}">{legend}</legend>
   {/if}

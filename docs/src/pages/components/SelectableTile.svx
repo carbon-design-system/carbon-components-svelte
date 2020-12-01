@@ -7,7 +7,7 @@ components: ["SelectableTile", "SelectableTileGroup"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Multi-selectable tiles
+### Default
 
 <SelectableTileGroup legend="Select the options you require">
   <SelectableTile title="Option 1" value="option1" selected>
@@ -17,6 +17,20 @@ components: ["SelectableTile", "SelectableTileGroup"]
     Option 2
   </SelectableTile>
   <SelectableTile title="Option 3" value="3">
+    Option 3
+  </SelectableTile>
+</SelectableTileGroup>
+
+### Light variant
+
+<SelectableTileGroup legend="Select the options you require">
+  <SelectableTile light title="Option 1" value="option1" selected>
+    Option 1
+  </SelectableTile>
+  <SelectableTile light title="Option 2" value="2" selected>
+    Option 2
+  </SelectableTile>
+  <SelectableTile light title="Option 3" value="3">
     Option 3
   </SelectableTile>
 </SelectableTileGroup>
