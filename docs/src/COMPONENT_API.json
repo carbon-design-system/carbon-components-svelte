@@ -8609,11 +8609,12 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "click", "element": "label" },
         { "type": "forwarded", "name": "mouseover", "element": "label" },
         { "type": "forwarded", "name": "mouseenter", "element": "label" },
-        { "type": "forwarded", "name": "mouseleave", "element": "label" },
-        { "type": "forwarded", "name": "keydown", "element": "label" }
+        { "type": "forwarded", "name": "mouseleave", "element": "label" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "label" }

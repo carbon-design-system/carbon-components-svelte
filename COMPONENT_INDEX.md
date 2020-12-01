@@ -2924,11 +2924,12 @@ None.
 
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
+| change     | forwarded | --     |
+| keydown    | forwarded | --     |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
 
 ## `SelectableTileGroup`
 

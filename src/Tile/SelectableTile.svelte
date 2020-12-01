@@ -53,6 +53,15 @@
   value="{value}"
   name="{name}"
   title="{title}"
+  on:change
+  on:change="{() => update({ value, selected: !selected })}"
+  on:keydown
+  on:keydown="{(e) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      update({ value, selected: !selected });
+    }
+  }}"
 />
 <label
   for="{id}"
@@ -63,17 +72,9 @@
   class:bx--tile--light="{light}"
   {...$$restProps}
   on:click
-  on:click|preventDefault="{() => update({ value, selected: !selected })}"
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:keydown
-  on:keydown="{(e) => {
-    if (e.key === ' ' || e.key === 'Enter') {
-      e.preventDefault();
-      update({ value, selected: !selected });
-    }
-  }}"
 >
   <span class:bx--tile__checkmark="{true}">
     <CheckmarkFilled16
