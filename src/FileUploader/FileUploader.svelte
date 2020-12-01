@@ -1,7 +1,7 @@
 <script>
   /**
-   * @event {FileList} add
-   * @event {FileList} remove
+   * @event {File[]} add
+   * @event {File[]} remove
    */
 
   /**
@@ -18,7 +18,7 @@
 
   /**
    * Obtain the uploaded file names
-   * @type {FileList}
+   * @type {File[]}
    */
   export let files = [];
 

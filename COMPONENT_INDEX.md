@@ -1058,7 +1058,7 @@ None.
 
 | Prop name        | Kind               | Reactive | Type                                                                                       | Default value                           | Description                                                           |
 | :--------------- | :----------------- | :------- | :----------------------------------------------------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------- |
-| files            | <code>let</code>   | Yes      | <code>FileList</code>                                                                      | <code>[]</code>                         | Obtain the uploaded file names                                        |
+| files            | <code>let</code>   | Yes      | <code>File[]</code>                                                                        | <code>[]</code>                         | Obtain the uploaded file names                                        |
 | status           | <code>let</code>   | No       | <code>"uploading" &#124; "edit" &#124; "complete"</code>                                   | <code>"uploading"</code>                | Specify the file uploader status                                      |
 | accept           | <code>let</code>   | No       | <code>string[]</code>                                                                      | <code>[]</code>                         | Specify the accepted file types                                       |
 | multiple         | <code>let</code>   | No       | <code>boolean</code>                                                                       | <code>false</code>                      | Set to `true` to allow multiple files                                 |
@@ -1076,16 +1076,16 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                |
-| :--------- | :--------- | :-------------------- |
-| add        | dispatched | <code>FileList</code> |
-| remove     | dispatched | <code>FileList</code> |
-| click      | forwarded  | --                    |
-| mouseover  | forwarded  | --                    |
-| mouseenter | forwarded  | --                    |
-| mouseleave | forwarded  | --                    |
-| change     | forwarded  | --                    |
-| keydown    | forwarded  | --                    |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| add        | dispatched | <code>File[]</code> |
+| remove     | dispatched | <code>File[]</code> |
+| click      | forwarded  | --                  |
+| mouseover  | forwarded  | --                  |
+| mouseenter | forwarded  | --                  |
+| mouseleave | forwarded  | --                  |
+| change     | forwarded  | --                  |
+| keydown    | forwarded  | --                  |
 
 ## `FileUploaderButton`
 
