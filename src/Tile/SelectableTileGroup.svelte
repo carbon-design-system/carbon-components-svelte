@@ -21,7 +21,7 @@
         if (_.includes(value)) {
           return _.filter((i) => i !== value);
         }
-        return [..._, value];
+        return selected ? [..._, value] : _; // else no update
       }),
   });
 
