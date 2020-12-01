@@ -123,7 +123,6 @@ export { default as ExpandableTile } from "./Tile/ExpandableTile";
 export { default as SelectableTile } from "./Tile/SelectableTile";
 export { default as RadioTile } from "./Tile/RadioTile";
 export { default as TileGroup } from "./Tile/TileGroup";
-export { default as RadioTileGroup } from "./Tile/RadioTileGroup";
 export { default as SelectableTileGroup } from "./Tile/SelectableTileGroup";
 export { default as TimePicker } from "./TimePicker/TimePicker";
 export { default as TimePickerSelect } from "./TimePicker/TimePickerSelect";

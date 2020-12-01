@@ -1,21 +1,16 @@
 ---
-components: ["RadioTileGroup", "RadioTile"]
+components: ["TileGroup", "RadioTile"]
 ---
 
 <script>
-  import { RadioTileGroup, RadioTile, InlineNotification } from "carbon-components-svelte";
+  import { TileGroup, RadioTile } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
-<InlineNotification svx-ignore title="Deprecation warning:" kind="warning" hideCloseButton>
-  <div>
-    The TileGroup component will be removed in favour of the RadioTileGroup component in the next major release.
-  </div>
-</InlineNotification>
 
 ### Default
 
-<RadioTileGroup legend="Service pricing tiers">
+<TileGroup legend="Service pricing tiers">
   <RadioTile value="0" checked>
     Lite plan
   </RadioTile>
@@ -25,11 +20,11 @@ components: ["RadioTileGroup", "RadioTile"]
   <RadioTile value="2">
     Plus plan
   </RadioTile>
-</RadioTileGroup>
+</TileGroup>
 
 ### Light variant
 
-<RadioTileGroup legend="Service pricing tiers">
+<TileGroup legend="Service pricing tiers">
   <RadioTile light value="0" checked>
     Lite plan
   </RadioTile>
@@ -39,4 +34,4 @@ components: ["RadioTileGroup", "RadioTile"]
   <RadioTile light value="2">
     Plus plan
   </RadioTile>
-</RadioTileGroup>
+</TileGroup>

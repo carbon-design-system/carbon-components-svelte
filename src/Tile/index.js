@@ -4,5 +4,4 @@ export { default as ExpandableTile } from "./ExpandableTile.svelte";
 export { default as SelectableTile } from "./SelectableTile.svelte";
 export { default as RadioTile } from "./RadioTile.svelte";
 export { default as TileGroup } from "./TileGroup.svelte";
-export { default as RadioTileGroup } from "./RadioTileGroup.svelte";
 export { default as SelectableTileGroup } from "./SelectableTileGroup.svelte";

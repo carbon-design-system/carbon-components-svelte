@@ -17,7 +17,7 @@
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);
 
-  setContext("RadioTileGroup", {
+  setContext("TileGroup", {
     selectedValue,
     add: ({ checked, value }) => {
       if (checked) {

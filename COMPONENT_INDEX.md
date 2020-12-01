@@ -1,6 +1,6 @@
 # Component Index
 
-> 157 components exported from carbon-components-svelte@0.25.1.
+> 156 components exported from carbon-components-svelte@0.25.1.
 
 ## Components
 
@@ -97,7 +97,6 @@
 - [`RadioButtonGroup`](#radiobuttongroup)
 - [`RadioButtonSkeleton`](#radiobuttonskeleton)
 - [`RadioTile`](#radiotile)
-- [`RadioTileGroup`](#radiotilegroup)
 - [`Row`](#row)
 - [`Search`](#search)
 - [`SearchSkeleton`](#searchskeleton)
@@ -2722,28 +2721,6 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
-
-## `RadioTileGroup`
-
-### Props
-
-| Prop name     | Kind             | Reactive | Type                 | Default value      | Description                             |
-| :------------ | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------- |
-| selectedValue | <code>let</code> | Yes      | <code>any</code>     | --                 | Specify the selected tile value         |
-| disabled      | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the tile group |
-| legend        | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                 |
-
-### Slots
-
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
-
-### Events
-
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| select     | dispatched | --     |
 
 ## `Row`
 

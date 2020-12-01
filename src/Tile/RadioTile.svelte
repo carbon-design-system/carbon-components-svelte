@@ -29,7 +29,7 @@
   import { getContext } from "svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
 
-  const { add, update, selectedValue } = getContext("RadioTileGroup");
+  const { add, update, selectedValue } = getContext("TileGroup");
 
   add({ value, checked });
 
