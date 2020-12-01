@@ -2699,7 +2699,6 @@ None.
 | checked         | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the tile                          |
 | light           | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                |
 | value           | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the value of the radio input                     |
-| title           | <code>let</code> | No       | <code>string</code>                       | <code>"title"</code>                             | Specify the title of the selectable tile                 |
 | tabindex        | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify the tabindex                                     |
 | iconDescription | <code>let</code> | No       | <code>string</code>                       | <code>"Tile checkmark"</code>                    | Specify the ARIA label for the radio tile checkmark icon |
 | id              | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                          |

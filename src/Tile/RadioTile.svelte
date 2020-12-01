@@ -8,9 +8,6 @@
   /** Specify the value of the radio input */
   export let value = "";
 
-  /** Specify the title of the selectable tile */
-  export let title = "title";
-
   /** Specify the tabindex */
   export let tabindex = "0";
 
@@ -45,7 +42,6 @@
   checked="{checked}"
   tabindex="-1"
   class:bx--tile-input="{true}"
-  title="{title}"
   on:change
   on:change="{() => {
     update(value);

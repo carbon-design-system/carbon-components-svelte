@@ -8653,16 +8653,6 @@
           "reactive": false
         },
         {
-          "name": "title",
-          "kind": "let",
-          "description": "Specify the title of the selectable tile",
-          "type": "string",
-          "value": "\"title\"",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "tabindex",
           "kind": "let",
           "description": "Specify the tabindex",

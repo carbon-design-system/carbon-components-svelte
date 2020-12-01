@@ -60,7 +60,6 @@
     </section>
   {/if}
   <table
-    {...$$restProps}
     class:bx--skeleton="{true}"
     class:bx--data-table="{true}"
     class:bx--data-table--compact="{size === 'compact'}"
