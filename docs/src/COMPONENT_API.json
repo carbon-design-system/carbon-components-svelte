@@ -3356,7 +3356,7 @@
         { "type": "forwarded", "name": "mouseleave", "element": "table" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "table" },
+      "rest_props": { "type": "Element", "name": "div" },
       "extends": {
         "interface": "DataTableHeader",
         "import": "\"../DataTable/DataTable\""
