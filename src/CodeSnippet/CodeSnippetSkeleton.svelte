@@ -1,14 +1,14 @@
 <script>
   /**
    * Set the type of code snippet
-   * @type {"single" | "inline" | "multi"}
+   * @type {"single" | "multi"}
    */
   export let type = "single";
 </script>
 
 <div
-  class:bx--snippet="{true}"
   class:bx--skeleton="{true}"
+  class:bx--snippet="{true}"
   class:bx--snippet--single="{type === 'single'}"
   class:bx--snippet--multi="{type === 'multi'}"
   {...$$restProps}

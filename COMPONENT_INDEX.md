@@ -527,9 +527,9 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                 | Default value         | Description                  |
-| :-------- | :--------------- | :------- | :--------------------------------------------------- | --------------------- | ---------------------------- |
-| type      | <code>let</code> | No       | <code>"single" &#124; "inline" &#124; "multi"</code> | <code>"single"</code> | Set the type of code snippet |
+| Prop name | Kind             | Reactive | Type                                 | Default value         | Description                  |
+| :-------- | :--------------- | :------- | :----------------------------------- | --------------------- | ---------------------------- |
+| type      | <code>let</code> | No       | <code>"single" &#124; "multi"</code> | <code>"single"</code> | Set the type of code snippet |
 
 ### Slots
 
