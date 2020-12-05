@@ -189,11 +189,6 @@
           change(-1);
         }
       }}"
-      on:blur="{({ relatedTarget }) => {
-        if (relatedTarget) {
-          ref.focus();
-        }
-      }}"
       disabled="{disabled}"
       translateWithId="{translateWithId}"
       id="{id}"
@@ -213,6 +208,7 @@
             on:click="{() => {
               selectedId = item.id;
               selectedIndex = i;
+              ref.focus();
             }}"
             on:mouseenter="{() => {
               highlightedIndex = i;

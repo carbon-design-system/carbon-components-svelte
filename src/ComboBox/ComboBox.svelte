@@ -82,7 +82,7 @@
    */
   export let listRef = null;
 
-  import { createEventDispatcher, afterUpdate } from "svelte";
+  import { createEventDispatcher, afterUpdate, tick } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
   import {
     ListBox,
@@ -173,9 +173,11 @@
     <ListBoxField
       role="button"
       aria-expanded="{open}"
-      on:click="{() => {
+      on:click="{async () => {
         if (disabled) return;
         open = true;
+        await tick();
+        ref.focus();
       }}"
       id="{id}"
       name="{name}"
@@ -220,7 +222,8 @@
         on:focus
         on:blur
         on:blur="{({ relatedTarget }) => {
-          if (relatedTarget && relatedTarget.getAttribute('role') !== 'button') {
+          if (!open || !relatedTarget) return;
+          if (relatedTarget.getAttribute('role') !== 'button' && relatedTarget.getAttribute('role') !== 'searchbox') {
             ref.focus();
           }
         }}"
