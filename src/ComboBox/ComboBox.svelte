@@ -222,8 +222,8 @@
         on:focus
         on:blur
         on:blur="{({ relatedTarget }) => {
-          if (!open) return;
-          if (relatedTarget && relatedTarget.getAttribute('role') !== 'button') {
+          if (!open || !relatedTarget) return;
+          if (relatedTarget.getAttribute('role') !== 'button' && relatedTarget.getAttribute('role') !== 'searchbox') {
             ref.focus();
           }
         }}"
