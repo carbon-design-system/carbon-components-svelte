@@ -2780,6 +2780,7 @@ None.
 | input      | forwarded  | --     |
 | focus      | forwarded  | --     |
 | blur       | forwarded  | --     |
+| keydown    | forwarded  | --     |
 | clear      | dispatched | --     |
 
 ## `SearchSkeleton`

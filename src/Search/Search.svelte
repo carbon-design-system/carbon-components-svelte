@@ -120,6 +120,13 @@
       }}"
       on:focus
       on:blur
+      on:keydown
+      on:keydown="{({ key }) => {
+        if (key === 'Escape') {
+          value = '';
+          dispatch('clear');
+        }
+      }}"
     />
     <button
       type="button"
