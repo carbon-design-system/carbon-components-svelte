@@ -70,10 +70,10 @@
   export let ref = null;
 
   import { tick } from "svelte";
-  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
-  import { Button } from "../Button";
-  import { Copy } from "../Copy";
-  import { CopyButton } from "../CopyButton";
+  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
+  import Button from "../Button/Button.svelte";
+  import Copy from "../Copy/Copy.svelte";
+  import CopyButton from "../CopyButton/CopyButton.svelte";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   function setShowMoreLess() {
@@ -101,12 +101,14 @@
   {#if type === 'inline'}
     {#if hideCopyButton}
       <span
-        class="bx--snippet {type && `bx--snippet--${type}`}
-          {type === 'inline' && 'bx--btn--copy'}
-          {expanded && 'bx--snippet--expand'}
-          {light && 'bx--snippet--light'}
-          {hideCopyButton && 'bx--snippet--no-copy'}
-          {wrapText && 'bx--snippet--wraptext'}"
+        class:bx--snippet="{true}"
+        class:bx--snippet--expand="{expanded}"
+        class:bx--snippet--light="{light}"
+        class:bx--snippet--no-copy="{hideCopyButton}"
+        class:bx--snippet--wraptext="{wrapText}"
+        class:bx--snippet--single="{type === 'single'}"
+        class:bx--snippet--inline="{type === 'inline'}"
+        class:bx--snippet--multi="{type === 'multi'}"
         {...$$restProps}
       >
         <code id="{id}">
@@ -144,8 +146,10 @@
       class:bx--snippet--light="{light}"
       class:bx--snippet--no-copy="{hideCopyButton}"
       class:bx--snippet--wraptext="{wrapText}"
+      class:bx--snippet--single="{type === 'single'}"
+      class:bx--snippet--inline="{type === 'inline'}"
+      class:bx--snippet--multi="{type === 'multi'}"
       {...$$restProps}
-      class="{type && `bx--snippet--${type}`} {$$restProps.class}"
       on:mouseover
       on:mouseenter
       on:mouseleave
@@ -153,8 +157,8 @@
       <div
         role="{type === 'single' ? 'textbox' : undefined}"
         tabindex="{type === 'single' ? '0' : undefined}"
-        class:bx--snippet-container="{true}"
         aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
+        class:bx--snippet-container="{true}"
       >
         <code>
           <pre bind:this="{ref}">
