@@ -1,7 +1,7 @@
 <script>
   /**
    * @deprecated this prop will be removed in the next major release
-   * Set to `true` to use the small variant
+   * Use size="sm" instead
    * @type {boolean} [small=false]
    */
   export let small = false;

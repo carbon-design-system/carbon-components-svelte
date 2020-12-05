@@ -11,7 +11,10 @@
    */
   export let size = "default";
 
-  /** Set to `true` to use the small variant */
+  /**
+   * @deprecated this prop will be removed in the next major release
+   * Use size="small" instead
+   */
   export let small = false;
 </script>
 
