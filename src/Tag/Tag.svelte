@@ -1,11 +1,9 @@
 <script>
-  /**
-   * @restProps {div | span}
-   */
+  /** @restProps {div | span} */
 
   /**
    * Specify the type of tag
-   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast"} [type]
+   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast"}
    */
   export let type = undefined;
 
@@ -24,7 +22,7 @@
   /** Set an id for the filterable tag */
   export let id = "ccs-" + Math.random().toString(36);
 
-  import Close16 from "carbon-icons-svelte/lib/Close16";
+  import Close16 from "carbon-icons-svelte/lib/Close16/Close16.svelte";
   import TagSkeleton from "./TagSkeleton.svelte";
 </script>
 
@@ -44,8 +42,17 @@
       class:bx--tag="{true}"
       class:bx--tag--disabled="{disabled}"
       class:bx--tag--filter="{filter}"
-      {...$$restProps}
-      class="{type && `bx--tag--${type}`} {$$restProps.class}"
+      class:bx--tag--red="{type === 'red'}"
+      class:bx--tag--magenta="{type === 'magenta'}"
+      class:bx--tag--purple="{type === 'purple'}"
+      class:bx--tag--blue="{type === 'blue'}"
+      class:bx--tag--cyan="{type === 'cyan'}"
+      class:bx--tag--teal="{type === 'teal'}"
+      class:bx--tag--green="{type === 'green'}"
+      class:bx--tag--gray="{type === 'gray'}"
+      class:bx--tag--cool-gray="{type === 'cool-gray'}"
+      class:bx--tag--warm-gray="{type === 'warm-gray'}"
+      class:bx--tag--high-contrast="{type === 'high-contrast'}"
     >
       <slot props="{{ class: 'bx--tag__label' }}">
         <span class:bx--tag__label="{true}">{type}</span>
@@ -67,8 +74,17 @@
     <span
       class:bx--tag="{true}"
       class:bx--tag--disabled="{disabled}"
-      {...$$restProps}
-      class="{type && `bx--tag--${type}`} {$$restProps.class}"
+      class:bx--tag--red="{type === 'red'}"
+      class:bx--tag--magenta="{type === 'magenta'}"
+      class:bx--tag--purple="{type === 'purple'}"
+      class:bx--tag--blue="{type === 'blue'}"
+      class:bx--tag--cyan="{type === 'cyan'}"
+      class:bx--tag--teal="{type === 'teal'}"
+      class:bx--tag--green="{type === 'green'}"
+      class:bx--tag--gray="{type === 'gray'}"
+      class:bx--tag--cool-gray="{type === 'cool-gray'}"
+      class:bx--tag--warm-gray="{type === 'warm-gray'}"
+      class:bx--tag--high-contrast="{type === 'high-contrast'}"
       on:click
       on:mouseover
       on:mouseenter
