@@ -2,6 +2,12 @@
 
 export interface TooltipProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
+   * Set the alignment of the tooltip relative to the icon
+   * @default "center"
+   */
+  align?: "start" | "center" | "end";
+
+  /**
    * Set the direction of the tooltip relative to the button
    * @default "bottom"
    */

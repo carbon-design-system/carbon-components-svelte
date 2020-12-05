@@ -3,7 +3,7 @@ import { DataTableHeader } from "../DataTable/DataTable";
 
 export interface DataTableSkeletonProps
   extends DataTableHeader,
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["table"]> {
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the number of columns
    * Superseded by `headers` if `headers` is a non-empty array

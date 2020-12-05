@@ -6,8 +6,8 @@
 
 ### Default (icon-only, "bottom" direction)
 
-<Tooltip>
-  <p>
+<Tooltip tooltipBodyId="tooltip-body">
+  <p id="tooltip-body">
     Resources are provisioned based on your account's organization.
   </p>
 </Tooltip>
@@ -26,6 +26,12 @@
 <Tooltip triggerText="Right" direction="right"><p>Right</p></Tooltip>
 <Tooltip triggerText="Bottom" direction="bottom"><p>Bottom</p></Tooltip>
 <Tooltip triggerText="Left" direction="left"><p>Left</p></Tooltip>
+
+### Alignment
+
+<Tooltip triggerText="Start" align="start"><p>Start</p></Tooltip>
+<Tooltip triggerText="End" align="end"><p>End</p></Tooltip>
+<Tooltip triggerText="Center" align="center"><p>Center</p></Tooltip>
 
 ### Interactive
 
