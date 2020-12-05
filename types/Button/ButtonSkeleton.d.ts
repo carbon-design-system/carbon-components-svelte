@@ -13,7 +13,6 @@ export interface ButtonSkeletonProps extends svelte.JSX.HTMLAttributes<HTMLEleme
   size?: "default" | "field" | "small";
 
   /**
-   * Set to `true` to use the small variant
    * @default false
    */
   small?: boolean;
