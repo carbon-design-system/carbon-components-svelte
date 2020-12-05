@@ -192,12 +192,12 @@
 
 ### Props
 
-| Prop name       | Kind             | Reactive | Type                 | Default value                  | Description                                                                                                                                    |
-| :-------------- | :--------------- | :------- | :------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| disabled        | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to disable the accordion item                                                                                                    |
-| open            | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to open the first accordion item                                                                                                 |
-| title           | <code>let</code> | No       | <code>string</code>  | <code>"title"</code>           | Specify the title of the accordion item heading<br />Alternatively, use the named slot "title" (e.g., &lt;div slot="title"&gt;...&lt;/div&gt;) |
-| iconDescription | <code>let</code> | No       | <code>string</code>  | <code>"Expand/Collapse"</code> | Specify the ARIA label for the accordion item chevron icon                                                                                     |
+| Prop name       | Kind             | Reactive | Type                 | Default value                  | Description                                                                                                                              |
+| :-------------- | :--------------- | :------- | :------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| disabled        | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to disable the accordion item                                                                                              |
+| open            | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to open the first accordion item                                                                                           |
+| title           | <code>let</code> | No       | <code>string</code>  | <code>"title"</code>           | Specify the title of the accordion item heading<br />Alternatively, use the "title" slot (e.g., &lt;div slot="title"&gt;...&lt;/div&gt;) |
+| iconDescription | <code>let</code> | No       | <code>string</code>  | <code>"Expand/Collapse"</code> | Specify the ARIA label for the accordion item chevron icon                                                                               |
 
 ### Slots
 

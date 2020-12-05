@@ -191,7 +191,7 @@
         {
           "name": "title",
           "kind": "let",
-          "description": "Specify the title of the accordion item heading\nAlternatively, use the named slot \"title\" (e.g., <div slot=\"title\">...</div>)",
+          "description": "Specify the title of the accordion item heading\nAlternatively, use the \"title\" slot (e.g., <div slot=\"title\">...</div>)",
           "type": "string",
           "value": "\"title\"",
           "isFunction": false,

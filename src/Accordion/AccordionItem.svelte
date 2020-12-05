@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the title of the accordion item heading
-   * Alternatively, use the named slot "title" (e.g., <div slot="title">...</div>)
+   * Alternatively, use the "title" slot (e.g., <div slot="title">...</div>)
    */
   export let title = "title";
 
@@ -15,7 +15,7 @@
   export let iconDescription = "Expand/Collapse";
 
   import { onMount, getContext } from "svelte";
-  import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16";
+  import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16/ChevronRight16.svelte";
 
   let initialDisabled = disabled;
 
@@ -38,8 +38,9 @@
   class:bx--accordion__item="{true}"
   class:bx--accordion__item--active="{open}"
   class:bx--accordion__item--disabled="{disabled}"
+  class:bx--accordion__item--expanding="{animation === 'expanding'}"
+  class:bx--accordion__item--collapsing="{animation === 'collapsing'}"
   {...$$restProps}
-  class="bx--accordion__item--{animation} {$$restProps.class}"
   on:animationend
   on:animationend="{() => {
     animation = undefined;
@@ -70,11 +71,11 @@
       class="bx--accordion__arrow"
       aria-label="{iconDescription}"
     />
-    <div class="bx--accordion__title">
+    <div class:bx--accordion__title="{true}">
       <slot name="title">{title}</slot>
     </div>
   </button>
-  <div class="bx--accordion__content">
+  <div class:bx--accordion__content="{true}">
     <slot />
   </div>
 </li>
