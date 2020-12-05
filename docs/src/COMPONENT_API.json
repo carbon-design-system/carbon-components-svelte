@@ -911,7 +911,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the switch text\nAlternatively, use the named slot \"text\" (e.g., <span slot=\"text\">...</span>)",
+          "description": "Specify the switch text\nAlternatively, use the \"text\" slot  (e.g., <span slot=\"text\">...</span>)",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,

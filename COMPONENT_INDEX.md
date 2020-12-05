@@ -3320,13 +3320,13 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                       | Default value                                    | Description                                                                                                            |
-| :-------- | :--------------- | :------- | :----------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the button HTML element                                                                          |
-| selected  | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>                               | Set to `true` for the switch to be selected                                                                            |
-| text      | <code>let</code> | No       | <code>string</code>                        | <code>"Provide text"</code>                      | Specify the switch text<br />Alternatively, use the named slot "text" (e.g., &lt;span slot="text"&gt;...&lt;/span&gt;) |
-| disabled  | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to disable the switch                                                                                    |
-| id        | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                                                                       |
+| Prop name | Kind             | Reactive | Type                                       | Default value                                    | Description                                                                                                      |
+| :-------- | :--------------- | :------- | :----------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the button HTML element                                                                    |
+| selected  | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>                               | Set to `true` for the switch to be selected                                                                      |
+| text      | <code>let</code> | No       | <code>string</code>                        | <code>"Provide text"</code>                      | Specify the switch text<br />Alternatively, use the "text" slot (e.g., &lt;span slot="text"&gt;...&lt;/span&gt;) |
+| disabled  | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to disable the switch                                                                              |
+| id        | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                                                                 |
 
 ### Slots
 
