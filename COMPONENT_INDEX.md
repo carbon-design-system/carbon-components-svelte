@@ -2295,14 +2295,14 @@ export type NumberInputTranslationId = "increment" | "decrement";
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| input      | forwarded  | --     |
-| change     | dispatched | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| change     | dispatched | <code>number</code> |
+| click      | forwarded  | --                  |
+| mouseover  | forwarded  | --                  |
+| mouseenter | forwarded  | --                  |
+| mouseleave | forwarded  | --                  |
+| input      | forwarded  | --                  |
 
 ## `NumberInputSkeleton`
 

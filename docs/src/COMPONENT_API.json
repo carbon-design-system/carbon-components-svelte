@@ -6134,12 +6134,12 @@
         }
       ],
       "events": [
+        { "type": "dispatched", "name": "change", "detail": "number" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "input", "element": "input" },
-        { "type": "dispatched", "name": "change" }
+        { "type": "forwarded", "name": "input", "element": "input" }
       ],
       "typedefs": [
         {
