@@ -76,7 +76,9 @@
 
   <Button
     on:click="{() => {
-      selectedValues3 = [];
+      selectedValues3 = selectedValues3.map((item) => {
+        return { ...item, selected: false };
+      });
     }}"
   >
     Reset selectedValues3
