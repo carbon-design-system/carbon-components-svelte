@@ -27,7 +27,7 @@
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@tsconfig/svelte": "^1.0.10",
     "autoprefixer": "^9.8.6",
-    "carbon-components-10.23": "npm:carbon-components@10.23.1",
+    "carbon-components-10.25": "npm:carbon-components@10.25.0",
     "gh-pages": "^3.1.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.5.1",

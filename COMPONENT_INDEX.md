@@ -2780,6 +2780,7 @@ None.
 | input      | forwarded  | --     |
 | focus      | forwarded  | --     |
 | blur       | forwarded  | --     |
+| keydown    | forwarded  | --     |
 | clear      | dispatched | --     |
 
 ## `SearchSkeleton`
@@ -4131,6 +4132,7 @@ None.
 | refTooltip      | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the tooltip HTML element                                                                                     |
 | ref             | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the trigger text HTML element                                                                                |
 | open            | <code>let</code> | Yes      | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to open the tooltip                                                                                                  |
+| align           | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon                                                                              |
 | direction       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the button                                                                            |
 | hideIcon        | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to hide the tooltip icon                                                                                             |
 | icon            | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>    | --                                               | Specify the icon from `carbon-icons-svelte` to render for the tooltip button<br />Icon size must be 16px (e.g., `Add16`, `Task16`) |

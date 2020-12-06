@@ -1,5 +1,11 @@
 <script>
   /**
+   * Set the alignment of the tooltip relative to the icon
+   * @type {"start" | "center" | "end"}
+   */
+  export let align = "center";
+
+  /**
    * Set the direction of the tooltip relative to the button
    * @type {"top" | "right" | "bottom" | "left"}
    */
@@ -205,10 +211,25 @@
       data-floating-menu-direction="{direction}"
       class:bx--tooltip="{true}"
       class:bx--tooltip--shown="{open}"
+      class:bx--tooltip--top="{direction === 'top'}"
+      class:bx--tooltip--right="{direction === 'right'}"
+      class:bx--tooltip--bottom="{direction === 'bottom'}"
+      class:bx--tooltip--left="{direction === 'left'}"
+      class:bx--tooltip--align-center="{align === 'center'}"
+      class:bx--tooltip--align-start="{align === 'start'}"
+      class:bx--tooltip--align-end="{align === 'end'}"
       on:blur="{closeMenu}"
     >
       <span class:bx--tooltip__caret="{true}"></span>
-      <slot />
+      <div
+        class:bx--tooltip__content="{true}"
+        tabIndex="-1"
+        role="dialog"
+        aria-describedby="{$$props['tooltipBodyId']}"
+        aria-labelledby="{triggerId}"
+      >
+        <slot />
+      </div>
     </div>
   {/if}
 </div>
