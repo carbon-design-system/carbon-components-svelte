@@ -83,15 +83,13 @@
   export let listRef = null;
 
   import { createEventDispatcher, afterUpdate, tick } from "svelte";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
-  import {
-    ListBox,
-    ListBoxField,
-    ListBoxMenu,
-    ListBoxMenuIcon,
-    ListBoxMenuItem,
-    ListBoxSelection,
-  } from "../ListBox";
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import ListBox from "../ListBox/ListBox.svelte";
+  import ListBoxField from "../ListBox/ListBoxField.svelte";
+  import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
+  import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
+  import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
+  import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
 
   const dispatch = createEventDispatcher();
 
