@@ -232,7 +232,7 @@
           aria-label="{label ? undefined : ariaLabel}"
           on:input
           on:input="{({ target }) => {
-            value = target.value;
+            inputValue = target.value;
           }}"
           disabled="{disabled}"
           id="{id}"
