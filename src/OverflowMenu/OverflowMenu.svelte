@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {{ index: number; text: string; }} close
+   */
+
+  /**
    * Specify the size of the overflow menu
    * @type {"sm" | "xl"}
    */
@@ -52,7 +56,7 @@
 
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";
   import { writable } from "svelte/store";
-  import OverflowMenuVertical16 from "carbon-icons-svelte/lib/OverflowMenuVertical16";
+  import OverflowMenuVertical16 from "carbon-icons-svelte/lib/OverflowMenuVertical16/OverflowMenuVertical16.svelte";
   import { formatStyle } from "./formatStyle";
 
   const dispatch = createEventDispatcher();

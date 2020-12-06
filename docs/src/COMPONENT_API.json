@@ -3127,12 +3127,16 @@
         }
       ],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "close",
+          "detail": "{ index: number; text: string; }"
+        },
         { "type": "forwarded", "name": "click", "element": "button" },
         { "type": "forwarded", "name": "mouseover", "element": "button" },
         { "type": "forwarded", "name": "mouseenter", "element": "button" },
         { "type": "forwarded", "name": "mouseleave", "element": "button" },
-        { "type": "forwarded", "name": "keydown", "element": "button" },
-        { "type": "dispatched", "name": "close" }
+        { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "button" }

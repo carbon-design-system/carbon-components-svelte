@@ -2377,14 +2377,14 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail                                        |
+| :--------- | :--------- | :-------------------------------------------- |
+| close      | dispatched | <code>{ index: number; text: string; }</code> |
+| click      | forwarded  | --                                            |
+| mouseover  | forwarded  | --                                            |
+| mouseenter | forwarded  | --                                            |
+| mouseleave | forwarded  | --                                            |
+| keydown    | forwarded  | --                                            |
 
 ## `OverflowMenuItem`
 
