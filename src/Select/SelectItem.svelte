@@ -17,8 +17,8 @@
 
   let selected = false;
 
-  const unsubscribe = ctx.selectedValue.subscribe(($) => {
-    selected = $ === value;
+  const unsubscribe = ctx.selectedValue.subscribe((currentValue) => {
+    selected = currentValue === value;
   });
 
   onDestroy(() => {
@@ -32,8 +32,7 @@
   hidden="{hidden}"
   selected="{selected}"
   class:bx--select-option="{true}"
-  class="{$$restProps.class}"
-  style="{$$restProps.style}"
+  {...$$restProps}
 >
   {text || value}
 </option>

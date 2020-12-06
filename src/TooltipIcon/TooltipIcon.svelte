@@ -36,10 +36,14 @@
   class:bx--tooltip__trigger="{true}"
   class:bx--tooltip--a11y="{true}"
   class:bx--tooltip--hidden="{hidden}"
+  class:bx--tooltip--top="{direction === 'top'}"
+  class:bx--tooltip--right="{direction === 'right'}"
+  class:bx--tooltip--bottom="{direction === 'bottom'}"
+  class:bx--tooltip--left="{direction === 'left'}"
+  class:bx--tooltip--align-start="{align === 'start'}"
+  class:bx--tooltip--align-center="{align === 'center'}"
+  class:bx--tooltip--align-end="{align === 'end'}"
   {...$$restProps}
-  class="{direction && `bx--tooltip--${direction}`}
-    {align && `bx--tooltip--align-${align}`}
-    {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter

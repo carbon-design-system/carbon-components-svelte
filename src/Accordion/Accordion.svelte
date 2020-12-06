@@ -43,10 +43,11 @@
 {:else}
   <ul
     class:bx--accordion="{true}"
+    class:bx--accordion--start="{align === 'start'}"
+    class:bx--accordion--end="{align === 'end'}"
+    class:bx--accordion--sm="{size === 'sm'}"
+    class:bx--accordion--xl="{size === 'xl'}"
     {...$$restProps}
-    class="bx--accordion--{align}
-      {size && `bx--accordion--${size}`}
-      {$$restProps.class}"
     on:click
     on:mouseover
     on:mouseenter

@@ -64,7 +64,7 @@
   export let refIcon = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";
-  import Information16 from "carbon-icons-svelte/lib/Information16";
+  import Information16 from "carbon-icons-svelte/lib/Information16/Information16.svelte";
 
   const dispatch = createEventDispatcher();
 

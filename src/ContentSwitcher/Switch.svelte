@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the switch text
-   * Alternatively, use the named slot "text" (e.g., <span slot="text">...</span>)
+   * Alternatively, use the "text" slot  (e.g., <span slot="text">...</span>)
    */
   export let text = "Provide text";
 

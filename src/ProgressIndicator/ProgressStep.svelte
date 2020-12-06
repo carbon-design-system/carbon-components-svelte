@@ -24,8 +24,8 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   import { onMount, getContext } from "svelte";
-  import CheckmarkOutline16 from "carbon-icons-svelte/lib/CheckmarkOutline16";
-  import Warning16 from "carbon-icons-svelte/lib/Warning16";
+  import CheckmarkOutline16 from "carbon-icons-svelte/lib/CheckmarkOutline16/CheckmarkOutline16.svelte";
+  import Warning16 from "carbon-icons-svelte/lib/Warning16/Warning16.svelte";
 
   let step = {};
 

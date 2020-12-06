@@ -21,7 +21,7 @@
   export let iconDescription = "Close";
 
   import { getContext } from "svelte";
-  import Close20 from "carbon-icons-svelte/lib/Close20";
+  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
 
   const { closeModal } = getContext("ComposedModal");
 </script>

@@ -54,15 +54,13 @@
   });
 
   function focus(element) {
-    if (selectorPrimaryFocus == null) {
-      return;
-    }
+    if (selectorPrimaryFocus == null) return;
     const node =
       (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
     if (node != null) node.focus();
   }
 
-  $: opened = false;
+  let opened = false;
   $: didOpen = open;
 
   onMount(async () => {
@@ -116,7 +114,10 @@
   <div
     bind:this="{innerModal}"
     class:bx--modal-container="{true}"
-    class="{size && `bx--modal-container--${size}`} {containerClass}"
+    class:bx--modal-container--xs="{size === 'xs'}"
+    class:bx--modal-container--sm="{size === 'sm'}"
+    class:bx--modal-container--lg="{size === 'lg'}"
+    class="{containerClass}"
     on:click="{() => {
       didClickInnerModal = true;
     }}"

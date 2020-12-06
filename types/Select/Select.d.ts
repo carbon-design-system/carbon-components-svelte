@@ -89,7 +89,7 @@ export default class Select {
     default: {};
   };
 
+  $on(eventname: "change", cb: (event: CustomEvent<string>) => void): () => void;
   $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: "change", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

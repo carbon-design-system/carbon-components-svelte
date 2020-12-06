@@ -2,7 +2,13 @@
   import { Pagination, PaginationSkeleton } from "../types";
 </script>
 
-<Pagination totalItems="{102}" pageSizes="{[10, 15, 20]}" />
+<Pagination
+  totalItems="{102}"
+  pageSizes="{[10, 15, 20]}"
+  on:update="{(e) => {
+    console.log(e.detail); // { pageSize: number; page: number; }
+  }}"
+/>
 
 <Pagination totalItems="{102}" page="{4}" />
 

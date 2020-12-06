@@ -102,6 +102,6 @@ export default class Pagination {
   $$prop_def: PaginationProps;
   $$slot_def: {};
 
-  $on(eventname: "update", cb: (event: CustomEvent<any>) => void): () => void;
+  $on(eventname: "update", cb: (event: CustomEvent<{ pageSize: number; page: number }>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

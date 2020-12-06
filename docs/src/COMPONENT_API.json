@@ -191,7 +191,7 @@
         {
           "name": "title",
           "kind": "let",
-          "description": "Specify the title of the accordion item heading\nAlternatively, use the named slot \"title\" (e.g., <div slot=\"title\">...</div>)",
+          "description": "Specify the title of the accordion item heading\nAlternatively, use the \"title\" slot (e.g., <div slot=\"title\">...</div>)",
           "type": "string",
           "value": "\"title\"",
           "isFunction": false,
@@ -456,7 +456,13 @@
           "reactive": false
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "slot_props": "{props?: { [\"aria-current\"]?: string; class: \"bx--link\"; }}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "li" },
         { "type": "forwarded", "name": "mouseover", "element": "li" },
@@ -492,7 +498,6 @@
         {
           "name": "small",
           "kind": "let",
-          "description": "Set to `true` to use the small variant",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -906,7 +911,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the switch text\nAlternatively, use the named slot \"text\" (e.g., <span slot=\"text\">...</span>)",
+          "description": "Specify the switch text\nAlternatively, use the \"text\" slot  (e.g., <span slot=\"text\">...</span>)",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
@@ -1884,7 +1889,7 @@
           "name": "type",
           "kind": "let",
           "description": "Set the type of code snippet",
-          "type": "\"single\" | \"inline\" | \"multi\"",
+          "type": "\"single\" | \"multi\"",
           "value": "\"single\"",
           "isFunction": false,
           "constant": false,
@@ -3122,12 +3127,16 @@
         }
       ],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "close",
+          "detail": "{ index: number; text: string; }"
+        },
         { "type": "forwarded", "name": "click", "element": "button" },
         { "type": "forwarded", "name": "mouseover", "element": "button" },
         { "type": "forwarded", "name": "mouseenter", "element": "button" },
         { "type": "forwarded", "name": "mouseleave", "element": "button" },
-        { "type": "forwarded", "name": "keydown", "element": "button" },
-        { "type": "dispatched", "name": "close" }
+        { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "button" }
@@ -6125,12 +6134,12 @@
         }
       ],
       "events": [
+        { "type": "dispatched", "name": "change", "detail": "number" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "input", "element": "input" },
-        { "type": "dispatched", "name": "change" }
+        { "type": "forwarded", "name": "input", "element": "input" }
       ],
       "typedefs": [
         {
@@ -6345,33 +6354,8 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        { "type": "forwarded", "name": "blur", "element": "select" },
-        { "type": "dispatched", "name": "change" }
-      ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
-    },
-    {
-      "moduleName": "SelectSkeleton",
-      "filePath": "/src/Select/SelectSkeleton.svelte",
-      "props": [
-        {
-          "name": "hideLabel",
-          "kind": "let",
-          "description": "Set to `true` to hide the label text",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
-        }
-      ],
-      "slots": [],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
+        { "type": "dispatched", "name": "change", "detail": "string" },
+        { "type": "forwarded", "name": "blur", "element": "select" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -6423,37 +6407,8 @@
       ],
       "slots": [],
       "events": [],
-      "typedefs": []
-    },
-    {
-      "moduleName": "SelectItemGroup",
-      "filePath": "/src/Select/SelectItemGroup.svelte",
-      "props": [
-        {
-          "name": "disabled",
-          "kind": "let",
-          "description": "Set to `true` to disable the optgroup element",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "label",
-          "kind": "let",
-          "description": "Specify the label attribute of the optgroup element",
-          "type": "string",
-          "value": "\"Provide label\"",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
-        }
-      ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "optgroup" }
+      "rest_props": { "type": "Element", "name": "option" }
     },
     {
       "moduleName": "Pagination",
@@ -6621,7 +6576,13 @@
         }
       ],
       "slots": [],
-      "events": [{ "type": "dispatched", "name": "update" }],
+      "events": [
+        {
+          "type": "dispatched",
+          "name": "update",
+          "detail": "{ pageSize: number; page: number; }"
+        }
+      ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
@@ -6706,9 +6667,21 @@
       ],
       "slots": [],
       "events": [
-        { "type": "dispatched", "name": "click:button--previous" },
-        { "type": "dispatched", "name": "click:button--next" },
-        { "type": "dispatched", "name": "change" }
+        {
+          "type": "dispatched",
+          "name": "change",
+          "detail": "{ page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "click:button--previous",
+          "detail": "{ page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "click:button--next",
+          "detail": "{ page: number; }"
+        }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "nav" }
@@ -6970,6 +6943,61 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "SelectSkeleton",
+      "filePath": "/src/Select/SelectSkeleton.svelte",
+      "props": [
+        {
+          "name": "hideLabel",
+          "kind": "let",
+          "description": "Set to `true` to hide the label text",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
+      ],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "SelectItemGroup",
+      "filePath": "/src/Select/SelectItemGroup.svelte",
+      "props": [
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the optgroup element",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "label",
+          "kind": "let",
+          "description": "Specify the label attribute of the optgroup element",
+          "type": "string",
+          "value": "\"Provide label\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "optgroup" }
     },
     {
       "moduleName": "SkeletonPlaceholder",

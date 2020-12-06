@@ -64,8 +64,9 @@
   role="tablist"
   class:bx--content-switcher="{true}"
   class:bx--content-switcher--light="{light}"
+  class:bx--content-switcher--sm="{size === 'sm'}"
+  class:bx--content-switcher--xl="{size === 'xl'}"
   {...$$restProps}
-  class="{size && `bx--content-switcher--${size}`} {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter

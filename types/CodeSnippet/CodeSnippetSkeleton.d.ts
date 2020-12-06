@@ -5,7 +5,7 @@ export interface CodeSnippetSkeletonProps extends svelte.JSX.HTMLAttributes<HTML
    * Set the type of code snippet
    * @default "single"
    */
-  type?: "single" | "inline" | "multi";
+  type?: "single" | "multi";
 }
 
 export default class CodeSnippetSkeleton {

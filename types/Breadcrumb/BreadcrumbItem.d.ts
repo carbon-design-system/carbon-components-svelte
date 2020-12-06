@@ -16,7 +16,7 @@ export interface BreadcrumbItemProps extends svelte.JSX.HTMLAttributes<HTMLEleme
 export default class BreadcrumbItem {
   $$prop_def: BreadcrumbItemProps;
   $$slot_def: {
-    default: {};
+    default: { props?: { ["aria-current"]?: string; class: "bx--link" } };
   };
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

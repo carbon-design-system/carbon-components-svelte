@@ -42,8 +42,8 @@ export default class PaginationNav {
   $$prop_def: PaginationNavProps;
   $$slot_def: {};
 
-  $on(eventname: "click:button--previous", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "click:button--next", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "change", cb: (event: CustomEvent<any>) => void): () => void;
+  $on(eventname: "change", cb: (event: CustomEvent<{ page: number }>) => void): () => void;
+  $on(eventname: "click:button--previous", cb: (event: CustomEvent<{ page: number }>) => void): () => void;
+  $on(eventname: "click:button--next", cb: (event: CustomEvent<{ page: number }>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

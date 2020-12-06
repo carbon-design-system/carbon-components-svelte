@@ -1,6 +1,7 @@
 <script>
   /**
    * @typedef {"increment" | "decrement"} NumberInputTranslationId
+   * @event {number} change
    */
 
   /**
@@ -91,9 +92,9 @@
   export let ref = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";
-  import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";
-  import CaretUpGlyph from "carbon-icons-svelte/lib/CaretUpGlyph";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
+  import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph/CaretDownGlyph.svelte";
+  import CaretUpGlyph from "carbon-icons-svelte/lib/CaretUpGlyph/CaretUpGlyph.svelte";
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",

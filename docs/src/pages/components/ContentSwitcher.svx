@@ -24,6 +24,10 @@ components: ["ContentSwitcher", "Switch"]
   <Switch text="Recommended" />
 </ContentSwitcher>
 
+### Reactive example
+
+<FileSource src="/framed/ContentSwitcher/ContentSwitcherReactive" />
+
 ### Light variant
 
 <ContentSwitcher light>

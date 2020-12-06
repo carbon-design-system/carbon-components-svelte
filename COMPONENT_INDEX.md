@@ -192,12 +192,12 @@
 
 ### Props
 
-| Prop name       | Kind             | Reactive | Type                 | Default value                  | Description                                                                                                                                    |
-| :-------------- | :--------------- | :------- | :------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| disabled        | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to disable the accordion item                                                                                                    |
-| open            | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to open the first accordion item                                                                                                 |
-| title           | <code>let</code> | No       | <code>string</code>  | <code>"title"</code>           | Specify the title of the accordion item heading<br />Alternatively, use the named slot "title" (e.g., &lt;div slot="title"&gt;...&lt;/div&gt;) |
-| iconDescription | <code>let</code> | No       | <code>string</code>  | <code>"Expand/Collapse"</code> | Specify the ARIA label for the accordion item chevron icon                                                                                     |
+| Prop name       | Kind             | Reactive | Type                 | Default value                  | Description                                                                                                                              |
+| :-------------- | :--------------- | :------- | :------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| disabled        | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to disable the accordion item                                                                                              |
+| open            | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to open the first accordion item                                                                                           |
+| title           | <code>let</code> | No       | <code>string</code>  | <code>"title"</code>           | Specify the title of the accordion item heading<br />Alternatively, use the "title" slot (e.g., &lt;div slot="title"&gt;...&lt;/div&gt;) |
+| iconDescription | <code>let</code> | No       | <code>string</code>  | <code>"Expand/Collapse"</code> | Specify the ARIA label for the accordion item chevron icon                                                                               |
 
 ### Slots
 
@@ -294,9 +294,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                                                                     | Fallback |
+| :-------- | :------ | :------------------------------------------------------------------------ | :------- |
+| --        | Yes     | <code>{props?: { ["aria-current"]?: string; class: "bx--link"; }} </code> | --       |
 
 ### Events
 
@@ -387,11 +387,11 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                 | Default value          | Description                            |
-| :-------- | :--------------- | :------- | :--------------------------------------------------- | ---------------------- | -------------------------------------- |
-| href      | <code>let</code> | No       | <code>string</code>                                  | --                     | Set the `href` to use an anchor link   |
-| size      | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small"</code> | <code>"default"</code> | Specify the size of button skeleton    |
-| small     | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>     | Set to `true` to use the small variant |
+| Prop name | Kind             | Reactive | Type                                                 | Default value          | Description                          |
+| :-------- | :--------------- | :------- | :--------------------------------------------------- | ---------------------- | ------------------------------------ |
+| href      | <code>let</code> | No       | <code>string</code>                                  | --                     | Set the `href` to use an anchor link |
+| size      | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small"</code> | <code>"default"</code> | Specify the size of button skeleton  |
+| small     | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>     | --                                   |
 
 ### Slots
 
@@ -527,9 +527,9 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                 | Default value         | Description                  |
-| :-------- | :--------------- | :------- | :--------------------------------------------------- | --------------------- | ---------------------------- |
-| type      | <code>let</code> | No       | <code>"single" &#124; "inline" &#124; "multi"</code> | <code>"single"</code> | Set the type of code snippet |
+| Prop name | Kind             | Reactive | Type                                 | Default value         | Description                  |
+| :-------- | :--------------- | :------- | :----------------------------------- | --------------------- | ---------------------------- |
+| type      | <code>let</code> | No       | <code>"single" &#124; "multi"</code> | <code>"single"</code> | Set the type of code snippet |
 
 ### Slots
 
@@ -2295,14 +2295,14 @@ export type NumberInputTranslationId = "increment" | "decrement";
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| input      | forwarded  | --     |
-| change     | dispatched | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| change     | dispatched | <code>number</code> |
+| click      | forwarded  | --                  |
+| mouseover  | forwarded  | --                  |
+| mouseenter | forwarded  | --                  |
+| mouseleave | forwarded  | --                  |
+| input      | forwarded  | --                  |
 
 ## `NumberInputSkeleton`
 
@@ -2377,14 +2377,14 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail                                        |
+| :--------- | :--------- | :-------------------------------------------- |
+| close      | dispatched | <code>{ index: number; text: string; }</code> |
+| click      | forwarded  | --                                            |
+| mouseover  | forwarded  | --                                            |
+| mouseenter | forwarded  | --                                            |
+| mouseleave | forwarded  | --                                            |
+| keydown    | forwarded  | --                                            |
 
 ## `OverflowMenuItem`
 
@@ -2444,9 +2444,9 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| update     | dispatched | --     |
+| Event name | Type       | Detail                                           |
+| :--------- | :--------- | :----------------------------------------------- |
+| update     | dispatched | <code>{ pageSize: number; page: number; }</code> |
 
 ## `PaginationNav`
 
@@ -2467,11 +2467,11 @@ None.
 
 ### Events
 
-| Event name             | Type       | Detail |
-| :--------------------- | :--------- | :----- |
-| click:button--previous | dispatched | --     |
-| click:button--next     | dispatched | --     |
-| change                 | dispatched | --     |
+| Event name             | Type       | Detail                         |
+| :--------------------- | :--------- | :----------------------------- |
+| change                 | dispatched | <code>{ page: number; }</code> |
+| click:button--previous | dispatched | <code>{ page: number; }</code> |
+| click:button--next     | dispatched | <code>{ page: number; }</code> |
 
 ## `PaginationSkeleton`
 
@@ -2834,10 +2834,10 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| blur       | forwarded  | --     |
-| change     | dispatched | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| change     | dispatched | <code>string</code> |
+| blur       | forwarded  | --                  |
 
 ## `SelectItem`
 
@@ -3320,13 +3320,13 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                       | Default value                                    | Description                                                                                                            |
-| :-------- | :--------------- | :------- | :----------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the button HTML element                                                                          |
-| selected  | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>                               | Set to `true` for the switch to be selected                                                                            |
-| text      | <code>let</code> | No       | <code>string</code>                        | <code>"Provide text"</code>                      | Specify the switch text<br />Alternatively, use the named slot "text" (e.g., &lt;span slot="text"&gt;...&lt;/span&gt;) |
-| disabled  | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to disable the switch                                                                                    |
-| id        | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                                                                       |
+| Prop name | Kind             | Reactive | Type                                       | Default value                                    | Description                                                                                                      |
+| :-------- | :--------------- | :------- | :----------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the button HTML element                                                                    |
+| selected  | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>                               | Set to `true` for the switch to be selected                                                                      |
+| text      | <code>let</code> | No       | <code>string</code>                        | <code>"Provide text"</code>                      | Specify the switch text<br />Alternatively, use the "text" slot (e.g., &lt;span slot="text"&gt;...&lt;/span&gt;) |
+| disabled  | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to disable the switch                                                                              |
+| id        | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                                                                 |
 
 ### Slots
 

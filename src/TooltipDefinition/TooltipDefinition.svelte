@@ -51,8 +51,11 @@
     class:bx--tooltip__trigger--definition="{true}"
     class:bx--tooltip--hidden="{!visible}"
     class:bx--tooltip--visible="{visible}"
-    class="{direction && `bx--tooltip--${direction}`}
-      {align && `bx--tooltip--align-${align}`}"
+    class:bx--tooltip--top="{direction === 'top'}"
+    class:bx--tooltip--bottom="{direction === 'bottom'}"
+    class:bx--tooltip--align-start="{align === 'start'}"
+    class:bx--tooltip--align-center="{align === 'center'}"
+    class:bx--tooltip--align-end="{align === 'end'}"
     on:click
     on:mouseover
     on:mouseenter

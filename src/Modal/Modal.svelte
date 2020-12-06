@@ -69,8 +69,8 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount, afterUpdate } from "svelte";
-  import Close20 from "carbon-icons-svelte/lib/Close20";
-  import { Button } from "../Button";
+  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
+  import Button from "../Button/Button.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -160,7 +160,9 @@
     aria-modal="true"
     aria-label="{ariaLabel}"
     class:bx--modal-container="{true}"
-    class="{size && `bx--modal-container--${size}`}"
+    class:bx--modal-container--xs="{size === 'xs'}"
+    class:bx--modal-container--sm="{size === 'sm'}"
+    class:bx--modal-container--lg="{size === 'lg'}"
     on:click="{() => {
       didClickInnerModal = true;
     }}"

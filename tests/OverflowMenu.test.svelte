@@ -3,7 +3,11 @@
   import Add16 from "carbon-icons-svelte/lib/Add16";
 </script>
 
-<OverflowMenu>
+<OverflowMenu
+  on:close="{(e) => {
+    console.log(e.detail); // { index: number; text: string; }
+  }}"
+>
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem
     href="https://cloud.ibm.com/docs/api-gateway/"

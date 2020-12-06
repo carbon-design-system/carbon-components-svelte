@@ -1,7 +1,7 @@
 <script>
   /**
    * @deprecated this prop will be removed in the next major release
-   * Set to `true` to use the small variant
+   * Use size="sm" instead
    * @type {boolean} [small=false]
    */
   export let small = false;
@@ -70,9 +70,9 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import Close16 from "carbon-icons-svelte/lib/Close16";
-  import Close20 from "carbon-icons-svelte/lib/Close20";
-  import Search16 from "carbon-icons-svelte/lib/Search16";
+  import Close16 from "carbon-icons-svelte/lib/Close16/Close16.svelte";
+  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
+  import Search16 from "carbon-icons-svelte/lib/Search16/Search16.svelte";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

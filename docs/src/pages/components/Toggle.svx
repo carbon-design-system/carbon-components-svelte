@@ -15,6 +15,10 @@ components: ["Toggle", "ToggleSkeleton"]
 
 <Toggle labelText="Push notifications" toggled />
 
+### Reactive example
+
+<FileSource src="/framed/Toggle/ToggleReactive" />
+
 ### Custom labels
 
 <Toggle labelText="Push notifications" labelA="No" labelB="Yes" />

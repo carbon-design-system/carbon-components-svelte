@@ -13,6 +13,10 @@ The `Search` component size is extra-large by default. There are [large](#large-
 
 <Search placeholder="Search catalog..." value="Cloud functions" />
 
+### Reactive example
+
+<FileSource src="/framed/Search/SearchReactive" />
+
 ### Light variant
 
 <Search light />

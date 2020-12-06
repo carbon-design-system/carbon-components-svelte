@@ -1,5 +1,9 @@
 <script>
   /**
+   * @slot {{props?: { ["aria-current"]?: string; class: "bx--link"; }}}
+   */
+
+  /**
    * Set the `href` to use an anchor link
    * @type {string}
    */
@@ -8,7 +12,7 @@
   /** Set to `true` if the breadcrumb item represents the current page */
   export let isCurrentPage = false;
 
-  import { Link } from "../Link";
+  import Link from "../Link/Link.svelte";
 </script>
 
 <li

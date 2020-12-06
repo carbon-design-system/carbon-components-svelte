@@ -24,7 +24,7 @@
   export let danger = false;
 
   import { getContext } from "svelte";
-  import { Button } from "../Button";
+  import Button from "../Button/Button.svelte";
 
   const { closeModal, submit } = getContext("ComposedModal");
 </script>

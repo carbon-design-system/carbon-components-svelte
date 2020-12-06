@@ -3,7 +3,7 @@
 export interface AccordionItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
   /**
    * Specify the title of the accordion item heading
-   * Alternatively, use the named slot "title" (e.g., <div slot="title">...</div>)
+   * Alternatively, use the "title" slot (e.g., <div slot="title">...</div>)
    * @default "title"
    */
   title?: string;

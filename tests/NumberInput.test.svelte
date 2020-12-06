@@ -2,7 +2,12 @@
   import { NumberInput, NumberInputSkeleton } from "../types";
 </script>
 
-<NumberInput label="Clusters" />
+<NumberInput
+  label="Clusters"
+  on:change="{(e) => {
+    console.log(e.detail); // number
+  }}"
+/>
 
 <NumberInput
   label="Clusters"
