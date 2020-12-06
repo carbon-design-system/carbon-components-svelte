@@ -32,7 +32,8 @@
   hidden="{hidden}"
   selected="{selected}"
   class:bx--select-option="{true}"
-  {...$$restProps}
+  class="{$$restProps.class}"
+  style="{$$restProps.style}"
 >
   {text || value}
 </option>
