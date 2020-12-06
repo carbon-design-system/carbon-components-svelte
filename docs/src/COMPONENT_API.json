@@ -6428,7 +6428,8 @@
       ],
       "slots": [],
       "events": [],
-      "typedefs": []
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "option" }
     },
     {
       "moduleName": "SelectItemGroup",
