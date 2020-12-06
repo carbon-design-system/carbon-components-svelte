@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @event {{ index: number; }} select
+   */
+
   /** Specify the pivot start index */
   export let fromIndex = 0;
 
@@ -6,7 +10,7 @@
   export let count = 0;
 
   import { createEventDispatcher } from "svelte";
-  import OverflowMenuHorizontal16 from "carbon-icons-svelte/lib/OverflowMenuHorizontal16";
+  import OverflowMenuHorizontal16 from "carbon-icons-svelte/lib/OverflowMenuHorizontal16/OverflowMenuHorizontal16.svelte";
   import PaginationItem from "./PaginationItem.svelte";
 
   const dispatch = createEventDispatcher();

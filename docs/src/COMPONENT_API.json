@@ -6712,9 +6712,21 @@
       ],
       "slots": [],
       "events": [
-        { "type": "dispatched", "name": "click:button--previous" },
-        { "type": "dispatched", "name": "click:button--next" },
-        { "type": "dispatched", "name": "change" }
+        {
+          "type": "dispatched",
+          "name": "change",
+          "detail": "{ page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "click:button--previous",
+          "detail": "{ page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "click:button--next",
+          "detail": "{ page: number; }"
+        }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "nav" }

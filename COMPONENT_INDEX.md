@@ -2467,11 +2467,11 @@ None.
 
 ### Events
 
-| Event name             | Type       | Detail |
-| :--------------------- | :--------- | :----- |
-| click:button--previous | dispatched | --     |
-| click:button--next     | dispatched | --     |
-| change                 | dispatched | --     |
+| Event name             | Type       | Detail                         |
+| :--------------------- | :--------- | :----------------------------- |
+| change                 | dispatched | <code>{ page: number; }</code> |
+| click:button--previous | dispatched | <code>{ page: number; }</code> |
+| click:button--next     | dispatched | <code>{ page: number; }</code> |
 
 ## `PaginationSkeleton`
 
