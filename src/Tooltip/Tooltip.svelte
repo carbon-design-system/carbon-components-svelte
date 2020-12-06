@@ -68,8 +68,6 @@
 
   const dispatch = createEventDispatcher();
 
-  let programmatic = true;
-
   function onKeydown(e) {
     if (e.key === "Escape") {
       e.stopPropagation();
@@ -88,13 +86,7 @@
   }
 
   function openMenu() {
-    programmatic = false;
     open = true;
-  }
-
-  function closeMenu() {
-    programmatic = false;
-    open = false;
   }
 
   afterUpdate(() => {
@@ -167,8 +159,14 @@
 </script>
 
 <svelte:body
-  on:click="{({ target }) => {
-    if (!programmatic && open && refTooltip && !refTooltip.contains(target)) {
+  on:mousedown="{({ target }) => {
+    if (open && target.contains(refTooltip)) {
+      if (refIcon) {
+        refIcon.focus();
+      } else if (ref) {
+        ref.focus();
+      }
+
       open = false;
     }
   }}" />
@@ -206,7 +204,6 @@
     <div
       bind:this="{refTooltip}"
       role="tooltip"
-      tabindex="0"
       id="{tooltipId}"
       data-floating-menu-direction="{direction}"
       class:bx--tooltip="{true}"
@@ -218,10 +215,11 @@
       class:bx--tooltip--align-center="{align === 'center'}"
       class:bx--tooltip--align-start="{align === 'start'}"
       class:bx--tooltip--align-end="{align === 'end'}"
-      on:blur="{closeMenu}"
     >
       <span class:bx--tooltip__caret="{true}"></span>
       <div
+        on:click|stopPropagation
+        on:mousedown|stopPropagation
         class:bx--tooltip__content="{true}"
         tabIndex="-1"
         role="dialog"
