@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {string} change
+   */
+
+  /**
    * Specify the selected item value
    * @type {string}
    */

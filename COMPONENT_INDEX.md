@@ -2834,10 +2834,10 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| blur       | forwarded  | --     |
-| change     | dispatched | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| change     | dispatched | <code>string</code> |
+| blur       | forwarded  | --                  |
 
 ## `SelectItem`
 
