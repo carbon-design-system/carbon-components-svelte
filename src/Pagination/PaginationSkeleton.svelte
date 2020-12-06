@@ -1,5 +1,5 @@
 <script>
-  import { SkeletonText } from "../SkeletonText";
+  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
 </script>
 
 <div

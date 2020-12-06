@@ -65,10 +65,11 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   import { createEventDispatcher } from "svelte";
-  import CaretLeft16 from "carbon-icons-svelte/lib/CaretLeft16";
-  import CaretRight16 from "carbon-icons-svelte/lib/CaretRight16";
-  import { Button } from "../Button";
-  import { Select, SelectItem } from "../Select";
+  import CaretLeft16 from "carbon-icons-svelte/lib/CaretLeft16/CaretLeft16.svelte";
+  import CaretRight16 from "carbon-icons-svelte/lib/CaretRight16/CaretRight16.svelte";
+  import Button from "../Button/Button.svelte";
+  import Select from "../Select/Select.svelte";
+  import SelectItem from "../Select/SelectItem.svelte";
 
   const dispatch = createEventDispatcher();
 
