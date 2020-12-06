@@ -191,7 +191,7 @@
           max="{max}"
           min="{min}"
           step="{step}"
-          value="{inputValue}"
+          value="{value}"
           readonly="{readonly}"
         />
         <button
