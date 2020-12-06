@@ -86,9 +86,7 @@ export { default as NumberInput } from "./NumberInput/NumberInput";
 export { default as NumberInputSkeleton } from "./NumberInput/NumberInputSkeleton";
 export { default as OrderedList } from "./OrderedList/OrderedList";
 export { default as Select } from "./Select/Select";
-export { default as SelectSkeleton } from "./Select/SelectSkeleton";
 export { default as SelectItem } from "./Select/SelectItem";
-export { default as SelectItemGroup } from "./Select/SelectItemGroup";
 export { default as Pagination } from "./Pagination/Pagination";
 export { default as PaginationSkeleton } from "./Pagination/PaginationSkeleton";
 export { default as PaginationNav } from "./PaginationNav/PaginationNav";
@@ -96,6 +94,8 @@ export { default as ProgressIndicator } from "./ProgressIndicator/ProgressIndica
 export { default as ProgressIndicatorSkeleton } from "./ProgressIndicator/ProgressIndicatorSkeleton";
 export { default as ProgressStep } from "./ProgressIndicator/ProgressStep";
 export { default as RadioButtonGroup } from "./RadioButtonGroup/RadioButtonGroup";
+export { default as SelectSkeleton } from "./Select/SelectSkeleton";
+export { default as SelectItemGroup } from "./Select/SelectItemGroup";
 export { default as SkeletonPlaceholder } from "./SkeletonPlaceholder/SkeletonPlaceholder";
 export { default as Slider } from "./Slider/Slider";
 export { default as SliderSkeleton } from "./Slider/SliderSkeleton";

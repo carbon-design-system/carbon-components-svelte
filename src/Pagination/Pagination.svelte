@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @event {{ pageSize: number; page: number; }} update
+   */
+
   /** Specify the current page index */
   export let page = 1;
 

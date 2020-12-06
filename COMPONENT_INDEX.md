@@ -2444,9 +2444,9 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| update     | dispatched | --     |
+| Event name | Type       | Detail                                           |
+| :--------- | :--------- | :----------------------------------------------- |
+| update     | dispatched | <code>{ pageSize: number; page: number; }</code> |
 
 ## `PaginationNav`
 
