@@ -119,9 +119,11 @@
     dispatch("change", value);
   });
 
+  let inputValue = value;
+
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: value = Number(value);
+  $: value = Number(inputValue);
   $: error =
     invalid || (!allowEmpty && value === "") || value > max || value < min;
   $: errorId = `error-${id}`;
@@ -182,7 +184,7 @@
           aria-label="{label ? undefined : ariaLabel}"
           on:input
           on:input="{({ target }) => {
-            value = target.value;
+            inputValue = target.value;
           }}"
           disabled="{disabled}"
           id="{id}"
@@ -231,7 +233,7 @@
           aria-label="{label ? undefined : ariaLabel}"
           on:input
           on:input="{({ target }) => {
-            value = target.value;
+            inputValue = target.value;
           }}"
           disabled="{disabled}"
           id="{id}"
