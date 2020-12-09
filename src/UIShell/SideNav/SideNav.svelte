@@ -11,8 +11,13 @@
   /** Set to `true` to toggle the expanded state */
   export let isOpen = false;
 
+  import { onMount } from "svelte";
   import { shouldRenderHamburgerMenu } from "../navStore";
-  shouldRenderHamburgerMenu.set(true);
+
+  onMount(() => {
+    shouldRenderHamburgerMenu.set(true);
+    return () => shouldRenderHamburgerMenu.set(false);
+  });
 </script>
 
 {#if fixed}
