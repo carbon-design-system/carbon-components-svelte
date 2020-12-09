@@ -10,6 +10,9 @@
 
   /** Set to `true` to toggle the expanded state */
   export let isOpen = false;
+
+  import { shouldRenderHamburgerMenu } from "../navStore";
+  shouldRenderHamburgerMenu.set(true);
 </script>
 
 {#if fixed}

@@ -35,6 +35,7 @@
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
+  import { shouldRenderHamburgerMenu } from "../navStore";
   import HamburgerMenu from "../SideNav/HamburgerMenu.svelte";
 
   let winWidth = undefined;
@@ -50,7 +51,7 @@
 
 <header role="banner" aria-label="{ariaLabel}" class:bx--header="{true}">
   <slot name="skip-to-content" />
-  {#if winWidth < 1056 || persistentHamburgerMenu}
+  {#if ($shouldRenderHamburgerMenu && winWidth < 1056) || persistentHamburgerMenu}
     <HamburgerMenu bind:isOpen="{isSideNavOpen}" />
   {/if}
   <a
