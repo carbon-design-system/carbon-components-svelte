@@ -22,7 +22,9 @@
     selectedValues.map((s) => (s.value ? s.value : s))
   );
 
-  $: _selectedValues.set(selectedValues.map((s) => (s.value ? s.value : s)));
+  $: _selectedValues.set(
+    selectedValues.filter((s) => (s.value ? (s.selected ? s.value : false) : s))
+  );
 
   setContext("SelectableTileGroup", {
     _light: light,
