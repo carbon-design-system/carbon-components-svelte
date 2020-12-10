@@ -62,11 +62,11 @@
 </div>
 
 <SelectableTileGroup
-  selectedValues="{selectedValues3}"
+  bind:selectedValues="{selectedValues3}"
   legend="Select the options you require"
 >
   {#each selectedValues3_control as item}
-    <SelectableTile value="{item.value}" bind:selected="{item.selected}">
+    <SelectableTile value="{item.value}" selected="{item.selected}">
       {item.value}
     </SelectableTile>
   {/each}

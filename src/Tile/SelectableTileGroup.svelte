@@ -26,11 +26,11 @@
     _light: light,
     selectedValues: _selectedValues,
     update: ({ selected, value }) =>
-      _selectedValues.update((_) => {
-        if (_.includes(value) && !selected) {
-          return _.filter((i) => i !== value);
+      _selectedValues.update((s) => {
+        if (s.includes(value) && !selected) {
+          return s.filter((i) => i !== value);
         }
-        return selected ? [..._, value] : _; // else no update
+        return selected ? [...s, value] : s; // else no update
       }),
   });
 
