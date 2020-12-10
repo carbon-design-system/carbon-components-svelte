@@ -77,7 +77,7 @@
 
   <Button
     on:click="{() => {
-      selectedValues3_control = selectedValues3.map((item) => {
+      selectedValues3_control = selectedValues3_control.map((item) => {
         return { ...item, selected: false };
       });
     }}"
