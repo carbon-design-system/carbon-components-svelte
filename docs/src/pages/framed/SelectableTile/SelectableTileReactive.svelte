@@ -62,7 +62,7 @@
 </div>
 
 <SelectableTileGroup
-  selectedValues="{selectedValues3}"
+  bind:selectedValues="{selectedValues3}"
   legend="Select the options you require"
 >
   {#each selectedValues3_control as item}
@@ -70,6 +70,35 @@
       {item.value}
     </SelectableTile>
   {/each}
+</SelectableTileGroup>
+
+<div>
+  {selectedValues3.join(', ')}
+
+  <Button
+    on:click="{() => {
+      selectedValues3_control = selectedValues3_control.map((item) => {
+        return { ...item, selected: false };
+      });
+    }}"
+  >
+    Reset selectedValues3
+  </Button>
+</div>
+
+<h2>#key fix</h2>
+
+<SelectableTileGroup
+  bind:selectedValues="{selectedValues3}"
+  legend="Select the options you require"
+>
+  {#key selectedValues3_control}
+    {#each selectedValues3_control as item}
+      <SelectableTile value="{item.value}" selected="{item.selected}">
+        {item.value}
+      </SelectableTile>
+    {/each}
+  {/key}
 </SelectableTileGroup>
 
 <div>
