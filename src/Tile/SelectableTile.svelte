@@ -34,9 +34,7 @@
 
   const { update, selectedValues, _light } = getContext("SelectableTileGroup");
 
-  if (selected) {
-    update({ value, selected });
-  }
+  $: update({ value, selected });
 
   light = light || _light;
 
