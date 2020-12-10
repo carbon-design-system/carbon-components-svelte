@@ -29,7 +29,7 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onDestroy } from "svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
 
   const { update, selectedValues, _light } = getContext("SelectableTileGroup");
@@ -41,6 +41,10 @@
   light = light || _light;
 
   $: selected = $selectedValues.indexOf(value) > -1;
+
+  onDestroy(() => {
+    update({ value, selected: false });
+  });
 </script>
 
 <input
