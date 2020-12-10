@@ -14,7 +14,7 @@ export function createRollupConfigs(config) {
   const { production, serve, distDir } = config;
   const useDynamicImports = process.env.BUNDLING === "dynamic" || !!production;
 
-  fs.rmdirSync(distDir, { recursive: true });
+  if (fs.existsSync(distDir)) fs.rmdirSync(distDir, { recursive: true });
 
   if (serve) spassr({ serveSpa: true, serveSsr: true, silent: false });
 
