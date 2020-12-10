@@ -7,7 +7,7 @@
 
   let selectedValues = ["1"];
   let selectedValues2 = [];
-  let selectedValues3 = [];
+  let selectedValues3 = ["1", "3"];
   let selectedValues3_control = [
     { value: "1", selected: true },
     { value: "2", selected: false },
@@ -62,7 +62,7 @@
 </div>
 
 <SelectableTileGroup
-  bind:selectedValues="{selectedValues3}"
+  selectedValues="{selectedValues3}"
   legend="Select the options you require"
 >
   {#each selectedValues3_control as item}
