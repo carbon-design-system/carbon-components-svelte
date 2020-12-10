@@ -18,9 +18,11 @@
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
-  const _selectedValues = writable([]);
+  const _selectedValues = writable(
+    selectedValues.map((s) => (s.value ? s.value : s))
+  );
 
-  $: _selectedValues.set(selectedValues);
+  $: _selectedValues.set(selectedValues.map((s) => (s.value ? s.value : s)));
 
   setContext("SelectableTileGroup", {
     _light: light,
