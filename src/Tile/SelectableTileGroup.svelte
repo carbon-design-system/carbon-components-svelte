@@ -34,7 +34,7 @@
       }),
   });
 
-  $: selectedValues = $_selectedValues.map();
+  $: selectedValues = $_selectedValues;
   $: dispatch("select", $_selectedValues);
 </script>
 
