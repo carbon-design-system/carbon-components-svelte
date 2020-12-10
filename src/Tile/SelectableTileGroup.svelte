@@ -30,7 +30,7 @@
         if (values.includes(value) && !selected) {
           return values.filter((i) => i !== value);
         } else if (selected && !values.includes(value)) {
-          return [...s, value];
+          return [...values, value];
         }
         return s;
       }),
