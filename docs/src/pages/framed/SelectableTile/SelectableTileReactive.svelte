@@ -7,7 +7,8 @@
 
   let selectedValues = ["1"];
   let selectedValues2 = [];
-  let selectedValues3 = [
+  let selectedValues3 = [];
+  let selectedValues3_control = [
     { value: "1", selected: true },
     { value: "2", selected: false },
     { value: "3", selected: false },
@@ -64,7 +65,7 @@
   selectedValues="{selectedValues3}"
   legend="Select the options you require"
 >
-  {#each selectedValues3 as item}
+  {#each selectedValues3_control as item}
     <SelectableTile value="{item.value}" bind:selected="{item.selected}">
       {item.value}
     </SelectableTile>
@@ -72,11 +73,11 @@
 </SelectableTileGroup>
 
 <div>
-  {selectedValues3.map((item) => item.value).join(', ')}
+  {selectedValues3.join(', ')}
 
   <Button
     on:click="{() => {
-      selectedValues3 = selectedValues3.map((item) => {
+      selectedValues3_control = selectedValues3.map((item) => {
         return { ...item, selected: false };
       });
     }}"

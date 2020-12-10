@@ -18,15 +18,9 @@
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
-  const _selectedValues = writable(
-    selectedValues.map((s) => (s.value ? s.value : s))
-  );
+  const _selectedValues = writable([]);
 
-  $: _selectedValues.set(
-    selectedValues
-      .filter((s) => (s.value ? s.selected : true))
-      .map((s) => (s.value ? s.value : s))
-  );
+  $: _selectedValues.set(selectedValues);
 
   setContext("SelectableTileGroup", {
     _light: light,
@@ -40,7 +34,7 @@
       }),
   });
 
-  $: selectedValues = $_selectedValues;
+  $: selectedValues = $_selectedValues.map();
   $: dispatch("select", $_selectedValues);
 </script>
 
