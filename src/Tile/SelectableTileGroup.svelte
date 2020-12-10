@@ -23,7 +23,9 @@
   );
 
   $: _selectedValues.set(
-    selectedValues.filter((s) => (s.value ? (s.selected ? s.value : false) : s))
+    selectedValues
+      .filter((s) => (s.value ? s.selected : true))
+      .map((s) => (s.value ? s.value : s))
   );
 
   setContext("SelectableTileGroup", {
