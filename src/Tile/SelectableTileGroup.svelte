@@ -32,7 +32,7 @@
         } else if (selected && !values.includes(value)) {
           return [...values, value];
         }
-        return s;
+        return values;
       }),
   });
 
