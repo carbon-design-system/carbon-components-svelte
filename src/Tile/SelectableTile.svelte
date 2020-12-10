@@ -38,8 +38,6 @@
     update({ value, selected });
   }
 
-  $: update({ value, selected });
-
   light = light || _light;
 
   $: selected = $selectedValues.indexOf(value) > -1;
