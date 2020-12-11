@@ -19,10 +19,12 @@ The Carbon Svelte portfolio also includes:
 
 <a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="34px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
 
-The [documentation website](http://ibm.biz/carbon-svelte) contains live demos and examples. Other forms of documentation are auto-generated:
+The [documentation website](http://ibm.biz/carbon-svelte) contains live demos and examples.
 
-- **[Component Index](COMPONENT_INDEX.md)**: Markdown file documenting component props, slots, and events
+Other forms of documentation are auto-generated:
+
 - **[TypeScript definitions](types)**: Component TypeScript definitions
+- **[Component Index](COMPONENT_INDEX.md)**: Markdown file documenting component props, slots, and events
 - **[Component API](docs/src/COMPONENT_API.json)**: Component API metadata in JSON format
 
 ## Getting started
@@ -39,7 +41,7 @@ npm i -D carbon-components-svelte
 
 The quickest way to get started is to customize a template from the [examples](examples/) folder.
 
-Example set-ups demonstrate usage with popular application bundlers and frameworks. They feature a mix of Single-page Applications (SPA), Server-side rendering (SSR) and statically exported approaches.
+Example set-ups demonstrate usage with popular application bundlers and frameworks. They include a mix of client-side rendering (CSR) and server-side rendering (SSR) approaches.
 
 - **[examples/rollup](examples/rollup/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup)
 - **[examples/rollup-typescript](examples/rollup-typescript/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup) with TypeScript support
@@ -91,11 +93,7 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 - **g100.css**: Gray 100 theme (dark)
 - **all.css**: All themes (White, Gray 10, Gray 90, Gray 100) using CSS variables
 
-Each StyleSheet is [generated](scripts/build-css.js) from the flagship [carbon-components](https://github.com/carbon-design-system/carbon/tree/master/packages/components) library.
-
-The [examples](examples/) use `all.css` for dynamic theming through CSS variables.
-
-Because the CSS is precompiled, it includes all Carbon design styles. One method to optimize the CSS is to ship only the CSS that is used. This can be accomplished using [PurgeCSS](https://github.com/FullHuman/purgecss) with a Carbon style extractor (WIP).
+Each StyleSheet is [generated](scripts/build-css.js) from the flagship [carbon-components](https://github.com/carbon-design-system/carbon/tree/master/packages/components) library..
 
 #### Usage
 
