@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.26.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.26.0) - 2020-12-11
+
+**Features**
+
+- Render the UI Shell hamburger menu only if the `SideNav` component is present ([PR #457](https://github.com/IBM/carbon-components-svelte/pull/457), [issue #434](https://github.com/IBM/carbon-components-svelte/issues/434))
+- Clear the `Search` input value if the "Escape" key is pressed ([PR #448](https://github.com/IBM/carbon-components-svelte/pull/448))
+- Customize the `Tooltip` alignment using the `align` prop ([PR #446](https://github.com/IBM/carbon-components-svelte/pull/446), [issue #398](https://github.com/IBM/carbon-components-svelte/issues/398))
+
+**Fixes**
+
+- Fix `files` prop type `FileUploader` to be a list of [Files](https://developer.mozilla.org/en-US/docs/Web/API/File) instead of file names ([PR #437](https://github.com/IBM/carbon-components-svelte/pull/437))
+- Allow binding decimal values in `NumberInput` ([PR #444](https://github.com/IBM/carbon-components-svelte/pull/444))
+- Spread `$$restProps` in `DataTableSkeleton` to the top-level element to be consistent with `DataTable` ([PR #441](https://github.com/IBM/carbon-components-svelte/pull/441), [issue #423](https://github.com/IBM/carbon-components-svelte/issues/423))
+- Close the `Tooltip` on the mousedown event; re-focus the tooltip icon after closing and forward `click`, `mousedown` events
+- Focus the `Dropdown` button correctly for multiple dropdowns ([PR #447](https://github.com/IBM/carbon-components-svelte/pull/447))
+- Focus the `ComboBox` input correctly for multiple combo boxes ([PR #447](https://github.com/IBM/carbon-components-svelte/pull/447))
+- Blur an opened `ComboBox` when clicking a search input ([PR #447](https://github.com/IBM/carbon-components-svelte/pull/447), [issue #436](https://github.com/IBM/carbon-components-svelte/issues/436))
+- Prevent cursor shift in UI Shell `HeaderSearch` when using the up/down arrow keys to navigate results ([PR #432](https://github.com/IBM/carbon-components-svelte/pull/432), [issue #431](https://github.com/IBM/carbon-components-svelte/issues/431))
+- Deprecate `small` prop in `ButtonSkeleton`
+- Fix `CodeSnippetSkeleton` type to only be "single" or "multi"
+
+**Breaking Changes**
+
+- `files` in `FileUploader` components is a list of [Files](https://developer.mozilla.org/en-US/docs/Web/API/File), not just file names
+- `$$restProps` is spread to the top-level element in `DataTableSkeleton`
+
+**Documentation**
+
+- Add reactive, hidden, custom alignment examples for Tooltip
+- Add reactive examples for `Search`, `ContentSwitcher`, `Toggle` components
+- Add plain Header (no `SideNav`) UI Shell example
+
+**Housekeeping**
+
+- Upgrade `carbon-components` to version 10.25 for the pre-compiled CSS StyleSheets
+
 ## [0.25.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.25.1) - 2020-11-28
 
 **Fixes**

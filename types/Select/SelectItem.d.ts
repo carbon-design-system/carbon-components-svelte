@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-export interface SelectItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["option"]> {
+export interface SelectItemProps {
   /**
    * Specify the option value
    * @default ""

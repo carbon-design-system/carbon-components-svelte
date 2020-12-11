@@ -6407,8 +6407,7 @@
       ],
       "slots": [],
       "events": [],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "option" }
+      "typedefs": []
     },
     {
       "moduleName": "Pagination",
@@ -9458,7 +9457,10 @@
           "slot_props": "{}"
         }
       ],
-      "events": [],
+      "events": [
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mousedown", "element": "div" }
+      ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },

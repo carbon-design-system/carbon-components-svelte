@@ -1,6 +1,6 @@
 # Component Index
 
-> 155 components exported from carbon-components-svelte@0.25.1.
+> 155 components exported from carbon-components-svelte@0.26.0.
 
 ## Components
 
@@ -4153,7 +4153,10 @@ None.
 
 ### Events
 
-None.
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| click      | forwarded | --     |
+| mousedown  | forwarded | --     |
 
 ## `TooltipDefinition`
 

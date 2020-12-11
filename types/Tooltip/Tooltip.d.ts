@@ -94,5 +94,7 @@ export default class Tooltip {
     triggerText: {};
   };
 
+  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
+  $on(eventname: "mousedown", cb: (event: WindowEventMap["mousedown"]) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }
