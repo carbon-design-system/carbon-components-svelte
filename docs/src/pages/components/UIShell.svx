@@ -26,7 +26,13 @@ components: ["Header",
   import Preview from "../../components/Preview.svelte";
 </script>
 
+### Header
+
+<FileSource src="/framed/UIShell/Header" />
+
 ### Header with side navigation
+
+The hamburger menu will automatically be rendered if the `SideNav` component is used.
 
 <FileSource src="/framed/UIShell/HeaderNav" />
 

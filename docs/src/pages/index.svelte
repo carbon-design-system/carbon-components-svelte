@@ -85,7 +85,7 @@
           borderRight
           borderBottom
           title="Carbon Components Svelte"
-          subtitle="100+ components"
+          subtitle="50+ components"
           target="_blank"
           href="https://github.com/IBM/carbon-components-svelte"
         />

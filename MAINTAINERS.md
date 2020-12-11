@@ -1,5 +1,5 @@
 # Maintainers
 
-Eric Liu - eric.young.liu@ibm.com
+[Eric Liu](https://github.com/metonym) - eric.young.liu@ibm.com
 
-Josef Aidt - josef.aidt@gmail.com
+[Josef Aidt](https://github.com/josefaidt) - josef.aidt@gmail.com
