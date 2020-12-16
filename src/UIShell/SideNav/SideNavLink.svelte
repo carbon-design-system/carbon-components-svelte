@@ -22,8 +22,6 @@
 
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
-
-  import { Icon } from "../../Icon";
 </script>
 
 <li class:bx--side-nav__item="{true}">
@@ -39,10 +37,9 @@
   >
     {#if icon}
       <div
-        class:bx--side-nav__icon="{true}"
-        class:bx--side-nav__icon--small="{true}"
-      >
-        <Icon {...icon} />
+      class:bx--side-nav__icon="{true}"
+      class:bx--side-nav__icon--small="{true}">  
+        <svelte:component this="{icon}" />
       </div>
     {/if}
     <span class:bx--side-nav__link-text="{true}">{text}</span>
