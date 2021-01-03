@@ -187,13 +187,6 @@
       }
     }
   }}"
-  on:focusout="{(e) => {
-    if (open) {
-      if (!buttonRef.contains(e.relatedTarget)) {
-        open = false;
-      }
-    }
-  }}"
 >
   <slot name="menu">
     <svelte:component
