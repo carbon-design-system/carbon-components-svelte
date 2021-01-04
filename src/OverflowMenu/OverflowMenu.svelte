@@ -125,9 +125,11 @@
       }
     }
 
-    items.set([]);
-    currentId.set(undefined);
-    currentIndex.set(0);
+    if (!open) {
+      items.set([]);
+      currentId.set(undefined);
+      currentIndex.set(0);
+    }
 
     onMountAfterUpdate = false;
   });
