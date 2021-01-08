@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-export interface TextInputProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface TextInputProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the size of the input
    */
