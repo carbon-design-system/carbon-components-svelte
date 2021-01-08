@@ -66,7 +66,7 @@
   const currentIndex = writable(-1);
 
   let buttonWidth = undefined;
-  let didOpen = false;
+  let onMountAfterUpdate = true;
 
   setContext("OverflowMenu", {
     focusedId,
@@ -108,7 +108,7 @@
 
       buttonWidth = width;
 
-      if ($currentIndex < 0) {
+      if (!onMountAfterUpdate && $currentIndex < 0) {
         menuRef.focus();
       }
 
@@ -125,15 +125,13 @@
       }
     }
 
-    if (didOpen && !open) {
+    if (!open) {
       items.set([]);
       currentId.set(undefined);
       currentIndex.set(0);
     }
 
-    if (!didOpen && open) {
-      didOpen = true;
-    }
+    onMountAfterUpdate = false;
   });
 
   $: ariaLabel = $$props["aria-label"] || "menu";
