@@ -123,8 +123,8 @@
       class:bx--password-input="{true}"
       class:bx--text-input--light="{light}"
       class:bx--text-input--invalid="{invalid}"
-      class="{size && `bx--text-input--${size}`}"
       {...$$restProps}
+      class="{size && `bx--text-input--${size}`}"
       on:change
       on:input
       on:input="{({ target }) => {

@@ -154,8 +154,8 @@
         class:bx--text-input--light="{light}"
         class:bx--text-input--invalid="{invalid}"
         class:bx--text-input--warn="{warn}"
-        class="{size && `bx--text-input--${size}`}"
         {...$$restProps}
+        class="{size && `bx--text-input--${size}`}"
         on:change
         on:input
         on:input="{({ target }) => {
