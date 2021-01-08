@@ -77,7 +77,6 @@
   class:bx--form-item="{true}"
   class:bx--text-input-wrapper="{true}"
   class:bx--text-input-wrapper--inline="{inline}"
-  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -156,6 +155,7 @@
         class:bx--text-input--invalid="{invalid}"
         class:bx--text-input--warn="{warn}"
         class="{size && `bx--text-input--${size}`}"
+        {...$$restProps}
         on:change
         on:input
         on:input="{({ target }) => {

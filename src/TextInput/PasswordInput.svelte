@@ -86,7 +86,6 @@
   class:bx--form-item="{true}"
   class:bx--text-input-wrapper="{true}"
   class:bx--password-input-wrapper="{!isFluid}"
-  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -125,6 +124,7 @@
       class:bx--text-input--light="{light}"
       class:bx--text-input--invalid="{invalid}"
       class="{size && `bx--text-input--${size}`}"
+      {...$$restProps}
       on:change
       on:input
       on:input="{({ target }) => {

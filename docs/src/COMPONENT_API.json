@@ -8138,7 +8138,7 @@
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "TextInputSkeleton",
@@ -8359,7 +8359,7 @@
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "Tile",
