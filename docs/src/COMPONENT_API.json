@@ -1,5 +1,5 @@
 {
-  "total": 155,
+  "total": 160,
   "components": [
     {
       "moduleName": "SkeletonText",
@@ -4909,6 +4909,157 @@
         }
       ],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "Head",
+      "filePath": "/src/Head/Head.svelte",
+      "props": [
+        {
+          "name": "flexDirection",
+          "kind": "let",
+          "description": "Set the flexDirection of the head",
+          "type": "\"row\" | \"row-reverse\"",
+          "value": "'row'",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "margin",
+          "kind": "let",
+          "description": "Set the margin of the head",
+          "type": "string",
+          "value": "'20px 0 15px'",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": []
+    },
+    {
+      "moduleName": "HeadAction",
+      "filePath": "/src/Head/HeadAction.svelte",
+      "props": [
+        {
+          "name": "href",
+          "kind": "let",
+          "description": "Specify the href attribute",
+          "type": "string",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "icon",
+          "kind": "let",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "description",
+          "kind": "let",
+          "description": "Specify the description",
+          "type": "string",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [],
+      "events": [{ "type": "forwarded", "name": "click", "element": "Button" }],
+      "typedefs": []
+    },
+    {
+      "moduleName": "HeadActions",
+      "filePath": "/src/Head/HeadActions.svelte",
+      "props": [
+        {
+          "name": "width",
+          "kind": "let",
+          "description": "Set the width of the head actions",
+          "type": "string",
+          "value": "\"100%\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": []
+    },
+    {
+      "moduleName": "HeadFilters",
+      "filePath": "/src/Head/HeadFilters.svelte",
+      "props": [],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": []
+    },
+    {
+      "moduleName": "HeadIdentity",
+      "filePath": "/src/Head/HeadIdentity.svelte",
+      "props": [
+        {
+          "name": "title",
+          "kind": "let",
+          "description": "Specify the href attribute",
+          "type": "string",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "subtitle",
+          "kind": "let",
+          "description": "Specify the subtitle attribute",
+          "type": "string",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "imgSrc",
+          "kind": "let",
+          "description": "Specify the imgSrc attribute",
+          "type": "string",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "imgSize",
+          "kind": "let",
+          "description": "Set the imgSize of the head",
+          "type": "\"small\" | \"normal\" | \"large\"",
+          "value": "'normal'",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "titleSize",
+          "kind": "let",
+          "description": "Set the titleSize of the head",
+          "type": "\"small\" | \"normal\" | \"large\"",
+          "value": "'normal'",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        { "name": "tabs", "default": false, "slot_props": "{}" }
+      ],
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "IconSkeleton",

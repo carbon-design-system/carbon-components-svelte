@@ -23,10 +23,12 @@
   let innerWidth = 2048;
 
   $: isMobile = innerWidth < 1056;
+  console.log("$layout", $layout);
   $: components = $layout.children.filter(
     (child) => child.title === "components"
   )[0];
   $: recipes = $layout.children.filter((child) => child.title === "recipes")[0];
+  $: avui = $layout.children.filter((child) => child.title === "avui")[0];
 
   $beforeUrlChange(() => {
     if (isMobile) isSideNavOpen = false;
@@ -217,7 +219,19 @@
   <SideNav bind:isOpen="{isSideNavOpen}">
     <SideNavItems>
       <SideNavMenu
-        expanded="{$isActive($url('')) || $isActive($url('/components'))}"
+        expanded="{$isActive($url('')) || $isActive($url('/avui'))}"
+        text="avUI Components"
+      >
+        {#each avui.children as child, i (child.path)}
+          <SideNavMenuItem
+            text="{child.title}"
+            href="{$url(child.path)}"
+            isSelected="{$isActive($url(child.path))}"
+          />
+        {/each}
+      </SideNavMenu>
+      <SideNavMenu
+        expanded="{$isActive($url('/components'))}"
         text="Components"
       >
         {#each components.children as child, i (child.path)}

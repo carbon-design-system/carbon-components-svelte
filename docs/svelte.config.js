@@ -144,6 +144,7 @@ module.exports = {
       remarkPlugins: [plugin, slug, carbonify],
       layout: {
         recipe: path.join(__dirname, "src/layouts/Recipe.svelte"),
+        avui: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
         _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
       },
     }),

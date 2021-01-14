@@ -1,0 +1,78 @@
+---
+layout: "avui"
+components: ["Head", "HeadIdentity", "HeadActions", "HeadFilters", "HeadAction"]
+---
+
+<script>
+  import { Head, HeadAction, HeadActions, HeadFilters, HeadIdentity, Select, SelectItem, Search } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+  import CloudUpload32 from "carbon-icons-svelte/lib/CloudUpload32";
+  import Add32 from "carbon-icons-svelte/lib/Add32";
+  import Close32 from "carbon-icons-svelte/lib/Close32";
+</script>
+
+The `Head` component
+
+### Head with identity, filters and actions
+
+<Head>
+  <HeadIdentity title="Test title" subtitle="Test subtitle" imgSrc="https://via.placeholder.com/200x200" />
+  <HeadActions>
+    <HeadFilters>
+      <Select inline selected="All" noLabel={true}>
+        <SelectItem value="All" text="All Statuses" />
+        <SelectItem value="Active" text="Active" />
+        <SelectItem value="Archive" text="Archive" />
+        <SelectItem value="Published" text="Published" />
+      </Select>
+    </HeadFilters>
+    <Search light placeholder="What can we help you find?" />
+    <HeadAction icon={CloudUpload32} description="Upload assets" />
+    <HeadAction href="/#/add" icon={Add32} description="Add Project" />
+  </HeadActions>
+</Head>
+
+<Head>
+  <HeadIdentity title="Test title" subtitle="Test subtitle" imgSrc="https://via.placeholder.com/200x200" />
+  <HeadActions width="unset">
+    <HeadAction href="/#/add" icon={Close32} description="Add Project" />
+  </HeadActions>
+</Head>
+
+### Head with Identity only (title, subtitle and image)
+
+<Head>
+  <HeadIdentity title="Test title" subtitle="Test subtitle" imgSrc="https://via.placeholder.com/200x200" />
+</Head>
+
+### Sizes
+
+Small size:
+
+<Head>
+  <HeadIdentity title="Test title" titleSize="small" imgSrc="https://via.placeholder.com/200x200"  imgSize="small" />
+</Head>
+
+Large size:
+
+<Head>
+  <HeadIdentity title="Test title" titleSize="large" subtitle="Test subtitle" imgSrc="https://via.placeholder.com/200x200" imgSize="large" />
+</Head>
+
+### Head without Identity
+
+<Head>
+  <HeadActions>
+    <HeadFilters>
+      <Select inline selected="All" noLabel={true}>
+        <SelectItem value="All" text="All Statuses" />
+        <SelectItem value="Active" text="Active" />
+        <SelectItem value="Archive" text="Archive" />
+        <SelectItem value="Published" text="Published" />
+      </Select>
+    </HeadFilters>
+    <Search light placeholder="What can we help you find?" />
+    <HeadAction icon={CloudUpload32} description="Upload assets" />
+    <HeadAction href="/#/add" icon={Add32} description="Add Project" />
+  </HeadActions>
+</Head>

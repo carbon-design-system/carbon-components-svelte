@@ -1,6 +1,6 @@
 # Component Index
 
-> 155 components exported from carbon-components-svelte@0.26.0.
+> 160 components exported from carbon-components-svelte@0.26.0.
 
 ## Components
 
@@ -46,6 +46,11 @@
 - [`FormItem`](#formitem)
 - [`FormLabel`](#formlabel)
 - [`Grid`](#grid)
+- [`Head`](#head)
+- [`HeadAction`](#headaction)
+- [`HeadActions`](#headactions)
+- [`HeadFilters`](#headfilters)
+- [`HeadIdentity`](#headidentity)
 - [`Header`](#header)
 - [`HeaderAction`](#headeraction)
 - [`HeaderActionLink`](#headeractionlink)
@@ -1345,6 +1350,102 @@ None.
 | Slot name | Default | Props                                                           | Fallback |
 | :-------- | :------ | :-------------------------------------------------------------- | :------- |
 | --        | Yes     | <code>{ props: { class: string; [key: string]: any; } } </code> | --       |
+
+### Events
+
+None.
+
+## `Head`
+
+### Props
+
+| Prop name     | Kind             | Reactive | Type                                    | Default value              | Description                       |
+| :------------ | :--------------- | :------- | :-------------------------------------- | -------------------------- | --------------------------------- |
+| flexDirection | <code>let</code> | No       | <code>"row" &#124; "row-reverse"</code> | <code>'row'</code>         | Set the flexDirection of the head |
+| margin        | <code>let</code> | No       | <code>string</code>                     | <code>'20px 0 15px'</code> | Set the margin of the head        |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
+
+## `HeadAction`
+
+### Props
+
+| Prop name   | Kind             | Reactive | Type                                                         | Default value | Description                                           |
+| :---------- | :--------------- | :------- | :----------------------------------------------------------- | ------------- | ----------------------------------------------------- |
+| href        | <code>let</code> | No       | <code>string</code>                                          | --            | Specify the href attribute                            |
+| icon        | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --            | Specify the icon from `carbon-icons-svelte` to render |
+| description | <code>let</code> | No       | <code>string</code>                                          | --            | Specify the description                               |
+
+### Slots
+
+None.
+
+### Events
+
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| click      | forwarded | --     |
+
+## `HeadActions`
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                | Default value       | Description                       |
+| :-------- | :--------------- | :------- | :------------------ | ------------------- | --------------------------------- |
+| width     | <code>let</code> | No       | <code>string</code> | <code>"100%"</code> | Set the width of the head actions |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
+
+## `HeadFilters`
+
+### Props
+
+None.
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
+
+## `HeadIdentity`
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                                                | Default value         | Description                    |
+| :-------- | :--------------- | :------- | :-------------------------------------------------- | --------------------- | ------------------------------ |
+| title     | <code>let</code> | No       | <code>string</code>                                 | --                    | Specify the href attribute     |
+| subtitle  | <code>let</code> | No       | <code>string</code>                                 | --                    | Specify the subtitle attribute |
+| imgSrc    | <code>let</code> | No       | <code>string</code>                                 | --                    | Specify the imgSrc attribute   |
+| imgSize   | <code>let</code> | No       | <code>"small" &#124; "normal" &#124; "large"</code> | <code>'normal'</code> | Set the imgSize of the head    |
+| titleSize | <code>let</code> | No       | <code>"small" &#124; "normal" &#124; "large"</code> | <code>'normal'</code> | Set the titleSize of the head  |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+| tabs      | No      | --    | --       |
 
 ### Events
 
