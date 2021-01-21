@@ -95,6 +95,7 @@
     value = nextValue;
   }
 
+  $: labelId = `label-${id}`;
   $: range = max - min;
   $: left = ((value - min) / range) * 100;
   $: {
@@ -132,6 +133,7 @@
 >
   <label
     for="{id}"
+    id="{labelId}"
     class:bx--label="{true}"
     class:bx--label--disabled="{disabled}"
   >
@@ -160,6 +162,7 @@
         tabindex="0"
         class:bx--slider__thumb="{true}"
         style="left: {left}%"
+        aria-labelledby="{labelId}"
         aria-valuemax="{max}"
         aria-valuemin="{min}"
         aria-valuenow="{value}"

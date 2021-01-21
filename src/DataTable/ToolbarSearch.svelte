@@ -43,7 +43,6 @@
   <Search
     size="sm"
     tabindex="{expanded ? tabindex : '-1'}"
-    aria-hidden="{!expanded}"
     {...$$restProps}
     bind:ref
     bind:value
