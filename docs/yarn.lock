@@ -771,10 +771,10 @@ caniuse-lite@^1.0.30001135, caniuse-lite@^1.0.30001137:
   integrity sha512-VAy5RHDfTJhpxnDdp2n40GPPLp3KqNrXz1QqFv4J64HvArKs8nuNMOWkB3ICOaBTU/Aj4rYAo/ytdQDDFF/Pug==
 
 carbon-components-svelte@../:
-  version "0.25.1"
+  version "0.26.0"
   dependencies:
     carbon-icons-svelte "^10.21.0"
-    flatpickr "4.6.3"
+    flatpickr "4.6.9"
 
 carbon-components@^10.25.0:
   version "10.25.0"
@@ -1639,10 +1639,10 @@ flatpickr@4.6.1:
   resolved "https://registry.npmjs.org/flatpickr/-/flatpickr-4.6.1.tgz#9eb498ab805dd27f5ae02e1ac6ac6c099ce45e94"
   integrity sha512-3ULSxbXmcMIRzer/2jLNweoqHpwDvsjEawO2FUd9UFR8uPwLM+LruZcPDpuZStcEgbQKhuFOfXo4nYdGladSNw==
 
-flatpickr@4.6.3:
-  version "4.6.3"
-  resolved "https://registry.npmjs.org/flatpickr/-/flatpickr-4.6.3.tgz#15a8b76b6e34e3a072861250503a5995b9d3bc60"
-  integrity sha512-007VucCkqNOMMb9ggRLNuJowwaJcyOh4sKAFcdGfahfGc7JQbf94zSzjdBq/wVyHWUEs5o3+idhFZ0wbZMRmVQ==
+flatpickr@4.6.9:
+  version "4.6.9"
+  resolved "https://registry.npmjs.org/flatpickr/-/flatpickr-4.6.9.tgz#9a13383e8a6814bda5d232eae3fcdccb97dc1499"
+  integrity sha512-F0azNNi8foVWKSF+8X+ZJzz8r9sE1G4hl06RyceIaLvyltKvDl6vqk9Lm/6AUUCi5HWaIjiUbk7UpeE/fOXOpw==
 
 follow-redirects@^1.0.0:
   version "1.13.0"

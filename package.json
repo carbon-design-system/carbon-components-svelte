@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "carbon-icons-svelte": "^10.21.0",
-    "flatpickr": "4.6.3"
+    "flatpickr": "4.6.9"
   },
   "devDependencies": {
     "@carbon/themes": "^10.22.1",
