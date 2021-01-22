@@ -47,6 +47,14 @@ let comment = `
 
 <CodeSnippet type="multi" {code} hideCopyButton />
 
+### Disabled
+
+The `disabled` prop applies only to the `"single"` and `"multi"` code snippet types.
+
+<CodeSnippet disabled>yarn add -D carbon-components-svelte</CodeSnippet>
+<br />
+<CodeSnippet disabled type="multi" code="{comment}" />
+
 ### Wrapped text
 
 `wrapText` only applies to the `"multi"` type.

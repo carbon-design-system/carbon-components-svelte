@@ -47,4 +47,4 @@ export function subtract(a: number, b: number) {
 
 <CodeSnippet skeleton />
 
-<CodeSnippet type="multi" skeleton />
+<CodeSnippet type="multi" disabled skeleton />

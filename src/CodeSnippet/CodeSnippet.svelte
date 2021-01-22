@@ -19,6 +19,12 @@
   export let hideCopyButton = false;
 
   /**
+   * Set to `true` for the disabled variant
+   * Only applies to the "single", "multi" types
+   */
+  export let disabled = false;
+
+  /**
    * Set to `true` to wrap the text
    * Note that `type` must be "multi"
    */
@@ -149,6 +155,7 @@
       class:bx--snippet--single="{type === 'single'}"
       class:bx--snippet--inline="{type === 'inline'}"
       class:bx--snippet--multi="{type === 'multi'}"
+      class:bx--snippet--disabled="{type !== 'inline' && disabled}"
       {...$$restProps}
       on:mouseover
       on:mouseenter
@@ -156,7 +163,7 @@
     >
       <div
         role="{type === 'single' ? 'textbox' : undefined}"
-        tabindex="{type === 'single' ? '0' : undefined}"
+        tabindex="{type === 'single' && !disabled ? '0' : undefined}"
         aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
         class:bx--snippet-container="{true}"
       >
@@ -168,6 +175,7 @@
       </div>
       {#if !hideCopyButton}
         <CopyButton
+          disabled="{disabled}"
           feedback="{feedback}"
           feedbackTimeout="{feedbackTimeout}"
           iconDescription="{copyButtonDescription}"
@@ -180,6 +188,7 @@
           kind="ghost"
           size="small"
           class="bx--snippet-btn--expand"
+          disabled="{disabled}"
           on:click="{() => {
             expanded = !expanded;
           }}"
