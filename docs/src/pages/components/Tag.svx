@@ -1,5 +1,7 @@
 <script>
   import { Tag } from "carbon-components-svelte";
+  import IbmCloud16 from "carbon-icons-svelte/lib/IbmCloud16";
+  import Document16 from "carbon-icons-svelte/lib/Document16";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -24,6 +26,13 @@
 ### Filterable
 
 <Tag filter on:click>Filterable</Tag>
+
+### Custom icon
+
+Note: rendering a custom icon cannnot be used with the filterable variant.
+
+<Tag icon={IbmCloud16}>IBM Cloud</Tag>
+<Tag icon={Document16} type="blue">API documentation</Tag>
 
 ### Skeleton
 

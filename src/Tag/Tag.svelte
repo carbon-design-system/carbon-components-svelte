@@ -19,6 +19,12 @@
   /** Set the title for the close button in a filterable tag */
   export let title = "Clear filter";
 
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let icon = undefined;
+
   /** Set an id for the filterable tag */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -53,6 +59,7 @@
       class:bx--tag--cool-gray="{type === 'cool-gray'}"
       class:bx--tag--warm-gray="{type === 'warm-gray'}"
       class:bx--tag--high-contrast="{type === 'high-contrast'}"
+      {...$$restProps}
     >
       <slot props="{{ class: 'bx--tag__label' }}">
         <span class:bx--tag__label="{true}">{type}</span>
@@ -71,7 +78,8 @@
       </button>
     </div>
   {:else}
-    <span
+    <div
+      id="{id}"
       class:bx--tag="{true}"
       class:bx--tag--disabled="{disabled}"
       class:bx--tag--red="{type === 'red'}"
@@ -85,12 +93,20 @@
       class:bx--tag--cool-gray="{type === 'cool-gray'}"
       class:bx--tag--warm-gray="{type === 'warm-gray'}"
       class:bx--tag--high-contrast="{type === 'high-contrast'}"
+      {...$$restProps}
       on:click
       on:mouseover
       on:mouseenter
       on:mouseleave
     >
-      <slot />
-    </span>
+      {#if icon}
+        <div class:bx--tag__custom-icon="{true}">
+          <svelte:component this="{icon}" />
+        </div>
+      {/if}
+      <span>
+        <slot />
+      </span>
+    </div>
   {/if}
 {/if}
