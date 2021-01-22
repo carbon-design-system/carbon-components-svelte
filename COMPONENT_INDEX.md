@@ -1023,17 +1023,19 @@ None.
 
 ### Props
 
-| Prop name             | Kind             | Reactive | Type                                    | Default value                                    | Description                                           |
-| :-------------------- | :--------------- | :------- | :-------------------------------------- | ------------------------------------------------ | ----------------------------------------------------- |
-| ref                   | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code> | <code>null</code>                                | Obtain a reference to the top-level element           |
-| tilePadding           | <code>let</code> | Yes      | <code>number</code>                     | <code>0</code>                                   | Specify the padding of the tile (number of pixels)    |
-| tileMaxHeight         | <code>let</code> | Yes      | <code>number</code>                     | <code>0</code>                                   | Specify the max height of the tile (number of pixels) |
-| expanded              | <code>let</code> | Yes      | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to expand the tile                      |
-| light                 | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to enable the light variant             |
-| tileCollapsedIconText | <code>let</code> | No       | <code>string</code>                     | <code>"Interact to expand Tile"</code>           | Specify the icon text of the collapsed tile           |
-| tileExpandedIconText  | <code>let</code> | No       | <code>string</code>                     | <code>"Interact to collapse Tile"</code>         | Specify the icon text of the expanded tile            |
-| tabindex              | <code>let</code> | No       | <code>string</code>                     | <code>"0"</code>                                 | Specify the tabindex                                  |
-| id                    | <code>let</code> | No       | <code>string</code>                     | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level div element               |
+| Prop name             | Kind             | Reactive | Type                                       | Default value                                    | Description                                           |
+| :-------------------- | :--------------- | :------- | :----------------------------------------- | ------------------------------------------------ | ----------------------------------------------------- |
+| ref                   | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the top-level element           |
+| tilePadding           | <code>let</code> | Yes      | <code>number</code>                        | <code>0</code>                                   | Specify the padding of the tile (number of pixels)    |
+| tileMaxHeight         | <code>let</code> | Yes      | <code>number</code>                        | <code>0</code>                                   | Specify the max height of the tile (number of pixels) |
+| expanded              | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to expand the tile                      |
+| light                 | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to enable the light variant             |
+| tileCollapsedIconText | <code>let</code> | No       | <code>string</code>                        | <code>"Interact to expand Tile"</code>           | Specify the icon text of the collapsed tile           |
+| tileExpandedIconText  | <code>let</code> | No       | <code>string</code>                        | <code>"Interact to collapse Tile"</code>         | Specify the icon text of the expanded tile            |
+| tileExpandedLabel     | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the icon label of the expanded tile           |
+| tileCollapsedLabel    | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the icon label of the collapsed tile          |
+| tabindex              | <code>let</code> | No       | <code>string</code>                        | <code>"0"</code>                                 | Specify the tabindex                                  |
+| id                    | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level div element               |
 
 ### Slots
 

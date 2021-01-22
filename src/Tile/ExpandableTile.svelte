@@ -17,6 +17,12 @@
   /** Specify the icon text of the expanded tile */
   export let tileExpandedIconText = "Interact to collapse Tile";
 
+  /** Specify the icon label of the expanded tile */
+  export let tileExpandedLabel = "";
+
+  /** Specify the icon label of the collapsed tile */
+  export let tileCollapsedLabel = "";
+
   /** Specify the tabindex */
   export let tabindex = "0";
 
@@ -27,7 +33,7 @@
   export let ref = null;
 
   import { afterUpdate } from "svelte";
-  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
+  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
 
   let refContent = null;
   let refAbove = null;
@@ -45,10 +51,13 @@
   });
 </script>
 
-<div
+<button
   bind:this="{ref}"
+  type="button"
   id="{id}"
+  aria-expanded="{expanded}"
   tabindex="{tabindex}"
+  title="{expanded ? tileExpandedIconText : tileCollapsedIconText}"
   class:bx--tile="{true}"
   class:bx--tile--expandable="{true}"
   class:bx--tile--is-expanded="{expanded}"
@@ -60,45 +69,24 @@
     expanded = !expanded;
   }}"
   on:keypress
-  on:keypress="{(e) => {
-    if (e.key === ' ' || e.key === 'Enter') {
-      e.preventDefault();
-      expanded = !expanded;
-    }
-  }}"
   on:mouseover
   on:mouseenter
   on:mouseleave
 >
   <div bind:this="{refContent}">
     <div bind:this="{refAbove}" class:bx--tile-content="{true}">
-      <span
-        class:bx--tile-content__above-the-fold="{true}"
-        on:click
-        on:mouseover
-        on:mouseenter
-        on:mouseleave
-      >
+      <span class:bx--tile-content__above-the-fold="{true}">
         <slot name="above" />
       </span>
     </div>
-    <button
-      aria-expanded="{expanded}"
-      aria-label="{expanded ? tileExpandedIconText : tileCollapsedIconText}"
-      class:bx--tile__chevron="{true}"
-    >
+    <div class:bx--tile__chevron="{true}">
+      <span>{expanded ? tileExpandedLabel : tileCollapsedLabel}</span>
       <ChevronDown16 />
-    </button>
+    </div>
     <div class:bx--tile-content="{true}">
-      <span
-        on:click
-        on:mouseover
-        on:mouseenter
-        on:mouseleave
-        class:bx--tile-content__below-the-fold="{true}"
-      >
+      <span class:bx--tile-content__below-the-fold="{true}">
         <slot name="below" />
       </span>
     </div>
   </div>
-</div>
+</button>

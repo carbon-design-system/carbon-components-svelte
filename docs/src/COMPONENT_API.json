@@ -8493,6 +8493,26 @@
           "reactive": false
         },
         {
+          "name": "tileExpandedLabel",
+          "kind": "let",
+          "description": "Specify the icon label of the expanded tile",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "tileCollapsedLabel",
+          "kind": "let",
+          "description": "Specify the icon label of the collapsed tile",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "tabindex",
           "kind": "let",
           "description": "Specify the tabindex",
@@ -8516,7 +8536,7 @@
           "name": "ref",
           "kind": "let",
           "description": "Obtain a reference to the top-level element",
-          "type": "null | HTMLDivElement",
+          "type": "null | HTMLButtonElement",
           "value": "null",
           "isFunction": false,
           "constant": false,
@@ -8528,14 +8548,14 @@
         { "name": "below", "default": false, "slot_props": "{}" }
       ],
       "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "keypress", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "keypress", "element": "button" },
+        { "type": "forwarded", "name": "mouseover", "element": "button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "SelectableTile",
