@@ -18,7 +18,7 @@ export default ["es", "umd"].map((format) => {
     },
     external: Object.keys(pkg.dependencies),
     plugins: [
-      svelte(),
+      svelte({ emitCss: false }),
       resolve(),
       commonjs(),
       UMD && terser(),
