@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {{ timeout: boolean }} close
+   */
+
+  /**
    * Specify the kind of notification
    * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
    */

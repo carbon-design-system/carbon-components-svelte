@@ -1755,13 +1755,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail                            |
+| :--------- | :--------- | :-------------------------------- |
+| close      | dispatched | <code>{ timeout: boolean }</code> |
+| click      | forwarded  | --                                |
+| mouseover  | forwarded  | --                                |
+| mouseenter | forwarded  | --                                |
+| mouseleave | forwarded  | --                                |
 
 ## `Link`
 
@@ -3892,13 +3892,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail                            |
+| :--------- | :--------- | :-------------------------------- |
+| close      | dispatched | <code>{ timeout: boolean }</code> |
+| click      | forwarded  | --                                |
+| mouseover  | forwarded  | --                                |
+| mouseenter | forwarded  | --                                |
+| mouseleave | forwarded  | --                                |
 
 ## `Toggle`
 

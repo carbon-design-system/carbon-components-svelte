@@ -5772,11 +5772,15 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "close",
+          "detail": "{ timeout: boolean }"
+        },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "close" }
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -5871,11 +5875,15 @@
         { "name": "actions", "default": false, "slot_props": "{}" }
       ],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "close",
+          "detail": "{ timeout: boolean }"
+        },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "close" }
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
