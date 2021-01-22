@@ -38,11 +38,13 @@ export interface PasswordInputProps extends svelte.JSX.HTMLAttributes<HTMLElemen
 
   /**
    * Set the alignment of the tooltip relative to the icon
+   * @default "center"
    */
   tooltipAlignment?: "start" | "center" | "end";
 
   /**
    * Set the position of the tooltip relative to the icon
+   * @default "bottom"
    */
   tooltipPosition?: "top" | "right" | "bottom" | "left";
 

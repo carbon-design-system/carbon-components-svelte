@@ -8240,6 +8240,7 @@
           "kind": "let",
           "description": "Set the alignment of the tooltip relative to the icon",
           "type": "\"start\" | \"center\" | \"end\"",
+          "value": "\"center\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -8249,6 +8250,7 @@
           "kind": "let",
           "description": "Set the position of the tooltip relative to the icon",
           "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+          "value": "\"bottom\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
