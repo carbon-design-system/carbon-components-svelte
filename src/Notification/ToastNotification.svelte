@@ -45,14 +45,14 @@
   let open = true;
   let timeoutId = undefined;
 
-  function close() {
+  function close(closeFromTimeout) {
     open = false;
-    dispatch("close");
+    dispatch("close", { timeout: closeFromTimeout === true });
   }
 
   onMount(() => {
     if (timeout) {
-      timeoutId = setTimeout(() => close(), timeout);
+      timeoutId = setTimeout(() => close(true), timeout);
     }
 
     return () => {
