@@ -14,7 +14,7 @@
   /** Set an id for the label element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  $: spinnerRadius = small ? "26.8125" : "37.5";
+  $: spinnerRadius = small ? "42" : "44";
 </script>
 
 {#if withOverlay}
@@ -33,20 +33,20 @@
     >
       <!-- svelte-ignore a11y-label-has-associated-control -->
       <label class:bx--visually-hidden="{true}" id="{id}">{description}</label>
-      <svg class:bx--loading__svg="{true}" viewBox="-75 -75 150 150">
+      <svg class:bx--loading__svg="{true}" viewBox="0 0 100 100">
         <title>{description}</title>
         {#if small}
           <circle
             class:bx--loading__background="{true}"
-            cx="0"
-            cy="0"
+            cx="50%"
+            cy="50%"
             r="{spinnerRadius}"
           ></circle>
         {/if}
         <circle
           class:bx--loading__stroke="{true}"
-          cx="0"
-          cy="0"
+          cx="50%"
+          cy="50%"
           r="{spinnerRadius}"
         ></circle>
       </svg>
@@ -64,20 +64,20 @@
   >
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label class:bx--visually-hidden="{true}" id="{id}">{description}</label>
-    <svg class:bx--loading__svg="{true}" viewBox="-75 -75 150 150">
+    <svg class:bx--loading__svg="{true}" viewBox="0 0 100 100">
       <title>{description}</title>
       {#if small}
         <circle
           class:bx--loading__background="{true}"
-          cx="0"
-          cy="0"
+          cx="50%"
+          cy="50%"
           r="{spinnerRadius}"
         ></circle>
       {/if}
       <circle
         class:bx--loading__stroke="{true}"
-        cx="0"
-        cy="0"
+        cx="50%"
+        cy="50%"
         r="{spinnerRadius}"
       ></circle>
     </svg>
