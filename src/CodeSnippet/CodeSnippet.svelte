@@ -147,7 +147,6 @@
   {:else}
     <div
       class:bx--snippet="{true}"
-      class:bx--btn--copy="{type === 'inline'}"
       class:bx--snippet--expand="{expanded}"
       class:bx--snippet--light="{light}"
       class:bx--snippet--no-copy="{hideCopyButton}"
