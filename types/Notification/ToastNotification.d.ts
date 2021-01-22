@@ -2,12 +2,6 @@
 
 export interface ToastNotificationProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
-   * Set the type of notification
-   * @default "toast"
-   */
-  notificationType?: "toast" | "inline";
-
-  /**
    * Specify the kind of notification
    * @default "error"
    */

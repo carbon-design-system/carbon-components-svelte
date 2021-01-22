@@ -1,11 +1,5 @@
 <script>
   /**
-   * Set the type of notification
-   * @type {"toast" | "inline"}
-   */
-  export let notificationType = "toast";
-
-  /**
    * Specify the kind of notification
    * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
    */
@@ -79,23 +73,17 @@
     on:mouseenter
     on:mouseleave
   >
-    <NotificationIcon
-      notificationType="{notificationType}"
-      kind="{kind}"
-      iconDescription="{iconDescription}"
-    />
+    <NotificationIcon kind="{kind}" iconDescription="{iconDescription}" />
     <NotificationTextDetails
       title="{title}"
       subtitle="{subtitle}"
       caption="{caption}"
-      notificationType="{notificationType}"
     >
       <slot />
     </NotificationTextDetails>
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription="{iconDescription}"
-        notificationType="{notificationType}"
         on:click="{close}"
       />
     {/if}

@@ -5680,16 +5680,6 @@
       "filePath": "/src/Notification/ToastNotification.svelte",
       "props": [
         {
-          "name": "notificationType",
-          "kind": "let",
-          "description": "Set the type of notification",
-          "type": "\"toast\" | \"inline\"",
-          "value": "\"toast\"",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "kind",
           "kind": "let",
           "description": "Specify the kind of notification",
@@ -5795,16 +5785,6 @@
       "moduleName": "InlineNotification",
       "filePath": "/src/Notification/InlineNotification.svelte",
       "props": [
-        {
-          "name": "notificationType",
-          "kind": "let",
-          "description": "Set the type of notification",
-          "type": "\"toast\" | \"inline\"",
-          "value": "\"inline\"",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
-        },
         {
           "name": "kind",
           "kind": "let",

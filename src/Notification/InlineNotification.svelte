@@ -1,11 +1,5 @@
 <script>
   /**
-   * Set the type of notification
-   * @type {"toast" | "inline"}
-   */
-  export let notificationType = "inline";
-
-  /**
    * Specify the kind of notification
    * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
    */
@@ -79,14 +73,14 @@
   >
     <div class:bx--inline-notification__details="{true}">
       <NotificationIcon
-        notificationType="{notificationType}"
+        notificationType="inline"
         kind="{kind}"
         iconDescription="{iconDescription}"
       />
       <NotificationTextDetails
         title="{title}"
         subtitle="{subtitle}"
-        notificationType="{notificationType}"
+        notificationType="inline"
       >
         <slot />
       </NotificationTextDetails>
@@ -95,7 +89,7 @@
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription="{iconDescription}"
-        notificationType="{notificationType}"
+        notificationType="inline"
         on:click="{close}"
       />
     {/if}

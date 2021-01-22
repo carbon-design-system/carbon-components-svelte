@@ -2,12 +2,6 @@
 
 export interface InlineNotificationProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
-   * Set the type of notification
-   * @default "inline"
-   */
-  notificationType?: "toast" | "inline";
-
-  /**
    * Specify the kind of notification
    * @default "error"
    */
