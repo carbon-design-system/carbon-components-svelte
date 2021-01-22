@@ -9,26 +9,26 @@ source: Notification/ToastNotification.svelte
 
 ### Default (error)
 
-<ToastNotification />
+<ToastNotification title="Error" subtitle="An internal server error occurred." caption="[MMM D, YYYY h:mm A]" />
 
 ### Hidden close button
 
-<ToastNotification hideCloseButton kind="warning" title="Upcoming scheduled maintenance" />
+<ToastNotification hideCloseButton kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
 
 ### Notification variants
 
-<ToastNotification kind="error" />
-<ToastNotification kind="info" />
-<ToastNotification kind="info-square" />
-<ToastNotification kind="success" />
-<ToastNotification kind="warning" />
-<ToastNotification kind="warning-alt" />
+<ToastNotification kind="error" title="Error" subtitle="An internal server error occurred." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="[MMM D, YYYY h:mm A]"  />
+<ToastNotification kind="info-square" title="New updates" subtitle="Restart to get the latest updates." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification kind="success" title="Success" subtitle="Your settings have been saved." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification kind="warning-alt" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
 
 ### Low contrast
 
-<ToastNotification lowContrast kind="error" />
-<ToastNotification lowContrast kind="info" />
-<ToastNotification lowContrast kind="info-square" />
-<ToastNotification lowContrast kind="success" />
-<ToastNotification lowContrast kind="warning" />
-<ToastNotification lowContrast kind="warning-alt" />
+<ToastNotification lowContrast kind="error" title="Error" subtitle="An internal server error occurred." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification lowContrast kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification lowContrast kind="info-square" title="New updates" subtitle="Restart to get the latest updates." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification lowContrast kind="success" title="Success" subtitle="Your settings have been saved." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification lowContrast kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification lowContrast kind="warning-alt" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
