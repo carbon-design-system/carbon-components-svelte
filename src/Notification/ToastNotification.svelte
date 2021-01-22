@@ -67,7 +67,12 @@
     kind="{kind}"
     class:bx--toast-notification="{true}"
     class:bx--toast-notification--low-contrast="{lowContrast}"
-    class="{kind && `bx--toast-notification--${kind}`}"
+    class:bx--toast-notification--error="{kind === 'error'}"
+    class:bx--toast-notification--info="{kind === 'info'}"
+    class:bx--toast-notification--info-square="{kind === 'info-square'}"
+    class:bx--toast-notification--success="{kind === 'success'}"
+    class:bx--toast-notification--warning="{kind === 'warning'}"
+    class:bx--toast-notification--warning-alt="{kind === 'warning-alt'}"
     {...$$restProps}
     on:click
     on:mouseover

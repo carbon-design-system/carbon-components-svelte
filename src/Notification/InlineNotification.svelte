@@ -65,7 +65,12 @@
     class:bx--inline-notification="{true}"
     class:bx--inline-notification--low-contrast="{lowContrast}"
     class:bx--inline-notification--hide-close-button="{hideCloseButton}"
-    class="{kind && `bx--inline-notification--${kind}`}"
+    class:bx--inline-notification--error="{kind === 'error'}"
+    class:bx--inline-notification--info="{kind === 'info'}"
+    class:bx--inline-notification--info-square="{kind === 'info-square'}"
+    class:bx--inline-notification--success="{kind === 'success'}"
+    class:bx--inline-notification--warning="{kind === 'warning'}"
+    class:bx--inline-notification--warning-alt="{kind === 'warning-alt'}"
     {...$$restProps}
     on:click
     on:mouseover
