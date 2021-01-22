@@ -90,7 +90,6 @@
 <div
   bind:this="{ref}"
   role="presentation"
-  tabindex="-1"
   class:bx--modal="{true}"
   class:is-visible="{open}"
   class:bx--modal--danger="{danger}"

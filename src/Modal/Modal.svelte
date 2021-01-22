@@ -127,7 +127,6 @@
 <div
   bind:this="{ref}"
   role="presentation"
-  tabindex="-1"
   id="{id}"
   class:bx--modal="{true}"
   class:bx--modal-tall="{!passiveModal}"
@@ -156,6 +155,7 @@
   <div
     bind:this="{innerModal}"
     role="dialog"
+    tabindex="-1"
     {...alertDialogProps}
     aria-modal="true"
     aria-label="{ariaLabel}"
