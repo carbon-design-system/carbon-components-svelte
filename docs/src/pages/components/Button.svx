@@ -1,6 +1,7 @@
 <script>
   import { Button } from "carbon-components-svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16";
+  import TrashCan16 from "carbon-icons-svelte/lib/TrashCan16";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -27,6 +28,10 @@
 ### Danger tertiary button
 
 <Button kind="danger-tertiary">Danger tertiary button</Button>
+
+### Danger tertiary, icon-only button
+
+<Button kind="danger-tertiary" tooltipPosition="bottom" tooltipAlignment="center" iconDescription="Delete" icon={TrashCan16} />
 
 ### Danger ghost button
 
