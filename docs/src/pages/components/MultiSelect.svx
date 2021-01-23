@@ -90,3 +90,27 @@ Use the `itemToString` prop to format the display of individual items.
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
   />
+
+### Invalid state
+
+<MultiSelect invalid invalidText="A contact method is required" titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+### Warning state
+
+<MultiSelect warn warnText="One or more contact methods are not associated with your account" titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+### Disabled state
+
+<MultiSelect disabled titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />

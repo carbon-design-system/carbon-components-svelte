@@ -90,6 +90,12 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
+  /** Set to `true` to indicate an warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Specify the helper text */
   export let helperText = "";
 
@@ -112,8 +118,9 @@
    */
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
-  import { Checkbox } from "../Checkbox";
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
+  import Checkbox from "../Checkbox/Checkbox.svelte";
   import {
     ListBox,
     ListBoxField,
@@ -243,6 +250,8 @@
     open="{open}"
     light="{light}"
     size="{size}"
+    warn="{warn}"
+    warnText="{warnText}"
     class="bx--multi-select {filterable && 'bx--combo-box'}
       {filterable && 'bx--multi-select--filterable'}
       {invalid && 'bx--multi-select--invalid'}
@@ -251,6 +260,11 @@
   >
     {#if invalid}
       <WarningFilled16 class="bx--list-box__invalid-icon" />
+    {/if}
+    {#if !invalid && warn}
+      <WarningAltFilled16
+        class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+      />
     {/if}
     <ListBoxField
       role="button"
@@ -415,7 +429,7 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
-  {#if !inline && !invalid && helperText}
+  {#if !inline && !invalid && !warn && helperText}
     <div
       class:bx--form__helper-text="{true}"
       class:bx--form__helper-text--disabled="{disabled}"
