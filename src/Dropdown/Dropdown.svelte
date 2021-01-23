@@ -54,6 +54,12 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
+  /** Set to `true` to indicate an warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Specify the helper text */
   export let helperText = "";
 
@@ -82,7 +88,8 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
   import {
     ListBox,
     ListBoxMenu,
@@ -148,8 +155,7 @@
     id="{id}"
     name="{name}"
     aria-label="{$$props['aria-label']}"
-    class="bx--dropdown {invalid && 'bx--dropdown--invalid'}
-      {open && 'bx--dropdown--open'}
+    class="bx--dropdown {invalid && 'bx--dropdown--invalid'} {!invalid && warn && 'bx--dropdown--warning'} {open && 'bx--dropdown--open'}
       {size === 'sm' && 'bx--dropdown--sm'}
       {size === 'xl' && 'bx--dropdown--xl'}
       {inline && 'bx--dropdown--inline'}
@@ -163,9 +169,16 @@
     invalid="{invalid}"
     invalidText="{invalidText}"
     light="{light}"
+    warn="{warn}"
+    warnText="{warnText}"
   >
     {#if invalid}
       <WarningFilled16 class="bx--list-box__invalid-icon" />
+    {/if}
+    {#if !invalid && warn}
+      <WarningAltFilled16
+        class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+      />
     {/if}
     <button
       bind:this="{ref}"
@@ -220,7 +233,7 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
-  {#if !inline && !invalid && helperText}
+  {#if !inline && !invalid && !warn && helperText}
     <div
       class:bx--form__helper-text="{true}"
       class:bx--form__helper-text--disabled="{disabled}"

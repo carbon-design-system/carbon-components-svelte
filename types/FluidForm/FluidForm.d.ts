@@ -8,5 +8,6 @@ export default class FluidForm {
     default: {};
   };
 
+  $on(eventname: "submit", cb: (event: WindowEventMap["submit"]) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

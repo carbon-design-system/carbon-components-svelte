@@ -983,6 +983,8 @@ export interface DropdownItem {
 | titleText       | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the title text                        |
 | invalid         | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to indicate an invalid state    |
 | invalidText     | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the invalid state text                |
+| warn            | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to indicate an warning state    |
+| warnText        | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the warning state text                |
 | helperText      | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the helper text                       |
 | label           | <code>let</code> | No       | <code>string</code>                         | --                                                    | Specify the list box label                    |
 | translateWithId | <code>let</code> | No       | <code>(id: any) => string</code>            | --                                                    | Override the default translation ids          |
@@ -1234,7 +1236,9 @@ None.
 
 ### Events
 
-None.
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| submit     | forwarded | --     |
 
 ## `Form`
 
@@ -1807,6 +1811,8 @@ None.
 | disabled    | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>     | Set to `true` to disable the list box      |
 | invalid     | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>     | Set to `true` to indicate an invalid state |
 | invalidText | <code>let</code> | No       | <code>string</code>                    | <code>""</code>        | Specify the invalid state text             |
+| warn        | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>     | Set to `true` to indicate an warning state |
+| warnText    | <code>let</code> | No       | <code>string</code>                    | <code>""</code>        | Specify the warning state text             |
 
 ### Slots
 

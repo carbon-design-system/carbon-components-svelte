@@ -51,6 +51,18 @@ Use the `itemToString` prop to format the display of individual items.
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Invalid state
+
+<Dropdown invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Warning state
+
+<Dropdown warn warnText="This contact method is not associated with your account" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ### Disabled state
 
 <Dropdown disabled titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
