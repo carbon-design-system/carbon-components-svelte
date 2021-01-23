@@ -271,6 +271,7 @@
       tabindex="0"
       aria-expanded="{open}"
       on:click="{() => {
+        if (disabled) return;
         if (filterable) {
           open = true;
           inputRef.focus();
