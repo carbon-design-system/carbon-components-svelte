@@ -17,7 +17,10 @@
    */
   export let size = "default";
 
-  /** Set to `true` for the icon-only variant */
+  /**
+   * Set to `true` for the icon-only variant
+   * @deprecated inferred using the $$slots API
+   */
   export let hasIconOnly = false;
 
   /**
@@ -37,13 +40,13 @@
    * `hasIconOnly` must be set to `true`
    * @type {"start" | "center" | "end"}
    */
-  export let tooltipAlignment = undefined;
+  export let tooltipAlignment = "center";
 
   /**
    * Set the position of the tooltip relative to the icon
    * @type {"top" | "right" | "bottom" | "left"}
    */
-  export let tooltipPosition = undefined;
+  export let tooltipPosition = "bottom";
 
   /**
    * Set to `true` to render a custom HTML element

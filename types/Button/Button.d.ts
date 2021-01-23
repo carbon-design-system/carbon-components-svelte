@@ -37,11 +37,13 @@ export interface ButtonProps
   /**
    * Set the alignment of the tooltip relative to the icon
    * `hasIconOnly` must be set to `true`
+   * @default "center"
    */
   tooltipAlignment?: "start" | "center" | "end";
 
   /**
    * Set the position of the tooltip relative to the icon
+   * @default "bottom"
    */
   tooltipPosition?: "top" | "right" | "bottom" | "left";
 

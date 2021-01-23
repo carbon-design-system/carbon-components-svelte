@@ -31,7 +31,9 @@
 
 ### Danger tertiary, icon-only button
 
-<Button kind="danger-tertiary" tooltipPosition="bottom" tooltipAlignment="center" iconDescription="Delete" icon={TrashCan16} />
+**Note:** you must provide an `iconDescription` for the button tooltip.
+
+<Button kind="danger-tertiary"iconDescription="Delete" icon={TrashCan16} />
 
 ### Danger ghost button
 
@@ -43,13 +45,15 @@
 
 ### Icon-only button
 
-Set `hasIconOnly` to `true` to use the icon-only button variant.
-
 **Note:** you must provide an `iconDescription` for the button tooltip.
 
-The tooltip position and alignment can be controlled by the `tooltipPosition`, `tooltipAlignment` props, respectively.
+<Button iconDescription="Tooltip text" icon={Add16} />
 
-<Button tooltipPosition="bottom" tooltipAlignment="center" iconDescription="Tooltip text" icon={Add16} />
+### Icon-only button (custom tooltip position)
+
+The tooltip position and alignment can be controlled by `tooltipPosition` and `tooltipAlignment`.
+
+<Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add16} />
 
 ### Link button
 
