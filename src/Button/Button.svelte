@@ -80,6 +80,7 @@
   $: if (ctx && ref) {
     ctx.declareRef(ref);
   }
+  $: hasIconOnly = icon && !$$slots.default;
   $: buttonProps = {
     role: "button",
     type: href && !disabled ? undefined : type,

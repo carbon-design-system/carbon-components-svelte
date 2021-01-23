@@ -1,7 +1,3 @@
----
-description: High-level description
----
-
 <script>
   import { Button } from "carbon-components-svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16";
@@ -48,7 +44,7 @@ Set `hasIconOnly` to `true` to use the icon-only button variant.
 
 The tooltip position and alignment can be controlled by the `tooltipPosition`, `tooltipAlignment` props, respectively.
 
-<Button hasIconOnly tooltipPosition="bottom" tooltipAlignment="center" iconDescription="Tooltip text" icon={Add16} />
+<Button tooltipPosition="bottom" tooltipAlignment="center" iconDescription="Tooltip text" icon={Add16} />
 
 ### Link button
 
