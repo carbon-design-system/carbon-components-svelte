@@ -1,4 +1,5 @@
 export { default as DataTable } from "./DataTable.svelte";
+export { default as DataTableSkeleton } from "./DataTableSkeleton.svelte";
 export { default as Table } from "./Table.svelte";
 export { default as TableBody } from "./TableBody.svelte";
 export { default as TableCell } from "./TableCell.svelte";
