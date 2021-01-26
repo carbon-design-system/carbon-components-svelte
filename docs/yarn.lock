@@ -119,20 +119,20 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@carbon/colors@^10.19.0-rc.0":
-  version "10.19.0-rc.0"
-  resolved "https://registry.npmjs.org/@carbon/colors/-/colors-10.19.0-rc.0.tgz#80991869d8a4d71f8d7b9816136e6c66ad6c4991"
-  integrity sha512-Nnvt15A2ahlk2KvfXBe5F2HO8z0/jkanT0gBVz9wRYziWeGkiQpYLPX73orYXzqGPTEuHrxGkMz/eHMAlGFrbA==
+"@carbon/colors@^10.19.0":
+  version "10.19.0"
+  resolved "https://registry.npmjs.org/@carbon/colors/-/colors-10.19.0.tgz#b3fe4b8302f5a0d8450d4fe9af36eed40c035426"
+  integrity sha512-LrlxOuIrpWQmn8VmSu0VwuT4hRiXmSOtt9Yjs5OKEUuSIxADZFMpY+fJIvMu7q69Y4XeV6XNYrJpIExOfb62iw==
 
-"@carbon/import-once@^10.5.0-rc.0":
-  version "10.5.0-rc.0"
-  resolved "https://registry.npmjs.org/@carbon/import-once/-/import-once-10.5.0-rc.0.tgz#296a200b0f25a8ce3c6eb920ee97769b504c5be5"
-  integrity sha512-Q8TE6H2ERrnPYRc+u3mIkoY8q7y80DEUqfQB2rOtapbNinRH43XwqzSPygsQlYdwARAgJNhDp1yjlleqMsyOvQ==
+"@carbon/import-once@^10.5.0":
+  version "10.5.0"
+  resolved "https://registry.npmjs.org/@carbon/import-once/-/import-once-10.5.0.tgz#9a84b50a761aa561ae6600a6c34b9955d97b3fd8"
+  integrity sha512-OlyJpA5wJ9XNv/FAogN4TGhwmrdyVYeoJ/ARkcmbdWiXwq4OTCVki9MUlV779+HYseLlXBxtlA1No3/R4Sds0g==
 
-"@carbon/layout@^10.17.0-rc.0":
-  version "10.17.0-rc.0"
-  resolved "https://registry.npmjs.org/@carbon/layout/-/layout-10.17.0-rc.0.tgz#bdd4272ce40ed08e554f4650af2c8252fccd4f4e"
-  integrity sha512-IdPSasYLvjAs4D98FUPMDJZa8/TLD7M+M5hCb3kRIscjQEKua9to7ti26yNusszpf5F9ZJJ9porogGqEdTPAcA==
+"@carbon/layout@^10.17.0":
+  version "10.17.0"
+  resolved "https://registry.npmjs.org/@carbon/layout/-/layout-10.17.0.tgz#de2b80673c0ee13c451adf7060e63b117a87bc30"
+  integrity sha512-FS198XBh0dxfjU2GJ35b85gQbnuNFSK8IcpSBsgX7KKSIktwpPy0WV40EGQoZD/qFPIJpzZRngkJWD+d6vhf7w==
 
 "@carbon/telemetry@0.0.0-alpha.6":
   version "0.0.0-alpha.6"
@@ -150,23 +150,23 @@
     winston "^3.3.3"
     yargs "^16.1.1"
 
-"@carbon/themes@10.26.0-rc.1":
-  version "10.26.0-rc.1"
-  resolved "https://registry.npmjs.org/@carbon/themes/-/themes-10.26.0-rc.1.tgz#df8125de4280319414c442215de59c741db5508b"
-  integrity sha512-GSHlCtboQOlP2w51NQtOKWfTKwz3naV0DNCKMOPiPnTLYbmTGrzsBqsVztHSpWdfH83sEQwFmlntFTKUMWENJg==
+"@carbon/themes@10.26.0":
+  version "10.26.0"
+  resolved "https://registry.npmjs.org/@carbon/themes/-/themes-10.26.0.tgz#61720c0e51ebe6a1121e22d0f764b0d55cf8533d"
+  integrity sha512-8S/S3S9l+7lbxGpbz81eoRxOYtloFTMPBZtcOmfUE1bwX3y31hhxc+4hrTCqdS0LQQSDvGebfYxiF7bfiVRFRg==
   dependencies:
-    "@carbon/colors" "^10.19.0-rc.0"
-    "@carbon/layout" "^10.17.0-rc.0"
-    "@carbon/type" "^10.20.0-rc.1"
+    "@carbon/colors" "^10.19.0"
+    "@carbon/layout" "^10.17.0"
+    "@carbon/type" "^10.20.0"
     color "^3.1.2"
 
-"@carbon/type@^10.20.0-rc.1":
-  version "10.20.0-rc.1"
-  resolved "https://registry.npmjs.org/@carbon/type/-/type-10.20.0-rc.1.tgz#46848a1e2c11b3cfae75902405fa8af7e6e5c767"
-  integrity sha512-ugcCAYsZRCryGin4MBjo+VhQwiWMskXLQQQ8mrSGUJ+7sTglWVmb5G61XSoN2GmrLT7GRYndxSGEZYfMc9bXbw==
+"@carbon/type@^10.20.0":
+  version "10.20.0"
+  resolved "https://registry.npmjs.org/@carbon/type/-/type-10.20.0.tgz#cea815adb8edceb98b4f7111d82ce6aa6ac59a96"
+  integrity sha512-F12I0oSR9CwFavdO357+a+2S7bGK4V3iaT5F89WNBR6RyV6jSTVq02rqWaRtmDK7Axy0dH/8Dxbq/xnLynFb6g==
   dependencies:
-    "@carbon/import-once" "^10.5.0-rc.0"
-    "@carbon/layout" "^10.17.0-rc.0"
+    "@carbon/import-once" "^10.5.0"
+    "@carbon/layout" "^10.17.0"
 
 "@dabh/diagnostics@^2.0.2":
   version "2.0.2"
@@ -947,10 +947,10 @@ carbon-components-svelte@../:
     carbon-icons-svelte "^10.21.0"
     flatpickr "4.6.9"
 
-carbon-components@10.27.0-rc.4:
-  version "10.27.0-rc.4"
-  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.27.0-rc.4.tgz#230fc17b7947edf263f72a7a6f19efc74cfcafe8"
-  integrity sha512-NQsURaBM98fJGOPiNivvoBqfkk4q7uz5pQ7RmZqrMjYffsDN9O+INz/d5qp3VQwLmN6MJjmjAypDQE8pgyy0Kw==
+carbon-components@10.27.0:
+  version "10.27.0"
+  resolved "https://registry.npmjs.org/carbon-components/-/carbon-components-10.27.0.tgz#b984ee1b87371a64ecd041853993ffc69c9191a0"
+  integrity sha512-kDW3ezjfqxTydIMLZ+pTxA3oWsmhET330NTVe47hXeCRsoZ000tq0ZwGbbliSjlW2wY4s5nKxWkMj0b+dkeFyQ==
   dependencies:
     "@carbon/telemetry" "0.0.0-alpha.6"
     flatpickr "4.6.1"
