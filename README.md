@@ -12,7 +12,7 @@ Design systems facilitate design and development through reuse, consistency, and
 The Carbon Svelte portfolio also includes:
 
 - **[Carbon Icons Svelte](https://github.com/IBM/carbon-icons-svelte)**: 6000+ Carbon icons as Svelte components
-- **[Carbon Pictograms Svelte](https://github.com/IBM/carbon-pictograms-svelte)**: 600+ Carbon pictograms as Svelte components
+- **[Carbon Pictograms Svelte](https://github.com/IBM/carbon-pictograms-svelte)**: 700+ Carbon pictograms as Svelte components
 - **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 16 chart types, powered by d3
 
 ## [Documentation](http://ibm.biz/carbon-svelte)
