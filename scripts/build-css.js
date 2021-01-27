@@ -1,12 +1,11 @@
 const fs = require("fs");
-const sass = require("node-sass");
+const sass = require("sass");
 const autoprefixer = require("autoprefixer");
 const postcss = require("postcss");
 const path = require("path");
 const { promisify } = require("util");
 
 const writeFile = promisify(fs.writeFile);
-const sassRender = promisify(sass.render);
 
 const shared = {
   globals: `
@@ -74,9 +73,9 @@ async function buildCss() {
   Object.keys(themes).forEach(async (theme) => {
     try {
       const outFile = path.resolve("css", theme + ".css");
-      const { css } = await sassRender({
+      const { css } = sass.renderSync({
         data: `
-        @import "node_modules/@carbon/themes/scss/themes";
+          @import "node_modules/@carbon/themes/scss/themes";
 
           $feature-flags: (
             enable-css-custom-properties: ${theme === "all"},
@@ -88,7 +87,7 @@ async function buildCss() {
           ${shared.components}
         `,
         outFile,
-        outputStyle: "compact",
+        outputStyle: "compressed",
         omitSourceMapUrl: true,
       });
 
