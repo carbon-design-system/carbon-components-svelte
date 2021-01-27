@@ -138,10 +138,11 @@
       type="button"
       disabled="{disabled}"
       class:bx--text-input--password__visibility__toggle="{true}"
+      class:bx--btn="{true}"
       class:bx--btn--icon-only="{true}"
+      class:bx--btn--disabled="{disabled}"
       class:bx--tooltip__trigger="{true}"
       class:bx--tooltip--a11y="{true}"
-      class:bx--btn--disabled="{disabled}"
       class="{tooltipPosition && `bx--tooltip--${tooltipPosition}`}
         {tooltipAlignment && `bx--tooltip--align-${tooltipAlignment}`}"
       on:click="{() => {
