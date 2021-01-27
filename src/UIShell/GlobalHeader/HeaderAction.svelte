@@ -7,8 +7,8 @@
   export let isOpen = false;
 
   /**
-   * Specify the icon props
-   * @type {{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }}
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
   export let icon = undefined;
 
@@ -31,9 +31,9 @@
 
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
-  import Close20 from "carbon-icons-svelte/lib/Close20";
-  import AppSwitcher20 from "carbon-icons-svelte/lib/AppSwitcher20";
-  import { Icon } from "../../Icon";
+  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
+  import AppSwitcher20 from "carbon-icons-svelte/lib/AppSwitcher20/AppSwitcher20.svelte";
+  import Icon from "../../Icon/Icon.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -79,7 +79,7 @@
       dispatch(isOpen ? 'open' : 'close');
     }}"
   >
-    <Icon render="{isOpen ? Close20 : AppSwitcher20}" {...icon} />
+    <Icon render="{icon || (isOpen ? Close20 : AppSwitcher20)}" />
     <slot name="text">
       {#if text}<span>{text}</span>{/if}
     </slot>

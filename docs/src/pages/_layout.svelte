@@ -182,7 +182,7 @@
 
     <HeaderUtilities>
       <HeaderActionLink
-        icon="{{ render: LogoGithub20 }}"
+        icon="{LogoGithub20}"
         href="https://github.com/IBM/carbon-components-svelte"
         target="_blank"
       />

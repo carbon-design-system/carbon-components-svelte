@@ -1400,13 +1400,13 @@ export interface HeaderActionSlideTransition {
 
 ### Props
 
-| Prop name  | Kind             | Reactive | Type                                                                                  | Default value                  | Description                                                                                                   |
-| :--------- | :--------------- | :------- | :------------------------------------------------------------------------------------ | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                                            | <code>null</code>              | Obtain a reference to the button HTML element                                                                 |
-| isOpen     | <code>let</code> | Yes      | <code>boolean</code>                                                                  | <code>false</code>             | Set to `true` to open the panel                                                                               |
-| icon       | <code>let</code> | No       | <code>{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }</code> | --                             | Specify the icon props                                                                                        |
-| text       | <code>let</code> | No       | <code>string</code>                                                                   | --                             | Specify the text<br />Alternatively, use the named slot "text" (e.g., &lt;div slot="text"&gt;...&lt;/div&gt;) |
-| transition | <code>let</code> | No       | <code>false &#124; HeaderActionSlideTransition</code>                                 | <code>{ duration: 200 }</code> | Customize the panel transition (i.e., `transition:slide`)<br />Set to `false` to disable the transition       |
+| Prop name  | Kind             | Reactive | Type                                                         | Default value                  | Description                                                                                                   |
+| :--------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                   | <code>null</code>              | Obtain a reference to the button HTML element                                                                 |
+| isOpen     | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>             | Set to `true` to open the panel                                                                               |
+| icon       | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                             | Specify the icon from `carbon-icons-svelte` to render                                                         |
+| text       | <code>let</code> | No       | <code>string</code>                                          | --                             | Specify the text<br />Alternatively, use the named slot "text" (e.g., &lt;div slot="text"&gt;...&lt;/div&gt;) |
+| transition | <code>let</code> | No       | <code>false &#124; HeaderActionSlideTransition</code>        | <code>{ duration: 200 }</code> | Customize the panel transition (i.e., `transition:slide`)<br />Set to `false` to disable the transition       |
 
 ### Slots
 
@@ -1426,12 +1426,12 @@ export interface HeaderActionSlideTransition {
 
 ### Props
 
-| Prop name    | Kind             | Reactive | Type                                                                                  | Default value      | Description                                   |
-| :----------- | :--------------- | :------- | :------------------------------------------------------------------------------------ | ------------------ | --------------------------------------------- |
-| ref          | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code>                                            | <code>null</code>  | Obtain a reference to the HTML anchor element |
-| linkIsActive | <code>let</code> | No       | <code>boolean</code>                                                                  | <code>false</code> | Set to `true` to use the active state         |
-| href         | <code>let</code> | No       | <code>string</code>                                                                   | --                 | Specify the `href` attribute                  |
-| icon         | <code>let</code> | No       | <code>{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }</code> | --                 | Specify the icon props                        |
+| Prop name    | Kind             | Reactive | Type                                                         | Default value      | Description                                           |
+| :----------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------ | ----------------------------------------------------- |
+| ref          | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code>                   | <code>null</code>  | Obtain a reference to the HTML anchor element         |
+| linkIsActive | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code> | Set to `true` to use the active state                 |
+| href         | <code>let</code> | No       | <code>string</code>                                          | --                 | Specify the `href` attribute                          |
+| icon         | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                 | Specify the icon from `carbon-icons-svelte` to render |
 
 ### Slots
 
@@ -2207,7 +2207,7 @@ None.
 | Prop name        | Kind             | Reactive | Type                                                         | Default value             | Description                                           |
 | :--------------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------------- | ----------------------------------------------------- |
 | notificationType | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                         | <code>"toast"</code>      | Set the type of notification                          |
-| renderIcon       | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                        | Specify the icon from `carbon-icons-svelte` to render |
+| icon             | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                        | Specify the icon from `carbon-icons-svelte` to render |
 | title            | <code>let</code> | No       | <code>string</code>                                          | --                        | Specify the title of the icon                         |
 | iconDescription  | <code>let</code> | No       | <code>string</code>                                          | <code>"Close icon"</code> | Specify the ARIA label for the icon                   |
 
@@ -2982,13 +2982,13 @@ None.
 
 ### Props
 
-| Prop name  | Kind             | Reactive | Type                                                                                  | Default value      | Description                                   |
-| :--------- | :--------------- | :------- | :------------------------------------------------------------------------------------ | ------------------ | --------------------------------------------- |
-| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code>                                            | <code>null</code>  | Obtain a reference to the HTML anchor element |
-| isSelected | <code>let</code> | No       | <code>boolean</code>                                                                  | <code>false</code> | Set to `true` to select the current link      |
-| href       | <code>let</code> | No       | <code>string</code>                                                                   | --                 | Specify the `href` attribute                  |
-| text       | <code>let</code> | No       | <code>string</code>                                                                   | --                 | Specify the text                              |
-| icon       | <code>let</code> | No       | <code>{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }</code> | --                 | Specify the icon props                        |
+| Prop name  | Kind             | Reactive | Type                                                         | Default value      | Description                                           |
+| :--------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------ | ----------------------------------------------------- |
+| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code>                   | <code>null</code>  | Obtain a reference to the HTML anchor element         |
+| isSelected | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code> | Set to `true` to select the current link              |
+| href       | <code>let</code> | No       | <code>string</code>                                          | --                 | Specify the `href` attribute                          |
+| text       | <code>let</code> | No       | <code>string</code>                                          | --                 | Specify the text                                      |
+| icon       | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                 | Specify the icon from `carbon-icons-svelte` to render |
 
 ### Slots
 
@@ -3004,12 +3004,12 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                                                  | Default value      | Description                                   |
-| :-------- | :--------------- | :------- | :------------------------------------------------------------------------------------ | ------------------ | --------------------------------------------- |
-| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                                            | <code>null</code>  | Obtain a reference to the HTML button element |
-| expanded  | <code>let</code> | Yes      | <code>boolean</code>                                                                  | <code>false</code> | Set to `true` to toggle the expanded state    |
-| text      | <code>let</code> | No       | <code>string</code>                                                                   | --                 | Specify the text                              |
-| icon      | <code>let</code> | No       | <code>{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }</code> | --                 | Specify the icon props                        |
+| Prop name | Kind             | Reactive | Type                                                         | Default value      | Description                                           |
+| :-------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------ | ----------------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                   | <code>null</code>  | Obtain a reference to the HTML button element         |
+| expanded  | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code> | Set to `true` to toggle the expanded state            |
+| text      | <code>let</code> | No       | <code>string</code>                                          | --                 | Specify the text                                      |
+| icon      | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                 | Specify the icon from `carbon-icons-svelte` to render |
 
 ### Slots
 
