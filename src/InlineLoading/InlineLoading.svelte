@@ -54,11 +54,11 @@
   on:mouseleave
 >
   <div class:bx--inline-loading__animation="{true}">
-    {#if status === 'error'}
+    {#if status === "error"}
       <Error20 class="bx--inline-loading--error" />
-    {:else if status === 'finished'}
+    {:else if status === "finished"}
       <CheckmarkFilled16 class="bx--inline-loading__checkmark-container" />
-    {:else if status === 'inactive' || status === 'active'}
+    {:else if status === "inactive" || status === "active"}
       <Loading
         small
         description="{iconDescription}"

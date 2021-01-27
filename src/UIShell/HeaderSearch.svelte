@@ -53,6 +53,109 @@
     : undefined;
 </script>
 
+<svelte:window
+  on:mouseup="{({ target }) => {
+    if (active && !refSearch.contains(target)) active = false;
+  }}"
+/>
+
+<div bind:this="{refSearch}" role="search" class:active>
+  <label for="search-input" id="search-label">Search</label>
+  <div role="combobox" aria-expanded="{active}">
+    <button
+      type="button"
+      aria-label="Search"
+      tabindex="{active ? '-1' : '0'}"
+      class:bx--header__action="{true}"
+      class:disabled="{active}"
+      on:click="{() => {
+        active = true;
+      }}"
+    >
+      <Search20 title="Search" />
+    </button>
+    <input
+      bind:this="{ref}"
+      type="text"
+      autocomplete="off"
+      placeholder="Search..."
+      tabindex="{active ? '0' : '-1'}"
+      class:active
+      {...$$restProps}
+      id="search-input"
+      aria-activedescendant="{selectedId}"
+      bind:value
+      on:change
+      on:input
+      on:focus
+      on:blur
+      on:keydown
+      on:keydown="{(e) => {
+        switch (e.key) {
+          case 'Enter':
+            selectResult();
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            if (selectedResultIndex === results.length - 1) {
+              selectedResultIndex = 0;
+            } else {
+              selectedResultIndex += 1;
+            }
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            if (selectedResultIndex === 0) {
+              selectedResultIndex = results.length - 1;
+            } else {
+              selectedResultIndex -= 1;
+            }
+            break;
+        }
+      }}"
+    />
+    <button
+      type="button"
+      aria-label="Clear search"
+      tabindex="{active ? '0' : '-1'}"
+      class:bx--header__action="{true}"
+      class:hidden="{!active}"
+      on:click="{() => {
+        reset();
+        dispatch('clear');
+      }}"
+    >
+      <Close20 title="Close" />
+    </button>
+  </div>
+
+  {#if active && results.length > 0}
+    <ul aria-labelledby="search-label" role="menu" id="search-menu">
+      {#each results as result, i}
+        <li>
+          <a
+            tabindex="-1"
+            id="search-menuitem-{i}"
+            role="menuitem"
+            href="{result.href}"
+            class:selected="{selectedId === `search-menuitem-${i}`}"
+            on:click|preventDefault="{async () => {
+              selectedResultIndex = i;
+              await tick();
+              selectResult();
+            }}"
+          >
+            <slot result="{result}" index="{i}">
+              {result.text}
+              {#if result.description}<span>– {result.description}</span>{/if}
+            </slot>
+          </a>
+        </li>
+      {/each}
+    </ul>
+  {/if}
+</div>
+
 <style>
   label {
     position: absolute;
@@ -185,106 +288,3 @@
     color: #c6c6c6;
   }
 </style>
-
-<svelte:window
-  on:mouseup="{({ target }) => {
-    if (active && !refSearch.contains(target)) active = false;
-  }}"
-/>
-
-<div bind:this="{refSearch}" role="search" class:active>
-  <label for="search-input" id="search-label">Search</label>
-  <div role="combobox" aria-expanded="{active}">
-    <button
-      type="button"
-      aria-label="Search"
-      tabindex="{active ? '-1' : '0'}"
-      class:bx--header__action="{true}"
-      class:disabled="{active}"
-      on:click="{() => {
-        active = true;
-      }}"
-    >
-      <Search20 title="Search" />
-    </button>
-    <input
-      bind:this="{ref}"
-      type="text"
-      autocomplete="off"
-      placeholder="Search..."
-      tabindex="{active ? '0' : '-1'}"
-      class:active
-      {...$$restProps}
-      id="search-input"
-      aria-activedescendant="{selectedId}"
-      bind:value
-      on:change
-      on:input
-      on:focus
-      on:blur
-      on:keydown
-      on:keydown="{(e) => {
-        switch (e.key) {
-          case 'Enter':
-            selectResult();
-            break;
-          case 'ArrowDown':
-            e.preventDefault();
-            if (selectedResultIndex === results.length - 1) {
-              selectedResultIndex = 0;
-            } else {
-              selectedResultIndex += 1;
-            }
-            break;
-          case 'ArrowUp':
-            e.preventDefault();
-            if (selectedResultIndex === 0) {
-              selectedResultIndex = results.length - 1;
-            } else {
-              selectedResultIndex -= 1;
-            }
-            break;
-        }
-      }}"
-    />
-    <button
-      type="button"
-      aria-label="Clear search"
-      tabindex="{active ? '0' : '-1'}"
-      class:bx--header__action="{true}"
-      class:hidden="{!active}"
-      on:click="{() => {
-        reset();
-        dispatch('clear');
-      }}"
-    >
-      <Close20 title="Close" />
-    </button>
-  </div>
-
-  {#if active && results.length > 0}
-    <ul aria-labelledby="search-label" role="menu" id="search-menu">
-      {#each results as result, i}
-        <li>
-          <a
-            tabindex="-1"
-            id="search-menuitem-{i}"
-            role="menuitem"
-            href="{result.href}"
-            class:selected="{selectedId === `search-menuitem-${i}`}"
-            on:click|preventDefault="{async () => {
-              selectedResultIndex = i;
-              await tick();
-              selectResult();
-            }}"
-          >
-            <slot result="{result}" index="{i}">
-              {result.text}
-              {#if result.description}<span>– {result.description}</span>{/if}
-            </slot>
-          </a>
-        </li>
-      {/each}
-    </ul>
-  {/if}
-</div>

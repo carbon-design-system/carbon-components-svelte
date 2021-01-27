@@ -58,8 +58,7 @@
         <span
           class:bx--skeleton="{true}"
           class:bx--btn="{true}"
-          class:bx--btn--sm="{true}"
-        ></span>
+          class:bx--btn--sm="{true}"></span>
       </div>
     </section>
   {/if}
@@ -78,7 +77,7 @@
     <thead>
       <tr>
         {#each cols as col (col)}
-          <th>{values[col] || ''}</th>
+          <th>{values[col] || ""}</th>
         {/each}
       </tr>
     </thead>

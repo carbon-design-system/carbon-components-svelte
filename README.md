@@ -155,7 +155,8 @@ Using JavaScript:
   $: document.documentElement.setAttribute("theme", theme);
 </script>
 
-<button on:click="{() => theme = 'g90'}">Update theme</button>
+<button on:click="{() => (theme = 'g90')}">Update theme</button>
+
 ```
 
 ### TypeScript support

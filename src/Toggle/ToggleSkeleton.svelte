@@ -28,7 +28,9 @@
     class:bx--skeleton="{true}"
   />
   <label
-    aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle is loading'}"
+    aria-label="{labelText
+      ? undefined
+      : $$props['aria-label'] || 'Toggle is loading'}"
     for="{id}"
     class:bx--toggle__label="{true}"
     class:bx--skeleton="{true}"

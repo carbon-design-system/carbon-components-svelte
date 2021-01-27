@@ -37,7 +37,8 @@
     <button
       class:bx--table-sort="{true}"
       class:bx--table-sort--active="{active}"
-      class:bx--table-sort--ascending="{active && $sortHeader.sortDirection === 'descending'}"
+      class:bx--table-sort--ascending="{active &&
+        $sortHeader.sortDirection === 'descending'}"
       on:click
     >
       <div class:bx--table-header-label="{true}">

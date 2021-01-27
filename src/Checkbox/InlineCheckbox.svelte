@@ -34,5 +34,4 @@
   for="{id}"
   title="{title}"
   aria-label="{$$props['aria-label']}"
-  class:bx--checkbox-label="{true}"
-></label>
+  class:bx--checkbox-label="{true}"></label>

@@ -94,8 +94,7 @@
         value = target.value;
       }}"
       on:focus
-      on:blur
-    ></textarea>
+      on:blur></textarea>
   </div>
   {#if !invalid && helperText}
     <div

@@ -5,12 +5,6 @@
   import copy from "clipboard-copy";
 </script>
 
-<style>
-  div {
-    margin-bottom: var(--cds-spacing-04);
-  }
-</style>
-
 <div>
   <CodeSnippet
     code="{code}"
@@ -20,3 +14,9 @@
     }}"
   />
 </div>
+
+<style>
+  div {
+    margin-bottom: var(--cds-spacing-04);
+  }
+</style>

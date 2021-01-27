@@ -45,7 +45,7 @@
   }}"
 >
   <slot>
-    {#if animation}{feedback || $$restProps['aria-label']}{/if}
+    {#if animation}{feedback || $$restProps["aria-label"]}{/if}
   </slot>
   <span
     aria-hidden="true"

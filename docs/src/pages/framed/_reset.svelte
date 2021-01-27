@@ -13,6 +13,8 @@
   $: document.documentElement.setAttribute("theme", currentTheme);
 </script>
 
+<slot />
+
 <style>
   :global(body.framed) {
     min-height: 100vh;
@@ -20,5 +22,3 @@
     padding: var(--cds-spacing-06) var(--cds-spacing-05);
   }
 </style>
-
-<slot />

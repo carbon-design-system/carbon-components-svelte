@@ -5,5 +5,4 @@
   on:click
   on:mouseover
   on:mouseenter
-  on:mouseleave
-></span>
+  on:mouseleave></span>

@@ -19,12 +19,6 @@
   $: secondary = formatSelected(multiselect2_selectedIds);
 </script>
 
-<style>
-  div {
-    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
-  }
-</style>
-
 <MultiSelect
   titleText="Primary contact"
   bind:selectedIds="{multiselect1_selectedIds}"
@@ -42,3 +36,9 @@
 />
 
 <div>Secondary: {secondary}</div>
+
+<style>
+  div {
+    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
+  }
+</style>

@@ -19,7 +19,7 @@
 </FormGroup>
 
 <ButtonSet>
-  {#each ['free', 'standard', 'pro'] as value}
+  {#each ["free", "standard", "pro"] as value}
     <Button
       on:click="{() => {
         plan = value;

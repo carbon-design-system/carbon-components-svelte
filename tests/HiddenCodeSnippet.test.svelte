@@ -6,12 +6,6 @@
   const code = Array.from({ length: 20 }, (_, i) => i + 1).join("\n");
 </script>
 
-<style>
-  .hidden {
-    display: none;
-  }
-</style>
-
 <ToggleSmall
   style="margin-bottom: var(--cds-spacing-05)"
   labelText="Show code snippets"
@@ -19,7 +13,8 @@
 />
 
 {#if toggled}
-  <h5>"Show more" will not render</h5><br />
+  <h5>"Show more" will not render</h5>
+  <br />
 {/if}
 <div class:hidden="{!toggled}">
   <CodeSnippet type="multi" code="{code}" />
@@ -27,8 +22,15 @@
 
 {#if toggled}
   <br /><br />
-  <h5>"Show more" will render</h5><br />
+  <h5>"Show more" will render</h5>
+  <br />
   <div class:hidden="{!toggled}">
     <CodeSnippet type="multi" code="{code}" />
   </div>
 {/if}
+
+<style>
+  .hidden {
+    display: none;
+  }
+</style>

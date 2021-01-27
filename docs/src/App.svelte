@@ -3,6 +3,8 @@
   import { routes } from "../.routify/routes";
 </script>
 
+<Router routes="{routes}" />
+
 <style lang="scss" global>
   @import "@carbon/themes/scss/themes";
 
@@ -42,5 +44,3 @@
   @import "carbon-components/scss/globals/grid/_grid.scss";
   @import "carbon-components/scss/globals/scss/styles.scss";
 </style>
-
-<Router routes="{routes}" />

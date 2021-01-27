@@ -78,10 +78,9 @@
       <span aria-hidden="true" class:bx--toggle__text--off="{true}">
         {labelA}
       </span>
-      <span
-        aria-hidden="true"
-        class:bx--toggle__text--on="{true}"
-      >{labelB}</span>
+      <span aria-hidden="true" class:bx--toggle__text--on="{true}"
+        >{labelB}</span
+      >
     </span>
   </label>
 </div>

@@ -63,7 +63,9 @@
   class:bx--tile--is-expanded="{expanded}"
   class:bx--tile--light="{light}"
   {...$$restProps}
-  style="{expanded ? $$restProps.style : `${$$restProps.style}; max-height: ${tileMaxHeight + tilePadding}px`}"
+  style="{expanded
+    ? $$restProps.style
+    : `${$$restProps.style}; max-height: ${tileMaxHeight + tilePadding}px`}"
   on:click
   on:click="{() => {
     expanded = !expanded;

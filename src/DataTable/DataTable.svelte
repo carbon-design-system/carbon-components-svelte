@@ -252,7 +252,9 @@
               on:click="{() => {
                 dispatch('click', { header });
                 let active = header.key === $sortHeader.key;
-                let currentSortDirection = active ? $sortHeader.sortDirection : 'none';
+                let currentSortDirection = active
+                  ? $sortHeader.sortDirection
+                  : 'none';
                 let sortDirection = sortDirectionMap[currentSortDirection];
                 dispatch('click:header', { header, sortDirection });
                 sortHeader.set({
@@ -273,7 +275,13 @@
       {#each sorting ? sortedRows : rows as row, i (row.id)}
         <TableRow
           id="row-{row.id}"
-          class="{selectedRowIds.includes(row.id) ? 'bx--data-table--selected' : ''} {expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable ? 'bx--parent-row' : ''} {expandable && parentRowId === row.id ? 'bx--expandable-row--hover' : ''}"
+          class="{selectedRowIds.includes(row.id)
+            ? 'bx--data-table--selected'
+            : ''} {expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable
+            ? 'bx--parent-row'
+            : ''} {expandable && parentRowId === row.id
+            ? 'bx--expandable-row--hover'
+            : ''}"
           on:click="{() => {
             dispatch('click', { row });
             dispatch('click:row', row);
@@ -289,16 +297,22 @@
             <TableCell
               class="bx--table-expand"
               headers="expand"
-              data-previous-value="{expandedRows[row.id] ? 'collapsed' : undefined}"
+              data-previous-value="{expandedRows[row.id]
+                ? 'collapsed'
+                : undefined}"
             >
               <button
                 type="button"
                 class:bx--table-expand__button="{true}"
-                aria-label="{expandedRows[row.id] ? 'Collapse current row' : 'Expand current row'}"
+                aria-label="{expandedRows[row.id]
+                  ? 'Collapse current row'
+                  : 'Expand current row'}"
                 on:click="{() => {
                   const rowExpanded = !!expandedRows[row.id];
 
-                  expandedRowIds = rowExpanded ? expandedRowIds.filter((id) => id !== row.id) : [...expandedRowIds, row.id];
+                  expandedRowIds = rowExpanded
+                    ? expandedRowIds.filter((id) => id !== row.id)
+                    : [...expandedRowIds, row.id];
 
                   dispatch('click:row--expand', {
                     row,
@@ -329,7 +343,9 @@
                   checked="{selectedRowIds.includes(row.id)}"
                   on:change="{() => {
                     if (selectedRowIds.includes(row.id)) {
-                      selectedRowIds = selectedRowIds.filter((id) => id !== row.id);
+                      selectedRowIds = selectedRowIds.filter(
+                        (id) => id !== row.id
+                      );
                     } else {
                       selectedRowIds = [...selectedRowIds, row.id];
                     }
@@ -342,7 +358,9 @@
             {#if headers[j].empty}
               <td class:bx--table-column-menu="{headers[j].columnMenu}">
                 <slot name="cell" row="{row}" cell="{cell}">
-                  {headers[j].display ? headers[j].display(cell.value) : cell.value}
+                  {headers[j].display
+                    ? headers[j].display(cell.value)
+                    : cell.value}
                 </slot>
               </td>
             {:else}
@@ -353,7 +371,9 @@
                 }}"
               >
                 <slot name="cell" row="{row}" cell="{cell}">
-                  {headers[j].display ? headers[j].display(cell.value) : cell.value}
+                  {headers[j].display
+                    ? headers[j].display(cell.value)
+                    : cell.value}
                 </slot>
               </TableCell>
             {/if}

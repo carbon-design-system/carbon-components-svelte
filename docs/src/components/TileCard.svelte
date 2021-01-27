@@ -12,6 +12,33 @@
   $: tileComponent = href ? ClickableTile : Tile;
 </script>
 
+<div class="card-wrapper" class:borderRight class:borderBottom>
+  <AspectRatio>
+    <svelte:component
+      this="{tileComponent}"
+      href="{href}"
+      {...$$restProps}
+      style="height: 100%;"
+    >
+      <div class="card">
+        <div>
+          <h5 class="title">{title}</h5>
+          {#if subtitle}
+            <div class="subtitle">{subtitle}</div>
+          {/if}
+        </div>
+        <div class="card-footer">
+          <svelte:component
+            this="{LogoGithub32}"
+            style="fill: var(--cds-icon-01)"
+          />
+          <Launch20 style="fill: var(--cds-icon-01)" />
+        </div>
+      </div>
+    </svelte:component>
+  </AspectRatio>
+</div>
+
 <style>
   .card-wrapper {
     border-right: 1px solid transparent;
@@ -56,30 +83,3 @@
     }
   }
 </style>
-
-<div class="card-wrapper" class:borderRight class:borderBottom>
-  <AspectRatio>
-    <svelte:component
-      this="{tileComponent}"
-      href="{href}"
-      {...$$restProps}
-      style="height: 100%;"
-    >
-      <div class="card">
-        <div>
-          <h5 class="title">{title}</h5>
-          {#if subtitle}
-            <div class="subtitle">{subtitle}</div>
-          {/if}
-        </div>
-        <div class="card-footer">
-          <svelte:component
-            this="{LogoGithub32}"
-            style="fill: var(--cds-icon-01)"
-          />
-          <Launch20 style="fill: var(--cds-icon-01)" />
-        </div>
-      </div>
-    </svelte:component>
-  </AspectRatio>
-</div>

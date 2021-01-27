@@ -40,15 +40,13 @@
             class:bx--loading__background="{true}"
             cx="50%"
             cy="50%"
-            r="{spinnerRadius}"
-          ></circle>
+            r="{spinnerRadius}"></circle>
         {/if}
         <circle
           class:bx--loading__stroke="{true}"
           cx="50%"
           cy="50%"
-          r="{spinnerRadius}"
-        ></circle>
+          r="{spinnerRadius}"></circle>
       </svg>
     </div>
   </div>
@@ -71,15 +69,13 @@
           class:bx--loading__background="{true}"
           cx="50%"
           cy="50%"
-          r="{spinnerRadius}"
-        ></circle>
+          r="{spinnerRadius}"></circle>
       {/if}
       <circle
         class:bx--loading__stroke="{true}"
         cx="50%"
         cy="50%"
-        r="{spinnerRadius}"
-      ></circle>
+        r="{spinnerRadius}"></circle>
     </svg>
   </div>
 {/if}
