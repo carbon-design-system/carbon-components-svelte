@@ -9,7 +9,7 @@
    * Specify the icon from `carbon-icons-svelte` to render
    * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
-  export let renderIcon = Close20;
+  export let icon = Close20;
 
   /**
    * Specify the title of the icon
@@ -36,7 +36,7 @@
   on:mouseleave
 >
   <svelte:component
-    this="{renderIcon}"
+    this="{icon}"
     title="{title}"
     class="bx--{notificationType}-notification__close-icon"
   />

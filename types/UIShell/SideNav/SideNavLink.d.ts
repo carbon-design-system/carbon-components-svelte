@@ -18,9 +18,9 @@ export interface SideNavLinkProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   text?: string;
 
   /**
-   * Specify the icon props
+   * Specify the icon from `carbon-icons-svelte` to render
    */
-  icon?: { render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean };
+  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
 
   /**
    * Obtain a reference to the HTML anchor element

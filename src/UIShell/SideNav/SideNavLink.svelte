@@ -15,15 +15,15 @@
   export let text = undefined;
 
   /**
-   * Specify the icon props
-   * @type {{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }}
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
   export let icon = undefined;
 
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
-  import { Icon } from "../../Icon";
+  import Icon from "../../Icon/Icon.svelte";
 </script>
 
 <li class:bx--side-nav__item="{true}">
@@ -42,7 +42,7 @@
         class:bx--side-nav__icon="{true}"
         class:bx--side-nav__icon--small="{true}"
       >
-        <Icon {...icon} />
+        <Icon render="{icon}" />
       </div>
     {/if}
     <span class:bx--side-nav__link-text="{true}">{text}</span>

@@ -5621,7 +5621,7 @@
           "reactive": false
         },
         {
-          "name": "renderIcon",
+          "name": "icon",
           "kind": "let",
           "description": "Specify the icon from `carbon-icons-svelte` to render",
           "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
@@ -9828,8 +9828,8 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon props",
-          "type": "{ render: import(\"carbon-icons-svelte\").CarbonIcon; skeleton: boolean; }",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -9912,8 +9912,8 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon props",
-          "type": "{ render: import(\"carbon-icons-svelte\").CarbonIcon; skeleton: boolean; }",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -10230,8 +10230,8 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon props",
-          "type": "{ render: import(\"carbon-icons-svelte\").CarbonIcon; skeleton: boolean; }",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -10278,8 +10278,8 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon props",
-          "type": "{ render: import(\"carbon-icons-svelte\").CarbonIcon; skeleton: boolean; }",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false

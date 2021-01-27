@@ -9,15 +9,15 @@
   export let href = undefined;
 
   /**
-   * Specify the icon props
-   * @type {{ render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean; }}
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
   export let icon = undefined;
 
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
-  import { Icon } from "../../Icon";
+  import Icon from "../../Icon/Icon.svelte";
 </script>
 
 <style>
@@ -39,5 +39,5 @@
   rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
   {...$$restProps}
 >
-  <Icon {...icon} />
+  <Icon render="{icon}" />
 </a>

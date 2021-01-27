@@ -13,9 +13,9 @@ export interface HeaderActionLinkProps extends svelte.JSX.HTMLAttributes<HTMLEle
   href?: string;
 
   /**
-   * Specify the icon props
+   * Specify the icon from `carbon-icons-svelte` to render
    */
-  icon?: { render: import("carbon-icons-svelte").CarbonIcon; skeleton: boolean };
+  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
 
   /**
    * Obtain a reference to the HTML anchor element
