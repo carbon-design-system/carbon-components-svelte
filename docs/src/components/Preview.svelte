@@ -106,7 +106,7 @@
     border: 1px solid var(--cds-ui-03);
     border-bottom: 0;
     position: relative;
-    z-index: 1;
+    z-index: 9999;
   }
 
   .preview-viewer:not(.framed) {
