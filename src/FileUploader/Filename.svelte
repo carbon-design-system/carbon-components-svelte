@@ -17,7 +17,7 @@
   import { Loading } from "../Loading";
 </script>
 
-{#if status === 'uploading'}
+{#if status === "uploading"}
   <Loading
     description="{iconDescription}"
     {...$$restProps}
@@ -26,7 +26,7 @@
   />
 {/if}
 
-{#if status === 'edit'}
+{#if status === "edit"}
   {#if invalid}
     <WarningFilled16 class="bx--file-invalid" />
   {/if}
@@ -40,7 +40,7 @@
   />
 {/if}
 
-{#if status === 'complete'}
+{#if status === "complete"}
   <CheckmarkFilled16
     aria-label="{iconDescription}"
     title="{iconDescription}"

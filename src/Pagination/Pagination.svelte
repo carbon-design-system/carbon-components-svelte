@@ -121,7 +121,11 @@
       {#if pagesUnknown}
         {itemText(pageSize * (page - 1) + 1, page * pageSize)}
       {:else}
-        {itemRangeText(Math.min(pageSize * (page - 1) + 1, totalItems), Math.min(page * pageSize, totalItems), totalItems)}
+        {itemRangeText(
+          Math.min(pageSize * (page - 1) + 1, totalItems),
+          Math.min(page * pageSize, totalItems),
+          totalItems
+        )}
       {/if}
     </span>
   </div>
@@ -153,7 +157,9 @@
       icon="{CaretLeft16}"
       iconDescription="{backwardText}"
       disabled="{backButtonDisabled}"
-      class="bx--pagination__button bx--pagination__button--backward {backButtonDisabled ? 'bx--pagination__button--no-index' : ''}"
+      class="bx--pagination__button bx--pagination__button--backward {backButtonDisabled
+        ? 'bx--pagination__button--no-index'
+        : ''}"
       on:click="{() => {
         page--;
       }}"
@@ -166,7 +172,9 @@
       icon="{CaretRight16}"
       iconDescription="{forwardText}"
       disabled="{forwardButtonDisabled}"
-      class="bx--pagination__button bx--pagination__button--forward {forwardButtonDisabled ? 'bx--pagination__button--no-index' : ''}"
+      class="bx--pagination__button bx--pagination__button--forward {forwardButtonDisabled
+        ? 'bx--pagination__button--no-index'
+        : ''}"
       on:click="{() => {
         page++;
       }}"

@@ -16,12 +16,6 @@
   $: secondary = formatSelected(comboBox2_selectedIndex);
 </script>
 
-<style>
-  div {
-    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
-  }
-</style>
-
 <ComboBox
   bind:selectedIndex="{comboBox1_selectedIndex}"
   titleText="Primary contact"
@@ -39,3 +33,9 @@
 />
 
 <div>Secondary: {secondary}</div>
+
+<style>
+  div {
+    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
+  }
+</style>

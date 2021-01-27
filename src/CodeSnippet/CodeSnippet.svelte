@@ -104,7 +104,7 @@
     on:mouseleave
   />
 {:else}
-  {#if type === 'inline'}
+  {#if type === "inline"}
     {#if hideCopyButton}
       <span
         class:bx--snippet="{true}"
@@ -128,11 +128,16 @@
         feedback="{feedback}"
         feedbackTimeout="{feedbackTimeout}"
         class="bx--snippet {type && `bx--snippet--${type}`}
-          {type === 'inline' && 'bx--btn--copy'}
-          {expanded && 'bx--snippet--expand'}
-          {light && 'bx--snippet--light'}
-          {hideCopyButton && 'bx--snippet--no-copy'}
-          {wrapText && 'bx--snippet--wraptext'}"
+          {type ===
+          'inline' && 'bx--btn--copy'}
+          {expanded &&
+          'bx--snippet--expand'}
+          {light &&
+          'bx--snippet--light'}
+          {hideCopyButton &&
+          'bx--snippet--no-copy'}
+          {wrapText &&
+          'bx--snippet--wraptext'}"
         {...$$restProps}
         on:click
         on:mouseover

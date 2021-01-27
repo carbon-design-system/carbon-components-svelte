@@ -33,7 +33,7 @@
     on:mouseenter
     on:mouseleave
   >
-    {''}
+    {""}
   </a>
 {:else}
   <div

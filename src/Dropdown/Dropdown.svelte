@@ -155,11 +155,17 @@
     id="{id}"
     name="{name}"
     aria-label="{$$props['aria-label']}"
-    class="bx--dropdown {invalid && 'bx--dropdown--invalid'} {!invalid && warn && 'bx--dropdown--warning'} {open && 'bx--dropdown--open'}
-      {size === 'sm' && 'bx--dropdown--sm'}
-      {size === 'xl' && 'bx--dropdown--xl'}
-      {inline && 'bx--dropdown--inline'}
-      {disabled && 'bx--dropdown--disabled'}
+    class="bx--dropdown {invalid && 'bx--dropdown--invalid'} {!invalid &&
+      warn &&
+      'bx--dropdown--warning'} {open && 'bx--dropdown--open'}
+      {size ===
+      'sm' && 'bx--dropdown--sm'}
+      {size === 'xl' &&
+      'bx--dropdown--xl'}
+      {inline &&
+      'bx--dropdown--inline'}
+      {disabled &&
+      'bx--dropdown--disabled'}
       {light && 'bx--dropdown--light'}"
     on:click="{({ target }) => {
       open = ref.contains(target) ? !open : false;

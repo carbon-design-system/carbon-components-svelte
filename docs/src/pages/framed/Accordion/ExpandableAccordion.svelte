@@ -29,7 +29,7 @@
     open = !open;
   }}"
 >
-  {open ? 'Collapse' : 'Expand'}
+  {open ? "Collapse" : "Expand"}
   all
 </Button>
 

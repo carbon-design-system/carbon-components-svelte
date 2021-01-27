@@ -73,13 +73,13 @@
 
 <DataTable headers="{headers}" rows="{rows}">
   <span slot="cell-header" let:header>
-    {#if header.key === 'port'}
+    {#if header.key === "port"}
       {header.value}
       (network)
     {:else}{header.value}{/if}
   </span>
   <span slot="cell" let:cell>
-    {#if cell.key === 'rule' && cell.value === 'Round robin'}
+    {#if cell.key === "rule" && cell.value === "Round robin"}
       <Link
         inline
         href="https://en.wikipedia.org/wiki/Round-robin_DNS"
@@ -156,8 +156,68 @@
   sortable
   title="Load balancers"
   description="Your organization's active load balancers."
-  headers="{[{ key: 'name', value: 'Name' }, { key: 'protocol', value: 'Protocol' }, { key: 'port', value: 'Port' }, { key: 'cost', value: 'Cost', display: (cost) => cost + ' €' }, { key: 'expireDate', value: 'Expire date', display: (date) => new Date(date).toLocaleString(), sort }]}"
-  rows="{[{ id: 'a', name: 'Load Balancer 3', protocol: 'HTTP', port: 3000, cost: 100, expireDate: '2020-10-21' }, { id: 'b', name: 'Load Balancer 1', protocol: 'HTTP', port: 443, cost: 200, expireDate: '2020-09-10' }, { id: 'c', name: 'Load Balancer 2', protocol: 'HTTP', port: 80, cost: 150, expireDate: '2020-11-24' }, { id: 'd', name: 'Load Balancer 6', protocol: 'HTTP', port: 3000, cost: 250, expireDate: '2020-12-01' }, { id: 'e', name: 'Load Balancer 4', protocol: 'HTTP', port: 443, cost: 550, expireDate: '2021-03-21' }, { id: 'f', name: 'Load Balancer 5', protocol: 'HTTP', port: 80, cost: 400, expireDate: '2020-11-14' }]}"
+  headers="{[
+    { key: 'name', value: 'Name' },
+    { key: 'protocol', value: 'Protocol' },
+    { key: 'port', value: 'Port' },
+    { key: 'cost', value: 'Cost', display: (cost) => cost + ' €' },
+    {
+      key: 'expireDate',
+      value: 'Expire date',
+      display: (date) => new Date(date).toLocaleString(),
+      sort,
+    },
+  ]}"
+  rows="{[
+    {
+      id: 'a',
+      name: 'Load Balancer 3',
+      protocol: 'HTTP',
+      port: 3000,
+      cost: 100,
+      expireDate: '2020-10-21',
+    },
+    {
+      id: 'b',
+      name: 'Load Balancer 1',
+      protocol: 'HTTP',
+      port: 443,
+      cost: 200,
+      expireDate: '2020-09-10',
+    },
+    {
+      id: 'c',
+      name: 'Load Balancer 2',
+      protocol: 'HTTP',
+      port: 80,
+      cost: 150,
+      expireDate: '2020-11-24',
+    },
+    {
+      id: 'd',
+      name: 'Load Balancer 6',
+      protocol: 'HTTP',
+      port: 3000,
+      cost: 250,
+      expireDate: '2020-12-01',
+    },
+    {
+      id: 'e',
+      name: 'Load Balancer 4',
+      protocol: 'HTTP',
+      port: 443,
+      cost: 550,
+      expireDate: '2021-03-21',
+    },
+    {
+      id: 'f',
+      name: 'Load Balancer 5',
+      protocol: 'HTTP',
+      port: 80,
+      cost: 400,
+      expireDate: '2020-11-14',
+    },
+  ]}"
 />
 
 <DataTable expandable headers="{headers}" rows="{rows}">
@@ -184,7 +244,12 @@
 />
 
 <DataTableSkeleton
-  headers="{[{ value: 'Name' }, { value: 'Protocol' }, { value: 'Port' }, { value: 'Rule' }]}"
+  headers="{[
+    { value: 'Name' },
+    { value: 'Protocol' },
+    { value: 'Port' },
+    { value: 'Rule' },
+  ]}"
   rows="{10}"
 />
 

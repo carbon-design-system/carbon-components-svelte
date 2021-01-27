@@ -94,7 +94,7 @@
         active="{page === 0}"
         on:click="{() => (page = 0)}"
       >
-        {page === 0 ? 'Active, Page' : 'Page'}
+        {page === 0 ? "Active, Page" : "Page"}
       </PaginationItem>
     {/if}
     <PaginationOverflow
@@ -108,7 +108,7 @@
         active="{page === item}"
         on:click="{() => (page = item)}"
       >
-        {page === item ? 'Active, Page' : 'Page'}
+        {page === item ? "Active, Page" : "Page"}
       </PaginationItem>
     {/each}
     <PaginationOverflow
@@ -124,7 +124,7 @@
         active="{page === total - 1}"
         on:click="{() => (page = total - 1)}"
       >
-        {page === total - 1 ? 'Active, Page' : 'Page'}
+        {page === total - 1 ? "Active, Page" : "Page"}
       </PaginationItem>
     {/if}
     <li class:bx--pagination-nav__list-item="{true}">

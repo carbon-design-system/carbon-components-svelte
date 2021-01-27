@@ -16,12 +16,6 @@
   $: secondary = formatSelected(dropdown2_selectedIndex);
 </script>
 
-<style>
-  div {
-    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
-  }
-</style>
-
 <Dropdown
   titleText="Primary contact"
   bind:selectedIndex="{dropdown1_selectedIndex}"
@@ -39,3 +33,9 @@
 />
 
 <div>Secondary: {secondary}</div>
+
+<style>
+  div {
+    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
+  }
+</style>

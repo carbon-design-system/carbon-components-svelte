@@ -24,6 +24,46 @@
   });
 </script>
 
+<Content data-components>
+  <Grid>
+    <Row>
+      <Column>
+        <h1>{component}</h1>
+        <div class="bar">
+          <Select
+            id="select-theme"
+            inline
+            labelText="Theme"
+            bind:selected="{$theme}"
+          >
+            <SelectItem value="white" text="White" />
+            <SelectItem value="g10" text="Gray 10" />
+            <SelectItem value="g90" text="Gray 90" />
+            <SelectItem value="g100" text="Gray 100" />
+          </Select>
+        </div>
+      </Column>
+    </Row>
+
+    <Row>
+      <Column class="prose">
+        <div class="toc mobile">
+          <h5>Table of Contents</h5>
+          <slot name="aside" />
+        </div>
+        <slot />
+      </Column>
+    </Row>
+  </Grid>
+
+  <Column class="table" xlg="{4}" lg="{5}">
+    <div class="toc">
+      <h5>Table of Contents</h5>
+      <slot name="aside" />
+    </div>
+  </Column>
+</Content>
+
 <style global>
   #select-theme {
     width: auto;
@@ -82,43 +122,3 @@
     }
   }
 </style>
-
-<Content data-components>
-  <Grid>
-    <Row>
-      <Column>
-        <h1>{component}</h1>
-        <div class="bar">
-          <Select
-            id="select-theme"
-            inline
-            labelText="Theme"
-            bind:selected="{$theme}"
-          >
-            <SelectItem value="white" text="White" />
-            <SelectItem value="g10" text="Gray 10" />
-            <SelectItem value="g90" text="Gray 90" />
-            <SelectItem value="g100" text="Gray 100" />
-          </Select>
-        </div>
-      </Column>
-    </Row>
-
-    <Row>
-      <Column class="prose">
-        <div class="toc mobile">
-          <h5>Table of Contents</h5>
-          <slot name="aside" />
-        </div>
-        <slot />
-      </Column>
-    </Row>
-  </Grid>
-
-  <Column class="table" xlg="{4}" lg="{5}">
-    <div class="toc">
-      <h5>Table of Contents</h5>
-      <slot name="aside" />
-    </div>
-  </Column>
-</Content>

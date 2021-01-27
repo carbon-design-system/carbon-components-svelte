@@ -39,29 +39,6 @@
   );
 </script>
 
-<style>
-  .description {
-    margin-bottom: var(--cds-spacing-04);
-  }
-
-  .cell {
-    position: relative;
-    z-index: 9;
-    min-height: 1.25rem;
-    margin-bottom: var(--cds-spacing-02);
-  }
-
-  .overflow {
-    overflow-x: auto;
-  }
-
-  :global(.my-layout-01-03),
-  :global(.overflow .bx--structured-list) {
-    margin-top: var(--cds-layout-01);
-    margin-bottom: var(--cds-layout-04);
-  }
-</style>
-
 <p style="margin-bottom: var(--cds-layout-02)">
   Component source code:
   <Link inline size="lg" href="{source}" target="_blank">
@@ -101,12 +78,12 @@
               {/if}
             </StructuredListCell>
             <StructuredListCell>
-              {#each prop.type.split(' | ') as type, i (type)}
+              {#each prop.type.split(" | ") as type, i (type)}
                 <div
                   class="cell"
                   style="z-index: {prop.type.split(' | ').length - i}"
                 >
-                  {#if type.startsWith('typeof')}
+                  {#if type.startsWith("typeof")}
                     <TooltipDefinition
                       direction="top"
                       align="start"
@@ -114,7 +91,7 @@
                     >
                       Carbon Svelte icon
                     </TooltipDefinition>
-                  {:else if type.startsWith('HTML')}
+                  {:else if type.startsWith("HTML")}
                     <Link
                       href="{mdn_api}{type}"
                       target="_blank"
@@ -125,7 +102,7 @@
                     </Link>
                   {:else if type in typeMap}
                     <code>{typeMap[type]}</code>
-                  {:else if type.startsWith('(')}
+                  {:else if type.startsWith("(")}
                     <code>{type}</code>
                   {:else}
                     <InlineSnippet code="{type}" />
@@ -136,12 +113,12 @@
             <StructuredListCell><code>{prop.value}</code></StructuredListCell>
             <StructuredListCell>
               {#if prop.description}
-                {#each prop.description.split('\n') as line}
+                {#each prop.description.split("\n") as line}
                   <div class="description">
                     {@html line
-                      .replace(/\</g, '&lt;')
-                      .replace(/\>/g, '&gt;')
-                      .replace(/`(.*?)`/g, '<code>$1</code>')}.
+                      .replace(/\</g, "&lt;")
+                      .replace(/\>/g, "&gt;")
+                      .replace(/`(.*?)`/g, "<code>$1</code>")}.
                   </div>
                 {/each}
               {:else}
@@ -160,7 +137,7 @@
 {#if component.slots.length > 0}
   <UnorderedList class="my-layout-01-03">
     {#each component.slots as slot (slot.name)}
-      <ListItem>{slot.default ? 'default' : slot.name}</ListItem>
+      <ListItem>{slot.default ? "default" : slot.name}</ListItem>
     {/each}
   </UnorderedList>
 {:else}
@@ -198,9 +175,32 @@
     spreads
     <code>$$restProps</code>
     to the
-    {#if component.rest_props.type === 'Element'}
+    {#if component.rest_props.type === "Element"}
       <code>{component.rest_props.name}</code>
       element.
     {:else}<code>{component.rest_props.name}</code> component.{/if}
   {:else}This component does not spread <code>restProps</code>{/if}
 </div>
+
+<style>
+  .description {
+    margin-bottom: var(--cds-spacing-04);
+  }
+
+  .cell {
+    position: relative;
+    z-index: 9;
+    min-height: 1.25rem;
+    margin-bottom: var(--cds-spacing-02);
+  }
+
+  .overflow {
+    overflow-x: auto;
+  }
+
+  :global(.my-layout-01-03),
+  :global(.overflow .bx--structured-list) {
+    margin-top: var(--cds-layout-01);
+    margin-bottom: var(--cds-layout-04);
+  }
+</style>

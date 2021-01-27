@@ -1,3 +1,9 @@
+<li class="subject-divider">
+  <span>
+    <slot />
+  </span>
+</li>
+
 <style>
   .subject-divider {
     color: #525252;
@@ -14,9 +20,3 @@
     color: #c6c6c6;
   }
 </style>
-
-<li class="subject-divider">
-  <span>
-    <slot />
-  </span>
-</li>

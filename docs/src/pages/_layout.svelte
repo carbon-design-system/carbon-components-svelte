@@ -34,6 +34,88 @@
   });
 </script>
 
+<!-- routify:options bundle=true -->
+<svelte:window bind:innerWidth />
+
+<Theme persist>
+  <Header
+    aria-label="Navigation"
+    href="{$url('/')}"
+    expandedByDefault="{true}"
+    bind:isSideNavOpen
+  >
+    <div slot="skip-to-content">
+      <SkipToContent />
+    </div>
+
+    <span slot="platform" class="platform-name">
+      Carbon Components Svelte
+      <code>v{process.env.VERSION || ""}</code>
+    </span>
+
+    <HeaderUtilities>
+      <HeaderActionLink
+        icon="{LogoGithub20}"
+        href="https://github.com/IBM/carbon-components-svelte"
+        target="_blank"
+      />
+      <HeaderAction transition="{false}" bind:isOpen>
+        <HeaderPanelLinks>
+          <HeaderPanelDivider>Carbon Svelte portfolio</HeaderPanelDivider>
+          <HeaderPanelLink href="https://github.com/IBM/carbon-icons-svelte">
+            Carbon Icons Svelte
+          </HeaderPanelLink>
+          <HeaderPanelLink
+            href="https://github.com/IBM/carbon-pictograms-svelte"
+          >
+            Carbon Pictograms Svelte
+          </HeaderPanelLink>
+          <HeaderPanelLink
+            href="https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte"
+          >
+            Carbon Charts Svelte
+          </HeaderPanelLink>
+          <HeaderPanelDivider>Resources</HeaderPanelDivider>
+          <HeaderPanelLink href="https://www.carbondesignsystem.com/">
+            Carbon Design System
+          </HeaderPanelLink>
+          <HeaderPanelLink href="https://www.ibm.com/design/language/">
+            IBM Design Language
+          </HeaderPanelLink>
+        </HeaderPanelLinks>
+      </HeaderAction>
+    </HeaderUtilities>
+  </Header>
+
+  <SideNav bind:isOpen="{isSideNavOpen}">
+    <SideNavItems>
+      <SideNavMenu
+        expanded="{$isActive($url('')) || $isActive($url('/components'))}"
+        text="Components"
+      >
+        {#each components.children as child, i (child.path)}
+          <SideNavMenuItem
+            text="{child.title}"
+            href="{$url(child.path)}"
+            isSelected="{$isActive($url(child.path))}"
+          />
+        {/each}
+      </SideNavMenu>
+      <SideNavMenu expanded="{$isActive($url('/recipes'))}" text="Recipes">
+        {#each recipes.children as child, i (child.path)}
+          <SideNavMenuItem
+            text="{child.title}"
+            href="{$url(child.path)}"
+            isSelected="{$isActive($url(child.path))}"
+          />
+        {/each}
+      </SideNavMenu>
+    </SideNavItems>
+  </SideNav>
+  <slot />
+  <Footer />
+</Theme>
+
 <style global>
   .body-short-01 {
     font-size: var(--cds-body-short-01-font-size);
@@ -160,85 +242,3 @@
     max-height: 120rem;
   }
 </style>
-
-<!-- routify:options bundle=true -->
-<svelte:window bind:innerWidth />
-
-<Theme persist>
-  <Header
-    aria-label="Navigation"
-    href="{$url('/')}"
-    expandedByDefault="{true}"
-    bind:isSideNavOpen
-  >
-    <div slot="skip-to-content">
-      <SkipToContent />
-    </div>
-
-    <span slot="platform" class="platform-name">
-      Carbon Components Svelte
-      <code>v{process.env.VERSION || ''}</code>
-    </span>
-
-    <HeaderUtilities>
-      <HeaderActionLink
-        icon="{LogoGithub20}"
-        href="https://github.com/IBM/carbon-components-svelte"
-        target="_blank"
-      />
-      <HeaderAction transition="{false}" bind:isOpen>
-        <HeaderPanelLinks>
-          <HeaderPanelDivider>Carbon Svelte portfolio</HeaderPanelDivider>
-          <HeaderPanelLink href="https://github.com/IBM/carbon-icons-svelte">
-            Carbon Icons Svelte
-          </HeaderPanelLink>
-          <HeaderPanelLink
-            href="https://github.com/IBM/carbon-pictograms-svelte"
-          >
-            Carbon Pictograms Svelte
-          </HeaderPanelLink>
-          <HeaderPanelLink
-            href="https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte"
-          >
-            Carbon Charts Svelte
-          </HeaderPanelLink>
-          <HeaderPanelDivider>Resources</HeaderPanelDivider>
-          <HeaderPanelLink href="https://www.carbondesignsystem.com/">
-            Carbon Design System
-          </HeaderPanelLink>
-          <HeaderPanelLink href="https://www.ibm.com/design/language/">
-            IBM Design Language
-          </HeaderPanelLink>
-        </HeaderPanelLinks>
-      </HeaderAction>
-    </HeaderUtilities>
-  </Header>
-
-  <SideNav bind:isOpen="{isSideNavOpen}">
-    <SideNavItems>
-      <SideNavMenu
-        expanded="{$isActive($url('')) || $isActive($url('/components'))}"
-        text="Components"
-      >
-        {#each components.children as child, i (child.path)}
-          <SideNavMenuItem
-            text="{child.title}"
-            href="{$url(child.path)}"
-            isSelected="{$isActive($url(child.path))}"
-          />
-        {/each}
-      </SideNavMenu>
-      <SideNavMenu expanded="{$isActive($url('/recipes'))}" text="Recipes">
-        {#each recipes.children as child, i (child.path)}
-          <SideNavMenuItem
-            text="{child.title}"
-            href="{$url(child.path)}"
-            isSelected="{$isActive($url(child.path))}"
-          />
-        {/each}
-      </SideNavMenu>
-    </SideNavItems>
-  </SideNav>
-  <slot />
-  <Footer />
-</Theme>

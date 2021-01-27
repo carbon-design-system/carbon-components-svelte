@@ -188,8 +188,11 @@
     class:bx--date-picker="{true}"
     class:bx--date-picker--short="{short}"
     class:bx--date-picker--light="{light}"
-    class="{datePickerType && `bx--date-picker--${datePickerType}`}
-      {datePickerType === 'range' && $labelTextEmpty && 'bx--date-picker--nolabel'}"
+    class="{datePickerType &&
+      `bx--date-picker--${datePickerType}`}
+      {datePickerType === 'range' &&
+      $labelTextEmpty &&
+      'bx--date-picker--nolabel'}"
   >
     <slot />
   </div>

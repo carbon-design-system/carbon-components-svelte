@@ -143,20 +143,22 @@
       class:bx--btn--disabled="{disabled}"
       class:bx--tooltip__trigger="{true}"
       class:bx--tooltip--a11y="{true}"
-      class="{tooltipPosition && `bx--tooltip--${tooltipPosition}`}
-        {tooltipAlignment && `bx--tooltip--align-${tooltipAlignment}`}"
+      class="{tooltipPosition &&
+        `bx--tooltip--${tooltipPosition}`}
+        {tooltipAlignment &&
+        `bx--tooltip--align-${tooltipAlignment}`}"
       on:click="{() => {
         type = type === 'password' ? 'text' : 'password';
       }}"
     >
       {#if !disabled}
         <span class:bx--assistive-text="{true}">
-          {#if type === 'text'}
+          {#if type === "text"}
             {hidePasswordLabel}
           {:else}{showPasswordLabel}{/if}
         </span>
       {/if}
-      {#if type === 'text'}
+      {#if type === "text"}
         <ViewOff16 class="bx--icon-visibility-off" />
       {:else}
         <View16 class="bx--icon-visibility-on" />

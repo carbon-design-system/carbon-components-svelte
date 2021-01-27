@@ -18,8 +18,8 @@
   on:mouseleave
 >
   <div class:bx--snippet-container="{true}">
-    {#if type === 'single'}
+    {#if type === "single"}
       <span></span>
-    {:else if type === 'multi'}<span></span> <span></span> <span></span>{/if}
+    {:else if type === "multi"}<span></span> <span></span> <span></span>{/if}
   </div>
 </div>

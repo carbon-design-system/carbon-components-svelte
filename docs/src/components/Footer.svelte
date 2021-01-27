@@ -2,12 +2,6 @@
   import { Content, Grid, Row, Column, Link } from "carbon-components-svelte";
 </script>
 
-<style>
-  footer {
-    background: var(--cds-ui-01);
-  }
-</style>
-
 <footer class="bx--content">
   <Grid>
     <Row>
@@ -26,3 +20,9 @@
     </Row>
   </Grid>
 </footer>
+
+<style>
+  footer {
+    background: var(--cds-ui-01);
+  }
+</style>

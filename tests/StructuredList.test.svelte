@@ -59,7 +59,7 @@
       <StructuredListCell head>ColumnA</StructuredListCell>
       <StructuredListCell head>ColumnB</StructuredListCell>
       <StructuredListCell head>ColumnC</StructuredListCell>
-      <StructuredListCell head>{''}</StructuredListCell>
+      <StructuredListCell head>{""}</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>

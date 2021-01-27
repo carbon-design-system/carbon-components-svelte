@@ -4,12 +4,6 @@
   let value = "";
 </script>
 
-<style>
-  div {
-    margin-top: var(--cds-spacing-05);
-  }
-</style>
-
 <Search bind:value />
 
 <div>
@@ -33,3 +27,9 @@
 </div>
 
 <div>Value: {value}</div>
+
+<style>
+  div {
+    margin-top: var(--cds-spacing-05);
+  }
+</style>

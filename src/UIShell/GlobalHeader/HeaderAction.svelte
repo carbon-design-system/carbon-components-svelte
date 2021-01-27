@@ -40,22 +40,6 @@
   let refPanel = null;
 </script>
 
-<style>
-  .action-text {
-    font-size: 16px;
-    line-height: 20px;
-    text-decoration: none;
-    color: #fff;
-    width: 100%;
-    padding: 0 1rem;
-  }
-
-  .action-text > span {
-    margin-left: 0.75rem;
-    vertical-align: top;
-  }
-</style>
-
 <svelte:window
   on:click="{({ target }) => {
     if (isOpen && !ref.contains(target) && !refPanel.contains(target)) {
@@ -89,9 +73,28 @@
       bind:this="{refPanel}"
       class:bx--header-panel="{true}"
       class:bx--header-panel--expanded="{true}"
-      transition:slide="{{ ...transition, duration: transition === false ? 0 : transition.duration }}"
+      transition:slide="{{
+        ...transition,
+        duration: transition === false ? 0 : transition.duration,
+      }}"
     >
       <slot />
     </div>
   {/if}
 </div>
+
+<style>
+  .action-text {
+    font-size: 16px;
+    line-height: 20px;
+    text-decoration: none;
+    color: #fff;
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .action-text > span {
+    margin-left: 0.75rem;
+    vertical-align: top;
+  }
+</style>

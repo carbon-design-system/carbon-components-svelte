@@ -42,7 +42,7 @@
   >
     Cancel
   </Button>
-  {#if state !== 'dormant'}
+  {#if state !== "dormant"}
     <InlineLoading status="{state}" description="{descriptionMap[state]}" />
   {:else}
     <Button on:click="{() => (state = 'active')}">Submit</Button>

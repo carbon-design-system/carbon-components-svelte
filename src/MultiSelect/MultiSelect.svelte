@@ -253,10 +253,14 @@
     warn="{warn}"
     warnText="{warnText}"
     class="bx--multi-select {filterable && 'bx--combo-box'}
-      {filterable && 'bx--multi-select--filterable'}
-      {invalid && 'bx--multi-select--invalid'}
-      {inline && 'bx--multi-select--inline'}
-      {checked.length > 0 && 'bx--multi-select--selected'}"
+      {filterable &&
+      'bx--multi-select--filterable'}
+      {invalid &&
+      'bx--multi-select--invalid'}
+      {inline &&
+      'bx--multi-select--inline'}
+      {checked.length > 0 &&
+      'bx--multi-select--selected'}"
   >
     {#if invalid}
       <WarningFilled16 class="bx--list-box__invalid-icon" />
@@ -298,7 +302,9 @@
           change(-1);
         } else if (key === 'Enter') {
           if (highlightedIndex > -1) {
-            sortedItems[highlightedIndex].checked = !sortedItems[highlightedIndex].checked;
+            sortedItems[highlightedIndex].checked = !sortedItems[
+              highlightedIndex
+            ].checked;
           }
         }
       }}"
@@ -347,7 +353,9 @@
           on:keydown|stopPropagation="{({ key }) => {
             if (key === 'Enter') {
               if (highlightedIndex > -1) {
-                sortedItems[highlightedIndex].checked = !sortedItems[highlightedIndex].checked;
+                sortedItems[highlightedIndex].checked = !sortedItems[
+                  highlightedIndex
+                ].checked;
               }
             } else if (key === 'Tab') {
               open = false;
@@ -360,7 +368,10 @@
           on:focus
           on:blur
           on:blur="{({ relatedTarget }) => {
-            if (relatedTarget && relatedTarget.getAttribute('role') !== 'button') {
+            if (
+              relatedTarget &&
+              relatedTarget.getAttribute('role') !== 'button'
+            ) {
               inputRef.focus();
             }
           }}"

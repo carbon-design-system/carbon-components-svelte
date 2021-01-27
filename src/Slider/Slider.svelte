@@ -151,9 +151,15 @@
       on:mousedown="{startHolding}"
       on:touchstart="{startHolding}"
       on:keydown="{({ shiftKey, key }) => {
-        const keys = { ArrowDown: -1, ArrowLeft: -1, ArrowRight: 1, ArrowUp: 1 };
+        const keys = {
+          ArrowDown: -1,
+          ArrowLeft: -1,
+          ArrowRight: 1,
+          ArrowUp: 1,
+        };
         if (keys[key]) {
-          value += step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
+          value +=
+            step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
         }
       }}"
     >

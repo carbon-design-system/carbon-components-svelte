@@ -13,6 +13,40 @@
   $: themedSrcUrl = $url(`${src}?theme=${$theme}`);
 </script>
 
+<div class="preview">
+  {#if framed}
+    <div class="framed-header">
+      <div
+        style="margin-left: var(--cds-spacing-05); color: var(--cds-text-02)"
+      >
+        Content loaded in an iframe
+      </div>
+      <Button
+        style="margin-left: auto;"
+        kind="ghost"
+        target="_blank"
+        size="field"
+        href="{themedSrcUrl}"
+        icon="{Launch16}"
+      >
+        Open in new tab
+      </Button>
+    </div>
+  {/if}
+  <div class="preview-viewer" class:framed>
+    {#if framed}
+      <iframe title="{src.split('/').pop()}" src="{themedSrcUrl}"></iframe>
+    {:else}
+      <slot />
+    {/if}
+  </div>
+  <div class="code-override">
+    <CodeSnippet type="multi" on:click="{() => copy(codeRaw)}">
+      {@html code}
+    </CodeSnippet>
+  </div>
+</div>
+
 <style global>
   .preview {
     margin-bottom: var(--cds-layout-04);
@@ -130,37 +164,3 @@
     height: 100%;
   }
 </style>
-
-<div class="preview">
-  {#if framed}
-    <div class="framed-header">
-      <div
-        style="margin-left: var(--cds-spacing-05); color: var(--cds-text-02)"
-      >
-        Content loaded in an iframe
-      </div>
-      <Button
-        style="margin-left: auto;"
-        kind="ghost"
-        target="_blank"
-        size="field"
-        href="{themedSrcUrl}"
-        icon="{Launch16}"
-      >
-        Open in new tab
-      </Button>
-    </div>
-  {/if}
-  <div class="preview-viewer" class:framed>
-    {#if framed}
-      <iframe title="{src.split('/').pop()}" src="{themedSrcUrl}"></iframe>
-    {:else}
-      <slot />
-    {/if}
-  </div>
-  <div class="code-override">
-    <CodeSnippet type="multi" on:click="{() => copy(codeRaw)}">
-      {@html code}
-    </CodeSnippet>
-  </div>
-</div>
