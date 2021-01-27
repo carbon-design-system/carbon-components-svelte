@@ -39,6 +39,10 @@ components: ["TextInput", "TextInputSkeleton"]
 
 <TextInput invalid invalidText="User name is already taken. Please try another." labelText="User name" placeholder="Enter user name..." />
 
+### Warning state
+
+<TextInput warn warnText="Your user name is different from your log in ID." labelText="User name" placeholder="Enter user name..." />
+
 ### Disabled state
 
 <TextInput disabled labelText="User name" placeholder="Enter user name..." />

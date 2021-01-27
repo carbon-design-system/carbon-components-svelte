@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 
-export interface ExpandableTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface ExpandableTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
    * Set to `true` to expand the tile
    * @default false
@@ -38,6 +38,18 @@ export interface ExpandableTileProps extends svelte.JSX.HTMLAttributes<HTMLEleme
   tileExpandedIconText?: string;
 
   /**
+   * Specify the icon label of the expanded tile
+   * @default ""
+   */
+  tileExpandedLabel?: string;
+
+  /**
+   * Specify the icon label of the collapsed tile
+   * @default ""
+   */
+  tileCollapsedLabel?: string;
+
+  /**
    * Specify the tabindex
    * @default "0"
    */
@@ -53,7 +65,7 @@ export interface ExpandableTileProps extends svelte.JSX.HTMLAttributes<HTMLEleme
    * Obtain a reference to the top-level element
    * @default null
    */
-  ref?: null | HTMLDivElement;
+  ref?: null | HTMLButtonElement;
 }
 
 export default class ExpandableTile {

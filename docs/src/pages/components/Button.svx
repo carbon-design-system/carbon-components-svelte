@@ -1,10 +1,7 @@
----
-description: High-level description
----
-
 <script>
   import { Button } from "carbon-components-svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16";
+  import TrashCan16 from "carbon-icons-svelte/lib/TrashCan16";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -32,6 +29,12 @@ description: High-level description
 
 <Button kind="danger-tertiary">Danger tertiary button</Button>
 
+### Danger tertiary, icon-only button
+
+**Note:** you must provide an `iconDescription` for the button tooltip.
+
+<Button kind="danger-tertiary"iconDescription="Delete" icon={TrashCan16} />
+
 ### Danger ghost button
 
 <Button kind="danger-ghost">Danger ghost button</Button>
@@ -42,13 +45,15 @@ description: High-level description
 
 ### Icon-only button
 
-Set `hasIconOnly` to `true` to use the icon-only button variant.
-
 **Note:** you must provide an `iconDescription` for the button tooltip.
 
-The tooltip position and alignment can be controlled by the `tooltipPosition`, `tooltipAlignment` props, respectively.
+<Button iconDescription="Tooltip text" icon={Add16} />
 
-<Button hasIconOnly tooltipPosition="bottom" tooltipAlignment="center" iconDescription="Tooltip text" icon={Add16} />
+### Icon-only button (custom tooltip position)
+
+The tooltip position and alignment can be controlled by `tooltipPosition` and `tooltipAlignment`.
+
+<Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add16} />
 
 ### Link button
 

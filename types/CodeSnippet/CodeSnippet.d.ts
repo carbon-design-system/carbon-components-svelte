@@ -26,6 +26,13 @@ export interface CodeSnippetProps {
   hideCopyButton?: boolean;
 
   /**
+   * Set to `true` for the disabled variant
+   * Only applies to the "single", "multi" types
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
    * Set to `true` to wrap the text
    * Note that `type` must be "multi"
    * @default false

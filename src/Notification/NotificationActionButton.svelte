@@ -1,12 +1,12 @@
 <script>
-  import { Button } from "../Button";
+  import Button from "../Button/Button.svelte";
 </script>
 
 <Button
   kind="ghost"
   size="small"
-  class="bx--inline-notification__action-button"
   {...$$restProps}
+  class="bx--inline-notification__action-button {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter

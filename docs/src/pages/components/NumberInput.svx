@@ -41,7 +41,11 @@ components: ["NumberInput", "NumberInputSkeleton"]
 
 ### Invalid state
 
-<NumberInput invalid invalidText="An error occurred" label="Clusters" />
+<NumberInput invalid invalidText="Invalid value" label="Clusters" />
+
+### Warning state
+
+<NumberInput warn warnText="A high number may impact initial rollout" label="Clusters" value="25" />
 
 ### Disabled state
 

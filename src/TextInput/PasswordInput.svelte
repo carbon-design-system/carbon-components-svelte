@@ -30,13 +30,13 @@
    * Set the alignment of the tooltip relative to the icon
    * @type {"start" | "center" | "end"}
    */
-  export let tooltipAlignment = undefined;
+  export let tooltipAlignment = "center";
 
   /**
    * Set the position of the tooltip relative to the icon
    * @type {"top" | "right" | "bottom" | "left"}
    */
-  export let tooltipPosition = undefined;
+  export let tooltipPosition = "bottom";
 
   /** Set to `true` to enable the light variant */
   export let light = false;
@@ -72,9 +72,9 @@
   export let ref = null;
 
   import { getContext } from "svelte";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
-  import View16 from "carbon-icons-svelte/lib/View16";
-  import ViewOff16 from "carbon-icons-svelte/lib/ViewOff16";
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import View16 from "carbon-icons-svelte/lib/View16/View16.svelte";
+  import ViewOff16 from "carbon-icons-svelte/lib/ViewOff16/ViewOff16.svelte";
 
   const ctx = getContext("Form");
 
@@ -136,8 +136,11 @@
     />
     <button
       type="button"
+      disabled="{disabled}"
       class:bx--text-input--password__visibility__toggle="{true}"
+      class:bx--btn="{true}"
       class:bx--btn--icon-only="{true}"
+      class:bx--btn--disabled="{disabled}"
       class:bx--tooltip__trigger="{true}"
       class:bx--tooltip--a11y="{true}"
       class="{tooltipPosition && `bx--tooltip--${tooltipPosition}`}
@@ -146,9 +149,13 @@
         type = type === 'password' ? 'text' : 'password';
       }}"
     >
-      <span class:bx--assistive-text="{true}">
-        {#if type === 'text'}{hidePasswordLabel}{:else}{showPasswordLabel}{/if}
-      </span>
+      {#if !disabled}
+        <span class:bx--assistive-text="{true}">
+          {#if type === 'text'}
+            {hidePasswordLabel}
+          {:else}{showPasswordLabel}{/if}
+        </span>
+      {/if}
       {#if type === 'text'}
         <ViewOff16 class="bx--icon-visibility-off" />
       {:else}

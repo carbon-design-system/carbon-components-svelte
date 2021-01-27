@@ -1,9 +1,7 @@
 <script>
   /**
-   * Set the type of notification
-   * @type {"toast" | "inline"}
+   * @event {{ timeout: boolean }} close
    */
-  export let notificationType = "inline";
 
   /**
    * Specify the kind of notification
@@ -42,14 +40,14 @@
   let open = true;
   let timeoutId = undefined;
 
-  function close() {
+  function close(closeFromTimeout) {
     open = false;
-    dispatch("close");
+    dispatch("close", { timeout: closeFromTimeout === true });
   }
 
   onMount(() => {
     if (timeout) {
-      timeoutId = setTimeout(() => close(), timeout);
+      timeoutId = setTimeout(() => close(true), timeout);
     }
 
     return () => {
@@ -65,7 +63,12 @@
     class:bx--inline-notification="{true}"
     class:bx--inline-notification--low-contrast="{lowContrast}"
     class:bx--inline-notification--hide-close-button="{hideCloseButton}"
-    class="{kind && `bx--inline-notification--${kind}`}"
+    class:bx--inline-notification--error="{kind === 'error'}"
+    class:bx--inline-notification--info="{kind === 'info'}"
+    class:bx--inline-notification--info-square="{kind === 'info-square'}"
+    class:bx--inline-notification--success="{kind === 'success'}"
+    class:bx--inline-notification--warning="{kind === 'warning'}"
+    class:bx--inline-notification--warning-alt="{kind === 'warning-alt'}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -74,14 +77,14 @@
   >
     <div class:bx--inline-notification__details="{true}">
       <NotificationIcon
-        notificationType="{notificationType}"
+        notificationType="inline"
         kind="{kind}"
         iconDescription="{iconDescription}"
       />
       <NotificationTextDetails
         title="{title}"
         subtitle="{subtitle}"
-        notificationType="{notificationType}"
+        notificationType="inline"
       >
         <slot />
       </NotificationTextDetails>
@@ -90,7 +93,7 @@
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription="{iconDescription}"
-        notificationType="{notificationType}"
+        notificationType="inline"
         on:click="{close}"
       />
     {/if}

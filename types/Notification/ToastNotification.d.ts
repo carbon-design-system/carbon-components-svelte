@@ -2,12 +2,6 @@
 
 export interface ToastNotificationProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
-   * Set the type of notification
-   * @default "toast"
-   */
-  notificationType?: "toast" | "inline";
-
-  /**
    * Specify the kind of notification
    * @default "error"
    */
@@ -68,10 +62,10 @@ export default class ToastNotification {
     default: {};
   };
 
+  $on(eventname: "close", cb: (event: CustomEvent<{ timeout: boolean }>) => void): () => void;
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
   $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
   $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
   $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "close", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

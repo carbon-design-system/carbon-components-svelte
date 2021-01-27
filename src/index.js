@@ -16,6 +16,7 @@ export {
 export { CodeSnippet, CodeSnippetSkeleton } from "./CodeSnippet";
 export {
   DataTable,
+  DataTableSkeleton,
   Table,
   TableBody,
   TableCell,
@@ -30,7 +31,6 @@ export {
   ToolbarMenu,
   ToolbarMenuItem,
 } from "./DataTable";
-export { DataTableSkeleton } from "./DataTableSkeleton";
 export { DatePicker, DatePickerInput, DatePickerSkeleton } from "./DatePicker";
 export { Dropdown, DropdownSkeleton } from "./Dropdown";
 export {

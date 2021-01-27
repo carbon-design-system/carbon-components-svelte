@@ -55,6 +55,12 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
+  /** Set to `true` to indicate an warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Specify the helper text */
   export let helperText = "";
 
@@ -95,6 +101,7 @@
   import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph/CaretDownGlyph.svelte";
   import CaretUpGlyph from "carbon-icons-svelte/lib/CaretUpGlyph/CaretUpGlyph.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
@@ -161,7 +168,10 @@
           <slot name="label">{label}</slot>
         </label>
       {/if}
-      <div class:bx--number__input-wrapper="{true}">
+      <div
+        class:bx--number__input-wrapper="{true}"
+        class:bx--number__input-wrapper--warning="{!invalid && warn}"
+      >
         <button
           type="button"
           aria-live="polite"
@@ -222,7 +232,10 @@
           <slot name="label">{label}</slot>
         </label>
       {/if}
-      <div class:bx--number__input-wrapper="{true}">
+      <div
+        class:bx--number__input-wrapper="{true}"
+        class:bx--number__input-wrapper--warning="{!invalid && warn}"
+      >
         <input
           bind:this="{ref}"
           type="number"
@@ -245,6 +258,11 @@
         />
         {#if invalid}
           <WarningFilled16 class="bx--number__invalid" />
+        {/if}
+        {#if !invalid && warn}
+          <WarningAltFilled16
+            class="bx--number__invalid bx--number__invalid--warning"
+          />
         {/if}
         <div class:bx--number__controls="{true}">
           <button
@@ -280,7 +298,7 @@
         </div>
       </div>
     {/if}
-    {#if !error && helperText}
+    {#if !error && !warn && helperText}
       <div
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
@@ -292,6 +310,9 @@
       <div id="{errorId}" class:bx--form-requirement="{true}">
         {invalidText}
       </div>
+    {/if}
+    {#if !error && warn}
+      <div id="{errorId}" class:bx--form-requirement="{true}">{warnText}</div>
     {/if}
   </div>
 </div>

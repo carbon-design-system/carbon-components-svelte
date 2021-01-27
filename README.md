@@ -11,8 +11,8 @@ Design systems facilitate design and development through reuse, consistency, and
 
 The Carbon Svelte portfolio also includes:
 
-- **[Carbon Icons Svelte](https://github.com/IBM/carbon-icons-svelte)**: 5800+ Carbon icons as Svelte components
-- **[Carbon Pictograms Svelte](https://github.com/IBM/carbon-pictograms-svelte)**: 600+ Carbon pictograms as Svelte components
+- **[Carbon Icons Svelte](https://github.com/IBM/carbon-icons-svelte)**: 6000+ Carbon icons as Svelte components
+- **[Carbon Pictograms Svelte](https://github.com/IBM/carbon-pictograms-svelte)**: 700+ Carbon pictograms as Svelte components
 - **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 16 chart types, powered by d3
 
 ## [Documentation](http://ibm.biz/carbon-svelte)
@@ -129,6 +129,34 @@ export default app;
 ```
 
 See [webpack.config.js](examples/webpack/webpack.config.js) in [examples/webpack](examples/webpack).
+
+#### Dynamic theming
+
+Use `carbon-components-svelte/css/all.css` for dynamic, client-side styling.
+
+Update the theme by setting the `theme` attribute on the `html` element. The default `theme` is `"white"`.
+
+```html
+<!DOCTYPE html>
+<html lang="en" theme="g10">
+  <body>
+    ...
+  </body>
+</html>
+```
+
+Using JavaScript:
+
+```svelte
+<script>
+  /** @type {"white" | "g10" | "g90" | "g100"} */
+  let theme = "white";
+
+  $: document.documentElement.setAttribute("theme", theme);
+</script>
+
+<button on:click="{() => theme = 'g90'}">Update theme</button>
+```
 
 ### TypeScript support
 

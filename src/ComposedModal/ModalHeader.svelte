@@ -31,7 +31,7 @@
     <p
       class:bx--modal-header__label="{true}"
       class:bx--type-delta="{true}"
-      class:labelClass
+      class="{labelClass}"
     >
       {label}
     </p>
@@ -40,7 +40,7 @@
     <p
       class:bx--modal-header__heading="{true}"
       class:bx--type-beta="{true}"
-      class:titleClass
+      class="{titleClass}"
     >
       {title}
     </p>
@@ -51,7 +51,7 @@
     title="{iconDescription}"
     aria-label="{iconDescription}"
     class:bx--modal-close="{true}"
-    class:closeClass
+    class="{closeClass}"
     on:click
     on:click="{closeModal}"
   >

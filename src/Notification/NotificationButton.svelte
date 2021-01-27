@@ -20,7 +20,7 @@
   /** Specify the ARIA label for the icon */
   export let iconDescription = "Close icon";
 
-  import Close20 from "carbon-icons-svelte/lib/Close20";
+  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
 </script>
 
 <button
@@ -38,7 +38,6 @@
   <svelte:component
     this="{renderIcon}"
     title="{title}"
-    class="{notificationType === 'toast' && 'bx--toast-notification__close-icon'}
-      {notificationType === 'inline' && 'bx--inline-notification__close-icon'}"
+    class="bx--{notificationType}-notification__close-icon"
   />
 </button>

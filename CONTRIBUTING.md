@@ -1,12 +1,10 @@
 # Contributing
 
-Note: before submitting a pull request (PR), it is recommended to first [file an issue](https://github.com/IBM/carbon-components-svelte/issues).
+Before submitting a pull request (PR), consider [filing an issue](https://github.com/IBM/carbon-components-svelte/issues) to gain clarity and direction.
 
 ## Prerequisites
 
-This project requires Node.js (version 12 or greater) and Yarn (version 1 or greater).
-
-- [Node.js](https://nodejs.org/en/download/package-manager/)
+- [Node.js](https://nodejs.org/en/download/package-manager/) (version >=12)
 - [Yarn](https://classic.yarnpkg.com/en/docs/install)
 
 ## Project set-up
@@ -64,6 +62,12 @@ If linked correctly, any change to a component in the `src` folder should be ref
 ---
 
 ## Development workflow
+
+Create a topic branch from `master`. Keep your PR focused and branch up-to-date with upstream `master`.
+
+```sh
+git checkout -b new-feature
+```
 
 Preview changes to components from the `src` folder in the documentation website located in `docs/`.
 

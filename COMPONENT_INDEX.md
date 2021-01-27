@@ -336,13 +336,13 @@ None.
 | Prop name        | Kind             | Reactive | Type                                                                                                                                      | Default value          | Description                                                                                                                                                                                   |
 | :--------------- | :--------------- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ref              | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code>                                                                       | <code>null</code>      | Obtain a reference to the HTML element                                                                                                                                                        |
+| hasIconOnly      | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` for the icon-only variant                                                                                                                                                       |
 | kind             | <code>let</code> | No       | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger" &#124; "danger-tertiary" &#124; "danger-ghost"</code> | <code>"primary"</code> | Specify the kind of button                                                                                                                                                                    |
 | size             | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small"</code>                                                                                      | <code>"default"</code> | Specify the size of button                                                                                                                                                                    |
-| hasIconOnly      | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` for the icon-only variant                                                                                                                                                       |
 | icon             | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>                                                                              | --                     | Specify the icon from `carbon-icons-svelte` to render                                                                                                                                         |
 | iconDescription  | <code>let</code> | No       | <code>string</code>                                                                                                                       | --                     | Specify the ARIA label for the button icon                                                                                                                                                    |
-| tooltipAlignment | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                                                                                         | --                     | Set the alignment of the tooltip relative to the icon<br />`hasIconOnly` must be set to `true`                                                                                                |
-| tooltipPosition  | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                                                                           | --                     | Set the position of the tooltip relative to the icon                                                                                                                                          |
+| tooltipAlignment | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                                                                                         | <code>"center"</code>  | Set the alignment of the tooltip relative to the icon<br />`hasIconOnly` must be set to `true`                                                                                                |
+| tooltipPosition  | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                                                                           | <code>"bottom"</code>  | Set the position of the tooltip relative to the icon                                                                                                                                          |
 | as               | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to render a custom HTML element<br />Props are destructured as `props` in the default slot (e.g., &lt;Button let:props&gt;&lt;div {...props}&gt;...&lt;/div&gt;&lt;/Button&gt;) |
 | skeleton         | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to display the skeleton state                                                                                                                                                   |
 | disabled         | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to disable the button                                                                                                                                                           |
@@ -496,6 +496,7 @@ None.
 | type                  | <code>let</code> | No       | <code>"single" &#124; "inline" &#124; "multi"</code> | <code>"single"</code>                            | Set the type of code snippet                                                                                               |
 | code                  | <code>let</code> | No       | <code>string</code>                                  | --                                               | Set the code snippet text<br />Alternatively, use the default slot (e.g., &lt;CodeSnippet&gt;{`code`}&lt;/CodeSnippet&gt;) |
 | hideCopyButton        | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to hide the copy button                                                                                      |
+| disabled              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` for the disabled variant<br />Only applies to the "single", "multi" types                                    |
 | wrapText              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to wrap the text<br />Note that `type` must be "multi"                                                       |
 | light                 | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                                                                                  |
 | skeleton              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to display the skeleton state                                                                                |
@@ -982,6 +983,8 @@ export interface DropdownItem {
 | titleText       | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the title text                        |
 | invalid         | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to indicate an invalid state    |
 | invalidText     | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the invalid state text                |
+| warn            | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to indicate an warning state    |
+| warnText        | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the warning state text                |
 | helperText      | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the helper text                       |
 | label           | <code>let</code> | No       | <code>string</code>                         | --                                                    | Specify the list box label                    |
 | translateWithId | <code>let</code> | No       | <code>(id: any) => string</code>            | --                                                    | Override the default translation ids          |
@@ -1023,17 +1026,19 @@ None.
 
 ### Props
 
-| Prop name             | Kind             | Reactive | Type                                    | Default value                                    | Description                                           |
-| :-------------------- | :--------------- | :------- | :-------------------------------------- | ------------------------------------------------ | ----------------------------------------------------- |
-| ref                   | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code> | <code>null</code>                                | Obtain a reference to the top-level element           |
-| tilePadding           | <code>let</code> | Yes      | <code>number</code>                     | <code>0</code>                                   | Specify the padding of the tile (number of pixels)    |
-| tileMaxHeight         | <code>let</code> | Yes      | <code>number</code>                     | <code>0</code>                                   | Specify the max height of the tile (number of pixels) |
-| expanded              | <code>let</code> | Yes      | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to expand the tile                      |
-| light                 | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to enable the light variant             |
-| tileCollapsedIconText | <code>let</code> | No       | <code>string</code>                     | <code>"Interact to expand Tile"</code>           | Specify the icon text of the collapsed tile           |
-| tileExpandedIconText  | <code>let</code> | No       | <code>string</code>                     | <code>"Interact to collapse Tile"</code>         | Specify the icon text of the expanded tile            |
-| tabindex              | <code>let</code> | No       | <code>string</code>                     | <code>"0"</code>                                 | Specify the tabindex                                  |
-| id                    | <code>let</code> | No       | <code>string</code>                     | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level div element               |
+| Prop name             | Kind             | Reactive | Type                                       | Default value                                    | Description                                           |
+| :-------------------- | :--------------- | :------- | :----------------------------------------- | ------------------------------------------------ | ----------------------------------------------------- |
+| ref                   | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the top-level element           |
+| tilePadding           | <code>let</code> | Yes      | <code>number</code>                        | <code>0</code>                                   | Specify the padding of the tile (number of pixels)    |
+| tileMaxHeight         | <code>let</code> | Yes      | <code>number</code>                        | <code>0</code>                                   | Specify the max height of the tile (number of pixels) |
+| expanded              | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to expand the tile                      |
+| light                 | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to enable the light variant             |
+| tileCollapsedIconText | <code>let</code> | No       | <code>string</code>                        | <code>"Interact to expand Tile"</code>           | Specify the icon text of the collapsed tile           |
+| tileExpandedIconText  | <code>let</code> | No       | <code>string</code>                        | <code>"Interact to collapse Tile"</code>         | Specify the icon text of the expanded tile            |
+| tileExpandedLabel     | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the icon label of the expanded tile           |
+| tileCollapsedLabel    | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the icon label of the collapsed tile          |
+| tabindex              | <code>let</code> | No       | <code>string</code>                        | <code>"0"</code>                                 | Specify the tabindex                                  |
+| id                    | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level div element               |
 
 ### Slots
 
@@ -1231,7 +1236,9 @@ None.
 
 ### Events
 
-None.
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| submit     | forwarded | --     |
 
 ## `Form`
 
@@ -1735,17 +1742,16 @@ None.
 
 ### Props
 
-| Prop name        | Kind             | Reactive | Type                                                                                                           | Default value                      | Description                                                             |
-| :--------------- | :--------------- | :------- | :------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------- |
-| notificationType | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                                                                           | <code>"inline"</code>              | Set the type of notification                                            |
-| kind             | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code>               | Specify the kind of notification                                        |
-| lowContrast      | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                 | Set to `true` to use the low contrast variant                           |
-| timeout          | <code>let</code> | No       | <code>number</code>                                                                                            | <code>0</code>                     | Set the timeout duration (ms) to hide the notification after opening it |
-| role             | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"alert"</code>               | Set the `role` attribute                                                |
-| title            | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Title"</code>               | Specify the title text                                                  |
-| subtitle         | <code>let</code> | No       | <code>string</code>                                                                                            | <code>""</code>                    | Specify the subtitle text                                               |
-| hideCloseButton  | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                 | Set to `true` to hide the close button                                  |
-| iconDescription  | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Closes notification"</code> | Specify the ARIA label for the icon                                     |
+| Prop name       | Kind             | Reactive | Type                                                                                                           | Default value                      | Description                                                             |
+| :-------------- | :--------------- | :------- | :------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------- |
+| kind            | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code>               | Specify the kind of notification                                        |
+| lowContrast     | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                 | Set to `true` to use the low contrast variant                           |
+| timeout         | <code>let</code> | No       | <code>number</code>                                                                                            | <code>0</code>                     | Set the timeout duration (ms) to hide the notification after opening it |
+| role            | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"alert"</code>               | Set the `role` attribute                                                |
+| title           | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Title"</code>               | Specify the title text                                                  |
+| subtitle        | <code>let</code> | No       | <code>string</code>                                                                                            | <code>""</code>                    | Specify the subtitle text                                               |
+| hideCloseButton | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                 | Set to `true` to hide the close button                                  |
+| iconDescription | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Closes notification"</code> | Specify the ARIA label for the icon                                     |
 
 ### Slots
 
@@ -1756,13 +1762,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail                            |
+| :--------- | :--------- | :-------------------------------- |
+| close      | dispatched | <code>{ timeout: boolean }</code> |
+| click      | forwarded  | --                                |
+| mouseover  | forwarded  | --                                |
+| mouseenter | forwarded  | --                                |
+| mouseleave | forwarded  | --                                |
 
 ## `Link`
 
@@ -1805,6 +1811,8 @@ None.
 | disabled    | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>     | Set to `true` to disable the list box      |
 | invalid     | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>     | Set to `true` to indicate an invalid state |
 | invalidText | <code>let</code> | No       | <code>string</code>                    | <code>""</code>        | Specify the invalid state text             |
+| warn        | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>     | Set to `true` to indicate an warning state |
+| warnText    | <code>let</code> | No       | <code>string</code>                    | <code>""</code>        | Specify the warning state text             |
 
 ### Slots
 
@@ -2150,6 +2158,8 @@ export interface MultiSelectItem {
 | useTitleInItem    | <code>let</code> | No       | <code>boolean</code>                                                                           | <code>false</code>                                                                  | Set to `true` to pass the item to `itemToString` in the checkbox                      |
 | invalid           | <code>let</code> | No       | <code>boolean</code>                                                                           | <code>false</code>                                                                  | Set to `true` to indicate an invalid state                                            |
 | invalidText       | <code>let</code> | No       | <code>string</code>                                                                            | <code>""</code>                                                                     | Specify the invalid state text                                                        |
+| warn              | <code>let</code> | No       | <code>boolean</code>                                                                           | <code>false</code>                                                                  | Set to `true` to indicate an warning state                                            |
+| warnText          | <code>let</code> | No       | <code>string</code>                                                                            | <code>""</code>                                                                     | Specify the warning state text                                                        |
 | helperText        | <code>let</code> | No       | <code>string</code>                                                                            | <code>""</code>                                                                     | Specify the helper text                                                               |
 | label             | <code>let</code> | No       | <code>string</code>                                                                            | <code>""</code>                                                                     | Specify the list box label                                                            |
 | id                | <code>let</code> | No       | <code>string</code>                                                                            | <code>"ccs-" + Math.random().toString(36)</code>                                    | Set an id for the list box component                                                  |
@@ -2279,6 +2289,8 @@ export type NumberInputTranslationId = "increment" | "decrement";
 | iconDescription | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the ARIA label for the increment icons |
 | invalid         | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to indicate an invalid state     |
 | invalidText     | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the invalid state text                 |
+| warn            | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to indicate an warning state     |
+| warnText        | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the warning state text                 |
 | helperText      | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the helper text                        |
 | label           | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the label text                         |
 | hideLabel       | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to visually hide the label text  |
@@ -2505,8 +2517,8 @@ None.
 | placeholder       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the placeholder text                          |
 | hidePasswordLabel | <code>let</code> | No       | <code>string</code>                                             | <code>"Hide password"</code>                     | Specify the hide password label text                  |
 | showPasswordLabel | <code>let</code> | No       | <code>string</code>                                             | <code>"Show password"</code>                     | Specify the show password label text                  |
-| tooltipAlignment  | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | --                                               | Set the alignment of the tooltip relative to the icon |
-| tooltipPosition   | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | --                                               | Set the position of the tooltip relative to the icon  |
+| tooltipAlignment  | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon |
+| tooltipPosition   | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the position of the tooltip relative to the icon  |
 | light             | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to enable the light variant             |
 | disabled          | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to disable the input                    |
 | helperText        | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the helper text                               |
@@ -3594,6 +3606,7 @@ None.
 | disabled  | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to disable a filterable tag              |
 | skeleton  | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to display the skeleton state            |
 | title     | <code>let</code> | No       | <code>string</code>                                                                                                                                                                     | <code>"Clear filter"</code>                      | Set the title for the close button in a filterable tag |
+| icon      | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>                                                                                                                            | --                                               | Specify the icon from `carbon-icons-svelte` to render  |
 | id        | <code>let</code> | No       | <code>string</code>                                                                                                                                                                     | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the filterable tag                       |
 
 ### Slots
@@ -3873,18 +3886,17 @@ None.
 
 ### Props
 
-| Prop name        | Kind             | Reactive | Type                                                                                                           | Default value                      | Description                                                             |
-| :--------------- | :--------------- | :------- | :------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------- |
-| notificationType | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                                                                           | <code>"toast"</code>               | Set the type of notification                                            |
-| kind             | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code>               | Specify the kind of notification                                        |
-| lowContrast      | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                 | Set to `true` to use the low contrast variant                           |
-| timeout          | <code>let</code> | No       | <code>number</code>                                                                                            | <code>0</code>                     | Set the timeout duration (ms) to hide the notification after opening it |
-| role             | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"alert"</code>               | Set the `role` attribute                                                |
-| title            | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Title"</code>               | Specify the title text                                                  |
-| subtitle         | <code>let</code> | No       | <code>string</code>                                                                                            | <code>""</code>                    | Specify the subtitle text                                               |
-| caption          | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Caption"</code>             | Specify the caption text                                                |
-| iconDescription  | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Closes notification"</code> | Specify the ARIA label for the icon                                     |
-| hideCloseButton  | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                 | Set to `true` to hide the close button                                  |
+| Prop name       | Kind             | Reactive | Type                                                                                                           | Default value                      | Description                                                             |
+| :-------------- | :--------------- | :------- | :------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------- |
+| kind            | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code>               | Specify the kind of notification                                        |
+| lowContrast     | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                 | Set to `true` to use the low contrast variant                           |
+| timeout         | <code>let</code> | No       | <code>number</code>                                                                                            | <code>0</code>                     | Set the timeout duration (ms) to hide the notification after opening it |
+| role            | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"alert"</code>               | Set the `role` attribute                                                |
+| title           | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Title"</code>               | Specify the title text                                                  |
+| subtitle        | <code>let</code> | No       | <code>string</code>                                                                                            | <code>""</code>                    | Specify the subtitle text                                               |
+| caption         | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Caption"</code>             | Specify the caption text                                                |
+| iconDescription | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"Closes notification"</code> | Specify the ARIA label for the icon                                     |
+| hideCloseButton | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                 | Set to `true` to hide the close button                                  |
 
 ### Slots
 
@@ -3894,13 +3906,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail                            |
+| :--------- | :--------- | :-------------------------------- |
+| close      | dispatched | <code>{ timeout: boolean }</code> |
+| click      | forwarded  | --                                |
+| mouseover  | forwarded  | --                                |
+| mouseenter | forwarded  | --                                |
+| mouseleave | forwarded  | --                                |
 
 ## `Toggle`
 

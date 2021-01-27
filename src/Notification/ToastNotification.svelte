@@ -1,9 +1,7 @@
 <script>
   /**
-   * Set the type of notification
-   * @type {"toast" | "inline"}
+   * @event {{ timeout: boolean }} close
    */
-  export let notificationType = "toast";
 
   /**
    * Specify the kind of notification
@@ -45,14 +43,14 @@
   let open = true;
   let timeoutId = undefined;
 
-  function close() {
+  function close(closeFromTimeout) {
     open = false;
-    dispatch("close");
+    dispatch("close", { timeout: closeFromTimeout === true });
   }
 
   onMount(() => {
     if (timeout) {
-      timeoutId = setTimeout(() => close(), timeout);
+      timeoutId = setTimeout(() => close(true), timeout);
     }
 
     return () => {
@@ -67,30 +65,29 @@
     kind="{kind}"
     class:bx--toast-notification="{true}"
     class:bx--toast-notification--low-contrast="{lowContrast}"
-    class="{kind && `bx--toast-notification--${kind}`}"
+    class:bx--toast-notification--error="{kind === 'error'}"
+    class:bx--toast-notification--info="{kind === 'info'}"
+    class:bx--toast-notification--info-square="{kind === 'info-square'}"
+    class:bx--toast-notification--success="{kind === 'success'}"
+    class:bx--toast-notification--warning="{kind === 'warning'}"
+    class:bx--toast-notification--warning-alt="{kind === 'warning-alt'}"
     {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
   >
-    <NotificationIcon
-      notificationType="{notificationType}"
-      kind="{kind}"
-      iconDescription="{iconDescription}"
-    />
+    <NotificationIcon kind="{kind}" iconDescription="{iconDescription}" />
     <NotificationTextDetails
       title="{title}"
       subtitle="{subtitle}"
       caption="{caption}"
-      notificationType="{notificationType}"
     >
       <slot />
     </NotificationTextDetails>
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription="{iconDescription}"
-        notificationType="{notificationType}"
         on:click="{close}"
       />
     {/if}

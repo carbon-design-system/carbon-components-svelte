@@ -63,8 +63,8 @@
   export let inline = false;
 
   import { getContext } from "svelte";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
-  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16";
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
 
   const ctx = getContext("Form");
 
@@ -127,6 +127,7 @@
       data-invalid="{invalid || undefined}"
       data-warn="{warn || undefined}"
       class:bx--text-input__field-wrapper="{true}"
+      class:bx--text-input__field-wrapper--warning="{!invalid && warn}"
     >
       {#if invalid}
         <WarningFilled16 class="bx--text-input__invalid-icon" />

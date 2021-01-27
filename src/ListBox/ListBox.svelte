@@ -25,6 +25,12 @@
 
   /** Specify the invalid state text */
   export let invalidText = "";
+
+  /** Set to `true` to indicate an warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
 </script>
 
 <div
@@ -38,6 +44,7 @@
   class:bx--list-box--disabled="{disabled}"
   class:bx--list-box--expanded="{open}"
   class:bx--list-box--light="{light}"
+  class:bx--list-box--warning="{!invalid && warn}"
   {...$$restProps}
   on:keydown
   on:keydown="{(e) => {
@@ -51,4 +58,7 @@
 </div>
 {#if invalid}
   <div class:bx--form-requirement="{true}">{invalidText}</div>
+{/if}
+{#if !invalid && warn}
+  <div class:bx--form-requirement="{true}">{warnText}</div>
 {/if}

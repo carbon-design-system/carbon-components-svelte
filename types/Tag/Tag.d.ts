@@ -44,6 +44,11 @@ export interface TagProps
   title?: string;
 
   /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   */
+  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+
+  /**
    * Set an id for the filterable tag
    * @default "ccs-" + Math.random().toString(36)
    */
