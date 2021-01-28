@@ -476,7 +476,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Features**
 
-- css: ship precompiled CSS StyleSheets for each Carbon theme (70e0875)
+- css: ship pre-compiled CSS StyleSheets for each Carbon theme (70e0875)
 
 **Documentation**
 

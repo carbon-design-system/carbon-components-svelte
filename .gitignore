@@ -1,7 +1,7 @@
 /coverage
 /lib
 /node_modules
-/css
+/css/*.css
 .DS_Store
 yarn-debug.log*
 yarn-error.log*

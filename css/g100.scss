@@ -1,0 +1,25 @@
+$feature-flags: (
+  ui-shell: true,
+  grid-columns-16: true
+);
+
+$css--font-face: true;
+$css--helpers: true;
+$css--body: true;
+$css--use-layer: true;
+$css--reset: true;
+$css--default-type: true;
+$css--plex: true;
+
+// Use the "g100" (Gray 100) Carbon theme
+@import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
+
+$carbon--theme: $carbon--theme--g100;
+@include carbon--theme();
+
+@import "carbon-components/scss/globals/scss/_css--reset.scss";
+@import "carbon-components/scss/globals/scss/_css--font-face.scss";
+@import "carbon-components/scss/globals/scss/_css--helpers.scss";
+@import "carbon-components/scss/globals/scss/_css--body.scss";
+@import "carbon-components/scss/globals/grid/_grid.scss";
+@import "carbon-components/scss/globals/scss/styles.scss";
