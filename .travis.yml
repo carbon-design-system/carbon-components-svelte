@@ -2,5 +2,5 @@ language: node_js
 node_js: 12
 cache: yarn
 script:
-  - yarn check-types
   - yarn prepack
+  - yarn test
