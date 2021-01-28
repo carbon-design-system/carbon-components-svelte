@@ -83,17 +83,25 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 
 **Refer to [COMPONENT_INDEX.md](COMPONENT_INDEX.md) for component API documentation.**
 
-### Precompiled CSS StyleSheets
+### Pre-compiled CSS StyleSheets
 
-`carbon-components-svelte` includes precompiled CSS StyleSheets for each Carbon theme:
+`carbon-components-svelte` includes pre-compiled CSS StyleSheets for each Carbon theme:
 
 - **white.css**: Default Carbon theme (light)
 - **g10.css**: Gray 10 theme (light)
 - **g90.css**: Gray 90 theme (dark)
 - **g100.css**: Gray 100 theme (dark)
-- **all.css**: All themes (White, Gray 10, Gray 90, Gray 100) using CSS variables
+- **all.css**: All themes (White, Gray 10, Gray 90, Gray 100) using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 
-Each StyleSheet is [generated](scripts/build-css.js) from the flagship [carbon-components](https://github.com/carbon-design-system/carbon/tree/master/packages/components) library..
+Each StyleSheet is [generated](scripts/build-css.js) from the flagship [carbon-components](https://github.com/carbon-design-system/carbon/tree/master/packages/components) library.
+
+The compiled CSS is generated from the following `.scss` files:
+
+- [css/white.scss](css/white.scss)
+- [css/g10.scss](css/g10.scss)
+- [css/g90.scss](css/g90.scss)
+- [css/g100.scss](css/g100.scss)
+- [css/all.scss](css/all.scss)
 
 #### Usage
 
