@@ -10,12 +10,15 @@
   "types": "./types/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "check-types": "svelte-check --workspace tests",
-    "publish-examples": "node scripts/publish-examples",
+    "test": "run-p test:*",
+    "test:types": "svelte-check --workspace tests",
+    "test:preprocess": "node tests/preprocess",
     "build:css": "node scripts/build-css",
+    "build:api": "node scripts/build-api",
     "build:lib": "rollup -c",
     "prepack": "run-p build:*",
-    "format": "prettier --write './**/*.{svelte,js,md}'"
+    "format": "prettier --write './**/*.{svelte,js,md}'",
+    "publish-examples": "node scripts/publish-examples"
   },
   "dependencies": {
     "carbon-icons-svelte": "^10.21.0",
@@ -75,6 +78,7 @@
     "lib",
     "src",
     "types",
-    "css"
+    "css",
+    "preprocess"
   ]
 }
