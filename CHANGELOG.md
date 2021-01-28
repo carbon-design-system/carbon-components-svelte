@@ -7,6 +7,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.27.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.27.0) - 2021-01-28
+
+**Features**
+
+- Ship scss files used to pre-compile CSS
+- Add `optimizeCarbonImports` preprocessor to rewrite base imports from Carbon components/icons/pictograms to the source Svelte file
+- Support warning state in Dropdown, MultiSelect, NumberInput
+- Set default values for Button `tooltipAlignment` ("center") and `tooltipPosition` ("bottom") in Button
+- Infer icon-only Button variant using $$slots API
+- Support disabled state for CodeSnippet (single or multi type only)
+- Add optional expand/collapse icon labels to ExpandableTile
+- Support custom icon variant for Tag
+- Add `timeout` to dispatched `on:close` event detail in InlineNotification and ToastNotification
+- Upgrade `flatpickr` to version 4.6.9 for ES module (ESM) imports
+
+**Fixes**
+
+- Co-locate DataTableSkeleton with DataTable components
+- Prevent MultiSelect dropdown from opening if disabled
+- Forward `submit` event to FluidForm
+- Correctly apply class props in ModalHeader
+- Add missing warning class to TextInput
+- Disable visibility toggle if PasswordInput is disabled
+- "Show more" button in CodeSnippet should be "field" sized, not small
+- Remove extraneous "bx--btn--copy" class from CodeSnippet
+- Adjust Loading spinner styles to remove excess padding
+- Prevent class from being overridden by $$restProps in InlineNotification, ToastNotification, NotificationActionButton
+- Remove extraneous focus ring in Modal
+- Remove aria-hidden prop from ToolbarSearch
+- Add label id to Slider
+- Remove menubar role from HeaderNav; deprecate ariaLabel prop in HeaderNav in favor of real HTML attributes "aria-label" and "aria-labelledby"
+- Remove notificationType prop from InlineNotification and ToastNotification
+- Focus the first item when opening an OverflowMenu for the first time
+- Close the OverflowMenu on the `focusout` event
+- Forward $$restProps to the input element for TextInput, PasswordInput
+
+**Breaking Changes**
+
+- DataTableSkeleton.svelte is moved to `src/DataTable`
+- `notificationType` is removed from InlineNotification and ToastNotification
+- Svelte version 3.25 or greater is required due to use of the $$slots API
+- $$restProps are forwarded to the input element for TextInput, PasswordInput
+- `renderIcon` prop renamed to `icon` in NotificationButton
+- `icon` prop type changed to "typeof import("carbon-icons-svelte").CarbonIcon" in HeaderAction, HeaderActionLink, SideNavLink, SideNavMenu
+- Pre-compiled CSS StyleSheets use the "compressed" `sass.outputStyle` instead of "compact"
+
+**Documentation**
+
+- Add documentation for dynamic, client-side theming
+- Add icon-only example for the "danger-tertiary" Button
+- Update number of supported Carbon icons and pictograms
+- Use more realistic body copy in Notification usage examples
+- Update development workflow in the contributing guidelines
+
+**Housekeeping**
+
+- Replace `node-sass` with `sass`
+- Upgrade `carbon-components` to version 10.27.0
+- Upgrade `@carbon/themes` to version 10.26.0
+- Upgrade `autoprefixer`, `postcss`, `prettier-plugin-svelte`
+
 ## [0.26.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.26.0) - 2020-12-11
 
 **Features**

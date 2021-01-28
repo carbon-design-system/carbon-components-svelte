@@ -1018,7 +1018,7 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "{#if animation}{feedback || $$restProps['aria-label']}{/if}",
+          "fallback": "{#if animation}{feedback || $$restProps[\"aria-label\"]}{/if}",
           "slot_props": "{}"
         }
       ],
@@ -2612,7 +2612,7 @@
         {
           "name": "cell",
           "default": false,
-          "fallback": "{headers[j].display ? headers[j].display(cell.value) : cell.value}",
+          "fallback": "{headers[j].display\n                    ? headers[j].display(cell.value)\n                    : cell.value}",
           "slot_props": "{ row: DataTableRow; cell: DataTableCell; }"
         },
         {

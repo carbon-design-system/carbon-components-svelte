@@ -1,6 +1,6 @@
 # Component Index
 
-> 155 components exported from carbon-components-svelte@0.26.0.
+> 155 components exported from carbon-components-svelte@0.27.0.
 
 ## Components
 
@@ -727,7 +727,7 @@ None.
 
 | Slot name | Default | Props | Fallback                                                                           |
 | :-------- | :------ | :---- | :--------------------------------------------------------------------------------- |
-| --        | Yes     | --    | <code>{#if animation}{feedback &#124;&#124; $$restProps['aria-label']}{/if}</code> |
+| --        | Yes     | --    | <code>{#if animation}{feedback &#124;&#124; $$restProps["aria-label"]}{/if}</code> |
 
 ### Events
 
@@ -817,12 +817,12 @@ export interface DataTableCell {
 
 ### Slots
 
-| Slot name    | Default | Props                                                     | Fallback                                                                        |
-| :----------- | :------ | :-------------------------------------------------------- | :------------------------------------------------------------------------------ |
-| --           | Yes     | --                                                        | --                                                                              |
-| cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; } </code> | <code>{headers[j].display ? headers[j].display(cell.value) : cell.value}</code> |
-| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>        | <code>{header.value}</code>                                                     |
-| expanded-row | No      | <code>{ row: DataTableRow; } </code>                      | --                                                                              |
+| Slot name    | Default | Props                                                     | Fallback                                                                                    |
+| :----------- | :------ | :-------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
+| --           | Yes     | --                                                        | --                                                                                          |
+| cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; } </code> | <code>{headers[j].display<br /> ? headers[j].display(cell.value)<br /> : cell.value}</code> |
+| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>        | <code>{header.value}</code>                                                                 |
+| expanded-row | No      | <code>{ row: DataTableRow; } </code>                      | --                                                                                          |
 
 ### Events
 
