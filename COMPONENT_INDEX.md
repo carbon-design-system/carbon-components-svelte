@@ -3640,12 +3640,13 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| click      | forwarded  | --     |
+| mouseover  | forwarded  | --     |
+| mouseenter | forwarded  | --     |
+| mouseleave | forwarded  | --     |
+| close      | dispatched | --     |
 
 ## `TagSkeleton`
 

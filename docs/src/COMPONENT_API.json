@@ -7859,7 +7859,8 @@
         { "type": "forwarded", "name": "click", "element": "TagSkeleton" },
         { "type": "forwarded", "name": "mouseover", "element": "TagSkeleton" },
         { "type": "forwarded", "name": "mouseenter", "element": "TagSkeleton" },
-        { "type": "forwarded", "name": "mouseleave", "element": "TagSkeleton" }
+        { "type": "forwarded", "name": "mouseleave", "element": "TagSkeleton" },
+        { "type": "dispatched", "name": "close" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div | span" }

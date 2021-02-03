@@ -30,6 +30,10 @@
 
   import Close16 from "carbon-icons-svelte/lib/Close16/Close16.svelte";
   import TagSkeleton from "./TagSkeleton.svelte";
+
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
 </script>
 
 {#if skeleton}
@@ -70,6 +74,9 @@
         disabled="{disabled}"
         title="{title}"
         on:click|stopPropagation
+        on:click|stopPropagation="{() => {
+          dispatch('close');
+        }}"
         on:mouseover
         on:mouseenter
         on:mouseleave
