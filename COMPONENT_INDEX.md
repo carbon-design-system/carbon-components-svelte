@@ -916,6 +916,8 @@ None.
 | hideLabel       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to visually hide the label text      |
 | invalid         | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to indicate an invalid state         |
 | invalidText     | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the invalid state text                     |
+| warn            | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to indicate an warning state         |
+| warnText        | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the warning state text                     |
 | name            | <code>let</code> | No       | <code>string</code>                       | --                                               | Set a name for the input element                   |
 
 ### Slots

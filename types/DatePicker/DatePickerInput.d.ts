@@ -67,6 +67,18 @@ export interface DatePickerInputProps extends svelte.JSX.HTMLAttributes<HTMLElem
   invalidText?: string;
 
   /**
+   * Set to `true` to indicate an warning state
+   * @default false
+   */
+  warn?: boolean;
+
+  /**
+   * Specify the warning state text
+   * @default ""
+   */
+  warnText?: string;
+
+  /**
    * Set a name for the input element
    */
   name?: string;

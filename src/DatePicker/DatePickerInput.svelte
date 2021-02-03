@@ -35,6 +35,12 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
+  /** Set to `true` to indicate an warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /**
    * Set a name for the input element
    * @type {string}
@@ -45,7 +51,9 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import Calendar16 from "carbon-icons-svelte/lib/Calendar16";
+  import Calendar16 from "carbon-icons-svelte/lib/Calendar16/Calendar16.svelte";
+  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
 
   const {
     range,
@@ -81,7 +89,11 @@
       {labelText}
     </label>
   {/if}
-  <div class:bx--date-picker-input__wrapper="{true}">
+  <div
+    class:bx--date-picker-input__wrapper="{true}"
+    class:bx--date-picker-input__wrapper--invalid="{invalid}"
+    class:bx--date-picker-input__wrapper--warn="{warn}"
+  >
     <input
       bind:this="{ref}"
       data-invalid="{invalid || undefined}"
@@ -93,6 +105,7 @@
       pattern="{pattern}"
       disabled="{disabled}"
       class:bx--date-picker__input="{true}"
+      class:bx--date-picker__input--invalid="{invalid}"
       class="{size && `bx--date-picker__input--${size}`}"
       on:input
       on:input="{({ target }) => {
@@ -112,6 +125,18 @@
         blurInput(relatedTarget);
       }}"
     />
+    {#if !$hasCalendar}
+      {#if invalid}
+        <WarningFilled16
+          class="bx--date-picker__icon bx--date-picker__icon--invalid"
+        />
+      {/if}
+      {#if !invalid && warn}
+        <WarningAltFilled16
+          class="bx--date-picker__icon bx--date-picker__icon--warn"
+        />
+      {/if}
+    {/if}
     {#if $hasCalendar}
       <Calendar16
         role="img"
@@ -124,5 +149,8 @@
   </div>
   {#if invalid}
     <div class:bx--form-requirement="{true}">{invalidText}</div>
+  {/if}
+  {#if !invalid && warn}
+    <div class:bx--form-requirement="{true}">{warnText}</div>
   {/if}
 </div>
