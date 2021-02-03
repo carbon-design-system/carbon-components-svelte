@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {{ open: boolean; }} transitionend
+   */
+
+  /**
    * Set the size of the composed modal
    * @type {"xs" | "sm" | "lg"}
    */
@@ -102,8 +106,11 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:transitionend
-  on:transitionend="{({ currentTarget }) => {
+  on:transitionend="{({ propertyName, currentTarget }) => {
+    if (propertyName === 'transform') {
+      dispatch('transitionend', { open });
+    }
+
     if (didOpen) {
       focus(currentTarget);
       didOpen = false;

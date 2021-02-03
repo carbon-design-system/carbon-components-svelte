@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {{ open: boolean; }} transitionend
+   */
+
+  /**
    * Set the size of the modal
    * @type {"xs" | "sm" | "lg"}
    */
@@ -151,6 +155,11 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
+  on:transitionend="{(e) => {
+    if (e.propertyName === 'transform') {
+      dispatch('transitionend', { open });
+    }
+  }}"
 >
   <div
     bind:this="{innerModal}"

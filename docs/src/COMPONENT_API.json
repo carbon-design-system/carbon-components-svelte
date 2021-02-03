@@ -1713,11 +1713,15 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "transitionend",
+          "detail": "{ open: boolean; }"
+        },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "transitionend", "element": "div" },
         { "type": "dispatched", "name": "submit" },
         { "type": "dispatched", "name": "close" },
         { "type": "dispatched", "name": "open" }
@@ -5618,6 +5622,11 @@
         }
       ],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "transitionend",
+          "detail": "{ open: boolean; }"
+        },
         { "type": "forwarded", "name": "keydown", "element": "div" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
