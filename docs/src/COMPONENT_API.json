@@ -9678,7 +9678,7 @@
         {
           "name": "tooltipText",
           "kind": "let",
-          "description": "Specify the tooltip text",
+          "description": "Specify the tooltip text.\nAlternatively, use the \"text\" slot",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -9726,7 +9726,15 @@
           "reactive": true
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "text",
+          "default": false,
+          "fallback": "{tooltipText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "button" },
         { "type": "forwarded", "name": "mouseover", "element": "button" },
