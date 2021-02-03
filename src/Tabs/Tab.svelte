@@ -39,6 +39,7 @@
   class:bx--tabs__nav-item--disabled="{disabled}"
   class:bx--tabs__nav-item--selected="{selected}"
   {...$$restProps}
+  on:click|preventDefault
   on:click|preventDefault="{() => {
     if (!disabled) {
       update(id);

@@ -7708,6 +7708,7 @@
         }
       ],
       "events": [
+        { "type": "forwarded", "name": "click", "element": "li" },
         { "type": "forwarded", "name": "mouseover", "element": "li" },
         { "type": "forwarded", "name": "mouseenter", "element": "li" },
         { "type": "forwarded", "name": "mouseleave", "element": "li" }
