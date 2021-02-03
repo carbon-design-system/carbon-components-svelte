@@ -9245,6 +9245,11 @@
       ],
       "slots": [],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "toggle",
+          "detail": "{ toggled: boolean; }"
+        },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },

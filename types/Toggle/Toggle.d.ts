@@ -53,6 +53,7 @@ export default class Toggle {
   $$prop_def: ToggleProps;
   $$slot_def: {};
 
+  $on(eventname: "toggle", cb: (event: CustomEvent<{ toggled: boolean }>) => void): () => void;
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
   $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
   $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;

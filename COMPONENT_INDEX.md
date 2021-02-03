@@ -3958,16 +3958,17 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
+| Event name | Type       | Detail                             |
+| :--------- | :--------- | :--------------------------------- |
+| toggle     | dispatched | <code>{ toggled: boolean; }</code> |
+| click      | forwarded  | --                                 |
+| mouseover  | forwarded  | --                                 |
+| mouseenter | forwarded  | --                                 |
+| mouseleave | forwarded  | --                                 |
+| change     | forwarded  | --                                 |
+| keyup      | forwarded  | --                                 |
+| focus      | forwarded  | --                                 |
+| blur       | forwarded  | --                                 |
 
 ## `ToggleSkeleton`
 
