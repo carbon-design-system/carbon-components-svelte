@@ -174,7 +174,7 @@
           type="button"
           aria-label="{iconDescription}"
           title="{iconDescription}"
-          class="bx--modal-close"
+          class:bx--modal-close="{true}"
           on:click="{() => {
             open = false;
           }}"
