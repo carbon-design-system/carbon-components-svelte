@@ -25,7 +25,6 @@
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
-    "@carbon/themes": "^10.26.0",
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@tsconfig/svelte": "^1.0.10",
