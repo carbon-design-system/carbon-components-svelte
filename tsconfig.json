@@ -1,1 +1,1 @@
-{ "extends": "@tsconfig/svelte/tsconfig.json" }
+{ "extends": "@tsconfig/svelte" }
