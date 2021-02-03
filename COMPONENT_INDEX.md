@@ -988,6 +988,7 @@ export interface DropdownItem {
 | warnText        | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the warning state text                |
 | helperText      | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the helper text                       |
 | label           | <code>let</code> | No       | <code>string</code>                         | --                                                    | Specify the list box label                    |
+| hideLabel       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to visually hide the label text |
 | translateWithId | <code>let</code> | No       | <code>(id: any) => string</code>            | --                                                    | Override the default translation ids          |
 | id              | <code>let</code> | No       | <code>string</code>                         | <code>"ccs-" + Math.random().toString(36)</code>      | Set an id for the list box component          |
 | name            | <code>let</code> | No       | <code>string</code>                         | --                                                    | Specify a name attribute for the list box     |
