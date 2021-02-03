@@ -1,6 +1,6 @@
 # Component Index
 
-> 155 components exported from carbon-components-svelte@0.27.0.
+> 156 components exported from carbon-components-svelte@0.27.0.
 
 ## Components
 
@@ -84,6 +84,7 @@
 - [`NumberInput`](#numberinput)
 - [`NumberInputSkeleton`](#numberinputskeleton)
 - [`OrderedList`](#orderedlist)
+- [`OutboundLink`](#outboundlink)
 - [`OverflowMenu`](#overflowmenu)
 - [`OverflowMenuItem`](#overflowmenuitem)
 - [`Pagination`](#pagination)
@@ -2345,6 +2346,27 @@ None.
 | :-------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------- |
 | nested    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant |
 | native    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use native list styles |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| click      | forwarded | --     |
+| mouseover  | forwarded | --     |
+| mouseenter | forwarded | --     |
+| mouseleave | forwarded | --     |
+
+## `OutboundLink`
+
+### Props
+
+None.
 
 ### Slots
 
