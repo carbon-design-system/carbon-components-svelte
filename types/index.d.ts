@@ -73,6 +73,7 @@ export { default as Column } from "./Grid/Column";
 export { default as IconSkeleton } from "./Icon/IconSkeleton";
 export { default as Icon } from "./Icon/Icon";
 export { default as InlineLoading } from "./InlineLoading/InlineLoading";
+export { default as OutboundLink } from "./Link/OutboundLink";
 export { default as ListItem } from "./ListItem/ListItem";
 export { default as MultiSelect } from "./MultiSelect/MultiSelect";
 export { default as Modal } from "./Modal/Modal";

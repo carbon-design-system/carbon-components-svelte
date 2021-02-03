@@ -1,5 +1,5 @@
 {
-  "total": 155,
+  "total": 156,
   "components": [
     {
       "moduleName": "SkeletonText",
@@ -5082,6 +5082,16 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "OutboundLink",
+      "filePath": "/src/Link/OutboundLink.svelte",
+      "props": [],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": [],
+      "rest_props": { "type": "InlineComponent", "name": "Link" },
+      "extends": { "interface": "LinkProps", "import": "\"./Link\"" }
     },
     {
       "moduleName": "ListItem",

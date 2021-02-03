@@ -1,6 +1,6 @@
 # Component Index
 
-> 155 components exported from carbon-components-svelte@0.27.0.
+> 156 components exported from carbon-components-svelte@0.27.0.
 
 ## Components
 
@@ -84,6 +84,7 @@
 - [`NumberInput`](#numberinput)
 - [`NumberInputSkeleton`](#numberinputskeleton)
 - [`OrderedList`](#orderedlist)
+- [`OutboundLink`](#outboundlink)
 - [`OverflowMenu`](#overflowmenu)
 - [`OverflowMenuItem`](#overflowmenuitem)
 - [`Pagination`](#pagination)
@@ -2360,6 +2361,22 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `OutboundLink`
+
+### Props
+
+None.
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `OverflowMenu`
 
