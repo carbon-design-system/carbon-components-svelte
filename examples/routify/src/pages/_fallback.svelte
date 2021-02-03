@@ -1,5 +1,5 @@
 <script>
-  import { url } from "@sveltech/routify";
+  import { url } from "@roxi/routify";
   import { Row, Column, Link } from "carbon-components-svelte";
 </script>
 
