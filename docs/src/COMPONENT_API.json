@@ -5088,7 +5088,12 @@
       "filePath": "/src/Link/OutboundLink.svelte",
       "props": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [],
+      "events": [
+        { "type": "forwarded", "name": "click", "element": "Link" },
+        { "type": "forwarded", "name": "mouseover", "element": "Link" },
+        { "type": "forwarded", "name": "mouseenter", "element": "Link" },
+        { "type": "forwarded", "name": "mouseleave", "element": "Link" }
+      ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "Link" },
       "extends": { "interface": "LinkProps", "import": "\"./Link\"" }
