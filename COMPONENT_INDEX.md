@@ -4151,6 +4151,7 @@ None.
 | expanded   | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to expand the search bar        |
 | value      | <code>let</code> | Yes      | <code>number &#124; string</code>         | <code>""</code>    | Specify the value of the search input         |
 | persistent | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to keep the search bar expanded |
+| disabled   | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to disable the search bar       |
 | tabindex   | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>   | Specify the tabindex                          |
 
 ### Slots
