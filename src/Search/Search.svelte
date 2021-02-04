@@ -90,6 +90,8 @@
   />
 {:else}
   <div
+    role="search"
+    aria-labelledby="{id}-search"
     class:bx--search="{true}"
     class:bx--search--light="{light}"
     class:bx--search--disabled="{disabled}"
@@ -99,7 +101,9 @@
     {...$$restProps}
   >
     <Search16 class="bx--search-magnifier" />
-    <label for="{id}" class:bx--label="{true}">{labelText}</label>
+    <label id="{id}-search" for="{id}" class:bx--label="{true}"
+      >{labelText}</label
+    >
     <!-- svelte-ignore a11y-autofocus -->
     <input
       bind:this="{ref}"
