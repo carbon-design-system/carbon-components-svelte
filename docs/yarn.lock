@@ -842,10 +842,10 @@ carbon-components-svelte@../:
     carbon-icons-svelte "^10.21.0"
     flatpickr "4.6.9"
 
-carbon-components@10.28.0-rc.0:
-  version "10.28.0-rc.0"
-  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.28.0-rc.0.tgz#b9c7c3b168f0897cf545a464e51a50ef8bf6f182"
-  integrity sha512-3US6oBa/IDdZ/9RQ9ysHza+UMnSkzr6PAymoruhuBxBvFvP6aGxN4v2w7Q0GfkuPdOnxYA0K2lZgsqIUCoSscA==
+carbon-components@10.28.0:
+  version "10.28.0"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.28.0.tgz#c4d2b23df2559cf3b0226867c45e2e84e0af7c4e"
+  integrity sha512-bFsyngr625zc/t2gl4BPFYl0/ed4q38rrPihQxBXHhLAdeZNyy8xyOQlbh1PEQbTu47H/s/bxVo6QiFm/VmLZA==
   dependencies:
     "@carbon/telemetry" "0.0.0-alpha.6"
     flatpickr "4.6.1"
