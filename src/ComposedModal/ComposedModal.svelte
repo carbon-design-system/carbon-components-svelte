@@ -38,8 +38,10 @@
     afterUpdate,
     onDestroy,
   } from "svelte";
+  import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  const label = writable(undefined);
 
   let buttonRef = null;
   let innerModal = null;
@@ -54,6 +56,9 @@
     },
     declareRef: (ref) => {
       buttonRef = ref;
+    },
+    updateLabel: (value) => {
+      label.set(value);
     },
   });
 
@@ -119,6 +124,9 @@
 >
   <div
     bind:this="{innerModal}"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{$$props['aria-label'] || $label || undefined}"
     class:bx--modal-container="{true}"
     class:bx--modal-container--xs="{size === 'xs'}"
     class:bx--modal-container--sm="{size === 'sm'}"
