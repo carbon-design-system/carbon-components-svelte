@@ -3629,6 +3629,7 @@ None.
 | Prop name | Kind             | Reactive | Type                                                                                                                                                                                    | Default value                                    | Description                                            |
 | :-------- | :--------------- | :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------ |
 | type      | <code>let</code> | No       | <code>"red" &#124; "magenta" &#124; "purple" &#124; "blue" &#124; "cyan" &#124; "teal" &#124; "green" &#124; "gray" &#124; "cool-gray" &#124; "warm-gray" &#124; "high-contrast"</code> | --                                               | Specify the type of tag                                |
+| size      | <code>let</code> | No       | <code>"sm" &#124; "default"</code>                                                                                                                                                      | <code>"default"</code>                           | --                                                     |
 | filter    | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to use filterable variant                |
 | disabled  | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to disable a filterable tag              |
 | skeleton  | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to display the skeleton state            |
@@ -3656,7 +3657,9 @@ None.
 
 ### Props
 
-None.
+| Prop name | Kind             | Reactive | Type                               | Default value          | Description |
+| :-------- | :--------------- | :------- | :--------------------------------- | ---------------------- | ----------- |
+| size      | <code>let</code> | No       | <code>"sm" &#124; "default"</code> | <code>"default"</code> | --          |
 
 ### Slots
 

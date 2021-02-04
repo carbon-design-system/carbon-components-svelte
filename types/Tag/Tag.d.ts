@@ -20,6 +20,11 @@ export interface TagProps
     | "high-contrast";
 
   /**
+   * @default "default"
+   */
+  size?: "sm" | "default";
+
+  /**
    * Set to `true` to use filterable variant
    * @default false
    */
