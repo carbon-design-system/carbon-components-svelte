@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.28.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.28.0) - 2021-02-05
+
+**Breaking Changes**
+
+- The `transitionend` event in ComposedModal is dispatched, not forwarded; it will only trigger when the modal has finished animating
+
+**Features**
+
+- Support small size variant for Tag (`size="sm"`)
+- Dispatch `close` event in a filterable Tag (an alias for `click`)
+- Dispatch `toggle` event in Toggle
+- Make `tooltipText` slottable in TooltipIcon (slot name="tooltipText")
+- Add `hideLabel` prop to Dropdown
+- Dispatch `transitionend` event in Modal, ComposedModal to fire after the modal has finished animating
+- Add warn state to DatePickerInput
+
+**Fixes**
+
+- Forward the `click` event to Tab
+- Do not trigger initial Tab focus when mounting
+
+**Documentation**
+
+- Add a "Hidden label" example for the Select component
+- Add a light variant example for OverflowMenu
+- Add a reactive example for Tabs
+
+**Housekeeping**
+
+- Upgrade `carbon-components` to version 10.28.0
+- Remove unused `@carbon/themes` development dependency; themes are pulled from `carbon-components`
+
 ## [0.27.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.27.0) - 2021-01-28
 
 **Features**

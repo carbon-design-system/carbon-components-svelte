@@ -1,5 +1,5 @@
 {
-  "version": "0.27.0",
+  "version": "0.28.0",
   "components": {
     "Accordion": {
       "path": "carbon-components-svelte/src/Accordion/Accordion.svelte"
@@ -186,6 +186,9 @@
     },
     "Link": {
       "path": "carbon-components-svelte/src/Link/Link.svelte"
+    },
+    "OutboundLink": {
+      "path": "carbon-components-svelte/src/Link/OutboundLink.svelte"
     },
     "ListBox": {
       "path": "carbon-components-svelte/src/ListBox/ListBox.svelte"
