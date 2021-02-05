@@ -20,6 +20,10 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   </div>
 </Tabs>
 
+### Reactive example
+
+<FileSource src="/framed/Tabs/TabsReactive" />
+
 ### Container type
 
 <Tabs type="container">
