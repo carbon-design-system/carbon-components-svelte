@@ -3,7 +3,7 @@
 export interface TooltipIconProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
    * Specify the tooltip text.
-   * Alternatively, use the "text" slot
+   * Alternatively, use the "tooltipText" slot
    * @default ""
    */
   tooltipText?: string;
@@ -37,7 +37,7 @@ export default class TooltipIcon {
   $$prop_def: TooltipIconProps;
   $$slot_def: {
     default: {};
-    text: {};
+    tooltipText: {};
   };
 
   $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;

@@ -4236,20 +4236,20 @@ None.
 
 ### Props
 
-| Prop name   | Kind             | Reactive | Type                                                            | Default value                                    | Description                                                       |
-| :---------- | :--------------- | :------- | :-------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
-| ref         | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                      | <code>null</code>                                | Obtain a reference to the button HTML element                     |
-| tooltipText | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the tooltip text.<br />Alternatively, use the "text" slot |
-| align       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon             |
-| direction   | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the icon             |
-| id          | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the span element                                    |
+| Prop name   | Kind             | Reactive | Type                                                            | Default value                                    | Description                                                              |
+| :---------- | :--------------- | :------- | :-------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------ |
+| ref         | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                      | <code>null</code>                                | Obtain a reference to the button HTML element                            |
+| tooltipText | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the tooltip text.<br />Alternatively, use the "tooltipText" slot |
+| align       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon                    |
+| direction   | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the icon                    |
+| id          | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the span element                                           |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                   |
-| :-------- | :------ | :---- | :------------------------- |
-| --        | Yes     | --    | --                         |
-| text      | No      | --    | <code>{tooltipText}</code> |
+| Slot name   | Default | Props | Fallback                   |
+| :---------- | :------ | :---- | :------------------------- |
+| --          | Yes     | --    | --                         |
+| tooltipText | No      | --    | <code>{tooltipText}</code> |
 
 ### Events
 

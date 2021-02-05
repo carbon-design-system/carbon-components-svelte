@@ -23,6 +23,6 @@
 Use the "text" slot to customize the tooltip text.
 
 <TooltipIcon>
-  <span slot="text" style="color: red">Carbon is an open source design system by IBM.</span>
+  <span slot="tooltipText" style="color: red">Carbon is an open source design system by IBM.</span>
   <Carbon24 />
 </TooltipIcon>

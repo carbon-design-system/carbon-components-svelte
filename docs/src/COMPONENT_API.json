@@ -9746,7 +9746,7 @@
         {
           "name": "tooltipText",
           "kind": "let",
-          "description": "Specify the tooltip text.\nAlternatively, use the \"text\" slot",
+          "description": "Specify the tooltip text.\nAlternatively, use the \"tooltipText\" slot",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -9797,7 +9797,7 @@
       "slots": [
         { "name": "__default__", "default": true, "slot_props": "{}" },
         {
-          "name": "text",
+          "name": "tooltipText",
           "default": false,
           "fallback": "{tooltipText}",
           "slot_props": "{}"
