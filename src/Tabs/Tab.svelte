@@ -20,16 +20,27 @@
   /** Obtain a reference to the anchor HTML element */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { onMount, afterUpdate, getContext, tick } from "svelte";
 
   const { selectedTab, add, update, change } = getContext("Tabs");
 
   add({ id, label, disabled });
 
+  let didMount = false;
+
   $: selected = $selectedTab === id;
-  $: if (selected && ref) {
-    ref.focus();
-  }
+
+  onMount(() => {
+    tick().then(() => {
+      didMount = true;
+    });
+  });
+
+  afterUpdate(() => {
+    if (didMount && selected && ref) {
+      ref.focus();
+    }
+  });
 </script>
 
 <li
