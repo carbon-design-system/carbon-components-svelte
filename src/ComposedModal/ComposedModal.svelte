@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {{ open: boolean; }} transitionend
+   */
+
+  /**
    * Set the size of the composed modal
    * @type {"xs" | "sm" | "lg"}
    */
@@ -34,8 +38,10 @@
     afterUpdate,
     onDestroy,
   } from "svelte";
+  import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  const label = writable(undefined);
 
   let buttonRef = null;
   let innerModal = null;
@@ -50,6 +56,9 @@
     },
     declareRef: (ref) => {
       buttonRef = ref;
+    },
+    updateLabel: (value) => {
+      label.set(value);
     },
   });
 
@@ -102,8 +111,11 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:transitionend
-  on:transitionend="{({ currentTarget }) => {
+  on:transitionend="{({ propertyName, currentTarget }) => {
+    if (propertyName === 'transform') {
+      dispatch('transitionend', { open });
+    }
+
     if (didOpen) {
       focus(currentTarget);
       didOpen = false;
@@ -112,6 +124,9 @@
 >
   <div
     bind:this="{innerModal}"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{$$props['aria-label'] || $label || undefined}"
     class:bx--modal-container="{true}"
     class:bx--modal-container--xs="{size === 'xs'}"
     class:bx--modal-container--sm="{size === 'sm'}"

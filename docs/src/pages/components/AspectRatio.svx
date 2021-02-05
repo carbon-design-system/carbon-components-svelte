@@ -9,43 +9,43 @@ Supported aspect ratios: `"2x1"`, `"16x9"`, `"4x3"`, `"1x1"`, `"3x4"`, `"9x16"`,
 
 ### Default (2x1)
 
-<AspectRatio style="outline: 1px solid var(--cds-interactive-04)">
+<AspectRatio>
   2x1
 </AspectRatio>
 
 ### Ratio 16x9
 
-<AspectRatio ratio="16x9" style="outline: 1px solid var(--cds-interactive-04)">
+<AspectRatio ratio="16x9">
   16x9
 </AspectRatio>
 
 ### Ratio 4x3
 
-<AspectRatio ratio="4x3" style="outline: 1px solid var(--cds-interactive-04)">
+<AspectRatio ratio="4x3">
   4x3
 </AspectRatio>
 
 ### Ratio 1x1
 
-<AspectRatio ratio="1x1" style="outline: 1px solid var(--cds-interactive-04)">
+<AspectRatio ratio="1x1">
   1x1
 </AspectRatio>
 
 ### Ratio 3x4
 
-<AspectRatio ratio="3x4" style="outline: 1px solid var(--cds-interactive-04)">
+<AspectRatio ratio="3x4">
   3x4
 </AspectRatio>
 
 ### Ratio 9x16
 
-<AspectRatio ratio="9x16" style="outline: 1px solid var(--cds-interactive-04)">
+<AspectRatio ratio="9x16">
   9x16
 </AspectRatio>
 
 ### Ratio 1x2
 
-<AspectRatio ratio="1x2" style="outline: 1px solid var(--cds-interactive-04)">
+<AspectRatio ratio="1x2">
   1x2
 </AspectRatio>
 

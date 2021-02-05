@@ -32,6 +32,14 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
+### Light variant
+
+<OverflowMenu light>
+  <OverflowMenuItem text="Manage credentials" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem danger text="Delete service" />
+</OverflowMenu>
+
 ### Extra-large size
 
 <OverflowMenu size="xl">

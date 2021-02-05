@@ -6,28 +6,11 @@
 <Router routes="{routes}" />
 
 <style lang="scss" global>
-  @import "@carbon/themes/scss/themes";
-
   $feature-flags: (
     enable-css-custom-properties: true,
+    ui-shell: true,
     grid-columns-16: true
   );
-
-  :root {
-    @include carbon--theme($carbon--theme--white, true);
-  }
-
-  :root[theme="g10"] {
-    @include carbon--theme($carbon--theme--g10, true);
-  }
-
-  :root[theme="g90"] {
-    @include carbon--theme($carbon--theme--g90, true);
-  }
-
-  :root[theme="g100"] {
-    @include carbon--theme($carbon--theme--g100, true);
-  }
 
   $css--font-face: true;
   $css--helpers: true;
@@ -36,6 +19,22 @@
   $css--reset: true;
   $css--default-type: true;
   $css--plex: true;
+
+  // Use all Carbon themes
+  @import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
+
+  :root {
+    @include carbon--theme($carbon--theme--white, true);
+  }
+  :root[theme="g10"] {
+    @include carbon--theme($carbon--theme--g10, true);
+  }
+  :root[theme="g90"] {
+    @include carbon--theme($carbon--theme--g90, true);
+  }
+  :root[theme="g100"] {
+    @include carbon--theme($carbon--theme--g100, true);
+  }
 
   @import "carbon-components/scss/globals/scss/_css--reset.scss";
   @import "carbon-components/scss/globals/scss/_css--font-face.scss";

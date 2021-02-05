@@ -23,3 +23,10 @@
 <TooltipIcon tooltipText="Left start" direction="left" align="start">
   <Filter20 />
 </TooltipIcon>
+
+<TooltipIcon>
+  <span slot="text" style="color: red"
+    >Carbon is an open source design system by IBM.</span
+  >
+  <Carbon24 />
+</TooltipIcon>

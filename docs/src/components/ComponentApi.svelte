@@ -203,4 +203,8 @@
     margin-top: var(--cds-layout-01);
     margin-bottom: var(--cds-layout-04);
   }
+
+  code {
+    word-break: break-word;
+  }
 </style>

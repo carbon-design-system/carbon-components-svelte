@@ -7,6 +7,9 @@
    */
   export let type = undefined;
 
+  /** @type {"sm" | "default"} */
+  export let size = "default";
+
   /** Set to `true` to use filterable variant */
   export let filter = false;
 
@@ -30,10 +33,15 @@
 
   import Close16 from "carbon-icons-svelte/lib/Close16/Close16.svelte";
   import TagSkeleton from "./TagSkeleton.svelte";
+
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
 </script>
 
 {#if skeleton}
   <TagSkeleton
+    size="{size}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -48,6 +56,7 @@
       class:bx--tag="{true}"
       class:bx--tag--disabled="{disabled}"
       class:bx--tag--filter="{filter}"
+      class:bx--tag--sm="{size === 'sm'}"
       class:bx--tag--red="{type === 'red'}"
       class:bx--tag--magenta="{type === 'magenta'}"
       class:bx--tag--purple="{type === 'purple'}"
@@ -70,6 +79,9 @@
         disabled="{disabled}"
         title="{title}"
         on:click|stopPropagation
+        on:click|stopPropagation="{() => {
+          dispatch('close');
+        }}"
         on:mouseover
         on:mouseenter
         on:mouseleave
@@ -82,6 +94,7 @@
       id="{id}"
       class:bx--tag="{true}"
       class:bx--tag--disabled="{disabled}"
+      class:bx--tag--sm="{size === 'sm'}"
       class:bx--tag--red="{type === 'red'}"
       class:bx--tag--magenta="{type === 'magenta'}"
       class:bx--tag--purple="{type === 'purple'}"

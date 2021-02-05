@@ -20,6 +20,12 @@ export interface ToolbarSearchProps {
   persistent?: boolean;
 
   /**
+   * Set to `true` to disable the search bar
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
    * Specify the tabindex
    * @default "0"
    */

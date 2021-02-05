@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {{ toggled: boolean; }} toggle
+   */
+
+  /**
    * Specify the toggle size
    * @type {"default" | "sm"}
    */
@@ -28,6 +32,12 @@
    * @type {string}
    */
   export let name = undefined;
+
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
+
+  $: dispatch("toggle", { toggled });
 </script>
 
 <div

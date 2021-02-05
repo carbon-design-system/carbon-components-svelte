@@ -11,6 +11,9 @@
   /** Set to `true` to keep the search bar expanded */
   export let persistent = false;
 
+  /** Set to `true` to disable the search bar */
+  export let disabled = false;
+
   /** Specify the tabindex */
   export let tabindex = "0";
 
@@ -21,10 +24,10 @@
   export let ref = null;
 
   import { tick } from "svelte";
-  import { Search } from "../Search";
+  import Search from "../Search/Search.svelte";
 
   async function expandSearch() {
-    if (persistent || expanded) return;
+    if (disabled || persistent || expanded) return;
     expanded = true;
     await tick();
     ref.focus();
@@ -32,17 +35,19 @@
 </script>
 
 <div
-  tabindex="{expanded ? '-1' : tabindex}"
+  tabindex="{expanded || disabled ? '-1' : tabindex}"
   class:bx--toolbar-action="{true}"
   class:bx--toolbar-search-container-active="{expanded}"
   class:bx--toolbar-search-container-expandable="{!persistent}"
   class:bx--toolbar-search-container-persistent="{persistent}"
+  class:bx--toolbar-search-container-disabled="{disabled}"
   on:click="{expandSearch}"
   on:focus="{expandSearch}"
 >
   <Search
     size="sm"
     tabindex="{expanded ? tabindex : '-1'}"
+    disabled="{disabled}"
     {...$$restProps}
     bind:ref
     bind:value

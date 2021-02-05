@@ -659,16 +659,16 @@ None.
 
 ### Events
 
-| Event name    | Type       | Detail |
-| :------------ | :--------- | :----- |
-| click         | forwarded  | --     |
-| mouseover     | forwarded  | --     |
-| mouseenter    | forwarded  | --     |
-| mouseleave    | forwarded  | --     |
-| transitionend | forwarded  | --     |
-| submit        | dispatched | --     |
-| close         | dispatched | --     |
-| open          | dispatched | --     |
+| Event name    | Type       | Detail                          |
+| :------------ | :--------- | :------------------------------ |
+| transitionend | dispatched | <code>{ open: boolean; }</code> |
+| click         | forwarded  | --                              |
+| mouseover     | forwarded  | --                              |
+| mouseenter    | forwarded  | --                              |
+| mouseleave    | forwarded  | --                              |
+| submit        | dispatched | --                              |
+| close         | dispatched | --                              |
+| open          | dispatched | --                              |
 
 ## `Content`
 
@@ -916,6 +916,8 @@ None.
 | hideLabel       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to visually hide the label text      |
 | invalid         | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to indicate an invalid state         |
 | invalidText     | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the invalid state text                     |
+| warn            | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to indicate an warning state         |
+| warnText        | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the warning state text                     |
 | name            | <code>let</code> | No       | <code>string</code>                       | --                                               | Set a name for the input element                   |
 
 ### Slots
@@ -988,6 +990,7 @@ export interface DropdownItem {
 | warnText        | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the warning state text                |
 | helperText      | <code>let</code> | No       | <code>string</code>                         | <code>""</code>                                       | Specify the helper text                       |
 | label           | <code>let</code> | No       | <code>string</code>                         | --                                                    | Specify the list box label                    |
+| hideLabel       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to visually hide the label text |
 | translateWithId | <code>let</code> | No       | <code>(id: any) => string</code>            | --                                                    | Override the default translation ids          |
 | id              | <code>let</code> | No       | <code>string</code>                         | <code>"ccs-" + Math.random().toString(36)</code>      | Set an id for the list box component          |
 | name            | <code>let</code> | No       | <code>string</code>                         | --                                                    | Specify a name attribute for the list box     |
@@ -2040,17 +2043,18 @@ None.
 
 ### Events
 
-| Event name              | Type       | Detail |
-| :---------------------- | :--------- | :----- |
-| keydown                 | forwarded  | --     |
-| click                   | forwarded  | --     |
-| mouseover               | forwarded  | --     |
-| mouseenter              | forwarded  | --     |
-| mouseleave              | forwarded  | --     |
-| submit                  | dispatched | --     |
-| click:button--secondary | dispatched | --     |
-| close                   | dispatched | --     |
-| open                    | dispatched | --     |
+| Event name              | Type       | Detail                          |
+| :---------------------- | :--------- | :------------------------------ |
+| transitionend           | dispatched | <code>{ open: boolean; }</code> |
+| keydown                 | forwarded  | --                              |
+| click                   | forwarded  | --                              |
+| mouseover               | forwarded  | --                              |
+| mouseenter              | forwarded  | --                              |
+| mouseleave              | forwarded  | --                              |
+| submit                  | dispatched | --                              |
+| click:button--secondary | dispatched | --                              |
+| close                   | dispatched | --                              |
+| open                    | dispatched | --                              |
 
 ## `ModalBody`
 
@@ -3401,6 +3405,7 @@ None.
 
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
+| click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
@@ -3624,6 +3629,7 @@ None.
 | Prop name | Kind             | Reactive | Type                                                                                                                                                                                    | Default value                                    | Description                                            |
 | :-------- | :--------------- | :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------ |
 | type      | <code>let</code> | No       | <code>"red" &#124; "magenta" &#124; "purple" &#124; "blue" &#124; "cyan" &#124; "teal" &#124; "green" &#124; "gray" &#124; "cool-gray" &#124; "warm-gray" &#124; "high-contrast"</code> | --                                               | Specify the type of tag                                |
+| size      | <code>let</code> | No       | <code>"sm" &#124; "default"</code>                                                                                                                                                      | <code>"default"</code>                           | --                                                     |
 | filter    | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to use filterable variant                |
 | disabled  | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to disable a filterable tag              |
 | skeleton  | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to display the skeleton state            |
@@ -3639,18 +3645,21 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| click      | forwarded  | --     |
+| mouseover  | forwarded  | --     |
+| mouseenter | forwarded  | --     |
+| mouseleave | forwarded  | --     |
+| close      | dispatched | --     |
 
 ## `TagSkeleton`
 
 ### Props
 
-None.
+| Prop name | Kind             | Reactive | Type                               | Default value          | Description |
+| :-------- | :--------------- | :------- | :--------------------------------- | ---------------------- | ----------- |
+| size      | <code>let</code> | No       | <code>"sm" &#124; "default"</code> | <code>"default"</code> | --          |
 
 ### Slots
 
@@ -3957,16 +3966,17 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
+| Event name | Type       | Detail                             |
+| :--------- | :--------- | :--------------------------------- |
+| toggle     | dispatched | <code>{ toggled: boolean; }</code> |
+| click      | forwarded  | --                                 |
+| mouseover  | forwarded  | --                                 |
+| mouseenter | forwarded  | --                                 |
+| mouseleave | forwarded  | --                                 |
+| change     | forwarded  | --                                 |
+| keyup      | forwarded  | --                                 |
+| focus      | forwarded  | --                                 |
+| blur       | forwarded  | --                                 |
 
 ## `ToggleSkeleton`
 
@@ -4141,6 +4151,7 @@ None.
 | expanded   | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to expand the search bar        |
 | value      | <code>let</code> | Yes      | <code>number &#124; string</code>         | <code>""</code>    | Specify the value of the search input         |
 | persistent | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to keep the search bar expanded |
+| disabled   | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to disable the search bar       |
 | tabindex   | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>   | Specify the tabindex                          |
 
 ### Slots
@@ -4225,19 +4236,20 @@ None.
 
 ### Props
 
-| Prop name   | Kind             | Reactive | Type                                                            | Default value                                    | Description                                           |
-| :---------- | :--------------- | :------- | :-------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------- |
-| ref         | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                      | <code>null</code>                                | Obtain a reference to the button HTML element         |
-| tooltipText | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the tooltip text                              |
-| align       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon |
-| direction   | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the icon |
-| id          | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the span element                        |
+| Prop name   | Kind             | Reactive | Type                                                            | Default value                                    | Description                                                              |
+| :---------- | :--------------- | :------- | :-------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------ |
+| ref         | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                      | <code>null</code>                                | Obtain a reference to the button HTML element                            |
+| tooltipText | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the tooltip text.<br />Alternatively, use the "tooltipText" slot |
+| align       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon                    |
+| direction   | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the icon                    |
+| id          | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the span element                                           |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name   | Default | Props | Fallback                   |
+| :---------- | :------ | :---- | :------------------------- |
+| --          | Yes     | --    | --                         |
+| tooltipText | No      | --    | <code>{tooltipText}</code> |
 
 ### Events
 

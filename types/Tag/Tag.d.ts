@@ -20,6 +20,11 @@ export interface TagProps
     | "high-contrast";
 
   /**
+   * @default "default"
+   */
+  size?: "sm" | "default";
+
+  /**
    * Set to `true` to use filterable variant
    * @default false
    */
@@ -65,5 +70,6 @@ export default class Tag {
   $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
   $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
   $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
+  $on(eventname: "close", cb: (event: CustomEvent<any>) => void): () => void;
   $on(eventname: string, cb: (event: Event) => void): () => void;
 }

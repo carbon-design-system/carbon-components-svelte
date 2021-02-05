@@ -69,6 +69,9 @@
    */
   export let label = undefined;
 
+  /** Set to `true` to visually hide the label text */
+  export let hideLabel = false;
+
   /**
    * Override the default translation ids
    * @type {(id: any) => string}
@@ -145,6 +148,7 @@
       for="{id}"
       class:bx--label="{true}"
       class:bx--label--disabled="{disabled}"
+      class:bx--visually-hidden="{hideLabel}"
     >
       {titleText}
     </label>

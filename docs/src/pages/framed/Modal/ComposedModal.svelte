@@ -11,7 +11,7 @@
 </script>
 
 <ComposedModal open>
-  <ModalHeader title="Confirm changes" />
+  <ModalHeader label="Changes" title="Confirm changes" />
   <ModalBody hasForm>
     <Checkbox labelText="I have reviewed the changes" bind:checked />
   </ModalBody>

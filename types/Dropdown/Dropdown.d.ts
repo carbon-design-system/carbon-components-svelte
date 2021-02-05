@@ -105,6 +105,12 @@ export interface DropdownProps extends svelte.JSX.HTMLAttributes<HTMLElementTagN
   label?: string;
 
   /**
+   * Set to `true` to visually hide the label text
+   * @default false
+   */
+  hideLabel?: boolean;
+
+  /**
    * Override the default translation ids
    */
   translateWithId?: (id: any) => string;

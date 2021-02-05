@@ -16,6 +16,15 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
+### Hidden label
+
+<Select hideLabel labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
 ### Item groups
 
 <Select labelText="Carbon theme" selected="g10" >

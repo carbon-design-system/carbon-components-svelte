@@ -19,6 +19,10 @@ components: ["Toggle", "ToggleSkeleton"]
 
 <FileSource src="/framed/Toggle/ToggleReactive" />
 
+### on:toggle event
+
+<Toggle labelText="Push notifications" on:toggle={e => console.log(e.detail)} />
+
 ### Custom labels
 
 <Toggle labelText="Push notifications" labelA="No" labelB="Yes" />

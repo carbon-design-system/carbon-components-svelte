@@ -23,27 +23,29 @@
   import { getContext } from "svelte";
   import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
 
-  const { closeModal } = getContext("ComposedModal");
+  const { closeModal, updateLabel } = getContext("ComposedModal");
+
+  $: updateLabel(label);
 </script>
 
 <div class:bx--modal-header="{true}" {...$$restProps}>
   {#if label}
-    <p
+    <h2
       class:bx--modal-header__label="{true}"
       class:bx--type-delta="{true}"
       class="{labelClass}"
     >
       {label}
-    </p>
+    </h2>
   {/if}
   {#if title}
-    <p
+    <h3
       class:bx--modal-header__heading="{true}"
       class:bx--type-beta="{true}"
       class="{titleClass}"
     >
       {title}
-    </p>
+    </h3>
   {/if}
   <slot />
   <button

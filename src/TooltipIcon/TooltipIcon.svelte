@@ -1,5 +1,8 @@
 <script>
-  /** Specify the tooltip text */
+  /**
+   * Specify the tooltip text.
+   * Alternatively, use the "tooltipText" slot
+   */
   export let tooltipText = "";
 
   /**
@@ -56,6 +59,8 @@
     hidden = false;
   }}"
 >
-  <span id="{id}" class:bx--assistive-text="{true}">{tooltipText}</span>
+  <span id="{id}" class:bx--assistive-text="{true}">
+    <slot name="tooltipText">{tooltipText}</slot>
+  </span>
   <slot />
 </button>

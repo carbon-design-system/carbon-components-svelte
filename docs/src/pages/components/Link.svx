@@ -1,3 +1,7 @@
+---
+components: ["Link", "OutboundLink"]
+---
+
 <script>
   import { Link, OutboundLink } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

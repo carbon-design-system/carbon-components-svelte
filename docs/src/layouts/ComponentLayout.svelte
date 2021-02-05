@@ -207,4 +207,8 @@
       display: block;
     }
   }
+
+  .preview-viewer > .bx--aspect-ratio {
+    outline: 1px solid var(--cds-interactive-04);
+  }
 </style>

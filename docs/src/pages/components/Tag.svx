@@ -9,6 +9,10 @@
 
 <Tag>IBM Cloud</Tag>
 
+### Small size
+
+<Tag size="sm">IBM Cloud</Tag>
+
 ### Tag types
 
 <Tag type="red">red</Tag>
@@ -25,15 +29,18 @@
 
 ### Filterable
 
-<Tag filter on:click>Filterable</Tag>
+<Tag filter on:close>Filterable</Tag>
 
 ### Custom icon
 
 Note: rendering a custom icon cannnot be used with the filterable variant.
 
 <Tag icon={IbmCloud16}>IBM Cloud</Tag>
-<Tag icon={Document16} type="blue">API documentation</Tag>
 
 ### Skeleton
 
 <Tag skeleton />
+
+### Skeleton (small)
+
+<Tag size="sm" skeleton />

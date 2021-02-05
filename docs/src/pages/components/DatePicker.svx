@@ -43,6 +43,12 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
   <DatePickerInput invalid invalidText="Invalid date" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
+### Warning state
+
+<DatePicker>
+  <DatePickerInput warn warnText="This info will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
 ### Disabled state
 
 <DatePicker>
