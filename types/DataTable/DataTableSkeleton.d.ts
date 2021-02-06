@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 import { DataTableHeader } from "../DataTable/DataTable";
 
 export interface DataTableSkeletonProps
@@ -48,13 +49,13 @@ export interface DataTableSkeletonProps
   showToolbar?: boolean;
 }
 
-export default class DataTableSkeleton {
-  $$prop_def: DataTableSkeletonProps;
-  $$slot_def: {};
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class DataTableSkeleton extends SvelteComponentTyped<
+  DataTableSkeletonProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  {}
+> {}

@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface OverflowMenuProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
+export interface OverflowMenuProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
    * Specify the size of the overflow menu
    */
@@ -70,18 +72,15 @@ export interface OverflowMenuProps extends svelte.JSX.HTMLAttributes<HTMLElement
   menuRef?: null | HTMLUListElement;
 }
 
-export default class OverflowMenu {
-  $$prop_def: OverflowMenuProps;
-  $$slot_def: {
-    default: {};
-    menu: {};
-  };
-
-  $on(eventname: "close", cb: (event: CustomEvent<{ index: number; text: string }>) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class OverflowMenu extends SvelteComponentTyped<
+  OverflowMenuProps,
+  {
+    close: CustomEvent<{ index: number; text: string }>;
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    keydown: WindowEventMap["keydown"];
+  },
+  { default: {}; menu: {} }
+> {}

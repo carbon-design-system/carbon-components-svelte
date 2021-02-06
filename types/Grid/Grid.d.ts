@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface GridProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface GridProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g., <Grid let:props><header {...props}>...</header></Grid>)
@@ -51,11 +53,8 @@ export interface GridProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameM
   padding?: boolean;
 }
 
-export default class Grid {
-  $$prop_def: GridProps;
-  $$slot_def: {
-    default: { props: { class: string; [key: string]: any } };
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Grid extends SvelteComponentTyped<
+  GridProps,
+  {},
+  { default: { props: { class: string; [key: string]: any } } }
+> {}

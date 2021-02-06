@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface HeaderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+export interface HeaderProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
    * Set to `false` to hide the side nav by default
    * @default true
@@ -48,14 +50,8 @@ export interface HeaderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNam
   ref?: null | HTMLAnchorElement;
 }
 
-export default class Header {
-  $$prop_def: HeaderProps;
-  $$slot_def: {
-    default: {};
-    platform: {};
-    ["skip-to-content"]: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Header extends SvelteComponentTyped<
+  HeaderProps,
+  { click: WindowEventMap["click"] },
+  { default: {}; platform: {}; ["skip-to-content"]: {} }
+> {}

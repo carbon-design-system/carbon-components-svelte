@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface ModalHeaderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface ModalHeaderProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the modal title
    * @default ""
@@ -44,12 +46,8 @@ export interface ModalHeaderProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   iconDescription?: string;
 }
 
-export default class ModalHeader {
-  $$prop_def: ModalHeaderProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ModalHeader extends SvelteComponentTyped<
+  ModalHeaderProps,
+  { click: WindowEventMap["click"] },
+  { default: {} }
+> {}

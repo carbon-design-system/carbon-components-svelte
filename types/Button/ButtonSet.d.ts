@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface ButtonSetProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface ButtonSetProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set to `true` to stack the buttons vertically
    * @default false
@@ -8,11 +10,8 @@ export interface ButtonSetProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
   stacked?: boolean;
 }
 
-export default class ButtonSet {
-  $$prop_def: ButtonSetProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ButtonSet extends SvelteComponentTyped<
+  ButtonSetProps,
+  {},
+  { default: {} }
+> {}

@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface BreadcrumbItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+export interface BreadcrumbItemProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
   /**
    * Set the `href` to use an anchor link
    */
@@ -13,15 +15,13 @@ export interface BreadcrumbItemProps extends svelte.JSX.HTMLAttributes<HTMLEleme
   isCurrentPage?: boolean;
 }
 
-export default class BreadcrumbItem {
-  $$prop_def: BreadcrumbItemProps;
-  $$slot_def: {
-    default: { props?: { ["aria-current"]?: string; class: "bx--link" } };
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class BreadcrumbItem extends SvelteComponentTyped<
+  BreadcrumbItemProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: { props?: { ["aria-current"]?: string; class: "bx--link" } } }
+> {}

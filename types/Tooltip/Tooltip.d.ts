@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface TooltipProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface TooltipProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the alignment of the tooltip relative to the icon
    * @default "center"
@@ -86,15 +88,8 @@ export interface TooltipProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNa
   refIcon?: null | HTMLDivElement;
 }
 
-export default class Tooltip {
-  $$prop_def: TooltipProps;
-  $$slot_def: {
-    default: {};
-    icon: {};
-    triggerText: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mousedown", cb: (event: WindowEventMap["mousedown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Tooltip extends SvelteComponentTyped<
+  TooltipProps,
+  { click: WindowEventMap["click"]; mousedown: WindowEventMap["mousedown"] },
+  { default: {}; icon: {}; triggerText: {} }
+> {}

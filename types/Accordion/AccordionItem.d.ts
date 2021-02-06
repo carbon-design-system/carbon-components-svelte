@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface AccordionItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+export interface AccordionItemProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
   /**
    * Specify the title of the accordion item heading
    * Alternatively, use the "title" slot (e.g., <div slot="title">...</div>)
@@ -27,18 +29,15 @@ export interface AccordionItemProps extends svelte.JSX.HTMLAttributes<HTMLElemen
   iconDescription?: string;
 }
 
-export default class AccordionItem {
-  $$prop_def: AccordionItemProps;
-  $$slot_def: {
-    default: {};
-    title: {};
-  };
-
-  $on(eventname: "animationend", cb: (event: WindowEventMap["animationend"]) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class AccordionItem extends SvelteComponentTyped<
+  AccordionItemProps,
+  {
+    animationend: WindowEventMap["animationend"];
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    keydown: WindowEventMap["keydown"];
+  },
+  { default: {}; title: {} }
+> {}

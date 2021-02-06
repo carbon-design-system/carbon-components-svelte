@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export interface FilenameProps {
   /**
@@ -20,11 +21,8 @@ export interface FilenameProps {
   invalid?: boolean;
 }
 
-export default class Filename {
-  $$prop_def: FilenameProps;
-  $$slot_def: {};
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Filename extends SvelteComponentTyped<
+  FilenameProps,
+  { click: WindowEventMap["click"]; keydown: WindowEventMap["keydown"] },
+  {}
+> {}

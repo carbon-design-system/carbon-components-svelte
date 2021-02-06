@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 import { BreadcrumbSkeletonProps } from "./BreadcrumbSkeleton";
 
 export interface BreadcrumbProps extends BreadcrumbSkeletonProps {
@@ -15,15 +16,13 @@ export interface BreadcrumbProps extends BreadcrumbSkeletonProps {
   skeleton?: boolean;
 }
 
-export default class Breadcrumb {
-  $$prop_def: BreadcrumbProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Breadcrumb extends SvelteComponentTyped<
+  BreadcrumbProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: {} }
+> {}

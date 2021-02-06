@@ -1,11 +1,18 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export interface NotificationIconProps {
   /**
    * Specify the kind of notification icon
    * @default "error"
    */
-  kind?: "error" | "info" | "info-square" | "success" | "warning" | "warning-alt";
+  kind?:
+    | "error"
+    | "info"
+    | "info-square"
+    | "success"
+    | "warning"
+    | "warning-alt";
 
   /**
    * Set the type of notification
@@ -20,9 +27,8 @@ export interface NotificationIconProps {
   iconDescription?: string;
 }
 
-export default class NotificationIcon {
-  $$prop_def: NotificationIconProps;
-  $$slot_def: {};
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class NotificationIcon extends SvelteComponentTyped<
+  NotificationIconProps,
+  {},
+  {}
+> {}

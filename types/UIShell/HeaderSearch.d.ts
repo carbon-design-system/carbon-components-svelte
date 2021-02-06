@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export interface HeaderSearchResult {
   href: string;
@@ -6,7 +7,8 @@ export interface HeaderSearchResult {
   description?: string;
 }
 
-export interface HeaderSearchProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
+export interface HeaderSearchProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Specify the search input value
    * @default ""
@@ -38,23 +40,22 @@ export interface HeaderSearchProps extends svelte.JSX.HTMLAttributes<HTMLElement
   selectedResultIndex?: number;
 }
 
-export default class HeaderSearch {
-  $$prop_def: HeaderSearchProps;
-  $$slot_def: {
-    default: { result: HeaderSearchResult; index: number };
-  };
-
-  $on(eventname: "active", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "inactive", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "clear", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(
-    eventname: "select",
-    cb: (event: CustomEvent<{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }>) => void
-  ): () => void;
-  $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
-  $on(eventname: "input", cb: (event: WindowEventMap["input"]) => void): () => void;
-  $on(eventname: "focus", cb: (event: WindowEventMap["focus"]) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class HeaderSearch extends SvelteComponentTyped<
+  HeaderSearchProps,
+  {
+    active: CustomEvent<any>;
+    inactive: CustomEvent<any>;
+    clear: CustomEvent<any>;
+    select: CustomEvent<{
+      value: string;
+      selectedResultIndex: number;
+      selectedResult: HeaderSearchResult;
+    }>;
+    change: WindowEventMap["change"];
+    input: WindowEventMap["input"];
+    focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
+    keydown: WindowEventMap["keydown"];
+  },
+  { default: { result: HeaderSearchResult; index: number } }
+> {}

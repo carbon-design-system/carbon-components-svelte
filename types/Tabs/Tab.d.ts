@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface TabProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+export interface TabProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
   /**
    * Specify the tab label
    * Alternatively, use the default slot (e.g., <Tab><span>Label</span></Tab>)
@@ -39,15 +41,13 @@ export interface TabProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMa
   ref?: null | HTMLAnchorElement;
 }
 
-export default class Tab {
-  $$prop_def: TabProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Tab extends SvelteComponentTyped<
+  TabProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: {} }
+> {}

@@ -24,6 +24,7 @@ export default ["es", "umd"].map((format) => {
       UMD && terser(),
       UMD &&
         sveld({
+          glob: true,
           markdown: true,
           markdownOptions: {
             onAppend: (type, document, components) => {

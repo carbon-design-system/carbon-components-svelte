@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface RadioButtonGroupProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface RadioButtonGroupProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the selected radio button value
    */
@@ -30,16 +32,14 @@ export interface RadioButtonGroupProps extends svelte.JSX.HTMLAttributes<HTMLEle
   id?: string;
 }
 
-export default class RadioButtonGroup {
-  $$prop_def: RadioButtonGroupProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "change", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class RadioButtonGroup extends SvelteComponentTyped<
+  RadioButtonGroupProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    change: CustomEvent<any>;
+  },
+  { default: {} }
+> {}

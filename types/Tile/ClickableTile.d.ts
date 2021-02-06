@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface ClickableTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+export interface ClickableTileProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
    * Set to `true` to click the tile
    * @default false
@@ -19,16 +21,14 @@ export interface ClickableTileProps extends svelte.JSX.HTMLAttributes<HTMLElemen
   href?: string;
 }
 
-export default class ClickableTile {
-  $$prop_def: ClickableTileProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ClickableTile extends SvelteComponentTyped<
+  ClickableTileProps,
+  {
+    click: WindowEventMap["click"];
+    keydown: WindowEventMap["keydown"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: {} }
+> {}

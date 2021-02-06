@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export type MultiSelectItemId = string;
 
@@ -9,7 +10,8 @@ export interface MultiSelectItem {
   text: MultiSelectItemText;
 }
 
-export interface MultiSelectProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface MultiSelectProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the multiselect items
    * @default []
@@ -99,7 +101,9 @@ export interface MultiSelectProps extends svelte.JSX.HTMLAttributes<HTMLElementT
    * The default sorting compare the item text value
    * @default (a, b) => a.text.localeCompare(b.text, locale, { numeric: true })
    */
-  sortItem?: ((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void);
+  sortItem?:
+    | ((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem)
+    | (() => void);
 
   /**
    * Override the default translation ids
@@ -166,14 +170,14 @@ export interface MultiSelectProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   name?: string;
 }
 
-export default class MultiSelect {
-  $$prop_def: MultiSelectProps;
-  $$slot_def: {};
-
-  $on(eventname: "clear", cb: (event: WindowEventMap["clear"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "focus", cb: (event: WindowEventMap["focus"]) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: "select", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class MultiSelect extends SvelteComponentTyped<
+  MultiSelectProps,
+  {
+    clear: WindowEventMap["clear"];
+    keydown: WindowEventMap["keydown"];
+    focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
+    select: CustomEvent<any>;
+  },
+  {}
+> {}

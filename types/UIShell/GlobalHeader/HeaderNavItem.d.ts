@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface HeaderNavItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+export interface HeaderNavItemProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
    * Specify the `href` attribute
    */
@@ -18,17 +20,17 @@ export interface HeaderNavItemProps extends svelte.JSX.HTMLAttributes<HTMLElemen
   ref?: null | HTMLAnchorElement;
 }
 
-export default class HeaderNavItem {
-  $$prop_def: HeaderNavItemProps;
-  $$slot_def: {};
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "keyup", cb: (event: WindowEventMap["keyup"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "focus", cb: (event: WindowEventMap["focus"]) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class HeaderNavItem extends SvelteComponentTyped<
+  HeaderNavItemProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    keyup: WindowEventMap["keyup"];
+    keydown: WindowEventMap["keydown"];
+    focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
+  },
+  {}
+> {}

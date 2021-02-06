@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface TableProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["section"]> {
+export interface TableProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["section"]> {
   /**
    * Set the size of the table
    */
@@ -37,11 +39,8 @@ export interface TableProps extends svelte.JSX.HTMLAttributes<HTMLElementTagName
   stickyHeader?: boolean;
 }
 
-export default class Table {
-  $$prop_def: TableProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Table extends SvelteComponentTyped<
+  TableProps,
+  {},
+  { default: {} }
+> {}

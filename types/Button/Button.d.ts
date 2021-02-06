@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 import { ButtonSkeletonProps } from "./ButtonSkeleton";
 
 export interface ButtonProps
@@ -10,7 +11,14 @@ export interface ButtonProps
    * Specify the kind of button
    * @default "primary"
    */
-  kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost";
+  kind?:
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "ghost"
+    | "danger"
+    | "danger-tertiary"
+    | "danger-ghost";
 
   /**
    * Specify the size of button
@@ -90,9 +98,15 @@ export interface ButtonProps
   ref?: null | HTMLAnchorElement | HTMLButtonElement;
 }
 
-export default class Button {
-  $$prop_def: ButtonProps;
-  $$slot_def: {
+export default class Button extends SvelteComponentTyped<
+  ButtonProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  {
     default: {
       props: {
         role: "button";
@@ -104,11 +118,5 @@ export default class Button {
         [key: string]: any;
       };
     };
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+  }
+> {}

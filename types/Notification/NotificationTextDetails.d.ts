@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export interface NotificationTextDetailsProps {
   /**
@@ -26,11 +27,8 @@ export interface NotificationTextDetailsProps {
   caption?: string;
 }
 
-export default class NotificationTextDetails {
-  $$prop_def: NotificationTextDetailsProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class NotificationTextDetails extends SvelteComponentTyped<
+  NotificationTextDetailsProps,
+  {},
+  { default: {} }
+> {}

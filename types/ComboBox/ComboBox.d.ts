@@ -1,11 +1,13 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export interface ComboBoxItem {
   id: string;
   text: string;
 }
 
-export interface ComboBoxProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface ComboBoxProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the combobox items
    * @default []
@@ -118,18 +120,19 @@ export interface ComboBoxProps extends svelte.JSX.HTMLAttributes<HTMLElementTagN
   listRef?: null | HTMLDivElement;
 }
 
-export default class ComboBox {
-  $$prop_def: ComboBoxProps;
-  $$slot_def: {};
-
-  $on(
-    eventname: "select",
-    cb: (event: CustomEvent<{ selectedId: string; selectedIndex: number; selectedItem: ComboBoxItem }>) => void
-  ): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "focus", cb: (event: WindowEventMap["focus"]) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: "clear", cb: (event: WindowEventMap["clear"]) => void): () => void;
-  $on(eventname: "scroll", cb: (event: WindowEventMap["scroll"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ComboBox extends SvelteComponentTyped<
+  ComboBoxProps,
+  {
+    select: CustomEvent<{
+      selectedId: string;
+      selectedIndex: number;
+      selectedItem: ComboBoxItem;
+    }>;
+    keydown: WindowEventMap["keydown"];
+    focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
+    clear: WindowEventMap["clear"];
+    scroll: WindowEventMap["scroll"];
+  },
+  {}
+> {}

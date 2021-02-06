@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface FileUploaderProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface FileUploaderProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the file uploader status
    * @default "uploading"
@@ -69,17 +71,17 @@ export interface FileUploaderProps extends svelte.JSX.HTMLAttributes<HTMLElement
   name?: string;
 }
 
-export default class FileUploader {
-  $$prop_def: FileUploaderProps;
-  $$slot_def: {};
-
-  $on(eventname: "add", cb: (event: CustomEvent<File[]>) => void): () => void;
-  $on(eventname: "remove", cb: (event: CustomEvent<File[]>) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class FileUploader extends SvelteComponentTyped<
+  FileUploaderProps,
+  {
+    add: CustomEvent<File[]>;
+    remove: CustomEvent<File[]>;
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    change: WindowEventMap["change"];
+    keydown: WindowEventMap["keydown"];
+  },
+  {}
+> {}

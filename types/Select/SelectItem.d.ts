@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export interface SelectItemProps {
   /**
@@ -26,9 +27,8 @@ export interface SelectItemProps {
   disabled?: boolean;
 }
 
-export default class SelectItem {
-  $$prop_def: SelectItemProps;
-  $$slot_def: {};
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class SelectItem extends SvelteComponentTyped<
+  SelectItemProps,
+  {},
+  {}
+> {}

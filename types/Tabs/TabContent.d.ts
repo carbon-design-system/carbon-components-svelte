@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface TabContentProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface TabContentProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set an id for the top-level element
    * @default "ccs-" + Math.random().toString(36)
@@ -8,11 +10,8 @@ export interface TabContentProps extends svelte.JSX.HTMLAttributes<HTMLElementTa
   id?: string;
 }
 
-export default class TabContent {
-  $$prop_def: TabContentProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class TabContent extends SvelteComponentTyped<
+  TabContentProps,
+  {},
+  { default: {} }
+> {}
