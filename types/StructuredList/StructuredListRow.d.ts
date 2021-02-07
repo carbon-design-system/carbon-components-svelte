@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface StructuredListRowProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
+export interface StructuredListRowProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
   /**
    * Set to `true` to use as a header
    * @default false
@@ -20,16 +22,14 @@ export interface StructuredListRowProps extends svelte.JSX.HTMLAttributes<HTMLEl
   tabindex?: string;
 }
 
-export default class StructuredListRow {
-  $$prop_def: StructuredListRowProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class StructuredListRow extends SvelteComponentTyped<
+  StructuredListRowProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    keydown: WindowEventMap["keydown"];
+  },
+  { default: {} }
+> {}

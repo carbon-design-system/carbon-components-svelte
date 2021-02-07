@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface FileUploaderItemProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
+export interface FileUploaderItemProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
   /**
    * Specify the file uploader status
    * @default "uploading"
@@ -44,13 +46,13 @@ export interface FileUploaderItemProps extends svelte.JSX.HTMLAttributes<HTMLEle
   name?: string;
 }
 
-export default class FileUploaderItem {
-  $$prop_def: FileUploaderItemProps;
-  $$slot_def: {};
-
-  $on(eventname: "delete", cb: (event: CustomEvent<string>) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class FileUploaderItem extends SvelteComponentTyped<
+  FileUploaderItemProps,
+  {
+    delete: CustomEvent<string>;
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  {}
+> {}

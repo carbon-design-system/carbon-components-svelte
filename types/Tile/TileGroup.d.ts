@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface TileGroupProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> {
+export interface TileGroupProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> {
   /**
    * Specify the selected tile value
    */
@@ -19,12 +21,8 @@ export interface TileGroupProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
   legend?: string;
 }
 
-export default class TileGroup {
-  $$prop_def: TileGroupProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "select", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class TileGroup extends SvelteComponentTyped<
+  TileGroupProps,
+  { select: CustomEvent<any> },
+  { default: {} }
+> {}

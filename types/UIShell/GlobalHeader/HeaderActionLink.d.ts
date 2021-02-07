@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface HeaderActionLinkProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+export interface HeaderActionLinkProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
    * Set to `true` to use the active state
    * @default false
@@ -24,9 +26,8 @@ export interface HeaderActionLinkProps extends svelte.JSX.HTMLAttributes<HTMLEle
   ref?: null | HTMLAnchorElement;
 }
 
-export default class HeaderActionLink {
-  $$prop_def: HeaderActionLinkProps;
-  $$slot_def: {};
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class HeaderActionLink extends SvelteComponentTyped<
+  HeaderActionLinkProps,
+  {},
+  {}
+> {}

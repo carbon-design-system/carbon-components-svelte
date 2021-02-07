@@ -1,8 +1,10 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export type ListBoxMenuIconTranslationId = "close" | "open";
 
-export interface ListBoxMenuIconProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface ListBoxMenuIconProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set to `true` to open the list box menu icon
    * @default false
@@ -23,10 +25,8 @@ export interface ListBoxMenuIconProps extends svelte.JSX.HTMLAttributes<HTMLElem
   translateWithId?: (id: ListBoxMenuIconTranslationId) => string;
 }
 
-export default class ListBoxMenuIcon {
-  $$prop_def: ListBoxMenuIconProps;
-  $$slot_def: {};
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ListBoxMenuIcon extends SvelteComponentTyped<
+  ListBoxMenuIconProps,
+  { click: WindowEventMap["click"] },
+  {}
+> {}

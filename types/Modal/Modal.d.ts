@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface ModalProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface ModalProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the size of the modal
    */
@@ -112,23 +114,19 @@ export interface ModalProps extends svelte.JSX.HTMLAttributes<HTMLElementTagName
   ref?: null | HTMLDivElement;
 }
 
-export default class Modal {
-  $$prop_def: ModalProps;
-  $$slot_def: {
-    default: {};
-    heading: {};
-    label: {};
-  };
-
-  $on(eventname: "transitionend", cb: (event: CustomEvent<{ open: boolean }>) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "submit", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "click:button--secondary", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "close", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "open", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Modal extends SvelteComponentTyped<
+  ModalProps,
+  {
+    transitionend: CustomEvent<{ open: boolean }>;
+    keydown: WindowEventMap["keydown"];
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    submit: CustomEvent<any>;
+    ["click:button--secondary"]: CustomEvent<any>;
+    close: CustomEvent<any>;
+    open: CustomEvent<any>;
+  },
+  { default: {}; heading: {}; label: {} }
+> {}

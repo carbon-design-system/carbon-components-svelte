@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface ComposedModalProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface ComposedModalProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the size of the composed modal
    */
@@ -43,19 +45,17 @@ export interface ComposedModalProps extends svelte.JSX.HTMLAttributes<HTMLElemen
   ref?: null | HTMLDivElement;
 }
 
-export default class ComposedModal {
-  $$prop_def: ComposedModalProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "transitionend", cb: (event: CustomEvent<{ open: boolean }>) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "submit", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "close", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: "open", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ComposedModal extends SvelteComponentTyped<
+  ComposedModalProps,
+  {
+    transitionend: CustomEvent<{ open: boolean }>;
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    submit: CustomEvent<any>;
+    close: CustomEvent<any>;
+    open: CustomEvent<any>;
+  },
+  { default: {} }
+> {}

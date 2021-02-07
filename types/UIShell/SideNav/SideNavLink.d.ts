@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface SideNavLinkProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+export interface SideNavLinkProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
    * Set to `true` to select the current link
    * @default false
@@ -29,10 +31,8 @@ export interface SideNavLinkProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   ref?: null | HTMLAnchorElement;
 }
 
-export default class SideNavLink {
-  $$prop_def: SideNavLinkProps;
-  $$slot_def: {};
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class SideNavLink extends SvelteComponentTyped<
+  SideNavLinkProps,
+  { click: WindowEventMap["click"] },
+  {}
+> {}

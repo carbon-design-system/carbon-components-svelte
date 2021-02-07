@@ -1,12 +1,10 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export interface ToolbarContentProps {}
 
-export default class ToolbarContent {
-  $$prop_def: ToolbarContentProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class ToolbarContent extends SvelteComponentTyped<
+  ToolbarContentProps,
+  {},
+  { default: {} }
+> {}

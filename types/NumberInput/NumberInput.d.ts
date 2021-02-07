@@ -1,8 +1,10 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export type NumberInputTranslationId = "increment" | "decrement";
 
-export interface NumberInputProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface NumberInputProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the size of the input
    */
@@ -139,17 +141,15 @@ export interface NumberInputProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   ref?: null | HTMLInputElement;
 }
 
-export default class NumberInput {
-  $$prop_def: NumberInputProps;
-  $$slot_def: {
-    label: {};
-  };
-
-  $on(eventname: "change", cb: (event: CustomEvent<number>) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "input", cb: (event: WindowEventMap["input"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class NumberInput extends SvelteComponentTyped<
+  NumberInputProps,
+  {
+    change: CustomEvent<number>;
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    input: WindowEventMap["input"];
+  },
+  { label: {} }
+> {}

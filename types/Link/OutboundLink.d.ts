@@ -1,17 +1,16 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 import { LinkProps } from "./Link";
 
 export interface OutboundLinkProps extends LinkProps {}
 
-export default class OutboundLink {
-  $$prop_def: OutboundLinkProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class OutboundLink extends SvelteComponentTyped<
+  OutboundLinkProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: {} }
+> {}

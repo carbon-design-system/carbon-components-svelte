@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface TooltipIconProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
+export interface TooltipIconProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
    * Specify the tooltip text.
    * Alternatively, use the "tooltipText" slot
@@ -33,17 +35,14 @@ export interface TooltipIconProps extends svelte.JSX.HTMLAttributes<HTMLElementT
   ref?: null | HTMLButtonElement;
 }
 
-export default class TooltipIcon {
-  $$prop_def: TooltipIconProps;
-  $$slot_def: {
-    default: {};
-    tooltipText: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "focus", cb: (event: WindowEventMap["focus"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class TooltipIcon extends SvelteComponentTyped<
+  TooltipIconProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    focus: WindowEventMap["focus"];
+  },
+  { default: {}; tooltipText: {} }
+> {}

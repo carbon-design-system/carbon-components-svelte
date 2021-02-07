@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export type DataTableKey = string;
 
@@ -128,31 +129,32 @@ export interface DataTableProps {
   stickyHeader?: boolean;
 }
 
-export default class DataTable {
-  $$prop_def: DataTableProps;
-  $$slot_def: {
+export default class DataTable extends SvelteComponentTyped<
+  DataTableProps,
+  {
+    click: CustomEvent<{
+      header?: DataTableHeader;
+      row?: DataTableRow;
+      cell?: DataTableCell;
+    }>;
+    ["click:header--expand"]: CustomEvent<{ expanded: boolean }>;
+    ["click:header"]: CustomEvent<{
+      header: DataTableHeader;
+      sortDirection: "ascending" | "descending" | "none";
+    }>;
+    ["click:row"]: CustomEvent<DataTableRow>;
+    ["mouseenter:row"]: CustomEvent<DataTableRow>;
+    ["mouseleave:row"]: CustomEvent<DataTableRow>;
+    ["click:row--expand"]: CustomEvent<{
+      expanded: boolean;
+      row: DataTableRow;
+    }>;
+    ["click:cell"]: CustomEvent<DataTableCell>;
+  },
+  {
     default: {};
     cell: { row: DataTableRow; cell: DataTableCell };
     ["cell-header"]: { header: DataTableNonEmptyHeader };
     ["expanded-row"]: { row: DataTableRow };
-  };
-
-  $on(
-    eventname: "click",
-    cb: (event: CustomEvent<{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell }>) => void
-  ): () => void;
-  $on(eventname: "click:header--expand", cb: (event: CustomEvent<{ expanded: boolean }>) => void): () => void;
-  $on(
-    eventname: "click:header",
-    cb: (event: CustomEvent<{ header: DataTableHeader; sortDirection: "ascending" | "descending" | "none" }>) => void
-  ): () => void;
-  $on(eventname: "click:row", cb: (event: CustomEvent<DataTableRow>) => void): () => void;
-  $on(eventname: "mouseenter:row", cb: (event: CustomEvent<DataTableRow>) => void): () => void;
-  $on(eventname: "mouseleave:row", cb: (event: CustomEvent<DataTableRow>) => void): () => void;
-  $on(
-    eventname: "click:row--expand",
-    cb: (event: CustomEvent<{ expanded: boolean; row: DataTableRow }>) => void
-  ): () => void;
-  $on(eventname: "click:cell", cb: (event: CustomEvent<DataTableCell>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+  }
+> {}

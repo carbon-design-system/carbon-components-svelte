@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface RadioTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
+export interface RadioTileProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
   /**
    * Set to `true` to check the tile
    * @default false
@@ -44,17 +46,15 @@ export interface RadioTileProps extends svelte.JSX.HTMLAttributes<HTMLElementTag
   name?: string;
 }
 
-export default class RadioTile {
-  $$prop_def: RadioTileProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class RadioTile extends SvelteComponentTyped<
+  RadioTileProps,
+  {
+    change: WindowEventMap["change"];
+    keydown: WindowEventMap["keydown"];
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+  },
+  { default: {} }
+> {}

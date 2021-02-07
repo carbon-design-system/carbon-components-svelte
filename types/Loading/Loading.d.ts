@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface LoadingProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface LoadingProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set to `true` to use the small variant
    * @default false
@@ -32,9 +34,8 @@ export interface LoadingProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNa
   id?: string;
 }
 
-export default class Loading {
-  $$prop_def: LoadingProps;
-  $$slot_def: {};
-
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Loading extends SvelteComponentTyped<
+  LoadingProps,
+  {},
+  {}
+> {}

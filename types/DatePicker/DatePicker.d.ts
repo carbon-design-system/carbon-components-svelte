@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface DatePickerProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface DatePickerProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the date picker type
    * @default "simple"
@@ -61,16 +63,14 @@ export interface DatePickerProps extends svelte.JSX.HTMLAttributes<HTMLElementTa
   id?: string;
 }
 
-export default class DatePicker {
-  $$prop_def: DatePickerProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "change", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class DatePicker extends SvelteComponentTyped<
+  DatePickerProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    change: CustomEvent<any>;
+  },
+  { default: {} }
+> {}

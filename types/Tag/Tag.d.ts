@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
 export interface TagProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]>,
@@ -60,16 +61,14 @@ export interface TagProps
   id?: string;
 }
 
-export default class Tag {
-  $$prop_def: TagProps;
-  $$slot_def: {
-    default: { props: { class: "bx--tag__label" } };
-  };
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "close", cb: (event: CustomEvent<any>) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Tag extends SvelteComponentTyped<
+  TagProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    close: CustomEvent<any>;
+  },
+  { default: { props: { class: "bx--tag__label" } } }
+> {}

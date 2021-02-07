@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface PasswordInputProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
+export interface PasswordInputProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the size of the input
    */
@@ -108,18 +110,18 @@ export interface PasswordInputProps extends svelte.JSX.HTMLAttributes<HTMLElemen
   ref?: null | HTMLInputElement;
 }
 
-export default class PasswordInput {
-  $$prop_def: PasswordInputProps;
-  $$slot_def: {};
-
-  $on(eventname: "click", cb: (event: WindowEventMap["click"]) => void): () => void;
-  $on(eventname: "mouseover", cb: (event: WindowEventMap["mouseover"]) => void): () => void;
-  $on(eventname: "mouseenter", cb: (event: WindowEventMap["mouseenter"]) => void): () => void;
-  $on(eventname: "mouseleave", cb: (event: WindowEventMap["mouseleave"]) => void): () => void;
-  $on(eventname: "change", cb: (event: WindowEventMap["change"]) => void): () => void;
-  $on(eventname: "input", cb: (event: WindowEventMap["input"]) => void): () => void;
-  $on(eventname: "keydown", cb: (event: WindowEventMap["keydown"]) => void): () => void;
-  $on(eventname: "focus", cb: (event: WindowEventMap["focus"]) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class PasswordInput extends SvelteComponentTyped<
+  PasswordInputProps,
+  {
+    click: WindowEventMap["click"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    change: WindowEventMap["change"];
+    input: WindowEventMap["input"];
+    keydown: WindowEventMap["keydown"];
+    focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
+  },
+  {}
+> {}

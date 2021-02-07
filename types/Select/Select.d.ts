@@ -1,6 +1,8 @@
 /// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
 
-export interface SelectProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+export interface SelectProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the selected item value
    */
@@ -83,13 +85,8 @@ export interface SelectProps extends svelte.JSX.HTMLAttributes<HTMLElementTagNam
   ref?: null | HTMLSelectElement;
 }
 
-export default class Select {
-  $$prop_def: SelectProps;
-  $$slot_def: {
-    default: {};
-  };
-
-  $on(eventname: "change", cb: (event: CustomEvent<string>) => void): () => void;
-  $on(eventname: "blur", cb: (event: WindowEventMap["blur"]) => void): () => void;
-  $on(eventname: string, cb: (event: Event) => void): () => void;
-}
+export default class Select extends SvelteComponentTyped<
+  SelectProps,
+  { change: CustomEvent<string>; blur: WindowEventMap["blur"] },
+  { default: {} }
+> {}
