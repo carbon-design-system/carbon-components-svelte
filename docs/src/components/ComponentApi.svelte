@@ -30,7 +30,7 @@
     Date: "JavaScript Date",
   };
 
-  $: source = `https://github.com/IBM/carbon-components-svelte/tree/master${component.filePath}`;
+  $: source = `https://github.com/IBM/carbon-components-svelte/tree/master/${component.filePath}`;
   $: forwarded_events = component.events.filter(
     (event) => event.type === "forwarded"
   );
