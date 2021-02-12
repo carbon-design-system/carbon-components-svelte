@@ -20,7 +20,7 @@ export interface TimePickerProps extends svelte.JSX.HTMLAttributes<HTMLElementTa
 
   /**
    * Specify the input placeholder text
-   * @default "hh=mm"
+   * @default "hh:mm"
    */
   placeholder?: string;
 
