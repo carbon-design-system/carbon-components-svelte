@@ -9562,7 +9562,7 @@
           "kind": "let",
           "description": "Specify the input placeholder text",
           "type": "string",
-          "value": "\"hh:mm\"",
+          "value": "\"hh=mm\"",
           "isFunction": false,
           "constant": false,
           "reactive": false

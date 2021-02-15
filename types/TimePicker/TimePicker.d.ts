@@ -22,7 +22,7 @@ export interface TimePickerProps
 
   /**
    * Specify the input placeholder text
-   * @default "hh:mm"
+   * @default "hh=mm"
    */
   placeholder?: string;
 
