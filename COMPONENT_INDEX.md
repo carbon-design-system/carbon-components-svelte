@@ -3852,7 +3852,7 @@ None.
 | value       | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>                                     | Specify the input value                               |
 | size        | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>             | --                                                  | Specify the size of the input                         |
 | type        | <code>let</code> | No       | <code>string</code>                       | <code>"text"</code>                                 | Specify the input type                                |
-| placeholder | <code>let</code> | No       | <code>string</code>                       | <code>"hh=mm"</code>                                | Specify the input placeholder text                    |
+| placeholder | <code>let</code> | No       | <code>string</code>                       | <code>"hh:mm"</code>                                | Specify the input placeholder text                    |
 | pattern     | <code>let</code> | No       | <code>string</code>                       | <code>"(1[012]&#124;[1-9]):[0-5][0-9](\\s)?"</code> | Specify the `pattern` attribute for the input element |
 | maxlength   | <code>let</code> | No       | <code>number</code>                       | <code>5</code>                                      | Specify the `maxlength` input attribute               |
 | light       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                                  | Set to `true` to enable the light variant             |

@@ -18,7 +18,7 @@
   export let type = "text";
 
   /** Specify the input placeholder text */
-  export let placeholder = "hh=mm";
+  export let placeholder = "hh:mm";
 
   /** Specify the `pattern` attribute for the input element */
   export let pattern = "(1[012]|[1-9]):[0-5][0-9](\\s)?";
