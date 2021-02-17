@@ -76,6 +76,23 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
   />
 </ProgressIndicator>
 
+### Disabled steps
+
+<ProgressIndicator>
+  <ProgressStep complete
+    label="Step 1"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep disabled
+    label="Step 2"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep disabled
+    label="Step 3"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+</ProgressIndicator>
+
 ### Spaced-equally
 
 <ProgressIndicator spaceEqually>
