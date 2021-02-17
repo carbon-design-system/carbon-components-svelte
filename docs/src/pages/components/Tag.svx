@@ -29,7 +29,11 @@
 
 ### Filterable
 
-<Tag filter on:close>Filterable</Tag>
+<Tag filter on:close>carbon-components</Tag>
+
+### Filterable (small)
+
+<Tag size="sm" filter on:close>carbon-components</Tag>
 
 ### Custom icon
 
