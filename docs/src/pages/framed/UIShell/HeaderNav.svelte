@@ -9,6 +9,7 @@
     SideNavMenu,
     SideNavMenuItem,
     SideNavLink,
+    SideNavDivider,
     SkipToContent,
     Content,
     Grid,
@@ -33,6 +34,7 @@
       <HeaderNavItem href="/" text="Link 2" />
       <HeaderNavItem href="/" text="Link 3" />
     </HeaderNavMenu>
+    <HeaderNavItem href="/" text="Link 4" />
   </HeaderNav>
 </Header>
 
@@ -46,6 +48,8 @@
       <SideNavMenuItem href="/" text="Link 2" />
       <SideNavMenuItem href="/" text="Link 3" />
     </SideNavMenu>
+    <SideNavDivider />
+    <SideNavLink text="Link 4" />
   </SideNavItems>
 </SideNav>
 

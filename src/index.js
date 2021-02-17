@@ -131,6 +131,7 @@ export {
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
+  SideNavDivider,
   Content,
   SkipToContent,
   HeaderGlobalAction,

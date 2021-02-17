@@ -1,5 +1,5 @@
 {
-  "total": 156,
+  "total": 157,
   "components": [
     {
       "moduleName": "Accordion",
@@ -7732,6 +7732,15 @@
       "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "nav" }
+    },
+    {
+      "moduleName": "SideNavDivider",
+      "filePath": "src/UIShell/SideNavDivider.svelte",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "li" }
     },
     {
       "moduleName": "SideNavItems",

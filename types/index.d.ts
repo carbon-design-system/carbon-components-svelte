@@ -149,6 +149,7 @@ export { default as SideNavItems } from "./UIShell/SideNav/SideNavItems";
 export { default as SideNavLink } from "./UIShell/SideNav/SideNavLink";
 export { default as SideNavMenu } from "./UIShell/SideNav/SideNavMenu";
 export { default as SideNavMenuItem } from "./UIShell/SideNav/SideNavMenuItem";
+export { default as SideNavDivider } from "./UIShell/SideNavDivider";
 export { default as Content } from "./UIShell/Content";
 export { default as SkipToContent } from "./UIShell/SkipToContent";
 export { default as HeaderGlobalAction } from "./UIShell/HeaderGlobalAction";

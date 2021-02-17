@@ -1,6 +1,6 @@
 # Component Index
 
-> 156 components exported from carbon-components-svelte@0.28.0.
+> 157 components exported from carbon-components-svelte@0.28.0.
 
 ## Components
 
@@ -107,6 +107,7 @@
 - [`SelectSkeleton`](#selectskeleton)
 - [`SelectableTile`](#selectabletile)
 - [`SideNav`](#sidenav)
+- [`SideNavDivider`](#sidenavdivider)
 - [`SideNavItems`](#sidenavitems)
 - [`SideNavLink`](#sidenavlink)
 - [`SideNavMenu`](#sidenavmenu)
@@ -2983,6 +2984,20 @@ None.
 | Slot name | Default | Props | Fallback |
 | :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
+
+### Events
+
+None.
+
+## `SideNavDivider`
+
+### Props
+
+None.
+
+### Slots
+
+None.
 
 ### Events
 
