@@ -1844,7 +1844,7 @@
           "ts": "interface DataTableCell { key: DataTableKey; value: DataTableValue; }"
         }
       ],
-      "rest_props": { "type": "InlineComponent", "name": "TableContainer" }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "DataTableSkeleton",
