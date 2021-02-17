@@ -74,6 +74,18 @@ export interface ComboBoxProps
   invalid?: boolean;
 
   /**
+   * Set to `true` to indicate an warning state
+   * @default false
+   */
+  warn?: boolean;
+
+  /**
+   * Specify the warning state text
+   * @default ""
+   */
+  warnText?: string;
+
+  /**
    * Set to `true` to enable the light variant
    * @default false
    */
