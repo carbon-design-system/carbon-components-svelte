@@ -35,7 +35,8 @@ export interface DataTableCell {
   value: DataTableValue;
 }
 
-export interface DataTableProps {
+export interface DataTableProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the data table headers
    * @default []

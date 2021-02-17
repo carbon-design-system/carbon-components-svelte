@@ -69,7 +69,7 @@
   }
 </script>
 
-<DataTable headers="{headers}" rows="{rows}" />
+<DataTable headers="{headers}" rows="{rows}" style="" class="class" />
 
 <DataTable headers="{headers}" rows="{rows}">
   <span slot="cell-header" let:header>

@@ -19,6 +19,7 @@
    * @event {DataTableRow} mouseleave:row
    * @event {{ expanded: boolean; row: DataTableRow; }} click:row--expand
    * @event {DataTableCell} click:cell
+   * @restProps {div}
    */
 
   /**
