@@ -453,10 +453,10 @@ caniuse-lite@^1.0.30001181:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001183.tgz#7a57ba9d6584119bb5f2bc76d3cc47ba9356b3e2"
   integrity sha512-7JkwTEE1hlRKETbCFd8HDZeLiQIUcl8rC6JgNjvHCNaxOeNmQ9V4LvQXRUsKIV2CC73qKxljwVhToaA3kLRqTw==
 
-carbon-components@10.28.0:
-  version "10.28.0"
-  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.28.0.tgz#c4d2b23df2559cf3b0226867c45e2e84e0af7c4e"
-  integrity sha512-bFsyngr625zc/t2gl4BPFYl0/ed4q38rrPihQxBXHhLAdeZNyy8xyOQlbh1PEQbTu47H/s/bxVo6QiFm/VmLZA==
+carbon-components@10.29.0-rc.0:
+  version "10.29.0-rc.0"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.29.0-rc.0.tgz#dbff9d2a5fa6abbcff74c4f3601c499233c92278"
+  integrity sha512-4x+KyXn2v/NYTE9CDOguZTAQF9O+OGWJ818DzIxm5Bk6RQBBTP8AZmbQhV7QSuJ29rSiNHifG0VyLovzeRjl/g==
   dependencies:
     "@carbon/telemetry" "0.0.0-alpha.6"
     flatpickr "4.6.1"
@@ -1899,10 +1899,10 @@ prepend-http@^1.0.0:
   resolved "https://registry.npmjs.org/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
 
-prettier-plugin-svelte@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.npmjs.org/prettier-plugin-svelte/-/prettier-plugin-svelte-2.1.1.tgz#e6613cac4292b5bbda5250680565c131b0da5ced"
-  integrity sha512-U0gRsdJtveyusHd86OUPD+lEVd13bHPPF/CZD/csKjz0Y+Cv4WbUy9x8tA5vaHFtf0tsu8Yb1MrfuhN3GH2gig==
+prettier-plugin-svelte@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-svelte/-/prettier-plugin-svelte-2.1.5.tgz#cb1df2bffafa0562f05e02c6e9373806ef51ebb1"
+  integrity sha512-7ySuC/n0Rk8v6GrzoruojfLYde6ncjeFCAA65Dm+fXrK2Mgc3FlvzXMPpm//P3LgfEoc3zMEG/xog1YeoNhdSQ==
 
 prettier@^2.2.1:
   version "2.2.1"
