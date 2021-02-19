@@ -8,7 +8,9 @@
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
   "types": "./types/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "css/*.css"
+  ],
   "scripts": {
     "test": "run-p test:*",
     "test:types": "svelte-check --workspace tests",
