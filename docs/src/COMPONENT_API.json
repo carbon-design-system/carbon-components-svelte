@@ -1190,6 +1190,16 @@
           "reactive": true
         },
         {
+          "name": "direction",
+          "kind": "let",
+          "description": "Specify the direction of the combobox dropdown menu",
+          "type": "\"bottom\" | \"top\"",
+          "value": "\"bottom\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "size",
           "kind": "let",
           "description": "Set the size of the combobox",

@@ -23,6 +23,12 @@
   export let value = "";
 
   /**
+   * Specify the direction of the combobox dropdown menu
+   * @type {"bottom" | "top"}
+   */
+  export let direction = "bottom";
+
+  /**
    * Set the size of the combobox
    * @type {"sm" | "xl"}
    */
@@ -89,7 +95,6 @@
   export let listRef = null;
 
   import { createEventDispatcher, afterUpdate, tick } from "svelte";
-  import Checkmark16 from "carbon-icons-svelte/lib/Checkmark16/Checkmark16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
@@ -105,8 +110,8 @@
   let inputValue = "";
   let highlightedIndex = -1;
 
-  function change(direction) {
-    let index = highlightedIndex + direction;
+  function change(dir) {
+    let index = highlightedIndex + dir;
 
     if (index < 0) {
       index = items.length - 1;
@@ -166,7 +171,8 @@
     </label>
   {/if}
   <ListBox
-    class="bx--combo-box {!invalid && warn && 'bx--combo-box--warning'}"
+    class="bx--combo-box {direction === 'top' &&
+      'bx--list-box--up'} {!invalid && warn && 'bx--combo-box--warning'}"
     id="{comboId}"
     aria-label="{ariaLabel}"
     disabled="{disabled}"

@@ -10,6 +10,7 @@
 </script>
 
 <ComboBox
+  direction="top"
   titleText="Contact"
   placeholder="Select contact method"
   items="{items}"

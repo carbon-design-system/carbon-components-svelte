@@ -33,6 +33,12 @@ export interface ComboBoxProps
   value?: string;
 
   /**
+   * Specify the direction of the combobox dropdown menu
+   * @default "bottom"
+   */
+  direction?: "bottom" | "top";
+
+  /**
    * Set the size of the combobox
    */
   size?: "sm" | "xl";
