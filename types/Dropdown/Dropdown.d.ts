@@ -37,6 +37,12 @@ export interface DropdownProps
   type?: "default" | "inline";
 
   /**
+   * Specify the direction of the dropdown menu
+   * @default "bottom"
+   */
+  direction?: "bottom" | "top";
+
+  /**
    * Specify the size of the dropdown field
    */
   size?: "sm" | "lg" | "xl";

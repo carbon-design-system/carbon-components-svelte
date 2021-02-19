@@ -985,6 +985,7 @@ export interface DropdownItem {
 | items           | <code>let</code> | No       | <code>DropdownItem[]</code>                 | <code>[]</code>                                       | Set the dropdown items                        |
 | itemToString    | <code>let</code> | No       | <code>(item: DropdownItem) => string</code> | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a dropdown item       |
 | type            | <code>let</code> | No       | <code>"default" &#124; "inline"</code>      | <code>"default"</code>                                | Specify the type of dropdown                  |
+| direction       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>          | <code>"bottom"</code>                                 | Specify the direction of the dropdown menu    |
 | size            | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>   | --                                                    | Specify the size of the dropdown field        |
 | light           | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to enable the light variant     |
 | disabled        | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to disable the dropdown         |

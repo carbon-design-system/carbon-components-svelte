@@ -2321,6 +2321,16 @@
           "reactive": false
         },
         {
+          "name": "direction",
+          "kind": "let",
+          "description": "Specify the direction of the dropdown menu",
+          "type": "\"bottom\" | \"top\"",
+          "value": "\"bottom\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the dropdown field",

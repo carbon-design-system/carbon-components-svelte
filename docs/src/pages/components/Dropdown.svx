@@ -33,6 +33,14 @@ Use the `itemToString` prop to format the display of individual items.
 
 <FileSource src="/framed/Dropdown/MultipleDropdown" />
 
+### Top direction
+
+Set `direction` to `"top"` for the dropdown menu to appear above the input.
+
+<Dropdown direction="top" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ### Light variant
 
 <Dropdown light titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},

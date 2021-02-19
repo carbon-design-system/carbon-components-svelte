@@ -28,6 +28,12 @@
   export let type = "default";
 
   /**
+   * Specify the direction of the dropdown menu
+   * @type {"bottom" | "top"}
+   */
+  export let direction = "bottom";
+
+  /**
    * Specify the size of the dropdown field
    * @type {"sm" | "lg" | "xl"}
    */
@@ -105,8 +111,8 @@
   let selectedId = undefined;
   let highlightedIndex = -1;
 
-  function change(direction) {
-    let index = highlightedIndex + direction;
+  function change(dir) {
+    let index = highlightedIndex + dir;
 
     if (index < 0) {
       index = items.length - 1;
@@ -159,7 +165,8 @@
     id="{id}"
     name="{name}"
     aria-label="{$$props['aria-label']}"
-    class="bx--dropdown {invalid && 'bx--dropdown--invalid'} {!invalid &&
+    class="bx--dropdown {direction === 'top' && 'bx--list-box--up'} {invalid &&
+      'bx--dropdown--invalid'} {!invalid &&
       warn &&
       'bx--dropdown--warning'} {open && 'bx--dropdown--open'}
       {size ===
