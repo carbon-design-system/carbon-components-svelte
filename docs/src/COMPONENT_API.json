@@ -10669,7 +10669,7 @@
       "filePath": "src/Truncate/Truncate.svelte",
       "props": [
         {
-          "name": "direction",
+          "name": "clamp",
           "kind": "let",
           "type": "\"end\" | \"front\"",
           "value": "\"end\"",
@@ -10681,7 +10681,7 @@
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "p" }
     },
     {
       "moduleName": "UnorderedList",

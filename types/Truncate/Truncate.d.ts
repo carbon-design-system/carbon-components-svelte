@@ -2,11 +2,11 @@
 import { SvelteComponentTyped } from "svelte";
 
 export interface TruncateProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["p"]> {
   /**
    * @default "end"
    */
-  direction?: "end" | "front";
+  clamp?: "end" | "front";
 }
 
 export default class Truncate extends SvelteComponentTyped<

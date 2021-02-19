@@ -8,7 +8,7 @@
   Carbon Design System, an open source design system by IBM.
 </Truncate>
 
-<Truncate direction="front">
+<Truncate clamp="front">
   Carbon Components Svelte is a Svelte component library that implements the
   Carbon Design System, an open source design system by IBM.
 </Truncate>
@@ -17,7 +17,7 @@
   Carbon Components Svelte is a Svelte component library that implements the
   Carbon Design System, an open source design system by IBM.
 </h4>
-<h4 use:truncate="{{ direction: 'front' }}">
+<h4 use:truncate="{{ clamp: 'front' }}">
   Carbon Components Svelte is a Svelte component library that implements the
   Carbon Design System, an open source design system by IBM.
 </h4>

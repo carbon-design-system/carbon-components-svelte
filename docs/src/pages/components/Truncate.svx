@@ -5,7 +5,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-This is a utility component that wraps the `.bx--text-truncate--*` CSS selector from `carbon-components` for single line text truncation.
+This utility component wraps the `.bx--text-truncate--*` CSS selectors from [carbon-components](https://github.com/carbon-design-system/carbon/blob/master/packages/components/src/globals/scss/_helper-classes.scss#L11) for single-line text truncation.
 
 ### Default
 
@@ -15,11 +15,11 @@ By default, text will be clamped at the end of the line. Text is wrapped with a 
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </Truncate>
 
-### Direction (front)
+### Clamp front
 
-Set `direction` to `"front"` to clamp the text from the front.
+Set `clamp` to `"front"` to clamp the text from the front.
 
-<Truncate direction="front">
+<Truncate clamp="front">
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </Truncate>
 
@@ -32,6 +32,6 @@ Import path: `import { truncate } from "carbon-components-svelte/actions";`
 <h4 use:truncate>
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </h4>
-<h4 use:truncate={{ direction: "front" }}>
+<h4 use:truncate={{ clamp: "front" }}>
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </h4>

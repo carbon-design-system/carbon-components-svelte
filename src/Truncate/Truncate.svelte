@@ -1,11 +1,11 @@
 <script>
   /** @type {"end" | "front"}*/
-  export let direction = "end";
+  export let clamp = "end";
 </script>
 
 <p
-  class:bx--text-truncate--end="{direction === 'end'}"
-  class:bx--text-truncate--front="{direction === 'front'}"
+  class:bx--text-truncate--end="{clamp === 'end'}"
+  class:bx--text-truncate--front="{clamp === 'front'}"
   {...$$restProps}
 >
   <slot />

@@ -4285,7 +4285,7 @@ None.
 
 | Prop name | Kind             | Reactive | Type                              | Default value      | Description |
 | :-------- | :--------------- | :------- | :-------------------------------- | ------------------ | ----------- |
-| direction | <code>let</code> | No       | <code>"end" &#124; "front"</code> | <code>"end"</code> | --          |
+| clamp     | <code>let</code> | No       | <code>"end" &#124; "front"</code> | <code>"end"</code> | --          |
 
 ### Slots
 
