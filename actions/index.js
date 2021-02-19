@@ -1,0 +1,1 @@
+export { truncate } from "./truncate";

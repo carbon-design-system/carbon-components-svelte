@@ -1,5 +1,5 @@
 {
-  "total": 157,
+  "total": 158,
   "components": [
     {
       "moduleName": "Accordion",
@@ -10663,6 +10663,25 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "button" }
+    },
+    {
+      "moduleName": "Truncate",
+      "filePath": "src/Truncate/Truncate.svelte",
+      "props": [
+        {
+          "name": "direction",
+          "kind": "let",
+          "type": "\"end\" | \"front\"",
+          "value": "\"end\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "UnorderedList",

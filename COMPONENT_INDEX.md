@@ -1,6 +1,6 @@
 # Component Index
 
-> 157 components exported from carbon-components-svelte@0.28.0.
+> 158 components exported from carbon-components-svelte@0.28.0.
 
 ## Components
 
@@ -160,6 +160,7 @@
 - [`Tooltip`](#tooltip)
 - [`TooltipDefinition`](#tooltipdefinition)
 - [`TooltipIcon`](#tooltipicon)
+- [`Truncate`](#truncate)
 - [`UnorderedList`](#unorderedlist)
 
 ---
@@ -4277,6 +4278,24 @@ None.
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
 | focus      | forwarded | --     |
+
+## `Truncate`
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                              | Default value      | Description |
+| :-------- | :--------------- | :------- | :-------------------------------- | ------------------ | ----------- |
+| direction | <code>let</code> | No       | <code>"end" &#124; "front"</code> | <code>"end"</code> | --          |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `UnorderedList`
 

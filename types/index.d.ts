@@ -133,6 +133,7 @@ export { default as ToggleSmallSkeleton } from "./ToggleSmall/ToggleSmallSkeleto
 export { default as Tooltip } from "./Tooltip/Tooltip";
 export { default as TooltipDefinition } from "./TooltipDefinition/TooltipDefinition";
 export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon";
+export { default as Truncate } from "./Truncate/Truncate";
 export { default as Header } from "./UIShell/GlobalHeader/Header";
 export { default as HeaderAction } from "./UIShell/GlobalHeader/HeaderAction";
 export { default as HeaderActionLink } from "./UIShell/GlobalHeader/HeaderActionLink";
