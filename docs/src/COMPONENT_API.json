@@ -5183,6 +5183,16 @@
           "reactive": false
         },
         {
+          "name": "direction",
+          "kind": "let",
+          "description": "Specify the direction of the multiselect dropdown menu",
+          "type": "\"bottom\" | \"top\"",
+          "value": "\"bottom\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "selectionFeedback",
           "kind": "let",
           "description": "Specify the selection feedback after selecting items",
