@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.29.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.29.0) - 2021-02-19
+
+**Breaking Changes**
+
+- The default placeholder text for `TimePicker` is changed from "hh=mm" to "hh:mm"
+
+**Features**
+
+- Add UI Shell `SideNavDivider` component
+- Add a direction prop to `ComboBox`, `Dropdown`, `MultiSelect` to render the dropdown menu above or below the input
+- Support `ComboBox` warning state
+- Add text truncation component (`Truncate`) and action (`use:truncate`)
+- Use shorthand scss imports in `css/*.scss` files
+- Use the official `SvelteComponentTyped` interface in the component TypeScript definitions
+
+**Fixes**
+
+- Use `description` as warning icon title in `ProgressStep`
+- Include pre-compiled CSS to library side effects to prevent inadvertent tree-shaking
+- Fix `DataTable` type definition to include `$$restProps`
+
+**Documentation**
+
+- Add filterable small `Tag` example
+- Add `ComboBox` invalid state example
+- Add "Top direction" examples for `ComboBox`, `Dropdown`, `MultiSelect`
+- Demo `ProgressIndicator` invalid/disabled steps
+- Fix `RadioTile` light variant example
+
+**Housekeeping**
+
+- Upgrade `carbon-components` to version 10.29.0
+
 ## [0.28.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.28.0) - 2021-02-05
 
 **Breaking Changes**
