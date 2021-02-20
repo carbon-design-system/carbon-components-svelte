@@ -103,54 +103,9 @@
     on:mouseenter
     on:mouseleave
   />
-{:else}
-  {#if type === "inline"}
-    {#if hideCopyButton}
-      <span
-        class:bx--snippet="{true}"
-        class:bx--snippet--expand="{expanded}"
-        class:bx--snippet--light="{light}"
-        class:bx--snippet--no-copy="{hideCopyButton}"
-        class:bx--snippet--wraptext="{wrapText}"
-        class:bx--snippet--single="{type === 'single'}"
-        class:bx--snippet--inline="{type === 'inline'}"
-        class:bx--snippet--multi="{type === 'multi'}"
-        {...$$restProps}
-      >
-        <code id="{id}">
-          <slot>{code}</slot>
-        </code>
-      </span>
-    {:else}
-      <Copy
-        aria-label="{copyLabel}"
-        aria-describedby="{id}"
-        feedback="{feedback}"
-        feedbackTimeout="{feedbackTimeout}"
-        class="bx--snippet {type && `bx--snippet--${type}`}
-          {type ===
-          'inline' && 'bx--btn--copy'}
-          {expanded &&
-          'bx--snippet--expand'}
-          {light &&
-          'bx--snippet--light'}
-          {hideCopyButton &&
-          'bx--snippet--no-copy'}
-          {wrapText &&
-          'bx--snippet--wraptext'}"
-        {...$$restProps}
-        on:click
-        on:mouseover
-        on:mouseenter
-        on:mouseleave
-      >
-        <code id="{id}">
-          <slot>{code}</slot>
-        </code>
-      </Copy>
-    {/if}
-  {:else}
-    <div
+{:else if type === "inline"}
+  {#if hideCopyButton}
+    <span
       class:bx--snippet="{true}"
       class:bx--snippet--expand="{expanded}"
       class:bx--snippet--light="{light}"
@@ -159,51 +114,93 @@
       class:bx--snippet--single="{type === 'single'}"
       class:bx--snippet--inline="{type === 'inline'}"
       class:bx--snippet--multi="{type === 'multi'}"
-      class:bx--snippet--disabled="{type !== 'inline' && disabled}"
       {...$$restProps}
+    >
+      <code id="{id}">
+        <slot>{code}</slot>
+      </code>
+    </span>
+  {:else}
+    <Copy
+      aria-label="{copyLabel}"
+      aria-describedby="{id}"
+      feedback="{feedback}"
+      feedbackTimeout="{feedbackTimeout}"
+      class="bx--snippet {type && `bx--snippet--${type}`}
+          {type ===
+        'inline' && 'bx--btn--copy'}
+          {expanded &&
+        'bx--snippet--expand'}
+          {light &&
+        'bx--snippet--light'}
+          {hideCopyButton &&
+        'bx--snippet--no-copy'}
+          {wrapText && 'bx--snippet--wraptext'}"
+      {...$$restProps}
+      on:click
       on:mouseover
       on:mouseenter
       on:mouseleave
     >
-      <div
-        role="{type === 'single' ? 'textbox' : undefined}"
-        tabindex="{type === 'single' && !disabled ? '0' : undefined}"
-        aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
-        class:bx--snippet-container="{true}"
-      >
-        <code>
-          <pre bind:this="{ref}">
+      <code id="{id}">
+        <slot>{code}</slot>
+      </code>
+    </Copy>
+  {/if}
+{:else}
+  <div
+    class:bx--snippet="{true}"
+    class:bx--snippet--expand="{expanded}"
+    class:bx--snippet--light="{light}"
+    class:bx--snippet--no-copy="{hideCopyButton}"
+    class:bx--snippet--wraptext="{wrapText}"
+    class:bx--snippet--single="{type === 'single'}"
+    class:bx--snippet--inline="{type === 'inline'}"
+    class:bx--snippet--multi="{type === 'multi'}"
+    class:bx--snippet--disabled="{type !== 'inline' && disabled}"
+    {...$$restProps}
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    <div
+      role="{type === 'single' ? 'textbox' : undefined}"
+      tabindex="{type === 'single' && !disabled ? '0' : undefined}"
+      aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
+      class:bx--snippet-container="{true}"
+    >
+      <code>
+        <pre bind:this="{ref}">
             <slot>{code}</slot>
           </pre>
-        </code>
-      </div>
-      {#if !hideCopyButton}
-        <CopyButton
-          disabled="{disabled}"
-          feedback="{feedback}"
-          feedbackTimeout="{feedbackTimeout}"
-          iconDescription="{copyButtonDescription}"
-          on:click
-          on:animationend
-        />
-      {/if}
-      {#if showMoreLess}
-        <Button
-          kind="ghost"
-          size="field"
-          class="bx--snippet-btn--expand"
-          disabled="{disabled}"
-          on:click="{() => {
-            expanded = !expanded;
-          }}"
-        >
-          <span class:bx--snippet-btn--text="{true}">{expandText}</span>
-          <ChevronDown16
-            class="bx--icon-chevron--down bx--snippet__icon"
-            aria-label="{expandText}"
-          />
-        </Button>
-      {/if}
+      </code>
     </div>
-  {/if}
+    {#if !hideCopyButton}
+      <CopyButton
+        disabled="{disabled}"
+        feedback="{feedback}"
+        feedbackTimeout="{feedbackTimeout}"
+        iconDescription="{copyButtonDescription}"
+        on:click
+        on:animationend
+      />
+    {/if}
+    {#if showMoreLess}
+      <Button
+        kind="ghost"
+        size="field"
+        class="bx--snippet-btn--expand"
+        disabled="{disabled}"
+        on:click="{() => {
+          expanded = !expanded;
+        }}"
+      >
+        <span class:bx--snippet-btn--text="{true}">{expandText}</span>
+        <ChevronDown16
+          class="bx--icon-chevron--down bx--snippet__icon"
+          aria-label="{expandText}"
+        />
+      </Button>
+    {/if}
+  </div>
 {/if}

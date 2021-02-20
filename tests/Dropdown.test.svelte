@@ -3,6 +3,7 @@
 </script>
 
 <Dropdown
+  direction="top"
   titleText="Contact"
   selectedIndex="{0}"
   items="{[

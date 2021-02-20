@@ -48,78 +48,76 @@
     on:mouseenter
     on:mouseleave
   />
-{:else}
-  {#if filter}
-    <div
-      aria-label="{title}"
-      id="{id}"
-      class:bx--tag="{true}"
-      class:bx--tag--disabled="{disabled}"
-      class:bx--tag--filter="{filter}"
-      class:bx--tag--sm="{size === 'sm'}"
-      class:bx--tag--red="{type === 'red'}"
-      class:bx--tag--magenta="{type === 'magenta'}"
-      class:bx--tag--purple="{type === 'purple'}"
-      class:bx--tag--blue="{type === 'blue'}"
-      class:bx--tag--cyan="{type === 'cyan'}"
-      class:bx--tag--teal="{type === 'teal'}"
-      class:bx--tag--green="{type === 'green'}"
-      class:bx--tag--gray="{type === 'gray'}"
-      class:bx--tag--cool-gray="{type === 'cool-gray'}"
-      class:bx--tag--warm-gray="{type === 'warm-gray'}"
-      class:bx--tag--high-contrast="{type === 'high-contrast'}"
-      {...$$restProps}
-    >
-      <slot props="{{ class: 'bx--tag__label' }}">
-        <span class:bx--tag__label="{true}">{type}</span>
-      </slot>
-      <button
-        aria-labelledby="{id}"
-        class:bx--tag__close-icon="{true}"
-        disabled="{disabled}"
-        title="{title}"
-        on:click|stopPropagation
-        on:click|stopPropagation="{() => {
-          dispatch('close');
-        }}"
-        on:mouseover
-        on:mouseenter
-        on:mouseleave
-      >
-        <Close16 />
-      </button>
-    </div>
-  {:else}
-    <div
-      id="{id}"
-      class:bx--tag="{true}"
-      class:bx--tag--disabled="{disabled}"
-      class:bx--tag--sm="{size === 'sm'}"
-      class:bx--tag--red="{type === 'red'}"
-      class:bx--tag--magenta="{type === 'magenta'}"
-      class:bx--tag--purple="{type === 'purple'}"
-      class:bx--tag--blue="{type === 'blue'}"
-      class:bx--tag--cyan="{type === 'cyan'}"
-      class:bx--tag--teal="{type === 'teal'}"
-      class:bx--tag--green="{type === 'green'}"
-      class:bx--tag--gray="{type === 'gray'}"
-      class:bx--tag--cool-gray="{type === 'cool-gray'}"
-      class:bx--tag--warm-gray="{type === 'warm-gray'}"
-      class:bx--tag--high-contrast="{type === 'high-contrast'}"
-      {...$$restProps}
-      on:click
+{:else if filter}
+  <div
+    aria-label="{title}"
+    id="{id}"
+    class:bx--tag="{true}"
+    class:bx--tag--disabled="{disabled}"
+    class:bx--tag--filter="{filter}"
+    class:bx--tag--sm="{size === 'sm'}"
+    class:bx--tag--red="{type === 'red'}"
+    class:bx--tag--magenta="{type === 'magenta'}"
+    class:bx--tag--purple="{type === 'purple'}"
+    class:bx--tag--blue="{type === 'blue'}"
+    class:bx--tag--cyan="{type === 'cyan'}"
+    class:bx--tag--teal="{type === 'teal'}"
+    class:bx--tag--green="{type === 'green'}"
+    class:bx--tag--gray="{type === 'gray'}"
+    class:bx--tag--cool-gray="{type === 'cool-gray'}"
+    class:bx--tag--warm-gray="{type === 'warm-gray'}"
+    class:bx--tag--high-contrast="{type === 'high-contrast'}"
+    {...$$restProps}
+  >
+    <slot props="{{ class: 'bx--tag__label' }}">
+      <span class:bx--tag__label="{true}">{type}</span>
+    </slot>
+    <button
+      aria-labelledby="{id}"
+      class:bx--tag__close-icon="{true}"
+      disabled="{disabled}"
+      title="{title}"
+      on:click|stopPropagation
+      on:click|stopPropagation="{() => {
+        dispatch('close');
+      }}"
       on:mouseover
       on:mouseenter
       on:mouseleave
     >
-      {#if icon}
-        <div class:bx--tag__custom-icon="{true}">
-          <svelte:component this="{icon}" />
-        </div>
-      {/if}
-      <span>
-        <slot />
-      </span>
-    </div>
-  {/if}
+      <Close16 />
+    </button>
+  </div>
+{:else}
+  <div
+    id="{id}"
+    class:bx--tag="{true}"
+    class:bx--tag--disabled="{disabled}"
+    class:bx--tag--sm="{size === 'sm'}"
+    class:bx--tag--red="{type === 'red'}"
+    class:bx--tag--magenta="{type === 'magenta'}"
+    class:bx--tag--purple="{type === 'purple'}"
+    class:bx--tag--blue="{type === 'blue'}"
+    class:bx--tag--cyan="{type === 'cyan'}"
+    class:bx--tag--teal="{type === 'teal'}"
+    class:bx--tag--green="{type === 'green'}"
+    class:bx--tag--gray="{type === 'gray'}"
+    class:bx--tag--cool-gray="{type === 'cool-gray'}"
+    class:bx--tag--warm-gray="{type === 'warm-gray'}"
+    class:bx--tag--high-contrast="{type === 'high-contrast'}"
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    {#if icon}
+      <div class:bx--tag__custom-icon="{true}">
+        <svelte:component this="{icon}" />
+      </div>
+    {/if}
+    <span>
+      <slot />
+    </span>
+  </div>
 {/if}

@@ -33,6 +33,12 @@
   export let type = "default";
 
   /**
+   * Specify the direction of the multiselect dropdown menu
+   * @type {"bottom" | "top"}
+   */
+  export let direction = "bottom";
+
+  /**
    * Specify the selection feedback after selecting items
    * @type {"top" | "fixed" | "top-after-reopen"}
    */
@@ -252,7 +258,8 @@
     size="{size}"
     warn="{warn}"
     warnText="{warnText}"
-    class="bx--multi-select {filterable && 'bx--combo-box'}
+    class="bx--multi-select {direction === 'top' &&
+      'bx--list-box--up'} {filterable && 'bx--combo-box'}
       {filterable &&
       'bx--multi-select--filterable'}
       {invalid &&

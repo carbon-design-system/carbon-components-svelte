@@ -80,7 +80,7 @@
     }}"
   >
     {#if invalid}
-      <Warning16 class="bx--progress__warning" />
+      <Warning16 class="bx--progress__warning" title="{description}" />
     {:else if current}
       <svg>
         <path d="M 7, 7 m -7, 0 a 7,7 0 1,0 14,0 a 7,7 0 1,0 -14,0"></path>

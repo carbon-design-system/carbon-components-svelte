@@ -30,6 +30,17 @@ items={[
 
 <FileSource src="/framed/ComboBox/FilterableComboBox" />
 
+### Top direction
+
+Set `direction` to `"top"` for the combobox dropdown menu to appear above the input.
+
+<ComboBox direction="top" titleText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
 ### Light variant
 
 <ComboBox light titleText="Contact" placeholder="Select contact method"
@@ -53,6 +64,24 @@ items={[
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
 size="sm"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Invalid state
+
+<ComboBox invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Warning state
+
+<ComboBox warn warnText="This contact method is not associated with your account" titleText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},

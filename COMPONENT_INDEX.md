@@ -1,6 +1,6 @@
 # Component Index
 
-> 156 components exported from carbon-components-svelte@0.28.0.
+> 158 components exported from carbon-components-svelte@0.28.0.
 
 ## Components
 
@@ -107,6 +107,7 @@
 - [`SelectSkeleton`](#selectskeleton)
 - [`SelectableTile`](#selectabletile)
 - [`SideNav`](#sidenav)
+- [`SideNavDivider`](#sidenavdivider)
 - [`SideNavItems`](#sidenavitems)
 - [`SideNavLink`](#sidenavlink)
 - [`SideNavMenu`](#sidenavmenu)
@@ -159,6 +160,7 @@
 - [`Tooltip`](#tooltip)
 - [`TooltipDefinition`](#tooltipdefinition)
 - [`TooltipIcon`](#tooltipicon)
+- [`Truncate`](#truncate)
 - [`UnorderedList`](#unorderedlist)
 
 ---
@@ -609,6 +611,7 @@ export interface ComboBoxItem {
 | selectedIndex    | <code>let</code> | Yes      | <code>number</code>                                         | <code>-1</code>                                       | Set the selected item by value index                                     |
 | items            | <code>let</code> | No       | <code>ComboBoxItem[]</code>                                 | <code>[]</code>                                       | Set the combobox items                                                   |
 | itemToString     | <code>let</code> | No       | <code>(item: ComboBoxItem) => string</code>                 | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a combobox item                                  |
+| direction        | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                          | <code>"bottom"</code>                                 | Specify the direction of the combobox dropdown menu                      |
 | size             | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                               | --                                                    | Set the size of the combobox                                             |
 | disabled         | <code>let</code> | No       | <code>boolean</code>                                        | <code>false</code>                                    | Set to `true` to disable the combobox                                    |
 | titleText        | <code>let</code> | No       | <code>string</code>                                         | <code>""</code>                                       | Specify the title text of the combobox                                   |
@@ -616,6 +619,8 @@ export interface ComboBoxItem {
 | helperText       | <code>let</code> | No       | <code>string</code>                                         | <code>""</code>                                       | Specify the helper text                                                  |
 | invalidText      | <code>let</code> | No       | <code>string</code>                                         | <code>""</code>                                       | Specify the invalid state text                                           |
 | invalid          | <code>let</code> | No       | <code>boolean</code>                                        | <code>false</code>                                    | Set to `true` to indicate an invalid state                               |
+| warn             | <code>let</code> | No       | <code>boolean</code>                                        | <code>false</code>                                    | Set to `true` to indicate an warning state                               |
+| warnText         | <code>let</code> | No       | <code>string</code>                                         | <code>""</code>                                       | Specify the warning state text                                           |
 | light            | <code>let</code> | No       | <code>boolean</code>                                        | <code>false</code>                                    | Set to `true` to enable the light variant                                |
 | shouldFilterItem | <code>let</code> | No       | <code>(item: ComboBoxItem, value: string) => boolean</code> | <code>() => true</code>                               | Determine if an item should be filtered given the current combobox value |
 | translateWithId  | <code>let</code> | No       | <code>(id: any) => string</code>                            | --                                                    | Override the default translation ids                                     |
@@ -980,6 +985,7 @@ export interface DropdownItem {
 | items           | <code>let</code> | No       | <code>DropdownItem[]</code>                 | <code>[]</code>                                       | Set the dropdown items                        |
 | itemToString    | <code>let</code> | No       | <code>(item: DropdownItem) => string</code> | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a dropdown item       |
 | type            | <code>let</code> | No       | <code>"default" &#124; "inline"</code>      | <code>"default"</code>                                | Specify the type of dropdown                  |
+| direction       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>          | <code>"bottom"</code>                                 | Specify the direction of the dropdown menu    |
 | size            | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>   | --                                                    | Specify the size of the dropdown field        |
 | light           | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to enable the light variant     |
 | disabled        | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to disable the dropdown         |
@@ -2150,6 +2156,7 @@ export interface MultiSelectItem {
 | itemToString      | <code>let</code> | No       | <code>(item: MultiSelectItem) => string</code>                                                 | <code>(item) => item.text &#124;&#124; item.id</code>                               | Override the display of a multiselect item                                            |
 | size              | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                      | --                                                                                  | Set the size of the combobox                                                          |
 | type              | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                         | <code>"default"</code>                                                              | Specify the type of multiselect                                                       |
+| direction         | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                             | <code>"bottom"</code>                                                               | Specify the direction of the multiselect dropdown menu                                |
 | selectionFeedback | <code>let</code> | No       | <code>"top" &#124; "fixed" &#124; "top-after-reopen"</code>                                    | <code>"top-after-reopen"</code>                                                     | Specify the selection feedback after selecting items                                  |
 | disabled          | <code>let</code> | No       | <code>boolean</code>                                                                           | <code>false</code>                                                                  | Set to `true` to disable the dropdown                                                 |
 | filterable        | <code>let</code> | No       | <code>boolean</code>                                                                           | <code>false</code>                                                                  | Set to `true` to filter items                                                         |
@@ -2983,6 +2990,20 @@ None.
 | Slot name | Default | Props | Fallback |
 | :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
+
+### Events
+
+None.
+
+## `SideNavDivider`
+
+### Props
+
+None.
+
+### Slots
+
+None.
 
 ### Events
 
@@ -4260,6 +4281,24 @@ None.
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
 | focus      | forwarded | --     |
+
+## `Truncate`
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                              | Default value      | Description |
+| :-------- | :--------------- | :------- | :-------------------------------- | ------------------ | ----------- |
+| clamp     | <code>let</code> | No       | <code>"end" &#124; "front"</code> | <code>"end"</code> | --          |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `UnorderedList`
 

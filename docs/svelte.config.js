@@ -38,6 +38,9 @@ function createImports(source) {
   const ccs_imports = Array.from(inlineComponents.keys());
   const icon_imports = Array.from(icons.keys());
 
+  if (ccs_imports.length === 0) return "";
+  // TODO: determine if action is used, and generate import accordingly
+
   return `
   <script>
     import {${ccs_imports.join(",")}} from "carbon-components-svelte";

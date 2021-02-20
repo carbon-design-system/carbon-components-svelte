@@ -164,7 +164,6 @@ Using JavaScript:
 </script>
 
 <button on:click="{() => (theme = 'g90')}">Update theme</button>
-
 ```
 
 ## Preprocessors

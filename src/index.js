@@ -114,6 +114,7 @@ export { ToggleSmall, ToggleSmallSkeleton } from "./ToggleSmall";
 export { Tooltip } from "./Tooltip";
 export { TooltipDefinition } from "./TooltipDefinition";
 export { TooltipIcon } from "./TooltipIcon";
+export { Truncate } from "./Truncate";
 export {
   Header,
   HeaderAction,
@@ -131,6 +132,7 @@ export {
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
+  SideNavDivider,
   Content,
   SkipToContent,
   HeaderGlobalAction,

@@ -6,7 +6,11 @@
 <Router routes="{routes}" />
 
 <style lang="scss" global>
+  // This is a recipe for dynamic, client-side theming
+  // All Carbon themes are included (White, Gray 10, Gray 90, Gray 100)
+
   $feature-flags: (
+    // Custom CSS properties must be enabled to dynamically switch themes
     enable-css-custom-properties: true,
     ui-shell: true,
     grid-columns-16: true
@@ -23,23 +27,38 @@
   // Use all Carbon themes
   @import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
 
+  // The default theme is "white" (White)
   :root {
     @include carbon--theme($carbon--theme--white, true);
   }
+
+  // Set the <html> theme attribute to "g10" to use the Gray 10 theme
+  // <html theme="g10">
   :root[theme="g10"] {
     @include carbon--theme($carbon--theme--g10, true);
   }
+
+  // Set the <html> theme attribute to "g90" to use the Gray 90 theme
+  // <html theme="g90">
   :root[theme="g90"] {
     @include carbon--theme($carbon--theme--g90, true);
   }
+
+  // Set the <html> theme attribute to "g100" to use the Gray 100 theme
+  // <html theme="g100">
   :root[theme="g100"] {
     @include carbon--theme($carbon--theme--g100, true);
   }
 
-  @import "carbon-components/scss/globals/scss/_css--reset.scss";
-  @import "carbon-components/scss/globals/scss/_css--font-face.scss";
-  @import "carbon-components/scss/globals/scss/_css--helpers.scss";
-  @import "carbon-components/scss/globals/scss/_css--body.scss";
-  @import "carbon-components/scss/globals/grid/_grid.scss";
-  @import "carbon-components/scss/globals/scss/styles.scss";
+  // Programmatically update the theme in JavaScript:
+  // document.documentElement.setAttribute("theme", "g90");
+
+  @import "carbon-components/scss/globals/scss/_css--reset";
+  @import "carbon-components/scss/globals/scss/_css--font-face";
+  @import "carbon-components/scss/globals/scss/_css--helpers";
+  @import "carbon-components/scss/globals/scss/_css--body";
+  @import "carbon-components/scss/globals/grid/grid";
+
+  // Import all component styles
+  @import "carbon-components/scss/globals/scss/styles";
 </style>

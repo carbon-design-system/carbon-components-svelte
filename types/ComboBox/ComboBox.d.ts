@@ -33,6 +33,12 @@ export interface ComboBoxProps
   value?: string;
 
   /**
+   * Specify the direction of the combobox dropdown menu
+   * @default "bottom"
+   */
+  direction?: "bottom" | "top";
+
+  /**
    * Set the size of the combobox
    */
   size?: "sm" | "xl";
@@ -72,6 +78,18 @@ export interface ComboBoxProps
    * @default false
    */
   invalid?: boolean;
+
+  /**
+   * Set to `true` to indicate an warning state
+   * @default false
+   */
+  warn?: boolean;
+
+  /**
+   * Specify the warning state text
+   * @default ""
+   */
+  warnText?: string;
 
   /**
    * Set to `true` to enable the light variant

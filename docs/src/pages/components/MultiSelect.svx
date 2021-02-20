@@ -51,6 +51,16 @@ Use the `itemToString` prop to format the display of individual items.
     sortItem="{() => {}}"
   />
 
+### Top direction
+
+Set `direction` to `"top"` for the dropdown menu to appear above the input.
+
+<MultiSelect direction="top" titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ### Light variant
 
 <MultiSelect light titleText="Contact" label="Select contact methods..."

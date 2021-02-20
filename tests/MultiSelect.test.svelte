@@ -3,6 +3,7 @@
 </script>
 
 <MultiSelect
+  direction="top"
   titleText="Contact"
   label="Select contact methods..."
   items="{[

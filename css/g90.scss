@@ -17,9 +17,11 @@ $css--plex: true;
 $carbon--theme: $carbon--theme--g90;
 @include carbon--theme();
 
-@import "carbon-components/scss/globals/scss/_css--reset.scss";
-@import "carbon-components/scss/globals/scss/_css--font-face.scss";
-@import "carbon-components/scss/globals/scss/_css--helpers.scss";
-@import "carbon-components/scss/globals/scss/_css--body.scss";
-@import "carbon-components/scss/globals/grid/_grid.scss";
-@import "carbon-components/scss/globals/scss/styles.scss";
+@import "carbon-components/scss/globals/scss/_css--reset";
+@import "carbon-components/scss/globals/scss/_css--font-face";
+@import "carbon-components/scss/globals/scss/_css--helpers";
+@import "carbon-components/scss/globals/scss/_css--body";
+@import "carbon-components/scss/globals/grid/grid";
+
+// Import all component styles
+@import "carbon-components/scss/globals/scss/styles";

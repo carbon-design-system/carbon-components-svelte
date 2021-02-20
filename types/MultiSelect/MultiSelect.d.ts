@@ -48,6 +48,12 @@ export interface MultiSelectProps
   type?: "default" | "inline";
 
   /**
+   * Specify the direction of the multiselect dropdown menu
+   * @default "bottom"
+   */
+  direction?: "bottom" | "top";
+
+  /**
    * Specify the selection feedback after selecting items
    * @default "top-after-reopen"
    */

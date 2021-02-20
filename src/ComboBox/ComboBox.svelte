@@ -23,6 +23,12 @@
   export let value = "";
 
   /**
+   * Specify the direction of the combobox dropdown menu
+   * @type {"bottom" | "top"}
+   */
+  export let direction = "bottom";
+
+  /**
    * Set the size of the combobox
    * @type {"sm" | "xl"}
    */
@@ -45,6 +51,12 @@
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
+
+  /** Set to `true` to indicate an warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
 
   /** Set to `true` to enable the light variant */
   export let light = false;
@@ -84,6 +96,7 @@
 
   import { createEventDispatcher, afterUpdate, tick } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
   import ListBoxField from "../ListBox/ListBoxField.svelte";
   import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
@@ -97,8 +110,8 @@
   let inputValue = "";
   let highlightedIndex = -1;
 
-  function change(direction) {
-    let index = highlightedIndex + direction;
+  function change(dir) {
+    let index = highlightedIndex + dir;
 
     if (index < 0) {
       index = items.length - 1;
@@ -158,7 +171,8 @@
     </label>
   {/if}
   <ListBox
-    class="bx--combo-box"
+    class="bx--combo-box {direction === 'top' &&
+      'bx--list-box--up'} {!invalid && warn && 'bx--combo-box--warning'}"
     id="{comboId}"
     aria-label="{ariaLabel}"
     disabled="{disabled}"
@@ -167,6 +181,8 @@
     open="{open}"
     light="{light}"
     size="{size}"
+    warn="{warn}"
+    warnText="{warnText}"
   >
     <ListBoxField
       role="button"
@@ -236,6 +252,11 @@
       {#if invalid}
         <WarningFilled16 class="bx--list-box__invalid-icon" />
       {/if}
+      {#if !invalid && warn}
+        <WarningAltFilled16
+          class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+        />
+      {/if}
       {#if inputValue}
         <ListBoxSelection
           on:clear
@@ -286,7 +307,7 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
-  {#if !invalid && helperText}
+  {#if !invalid && helperText && !warn}
     <div
       class:bx--form__helper-text="{true}"
       class:bx--form__helper-text--disabled="{disabled}"
