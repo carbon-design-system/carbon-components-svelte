@@ -13,6 +13,10 @@ $css--plex: true;
 
 // Use the "white" (White) Carbon theme
 @import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/src/components/tag/tag";
+@import "carbon-components/src/components/notification/inline-notification";
+@import "carbon-components/src/components/notification/toast-notification";
 
 $carbon--theme: $carbon--theme--white;
 @include carbon--theme();
