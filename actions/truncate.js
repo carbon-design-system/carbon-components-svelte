@@ -11,8 +11,14 @@
  * <h1 use:truncate={{ clamp: "front" }}>...</h1>
  */
 export function truncate(node, params = {}) {
+  const prefix = "bx--text-truncate--";
+
   function toggleClass(front = false) {
-    node.className = `bx--text-truncate--${front ? "front" : "end"}`;
+    const classes = [...node.classList]
+      .filter((name) => !name.startsWith(prefix))
+      .join(" ");
+
+    node.className = `${classes} ${prefix}${front ? "front" : "end"}`;
   }
 
   toggleClass(params.clamp === "front");
