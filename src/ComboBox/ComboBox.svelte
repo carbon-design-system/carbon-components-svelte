@@ -238,6 +238,7 @@
         on:blur="{({ relatedTarget }) => {
           if (!open || !relatedTarget) return;
           if (
+            !['INPUT', 'SELECT', 'TEXTAREA'].includes(relatedTarget.tagName) &&
             relatedTarget.getAttribute('role') !== 'button' &&
             relatedTarget.getAttribute('role') !== 'searchbox'
           ) {
