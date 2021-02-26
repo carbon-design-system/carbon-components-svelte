@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.29.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.29.1) - 2021-02-26
+
+**Fixes**
+
+- fix blur logic in `ComboBox`, `MultiSelect` based on relatedTarget tag name
+- fix `truncate` action to preserve existing class names on node
+- use new component tokens to correctly render CSS for tags, low contrast notifications
+
 ## [0.29.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.29.0) - 2021-02-19
 
 **Breaking Changes**
