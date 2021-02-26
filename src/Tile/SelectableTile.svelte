@@ -1,9 +1,12 @@
 <script>
-  /** Set to `true` to select the tile */
+  /** Set to `true` to select  the tile*/
   export let selected = false;
 
   /** Set to `true` to enable the light variant */
   export let light = false;
+
+  /** Set to `true` to disable the tile */
+  export let disabled = false;
 
   /** Specify the title of the selectable tile */
   export let title = "title";
@@ -47,6 +50,7 @@
   value="{value}"
   name="{name}"
   title="{title}"
+  disabled="{disabled}"
 />
 <label
   for="{id}"
