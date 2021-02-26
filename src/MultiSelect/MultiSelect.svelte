@@ -316,7 +316,12 @@
         }
       }}"
       on:blur="{({ relatedTarget }) => {
-        if (relatedTarget && relatedTarget.getAttribute('role') !== 'button') {
+        if (
+          relatedTarget &&
+          !['INPUT', 'SELECT', 'TEXTAREA'].includes(relatedTarget.tagName) &&
+          relatedTarget.getAttribute('role') !== 'button' &&
+          relatedTarget.getAttribute('role') !== 'searchbox'
+        ) {
           fieldRef.focus();
         }
       }}"
