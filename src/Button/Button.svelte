@@ -137,8 +137,7 @@
     {#if hasIconOnly}
       <span class:bx--assistive-text="{true}">{iconDescription}</span>
     {/if}
-    <slot />
-    <svelte:component
+    <slot /><svelte:component
       this="{icon}"
       aria-hidden="true"
       class="bx--btn__icon"
@@ -157,8 +156,7 @@
     {#if hasIconOnly}
       <span class:bx--assistive-text="{true}">{iconDescription}</span>
     {/if}
-    <slot />
-    <svelte:component
+    <slot /><svelte:component
       this="{icon}"
       aria-hidden="true"
       class="bx--btn__icon"
