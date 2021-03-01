@@ -18,6 +18,9 @@
   /** Set to `true` to prevent the modal from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
+  /** Set to `true` for the primary button to be triggered when pressing "Enter" */
+  export let shouldSubmitOnEnter = true;
+  
   /** Specify a class for the inner modal */
   export let containerClass = "";
 
@@ -103,6 +106,16 @@
   class:is-visible="{open}"
   class:bx--modal--danger="{danger}"
   {...$$restProps}
+  on:keydown
+  on:keydown="{({ key }) => {
+    if (open) {
+      if (key === 'Escape') {
+        open = false;
+      } else if (shouldSubmitOnEnter && key === 'Enter') {
+        dispatch('submit');
+      }
+    }
+  }}"
   on:click
   on:click="{() => {
     if (!didClickInnerModal && !preventCloseOnClickOutside) open = false;
