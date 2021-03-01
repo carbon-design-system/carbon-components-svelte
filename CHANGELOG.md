@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.29.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.29.2) - 2021-03-01
+
+**Fixes**
+
+- remove blank line after `slot` to correctly render button with icon in Safari 13
+
 ## [0.29.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.29.1) - 2021-02-26
 
 **Fixes**
