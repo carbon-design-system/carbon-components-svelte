@@ -107,12 +107,13 @@
   class:bx--modal--danger="{danger}"
   {...$$restProps}
   on:keydown
-  on:keydown="{({ key }) => {
+  on:keydown="{(e) => {
+    let key = e.key
     if (open) {
       if (key === 'Escape') {
         open = false;
       } else if (shouldSubmitOnEnter && key === 'Enter') {
-        dispatch('submit');
+        dispatch('submit', e.target);
       }
     }
   }}"
