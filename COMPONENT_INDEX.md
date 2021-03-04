@@ -4183,6 +4183,7 @@ None.
 
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
+| clear      | forwarded | --     |
 | change     | forwarded | --     |
 | input      | forwarded | --     |
 | focus      | forwarded | --     |

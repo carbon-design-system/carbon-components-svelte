@@ -10372,6 +10372,7 @@
       ],
       "slots": [],
       "events": [
+        { "type": "forwarded", "name": "clear", "element": "Search" },
         { "type": "forwarded", "name": "change", "element": "Search" },
         { "type": "forwarded", "name": "input", "element": "Search" },
         { "type": "forwarded", "name": "focus", "element": "Search" },
