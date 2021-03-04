@@ -17,6 +17,12 @@ The `Search` component size is extra-large by default. There are [large](#large-
 
 <FileSource src="/framed/Search/SearchReactive" />
 
+### on:clear
+
+The "clear" event is dispatched when clicking the "X" button in the search input element.
+
+<Search value="Cloud functions" on:clear={() => console.log('clear')}/>
+
 ### Light variant
 
 <Search light />
