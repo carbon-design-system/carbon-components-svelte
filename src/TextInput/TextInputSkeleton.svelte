@@ -14,5 +14,5 @@
   {#if !hideLabel}
     <span class:bx--label="{true}" class:bx--skeleton="{true}"></span>
   {/if}
-  <div class:bx--skeleton="{true}" class:bx--text-area="{true}"></div>
+  <div class:bx--skeleton="{true}" class:bx--text-input="{true}"></div>
 </div>
