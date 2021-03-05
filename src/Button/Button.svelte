@@ -18,6 +18,11 @@
   export let size = "default";
 
   /**
+   * Set to `true` to enable the selected state for an icon-only, ghost button
+   */
+  export let isSelected = false;
+
+  /**
    * Set to `true` for the icon-only variant
    * @deprecated inferred using the $$slots API
    */
@@ -104,6 +109,7 @@
       hasIconOnly &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
+      hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
       $$restProps.class,
     ]
       .filter(Boolean)
