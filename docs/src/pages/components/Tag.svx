@@ -44,6 +44,13 @@ Note: rendering a custom icon cannnot be used with the filterable variant.
 
 <Tag icon={IbmCloud16}>IBM Cloud</Tag>
 
+### Interactive variant
+
+Set `interactive` to `true` to render a `button` element instead of a `div`.
+
+<Tag interactive>Machine learning</Tag>
+<Tag interactive disabled>Machine learning</Tag>
+
 ### Skeleton
 
 <Tag skeleton />

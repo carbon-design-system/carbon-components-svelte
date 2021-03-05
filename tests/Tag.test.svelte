@@ -31,4 +31,6 @@
 
 <Tag icon="{Add16}">Custom icon</Tag>
 
+<Tag interactive>Text</Tag>
+
 <Tag skeleton />
