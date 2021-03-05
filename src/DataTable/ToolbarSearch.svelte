@@ -4,6 +4,12 @@
    * @type {number | string}
    */
   export let value = "";
+  
+  /**
+   * Specify a custom placeholder
+   * @type {string}
+   */
+  export let placeholder = "Search...";
 
   /** Set to `true` to expand the search bar */
   export let expanded = false;
@@ -48,6 +54,7 @@
     size="sm"
     tabindex="{expanded ? tabindex : '-1'}"
     disabled="{disabled}"
+    placeholder="{placeholder}"
     {...$$restProps}
     bind:ref
     bind:value
