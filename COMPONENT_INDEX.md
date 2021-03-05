@@ -2695,15 +2695,17 @@ None.
 | :------------ | :--------------- | :------- | :------------------------------------------ | ------------------------- | -------------------------------------------- |
 | selected      | <code>let</code> | Yes      | <code>string</code>                         | --                        | Set the selected radio button value          |
 | disabled      | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to disable the radio buttons   |
+| legendText    | <code>let</code> | No       | <code>string</code>                         | <code>""</code>           | Specify the legend text                      |
 | labelPosition | <code>let</code> | No       | <code>"right" &#124; "left"</code>          | <code>"right"</code>      | Specify the label position                   |
 | orientation   | <code>let</code> | No       | <code>"horizontal" &#124; "vertical"</code> | <code>"horizontal"</code> | Specify the orientation of the radio buttons |
 | id            | <code>let</code> | No       | <code>string</code>                         | --                        | Set an id for the container div element      |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name  | Default | Props | Fallback                  |
+| :--------- | :------ | :---- | :------------------------ |
+| --         | Yes     | --    | --                        |
+| legendText | No      | --    | <code>{legendText}</code> |
 
 ### Events
 

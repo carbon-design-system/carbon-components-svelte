@@ -3,19 +3,43 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
 ---
 
 <script>
-  import { FormGroup, RadioButton, RadioButtonSkeleton, RadioButtonGroup } from "carbon-components-svelte";
+  import { RadioButton, RadioButtonSkeleton, RadioButtonGroup, Tooltip } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
 ### Default
 
-<FormGroup legendText="Storage tier (disk)">
-  <RadioButtonGroup selected="standard">
-    <RadioButton labelText="Free (1 GB)" value="free" />
-    <RadioButton labelText="Standard (10 GB)" value="standard" />
-    <RadioButton labelText="Pro (128 GB)" value="pro" />
-  </RadioButtonGroup>
-</FormGroup>
+<RadioButtonGroup selected="standard">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
+### With legend text
+
+<RadioButtonGroup legendText="Storage tier (disk)" selected="standard">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
+### Legend text slot
+
+Use the named "legendText" slot to customize the legend text.
+
+<RadioButtonGroup selected="standard">
+  <div slot="legendText" style="display: flex">
+    Storage tier (disk)
+    <Tooltip tooltipBodyId="tooltip-body">
+      <p id="tooltip-body">
+        Storage tiers may vary based on geolocation.
+      </p>
+    </Tooltip>
+  </div>
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
 
 ### Programmatic usage
 
@@ -25,40 +49,32 @@ Bind the selected value using the `selected` prop.
 
 ### Label text aligned left
 
-<FormGroup legendText="Storage tier (disk)">
-  <RadioButtonGroup labelPosition="left" selected="standard">
-    <RadioButton labelText="Free (1 GB)" value="free" />
-    <RadioButton labelText="Standard (10 GB)" value="standard" />
-    <RadioButton labelText="Pro (128 GB)" value="pro" />
-  </RadioButtonGroup>
-</FormGroup>
+<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" selected="standard">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
 
 ### Vertical orientation
 
-<FormGroup legendText="Storage tier (disk)">
-  <RadioButtonGroup orientation="vertical" selected="standard">
-    <RadioButton labelText="Free (1 GB)" value="free" />
-    <RadioButton labelText="Standard (10 GB)" value="standard" />
-    <RadioButton labelText="Pro (128 GB)" value="pro" />
-  </RadioButtonGroup>
-</FormGroup>
+<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" selected="standard">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
 
 ### Skeleton
 
-<FormGroup legendText="Storage tier (disk)">
-  <RadioButtonGroup>
-    <RadioButtonSkeleton />
-    <RadioButtonSkeleton />
-    <RadioButtonSkeleton />
-  </RadioButtonGroup>
-</FormGroup>
+<RadioButtonGroup legendText="Storage tier (disk)">
+  <RadioButtonSkeleton />
+  <RadioButtonSkeleton />
+  <RadioButtonSkeleton />
+</RadioButtonGroup>
 
 ### Skeleton (vertical orientation)
 
-<FormGroup legendText="Storage tier (disk)">
-  <RadioButtonGroup orientation="vertical">
-    <RadioButtonSkeleton />
-    <RadioButtonSkeleton />
-    <RadioButtonSkeleton />
-  </RadioButtonGroup>
-</FormGroup>
+<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)">
+  <RadioButtonSkeleton />
+  <RadioButtonSkeleton />
+  <RadioButtonSkeleton />
+</RadioButtonGroup>

@@ -6961,6 +6961,16 @@
           "reactive": false
         },
         {
+          "name": "legendText",
+          "kind": "let",
+          "description": "Specify the legend text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "labelPosition",
           "kind": "let",
           "description": "Specify the label position",
@@ -6990,7 +7000,15 @@
           "reactive": false
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "legendText",
+          "default": false,
+          "fallback": "{legendText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
