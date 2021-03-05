@@ -37,7 +37,10 @@
   /** Set to `true` for the input to be read-only */
   export let readonly = false;
 
-  /** Set to `true` to enable the mobile variant */
+  /**
+   * Set to `true` to enable the mobile variant
+   * @deprecated
+   */
   export let mobile = false;
 
   /** Set to `true` to allow for an empty value */
