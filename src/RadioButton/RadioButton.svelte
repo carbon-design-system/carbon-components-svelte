@@ -67,6 +67,8 @@
   />
   <label class:bx--radio-button__label="{true}" for="{id}">
     <span class:bx--radio-button__appearance="{true}"></span>
-    <span class:bx--visually-hidden="{hideLabel}">{labelText}</span>
+    {#if labelText}
+      <span class:bx--visually-hidden="{hideLabel}">{labelText}</span>
+    {/if}
   </label>
 </div>
