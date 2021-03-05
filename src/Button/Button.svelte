@@ -95,6 +95,7 @@
     tabindex,
     disabled,
     href,
+    "aria-pressed": hasIconOnly && kind === "ghost" ? isSelected : undefined,
     ...$$restProps,
     class: [
       "bx--btn",
