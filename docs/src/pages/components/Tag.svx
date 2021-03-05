@@ -1,7 +1,6 @@
 <script>
   import { Tag } from "carbon-components-svelte";
   import IbmCloud16 from "carbon-icons-svelte/lib/IbmCloud16";
-  import Document16 from "carbon-icons-svelte/lib/Document16";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -30,6 +29,10 @@
 ### Filterable
 
 <Tag filter on:close>carbon-components</Tag>
+
+### Filterable (disabled)
+
+<Tag filter disabled on:close>carbon-components</Tag>
 
 ### Filterable (small)
 
