@@ -20,7 +20,7 @@
   });
 </script>
 
-{#if fixed}
+{#if !fixed}
   <div
     on:click="{() => {
       isOpen = false;
