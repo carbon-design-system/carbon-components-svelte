@@ -2184,13 +2184,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| clear      | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| focus      | forwarded  | --     |
-| blur       | forwarded  | --     |
-| select     | dispatched | --     |
+| Event name | Type       | Detail                                                                                              |
+| :--------- | :--------- | :-------------------------------------------------------------------------------------------------- |
+| select     | dispatched | <code>{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
+| clear      | forwarded  | --                                                                                                  |
+| keydown    | forwarded  | --                                                                                                  |
+| focus      | forwarded  | --                                                                                                  |
+| blur       | forwarded  | --                                                                                                  |
 
 ## `NotificationActionButton`
 

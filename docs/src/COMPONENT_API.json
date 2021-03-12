@@ -5403,11 +5403,15 @@
       ],
       "slots": [],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "select",
+          "detail": "{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }"
+        },
         { "type": "forwarded", "name": "clear", "element": "ListBoxSelection" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
-        { "type": "forwarded", "name": "blur", "element": "input" },
-        { "type": "dispatched", "name": "select" }
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [
         {

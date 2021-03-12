@@ -121,6 +121,7 @@
    * @typedef {string} MultiSelectItemId
    * @typedef {string} MultiSelectItemText
    * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
+   * @event {{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
    */
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
