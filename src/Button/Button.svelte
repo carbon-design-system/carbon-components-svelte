@@ -90,7 +90,6 @@
   }
   $: hasIconOnly = icon && !$$slots.default;
   $: buttonProps = {
-    role: "button",
     type: href && !disabled ? undefined : type,
     tabindex,
     disabled,
