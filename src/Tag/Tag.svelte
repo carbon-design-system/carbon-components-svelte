@@ -93,6 +93,7 @@
 {:else if interactive}
   <button
     id="{id}"
+    disabled="{disabled}"
     aria-disabled="{disabled}"
     tabindex="{disabled ? '-1' : undefined}"
     class:bx--tag="{true}"
