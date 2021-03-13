@@ -108,7 +108,7 @@
               <Tag size="sm" type="red">Deprecated</Tag>
             {/if}
             {#if new_components.includes(child.title)}
-              <Tag size="sm" type="blue">New</Tag>
+              <Tag size="sm" type="green">New</Tag>
             {/if}
           </SideNavMenuItem>
         {/each}
