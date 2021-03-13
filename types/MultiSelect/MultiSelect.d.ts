@@ -11,7 +11,7 @@ export interface MultiSelectItem {
 }
 
 export interface MultiSelectProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the multiselect items
    * @default []

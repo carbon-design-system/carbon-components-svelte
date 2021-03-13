@@ -237,7 +237,6 @@
   class:bx--multi-select__wrapper--inline="{inline}"
   class:bx--list-box__wrapper--inline="{inline}"
   class:bx--multi-select__wrapper--inline--invalid="{inline && invalid}"
-  {...$$restProps}
 >
   {#if titleText}
     <label
@@ -348,6 +347,7 @@
       {#if filterable}
         <input
           bind:this="{inputRef}"
+          {...$$restProps}
           role="combobox"
           tabindex="0"
           autocomplete="off"

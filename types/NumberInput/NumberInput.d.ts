@@ -4,7 +4,7 @@ import { SvelteComponentTyped } from "svelte";
 export type NumberInputTranslationId = "increment" | "decrement";
 
 export interface NumberInputProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the size of the input
    */

@@ -98,7 +98,6 @@
     class:bx--search--sm="{size === 'sm' || small}"
     class:bx--search--lg="{size === 'lg'}"
     class:bx--search--xl="{size === 'xl'}"
-    {...$$restProps}
   >
     <Search16 class="bx--search-magnifier" />
     <label id="{id}-search" for="{id}" class:bx--label="{true}"
@@ -116,7 +115,7 @@
       placeholder="{placeholder}"
       type="{type}"
       value="{value}"
-      aria-hidden="{$$props['aria-hidden']}"
+      {...$$restProps}
       on:change
       on:input
       on:input="{({ target }) => {

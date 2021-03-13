@@ -1397,7 +1397,7 @@
           "ts": "interface ComboBoxItem { id: string; text: string; }"
         }
       ],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "ComposedModal",
@@ -2249,7 +2249,7 @@
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "DatePickerSkeleton",
@@ -5430,7 +5430,7 @@
           "ts": "interface MultiSelectItem { id: MultiSelectItemId; text: MultiSelectItemText; }"
         }
       ],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "NotificationActionButton",
@@ -5841,7 +5841,7 @@
           "ts": "type NumberInputTranslationId = \"increment\" | \"decrement\""
         }
       ],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "NumberInputSkeleton",
@@ -9797,7 +9797,7 @@
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "TimePickerSelect",
