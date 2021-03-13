@@ -4595,7 +4595,7 @@
           "name": "selectionCount",
           "kind": "let",
           "description": "Specify the number of selected items",
-          "type": "any",
+          "type": "number",
           "isFunction": false,
           "constant": false,
           "reactive": false
