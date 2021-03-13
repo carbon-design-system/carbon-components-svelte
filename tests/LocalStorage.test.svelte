@@ -3,6 +3,7 @@
 
   let storage;
   let toggled = false;
+  let events = [];
 </script>
 
 <LocalStorage
