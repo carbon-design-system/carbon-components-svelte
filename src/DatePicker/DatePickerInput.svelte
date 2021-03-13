@@ -77,7 +77,6 @@
 <div
   class:bx--date-picker-container="{true}"
   class:bx--date-picker--nolabel="{!labelText}"
-  {...$$restProps}
 >
   {#if labelText}
     <label
@@ -97,13 +96,14 @@
     <input
       bind:this="{ref}"
       data-invalid="{invalid || undefined}"
-      value="{!$range ? $inputValue : undefined}"
       id="{id}"
       name="{name}"
       placeholder="{placeholder}"
       type="{type}"
       pattern="{pattern}"
       disabled="{disabled}"
+      {...$$restProps}
+      value="{!$range ? $inputValue : undefined}"
       class:bx--date-picker__input="{true}"
       class:bx--date-picker__input--invalid="{invalid}"
       class="{size && `bx--date-picker__input--${size}`}"

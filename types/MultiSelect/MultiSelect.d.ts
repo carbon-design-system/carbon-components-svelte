@@ -11,7 +11,7 @@ export interface MultiSelectItem {
 }
 
 export interface MultiSelectProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the multiselect items
    * @default []
@@ -179,11 +179,15 @@ export interface MultiSelectProps
 export default class MultiSelect extends SvelteComponentTyped<
   MultiSelectProps,
   {
+    select: CustomEvent<{
+      selectedIds: string[];
+      selected: MultiSelectItem[];
+      unselected: MultiSelectItem[];
+    }>;
     clear: WindowEventMap["clear"];
     keydown: WindowEventMap["keydown"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
-    select: CustomEvent<any>;
   },
   {}
 > {}

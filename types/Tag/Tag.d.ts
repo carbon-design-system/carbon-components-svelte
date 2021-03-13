@@ -38,6 +38,12 @@ export interface TagProps
   disabled?: boolean;
 
   /**
+   * Set to `true` to render a `button` element instead of a `div`
+   * @default false
+   */
+  interactive?: boolean;
+
+  /**
    * Set to `true` to display the skeleton state
    * @default false
    */

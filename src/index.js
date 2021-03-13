@@ -48,6 +48,7 @@ export { FormItem } from "./FormItem";
 export { FormLabel } from "./FormLabel";
 export { Grid, Row, Column } from "./Grid";
 export { Icon, IconSkeleton } from "./Icon";
+export { ImageLoader } from "./ImageLoader";
 export { InlineLoading } from "./InlineLoading";
 export { Link, OutboundLink } from "./Link";
 export {
@@ -60,6 +61,7 @@ export {
 } from "./ListBox";
 export { ListItem } from "./ListItem";
 export { Loading } from "./Loading";
+export { LocalStorage } from "./LocalStorage";
 export { MultiSelect } from "./MultiSelect";
 export { Modal } from "./Modal";
 export {

@@ -171,7 +171,10 @@
     }
   }}" />
 
-<div {...$$restProps} style="{$$restProps.style}; position: relative;">
+<div
+  {...$$restProps}
+  style="{open ? 'z-index: 1;' : ''}{$$restProps.style}; position: relative;"
+>
   {#if !hideIcon}
     <div bind:this="{ref}" id="{triggerId}" class:bx--tooltip__label="{true}">
       <slot name="triggerText">{triggerText}</slot>

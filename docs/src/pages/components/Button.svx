@@ -2,7 +2,12 @@
   import { Button } from "carbon-components-svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16";
   import TrashCan16 from "carbon-icons-svelte/lib/TrashCan16";
+  import TextBold16 from "carbon-icons-svelte/lib/TextBold16";
+  import TextItalic16 from "carbon-icons-svelte/lib/TextItalic16";
+  import TextUnderline16 from "carbon-icons-svelte/lib/TextUnderline16";
   import Preview from "../../components/Preview.svelte";
+
+  let index = 1;
 </script>
 
 ### Primary button
@@ -54,6 +59,12 @@
 The tooltip position and alignment can be controlled by `tooltipPosition` and `tooltipAlignment`.
 
 <Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add16} />
+
+### Selected icon-only, ghost button
+
+Set `isSelected` to `true` to enable the selected state for an icon-only, ghost button.
+
+<FileSource src="/framed/Button/SelectedIconOnlyButton" />
 
 ### Link button
 

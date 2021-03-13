@@ -30,6 +30,7 @@
   ></div>
 {/if}
 <nav
+  aria-hidden="{!isOpen}"
   aria-label="{ariaLabel}"
   class:bx--side-nav__navigation="{true}"
   class:bx--side-nav="{true}"

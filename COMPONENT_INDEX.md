@@ -1,6 +1,6 @@
 # Component Index
 
-> 158 components exported from carbon-components-svelte@0.29.2.
+> 160 components exported from carbon-components-svelte@0.29.2.
 
 ## Components
 
@@ -61,6 +61,7 @@
 - [`HeaderUtilities`](#headerutilities)
 - [`Icon`](#icon)
 - [`IconSkeleton`](#iconskeleton)
+- [`ImageLoader`](#imageloader)
 - [`InlineLoading`](#inlineloading)
 - [`InlineNotification`](#inlinenotification)
 - [`Link`](#link)
@@ -72,6 +73,7 @@
 - [`ListBoxSelection`](#listboxselection)
 - [`ListItem`](#listitem)
 - [`Loading`](#loading)
+- [`LocalStorage`](#localstorage)
 - [`Modal`](#modal)
 - [`ModalBody`](#modalbody)
 - [`ModalFooter`](#modalfooter)
@@ -342,6 +344,7 @@ None.
 | hasIconOnly      | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` for the icon-only variant                                                                                                                                                       |
 | kind             | <code>let</code> | No       | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger" &#124; "danger-tertiary" &#124; "danger-ghost"</code> | <code>"primary"</code> | Specify the kind of button                                                                                                                                                                    |
 | size             | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small"</code>                                                                                      | <code>"default"</code> | Specify the size of button                                                                                                                                                                    |
+| isSelected       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to enable the selected state for an icon-only, ghost button                                                                                                                     |
 | icon             | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>                                                                              | --                     | Specify the icon from `carbon-icons-svelte` to render                                                                                                                                         |
 | iconDescription  | <code>let</code> | No       | <code>string</code>                                                                                                                       | --                     | Specify the ARIA label for the button icon                                                                                                                                                    |
 | tooltipAlignment | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                                                                                         | <code>"center"</code>  | Set the alignment of the tooltip relative to the icon<br />`hasIconOnly` must be set to `true`                                                                                                |
@@ -1723,6 +1726,35 @@ None.
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
 
+## `ImageLoader`
+
+### Props
+
+| Prop name | Kind               | Reactive | Type                                                                                               | Default value                                                                                                                                                                                                                | Description                                                                                                                 |
+| :-------- | :----------------- | :------- | :------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| error     | <code>let</code>   | Yes      | <code>boolean</code>                                                                               | <code>false</code>                                                                                                                                                                                                           | Set to `true` if an error occurs when loading the image                                                                     |
+| loaded    | <code>let</code>   | Yes      | <code>boolean</code>                                                                               | <code>false</code>                                                                                                                                                                                                           | Set to `true` when the image is loaded                                                                                      |
+| loading   | <code>let</code>   | Yes      | <code>boolean</code>                                                                               | <code>false</code>                                                                                                                                                                                                           | Set to `true` when `loaded` is `true` and `error` is false                                                                  |
+| src       | <code>let</code>   | No       | <code>string</code>                                                                                | <code>""</code>                                                                                                                                                                                                              | Specify the image source                                                                                                    |
+| alt       | <code>let</code>   | No       | <code>string</code>                                                                                | <code>""</code>                                                                                                                                                                                                              | Specify the image alt text                                                                                                  |
+| ratio     | <code>let</code>   | No       | <code>"2x1" &#124; "16x9" &#124; "4x3" &#124; "1x1" &#124; "3x4" &#124; "9x16" &#124; "1x2"</code> | --                                                                                                                                                                                                                           | Specify the aspect ratio for the image wrapper                                                                              |
+| fadeIn    | <code>let</code>   | No       | <code>boolean</code>                                                                               | <code>false</code>                                                                                                                                                                                                           | Set to `true` to fade in the image on load<br />The duration uses the `fast-02` value following Carbon guidelines on motion |
+| loadImage | <code>const</code> | No       | <code>(url?: string) => void</code>                                                                | <code>(url) => { if (image != null) image = null; loaded = false; error = false; image = new Image(); image.src = url &#124;&#124; src; image.onload = () => (loaded = true); image.onerror = () => (error = true); }</code> | Method invoked to load the image provided a `src` value                                                                     |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| error     | No      | --    | --       |
+| loading   | No      | --    | --       |
+
+### Events
+
+| Event name | Type       | Detail           |
+| :--------- | :--------- | :--------------- |
+| load       | dispatched | <code>any</code> |
+| error      | dispatched | <code>any</code> |
+
 ## `InlineLoading`
 
 ### Props
@@ -1957,7 +1989,7 @@ export type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 | Prop name       | Kind               | Reactive | Type                                                                     | Default value                                                            | Description                                      |
 | :-------------- | :----------------- | :------- | :----------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------ |
 | ref             | <code>let</code>   | Yes      | <code>null &#124; HTMLDivElement</code>                                  | <code>null</code>                                                        | Obtain a reference to the top-level HTML element |
-| selectionCount  | <code>let</code>   | No       | <code>any</code>                                                         | --                                                                       | Specify the number of selected items             |
+| selectionCount  | <code>let</code>   | No       | <code>number</code>                                                      | --                                                                       | Specify the number of selected items             |
 | disabled        | <code>let</code>   | No       | <code>boolean</code>                                                     | <code>false</code>                                                       | Set to `true` to disable the list box selection  |
 | translationIds  | <code>const</code> | No       | <code>{ clearAll: "clearAll", clearSelection: "clearSelection", }</code> | <code>{ clearAll: "clearAll", clearSelection: "clearSelection", }</code> | Default translation ids                          |
 | translateWithId | <code>let</code>   | No       | <code>(id: ListBoxSelectionTranslationId) => string</code>               | <code>(id) => defaultTranslations[id]</code>                             | Override the default translation ids             |
@@ -2012,6 +2044,26 @@ None.
 ### Events
 
 None.
+
+## `LocalStorage`
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                | Default value                    | Description                   |
+| :-------- | :--------------- | :------- | :------------------ | -------------------------------- | ----------------------------- |
+| value     | <code>let</code> | Yes      | <code>any</code>    | <code>""</code>                  | Provide a value to persist    |
+| key       | <code>let</code> | No       | <code>string</code> | <code>"local-storage-key"</code> | Specify the local storage key |
+
+### Slots
+
+None.
+
+### Events
+
+| Event name | Type       | Detail                                       |
+| :--------- | :--------- | :------------------------------------------- |
+| save       | dispatched | <code>any</code>                             |
+| update     | dispatched | <code>{ prevValue: any; value: any; }</code> |
 
 ## `Modal`
 
@@ -2183,13 +2235,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| clear      | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| focus      | forwarded  | --     |
-| blur       | forwarded  | --     |
-| select     | dispatched | --     |
+| Event name | Type       | Detail                                                                                              |
+| :--------- | :--------- | :-------------------------------------------------------------------------------------------------- |
+| select     | dispatched | <code>{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
+| clear      | forwarded  | --                                                                                                  |
+| keydown    | forwarded  | --                                                                                                  |
+| focus      | forwarded  | --                                                                                                  |
+| blur       | forwarded  | --                                                                                                  |
 
 ## `NotificationActionButton`
 
@@ -2694,15 +2746,17 @@ None.
 | :------------ | :--------------- | :------- | :------------------------------------------ | ------------------------- | -------------------------------------------- |
 | selected      | <code>let</code> | Yes      | <code>string</code>                         | --                        | Set the selected radio button value          |
 | disabled      | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to disable the radio buttons   |
+| legendText    | <code>let</code> | No       | <code>string</code>                         | <code>""</code>           | Specify the legend text                      |
 | labelPosition | <code>let</code> | No       | <code>"right" &#124; "left"</code>          | <code>"right"</code>      | Specify the label position                   |
 | orientation   | <code>let</code> | No       | <code>"horizontal" &#124; "vertical"</code> | <code>"horizontal"</code> | Specify the orientation of the radio buttons |
 | id            | <code>let</code> | No       | <code>string</code>                         | --                        | Set an id for the container div element      |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name  | Default | Props | Fallback                  |
+| :--------- | :------ | :---- | :------------------------ |
+| --         | Yes     | --    | --                        |
+| legendText | No      | --    | <code>{legendText}</code> |
 
 ### Events
 
@@ -3083,7 +3137,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback            |
+| :-------- | :------ | :---- | :------------------ |
+| --        | Yes     | --    | <code>{text}</code> |
 
 ### Events
 
@@ -3647,16 +3703,17 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                                                                                                                                                    | Default value                                    | Description                                            |
-| :-------- | :--------------- | :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------ |
-| type      | <code>let</code> | No       | <code>"red" &#124; "magenta" &#124; "purple" &#124; "blue" &#124; "cyan" &#124; "teal" &#124; "green" &#124; "gray" &#124; "cool-gray" &#124; "warm-gray" &#124; "high-contrast"</code> | --                                               | Specify the type of tag                                |
-| size      | <code>let</code> | No       | <code>"sm" &#124; "default"</code>                                                                                                                                                      | <code>"default"</code>                           | --                                                     |
-| filter    | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to use filterable variant                |
-| disabled  | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to disable a filterable tag              |
-| skeleton  | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to display the skeleton state            |
-| title     | <code>let</code> | No       | <code>string</code>                                                                                                                                                                     | <code>"Clear filter"</code>                      | Set the title for the close button in a filterable tag |
-| icon      | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>                                                                                                                            | --                                               | Specify the icon from `carbon-icons-svelte` to render  |
-| id        | <code>let</code> | No       | <code>string</code>                                                                                                                                                                     | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the filterable tag                       |
+| Prop name   | Kind             | Reactive | Type                                                                                                                                                                                    | Default value                                    | Description                                                   |
+| :---------- | :--------------- | :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------- |
+| type        | <code>let</code> | No       | <code>"red" &#124; "magenta" &#124; "purple" &#124; "blue" &#124; "cyan" &#124; "teal" &#124; "green" &#124; "gray" &#124; "cool-gray" &#124; "warm-gray" &#124; "high-contrast"</code> | --                                               | Specify the type of tag                                       |
+| size        | <code>let</code> | No       | <code>"sm" &#124; "default"</code>                                                                                                                                                      | <code>"default"</code>                           | --                                                            |
+| filter      | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to use filterable variant                       |
+| disabled    | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to disable a filterable tag                     |
+| interactive | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to render a `button` element instead of a `div` |
+| skeleton    | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                    | <code>false</code>                               | Set to `true` to display the skeleton state                   |
+| title       | <code>let</code> | No       | <code>string</code>                                                                                                                                                                     | <code>"Clear filter"</code>                      | Set the title for the close button in a filterable tag        |
+| icon        | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>                                                                                                                            | --                                               | Specify the icon from `carbon-icons-svelte` to render         |
+| id          | <code>let</code> | No       | <code>string</code>                                                                                                                                                                     | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the filterable tag                              |
 
 ### Slots
 
@@ -4183,6 +4240,7 @@ None.
 
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
+| clear      | forwarded | --     |
 | change     | forwarded | --     |
 | input      | forwarded | --     |
 | focus      | forwarded | --     |

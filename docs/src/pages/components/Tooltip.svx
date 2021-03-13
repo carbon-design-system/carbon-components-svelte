@@ -4,7 +4,9 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (icon-only, "bottom" direction)
+### Default
+
+By default, the tooltip is triggered by an information icon.
 
 <Tooltip tooltipBodyId="tooltip-body">
   <p id="tooltip-body">

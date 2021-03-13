@@ -27,6 +27,12 @@ export interface ButtonProps
   size?: "default" | "field" | "small";
 
   /**
+   * Set to `true` to enable the selected state for an icon-only, ghost button
+   * @default false
+   */
+  isSelected?: boolean;
+
+  /**
    * Set to `true` for the icon-only variant
    * @default false
    */

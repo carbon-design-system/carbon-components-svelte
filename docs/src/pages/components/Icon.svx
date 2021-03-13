@@ -1,11 +1,17 @@
 <script>
-  import { Icon } from "carbon-components-svelte";
+  import { Icon, InlineNotification, OutboundLink } from "carbon-components-svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16";
   import Add20 from "carbon-icons-svelte/lib/Add20";
   import Add24 from "carbon-icons-svelte/lib/Add24";
   import Add32 from "carbon-icons-svelte/lib/Add32";
   import Preview from "../../components/Preview.svelte";
 </script>
+
+<InlineNotification svx-ignore title="Deprecation warning" kind="warning" hideCloseButton>
+  <div>
+    This component will be removed in the next major release. Use icons from <OutboundLink href="https://github.com/IBM/carbon-icons-svelte">carbon-icons-svelte</OutboundLink> instead.
+  </div>
+</InlineNotification>
 
 ### Default
 

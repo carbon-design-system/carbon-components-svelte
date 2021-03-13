@@ -27,10 +27,6 @@ components: ["NumberInput", "NumberInputSkeleton"]
 
 <NumberInput light label="Clusters" />
 
-### Mobile variant
-
-<NumberInput mobile label="Clusters" />
-
 ### Extra-large size
 
 <NumberInput size="xl" label="Clusters" />

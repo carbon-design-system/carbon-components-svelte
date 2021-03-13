@@ -59,7 +59,6 @@
 
 <div
   class:bx--form-item="{true}"
-  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -94,6 +93,7 @@
         type="{type}"
         value="{value}"
         disabled="{disabled}"
+        {...$$restProps}
         class:bx--time-picker__input-field="{true}"
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"

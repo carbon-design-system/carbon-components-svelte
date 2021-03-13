@@ -51,6 +51,7 @@
     {...$$restProps}
     bind:ref
     bind:value
+    on:clear
     on:change
     on:input
     on:focus

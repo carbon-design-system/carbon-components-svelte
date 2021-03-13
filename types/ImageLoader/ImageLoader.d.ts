@@ -1,0 +1,60 @@
+/// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
+
+export interface ImageLoaderProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["img"]> {
+  /**
+   * Specify the image source
+   * @default ""
+   */
+  src?: string;
+
+  /**
+   * Specify the image alt text
+   * @default ""
+   */
+  alt?: string;
+
+  /**
+   * Specify the aspect ratio for the image wrapper
+   */
+  ratio?: "2x1" | "16x9" | "4x3" | "1x1" | "3x4" | "9x16" | "1x2";
+
+  /**
+   * Set to `true` when `loaded` is `true` and `error` is false
+   * @default false
+   */
+  loading?: boolean;
+
+  /**
+   * Set to `true` when the image is loaded
+   * @default false
+   */
+  loaded?: boolean;
+
+  /**
+   * Set to `true` if an error occurs when loading the image
+   * @default false
+   */
+  error?: boolean;
+
+  /**
+   * Set to `true` to fade in the image on load
+   * The duration uses the `fast-02` value following Carbon guidelines on motion
+   * @default false
+   */
+  fadeIn?: boolean;
+
+  /**
+   * Method invoked to load the image provided a `src` value
+   * @constant
+   * @default (url) => { if (image != null) image = null; loaded = false; error = false; image = new Image(); image.src = url || src; image.onload = () => (loaded = true); image.onerror = () => (error = true); }
+   */
+  loadImage?: (url?: string) => void;
+}
+
+export default class ImageLoader extends SvelteComponentTyped<
+  ImageLoaderProps,
+  { load: CustomEvent<any>; error: CustomEvent<any> },
+  { error: {}; loading: {} }
+> {}

@@ -2,7 +2,7 @@
 import { SvelteComponentTyped } from "svelte";
 
 export interface DatePickerInputProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the size of the input
    */

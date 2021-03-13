@@ -15,6 +15,12 @@ export interface RadioButtonGroupProps
   disabled?: boolean;
 
   /**
+   * Specify the legend text
+   * @default ""
+   */
+  legendText?: string;
+
+  /**
    * Specify the label position
    * @default "right"
    */
@@ -41,5 +47,5 @@ export default class RadioButtonGroup extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     change: CustomEvent<any>;
   },
-  { default: {} }
+  { default: {}; legendText: {} }
 > {}

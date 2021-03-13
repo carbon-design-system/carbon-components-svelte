@@ -37,7 +37,10 @@
   /** Set to `true` for the input to be read-only */
   export let readonly = false;
 
-  /** Set to `true` to enable the mobile variant */
+  /**
+   * Set to `true` to enable the mobile variant
+   * @deprecated
+   */
   export let mobile = false;
 
   /** Set to `true` to allow for an empty value */
@@ -141,7 +144,6 @@
 
 <div
   class:bx--form-item="{true}"
-  {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
@@ -192,10 +194,6 @@
           type="number"
           pattern="[0-9]*"
           aria-label="{label ? undefined : ariaLabel}"
-          on:input
-          on:input="{({ target }) => {
-            inputValue = target.value;
-          }}"
           disabled="{disabled}"
           id="{id}"
           name="{name}"
@@ -204,6 +202,11 @@
           step="{step}"
           value="{value}"
           readonly="{readonly}"
+          {...$$restProps}
+          on:input
+          on:input="{({ target }) => {
+            inputValue = target.value;
+          }}"
         />
         <button
           type="button"
@@ -244,10 +247,6 @@
           data-invalid="{invalid || undefined}"
           aria-invalid="{invalid || undefined}"
           aria-label="{label ? undefined : ariaLabel}"
-          on:input
-          on:input="{({ target }) => {
-            inputValue = target.value;
-          }}"
           disabled="{disabled}"
           id="{id}"
           max="{max}"
@@ -255,6 +254,11 @@
           step="{step}"
           value="{value}"
           readonly="{readonly}"
+          {...$$restProps}
+          on:input
+          on:input="{({ target }) => {
+            inputValue = target.value;
+          }}"
         />
         {#if invalid}
           <WarningFilled16 class="bx--number__invalid" />

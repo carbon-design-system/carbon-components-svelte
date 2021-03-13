@@ -160,7 +160,7 @@
     }
   }}" />
 
-<div class:bx--list-box__wrapper="{true}" {...$$restProps}>
+<div class:bx--list-box__wrapper="{true}">
   {#if titleText}
     <label
       for="{id}"
@@ -209,6 +209,11 @@
         aria-disabled="{disabled}"
         aria-controls="{open ? menuId : undefined}"
         aria-owns="{open ? menuId : undefined}"
+        disabled="{disabled}"
+        placeholder="{placeholder}"
+        id="{id}"
+        value="{inputValue}"
+        {...$$restProps}
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
         class:bx--text-input--empty="{inputValue === ''}"
@@ -246,10 +251,6 @@
             ref.focus();
           }
         }}"
-        disabled="{disabled}"
-        placeholder="{placeholder}"
-        id="{id}"
-        value="{inputValue}"
       />
       {#if invalid}
         <WarningFilled16 class="bx--list-box__invalid-icon" />

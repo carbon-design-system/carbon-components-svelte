@@ -8,6 +8,9 @@
   /** Set to `true` to disable the radio buttons */
   export let disabled = false;
 
+  /** Specify the legend text */
+  export let legendText = "";
+
   /**
    * Specify the label position
    * @type {"right" | "left"}
@@ -72,12 +75,18 @@
   on:mouseenter
   on:mouseleave
 >
-  <div
+  <fieldset
     class:bx--radio-button-group="{true}"
     class:bx--radio-button-group--vertical="{orientation === 'vertical'}"
-    class="{labelPosition && `bx--radio-button-group--label-${labelPosition}`}"
+    class:bx--radio-button-group--label-left="{labelPosition === 'left'}"
+    class:bx--radio-button-group--label-right="{labelPosition === 'right'}"
     disabled="{disabled}"
   >
+    {#if legendText || $$slots.legendText}
+      <legend class:bx--label="{true}">
+        <slot name="legendText">{legendText}</slot>
+      </legend>
+    {/if}
     <slot />
-  </div>
+  </fieldset>
 </div>

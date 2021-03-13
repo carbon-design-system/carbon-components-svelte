@@ -11,6 +11,11 @@
     { id: '1', text: 'Email' },
     { id: '2', text: 'Fax' },
   ]}"
+  on:select="{(e) => {
+    console.log(e.detail.selectedIds);
+    console.log(e.detail.selected);
+    console.log(e.detail.unselected);
+  }}"
 />
 
 <MultiSelect

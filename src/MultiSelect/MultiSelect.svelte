@@ -121,6 +121,7 @@
    * @typedef {string} MultiSelectItemId
    * @typedef {string} MultiSelectItemText
    * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
+   * @event {{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
    */
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
@@ -236,7 +237,6 @@
   class:bx--multi-select__wrapper--inline="{inline}"
   class:bx--list-box__wrapper--inline="{inline}"
   class:bx--multi-select__wrapper--inline--invalid="{inline && invalid}"
-  {...$$restProps}
 >
   {#if titleText}
     <label
@@ -347,6 +347,7 @@
       {#if filterable}
         <input
           bind:this="{inputRef}"
+          {...$$restProps}
           role="combobox"
           tabindex="0"
           autocomplete="off"

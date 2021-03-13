@@ -8,7 +8,7 @@ export interface ListBoxSelectionProps
   /**
    * Specify the number of selected items
    */
-  selectionCount?: any;
+  selectionCount?: number;
 
   /**
    * Set to `true` to disable the list box selection

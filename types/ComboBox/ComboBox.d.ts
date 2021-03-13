@@ -7,7 +7,7 @@ export interface ComboBoxItem {
 }
 
 export interface ComboBoxProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the combobox items
    * @default []

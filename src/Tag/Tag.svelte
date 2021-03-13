@@ -16,6 +16,9 @@
   /** Set to `true` to disable a filterable tag */
   export let disabled = false;
 
+  /** Set to `true` to render a `button` element instead of a `div` */
+  export let interactive = false;
+
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
@@ -31,10 +34,9 @@
   /** Set an id for the filterable tag */
   export let id = "ccs-" + Math.random().toString(36);
 
+  import { createEventDispatcher } from "svelte";
   import Close16 from "carbon-icons-svelte/lib/Close16/Close16.svelte";
   import TagSkeleton from "./TagSkeleton.svelte";
-
-  import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 </script>
@@ -88,6 +90,42 @@
       <Close16 />
     </button>
   </div>
+{:else if interactive}
+  <button
+    id="{id}"
+    disabled="{disabled}"
+    aria-disabled="{disabled}"
+    tabindex="{disabled ? '-1' : undefined}"
+    class:bx--tag="{true}"
+    class:bx--tag--interactive="{true}"
+    class:bx--tag--disabled="{disabled}"
+    class:bx--tag--sm="{size === 'sm'}"
+    class:bx--tag--red="{type === 'red'}"
+    class:bx--tag--magenta="{type === 'magenta'}"
+    class:bx--tag--purple="{type === 'purple'}"
+    class:bx--tag--blue="{type === 'blue'}"
+    class:bx--tag--cyan="{type === 'cyan'}"
+    class:bx--tag--teal="{type === 'teal'}"
+    class:bx--tag--green="{type === 'green'}"
+    class:bx--tag--gray="{type === 'gray'}"
+    class:bx--tag--cool-gray="{type === 'cool-gray'}"
+    class:bx--tag--warm-gray="{type === 'warm-gray'}"
+    class:bx--tag--high-contrast="{type === 'high-contrast'}"
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    {#if icon}
+      <div class:bx--tag__custom-icon="{true}">
+        <svelte:component this="{icon}" />
+      </div>
+    {/if}
+    <span>
+      <slot />
+    </span>
+  </button>
 {:else}
   <div
     id="{id}"

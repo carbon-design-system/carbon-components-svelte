@@ -5,7 +5,7 @@
 
   /**
    * Specify the number of selected items
-   * @type {any}
+   * @type {number}
    */
   export let selectionCount = undefined;
 
@@ -46,27 +46,61 @@
     : translateWithId("clearSelection");
 </script>
 
-<div
-  bind:this="{ref}"
-  role="button"
-  aria-label="Clear Selection"
-  tabindex="{disabled ? '-1' : '0'}"
-  title="{description}"
-  class:bx--list-box__selection="{true}"
-  class:bx--tag--filter="{selectionCount}"
-  class:bx--list-box__selection--multi="{selectionCount}"
-  {...$$restProps}
-  on:click|preventDefault|stopPropagation="{(e) => {
-    if (!disabled) {
-      dispatch('clear', e);
-    }
-  }}"
-  on:keydown|stopPropagation="{(e) => {
-    if (!disabled && e.key === 'Enter') {
-      dispatch('clear', e);
-    }
-  }}"
->
-  {#if selectionCount}{selectionCount}{/if}
-  <Close16 />
-</div>
+{#if selectionCount !== undefined}
+  <div
+    class:bx--tag="{true}"
+    class:bx--tag--filter="{true}"
+    class:bx--tag--high-contrast="{true}"
+    class:bx--tag--disabled="{disabled}"
+  >
+    <span class:bx--tag__label="{true}" title="{selectionCount}">
+      {selectionCount}
+    </span>
+    <div
+      bind:this="{ref}"
+      role="button"
+      tabIndex="{disabled ? -1 : 0}"
+      class:bx--tag__close-icon="{true}"
+      on:click|preventDefault|stopPropagation="{(e) => {
+        if (!disabled) {
+          dispatch('clear', e);
+        }
+      }}"
+      on:keydown|stopPropagation="{(e) => {
+        if (!disabled && e.key === 'Enter') {
+          dispatch('clear', e);
+        }
+      }}"
+      disabled="{disabled}"
+      aria-label="{translationIds.clearAll}"
+      title="{description}"
+    >
+      <Close16 />
+    </div>
+  </div>
+{:else}
+  <div
+    bind:this="{ref}"
+    role="button"
+    aria-label="{description}"
+    title="{description}"
+    tabindex="{disabled ? '-1' : '0'}"
+    class:bx--list-box__selection="{true}"
+    class:bx--tag--filter="{selectionCount}"
+    class:bx--list-box__selection--multi="{selectionCount}"
+    {...$$restProps}
+    on:click|preventDefault|stopPropagation="{(e) => {
+      if (!disabled) {
+        dispatch('clear', e);
+      }
+    }}"
+    on:keydown|stopPropagation="{(e) => {
+      if (!disabled && e.key === 'Enter') {
+        dispatch('clear', e);
+      }
+    }}"
+  >
+    {#if selectionCount !== undefined}{selectionCount}{/if}
+    <Close16 />
+  </div>
+{/if}
