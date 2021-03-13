@@ -1,6 +1,6 @@
 # Component Index
 
-> 158 components exported from carbon-components-svelte@0.29.2.
+> 159 components exported from carbon-components-svelte@0.29.2.
 
 ## Components
 
@@ -61,6 +61,7 @@
 - [`HeaderUtilities`](#headerutilities)
 - [`Icon`](#icon)
 - [`IconSkeleton`](#iconskeleton)
+- [`ImageLoader`](#imageloader)
 - [`InlineLoading`](#inlineloading)
 - [`InlineNotification`](#inlinenotification)
 - [`Link`](#link)
@@ -1723,6 +1724,35 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `ImageLoader`
+
+### Props
+
+| Prop name | Kind               | Reactive | Type                                                                                               | Default value                                                                                                                                                                                                                | Description                                                                                                                 |
+| :-------- | :----------------- | :------- | :------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| error     | <code>let</code>   | Yes      | <code>boolean</code>                                                                               | <code>false</code>                                                                                                                                                                                                           | Set to `true` if an error occurs when loading the image                                                                     |
+| loaded    | <code>let</code>   | Yes      | <code>boolean</code>                                                                               | <code>false</code>                                                                                                                                                                                                           | Set to `true` when the image is loaded                                                                                      |
+| loading   | <code>let</code>   | Yes      | <code>boolean</code>                                                                               | <code>false</code>                                                                                                                                                                                                           | Set to `true` when `loaded` is `true` and `error` is false                                                                  |
+| src       | <code>let</code>   | No       | <code>string</code>                                                                                | <code>""</code>                                                                                                                                                                                                              | Specify the image source                                                                                                    |
+| alt       | <code>let</code>   | No       | <code>string</code>                                                                                | <code>""</code>                                                                                                                                                                                                              | Specify the image alt text                                                                                                  |
+| ratio     | <code>let</code>   | No       | <code>"2x1" &#124; "16x9" &#124; "4x3" &#124; "1x1" &#124; "3x4" &#124; "9x16" &#124; "1x2"</code> | --                                                                                                                                                                                                                           | Specify the aspect ratio for the image wrapper                                                                              |
+| fadeIn    | <code>let</code>   | No       | <code>boolean</code>                                                                               | <code>false</code>                                                                                                                                                                                                           | Set to `true` to fade in the image on load<br />The duration uses the `fast-02` value following Carbon guidelines on motion |
+| loadImage | <code>const</code> | No       | <code>(url?: string) => void</code>                                                                | <code>(url) => { if (image != null) image = null; loaded = false; error = false; image = new Image(); image.src = url &#124;&#124; src; image.onload = () => (loaded = true); image.onerror = () => (error = true); }</code> | Method invoked to load the image provided a `src` value                                                                     |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| error     | No      | --    | --       |
+| loading   | No      | --    | --       |
+
+### Events
+
+| Event name | Type       | Detail           |
+| :--------- | :--------- | :--------------- |
+| load       | dispatched | <code>any</code> |
+| error      | dispatched | <code>any</code> |
 
 ## `InlineLoading`
 

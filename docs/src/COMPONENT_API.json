@@ -1,5 +1,5 @@
 {
-  "total": 158,
+  "total": 159,
   "components": [
     {
       "moduleName": "Accordion",
@@ -4051,6 +4051,101 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "ImageLoader",
+      "filePath": "src/ImageLoader/ImageLoader.svelte",
+      "props": [
+        {
+          "name": "src",
+          "kind": "let",
+          "description": "Specify the image source",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "alt",
+          "kind": "let",
+          "description": "Specify the image alt text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "ratio",
+          "kind": "let",
+          "description": "Specify the aspect ratio for the image wrapper",
+          "type": "\"2x1\" | \"16x9\" | \"4x3\" | \"1x1\" | \"3x4\" | \"9x16\" | \"1x2\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "loading",
+          "kind": "let",
+          "description": "Set to `true` when `loaded` is `true` and `error` is false",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "loaded",
+          "kind": "let",
+          "description": "Set to `true` when the image is loaded",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "error",
+          "kind": "let",
+          "description": "Set to `true` if an error occurs when loading the image",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "fadeIn",
+          "kind": "let",
+          "description": "Set to `true` to fade in the image on load\nThe duration uses the `fast-02` value following Carbon guidelines on motion",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "loadImage",
+          "kind": "const",
+          "description": "Method invoked to load the image provided a `src` value",
+          "type": "(url?: string) => void",
+          "value": "(url) => {     if (image != null) image = null;     loaded = false;     error = false;     image = new Image();     image.src = url || src;     image.onload = () => (loaded = true);     image.onerror = () => (error = true);   }",
+          "isFunction": true,
+          "constant": true,
+          "reactive": false
+        }
+      ],
+      "slots": [
+        { "name": "error", "default": false, "slot_props": "{}" },
+        { "name": "loading", "default": false, "slot_props": "{}" }
+      ],
+      "events": [
+        { "type": "dispatched", "name": "load", "detail": "any" },
+        { "type": "dispatched", "name": "error", "detail": "any" }
+      ],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "img" }
     },
     {
       "moduleName": "InlineLoading",

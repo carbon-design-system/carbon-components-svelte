@@ -57,6 +57,7 @@ export { default as Row } from "./Grid/Row";
 export { default as Column } from "./Grid/Column";
 export { default as Icon } from "./Icon/Icon";
 export { default as IconSkeleton } from "./Icon/IconSkeleton";
+export { default as ImageLoader } from "./ImageLoader/ImageLoader";
 export { default as InlineLoading } from "./InlineLoading/InlineLoading";
 export { default as Link } from "./Link/Link";
 export { default as OutboundLink } from "./Link/OutboundLink";

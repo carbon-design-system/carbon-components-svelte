@@ -20,6 +20,7 @@
   import Footer from "../components/Footer.svelte";
 
   const deprecated = ["ToggleSmall", "Icon"];
+  const new_components = ["ImageLoader"];
 
   let isOpen = false;
   let isSideNavOpen = true;
@@ -105,6 +106,9 @@
             {child.title}
             {#if deprecated.includes(child.title)}
               <Tag size="sm" type="red">Deprecated</Tag>
+            {/if}
+            {#if new_components.includes(child.title)}
+              <Tag size="sm" type="blue">New</Tag>
             {/if}
           </SideNavMenuItem>
         {/each}

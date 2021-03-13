@@ -1,0 +1,46 @@
+<script>
+    import { ImageLoader, Button, InlineLoading } from "carbon-components-svelte";
+    import Preview from "../../components/Preview.svelte";
+
+    let key = 0;
+</script>
+
+This utility component uses the [Image API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image) to programmatically load an image with slottable loading and error states.
+  
+### Default
+  
+<ImageLoader src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
+
+### Slots
+
+Use the "loading" and "error" named slots to render an element when the image is loading or has an error.
+
+<ImageLoader src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg">
+    <div slot="loading">
+        <InlineLoading />
+    </div>
+    <div slot="error">
+        An error occurred.
+    </div>
+</ImageLoader>
+
+### With aspect ratio
+
+If `ratio` is set, this component uses the [AspectRatio](/components/AspectRatio) to constrain the image.
+
+Supported aspect ratios include `"2x1"`, `"16x9"`, `"4x3"`, `"1x1"`, `"3x4"`, `"9x16"` and `"1x2"`.
+  
+<ImageLoader ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
+
+### Fade in
+
+Set `fadeIn` to `true` to fade in the image if successfully loaded.
+
+<Button kind="ghost" on:click="{() => { key++;}}">Reload image</Button>
+{#key key}<ImageLoader fadeIn ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />{/key}
+
+### Programmatic usage
+
+In this example, a component reference is obtained to programmatically trigger the `loadImage` method.
+
+<FileSource src="/framed/ImageLoader/ProgrammaticImageLoader" />
