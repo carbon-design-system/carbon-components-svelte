@@ -61,6 +61,7 @@ export {
 } from "./ListBox";
 export { ListItem } from "./ListItem";
 export { Loading } from "./Loading";
+export { LocalStorage } from "./LocalStorage";
 export { MultiSelect } from "./MultiSelect";
 export { Modal } from "./Modal";
 export {

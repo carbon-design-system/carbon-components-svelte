@@ -1,6 +1,6 @@
 # Component Index
 
-> 159 components exported from carbon-components-svelte@0.29.2.
+> 160 components exported from carbon-components-svelte@0.29.2.
 
 ## Components
 
@@ -73,6 +73,7 @@
 - [`ListBoxSelection`](#listboxselection)
 - [`ListItem`](#listitem)
 - [`Loading`](#loading)
+- [`LocalStorage`](#localstorage)
 - [`Modal`](#modal)
 - [`ModalBody`](#modalbody)
 - [`ModalFooter`](#modalfooter)
@@ -2043,6 +2044,26 @@ None.
 ### Events
 
 None.
+
+## `LocalStorage`
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                | Default value                    | Description                   |
+| :-------- | :--------------- | :------- | :------------------ | -------------------------------- | ----------------------------- |
+| value     | <code>let</code> | Yes      | <code>any</code>    | <code>""</code>                  | Provide a value to persist    |
+| key       | <code>let</code> | No       | <code>string</code> | <code>"local-storage-key"</code> | Specify the local storage key |
+
+### Slots
+
+None.
+
+### Events
+
+| Event name | Type       | Detail                                       |
+| :--------- | :--------- | :------------------------------------------- |
+| save       | dispatched | <code>any</code>                             |
+| update     | dispatched | <code>{ prevValue: any; value: any; }</code> |
 
 ## `Modal`
 

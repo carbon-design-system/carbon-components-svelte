@@ -69,6 +69,7 @@ export { default as ListBoxMenuItem } from "./ListBox/ListBoxMenuItem";
 export { default as ListBoxSelection } from "./ListBox/ListBoxSelection";
 export { default as ListItem } from "./ListItem/ListItem";
 export { default as Loading } from "./Loading/Loading";
+export { default as LocalStorage } from "./LocalStorage/LocalStorage";
 export { default as MultiSelect } from "./MultiSelect/MultiSelect";
 export { default as Modal } from "./Modal/Modal";
 export { default as ToastNotification } from "./Notification/ToastNotification";

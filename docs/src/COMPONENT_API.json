@@ -1,5 +1,5 @@
 {
-  "total": 159,
+  "total": 160,
   "components": [
     {
       "moduleName": "Accordion",
@@ -4820,6 +4820,42 @@
       "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "LocalStorage",
+      "filePath": "src/LocalStorage/LocalStorage.svelte",
+      "props": [
+        {
+          "name": "key",
+          "kind": "let",
+          "description": "Specify the local storage key",
+          "type": "string",
+          "value": "\"local-storage-key\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "value",
+          "kind": "let",
+          "description": "Provide a value to persist",
+          "type": "any",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        }
+      ],
+      "slots": [],
+      "events": [
+        { "type": "dispatched", "name": "save", "detail": "any" },
+        {
+          "type": "dispatched",
+          "name": "update",
+          "detail": "{ prevValue: any; value: any; }"
+        }
+      ],
+      "typedefs": []
     },
     {
       "moduleName": "Modal",

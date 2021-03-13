@@ -1,0 +1,9 @@
+<script>
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+This utility component wraps the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to persist values by key. This is useful for non-persistent data (e.g., dark mode toggle).
+  
+### Reactive example
+  
+<FileSource src="/framed/LocalStorage/LocalStorage" />
