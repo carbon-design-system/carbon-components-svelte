@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.30.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.30.0) - 2021-03-13
+
+**Breaking Changes**
+
+- forward `$$restProps` to the input element in `Search`, `MultiSelect`, `ComboBox`, `TimePicker`, `DatePickerInput`, `NumberInput`
+
+**Features**
+
+- add `ImageLoader` component
+- add `LocalStorage` component
+- forward "clear" event in `ToolbarSearch`
+- add isSelected prop for icon-only, ghost buttons
+- add legendText prop/slot to `RadioButtonGroup`
+- add interactive prop to `Tag`
+- make UI Shell `SideNavMenuItem` text slottable
+- deprecate `Icon`, `IconSkeleton`
+
+**Fixes**
+
+- set aria-hidden attribute in UI Shell `SideNav`
+- only show overlay for non-fixed UI Shell `SideNav`
+- correctly render skeleton styles for `TextInputSkeleton`
+- only render `RadioButton` label if `labelText` is truthy
+- deprecate the `NumberInput` mobile variant
+- add missing type annotation for dispatched `MultiSelect` select event
+- remove redundant "button" role in `Button`
+- update styles for `ListBoxSelection` to fix filterable `MultiSelect`
+- temporarily apply override styles to `ListBoxMenuIcon` to correctly render `Dropdown` chevron icon
+- apply `z-index: 1` on tooltip when open; style can be overridden through `$$restProps.style`
+
+**Documentation**
+
+- add "on:clear" example for `Search`
+- add custom tooltip example for `PasswordInput`
+- add legend text examples for `RadioButtonGroup`
+- add filterable (disabled) variant for `Tag`
+- remove the mobile variant example for `NumberInput`
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.30.0
+
 ## [0.29.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.29.2) - 2021-03-01
 
 **Fixes**

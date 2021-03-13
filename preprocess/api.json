@@ -1,5 +1,5 @@
 {
-  "version": "0.29.2",
+  "version": "0.30.0",
   "components": {
     "Accordion": {
       "path": "carbon-components-svelte/src/Accordion/Accordion.svelte"
@@ -181,6 +181,9 @@
     "IconSkeleton": {
       "path": "carbon-components-svelte/src/Icon/IconSkeleton.svelte"
     },
+    "ImageLoader": {
+      "path": "carbon-components-svelte/src/ImageLoader/ImageLoader.svelte"
+    },
     "InlineLoading": {
       "path": "carbon-components-svelte/src/InlineLoading/InlineLoading.svelte"
     },
@@ -213,6 +216,9 @@
     },
     "Loading": {
       "path": "carbon-components-svelte/src/Loading/Loading.svelte"
+    },
+    "LocalStorage": {
+      "path": "carbon-components-svelte/src/LocalStorage/LocalStorage.svelte"
     },
     "Modal": {
       "path": "carbon-components-svelte/src/Modal/Modal.svelte"
