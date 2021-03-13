@@ -7979,7 +7979,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "fallback": "{text}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [{ "type": "forwarded", "name": "click", "element": "a" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "a" }

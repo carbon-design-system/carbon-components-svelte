@@ -13,10 +13,13 @@
     SideNavItems,
     SideNavMenu,
     SideNavMenuItem,
+    Tag,
   } from "carbon-components-svelte";
   import LogoGithub20 from "carbon-icons-svelte/lib/LogoGithub20";
   import Theme from "../components/Theme.svelte";
   import Footer from "../components/Footer.svelte";
+
+  const deprecated = ["ToggleSmall", "Icon"];
 
   let isOpen = false;
   let isSideNavOpen = true;
@@ -98,16 +101,22 @@
             text="{child.title}"
             href="{$url(child.path)}"
             isSelected="{$isActive($url(child.path))}"
-          />
+          >
+            {child.title}
+            {#if deprecated.includes(child.title)}
+              <Tag size="sm" type="red">Deprecated</Tag>
+            {/if}
+          </SideNavMenuItem>
         {/each}
       </SideNavMenu>
       <SideNavMenu expanded="{$isActive($url('/recipes'))}" text="Recipes">
         {#each recipes.children as child, i (child.path)}
           <SideNavMenuItem
-            text="{child.title}"
             href="{$url(child.path)}"
             isSelected="{$isActive($url(child.path))}"
-          />
+          >
+            {child.title}
+          </SideNavMenuItem>
         {/each}
       </SideNavMenu>
     </SideNavItems>

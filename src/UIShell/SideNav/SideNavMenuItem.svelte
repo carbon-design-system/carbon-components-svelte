@@ -30,6 +30,6 @@
     {...$$restProps}
     on:click
   >
-    <span class:bx--side-nav__link-text="{true}">{text}</span>
+    <span class:bx--side-nav__link-text="{true}"><slot>{text}</slot></span>
   </a>
 </li>

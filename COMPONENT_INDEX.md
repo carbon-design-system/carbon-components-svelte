@@ -3086,7 +3086,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback            |
+| :-------- | :------ | :---- | :------------------ |
+| --        | Yes     | --    | <code>{text}</code> |
 
 ### Events
 
