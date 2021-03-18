@@ -8,6 +8,12 @@ export interface TabsSkeletonProps
    * @default 4
    */
   count?: number;
+
+  /**
+   * Specify the type of tabs
+   * @default "default"
+   */
+  type?: "default" | "container";
 }
 
 export default class TabsSkeleton extends SvelteComponentTyped<

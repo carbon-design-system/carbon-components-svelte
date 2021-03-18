@@ -9148,6 +9148,16 @@
           "isFunction": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "type",
+          "kind": "let",
+          "description": "Specify the type of tabs",
+          "type": "\"default\" | \"container\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [],

@@ -37,6 +37,10 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   </div>
 </Tabs>
 
-### Skeleton
+### Skeleton (default)
 
 <TabsSkeleton count={3} />
+
+### Skeleton (container)
+
+<TabsSkeleton type="container" count={3} />

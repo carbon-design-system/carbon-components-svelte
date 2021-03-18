@@ -3682,9 +3682,10 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                | Default value  | Description                          |
-| :-------- | :--------------- | :------- | :------------------ | -------------- | ------------------------------------ |
-| count     | <code>let</code> | No       | <code>number</code> | <code>4</code> | Specify the number of tabs to render |
+| Prop name | Kind             | Reactive | Type                                      | Default value          | Description                          |
+| :-------- | :--------------- | :------- | :---------------------------------------- | ---------------------- | ------------------------------------ |
+| count     | <code>let</code> | No       | <code>number</code>                       | <code>4</code>         | Specify the number of tabs to render |
+| type      | <code>let</code> | No       | <code>"default" &#124; "container"</code> | <code>"default"</code> | Specify the type of tabs             |
 
 ### Slots
 
