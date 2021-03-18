@@ -249,6 +249,7 @@
           aria-label="{label ? undefined : ariaLabel}"
           disabled="{disabled}"
           id="{id}"
+          name="{name}"
           max="{max}"
           min="{min}"
           step="{step}"
