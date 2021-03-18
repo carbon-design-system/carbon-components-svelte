@@ -11,6 +11,10 @@ components: ["Slider", "SliderSkeleton"]
 
 <Slider />
 
+### Hidden text input
+
+<Slider hideTextInput />
+
 ### Custom minimum, maximum values
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} />
@@ -22,6 +26,14 @@ components: ["Slider", "SliderSkeleton"]
 ### Light variant
 
 <Slider light labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
+
+### Invalid state
+
+<Slider invalid labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
+
+### Disabled state
+
+<Slider disabled labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
 
 ### Skeleton
 
