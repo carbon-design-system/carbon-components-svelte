@@ -191,21 +191,27 @@
       />
     </div>
     <span class:bx--slider__range-label="{true}">{maxLabel || max}</span>
-    {#if !hideTextInput}
-      <input
-        type="{inputType}"
-        id="input-{id}"
-        aria-label="{$$props['aria-label'] || 'Slider number input'}"
-        class:bx--text-input="{true}"
-        class:bx--slider-text-input="{true}"
-        class:bx--text-input--light="{light}"
-        class:bx--text-input--invalid="{invalid}"
-        on:change="{({ target }) => {
-          value = Number(target.value);
-        }}"
-        disabled="{disabled}"
-        value="{value}"
-      />
-    {/if}
+    <input
+      type="{hideTextInput ? 'hidden' : inputType}"
+      style="{hideTextInput ? 'display: none' : undefined}"
+      id="input-{id}"
+      name="{name}"
+      class:bx--text-input="{true}"
+      class:bx--slider-text-input="{true}"
+      class:bx--text-input--light="{light}"
+      class:bx--text-input--invalid="{invalid}"
+      value="{value}"
+      aria-label="{$$props['aria-label'] || 'Slider number input'}"
+      disabled="{disabled}"
+      required="{required}"
+      min="{min}"
+      max="{max}"
+      step="{step}"
+      on:change="{({ target }) => {
+        value = Number(target.value);
+      }}"
+      data-invalid="{invalid || null}"
+      aria-invalid="{invalid || null}"
+    />
   </div>
 </div>
