@@ -55,6 +55,14 @@ Bind the selected value using the `selected` prop.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
+### Disabled buttons
+
+<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" selected="standard">
+  <RadioButton disabled labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton disabled labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
 ### Vertical orientation
 
 <RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" selected="standard">
