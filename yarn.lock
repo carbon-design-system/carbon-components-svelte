@@ -463,10 +463,10 @@ carbon-components@10.31.0:
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
 
-carbon-icons-svelte@^10.21.0:
-  version "10.21.0"
-  resolved "https://registry.npmjs.org/carbon-icons-svelte/-/carbon-icons-svelte-10.21.0.tgz#9bbdd37d5513d484e9706d6335c121f60f3186c4"
-  integrity sha512-5NNaRdmbS4N36dUGNj72Ys3VqVjH3fZ69AhYUHx+bH02GFYCwAaE49qjtP77kP7DKMtDV9NmMEti/P/JB83aYQ==
+carbon-icons-svelte@^10.27.0:
+  version "10.27.0"
+  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-10.27.0.tgz#918e806d09e0e9cf61cf756ff0f9be49125ff9ea"
+  integrity sha512-e3l95wurOuEYMQxaDT2oYH322yRKgvTq5TDkzvylMGlCkA8erJH5lSwCM59VNFgPtptH4fIW9FlbQtpfp4iQ7Q==
 
 chalk@^2.0.0, chalk@^2.4.1:
   version "2.4.2"
