@@ -101,8 +101,8 @@
   export let ref = null;
 
   import { createEventDispatcher, afterUpdate } from "svelte";
-  import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph/CaretDownGlyph.svelte";
-  import CaretUpGlyph from "carbon-icons-svelte/lib/CaretUpGlyph/CaretUpGlyph.svelte";
+  import Add16 from "carbon-icons-svelte/lib/Add16/Add16.svelte";
+  import Subtract16 from "carbon-icons-svelte/lib/Subtract16/Subtract16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
 
@@ -187,7 +187,7 @@
           }}"
           disabled="{disabled}"
         >
-          <CaretDownGlyph class="down-icon" />
+          <Subtract16 class="down-icon" />
         </button>
         <input
           bind:this="{ref}"
@@ -221,7 +221,7 @@
           }}"
           disabled="{disabled}"
         >
-          <CaretUpGlyph class="up-icon" />
+          <Add16 class="up-icon" />
         </button>
       </div>
     {:else}
@@ -271,23 +271,7 @@
         <div class:bx--number__controls="{true}">
           <button
             type="button"
-            aria-live="polite"
-            aria-atomic="true"
-            title="{incrementLabel || iconDescription}"
-            aria-label="{incrementLabel || iconDescription}"
-            class:bx--number__control-btn="{true}"
-            class:up-icon="{true}"
-            on:click="{() => {
-              updateValue(1);
-            }}"
-            disabled="{disabled}"
-          >
-            <CaretUpGlyph class="up-icon" />
-          </button>
-          <button
-            type="button"
-            aria-live="polite"
-            aria-atomic="true"
+            tabindex="-1"
             title="{decrementLabel || iconDescription}"
             aria-label="{decrementLabel || iconDescription}"
             class:bx--number__control-btn="{true}"
@@ -297,8 +281,24 @@
             }}"
             disabled="{disabled}"
           >
-            <CaretDownGlyph class="down-icon" />
+            <Subtract16 class="down-icon" />
           </button>
+          <div class:bx--number__rule-divider="{true}"></div>
+          <button
+            type="button"
+            tabindex="-1"
+            title="{incrementLabel || iconDescription}"
+            aria-label="{incrementLabel || iconDescription}"
+            class:bx--number__control-btn="{true}"
+            class:up-icon="{true}"
+            on:click="{() => {
+              updateValue(1);
+            }}"
+            disabled="{disabled}"
+          >
+            <Add16 class="up-icon" />
+          </button>
+          <div class:bx--number__rule-divider="{true}"></div>
         </div>
       </div>
     {/if}
