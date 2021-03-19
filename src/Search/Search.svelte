@@ -108,7 +108,7 @@
       bind:this="{ref}"
       role="searchbox"
       class:bx--search-input="{true}"
-      autofocus="{autofocus}"
+      autofocus="{autofocus === true ? true : undefined}"
       autocomplete="{autocomplete}"
       disabled="{disabled}"
       id="{id}"
