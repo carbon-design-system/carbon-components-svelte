@@ -7,7 +7,7 @@
 
 By default, the position of the popover component is absolute.
 
-<div data-outline="relative">
+<div data-outline>
     Parent
     <Popover open>
         <div style="padding: var(--cds-spacing-05)">Content</div>
@@ -18,7 +18,7 @@ By default, the position of the popover component is absolute.
 
 Set `relative` to `true` to use a relative position.
 
-<div data-outline="relative">
+<div data-outline>
     Parent
     <Popover relative open>
         <div style="padding: var(--cds-spacing-05)">Content</div>
@@ -29,7 +29,7 @@ Set `relative` to `true` to use a relative position.
 
 Set `closeOnOutsideClick` to set `open` to `false` when clicking outside of the popover.
 
-<div data-outline="relative">
+<div data-outline>
     Parent
     <Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
         <div style="padding: var(--cds-spacing-05)">Content</div>
@@ -38,7 +38,7 @@ Set `closeOnOutsideClick` to set `open` to `false` when clicking outside of the 
 
 ### With caret
 
-<div data-outline="relative">
+<div data-outline>
     Parent
     <Popover caret open>
         <div style="padding: var(--cds-spacing-05)">Content</div>
@@ -51,7 +51,7 @@ By default, the caret is aligned "top".
 
 Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"` or `"right-top"`.
 
-<div data-outline="relative">
+<div data-outline>
     Parent
     <Popover caret align="top-left" open>
         <div style="padding: var(--cds-spacing-05)">Content</div>
@@ -60,7 +60,7 @@ Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`
 
 ### Light variant
 
-<div data-outline="relative">
+<div data-outline>
     Parent
     <Popover light open>
         <div style="padding: var(--cds-spacing-05)">Content</div>
@@ -69,7 +69,7 @@ Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`
 
 ### High contrast variant
 
-<div data-outline="relative">
+<div data-outline>
     Parent
     <Popover highContrast open>
         <div style="padding: var(--cds-spacing-05)">Content</div>

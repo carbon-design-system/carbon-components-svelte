@@ -213,7 +213,7 @@
     outline: 1px solid var(--cds-interactive-04);
   }
 
-  [data-outline="relative"] {
+  [data-outline] {
     position: relative;
   }
 </style>
