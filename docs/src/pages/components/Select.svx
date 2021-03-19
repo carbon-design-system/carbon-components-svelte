@@ -75,6 +75,15 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
+### Invalid state
+
+<Select invalid invalidText="Theme must be a dark variant" labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
 ### Warning state
 
 <Select warn warnText="The selected theme will not be persisted" labelText="Carbon theme" selected="g10" >
