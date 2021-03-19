@@ -7,12 +7,18 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import ContextMenuGroup from "./ContextMenuGroup.svelte";
 
   const currentId = writable("");
+  const radioIds = writable([]);
 
   setContext("ContextMenuRadioGroup", {
     currentId,
+    radioIds,
+    addOption: ({ id }) => {
+      if (!$radioIds.includes(id)) {
+        radioIds.update((_) => [..._, id]);
+      }
+    },
     setOption: ({ id }) => {
       selectedId = id;
     },
@@ -21,6 +27,8 @@
   $: currentId.set(selectedId);
 </script>
 
-<ContextMenuGroup labelText="{labelText}">
-  <slot />
-</ContextMenuGroup>
+<li role="none">
+  <ul role="group" aria-label="{labelText}">
+    <slot />
+  </ul>
+</li>

@@ -35,14 +35,14 @@
 
   /**
    * Specify the id
-   * It's highly recommended to provide an id when using in a selectable/radio menu group
+   * It's recommended to provide an id as a value to bind to within a selectable/radio menu group
    */
   export let id = "ccs-" + Math.random().toString(36);
 
   /** Obtain a reference to the list item HTML element */
   export let ref = null;
 
-  import { onMount, getContext, createEventDispatcher } from "svelte";
+  import { onMount, getContext, createEventDispatcher, tick } from "svelte";
   import ContextMenu from "./ContextMenu.svelte";
   import Checkmark16 from "carbon-icons-svelte/lib/Checkmark16/Checkmark16.svelte";
   import CaretRight16 from "carbon-icons-svelte/lib/CaretRight16/CaretRight16.svelte";
@@ -54,12 +54,40 @@
 
   let unsubCurrentIds = undefined;
   let unsubCurrentId = undefined;
+  let unsubRadioIds = undefined;
+  let radioIds = [];
   let timeoutHover = undefined;
   let rootMenuPosition = [0, 0];
+  let currentIndex = -1;
+  let submenuOpen = false;
+
+  const unsubCurrentIndex = ctx.currentIndex.subscribe((index) => {
+    currentIndex = index;
+  });
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
   });
+
+  function handleClick(opts = {}) {
+    if (disabled) return ctx.close();
+    if (subOptions) return;
+
+    if (!!ctxGroup) {
+      ctxGroup.toggleOption({ id });
+    } else if (!!ctxRadioGroup) {
+      if (opts.fromKeyboard) {
+        ctxRadioGroup.setOption({ id: radioIds[currentIndex] });
+      } else {
+        ctxRadioGroup.setOption({ id });
+      }
+    } else {
+      selected = !selected;
+    }
+
+    ctx.close();
+    dispatch("click");
+  }
 
   onMount(() => {
     selectable = selected === true;
@@ -74,12 +102,17 @@
       unsubCurrentId = ctxRadioGroup.currentId.subscribe((_id) => {
         selected = id === _id;
       });
+      unsubRadioIds = ctxRadioGroup.radioIds.subscribe((ids) => {
+        radioIds = ids;
+      });
     }
 
     return () => {
+      unsubCurrentIndex();
       unsubPosition();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
+      if (unsubRadioIds) unsubRadioIds();
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
     };
   });
@@ -98,7 +131,6 @@
     }
   }
 
-  let submenuOpen = false;
   let submenuPosition = [0, 0];
 
   $: subOptions = $$slots.default;
@@ -107,12 +139,16 @@
     submenuPosition = [rootMenuPosition[0] + width, y];
   }
 
+  $: ctx.setPopup(submenuOpen);
+
   let role = "menuitem";
 
+  $: indented = isSelectable || isRadio;
   $: {
     if (isSelectable) role = "menuitemcheckbox";
     if (isRadio) {
       role = "menuitemradio";
+      ctxRadioGroup.addOption({ id });
 
       if (selected) {
         if (ctxRadioGroup) ctxRadioGroup.setOption({ id });
@@ -134,12 +170,32 @@
   class:bx--context-menu-option="{true}"
   class:bx--context-menu-option--disabled="{true}"
   class:bx--context-menu-option--active="{subOptions && submenuOpen}"
-  indented="{isSelectable || isRadio}"
+  indented="{indented}"
   aria-checked="{isSelectable || isRadio ? selected : undefined}"
+  data-nested="{ref &&
+    ref.closest('.bx--context-menu').getAttribute('data-level') === '2'}"
+  data-sub="{subOptions}"
   {...$$restProps}
   on:keydown
-  on:keydown="{(e) => {
-    // TODO: handle focus
+  on:keydown="{async ({ key }) => {
+    if (
+      subOptions &&
+      (key === 'ArrowRight' || key === ' ' || key === 'Enter')
+    ) {
+      submenuOpen = true;
+
+      await tick();
+
+      const options = ref.querySelectorAll('li[tabindex]');
+
+      if (options[0]) options[0].focus();
+
+      return;
+    }
+
+    if (key === ' ' || key === 'Enter') {
+      handleClick({ fromKeyboard: true });
+    }
   }}"
   on:mouseenter
   on:mouseenter="{() => {
@@ -156,26 +212,10 @@
       submenuOpen = false;
     }
   }}"
-  on:click="{() => {
-    if (disabled) return ctx.close();
-    if (subOptions) return;
-
-    if (!!ctxGroup) {
-      ctxGroup.toggleOption({ id });
-    } else if (!!ctxRadioGroup) {
-      ctxRadioGroup.setOption({ id });
-    } else {
-      console.log('toggle');
-      selected = !selected;
-    }
-
-    ctx.close();
-    dispatch('click');
-  }}"
+  on:click="{handleClick}"
 >
   {#if subOptions}
     <div
-      data-nested="{true}"
       class:bx--context-menu-option__content="{true}"
       class:bx--context-menu-option__content--disabled="{disabled}"
     >

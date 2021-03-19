@@ -24,46 +24,70 @@
 
   const dispatch = createEventDispatcher();
   const position = writable([x, y]);
+  const currentIndex = writable(-1);
+  const hasPopup = writable(false);
   const ctx = getContext("ContextMenu");
 
+  let options = [];
   let direction = 1;
   let prevX = 0;
   let prevY = 0;
+  let focusIndex = -1;
 
   function close() {
     open = false;
     x = 0;
     y = 0;
+    prevX = 0;
+    prevY = 0;
+    focusIndex = -1;
   }
 
-  setContext("ContextMenu", { position, close });
+  setContext("ContextMenu", {
+    currentIndex,
+    position,
+    close,
+    setPopup: (popup) => {
+      hasPopup.set(popup);
+    },
+  });
 
   afterUpdate(() => {
-    if (open && level === 1) {
-      if (prevX !== x || prevY !== y) ref.focus();
-      prevX = x;
-      prevY = y;
+    if (open) {
+      options = [...ref.querySelectorAll("li[data-nested='false']")];
+
+      if (level === 1) {
+        if (prevX !== x || prevY !== y) ref.focus();
+        prevX = x;
+        prevY = y;
+      }
+
+      dispatch("open");
     } else {
       dispatch("close");
     }
+
+    if (!$hasPopup && options[focusIndex]) options[focusIndex].focus();
   });
 
   $: level = !ctx ? 1 : 2;
+  $: currentIndex.set(focusIndex);
 </script>
 
 <svelte:window
   on:contextmenu|preventDefault="{(e) => {
     if (level > 1) return;
-
     if (open || x === 0) x = e.x;
     if (open || y === 0) y = e.y;
-
     position.set([x, y]);
     open = true;
   }}"
   on:click="{(e) => {
     if (!open) return;
     if (e.target.contains(ref)) close();
+  }}"
+  on:keydown="{(e) => {
+    if (open && e.key === 'Escape') close();
   }}"
 />
 
@@ -81,18 +105,23 @@
   style="left: {x}px; top: {y}px; {$$restProps.style}"
   on:click
   on:click="{({ target }) => {
-    if (
-      target &&
-      target.closest('[tabindex]') &&
-      target.closest('[tabindex]').getAttribute('role') === 'menuitem'
-    ) {
-      return;
+    const closestOption = target.closest('[tabindex]');
+
+    if (closestOption && closestOption.getAttribute('role') !== 'menuitem') {
+      close();
     }
-    close();
   }}"
   on:keydown
   on:keydown="{(e) => {
-    // TODO: add focus logic
+    if (e.key === 'ArrowDown') {
+      if (focusIndex < options.length - 1) focusIndex++;
+    } else if (e.key === 'ArrowUp') {
+      if (focusIndex === -1) {
+        focusIndex = options.length - 1;
+      } else {
+        if (focusIndex > 0) focusIndex--;
+      }
+    }
   }}"
 >
   <slot />
