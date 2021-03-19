@@ -14,7 +14,7 @@ By default, the position of the popover component is absolute.
     </Popover>
 </div>
 
-### Relative
+### Relative position
 
 Set `relative` to `true` to use a relative position.
 
@@ -25,6 +25,16 @@ Set `relative` to `true` to use a relative position.
     </Popover>
 </div>
 
+### Close on outside click
+
+Set `closeOnOutsideClick` to set `open` to `false` when clicking outside of the popover.
+
+<div data-outline="relative">
+    Parent
+    <Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
+        <div style="padding: var(--cds-spacing-05)">Content</div>
+    </Popover>
+</div>
 
 ### With caret
 

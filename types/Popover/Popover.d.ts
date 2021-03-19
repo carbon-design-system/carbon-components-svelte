@@ -10,6 +10,12 @@ export interface PopoverProps
   open?: boolean;
 
   /**
+   * Set to `true` to close the popover on an outside click
+   * @default false
+   */
+  closeOnOutsideClick?: boolean;
+
+  /**
    * Set to `true` render a caret
    * @default false
    */
@@ -54,6 +60,6 @@ export interface PopoverProps
 
 export default class Popover extends SvelteComponentTyped<
   PopoverProps,
-  {},
+  { ["click:outside"]: CustomEvent<any> },
   { default: {} }
 > {}
