@@ -1,7 +1,7 @@
 <script lang="ts">
   import { LocalStorage } from "../types";
 
-  let storage;
+  let storage: LocalStorage;
   let toggled = false;
   let events = [];
 </script>
