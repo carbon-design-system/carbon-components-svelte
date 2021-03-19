@@ -4,6 +4,13 @@ export { Breadcrumb, BreadcrumbItem, BreadcrumbSkeleton } from "./Breadcrumb";
 export { Button, ButtonSkeleton, ButtonSet } from "./Button";
 export { Checkbox, CheckboxSkeleton } from "./Checkbox";
 export { ContentSwitcher, Switch } from "./ContentSwitcher";
+export {
+  ContextMenu,
+  ContextMenuDivider,
+  ContextMenuGroup,
+  ContextMenuOption,
+  ContextMenuRadioGroup,
+} from "./ContextMenu";
 export { Copy } from "./Copy";
 export { CopyButton } from "./CopyButton";
 export { ComboBox } from "./ComboBox";
