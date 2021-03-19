@@ -2,7 +2,8 @@
   /** @type {string[]} */
   export let selectedIds = [];
 
-  export let label = "";
+  /** Specify the label text */
+  export let labelText = "";
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
@@ -29,7 +30,7 @@
 </script>
 
 <li role="none">
-  <ul role="group" aria-label="{label}">
+  <ul role="group" aria-label="{labelText}">
     <slot />
   </ul>
 </li>

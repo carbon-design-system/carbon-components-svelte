@@ -1,7 +1,9 @@
 <script>
+  /** Set the selected radio group id */
   export let selectedId = "";
 
-  export let label = "";
+  /** Specify the label text */
+  export let labelText = "";
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
@@ -19,6 +21,6 @@
   $: currentId.set(selectedId);
 </script>
 
-<ContextMenuGroup label="{label}">
+<ContextMenuGroup labelText="{labelText}">
   <slot />
 </ContextMenuGroup>

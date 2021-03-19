@@ -1,6 +1,6 @@
 # Component Index
 
-> 161 components exported from carbon-components-svelte@0.30.0.
+> 166 components exported from carbon-components-svelte@0.30.0.
 
 ## Components
 
@@ -24,6 +24,11 @@
 - [`ComposedModal`](#composedmodal)
 - [`Content`](#content)
 - [`ContentSwitcher`](#contentswitcher)
+- [`ContextMenu`](#contextmenu)
+- [`ContextMenuDivider`](#contextmenudivider)
+- [`ContextMenuGroup`](#contextmenugroup)
+- [`ContextMenuOption`](#contextmenuoption)
+- [`ContextMenuRadioGroup`](#contextmenuradiogroup)
 - [`Copy`](#copy)
 - [`CopyButton`](#copybutton)
 - [`DataTable`](#datatable)
@@ -722,6 +727,116 @@ None.
 | mouseover  | forwarded  | --                  |
 | mouseenter | forwarded  | --                  |
 | mouseleave | forwarded  | --                  |
+
+## `ContextMenu`
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                                      | Default value      | Description                                                                      |
+| :-------- | :--------------- | :------- | :---------------------------------------- | ------------------ | -------------------------------------------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code> | <code>null</code>  | Obtain a reference to the unordered list HTML element                            |
+| y         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the vertical offset of the menu position                                 |
+| x         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the horizontal offset of the menu position                               |
+| open      | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| click      | forwarded  | --     |
+| keydown    | forwarded  | --     |
+| close      | dispatched | --     |
+
+## `ContextMenuDivider`
+
+### Props
+
+None.
+
+### Slots
+
+None.
+
+### Events
+
+None.
+
+## `ContextMenuGroup`
+
+### Props
+
+| Prop name   | Kind             | Reactive | Type                  | Default value   | Description            |
+| :---------- | :--------------- | :------- | :-------------------- | --------------- | ---------------------- |
+| selectedIds | <code>let</code> | Yes      | <code>string[]</code> | <code>[]</code> | --                     |
+| labelText   | <code>let</code> | No       | <code>string</code>   | <code>""</code> | Specify the label text |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
+
+## `ContextMenuOption`
+
+### Props
+
+| Prop name    | Kind             | Reactive | Type                                                         | Default value                                    | Description                                                                                                                        |
+| :----------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| ref          | <code>let</code> | Yes      | <code>null &#124; HTMLLIElement</code>                       | <code>null</code>                                | Obtain a reference to the list item HTML element                                                                                   |
+| selectable   | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the selectable variant<br />Automatically set to `true` if `selected` is `true`                            |
+| selected     | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to use the selected variant                                                                                          |
+| icon         | <code>let</code> | Yes      | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                                               | Specify the icon from `carbon-icons-svelte` to render<br />Icon is rendered to the left of the label text                          |
+| indented     | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to indent the label                                                                                                  |
+| disabled     | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the disabled state                                                                                         |
+| labelText    | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the label text<br />Alternatively, use the "labelText" slot (e.g., &lt;span slot="labelText"&gt;...&lt;/span&gt;)          |
+| shortcutText | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the shortcut text<br />Alternatively, use the "shortcutText" slot (e.g., &lt;span slot="shortcutText"&gt;...&lt;/span&gt;) |
+| id           | <code>let</code> | No       | <code>string</code>                                          | <code>"ccs-" + Math.random().toString(36)</code> | Specify the id<br />It's highly recommended to provide an id when using in a selectable/radio menu group                           |
+
+### Slots
+
+| Slot name    | Default | Props | Fallback                    |
+| :----------- | :------ | :---- | :-------------------------- |
+| --           | Yes     | --    | --                          |
+| labelText    | No      | --    | <code>{labelText}</code>    |
+| shortcutText | No      | --    | <code>{shortcutText}</code> |
+
+### Events
+
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| keydown    | forwarded  | --     |
+| mouseenter | forwarded  | --     |
+| mouseleave | forwarded  | --     |
+| click      | dispatched | --     |
+
+## `ContextMenuRadioGroup`
+
+### Props
+
+| Prop name  | Kind             | Reactive | Type                | Default value   | Description                     |
+| :--------- | :--------------- | :------- | :------------------ | --------------- | ------------------------------- |
+| selectedId | <code>let</code> | Yes      | <code>string</code> | <code>""</code> | Set the selected radio group id |
+| labelText  | <code>let</code> | No       | <code>string</code> | <code>""</code> | Specify the label text          |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `Copy`
 

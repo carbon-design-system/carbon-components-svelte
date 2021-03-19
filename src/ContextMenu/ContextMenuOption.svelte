@@ -1,12 +1,45 @@
 <script>
+  /** Set to `true` to enable the disabled state */
   export let disabled = false;
-  export let icon = undefined;
+
+  /** Set to `true` to indent the label */
   export let indented = false;
-  export let label = "";
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * Icon is rendered to the left of the label text
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let icon = undefined;
+
+  /**
+   * Specify the label text
+   * Alternatively, use the "labelText" slot (e.g., <span slot="labelText">...</span>)
+   */
+  export let labelText = "";
+
+  /** Set to `true` to use the selected variant */
   export let selected = false;
+
+  /**
+   * Set to `true` to enable the selectable variant
+   * Automatically set to `true` if `selected` is `true`
+   */
   export let selectable = false;
-  export let shortcut = "";
+
+  /**
+   * Specify the shortcut text
+   * Alternatively, use the "shortcutText" slot (e.g., <span slot="shortcutText">...</span>)
+   */
+  export let shortcutText = "";
+
+  /**
+   * Specify the id
+   * It's highly recommended to provide an id when using in a selectable/radio menu group
+   */
   export let id = "ccs-" + Math.random().toString(36);
+
+  /** Obtain a reference to the list item HTML element */
   export let ref = null;
 
   import { onMount, getContext, createEventDispatcher } from "svelte";
@@ -21,7 +54,6 @@
 
   let unsubCurrentIds = undefined;
   let unsubCurrentId = undefined;
-  let initialSelected = false;
   let timeoutHover = undefined;
   let rootMenuPosition = [0, 0];
 
@@ -30,7 +62,7 @@
   });
 
   onMount(() => {
-    initialSelected = selected;
+    selectable = selected === true;
 
     if (ctxGroup) {
       unsubCurrentIds = ctxGroup.currentIds.subscribe((ids) => {
@@ -52,7 +84,7 @@
     };
   });
 
-  $: isSelectable = !!ctxGroup || initialSelected || selectable;
+  $: isSelectable = !!ctxGroup || selectable;
   $: isRadio = !!ctxRadioGroup;
 
   $: if (isSelectable) {
@@ -106,9 +138,11 @@
   aria-checked="{isSelectable || isRadio ? selected : undefined}"
   {...$$restProps}
   on:keydown
-  on:keydown="{(e) => {}}"
+  on:keydown="{(e) => {
+    // TODO: handle focus
+  }}"
   on:mouseenter
-  on:mouseenter="{(e) => {
+  on:mouseenter="{() => {
     if (subOptions) {
       timeoutHover = setTimeout(() => {
         submenuOpen = true;
@@ -150,8 +184,8 @@
           <svelte:component this="{icon}" />
         </div>
       {/if}
-      <span class:bx--context-menu-option__label="{true}" title="{label}">
-        {label}
+      <span class:bx--context-menu-option__label="{true}" title="{labelText}">
+        <slot name="labelText">{labelText}</slot>
       </span>
       <div class:bx--context-menu-option__info="{true}"><CaretRight16 /></div>
     </div>
@@ -173,10 +207,12 @@
           <svelte:component this="{icon}" />
         </div>
       {/if}
-      <span class:bx--context-menu-option__label="{true}" title="{label}">
-        {label}
+      <span class:bx--context-menu-option__label="{true}" title="{labelText}">
+        <slot name="labelText">{labelText}</slot>
       </span>
-      <div class:bx--context-menu-option__info="{true}">{shortcut}</div>
+      <div class:bx--context-menu-option__info="{true}">
+        <slot name="shortcutText">{shortcutText}</slot>
+      </div>
     </div>
   {/if}
 </li>
