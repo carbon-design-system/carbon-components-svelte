@@ -27,7 +27,7 @@ See the [ExpandableAccordion recipe](/recipes/ExpandableAccordion) for a togglea
   </AccordionItem>
 </Accordion>
 
-### Chevron aligned left
+### Left-aligned chevron
 
 <Accordion align="start">
   <AccordionItem title="Natural Language Classifier">
@@ -148,7 +148,7 @@ See the [ExpandableAccordion recipe](/recipes/ExpandableAccordion) for a togglea
 
 <Accordion skeleton />
 
-### Skeleton (chevron aligned left)
+### Skeleton (left-aligned chevron)
 
 <Accordion skeleton align="start" />
 
