@@ -1,5 +1,6 @@
 <div
   class:bx--structured-list-tbody="{true}"
+  role="rowgroup"
   {...$$restProps}
   on:click
   on:mouseover
