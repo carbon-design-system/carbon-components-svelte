@@ -47,7 +47,7 @@ Bind the selected value using the `selected` prop.
 
 <FileSource src="/framed/RadioButton/ProgrammaticRadioButton" />
 
-### Label text aligned left
+### Left-aligned label text
 
 <RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -79,7 +79,7 @@ Bind the selected value using the `selected` prop.
   <RadioButtonSkeleton />
 </RadioButtonGroup>
 
-### Skeleton (vertical orientation)
+### Skeleton (vertical)
 
 <RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)">
   <RadioButtonSkeleton />
