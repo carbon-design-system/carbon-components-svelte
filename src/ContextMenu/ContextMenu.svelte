@@ -113,6 +113,7 @@
   }}"
   on:keydown
   on:keydown="{(e) => {
+    if ($hasPopup) return;
     if (e.key === 'ArrowDown') {
       if (focusIndex < options.length - 1) focusIndex++;
     } else if (e.key === 'ArrowUp') {

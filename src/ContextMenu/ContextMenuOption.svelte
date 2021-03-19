@@ -60,6 +60,8 @@
   let rootMenuPosition = [0, 0];
   let currentIndex = -1;
   let submenuOpen = false;
+  let focusIndex = 0;
+  let options = [];
 
   const unsubCurrentIndex = ctx.currentIndex.subscribe((index) => {
     currentIndex = index;
@@ -186,11 +188,31 @@
 
       await tick();
 
-      const options = ref.querySelectorAll('li[tabindex]');
+      options = [...ref.querySelectorAll('li[tabindex]')];
 
-      if (options[0]) options[0].focus();
+      if (options[focusIndex]) options[focusIndex].focus();
 
       return;
+    }
+
+    if (submenuOpen) {
+      if (key === 'ArrowLeft') {
+        submenuOpen = false;
+        focusIndex = 0;
+        return;
+      }
+
+      if (key === 'ArrowDown') {
+        if (focusIndex < options.length - 1) focusIndex++;
+      } else if (key === 'ArrowUp') {
+        if (focusIndex === -1) {
+          focusIndex = options.length - 1;
+        } else {
+          if (focusIndex > 0) focusIndex--;
+        }
+      }
+
+      if (options[focusIndex]) options[focusIndex].focus();
     }
 
     if (key === ' ' || key === 'Enter') {
