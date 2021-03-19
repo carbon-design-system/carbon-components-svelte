@@ -1,5 +1,13 @@
 <script>
   /**
+   * @typedef {string} MultiSelectItemId
+   * @typedef {string} MultiSelectItemText
+   * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
+   * @event {{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
+   * @event {any} clear
+   */
+
+  /**
    * Set the multiselect items
    * @type {MultiSelectItem[]}
    */
@@ -116,13 +124,6 @@
    * @type {string}
    */
   export let name = undefined;
-
-  /**
-   * @typedef {string} MultiSelectItemId
-   * @typedef {string} MultiSelectItemText
-   * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
-   * @event {{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
-   */
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";

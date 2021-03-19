@@ -2239,7 +2239,7 @@ None.
 | Event name | Type       | Detail                                                                                              |
 | :--------- | :--------- | :-------------------------------------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
-| clear      | forwarded  | --                                                                                                  |
+| clear      | dispatched | <code>any</code>                                                                                    |
 | keydown    | forwarded  | --                                                                                                  |
 | focus      | forwarded  | --                                                                                                  |
 | blur       | forwarded  | --                                                                                                  |

@@ -5539,7 +5539,7 @@
           "name": "select",
           "detail": "{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }"
         },
-        { "type": "forwarded", "name": "clear", "element": "ListBoxSelection" },
+        { "type": "dispatched", "name": "clear", "detail": "any" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
