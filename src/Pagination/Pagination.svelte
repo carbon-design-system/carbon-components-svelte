@@ -1,6 +1,8 @@
 <script>
   /**
    * @event {{ pageSize: number; page: number; }} update
+   * @event {{ page: number; }} click:button--previous
+   * @event {{ page: number; }} click:button--next
    */
 
   /** Specify the current page index */
@@ -162,6 +164,7 @@
         : ''}"
       on:click="{() => {
         page--;
+        dispatch('click:button--previous', { page });
       }}"
     />
     <Button
@@ -177,6 +180,7 @@
         : ''}"
       on:click="{() => {
         page++;
+        dispatch('click:button--next', { page });
       }}"
     />
   </div>

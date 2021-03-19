@@ -2542,9 +2542,11 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                           |
-| :--------- | :--------- | :----------------------------------------------- |
-| update     | dispatched | <code>{ pageSize: number; page: number; }</code> |
+| Event name             | Type       | Detail                                           |
+| :--------------------- | :--------- | :----------------------------------------------- |
+| update                 | dispatched | <code>{ pageSize: number; page: number; }</code> |
+| click:button--previous | dispatched | <code>{ page: number; }</code>                   |
+| click:button--next     | dispatched | <code>{ page: number; }</code>                   |
 
 ## `PaginationNav`
 

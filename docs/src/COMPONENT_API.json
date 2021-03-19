@@ -6475,6 +6475,16 @@
           "type": "dispatched",
           "name": "update",
           "detail": "{ pageSize: number; page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "click:button--previous",
+          "detail": "{ page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "click:button--next",
+          "detail": "{ page: number; }"
         }
       ],
       "typedefs": [],
