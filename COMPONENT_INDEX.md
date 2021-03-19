@@ -2920,6 +2920,8 @@ None.
 | name        | <code>let</code> | No       | <code>string</code>                        | --                                               | Specify a name attribute for the select element |
 | invalid     | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to indicate an invalid state      |
 | invalidText | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the invalid state text                  |
+| warn        | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to indicate an warning state      |
+| warnText    | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the warning state text                  |
 | helperText  | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the helper text                         |
 | noLabel     | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to not render a label             |
 | labelText   | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the label text                          |
