@@ -114,3 +114,7 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
 ### Skeleton
 
 <SelectSkeleton />
+
+### Skeleton (hidden label)
+
+<SelectSkeleton hideLabel />
