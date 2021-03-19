@@ -77,6 +77,7 @@ export { OrderedList } from "./OrderedList";
 export { OverflowMenu, OverflowMenuItem } from "./OverflowMenu";
 export { Pagination, PaginationSkeleton } from "./Pagination";
 export { PaginationNav } from "./PaginationNav";
+export { Popover } from "./Popover";
 export {
   ProgressIndicator,
   ProgressIndicatorSkeleton,

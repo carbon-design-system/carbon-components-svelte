@@ -1,6 +1,6 @@
 # Component Index
 
-> 160 components exported from carbon-components-svelte@0.30.0.
+> 161 components exported from carbon-components-svelte@0.30.0.
 
 ## Components
 
@@ -93,6 +93,7 @@
 - [`PaginationNav`](#paginationnav)
 - [`PaginationSkeleton`](#paginationskeleton)
 - [`PasswordInput`](#passwordinput)
+- [`Popover`](#popover)
 - [`ProgressIndicator`](#progressindicator)
 - [`ProgressIndicatorSkeleton`](#progressindicatorskeleton)
 - [`ProgressStep`](#progressstep)
@@ -2631,6 +2632,29 @@ None.
 | keydown    | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
+
+## `Popover`
+
+### Props
+
+| Prop name    | Kind             | Reactive | Type                                                                                                                                                                                                                            | Default value      | Description                                       |
+| :----------- | :--------------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ | ------------------------------------------------- |
+| open         | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to display the popover              |
+| caret        | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` render a caret                      |
+| align        | <code>let</code> | No       | <code>"top" &#124; "top-left" &#124; "top-right" &#124; "bottom" &#124; "bottom-left" &#124; "bottom-right" &#124; "left" &#124; "left-bottom" &#124; "left-top" &#124; "right" &#124; "right-bottom" &#124; "right-top"</code> | <code>"top"</code> | Specify the alignment of the caret                |
+| light        | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to enable the light variant         |
+| highContrast | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to enable the high contrast variant |
+| relative     | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to use a relative position          |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `ProgressIndicator`
 

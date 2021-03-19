@@ -208,7 +208,12 @@
     }
   }
 
-  .preview-viewer > .bx--aspect-ratio {
+  .preview-viewer > .bx--aspect-ratio,
+  .preview-viewer [data-outline] {
     outline: 1px solid var(--cds-interactive-04);
+  }
+
+  [data-outline="relative"] {
+    position: relative;
   }
 </style>

@@ -86,6 +86,7 @@ export { default as OverflowMenuItem } from "./OverflowMenu/OverflowMenuItem";
 export { default as Pagination } from "./Pagination/Pagination";
 export { default as PaginationSkeleton } from "./Pagination/PaginationSkeleton";
 export { default as PaginationNav } from "./PaginationNav/PaginationNav";
+export { default as Popover } from "./Popover/Popover";
 export { default as ProgressIndicator } from "./ProgressIndicator/ProgressIndicator";
 export { default as ProgressIndicatorSkeleton } from "./ProgressIndicator/ProgressIndicatorSkeleton";
 export { default as ProgressStep } from "./ProgressIndicator/ProgressStep";

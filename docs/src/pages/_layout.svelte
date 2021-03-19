@@ -20,7 +20,7 @@
   import Footer from "../components/Footer.svelte";
 
   const deprecated = ["ToggleSmall", "Icon"];
-  const new_components = ["ImageLoader", "LocalStorage"];
+  const new_components = ["Popover"];
 
   let isOpen = false;
   let isSideNavOpen = true;
