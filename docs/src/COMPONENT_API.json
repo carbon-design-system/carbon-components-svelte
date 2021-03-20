@@ -4057,16 +4057,6 @@
           "isFunction": false,
           "constant": false,
           "reactive": true
-        },
-        {
-          "name": "iconDescription",
-          "kind": "let",
-          "description": "Specify the ARIA label for the chevron icon",
-          "type": "string",
-          "value": "\"Expand/Collapse\"",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
         }
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],

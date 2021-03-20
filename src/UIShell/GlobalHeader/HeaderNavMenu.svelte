@@ -14,9 +14,6 @@
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
-  /** Specify the ARIA label for the chevron icon */
-  export let iconDescription = "Expand/Collapse";
-
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
 </script>
 
@@ -32,7 +29,7 @@
   }}"
 />
 
-<li class:bx--header__submenu="{true}" title="{iconDescription}">
+<li class:bx--header__submenu="{true}">
   <a
     bind:this="{ref}"
     role="menuitem"
@@ -59,10 +56,7 @@
     on:blur
   >
     {text}
-    <ChevronDown16
-      aria-label="{iconDescription}"
-      class="bx--header__menu-arrow"
-    />
+    <ChevronDown16 class="bx--header__menu-arrow" />
   </a>
   <ul role="menu" aria-label="{text}" class:bx--header__menu="{true}">
     <slot />

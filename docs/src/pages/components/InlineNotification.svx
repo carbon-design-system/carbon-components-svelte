@@ -9,15 +9,15 @@ source: Notification/InlineNotification.svelte
 
 ### Default (error)
 
-<InlineNotification title="Error" subtitle="An internal server error occurred." />
+<InlineNotification title="Error:" subtitle="An internal server error occurred." />
 
 ### Hidden close button
 
-<InlineNotification hideCloseButton kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." />
+<InlineNotification hideCloseButton kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 
 ### With actions
 
-<InlineNotification kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours.">
+<InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours.">
   <div slot="actions">
     <NotificationActionButton>Learn more</NotificationActionButton>
   </div>
@@ -25,18 +25,18 @@ source: Notification/InlineNotification.svelte
 
 ### Notification variants
 
-<InlineNotification kind="error" title="Error" subtitle="An internal server error occurred." />
-<InlineNotification kind="info" title="New updates" subtitle="Restart to get the latest updates." />
-<InlineNotification kind="info-square" title="New updates" subtitle="Restart to get the latest updates." />
-<InlineNotification kind="success" title="Success" subtitle="Your settings have been saved." />
-<InlineNotification kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." />
-<InlineNotification kind="warning-alt" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." />
+<InlineNotification kind="error" title="Error:" subtitle="An internal server error occurred." />
+<InlineNotification kind="info" title="New updates:" subtitle="Restart to get the latest updates." />
+<InlineNotification kind="info-square" title="New updates:" subtitle="Restart to get the latest updates." />
+<InlineNotification kind="success" title="Success:" subtitle="Your settings have been saved." />
+<InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+<InlineNotification kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 
 ### Low contrast
 
-<InlineNotification lowContrast kind="error" title="Error" subtitle="An internal server error occurred." />
-<InlineNotification lowContrast kind="info" title="New updates" subtitle="Restart to get the latest updates." />
-<InlineNotification lowContrast kind="info-square" title="New updates" subtitle="Restart to get the latest updates." />
-<InlineNotification lowContrast kind="success" title="Success" subtitle="Your settings have been saved." />
-<InlineNotification lowContrast kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." />
-<InlineNotification lowContrast kind="warning-alt" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." />
+<InlineNotification lowContrast kind="error" title="Error:" subtitle="An internal server error occurred." />
+<InlineNotification lowContrast kind="info" title="New updates:" subtitle="Restart to get the latest updates." />
+<InlineNotification lowContrast kind="info-square" title="New updates:" subtitle="Restart to get the latest updates." />
+<InlineNotification lowContrast kind="success" title="Success:" subtitle="Your settings have been saved." />
+<InlineNotification lowContrast kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+<InlineNotification lowContrast kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />

@@ -9,26 +9,26 @@ source: Notification/ToastNotification.svelte
 
 ### Default (error)
 
-<ToastNotification title="Error" subtitle="An internal server error occurred." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 
 ### Hidden close button
 
-<ToastNotification hideCloseButton kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification hideCloseButton kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
 
 ### Notification variants
 
-<ToastNotification kind="error" title="Error" subtitle="An internal server error occurred." caption="[MMM D, YYYY h:mm A]" />
-<ToastNotification kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="[MMM D, YYYY h:mm A]"  />
-<ToastNotification kind="info-square" title="New updates" subtitle="Restart to get the latest updates." caption="[MMM D, YYYY h:mm A]" />
-<ToastNotification kind="success" title="Success" subtitle="Your settings have been saved." caption="[MMM D, YYYY h:mm A]" />
-<ToastNotification kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
-<ToastNotification kind="warning-alt" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification kind="error" title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
+<ToastNotification kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="{new Date().toLocaleString()}"  />
+<ToastNotification kind="info-square" title="New updates" subtitle="Restart to get the latest updates." caption="{new Date().toLocaleString()}" />
+<ToastNotification kind="success" title="Success" subtitle="Your settings have been saved." caption="{new Date().toLocaleString()}" />
+<ToastNotification kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
+<ToastNotification kind="warning-alt" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
 
 ### Low contrast
 
-<ToastNotification lowContrast kind="error" title="Error" subtitle="An internal server error occurred." caption="[MMM D, YYYY h:mm A]" />
-<ToastNotification lowContrast kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="[MMM D, YYYY h:mm A]" />
-<ToastNotification lowContrast kind="info-square" title="New updates" subtitle="Restart to get the latest updates." caption="[MMM D, YYYY h:mm A]" />
-<ToastNotification lowContrast kind="success" title="Success" subtitle="Your settings have been saved." caption="[MMM D, YYYY h:mm A]" />
-<ToastNotification lowContrast kind="warning" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
-<ToastNotification lowContrast kind="warning-alt" title="Upcoming scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="[MMM D, YYYY h:mm A]" />
+<ToastNotification lowContrast kind="error" title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
+<ToastNotification lowContrast kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="{new Date().toLocaleString()}" />
+<ToastNotification lowContrast kind="info-square" title="New updates" subtitle="Restart to get the latest updates." caption="{new Date().toLocaleString()}" />
+<ToastNotification lowContrast kind="success" title="Success" subtitle="Your settings have been saved." caption="{new Date().toLocaleString()}" />
+<ToastNotification lowContrast kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
+<ToastNotification lowContrast kind="warning-alt" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
