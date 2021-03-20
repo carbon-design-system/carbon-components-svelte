@@ -35,7 +35,7 @@ export interface ToastNotificationProps
 
   /**
    * Specify the title text
-   * @default "Title"
+   * @default ""
    */
   title?: string;
 
@@ -47,7 +47,7 @@ export interface ToastNotificationProps
 
   /**
    * Specify the caption text
-   * @default "Caption"
+   * @default ""
    */
   caption?: string;
 

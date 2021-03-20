@@ -19,13 +19,13 @@
   export let role = "alert";
 
   /** Specify the title text */
-  export let title = "Title";
+  export let title = "";
 
   /** Specify the subtitle text */
   export let subtitle = "";
 
   /** Specify the caption text */
-  export let caption = "Caption";
+  export let caption = "";
 
   /** Specify the ARIA label for the icon */
   export let iconDescription = "Closes notification";

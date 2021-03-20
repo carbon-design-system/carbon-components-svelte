@@ -19,7 +19,7 @@
   export let role = "alert";
 
   /** Specify the title text */
-  export let title = "Title";
+  export let title = "";
 
   /** Specify the subtitle text */
   export let subtitle = "";

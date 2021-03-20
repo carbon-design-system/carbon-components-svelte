@@ -4488,7 +4488,7 @@
           "kind": "let",
           "description": "Specify the title text",
           "type": "string",
-          "value": "\"Title\"",
+          "value": "\"\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -10430,7 +10430,7 @@
           "kind": "let",
           "description": "Specify the title text",
           "type": "string",
-          "value": "\"Title\"",
+          "value": "\"\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -10450,7 +10450,7 @@
           "kind": "let",
           "description": "Specify the caption text",
           "type": "string",
-          "value": "\"Caption\"",
+          "value": "\"\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
