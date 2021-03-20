@@ -112,7 +112,7 @@
     }
   }}"
   on:keydown
-  on:keydown="{(e) => {
+  on:keydown|preventDefault="{(e) => {
     if ($hasPopup) return;
 
     if (e.key === 'ArrowDown') {
