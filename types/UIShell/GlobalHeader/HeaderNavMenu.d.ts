@@ -25,12 +25,6 @@ export interface HeaderNavMenuProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
-
-  /**
-   * Specify the ARIA label for the chevron icon
-   * @default "Expand/Collapse"
-   */
-  iconDescription?: string;
 }
 
 export default class HeaderNavMenu extends SvelteComponentTyped<

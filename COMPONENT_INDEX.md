@@ -1662,13 +1662,12 @@ None.
 
 ### Props
 
-| Prop name       | Kind             | Reactive | Type                                       | Default value                  | Description                                   |
-| :-------------- | :--------------- | :------- | :----------------------------------------- | ------------------------------ | --------------------------------------------- |
-| ref             | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>              | Obtain a reference to the HTML anchor element |
-| expanded        | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>             | Set to `true` to toggle the expanded state    |
-| href            | <code>let</code> | No       | <code>string</code>                        | <code>"/"</code>               | Specify the `href` attribute                  |
-| text            | <code>let</code> | No       | <code>string</code>                        | --                             | Specify the text                              |
-| iconDescription | <code>let</code> | No       | <code>string</code>                        | <code>"Expand/Collapse"</code> | Specify the ARIA label for the chevron icon   |
+| Prop name | Kind             | Reactive | Type                                       | Default value      | Description                                   |
+| :-------- | :--------------- | :------- | :----------------------------------------- | ------------------ | --------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>  | Obtain a reference to the HTML anchor element |
+| expanded  | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code> | Set to `true` to toggle the expanded state    |
+| href      | <code>let</code> | No       | <code>string</code>                        | <code>"/"</code>   | Specify the `href` attribute                  |
+| text      | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the text                              |
 
 ### Slots
 
