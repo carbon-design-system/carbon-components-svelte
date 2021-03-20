@@ -102,6 +102,10 @@ export interface PaginationProps
 
 export default class Pagination extends SvelteComponentTyped<
   PaginationProps,
-  { update: CustomEvent<{ pageSize: number; page: number }> },
+  {
+    update: CustomEvent<{ pageSize: number; page: number }>;
+    ["click:button--previous"]: CustomEvent<{ page: number }>;
+    ["click:button--next"]: CustomEvent<{ page: number }>;
+  },
   {}
 > {}

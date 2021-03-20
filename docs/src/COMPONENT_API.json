@@ -1,5 +1,5 @@
 {
-  "total": 160,
+  "total": 166,
   "components": [
     {
       "moduleName": "Accordion",
@@ -1555,6 +1555,244 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "ContextMenu",
+      "filePath": "src/ContextMenu/ContextMenu.svelte",
+      "props": [
+        {
+          "name": "open",
+          "kind": "let",
+          "description": "Set to `true` to open the menu\nEither `x` and `y` must be greater than zero",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "x",
+          "kind": "let",
+          "description": "Specify the horizontal offset of the menu position",
+          "type": "number",
+          "value": "0",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "y",
+          "kind": "let",
+          "description": "Specify the vertical offset of the menu position",
+          "type": "number",
+          "value": "0",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "ref",
+          "kind": "let",
+          "description": "Obtain a reference to the unordered list HTML element",
+          "type": "null | HTMLUListElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [
+        { "type": "forwarded", "name": "click", "element": "ul" },
+        { "type": "forwarded", "name": "keydown", "element": "ul" },
+        { "type": "dispatched", "name": "open" },
+        { "type": "dispatched", "name": "close" }
+      ],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "ul" }
+    },
+    {
+      "moduleName": "ContextMenuDivider",
+      "filePath": "src/ContextMenu/ContextMenuDivider.svelte",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "typedefs": []
+    },
+    {
+      "moduleName": "ContextMenuGroup",
+      "filePath": "src/ContextMenu/ContextMenuGroup.svelte",
+      "props": [
+        {
+          "name": "selectedIds",
+          "kind": "let",
+          "type": "string[]",
+          "value": "[]",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "labelText",
+          "kind": "let",
+          "description": "Specify the label text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": []
+    },
+    {
+      "moduleName": "ContextMenuOption",
+      "filePath": "src/ContextMenu/ContextMenuOption.svelte",
+      "props": [
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to enable the disabled state",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "indented",
+          "kind": "let",
+          "description": "Set to `true` to indent the label",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "icon",
+          "kind": "let",
+          "description": "Specify the icon from `carbon-icons-svelte` to render\nIcon is rendered to the left of the label text",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "labelText",
+          "kind": "let",
+          "description": "Specify the label text\nAlternatively, use the \"labelText\" slot (e.g., <span slot=\"labelText\">...</span>)",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "selected",
+          "kind": "let",
+          "description": "Set to `true` to use the selected variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "selectable",
+          "kind": "let",
+          "description": "Set to `true` to enable the selectable variant\nAutomatically set to `true` if `selected` is `true`",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "shortcutText",
+          "kind": "let",
+          "description": "Specify the shortcut text\nAlternatively, use the \"shortcutText\" slot (e.g., <span slot=\"shortcutText\">...</span>)",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "id",
+          "kind": "let",
+          "description": "Specify the id\nIt's recommended to provide an id as a value to bind to within a selectable/radio menu group",
+          "type": "string",
+          "value": "\"ccs-\" + Math.random().toString(36)",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "ref",
+          "kind": "let",
+          "description": "Obtain a reference to the list item HTML element",
+          "type": "null | HTMLLIElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        }
+      ],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        },
+        {
+          "name": "shortcutText",
+          "default": false,
+          "fallback": "{shortcutText}",
+          "slot_props": "{}"
+        }
+      ],
+      "events": [
+        { "type": "forwarded", "name": "keydown", "element": "li" },
+        { "type": "forwarded", "name": "mouseenter", "element": "li" },
+        { "type": "forwarded", "name": "mouseleave", "element": "li" },
+        { "type": "dispatched", "name": "click" }
+      ],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "li" }
+    },
+    {
+      "moduleName": "ContextMenuRadioGroup",
+      "filePath": "src/ContextMenu/ContextMenuRadioGroup.svelte",
+      "props": [
+        {
+          "name": "selectedId",
+          "kind": "let",
+          "description": "Set the selected radio group id",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "labelText",
+          "kind": "let",
+          "description": "Specify the label text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "Copy",
@@ -5539,7 +5777,7 @@
           "name": "select",
           "detail": "{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }"
         },
-        { "type": "forwarded", "name": "clear", "element": "ListBoxSelection" },
+        { "type": "dispatched", "name": "clear", "detail": "any" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
@@ -6475,6 +6713,16 @@
           "type": "dispatched",
           "name": "update",
           "detail": "{ pageSize: number; page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "click:button--previous",
+          "detail": "{ page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "click:button--next",
+          "detail": "{ page: number; }"
         }
       ],
       "typedefs": [],
@@ -6777,6 +7025,86 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "input" }
+    },
+    {
+      "moduleName": "Popover",
+      "filePath": "src/Popover/Popover.svelte",
+      "props": [
+        {
+          "name": "open",
+          "kind": "let",
+          "description": "Set to `true` to display the popover",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "closeOnOutsideClick",
+          "kind": "let",
+          "description": "Set to `true` to close the popover on an outside click",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "caret",
+          "kind": "let",
+          "description": "Set to `true` render a caret",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "align",
+          "kind": "let",
+          "description": "Specify the alignment of the caret",
+          "type": "\"top\" | \"top-left\" | \"top-right\" | \"bottom\" | \"bottom-left\" | \"bottom-right\" | \"left\" | \"left-bottom\" | \"left-top\" | \"right\" | \"right-bottom\" | \"right-top\"",
+          "value": "\"top\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "light",
+          "kind": "let",
+          "description": "Set to `true` to enable the light variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "highContrast",
+          "kind": "let",
+          "description": "Set to `true` to enable the high contrast variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "relative",
+          "kind": "let",
+          "description": "Set to `true` to use a relative position",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [{ "type": "dispatched", "name": "click:outside" }],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ProgressIndicator",
@@ -7632,6 +7960,26 @@
           "name": "invalidText",
           "kind": "let",
           "description": "Specify the invalid state text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "warn",
+          "kind": "let",
+          "description": "Set to `true` to indicate an warning state",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "warnText",
+          "kind": "let",
+          "description": "Specify the warning state text",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -9145,6 +9493,16 @@
           "description": "Specify the number of tabs to render",
           "type": "number",
           "value": "4",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "type",
+          "kind": "let",
+          "description": "Specify the type of tabs",
+          "type": "\"default\" | \"container\"",
+          "value": "\"default\"",
           "isFunction": false,
           "constant": false,
           "reactive": false

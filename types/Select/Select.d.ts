@@ -55,6 +55,18 @@ export interface SelectProps
   invalidText?: string;
 
   /**
+   * Set to `true` to indicate an warning state
+   * @default false
+   */
+  warn?: boolean;
+
+  /**
+   * Specify the warning state text
+   * @default ""
+   */
+  warnText?: string;
+
+  /**
    * Specify the helper text
    * @default ""
    */

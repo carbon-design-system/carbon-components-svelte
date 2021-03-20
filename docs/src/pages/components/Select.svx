@@ -16,6 +16,15 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
+### Helper text
+
+<Select helperText="Carbon offers 4 themes (2 light, 2 dark)" labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
 ### Hidden label
 
 <Select hideLabel labelText="Carbon theme" selected="g10" >
@@ -75,7 +84,25 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Disabled
+### Invalid state
+
+<Select invalid invalidText="Theme must be a dark variant" labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+### Warning state
+
+<Select warn warnText="The selected theme will not be persisted" labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+### Disabled state
 
 <Select disabled labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -87,3 +114,7 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
 ### Skeleton
 
 <SelectSkeleton />
+
+### Skeleton (hidden label)
+
+<SelectSkeleton hideLabel />

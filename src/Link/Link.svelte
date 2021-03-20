@@ -40,7 +40,6 @@
     <slot />
   </p>
 {:else}
-  <!-- svelte-ignore a11y-missing-attribute -->
   <a
     bind:this="{ref}"
     class:bx--link="{true}"
@@ -55,8 +54,6 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave
+    on:mouseleave><slot /></a
   >
-    <slot />
-  </a>
 {/if}

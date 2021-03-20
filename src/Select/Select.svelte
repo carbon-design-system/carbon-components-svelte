@@ -39,6 +39,12 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
+  /** Set to `true` to indicate an warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Specify the helper text */
   export let helperText = "";
 
@@ -58,6 +64,7 @@
   import { writable } from "svelte/store";
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
 
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);
@@ -80,6 +87,7 @@
     class:bx--select--light="{light}"
     class:bx--select--invalid="{invalid}"
     class:bx--select--disabled="{disabled}"
+    class:bx--select--warning="{warn}"
   >
     {#if !noLabel}
       <label
@@ -158,6 +166,11 @@
         {#if invalid}
           <WarningFilled16 class="bx--select__invalid-icon" />
         {/if}
+        {#if !invalid && warn}
+          <WarningAltFilled16
+            class="bx--select__invalid-icon bx--select__invalid-icon--warning"
+          />
+        {/if}
       </div>
       {#if !invalid && helperText}
         <div
@@ -170,6 +183,11 @@
       {#if invalid}
         <div id="{errorId}" class:bx--form-requirement="{true}">
           {invalidText}
+        </div>
+      {/if}
+      {#if !invalid && warn}
+        <div id="{errorId}" class:bx--form-requirement="{true}">
+          {warnText}
         </div>
       {/if}
     {/if}

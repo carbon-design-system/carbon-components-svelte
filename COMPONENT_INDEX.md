@@ -1,6 +1,6 @@
 # Component Index
 
-> 160 components exported from carbon-components-svelte@0.30.0.
+> 166 components exported from carbon-components-svelte@0.30.0.
 
 ## Components
 
@@ -24,6 +24,11 @@
 - [`ComposedModal`](#composedmodal)
 - [`Content`](#content)
 - [`ContentSwitcher`](#contentswitcher)
+- [`ContextMenu`](#contextmenu)
+- [`ContextMenuDivider`](#contextmenudivider)
+- [`ContextMenuGroup`](#contextmenugroup)
+- [`ContextMenuOption`](#contextmenuoption)
+- [`ContextMenuRadioGroup`](#contextmenuradiogroup)
 - [`Copy`](#copy)
 - [`CopyButton`](#copybutton)
 - [`DataTable`](#datatable)
@@ -93,6 +98,7 @@
 - [`PaginationNav`](#paginationnav)
 - [`PaginationSkeleton`](#paginationskeleton)
 - [`PasswordInput`](#passwordinput)
+- [`Popover`](#popover)
 - [`ProgressIndicator`](#progressindicator)
 - [`ProgressIndicatorSkeleton`](#progressindicatorskeleton)
 - [`ProgressStep`](#progressstep)
@@ -721,6 +727,117 @@ None.
 | mouseover  | forwarded  | --                  |
 | mouseenter | forwarded  | --                  |
 | mouseleave | forwarded  | --                  |
+
+## `ContextMenu`
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                                      | Default value      | Description                                                                      |
+| :-------- | :--------------- | :------- | :---------------------------------------- | ------------------ | -------------------------------------------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code> | <code>null</code>  | Obtain a reference to the unordered list HTML element                            |
+| y         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the vertical offset of the menu position                                 |
+| x         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the horizontal offset of the menu position                               |
+| open      | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| click      | forwarded  | --     |
+| keydown    | forwarded  | --     |
+| open       | dispatched | --     |
+| close      | dispatched | --     |
+
+## `ContextMenuDivider`
+
+### Props
+
+None.
+
+### Slots
+
+None.
+
+### Events
+
+None.
+
+## `ContextMenuGroup`
+
+### Props
+
+| Prop name   | Kind             | Reactive | Type                  | Default value   | Description            |
+| :---------- | :--------------- | :------- | :-------------------- | --------------- | ---------------------- |
+| selectedIds | <code>let</code> | Yes      | <code>string[]</code> | <code>[]</code> | --                     |
+| labelText   | <code>let</code> | No       | <code>string</code>   | <code>""</code> | Specify the label text |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
+
+## `ContextMenuOption`
+
+### Props
+
+| Prop name    | Kind             | Reactive | Type                                                         | Default value                                    | Description                                                                                                                        |
+| :----------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| ref          | <code>let</code> | Yes      | <code>null &#124; HTMLLIElement</code>                       | <code>null</code>                                | Obtain a reference to the list item HTML element                                                                                   |
+| selectable   | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the selectable variant<br />Automatically set to `true` if `selected` is `true`                            |
+| selected     | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to use the selected variant                                                                                          |
+| icon         | <code>let</code> | Yes      | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                                               | Specify the icon from `carbon-icons-svelte` to render<br />Icon is rendered to the left of the label text                          |
+| indented     | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to indent the label                                                                                                  |
+| disabled     | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the disabled state                                                                                         |
+| labelText    | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the label text<br />Alternatively, use the "labelText" slot (e.g., &lt;span slot="labelText"&gt;...&lt;/span&gt;)          |
+| shortcutText | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the shortcut text<br />Alternatively, use the "shortcutText" slot (e.g., &lt;span slot="shortcutText"&gt;...&lt;/span&gt;) |
+| id           | <code>let</code> | No       | <code>string</code>                                          | <code>"ccs-" + Math.random().toString(36)</code> | Specify the id<br />It's recommended to provide an id as a value to bind to within a selectable/radio menu group                   |
+
+### Slots
+
+| Slot name    | Default | Props | Fallback                    |
+| :----------- | :------ | :---- | :-------------------------- |
+| --           | Yes     | --    | --                          |
+| labelText    | No      | --    | <code>{labelText}</code>    |
+| shortcutText | No      | --    | <code>{shortcutText}</code> |
+
+### Events
+
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| keydown    | forwarded  | --     |
+| mouseenter | forwarded  | --     |
+| mouseleave | forwarded  | --     |
+| click      | dispatched | --     |
+
+## `ContextMenuRadioGroup`
+
+### Props
+
+| Prop name  | Kind             | Reactive | Type                | Default value   | Description                     |
+| :--------- | :--------------- | :------- | :------------------ | --------------- | ------------------------------- |
+| selectedId | <code>let</code> | Yes      | <code>string</code> | <code>""</code> | Set the selected radio group id |
+| labelText  | <code>let</code> | No       | <code>string</code> | <code>""</code> | Specify the label text          |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `Copy`
 
@@ -2238,7 +2355,7 @@ None.
 | Event name | Type       | Detail                                                                                              |
 | :--------- | :--------- | :-------------------------------------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
-| clear      | forwarded  | --                                                                                                  |
+| clear      | dispatched | <code>any</code>                                                                                    |
 | keydown    | forwarded  | --                                                                                                  |
 | focus      | forwarded  | --                                                                                                  |
 | blur       | forwarded  | --                                                                                                  |
@@ -2541,9 +2658,11 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                           |
-| :--------- | :--------- | :----------------------------------------------- |
-| update     | dispatched | <code>{ pageSize: number; page: number; }</code> |
+| Event name             | Type       | Detail                                           |
+| :--------------------- | :--------- | :----------------------------------------------- |
+| update                 | dispatched | <code>{ pageSize: number; page: number; }</code> |
+| click:button--previous | dispatched | <code>{ page: number; }</code>                   |
+| click:button--next     | dispatched | <code>{ page: number; }</code>                   |
 
 ## `PaginationNav`
 
@@ -2631,6 +2750,32 @@ None.
 | keydown    | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
+
+## `Popover`
+
+### Props
+
+| Prop name           | Kind             | Reactive | Type                                                                                                                                                                                                                            | Default value      | Description                                            |
+| :------------------ | :--------------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ | ------------------------------------------------------ |
+| open                | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to display the popover                   |
+| closeOnOutsideClick | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to close the popover on an outside click |
+| caret               | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` render a caret                           |
+| align               | <code>let</code> | No       | <code>"top" &#124; "top-left" &#124; "top-right" &#124; "bottom" &#124; "bottom-left" &#124; "bottom-right" &#124; "left" &#124; "left-bottom" &#124; "left-top" &#124; "right" &#124; "right-bottom" &#124; "right-top"</code> | <code>"top"</code> | Specify the alignment of the caret                     |
+| light               | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to enable the light variant              |
+| highContrast        | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to enable the high contrast variant      |
+| relative            | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to use a relative position               |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+| Event name    | Type       | Detail |
+| :------------ | :--------- | :----- |
+| click:outside | dispatched | --     |
 
 ## `ProgressIndicator`
 
@@ -2920,6 +3065,8 @@ None.
 | name        | <code>let</code> | No       | <code>string</code>                        | --                                               | Specify a name attribute for the select element |
 | invalid     | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to indicate an invalid state      |
 | invalidText | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the invalid state text                  |
+| warn        | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to indicate an warning state      |
+| warnText    | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the warning state text                  |
 | helperText  | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the helper text                         |
 | noLabel     | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to not render a label             |
 | labelText   | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the label text                          |
@@ -3682,9 +3829,10 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                | Default value  | Description                          |
-| :-------- | :--------------- | :------- | :------------------ | -------------- | ------------------------------------ |
-| count     | <code>let</code> | No       | <code>number</code> | <code>4</code> | Specify the number of tabs to render |
+| Prop name | Kind             | Reactive | Type                                      | Default value          | Description                          |
+| :-------- | :--------------- | :------- | :---------------------------------------- | ---------------------- | ------------------------------------ |
+| count     | <code>let</code> | No       | <code>number</code>                       | <code>4</code>         | Specify the number of tabs to render |
+| type      | <code>let</code> | No       | <code>"default" &#124; "container"</code> | <code>"default"</code> | Specify the type of tabs             |
 
 ### Slots
 

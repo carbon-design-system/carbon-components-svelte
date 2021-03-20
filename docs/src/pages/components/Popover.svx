@@ -1,0 +1,77 @@
+<script>
+  import { Popover } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+By default, the position of the popover component is absolute.
+
+<div data-outline>
+    Parent
+    <Popover open>
+        <div style="padding: var(--cds-spacing-05)">Content</div>
+    </Popover>
+</div>
+
+### Relative position
+
+Set `relative` to `true` to use a relative position.
+
+<div data-outline>
+    Parent
+    <Popover relative open>
+        <div style="padding: var(--cds-spacing-05)">Content</div>
+    </Popover>
+</div>
+
+### Close on outside click
+
+Set `closeOnOutsideClick` to set `open` to `false` when clicking outside of the popover.
+
+<div data-outline>
+    Parent
+    <Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
+        <div style="padding: var(--cds-spacing-05)">Content</div>
+    </Popover>
+</div>
+
+### With caret
+
+<div data-outline>
+    Parent
+    <Popover caret open>
+        <div style="padding: var(--cds-spacing-05)">Content</div>
+    </Popover>
+</div>
+
+### Custom caret alignment
+
+By default, the caret is aligned "top".
+
+Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"` or `"right-top"`.
+
+<div data-outline>
+    Parent
+    <Popover caret align="top-left" open>
+        <div style="padding: var(--cds-spacing-05)">Content</div>
+    </Popover>
+</div>
+
+### Light variant
+
+<div data-outline>
+    Parent
+    <Popover light open>
+        <div style="padding: var(--cds-spacing-05)">Content</div>
+    </Popover>
+</div>
+
+### High contrast variant
+
+<div data-outline>
+    Parent
+    <Popover highContrast open>
+        <div style="padding: var(--cds-spacing-05)">Content</div>
+    </Popover>
+</div>

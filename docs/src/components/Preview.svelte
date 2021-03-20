@@ -55,6 +55,10 @@
     max-width: 56rem;
   }
 
+  .code-override .bx--snippet {
+    max-width: none;
+  }
+
   .code-override .bx--copy-btn,
   .code-override .bx--snippet,
   .code-override button.bx--btn.bx--snippet-btn--expand {

@@ -1,0 +1,17 @@
+---
+components: ["ContextMenu", "ContextMenuGroup", "ContextMenuRadioGroup", "ContextMenuOption", "ContextMenuDivider"]
+---
+
+<script>
+    import Preview from "../../components/Preview.svelte";
+</script>
+
+In the examples, right click anywhere within the iframe.
+  
+### Default
+  
+<FileSource src="/framed/ContextMenu/ContextMenu" />
+
+### Radio groups
+  
+<FileSource src="/framed/ContextMenu/ContextMenuGroups" />
