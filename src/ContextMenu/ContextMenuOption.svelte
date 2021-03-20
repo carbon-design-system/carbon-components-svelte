@@ -52,20 +52,18 @@
   const ctxGroup = getContext("ContextMenuGroup");
   const ctxRadioGroup = getContext("ContextMenuRadioGroup");
 
+  // "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
+  const moderate01 = 150;
+
   let unsubCurrentIds = undefined;
   let unsubCurrentId = undefined;
-  let unsubRadioIds = undefined;
-  let radioIds = [];
   let timeoutHover = undefined;
   let rootMenuPosition = [0, 0];
-  let currentIndex = -1;
-  let submenuOpen = false;
   let focusIndex = 0;
   let options = [];
-
-  const unsubCurrentIndex = ctx.currentIndex.subscribe((index) => {
-    currentIndex = index;
-  });
+  let role = "menuitem";
+  let submenuOpen = false;
+  let submenuPosition = [0, 0];
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
@@ -79,7 +77,7 @@
       ctxGroup.toggleOption({ id });
     } else if (!!ctxRadioGroup) {
       if (opts.fromKeyboard) {
-        ctxRadioGroup.setOption({ id: radioIds[currentIndex] });
+        ctxRadioGroup.setOption({ id: opts.id });
       } else {
         ctxRadioGroup.setOption({ id });
       }
@@ -92,11 +90,11 @@
   }
 
   onMount(() => {
-    selectable = selected === true;
+    if (selected === true) selectable = true;
 
     if (ctxGroup) {
-      unsubCurrentIds = ctxGroup.currentIds.subscribe((ids) => {
-        selected = ids.includes(id);
+      unsubCurrentIds = ctxGroup.currentIds.subscribe((_currentIds) => {
+        selected = _currentIds.includes(id);
       });
     }
 
@@ -104,51 +102,39 @@
       unsubCurrentId = ctxRadioGroup.currentId.subscribe((_id) => {
         selected = id === _id;
       });
-      unsubRadioIds = ctxRadioGroup.radioIds.subscribe((ids) => {
-        radioIds = ids;
-      });
     }
 
     return () => {
-      unsubCurrentIndex();
       unsubPosition();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
-      if (unsubRadioIds) unsubRadioIds();
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
     };
   });
 
   $: isSelectable = !!ctxGroup || selectable;
   $: isRadio = !!ctxRadioGroup;
-
-  $: if (isSelectable) {
-    indented = true;
-
-    if (selected) {
-      if (ctxGroup) ctxGroup.addOption({ id });
-      icon = Checkmark16;
-    } else {
-      icon = undefined;
-    }
-  }
-
-  let submenuPosition = [0, 0];
-
   $: subOptions = $$slots.default;
+  $: ctx.setPopup(submenuOpen);
   $: if (submenuOpen) {
     const { width, y } = ref.getBoundingClientRect();
     submenuPosition = [rootMenuPosition[0] + width, y];
   }
-
-  $: ctx.setPopup(submenuOpen);
-
-  let role = "menuitem";
-
-  $: indented = isSelectable || isRadio;
   $: {
-    if (isSelectable) role = "menuitemcheckbox";
+    if (isSelectable) {
+      indented = true;
+      role = "menuitemcheckbox";
+
+      if (selected) {
+        if (ctxGroup) ctxGroup.addOption({ id });
+        icon = Checkmark16;
+      } else {
+        icon = undefined;
+      }
+    }
+
     if (isRadio) {
+      indented = true;
       role = "menuitemradio";
       ctxRadioGroup.addOption({ id });
 
@@ -177,21 +163,18 @@
   data-nested="{ref &&
     ref.closest('.bx--context-menu').getAttribute('data-level') === '2'}"
   data-sub="{subOptions}"
+  data-id="{id}"
   {...$$restProps}
   on:keydown
-  on:keydown="{async ({ key }) => {
+  on:keydown="{async ({ key, target }) => {
     if (
       subOptions &&
       (key === 'ArrowRight' || key === ' ' || key === 'Enter')
     ) {
       submenuOpen = true;
-
       await tick();
-
       options = [...ref.querySelectorAll('li[tabindex]')];
-
       if (options[focusIndex]) options[focusIndex].focus();
-
       return;
     }
 
@@ -216,7 +199,7 @@
     }
 
     if (key === ' ' || key === 'Enter') {
-      handleClick({ fromKeyboard: true });
+      handleClick({ fromKeyboard: true, id: target.getAttribute('data-id') });
     }
   }}"
   on:mouseenter
@@ -224,7 +207,7 @@
     if (subOptions) {
       timeoutHover = setTimeout(() => {
         submenuOpen = true;
-      }, 150);
+      }, moderate01);
     }
   }}"
   on:mouseleave
