@@ -751,6 +751,7 @@ None.
 | :--------- | :--------- | :----- |
 | click      | forwarded  | --     |
 | keydown    | forwarded  | --     |
+| open       | dispatched | --     |
 | close      | dispatched | --     |
 
 ## `ContextMenuDivider`
@@ -800,7 +801,7 @@ None.
 | disabled     | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the disabled state                                                                                         |
 | labelText    | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the label text<br />Alternatively, use the "labelText" slot (e.g., &lt;span slot="labelText"&gt;...&lt;/span&gt;)          |
 | shortcutText | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the shortcut text<br />Alternatively, use the "shortcutText" slot (e.g., &lt;span slot="shortcutText"&gt;...&lt;/span&gt;) |
-| id           | <code>let</code> | No       | <code>string</code>                                          | <code>"ccs-" + Math.random().toString(36)</code> | Specify the id<br />It's highly recommended to provide an id when using in a selectable/radio menu group                           |
+| id           | <code>let</code> | No       | <code>string</code>                                          | <code>"ccs-" + Math.random().toString(36)</code> | Specify the id<br />It's recommended to provide an id as a value to bind to within a selectable/radio menu group                   |
 
 ### Slots
 

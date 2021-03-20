@@ -1605,6 +1605,7 @@
       "events": [
         { "type": "forwarded", "name": "click", "element": "ul" },
         { "type": "forwarded", "name": "keydown", "element": "ul" },
+        { "type": "dispatched", "name": "open" },
         { "type": "dispatched", "name": "close" }
       ],
       "typedefs": [],
@@ -1722,7 +1723,7 @@
         {
           "name": "id",
           "kind": "let",
-          "description": "Specify the id\nIt's highly recommended to provide an id when using in a selectable/radio menu group",
+          "description": "Specify the id\nIt's recommended to provide an id as a value to bind to within a selectable/radio menu group",
           "type": "string",
           "value": "\"ccs-\" + Math.random().toString(36)",
           "isFunction": false,

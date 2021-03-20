@@ -50,7 +50,7 @@ export interface ContextMenuOptionProps
 
   /**
    * Specify the id
-   * It's highly recommended to provide an id when using in a selectable/radio menu group
+   * It's recommended to provide an id as a value to bind to within a selectable/radio menu group
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;
