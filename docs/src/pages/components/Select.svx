@@ -36,7 +36,7 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
 
 ### Item groups
 
-<Select labelText="Carbon theme" selected="g10" >
+<Select labelText="Carbon theme" selected="0">
   <SelectItem value="0" text="Select a theme" disabled hidden />
   <SelectItemGroup label="Light theme">
     <SelectItem value="white" text="White" />
