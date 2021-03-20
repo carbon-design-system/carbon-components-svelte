@@ -35,7 +35,7 @@ export interface InlineNotificationProps
 
   /**
    * Specify the title text
-   * @default "Title"
+   * @default ""
    */
   title?: string;
 
