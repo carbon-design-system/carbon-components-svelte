@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.31.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.31.0) - 2021-03-20
+
+**Breaking Changes**
+
+- remove default `title` value in `InlineNotification`
+- remove default `title`, `caption` values in `ToastNotification`
+- remove `iconDescription` prop from `HeaderNavMenu`
+
+**Features**
+
+- add `Popover` component
+- add `ContextMenu` component
+- add "container" type for `TabsSkeleton`
+- add warning state to `Select`
+- dispatch "on:click:button--next" and "on:click:button--previous" in `Pagination`
+
+**Fixes**
+
+- replace chevron icons with "Add" and "Subtract" icons in `NumberInput`
+- fix `Slider` markup to use CSS to hide input if `hideTextInput` is `true`
+- remove hotfix inline style to center dropdown chevron
+- add "rowgroup" role to `StructuredListBody`
+- fix type definition for `MultiSelect`: "clear" should be typed as a custom event
+- remove line breaks in anchor element in `Link`
+- only set `autofocus` attribute if the value is `true`
+
+**Documentation**
+
+- add `Slider` hidden text input, invalid, disabled examples
+- add `Select` warning, invalid, helper text, skeleton (hidden label) examples
+- add `RadioButton` disabled buttons example
+- update sample copy in `ToastNotification`, `InlineNotification`
+- update `Select` item groups example to use the hidden default option
+
+**Housekeeping**
+
+- upgrade `carbon-components` to version 10.31.0
+- upgrade `carbon-icons-svelte` to version 10.27.0 (icons are correctly typed using `SvelteComponentTyped`)
+
 ## [0.30.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.30.0) - 2021-03-13
 
 **Breaking Changes**

@@ -1,5 +1,5 @@
 {
-  "version": "0.30.0",
+  "version": "0.31.0",
   "components": {
     "Accordion": {
       "path": "carbon-components-svelte/src/Accordion/Accordion.svelte"
@@ -66,6 +66,21 @@
     },
     "Switch": {
       "path": "carbon-components-svelte/src/ContentSwitcher/Switch.svelte"
+    },
+    "ContextMenu": {
+      "path": "carbon-components-svelte/src/ContextMenu/ContextMenu.svelte"
+    },
+    "ContextMenuDivider": {
+      "path": "carbon-components-svelte/src/ContextMenu/ContextMenuDivider.svelte"
+    },
+    "ContextMenuGroup": {
+      "path": "carbon-components-svelte/src/ContextMenu/ContextMenuGroup.svelte"
+    },
+    "ContextMenuOption": {
+      "path": "carbon-components-svelte/src/ContextMenu/ContextMenuOption.svelte"
+    },
+    "ContextMenuRadioGroup": {
+      "path": "carbon-components-svelte/src/ContextMenu/ContextMenuRadioGroup.svelte"
     },
     "Copy": {
       "path": "carbon-components-svelte/src/Copy/Copy.svelte"
@@ -273,6 +288,9 @@
     },
     "PaginationOverflow": {
       "path": "carbon-components-svelte/src/PaginationNav/PaginationOverflow.svelte"
+    },
+    "Popover": {
+      "path": "carbon-components-svelte/src/Popover/Popover.svelte"
     },
     "ProgressIndicator": {
       "path": "carbon-components-svelte/src/ProgressIndicator/ProgressIndicator.svelte"
