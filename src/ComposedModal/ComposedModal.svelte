@@ -113,6 +113,9 @@
       if (key === 'Escape') {
         open = false;
       } else if (shouldSubmitOnEnter && key === 'Enter') {
+        if(e.target.tagName == 'BUTTON') {
+          return
+        }
         dispatch('submit', e.target);
       }
     }
