@@ -3448,7 +3448,14 @@
       "filePath": "src/FluidForm/FluidForm.svelte",
       "props": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [{ "type": "forwarded", "name": "submit", "element": "Form" }],
+      "events": [
+        { "type": "forwarded", "name": "click", "element": "Form" },
+        { "type": "forwarded", "name": "keydown", "element": "Form" },
+        { "type": "forwarded", "name": "mouseover", "element": "Form" },
+        { "type": "forwarded", "name": "mouseenter", "element": "Form" },
+        { "type": "forwarded", "name": "mouseleave", "element": "Form" },
+        { "type": "forwarded", "name": "submit", "element": "Form" }
+      ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "Form" }
     },
@@ -3459,6 +3466,7 @@
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
         { "type": "forwarded", "name": "click", "element": "form" },
+        { "type": "forwarded", "name": "keydown", "element": "form" },
         { "type": "forwarded", "name": "mouseover", "element": "form" },
         { "type": "forwarded", "name": "mouseenter", "element": "form" },
         { "type": "forwarded", "name": "mouseleave", "element": "form" },
