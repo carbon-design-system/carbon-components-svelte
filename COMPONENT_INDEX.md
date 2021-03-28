@@ -1368,6 +1368,11 @@ None.
 
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
+| click      | forwarded | --     |
+| keydown    | forwarded | --     |
+| mouseover  | forwarded | --     |
+| mouseenter | forwarded | --     |
+| mouseleave | forwarded | --     |
 | submit     | forwarded | --     |
 
 ## `Form`
@@ -1387,6 +1392,7 @@ None.
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
 | click      | forwarded | --     |
+| keydown    | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |

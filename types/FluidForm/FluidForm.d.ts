@@ -5,6 +5,13 @@ export interface FluidFormProps {}
 
 export default class FluidForm extends SvelteComponentTyped<
   FluidFormProps,
-  { submit: WindowEventMap["submit"] },
+  {
+    click: WindowEventMap["click"];
+    keydown: WindowEventMap["keydown"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
+    submit: WindowEventMap["submit"];
+  },
   { default: {} }
 > {}
