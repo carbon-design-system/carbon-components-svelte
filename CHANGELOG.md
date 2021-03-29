@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.31.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.31.1) - 2021-03-28
+
+**Fixes**
+
+- add missing "name" attribute to non-mobile `NumberInput`
+- forward missing "keydown" event to `Form`
+- forward click/keydown/mouse events in `FluidForm` to `Form`
+
 ## [0.31.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.31.0) - 2021-03-20
 
 **Breaking Changes**
