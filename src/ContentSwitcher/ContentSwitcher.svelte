@@ -6,7 +6,10 @@
   /** Set the selected index of the switch item */
   export let selectedIndex = 0;
 
-  /** Set to `true` to enable the light variant */
+  /**
+   * Set to `true` to enable the light variant
+   * @deprecated
+   */
   export let light = false;
 
   /**

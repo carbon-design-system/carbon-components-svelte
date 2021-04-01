@@ -28,13 +28,6 @@ components: ["ContentSwitcher", "Switch"]
 
 <FileSource src="/framed/ContentSwitcher/ContentSwitcherReactive" />
 
-### Light variant
-
-<ContentSwitcher light>
-  <Switch text="Latest news" />
-  <Switch text="Trending" />
-</ContentSwitcher>
-
 ### Custom switch slot
 
 <ContentSwitcher>
