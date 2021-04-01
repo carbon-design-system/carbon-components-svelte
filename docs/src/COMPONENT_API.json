@@ -5781,6 +5781,16 @@
           "isFunction": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "inputRef",
+          "kind": "let",
+          "description": "Obtain a reference to the input HTML element",
+          "type": "null | HTMLInputElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
         }
       ],
       "slots": [],
@@ -6369,7 +6379,7 @@
           "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
-          "reactive": false
+          "reactive": true
         },
         {
           "name": "iconClass",

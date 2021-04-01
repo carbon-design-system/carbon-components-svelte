@@ -174,6 +174,12 @@ export interface MultiSelectProps
    * Specify a name attribute for the select
    */
   name?: string;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @default null
+   */
+  inputRef?: null | HTMLInputElement;
 }
 
 export default class MultiSelect extends SvelteComponentTyped<
