@@ -54,11 +54,19 @@
   /** Obtain a reference to the overflow menu element */
   export let menuRef = null;
 
-  import { createEventDispatcher, setContext, afterUpdate } from "svelte";
+  import {
+    createEventDispatcher,
+    getContext,
+    setContext,
+    afterUpdate,
+  } from "svelte";
   import { writable } from "svelte/store";
   import OverflowMenuVertical16 from "carbon-icons-svelte/lib/OverflowMenuVertical16/OverflowMenuVertical16.svelte";
+  import OverflowMenuHorizontal16 from "carbon-icons-svelte/lib/OverflowMenuHorizontal16/OverflowMenuHorizontal16.svelte";
+
   import { formatStyle } from "./formatStyle";
 
+  const ctxBreadcrumbItem = getContext("BreadcrumbItem");
   const dispatch = createEventDispatcher();
   const items = writable([]);
   const currentId = writable(undefined);
@@ -67,6 +75,10 @@
 
   let buttonWidth = undefined;
   let onMountAfterUpdate = true;
+
+  $: if (ctxBreadcrumbItem) {
+    icon = OverflowMenuHorizontal16;
+  }
 
   setContext("OverflowMenu", {
     focusedId,
@@ -122,6 +134,11 @@
         menuRef.style.bottom = height + "px";
       } else if (direction === "bottom") {
         menuRef.style.top = height + "px";
+      }
+
+      if (ctxBreadcrumbItem) {
+        menuRef.style.top = height + 10 + "px";
+        menuRef.style.left = -11 + "px";
       }
     }
 
@@ -218,6 +235,7 @@
       class:bx--overflow-menu-options--light="{light}"
       class:bx--overflow-menu-options--sm="{size === 'sm'}"
       class:bx--overflow-menu-options--xl="{size === 'xl'}"
+      class:bx--breadcrumb-menu-options="{!!ctxBreadcrumbItem}"
       class:menuOptionsClass
     >
       <slot />
