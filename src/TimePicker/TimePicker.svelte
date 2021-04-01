@@ -67,6 +67,7 @@
   <div
     class:bx--time-picker="{true}"
     class:bx--time-picker--light="{light}"
+    class:bx--time-picker--invalid="{invalid}"
     class:bx--time-picker--sm="{size === 'sm'}"
     class:bx--time-picker--xl="{size === 'xl'}"
     class:bx--select--light="{light}"

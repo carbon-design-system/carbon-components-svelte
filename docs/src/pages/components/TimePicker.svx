@@ -59,7 +59,21 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   </TimePickerSelect>
 </TimePicker>
 
-### Disabled
+### Invalid state
+
+<TimePicker invalid invalidText="A valid value is required" labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="PM">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="PDT">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
+
+### Disabled state
 
 <TimePicker labelText="Cron job" placeholder="hh:mm" disabled>
   <TimePickerSelect value="PM" disabled>
