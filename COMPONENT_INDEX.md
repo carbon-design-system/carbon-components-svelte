@@ -2946,6 +2946,7 @@ None.
 | :-------------- | :--------------- | :------- | :------------------- | ------------------------------------------------ | -------------------------------------------------------- |
 | checked         | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to check the tile                          |
 | light           | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to enable the light variant                |
+| disabled        | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to disable the tile                        |
 | value           | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the value of the radio input                     |
 | tabindex        | <code>let</code> | No       | <code>string</code>  | <code>"0"</code>                                 | Specify the tabindex                                     |
 | iconDescription | <code>let</code> | No       | <code>string</code>  | <code>"Tile checkmark"</code>                    | Specify the ARIA label for the radio tile checkmark icon |
@@ -3159,6 +3160,7 @@ None.
 | ref             | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element                  |
 | selected        | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to select the tile                              |
 | light           | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                     |
+| disabled        | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the tile                             |
 | title           | <code>let</code> | No       | <code>string</code>                       | <code>"title"</code>                             | Specify the title of the selectable tile                      |
 | value           | <code>let</code> | No       | <code>string</code>                       | <code>"value"</code>                             | Specify the value of the selectable tile                      |
 | tabindex        | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify the tabindex                                          |

@@ -16,6 +16,12 @@ export interface SelectableTileProps
   light?: boolean;
 
   /**
+   * Set to `true` to disable the tile
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
    * Specify the title of the selectable tile
    * @default "title"
    */

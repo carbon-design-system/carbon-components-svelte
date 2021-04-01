@@ -16,6 +16,12 @@ export interface RadioTileProps
   light?: boolean;
 
   /**
+   * Set to `true` to disable the tile
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
    * Specify the value of the radio input
    * @default ""
    */

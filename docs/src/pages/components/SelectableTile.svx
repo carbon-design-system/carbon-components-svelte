@@ -34,3 +34,17 @@ components: ["SelectableTile"]
     Multi-select Tile
   </SelectableTile>
 </div>
+
+### Disabled state
+
+<div role="group" aria-label="selectable tiles">
+  <SelectableTile selected>
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile disabled>
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile disabled>
+    Multi-select Tile
+  </SelectableTile>
+</div>

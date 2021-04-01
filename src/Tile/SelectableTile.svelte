@@ -5,6 +5,9 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
+  /** Set to `true` to disable the tile */
+  export let disabled = false;
+
   /** Specify the title of the selectable tile */
   export let title = "title";
 
@@ -30,11 +33,11 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
+  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16/CheckmarkFilled16.svelte";
 
   const dispatch = createEventDispatcher();
 
-  $: dispatch(selected ? "select" : "deselect", id);
+  $: if (!disabled) dispatch(selected ? "select" : "deselect", id);
 </script>
 
 <input
@@ -47,17 +50,20 @@
   value="{value}"
   name="{name}"
   title="{title}"
+  disabled="{disabled}"
 />
 <label
   for="{id}"
-  tabindex="{tabindex}"
+  tabindex="{disabled ? undefined : tabindex}"
   class:bx--tile="{true}"
   class:bx--tile--selectable="{true}"
   class:bx--tile--is-selected="{selected}"
   class:bx--tile--light="{light}"
+  class:bx--tile--disabled="{disabled}"
   {...$$restProps}
   on:click
   on:click|preventDefault="{() => {
+    if (disabled) return;
     selected = !selected;
   }}"
   on:mouseover
@@ -65,6 +71,7 @@
   on:mouseleave
   on:keydown
   on:keydown="{(e) => {
+    if (disabled) return;
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       selected = !selected;

@@ -5,6 +5,9 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
+  /** Set to `true` to disable the tile */
+  export let disabled = false;
+
   /** Specify the value of the radio input */
   export let value = "";
 
@@ -21,7 +24,7 @@
   export let name = "";
 
   import { getContext } from "svelte";
-  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
+  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16/CheckmarkFilled16.svelte";
 
   const { add, update, selectedValue } = getContext("TileGroup");
 
@@ -36,14 +39,17 @@
   name="{name}"
   value="{value}"
   checked="{checked}"
-  tabindex="{tabindex}"
+  tabindex="{disabled ? undefined : tabindex}"
+  disabled="{disabled}"
   class:bx--tile-input="{true}"
   on:change
   on:change="{() => {
+    if (disabled) return;
     update(value);
   }}"
   on:keydown
   on:keydown="{(e) => {
+    if (disabled) return;
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       update(value);
@@ -56,6 +62,7 @@
   class:bx--tile--selectable="{true}"
   class:bx--tile--is-selected="{checked}"
   class:bx--tile--light="{light}"
+  class:bx--tile--disabled="{disabled}"
   {...$$restProps}
   on:click
   on:mouseover
