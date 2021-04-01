@@ -32,32 +32,33 @@
     await tick();
     ref.focus();
   }
+
+  $: classes = [
+    expanded && "bx--toolbar-search-container-active",
+    persistent
+      ? "bx--toolbar-search-container-persistent"
+      : "bx--toolbar-search-container-expandable",
+    disabled && "bx--toolbar-search-container-disabled",
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
-<div
-  tabindex="{expanded || disabled ? '-1' : tabindex}"
-  class:bx--toolbar-action="{true}"
-  class:bx--toolbar-search-container-active="{expanded}"
-  class:bx--toolbar-search-container-expandable="{!persistent}"
-  class:bx--toolbar-search-container-persistent="{persistent}"
-  class:bx--toolbar-search-container-disabled="{disabled}"
-  on:click="{expandSearch}"
+<Search
+  size="sm"
+  tabindex="{tabindex}"
+  disabled="{disabled}"
+  {...$$restProps}
+  searchClass="{classes} {$$restProps.class}"
+  bind:ref
+  bind:value
+  on:clear
+  on:change
+  on:input
+  on:focus
   on:focus="{expandSearch}"
->
-  <Search
-    size="sm"
-    tabindex="{expanded ? tabindex : '-1'}"
-    disabled="{disabled}"
-    {...$$restProps}
-    bind:ref
-    bind:value
-    on:clear
-    on:change
-    on:input
-    on:focus
-    on:blur
-    on:blur="{() => {
-      expanded = !persistent && !!value.length;
-    }}"
-  />
-</div>
+  on:blur
+  on:blur="{() => {
+    expanded = !persistent && !!value.length;
+  }}"
+/>
