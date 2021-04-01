@@ -1,6 +1,6 @@
 # Component Index
 
-> 166 components exported from carbon-components-svelte@0.31.1.
+> 167 components exported from carbon-components-svelte@0.31.1.
 
 ## Components
 
@@ -167,6 +167,7 @@
 - [`ToolbarSearch`](#toolbarsearch)
 - [`Tooltip`](#tooltip)
 - [`TooltipDefinition`](#tooltipdefinition)
+- [`TooltipFooter`](#tooltipfooter)
 - [`TooltipIcon`](#tooltipicon)
 - [`Truncate`](#truncate)
 - [`UnorderedList`](#unorderedlist)
@@ -4469,6 +4470,24 @@ None.
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
 | focus      | forwarded | --     |
+
+## `TooltipFooter`
+
+### Props
+
+| Prop name            | Kind             | Reactive | Type                | Default value                                  | Description                                                                 |
+| :------------------- | :--------------- | :------- | :------------------ | ---------------------------------------------- | --------------------------------------------------------------------------- |
+| selectorPrimaryFocus | <code>let</code> | No       | <code>string</code> | <code>"a[href], button:not([disabled])"</code> | Specify a selector to be focused inside the footer when opening the tooltip |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `TooltipIcon`
 

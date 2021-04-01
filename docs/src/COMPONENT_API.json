@@ -1,5 +1,5 @@
 {
-  "total": 166,
+  "total": 167,
   "components": [
     {
       "moduleName": "Accordion",
@@ -11201,6 +11201,25 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "TooltipFooter",
+      "filePath": "src/Tooltip/TooltipFooter.svelte",
+      "props": [
+        {
+          "name": "selectorPrimaryFocus",
+          "kind": "let",
+          "description": "Specify a selector to be focused inside the footer when opening the tooltip",
+          "type": "string",
+          "value": "\"a[href], button:not([disabled])\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "TooltipIcon",

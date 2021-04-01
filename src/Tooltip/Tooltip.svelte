@@ -63,10 +63,14 @@
   /** Obtain a reference to the icon HTML element */
   export let refIcon = null;
 
-  import { createEventDispatcher, afterUpdate } from "svelte";
+  import { createEventDispatcher, afterUpdate, setContext } from "svelte";
+  import { writable } from "svelte/store";
   import Information16 from "carbon-icons-svelte/lib/Information16/Information16.svelte";
 
   const dispatch = createEventDispatcher();
+  const tooltipOpen = writable(open);
+
+  setContext("Tooltip", { tooltipOpen });
 
   function onKeydown(e) {
     if (e.key === "Escape") {
@@ -143,6 +147,7 @@
     }
   });
 
+  $: tooltipOpen.set(open);
   $: dispatch(open ? "open" : "close");
   $: buttonProps = {
     role: "button",

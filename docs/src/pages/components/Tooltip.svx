@@ -1,5 +1,5 @@
 <script>
-  import { Tooltip, Link, Button } from "carbon-components-svelte";
+  import { Tooltip, TooltipFooter, Link, Button } from "carbon-components-svelte";
   import Catalog16 from "carbon-icons-svelte/lib/Catalog16";
   import Preview from "../../components/Preview.svelte";
 </script>
@@ -45,10 +45,10 @@ By default, the tooltip is triggered by an information icon.
   <p>
     Resources are provisioned based on your account's organization.
   </p>
-  <div class="bx--tooltip__footer">
+  <TooltipFooter selectorPrimaryFocus="#d">
     <Link href="/">Learn more</Link>
-    <Button size="small">Manage</Button>
-  </div>
+    <Button id="d" size="small">Manage</Button>
+</TooltipFooter>
 </Tooltip>
 
 ### Custom icon (component)
