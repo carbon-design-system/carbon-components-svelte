@@ -4,13 +4,13 @@
 </script>
 
 <InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">By design, the copy button does not copy text to the clipboard. You will need to write your own logic. Refer to the <Link href="/recipes/CopyableCodeSnippet">CopyableCodeSnippet recipe</Link> for an example.</div>
+  <div class="body-short-01">As of version 0.32, this component will copy the provided `code` text when clicking the button.</div>
 </InlineNotification>
 
 ### Default
 
-<CopyButton on:click />
+<CopyButton text="Carbon svelte" />
 
-### Custom feedback
+### Custom feedback text
 
-<CopyButton on:click feedback="Copied to clipboard" />
+<CopyButton text="Carbon svelte" feedback="Copied to clipboard" />

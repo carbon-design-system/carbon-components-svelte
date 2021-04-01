@@ -1862,12 +1862,22 @@
           "isFunction": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "text",
+          "kind": "let",
+          "description": "Specify the text to copy",
+          "type": "string",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [],
       "events": [
         { "type": "forwarded", "name": "click", "element": "Copy" },
-        { "type": "forwarded", "name": "animationend", "element": "Copy" }
+        { "type": "forwarded", "name": "animationend", "element": "Copy" },
+        { "type": "dispatched", "name": "copy" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "Copy" },

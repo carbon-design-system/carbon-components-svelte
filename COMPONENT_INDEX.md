@@ -870,6 +870,7 @@ None.
 | Prop name       | Kind             | Reactive | Type                | Default value                    | Description                                      |
 | :-------------- | :--------------- | :------- | :------------------ | -------------------------------- | ------------------------------------------------ |
 | iconDescription | <code>let</code> | No       | <code>string</code> | <code>"Copy to clipboard"</code> | Set the title and ARIA label for the copy button |
+| text            | <code>let</code> | No       | <code>string</code> | --                               | Specify the text to copy                         |
 
 ### Slots
 
@@ -877,10 +878,11 @@ None.
 
 ### Events
 
-| Event name   | Type      | Detail |
-| :----------- | :-------- | :----- |
-| click        | forwarded | --     |
-| animationend | forwarded | --     |
+| Event name   | Type       | Detail |
+| :----------- | :--------- | :----- |
+| click        | forwarded  | --     |
+| animationend | forwarded  | --     |
+| copy         | dispatched | --     |
 
 ## `DataTable`
 
