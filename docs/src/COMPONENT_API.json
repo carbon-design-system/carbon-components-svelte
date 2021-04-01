@@ -7716,6 +7716,16 @@
           "reactive": false
         },
         {
+          "name": "searchClass",
+          "kind": "let",
+          "description": "Specify the class name passed to the outer div element",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "skeleton",
           "kind": "let",
           "description": "Set to `true` to display the skeleton state",

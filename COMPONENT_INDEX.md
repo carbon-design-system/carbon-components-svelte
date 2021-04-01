@@ -3006,6 +3006,7 @@ None.
 | value                | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>                                  | Specify the value of the search input                   |
 | small                | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | --                                                      |
 | size                 | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code>                                | Specify the size of the search input                    |
+| searchClass          | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the class name passed to the outer div element  |
 | skeleton             | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state             |
 | light                | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant               |
 | disabled             | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the search input               |
