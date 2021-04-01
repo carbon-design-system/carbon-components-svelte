@@ -6,7 +6,6 @@
 
   import { CodeSnippet, Button } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
-  import copy from "clipboard-copy";
   import { url } from "@sveltech/routify";
   import { theme } from "../store";
 
@@ -41,7 +40,7 @@
     {/if}
   </div>
   <div class="code-override">
-    <CodeSnippet type="multi" on:click="{() => copy(codeRaw)}">
+    <CodeSnippet type="multi" code="{codeRaw}">
       {@html code}
     </CodeSnippet>
   </div>

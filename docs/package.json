@@ -11,7 +11,7 @@
   "devDependencies": {
     "@sveltech/routify": "^1.9.9",
     "autoprefixer": "^10.2.3",
-    "carbon-components": "10.31.0",
+    "carbon-components": "10.32.0-rc.0",
     "carbon-components-svelte": "../",
     "clipboard-copy": "^3.1.0",
     "mdsvex": "^0.8.8",

@@ -11,6 +11,7 @@ export interface CodeSnippetProps {
   /**
    * Set the code snippet text
    * Alternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)
+   * You must use the `code` prop to copy the code
    */
   code?: string;
 
@@ -115,6 +116,7 @@ export default class CodeSnippet extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     animationend: WindowEventMap["animationend"];
+    copy: CustomEvent<any>;
   },
   { default: {} }
 > {}

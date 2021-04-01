@@ -805,7 +805,7 @@
         {
           "name": "code",
           "kind": "let",
-          "description": "Set the code snippet text\nAlternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)",
+          "description": "Set the code snippet text\nAlternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)\nYou must use the `code` prop to copy the code",
           "type": "string",
           "isFunction": false,
           "constant": false,
@@ -989,7 +989,12 @@
           "name": "mouseleave",
           "element": "CodeSnippetSkeleton"
         },
-        { "type": "forwarded", "name": "animationend", "element": "CopyButton" }
+        {
+          "type": "forwarded",
+          "name": "animationend",
+          "element": "CopyButton"
+        },
+        { "type": "dispatched", "name": "copy" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "CodeSnippetSkeleton" }

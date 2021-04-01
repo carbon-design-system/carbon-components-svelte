@@ -500,25 +500,25 @@ None.
 
 ### Props
 
-| Prop name             | Kind             | Reactive | Type                                                 | Default value                                    | Description                                                                                                                |
-| :-------------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| ref                   | <code>let</code> | Yes      | <code>null &#124; HTMLPreElement</code>              | <code>null</code>                                | Obtain a reference to the pre HTML element                                                                                 |
-| showMoreLess          | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the show more/less button                                                                          |
-| expanded              | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to expand a multi-line code snippet (type="multi")                                                           |
-| type                  | <code>let</code> | No       | <code>"single" &#124; "inline" &#124; "multi"</code> | <code>"single"</code>                            | Set the type of code snippet                                                                                               |
-| code                  | <code>let</code> | No       | <code>string</code>                                  | --                                               | Set the code snippet text<br />Alternatively, use the default slot (e.g., &lt;CodeSnippet&gt;{`code`}&lt;/CodeSnippet&gt;) |
-| hideCopyButton        | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to hide the copy button                                                                                      |
-| disabled              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` for the disabled variant<br />Only applies to the "single", "multi" types                                    |
-| wrapText              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to wrap the text<br />Note that `type` must be "multi"                                                       |
-| light                 | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                                                                                  |
-| skeleton              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to display the skeleton state                                                                                |
-| copyButtonDescription | <code>let</code> | No       | <code>string</code>                                  | --                                               | Specify the ARIA label for the copy button icon                                                                            |
-| copyLabel             | <code>let</code> | No       | <code>string</code>                                  | --                                               | Specify the ARIA label of the copy button                                                                                  |
-| feedback              | <code>let</code> | No       | <code>string</code>                                  | <code>"Copied!"</code>                           | Specify the feedback text displayed when clicking the snippet                                                              |
-| feedbackTimeout       | <code>let</code> | No       | <code>number</code>                                  | <code>2000</code>                                | Set the timeout duration (ms) to display feedback text                                                                     |
-| showLessText          | <code>let</code> | No       | <code>string</code>                                  | <code>"Show less"</code>                         | Specify the show less text<br />`type` must be "multi"                                                                     |
-| showMoreText          | <code>let</code> | No       | <code>string</code>                                  | <code>"Show more"</code>                         | Specify the show more text<br />`type` must be "multi"                                                                     |
-| id                    | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the code element                                                                                             |
+| Prop name             | Kind             | Reactive | Type                                                 | Default value                                    | Description                                                                                                                                                                   |
+| :-------------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ref                   | <code>let</code> | Yes      | <code>null &#124; HTMLPreElement</code>              | <code>null</code>                                | Obtain a reference to the pre HTML element                                                                                                                                    |
+| showMoreLess          | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the show more/less button                                                                                                                             |
+| expanded              | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to expand a multi-line code snippet (type="multi")                                                                                                              |
+| type                  | <code>let</code> | No       | <code>"single" &#124; "inline" &#124; "multi"</code> | <code>"single"</code>                            | Set the type of code snippet                                                                                                                                                  |
+| code                  | <code>let</code> | No       | <code>string</code>                                  | --                                               | Set the code snippet text<br />Alternatively, use the default slot (e.g., &lt;CodeSnippet&gt;{`code`}&lt;/CodeSnippet&gt;)<br />You must use the `code` prop to copy the code |
+| hideCopyButton        | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to hide the copy button                                                                                                                                         |
+| disabled              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` for the disabled variant<br />Only applies to the "single", "multi" types                                                                                       |
+| wrapText              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to wrap the text<br />Note that `type` must be "multi"                                                                                                          |
+| light                 | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                                                                                                                                     |
+| skeleton              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to display the skeleton state                                                                                                                                   |
+| copyButtonDescription | <code>let</code> | No       | <code>string</code>                                  | --                                               | Specify the ARIA label for the copy button icon                                                                                                                               |
+| copyLabel             | <code>let</code> | No       | <code>string</code>                                  | --                                               | Specify the ARIA label of the copy button                                                                                                                                     |
+| feedback              | <code>let</code> | No       | <code>string</code>                                  | <code>"Copied!"</code>                           | Specify the feedback text displayed when clicking the snippet                                                                                                                 |
+| feedbackTimeout       | <code>let</code> | No       | <code>number</code>                                  | <code>2000</code>                                | Set the timeout duration (ms) to display feedback text                                                                                                                        |
+| showLessText          | <code>let</code> | No       | <code>string</code>                                  | <code>"Show less"</code>                         | Specify the show less text<br />`type` must be "multi"                                                                                                                        |
+| showMoreText          | <code>let</code> | No       | <code>string</code>                                  | <code>"Show more"</code>                         | Specify the show more text<br />`type` must be "multi"                                                                                                                        |
+| id                    | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the code element                                                                                                                                                |
 
 ### Slots
 
@@ -528,13 +528,14 @@ None.
 
 ### Events
 
-| Event name   | Type      | Detail |
-| :----------- | :-------- | :----- |
-| click        | forwarded | --     |
-| mouseover    | forwarded | --     |
-| mouseenter   | forwarded | --     |
-| mouseleave   | forwarded | --     |
-| animationend | forwarded | --     |
+| Event name   | Type       | Detail |
+| :----------- | :--------- | :----- |
+| click        | forwarded  | --     |
+| mouseover    | forwarded  | --     |
+| mouseenter   | forwarded  | --     |
+| mouseleave   | forwarded  | --     |
+| animationend | forwarded  | --     |
+| copy         | dispatched | --     |
 
 ## `CodeSnippetSkeleton`
 
