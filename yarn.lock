@@ -453,10 +453,10 @@ caniuse-lite@^1.0.30001181:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001183.tgz#7a57ba9d6584119bb5f2bc76d3cc47ba9356b3e2"
   integrity sha512-7JkwTEE1hlRKETbCFd8HDZeLiQIUcl8rC6JgNjvHCNaxOeNmQ9V4LvQXRUsKIV2CC73qKxljwVhToaA3kLRqTw==
 
-carbon-components@10.32.0-rc.0:
-  version "10.32.0-rc.0"
-  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.32.0-rc.0.tgz#e5886b6ebce37f378159938a08eae09da5d1cb04"
-  integrity sha512-+0hwzLWa3YUG3i+Re1HgX0BslzuLLe/5EPRugGUEmklJsozUv4SjmMPZU4yk1As4kCqsxQ+h3sRSFSsPRpL1bg==
+carbon-components@10.32.0:
+  version "10.32.0"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.32.0.tgz#0fbf60ea8fc12cea43ae7860bec844b3c2c0880f"
+  integrity sha512-LM44X6VhUc+yrZBSz+IW1aT/OGxAS0oiiy/kV7CiDpsUDF5zlPOwgokZbeYLo2mhB1wBZ1q9jwvItZ4zfaZuMw==
   dependencies:
     "@carbon/telemetry" "0.0.0-alpha.6"
     flatpickr "4.6.1"
