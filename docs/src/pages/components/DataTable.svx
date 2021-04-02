@@ -550,10 +550,16 @@ The slot name for the table header cells is `"cell-header"`.
 
 ### Sortable
 
+Set `sortable` to `true` to enable table column sorting.
+
+To disable sorting on a specific column, set `sort` to `false` in the header object passed to the `headers` prop.
+
+In the example below, the "Protocol" column is not sortable.
+
 <DataTable sortable
   headers="{[
     { key: "name", value: "Name" },
-    { key: "protocol", value: "Protocol" },
+    { key: "protocol", value: "Protocol", sort: false },
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule" }
   ]}"
@@ -757,6 +763,189 @@ In the following example, each row in the sortable data table has an overflow me
   </div>
 </DataTable>
 
+### Expandable (compact size)
+
+<DataTable size="compact" expandable
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+>
+  <div slot="expanded-row" let:row>
+    <pre>
+      {JSON.stringify(row, null, 2)}
+    </pre>
+  </div>
+</DataTable>
+
+### Expandable (short size)
+
+<DataTable size="short" expandable
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+>
+  <div slot="expanded-row" let:row>
+    <pre>
+      {JSON.stringify(row, null, 2)}
+    </pre>
+  </div>
+</DataTable>
+
+### Expandable (tall size)
+
+<DataTable size="tall" expandable
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+>
+  <div slot="expanded-row" let:row>
+    <pre>
+      {JSON.stringify(row, null, 2)}
+    </pre>
+  </div>
+</DataTable>
+
 ### Batch expansion
 
 <DataTable batchExpansion
@@ -831,6 +1020,12 @@ In the following example, each row in the sortable data table has an overflow me
 `headers` can also be an array of objects. The type is the same as the `headers` prop type used in `DataTable`.
 
 <DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}]} rows={10} />
+
+### Skeleton with empty header
+
+Pass an object with `"empty"` set to `true` to render an empty table header column.
+
+<DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}, { empty: true }]} rows={10} />
 
 ### Skeleton without header, toolbar
 

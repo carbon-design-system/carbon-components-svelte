@@ -8,6 +8,11 @@ export interface CopyButtonProps extends CopyProps {
    * @default "Copy to clipboard"
    */
   iconDescription?: string;
+
+  /**
+   * Specify the text to copy
+   */
+  text?: string;
 }
 
 export default class CopyButton extends SvelteComponentTyped<
@@ -15,6 +20,7 @@ export default class CopyButton extends SvelteComponentTyped<
   {
     click: WindowEventMap["click"];
     animationend: WindowEventMap["animationend"];
+    copy: CustomEvent<any>;
   },
   {}
 > {}

@@ -26,6 +26,7 @@
   const position = writable([x, y]);
   const currentIndex = writable(-1);
   const hasPopup = writable(false);
+  const menuOffsetX = writable(0);
   const ctx = getContext("ContextMenu");
 
   let options = [];
@@ -44,6 +45,7 @@
   }
 
   setContext("ContextMenu", {
+    menuOffsetX,
     currentIndex,
     position,
     close,
@@ -77,8 +79,26 @@
 <svelte:window
   on:contextmenu|preventDefault="{(e) => {
     if (level > 1) return;
-    if (open || x === 0) x = e.x;
-    if (open || y === 0) y = e.y;
+
+    const { height, width } = ref.getBoundingClientRect();
+
+    if (open || x === 0) {
+      if (window.innerWidth - width < e.x) {
+        x = e.x - width;
+      } else {
+        x = e.x;
+      }
+    }
+
+    if (open || y === 0) {
+      menuOffsetX.set(e.x);
+
+      if (window.innerHeight - height < e.y) {
+        y = e.y - height;
+      } else {
+        y = e.y;
+      }
+    }
     position.set([x, y]);
     open = true;
   }}"

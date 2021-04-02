@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
-import { DataTableHeader } from "../DataTable/DataTable";
+import { DataTableHeader } from "./DataTable";
 
 export interface DataTableSkeletonProps
   extends DataTableHeader,

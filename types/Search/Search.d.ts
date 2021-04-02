@@ -14,6 +14,12 @@ export interface SearchProps {
   size?: "sm" | "lg" | "xl";
 
   /**
+   * Specify the class name passed to the outer div element
+   * @default ""
+   */
+  searchClass?: string;
+
+  /**
    * Set to `true` to display the skeleton state
    * @default false
    */

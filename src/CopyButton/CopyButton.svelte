@@ -4,8 +4,18 @@
   /** Set the title and ARIA label for the copy button */
   export let iconDescription = "Copy to clipboard";
 
-  import { Copy } from "../Copy";
-  import Copy16 from "carbon-icons-svelte/lib/Copy16";
+  /**
+   * Specify the text to copy
+   * @type {string}
+   */
+  export let text = undefined;
+
+  import Copy from "../Copy/Copy.svelte";
+  import Copy16 from "carbon-icons-svelte/lib/Copy16/Copy16.svelte";
+  import copy from "clipboard-copy";
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
 </script>
 
 <Copy
@@ -14,6 +24,12 @@
   title="{iconDescription}"
   {...$$restProps}
   on:click
+  on:click="{() => {
+    if (text !== undefined) {
+      copy(text);
+      dispatch('copy');
+    }
+  }}"
   on:animationend
 >
   <Copy16 class="bx--snippet__icon" />

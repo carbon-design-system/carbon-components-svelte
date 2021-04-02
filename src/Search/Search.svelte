@@ -12,6 +12,9 @@
    */
   export let size = "xl";
 
+  /** Specify the class name passed to the outer div element */
+  export let searchClass = "";
+
   /**
    * Set to `true` to display the skeleton state
    * @type {boolean} [skeleton=false]
@@ -98,6 +101,7 @@
     class:bx--search--sm="{size === 'sm' || small}"
     class:bx--search--lg="{size === 'lg'}"
     class:bx--search--xl="{size === 'xl'}"
+    class="{searchClass}"
   >
     <Search16 class="bx--search-magnifier" />
     <label id="{id}-search" for="{id}" class:bx--label="{true}"

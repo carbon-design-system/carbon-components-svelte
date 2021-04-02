@@ -1,4 +1,10 @@
 <script>
+  /**
+   * Specify the kind of option
+   * @type {"default" | "danger"}
+   */
+  export let kind = "default";
+
   /** Set to `true` to enable the disabled state */
   export let disabled = false;
 
@@ -64,9 +70,14 @@
   let role = "menuitem";
   let submenuOpen = false;
   let submenuPosition = [0, 0];
+  let menuOffsetX = 0;
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
+  });
+
+  const unsubMenuOffsetX = ctx.menuOffsetX.subscribe((_menuOffsetX) => {
+    menuOffsetX = _menuOffsetX;
   });
 
   function handleClick(opts = {}) {
@@ -106,6 +117,7 @@
 
     return () => {
       unsubPosition();
+      unsubMenuOffsetX();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
@@ -118,7 +130,13 @@
   $: ctx.setPopup(submenuOpen);
   $: if (submenuOpen) {
     const { width, y } = ref.getBoundingClientRect();
-    submenuPosition = [rootMenuPosition[0] + width, y];
+    let x = rootMenuPosition[0] + width;
+
+    if (window.innerWidth - menuOffsetX < width) {
+      x = rootMenuPosition[0] - width;
+    }
+
+    submenuPosition = [x, y];
   }
   $: {
     if (isSelectable) {
@@ -158,6 +176,7 @@
   class:bx--context-menu-option="{true}"
   class:bx--context-menu-option--disabled="{true}"
   class:bx--context-menu-option--active="{subOptions && submenuOpen}"
+  class:bx--context-menu-option--danger="{!subOptions && kind === 'danger'}"
   indented="{indented}"
   aria-checked="{isSelectable || isRadio ? selected : undefined}"
   data-nested="{ref &&

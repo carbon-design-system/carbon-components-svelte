@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"../DataTable/DataTable"} DataTableHeader */
+  /** @extends {"./DataTable"} DataTableHeader */
 
   /**
    * Specify the number of columns
@@ -77,7 +77,11 @@
     <thead>
       <tr>
         {#each cols as col (col)}
-          <th>{values[col] || ""}</th>
+          {#if typeof values[col] === "object" && values[col].empty === true}
+            <th></th>
+          {:else}
+            <th>{values[col] || ""}</th>
+          {/if}
         {/each}
       </tr>
     </thead>

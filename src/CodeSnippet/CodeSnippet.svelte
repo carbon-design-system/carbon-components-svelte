@@ -8,6 +8,7 @@
   /**
    * Set the code snippet text
    * Alternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)
+   * You must use the `code` prop to copy the code
    * @type {string}
    */
   export let code = undefined;
@@ -75,16 +76,24 @@
   /** Obtain a reference to the pre HTML element */
   export let ref = null;
 
-  import { tick } from "svelte";
+  import { createEventDispatcher, tick } from "svelte";
+  import copy from "clipboard-copy";
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
   import Button from "../Button/Button.svelte";
   import Copy from "../Copy/Copy.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
+  const dispatch = createEventDispatcher();
+
   function setShowMoreLess() {
     const { height } = ref.getBoundingClientRect();
     if (height > 0) showMoreLess = ref.getBoundingClientRect().height > 255;
+  }
+
+  function copyCode() {
+    copy(code);
+    dispatch("copy");
   }
 
   $: expandText = expanded ? showLessText : showMoreText;
@@ -138,6 +147,7 @@
           {wrapText && 'bx--snippet--wraptext'}"
       {...$$restProps}
       on:click
+      on:click="{copyCode}"
       on:mouseover
       on:mouseenter
       on:mouseleave
@@ -182,6 +192,7 @@
         feedbackTimeout="{feedbackTimeout}"
         iconDescription="{copyButtonDescription}"
         on:click
+        on:click="{copyCode}"
         on:animationend
       />
     {/if}

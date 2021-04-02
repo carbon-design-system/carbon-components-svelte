@@ -121,7 +121,7 @@ export {
 export { TimePicker, TimePickerSelect } from "./TimePicker";
 export { Toggle, ToggleSkeleton } from "./Toggle";
 export { ToggleSmall, ToggleSmallSkeleton } from "./ToggleSmall";
-export { Tooltip } from "./Tooltip";
+export { Tooltip, TooltipFooter } from "./Tooltip";
 export { TooltipDefinition } from "./TooltipDefinition";
 export { TooltipIcon } from "./TooltipIcon";
 export { Truncate } from "./Truncate";

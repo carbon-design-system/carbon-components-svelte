@@ -453,10 +453,10 @@ caniuse-lite@^1.0.30001181:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001183.tgz#7a57ba9d6584119bb5f2bc76d3cc47ba9356b3e2"
   integrity sha512-7JkwTEE1hlRKETbCFd8HDZeLiQIUcl8rC6JgNjvHCNaxOeNmQ9V4LvQXRUsKIV2CC73qKxljwVhToaA3kLRqTw==
 
-carbon-components@10.31.0:
-  version "10.31.0"
-  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.31.0.tgz#050751e7fb4d845b7d1c6e8ac7fdfa9c71403c12"
-  integrity sha512-gUXRky9rUHavqFLJJQf+Lzouk8GHsXJUjxRgTOUQ6vdBfA0ks6ugwptG8fiFGwCJJht/CW9/YsKb5w8N9a39sg==
+carbon-components@10.32.0:
+  version "10.32.0"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.32.0.tgz#0fbf60ea8fc12cea43ae7860bec844b3c2c0880f"
+  integrity sha512-LM44X6VhUc+yrZBSz+IW1aT/OGxAS0oiiy/kV7CiDpsUDF5zlPOwgokZbeYLo2mhB1wBZ1q9jwvItZ4zfaZuMw==
   dependencies:
     "@carbon/telemetry" "0.0.0-alpha.6"
     flatpickr "4.6.1"
@@ -539,6 +539,11 @@ cli-truncate@^2.1.0:
   dependencies:
     slice-ansi "^3.0.0"
     string-width "^4.2.0"
+
+clipboard-copy@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/clipboard-copy/-/clipboard-copy-3.2.0.tgz#3c5b8651d3512dcfad295d77a9eb09e7fac8d5fb"
+  integrity sha512-vooFaGFL6ulEP1liiaWFBmmfuPm3cY3y7T9eB83ZTnYc/oFeAKsq3NcDrOkBC8XaauEE8zHQwI7k0+JSYiVQSQ==
 
 cliui@^7.0.2:
   version "7.0.4"

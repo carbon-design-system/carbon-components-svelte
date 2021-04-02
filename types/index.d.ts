@@ -139,6 +139,7 @@ export { default as ToggleSkeleton } from "./Toggle/ToggleSkeleton";
 export { default as ToggleSmall } from "./ToggleSmall/ToggleSmall";
 export { default as ToggleSmallSkeleton } from "./ToggleSmall/ToggleSmallSkeleton";
 export { default as Tooltip } from "./Tooltip/Tooltip";
+export { default as TooltipFooter } from "./Tooltip/TooltipFooter";
 export { default as TooltipDefinition } from "./TooltipDefinition/TooltipDefinition";
 export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon";
 export { default as Truncate } from "./Truncate/Truncate";

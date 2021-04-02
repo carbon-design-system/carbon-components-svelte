@@ -9,7 +9,6 @@
   } from "carbon-components-svelte";
   import TileCard from "../components/TileCard.svelte";
   import { metatags } from "@sveltech/routify";
-  import copy from "clipboard-copy";
 
   metatags.title = "Carbon Components Svelte";
   metatags.description =
@@ -53,21 +52,9 @@
       <Column>
         <h3>Install</h3>
         <h4>Installing with yarn:</h4>
-        <CodeSnippet
-          code="{installYarn}"
-          on:click="{() => {
-            copy(installYarn);
-          }}"
-        />
-
+        <CodeSnippet code="{installYarn}" />
         <h4>Using npm:</h4>
-
-        <CodeSnippet
-          code="{installNpm}"
-          on:click="{() => {
-            copy(installNpm);
-          }}"
-        />
+        <CodeSnippet code="{installNpm}" />
       </Column>
     </Row>
     <Row>

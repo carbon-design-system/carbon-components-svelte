@@ -13,6 +13,10 @@
   export let isCurrentPage = false;
 
   import Link from "../Link/Link.svelte";
+
+  import { setContext } from "svelte";
+
+  setContext("BreadcrumbItem", {});
 </script>
 
 <li

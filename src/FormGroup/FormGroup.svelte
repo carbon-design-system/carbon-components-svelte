@@ -5,6 +5,9 @@
   /** Set to `true` to render a form requirement */
   export let message = false;
 
+  /** Set to `true` for to remove the bottom margin */
+  export let noMargin = false;
+
   /** Specify the message text */
   export let messageText = "";
 
@@ -15,6 +18,7 @@
 <fieldset
   data-invalid="{invalid || undefined}"
   class:bx--fieldset="{true}"
+  class:bx--fieldset--no-margin="{noMargin}"
   {...$$restProps}
   on:click
   on:mouseover

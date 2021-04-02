@@ -28,20 +28,26 @@ let comment = `
 </script>
 
 <InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">By design, the copy button does not copy text to the clipboard. You will need to write your own logic. Refer to the <Link href="/recipes/CopyableCodeSnippet">CopyableCodeSnippet recipe</Link> for an example.</div>
+  <div class="body-short-01">As of version 0.32, the CodeSnippet will copy the provided `code` text when clicking the copy button.</div>
 </InlineNotification>
 
 ### Default (single-line)
 
-<CodeSnippet>yarn add -D carbon-components-svelte</CodeSnippet>
+<CodeSnippet code="yarn add -D carbon-components-svelte" />
 
 ### Inline
 
-<CodeSnippet type="inline">rm -rf node_modules/</CodeSnippet>
+<CodeSnippet type="inline" code="rm -rf node_modules/" />
 
 ### Multi-line
 
 <CodeSnippet type="multi" {code} />
+
+### Custom copy feedback text
+
+Use the `feedback` prop to override the default copy button feedback text.
+
+<CodeSnippet type="multi" {code} feedback="Copied to clipboard" />
 
 ### Hidden copy button
 
@@ -51,7 +57,7 @@ let comment = `
 
 The `disabled` prop applies only to the `"single"` and `"multi"` code snippet types.
 
-<CodeSnippet disabled>yarn add -D carbon-components-svelte</CodeSnippet>
+<CodeSnippet disabled code="yarn add -D carbon-components-svelte" />
 <br />
 <CodeSnippet disabled type="multi" code="{comment}" />
 

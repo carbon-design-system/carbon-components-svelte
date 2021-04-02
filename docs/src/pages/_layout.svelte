@@ -105,7 +105,11 @@
           >
             {child.title}
             {#if deprecated.includes(child.title)}
-              <Tag size="sm" type="red" style="margin-top: 0; margin-bottom: 0">
+              <Tag
+                size="sm"
+                type="red"
+                style="margin-top: 0; margin-bottom: 0; cursor: inherit"
+              >
                 Deprecated
               </Tag>
             {/if}
@@ -113,7 +117,7 @@
               <Tag
                 size="sm"
                 type="green"
-                style="margin-top: 0; margin-bottom: 0"
+                style="margin-top: 0; margin-bottom: 0; cursor: inherit"
               >
                 New
               </Tag>

@@ -2,8 +2,8 @@
   /**
    * @typedef {string} DataTableKey
    * @typedef {any} DataTableValue
-   * @typedef {{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }} DataTableEmptyHeader
-   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }} DataTableNonEmptyHeader
+   * @typedef {{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }} DataTableEmptyHeader
+   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }} DataTableNonEmptyHeader
    * @typedef {DataTableNonEmptyHeader | DataTableEmptyHeader} DataTableHeader
    * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
    * @typedef {string} DataTableRowId
@@ -13,7 +13,7 @@
    * @slot {{ row: DataTableRow; cell: DataTableCell; }} cell
    * @event {{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }} click
    * @event {{ expanded: boolean; }} click:header--expand
-   * @event {{ header: DataTableHeader; sortDirection: "ascending" | "descending" | "none" }} click:header
+   * @event {{ header: DataTableHeader; sortDirection?: "ascending" | "descending" | "none" }} click:header
    * @event {DataTableRow} click:row
    * @event {DataTableRow} mouseenter:row
    * @event {DataTableRow} mouseleave:row
@@ -250,20 +250,26 @@
             <th scope="col"></th>
           {:else}
             <TableHeader
+              disableSorting="{header.sort === false}"
               on:click="{() => {
                 dispatch('click', { header });
-                let active = header.key === $sortHeader.key;
-                let currentSortDirection = active
-                  ? $sortHeader.sortDirection
-                  : 'none';
-                let sortDirection = sortDirectionMap[currentSortDirection];
-                dispatch('click:header', { header, sortDirection });
-                sortHeader.set({
-                  id: sortDirection === 'none' ? null : $thKeys[header.key],
-                  key: header.key,
-                  sort: header.sort,
-                  sortDirection,
-                });
+
+                if (header.sort === false) {
+                  dispatch('click:header', { header });
+                } else {
+                  let active = header.key === $sortHeader.key;
+                  let currentSortDirection = active
+                    ? $sortHeader.sortDirection
+                    : 'none';
+                  let sortDirection = sortDirectionMap[currentSortDirection];
+                  dispatch('click:header', { header, sortDirection });
+                  sortHeader.set({
+                    id: sortDirection === 'none' ? null : $thKeys[header.key],
+                    key: header.key,
+                    sort: header.sort,
+                    sortDirection,
+                  });
+                }
               }}"
             >
               <slot name="cell-header" header="{header}">{header.value}</slot>

@@ -1,5 +1,5 @@
 {
-  "total": 166,
+  "total": 167,
   "components": [
     {
       "moduleName": "Accordion",
@@ -805,7 +805,7 @@
         {
           "name": "code",
           "kind": "let",
-          "description": "Set the code snippet text\nAlternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)",
+          "description": "Set the code snippet text\nAlternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)\nYou must use the `code` prop to copy the code",
           "type": "string",
           "isFunction": false,
           "constant": false,
@@ -989,7 +989,12 @@
           "name": "mouseleave",
           "element": "CodeSnippetSkeleton"
         },
-        { "type": "forwarded", "name": "animationend", "element": "CopyButton" }
+        {
+          "type": "forwarded",
+          "name": "animationend",
+          "element": "CopyButton"
+        },
+        { "type": "dispatched", "name": "copy" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "CodeSnippetSkeleton" }
@@ -1652,6 +1657,16 @@
       "filePath": "src/ContextMenu/ContextMenuOption.svelte",
       "props": [
         {
+          "name": "kind",
+          "kind": "let",
+          "description": "Specify the kind of option",
+          "type": "\"default\" | \"danger\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "disabled",
           "kind": "let",
           "description": "Set to `true` to enable the disabled state",
@@ -1857,12 +1872,22 @@
           "isFunction": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "text",
+          "kind": "let",
+          "description": "Specify the text to copy",
+          "type": "string",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [],
       "events": [
         { "type": "forwarded", "name": "click", "element": "Copy" },
-        { "type": "forwarded", "name": "animationend", "element": "Copy" }
+        { "type": "forwarded", "name": "animationend", "element": "Copy" },
+        { "type": "dispatched", "name": "copy" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "Copy" },
@@ -2056,7 +2081,7 @@
         {
           "type": "dispatched",
           "name": "click:header",
-          "detail": "{ header: DataTableHeader; sortDirection: \"ascending\" | \"descending\" | \"none\" }"
+          "detail": "{ header: DataTableHeader; sortDirection?: \"ascending\" | \"descending\" | \"none\" }"
         },
         { "type": "dispatched", "name": "click:row", "detail": "DataTableRow" },
         {
@@ -2092,14 +2117,14 @@
           "ts": "type DataTableValue = any"
         },
         {
-          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }",
+          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }",
           "name": "DataTableEmptyHeader",
-          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }"
+          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }"
         },
         {
-          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }",
+          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }",
           "name": "DataTableNonEmptyHeader",
-          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }"
+          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }"
         },
         {
           "type": "DataTableNonEmptyHeader | DataTableEmptyHeader",
@@ -2207,10 +2232,7 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" },
-      "extends": {
-        "interface": "DataTableHeader",
-        "import": "\"../DataTable/DataTable\""
-      }
+      "extends": { "interface": "DataTableHeader", "import": "\"./DataTable\"" }
     },
     {
       "moduleName": "DatePicker",
@@ -3493,6 +3515,16 @@
           "name": "message",
           "kind": "let",
           "description": "Set to `true` to render a form requirement",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "noMargin",
+          "kind": "let",
+          "description": "Set to `true` for to remove the bottom margin",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -5766,6 +5798,16 @@
           "isFunction": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "inputRef",
+          "kind": "let",
+          "description": "Obtain a reference to the input HTML element",
+          "type": "null | HTMLInputElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
         }
       ],
       "slots": [],
@@ -6354,7 +6396,7 @@
           "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
-          "reactive": false
+          "reactive": true
         },
         {
           "name": "iconClass",
@@ -7519,6 +7561,16 @@
           "reactive": false
         },
         {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the tile",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "value",
           "kind": "let",
           "description": "Specify the value of the radio input",
@@ -7686,6 +7738,16 @@
           "description": "Specify the size of the search input",
           "type": "\"sm\" | \"lg\" | \"xl\"",
           "value": "\"xl\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "searchClass",
+          "kind": "let",
+          "description": "Specify the class name passed to the outer div element",
+          "type": "string",
+          "value": "\"\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -8165,6 +8227,16 @@
           "name": "light",
           "kind": "let",
           "description": "Set to `true` to enable the light variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the tile",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -9369,6 +9441,16 @@
       "moduleName": "TableHeader",
       "filePath": "src/DataTable/TableHeader.svelte",
       "props": [
+        {
+          "name": "disableSorting",
+          "kind": "let",
+          "description": "Set to `true` to disable sorting on this specific cell",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
         {
           "name": "scope",
           "kind": "let",
@@ -11156,6 +11238,25 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "TooltipFooter",
+      "filePath": "src/Tooltip/TooltipFooter.svelte",
+      "props": [
+        {
+          "name": "selectorPrimaryFocus",
+          "kind": "let",
+          "description": "Specify a selector to be focused inside the footer when opening the tooltip",
+          "type": "string",
+          "value": "\"a[href], button:not([disabled])\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "TooltipIcon",

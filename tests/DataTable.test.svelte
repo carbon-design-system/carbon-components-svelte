@@ -10,13 +10,14 @@
     Button,
     Link,
   } from "../types";
+  import type { DataTableHeader } from "../types/DataTable/DataTable";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
 
-  const headers = [
+  const headers: DataTableHeader[] = [
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
     { key: "port", value: "Port" },
-    { key: "rule", value: "Rule" },
+    { key: "rule", value: "Rule", sort: false },
   ];
   const rows = [
     {
@@ -249,6 +250,7 @@
     { value: 'Protocol' },
     { value: 'Port' },
     { value: 'Rule' },
+    { empty: true },
   ]}"
   rows="{10}"
 />

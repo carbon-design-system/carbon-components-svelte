@@ -1,6 +1,6 @@
 # Component Index
 
-> 166 components exported from carbon-components-svelte@0.31.1.
+> 167 components exported from carbon-components-svelte@0.31.1.
 
 ## Components
 
@@ -167,6 +167,7 @@
 - [`ToolbarSearch`](#toolbarsearch)
 - [`Tooltip`](#tooltip)
 - [`TooltipDefinition`](#tooltipdefinition)
+- [`TooltipFooter`](#tooltipfooter)
 - [`TooltipIcon`](#tooltipicon)
 - [`Truncate`](#truncate)
 - [`UnorderedList`](#unorderedlist)
@@ -500,25 +501,25 @@ None.
 
 ### Props
 
-| Prop name             | Kind             | Reactive | Type                                                 | Default value                                    | Description                                                                                                                |
-| :-------------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| ref                   | <code>let</code> | Yes      | <code>null &#124; HTMLPreElement</code>              | <code>null</code>                                | Obtain a reference to the pre HTML element                                                                                 |
-| showMoreLess          | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the show more/less button                                                                          |
-| expanded              | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to expand a multi-line code snippet (type="multi")                                                           |
-| type                  | <code>let</code> | No       | <code>"single" &#124; "inline" &#124; "multi"</code> | <code>"single"</code>                            | Set the type of code snippet                                                                                               |
-| code                  | <code>let</code> | No       | <code>string</code>                                  | --                                               | Set the code snippet text<br />Alternatively, use the default slot (e.g., &lt;CodeSnippet&gt;{`code`}&lt;/CodeSnippet&gt;) |
-| hideCopyButton        | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to hide the copy button                                                                                      |
-| disabled              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` for the disabled variant<br />Only applies to the "single", "multi" types                                    |
-| wrapText              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to wrap the text<br />Note that `type` must be "multi"                                                       |
-| light                 | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                                                                                  |
-| skeleton              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to display the skeleton state                                                                                |
-| copyButtonDescription | <code>let</code> | No       | <code>string</code>                                  | --                                               | Specify the ARIA label for the copy button icon                                                                            |
-| copyLabel             | <code>let</code> | No       | <code>string</code>                                  | --                                               | Specify the ARIA label of the copy button                                                                                  |
-| feedback              | <code>let</code> | No       | <code>string</code>                                  | <code>"Copied!"</code>                           | Specify the feedback text displayed when clicking the snippet                                                              |
-| feedbackTimeout       | <code>let</code> | No       | <code>number</code>                                  | <code>2000</code>                                | Set the timeout duration (ms) to display feedback text                                                                     |
-| showLessText          | <code>let</code> | No       | <code>string</code>                                  | <code>"Show less"</code>                         | Specify the show less text<br />`type` must be "multi"                                                                     |
-| showMoreText          | <code>let</code> | No       | <code>string</code>                                  | <code>"Show more"</code>                         | Specify the show more text<br />`type` must be "multi"                                                                     |
-| id                    | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the code element                                                                                             |
+| Prop name             | Kind             | Reactive | Type                                                 | Default value                                    | Description                                                                                                                                                                   |
+| :-------------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ref                   | <code>let</code> | Yes      | <code>null &#124; HTMLPreElement</code>              | <code>null</code>                                | Obtain a reference to the pre HTML element                                                                                                                                    |
+| showMoreLess          | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the show more/less button                                                                                                                             |
+| expanded              | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to expand a multi-line code snippet (type="multi")                                                                                                              |
+| type                  | <code>let</code> | No       | <code>"single" &#124; "inline" &#124; "multi"</code> | <code>"single"</code>                            | Set the type of code snippet                                                                                                                                                  |
+| code                  | <code>let</code> | No       | <code>string</code>                                  | --                                               | Set the code snippet text<br />Alternatively, use the default slot (e.g., &lt;CodeSnippet&gt;{`code`}&lt;/CodeSnippet&gt;)<br />You must use the `code` prop to copy the code |
+| hideCopyButton        | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to hide the copy button                                                                                                                                         |
+| disabled              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` for the disabled variant<br />Only applies to the "single", "multi" types                                                                                       |
+| wrapText              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to wrap the text<br />Note that `type` must be "multi"                                                                                                          |
+| light                 | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                                                                                                                                     |
+| skeleton              | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to display the skeleton state                                                                                                                                   |
+| copyButtonDescription | <code>let</code> | No       | <code>string</code>                                  | --                                               | Specify the ARIA label for the copy button icon                                                                                                                               |
+| copyLabel             | <code>let</code> | No       | <code>string</code>                                  | --                                               | Specify the ARIA label of the copy button                                                                                                                                     |
+| feedback              | <code>let</code> | No       | <code>string</code>                                  | <code>"Copied!"</code>                           | Specify the feedback text displayed when clicking the snippet                                                                                                                 |
+| feedbackTimeout       | <code>let</code> | No       | <code>number</code>                                  | <code>2000</code>                                | Set the timeout duration (ms) to display feedback text                                                                                                                        |
+| showLessText          | <code>let</code> | No       | <code>string</code>                                  | <code>"Show less"</code>                         | Specify the show less text<br />`type` must be "multi"                                                                                                                        |
+| showMoreText          | <code>let</code> | No       | <code>string</code>                                  | <code>"Show more"</code>                         | Specify the show more text<br />`type` must be "multi"                                                                                                                        |
+| id                    | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the code element                                                                                                                                                |
 
 ### Slots
 
@@ -528,13 +529,14 @@ None.
 
 ### Events
 
-| Event name   | Type      | Detail |
-| :----------- | :-------- | :----- |
-| click        | forwarded | --     |
-| mouseover    | forwarded | --     |
-| mouseenter   | forwarded | --     |
-| mouseleave   | forwarded | --     |
-| animationend | forwarded | --     |
+| Event name   | Type       | Detail |
+| :----------- | :--------- | :----- |
+| click        | forwarded  | --     |
+| mouseover    | forwarded  | --     |
+| mouseenter   | forwarded  | --     |
+| mouseleave   | forwarded  | --     |
+| animationend | forwarded  | --     |
+| copy         | dispatched | --     |
 
 ## `CodeSnippetSkeleton`
 
@@ -798,6 +800,7 @@ None.
 | selected     | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to use the selected variant                                                                                          |
 | icon         | <code>let</code> | Yes      | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                                               | Specify the icon from `carbon-icons-svelte` to render<br />Icon is rendered to the left of the label text                          |
 | indented     | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to indent the label                                                                                                  |
+| kind         | <code>let</code> | No       | <code>"default" &#124; "danger"</code>                       | <code>"default"</code>                           | Specify the kind of option                                                                                                         |
 | disabled     | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the disabled state                                                                                         |
 | labelText    | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the label text<br />Alternatively, use the "labelText" slot (e.g., &lt;span slot="labelText"&gt;...&lt;/span&gt;)          |
 | shortcutText | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the shortcut text<br />Alternatively, use the "shortcutText" slot (e.g., &lt;span slot="shortcutText"&gt;...&lt;/span&gt;) |
@@ -869,6 +872,7 @@ None.
 | Prop name       | Kind             | Reactive | Type                | Default value                    | Description                                      |
 | :-------------- | :--------------- | :------- | :------------------ | -------------------------------- | ------------------------------------------------ |
 | iconDescription | <code>let</code> | No       | <code>string</code> | <code>"Copy to clipboard"</code> | Set the title and ARIA label for the copy button |
+| text            | <code>let</code> | No       | <code>string</code> | --                               | Specify the text to copy                         |
 
 ### Slots
 
@@ -876,10 +880,11 @@ None.
 
 ### Events
 
-| Event name   | Type      | Detail |
-| :----------- | :-------- | :----- |
-| click        | forwarded | --     |
-| animationend | forwarded | --     |
+| Event name   | Type       | Detail |
+| :----------- | :--------- | :----- |
+| click        | forwarded  | --     |
+| animationend | forwarded  | --     |
+| copy         | dispatched | --     |
 
 ## `DataTable`
 
@@ -894,7 +899,7 @@ export interface DataTableEmptyHeader {
   key: DataTableKey;
   empty: boolean;
   display?: (item: Value) => DataTableValue;
-  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
+  sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
 }
 
@@ -902,7 +907,7 @@ export interface DataTableNonEmptyHeader {
   key: DataTableKey;
   value: DataTableValue;
   display?: (item: Value) => DataTableValue;
-  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
+  sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
 }
 
@@ -952,16 +957,16 @@ export interface DataTableCell {
 
 ### Events
 
-| Event name           | Type       | Detail                                                                                                 |
-| :------------------- | :--------- | :----------------------------------------------------------------------------------------------------- |
-| click                | dispatched | <code>{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }</code>                   |
-| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                    |
-| click:header         | dispatched | <code>{ header: DataTableHeader; sortDirection: "ascending" &#124; "descending" &#124; "none" }</code> |
-| click:row            | dispatched | <code>DataTableRow</code>                                                                              |
-| mouseenter:row       | dispatched | <code>DataTableRow</code>                                                                              |
-| mouseleave:row       | dispatched | <code>DataTableRow</code>                                                                              |
-| click:row--expand    | dispatched | <code>{ expanded: boolean; row: DataTableRow; }</code>                                                 |
-| click:cell           | dispatched | <code>DataTableCell</code>                                                                             |
+| Event name           | Type       | Detail                                                                                                  |
+| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------ |
+| click                | dispatched | <code>{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }</code>                    |
+| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                     |
+| click:header         | dispatched | <code>{ header: DataTableHeader; sortDirection?: "ascending" &#124; "descending" &#124; "none" }</code> |
+| click:row            | dispatched | <code>DataTableRow</code>                                                                               |
+| mouseenter:row       | dispatched | <code>DataTableRow</code>                                                                               |
+| mouseleave:row       | dispatched | <code>DataTableRow</code>                                                                               |
+| click:row--expand    | dispatched | <code>{ expanded: boolean; row: DataTableRow; }</code>                                                  |
+| click:cell           | dispatched | <code>DataTableCell</code>                                                                              |
 
 ## `DataTableSkeleton`
 
@@ -1402,12 +1407,13 @@ None.
 
 ### Props
 
-| Prop name   | Kind             | Reactive | Type                 | Default value      | Description                                |
-| :---------- | :--------------- | :------- | :------------------- | ------------------ | ------------------------------------------ |
-| invalid     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to indicate an invalid state |
-| message     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a form requirement |
-| messageText | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the message text                   |
-| legendText  | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                    |
+| Prop name   | Kind             | Reactive | Type                 | Default value      | Description                                   |
+| :---------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------------- |
+| invalid     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to indicate an invalid state    |
+| message     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a form requirement    |
+| noMargin    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for to remove the bottom margin |
+| messageText | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the message text                      |
+| legendText  | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                       |
 
 ### Slots
 
@@ -2323,6 +2329,7 @@ export interface MultiSelectItem {
 
 | Prop name         | Kind             | Reactive | Type                                                                                           | Default value                                                                       | Description                                                                           |
 | :---------------- | :--------------- | :------- | :--------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| inputRef          | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                      | <code>null</code>                                                                   | Obtain a reference to the input HTML element                                          |
 | open              | <code>let</code> | Yes      | <code>boolean</code>                                                                           | <code>false</code>                                                                  | Set to `true` to open the dropdown                                                    |
 | value             | <code>let</code> | Yes      | <code>string</code>                                                                            | <code>""</code>                                                                     | Specify the multiselect value                                                         |
 | selectedIds       | <code>let</code> | Yes      | <code>MultiSelectItemId[]</code>                                                               | <code>[]</code>                                                                     | Set the selected ids                                                                  |
@@ -2576,13 +2583,13 @@ None.
 | :--------------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
 | menuRef          | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>                    | <code>null</code>                                | Obtain a reference to the overflow menu element                   |
 | buttonRef        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                   | <code>null</code>                                | Obtain a reference to the trigger button element                  |
+| icon             | <code>let</code> | Yes      | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                                               | Specify the icon from `carbon-icons-svelte` to render             |
 | open             | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to open the menu                                    |
 | size             | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                                | --                                               | Specify the size of the overflow menu                             |
 | direction        | <code>let</code> | No       | <code>"top" &#124; "bottom"</code>                           | <code>"bottom"</code>                            | Specify the direction of the overflow menu relative to the button |
 | light            | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the light variant                         |
 | flipped          | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to flip the menu relative to the button             |
 | menuOptionsClass | <code>let</code> | No       | <code>string</code>                                          | --                                               | Specify the menu options class                                    |
-| icon             | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                                               | Specify the icon from `carbon-icons-svelte` to render             |
 | iconClass        | <code>let</code> | No       | <code>string</code>                                          | --                                               | Specify the icon class                                            |
 | iconDescription  | <code>let</code> | No       | <code>string</code>                                          | <code>"Open and close list of options"</code>    | Specify the ARIA label for the icon                               |
 | id               | <code>let</code> | No       | <code>string</code>                                          | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                  |
@@ -2945,6 +2952,7 @@ None.
 | :-------------- | :--------------- | :------- | :------------------- | ------------------------------------------------ | -------------------------------------------------------- |
 | checked         | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to check the tile                          |
 | light           | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to enable the light variant                |
+| disabled        | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to disable the tile                        |
 | value           | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the value of the radio input                     |
 | tabindex        | <code>let</code> | No       | <code>string</code>  | <code>"0"</code>                                 | Specify the tabindex                                     |
 | iconDescription | <code>let</code> | No       | <code>string</code>  | <code>"Tile checkmark"</code>                    | Specify the ARIA label for the radio tile checkmark icon |
@@ -3002,6 +3010,7 @@ None.
 | value                | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>                                  | Specify the value of the search input                   |
 | small                | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | --                                                      |
 | size                 | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code>                                | Specify the size of the search input                    |
+| searchClass          | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the class name passed to the outer div element  |
 | skeleton             | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state             |
 | light                | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant               |
 | disabled             | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the search input               |
@@ -3158,6 +3167,7 @@ None.
 | ref             | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element                  |
 | selected        | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to select the tile                              |
 | light           | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                     |
+| disabled        | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the tile                             |
 | title           | <code>let</code> | No       | <code>string</code>                       | <code>"title"</code>                             | Specify the title of the selectable tile                      |
 | value           | <code>let</code> | No       | <code>string</code>                       | <code>"value"</code>                             | Specify the value of the selectable tile                      |
 | tabindex        | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify the tabindex                                          |
@@ -3762,11 +3772,12 @@ None.
 
 ### Props
 
-| Prop name       | Kind             | Reactive | Type                      | Default value                                    | Description                          |
-| :-------------- | :--------------- | :------- | :------------------------ | ------------------------------------------------ | ------------------------------------ |
-| scope           | <code>let</code> | No       | <code>string</code>       | <code>"col"</code>                               | Specify the `scope` attribute        |
-| translateWithId | <code>let</code> | No       | <code>() => string</code> | <code>() => ""</code>                            | Override the default id translations |
-| id              | <code>let</code> | No       | <code>string</code>       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element  |
+| Prop name       | Kind             | Reactive | Type                      | Default value                                    | Description                                            |
+| :-------------- | :--------------- | :------- | :------------------------ | ------------------------------------------------ | ------------------------------------------------------ |
+| disableSorting  | <code>let</code> | No       | <code>boolean</code>      | <code>false</code>                               | Set to `true` to disable sorting on this specific cell |
+| scope           | <code>let</code> | No       | <code>string</code>       | <code>"col"</code>                               | Specify the `scope` attribute                          |
+| translateWithId | <code>let</code> | No       | <code>() => string</code> | <code>() => ""</code>                            | Override the default id translations                   |
+| id              | <code>let</code> | No       | <code>string</code>       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element                    |
 
 ### Slots
 
@@ -4463,6 +4474,24 @@ None.
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
 | focus      | forwarded | --     |
+
+## `TooltipFooter`
+
+### Props
+
+| Prop name            | Kind             | Reactive | Type                | Default value                                  | Description                                                                 |
+| :------------------- | :--------------- | :------- | :------------------ | ---------------------------------------------- | --------------------------------------------------------------------------- |
+| selectorPrimaryFocus | <code>let</code> | No       | <code>string</code> | <code>"a[href], button:not([disabled])"</code> | Specify a selector to be focused inside the footer when opening the tooltip |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `TooltipIcon`
 

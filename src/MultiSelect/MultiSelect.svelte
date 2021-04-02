@@ -125,6 +125,9 @@
    */
   export let name = undefined;
 
+  /** Obtain a reference to the input HTML element */
+  export let inputRef = null;
+
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
@@ -143,7 +146,7 @@
   let multiSelectRef = null;
   let fieldRef = null;
   let selectionRef = null;
-  let inputRef = null;
+
   let inputValue = "";
   let initialSorted = false;
   let highlightedIndex = -1;
