@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.32.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.32.0) - 2021-04-02
+
+**Breaking Changes**
+
+- copy text by default in `CodeSnippet` and `CopyButton` using `clipboard-copy`
+- deprecate `light` prop in `ContentSwitcher`
+
+**Features**
+
+- support disabled state for `SelectableTile`, `RadioTile`
+- add `TooltipFooter` component
+- support `OverflowMenu` in Breadcrumbs
+- support danger kind for `ContextMenuOption`
+- allow sorting to be disabled for a specific header in `DataTable`
+- render an empty header column in `DataTableSkeleton` if a value is `{ "empty": true }`
+- export `inputRef` prop in `MultiSelect`
+- add `searchClass` prop to `Search`, which is passed to the outermost element
+- add `noMargin` prop to `FormGroup` to remove default bottom margin (default value is `false`)
+
+**Fixes**
+
+- render initial `ContextMenu` position based on viewport constraints
+- correctly display invalid text in `TimePicker`
+- remove outer div in `ToolbarSearch`
+- set hasScrollingContent class on `ModalBody`
+
+**Documentation**
+
+- add disabled state examples for `SelectableTile`, `RadioTile`
+- add expandable `DataTable` size examples, empty header column `DataTableSkeleton` example
+- remove the light `ContentSwitcher` example
+
+**Housekeeping**
+
+- upgrade `carbon-components` to version 10.32.0
+- add `clipboard-copy` to direct dependencies
+
 ## [0.31.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.31.1) - 2021-03-28
 
 **Fixes**
