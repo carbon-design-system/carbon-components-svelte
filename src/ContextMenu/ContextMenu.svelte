@@ -78,7 +78,15 @@
   on:contextmenu|preventDefault="{(e) => {
     if (level > 1) return;
     if (open || x === 0) x = e.x;
-    if (open || y === 0) y = e.y;
+    if (open || y === 0) {
+      const { height } = ref.getBoundingClientRect();
+
+      if (window.innerHeight - height < e.y) {
+        y = e.y - height;
+      } else {
+        y = e.y;
+      }
+    }
     position.set([x, y]);
     open = true;
   }}"
