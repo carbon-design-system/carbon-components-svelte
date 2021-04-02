@@ -899,7 +899,7 @@ export interface DataTableEmptyHeader {
   key: DataTableKey;
   empty: boolean;
   display?: (item: Value) => DataTableValue;
-  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
+  sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
 }
 
@@ -907,7 +907,7 @@ export interface DataTableNonEmptyHeader {
   key: DataTableKey;
   value: DataTableValue;
   display?: (item: Value) => DataTableValue;
-  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
+  sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
 }
 
@@ -957,16 +957,16 @@ export interface DataTableCell {
 
 ### Events
 
-| Event name           | Type       | Detail                                                                                                 |
-| :------------------- | :--------- | :----------------------------------------------------------------------------------------------------- |
-| click                | dispatched | <code>{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }</code>                   |
-| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                    |
-| click:header         | dispatched | <code>{ header: DataTableHeader; sortDirection: "ascending" &#124; "descending" &#124; "none" }</code> |
-| click:row            | dispatched | <code>DataTableRow</code>                                                                              |
-| mouseenter:row       | dispatched | <code>DataTableRow</code>                                                                              |
-| mouseleave:row       | dispatched | <code>DataTableRow</code>                                                                              |
-| click:row--expand    | dispatched | <code>{ expanded: boolean; row: DataTableRow; }</code>                                                 |
-| click:cell           | dispatched | <code>DataTableCell</code>                                                                             |
+| Event name           | Type       | Detail                                                                                                  |
+| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------ |
+| click                | dispatched | <code>{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }</code>                    |
+| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                     |
+| click:header         | dispatched | <code>{ header: DataTableHeader; sortDirection?: "ascending" &#124; "descending" &#124; "none" }</code> |
+| click:row            | dispatched | <code>DataTableRow</code>                                                                               |
+| mouseenter:row       | dispatched | <code>DataTableRow</code>                                                                               |
+| mouseleave:row       | dispatched | <code>DataTableRow</code>                                                                               |
+| click:row--expand    | dispatched | <code>{ expanded: boolean; row: DataTableRow; }</code>                                                  |
+| click:cell           | dispatched | <code>DataTableCell</code>                                                                              |
 
 ## `DataTableSkeleton`
 
@@ -3772,11 +3772,12 @@ None.
 
 ### Props
 
-| Prop name       | Kind             | Reactive | Type                      | Default value                                    | Description                          |
-| :-------------- | :--------------- | :------- | :------------------------ | ------------------------------------------------ | ------------------------------------ |
-| scope           | <code>let</code> | No       | <code>string</code>       | <code>"col"</code>                               | Specify the `scope` attribute        |
-| translateWithId | <code>let</code> | No       | <code>() => string</code> | <code>() => ""</code>                            | Override the default id translations |
-| id              | <code>let</code> | No       | <code>string</code>       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element  |
+| Prop name       | Kind             | Reactive | Type                      | Default value                                    | Description                                            |
+| :-------------- | :--------------- | :------- | :------------------------ | ------------------------------------------------ | ------------------------------------------------------ |
+| disableSorting  | <code>let</code> | No       | <code>boolean</code>      | <code>false</code>                               | Set to `true` to disable sorting on this specific cell |
+| scope           | <code>let</code> | No       | <code>string</code>       | <code>"col"</code>                               | Specify the `scope` attribute                          |
+| translateWithId | <code>let</code> | No       | <code>() => string</code> | <code>() => ""</code>                            | Override the default id translations                   |
+| id              | <code>let</code> | No       | <code>string</code>       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element                    |
 
 ### Slots
 

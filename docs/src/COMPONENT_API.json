@@ -2081,7 +2081,7 @@
         {
           "type": "dispatched",
           "name": "click:header",
-          "detail": "{ header: DataTableHeader; sortDirection: \"ascending\" | \"descending\" | \"none\" }"
+          "detail": "{ header: DataTableHeader; sortDirection?: \"ascending\" | \"descending\" | \"none\" }"
         },
         { "type": "dispatched", "name": "click:row", "detail": "DataTableRow" },
         {
@@ -2117,14 +2117,14 @@
           "ts": "type DataTableValue = any"
         },
         {
-          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }",
+          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }",
           "name": "DataTableEmptyHeader",
-          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }"
+          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }"
         },
         {
-          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }",
+          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }",
           "name": "DataTableNonEmptyHeader",
-          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: (a: DataTableValue, b: DataTableValue) => (0 | -1 | 1); columnMenu?: boolean; }"
+          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }"
         },
         {
           "type": "DataTableNonEmptyHeader | DataTableEmptyHeader",
@@ -9441,6 +9441,16 @@
       "moduleName": "TableHeader",
       "filePath": "src/DataTable/TableHeader.svelte",
       "props": [
+        {
+          "name": "disableSorting",
+          "kind": "let",
+          "description": "Set to `true` to disable sorting on this specific cell",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
         {
           "name": "scope",
           "kind": "let",

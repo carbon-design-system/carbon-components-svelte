@@ -1,4 +1,7 @@
 <script>
+  /** Set to `true` to disable sorting on this specific cell */
+  export let disableSorting = false;
+
   /** Specify the `scope` attribute */
   export let scope = "col";
 
@@ -12,8 +15,8 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   import { getContext } from "svelte";
-  import ArrowUp20 from "carbon-icons-svelte/lib/ArrowUp20";
-  import ArrowsVertical20 from "carbon-icons-svelte/lib/ArrowsVertical20";
+  import ArrowUp20 from "carbon-icons-svelte/lib/ArrowUp20/ArrowUp20.svelte";
+  import ArrowsVertical20 from "carbon-icons-svelte/lib/ArrowsVertical20/ArrowsVertical20.svelte";
 
   const { sortHeader, tableSortable, add } = getContext("DataTable");
 
@@ -24,7 +27,7 @@
   $: ariaLabel = translateWithId();
 </script>
 
-{#if $tableSortable}
+{#if $tableSortable && !disableSorting}
   <th
     aria-sort="{active ? $sortHeader.sortDirection : 'none'}"
     scope="{scope}"

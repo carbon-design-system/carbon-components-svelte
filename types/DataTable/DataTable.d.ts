@@ -9,7 +9,7 @@ export interface DataTableEmptyHeader {
   key: DataTableKey;
   empty: boolean;
   display?: (item: Value) => DataTableValue;
-  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
+  sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
 }
 
@@ -17,7 +17,7 @@ export interface DataTableNonEmptyHeader {
   key: DataTableKey;
   value: DataTableValue;
   display?: (item: Value) => DataTableValue;
-  sort?: (a: DataTableValue, b: DataTableValue) => 0 | -1 | 1;
+  sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
 }
 
@@ -141,7 +141,7 @@ export default class DataTable extends SvelteComponentTyped<
     ["click:header--expand"]: CustomEvent<{ expanded: boolean }>;
     ["click:header"]: CustomEvent<{
       header: DataTableHeader;
-      sortDirection: "ascending" | "descending" | "none";
+      sortDirection?: "ascending" | "descending" | "none";
     }>;
     ["click:row"]: CustomEvent<DataTableRow>;
     ["mouseenter:row"]: CustomEvent<DataTableRow>;
