@@ -552,16 +552,16 @@ The slot name for the table header cells is `"cell-header"`.
 
 Set `sortable` to `true` to enable table column sorting.
 
-To disable sorting on a specific column, set `sort` to `false` in the header object passed to `headers`.
+To disable sorting on a specific column, set `sort` to `false` in the header object passed to the `headers` prop.
 
-In the example below, the "Rule" column is not sortable.
+In the example below, the "Protocol" column is not sortable.
 
 <DataTable sortable
   headers="{[
     { key: "name", value: "Name" },
-    { key: "protocol", value: "Protocol" },
+    { key: "protocol", value: "Protocol", sort: false },
     { key: "port", value: "Port" },
-    { key: "rule", value: "Rule", sort: false }
+    { key: "rule", value: "Rule" }
   ]}"
   rows="{[
     {
