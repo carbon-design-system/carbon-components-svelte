@@ -1657,6 +1657,16 @@
       "filePath": "src/ContextMenu/ContextMenuOption.svelte",
       "props": [
         {
+          "name": "kind",
+          "kind": "let",
+          "description": "Specify the kind of option",
+          "type": "\"default\" | \"danger\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "disabled",
           "kind": "let",
           "description": "Set to `true` to enable the disabled state",

@@ -4,6 +4,12 @@ import { SvelteComponentTyped } from "svelte";
 export interface ContextMenuOptionProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
   /**
+   * Specify the kind of option
+   * @default "default"
+   */
+  kind?: "default" | "danger";
+
+  /**
    * Set to `true` to enable the disabled state
    * @default false
    */

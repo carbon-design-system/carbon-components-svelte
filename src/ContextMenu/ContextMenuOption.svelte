@@ -1,4 +1,10 @@
 <script>
+  /**
+   * Specify the kind of option
+   * @type {"default" | "danger"}
+   */
+  export let kind = "default";
+
   /** Set to `true` to enable the disabled state */
   export let disabled = false;
 
@@ -158,6 +164,7 @@
   class:bx--context-menu-option="{true}"
   class:bx--context-menu-option--disabled="{true}"
   class:bx--context-menu-option--active="{subOptions && submenuOpen}"
+  class:bx--context-menu-option--danger="{!subOptions && kind === 'danger'}"
   indented="{indented}"
   aria-checked="{isSelectable || isRadio ? selected : undefined}"
   data-nested="{ref &&

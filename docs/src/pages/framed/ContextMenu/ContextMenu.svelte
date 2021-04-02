@@ -42,4 +42,6 @@
     <ContextMenuOption id="1" labelText="Reduce noise" />
     <ContextMenuOption id="2" labelText="Auto-sharpen" />
   </ContextMenuGroup>
+  <ContextMenuDivider />
+  <ContextMenuOption indented kind="danger" labelText="Delete" />
 </ContextMenu>

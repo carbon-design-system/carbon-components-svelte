@@ -17,6 +17,7 @@
 
 <ContextMenu>
   <ContextMenuOption
+    kind="danger"
     indented
     labelText="Copy"
     shortcutText="⌘C"
