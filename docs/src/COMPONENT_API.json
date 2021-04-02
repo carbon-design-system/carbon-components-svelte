@@ -2232,10 +2232,7 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" },
-      "extends": {
-        "interface": "DataTableHeader",
-        "import": "\"../DataTable/DataTable\""
-      }
+      "extends": { "interface": "DataTableHeader", "import": "\"./DataTable\"" }
     },
     {
       "moduleName": "DatePicker",
