@@ -1,3 +1,7 @@
+---
+components: ["Tooltip", "TooltipFooter"]
+---
+
 <script>
   import { Tooltip, TooltipFooter, Link, Button } from "carbon-components-svelte";
   import Catalog16 from "carbon-icons-svelte/lib/Catalog16";
