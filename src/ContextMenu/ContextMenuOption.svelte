@@ -70,9 +70,14 @@
   let role = "menuitem";
   let submenuOpen = false;
   let submenuPosition = [0, 0];
+  let menuOffsetX = 0;
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
+  });
+
+  const unsubMenuOffsetX = ctx.menuOffsetX.subscribe((_menuOffsetX) => {
+    menuOffsetX = _menuOffsetX;
   });
 
   function handleClick(opts = {}) {
@@ -112,6 +117,7 @@
 
     return () => {
       unsubPosition();
+      unsubMenuOffsetX();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
@@ -124,7 +130,13 @@
   $: ctx.setPopup(submenuOpen);
   $: if (submenuOpen) {
     const { width, y } = ref.getBoundingClientRect();
-    submenuPosition = [rootMenuPosition[0] + width, y];
+    let x = rootMenuPosition[0] + width;
+
+    if (window.innerWidth - menuOffsetX < width) {
+      x = rootMenuPosition[0] - width;
+    }
+
+    submenuPosition = [x, y];
   }
   $: {
     if (isSelectable) {
