@@ -16,6 +16,12 @@ export interface FormGroupProps
   message?: boolean;
 
   /**
+   * Set to `true` for to remove the bottom margin
+   * @default false
+   */
+  noMargin?: boolean;
+
+  /**
    * Specify the message text
    * @default ""
    */
