@@ -1015,6 +1015,12 @@ In the following example, each row in the sortable data table has an overflow me
 
 <DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}]} rows={10} />
 
+### Skeleton with empty header
+
+Pass an object with `"empty"` set to `true` to render an empty table header column.
+
+<DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}, { empty: true }]} rows={10} />
+
 ### Skeleton without header, toolbar
 
 <DataTableSkeleton showHeader={false} showToolbar={false} />

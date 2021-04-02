@@ -249,6 +249,7 @@
     { value: 'Protocol' },
     { value: 'Port' },
     { value: 'Rule' },
+    { empty: true },
   ]}"
   rows="{10}"
 />
