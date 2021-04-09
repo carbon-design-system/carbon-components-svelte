@@ -11,8 +11,8 @@
   /** Obtain a reference to the HTML button element */
   export let ref = null;
 
-  import Close20 from "carbon-icons-svelte/lib/Close20";
-  import Menu20 from "carbon-icons-svelte/lib/Menu20";
+  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
+  import Menu20 from "carbon-icons-svelte/lib/Menu20/Menu20.svelte";
   import { Icon } from "../../Icon";
 </script>
 
