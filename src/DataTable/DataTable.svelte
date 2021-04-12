@@ -93,7 +93,7 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
-  import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16";
+  import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16/ChevronRight16.svelte";
   import { InlineCheckbox } from "../Checkbox";
   import { RadioButton } from "../RadioButton";
   import Table from "./Table.svelte";
