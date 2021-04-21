@@ -7,7 +7,7 @@
    * @typedef {DataTableNonEmptyHeader | DataTableEmptyHeader} DataTableHeader
    * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
    * @typedef {string} DataTableRowId
-   * @typedef {{ key: DataTableKey; value: DataTableValue; }} DataTableCell
+   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; }} DataTableCell
    * @slot {{ row: DataTableRow; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
    * @slot {{ row: DataTableRow; cell: DataTableCell; }} cell
@@ -159,7 +159,11 @@
   $: headerKeys = headers.map(({ key }) => key);
   $: rows = rows.map((row) => ({
     ...row,
-    cells: headerKeys.map((key) => ({ key, value: row[key] })),
+    cells: headerKeys.map((key, index) => ({
+      key,
+      value: row[key],
+      display: headers[index].display,
+    })),
   }));
   $: sortedRows = rows;
   $: ascending = $sortHeader.sortDirection === "ascending";
@@ -365,9 +369,7 @@
             {#if headers[j].empty}
               <td class:bx--table-column-menu="{headers[j].columnMenu}">
                 <slot name="cell" row="{row}" cell="{cell}">
-                  {headers[j].display
-                    ? headers[j].display(cell.value)
-                    : cell.value}
+                  {cell.display ? cell.display(cell.value) : cell.value}
                 </slot>
               </td>
             {:else}
@@ -378,9 +380,7 @@
                 }}"
               >
                 <slot name="cell" row="{row}" cell="{cell}">
-                  {headers[j].display
-                    ? headers[j].display(cell.value)
-                    : cell.value}
+                  {cell.display ? cell.display(cell.value) : cell.value}
                 </slot>
               </TableCell>
             {/if}

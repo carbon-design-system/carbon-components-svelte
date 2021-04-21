@@ -33,6 +33,7 @@ export type DataTableRowId = string;
 export interface DataTableCell {
   key: DataTableKey;
   value: DataTableValue;
+  display?: (item: Value) => DataTableValue;
 }
 
 export interface DataTableProps
