@@ -203,7 +203,11 @@
       tabindex="0"
       role="button"
       aria-expanded="{open}"
-      on:keydown="{({ key }) => {
+      on:keydown="{(e) => {
+        const { key } = e;
+        if (['Enter', 'ArrowDown', 'ArrowUp'].includes(key)) {
+          e.preventDefault();
+        }
         if (key === 'Enter') {
           open = !open;
           if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
