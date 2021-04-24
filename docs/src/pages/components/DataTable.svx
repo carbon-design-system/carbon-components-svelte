@@ -676,6 +676,85 @@ In the example below, the "Protocol" column is not sortable.
   ]}"
 />
 
+### Sortable with nested object values
+
+<DataTable sortable title="Load balancers" description="Your organization's active load balancers."
+           headers="{[
+    { key: "name", value: "Name" },
+    { key: "network.protocol", value: "Protocol" },
+    { key: "network.port", value: "Port" },
+    { key: "cost", value: "Cost", display: (cost) => cost + " €" },
+    {
+      key: "expireDate",
+      value: "Expire date",
+      display: (date) => new Date(date).toLocaleString(),
+      sort: (a, b) => new Date(a) - new Date(b),
+    },
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      network: {
+        protocol: "HTTP",
+        port: 3000,
+      },
+      cost: 100,
+      expireDate: "2020-10-21",
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      network: {
+        protocol: "HTTP",
+        port: 443,
+      },
+      cost: 200,
+      expireDate: "2020-09-10",
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      network: {
+        protocol: "HTTP",
+        port: 80,
+      },
+      cost: 150,
+      expireDate: "2020-11-24",
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      network: {
+        protocol: "HTTP",
+        port: 3000,
+      },
+      cost: 250,
+      expireDate: "2020-12-01",
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      network: {
+        protocol: "HTTP",
+        port: 443,
+      },
+      cost: 550,
+      expireDate: "2021-03-21",
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      network: {
+        protocol: "HTTP",
+        port: 80,
+      },
+      cost: 400,
+      expireDate: "2020-11-14",
+    },
+  ]}"
+/>
+
 ### Empty column with overflow menu
 
 Some use cases require an empty column in the table body without a corresponding table header.
