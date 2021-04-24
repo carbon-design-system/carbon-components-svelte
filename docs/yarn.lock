@@ -837,16 +837,16 @@ caniuse-lite@^1.0.30001173, caniuse-lite@^1.0.30001178:
   integrity sha512-n8JVqXuZMVSPKiPiypjFtDTXc4jWIdjxull0f92WLo7e1MSi3uJ3NvveakSh/aCl1QKFAvIz3vIj0v+0K+FrXw==
 
 carbon-components-svelte@../:
-  version "0.32.1"
+  version "0.32.2"
   dependencies:
     carbon-icons-svelte "^10.27.0"
     clipboard-copy "3.2.0"
     flatpickr "4.6.9"
 
-carbon-components@10.32.1:
-  version "10.32.1"
-  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.32.1.tgz#064d4504daafafa379ee2fbc5b2997204fb2e5eb"
-  integrity sha512-m9Q9y1NSsXcLINSYmRmOOuxwvSNrXqC2FIN3ykg+WO3+WrmozbPsgFSyMs0gd/RUgNXP6edt8k0Op//oks01gA==
+carbon-components@10.33.0:
+  version "10.33.0"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.33.0.tgz#c573de233530270d172a2cae0faba5d1530725e5"
+  integrity sha512-u9eqP0tZTdyd4RzD5isK1LqTH+Lb+3jUtei7dkKXBK5sm+Xx8yP8l2koOZqzsFzaMGpeZOlO/3ajmDQ+LK6Gbw==
   dependencies:
     "@carbon/telemetry" "0.0.0-alpha.6"
     flatpickr "4.6.1"
