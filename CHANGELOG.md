@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.32.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.32.2) - 2021-04-23
+
+**Fixes**
+
+- prevent multiple Dropdown items from being selected by updating the `selectedId`
+- prevent the default keydown behavior so that pressing "Enter" should open the Dropdown menu
+- resolve Carbon icon imports to Svelte files in `DataTable`, `HamburgerMenu` components
+
+**Housekeeping**
+
+- patch `carbon-components` to version 10.32.1
+
 ## [0.32.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.32.1) - 2021-04-02
 
 **Fixes**

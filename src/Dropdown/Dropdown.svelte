@@ -128,7 +128,7 @@
   }
   $: inline = type === "inline";
   $: selectedItem = items[selectedIndex];
-  $: selectedId = items[selectedIndex] ? items[selectedIndex].id : undefined;  
+  $: selectedId = items[selectedIndex] ? items[selectedIndex].id : undefined;
   $: if (!open) {
     highlightedIndex = -1;
   }
