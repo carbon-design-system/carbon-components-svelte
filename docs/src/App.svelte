@@ -77,16 +77,4 @@
 
   // Import all component styles
   @import "carbon-components/scss/globals/scss/styles";
-
-  .bx--list-box:not(.bx--list-box--light) input[role="combobox"],
-  .bx--list-box:not(.bx--list-box--light) input[type="text"],
-  .bx--dropdown:not(.bx--dropdown--light),
-  .bx--list-box:not(.bx--list-box--light),
-  .bx--number:not(.bx--number--light) input[type="number"],
-  .bx--number:not(.bx--number--light) .bx--number__control-btn::before,
-  .bx--number:not(.bx--number--light) .bx--number__control-btn::after,
-  .bx--text-input:not(.bx--text-input--light),
-  .bx--select-input {
-    background-color: $field-01;
-  }
 </style>

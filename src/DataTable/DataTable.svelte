@@ -124,6 +124,14 @@
       .map(({ key }, i) => ({ key, id: $headerItems[i] }))
       .reduce((a, c) => ({ ...a, [c.key]: c.id }), {})
   );
+  const resolvePath = (object, path, defaultValue) =>
+    path
+      .split(/[\.\[\]\'\"]/)
+      .filter((p) => p)
+      .reduce(
+        (o, p) => (o && typeof o === "object" && o[p] ? o[p] : defaultValue),
+        object
+      );
 
   setContext("DataTable", {
     sortHeader,
@@ -161,7 +169,7 @@
     ...row,
     cells: headerKeys.map((key, index) => ({
       key,
-      value: row[key],
+      value: resolvePath(row, key, ""),
       display: headers[index].display,
     })),
   }));
@@ -174,8 +182,12 @@
       sortedRows = rows;
     } else {
       sortedRows = [...rows].sort((a, b) => {
-        const itemA = ascending ? a[sortKey] : b[sortKey];
-        const itemB = ascending ? b[sortKey] : a[sortKey];
+        const itemA = ascending
+          ? resolvePath(a, sortKey, "")
+          : resolvePath(b, sortKey, "");
+        const itemB = ascending
+          ? resolvePath(b, sortKey, "")
+          : resolvePath(a, sortKey, "");
 
         if ($sortHeader.sort) return $sortHeader.sort(itemA, itemB);
 

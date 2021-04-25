@@ -1,6 +1,6 @@
 {
   "name": "carbon-components-svelte",
-  "version": "0.32.1",
+  "version": "0.32.2",
   "license": "Apache-2.0",
   "author": "IBM",
   "description": "Svelte implementation of the Carbon Design System",
@@ -32,7 +32,7 @@
     "@rollup/plugin-node-resolve": "^11.1.1",
     "@tsconfig/svelte": "^1.0.10",
     "autoprefixer": "^10.2.4",
-    "carbon-components": "10.32.0",
+    "carbon-components": "10.32.1",
     "gh-pages": "^3.1.0",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.3",

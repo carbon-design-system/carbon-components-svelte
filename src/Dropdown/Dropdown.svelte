@@ -128,6 +128,7 @@
   }
   $: inline = type === "inline";
   $: selectedItem = items[selectedIndex];
+  $: selectedId = items[selectedIndex] ? items[selectedIndex].id : undefined;
   $: if (!open) {
     highlightedIndex = -1;
   }
@@ -203,7 +204,11 @@
       tabindex="0"
       role="button"
       aria-expanded="{open}"
-      on:keydown="{({ key }) => {
+      on:keydown="{(e) => {
+        const { key } = e;
+        if (['Enter', 'ArrowDown', 'ArrowUp'].includes(key)) {
+          e.preventDefault();
+        }
         if (key === 'Enter') {
           open = !open;
           if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
