@@ -479,6 +479,7 @@ None.
 | :-------- | :--------------- | :------- | :------------------- | ------------------ | ----------------------------------------- |
 | clicked   | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code> | Set to `true` to click the tile           |
 | light     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the light variant |
+| disabled  | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the tile         |
 | href      | <code>let</code> | No       | <code>string</code>  | --                 | Set the `href`                            |
 
 ### Slots

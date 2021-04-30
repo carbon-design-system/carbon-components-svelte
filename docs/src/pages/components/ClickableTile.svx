@@ -14,3 +14,7 @@ source: Tile/ClickableTile.svelte
 ### Light variant
 
 <ClickableTile light href="https://www.carbondesignsystem.com/">Carbon Design System</ClickableTile>
+
+### Disabled state
+
+<ClickableTile disabled href="https://www.carbondesignsystem.com/">Carbon Design System</ClickableTile>

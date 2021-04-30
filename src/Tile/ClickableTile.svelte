@@ -5,21 +5,23 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
+  /** Set to `true` to disable the tile */
+  export let disabled = false;
+
   /**
    * Set the `href`
    * @type {string}
    */
   export let href = undefined;
+
+  import Link from "../Link/Link.svelte";
 </script>
 
-<!-- svelte-ignore a11y-missing-attribute -->
-<a
-  class:bx--tile="{true}"
-  class:bx--tile--clickable="{true}"
-  class:bx--tile--is-clicked="{clicked}"
-  class:bx--tile--light="{light}"
-  rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
+<Link
   {...$$restProps}
+  disabled="{disabled}"
+  class="bx--tile bx--tile--clickable {clicked &&
+    'bx--tile--is-clicked'} {light && 'bx--tile--light'} {$$restProps.class}"
   href="{href}"
   on:click
   on:click="{() => {
@@ -36,4 +38,4 @@
   on:mouseleave
 >
   <slot />
-</a>
+</Link>
