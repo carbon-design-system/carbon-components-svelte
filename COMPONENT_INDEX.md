@@ -1945,14 +1945,15 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                                   | Default value      | Description                                      |
-| :-------- | :--------------- | :------- | :--------------------------------------------------------------------- | ------------------ | ------------------------------------------------ |
-| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLParagraphElement</code> | <code>null</code>  | Obtain a reference to the top-level HTML element |
-| size      | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>                                          | --                 | Specify the size of the link                     |
-| href      | <code>let</code> | No       | <code>string</code>                                                    | --                 | Specify the href value                           |
-| inline    | <code>let</code> | No       | <code>boolean</code>                                                   | <code>false</code> | Set to `true` to use the inline variant          |
-| disabled  | <code>let</code> | No       | <code>boolean</code>                                                   | <code>false</code> | Set to `true` to disable the checkbox            |
-| visited   | <code>let</code> | No       | <code>boolean</code>                                                   | <code>false</code> | Set to `true` to allow visited styles            |
+| Prop name | Kind             | Reactive | Type                                                                   | Default value      | Description                                                                         |
+| :-------- | :--------------- | :------- | :--------------------------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLParagraphElement</code> | <code>null</code>  | Obtain a reference to the top-level HTML element                                    |
+| size      | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>                                          | --                 | Specify the size of the link                                                        |
+| href      | <code>let</code> | No       | <code>string</code>                                                    | --                 | Specify the href value                                                              |
+| inline    | <code>let</code> | No       | <code>boolean</code>                                                   | <code>false</code> | Set to `true` to use the inline variant                                             |
+| icon      | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>           | --                 | Specify the icon from `carbon-icons-svelte` to render<br />`inline` must be `false` |
+| disabled  | <code>let</code> | No       | <code>boolean</code>                                                   | <code>false</code> | Set to `true` to disable the checkbox                                               |
+| visited   | <code>let</code> | No       | <code>boolean</code>                                                   | <code>false</code> | Set to `true` to allow visited styles                                               |
 
 ### Slots
 

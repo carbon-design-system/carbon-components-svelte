@@ -4615,6 +4615,15 @@
           "reactive": false
         },
         {
+          "name": "icon",
+          "kind": "let",
+          "description": "Specify the icon from `carbon-icons-svelte` to render\n`inline` must be `false`",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "disabled",
           "kind": "let",
           "description": "Set to `true` to disable the checkbox",
