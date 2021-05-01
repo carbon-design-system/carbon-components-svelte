@@ -14,6 +14,13 @@
   /** Set to `true` to use the inline variant */
   export let inline = false;
 
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * `inline` must be `false`
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let icon = undefined;
+
   /** Set to `true` to disable the checkbox */
   export let disabled = false;
 
@@ -37,7 +44,9 @@
     on:mouseenter
     on:mouseleave
   >
-    <slot />
+    <slot />{#if !inline && icon}<div class:bx--link__icon="{true}">
+        <svelte:component this="{icon}" />
+      </div>{/if}
   </p>
 {:else}
   <a
@@ -54,6 +63,9 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseleave><slot /></a
+    on:mouseleave
+    ><slot />{#if !inline && icon}<div class:bx--link__icon="{true}">
+        <svelte:component this="{icon}" />
+      </div>{/if}</a
   >
 {/if}

@@ -4,6 +4,7 @@ components: ["Link", "OutboundLink"]
 
 <script>
   import { Link, OutboundLink } from "carbon-components-svelte";
+  import Carbon16 from "carbon-icons-svelte/lib/Carbon16"
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -30,6 +31,15 @@ An alternative to manually setting `target` to `"_blank"` is to use the `Outboun
 <div>
   Visit the
   <Link inline href="https://www.carbondesignsystem.com/">Carbon Design System</Link>.
+</div>
+
+### Link with icon
+
+Note that `inline` must be `false` when rendering a link with an icon.
+
+<div>
+  Visit the
+  <Link href="https://www.carbondesignsystem.com/" icon={Carbon16}>Carbon Design System</Link>.
 </div>
 
 ### Large size

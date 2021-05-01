@@ -100,7 +100,7 @@
       <Column xlg="{5}" lg="{8}" md="{4}">
         <TileCard
           title="Carbon Charts Svelte"
-          subtitle="16 chart types, powered by d3"
+          subtitle="17 chart types, powered by d3"
           target="_blank"
           href="https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte"
         />

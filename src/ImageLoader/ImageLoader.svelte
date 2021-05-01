@@ -16,7 +16,7 @@
 
   /**
    * Specify the aspect ratio for the image wrapper
-   * @type {"2x1" | "16x9" | "4x3" | "1x1" | "3x4" | "9x16" | "1x2"}
+   * @type {"2x1" | "16x9" | "4x3" | "1x1" | "3x4" | "3x2" | "9x16" | "1x2"}
    */
   export let ratio = undefined;
 
