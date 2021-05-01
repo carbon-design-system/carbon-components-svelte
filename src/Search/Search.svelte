@@ -103,7 +103,9 @@
     class:bx--search--xl="{size === 'xl'}"
     class="{searchClass}"
   >
-    <Search16 class="bx--search-magnifier" />
+    <div class:bx--search-magnifier="{true}">
+      <Search16 class="bx--search-magnifier-icon" />
+    </div>
     <label id="{id}-search" for="{id}" class:bx--label="{true}"
       >{labelText}</label
     >
