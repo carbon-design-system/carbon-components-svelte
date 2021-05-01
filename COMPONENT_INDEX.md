@@ -1,6 +1,6 @@
 # Component Index
 
-> 167 components exported from carbon-components-svelte@0.32.2.
+> 167 components exported from carbon-components-svelte@0.33.0.
 
 ## Components
 
@@ -924,6 +924,7 @@ export type DataTableRowId = string;
 export interface DataTableCell {
   key: DataTableKey;
   value: DataTableValue;
+  display?: (item: Value) => DataTableValue;
 }
 ```
 
@@ -949,12 +950,12 @@ export interface DataTableCell {
 
 ### Slots
 
-| Slot name    | Default | Props                                                     | Fallback                                                                                    |
-| :----------- | :------ | :-------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
-| --           | Yes     | --                                                        | --                                                                                          |
-| cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; } </code> | <code>{headers[j].display<br /> ? headers[j].display(cell.value)<br /> : cell.value}</code> |
-| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>        | <code>{header.value}</code>                                                                 |
-| expanded-row | No      | <code>{ row: DataTableRow; } </code>                      | --                                                                                          |
+| Slot name    | Default | Props                                                     | Fallback                                                            |
+| :----------- | :------ | :-------------------------------------------------------- | :------------------------------------------------------------------ |
+| --           | Yes     | --                                                        | --                                                                  |
+| cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; } </code> | <code>{cell.display ? cell.display(cell.value) : cell.value}</code> |
+| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>        | <code>{header.value}</code>                                         |
+| expanded-row | No      | <code>{ row: DataTableRow; } </code>                      | --                                                                  |
 
 ### Events
 

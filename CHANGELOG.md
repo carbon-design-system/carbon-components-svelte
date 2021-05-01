@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.33.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.33.0) - 2021-04-30
+
+**Features**
+
+- support nested object values for DataTable sorting
+- pass DataTable header display function to slotted cell
+- add icon prop to `Link` to support rendering links with icons; refactor `OutboundLink` to use `Link.icon` prop
+
+**Fixes**
+
+- prevent DataTable sorting from crashing by defaulting `undefined` to an empty string
+- add extra DataTable cell `colspan` to support expandable, selectable rows
+- support disabled state for `ClickableTile`
+- add missing "3x2" ratio to `AspectRatio`
+
+**Documentation**
+
+- add DataTable example ["Sortable with nested object values"](https://carbon-svelte.vercel.app/components/DataTable#sortable-with-nested-object-values)
+- add ClickableTile example ["Disabled state"](https://carbon-svelte.vercel.app/components/ClickableTile#disabled-state)
+- add Link example ["Link with icon"](https://carbon-svelte.vercel.app/components/Link#link-with-icon)
+
+**Housekeeping**
+
+- upgrade `carbon-components` to version 10.33.0
+
 ## [0.32.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.32.2) - 2021-04-23
 
 **Fixes**

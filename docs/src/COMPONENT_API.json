@@ -2062,7 +2062,7 @@
         {
           "name": "cell",
           "default": false,
-          "fallback": "{headers[j].display\n                    ? headers[j].display(cell.value)\n                    : cell.value}",
+          "fallback": "{cell.display ? cell.display(cell.value) : cell.value}",
           "slot_props": "{ row: DataTableRow; cell: DataTableCell; }"
         },
         {
@@ -2152,9 +2152,9 @@
           "ts": "type DataTableRowId = string"
         },
         {
-          "type": "{ key: DataTableKey; value: DataTableValue; }",
+          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; }",
           "name": "DataTableCell",
-          "ts": "interface DataTableCell { key: DataTableKey; value: DataTableValue; }"
+          "ts": "interface DataTableCell { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "div" }

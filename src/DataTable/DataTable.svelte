@@ -410,7 +410,9 @@
               parentRowId = null;
             }}"
           >
-            <TableCell colspan="{selectable ? headers.length + 2 : headers.length + 1}">
+            <TableCell
+              colspan="{selectable ? headers.length + 2 : headers.length + 1}"
+            >
               <div class:bx--child-row-inner-container="{true}">
                 <slot name="expanded-row" row="{row}" />
               </div>
