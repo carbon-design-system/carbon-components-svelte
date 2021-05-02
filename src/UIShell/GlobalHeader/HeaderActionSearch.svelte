@@ -15,7 +15,6 @@
   import { createEventDispatcher } from "svelte";
   import Close20 from "carbon-icons-svelte/lib/Close20";
   import Search20 from "carbon-icons-svelte/lib/Search20";
-  import { Icon } from "../../Icon";
   import searchStore from "../searchStore";
 
   const dispatch = createEventDispatcher();
@@ -96,7 +95,7 @@
         }
       }}"
     >
-      <Icon title="Search" tabindex="0" render="{Search20}" />
+      <svelte:component this="{Search20}" title="Search" tabindex="0" />
     </button>
     <input
       bind:this="{elInput}"
@@ -130,7 +129,7 @@
         }
       }}"
     >
-      <Icon title="Close" tabindex="0" render="{Close20}" />
+      <svelte:component this="{Close20}" title="Close" tabindex="0" />
     </button>
   </div>
 </div>

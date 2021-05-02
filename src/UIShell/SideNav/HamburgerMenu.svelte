@@ -13,13 +13,12 @@
 
   import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
   import Menu20 from "carbon-icons-svelte/lib/Menu20/Menu20.svelte";
-  import { Icon } from "../../Icon";
 </script>
 
 <button
   bind:this="{ref}"
   type="button"
-  title="Open menu"
+  title="{ariaLabel}"
   aria-label="{ariaLabel}"
   class:bx--header__action="{true}"
   class:bx--header__menu-trigger="{true}"
@@ -28,8 +27,5 @@
   on:click
   on:click="{() => (isOpen = !isOpen)}"
 >
-  <Icon
-    title="{isOpen ? 'Close' : 'Open Menu'}"
-    render="{isOpen ? Close20 : Menu20}"
-  />
+  <svelte:component this="{isOpen ? Close20 : Menu20}" />
 </button>
