@@ -3216,7 +3216,11 @@ None.
 
 ### Events
 
-None.
+| Event name    | Type       | Detail           |
+| :------------ | :--------- | :--------------- |
+| open          | dispatched | <code>any</code> |
+| close         | dispatched | <code>any</code> |
+| click:overlay | dispatched | <code>any</code> |
 
 ## `SideNavDivider`
 

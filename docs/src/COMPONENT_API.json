@@ -8401,7 +8401,11 @@
         }
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [],
+      "events": [
+        { "type": "dispatched", "name": "open", "detail": "any" },
+        { "type": "dispatched", "name": "close", "detail": "any" },
+        { "type": "dispatched", "name": "click:overlay", "detail": "any" }
+      ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "nav" }
     },
