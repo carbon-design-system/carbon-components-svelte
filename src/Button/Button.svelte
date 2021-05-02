@@ -106,7 +106,9 @@
       hasIconOnly && "bx--btn--icon-only",
       hasIconOnly && "bx--tooltip__trigger",
       hasIconOnly && "bx--tooltip--a11y",
-      hasIconOnly && tooltipPosition && `bx--tooltip--${tooltipPosition}`,
+      hasIconOnly &&
+        tooltipPosition &&
+        `bx--btn--icon-only--${tooltipPosition}`,
       hasIconOnly &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
