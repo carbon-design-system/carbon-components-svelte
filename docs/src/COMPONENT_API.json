@@ -362,7 +362,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of button",
-          "type": "\"default\" | \"field\" | \"small\"",
+          "type": "\"default\" | \"field\" | \"small\" | \"xl\"",
           "value": "\"default\"",
           "isFunction": false,
           "constant": false,

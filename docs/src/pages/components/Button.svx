@@ -94,6 +94,14 @@ If an `href` value is specified, the component will render an [anchor element](h
 <Button size="small" kind="ghost">Ghost</Button>
 <Button size="small" kind="danger">Danger</Button>
 
+### Extra-large button
+
+<Button size="xl">Primary</Button>
+<Button size="xl" kind="secondary">Secondary</Button>
+<Button size="xl" kind="tertiary">Tertiary</Button>
+<Button size="xl" kind="ghost">Ghost</Button>
+<Button size="xl" kind="danger">Danger</Button>
+
 ### Disabled button
 
 <Button disabled>Disabled button</Button>

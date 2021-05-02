@@ -24,7 +24,7 @@ export interface ButtonProps
    * Specify the size of button
    * @default "default"
    */
-  size?: "default" | "field" | "small";
+  size?: "default" | "field" | "small" | "xl";
 
   /**
    * Set to `true` to enable the selected state for an icon-only, ghost button
