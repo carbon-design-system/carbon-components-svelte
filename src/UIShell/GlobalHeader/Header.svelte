@@ -35,6 +35,22 @@
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the closed state
+   * Defaults to `Menu20`
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let iconMenu = Menu20;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the opened state
+   * Defaults to `Close20`
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let iconClose = Close20;
+
+  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
+  import Menu20 from "carbon-icons-svelte/lib/Menu20/Menu20.svelte";
   import { shouldRenderHamburgerMenu } from "../navStore";
   import HamburgerMenu from "../SideNav/HamburgerMenu.svelte";
 
@@ -52,7 +68,11 @@
 <header role="banner" aria-label="{ariaLabel}" class:bx--header="{true}">
   <slot name="skip-to-content" />
   {#if ($shouldRenderHamburgerMenu && winWidth < 1056) || persistentHamburgerMenu}
-    <HamburgerMenu bind:isOpen="{isSideNavOpen}" />
+    <HamburgerMenu
+      bind:isOpen="{isSideNavOpen}"
+      iconClose="{iconClose}"
+      iconMenu="{iconMenu}"
+    />
   {/if}
   <a
     href="{href}"

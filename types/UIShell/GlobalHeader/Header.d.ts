@@ -48,6 +48,18 @@ export interface HeaderProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the closed state
+   * Defaults to `Menu20`
+   */
+  iconMenu?: typeof import("carbon-icons-svelte").CarbonIcon;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the opened state
+   * Defaults to `Close20`
+   */
+  iconClose?: typeof import("carbon-icons-svelte").CarbonIcon;
 }
 
 export default class Header extends SvelteComponentTyped<

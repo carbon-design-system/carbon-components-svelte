@@ -3787,6 +3787,24 @@
           "isFunction": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "iconMenu",
+          "kind": "let",
+          "description": "Specify the icon from `carbon-icons-svelte` to render for the closed state\nDefaults to `Menu20`",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "iconClose",
+          "kind": "let",
+          "description": "Specify the icon from `carbon-icons-svelte` to render for the opened state\nDefaults to `Close20`",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [
