@@ -132,7 +132,7 @@ The slot name for the table header cells is `"cell-header"`.
   </span>
   <span slot="cell" let:row let:cell>
     {#if cell.key === 'rule' && cell.value === 'Round robin'}
-      <Link inline href="https://en.wikipedia.org/wiki/Round-robin_DNS" target="_blank">{cell.value} <Launch16 /></Link>
+      <Link icon={Launch16} href="https://en.wikipedia.org/wiki/Round-robin_DNS" target="_blank">{cell.value}</Link>
     {:else}
       {cell.value}
     {/if}
