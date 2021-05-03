@@ -59,6 +59,7 @@
   const ctxRadioGroup = getContext("ContextMenuRadioGroup");
 
   const rootMenuPosition = ctx.position;
+  const rootMenuDimensions = ctx.dimensions;
 
   // "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
   const moderate01 = 150;
@@ -120,11 +121,15 @@
   $: ctx.setPopup(submenuOpen);
   $: if (submenuOpen) {
     const rootMenuX = $rootMenuPosition[0];
+    const rootMenuWidth = $rootMenuDimensions[0];
     const { width, y } = ref.getBoundingClientRect();
-    let x = rootMenuX + width;
 
-    if (window.innerWidth - rootMenuX < width) {
+    let x;
+    if (window.innerWidth < rootMenuX + rootMenuWidth + width) {
+      // submenu is too far to the right,  so we display it on the left side
       x = rootMenuX - width;
+    } else {
+      x = rootMenuX + width;
     }
 
     submenuPosition = [x, y];
