@@ -76,6 +76,9 @@
     "ContextMenuGroup": {
       "path": "carbon-components-svelte/src/ContextMenu/ContextMenuGroup.svelte"
     },
+    "ContextMenuInner": {
+      "path": "carbon-components-svelte/src/ContextMenu/ContextMenuInner.svelte"
+    },
     "ContextMenuOption": {
       "path": "carbon-components-svelte/src/ContextMenu/ContextMenuOption.svelte"
     },

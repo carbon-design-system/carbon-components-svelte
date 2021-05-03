@@ -1,7 +1,8 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
 
-export interface ContextMenuProps {
+export interface ContextMenuInnerProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
   /**
    * Set to `true` to open the menu
    * Either `x` and `y` must be greater than zero
@@ -25,11 +26,16 @@ export interface ContextMenuProps {
    * Obtain a reference to the unordered list HTML element
    * @default null
    */
-  ref?: HTMLUListElement | null;
+  ref?: null | HTMLUListElement;
 }
 
-export default class ContextMenu extends SvelteComponentTyped<
-  ContextMenuProps,
-  {},
+export default class ContextMenuInner extends SvelteComponentTyped<
+  ContextMenuInnerProps,
+  {
+    click: WindowEventMap["click"];
+    keydown: WindowEventMap["keydown"];
+    open: CustomEvent<any>;
+    close: CustomEvent<any>;
+  },
   { default: {} }
 > {}

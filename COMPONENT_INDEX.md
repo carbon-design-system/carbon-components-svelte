@@ -1,6 +1,6 @@
 # Component Index
 
-> 167 components exported from carbon-components-svelte@0.33.0.
+> 168 components exported from carbon-components-svelte@0.33.0.
 
 ## Components
 
@@ -27,6 +27,7 @@
 - [`ContextMenu`](#contextmenu)
 - [`ContextMenuDivider`](#contextmenudivider)
 - [`ContextMenuGroup`](#contextmenugroup)
+- [`ContextMenuInner`](#contextmenuinner)
 - [`ContextMenuOption`](#contextmenuoption)
 - [`ContextMenuRadioGroup`](#contextmenuradiogroup)
 - [`Copy`](#copy)
@@ -737,7 +738,7 @@ None.
 
 | Prop name | Kind             | Reactive | Type                                      | Default value      | Description                                                                      |
 | :-------- | :--------------- | :------- | :---------------------------------------- | ------------------ | -------------------------------------------------------------------------------- |
-| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code> | <code>null</code>  | Obtain a reference to the unordered list HTML element                            |
+| ref       | <code>let</code> | Yes      | <code>HTMLUListElement &#124; null</code> | <code>null</code>  | Obtain a reference to the unordered list HTML element                            |
 | y         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the vertical offset of the menu position                                 |
 | x         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the horizontal offset of the menu position                               |
 | open      | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero |
@@ -750,12 +751,7 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| open       | dispatched | --     |
-| close      | dispatched | --     |
+None.
 
 ## `ContextMenuDivider`
 
@@ -789,6 +785,32 @@ None.
 ### Events
 
 None.
+
+## `ContextMenuInner`
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                                      | Default value      | Description                                                                      |
+| :-------- | :--------------- | :------- | :---------------------------------------- | ------------------ | -------------------------------------------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code> | <code>null</code>  | Obtain a reference to the unordered list HTML element                            |
+| y         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the vertical offset of the menu position                                 |
+| x         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the horizontal offset of the menu position                               |
+| open      | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| click      | forwarded  | --     |
+| keydown    | forwarded  | --     |
+| open       | dispatched | --     |
+| close      | dispatched | --     |
 
 ## `ContextMenuOption`
 
