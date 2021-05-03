@@ -41,6 +41,7 @@
 
   function onContextMenu(e) {
     if (level > 1) return;
+    e.preventDefault();
     open = true;
     x = e.x;
     y = e.y;
@@ -48,7 +49,7 @@
 </script>
 
 <svelte:window
-  on:contextmenu|preventDefault="{onContextMenu}"
+  on:contextmenu="{onContextMenu}"
   on:click="{(e) => {
     if (!open) return;
     if (e.target.contains(ref)) close();
