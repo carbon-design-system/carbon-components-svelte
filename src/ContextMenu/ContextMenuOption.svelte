@@ -58,22 +58,19 @@
   const ctxGroup = getContext("ContextMenuGroup");
   const ctxRadioGroup = getContext("ContextMenuRadioGroup");
 
+  const rootMenuPosition = ctx.position;
+
   // "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
   const moderate01 = 150;
 
   let unsubCurrentIds = undefined;
   let unsubCurrentId = undefined;
   let timeoutHover = undefined;
-  let rootMenuPosition = [0, 0];
   let focusIndex = 0;
   let options = [];
   let role = "menuitem";
   let submenuOpen = false;
   let submenuPosition = [0, 0];
-
-  const unsubPosition = ctx.position.subscribe((position) => {
-    rootMenuPosition = position;
-  });
 
   function handleClick(opts = {}) {
     if (disabled) return ctx.close();
@@ -111,7 +108,6 @@
     }
 
     return () => {
-      unsubPosition();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
@@ -123,11 +119,12 @@
   $: subOptions = $$slots.default;
   $: ctx.setPopup(submenuOpen);
   $: if (submenuOpen) {
+    const rootMenuX = $rootMenuPosition[0];
     const { width, y } = ref.getBoundingClientRect();
-    let x = rootMenuPosition[0] + width;
+    let x = rootMenuX + width;
 
-    if (window.innerWidth - rootMenuPosition[0] < width) {
-      x = rootMenuPosition[0] - width;
+    if (window.innerWidth - rootMenuX < width) {
+      x = rootMenuX - width;
     }
 
     submenuPosition = [x, y];
