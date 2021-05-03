@@ -26,7 +26,6 @@
   const position = writable([x, y]);
   const currentIndex = writable(-1);
   const hasPopup = writable(false);
-  const menuOffsetX = writable(0);
   const ctx = getContext("ContextMenu");
 
   let options = [];
@@ -45,7 +44,6 @@
   }
 
   setContext("ContextMenu", {
-    menuOffsetX,
     currentIndex,
     position,
     close,
@@ -91,8 +89,6 @@
     }
 
     if (open || y === 0) {
-      menuOffsetX.set(e.x);
-
       if (window.innerHeight - height < e.y) {
         y = e.y - height;
       } else {
