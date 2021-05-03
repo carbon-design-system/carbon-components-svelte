@@ -33,6 +33,7 @@
   let prevX = 0;
   let prevY = 0;
   let focusIndex = -1;
+  let level;
 
   function close() {
     open = false;
