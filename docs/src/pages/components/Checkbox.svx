@@ -1,7 +1,37 @@
 <script>
   import { Checkbox } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
+  import Playground from "../../components/playground/Playground.svelte";
 </script>
+
+<Playground
+    component={Checkbox}
+    props={{
+        labelText: {
+            component: "TextInput",
+            props: { value: "Label text", labelText: "Label" }
+        },
+        checked: {
+            component: "Checkbox",
+            props: { labelText: "Checked" }
+        },
+        indeterminate: {
+            component: "Checkbox",
+            props: { labelText: "Indeterminate" }
+        },
+        hideLabel: {
+            component: "Checkbox",
+            props: { labelText: "Hide label" }
+        },
+        disabled: {
+            component: "Checkbox",
+            props: { labelText: "Disabled" }
+        },
+        skeleton: {
+            component: "Checkbox",
+            props: { labelText: "Skeleton" }
+        },
+    }} />
 
 ### Default (unchecked)
 
