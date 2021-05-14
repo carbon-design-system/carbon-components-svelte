@@ -13,7 +13,7 @@ export interface DatePickerProps
    * Specify the date picker input value
    * @default ""
    */
-  value?: number | string;
+  value?: number | string | Date;
 
   /**
    * Specify the element to append the calendar to
@@ -30,13 +30,13 @@ export interface DatePickerProps
    * Specify the maximum date
    * @default null
    */
-  maxDate?: null | string | Date;
+  maxDate?: null | number | string | Date;
 
   /**
    * Specify the minimum date
    * @default null
    */
-  minDate?: null | string | Date;
+  minDate?: null | number | string | Date;
 
   /**
    * Specify the locale

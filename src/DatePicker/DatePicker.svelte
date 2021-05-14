@@ -11,7 +11,7 @@
 
   /**
    * Specify the date picker input value
-   * @type {number | string}
+   * @type {number | string | Date}
    */
   export let value = "";
 
@@ -26,13 +26,13 @@
 
   /**
    * Specify the maximum date
-   * @type {null | string | Date}
+   * @type {null | number | string | Date}
    */
   export let maxDate = null;
 
   /**
    * Specify the minimum date
-   * @type {null | string | Date}
+   * @type {null | number | string | Date}
    */
   export let minDate = null;
 
