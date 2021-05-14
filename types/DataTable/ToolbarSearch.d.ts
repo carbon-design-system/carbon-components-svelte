@@ -1,7 +1,7 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
 
-export interface ToolbarSearchProps {
+export interface ToolbarSearchProps extends Partial<HTMLElementTagNameMap["input"]> {
   /**
    * Specify the value of the search input
    * @default ""
