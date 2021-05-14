@@ -11016,7 +11016,7 @@
         { "type": "forwarded", "name": "blur", "element": "Search" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "Search" }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "Tooltip",
