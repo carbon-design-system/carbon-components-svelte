@@ -1,4 +1,6 @@
 <script>
+  /** @restProps {input} */
+
   /**
    * Specify the value of the search input
    * @type {number | string}
