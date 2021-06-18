@@ -58,27 +58,20 @@
   const ctxGroup = getContext("ContextMenuGroup");
   const ctxRadioGroup = getContext("ContextMenuRadioGroup");
 
+  const rootMenuPosition = ctx.position;
+  const rootMenuDimensions = ctx.dimensions;
+
   // "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
   const moderate01 = 150;
 
   let unsubCurrentIds = undefined;
   let unsubCurrentId = undefined;
   let timeoutHover = undefined;
-  let rootMenuPosition = [0, 0];
   let focusIndex = 0;
   let options = [];
   let role = "menuitem";
   let submenuOpen = false;
   let submenuPosition = [0, 0];
-  let menuOffsetX = 0;
-
-  const unsubPosition = ctx.position.subscribe((position) => {
-    rootMenuPosition = position;
-  });
-
-  const unsubMenuOffsetX = ctx.menuOffsetX.subscribe((_menuOffsetX) => {
-    menuOffsetX = _menuOffsetX;
-  });
 
   function handleClick(opts = {}) {
     if (disabled) return ctx.close();
@@ -116,8 +109,6 @@
     }
 
     return () => {
-      unsubPosition();
-      unsubMenuOffsetX();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
@@ -129,11 +120,16 @@
   $: subOptions = $$slots.default;
   $: ctx.setPopup(submenuOpen);
   $: if (submenuOpen) {
+    const rootMenuX = $rootMenuPosition[0];
+    const rootMenuWidth = $rootMenuDimensions[0];
     const { width, y } = ref.getBoundingClientRect();
-    let x = rootMenuPosition[0] + width;
 
-    if (window.innerWidth - menuOffsetX < width) {
-      x = rootMenuPosition[0] - width;
+    let x;
+    if (window.innerWidth < rootMenuX + rootMenuWidth + width) {
+      // submenu is too far to the right,  so we display it on the left side
+      x = rootMenuX - width;
+    } else {
+      x = rootMenuX + width;
     }
 
     submenuPosition = [x, y];

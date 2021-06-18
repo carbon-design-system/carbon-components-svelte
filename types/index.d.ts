@@ -13,6 +13,7 @@ export { default as CheckboxSkeleton } from "./Checkbox/CheckboxSkeleton";
 export { default as ContentSwitcher } from "./ContentSwitcher/ContentSwitcher";
 export { default as Switch } from "./ContentSwitcher/Switch";
 export { default as ContextMenu } from "./ContextMenu/ContextMenu";
+export { default as ContextMenuInner } from "./ContextMenu/ContextMenuInner";
 export { default as ContextMenuDivider } from "./ContextMenu/ContextMenuDivider";
 export { default as ContextMenuGroup } from "./ContextMenu/ContextMenuGroup";
 export { default as ContextMenuOption } from "./ContextMenu/ContextMenuOption";

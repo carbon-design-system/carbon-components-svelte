@@ -1,5 +1,5 @@
 ---
-components: ["ContextMenu", "ContextMenuGroup", "ContextMenuRadioGroup", "ContextMenuOption", "ContextMenuDivider"]
+components: ["ContextMenu", "ContextMenuInner", "ContextMenuGroup", "ContextMenuRadioGroup", "ContextMenuOption", "ContextMenuDivider"]
 ---
 
 <script>
@@ -15,3 +15,7 @@ In the examples, right click anywhere within the iframe.
 ### Radio groups
   
 <FileSource src="/framed/ContextMenu/ContextMenuGroups" />
+
+### On specific element
+
+<FileSource src="/framed/ContextMenu/ContextMenuInner" />

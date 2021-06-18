@@ -6,6 +6,7 @@ export { Checkbox, CheckboxSkeleton } from "./Checkbox";
 export { ContentSwitcher, Switch } from "./ContentSwitcher";
 export {
   ContextMenu,
+  ContextMenuInner,
   ContextMenuDivider,
   ContextMenuGroup,
   ContextMenuOption,
