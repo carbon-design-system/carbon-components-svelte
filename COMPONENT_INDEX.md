@@ -2747,6 +2747,9 @@ None.
 | hideLabel         | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to visually hide the label text         |
 | invalid           | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to indicate an invalid state            |
 | invalidText       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the text for the invalid state                |
+| warn              | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to indicate an warning state            |
+| warnText          | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the warning state text                        |
+| inline            | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to use inline version                   |
 | id                | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                       |
 | name              | <code>let</code> | No       | <code>string</code>                                             | --                                               | Specify a name attribute for the input                |
 

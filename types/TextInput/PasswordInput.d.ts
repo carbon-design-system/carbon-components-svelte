@@ -93,6 +93,24 @@ export interface PasswordInputProps
   invalidText?: string;
 
   /**
+   * Set to `true` to indicate an warning state
+   * @default false
+   */
+  warn?: boolean;
+
+  /**
+   * Specify the warning state text
+   * @default ""
+   */
+  warnText?: string;
+
+  /**
+   * Set to `true` to use inline version
+   * @default false
+   */
+  inline?: boolean;
+
+  /**
    * Set an id for the input element
    * @default "ccs-" + Math.random().toString(36)
    */
