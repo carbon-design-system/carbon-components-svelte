@@ -930,23 +930,23 @@ export interface DataTableCell {
 
 ### Props
 
-| Prop name      | Kind             | Reactive | Type                                                | Default value      | Description                                                                                                         |
-| :------------- | :--------------- | :------- | :-------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| selectedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                       | <code>[]</code>    | Specify the row ids to be selected                                                                                  |
-| selectable     | <code>let</code> | Yes      | <code>boolean</code>                                | <code>false</code> | Set to `true` for the selectable variant<br />Automatically set to `true` if `radio` or `batchSelection` are `true` |
-| expandedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                       | <code>[]</code>    | Specify the row ids to be expanded                                                                                  |
-| expandable     | <code>let</code> | Yes      | <code>boolean</code>                                | <code>false</code> | Set to `true` for the expandable variant<br />Automatically set to `true` if `batchExpansion` is `true`             |
-| rows           | <code>let</code> | Yes      | <code>DataTableRow[]</code>                         | <code>[]</code>    | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
-| headers        | <code>let</code> | No       | <code>DataTableHeader[]</code>                      | <code>[]</code>    | Specify the data table headers                                                                                      |
-| size           | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code> | --                 | Set the size of the data table                                                                                      |
-| title          | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>    | Specify the title of the data table                                                                                 |
-| description    | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>    | Specify the description of the data table                                                                           |
-| zebra          | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to use zebra styles                                                                                   |
-| sortable       | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` for the sortable variant                                                                              |
-| batchExpansion | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to enable batch expansion                                                                             |
-| radio          | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` for the radio selection variant                                                                       |
-| batchSelection | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to enable batch selection                                                                             |
-| stickyHeader   | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to enable a sticky header                                                                             |
+| Prop name      | Kind             | Reactive | Type                                                                | Default value      | Description                                                                                                         |
+| :------------- | :--------------- | :------- | :------------------------------------------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| selectedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                                       | <code>[]</code>    | Specify the row ids to be selected                                                                                  |
+| selectable     | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the selectable variant<br />Automatically set to `true` if `radio` or `batchSelection` are `true` |
+| expandedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                                       | <code>[]</code>    | Specify the row ids to be expanded                                                                                  |
+| expandable     | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the expandable variant<br />Automatically set to `true` if `batchExpansion` is `true`             |
+| rows           | <code>let</code> | Yes      | <code>DataTableRow[]</code>                                         | <code>[]</code>    | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
+| headers        | <code>let</code> | No       | <code>DataTableHeader[]</code>                                      | <code>[]</code>    | Specify the data table headers                                                                                      |
+| size           | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | --                 | Set the size of the data table                                                                                      |
+| title          | <code>let</code> | No       | <code>string</code>                                                 | <code>""</code>    | Specify the title of the data table                                                                                 |
+| description    | <code>let</code> | No       | <code>string</code>                                                 | <code>""</code>    | Specify the description of the data table                                                                           |
+| zebra          | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to use zebra styles                                                                                   |
+| sortable       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the sortable variant                                                                              |
+| batchExpansion | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable batch expansion                                                                             |
+| radio          | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the radio selection variant                                                                       |
+| batchSelection | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable batch selection                                                                             |
+| stickyHeader   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable a sticky header                                                                             |
 
 ### Slots
 
@@ -3687,14 +3687,14 @@ None.
 
 ### Props
 
-| Prop name        | Kind             | Reactive | Type                                                | Default value      | Description                             |
-| :--------------- | :--------------- | :------- | :-------------------------------------------------- | ------------------ | --------------------------------------- |
-| size             | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code> | --                 | Set the size of the table               |
-| zebra            | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to use zebra styles       |
-| useStaticWidth   | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to use static width       |
-| shouldShowBorder | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` for the bordered variant  |
-| sortable         | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` for the sortable variant  |
-| stickyHeader     | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to enable a sticky header |
+| Prop name        | Kind             | Reactive | Type                                                                | Default value      | Description                             |
+| :--------------- | :--------------- | :------- | :------------------------------------------------------------------ | ------------------ | --------------------------------------- |
+| size             | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | --                 | Set the size of the table               |
+| zebra            | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to use zebra styles       |
+| useStaticWidth   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to use static width       |
+| shouldShowBorder | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the bordered variant  |
+| sortable         | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the sortable variant  |
+| stickyHeader     | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable a sticky header |
 
 ### Slots
 

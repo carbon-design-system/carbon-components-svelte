@@ -6,7 +6,7 @@ export interface TableProps
   /**
    * Set the size of the table
    */
-  size?: "compact" | "short" | "tall";
+  size?: "compact" | "short" | "medium" | "tall";
 
   /**
    * Set to `true` to use zebra styles

@@ -1931,7 +1931,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the data table",
-          "type": "\"compact\" | \"short\" | \"tall\"",
+          "type": "\"compact\" | \"short\" | \"medium\" | \"tall\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -9392,7 +9392,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the table",
-          "type": "\"compact\" | \"short\" | \"tall\"",
+          "type": "\"compact\" | \"short\" | \"medium\" | \"tall\"",
           "isFunction": false,
           "constant": false,
           "reactive": false

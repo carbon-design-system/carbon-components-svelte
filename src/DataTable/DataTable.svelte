@@ -37,7 +37,7 @@
 
   /**
    * Set the size of the data table
-   * @type {"compact" | "short" | "tall"}
+   * @type {"compact" | "short" | "medium" | "tall"}
    */
   export let size = undefined;
 
