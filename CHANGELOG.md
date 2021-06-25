@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.34.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.34.0) - 2021-06-25
+
+**Features**
+
+- add new Gray 80 (g80) theme
+- support expandable `Search` variant
+- dispatch open, close, click:overlay events in `SideNav`
+- allow custom hamburger menu icons (`iconMenu`, `iconClose`)
+- support "xl" `Button` size
+- support "medium" `DataTable` size
+- support warning state, inline variant for `PasswordInput`
+
+**Fixes**
+
+- replace `<strong>` with semantic paragraph element for file uploader label
+- wrap `code` element with `pre`
+- add missing restProps annotation to `ToolbarSearch`
+
+**Refactor**
+
+- remove usage of deprecated `Icon` component
+- use button specific tooltip class for icon-only variant
+
+**Documentation**
+
+- update available site theming options to include Gray 80 (g80)
+- add Search example "Expandable variant"
+- add Button example "Extra-large size"
+- add DataTable example "Medium rows"
+- add PasswordInput examples "Inline" and "Warning state"
+
+**Housekeeping**
+
+- upgrade `carbon-components` to version 10.34.0
+
 ## [0.33.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.33.0) - 2021-04-30
 
 **Features**
