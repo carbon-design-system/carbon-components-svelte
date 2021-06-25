@@ -62,6 +62,7 @@
           >
             <SelectItem value="white" text="White" />
             <SelectItem value="g10" text="Gray 10" />
+            <SelectItem value="g80" text="Gray 80" />
             <SelectItem value="g90" text="Gray 90" />
             <SelectItem value="g100" text="Gray 100" />
           </Select>

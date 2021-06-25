@@ -89,6 +89,7 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 
 - **white.css**: Default Carbon theme (light)
 - **g10.css**: Gray 10 theme (light)
+- **g80.css**: Gray 80 theme (dark)
 - **g90.css**: Gray 90 theme (dark)
 - **g100.css**: Gray 100 theme (dark)
 - **all.css**: All themes (White, Gray 10, Gray 90, Gray 100) using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
@@ -99,6 +100,7 @@ The compiled CSS is generated from the following `.scss` files:
 
 - [css/white.scss](css/white.scss)
 - [css/g10.scss](css/g10.scss)
+- [css/g80.scss](css/g80.scss)
 - [css/g90.scss](css/g90.scss)
 - [css/g100.scss](css/g100.scss)
 - [css/all.scss](css/all.scss)
@@ -157,7 +159,7 @@ Using JavaScript:
 
 ```svelte
 <script>
-  /** @type {"white" | "g10" | "g90" | "g100"} */
+  /** @type {"white" | "g10" | "g80" | "g90" | "g100"} */
   let theme = "white";
 
   $: document.documentElement.setAttribute("theme", theme);

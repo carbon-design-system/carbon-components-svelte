@@ -13,7 +13,7 @@
 
   /**
    * Specify the size of button
-   * @type {"default" | "field" | "small"}
+   * @type {"default" | "field" | "small" | "xl"}
    */
   export let size = "default";
 
@@ -100,12 +100,15 @@
       "bx--btn",
       size === "field" && "bx--btn--field",
       size === "small" && "bx--btn--sm",
+      size === "xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
       hasIconOnly && "bx--tooltip__trigger",
       hasIconOnly && "bx--tooltip--a11y",
-      hasIconOnly && tooltipPosition && `bx--tooltip--${tooltipPosition}`,
+      hasIconOnly &&
+        tooltipPosition &&
+        `bx--btn--icon-only--${tooltipPosition}`,
       hasIconOnly &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,

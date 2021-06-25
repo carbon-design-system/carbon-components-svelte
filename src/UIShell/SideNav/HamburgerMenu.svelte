@@ -8,18 +8,31 @@
   /** Set to `true` to toggle the open state */
   export let isOpen = false;
 
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the closed state
+   * Defaults to `Menu20`
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let iconMenu = Menu20;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the opened state
+   * Defaults to `Close20`
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let iconClose = Close20;
+
   /** Obtain a reference to the HTML button element */
   export let ref = null;
 
   import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
   import Menu20 from "carbon-icons-svelte/lib/Menu20/Menu20.svelte";
-  import { Icon } from "../../Icon";
 </script>
 
 <button
   bind:this="{ref}"
   type="button"
-  title="Open menu"
+  title="{ariaLabel}"
   aria-label="{ariaLabel}"
   class:bx--header__action="{true}"
   class:bx--header__menu-trigger="{true}"
@@ -28,8 +41,5 @@
   on:click
   on:click="{() => (isOpen = !isOpen)}"
 >
-  <Icon
-    title="{isOpen ? 'Close' : 'Open Menu'}"
-    render="{isOpen ? Close20 : Menu20}"
-  />
+  <svelte:component this="{isOpen ? iconClose : iconMenu}" />
 </button>

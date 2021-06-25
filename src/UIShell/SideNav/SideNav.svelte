@@ -1,4 +1,10 @@
 <script>
+  /**
+   * @event {any} open
+   * @event {any} close
+   * @event {any} click:overlay
+   */
+
   /** Set to `true` to use the fixed variant */
   export let fixed = false;
 
@@ -11,8 +17,12 @@
   /** Set to `true` to toggle the expanded state */
   export let isOpen = false;
 
-  import { onMount } from "svelte";
+  import { onMount, createEventDispatcher } from "svelte";
   import { shouldRenderHamburgerMenu } from "../navStore";
+
+  const dispatch = createEventDispatcher();
+
+  $: dispatch(isOpen ? "open" : "close");
 
   onMount(() => {
     shouldRenderHamburgerMenu.set(true);
@@ -23,6 +33,7 @@
 {#if !fixed}
   <div
     on:click="{() => {
+      dispatch('click:overlay');
       isOpen = false;
     }}"
     class:bx--side-nav__overlay="{true}"

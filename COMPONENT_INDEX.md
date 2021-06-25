@@ -350,7 +350,7 @@ None.
 | ref              | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code>                                                                       | <code>null</code>      | Obtain a reference to the HTML element                                                                                                                                                        |
 | hasIconOnly      | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` for the icon-only variant                                                                                                                                                       |
 | kind             | <code>let</code> | No       | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger" &#124; "danger-tertiary" &#124; "danger-ghost"</code> | <code>"primary"</code> | Specify the kind of button                                                                                                                                                                    |
-| size             | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small"</code>                                                                                      | <code>"default"</code> | Specify the size of button                                                                                                                                                                    |
+| size             | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small" &#124; "xl"</code>                                                                          | <code>"default"</code> | Specify the size of button                                                                                                                                                                    |
 | isSelected       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to enable the selected state for an icon-only, ghost button                                                                                                                     |
 | icon             | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>                                                                              | --                     | Specify the icon from `carbon-icons-svelte` to render                                                                                                                                         |
 | iconDescription  | <code>let</code> | No       | <code>string</code>                                                                                                                       | --                     | Specify the ARIA label for the button icon                                                                                                                                                    |
@@ -930,23 +930,23 @@ export interface DataTableCell {
 
 ### Props
 
-| Prop name      | Kind             | Reactive | Type                                                | Default value      | Description                                                                                                         |
-| :------------- | :--------------- | :------- | :-------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| selectedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                       | <code>[]</code>    | Specify the row ids to be selected                                                                                  |
-| selectable     | <code>let</code> | Yes      | <code>boolean</code>                                | <code>false</code> | Set to `true` for the selectable variant<br />Automatically set to `true` if `radio` or `batchSelection` are `true` |
-| expandedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                       | <code>[]</code>    | Specify the row ids to be expanded                                                                                  |
-| expandable     | <code>let</code> | Yes      | <code>boolean</code>                                | <code>false</code> | Set to `true` for the expandable variant<br />Automatically set to `true` if `batchExpansion` is `true`             |
-| rows           | <code>let</code> | Yes      | <code>DataTableRow[]</code>                         | <code>[]</code>    | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
-| headers        | <code>let</code> | No       | <code>DataTableHeader[]</code>                      | <code>[]</code>    | Specify the data table headers                                                                                      |
-| size           | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code> | --                 | Set the size of the data table                                                                                      |
-| title          | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>    | Specify the title of the data table                                                                                 |
-| description    | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>    | Specify the description of the data table                                                                           |
-| zebra          | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to use zebra styles                                                                                   |
-| sortable       | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` for the sortable variant                                                                              |
-| batchExpansion | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to enable batch expansion                                                                             |
-| radio          | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` for the radio selection variant                                                                       |
-| batchSelection | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to enable batch selection                                                                             |
-| stickyHeader   | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to enable a sticky header                                                                             |
+| Prop name      | Kind             | Reactive | Type                                                                | Default value      | Description                                                                                                         |
+| :------------- | :--------------- | :------- | :------------------------------------------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| selectedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                                       | <code>[]</code>    | Specify the row ids to be selected                                                                                  |
+| selectable     | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the selectable variant<br />Automatically set to `true` if `radio` or `batchSelection` are `true` |
+| expandedRowIds | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                                       | <code>[]</code>    | Specify the row ids to be expanded                                                                                  |
+| expandable     | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the expandable variant<br />Automatically set to `true` if `batchExpansion` is `true`             |
+| rows           | <code>let</code> | Yes      | <code>DataTableRow[]</code>                                         | <code>[]</code>    | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
+| headers        | <code>let</code> | No       | <code>DataTableHeader[]</code>                                      | <code>[]</code>    | Specify the data table headers                                                                                      |
+| size           | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | --                 | Set the size of the data table                                                                                      |
+| title          | <code>let</code> | No       | <code>string</code>                                                 | <code>""</code>    | Specify the title of the data table                                                                                 |
+| description    | <code>let</code> | No       | <code>string</code>                                                 | <code>""</code>    | Specify the description of the data table                                                                           |
+| zebra          | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to use zebra styles                                                                                   |
+| sortable       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the sortable variant                                                                              |
+| batchExpansion | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable batch expansion                                                                             |
+| radio          | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the radio selection variant                                                                       |
+| batchSelection | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable batch selection                                                                             |
+| stickyHeader   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable a sticky header                                                                             |
 
 ### Slots
 
@@ -1505,16 +1505,18 @@ None.
 
 ### Props
 
-| Prop name               | Kind             | Reactive | Type                                       | Default value      | Description                                                                                                                      |
-| :---------------------- | :--------------- | :------- | :----------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| ref                     | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>  | Obtain a reference to the HTML anchor element                                                                                    |
-| isSideNavOpen           | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code> | Set to `true` to open the side nav                                                                                               |
-| expandedByDefault       | <code>let</code> | No       | <code>boolean</code>                       | <code>true</code>  | Set to `false` to hide the side nav by default                                                                                   |
-| uiShellAriaLabel        | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the ARIA label for the header                                                                                            |
-| href                    | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the `href` attribute                                                                                                     |
-| company                 | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the company name                                                                                                         |
-| platformName            | <code>let</code> | No       | <code>string</code>                        | <code>""</code>    | Specify the platform name<br />Alternatively, use the named slot "platform" (e.g., &lt;span slot="platform"&gt;...&lt;/span&gt;) |
-| persistentHamburgerMenu | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code> | Set to `true` to persist the hamburger menu                                                                                      |
+| Prop name               | Kind             | Reactive | Type                                                         | Default value      | Description                                                                                                                      |
+| :---------------------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| ref                     | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code>                   | <code>null</code>  | Obtain a reference to the HTML anchor element                                                                                    |
+| isSideNavOpen           | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code> | Set to `true` to open the side nav                                                                                               |
+| expandedByDefault       | <code>let</code> | No       | <code>boolean</code>                                         | <code>true</code>  | Set to `false` to hide the side nav by default                                                                                   |
+| uiShellAriaLabel        | <code>let</code> | No       | <code>string</code>                                          | --                 | Specify the ARIA label for the header                                                                                            |
+| href                    | <code>let</code> | No       | <code>string</code>                                          | --                 | Specify the `href` attribute                                                                                                     |
+| company                 | <code>let</code> | No       | <code>string</code>                                          | --                 | Specify the company name                                                                                                         |
+| platformName            | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>    | Specify the platform name<br />Alternatively, use the named slot "platform" (e.g., &lt;span slot="platform"&gt;...&lt;/span&gt;) |
+| persistentHamburgerMenu | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code> | Set to `true` to persist the hamburger menu                                                                                      |
+| iconMenu                | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                 | Specify the icon from `carbon-icons-svelte` to render for the closed state<br />Defaults to `Menu20`                             |
+| iconClose               | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                 | Specify the icon from `carbon-icons-svelte` to render for the opened state<br />Defaults to `Close20`                            |
 
 ### Slots
 
@@ -2745,6 +2747,9 @@ None.
 | hideLabel         | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to visually hide the label text         |
 | invalid           | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to indicate an invalid state            |
 | invalidText       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the text for the invalid state                |
+| warn              | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to indicate an warning state            |
+| warnText          | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the warning state text                        |
+| inline            | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to use inline version                   |
 | id                | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                       |
 | name              | <code>let</code> | No       | <code>string</code>                                             | --                                               | Specify a name attribute for the input                |
 
@@ -3011,12 +3016,14 @@ None.
 | :------------------- | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
 | ref                  | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element            |
 | value                | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>                                  | Specify the value of the search input                   |
+| expanded             | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true to expand the search input                 |
 | small                | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | --                                                      |
 | size                 | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code>                                | Specify the size of the search input                    |
 | searchClass          | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the class name passed to the outer div element  |
 | skeleton             | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state             |
 | light                | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant               |
 | disabled             | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the search input               |
+| expandable           | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the expandable variant          |
 | type                 | <code>let</code> | No       | <code>string</code>                       | <code>"text"</code>                              | Specify the `type` attribute of the search input        |
 | placeholder          | <code>let</code> | No       | <code>string</code>                       | <code>"Search..."</code>                         | Specify the `placeholder` attribute of the search input |
 | autocomplete         | <code>let</code> | No       | <code>"on" &#124; "off"</code>            | <code>"off"</code>                               | Specify the `autocomplete` attribute                    |
@@ -3031,18 +3038,20 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| change     | forwarded  | --     |
-| input      | forwarded  | --     |
-| focus      | forwarded  | --     |
-| blur       | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| clear      | dispatched | --     |
+| Event name | Type       | Detail           |
+| :--------- | :--------- | :--------------- |
+| expand     | dispatched | <code>any</code> |
+| collapse   | dispatched | <code>any</code> |
+| click      | forwarded  | --               |
+| mouseover  | forwarded  | --               |
+| mouseenter | forwarded  | --               |
+| mouseleave | forwarded  | --               |
+| change     | forwarded  | --               |
+| input      | forwarded  | --               |
+| focus      | forwarded  | --               |
+| blur       | forwarded  | --               |
+| keydown    | forwarded  | --               |
+| clear      | dispatched | --               |
 
 ## `SearchSkeleton`
 
@@ -3212,7 +3221,11 @@ None.
 
 ### Events
 
-None.
+| Event name    | Type       | Detail           |
+| :------------ | :--------- | :--------------- |
+| open          | dispatched | <code>any</code> |
+| close         | dispatched | <code>any</code> |
+| click:overlay | dispatched | <code>any</code> |
 
 ## `SideNavDivider`
 
@@ -3674,14 +3687,14 @@ None.
 
 ### Props
 
-| Prop name        | Kind             | Reactive | Type                                                | Default value      | Description                             |
-| :--------------- | :--------------- | :------- | :-------------------------------------------------- | ------------------ | --------------------------------------- |
-| size             | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code> | --                 | Set the size of the table               |
-| zebra            | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to use zebra styles       |
-| useStaticWidth   | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to use static width       |
-| shouldShowBorder | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` for the bordered variant  |
-| sortable         | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` for the sortable variant  |
-| stickyHeader     | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to enable a sticky header |
+| Prop name        | Kind             | Reactive | Type                                                                | Default value      | Description                             |
+| :--------------- | :--------------- | :------- | :------------------------------------------------------------------ | ------------------ | --------------------------------------- |
+| size             | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | --                 | Set the size of the table               |
+| zebra            | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to use zebra styles       |
+| useStaticWidth   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to use static width       |
+| shouldShowBorder | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the bordered variant  |
+| sortable         | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the sortable variant  |
+| stickyHeader     | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable a sticky header |
 
 ### Slots
 

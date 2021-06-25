@@ -84,7 +84,7 @@
   on:mouseenter
   on:mouseleave
 >
-  <strong class:bx--file--label="{true}">{labelTitle}</strong>
+  <p class:bx--file--label="{true}">{labelTitle}</p>
   <p class:bx--label-description="{true}">{labelDescription}</p>
   <FileUploaderButton
     disableLabelChanges

@@ -1,7 +1,7 @@
 <script>
   export let persist = false;
   export let persistKey = "carbon-theme";
-  export const themes = ["white", "g10", "g90", "g100"];
+  export const themes = ["white", "g10", "g80", "g90", "g100"];
 
   import { onMount, afterUpdate } from "svelte";
   import { theme } from "../store";

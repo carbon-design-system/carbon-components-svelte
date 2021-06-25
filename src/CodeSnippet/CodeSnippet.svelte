@@ -179,11 +179,10 @@
       aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
       class:bx--snippet-container="{true}"
     >
-      <code>
-        <pre bind:this="{ref}">
-            <slot>{code}</slot>
-          </pre>
-      </code>
+      <pre
+        bind:this="{ref}">
+        <code><slot>{code}</slot></code>
+      </pre>
     </div>
     {#if !hideCopyButton}
       <CopyButton
