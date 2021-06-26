@@ -32,7 +32,7 @@
     "@rollup/plugin-node-resolve": "^11.1.1",
     "@tsconfig/svelte": "^1.0.10",
     "autoprefixer": "^10.2.4",
-    "carbon-components": "10.34.0",
+    "carbon-components": "10.35.0",
     "gh-pages": "^3.1.0",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.3",
