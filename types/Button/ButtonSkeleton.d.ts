@@ -12,7 +12,7 @@ export interface ButtonSkeletonProps
    * Specify the size of button skeleton
    * @default "default"
    */
-  size?: "default" | "field" | "small";
+  size?: "default" | "field" | "small" | "lg" | "xl";
 
   /**
    * @default false

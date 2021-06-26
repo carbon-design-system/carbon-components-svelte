@@ -575,7 +575,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of button skeleton",
-          "type": "\"default\" | \"field\" | \"small\"",
+          "type": "\"default\" | \"field\" | \"small\" | \"lg\" | \"xl\"",
           "value": "\"default\"",
           "isFunction": false,
           "constant": false,

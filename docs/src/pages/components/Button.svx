@@ -134,6 +134,8 @@ Note: the expressive styles only apply to the default and `"xl"` size buttons.
 
 ### Skeleton
 
+<Button size="xl" skeleton />
+<Button size="lg" skeleton />
 <Button skeleton />
 <Button skeleton size="field" />
 <Button skeleton size="small" />

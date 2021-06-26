@@ -401,11 +401,11 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                 | Default value          | Description                          |
-| :-------- | :--------------- | :------- | :--------------------------------------------------- | ---------------------- | ------------------------------------ |
-| href      | <code>let</code> | No       | <code>string</code>                                  | --                     | Set the `href` to use an anchor link |
-| size      | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small"</code> | <code>"default"</code> | Specify the size of button skeleton  |
-| small     | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>     | --                                   |
+| Prop name | Kind             | Reactive | Type                                                                         | Default value          | Description                          |
+| :-------- | :--------------- | :------- | :--------------------------------------------------------------------------- | ---------------------- | ------------------------------------ |
+| href      | <code>let</code> | No       | <code>string</code>                                                          | --                     | Set the `href` to use an anchor link |
+| size      | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small" &#124; "lg" &#124; "xl"</code> | <code>"default"</code> | Specify the size of button skeleton  |
+| small     | <code>let</code> | No       | <code>boolean</code>                                                         | <code>false</code>     | --                                   |
 
 ### Slots
 
