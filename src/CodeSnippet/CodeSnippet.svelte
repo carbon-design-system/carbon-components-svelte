@@ -97,6 +97,8 @@
   }
 
   $: expandText = expanded ? showLessText : showMoreText;
+  $: minHeight = expanded ? 16 * 15 : 48;
+  $: maxHeight = expanded ? "none" : 16 * 15 + "px";
   $: if (type === "multi" && ref) {
     if (code === undefined) setShowMoreLess();
     if (code) tick().then(setShowMoreLess);
@@ -178,6 +180,7 @@
       tabindex="{type === 'single' && !disabled ? '0' : undefined}"
       aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
       class:bx--snippet-container="{true}"
+      style="width: 100%; min-height: {minHeight}px; max-height: {maxHeight}"
     >
       <pre
         bind:this="{ref}">
