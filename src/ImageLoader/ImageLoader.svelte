@@ -67,7 +67,7 @@
   let image = null;
 
   $: loading = !loaded && !error;
-  $: if (src) loadImage();
+  $: if (src && typeof window !== "undefined") loadImage();
   $: if (loaded) dispatch("load");
   $: if (error) dispatch("error");
 
