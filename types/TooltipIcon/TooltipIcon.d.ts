@@ -16,6 +16,12 @@ export interface TooltipIconProps
   icon?: typeof import("carbon-icons-svelte").CarbonIcon;
 
   /**
+   * Set to `true` to disable the tooltip icon
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
    * Set the alignment of the tooltip relative to the icon
    * @default "center"
    */

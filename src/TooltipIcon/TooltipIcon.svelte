@@ -11,6 +11,9 @@
    */
   export let icon = undefined;
 
+  /** Set to `true` to disable the tooltip icon */
+  export let disabled = false;
+
   /**
    * Set the alignment of the tooltip relative to the icon
    * @type {"start" | "center" | "end"}
@@ -41,10 +44,11 @@
 
 <button
   bind:this="{ref}"
+  disabled="{disabled}"
   aria-describedby="{id}"
   class:bx--tooltip__trigger="{true}"
   class:bx--tooltip--a11y="{true}"
-  class:bx--tooltip--hidden="{hidden}"
+  class:bx--tooltip--hidden="{hidden || disabled}"
   class:bx--tooltip--top="{direction === 'top'}"
   class:bx--tooltip--right="{direction === 'right'}"
   class:bx--tooltip--bottom="{direction === 'bottom'}"
@@ -53,15 +57,18 @@
   class:bx--tooltip--align-center="{align === 'center'}"
   class:bx--tooltip--align-end="{align === 'end'}"
   {...$$restProps}
+  style="cursor: {disabled ? 'not-allowed' : 'default'}; {$$restProps.style}"
   on:click
   on:mouseover
   on:mouseenter
   on:mouseenter="{() => {
+    if (disabled) return;
     hidden = false;
   }}"
   on:mouseleave
   on:focus
   on:focus="{() => {
+    if (disabled) return;
     hidden = false;
   }}"
 >

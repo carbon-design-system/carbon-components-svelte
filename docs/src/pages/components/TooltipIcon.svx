@@ -23,3 +23,7 @@ Use the "text" slot to customize the tooltip text.
 <TooltipIcon icon={Carbon24}>
   <span slot="tooltipText" style="color: red">Carbon is an open source design system by IBM.</span>
 </TooltipIcon>
+
+### Disabled
+
+<TooltipIcon disabled tooltipText="Carbon is an open source design system by IBM." icon={Carbon24} />
