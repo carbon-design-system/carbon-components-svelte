@@ -93,6 +93,8 @@
       on:input="{({ target }) => {
         value = target.value;
       }}"
+      on:keydown
+      on:keyup
       on:focus
       on:blur></textarea>
   </div>
