@@ -186,6 +186,7 @@
       <div
         bind:this="{refIcon}"
         {...buttonProps}
+        aria-describedby="{tooltipId}"
         on:click|preventDefault|stopPropagation="{openMenu}"
         on:focus="{openMenu}"
         on:blur="{onBlur}"
@@ -200,6 +201,7 @@
     <div
       bind:this="{ref}"
       {...buttonProps}
+      aria-describedby="{tooltipId}"
       on:click|preventDefault|stopPropagation="{openMenu}"
       on:focus="{openMenu}"
       on:blur="{onBlur}"
@@ -211,7 +213,6 @@
   {#if open}
     <div
       bind:this="{refTooltip}"
-      role="tooltip"
       id="{tooltipId}"
       data-floating-menu-direction="{direction}"
       class:bx--tooltip="{true}"
@@ -231,8 +232,6 @@
         class:bx--tooltip__content="{true}"
         tabIndex="-1"
         role="dialog"
-        aria-describedby="{$$props['tooltipBodyId']}"
-        aria-labelledby="{triggerId}"
       >
         <slot />
       </div>
