@@ -76,11 +76,7 @@
     on:mouseleave
   >
     <div class:bx--inline-notification__details="{true}">
-      <NotificationIcon
-        notificationType="inline"
-        kind="{kind}"
-        iconDescription="{iconDescription}"
-      />
+      <NotificationIcon notificationType="inline" kind="{kind}" />
       <NotificationTextDetails
         title="{title}"
         subtitle="{subtitle}"

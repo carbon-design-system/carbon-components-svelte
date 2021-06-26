@@ -77,7 +77,7 @@
     on:mouseenter
     on:mouseleave
   >
-    <NotificationIcon kind="{kind}" iconDescription="{iconDescription}" />
+    <NotificationIcon kind="{kind}" />
     <NotificationTextDetails
       title="{title}"
       subtitle="{subtitle}"
