@@ -27,6 +27,14 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
 
 <FileUploaderItem invalid name="README.md" status="edit" />
 
+### Item sizes
+
+The default `FileUploaderItem` size is "default".
+
+<FileUploaderItem size="default" name="README.md" status="uploading" />
+<FileUploaderItem size="field" name="README.md" status="uploading" />
+<FileUploaderItem size="small" name="README.md" status="uploading" />
+
 ### Drop container
 
 <FileUploaderDropContainer labelText="Drag and drop files here or click to upload" multiple />

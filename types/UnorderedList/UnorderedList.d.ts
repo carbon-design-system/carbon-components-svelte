@@ -8,6 +8,12 @@ export interface UnorderedListProps
    * @default false
    */
   nested?: boolean;
+
+  /**
+   * Set to `true` to use Carbon's expressive typesetting
+   * @default false
+   */
+  expressive?: boolean;
 }
 
 export default class UnorderedList extends SvelteComponentTyped<

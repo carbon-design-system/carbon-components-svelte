@@ -7,22 +7,23 @@
 
 ### Default ("bottom" direction, "center" aligned)
 
-<TooltipIcon tooltipText="Carbon is an open source design system by IBM.">
-  <Carbon24 />
-</TooltipIcon>
+<TooltipIcon tooltipText="Carbon is an open source design system by IBM." icon={Carbon24} />
 
 ### Directions
 
-<TooltipIcon tooltipText="Top start" direction="top" align="start"><Filter20 /></TooltipIcon>
-<TooltipIcon tooltipText="Right end" direction="right" align="end"><Filter20 /></TooltipIcon>
-<TooltipIcon tooltipText="Bottom start" direction="bottom" align="start"><Filter20 /></TooltipIcon>
-<TooltipIcon tooltipText="Left start" direction="left" align="start"><Filter20 /></TooltipIcon>
+<TooltipIcon tooltipText="Top start" direction="top" align="start" icon={Filter20} />
+<TooltipIcon tooltipText="Right end" direction="right" align="end" icon={Filter20} />
+<TooltipIcon tooltipText="Bottom start" direction="bottom" align="start" icon={Filter20} />
+<TooltipIcon tooltipText="Left start" direction="left" align="start" icon={Filter20} />
 
 ### Custom tooltip text
 
 Use the "text" slot to customize the tooltip text.
 
-<TooltipIcon>
+<TooltipIcon icon={Carbon24}>
   <span slot="tooltipText" style="color: red">Carbon is an open source design system by IBM.</span>
-  <Carbon24 />
 </TooltipIcon>
+
+### Disabled
+
+<TooltipIcon disabled tooltipText="Carbon is an open source design system by IBM." icon={Carbon24} />

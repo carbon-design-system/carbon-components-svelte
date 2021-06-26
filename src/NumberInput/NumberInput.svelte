@@ -49,6 +49,9 @@
   /** Set to `true` to disable the input */
   export let disabled = false;
 
+  /** Set to `true` to hide the input stepper buttons */
+  export let hideSteppers = false;
+
   /** Specify the ARIA label for the increment icons */
   export let iconDescription = "";
 
@@ -156,6 +159,7 @@
     class:bx--number--readonly="{readonly}"
     class:bx--number--light="{light}"
     class:bx--number--nolabel="{hideLabel}"
+    class:bx--number--nosteppers="{hideSteppers}"
     class:bx--number--mobile="{mobile}"
     class="{size && `bx--number--${size}`}"
   >
@@ -269,38 +273,40 @@
             class="bx--number__invalid bx--number__invalid--warning"
           />
         {/if}
-        <div class:bx--number__controls="{true}">
-          <button
-            type="button"
-            tabindex="-1"
-            title="{decrementLabel || iconDescription}"
-            aria-label="{decrementLabel || iconDescription}"
-            class:bx--number__control-btn="{true}"
-            class:down-icon="{true}"
-            on:click="{() => {
-              updateValue(-1);
-            }}"
-            disabled="{disabled}"
-          >
-            <Subtract16 class="down-icon" />
-          </button>
-          <div class:bx--number__rule-divider="{true}"></div>
-          <button
-            type="button"
-            tabindex="-1"
-            title="{incrementLabel || iconDescription}"
-            aria-label="{incrementLabel || iconDescription}"
-            class:bx--number__control-btn="{true}"
-            class:up-icon="{true}"
-            on:click="{() => {
-              updateValue(1);
-            }}"
-            disabled="{disabled}"
-          >
-            <Add16 class="up-icon" />
-          </button>
-          <div class:bx--number__rule-divider="{true}"></div>
-        </div>
+        {#if !hideSteppers}
+          <div class:bx--number__controls="{true}">
+            <button
+              type="button"
+              tabindex="-1"
+              title="{decrementLabel || iconDescription}"
+              aria-label="{decrementLabel || iconDescription}"
+              class:bx--number__control-btn="{true}"
+              class:down-icon="{true}"
+              on:click="{() => {
+                updateValue(-1);
+              }}"
+              disabled="{disabled}"
+            >
+              <Subtract16 class="down-icon" />
+            </button>
+            <div class:bx--number__rule-divider="{true}"></div>
+            <button
+              type="button"
+              tabindex="-1"
+              title="{incrementLabel || iconDescription}"
+              aria-label="{incrementLabel || iconDescription}"
+              class:bx--number__control-btn="{true}"
+              class:up-icon="{true}"
+              on:click="{() => {
+                updateValue(1);
+              }}"
+              disabled="{disabled}"
+            >
+              <Add16 class="up-icon" />
+            </button>
+            <div class:bx--number__rule-divider="{true}"></div>
+          </div>
+        {/if}
       </div>
     {/if}
     {#if !error && !warn && helperText}

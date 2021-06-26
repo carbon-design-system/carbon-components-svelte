@@ -63,6 +63,12 @@ export interface NumberInputProps
   disabled?: boolean;
 
   /**
+   * Set to `true` to hide the input stepper buttons
+   * @default false
+   */
+  hideSteppers?: boolean;
+
+  /**
    * Specify the ARIA label for the increment icons
    * @default ""
    */

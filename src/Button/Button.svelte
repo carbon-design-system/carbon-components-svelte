@@ -13,9 +13,12 @@
 
   /**
    * Specify the size of button
-   * @type {"default" | "field" | "small" | "xl"}
+   * @type {"default" | "field" | "small" | "lg" | "xl"}
    */
   export let size = "default";
+
+  /** Set to `true` to use Carbon's expressive typesetting */
+  export let expressive = false;
 
   /**
    * Set to `true` to enable the selected state for an icon-only, ghost button
@@ -98,8 +101,16 @@
     ...$$restProps,
     class: [
       "bx--btn",
+      expressive && "bx--btn--expressive",
+      ((size === "small" && !expressive) ||
+        (size === "sm" && !expressive) ||
+        (size === "small" && !expressive)) &&
+        "bx--btn--sm",
+      (size === "field" && !expressive) ||
+        (size === "md" && !expressive && "bx--btn--md"),
       size === "field" && "bx--btn--field",
       size === "small" && "bx--btn--sm",
+      size === "lg" && "bx--btn--lg",
       size === "xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",

@@ -362,8 +362,18 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of button",
-          "type": "\"default\" | \"field\" | \"small\" | \"xl\"",
+          "type": "\"default\" | \"field\" | \"small\" | \"lg\" | \"xl\"",
           "value": "\"default\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "expressive",
+          "kind": "let",
+          "description": "Set to `true` to use Carbon's expressive typesetting",
+          "type": "boolean",
+          "value": "false",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -565,7 +575,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of button skeleton",
-          "type": "\"default\" | \"field\" | \"small\"",
+          "type": "\"default\" | \"field\" | \"small\" | \"lg\" | \"xl\"",
           "value": "\"default\"",
           "isFunction": false,
           "constant": false,
@@ -3343,6 +3353,16 @@
           "description": "Specify the file uploader status",
           "type": "\"uploading\" | \"edit\" | \"complete\"",
           "value": "\"uploading\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the size of button skeleton",
+          "type": "\"default\" | \"field\" | \"small\"",
+          "value": "\"default\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -6135,6 +6155,16 @@
           "reactive": false
         },
         {
+          "name": "hideSteppers",
+          "kind": "let",
+          "description": "Set to `true` to hide the input stepper buttons",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "iconDescription",
           "kind": "let",
           "description": "Specify the ARIA label for the increment icons",
@@ -6332,6 +6362,16 @@
           "name": "native",
           "kind": "let",
           "description": "Set to `true` to use native list styles",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "expressive",
+          "kind": "let",
+          "description": "Set to `true` to use Carbon's expressive typesetting",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -7935,6 +7975,15 @@
           "description": "Specify the label text",
           "type": "string",
           "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "icon",
+          "kind": "let",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -11366,6 +11415,25 @@
           "reactive": false
         },
         {
+          "name": "icon",
+          "kind": "let",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the tooltip icon",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "align",
           "kind": "let",
           "description": "Set the alignment of the tooltip relative to the icon",
@@ -11407,7 +11475,12 @@
         }
       ],
       "slots": [
-        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "__default__",
+          "default": true,
+          "fallback": "<svelte:component this=\"{icon}\" />",
+          "slot_props": "{}"
+        },
         {
           "name": "tooltipText",
           "default": false,
@@ -11452,6 +11525,16 @@
           "name": "nested",
           "kind": "let",
           "description": "Set to `true` to use the nested variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "expressive",
+          "kind": "let",
+          "description": "Set to `true` to use Carbon's expressive typesetting",
           "type": "boolean",
           "value": "false",
           "isFunction": false,

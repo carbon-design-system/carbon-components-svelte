@@ -70,3 +70,13 @@ Use the `native` attribute to enable default browser list styles. This is useful
   <ListItem>Ordered list level 1</ListItem>
   <ListItem>Ordered list level 1</ListItem>
 </OrderedList>
+
+### Expressive styles
+
+Set `expressive` to `true` to use Carbon's expressive typesetting.
+
+<OrderedList expressive>
+  <ListItem><Link size="lg" href="#">Ordered list item</Link></ListItem>
+  <ListItem>Ordered list item</ListItem>
+  <ListItem>Ordered list item</ListItem>
+</OrderedList>

@@ -23,6 +23,10 @@ components: ["NumberInput", "NumberInputSkeleton"]
 
 <NumberInput hideLabel label="Clusters" />
 
+### Hidden steppers
+
+<NumberInput hideSteppers label="Clusters" />
+
 ### Light variant
 
 <NumberInput light label="Clusters" />
