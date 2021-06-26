@@ -1,6 +1,6 @@
 # Component Index
 
-> 167 components exported from carbon-components-svelte@0.36.0.
+> 168 components exported from carbon-components-svelte@0.36.0.
 
 ## Components
 
@@ -99,6 +99,7 @@
 - [`PaginationSkeleton`](#paginationskeleton)
 - [`PasswordInput`](#passwordinput)
 - [`Popover`](#popover)
+- [`ProgressBar`](#progressbar)
 - [`ProgressIndicator`](#progressindicator)
 - [`ProgressIndicatorSkeleton`](#progressindicatorskeleton)
 - [`ProgressStep`](#progressstep)
@@ -2815,6 +2816,28 @@ None.
 | Event name    | Type       | Detail |
 | :------------ | :--------- | :----- |
 | click:outside | dispatched | --     |
+
+## `ProgressBar`
+
+### Props
+
+| Prop name  | Kind             | Reactive | Type                 | Default value      | Description                                   |
+| :--------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------------- |
+| value      | <code>let</code> | No       | <code>number</code>  | --                 | Specify the current value                     |
+| max        | <code>let</code> | No       | <code>number</code>  | <code>100</code>   | Specify the maximum value                     |
+| labelText  | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the label text                        |
+| hideLabel  | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to visually hide the label text |
+| helperText | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the helper text                       |
+
+### Slots
+
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
+
+### Events
+
+None.
 
 ## `ProgressIndicator`
 

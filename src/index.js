@@ -85,6 +85,7 @@ export { OverflowMenu, OverflowMenuItem } from "./OverflowMenu";
 export { Pagination, PaginationSkeleton } from "./Pagination";
 export { PaginationNav } from "./PaginationNav";
 export { Popover } from "./Popover";
+export { ProgressBar } from "./ProgressBar";
 export {
   ProgressIndicator,
   ProgressIndicatorSkeleton,
