@@ -48,3 +48,13 @@ components: ["UnorderedList", "ListItem"]
   <ListItem>Unordered list level 1</ListItem>
   <ListItem>Unordered list level 1</ListItem>
 </UnorderedList>
+
+### Expressive styles
+
+Set `expressive` to `true` to use Carbon's expressive typesetting.
+
+<UnorderedList expressive>
+  <ListItem><Link size="lg" href="#">Unordered list item</Link></ListItem>
+  <ListItem>Unordered list item</ListItem>
+  <ListItem>Unordered list item</ListItem>
+</UnorderedList>

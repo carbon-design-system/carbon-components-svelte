@@ -27,6 +27,12 @@ export interface ButtonProps
   size?: "default" | "field" | "small" | "xl";
 
   /**
+   * Set to `true` to use Carbon's expressive typesetting
+   * @default false
+   */
+  expressive?: boolean;
+
+  /**
    * Set to `true` to enable the selected state for an icon-only, ghost button
    * @default false
    */

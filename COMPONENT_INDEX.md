@@ -351,6 +351,7 @@ None.
 | hasIconOnly      | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` for the icon-only variant                                                                                                                                                       |
 | kind             | <code>let</code> | No       | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger" &#124; "danger-tertiary" &#124; "danger-ghost"</code> | <code>"primary"</code> | Specify the kind of button                                                                                                                                                                    |
 | size             | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small" &#124; "xl"</code>                                                                          | <code>"default"</code> | Specify the size of button                                                                                                                                                                    |
+| expressive       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to use Carbon's expressive typesetting                                                                                                                                          |
 | isSelected       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to enable the selected state for an icon-only, ghost button                                                                                                                     |
 | icon             | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code>                                                                              | --                     | Specify the icon from `carbon-icons-svelte` to render                                                                                                                                         |
 | iconDescription  | <code>let</code> | No       | <code>string</code>                                                                                                                       | --                     | Specify the ARIA label for the button icon                                                                                                                                                    |
@@ -2540,10 +2541,11 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                 | Default value      | Description                             |
-| :-------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------- |
-| nested    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant |
-| native    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use native list styles |
+| Prop name  | Kind             | Reactive | Type                 | Default value      | Description                                          |
+| :--------- | :--------------- | :------- | :------------------- | ------------------ | ---------------------------------------------------- |
+| nested     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant              |
+| native     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use native list styles              |
+| expressive | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use Carbon's expressive typesetting |
 
 ### Slots
 
@@ -4563,9 +4565,10 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                 | Default value      | Description                             |
-| :-------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------- |
-| nested    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant |
+| Prop name  | Kind             | Reactive | Type                 | Default value      | Description                                          |
+| :--------- | :--------------- | :------- | :------------------- | ------------------ | ---------------------------------------------------- |
+| nested     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant              |
+| expressive | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use Carbon's expressive typesetting |
 
 ### Slots
 
