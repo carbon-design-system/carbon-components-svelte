@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.35.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.35.0) - 2021-06-26
+
+**Features**
+
+- support expressive styles for `Button`, `UnorderedList`, `OrderedList`
+- support large size for `Button` (`size="lg"`)
+- support large, extra-large `ButtonSkeleton` sizes
+- support field, small sizes for `FileUploaderItem`
+- allow custom `Search` icon
+- allow `NumberInput` input steppers to be hidden (`hideSteppers={true}`)
+- add `icon` prop to `TooltipIcon`
+- support disabled `TooltipIcon`
+
+**Fixes**
+
+- make `Tooltip` screenreader description less verbose
+
+**Documentation**
+
+- add Button examples "Large size", "Expressive styles"
+- add OrderedList example "Expressive styles"
+- add UnorderedList example "Expressive styles"
+- add Search example "Custom search icon"
+- add NumberInput example "Hidden steppers"
+- add TooltipIcon example "Disabled"
+
+**Housekeeping**
+
+- upgrade `carbon-components` to version 10.35.0
+
 ## [0.34.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.34.0) - 2021-06-25
 
 **Features**
