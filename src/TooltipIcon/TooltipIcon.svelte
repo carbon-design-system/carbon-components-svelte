@@ -6,6 +6,12 @@
   export let tooltipText = "";
 
   /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let icon = undefined;
+
+  /**
    * Set the alignment of the tooltip relative to the icon
    * @type {"start" | "center" | "end"}
    */
@@ -62,5 +68,7 @@
   <span id="{id}" class:bx--assistive-text="{true}">
     <slot name="tooltipText">{tooltipText}</slot>
   </span>
-  <slot />
+  <slot>
+    <svelte:component this="{icon}" />
+  </slot>
 </button>

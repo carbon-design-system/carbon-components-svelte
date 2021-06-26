@@ -11366,6 +11366,15 @@
           "reactive": false
         },
         {
+          "name": "icon",
+          "kind": "let",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "align",
           "kind": "let",
           "description": "Set the alignment of the tooltip relative to the icon",
@@ -11407,7 +11416,12 @@
         }
       ],
       "slots": [
-        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "__default__",
+          "default": true,
+          "fallback": "<svelte:component this=\"{icon}\" />",
+          "slot_props": "{}"
+        },
         {
           "name": "tooltipText",
           "default": false,

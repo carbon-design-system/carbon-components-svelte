@@ -11,6 +11,11 @@ export interface TooltipIconProps
   tooltipText?: string;
 
   /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   */
+  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+
+  /**
    * Set the alignment of the tooltip relative to the icon
    * @default "center"
    */
