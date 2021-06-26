@@ -3461,6 +3461,8 @@ None.
 | :-------- | :--------------- | :------- | :------------------- | ------------------ | ---------------------------------------------- |
 | selected  | <code>let</code> | Yes      | <code>string</code>  | --                 | Specify the selected structured list row value |
 | border    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the bordered variant      |
+| condensed | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the condensed variant     |
+| flush     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to flush the list                |
 | selection | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the selection variant     |
 
 ### Slots
