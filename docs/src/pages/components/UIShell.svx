@@ -40,7 +40,7 @@ The hamburger menu will automatically be rendered if the `SideNav` component is 
 
 Set `rail` to `true` on `SideNav` to use the rail variant.
 
-<FileSource src="/framed/UIShell/HeaderNav" />
+<FileSource src="/framed/UIShell/HeaderNavRail" />
 
 ### Header with app switcher
 
