@@ -83,7 +83,7 @@
   on:mouseleave
 >
   {#if inline}
-    <div class="bx--text-input__label-helper-wrapper">
+    <div class:bx--text-input__label-helper-wrapper="{true}">
       {#if labelText}
         <label
           for="{id}"
