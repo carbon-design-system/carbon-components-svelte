@@ -24,7 +24,7 @@ export interface ButtonProps
    * Specify the size of button
    * @default "default"
    */
-  size?: "default" | "field" | "small" | "xl";
+  size?: "default" | "field" | "small" | "lg" | "xl";
 
   /**
    * Set to `true` to use Carbon's expressive typesetting

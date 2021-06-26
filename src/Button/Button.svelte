@@ -13,7 +13,7 @@
 
   /**
    * Specify the size of button
-   * @type {"default" | "field" | "small" | "xl"}
+   * @type {"default" | "field" | "small" | "lg" | "xl"}
    */
   export let size = "default";
 
@@ -110,6 +110,7 @@
         (size === "md" && !expressive && "bx--btn--md"),
       size === "field" && "bx--btn--field",
       size === "small" && "bx--btn--sm",
+      size === "lg" && "bx--btn--lg",
       size === "xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",

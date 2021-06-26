@@ -78,7 +78,7 @@ If an `href` value is specified, the component will render an [anchor element](h
   <p {...props}>Custom element</p>
 </Button>
 
-### Field button
+### Field size
 
 <Button size="field">Primary</Button>
 <Button size="field" kind="secondary">Secondary</Button>
@@ -86,7 +86,7 @@ If an `href` value is specified, the component will render an [anchor element](h
 <Button size="field" kind="ghost">Ghost</Button>
 <Button size="field" kind="danger">Danger</Button>
 
-### Small button
+### Small size
 
 <Button size="small">Primary</Button>
 <Button size="small" kind="secondary">Secondary</Button>
@@ -94,7 +94,15 @@ If an `href` value is specified, the component will render an [anchor element](h
 <Button size="small" kind="ghost">Ghost</Button>
 <Button size="small" kind="danger">Danger</Button>
 
-### Extra-large button
+### Large size
+
+<Button size="lg">Primary</Button>
+<Button size="lg" kind="secondary">Secondary</Button>
+<Button size="lg" kind="tertiary">Tertiary</Button>
+<Button size="lg" kind="ghost">Ghost</Button>
+<Button size="lg" kind="danger">Danger</Button>
+
+### Extra-large size
 
 <Button size="xl">Primary</Button>
 <Button size="xl" kind="secondary">Secondary</Button>
