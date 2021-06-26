@@ -11,6 +11,9 @@
    */
   export let text = undefined;
 
+  /** Set to `true` to select the item */
+  export let isSelected = undefined;
+
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 </script>
@@ -23,6 +26,7 @@
     href="{href}"
     rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
     class:bx--header__menu-item="{true}"
+    aria-current="{isSelected ? 'page' : undefined}"
     {...$$restProps}
     on:click
     on:mouseover

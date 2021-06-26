@@ -14,6 +14,11 @@ export interface HeaderNavItemProps
   text?: string;
 
   /**
+   * Set to `true` to select the item
+   */
+  isSelected?: undefined;
+
+  /**
    * Obtain a reference to the HTML anchor element
    * @default null
    */

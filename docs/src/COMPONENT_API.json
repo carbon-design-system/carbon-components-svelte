@@ -4079,6 +4079,14 @@
           "reactive": false
         },
         {
+          "name": "isSelected",
+          "kind": "let",
+          "description": "Set to `true` to select the item",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "ref",
           "kind": "let",
           "description": "Obtain a reference to the HTML anchor element",
