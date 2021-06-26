@@ -10,6 +10,12 @@ export interface FileUploaderItemProps
   status?: "uploading" | "edit" | "complete";
 
   /**
+   * Specify the size of button skeleton
+   * @default "default"
+   */
+  size?: "default" | "field" | "small";
+
+  /**
    * Specify the ARIA label used for the status icons
    * @default ""
    */

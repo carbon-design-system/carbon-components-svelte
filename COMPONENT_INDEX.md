@@ -1300,6 +1300,7 @@ None.
 | Prop name       | Kind             | Reactive | Type                                                     | Default value                                    | Description                                      |
 | :-------------- | :--------------- | :------- | :------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------ |
 | status          | <code>let</code> | No       | <code>"uploading" &#124; "edit" &#124; "complete"</code> | <code>"uploading"</code>                         | Specify the file uploader status                 |
+| size            | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small"</code>     | <code>"default"</code>                           | Specify the size of button skeleton              |
 | iconDescription | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>                                  | Specify the ARIA label used for the status icons |
 | invalid         | <code>let</code> | No       | <code>boolean</code>                                     | <code>false</code>                               | Set to `true` to indicate an invalid state       |
 | errorSubject    | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>                                  | Specify the error subject text                   |

@@ -3358,6 +3358,16 @@
           "reactive": false
         },
         {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the size of button skeleton",
+          "type": "\"default\" | \"field\" | \"small\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "iconDescription",
           "kind": "let",
           "description": "Specify the ARIA label used for the status icons",
