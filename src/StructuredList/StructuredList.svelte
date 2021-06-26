@@ -5,7 +5,10 @@
    */
   export let selected = undefined;
 
-  /** Set to `true` to use the bordered variant */
+  /**
+   * Set to `true` to use the bordered variant
+   * @deprecated
+   */
   export let border = false;
 
   /** Set to `true` to use the condensed variant */
