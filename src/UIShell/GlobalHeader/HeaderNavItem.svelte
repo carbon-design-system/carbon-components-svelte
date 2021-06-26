@@ -12,7 +12,7 @@
   export let text = undefined;
 
   /** Set to `true` to select the item */
-  export let isSelected = undefined;
+  export let isSelected = false;
 
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
