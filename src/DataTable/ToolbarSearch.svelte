@@ -47,7 +47,6 @@
 </script>
 
 <Search
-  size="sm"
   tabindex="{tabindex}"
   disabled="{disabled}"
   {...$$restProps}
