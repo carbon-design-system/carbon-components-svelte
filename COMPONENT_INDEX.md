@@ -3313,12 +3313,12 @@ None.
 
 ### Props
 
-| Prop name  | Kind             | Reactive | Type                                       | Default value     | Description                                   |
-| :--------- | :--------------- | :------- | :----------------------------------------- | ----------------- | --------------------------------------------- |
-| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code> | Obtain a reference to the HTML anchor element |
-| isSelected | <code>let</code> | No       | <code>boolean</code>                       | --                | Set to `true` to select the item              |
-| href       | <code>let</code> | No       | <code>string</code>                        | --                | Specify the `href` attribute                  |
-| text       | <code>let</code> | No       | <code>string</code>                        | --                | Specify the item text                         |
+| Prop name  | Kind             | Reactive | Type                                       | Default value      | Description                                   |
+| :--------- | :--------------- | :------- | :----------------------------------------- | ------------------ | --------------------------------------------- |
+| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>  | Obtain a reference to the HTML anchor element |
+| isSelected | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code> | Set to `true` to select the item              |
+| href       | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the `href` attribute                  |
+| text       | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the item text                         |
 
 ### Slots
 
