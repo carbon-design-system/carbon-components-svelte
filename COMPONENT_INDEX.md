@@ -3012,25 +3012,26 @@ None.
 
 ### Props
 
-| Prop name            | Kind             | Reactive | Type                                      | Default value                                    | Description                                             |
-| :------------------- | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
-| ref                  | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element            |
-| value                | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>                                  | Specify the value of the search input                   |
-| expanded             | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true to expand the search input                 |
-| small                | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | --                                                      |
-| size                 | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code>                                | Specify the size of the search input                    |
-| searchClass          | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the class name passed to the outer div element  |
-| skeleton             | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state             |
-| light                | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant               |
-| disabled             | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the search input               |
-| expandable           | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the expandable variant          |
-| type                 | <code>let</code> | No       | <code>string</code>                       | <code>"text"</code>                              | Specify the `type` attribute of the search input        |
-| placeholder          | <code>let</code> | No       | <code>string</code>                       | <code>"Search..."</code>                         | Specify the `placeholder` attribute of the search input |
-| autocomplete         | <code>let</code> | No       | <code>"on" &#124; "off"</code>            | <code>"off"</code>                               | Specify the `autocomplete` attribute                    |
-| autofocus            | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to auto focus the search element          |
-| closeButtonLabelText | <code>let</code> | No       | <code>string</code>                       | <code>"Clear search input"</code>                | Specify the close button label text                     |
-| labelText            | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                                  |
-| id                   | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                         |
+| Prop name            | Kind             | Reactive | Type                                                         | Default value                                    | Description                                             |
+| :------------------- | :--------------- | :------- | :----------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
+| ref                  | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                    | <code>null</code>                                | Obtain a reference to the input HTML element            |
+| value                | <code>let</code> | Yes      | <code>string</code>                                          | <code>""</code>                                  | Specify the value of the search input                   |
+| expanded             | <code>let</code> | Yes      | <code>boolean</code>                                         | <code>false</code>                               | Set to `true to expand the search input                 |
+| small                | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | --                                                      |
+| size                 | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                    | <code>"xl"</code>                                | Specify the size of the search input                    |
+| searchClass          | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the class name passed to the outer div element  |
+| skeleton             | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to display the skeleton state             |
+| light                | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the light variant               |
+| disabled             | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to disable the search input               |
+| expandable           | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to enable the expandable variant          |
+| type                 | <code>let</code> | No       | <code>string</code>                                          | <code>"text"</code>                              | Specify the `type` attribute of the search input        |
+| placeholder          | <code>let</code> | No       | <code>string</code>                                          | <code>"Search..."</code>                         | Specify the `placeholder` attribute of the search input |
+| autocomplete         | <code>let</code> | No       | <code>"on" &#124; "off"</code>                               | <code>"off"</code>                               | Specify the `autocomplete` attribute                    |
+| autofocus            | <code>let</code> | No       | <code>boolean</code>                                         | <code>false</code>                               | Set to `true` to auto focus the search element          |
+| closeButtonLabelText | <code>let</code> | No       | <code>string</code>                                          | <code>"Clear search input"</code>                | Specify the close button label text                     |
+| labelText            | <code>let</code> | No       | <code>string</code>                                          | <code>""</code>                                  | Specify the label text                                  |
+| icon                 | <code>let</code> | No       | <code>typeof import("carbon-icons-svelte").CarbonIcon</code> | --                                               | Specify the icon from `carbon-icons-svelte` to render   |
+| id                   | <code>let</code> | No       | <code>string</code>                                          | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                         |
 
 ### Slots
 

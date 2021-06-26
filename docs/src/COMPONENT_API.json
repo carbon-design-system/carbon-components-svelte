@@ -7940,6 +7940,15 @@
           "reactive": false
         },
         {
+          "name": "icon",
+          "kind": "let",
+          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "id",
           "kind": "let",
           "description": "Set an id for the input element",

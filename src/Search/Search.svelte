@@ -58,6 +58,12 @@
   /** Specify the label text */
   export let labelText = "";
 
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let icon = Search16;
+
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -109,7 +115,7 @@
         if (expandable) expanded = true;
       }}"
     >
-      <Search16 class="bx--search-magnifier-icon" />
+      <svelte:component this="{icon}" class="bx--search-magnifier-icon" />
     </div>
     <label id="{id}-search" for="{id}" class:bx--label="{true}"
       >{labelText}</label
