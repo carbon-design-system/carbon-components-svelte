@@ -137,7 +137,9 @@
     class:bx--label="{true}"
     class:bx--label--disabled="{disabled}"
   >
-    {labelText}
+    <slot name="labelText">
+      {labelText}
+    </slot>
   </label>
   <div class:bx--slider-container="{true}">
     <span class:bx--slider__range-label="{true}">{minLabel || min}</span>

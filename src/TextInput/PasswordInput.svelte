@@ -114,7 +114,9 @@
       class:bx--label--inline--sm="{inline && size === 'sm'}"
       class:bx--label--inline--xl="{inline && size === 'xl'}"
     >
-      {labelText}
+      <slot name="labelText">
+        {labelText}
+      </slot>
     </label>
     {#if !isFluid && helperText}
       <div
@@ -135,7 +137,9 @@
       class:bx--label--inline--sm="{inline && size === 'sm'}"
       class:bx--label--inline--xl="{inline && size === 'xl'}"
     >
-      {labelText}
+      <slot name="labelText">
+        {labelText}
+      </slot>
     </label>
   {/if}
   <div

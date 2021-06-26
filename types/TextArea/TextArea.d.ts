@@ -101,5 +101,5 @@ export default class TextArea extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  {}
+  { labelText: {} }
 > {}

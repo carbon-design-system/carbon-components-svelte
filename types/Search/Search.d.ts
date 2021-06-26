@@ -126,5 +126,5 @@ export default class Search extends SvelteComponentTyped<
     keyup: WindowEventMap["keyup"];
     clear: CustomEvent<any>;
   },
-  {}
+  { labelText: {} }
 > {}

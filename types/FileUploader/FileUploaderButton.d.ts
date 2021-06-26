@@ -77,5 +77,5 @@ export default class FileUploaderButton extends SvelteComponentTyped<
     change: WindowEventMap["change"];
     click: WindowEventMap["click"];
   },
-  {}
+  { labelText: {} }
 > {}

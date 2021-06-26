@@ -54,7 +54,11 @@
     }
   }}"
 >
-  <span role="{role}">{labelText}</span>
+  <span role="{role}">
+    <slot name="labelText">
+      {labelText}
+    </slot>
+  </span>
 </label>
 <input
   bind:this="{ref}"

@@ -2530,7 +2530,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
@@ -3225,7 +3232,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "keydown", "element": "label" },
         { "type": "forwarded", "name": "change", "element": "input" },
@@ -3339,7 +3353,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "dispatched", "name": "add", "detail": "FileList" },
         { "type": "forwarded", "name": "dragover", "element": "div" },
@@ -7176,7 +7197,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -7561,7 +7589,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [{ "type": "forwarded", "name": "change", "element": "input" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -8028,7 +8063,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "dispatched", "name": "expand", "detail": "any" },
         { "type": "dispatched", "name": "collapse", "detail": "any" },
@@ -8255,7 +8297,15 @@
           "reactive": true
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "dispatched", "name": "change", "detail": "string" },
         { "type": "forwarded", "name": "blur", "element": "select" }
@@ -8994,7 +9044,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -10068,7 +10125,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -10292,7 +10356,14 @@
           "reactive": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -10550,7 +10621,15 @@
           "reactive": true
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -10649,7 +10728,15 @@
           "reactive": true
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -10853,7 +10940,14 @@
           "reactive": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         {
           "type": "dispatched",
@@ -10907,7 +11001,14 @@
           "reactive": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },

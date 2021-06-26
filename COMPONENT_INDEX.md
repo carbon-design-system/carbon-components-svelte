@@ -1058,7 +1058,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -1254,7 +1256,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -1283,7 +1287,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -2765,7 +2771,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -2906,7 +2914,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -3046,7 +3056,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -3113,9 +3125,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| --        | Yes     | --    | --                       |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -3429,7 +3442,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -3971,7 +3986,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -4036,7 +4053,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -4143,9 +4162,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| --        | Yes     | --    | --                       |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -4179,9 +4199,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| --        | Yes     | --    | --                       |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -4241,7 +4262,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -4269,7 +4292,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 

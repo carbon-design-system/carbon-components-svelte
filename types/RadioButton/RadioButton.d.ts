@@ -61,5 +61,5 @@ export interface RadioButtonProps
 export default class RadioButton extends SvelteComponentTyped<
   RadioButtonProps,
   { change: WindowEventMap["change"] },
-  {}
+  { labelText: {} }
 > {}

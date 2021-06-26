@@ -124,5 +124,5 @@ export default class TextInput extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  {}
+  { labelText: {} }
 > {}

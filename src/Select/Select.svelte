@@ -96,7 +96,9 @@
         class:bx--visually-hidden="{hideLabel}"
         class:bx--label--disabled="{disabled}"
       >
-        {labelText}
+        <slot name="labelText">
+          {labelText}
+        </slot>
       </label>
     {/if}
     {#if inline}
