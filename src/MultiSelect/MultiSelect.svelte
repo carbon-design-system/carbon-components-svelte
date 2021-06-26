@@ -382,6 +382,7 @@
               change(-1);
             }
           }}"
+          on:keyup
           on:focus
           on:blur
           on:blur="{({ relatedTarget }) => {

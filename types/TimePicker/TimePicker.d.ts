@@ -101,6 +101,8 @@ export default class TimePicker extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     change: WindowEventMap["change"];
     input: WindowEventMap["input"];
+    keydown: WindowEventMap["keydown"];
+    keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },

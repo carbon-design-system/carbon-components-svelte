@@ -650,6 +650,7 @@ None.
 | :--------- | :--------- | :------------------------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedId: string; selectedIndex: number; selectedItem: ComboBoxItem }</code> |
 | keydown    | forwarded  | --                                                                                     |
+| keyup      | forwarded  | --                                                                                     |
 | focus      | forwarded  | --                                                                                     |
 | blur       | forwarded  | --                                                                                     |
 | clear      | forwarded  | --                                                                                     |
@@ -1063,6 +1064,7 @@ None.
 | :--------- | :-------- | :----- |
 | input      | forwarded | --     |
 | keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | blur       | forwarded | --     |
 
 ## `DatePickerSkeleton`
@@ -2377,6 +2379,7 @@ None.
 | select     | dispatched | <code>{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
 | clear      | dispatched | <code>any</code>                                                                                    |
 | keydown    | forwarded  | --                                                                                                  |
+| keyup      | forwarded  | --                                                                                                  |
 | focus      | forwarded  | --                                                                                                  |
 | blur       | forwarded  | --                                                                                                  |
 
@@ -2773,6 +2776,7 @@ None.
 | change     | forwarded | --     |
 | input      | forwarded | --     |
 | keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
 
@@ -3057,6 +3061,7 @@ None.
 | focus      | forwarded  | --               |
 | blur       | forwarded  | --               |
 | keydown    | forwarded  | --               |
+| keyup      | forwarded  | --               |
 | clear      | dispatched | --               |
 
 ## `SearchSkeleton`
@@ -3976,6 +3981,8 @@ None.
 | mouseleave | forwarded | --     |
 | change     | forwarded | --     |
 | input      | forwarded | --     |
+| keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
 
@@ -4040,6 +4047,7 @@ None.
 | change     | forwarded | --     |
 | input      | forwarded | --     |
 | keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
 
@@ -4147,6 +4155,8 @@ None.
 | mouseleave | forwarded | --     |
 | change     | forwarded | --     |
 | input      | forwarded | --     |
+| keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
 

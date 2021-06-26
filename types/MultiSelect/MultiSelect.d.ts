@@ -192,6 +192,7 @@ export default class MultiSelect extends SvelteComponentTyped<
     }>;
     clear: CustomEvent<any>;
     keydown: WindowEventMap["keydown"];
+    keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },

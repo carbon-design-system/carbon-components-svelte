@@ -120,6 +120,7 @@
           focusCalendar();
         }
       }}"
+      on:keyup
       on:blur
       on:blur="{({ relatedTarget }) => {
         blurInput(relatedTarget);

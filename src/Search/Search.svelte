@@ -155,6 +155,7 @@
           dispatch('clear');
         }
       }}"
+      on:keyup
     />
     <button
       type="button"

@@ -123,6 +123,7 @@ export default class Search extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
     keydown: WindowEventMap["keydown"];
+    keyup: WindowEventMap["keyup"];
     clear: CustomEvent<any>;
   },
   {}
