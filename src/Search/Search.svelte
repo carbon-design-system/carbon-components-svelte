@@ -117,9 +117,11 @@
     >
       <svelte:component this="{icon}" class="bx--search-magnifier-icon" />
     </div>
-    <label id="{id}-search" for="{id}" class:bx--label="{true}"
-      >{labelText}</label
-    >
+    <label id="{id}-search" for="{id}" class:bx--label="{true}">
+      <slot name="labelText">
+        {labelText}
+      </slot>
+    </label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
       bind:this="{ref}"
@@ -155,6 +157,7 @@
           dispatch('clear');
         }
       }}"
+      on:keyup
     />
     <button
       type="button"

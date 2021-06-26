@@ -8,6 +8,9 @@
   /** Set to `true` to use the fixed variant */
   export let fixed = false;
 
+  /** Set to `true` to use the rail variant */
+  export let rail = false;
+
   /**
    * Specify the ARIA label for the nav
    * @type {string}
@@ -46,8 +49,9 @@
   class:bx--side-nav__navigation="{true}"
   class:bx--side-nav="{true}"
   class:bx--side-nav--ux="{true}"
-  class:bx--side-nav--expanded="{isOpen}"
-  class:bx--side-nav--collapsed="{!isOpen}"
+  class:bx--side-nav--expanded="{isOpen && !rail}"
+  class:bx--side-nav--collapsed="{!isOpen && !rail}"
+  class:bx--side-nav--rail="{rail}"
   {...$$restProps}
 >
   <slot />

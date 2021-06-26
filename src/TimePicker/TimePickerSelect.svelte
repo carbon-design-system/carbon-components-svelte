@@ -60,7 +60,9 @@
       class:bx--visually-hidden="{hideLabel}"
     >
       <!-- TODO: set to always be `true` after `hideLabel` is deprecated -->
-      {labelText}
+      <slot name="labelText">
+        {labelText}
+      </slot>
     </label>
   {/if}
   <!-- svelte-ignore a11y-no-onchange -->

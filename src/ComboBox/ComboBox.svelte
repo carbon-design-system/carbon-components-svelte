@@ -238,6 +238,7 @@
             open = false;
           }
         }}"
+        on:keyup
         on:focus
         on:blur
         on:blur="{({ relatedTarget }) => {

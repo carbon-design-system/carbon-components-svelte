@@ -93,7 +93,9 @@
           class:bx--label--inline="{inline}"
           class="{inline && !!size && `bx--label--inline--${size}`}"
         >
-          {labelText}
+          <slot name="labelText">
+            {labelText}
+          </slot>
         </label>
       {/if}
       {#if !isFluid && helperText}
@@ -116,7 +118,9 @@
       class:bx--label--inline="{inline}"
       class="{inline && !!size && `bx--label--inline--${size}`}"
     >
-      {labelText}
+      <slot name="labelText">
+        {labelText}
+      </slot>
     </label>
   {/if}
   <div
@@ -163,6 +167,7 @@
           value = target.value;
         }}"
         on:keydown
+        on:keyup
         on:focus
         on:blur
       />

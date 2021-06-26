@@ -89,7 +89,9 @@
       class:bx--file__drop-container="{true}"
       class:bx--file__drop-container--drag-over="{over}"
     >
-      {labelText}
+      <slot name="labelText">
+        {labelText}
+      </slot>
       <input
         bind:this="{ref}"
         type="file"

@@ -715,7 +715,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "dispatched", "name": "check", "detail": "boolean" },
         { "type": "forwarded", "name": "click", "element": "CheckboxSkeleton" },
@@ -1410,6 +1417,7 @@
           "detail": "{ selectedId: string; selectedIndex: number; selectedItem: ComboBoxItem }"
         },
         { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "clear", "element": "ListBoxSelection" },
@@ -2522,10 +2530,18 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
@@ -3216,7 +3232,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "keydown", "element": "label" },
         { "type": "forwarded", "name": "change", "element": "input" },
@@ -3330,7 +3353,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "dispatched", "name": "add", "detail": "FileList" },
         { "type": "forwarded", "name": "dragover", "element": "div" },
@@ -4074,6 +4104,16 @@
           "kind": "let",
           "description": "Specify the text",
           "type": "string",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "isSelected",
+          "kind": "let",
+          "description": "Set to `true` to select the item",
+          "type": "boolean",
+          "value": "false",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -5876,6 +5916,7 @@
         },
         { "type": "dispatched", "name": "clear", "detail": "any" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
@@ -7158,7 +7199,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -7167,6 +7215,7 @@
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
@@ -7542,7 +7591,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [{ "type": "forwarded", "name": "change", "element": "input" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -8009,7 +8065,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "dispatched", "name": "expand", "detail": "any" },
         { "type": "dispatched", "name": "collapse", "detail": "any" },
@@ -8034,6 +8097,7 @@
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "dispatched", "name": "clear" }
       ],
       "typedefs": [],
@@ -8235,7 +8299,15 @@
           "reactive": true
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "dispatched", "name": "change", "detail": "string" },
         { "type": "forwarded", "name": "blur", "element": "select" }
@@ -8478,6 +8550,16 @@
           "reactive": false
         },
         {
+          "name": "rail",
+          "kind": "let",
+          "description": "Set to `true` to use the rail variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "ariaLabel",
           "kind": "let",
           "description": "Specify the ARIA label for the nav",
@@ -8637,6 +8719,7 @@
           "kind": "let",
           "description": "Set to `true` to select the item",
           "type": "boolean",
+          "value": "false",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -8963,7 +9046,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -9016,6 +9106,26 @@
           "name": "border",
           "kind": "let",
           "description": "Set to `true` to use the bordered variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "condensed",
+          "kind": "let",
+          "description": "Set to `true` to use the condensed variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "flush",
+          "kind": "let",
+          "description": "Set to `true` to flush the list",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -10017,7 +10127,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -10025,6 +10142,8 @@
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "forwarded", "name": "change", "element": "textarea" },
         { "type": "forwarded", "name": "input", "element": "textarea" },
+        { "type": "forwarded", "name": "keydown", "element": "textarea" },
+        { "type": "forwarded", "name": "keyup", "element": "textarea" },
         { "type": "forwarded", "name": "focus", "element": "textarea" },
         { "type": "forwarded", "name": "blur", "element": "textarea" }
       ],
@@ -10239,7 +10358,14 @@
           "reactive": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -10248,6 +10374,7 @@
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
@@ -10496,7 +10623,15 @@
           "reactive": true
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -10504,6 +10639,8 @@
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
@@ -10593,7 +10730,15 @@
           "reactive": true
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
@@ -10797,7 +10942,14 @@
           "reactive": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         {
           "type": "dispatched",
@@ -10851,7 +11003,14 @@
           "reactive": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },

@@ -85,7 +85,9 @@
         class:bx--checkbox-label-text="{true}"
         class:bx--visually-hidden="{hideLabel}"
       >
-        {labelText}
+        <slot name="labelText">
+          {labelText}
+        </slot>
       </span>
     </label>
   </div>

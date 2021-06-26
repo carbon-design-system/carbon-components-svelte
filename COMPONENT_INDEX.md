@@ -440,7 +440,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -650,6 +652,7 @@ None.
 | :--------- | :--------- | :------------------------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedId: string; selectedIndex: number; selectedItem: ComboBoxItem }</code> |
 | keydown    | forwarded  | --                                                                                     |
+| keyup      | forwarded  | --                                                                                     |
 | focus      | forwarded  | --                                                                                     |
 | blur       | forwarded  | --                                                                                     |
 | clear      | forwarded  | --                                                                                     |
@@ -1055,7 +1058,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -1063,6 +1068,7 @@ None.
 | :--------- | :-------- | :----- |
 | input      | forwarded | --     |
 | keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | blur       | forwarded | --     |
 
 ## `DatePickerSkeleton`
@@ -1250,7 +1256,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -1279,7 +1287,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -1653,11 +1663,12 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                       | Default value     | Description                                   |
-| :-------- | :--------------- | :------- | :----------------------------------------- | ----------------- | --------------------------------------------- |
-| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code> | Obtain a reference to the HTML anchor element |
-| href      | <code>let</code> | No       | <code>string</code>                        | --                | Specify the `href` attribute                  |
-| text      | <code>let</code> | No       | <code>string</code>                        | --                | Specify the text                              |
+| Prop name  | Kind             | Reactive | Type                                       | Default value      | Description                                   |
+| :--------- | :--------------- | :------- | :----------------------------------------- | ------------------ | --------------------------------------------- |
+| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>  | Obtain a reference to the HTML anchor element |
+| href       | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the `href` attribute                  |
+| text       | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the text                              |
+| isSelected | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code> | Set to `true` to select the item              |
 
 ### Slots
 
@@ -2376,6 +2387,7 @@ None.
 | select     | dispatched | <code>{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
 | clear      | dispatched | <code>any</code>                                                                                    |
 | keydown    | forwarded  | --                                                                                                  |
+| keyup      | forwarded  | --                                                                                                  |
 | focus      | forwarded  | --                                                                                                  |
 | blur       | forwarded  | --                                                                                                  |
 
@@ -2759,7 +2771,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -2772,6 +2786,7 @@ None.
 | change     | forwarded | --     |
 | input      | forwarded | --     |
 | keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
 
@@ -2899,7 +2914,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -3039,7 +3056,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -3056,6 +3075,7 @@ None.
 | focus      | forwarded  | --               |
 | blur       | forwarded  | --               |
 | keydown    | forwarded  | --               |
+| keyup      | forwarded  | --               |
 | clear      | dispatched | --               |
 
 ## `SearchSkeleton`
@@ -3105,9 +3125,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| --        | Yes     | --    | --                       |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -3216,6 +3237,7 @@ None.
 | :-------- | :--------------- | :------- | :------------------- | ------------------ | ------------------------------------------ |
 | isOpen    | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code> | Set to `true` to toggle the expanded state |
 | fixed     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the fixed variant     |
+| rail      | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the rail variant      |
 | ariaLabel | <code>let</code> | No       | <code>string</code>  | --                 | Specify the ARIA label for the nav         |
 
 ### Slots
@@ -3311,12 +3333,12 @@ None.
 
 ### Props
 
-| Prop name  | Kind             | Reactive | Type                                       | Default value     | Description                                   |
-| :--------- | :--------------- | :------- | :----------------------------------------- | ----------------- | --------------------------------------------- |
-| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code> | Obtain a reference to the HTML anchor element |
-| isSelected | <code>let</code> | No       | <code>boolean</code>                       | --                | Set to `true` to select the item              |
-| href       | <code>let</code> | No       | <code>string</code>                        | --                | Specify the `href` attribute                  |
-| text       | <code>let</code> | No       | <code>string</code>                        | --                | Specify the item text                         |
+| Prop name  | Kind             | Reactive | Type                                       | Default value      | Description                                   |
+| :--------- | :--------------- | :------- | :----------------------------------------- | ------------------ | --------------------------------------------- |
+| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>  | Obtain a reference to the HTML anchor element |
+| isSelected | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code> | Set to `true` to select the item              |
+| href       | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the `href` attribute                  |
+| text       | <code>let</code> | No       | <code>string</code>                        | --                 | Specify the item text                         |
 
 ### Slots
 
@@ -3420,7 +3442,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -3461,6 +3485,8 @@ None.
 | :-------- | :--------------- | :------- | :------------------- | ------------------ | ---------------------------------------------- |
 | selected  | <code>let</code> | Yes      | <code>string</code>  | --                 | Specify the selected structured list row value |
 | border    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the bordered variant      |
+| condensed | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the condensed variant     |
+| flush     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to flush the list                |
 | selection | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the selection variant     |
 
 ### Slots
@@ -3960,7 +3986,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -3972,6 +4000,8 @@ None.
 | mouseleave | forwarded | --     |
 | change     | forwarded | --     |
 | input      | forwarded | --     |
+| keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
 
@@ -4023,7 +4053,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -4036,6 +4068,7 @@ None.
 | change     | forwarded | --     |
 | input      | forwarded | --     |
 | keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
 
@@ -4129,9 +4162,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| --        | Yes     | --    | --                       |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -4143,6 +4177,8 @@ None.
 | mouseleave | forwarded | --     |
 | change     | forwarded | --     |
 | input      | forwarded | --     |
+| keydown    | forwarded | --     |
+| keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
 
@@ -4163,9 +4199,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| --        | Yes     | --    | --                       |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -4225,7 +4262,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
@@ -4253,7 +4292,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
