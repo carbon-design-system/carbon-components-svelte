@@ -3216,6 +3216,7 @@ None.
 | :-------- | :--------------- | :------- | :------------------- | ------------------ | ------------------------------------------ |
 | isOpen    | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code> | Set to `true` to toggle the expanded state |
 | fixed     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the fixed variant     |
+| rail      | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the rail variant      |
 | ariaLabel | <code>let</code> | No       | <code>string</code>  | --                 | Specify the ARIA label for the nav         |
 
 ### Slots

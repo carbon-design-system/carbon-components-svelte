@@ -10,6 +10,12 @@ export interface SideNavProps
   fixed?: boolean;
 
   /**
+   * Set to `true` to use the rail variant
+   * @default false
+   */
+  rail?: boolean;
+
+  /**
    * Specify the ARIA label for the nav
    */
   ariaLabel?: string;
