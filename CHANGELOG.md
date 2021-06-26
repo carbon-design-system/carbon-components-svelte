@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.37.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.37.0) - 2021-06-26
+
+**Features**
+
+- add ProgressBar component
+
+**Fixes**
+
+- omit size prop in `ToolbarSearch`
+- omit passing iconDescription to `NotificationIcon` in `InlineNotification`, `ToastNotification`
+
+**Refactor**
+
+- use class directive in `TextInput`
+
+**Documentation**
+
+- add ProgressBar component documentation
+
+**Housekeeping**
+
+- upgrade `carbon-components` to version 10.37.0
+
 ## [0.36.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.36.0) - 2021-06-26
 
 **Features**
