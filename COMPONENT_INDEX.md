@@ -440,7 +440,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 

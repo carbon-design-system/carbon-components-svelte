@@ -715,7 +715,14 @@
           "reactive": true
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "dispatched", "name": "check", "detail": "boolean" },
         { "type": "forwarded", "name": "click", "element": "CheckboxSkeleton" },
