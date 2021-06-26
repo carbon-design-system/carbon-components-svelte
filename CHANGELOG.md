@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.36.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.36.0) - 2021-06-26
+
+**Features**
+
+- add condensed, flush props to `StructuredList`
+- support `SideNav` rail
+- add isSelected prop to `HeaderNavItem`
+- make components with `labelText` prop slottable (e.g., <span slot="labelText">...</span>)
+
+**Fixes**
+
+- set min/max height for multi-line `CodeSnippet`
+- make `ImageLoader` SSR compatible by using a window type check guard
+- default isSelected to false in `SideNavMenuItem`
+- forward keydown event to `TextArea`
+- deprecate border prop in `StructuredList`
+
+**Documentation**
+
+- add separate disabled example for filterable/interactive tags
+- update number of supported chart types from 17 to 20
+
+**Housekeeping**
+
+- upgrade `carbon-components` to version 10.36.0
+
 ## [0.35.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.35.0) - 2021-06-26
 
 **Features**
