@@ -235,6 +235,12 @@
                 inputValue = filteredItems[selectedIndex].text;
               }
             }
+
+            if (highlightedIndex < 0 && selectedIndex > -1) {
+              if (filteredItems[selectedIndex]) {
+                inputValue = filteredItems[selectedIndex].text;
+              }
+            }
           } else if (key === 'Tab') {
             open = false;
           } else if (key === 'ArrowDown') {
