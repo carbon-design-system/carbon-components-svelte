@@ -25,6 +25,8 @@
 
   const dispatch = createEventDispatcher();
 
+  let winWidth = undefined;
+
   $: dispatch(isOpen ? "open" : "close");
 
   onMount(() => {
@@ -32,6 +34,8 @@
     return () => shouldRenderHamburgerMenu.set(false);
   });
 </script>
+
+<svelte:window bind:innerWidth="{winWidth}" />
 
 {#if !fixed}
   <div
@@ -49,7 +53,7 @@
   class:bx--side-nav__navigation="{true}"
   class:bx--side-nav="{true}"
   class:bx--side-nav--ux="{true}"
-  class:bx--side-nav--expanded="{isOpen && !rail}"
+  class:bx--side-nav--expanded="{rail && winWidth >= 1056 ? false : isOpen}"
   class:bx--side-nav--collapsed="{!isOpen && !rail}"
   class:bx--side-nav--rail="{rail}"
   {...$$restProps}
