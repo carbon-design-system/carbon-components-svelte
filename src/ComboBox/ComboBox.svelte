@@ -128,7 +128,6 @@
       filteredItems = items.filter((item) => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
-      inputValue = selectedItem ? selectedItem.text : "";
 
       if (!selectedItem) {
         selectedId = undefined;
@@ -149,7 +148,6 @@
     : undefined;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
   $: selectedItem = items[selectedIndex];
-  $: inputValue = selectedItem ? selectedItem.text : undefined;
   $: value = inputValue;
 </script>
 
@@ -217,16 +215,25 @@
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
         class:bx--text-input--empty="{inputValue === ''}"
-        on:input="{({ target }) => {
+        on:input="{async ({ target }) => {
+          if (!open && target.value.length > 0) {
+            open = true;
+          }
+
           inputValue = target.value;
         }}"
         on:keydown
         on:keydown|stopPropagation="{({ key }) => {
           if (key === 'Enter') {
             open = !open;
+
             if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
               selectedIndex = highlightedIndex;
               open = false;
+
+              if (filteredItems[selectedIndex]) {
+                inputValue = filteredItems[selectedIndex].text;
+              }
             }
           } else if (key === 'Tab') {
             open = false;
@@ -242,6 +249,12 @@
         on:focus
         on:blur
         on:blur="{({ relatedTarget }) => {
+          if (inputValue.length === 0 && selectedIndex > -1) {
+            if (filteredItems[selectedIndex]) {
+              inputValue = filteredItems[selectedIndex].text;
+            }
+          }
+
           if (!open || !relatedTarget) return;
           if (
             relatedTarget &&
@@ -266,7 +279,9 @@
           on:clear
           on:clear="{() => {
             selectedIndex = -1;
+            highlightedIndex = -1;
             open = false;
+            inputValue = '';
             ref.focus();
           }}"
           translateWithId="{translateWithId}"
@@ -300,6 +315,10 @@
                 .map(({ id }) => id)
                 .indexOf(filteredItems[i].id);
               open = false;
+
+              if (filteredItems[i]) {
+                inputValue = filteredItems[i].text;
+              }
             }}"
             on:mouseenter="{() => {
               highlightedIndex = i;
