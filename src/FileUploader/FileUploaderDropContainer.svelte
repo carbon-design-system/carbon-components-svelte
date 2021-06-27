@@ -92,25 +92,25 @@
       <slot name="labelText">
         {labelText}
       </slot>
-      <input
-        bind:this="{ref}"
-        type="file"
-        tabindex="-1"
-        id="{id}"
-        disabled="{disabled}"
-        accept="{accept}"
-        name="{name}"
-        multiple="{multiple}"
-        class:bx--file-input="{true}"
-        on:change
-        on:change="{({ target }) => {
-          dispatch('add', validateFiles(target.files));
-        }}"
-        on:click
-        on:click="{({ target }) => {
-          target.value = null;
-        }}"
-      />
     </div>
+    <input
+      bind:this="{ref}"
+      type="file"
+      tabindex="-1"
+      id="{id}"
+      disabled="{disabled}"
+      accept="{accept}"
+      name="{name}"
+      multiple="{multiple}"
+      class:bx--file-input="{true}"
+      on:change
+      on:change="{({ target }) => {
+        dispatch('add', validateFiles(target.files));
+      }}"
+      on:click
+      on:click="{({ target }) => {
+        target.value = null;
+      }}"
+    />
   </label>
 </div>
