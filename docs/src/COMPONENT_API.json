@@ -741,7 +741,8 @@
           "name": "mouseleave",
           "element": "CheckboxSkeleton"
         },
-        { "type": "forwarded", "name": "change", "element": "input" }
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "CheckboxSkeleton" }
@@ -4926,6 +4927,7 @@
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "forwarded", "name": "keydown", "element": "div" },
+        { "type": "forwarded", "name": "focus", "element": "div" },
         { "type": "forwarded", "name": "blur", "element": "div" }
       ],
       "typedefs": [
@@ -11614,7 +11616,7 @@
         { "type": "forwarded", "name": "focus", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "span" }
     },
     {
       "moduleName": "TooltipFooter",

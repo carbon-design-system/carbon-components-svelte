@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.38.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.38.0) - 2021-06-27
+
+**Features**
+
+- support read-only `TextInput`
+- render a checkmark icon for the selected `ComboBox` item
+
+**Fixes**
+
+- adjust `FileUploaderDropContainer` markup to avoid accessibility error for nested interactive controls
+- use `ErrorFilled16` icon in `InlineLoading` for the error status
+- render iconDescription as title in error/warning icons in `InlineLoading`
+- update accessibility attributes for `StructuredList`
+- use `span` instead of `div` in `TooltipDefinition` to avoid potential invalid HTML
+- close `MultiSelect` menu when blurring the last filterable option
+- open/focus field when tab focusing a filterable `MultiSelect`
+- unblock tab navigation when blurring `MultiSelect`
+- select correct item using keyboard navigation in a filterable `ComboBox`
+- unblock input after clearing a `ComboBox` selection
+- update `ComboBox` input text if item is selected
+- toggle `SideNav` rail when clicking the hamburger menu
+- update `ContextMenu` class names
+- close `ContextMenu` when left clicking anywhere
+
+**Documentation**
+
+- add TextInput example "Read-only variant"
+- add Popover example "Popover alignment"
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.38.0
+
 ## [0.37.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.37.0) - 2021-06-26
 
 **Features**

@@ -57,6 +57,7 @@ export default class ListBoxField extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     keydown: WindowEventMap["keydown"];
+    focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
   { default: {} }

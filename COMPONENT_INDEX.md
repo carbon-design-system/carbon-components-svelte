@@ -1,6 +1,6 @@
 # Component Index
 
-> 168 components exported from carbon-components-svelte@0.37.0.
+> 168 components exported from carbon-components-svelte@0.38.0.
 
 ## Components
 
@@ -455,6 +455,7 @@ None.
 | mouseenter | forwarded  | --                   |
 | mouseleave | forwarded  | --                   |
 | change     | forwarded  | --                   |
+| blur       | forwarded  | --                   |
 
 ## `CheckboxSkeleton`
 
@@ -2051,6 +2052,7 @@ export type ListBoxFieldTranslationId = "close" | "open";
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
 | keydown    | forwarded | --     |
+| focus      | forwarded | --     |
 | blur       | forwarded | --     |
 
 ## `ListBoxMenu`
