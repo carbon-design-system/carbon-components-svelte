@@ -217,4 +217,8 @@
   [data-outline] {
     position: relative;
   }
+
+  [data-outline] ~ [data-outline] {
+    margin-top: var(--cds-spacing-08);
+  }
 </style>
