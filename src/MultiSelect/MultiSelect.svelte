@@ -319,6 +319,12 @@
           }
         }
       }}"
+      on:focus="{() => {
+        if (filterable) {
+          open = true;
+          if (inputRef) inputRef.focus();
+        }
+      }}"
       on:blur="{({ relatedTarget }) => {
         if (
           relatedTarget &&
@@ -342,7 +348,7 @@
               ...item,
               checked: false,
             }));
-            fieldRef.blur();
+            if (fieldRef) fieldRef.blur();
           }}"
           translateWithId="{translateWithId}"
           disabled="{disabled}"

@@ -61,6 +61,7 @@
   on:mouseenter
   on:mouseleave
   on:keydown|preventDefault|stopPropagation
+  on:focus
   on:blur
 >
   <slot />
