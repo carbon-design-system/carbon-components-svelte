@@ -22,7 +22,7 @@
 
   import { createEventDispatcher, afterUpdate, onMount } from "svelte";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16/CheckmarkFilled16.svelte";
-  import Error20 from "carbon-icons-svelte/lib/Error20/Error20.svelte";
+  import ErrorFilled16 from "carbon-icons-svelte/lib/ErrorFilled16/ErrorFilled16.svelte";
   import Loading from "../Loading/Loading.svelte";
 
   const dispatch = createEventDispatcher();
@@ -55,7 +55,7 @@
 >
   <div class:bx--inline-loading__animation="{true}">
     {#if status === "error"}
-      <Error20 class="bx--inline-loading--error" />
+      <ErrorFilled16 class="bx--inline-loading--error" />
     {:else if status === "finished"}
       <CheckmarkFilled16 class="bx--inline-loading__checkmark-container" />
     {:else if status === "inactive" || status === "active"}
