@@ -23,9 +23,13 @@ components: ["TextInput", "TextInputSkeleton"]
 
 <TextInput light labelText="User name" placeholder="Enter user name..." />
 
-### Inline
+### Inline variant
 
 <TextInput inline labelText="User name" placeholder="Enter user name..." />
+
+### Read-only variant
+
+<TextInput readonly labelText="User name" value="IBM" />
 
 ### Extra-large size
 

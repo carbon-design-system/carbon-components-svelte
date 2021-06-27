@@ -79,7 +79,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Inline type
+### Inline variant
 
 <MultiSelect type="inline" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},

@@ -36,7 +36,7 @@
     if (key === 'Escape') hide();
   }}" />
 
-<div
+<span
   class:bx--tooltip--definition="{true}"
   class:bx--tooltip--a11y="{true}"
   {...$$restProps}
@@ -69,4 +69,4 @@
   <div role="tooltip" id="{id}" class:bx--assistive-text="{true}">
     <slot name="tooltip">{tooltipText}</slot>
   </div>
-</div>
+</span>

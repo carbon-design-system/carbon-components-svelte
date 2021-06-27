@@ -4072,7 +4072,8 @@ None.
 | warn        | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to indicate an warning state    |
 | warnText    | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the warning state text                |
 | required    | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to mark the field as required   |
-| inline      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to use inline version           |
+| inline      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to use the inline variant       |
+| readonly    | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to use the read-only variant    |
 
 ### Slots
 

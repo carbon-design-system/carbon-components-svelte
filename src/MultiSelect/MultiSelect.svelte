@@ -319,6 +319,12 @@
           }
         }
       }}"
+      on:focus="{() => {
+        if (filterable) {
+          open = true;
+          if (inputRef) inputRef.focus();
+        }
+      }}"
       on:blur="{({ relatedTarget }) => {
         if (
           relatedTarget &&
@@ -342,7 +348,7 @@
               ...item,
               checked: false,
             }));
-            fieldRef.blur();
+            if (fieldRef) fieldRef.blur();
           }}"
           translateWithId="{translateWithId}"
           disabled="{disabled}"
@@ -388,7 +394,11 @@
           on:blur="{({ relatedTarget }) => {
             if (
               relatedTarget &&
-              relatedTarget.getAttribute('role') !== 'button'
+              !['INPUT', 'SELECT', 'TEXTAREA'].includes(
+                relatedTarget.tagName
+              ) &&
+              relatedTarget.getAttribute('role') !== 'button' &&
+              relatedTarget.getAttribute('role') !== 'searchbox'
             ) {
               inputRef.focus();
             }
@@ -453,6 +463,9 @@
               labelText="{itemToString(item)}"
               checked="{item.checked}"
               disabled="{disabled}"
+              on:blur="{() => {
+                if (i === filteredItems.length - 1) open = false;
+              }}"
             />
           </ListBoxMenuItem>
         {/each}

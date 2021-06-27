@@ -1,4 +1,5 @@
 <div
+  role="rowgroup"
   class:bx--structured-list-thead="{true}"
   {...$$restProps}
   on:click
