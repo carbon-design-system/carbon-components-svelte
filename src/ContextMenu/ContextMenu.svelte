@@ -79,6 +79,7 @@
 <svelte:window
   on:contextmenu|preventDefault="{(e) => {
     if (level > 1) return;
+    if (!ref) return;
 
     const { height, width } = ref.getBoundingClientRect();
 
@@ -117,10 +118,10 @@
   tabindex="-1"
   data-direction="{direction}"
   data-level="{level}"
-  class:bx--context-menu="{true}"
-  class:bx--context-menu--open="{open}"
-  class:bx--context-menu--invisible="{open && x === 0 && y === 0}"
-  class:bx--context-menu--root="{level === 1}"
+  class:bx--menu="{true}"
+  class:bx--menu--open="{open}"
+  class:bx--menu--invisible="{open && x === 0 && y === 0}"
+  class:bx--menu--root="{level === 1}"
   {...$$restProps}
   style="left: {x}px; top: {y}px; {$$restProps.style}"
   on:click

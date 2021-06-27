@@ -173,14 +173,14 @@
   aria-disabled="{!subOptions && disabled}"
   aria-haspopup="{subOptions ? true : undefined}"
   aria-expanded="{subOptions ? submenuOpen : undefined}"
-  class:bx--context-menu-option="{true}"
-  class:bx--context-menu-option--disabled="{true}"
-  class:bx--context-menu-option--active="{subOptions && submenuOpen}"
-  class:bx--context-menu-option--danger="{!subOptions && kind === 'danger'}"
+  class:bx--menu-option="{true}"
+  class:bx--menu-option--disabled="{true}"
+  class:bx--menu-option--active="{subOptions && submenuOpen}"
+  class:bx--menu-option--danger="{!subOptions && kind === 'danger'}"
   indented="{indented}"
   aria-checked="{isSelectable || isRadio ? selected : undefined}"
   data-nested="{ref &&
-    ref.closest('.bx--context-menu').getAttribute('data-level') === '2'}"
+    ref.closest('.bx--menu').getAttribute('data-level') === '2'}"
   data-sub="{subOptions}"
   data-id="{id}"
   {...$$restProps}
@@ -240,18 +240,18 @@
 >
   {#if subOptions}
     <div
-      class:bx--context-menu-option__content="{true}"
-      class:bx--context-menu-option__content--disabled="{disabled}"
+      class:bx--menu-option__content="{true}"
+      class:bx--menu-option__content--disabled="{disabled}"
     >
       {#if indented}
-        <div class:bx--context-menu-option__icon="{true}">
+        <div class:bx--menu-option__icon="{true}">
           <svelte:component this="{icon}" />
         </div>
       {/if}
-      <span class:bx--context-menu-option__label="{true}" title="{labelText}">
+      <span class:bx--menu-option__label="{true}" title="{labelText}">
         <slot name="labelText">{labelText}</slot>
       </span>
-      <div class:bx--context-menu-option__info="{true}"><CaretRight16 /></div>
+      <div class:bx--menu-option__info="{true}"><CaretRight16 /></div>
     </div>
 
     <ContextMenu
@@ -263,18 +263,18 @@
     </ContextMenu>
   {:else}
     <div
-      class:bx--context-menu-option__content="{true}"
-      class:bx--context-menu-option__content--disabled="{disabled}"
+      class:bx--menu-option__content="{true}"
+      class:bx--menu-option__content--disabled="{disabled}"
     >
       {#if indented}
-        <div class:bx--context-menu-option__icon="{true}">
+        <div class:bx--menu-option__icon="{true}">
           <svelte:component this="{icon}" />
         </div>
       {/if}
-      <span class:bx--context-menu-option__label="{true}" title="{labelText}">
+      <span class:bx--menu-option__label="{true}" title="{labelText}">
         <slot name="labelText">{labelText}</slot>
       </span>
-      <div class:bx--context-menu-option__info="{true}">
+      <div class:bx--menu-option__info="{true}">
         <slot name="shortcutText">{shortcutText}</slot>
       </div>
     </div>
