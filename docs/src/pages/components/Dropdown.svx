@@ -47,7 +47,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-### Inline type
+### Inline variant
 
 <Dropdown type="inline" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},

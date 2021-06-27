@@ -62,7 +62,7 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Inline type
+### Inline variant
 
 <Select inline labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
