@@ -45,3 +45,19 @@
   <ContextMenuDivider />
   <ContextMenuOption indented kind="danger" labelText="Delete" />
 </ContextMenu>
+
+<div>
+  <p>Right click anywhere on this page</p>
+</div>
+
+<style>
+  div {
+    position: absolute;
+    width: calc(100% - var(--cds-spacing-05));
+    height: calc(100% - var(--cds-spacing-06));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cds-text-02);
+  }
+</style>
