@@ -79,6 +79,7 @@
       on:change="{() => {
         checked = !checked;
       }}"
+      on:blur
     />
     <label for="{id}" title="{title}" class:bx--checkbox-label="{true}">
       <span

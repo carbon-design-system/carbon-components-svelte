@@ -453,6 +453,9 @@
               labelText="{itemToString(item)}"
               checked="{item.checked}"
               disabled="{disabled}"
+              on:blur="{() => {
+                if (i === filteredItems.length - 1) open = false;
+              }}"
             />
           </ListBoxMenuItem>
         {/each}
