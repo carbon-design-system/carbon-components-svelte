@@ -59,12 +59,16 @@
   /** Set to `true` to mark the field as required */
   export let required = false;
 
-  /** Set to `true` to use inline version */
+  /** Set to `true` to use the inline variant */
   export let inline = false;
+
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
 
   import { getContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
+  import EditOff16 from "carbon-icons-svelte/lib/EditOff16/EditOff16.svelte";
 
   const ctx = getContext("Form");
 
@@ -77,6 +81,8 @@
   class:bx--form-item="{true}"
   class:bx--text-input-wrapper="{true}"
   class:bx--text-input-wrapper--inline="{inline}"
+  class:bx--text-input-wrapper--light="{light}"
+  class:bx--text-input-wrapper--readonly="{readonly}"
   on:click
   on:mouseover
   on:mouseenter
@@ -142,6 +148,9 @@
             bx--text-input__invalid-icon--warning"
         />
       {/if}
+      {#if readonly}
+        <EditOff16 class="bx--text-input__readonly-icon" />
+      {/if}
       <input
         bind:this="{ref}"
         data-invalid="{invalid || undefined}"
@@ -155,6 +164,7 @@
         type="{type}"
         value="{value}"
         required="{required}"
+        readonly="{readonly}"
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
         class:bx--text-input--invalid="{invalid}"
