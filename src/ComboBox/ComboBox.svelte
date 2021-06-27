@@ -95,6 +95,7 @@
   export let listRef = null;
 
   import { createEventDispatcher, afterUpdate, tick } from "svelte";
+  import Checkmark16 from "carbon-icons-svelte/lib/Checkmark16/Checkmark16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
@@ -331,6 +332,9 @@
             }}"
           >
             {itemToString(item)}
+            {#if selectedItem && selectedItem.id === item.id}
+              <Checkmark16 class="bx--list-box__menu-item__selected-icon" />
+            {/if}
           </ListBoxMenuItem>
         {/each}
       </ListBoxMenu>
