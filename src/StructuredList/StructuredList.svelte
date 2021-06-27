@@ -38,7 +38,7 @@
 </script>
 
 <div
-  aria-label="Structured list section"
+  role="table"
   class:bx--structured-list="{true}"
   class:bx--structured-list--border="{border}"
   class:bx--structured-list--selection="{selection}"

@@ -7,6 +7,7 @@
 </script>
 
 <div
+  role="{head ? 'columnheader' : 'cell'}"
   class:bx--structured-list-th="{head}"
   class:bx--structured-list-td="{!head}"
   class:bx--structured-list-content--nowrap="{noWrap}"
