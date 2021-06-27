@@ -55,9 +55,15 @@
 >
   <div class:bx--inline-loading__animation="{true}">
     {#if status === "error"}
-      <ErrorFilled16 class="bx--inline-loading--error" />
+      <ErrorFilled16
+        class="bx--inline-loading--error"
+        title="{iconDescription}"
+      />
     {:else if status === "finished"}
-      <CheckmarkFilled16 class="bx--inline-loading__checkmark-container" />
+      <CheckmarkFilled16
+        class="bx--inline-loading__checkmark-container"
+        title="{iconDescription}"
+      />
     {:else if status === "inactive" || status === "active"}
       <Loading
         small
