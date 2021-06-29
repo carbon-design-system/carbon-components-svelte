@@ -40,6 +40,15 @@ $css--plex: true;
   }
 }
 
+// Set the <html> theme attribute to "g80" to use the Gray 80 theme
+// <html theme="g80">
+:root[theme="g80"] {
+  @include carbon--theme($carbon--theme--g80, true) {
+    @include emit-component-tokens($tag-colors);
+    @include emit-component-tokens($notification-colors);
+  }
+}
+
 // Set the <html> theme attribute to "g90" to use the Gray 90 theme
 // <html theme="g90">
 :root[theme="g90"] {
