@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.38.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.38.1) - 2021-06-29
+
+**Fixes**
+
+- add Gray 80 (g80) theme to `all.scss` and the pre-compiled `all.css`
+
 ## [0.38.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.38.0) - 2021-06-27
 
 **Features**
