@@ -20,7 +20,7 @@
   import Footer from "../components/Footer.svelte";
 
   const deprecated = ["ToggleSmall", "Icon"];
-  const new_components = ["ProgressBar"];
+  const new_components = ["ProgressBar", "RecursiveList"];
 
   let isOpen = false;
   let isSideNavOpen = true;

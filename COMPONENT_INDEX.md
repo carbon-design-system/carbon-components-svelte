@@ -1,6 +1,6 @@
 # Component Index
 
-> 168 components exported from carbon-components-svelte@0.38.1.
+> 169 components exported from carbon-components-svelte@0.38.1.
 
 ## Components
 
@@ -107,6 +107,7 @@
 - [`RadioButtonGroup`](#radiobuttongroup)
 - [`RadioButtonSkeleton`](#radiobuttonskeleton)
 - [`RadioTile`](#radiotile)
+- [`RecursiveList`](#recursivelist)
 - [`Row`](#row)
 - [`Search`](#search)
 - [`SearchSkeleton`](#searchskeleton)
@@ -3029,6 +3030,34 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `RecursiveList`
+
+### Types
+
+```ts
+export interface Item {
+  text?: string;
+  href?: string;
+  html?: string;
+}
+```
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                                                              | Default value            | Description                             |
+| :-------- | :--------------- | :------- | :---------------------------------------------------------------- | ------------------------ | --------------------------------------- |
+| items     | <code>let</code> | No       | <code>Array<Item & { items?: Item[]; }></code>                    | <code>[]</code>          | Specify the items to render             |
+| type      | <code>let</code> | No       | <code>"unordered" &#124; "ordered" &#124; "ordered-native"</code> | <code>"unordered"</code> | Specify the type of list to render      |
+| nested    | <code>let</code> | No       | <code>boolean</code>                                              | <code>false</code>       | Set to `true` to use the nested variant |
+
+### Slots
+
+None.
+
+### Events
+
+None.
 
 ## `Row`
 

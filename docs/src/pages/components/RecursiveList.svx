@@ -1,0 +1,78 @@
+<script>
+  import { RecursiveList } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Unordered
+
+<RecursiveList
+  items={[
+      {
+      text: "Item 1",
+      items: [
+        {
+          text: "Link",
+          href: "/",
+          items: [
+            {
+              html: "<h5>Hello world</h5>",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      text: "Item 1",
+    }
+  ]}
+  />
+
+### Ordered
+
+<RecursiveList
+type="ordered"
+items={[
+    {
+    text: "Item 1",
+    items: [
+        {
+        text: "Link",
+        href: "/",
+        items: [
+            {
+            html: "<h5>Hello world</h5>",
+            },
+        ],
+        },
+    ],
+    },
+    {
+    text: "Item 1",
+    }
+]}
+/>
+
+### Ordered (native styles)
+
+<RecursiveList
+type="ordered-native"
+items={[
+    {
+    text: "Item 1",
+    items: [
+        {
+        text: "Link",
+        href: "/",
+        items: [
+            {
+            html: "<h5>Hello world</h5>",
+            },
+        ],
+        },
+    ],
+    },
+    {
+    text: "Item 1",
+    }
+]}
+/>
