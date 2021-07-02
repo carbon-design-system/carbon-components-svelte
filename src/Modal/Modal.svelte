@@ -138,11 +138,24 @@
   class:bx--modal--danger="{danger}"
   {...$$restProps}
   on:keydown
-  on:keydown="{({ key }) => {
+  on:keydown="{(e) => {
     if (open) {
-      if (key === 'Escape') {
+      if (e.key === 'Escape') {
         open = false;
-      } else if (shouldSubmitOnEnter && key === 'Enter') {
+      } else if (e.key === 'Tab') {
+        // trap focus
+        const nodes = ref.querySelectorAll('*');
+        const tabbable = Array.from(nodes).filter((n) => n.tabIndex >= 0);
+
+        let index = tabbable.indexOf(document.activeElement);
+        if (index === -1 && e.shiftKey) index = 0;
+
+        index += tabbable.length + (e.shiftKey ? -1 : 1);
+        index %= tabbable.length;
+
+        tabbable[index].focus();
+        e.preventDefault();
+      } else if (shouldSubmitOnEnter && e.key === 'Enter') {
         dispatch('submit');
       }
     }
