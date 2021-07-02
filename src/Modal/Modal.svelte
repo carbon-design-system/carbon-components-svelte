@@ -144,8 +144,16 @@
         open = false;
       } else if (e.key === 'Tab') {
         // trap focus
-        const nodes = ref.querySelectorAll('*');
-        const tabbable = Array.from(nodes).filter((n) => n.tabIndex >= 0);
+
+        // taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
+        const selectorTabbable = `
+  a[href], area[href], input:not([disabled]):not([tabindex='-1']),
+  button:not([disabled]):not([tabindex='-1']),select:not([disabled]):not([tabindex='-1']),
+  textarea:not([disabled]):not([tabindex='-1']),
+  iframe, object, embed, *[tabindex]:not([tabindex='-1']):not([disabled]), *[contenteditable=true]
+`;
+
+        const tabbable = Array.from(ref.querySelectorAll(selectorTabbable));
 
         let index = tabbable.indexOf(document.activeElement);
         if (index === -1 && e.shiftKey) index = 0;
