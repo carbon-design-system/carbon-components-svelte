@@ -32,6 +32,17 @@
   /** Set to `true` to persist the hamburger menu */
   export let persistentHamburgerMenu = false;
 
+  /**
+   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden
+   * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
+   * small: 320
+   * medium: 672
+   * large: 1056
+   * x-large: 1312
+   * max: 1584
+   */
+  export let expansionBreakpoint = 1056;
+
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
@@ -57,7 +68,9 @@
   let winWidth = undefined;
 
   $: isSideNavOpen =
-    expandedByDefault && winWidth >= 1056 && !persistentHamburgerMenu;
+    expandedByDefault &&
+    winWidth >= expansionBreakpoint &&
+    !persistentHamburgerMenu;
   $: ariaLabel = company
     ? `${company} `
     : "" + (uiShellAriaLabel || $$props["aria-label"] || platformName);
@@ -67,7 +80,7 @@
 
 <header role="banner" aria-label="{ariaLabel}" class:bx--header="{true}">
   <slot name="skip-to-content" />
-  {#if ($shouldRenderHamburgerMenu && winWidth < 1056) || persistentHamburgerMenu}
+  {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
     <HamburgerMenu
       bind:isOpen="{isSideNavOpen}"
       iconClose="{iconClose}"
