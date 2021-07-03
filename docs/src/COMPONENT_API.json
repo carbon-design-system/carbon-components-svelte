@@ -2092,9 +2092,21 @@
           "slot_props": "{ header: DataTableNonEmptyHeader; }"
         },
         {
+          "name": "description",
+          "default": false,
+          "fallback": "{description}",
+          "slot_props": "{}"
+        },
+        {
           "name": "expanded-row",
           "default": false,
           "slot_props": "{ row: DataTableRow; }"
+        },
+        {
+          "name": "title",
+          "default": false,
+          "fallback": "{title}",
+          "slot_props": "{}"
         }
       ],
       "events": [
