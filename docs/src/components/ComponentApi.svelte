@@ -18,6 +18,7 @@
     UnorderedList,
     ListItem,
     Tag,
+    CodeSnippet,
   } from "carbon-components-svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
@@ -41,7 +42,7 @@
 </script>
 
 <p style="margin-bottom: var(--cds-layout-02)">
-  Component source code:
+  Source code:
   <Link inline size="lg" href="{source}" target="_blank">
     {component.filePath}
     <Launch16 />
@@ -72,9 +73,9 @@
                 <div
                   style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-03)"
                 >
-                  <Tag style="margin-left: 0" size="sm" type="cyan"
-                    >Reactive</Tag
-                  >
+                  <Tag style="margin-left: 0" size="sm" type="cyan">
+                    Reactive
+                  </Tag>
                 </div>
               {/if}
             </StructuredListCell>
@@ -134,6 +135,20 @@
 {:else}
   <p class="my-layout-01-03">No props.</p>
 {/if}
+
+<h3 id="typedefs">Typedefs</h3>
+
+{#if component.typedefs.length > 0}
+  <CodeSnippet
+    style="margin-top: var(--cds-spacing-08)"
+    class="my-layout-01-03"
+    type="multi"
+    code="{component.typedefs.map((t) => t.ts).join(';\n\n')}"
+  />
+{:else}
+  <p class="my-layout-01-03">No typedefs.</p>
+{/if}
+
 <h3 id="slots">Slots</h3>
 {#if component.slots.length > 0}
   <UnorderedList class="my-layout-01-03">
