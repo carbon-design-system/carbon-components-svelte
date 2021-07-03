@@ -36,7 +36,7 @@
   add({ id, text, primaryFocus });
 
   afterUpdate(() => {
-    if (primaryFocus) {
+    if (ref && primaryFocus) {
       ref.focus();
     }
   });
