@@ -1,16 +1,34 @@
 <script>
-  import { RecursiveList } from "carbon-components-svelte";
+  import { InlineNotification, RecursiveList } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
+This component uses the [svelte:self API](https://svelte.dev/docs#svelte_self) to render the [UnorderedList](/components/UnorderedList) and [OrderedList](/components/OrderedList) components with data formatted as a tree structure. This is especially useful when the depth of the tree is unknown.
+
+A child node can render text (`text`), a link (`href`), HTML content (`html`), and other `children`.
+
+<InlineNotification svx-ignore title="Warning:" kind="warning" hideCloseButton>
+  <div class="body-short-01">
+    HTML content provided via the <code>html</code> prop is not sanitized.
+  </div>
+</InlineNotification>
+
 ### Unordered
+
+The `children` prop accepts an array of child nodes.
+
+By default, the list type is unordered.
 
 <FileSource src="/framed/RecursiveList/RecursiveList" />
 
 ### Ordered
 
+Set `type` to `"ordered"` to use the ordered list variant.
+
 <FileSource src="/framed/RecursiveList/RecursiveListOrdered" />
 
 ### Ordered (native styles)
+
+Set `type` to `"ordered-native"` to use the native styles for an ordered list.
 
 <FileSource src="/framed/RecursiveList/RecursiveListOrderedNative" />

@@ -3,9 +3,15 @@ components: ["OrderedList", "ListItem"]
 ---
 
 <script>
-  import { OrderedList, ListItem, Link } from "carbon-components-svelte";
+  import { InlineNotification, OrderedList, ListItem, Link } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
+
+<InlineNotification svx-ignore title="Tip:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    To render data formatted as a tree structure, use the <Link href="/components/RecursiveList#ordered">RecursiveList</Link> component.
+  </div>
+</InlineNotification>
 
 ### Default
 

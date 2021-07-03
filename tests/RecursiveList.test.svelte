@@ -6,14 +6,8 @@
       text: "Item 1",
       children: [
         {
-          text: "Link",
-          href: "/",
-          children: [
-            {
-              html: "<h5>Hello world</h5>",
-              children: [{ text: "Item 1a" }],
-            },
-          ],
+          text: "Item 1a",
+          children: [{ html: "<h5>HTML content</h5>" }],
         },
       ],
     },
@@ -21,7 +15,11 @@
       text: "Item 2",
       children: [
         {
-          text: "Item 2 content",
+          href: "https://svelte.dev/",
+        },
+        {
+          href: "https://svelte.dev/",
+          text: "Link with custom text",
         },
       ],
     },

@@ -15,9 +15,6 @@
    */
   export let type = "unordered";
 
-  /** Set to `true` to use the nested variant */
-  export let nested = false;
-
   import UnorderedList from "../UnorderedList/UnorderedList.svelte";
   import OrderedList from "../OrderedList/OrderedList.svelte";
   import RecursiveListItem from "./RecursiveListItem.svelte";
@@ -26,7 +23,6 @@
 <svelte:component
   this="{type === 'unordered' ? UnorderedList : OrderedList}"
   native="{type === 'ordered-native'}"
-  nested="{nested}"
   {...$$restProps}
 >
   {#each children as child}
