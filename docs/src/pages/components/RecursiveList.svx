@@ -5,74 +5,12 @@
 
 ### Unordered
 
-<RecursiveList
-  items={[
-      {
-      text: "Item 1",
-      items: [
-        {
-          text: "Link",
-          href: "/",
-          items: [
-            {
-              html: "<h5>Hello world</h5>",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      text: "Item 1",
-    }
-  ]}
-  />
+<FileSource src="/framed/RecursiveList/RecursiveList" />
 
 ### Ordered
 
-<RecursiveList
-type="ordered"
-items={[
-    {
-    text: "Item 1",
-    items: [
-        {
-        text: "Link",
-        href: "/",
-        items: [
-            {
-            html: "<h5>Hello world</h5>",
-            },
-        ],
-        },
-    ],
-    },
-    {
-    text: "Item 1",
-    }
-]}
-/>
+<FileSource src="/framed/RecursiveList/RecursiveListOrdered" />
 
 ### Ordered (native styles)
 
-<RecursiveList
-type="ordered-native"
-items={[
-    {
-    text: "Item 1",
-    items: [
-        {
-        text: "Link",
-        href: "/",
-        items: [
-            {
-            html: "<h5>Hello world</h5>",
-            },
-        ],
-        },
-    ],
-    },
-    {
-    text: "Item 1",
-    }
-]}
-/>
+<FileSource src="/framed/RecursiveList/RecursiveListOrderedNative" />
