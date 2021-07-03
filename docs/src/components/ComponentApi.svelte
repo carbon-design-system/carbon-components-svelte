@@ -4,6 +4,7 @@
     slots: [],
     events: [],
     rest_props: undefined,
+    typedefs: [],
   };
 
   import {
@@ -51,9 +52,7 @@
 
 {#if component.props.length > 0}
   <div class="overflow">
-    <StructuredList
-      style="margin-left: calc(-1 * var(--cds-spacing-05)); margin-right: calc(-1 * var(--cds-spacing-05))"
-    >
+    <StructuredList flush condensed>
       <StructuredListHead>
         <StructuredListRow head>
           <StructuredListCell head>Prop name</StructuredListCell>
