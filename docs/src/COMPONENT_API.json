@@ -7898,7 +7898,7 @@
           "ts": "interface RecursiveListNode { text?: string; href?: string; html?: string; }"
         }
       ],
-      "rest_props": { "type": "InlineComponent", "name": "svelte:component" }
+      "rest_props": { "type": "Element", "name": "ul | ol" }
     },
     {
       "moduleName": "Row",

@@ -1,6 +1,7 @@
 <script>
   /**
    * @typedef {{ text?: string; href?: string; html?: string; }} RecursiveListNode
+   * @restProps {ul | ol}
    */
 
   /**

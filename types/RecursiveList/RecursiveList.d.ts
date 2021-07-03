@@ -7,7 +7,9 @@ export interface RecursiveListNode {
   html?: string;
 }
 
-export interface RecursiveListProps {
+export interface RecursiveListProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]>,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ol"]> {
   /**
    * Specify the children to render
    * @default []
