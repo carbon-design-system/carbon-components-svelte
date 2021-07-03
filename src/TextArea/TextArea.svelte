@@ -90,6 +90,7 @@
       class:bx--text-area--light="{light}"
       class:bx--text-area--invalid="{invalid}"
       {...$$restProps}
+      readonly="{$$restProps.readonly === true ? true : undefined}"
       on:change
       on:input
       on:input="{({ target }) => {
