@@ -19,12 +19,6 @@ export interface RecursiveListProps {
    * @default "unordered"
    */
   type?: "unordered" | "ordered" | "ordered-native";
-
-  /**
-   * Set to `true` to use the nested variant
-   * @default false
-   */
-  nested?: boolean;
 }
 
 export default class RecursiveList extends SvelteComponentTyped<
