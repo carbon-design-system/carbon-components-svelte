@@ -3036,7 +3036,7 @@ None.
 ### Types
 
 ```ts
-export interface Item {
+export interface RecursiveListNode {
   text?: string;
   href?: string;
   html?: string;
@@ -3045,11 +3045,11 @@ export interface Item {
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                              | Default value            | Description                             |
-| :-------- | :--------------- | :------- | :---------------------------------------------------------------- | ------------------------ | --------------------------------------- |
-| items     | <code>let</code> | No       | <code>Array<Item & { items?: Item[]; }></code>                    | <code>[]</code>          | Specify the items to render             |
-| type      | <code>let</code> | No       | <code>"unordered" &#124; "ordered" &#124; "ordered-native"</code> | <code>"unordered"</code> | Specify the type of list to render      |
-| nested    | <code>let</code> | No       | <code>boolean</code>                                              | <code>false</code>       | Set to `true` to use the nested variant |
+| Prop name | Kind             | Reactive | Type                                                                        | Default value            | Description                             |
+| :-------- | :--------------- | :------- | :-------------------------------------------------------------------------- | ------------------------ | --------------------------------------- |
+| children  | <code>let</code> | No       | <code>Array<RecursiveListNode & { children?: RecursiveListNode[]; }></code> | <code>[]</code>          | Specify the children to render          |
+| type      | <code>let</code> | No       | <code>"unordered" &#124; "ordered" &#124; "ordered-native"</code>           | <code>"unordered"</code> | Specify the type of list to render      |
+| nested    | <code>let</code> | No       | <code>boolean</code>                                                        | <code>false</code>       | Set to `true` to use the nested variant |
 
 ### Slots
 

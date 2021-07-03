@@ -1,7 +1,7 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
 
-export interface Item {
+export interface RecursiveListNode {
   text?: string;
   href?: string;
   html?: string;
@@ -9,10 +9,10 @@ export interface Item {
 
 export interface RecursiveListProps {
   /**
-   * Specify the items to render
+   * Specify the children to render
    * @default []
    */
-  items?: Array<Item & { items?: Item[] }>;
+  children?: Array<RecursiveListNode & { children?: RecursiveListNode[] }>;
 
   /**
    * Specify the type of list to render

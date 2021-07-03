@@ -1,14 +1,13 @@
 <script>
   /**
-   * @typedef {{ text?: string; href?: string; html?: string; }} Item
-   * @type {Array<Item & { items?: Item[]; }>}
+   * @typedef {{ text?: string; href?: string; html?: string; }} RecursiveListNode
    */
 
   /**
-   * Specify the items to render
-   * @type {Array<Item & { items?: Item[]; }>}
+   * Specify the children to render
+   * @type {Array<RecursiveListNode & { children?: RecursiveListNode[]; }>}
    */
-  export let items = [];
+  export let children = [];
 
   /**
    * Specify the type of list to render
@@ -21,7 +20,7 @@
 
   import UnorderedList from "../UnorderedList/UnorderedList.svelte";
   import OrderedList from "../OrderedList/OrderedList.svelte";
-  import ListItem from "./RecursiveListItem.svelte";
+  import RecursiveListItem from "./RecursiveListItem.svelte";
 </script>
 
 <svelte:component
@@ -30,13 +29,13 @@
   nested="{nested}"
   {...$$restProps}
 >
-  {#each items as item}
-    {#if Array.isArray(item.items)}
-      <ListItem {...item}>
-        <svelte:self {...item} type="{type}" nested />
-      </ListItem>
+  {#each children as child}
+    {#if Array.isArray(child.children)}
+      <RecursiveListItem {...child}>
+        <svelte:self {...child} type="{type}" nested />
+      </RecursiveListItem>
     {:else}
-      <ListItem {...item} />
+      <RecursiveListItem {...child} />
     {/if}
   {/each}
 </svelte:component>

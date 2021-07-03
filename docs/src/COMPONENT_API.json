@@ -7869,10 +7869,10 @@
       "filePath": "src/RecursiveList/RecursiveList.svelte",
       "props": [
         {
-          "name": "items",
+          "name": "children",
           "kind": "let",
-          "description": "Specify the items to render",
-          "type": "Array<Item & { items?: Item[]; }>",
+          "description": "Specify the children to render",
+          "type": "Array<RecursiveListNode & { children?: RecursiveListNode[]; }>",
           "value": "[]",
           "isFunction": false,
           "constant": false,
@@ -7904,8 +7904,8 @@
       "typedefs": [
         {
           "type": "{ text?: string; href?: string; html?: string; }",
-          "name": "Item",
-          "ts": "interface Item { text?: string; href?: string; html?: string; }"
+          "name": "RecursiveListNode",
+          "ts": "interface RecursiveListNode { text?: string; href?: string; html?: string; }"
         }
       ],
       "rest_props": { "type": "InlineComponent", "name": "svelte:component" }
