@@ -1,6 +1,6 @@
 # Component Index
 
-> 168 components exported from carbon-components-svelte@0.38.1.
+> 168 components exported from carbon-components-svelte@0.38.2.
 
 ## Components
 
@@ -685,6 +685,7 @@ None.
 | Event name    | Type       | Detail                          |
 | :------------ | :--------- | :------------------------------ |
 | transitionend | dispatched | <code>{ open: boolean; }</code> |
+| keydown       | forwarded  | --                              |
 | click         | forwarded  | --                              |
 | mouseover     | forwarded  | --                              |
 | mouseenter    | forwarded  | --                              |

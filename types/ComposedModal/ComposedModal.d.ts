@@ -49,6 +49,7 @@ export default class ComposedModal extends SvelteComponentTyped<
   ComposedModalProps,
   {
     transitionend: CustomEvent<{ open: boolean }>;
+    keydown: WindowEventMap["keydown"];
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];

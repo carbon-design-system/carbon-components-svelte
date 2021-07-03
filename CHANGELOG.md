@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.38.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.38.2) - 2021-07-03
+
+**Fixes**
+
+- prevent `<TextArea readonly={false} />` from being read-only
+- only focus `OveflowMenuItem` if not disabled
+- trap tab focus within `Modal`, `ComposedModal`
+
 ## [0.38.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.38.1) - 2021-06-29
 
 **Fixes**
