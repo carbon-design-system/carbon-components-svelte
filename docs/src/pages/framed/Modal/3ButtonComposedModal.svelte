@@ -1,5 +1,6 @@
 <script>
   import {
+    Button,
     ComposedModal,
     ModalHeader,
     ModalBody,
@@ -11,7 +12,9 @@
   let checked = false;
 </script>
 
-<ComposedModal bind:open>
+<Button on:click="{() => (open = true)}">Review changes</Button>
+
+<ComposedModal bind:open on:submit="{() => (open = false)}">
   <ModalHeader label="Changes" title="Confirm changes" />
   <ModalBody hasForm>
     <Checkbox labelText="I have reviewed the changes" bind:checked />
