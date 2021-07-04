@@ -28,7 +28,7 @@ export interface ModalFooterProps
 
   /**
    * 2-tuple prop to render two secondary buttons for a 3 button modal
-   * Supercedes `secondaryButtonText`
+   * supersedes `secondaryButtonText`
    * @default []
    */
   secondaryButtons?: [{ text: string }, { text: string }];
