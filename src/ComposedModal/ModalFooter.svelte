@@ -57,7 +57,7 @@
         {button.text}
       </Button>
     {/each}
-  {:else}
+  {:else if secondaryButtonText}
     <Button
       kind="secondary"
       class="{secondaryClass}"
