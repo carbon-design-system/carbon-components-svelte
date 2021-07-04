@@ -27,6 +27,13 @@ export interface ModalFooterProps
   secondaryButtonText?: string;
 
   /**
+   * 2-tuple prop to render two secondary buttons for a 3 button modal
+   * Supercedes `secondaryButtonText`
+   * @default []
+   */
+  secondaryButtons?: [{ text: string }, { text: string }];
+
+  /**
    * Specify a class for the secondary button
    */
   secondaryClass?: string;
@@ -40,6 +47,6 @@ export interface ModalFooterProps
 
 export default class ModalFooter extends SvelteComponentTyped<
   ModalFooterProps,
-  {},
+  { ["click:button--secondary"]: CustomEvent<{ text: string }> },
   { default: {} }
 > {}

@@ -90,6 +90,13 @@ export interface ModalProps
   secondaryButtonText?: string;
 
   /**
+   * 2-tuple prop to render two secondary buttons for a 3 button modal
+   * Supercedes `secondaryButtonText`
+   * @default []
+   */
+  secondaryButtons?: [{ text: string }, { text: string }];
+
+  /**
    * Specify a selector to be focused when opening the modal
    * @default "[data-modal-primary-focus]"
    */
@@ -118,13 +125,13 @@ export default class Modal extends SvelteComponentTyped<
   ModalProps,
   {
     transitionend: CustomEvent<{ open: boolean }>;
+    ["click:button--secondary"]: CustomEvent<{ text: string }>;
     keydown: WindowEventMap["keydown"];
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     submit: CustomEvent<any>;
-    ["click:button--secondary"]: CustomEvent<any>;
     close: CustomEvent<any>;
     open: CustomEvent<any>;
   },

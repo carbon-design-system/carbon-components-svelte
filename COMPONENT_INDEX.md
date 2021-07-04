@@ -2219,27 +2219,28 @@ None.
 
 ### Props
 
-| Prop name                  | Kind             | Reactive | Type                                      | Default value                                    | Description                                                                |
-| :------------------------- | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------- |
-| ref                        | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>   | <code>null</code>                                | Obtain a reference to the top-level HTML element                           |
-| open                       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to open the modal                                            |
-| size                       | <code>let</code> | No       | <code>"xs" &#124; "sm" &#124; "lg"</code> | --                                               | Set the size of the modal                                                  |
-| danger                     | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to use the danger variant                                    |
-| alert                      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable alert mode                                         |
-| passiveModal               | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to use the passive variant                                   |
-| modalHeading               | <code>let</code> | No       | <code>string</code>                       | --                                               | Specify the modal heading                                                  |
-| modalLabel                 | <code>let</code> | No       | <code>string</code>                       | --                                               | Specify the modal label                                                    |
-| modalAriaLabel             | <code>let</code> | No       | <code>string</code>                       | --                                               | Specify the ARIA label for the modal                                       |
-| iconDescription            | <code>let</code> | No       | <code>string</code>                       | <code>"Close the modal"</code>                   | Specify the ARIA label for the close icon                                  |
-| hasForm                    | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` if the modal contains form elements                          |
-| hasScrollingContent        | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` if the modal contains scrolling content                      |
-| primaryButtonText          | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the primary button text                                            |
-| primaryButtonDisabled      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the primary button                                |
-| shouldSubmitOnEnter        | <code>let</code> | No       | <code>boolean</code>                      | <code>true</code>                                | Set to `true` for the primary button to be triggered when pressing "Enter" |
-| secondaryButtonText        | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the secondary button text                                          |
-| selectorPrimaryFocus       | <code>let</code> | No       | <code>string</code>                       | <code>"[data-modal-primary-focus]"</code>        | Specify a selector to be focused when opening the modal                    |
-| preventCloseOnClickOutside | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to prevent the modal from closing when clicking outside      |
-| id                         | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element                                        |
+| Prop name                  | Kind             | Reactive | Type                                                | Default value                                    | Description                                                                                             |
+| :------------------------- | :--------------- | :------- | :-------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| ref                        | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>             | <code>null</code>                                | Obtain a reference to the top-level HTML element                                                        |
+| open                       | <code>let</code> | Yes      | <code>boolean</code>                                | <code>false</code>                               | Set to `true` to open the modal                                                                         |
+| size                       | <code>let</code> | No       | <code>"xs" &#124; "sm" &#124; "lg"</code>           | --                                               | Set the size of the modal                                                                               |
+| danger                     | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code>                               | Set to `true` to use the danger variant                                                                 |
+| alert                      | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code>                               | Set to `true` to enable alert mode                                                                      |
+| passiveModal               | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code>                               | Set to `true` to use the passive variant                                                                |
+| modalHeading               | <code>let</code> | No       | <code>string</code>                                 | --                                               | Specify the modal heading                                                                               |
+| modalLabel                 | <code>let</code> | No       | <code>string</code>                                 | --                                               | Specify the modal label                                                                                 |
+| modalAriaLabel             | <code>let</code> | No       | <code>string</code>                                 | --                                               | Specify the ARIA label for the modal                                                                    |
+| iconDescription            | <code>let</code> | No       | <code>string</code>                                 | <code>"Close the modal"</code>                   | Specify the ARIA label for the close icon                                                               |
+| hasForm                    | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code>                               | Set to `true` if the modal contains form elements                                                       |
+| hasScrollingContent        | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code>                               | Set to `true` if the modal contains scrolling content                                                   |
+| primaryButtonText          | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>                                  | Specify the primary button text                                                                         |
+| primaryButtonDisabled      | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code>                               | Set to `true` to disable the primary button                                                             |
+| shouldSubmitOnEnter        | <code>let</code> | No       | <code>boolean</code>                                | <code>true</code>                                | Set to `true` for the primary button to be triggered when pressing "Enter"                              |
+| secondaryButtonText        | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>                                  | Specify the secondary button text                                                                       |
+| secondaryButtons           | <code>let</code> | No       | <code>[{ text: string; }, { text: string; }]</code> | <code>[]</code>                                  | 2-tuple prop to render two secondary buttons for a 3 button modal<br />Supercedes `secondaryButtonText` |
+| selectorPrimaryFocus       | <code>let</code> | No       | <code>string</code>                                 | <code>"[data-modal-primary-focus]"</code>        | Specify a selector to be focused when opening the modal                                                 |
+| preventCloseOnClickOutside | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code>                               | Set to `true` to prevent the modal from closing when clicking outside                                   |
+| id                         | <code>let</code> | No       | <code>string</code>                                 | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element                                                                     |
 
 ### Slots
 
@@ -2254,13 +2255,13 @@ None.
 | Event name              | Type       | Detail                          |
 | :---------------------- | :--------- | :------------------------------ |
 | transitionend           | dispatched | <code>{ open: boolean; }</code> |
+| click:button--secondary | dispatched | <code>{ text: string; }</code>  |
 | keydown                 | forwarded  | --                              |
 | click                   | forwarded  | --                              |
 | mouseover               | forwarded  | --                              |
 | mouseenter              | forwarded  | --                              |
 | mouseleave              | forwarded  | --                              |
 | submit                  | dispatched | --                              |
-| click:button--secondary | dispatched | --                              |
 | close                   | dispatched | --                              |
 | open                    | dispatched | --                              |
 
@@ -2287,14 +2288,15 @@ None.
 
 ### Props
 
-| Prop name             | Kind             | Reactive | Type                 | Default value      | Description                                 |
-| :-------------------- | :--------------- | :------- | :------------------- | ------------------ | ------------------------------------------- |
-| primaryButtonText     | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the primary button text             |
-| primaryButtonDisabled | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the primary button |
-| primaryClass          | <code>let</code> | No       | <code>string</code>  | --                 | Specify a class for the primary button      |
-| secondaryButtonText   | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the secondary button text           |
-| secondaryClass        | <code>let</code> | No       | <code>string</code>  | --                 | Specify a class for the secondary button    |
-| danger                | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the danger variant     |
+| Prop name             | Kind             | Reactive | Type                                                | Default value      | Description                                                                                             |
+| :-------------------- | :--------------- | :------- | :-------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------- |
+| primaryButtonText     | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>    | Specify the primary button text                                                                         |
+| primaryButtonDisabled | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to disable the primary button                                                             |
+| primaryClass          | <code>let</code> | No       | <code>string</code>                                 | --                 | Specify a class for the primary button                                                                  |
+| secondaryButtonText   | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>    | Specify the secondary button text                                                                       |
+| secondaryButtons      | <code>let</code> | No       | <code>[{ text: string; }, { text: string; }]</code> | <code>[]</code>    | 2-tuple prop to render two secondary buttons for a 3 button modal<br />Supercedes `secondaryButtonText` |
+| secondaryClass        | <code>let</code> | No       | <code>string</code>                                 | --                 | Specify a class for the secondary button                                                                |
+| danger                | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code> | Set to `true` to use the danger variant                                                                 |
 
 ### Slots
 
@@ -2304,7 +2306,9 @@ None.
 
 ### Events
 
-None.
+| Event name              | Type       | Detail                         |
+| :---------------------- | :--------- | :----------------------------- |
+| click:button--secondary | dispatched | <code>{ text: string; }</code> |
 
 ## `ModalHeader`
 
