@@ -4,6 +4,7 @@
   export let src = "";
   export let framed = false;
 
+  import copy from "clipboard-copy";
   import { CodeSnippet, Button } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
   import { url } from "@sveltech/routify";
@@ -40,7 +41,7 @@
     {/if}
   </div>
   <div class="code-override">
-    <CodeSnippet type="multi" code="{codeRaw}">
+    <CodeSnippet type="multi" code="{codeRaw}" copy="{(text) => copy(text)}">
       {@html code}
     </CodeSnippet>
   </div>
