@@ -13,6 +13,12 @@ export interface CopyButtonProps extends CopyProps {
    * Specify the text to copy
    */
   text?: string;
+
+  /**
+   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
+   * @default async (text) => { try { await navigator.clipboard.writeText(text); } catch (e) { console.log(e); } }
+   */
+  copy?: (text: string) => void;
 }
 
 export default class CopyButton extends SvelteComponentTyped<

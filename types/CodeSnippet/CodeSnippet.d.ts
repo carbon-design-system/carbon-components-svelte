@@ -16,6 +16,12 @@ export interface CodeSnippetProps {
   code?: string;
 
   /**
+   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
+   * @default async (code) => { try { await navigator.clipboard.writeText(code); } catch (e) { console.log(e); } }
+   */
+  copy?: (code: string) => void;
+
+  /**
    * Set to `true` to expand a multi-line code snippet (type="multi")
    * @default false
    */

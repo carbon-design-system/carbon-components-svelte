@@ -13,6 +13,18 @@
    */
   export let code = undefined;
 
+  /**
+   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
+   * @type {(code: string) => void}
+   */
+  export let copy = async (code) => {
+    try {
+      await navigator.clipboard.writeText(code);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   /** Set to `true` to expand a multi-line code snippet (type="multi") */
   export let expanded = false;
 
@@ -77,7 +89,6 @@
   export let ref = null;
 
   import { createEventDispatcher, tick } from "svelte";
-  import copy from "clipboard-copy";
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
   import Button from "../Button/Button.svelte";
   import Copy from "../Copy/Copy.svelte";

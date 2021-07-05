@@ -35,7 +35,9 @@ export function subtract(a: number, b: number) {
   hideCloseButton
 />
 
-<CodeSnippet>yarn add -D carbon-components-svelte</CodeSnippet>
+<CodeSnippet copy="{(text) => {}}"
+  >yarn add -D carbon-components-svelte</CodeSnippet
+>
 
 <CodeSnippet type="inline">rm -rf node_modules/</CodeSnippet>
 

@@ -840,6 +840,16 @@
           "reactive": false
         },
         {
+          "name": "copy",
+          "kind": "let",
+          "description": "Override the default copy behavior of using the navigator.clipboard.writeText API to copy text",
+          "type": "(code: string) => void",
+          "value": "async (code) => {     try {       await navigator.clipboard.writeText(code);     } catch (e) {       console.log(e);     }   }",
+          "isFunction": true,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "expanded",
           "kind": "let",
           "description": "Set to `true` to expand a multi-line code snippet (type=\"multi\")",
@@ -1909,6 +1919,16 @@
           "description": "Specify the text to copy",
           "type": "string",
           "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "copy",
+          "kind": "let",
+          "description": "Override the default copy behavior of using the navigator.clipboard.writeText API to copy text",
+          "type": "(text: string) => void",
+          "value": "async (text) => {     try {       await navigator.clipboard.writeText(text);     } catch (e) {       console.log(e);     }   }",
+          "isFunction": true,
           "constant": false,
           "reactive": false
         }
