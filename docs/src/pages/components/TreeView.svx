@@ -1,19 +1,31 @@
 <script>
-  import { TreeView } from "carbon-components-svelte";
+  import { InlineNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
-Note: every node MUST have an id.
-
 ### Default
+
+The `children` prop accepts an array of child nodes. Each node should contain `id` and `text` properties.
+
+Optional properties include `disabled`, `expanded`, `icon`, and `children`.
+
+A parent node is a node with `children` while a leaf node does not.
+
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">Every node must have a unique id.</div>
+</InlineNotification>
 
 <FileSource src="/framed/TreeView/TreeView" />
 
 ### Initial active node
 
+The active node can be set through `activeId`.
+
 <FileSource src="/framed/TreeView/TreeViewActive" />
 
 ### Compact size
+
+Set `size` to `"compact"` to use the compact variant.
 
 <FileSource src="/framed/TreeView/TreeViewCompact" />
 
@@ -23,8 +35,12 @@ Note: every node MUST have an id.
 
 ### With icons
 
+To render a node with an icon, define an `icon` property with a Carbon Svelte icon as its value.
+
 <FileSource src="/framed/TreeView/TreeViewIcons" />
 
 ### Initial multiple selected nodes
+
+Initial multiple selected nodes can be set using `selectedIds`.
 
 <FileSource src="/framed/TreeView/TreeViewMultiselect" />

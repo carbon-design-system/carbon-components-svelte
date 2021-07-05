@@ -1,5 +1,5 @@
 <script>
-  // TODO: add utility to expand/collapse all
+  // TODO: add function to programmatically expand/collapse parent nodes
 
   /**
    * @typedef {string | number} TreeNodeId
