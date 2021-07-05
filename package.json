@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "carbon-icons-svelte": "^10.27.0",
-    "clipboard-copy": "3.2.0",
     "flatpickr": "4.6.9"
   },
   "devDependencies": {

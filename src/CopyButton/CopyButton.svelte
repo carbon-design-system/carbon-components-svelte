@@ -10,9 +10,20 @@
    */
   export let text = undefined;
 
+  /**
+   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
+   * @type {(text: string) => void}
+   */
+  export let copy = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   import Copy from "../Copy/Copy.svelte";
   import Copy16 from "carbon-icons-svelte/lib/Copy16/Copy16.svelte";
-  import copy from "clipboard-copy";
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
