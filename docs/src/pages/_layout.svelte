@@ -264,6 +264,6 @@
   }
 
   .bx--side-nav__submenu[aria-expanded="true"] + .bx--side-nav__menu {
-    max-height: 124rem;
+    max-height: 132rem;
   }
 </style>
