@@ -3,16 +3,81 @@ components: ["DataTable", "Toolbar", "ToolbarContent", "ToolbarSearch", "Toolbar
 ---
 
 <script>
-  import { DataTable, DataTableSkeleton, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
+  import { InlineNotification, DataTable, DataTableSkeleton, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`DataTable` is keyed for both rendering and sorting purposes.
+
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">Every <code>headers</code> object must have a unique "key" property.</div>
+</InlineNotification>
+
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">Every <code>rows</code> object must have a unique "id" property.</div>
+</InlineNotification>
+
 ### Default
 
-The `DataTable` is keyed for both rendering and sorting. You must define a "key" value per object in the `headers` property and an "id" value in `rows`.
-
 <DataTable
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+/>
+
+### Static width
+
+Set `useStaticWidth` to `true` to render the table with a width of "auto" instead of "100%".
+
+<DataTable useStaticWidth
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },

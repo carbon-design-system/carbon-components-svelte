@@ -297,6 +297,7 @@
           disabled="{primaryButtonDisabled}"
           on:click="{() => {
             dispatch('submit');
+            dispatch('click:button--primary');
           }}"
         >
           {primaryButtonText}

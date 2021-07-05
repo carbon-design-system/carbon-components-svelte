@@ -129,6 +129,12 @@ export interface DataTableProps
    * @default false
    */
   stickyHeader?: boolean;
+
+  /**
+   * Set to `true` to use static width
+   * @default false
+   */
+  useStaticWidth?: boolean;
 }
 
 export default class DataTable extends SvelteComponentTyped<

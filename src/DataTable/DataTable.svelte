@@ -91,6 +91,9 @@
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
+  /** Set to `true` to use static width */
+  export let useStaticWidth = false;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
   import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16/ChevronRight16.svelte";
@@ -203,24 +206,27 @@
 </script>
 
 <TableContainer {...$$restProps}>
-  <div class:bx--data-table-header="{true}">
-    {#if title || $$slots.title}
-      <h4 class:bx--data-table-header__title="{true}">
-        <slot name="title">{title}</slot>
-      </h4>
-    {/if}
-    {#if description || $$slots.description}
-      <p class:bx--data-table-header__description="{true}">
-        <slot name="description">{description}</slot>
-      </p>
-    {/if}
-  </div>
+  {#if title || $$slots.title || description || $$slots.description}
+    <div class:bx--data-table-header="{true}">
+      {#if title || $$slots.title}
+        <h4 class:bx--data-table-header__title="{true}">
+          <slot name="title">{title}</slot>
+        </h4>
+      {/if}
+      {#if description || $$slots.description}
+        <p class:bx--data-table-header__description="{true}">
+          <slot name="description">{description}</slot>
+        </p>
+      {/if}
+    </div>
+  {/if}
   <slot />
   <Table
     zebra="{zebra}"
     size="{size}"
     stickyHeader="{stickyHeader}"
     sortable="{sortable}"
+    useStaticWidth="{useStaticWidth}"
   >
     <TableHead>
       <TableRow>

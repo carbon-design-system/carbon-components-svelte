@@ -685,17 +685,18 @@ None.
 
 ### Events
 
-| Event name    | Type       | Detail                          |
-| :------------ | :--------- | :------------------------------ |
-| transitionend | dispatched | <code>{ open: boolean; }</code> |
-| keydown       | forwarded  | --                              |
-| click         | forwarded  | --                              |
-| mouseover     | forwarded  | --                              |
-| mouseenter    | forwarded  | --                              |
-| mouseleave    | forwarded  | --                              |
-| submit        | dispatched | --                              |
-| close         | dispatched | --                              |
-| open          | dispatched | --                              |
+| Event name            | Type       | Detail                          |
+| :-------------------- | :--------- | :------------------------------ |
+| transitionend         | dispatched | <code>{ open: boolean; }</code> |
+| keydown               | forwarded  | --                              |
+| click                 | forwarded  | --                              |
+| mouseover             | forwarded  | --                              |
+| mouseenter            | forwarded  | --                              |
+| mouseleave            | forwarded  | --                              |
+| submit                | dispatched | --                              |
+| click:button--primary | dispatched | --                              |
+| close                 | dispatched | --                              |
+| open                  | dispatched | --                              |
 
 ## `Content`
 
@@ -958,6 +959,7 @@ export interface DataTableCell {
 | radio          | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the radio selection variant                                                                       |
 | batchSelection | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable batch selection                                                                             |
 | stickyHeader   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable a sticky header                                                                             |
+| useStaticWidth | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to use static width                                                                                   |
 
 ### Slots
 
@@ -2269,6 +2271,7 @@ None.
 | mouseenter              | forwarded  | --                              |
 | mouseleave              | forwarded  | --                              |
 | submit                  | dispatched | --                              |
+| click:button--primary   | dispatched | --                              |
 | close                   | dispatched | --                              |
 | open                    | dispatched | --                              |
 

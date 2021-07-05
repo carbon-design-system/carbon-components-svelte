@@ -53,6 +53,7 @@
     },
     submit: () => {
       dispatch("submit");
+      dispatch("click:button--primary");
     },
     declareRef: (ref) => {
       buttonRef = ref;

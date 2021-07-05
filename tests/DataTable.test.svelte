@@ -98,6 +98,7 @@
   description="Your organization's active load balancers."
   headers="{headers}"
   rows="{rows}"
+  useStaticWidth
 />
 
 <DataTable
