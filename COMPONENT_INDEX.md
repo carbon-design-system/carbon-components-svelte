@@ -1,6 +1,6 @@
 # Component Index
 
-> 168 components exported from carbon-components-svelte@0.38.2.
+> 169 components exported from carbon-components-svelte@0.38.2.
 
 ## Components
 
@@ -107,6 +107,7 @@
 - [`RadioButtonGroup`](#radiobuttongroup)
 - [`RadioButtonSkeleton`](#radiobuttonskeleton)
 - [`RadioTile`](#radiotile)
+- [`RecursiveList`](#recursivelist)
 - [`Row`](#row)
 - [`Search`](#search)
 - [`SearchSkeleton`](#searchskeleton)
@@ -3030,6 +3031,33 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `RecursiveList`
+
+### Types
+
+```ts
+export interface RecursiveListNode {
+  text?: string;
+  href?: string;
+  html?: string;
+}
+```
+
+### Props
+
+| Prop name | Kind             | Reactive | Type                                                                        | Default value            | Description                        |
+| :-------- | :--------------- | :------- | :-------------------------------------------------------------------------- | ------------------------ | ---------------------------------- |
+| children  | <code>let</code> | No       | <code>Array<RecursiveListNode & { children?: RecursiveListNode[]; }></code> | <code>[]</code>          | Specify the children to render     |
+| type      | <code>let</code> | No       | <code>"unordered" &#124; "ordered" &#124; "ordered-native"</code>           | <code>"unordered"</code> | Specify the type of list to render |
+
+### Slots
+
+None.
+
+### Events
+
+None.
 
 ## `Row`
 

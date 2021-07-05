@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ProgressBar } from "../types";
 </script>
 

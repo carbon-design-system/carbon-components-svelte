@@ -99,6 +99,7 @@ export { default as ProgressStep } from "./ProgressIndicator/ProgressStep";
 export { default as RadioButton } from "./RadioButton/RadioButton";
 export { default as RadioButtonSkeleton } from "./RadioButton/RadioButtonSkeleton";
 export { default as RadioButtonGroup } from "./RadioButtonGroup/RadioButtonGroup";
+export { default as RecursiveList } from "./RecursiveList/RecursiveList";
 export { default as Search } from "./Search/Search";
 export { default as SearchSkeleton } from "./Search/SearchSkeleton";
 export { default as Select } from "./Select/Select";

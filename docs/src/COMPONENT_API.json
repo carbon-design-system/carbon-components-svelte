@@ -1,5 +1,5 @@
 {
-  "total": 168,
+  "total": 169,
   "components": [
     {
       "moduleName": "Accordion",
@@ -7864,6 +7864,42 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "label" }
+    },
+    {
+      "moduleName": "RecursiveList",
+      "filePath": "src/RecursiveList/RecursiveList.svelte",
+      "props": [
+        {
+          "name": "children",
+          "kind": "let",
+          "description": "Specify the children to render",
+          "type": "Array<RecursiveListNode & { children?: RecursiveListNode[]; }>",
+          "value": "[]",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "type",
+          "kind": "let",
+          "description": "Specify the type of list to render",
+          "type": "\"unordered\" | \"ordered\" | \"ordered-native\"",
+          "value": "\"unordered\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "typedefs": [
+        {
+          "type": "{ text?: string; href?: string; html?: string; }",
+          "name": "RecursiveListNode",
+          "ts": "interface RecursiveListNode { text?: string; href?: string; html?: string; }"
+        }
+      ],
+      "rest_props": { "type": "Element", "name": "ul | ol" }
     },
     {
       "moduleName": "Row",
