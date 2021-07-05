@@ -963,7 +963,9 @@ export interface DataTableCell {
 | --           | Yes     | --                                                        | --                                                                  |
 | cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; } </code> | <code>{cell.display ? cell.display(cell.value) : cell.value}</code> |
 | cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>        | <code>{header.value}</code>                                         |
+| description  | No      | --                                                        | <code>{description}</code>                                          |
 | expanded-row | No      | <code>{ row: DataTableRow; } </code>                      | --                                                                  |
+| title        | No      | --                                                        | <code>{title}</code>                                                |
 
 ### Events
 
