@@ -25,6 +25,6 @@ Note: every node MUST have an id.
 
 <FileSource src="/framed/TreeView/TreeViewIcons" />
 
-### Initial multiselected nodes
+### Initial multiple selected nodes
 
 <FileSource src="/framed/TreeView/TreeViewMultiselect" />
