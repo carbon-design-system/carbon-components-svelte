@@ -239,6 +239,9 @@ module.exports = {
                         <a class="bx--link" href="#props">Props</a>
                       </li>
                       <li class="bx--list__item">
+                        <a class="bx--link" href="#typedefs">Typedefs</a>
+                      </li>
+                      <li class="bx--list__item">
                         <a class="bx--link" href="#slots">Slots</a>
                       </li>
                       <li class="bx--list__item">

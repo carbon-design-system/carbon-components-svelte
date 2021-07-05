@@ -37,7 +37,7 @@
   onMount(() => {
     const currentTheme = window.location.search.split("?theme=")[1];
 
-    if (["white", "g10", "g90", "g100"].includes(currentTheme)) {
+    if (["white", "g10", "g80", "g90", "g100"].includes(currentTheme)) {
       theme.set(currentTheme);
     }
   });
