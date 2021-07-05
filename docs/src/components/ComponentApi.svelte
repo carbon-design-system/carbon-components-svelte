@@ -9,6 +9,7 @@
 
   import {
     Link,
+    OutboundLink,
     StructuredList,
     StructuredListHead,
     StructuredListRow,
@@ -43,10 +44,9 @@
 
 <p style="margin-bottom: var(--cds-layout-02)">
   Source code:
-  <Link inline size="lg" href="{source}" target="_blank">
+  <OutboundLink inline href="{source}">
     {component.filePath}
-    <Launch16 />
-  </Link>
+  </OutboundLink>
 </p>
 
 <h3 id="props">Props</h3>
@@ -94,14 +94,12 @@
                       Carbon Svelte icon
                     </TooltipDefinition>
                   {:else if type.startsWith("HTML")}
-                    <Link
+                    <OutboundLink
                       href="{mdn_api}{type}"
-                      target="_blank"
                       style="white-space: nowrap"
                     >
                       {type}
-                      <Launch16 />
-                    </Link>
+                    </OutboundLink>
                   {:else if type in typeMap}
                     <code>{typeMap[type]}</code>
                   {:else if type.startsWith("(")}
