@@ -3,14 +3,22 @@ components: ["DataTable", "Toolbar", "ToolbarContent", "ToolbarSearch", "Toolbar
 ---
 
 <script>
-  import { DataTable, DataTableSkeleton, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
+  import { InlineNotification, DataTable, DataTableSkeleton, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+`DataTable` is keyed for both rendering and sorting purposes.
 
-The `DataTable` is keyed for both rendering and sorting. You must define a "key" value per object in the `headers` property and an "id" value in `rows`.
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">Every <code>headers</code> object must have a unique "key" property.</div>
+</InlineNotification>
+
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">Every <code>rows</code> object must have a unique "id" property.</div>
+</InlineNotification>
+
+### Default
 
 <DataTable
   headers="{[
