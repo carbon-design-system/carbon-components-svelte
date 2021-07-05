@@ -1,5 +1,5 @@
 <script>
-  import { CodeSnippet, InlineNotification, Link } from "carbon-components-svelte";
+  import { CodeSnippet } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 
   let code = `// helpers.js
@@ -27,13 +27,30 @@ let comment = `
 `
 </script>
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">As of version 0.32, the CodeSnippet will copy the provided `code` text when clicking the copy button.</div>
-</InlineNotification>
+This component uses the native, asynchronous [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text.
+
+Please note that the `clipboard.writeText` API is not supported in [IE 11 nor Safari iOS version 13.3  or lower](https://caniuse.com/mdn-api_clipboard_writetext).
+
+You can override the default copy functionality with your own copy text implementation. See [Overriding copy functionality](#overriding-copy-functionality).
+
 
 ### Default (single-line)
 
 <CodeSnippet code="yarn add -D carbon-components-svelte" />
+
+### Overriding copy functionality
+
+To override the default copy behavior, pass a custom function to the `copy` prop.
+
+In this example, we use the open source module [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
+
+### Preventing copy functionality
+
+To prevent text from being copied entirely, pass a "noop" function to the `copy` prop.
+
+<CodeSnippet code="yarn add -D carbon-components-svelte" copy={() => {}} />
 
 ### Inline
 
