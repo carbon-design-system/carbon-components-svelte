@@ -25,6 +25,18 @@ export interface SideNavProps
    * @default false
    */
   isOpen?: boolean;
+
+  /**
+   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden
+   * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
+   * small: 320
+   * medium: 672
+   * large: 1056
+   * x-large: 1312
+   * max: 1584
+   * @default 1056
+   */
+  expansionBreakpoint?: number;
 }
 
 export default class SideNav extends SvelteComponentTyped<

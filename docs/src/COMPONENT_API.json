@@ -3843,6 +3843,16 @@
           "reactive": false
         },
         {
+          "name": "expansionBreakpoint",
+          "kind": "let",
+          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\nsmall: 320\nmedium: 672\nlarge: 1056\nx-large: 1312\nmax: 1584",
+          "type": "number",
+          "value": "1056",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "ref",
           "kind": "let",
           "description": "Obtain a reference to the HTML anchor element",
@@ -8694,6 +8704,16 @@
           "isFunction": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "expansionBreakpoint",
+          "kind": "let",
+          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\nsmall: 320\nmedium: 672\nlarge: 1056\nx-large: 1312\nmax: 1584",
+          "type": "number",
+          "value": "1056",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
