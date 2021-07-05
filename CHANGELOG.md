@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.39.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.39.0) - 2021-07-05
+
+**Breaking Changes**
+
+- remove `clipboard-copy` direct dependency; use native Clipboard API instead of `clipboard-copy` to copy text in `CopyButton`, `CodeSnippet`
+
+**Features**
+
+- add `TreeView` component
+- add `RecursiveList` component
+- support 3 buttons in `Modal`, `ComposedModal` via `secondaryButtons`
+- make `DataTable` title/description slottable
+- allow custom `expansionBreakpoint` in UI Shell `Header`, `SideNav`
+- dispatch "click:button--primary" as an alias to "submit" in `Modal`, `ComposedModal`
+
+**Fixes**
+
+- export `useStaticWidth` prop in `DataTable`
+- do not render `DataTable` table header if title/description not provided
+
+**Documentation**
+
+- add TreeView documentation
+- add RecursiveList documentation
+- add CopyButton examples "Overriding copy functionality", "Preventing copy functionality"
+- add CodeSnippet examples "Overriding copy functionality", "Preventing copy functionality"
+- add DataTable example "Static width"
+- include typedefs in Component API section
+
 ## [0.38.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.38.2) - 2021-07-03
 
 **Fixes**
