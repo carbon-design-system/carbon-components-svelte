@@ -9,10 +9,22 @@ Note: every node MUST have an id.
 
 <FileSource src="/framed/TreeView/TreeView" />
 
+### Initial active node
+
+<FileSource src="/framed/TreeView/TreeViewActive" />
+
 ### Compact size
 
 <FileSource src="/framed/TreeView/TreeViewCompact" />
 
+### Initial expanded nodes
+
+<FileSource src="/framed/TreeView/TreeViewExpanded" />
+
 ### With icons
 
 <FileSource src="/framed/TreeView/TreeViewIcons" />
+
+### Initial multiselected nodes
+
+<FileSource src="/framed/TreeView/TreeViewMultiselect" />
