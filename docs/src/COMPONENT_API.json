@@ -5398,6 +5398,16 @@
           "reactive": false
         },
         {
+          "name": "secondaryButtons",
+          "kind": "let",
+          "description": "2-tuple prop to render two secondary buttons for a 3 button modal\nsupersedes `secondaryButtonText`",
+          "type": "[{ text: string; }, { text: string; }]",
+          "value": "[]",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "selectorPrimaryFocus",
           "kind": "let",
           "description": "Specify a selector to be focused when opening the modal",
@@ -5459,13 +5469,17 @@
           "name": "transitionend",
           "detail": "{ open: boolean; }"
         },
+        {
+          "type": "dispatched",
+          "name": "click:button--secondary",
+          "detail": "{ text: string; }"
+        },
         { "type": "forwarded", "name": "keydown", "element": "div" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "dispatched", "name": "submit" },
-        { "type": "dispatched", "name": "click:button--secondary" },
         { "type": "dispatched", "name": "close" },
         { "type": "dispatched", "name": "open" }
       ],
@@ -5546,6 +5560,16 @@
           "reactive": false
         },
         {
+          "name": "secondaryButtons",
+          "kind": "let",
+          "description": "2-tuple prop to render two secondary buttons for a 3 button modal\nsupersedes `secondaryButtonText`",
+          "type": "[{ text: string; }, { text: string; }]",
+          "value": "[]",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "secondaryClass",
           "kind": "let",
           "description": "Specify a class for the secondary button",
@@ -5566,7 +5590,13 @@
         }
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [],
+      "events": [
+        {
+          "type": "dispatched",
+          "name": "click:button--secondary",
+          "detail": "{ text: string; }"
+        }
+      ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },

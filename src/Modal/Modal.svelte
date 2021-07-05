@@ -1,6 +1,7 @@
 <script>
   /**
    * @event {{ open: boolean; }} transitionend
+   * @event {{ text: string; }} click:button--secondary
    */
 
   /**
@@ -59,6 +60,13 @@
 
   /** Specify the secondary button text */
   export let secondaryButtonText = "";
+
+  /**
+   * 2-tuple prop to render two secondary buttons for a 3 button modal
+   * supersedes `secondaryButtonText`
+   * @type {[{ text: string; }, { text: string; }]}
+   */
+  export let secondaryButtons = [];
 
   /** Specify a selector to be focused when opening the modal */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
@@ -257,15 +265,33 @@
       <div class:bx--modal-content--overflow-indicator="{true}"></div>
     {/if}
     {#if !passiveModal}
-      <div class:bx--modal-footer="{true}">
-        <Button
-          kind="secondary"
-          on:click="{() => {
-            dispatch('click:button--secondary');
-          }}"
-        >
-          {secondaryButtonText}
-        </Button>
+      <div
+        class:bx--modal-footer="{true}"
+        class:bx--modal-footer--three-button="{secondaryButtons.length === 2}"
+      >
+        {#if secondaryButtons.length > 0}
+          {#each secondaryButtons as button}
+            <Button
+              kind="secondary"
+              on:click="{() => {
+                dispatch('click:button--secondary', { text: button.text });
+              }}"
+            >
+              {button.text}
+            </Button>
+          {/each}
+        {:else if secondaryButtonText}
+          <Button
+            kind="secondary"
+            on:click="{() => {
+              dispatch('click:button--secondary', {
+                text: secondaryButtonText,
+              });
+            }}"
+          >
+            {secondaryButtonText}
+          </Button>
+        {/if}
         <Button
           kind="{danger ? 'danger' : 'primary'}"
           disabled="{primaryButtonDisabled}"

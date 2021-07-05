@@ -15,5 +15,10 @@
   <ModalBody hasForm>
     <Checkbox labelText="I have reviewed the changes" bind:checked />
   </ModalBody>
-  <ModalFooter primaryButtonText="Proceed" primaryButtonDisabled="{!checked}" />
+  <ModalFooter
+    primaryButtonText="Proceed"
+    primaryButtonDisabled="{!checked}"
+    secondaryButtons="{[{ text: 'Cancel' }, { text: 'Duplicate' }]}"
+    on:click:button--secondary="{({ detail }) => {}}"
+  />
 </ComposedModal>

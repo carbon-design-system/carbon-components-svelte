@@ -1,5 +1,5 @@
-<script lang="ts">
-  import { Button, Modal } from "../types";
+<script>
+  import { Button, Modal } from "carbon-components-svelte";
 
   let open = false;
 </script>
@@ -10,9 +10,11 @@
   bind:open
   modalHeading="Create database"
   primaryButtonText="Confirm"
-  secondaryButtons="{[{ text: 'Cancel' }, { text: 'Duplicate' }]}"
-  secondaryButtonText="Cancel"
-  on:click:button--secondary="{({ detail }) => (open = false)}"
+  secondaryButtons="{[{ text: 'Cancel' }, { text: 'Edit' }]}"
+  on:click:button--secondary="{({ detail }) => {
+    if (detail.text === 'Cancel') open = false;
+    if (detail.text === 'Edit') console.log('Edit');
+  }}"
   on:open
   on:close
   on:submit
