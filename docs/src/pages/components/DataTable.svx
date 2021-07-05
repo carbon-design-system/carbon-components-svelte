@@ -65,6 +65,63 @@ The `DataTable` is keyed for both rendering and sorting. You must define a "key"
   ]}"
 />
 
+### Static width
+
+Set `useStaticWidth` to `true` to render the table with a width of "auto" instead of "100%".
+
+<DataTable useStaticWidth
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+/>
+
 ### Slotted cells
 
 Use the `"cell"` slot to control the display value per table cell. Individual row and cell data are provided through the `let:row` and `let:cell` directives.
