@@ -20,7 +20,7 @@
   import Footer from "../components/Footer.svelte";
 
   const deprecated = ["ToggleSmall", "Icon"];
-  const new_components = ["ProgressBar", "RecursiveList"];
+  const new_components = ["ProgressBar", "RecursiveList", "TreeView"];
 
   let isOpen = false;
   let isSideNavOpen = true;
@@ -264,6 +264,6 @@
   }
 
   .bx--side-nav__submenu[aria-expanded="true"] + .bx--side-nav__menu {
-    max-height: 124rem;
+    max-height: 132rem;
   }
 </style>

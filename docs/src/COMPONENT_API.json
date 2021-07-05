@@ -1,5 +1,5 @@
 {
-  "total": 169,
+  "total": 170,
   "components": [
     {
       "moduleName": "Accordion",
@@ -11833,6 +11833,111 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "button" }
+    },
+    {
+      "moduleName": "TreeView",
+      "filePath": "src/TreeView/TreeView.svelte",
+      "props": [
+        {
+          "name": "children",
+          "kind": "let",
+          "description": "Provide an array of children nodes to render",
+          "type": "Array<TreeNode & { children?: TreeNode[] }>",
+          "value": "[]",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "activeId",
+          "kind": "let",
+          "description": "Set the current active node id\nOnly one node can be active",
+          "type": "TreeNodeId",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "selectedIds",
+          "kind": "let",
+          "description": "Set the node ids to be selected",
+          "type": "TreeNodeId[]",
+          "value": "[]",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the TreeView size",
+          "type": "\"default\" | \"compact\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "labelText",
+          "kind": "let",
+          "description": "Specify the label text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "hideLabel",
+          "kind": "let",
+          "description": "Set to `true` to visually hide the label text",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "labelText",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "{}"
+        }
+      ],
+      "events": [
+        {
+          "type": "dispatched",
+          "name": "select",
+          "detail": "TreeNode & { expanded: boolean; leaf: boolean; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "toggle",
+          "detail": "TreeNode & { expanded: boolean; leaf: boolean; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "focus",
+          "detail": "TreeNode & { expanded: boolean; leaf: boolean; }"
+        },
+        { "type": "forwarded", "name": "keydown", "element": "ul" }
+      ],
+      "typedefs": [
+        {
+          "type": "string | number",
+          "name": "TreeNodeId",
+          "ts": "type TreeNodeId = string | number"
+        },
+        {
+          "type": "{ id: TreeNodeId; text: string; icon?: typeof import(\"carbon-icons-svelte\").CarbonIcon; disabled?: boolean; expanded?: boolean; }",
+          "name": "TreeNode",
+          "ts": "interface TreeNode { id: TreeNodeId; text: string; icon?: typeof import(\"carbon-icons-svelte\").CarbonIcon; disabled?: boolean; expanded?: boolean; }"
+        }
+      ],
+      "rest_props": { "type": "Element", "name": "ul" }
     },
     {
       "moduleName": "Truncate",

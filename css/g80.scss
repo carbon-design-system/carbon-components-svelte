@@ -27,6 +27,9 @@ $carbon--theme: $carbon--theme--g80;
 @import "carbon-components/scss/globals/scss/_css--body";
 @import "carbon-components/scss/globals/grid/grid";
 
+// Import experimental TreeView styles not included in global styles
+@import "carbon-components/src/components/treeview/treeview";
+
 // Import all component styles
 @import "carbon-components/scss/globals/scss/styles";
 
