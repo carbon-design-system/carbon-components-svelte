@@ -9,7 +9,7 @@ The `children` prop accepts an array of child nodes. Each node should contain `i
 
 Optional properties include `disabled`, `expanded`, `icon`, and `children`.
 
-A parent node is a node with `children` while a leaf node does not.
+A parent node contains `children` while a leaf node does not.
 
 <InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every node must have a unique id.</div>
@@ -29,15 +29,17 @@ Set `size` to `"compact"` to use the compact variant.
 
 <FileSource src="/framed/TreeView/TreeViewCompact" />
 
-### Initial expanded nodes
-
-<FileSource src="/framed/TreeView/TreeViewExpanded" />
-
 ### With icons
 
 To render a node with an icon, define an `icon` property with a Carbon Svelte icon as its value.
 
 <FileSource src="/framed/TreeView/TreeViewIcons" />
+
+### Initial expanded nodes
+
+Set `expanded` to `true` on nodes that should be expanded by default.
+
+<FileSource src="/framed/TreeView/TreeViewExpanded" />
 
 ### Initial multiple selected nodes
 
