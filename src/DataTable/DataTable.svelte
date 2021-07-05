@@ -91,6 +91,9 @@
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
+  /** Set to `true` to use static width */
+  export let useStaticWidth = false;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
   import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16/ChevronRight16.svelte";
@@ -221,6 +224,7 @@
     size="{size}"
     stickyHeader="{stickyHeader}"
     sortable="{sortable}"
+    useStaticWidth="{useStaticWidth}"
   >
     <TableHead>
       <TableRow>

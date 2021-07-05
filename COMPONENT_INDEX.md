@@ -958,6 +958,7 @@ export interface DataTableCell {
 | radio          | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` for the radio selection variant                                                                       |
 | batchSelection | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable batch selection                                                                             |
 | stickyHeader   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable a sticky header                                                                             |
+| useStaticWidth | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to use static width                                                                                   |
 
 ### Slots
 
