@@ -144,6 +144,7 @@ export { default as Tooltip } from "./Tooltip/Tooltip";
 export { default as TooltipFooter } from "./Tooltip/TooltipFooter";
 export { default as TooltipDefinition } from "./TooltipDefinition/TooltipDefinition";
 export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon";
+export { default as TreeView } from "./TreeView/TreeView";
 export { default as Truncate } from "./Truncate/Truncate";
 export { default as Header } from "./UIShell/GlobalHeader/Header";
 export { default as HeaderAction } from "./UIShell/GlobalHeader/HeaderAction";

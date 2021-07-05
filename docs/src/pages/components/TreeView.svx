@@ -1,0 +1,18 @@
+<script>
+  import { TreeView } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+Note: every node MUST have an id.
+
+### Default
+
+<FileSource src="/framed/TreeView/TreeView" />
+
+### Compact size
+
+<FileSource src="/framed/TreeView/TreeViewCompact" />
+
+### With icons
+
+<FileSource src="/framed/TreeView/TreeViewIcons" />

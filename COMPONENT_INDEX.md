@@ -171,6 +171,7 @@
 - [`TooltipDefinition`](#tooltipdefinition)
 - [`TooltipFooter`](#tooltipfooter)
 - [`TooltipIcon`](#tooltipicon)
+- [`TreeView`](#treeview)
 - [`Truncate`](#truncate)
 - [`UnorderedList`](#unorderedlist)
 
@@ -4648,6 +4649,47 @@ None.
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
 | focus      | forwarded | --     |
+
+## `TreeView`
+
+### Types
+
+```ts
+export type TreeNodeId = string | number;
+
+export interface TreeNode {
+  id: TreeNodeId;
+  text: string;
+  disabled?: boolean;
+}
+```
+
+### Props
+
+| Prop name   | Kind             | Reactive | Type                                              | Default value          | Description                                                     |
+| :---------- | :--------------- | :------- | :------------------------------------------------ | ---------------------- | --------------------------------------------------------------- |
+| selectedIds | <code>let</code> | Yes      | <code>TreeNodeIds</code>                          | <code>[]</code>        | Set the node ids to be selected                                 |
+| activeId    | <code>let</code> | Yes      | <code>TreeNodeId</code>                           | <code>""</code>        | Set the current active node id<br />Only one node can be active |
+| children    | <code>let</code> | No       | <code>TreeNode & { children?: TreeNode[] }</code> | <code>[]</code>        | Provide an array of children nodes to render                    |
+| multiselect | <code>let</code> | No       | <code>boolean</code>                              | <code>false</code>     | Set to `true` to allow multiple selected nodes                  |
+| size        | <code>let</code> | No       | <code>"default" &#124; "compact"</code>           | <code>"default"</code> | Specify the TreeView size                                       |
+| labelText   | <code>let</code> | No       | <code>string</code>                               | <code>""</code>        | Specify the label text                                          |
+| hideLabel   | <code>let</code> | No       | <code>boolean</code>                              | <code>false</code>     | Set to `true` to visually hide the label text                   |
+
+### Slots
+
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
+
+### Events
+
+| Event name | Type       | Detail                                                        |
+| :--------- | :--------- | :------------------------------------------------------------ |
+| select     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
+| toggle     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
+| focus      | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
+| keydown    | forwarded  | --                                                            |
 
 ## `Truncate`
 
