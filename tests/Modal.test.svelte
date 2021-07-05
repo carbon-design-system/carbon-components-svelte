@@ -16,6 +16,7 @@
   on:open
   on:close
   on:submit
+  on:click:button--primary
 >
   <p>Create a new Cloudant database in the US South region.</p>
 </Modal>
