@@ -1530,6 +1530,7 @@
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "dispatched", "name": "submit" },
+        { "type": "dispatched", "name": "click:button--primary" },
         { "type": "dispatched", "name": "close" },
         { "type": "dispatched", "name": "open" }
       ],
@@ -5510,6 +5511,7 @@
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "dispatched", "name": "submit" },
+        { "type": "dispatched", "name": "click:button--primary" },
         { "type": "dispatched", "name": "close" },
         { "type": "dispatched", "name": "open" }
       ],

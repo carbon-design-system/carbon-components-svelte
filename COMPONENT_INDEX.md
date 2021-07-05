@@ -685,17 +685,18 @@ None.
 
 ### Events
 
-| Event name    | Type       | Detail                          |
-| :------------ | :--------- | :------------------------------ |
-| transitionend | dispatched | <code>{ open: boolean; }</code> |
-| keydown       | forwarded  | --                              |
-| click         | forwarded  | --                              |
-| mouseover     | forwarded  | --                              |
-| mouseenter    | forwarded  | --                              |
-| mouseleave    | forwarded  | --                              |
-| submit        | dispatched | --                              |
-| close         | dispatched | --                              |
-| open          | dispatched | --                              |
+| Event name            | Type       | Detail                          |
+| :-------------------- | :--------- | :------------------------------ |
+| transitionend         | dispatched | <code>{ open: boolean; }</code> |
+| keydown               | forwarded  | --                              |
+| click                 | forwarded  | --                              |
+| mouseover             | forwarded  | --                              |
+| mouseenter            | forwarded  | --                              |
+| mouseleave            | forwarded  | --                              |
+| submit                | dispatched | --                              |
+| click:button--primary | dispatched | --                              |
+| close                 | dispatched | --                              |
+| open                  | dispatched | --                              |
 
 ## `Content`
 
@@ -2270,6 +2271,7 @@ None.
 | mouseenter              | forwarded  | --                              |
 | mouseleave              | forwarded  | --                              |
 | submit                  | dispatched | --                              |
+| click:button--primary   | dispatched | --                              |
 | close                   | dispatched | --                              |
 | open                    | dispatched | --                              |
 
