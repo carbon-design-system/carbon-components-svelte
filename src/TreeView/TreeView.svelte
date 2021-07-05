@@ -11,7 +11,7 @@
 
   /**
    * Provide an array of children nodes to render
-   * @type {TreeNode & { children?: TreeNode[] }}
+   * @type {Array<TreeNode & { children?: TreeNode[] }>}
    */
   export let children = [];
 
@@ -24,7 +24,7 @@
 
   /**
    * Set the node ids to be selected
-   * @type {TreeNodeIds}
+   * @type {TreeNodeId[]}
    */
   export let selectedIds = [];
 

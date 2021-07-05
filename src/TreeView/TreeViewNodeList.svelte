@@ -4,7 +4,7 @@
    * @typedef {{ id: TreeNodeId; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode
    */
 
-  /** @type {TreeNode & { children?: TreeNode[] }} */
+  /** @type {Array<TreeNode & { children?: TreeNode[] }>} */
   export let children = [];
   export let expanded = false;
   export let root = false;

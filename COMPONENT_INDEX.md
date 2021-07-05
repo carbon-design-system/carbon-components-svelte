@@ -4660,21 +4660,22 @@ export type TreeNodeId = string | number;
 export interface TreeNode {
   id: TreeNodeId;
   text: string;
+  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
   disabled?: boolean;
+  expanded?: boolean;
 }
 ```
 
 ### Props
 
-| Prop name   | Kind             | Reactive | Type                                              | Default value          | Description                                                     |
-| :---------- | :--------------- | :------- | :------------------------------------------------ | ---------------------- | --------------------------------------------------------------- |
-| selectedIds | <code>let</code> | Yes      | <code>TreeNodeIds</code>                          | <code>[]</code>        | Set the node ids to be selected                                 |
-| activeId    | <code>let</code> | Yes      | <code>TreeNodeId</code>                           | <code>""</code>        | Set the current active node id<br />Only one node can be active |
-| children    | <code>let</code> | No       | <code>TreeNode & { children?: TreeNode[] }</code> | <code>[]</code>        | Provide an array of children nodes to render                    |
-| multiselect | <code>let</code> | No       | <code>boolean</code>                              | <code>false</code>     | Set to `true` to allow multiple selected nodes                  |
-| size        | <code>let</code> | No       | <code>"default" &#124; "compact"</code>           | <code>"default"</code> | Specify the TreeView size                                       |
-| labelText   | <code>let</code> | No       | <code>string</code>                               | <code>""</code>        | Specify the label text                                          |
-| hideLabel   | <code>let</code> | No       | <code>boolean</code>                              | <code>false</code>     | Set to `true` to visually hide the label text                   |
+| Prop name   | Kind             | Reactive | Type                                                     | Default value          | Description                                                     |
+| :---------- | :--------------- | :------- | :------------------------------------------------------- | ---------------------- | --------------------------------------------------------------- |
+| selectedIds | <code>let</code> | Yes      | <code>TreeNodeId[]</code>                                | <code>[]</code>        | Set the node ids to be selected                                 |
+| activeId    | <code>let</code> | Yes      | <code>TreeNodeId</code>                                  | <code>""</code>        | Set the current active node id<br />Only one node can be active |
+| children    | <code>let</code> | No       | <code>Array<TreeNode & { children?: TreeNode[] }></code> | <code>[]</code>        | Provide an array of children nodes to render                    |
+| size        | <code>let</code> | No       | <code>"default" &#124; "compact"</code>                  | <code>"default"</code> | Specify the TreeView size                                       |
+| labelText   | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>        | Specify the label text                                          |
+| hideLabel   | <code>let</code> | No       | <code>boolean</code>                                     | <code>false</code>     | Set to `true` to visually hide the label text                   |
 
 ### Slots
 

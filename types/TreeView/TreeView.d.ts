@@ -6,7 +6,9 @@ export type TreeNodeId = string | number;
 export interface TreeNode {
   id: TreeNodeId;
   text: string;
+  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
   disabled?: boolean;
+  expanded?: boolean;
 }
 
 export interface TreeViewProps
@@ -15,7 +17,7 @@ export interface TreeViewProps
    * Provide an array of children nodes to render
    * @default []
    */
-  children?: TreeNode & { children?: TreeNode[] };
+  children?: Array<TreeNode & { children?: TreeNode[] }>;
 
   /**
    * Set the current active node id
@@ -25,16 +27,10 @@ export interface TreeViewProps
   activeId?: TreeNodeId;
 
   /**
-   * Set to `true` to allow multiple selected nodes
-   * @default false
-   */
-  multiselect?: boolean;
-
-  /**
    * Set the node ids to be selected
    * @default []
    */
-  selectedIds?: TreeNodeIds;
+  selectedIds?: TreeNodeId[];
 
   /**
    * Specify the TreeView size
