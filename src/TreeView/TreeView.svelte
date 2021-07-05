@@ -3,7 +3,7 @@
 
   /**
    * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: string; disabled?: boolean; }} TreeNode
+   * @typedef {{ id: TreeNodeId; text: string; icon?: typeof import("carbon-icons-svelte").CarbonIcon; disabled?: boolean; expanded?: boolean; }} TreeNode
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} select
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} toggle
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} focus
@@ -21,9 +21,6 @@
    * @type {TreeNodeId}
    */
   export let activeId = "";
-
-  /** Set to `true` to allow multiple selected nodes */
-  export let multiselect = false;
 
   /**
    * Set the node ids to be selected
@@ -63,6 +60,9 @@
       selectedIds = [node.id];
       dispatch("select", node);
     },
+    selectNode: (node) => {
+      selectedIds = [node.id];
+    },
     focusNode: (node) => dispatch("focus", node),
     toggleNode: (node) => dispatch("toggle", node),
   });
@@ -77,7 +77,7 @@
     if (e.key === "ArrowUp") node = treeWalker.previousNode();
     if (e.key === "ArrowDown") node = treeWalker.nextNode();
     if (node && node !== e.target) {
-      node.tabindex = "0";
+      node.tabIndex = "0";
       node.focus();
     }
   }
@@ -112,7 +112,7 @@
   class:bx--tree--compact="{size === 'compact'}"
   aria-label="{hideLabel ? labelText : undefined}"
   aria-labelledby="{!hideLabel ? labelId : undefined}"
-  aria-multiselectable="{multiselect || undefined}"
+  aria-multiselectable="{selectedIds.length > 1 || undefined}"
   on:keydown
   on:keydown|stopPropagation="{handleKeyDown}"
 >

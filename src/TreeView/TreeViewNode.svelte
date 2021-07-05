@@ -49,16 +49,29 @@
    */
   export let icon = undefined;
 
-  import { getContext } from "svelte";
+  import { afterUpdate, getContext } from "svelte";
 
   let ref = null;
   let refLabel = null;
+  let prevActiveId = undefined;
 
-  const { clickNode, focusNode, activeNodeId, selectedNodeIds } = getContext(
-    "TreeView"
-  );
+  const {
+    activeNodeId,
+    selectedNodeIds,
+    clickNode,
+    selectNode,
+    focusNode,
+  } = getContext("TreeView");
   const offset = () =>
     computeTreeLeafDepth(refLabel) + (leaf && icon ? 2 : 2.5);
+
+  afterUpdate(() => {
+    if (id === $activeNodeId && prevActiveId !== $activeNodeId) {
+      if (!$selectedNodeIds.includes(id)) selectNode(node);
+    }
+
+    prevActiveId = $activeNodeId;
+  });
 
   $: node = { id, text, expanded: false, leaf };
   $: if (refLabel) {

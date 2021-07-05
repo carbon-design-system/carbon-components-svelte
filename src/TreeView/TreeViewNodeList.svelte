@@ -1,7 +1,7 @@
 <script>
   /**
    * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: string; disabled?: boolean; }} TreeNode
+   * @typedef {{ id: TreeNodeId; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode
    */
 
   /** @type {TreeNode & { children?: TreeNode[] }} */
@@ -20,19 +20,21 @@
    */
   export let icon = undefined;
 
-  import { getContext } from "svelte";
+  import { afterUpdate, getContext } from "svelte";
   import CaretDown16 from "carbon-icons-svelte/lib/CaretDown16/CaretDown16.svelte";
   import TreeViewNode, { computeTreeLeafDepth } from "./TreeViewNode.svelte";
 
   let ref = null;
   let refLabel = null;
+  let prevActiveId = undefined;
 
   const {
-    clickNode,
-    focusNode,
-    toggleNode,
     activeNodeId,
     selectedNodeIds,
+    clickNode,
+    selectNode,
+    focusNode,
+    toggleNode,
   } = getContext("TreeView");
 
   const offset = () => {
@@ -42,6 +44,14 @@
     if (icon) return depth + 2;
     return depth + 2.5;
   };
+
+  afterUpdate(() => {
+    if (id === $activeNodeId && prevActiveId !== $activeNodeId) {
+      if (!$selectedNodeIds.includes(id)) selectNode(node);
+    }
+
+    prevActiveId = $activeNodeId;
+  });
 
   $: parent = Array.isArray(children);
   $: node = { id, text, expanded, leaf: !parent };
