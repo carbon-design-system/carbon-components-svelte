@@ -27,6 +27,6 @@ In this example, we use the open source module [clipboard-copy](https://github.c
 
 ### Preventing copy functionality
 
-To prevent text from being copied entirely, pass a "noop" function to the `copy` prop.
+To prevent text from being copied entirely, pass a no-op function to the `copy` prop.
 
 <CopyButton text="This text should not be copied" copy={() => {}} />
