@@ -90,6 +90,7 @@
     <Row noGutter>
       <Column xlg="{5}" lg="{8}" md="{4}">
         <TileCard
+          borderBottom
           borderRight
           title="Carbon Pictograms Svelte"
           subtitle="700+ pictograms"
@@ -99,10 +100,21 @@
       </Column>
       <Column xlg="{5}" lg="{8}" md="{4}">
         <TileCard
+          borderBottom
           title="Carbon Charts Svelte"
           subtitle="20 chart types, powered by d3"
           target="_blank"
           href="https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte"
+        />
+      </Column>
+    </Row>
+    <Row noGutter>
+      <Column xlg="{5}" lg="{8}" md="{4}">
+        <TileCard
+          title="Carbon Preprocess Svelte"
+          subtitle="Collection of Carbon Svelte preprocessors"
+          target="_blank"
+          href="https://github.com/IBM/carbon-preprocess-svelte"
         />
       </Column>
     </Row>
