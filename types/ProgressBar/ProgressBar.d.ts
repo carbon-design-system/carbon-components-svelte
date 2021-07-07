@@ -31,6 +31,12 @@ export interface ProgressBarProps
    * @default ""
    */
   helperText?: string;
+
+  /**
+   * Set an id for the progress bar element
+   * @default "ccs-" + Math.random().toString(36)
+   */
+  id?: string;
 }
 
 export default class ProgressBar extends SvelteComponentTyped<

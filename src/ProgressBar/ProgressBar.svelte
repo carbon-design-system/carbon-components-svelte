@@ -17,7 +17,9 @@
   /** Specify the helper text */
   export let helperText = "";
 
-  let id = "ccs-" + Math.random().toString(36);
+  /** Set an id for the progress bar element */
+  export let id = "ccs-" + Math.random().toString(36);
+
   let helperId = "ccs-" + Math.random().toString(36);
 
   $: indeterminate = value === undefined;
