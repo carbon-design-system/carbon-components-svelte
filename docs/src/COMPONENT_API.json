@@ -351,6 +351,7 @@
         {
           "name": "size",
           "kind": "let",
+          "description": "Determine the current Carbon grid breakpoint size",
           "type": "BreakpointSize",
           "isFunction": false,
           "constant": false,
@@ -359,8 +360,9 @@
         {
           "name": "sizes",
           "kind": "let",
+          "description": "Carbon grid sizes as an object",
           "type": "Record<BreakpointSize, boolean>",
-          "value": "{       sm: false,       md: false,       lg: false,       xlg: false,       max: false,     }",
+          "value": "{     sm: false,     md: false,     lg: false,     xlg: false,     max: false,   }",
           "isFunction": false,
           "constant": false,
           "reactive": true
@@ -368,8 +370,9 @@
         {
           "name": "breakpoints",
           "kind": "const",
+          "description": "Reference the Carbon grid breakpoints",
           "type": "Record<BreakpointSize, BreakpointValue>",
-          "value": "{       sm: 320,       md: 672,       lg: 1056,       xlg: 1312,       max: 1584,     }",
+          "value": "{     sm: 320,     md: 672,     lg: 1056,     xlg: 1312,     max: 1584,   }",
           "isFunction": false,
           "constant": true,
           "reactive": false
@@ -379,7 +382,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ sizes: Record<BreakpointSize, boolean>, size: BreakpointSize }"
+          "slot_props": "{ size: BreakpointSize; sizes: Record<BreakpointSize, boolean>; }"
         }
       ],
       "events": [

@@ -3,12 +3,19 @@
    * @typedef {"sm" | "md" | "lg" | "xlg" | "max"} BreakpointSize
    * @typedef {320 | 672 | 1056 | 1312 | 1584} BreakpointValue
    * @event {{ size: BreakpointSize; breakpointValue: BreakpointValue; }} match
+   * @slot {{ size: BreakpointSize; sizes: Record<BreakpointSize, boolean>; }}
    */
 
-  /** @type {BreakpointSize} */
+  /**
+   * Determine the current Carbon grid breakpoint size
+   * @type {BreakpointSize}
+   */
   export let size = undefined;
 
-  /** @type {Record<BreakpointSize, boolean>} */
+  /**
+   * Carbon grid sizes as an object
+   * @type {Record<BreakpointSize, boolean>}
+   */
   export let sizes = {
     sm: false,
     md: false,
@@ -17,7 +24,10 @@
     max: false,
   };
 
-  /** @type {Record<BreakpointSize, BreakpointValue>} */
+  /**
+   * Reference the Carbon grid breakpoints
+   * @type {Record<BreakpointSize, BreakpointValue>}
+   */
   export const breakpoints = {
     sm: 320,
     md: 672,
@@ -62,6 +72,9 @@
 
       sizes = { ...sizes };
       sizes[size] = matches;
+
+      if (matches)
+        dispatch("match", { size, breakpointValue: breakpoints[size] });
     }
 
     matchers.forEach(([size, queryList]) =>
@@ -81,8 +94,7 @@
     if (sizes.lg) size = "lg";
     if (sizes.xlg) size = "xlg";
     if (sizes.max) size = "max";
-    if (size) dispatch("match", { size, breakpointValue: breakpoints[size] });
   }
 </script>
 
-<slot sizes="{sizes}" size="{size}" />
+<slot size="{size}" sizes="{sizes}" />
