@@ -5,6 +5,7 @@ export { default as AspectRatio } from "./AspectRatio/AspectRatio";
 export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb";
 export { default as BreadcrumbItem } from "./Breadcrumb/BreadcrumbItem";
 export { default as BreadcrumbSkeleton } from "./Breadcrumb/BreadcrumbSkeleton";
+export { default as Breakpoint } from "./Breakpoint/Breakpoint";
 export { default as Button } from "./Button/Button";
 export { default as ButtonSkeleton } from "./Button/ButtonSkeleton";
 export { default as ButtonSet } from "./Button/ButtonSet";

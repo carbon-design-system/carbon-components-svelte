@@ -1,0 +1,21 @@
+
+<script>
+  import {
+    Breakpoint
+  } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+The [Carbon Design System grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints:
+
+- Small (`sm`): less than 672px
+- Medium (`md`): 672 - 1056px
+- Large (`lg`): 1056 - 1312px
+- X-Large (`xlg`): 1312 - 1584px
+- Max (`max`): greater than 1584px
+
+This utility component uses the [Window.matchMedia API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) to declaratively determine the current Carbon breakpoint size.
+
+### Default
+
+<FileSource src="/framed/Breakpoint/Breakpoint" />

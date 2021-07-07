@@ -1,6 +1,6 @@
 # Component Index
 
-> 170 components exported from carbon-components-svelte@0.39.0.
+> 171 components exported from carbon-components-svelte@0.39.0.
 
 ## Components
 
@@ -11,6 +11,7 @@
 - [`Breadcrumb`](#breadcrumb)
 - [`BreadcrumbItem`](#breadcrumbitem)
 - [`BreadcrumbSkeleton`](#breadcrumbskeleton)
+- [`Breakpoint`](#breakpoint)
 - [`Button`](#button)
 - [`ButtonSet`](#buttonset)
 - [`ButtonSkeleton`](#buttonskeleton)
@@ -343,6 +344,36 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `Breakpoint`
+
+### Types
+
+```ts
+export type BreakpointSize = "sm" | "md" | "lg" | "xlg" | "max";
+
+export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
+```
+
+### Props
+
+| Prop name   | Kind               | Reactive | Type                                                 | Default value                                                             | Description |
+| :---------- | :----------------- | :------- | :--------------------------------------------------- | ------------------------------------------------------------------------- | ----------- |
+| sizes       | <code>let</code>   | Yes      | <code>Record<BreakpointSize, boolean></code>         | <code>{ sm: false, md: false, lg: false, xlg: false, max: false, }</code> | --          |
+| size        | <code>let</code>   | Yes      | <code>BreakpointSize</code>                          | --                                                                        | --          |
+| breakpoints | <code>const</code> | No       | <code>Record<BreakpointSize, BreakpointValue></code> | <code>{ sm: 320, md: 672, lg: 1056, xlg: 1312, max: 1584, }</code>        | --          |
+
+### Slots
+
+| Slot name | Default | Props                                                                          | Fallback |
+| :-------- | :------ | :----------------------------------------------------------------------------- | :------- |
+| --        | Yes     | <code>{ sizes: Record<BreakpointSize, boolean>, size: BreakpointSize } </code> | --       |
+
+### Events
+
+| Event name | Type       | Detail                                                                   |
+| :--------- | :--------- | :----------------------------------------------------------------------- |
+| match      | dispatched | <code>{ size: BreakpointSize; breakpointValue: BreakpointValue; }</code> |
 
 ## `Button`
 

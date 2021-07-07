@@ -1,5 +1,5 @@
 {
-  "total": 170,
+  "total": 171,
   "components": [
     {
       "moduleName": "Accordion",
@@ -343,6 +343,64 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "Breakpoint",
+      "filePath": "src/Breakpoint/Breakpoint.svelte",
+      "props": [
+        {
+          "name": "size",
+          "kind": "let",
+          "type": "BreakpointSize",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "sizes",
+          "kind": "let",
+          "type": "Record<BreakpointSize, boolean>",
+          "value": "{       sm: false,       md: false,       lg: false,       xlg: false,       max: false,     }",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "breakpoints",
+          "kind": "const",
+          "type": "Record<BreakpointSize, BreakpointValue>",
+          "value": "{       sm: 320,       md: 672,       lg: 1056,       xlg: 1312,       max: 1584,     }",
+          "isFunction": false,
+          "constant": true,
+          "reactive": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "slot_props": "{ sizes: Record<BreakpointSize, boolean>, size: BreakpointSize }"
+        }
+      ],
+      "events": [
+        {
+          "type": "dispatched",
+          "name": "match",
+          "detail": "{ size: BreakpointSize; breakpointValue: BreakpointValue; }"
+        }
+      ],
+      "typedefs": [
+        {
+          "type": "\"sm\" | \"md\" | \"lg\" | \"xlg\" | \"max\"",
+          "name": "BreakpointSize",
+          "ts": "type BreakpointSize = \"sm\" | \"md\" | \"lg\" | \"xlg\" | \"max\""
+        },
+        {
+          "type": "320 | 672 | 1056 | 1312 | 1584",
+          "name": "BreakpointValue",
+          "ts": "type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584"
+        }
+      ]
     },
     {
       "moduleName": "Button",
