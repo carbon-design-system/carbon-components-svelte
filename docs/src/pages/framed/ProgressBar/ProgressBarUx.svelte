@@ -1,30 +1,11 @@
 <script>
-  import { onMount } from "svelte";
-  import { ProgressBar } from "carbon-components-svelte";
+  import { ProgressBar, ButtonSet, Button } from "carbon-components-svelte";
 
   let max = 328;
   let value = 0;
-  let timer = undefined;
-
-  onMount(() => {
-    timer = setTimeout(() => {
-      const interval = setInterval(() => {
-        const delta = Math.random() * 10;
-
-        if (value + delta < max) {
-          value += delta;
-        } else {
-          value = max;
-          clearInterval(interval);
-        }
-      }, 20);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  });
 
   $: helperText =
-    value > 0 ? `${value.toFixed(0)}MB of ${max}MB` : "Preparing upload...";
+    value > 0 ? value.toFixed(0) + "MB of " + max + "MB" : "Press start";
   $: if (value === max) helperText = "Done";
 </script>
 
@@ -34,3 +15,30 @@
   max="{max}"
   helperText="{helperText}"
 />
+
+<ButtonSet style="margin-top: var(--cds-spacing-08)">
+  <Button
+    disabled="{value > 0}"
+    on:click="{() => {
+      const interval = setInterval(() => {
+        const delta = Math.random() * 10;
+
+        if (value + delta < max) {
+          value += delta;
+        } else {
+          value = max;
+          clearInterval(interval);
+        }
+      }, 30);
+    }}"
+  >
+    Start
+  </Button>
+  <Button
+    kind="tertiary"
+    disabled="{value !== max}"
+    on:click="{() => (value = 0)}"
+  >
+    Reset
+  </Button>
+</ButtonSet>
