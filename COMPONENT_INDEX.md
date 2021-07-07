@@ -2838,13 +2838,14 @@ None.
 
 ### Props
 
-| Prop name  | Kind             | Reactive | Type                 | Default value      | Description                                   |
-| :--------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------------- |
-| value      | <code>let</code> | No       | <code>number</code>  | --                 | Specify the current value                     |
-| max        | <code>let</code> | No       | <code>number</code>  | <code>100</code>   | Specify the maximum value                     |
-| labelText  | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the label text                        |
-| hideLabel  | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to visually hide the label text |
-| helperText | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the helper text                       |
+| Prop name  | Kind             | Reactive | Type                 | Default value                                    | Description                                   |
+| :--------- | :--------------- | :------- | :------------------- | ------------------------------------------------ | --------------------------------------------- |
+| value      | <code>let</code> | No       | <code>number</code>  | --                                               | Specify the current value                     |
+| max        | <code>let</code> | No       | <code>number</code>  | <code>100</code>                                 | Specify the maximum value                     |
+| labelText  | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the label text                        |
+| hideLabel  | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to visually hide the label text |
+| helperText | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the helper text                       |
+| id         | <code>let</code> | No       | <code>string</code>  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the progress bar element        |
 
 ### Slots
 
