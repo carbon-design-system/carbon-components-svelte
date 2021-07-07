@@ -141,7 +141,7 @@
     style="margin-top: var(--cds-spacing-08)"
     class="my-layout-01-03"
     type="multi"
-    code="{component.typedefs.map((t) => t.ts).join(';\n\n')}"
+    code="{component.typedefs.map((t) => t.ts).join(';\n\n')};"
   />
 {:else}
   <p class="my-layout-01-03">No typedefs.</p>
