@@ -8,9 +8,10 @@
 <Breakpoint bind:size on:match="{(e) => (events = [...events, e.detail])}" />
 
 <p>Resize the width of your browser.</p>
-<h6>Current breakpoint size</h6>
+<h6>Breakpoint size</h6>
 <h1>{size}</h1>
 
+<h6>on:match</h6>
 <pre>
   {JSON.stringify(events,null, 2)}
 </pre>
@@ -19,5 +20,9 @@
   p,
   h1 {
     margin-bottom: var(--cds-spacing-08);
+  }
+
+  h6 {
+    margin-bottom: var(--cds-spacing-03);
   }
 </style>
