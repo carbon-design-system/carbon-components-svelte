@@ -79,6 +79,11 @@
           >
             Carbon Charts Svelte
           </HeaderPanelLink>
+          <HeaderPanelLink
+            href="https://github.com/IBM/carbon-preprocess-svelte"
+          >
+            Carbon Preprocess Svelte
+          </HeaderPanelLink>
           <HeaderPanelDivider>Resources</HeaderPanelDivider>
           <HeaderPanelLink href="https://www.carbondesignsystem.com/">
             Carbon Design System

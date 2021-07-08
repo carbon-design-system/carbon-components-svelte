@@ -44,7 +44,7 @@
 
 <p style="margin-bottom: var(--cds-layout-02)">
   Source code:
-  <OutboundLink inline href="{source}">
+  <OutboundLink size="lg" inline href="{source}">
     {component.filePath}
   </OutboundLink>
 </p>

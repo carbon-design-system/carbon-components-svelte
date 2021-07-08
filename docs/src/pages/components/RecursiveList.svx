@@ -3,9 +3,9 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-This component uses the [svelte:self API](https://svelte.dev/docs#svelte_self) to render the [UnorderedList](/components/UnorderedList) and [OrderedList](/components/OrderedList) components with data formatted as a tree structure. This is especially useful when the depth of the tree is unknown.
+This component uses the [svelte:self API](https://svelte.dev/docs#svelte_self) to render the [UnorderedList](/components/UnorderedList) and [OrderedList](/components/OrderedList) components with tree structured data.
 
-A child node can render text (`text`), a link (`href`), HTML content (`html`), and other `children`.
+A child node can render text, a link, HTML content, and other children.
 
 <InlineNotification svx-ignore title="Warning:" kind="warning" hideCloseButton>
   <div class="body-short-01">
