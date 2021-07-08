@@ -52,9 +52,13 @@
       <Column>
         <h3>Install</h3>
         <h4>Installing with yarn:</h4>
-        <CodeSnippet code="{installYarn}" />
+        <Row noGutter>
+          <CodeSnippet code="{installYarn}" />
+        </Row>
         <h4>Using npm:</h4>
-        <CodeSnippet code="{installNpm}" />
+        <Row noGutter>
+          <CodeSnippet code="{installNpm}" />
+        </Row>
       </Column>
     </Row>
     <Row>
