@@ -1,5 +1,5 @@
 import flatpickr from "flatpickr";
-import rangePlugin from "flatpickr/dist/esm/plugins/rangePlugin";
+import rangePlugin from "flatpickr/dist/plugins/rangePlugin";
 
 let l10n;
 
