@@ -35,10 +35,9 @@
   $: values = headers.map((header) =>
     header.value !== undefined ? header.value : header
   );
-  $: cols = Array.from(
-    { length: headers.length > 0 ? headers.length : columns },
-    (_, i) => i
-  );
+  $: cols = Array.from({
+    length: headers.length > 0 ? headers.length : columns,
+  }).fill();
 </script>
 
 <div
@@ -86,15 +85,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        {#each cols as col (col)}
-          <td><span></span></td>
-        {/each}
-      </tr>
-      {#each Array.from({ length: rows - 1 }, (_, i) => i) as row (row)}
+      {#each Array.from({ length: rows }).fill() as row}
         <tr>
-          {#each cols as col (col)}
-            <td></td>
+          {#each cols as col}
+            <td><span></span></td>
           {/each}
         </tr>
       {/each}
