@@ -60,11 +60,14 @@
     add,
     hasCalendar,
     declareRef,
+    inputIds,
     updateValue,
     blurInput,
     openCalendar,
     focusCalendar,
     inputValue,
+    inputValueFrom,
+    inputValueTo,
   } = getContext("DatePicker");
 
   add({ id, labelText });
@@ -105,7 +108,11 @@
       pattern="{pattern}"
       disabled="{disabled}"
       {...$$restProps}
-      value="{!$range ? $inputValue : undefined}"
+      value="{$range
+        ? $inputIds.indexOf(id) === 0
+          ? $inputValueFrom
+          : $inputValueTo
+        : $inputValue}"
       class:bx--date-picker__input="{true}"
       class:bx--date-picker__input--invalid="{invalid}"
       class="{size && `bx--date-picker__input--${size}`}"

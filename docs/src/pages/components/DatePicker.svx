@@ -57,9 +57,11 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 
 ### Single
 
-<DatePicker datePickerType="single">
-  <DatePickerInput labelText="Schedule a meeting" placeholder="mm/dd/yyyy" />
-</DatePicker>
+<FileSource src="/framed/DatePicker/DatePickerSingle" />
+
+### Range
+
+<FileSource src="/framed/DatePicker/DatePickerRange" />
 
 ### Skeleton
 

@@ -2393,13 +2393,24 @@
           "reactive": true
         },
         {
-          "name": "appendTo",
+          "name": "valueFrom",
           "kind": "let",
-          "description": "Specify the element to append the calendar to",
-          "type": "HTMLElement",
+          "description": "Specify the date picker start date value (from)\nOnly works with the \"range\" date picker type",
+          "type": "string",
+          "value": "\"\"",
           "isFunction": false,
           "constant": false,
-          "reactive": false
+          "reactive": true
+        },
+        {
+          "name": "valueTo",
+          "kind": "let",
+          "description": "Specify the date picker end date value (to)\nOnly works with the \"range\" date picker type",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
         },
         {
           "name": "dateFormat",
@@ -2474,11 +2485,15 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "change",
+          "detail": "string | { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string | { from: string; to: string; } }"
+        },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "change" }
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
