@@ -15,12 +15,6 @@
    */
   export let value = "";
 
-  /**
-   * Specify the element to append the calendar to
-   * @type {HTMLElement}
-   */
-  export let appendTo = document.body;
-
   /** Specify the date format */
   export let dateFormat = "m/d/Y";
 
@@ -69,10 +63,10 @@
   const range = derived(mode, (_) => _ === "range");
   const hasCalendar = derived(mode, (_) => _ === "single" || _ === "range");
 
-  let calendar = undefined;
-  let datePickerRef = undefined;
-  let inputRef = undefined;
-  let inputRefTo = undefined;
+  let calendar = null;
+  let datePickerRef = null;
+  let inputRef = null;
+  let inputRefTo = null;
 
   setContext("DatePicker", {
     range,
@@ -119,7 +113,7 @@
     if ($hasCalendar && !calendar) {
       calendar = createCalendar({
         options: {
-          appendTo,
+          appendTo: datePickerRef,
           dateFormat,
           defaultDate: $inputValue,
           locale,
@@ -163,15 +157,9 @@
 
 <svelte:body
   on:click="{({ target }) => {
-    if (!calendar || !calendar.isOpen) {
-      return;
-    }
-    if (datePickerRef && datePickerRef.contains(target)) {
-      return;
-    }
-    if (!calendar.calendarContainer.contains(target)) {
-      calendar.close();
-    }
+    if (!calendar || !calendar.isOpen) return;
+    if (datePickerRef && datePickerRef.contains(target)) return;
+    if (!calendar.calendarContainer.contains(target)) calendar.close();
   }}" />
 
 <div
