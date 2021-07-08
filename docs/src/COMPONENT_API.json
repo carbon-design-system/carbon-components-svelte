@@ -2393,15 +2393,6 @@
           "reactive": true
         },
         {
-          "name": "appendTo",
-          "kind": "let",
-          "description": "Specify the element to append the calendar to",
-          "type": "HTMLElement",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "dateFormat",
           "kind": "let",
           "description": "Specify the date format",
@@ -2474,11 +2465,15 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "change",
+          "detail": "string | { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string | { from: string; to: string; } }"
+        },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "change" }
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }

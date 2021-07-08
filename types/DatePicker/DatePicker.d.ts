@@ -16,11 +16,6 @@ export interface DatePickerProps
   value?: number | string;
 
   /**
-   * Specify the element to append the calendar to
-   */
-  appendTo?: HTMLElement;
-
-  /**
    * Specify the date format
    * @default "m/d/Y"
    */
@@ -66,11 +61,17 @@ export interface DatePickerProps
 export default class DatePicker extends SvelteComponentTyped<
   DatePickerProps,
   {
+    change: CustomEvent<
+      | string
+      | {
+          selectedDates: [dateFrom: Date, dateTo?: Date];
+          dateStr: string | { from: string; to: string };
+        }
+    >;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    change: CustomEvent<any>;
   },
   { default: {} }
 > {}

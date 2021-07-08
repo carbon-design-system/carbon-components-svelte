@@ -1,6 +1,6 @@
 <script>
   /**
-   * @dispatch {string} change
+   * @event {string | { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string | { from: string; to: string; } }} change
    */
 
   /**
