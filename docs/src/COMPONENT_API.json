@@ -2393,6 +2393,26 @@
           "reactive": true
         },
         {
+          "name": "valueFrom",
+          "kind": "let",
+          "description": "Specify the date picker start date value (from)\nOnly works with the \"range\" date picker type",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "valueTo",
+          "kind": "let",
+          "description": "Specify the date picker end date value (to)\nOnly works with the \"range\" date picker type",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
           "name": "dateFormat",
           "kind": "let",
           "description": "Specify the date format",

@@ -15,6 +15,20 @@
    */
   export let value = "";
 
+  /**
+   * Specify the date picker start date value (from)
+   * Only works with the "range" date picker type
+   * @type {string}
+   */
+  export let valueFrom = "";
+
+  /**
+   * Specify the date picker end date value (to)
+   * Only works with the "range" date picker type
+   * @type {string}
+   */
+  export let valueTo = "";
+
   /** Specify the date format */
   export let dateFormat = "m/d/Y";
 
@@ -59,6 +73,8 @@
     (_) => _.filter(({ labelText }) => !!labelText).length === 0
   );
   const inputValue = writable(value);
+  const inputValueFrom = writable(valueFrom);
+  const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
   const range = derived(mode, (_) => _ === "range");
   const hasCalendar = derived(mode, (_) => _ === "single" || _ === "range");
@@ -71,6 +87,9 @@
   setContext("DatePicker", {
     range,
     inputValue,
+    inputValueFrom,
+    inputValueTo,
+    inputIds,
     hasCalendar,
     add: (data) => {
       inputs.update((_) => [..._, data]);
@@ -127,10 +146,16 @@
           const detail = { selectedDates: calendar.selectedDates };
 
           if ($range) {
+            const from = inputRef.value;
+            const to = inputRefTo.value;
+
             detail.dateStr = {
               from: inputRef.value,
               to: inputRefTo.value,
             };
+
+            valueFrom = from;
+            valueTo = to;
           } else {
             detail.dateStr = inputRef.value;
           }
@@ -140,8 +165,15 @@
       });
     }
 
-    if (calendar && !$range) {
-      calendar.setDate($inputValue);
+    if (calendar) {
+      if ($range) {
+        calendar.setDate([$inputValueFrom, $inputValueTo]);
+
+        // workaround to remove the default range plugin separator "to"
+        inputRef.value = $inputValueFrom;
+      } else {
+        calendar.setDate($inputValue);
+      }
     }
   });
 
@@ -153,6 +185,10 @@
 
   $: inputValue.set(value);
   $: value = $inputValue;
+  $: inputValueFrom.set(valueFrom);
+  $: valueFrom = $inputValueFrom;
+  $: inputValueTo.set(valueTo);
+  $: valueTo = $inputValueTo;
 </script>
 
 <svelte:body

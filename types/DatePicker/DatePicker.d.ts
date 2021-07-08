@@ -16,6 +16,20 @@ export interface DatePickerProps
   value?: number | string;
 
   /**
+   * Specify the date picker start date value (from)
+   * Only works with the "range" date picker type
+   * @default ""
+   */
+  valueFrom?: string;
+
+  /**
+   * Specify the date picker end date value (to)
+   * Only works with the "range" date picker type
+   * @default ""
+   */
+  valueTo?: string;
+
+  /**
    * Specify the date format
    * @default "m/d/Y"
    */

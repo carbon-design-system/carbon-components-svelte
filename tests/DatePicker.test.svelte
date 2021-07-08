@@ -2,7 +2,11 @@
   import { DatePicker, DatePickerSkeleton, DatePickerInput } from "../types";
 </script>
 
-<DatePicker>
+<DatePicker
+  on:change="{(e) => {
+    console.log(e.detail);
+  }}"
+>
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
@@ -51,7 +55,7 @@
   />
 </DatePicker>
 
-<DatePicker datePickerType="single">
+<DatePicker valueFrom="" valueTo="" datePickerType="single">
   <DatePickerInput labelText="Schedule a meeting" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
