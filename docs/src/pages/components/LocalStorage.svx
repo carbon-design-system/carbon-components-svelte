@@ -18,4 +18,6 @@ Invoking `clearItem` will remove the persisted key value from the browser's loca
 
 Invoking `clearAll` will remove all key values.
 
+In the following example, toggle the switch and reload the page. Then, click the "Clear storage" button. Refresh the page; the theme should be reset to the untoggled state.
+
 <FileSource src="/framed/LocalStorage/LocalStorageClear" />

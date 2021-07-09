@@ -14,4 +14,4 @@
 <br />
 <br />
 
-<Button size="small" on:click="{storage.clearAll}">Clear local storage</Button>
+<Button size="small" on:click="{storage.clearAll}">Clear storage</Button>
