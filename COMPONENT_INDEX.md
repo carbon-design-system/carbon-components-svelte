@@ -2241,10 +2241,12 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                | Default value                    | Description                   |
-| :-------- | :--------------- | :------- | :------------------ | -------------------------------- | ----------------------------- |
-| value     | <code>let</code> | Yes      | <code>any</code>    | <code>""</code>                  | Provide a value to persist    |
-| key       | <code>let</code> | No       | <code>string</code> | <code>"local-storage-key"</code> | Specify the local storage key |
+| Prop name | Kind                  | Reactive | Type                    | Default value                                        | Description                                                     |
+| :-------- | :-------------------- | :------- | :---------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
+| value     | <code>let</code>      | Yes      | <code>any</code>        | <code>""</code>                                      | Provide a value to persist                                      |
+| key       | <code>let</code>      | No       | <code>string</code>     | <code>"local-storage-key"</code>                     | Specify the local storage key                                   |
+| clearItem | <code>function</code> | No       | <code>() => void</code> | <code>() => { localStorage.removeItem(key); }</code> | Remove the persisted key value from the browser's local storage |
+| clearAll  | <code>function</code> | No       | <code>() => void</code> | <code>() => { localStorage.clear(); }</code>         | Clear all key values from the browser's local storage           |
 
 ### Slots
 

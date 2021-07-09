@@ -13,6 +13,18 @@ export interface LocalStorageProps {
    * @default ""
    */
   value?: any;
+
+  /**
+   * Remove the persisted key value from the browser's local storage
+   * @default () => { localStorage.removeItem(key); }
+   */
+  clearItem?: () => void;
+
+  /**
+   * Clear all key values from the browser's local storage
+   * @default () => { localStorage.clear(); }
+   */
+  clearAll?: () => void;
 }
 
 export default class LocalStorage extends SvelteComponentTyped<

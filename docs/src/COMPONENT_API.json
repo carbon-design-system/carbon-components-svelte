@@ -5351,6 +5351,26 @@
           "isFunction": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "clearItem",
+          "kind": "function",
+          "description": "Remove the persisted key value from the browser's local storage",
+          "type": "() => void",
+          "value": "() => {     localStorage.removeItem(key);   }",
+          "isFunction": true,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "clearAll",
+          "kind": "function",
+          "description": "Clear all key values from the browser's local storage",
+          "type": "() => void",
+          "value": "() => {     localStorage.clear();   }",
+          "isFunction": true,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [],
