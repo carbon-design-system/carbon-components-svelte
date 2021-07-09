@@ -31,6 +31,10 @@ components: ["NumberInput", "NumberInputSkeleton"]
 
 <NumberInput light label="Clusters" />
 
+### Read-only variant
+
+<NumberInput readonly label="Clusters" />
+
 ### Extra-large size
 
 <NumberInput size="xl" label="Clusters" />

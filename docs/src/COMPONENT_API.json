@@ -3683,6 +3683,16 @@
       "filePath": "src/FormGroup/FormGroup.svelte",
       "props": [
         {
+          "name": "noMargin",
+          "kind": "let",
+          "description": "Set to `true` for to remove the bottom margin",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "invalid",
           "kind": "let",
           "description": "Set to `true` to indicate an invalid state",
@@ -3703,16 +3713,6 @@
           "reactive": false
         },
         {
-          "name": "noMargin",
-          "kind": "let",
-          "description": "Set to `true` for to remove the bottom margin",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "messageText",
           "kind": "let",
           "description": "Specify the message text",
@@ -3726,6 +3726,16 @@
           "name": "legendText",
           "kind": "let",
           "description": "Specify the legend text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "legendId",
+          "kind": "let",
+          "description": "Specify an id for the legend element",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -5341,6 +5351,26 @@
           "isFunction": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "clearItem",
+          "kind": "function",
+          "description": "Remove the persisted key value from the browser's local storage",
+          "type": "() => void",
+          "value": "() => {     localStorage.removeItem(key);   }",
+          "isFunction": true,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "clearAll",
+          "kind": "function",
+          "description": "Clear all key values from the browser's local storage",
+          "type": "() => void",
+          "value": "() => {     localStorage.clear();   }",
+          "isFunction": true,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [],
@@ -6064,6 +6094,36 @@
           "kind": "let",
           "description": "Obtain a reference to the input HTML element",
           "type": "null | HTMLInputElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "multiSelectRef",
+          "kind": "let",
+          "description": "Obtain a reference to the outer div element",
+          "type": "null | HTMLDivElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "fieldRef",
+          "kind": "let",
+          "description": "Obtain a reference to the field box element",
+          "type": "null | HTMLDivElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "selectionRef",
+          "kind": "let",
+          "description": "Obtain a reference to the selection element",
+          "type": "null | HTMLDivElement",
           "value": "null",
           "isFunction": false,
           "constant": false,

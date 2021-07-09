@@ -15,6 +15,22 @@
    */
   export let value = "";
 
+  /**
+   * Remove the persisted key value from the browser's local storage
+   * @type {() => void}
+   */
+  export function clearItem() {
+    localStorage.removeItem(key);
+  }
+
+  /**
+   * Clear all key values from the browser's local storage
+   * @type {() => void}
+   */
+  export function clearAll() {
+    localStorage.clear();
+  }
+
   import { onMount, afterUpdate, createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();

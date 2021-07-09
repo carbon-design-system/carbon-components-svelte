@@ -108,6 +108,7 @@
   import Subtract16 from "carbon-icons-svelte/lib/Subtract16/Subtract16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
+  import EditOff16 from "carbon-icons-svelte/lib/EditOff16/EditOff16.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
@@ -272,6 +273,9 @@
           <WarningAltFilled16
             class="bx--number__invalid bx--number__invalid--warning"
           />
+        {/if}
+        {#if readonly}
+          <EditOff16 class="bx--text-input__readonly-icon" />
         {/if}
         {#if !hideSteppers}
           <div class:bx--number__controls="{true}">

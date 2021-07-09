@@ -5,5 +5,19 @@
 This utility component wraps the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and is useful for persisting ephemeral data (e.g., color theme) at the browser level.
   
 ### Reactive example
+
+In the example below, toggle the switch and reload the page. The updated theme should be persisted locally.
   
 <FileSource src="/framed/LocalStorage/LocalStorage" />
+
+### Clear item, clear all
+
+Use the `bind:this` directive to access the `clearItem` and `clearAll` methods.
+
+Invoking `clearItem` will remove the persisted key value from the browser's local storage.
+
+Invoking `clearAll` will remove all key values.
+
+In the following example, toggle the switch and reload the page. Then, click the "Clear storage" button. Refresh the page; the theme should be reset to the untoggled state.
+
+<FileSource src="/framed/LocalStorage/LocalStorageClear" />

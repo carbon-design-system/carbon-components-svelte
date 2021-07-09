@@ -1,7 +1,6 @@
 <script>
-  import { LocalStorage, Toggle, Button } from "carbon-components-svelte";
+  import { LocalStorage, Toggle } from "carbon-components-svelte";
 
-  let storage;
   let toggled = false;
   let events = [];
 
@@ -9,7 +8,6 @@
 </script>
 
 <LocalStorage
-  bind:this="{storage}"
   key="dark-mode"
   bind:value="{toggled}"
   on:save="{() => {

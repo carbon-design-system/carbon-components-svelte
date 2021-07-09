@@ -128,6 +128,21 @@
   /** Obtain a reference to the input HTML element */
   export let inputRef = null;
 
+  /** Obtain a reference to the outer div element */
+  export let multiSelectRef = null;
+
+  /**
+   * Obtain a reference to the field box element
+   * @type {null | HTMLDivElement}
+   */
+  export let fieldRef = null;
+
+  /**
+   * Obtain a reference to the selection element
+   * @type {null | HTMLDivElement}
+   */
+  export let selectionRef = null;
+
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
@@ -142,10 +157,6 @@
   } from "../ListBox";
 
   const dispatch = createEventDispatcher();
-
-  let multiSelectRef = null;
-  let fieldRef = null;
-  let selectionRef = null;
 
   let inputValue = "";
   let initialSorted = false;

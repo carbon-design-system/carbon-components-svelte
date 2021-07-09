@@ -1466,11 +1466,12 @@ None.
 
 | Prop name   | Kind             | Reactive | Type                 | Default value      | Description                                   |
 | :---------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------------- |
+| noMargin    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for to remove the bottom margin |
 | invalid     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to indicate an invalid state    |
 | message     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a form requirement    |
-| noMargin    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for to remove the bottom margin |
 | messageText | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the message text                      |
 | legendText  | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                       |
+| legendId    | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify an id for the legend element          |
 
 ### Slots
 
@@ -2240,10 +2241,12 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                | Default value                    | Description                   |
-| :-------- | :--------------- | :------- | :------------------ | -------------------------------- | ----------------------------- |
-| value     | <code>let</code> | Yes      | <code>any</code>    | <code>""</code>                  | Provide a value to persist    |
-| key       | <code>let</code> | No       | <code>string</code> | <code>"local-storage-key"</code> | Specify the local storage key |
+| Prop name | Kind                  | Reactive | Type                    | Default value                                        | Description                                                     |
+| :-------- | :-------------------- | :------- | :---------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
+| value     | <code>let</code>      | Yes      | <code>any</code>        | <code>""</code>                                      | Provide a value to persist                                      |
+| key       | <code>let</code>      | No       | <code>string</code>     | <code>"local-storage-key"</code>                     | Specify the local storage key                                   |
+| clearItem | <code>function</code> | No       | <code>() => void</code> | <code>() => { localStorage.removeItem(key); }</code> | Remove the persisted key value from the browser's local storage |
+| clearAll  | <code>function</code> | No       | <code>() => void</code> | <code>() => { localStorage.clear(); }</code>         | Clear all key values from the browser's local storage           |
 
 ### Slots
 
@@ -2397,6 +2400,9 @@ export interface MultiSelectItem {
 
 | Prop name         | Kind             | Reactive | Type                                                                                           | Default value                                                                       | Description                                                                           |
 | :---------------- | :--------------- | :------- | :--------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| selectionRef      | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                        | <code>null</code>                                                                   | Obtain a reference to the selection element                                           |
+| fieldRef          | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                        | <code>null</code>                                                                   | Obtain a reference to the field box element                                           |
+| multiSelectRef    | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                        | <code>null</code>                                                                   | Obtain a reference to the outer div element                                           |
 | inputRef          | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                      | <code>null</code>                                                                   | Obtain a reference to the input HTML element                                          |
 | open              | <code>let</code> | Yes      | <code>boolean</code>                                                                           | <code>false</code>                                                                  | Set to `true` to open the dropdown                                                    |
 | value             | <code>let</code> | Yes      | <code>string</code>                                                                            | <code>""</code>                                                                     | Specify the multiselect value                                                         |
