@@ -3737,7 +3737,7 @@
           "kind": "let",
           "description": "Specify an id for the legend element",
           "type": "string",
-          "value": "''",
+          "value": "\"\"",
           "isFunction": false,
           "constant": false,
           "reactive": false
@@ -6074,6 +6074,36 @@
           "kind": "let",
           "description": "Obtain a reference to the input HTML element",
           "type": "null | HTMLInputElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "multiSelectRef",
+          "kind": "let",
+          "description": "Obtain a reference to the outer div element",
+          "type": "null | HTMLDivElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "fieldRef",
+          "kind": "let",
+          "description": "Obtain a reference to the field box element",
+          "type": "null | HTMLDivElement",
+          "value": "null",
+          "isFunction": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "selectionRef",
+          "kind": "let",
+          "description": "Obtain a reference to the selection element",
+          "type": "null | HTMLDivElement",
           "value": "null",
           "isFunction": false,
           "constant": false,

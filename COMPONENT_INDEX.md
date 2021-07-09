@@ -1471,7 +1471,7 @@ None.
 | message     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a form requirement    |
 | messageText | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the message text                      |
 | legendText  | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                       |
-| legendId    | <code>let</code> | No       | <code>string</code>  | <code>''</code>    | Specify an id for the legend element          |
+| legendId    | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify an id for the legend element          |
 
 ### Slots
 
@@ -2398,6 +2398,9 @@ export interface MultiSelectItem {
 
 | Prop name         | Kind             | Reactive | Type                                                                                           | Default value                                                                       | Description                                                                           |
 | :---------------- | :--------------- | :------- | :--------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| selectionRef      | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                        | <code>null</code>                                                                   | Obtain a reference to the selection element                                           |
+| fieldRef          | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                        | <code>null</code>                                                                   | Obtain a reference to the field box element                                           |
+| multiSelectRef    | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                        | <code>null</code>                                                                   | Obtain a reference to the outer div element                                           |
 | inputRef          | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                      | <code>null</code>                                                                   | Obtain a reference to the input HTML element                                          |
 | open              | <code>let</code> | Yes      | <code>boolean</code>                                                                           | <code>false</code>                                                                  | Set to `true` to open the dropdown                                                    |
 | value             | <code>let</code> | Yes      | <code>string</code>                                                                            | <code>""</code>                                                                     | Specify the multiselect value                                                         |

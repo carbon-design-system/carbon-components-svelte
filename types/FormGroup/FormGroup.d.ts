@@ -35,7 +35,7 @@ export interface FormGroupProps
 
   /**
    * Specify an id for the legend element
-   * @default ''
+   * @default ""
    */
   legendId?: string;
 }
