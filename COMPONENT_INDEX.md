@@ -1466,11 +1466,12 @@ None.
 
 | Prop name   | Kind             | Reactive | Type                 | Default value      | Description                                   |
 | :---------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------------------- |
+| noMargin    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for to remove the bottom margin |
 | invalid     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to indicate an invalid state    |
 | message     | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a form requirement    |
-| noMargin    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for to remove the bottom margin |
 | messageText | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the message text                      |
 | legendText  | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the legend text                       |
+| legendId    | <code>let</code> | No       | <code>string</code>  | <code>''</code>    | Specify an id for the legend element          |
 
 ### Slots
 

@@ -4,6 +4,12 @@ import { SvelteComponentTyped } from "svelte";
 export interface FormGroupProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> {
   /**
+   * Set to `true` for to remove the bottom margin
+   * @default false
+   */
+  noMargin?: boolean;
+
+  /**
    * Set to `true` to indicate an invalid state
    * @default false
    */
@@ -16,12 +22,6 @@ export interface FormGroupProps
   message?: boolean;
 
   /**
-   * Set to `true` for to remove the bottom margin
-   * @default false
-   */
-  noMargin?: boolean;
-
-  /**
    * Specify the message text
    * @default ""
    */
@@ -32,6 +32,12 @@ export interface FormGroupProps
    * @default ""
    */
   legendText?: string;
+
+  /**
+   * Specify an id for the legend element
+   * @default ''
+   */
+  legendId?: string;
 }
 
 export default class FormGroup extends SvelteComponentTyped<
