@@ -11,7 +11,10 @@
   /** Set to `true` to use static width */
   export let useStaticWidth = false;
 
-  /**  Set to `true` for the bordered variant */
+  /**
+   * Set to `true` for the bordered variant
+   * @deprecated this prop will be removed in the next major release
+   */
   export let shouldShowBorder = false;
 
   /** Set to `true` for the sortable variant */
