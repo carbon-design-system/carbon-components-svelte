@@ -20,6 +20,7 @@
    * @type {() => void}
    */
   export function clearItem() {
+    value = "";
     localStorage.removeItem(key);
   }
 
@@ -28,6 +29,7 @@
    * @type {() => void}
    */
   export function clearAll() {
+    value = "";
     localStorage.clear();
   }
 
