@@ -221,4 +221,8 @@
   code {
     word-break: break-word;
   }
+
+  :global(.cell .bx--snippet--inline code, .bx--snippet--single pre) {
+    white-space: pre-wrap !important;
+  }
 </style>

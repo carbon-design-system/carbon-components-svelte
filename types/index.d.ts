@@ -129,6 +129,7 @@ export { default as TextAreaSkeleton } from "./TextArea/TextAreaSkeleton";
 export { default as TextInput } from "./TextInput/TextInput";
 export { default as TextInputSkeleton } from "./TextInput/TextInputSkeleton";
 export { default as PasswordInput } from "./TextInput/PasswordInput";
+export { default as Theme } from "./Theme/Theme";
 export { default as Tile } from "./Tile/Tile";
 export { default as ClickableTile } from "./Tile/ClickableTile";
 export { default as ExpandableTile } from "./Tile/ExpandableTile";
