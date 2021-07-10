@@ -12,7 +12,7 @@ export interface ThemeProps {
 
   /**
    * Customize a theme with your own tokens
-   * https://carbondesignsystem.com/guidelines/themes/overview#tokens
+   * https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme
    * @default {}
    */
   tokens?: { [token: string]: any };

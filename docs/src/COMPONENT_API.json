@@ -11591,7 +11591,7 @@
         {
           "name": "tokens",
           "kind": "let",
-          "description": "Customize a theme with your own tokens\nhttps://carbondesignsystem.com/guidelines/themes/overview#tokens",
+          "description": "Customize a theme with your own tokens\nhttps://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme",
           "type": "{ [token: string]: any; }",
           "value": "{}",
           "isFunction": false,

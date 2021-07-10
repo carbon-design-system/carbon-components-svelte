@@ -3,6 +3,8 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+This utility component dynamically updates the Carbon theme on the client-side using CSS variables.
+
 ### Default
 
 <FileSource src="/framed/Theme/Theme" />
@@ -15,7 +17,7 @@ Set `persist` to `true` to persist the theme locally using the [Window.localStor
 
 ### Custom theme
 
-Define keys and values in the `tokens` prop that override default Carbon theme tokens.
+Define keys and values in the `tokens` prop that override default Carbon theme tokens. Refer to the [Carbon website](https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme) for guidance on customizing a theme using token values.
 
 <FileSource src="/framed/Theme/ThemeTokens" />
 

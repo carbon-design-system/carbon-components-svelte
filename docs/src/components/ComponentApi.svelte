@@ -105,7 +105,10 @@
                   {:else if type.startsWith("(")}
                     <code>{type}</code>
                   {:else}
-                    <InlineSnippet code="{type}" />
+                    <InlineSnippet
+                      code="{type}"
+                      style="white-space: pre-wrap"
+                    />
                   {/if}
                 </div>
               {/each}
