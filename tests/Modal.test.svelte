@@ -12,7 +12,10 @@
   primaryButtonText="Confirm"
   secondaryButtons="{[{ text: 'Cancel' }, { text: 'Duplicate' }]}"
   secondaryButtonText="Cancel"
-  on:click:button--secondary="{({ detail }) => (open = false)}"
+  on:click:button--secondary="{({ detail }) => {
+    console.log(detail);
+    open = false;
+  }}"
   on:open
   on:close
   on:submit
