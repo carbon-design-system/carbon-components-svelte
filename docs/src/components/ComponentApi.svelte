@@ -105,10 +105,7 @@
                   {:else if type.startsWith("(")}
                     <code>{type}</code>
                   {:else}
-                    <InlineSnippet
-                      code="{type}"
-                      style="white-space: pre-wrap"
-                    />
+                    <InlineSnippet code="{type}" />
                   {/if}
                 </div>
               {/each}
@@ -223,5 +220,9 @@
 
   code {
     word-break: break-word;
+  }
+
+  :global(.cell .bx--snippet--inline code, .bx--snippet--single pre) {
+    white-space: pre-wrap !important;
   }
 </style>
