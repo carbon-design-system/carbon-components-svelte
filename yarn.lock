@@ -2383,10 +2383,10 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-sveld@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.7.0.tgz#379ecb92e42216cca11f7d7beecef6587c8f2b16"
-  integrity sha512-M022X3vjs6EVunPSC/oubO3br8vwcBZXYTdglGrydNCSTY5JewE+tY6Y+z8TaYeFt7PtEc6uVz1vzBIUqcrpyw==
+sveld@0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.8.1.tgz#9fcd23efdb350500337ac1ec041647b0a8dac49d"
+  integrity sha512-OtOEYDNFcjL9tmTvIJ+Iwt9nwN9NfClf5iP0bHGQRZzfSIlxY1lnl81cdMPgNz54ef5Sdibw7g4ham/MK+Spzw==
   dependencies:
     "@rollup/plugin-node-resolve" "^11.0.1"
     acorn "^8.0.4"
@@ -2397,6 +2397,8 @@ sveld@^0.7.0:
     rollup "^2.36.0"
     rollup-plugin-svelte "^7.0.0"
     svelte "^3.31.2"
+    svelte-preprocess "^4.7.3"
+    typescript "^4.1.3"
 
 svelte-check@^1.1.32:
   version "1.1.32"
@@ -2416,6 +2418,16 @@ svelte-preprocess@^4.0.0:
   version "4.5.2"
   resolved "https://registry.npmjs.org/svelte-preprocess/-/svelte-preprocess-4.5.2.tgz#37976d1e0d866eb382411d486f7468d2275087e9"
   integrity sha512-ClUX5NecnGBwI+nJnnBvKKy0XutCq5uHTIKe6cPhpvuOj9AAnyvef9wOZAE93yr85OKPutGCNIJa/X1TrJ7O0Q==
+  dependencies:
+    "@types/pug" "^2.0.4"
+    "@types/sass" "^1.16.0"
+    detect-indent "^6.0.0"
+    strip-indent "^3.0.0"
+
+svelte-preprocess@^4.7.3:
+  version "4.7.4"
+  resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-4.7.4.tgz#e4d5208ab25c2aaaf19e837f7d7bbf7930e61d2b"
+  integrity sha512-mDAmaltQl6e5zU2VEtoWEf7eLTfuOTGr9zt+BpA3AGHo8MIhKiNSPE9OLTCTOMgj0vj/uL9QBbaNmpG4G1CgIA==
   dependencies:
     "@types/pug" "^2.0.4"
     "@types/sass" "^1.16.0"

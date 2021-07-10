@@ -1,7 +1,8 @@
 <script lang="ts">
   import { Breakpoint } from "../types";
+  import { BreakpointSize } from "../types/Breakpoint/Breakpoint";
 
-  let size;
+  let size: BreakpointSize;
 </script>
 
 <Breakpoint
