@@ -1,5 +1,5 @@
 {
-  "total": 171,
+  "total": 172,
   "components": [
     {
       "moduleName": "Accordion",
@@ -11572,6 +11572,109 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "Theme",
+      "filePath": "src/Theme/Theme.svelte",
+      "props": [
+        {
+          "name": "theme",
+          "kind": "let",
+          "description": "Set the current Carbon theme",
+          "type": "CarbonTheme",
+          "value": "\"white\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "tokens",
+          "kind": "let",
+          "description": "Customize a theme with your own tokens\nhttps://carbondesignsystem.com/guidelines/themes/overview#tokens",
+          "type": "{}",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "persist",
+          "kind": "let",
+          "description": "Set to `true` to persist the theme using window.localStorage",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "persistKey",
+          "kind": "let",
+          "description": "Specify the local storage key",
+          "type": "string",
+          "value": "\"theme\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "render",
+          "kind": "let",
+          "description": "Render a toggle or select dropdown to control the theme",
+          "type": "\"toggle\" | \"select\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "toggle",
+          "kind": "let",
+          "description": "Override the default toggle props",
+          "type": "import(\"../Toggle/Toggle\").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }",
+          "value": "{       themes: [\"white\", \"g100\"],       labelA: \"\",       labelB: \"\",       labelText: \"Dark mode\",       hideLabel: false,     }",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "select",
+          "kind": "let",
+          "description": "Override the default select props",
+          "type": "import(\"../Select/Select\").SelectProps & { themes?: CarbonTheme[]; }",
+          "value": "{       themes: themeKeys,       labelText: \"Themes\",       hideLabel: false,     }",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "slot_props": "{ theme: CarbonTheme }"
+        }
+      ],
+      "events": [
+        {
+          "type": "dispatched",
+          "name": "update",
+          "detail": "{ theme: CarbonTheme; }"
+        }
+      ],
+      "typedefs": [
+        {
+          "type": "\"white\" | \"g10\" | \"g80\" | \"g90\" | \"g100\"",
+          "name": "CarbonTheme",
+          "ts": "type CarbonTheme = \"white\" | \"g10\" | \"g80\" | \"g90\" | \"g100\""
+        }
+      ]
     },
     {
       "moduleName": "Tile",

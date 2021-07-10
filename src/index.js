@@ -113,6 +113,7 @@ export { Tabs, Tab, TabContent, TabsSkeleton } from "./Tabs";
 export { Tag, TagSkeleton } from "./Tag";
 export { TextArea, TextAreaSkeleton } from "./TextArea";
 export { TextInput, TextInputSkeleton, PasswordInput } from "./TextInput";
+export { Theme } from "./Theme";
 export {
   Tile,
   ClickableTile,
