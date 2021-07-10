@@ -11592,7 +11592,7 @@
           "name": "tokens",
           "kind": "let",
           "description": "Customize a theme with your own tokens\nhttps://carbondesignsystem.com/guidelines/themes/overview#tokens",
-          "type": "{}",
+          "type": "{ [token: string]: any; }",
           "value": "{}",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -11636,7 +11636,7 @@
           "kind": "let",
           "description": "Override the default toggle props",
           "type": "import(\"../Toggle/Toggle\").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }",
-          "value": "{       themes: [\"white\", \"g100\"],       labelA: \"\",       labelB: \"\",       labelText: \"Dark mode\",       hideLabel: false,     }",
+          "value": "{     themes: [\"white\", \"g100\"],     labelA: \"\",     labelB: \"\",     labelText: \"Dark mode\",     hideLabel: false,   }",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
@@ -11647,7 +11647,7 @@
           "kind": "let",
           "description": "Override the default select props",
           "type": "import(\"../Select/Select\").SelectProps & { themes?: CarbonTheme[]; }",
-          "value": "{       themes: themeKeys,       labelText: \"Themes\",       hideLabel: false,     }",
+          "value": "{     themes: themeKeys,     labelText: \"Themes\",     hideLabel: false,   }",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
@@ -11658,7 +11658,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ theme: CarbonTheme }"
+          "slot_props": "{ theme: CarbonTheme; }"
         }
       ],
       "events": [

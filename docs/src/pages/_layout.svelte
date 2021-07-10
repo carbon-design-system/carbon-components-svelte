@@ -20,7 +20,7 @@
   import Footer from "../components/Footer.svelte";
 
   const deprecated = ["ToggleSmall", "Icon"];
-  const new_components = ["Breakpoint", "RecursiveList", "TreeView"];
+  const new_components = ["Theme"];
 
   let isOpen = false;
   let isSideNavOpen = true;

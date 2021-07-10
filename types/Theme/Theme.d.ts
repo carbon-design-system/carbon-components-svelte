@@ -15,7 +15,7 @@ export interface ThemeProps {
    * https://carbondesignsystem.com/guidelines/themes/overview#tokens
    * @default {}
    */
-  tokens?: {};
+  tokens?: { [token: string]: any };
 
   /**
    * Set to `true` to persist the theme using window.localStorage

@@ -12,10 +12,13 @@
   on:update="{(e) => console.log(e.detail.theme)}"
   tokens="{{ 'button-primary': 'violet' }}"
   render="toggle"
-  renderToggle="{{
+  toggle="{{
     themes: ['g10', 'g90'],
     labelA: '',
     labelB: '',
-    hideLabel: true,
+  }}"
+  select="{{
+    themes: ['g10', 'g90'],
+    labelText: '',
   }}"
 />

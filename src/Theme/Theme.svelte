@@ -7,6 +7,7 @@
   /**
    * @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme
    * @event {{ theme: CarbonTheme; }} update
+   * @slot {{ theme: CarbonTheme; }}
    */
 
   /**
@@ -19,7 +20,6 @@
    * Customize a theme with your own tokens
    * https://carbondesignsystem.com/guidelines/themes/overview#tokens
    * @type {{ [token: string]: any; }}
-   * @example {{ "button-primary": "violet" }}
    */
   export let tokens = {};
 

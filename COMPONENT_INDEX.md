@@ -4215,7 +4215,7 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 | Prop name  | Kind             | Reactive | Type                                                                                                           | Default value                                                                                                 | Description                                                                                                  |
 | :--------- | :--------------- | :------- | :------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | theme      | <code>let</code> | Yes      | <code>CarbonTheme</code>                                                                                       | <code>"white"</code>                                                                                          | Set the current Carbon theme                                                                                 |
-| tokens     | <code>let</code> | No       | <code>{}</code>                                                                                                | <code>{}</code>                                                                                               | Customize a theme with your own tokens<br />https://carbondesignsystem.com/guidelines/themes/overview#tokens |
+| tokens     | <code>let</code> | No       | <code>{ [token: string]: any; }</code>                                                                         | <code>{}</code>                                                                                               | Customize a theme with your own tokens<br />https://carbondesignsystem.com/guidelines/themes/overview#tokens |
 | persist    | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                                                                                            | Set to `true` to persist the theme using window.localStorage                                                 |
 | persistKey | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"theme"</code>                                                                                          | Specify the local storage key                                                                                |
 | render     | <code>let</code> | No       | <code>"toggle" &#124; "select"</code>                                                                          | --                                                                                                            | Render a toggle or select dropdown to control the theme                                                      |
@@ -4224,9 +4224,9 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props                                | Fallback |
-| :-------- | :------ | :----------------------------------- | :------- |
-| --        | Yes     | <code>{ theme: CarbonTheme } </code> | --       |
+| Slot name | Default | Props                                 | Fallback |
+| :-------- | :------ | :------------------------------------ | :------- |
+| --        | Yes     | <code>{ theme: CarbonTheme; } </code> | --       |
 
 ### Events
 
