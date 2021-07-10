@@ -6,3 +6,39 @@
 ### Default
 
 <FileSource src="/framed/Theme/Theme" />
+
+### Persist locally
+
+Set `persist` to `true` to persist the theme locally using the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
+
+<FileSource src="/framed/Theme/ThemePersist" />
+
+### Custom theme
+
+Define keys and values in the `tokens` prop that override default Carbon theme tokens.
+
+<FileSource src="/framed/Theme/ThemeTokens" />
+
+### Theme toggle
+
+Set `render` to `"toggle"` to render a toggle switch to control the theme.
+
+<FileSource src="/framed/Theme/ThemeToggle" />
+
+### Theme toggle (custom)
+
+Customize the toggle using the `toggle` prop.
+
+<FileSource src="/framed/Theme/ThemeToggleCustom" />
+
+### Theme select
+
+Set `render` to `"select"` to render a select dropdown to control the theme.
+
+<FileSource src="/framed/Theme/ThemeSelect" />
+
+### Theme select (custom)
+
+Customize the select using the `select` prop.
+
+<FileSource src="/framed/Theme/ThemeSelectCustom" />
