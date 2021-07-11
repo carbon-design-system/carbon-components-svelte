@@ -16,13 +16,6 @@ export interface BreakpointProps {
    * @default { sm: false, md: false, lg: false, xlg: false, max: false, }
    */
   sizes?: Record<BreakpointSize, boolean>;
-
-  /**
-   * Reference the Carbon grid breakpoints
-   * @constant
-   * @default { sm: 320, md: 672, lg: 1056, xlg: 1312, max: 1584, }
-   */
-  breakpoints?: { sm: 320; md: 672; lg: 1056; xlg: 1312; max: 1584 };
 }
 
 export default class Breakpoint extends SvelteComponentTyped<
@@ -34,4 +27,11 @@ export default class Breakpoint extends SvelteComponentTyped<
     }>;
   },
   { default: { size: BreakpointSize; sizes: Record<BreakpointSize, boolean> } }
-> {}
+> {
+  /**
+   * Reference the Carbon grid breakpoints
+   * @constant
+   * @default { sm: 320, md: 672, lg: 1056, xlg: 1312, max: 1584, }
+   */
+  breakpoints: Record<BreakpointSize, BreakpointValue>;
+}

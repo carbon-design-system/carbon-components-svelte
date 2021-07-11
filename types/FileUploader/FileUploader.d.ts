@@ -28,13 +28,6 @@ export interface FileUploaderProps
   multiple?: boolean;
 
   /**
-   * Override the default behavior of clearing the array of uploaded files
-   * @constant
-   * @default () => { files = []; }
-   */
-  clearFiles?: () => void;
-
-  /**
    * Specify the label description
    * @default ""
    */
@@ -84,4 +77,11 @@ export default class FileUploader extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
   },
   {}
-> {}
+> {
+  /**
+   * Override the default behavior of clearing the array of uploaded files
+   * @constant
+   * @default () => { files = []; }
+   */
+  clearFiles: () => void;
+}

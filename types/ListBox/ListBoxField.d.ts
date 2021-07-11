@@ -24,13 +24,6 @@ export interface ListBoxFieldProps
   tabindex?: string;
 
   /**
-   * Default translation ids
-   * @constant
-   * @default { close: "close", open: "open" }
-   */
-  translationIds?: { close: "close"; open: "open" };
-
-  /**
    * Override the default translation ids
    * @default (id) => defaultTranslations[id]
    */
@@ -61,4 +54,11 @@ export default class ListBoxField extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
   },
   { default: {} }
-> {}
+> {
+  /**
+   * Default translation ids
+   * @constant
+   * @default { close: "close", open: "open" }
+   */
+  translationIds: { close: "close"; open: "open" };
+}

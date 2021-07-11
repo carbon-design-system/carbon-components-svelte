@@ -12,13 +12,6 @@ export interface ListBoxMenuIconProps
   open?: boolean;
 
   /**
-   * Default translation ids
-   * @constant
-   * @default { close: "close", open: "open" }
-   */
-  translationIds?: { close: "close"; open: "open" };
-
-  /**
    * Override the default translation ids
    * @default (id) => defaultTranslations[id]
    */
@@ -29,4 +22,11 @@ export default class ListBoxMenuIcon extends SvelteComponentTyped<
   ListBoxMenuIconProps,
   { click: WindowEventMap["click"] },
   {}
-> {}
+> {
+  /**
+   * Default translation ids
+   * @constant
+   * @default { close: "close", open: "open" }
+   */
+  translationIds: { close: "close"; open: "open" };
+}

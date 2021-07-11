@@ -17,13 +17,6 @@ export interface ListBoxSelectionProps
   disabled?: boolean;
 
   /**
-   * Default translation ids
-   * @constant
-   * @default { clearAll: "clearAll", clearSelection: "clearSelection", }
-   */
-  translationIds?: { clearAll: "clearAll"; clearSelection: "clearSelection" };
-
-  /**
    * Override the default translation ids
    * @default (id) => defaultTranslations[id]
    */
@@ -40,4 +33,11 @@ export default class ListBoxSelection extends SvelteComponentTyped<
   ListBoxSelectionProps,
   { clear: CustomEvent<any> },
   {}
-> {}
+> {
+  /**
+   * Default translation ids
+   * @constant
+   * @default { clearAll: "clearAll", clearSelection: "clearSelection", }
+   */
+  translationIds: { clearAll: "clearAll"; clearSelection: "clearSelection" };
+}
