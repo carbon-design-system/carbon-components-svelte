@@ -1,5 +1,5 @@
 {
-  "version": "0.39.0",
+  "version": "0.40.0",
   "components": {
     "Accordion": {
       "path": "carbon-components-svelte/src/Accordion/Accordion.svelte"
@@ -21,6 +21,9 @@
     },
     "BreadcrumbSkeleton": {
       "path": "carbon-components-svelte/src/Breadcrumb/BreadcrumbSkeleton.svelte"
+    },
+    "Breakpoint": {
+      "path": "carbon-components-svelte/src/Breakpoint/Breakpoint.svelte"
     },
     "Button": {
       "path": "carbon-components-svelte/src/Button/Button.svelte"
@@ -402,6 +405,9 @@
     },
     "TextInputSkeleton": {
       "path": "carbon-components-svelte/src/TextInput/TextInputSkeleton.svelte"
+    },
+    "Theme": {
+      "path": "carbon-components-svelte/src/Theme/Theme.svelte"
     },
     "ClickableTile": {
       "path": "carbon-components-svelte/src/Tile/ClickableTile.svelte"

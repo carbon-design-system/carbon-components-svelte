@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.40.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.40.0) - 2021-07-11
+
+**Breaking Changes**
+
+- remove `appendTo` prop in `DatePicker` for server-side rendering (SSR) compatibility
+
+**Features**
+
+- add `Breakpoint` component to detect the current Carbon grid size based on browser width
+- add `Theme` component to dynamically update the current theme client-side
+- add `valueFrom`, `valueTo` props for range `DatePicker`
+- export `multiSelectRef`, `fieldRef`, `selectionRef` in `MultiSelect`
+- add clearItem, clearAll instance methods to `LocalStorage`
+- support `NumberInput` readonly variant
+
+**Fixes**
+
+- append `DatePicker` instance to local reference to prevent arrow key locking
+- fix `on:change` type signature in `DatePicker`
+- export id prop in `ProgressBar`
+- add skeleton text for every row and column in `DataTableSkeleton`
+- deprecate `shouldShowBorder` prop in `Table`
+- correctly type exported constant props and function declarations as accessors in `SvelteComponentTyped` interface
+
+**Documentation**
+
+- document Breakpoint component
+- document Theme component
+- add ProgressBar "UX example"
+- add DatePicker example "Range"
+- add NumberInput example "Read-only variant"
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.39.0
+
 ## [0.39.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.39.0) - 2021-07-05
 
 **Breaking Changes**
