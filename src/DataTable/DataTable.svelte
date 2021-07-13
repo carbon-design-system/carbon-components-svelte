@@ -132,7 +132,7 @@
       .split(/[\.\[\]\'\"]/)
       .filter((p) => p)
       .reduce(
-        (o, p) => (o && typeof o === "object" && o[p] ? o[p] : defaultValue),
+        (o, p) => ((o && typeof o === "object" && typeof o[p] === 'undefined') ? o[p] : defaultValue),
         object
       );
 
