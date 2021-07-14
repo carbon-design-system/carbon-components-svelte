@@ -28,7 +28,7 @@ export interface DataTableRow {
   [key: string]: DataTableValue;
 }
 
-export type DataTableRowId = string;
+export type DataTableRowId = any;
 
 export interface DataTableCell {
   key: DataTableKey;

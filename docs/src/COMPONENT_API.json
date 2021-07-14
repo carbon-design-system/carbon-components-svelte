@@ -2431,9 +2431,9 @@
           "ts": "interface DataTableRow { id: any; [key: string]: DataTableValue; }"
         },
         {
-          "type": "string",
+          "type": "any",
           "name": "DataTableRowId",
-          "ts": "type DataTableRowId = string"
+          "ts": "type DataTableRowId = any"
         },
         {
           "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; }",
