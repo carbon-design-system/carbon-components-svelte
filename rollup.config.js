@@ -15,10 +15,7 @@ export default ["es", "umd"].map((format) => {
       format,
       file: UMD ? pkg.main : pkg.module,
       name: UMD ? "carbon-components-svelte" : undefined,
-      globals: {
-        flatpickr: "flatpickr",
-        "clipboard-copy": "copy",
-      },
+      globals: { flatpickr: "flatpickr" },
     },
     external: Object.keys(pkg.dependencies),
     plugins: [
