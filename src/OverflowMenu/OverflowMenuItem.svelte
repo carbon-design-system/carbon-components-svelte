@@ -48,7 +48,7 @@
     class: "bx--overflow-menu-options__btn",
     disabled: href ? undefined : disabled,
     href: href ? href : undefined,
-    title: requireTitle ? text : undefined,
+    title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
   };
 </script>
 
