@@ -1,6 +1,4 @@
 <script>
-  // TODO: add function to programmatically expand/collapse parent nodes
-
   /**
    * @typedef {string | number} TreeNodeId
    * @typedef {{ id: TreeNodeId; text: string; icon?: typeof import("carbon-icons-svelte").CarbonIcon; disabled?: boolean; expanded?: boolean; }} TreeNode
@@ -40,7 +38,7 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
-  import { createEventDispatcher, setContext } from "svelte";
+  import { createEventDispatcher, setContext, onMount } from "svelte";
   import { writable } from "svelte/store";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
 
@@ -81,6 +79,18 @@
       node.focus();
     }
   }
+
+  onMount(() => {
+    if ($activeNodeId === "") {
+      const firstFocusableNode = ref.querySelector(
+        "li.bx--tree-node:not(.bx--tree-node--disabled)"
+      );
+
+      if (firstFocusableNode != null) {
+        firstFocusableNode.tabIndex = "0";
+      }
+    }
+  });
 
   $: activeNodeId.set(activeId);
   $: selectedNodeIds.set(selectedIds);
