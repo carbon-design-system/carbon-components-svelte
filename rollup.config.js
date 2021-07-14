@@ -10,6 +10,7 @@ export default ["es", "umd"].map((format) => {
 
   return {
     input: "src",
+    inlineDynamicImports: true,
     output: {
       format,
       file: UMD ? pkg.main : pkg.module,
