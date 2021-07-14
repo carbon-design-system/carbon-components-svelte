@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.40.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.40.1) - 2021-07-14
+
+**Fixes**
+
+- focus first, non-disabled `TreeView` node if active id does not match the selected id
+- set `type="button"` on `OverflowMenu` to prevent submit behavior when pressing "Enter"
+- update semantic attributes in `OverflowMenuItem`
+- do not render `OverflowMenuItem` title attribute if using a slot
+- do not dispatch `NumberInput` on:change event on initialization
+- dynamically load ESM `flatpickr` rangePlugin
+- forward input, focus events to `Select`
+- type `DataTableRowId` as `any`, fixes
+
 ## [0.40.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.40.0) - 2021-07-11
 
 **Breaking Changes**
