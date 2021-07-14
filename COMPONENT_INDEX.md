@@ -3242,6 +3242,8 @@ None.
 | Event name | Type       | Detail              |
 | :--------- | :--------- | :------------------ |
 | change     | dispatched | <code>string</code> |
+| input      | forwarded  | --                  |
+| focus      | forwarded  | --                  |
 | blur       | forwarded  | --                  |
 
 ## `SelectItem`

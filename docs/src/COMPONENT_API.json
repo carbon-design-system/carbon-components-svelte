@@ -9304,6 +9304,8 @@
       ],
       "events": [
         { "type": "dispatched", "name": "change", "detail": "string" },
+        { "type": "forwarded", "name": "input", "element": "select" },
+        { "type": "forwarded", "name": "focus", "element": "select" },
         { "type": "forwarded", "name": "blur", "element": "select" }
       ],
       "typedefs": [],
