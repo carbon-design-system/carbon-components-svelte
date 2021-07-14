@@ -81,7 +81,7 @@
   }
 
   onMount(() => {
-    if ($activeNodeId === "") {
+    if ($activeNodeId !== $selectedNodeIds[0]) {
       const firstFocusableNode = ref.querySelector(
         "li.bx--tree-node:not(.bx--tree-node--disabled)"
       );
