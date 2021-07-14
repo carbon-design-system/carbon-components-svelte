@@ -128,43 +128,43 @@
     },
   });
 
+  async function initCalendar() {
+    calendar = await createCalendar({
+      options: {
+        appendTo: datePickerRef,
+        dateFormat,
+        defaultDate: $inputValue,
+        locale,
+        maxDate,
+        minDate,
+        mode: $mode,
+      },
+      base: inputRef,
+      input: inputRefTo,
+      dispatch: (event) => {
+        const detail = { selectedDates: calendar.selectedDates };
+
+        if ($range) {
+          const from = inputRef.value;
+          const to = inputRefTo.value;
+
+          detail.dateStr = {
+            from: inputRef.value,
+            to: inputRefTo.value,
+          };
+
+          valueFrom = from;
+          valueTo = to;
+        } else {
+          detail.dateStr = inputRef.value;
+        }
+
+        return dispatch(event, detail);
+      },
+    });
+  }
+
   afterUpdate(() => {
-    if ($hasCalendar && !calendar) {
-      calendar = createCalendar({
-        options: {
-          appendTo: datePickerRef,
-          dateFormat,
-          defaultDate: $inputValue,
-          locale,
-          maxDate,
-          minDate,
-          mode: $mode,
-        },
-        base: inputRef,
-        input: inputRefTo,
-        dispatch: (event) => {
-          const detail = { selectedDates: calendar.selectedDates };
-
-          if ($range) {
-            const from = inputRef.value;
-            const to = inputRefTo.value;
-
-            detail.dateStr = {
-              from: inputRef.value,
-              to: inputRefTo.value,
-            };
-
-            valueFrom = from;
-            valueTo = to;
-          } else {
-            detail.dateStr = inputRef.value;
-          }
-
-          return dispatch(event, detail);
-        },
-      });
-    }
-
     if (calendar) {
       if ($range) {
         calendar.setDate([$inputValueFrom, $inputValueTo]);
@@ -189,6 +189,7 @@
   $: valueFrom = $inputValueFrom;
   $: inputValueTo.set(valueTo);
   $: valueTo = $inputValueTo;
+  $: if ($hasCalendar && !calendar && inputRef) initCalendar();
 </script>
 
 <svelte:body

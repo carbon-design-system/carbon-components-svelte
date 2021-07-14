@@ -72,9 +72,7 @@
 
   add({ id, labelText });
 
-  onMount(() => {
-    declareRef({ id, ref });
-  });
+  $: if (ref) declareRef({ id, ref });
 </script>
 
 <div

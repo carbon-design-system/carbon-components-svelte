@@ -963,7 +963,7 @@ export interface DataTableRow {
   [key: string]: DataTableValue;
 }
 
-export type DataTableRowId = string;
+export type DataTableRowId = any;
 
 export interface DataTableCell {
   key: DataTableKey;
@@ -3242,6 +3242,8 @@ None.
 | Event name | Type       | Detail              |
 | :--------- | :--------- | :------------------ |
 | change     | dispatched | <code>string</code> |
+| input      | forwarded  | --                  |
+| focus      | forwarded  | --                  |
 | blur       | forwarded  | --                  |
 
 ## `SelectItem`

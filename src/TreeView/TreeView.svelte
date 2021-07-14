@@ -81,14 +81,12 @@
   }
 
   onMount(() => {
-    if ($activeNodeId === "") {
-      const firstFocusableNode = ref.querySelector(
-        "li.bx--tree-node:not(.bx--tree-node--disabled)"
-      );
+    const firstFocusableNode = ref.querySelector(
+      "li.bx--tree-node:not(.bx--tree-node--disabled)"
+    );
 
-      if (firstFocusableNode != null) {
-        firstFocusableNode.tabIndex = "0";
-      }
+    if (firstFocusableNode != null) {
+      firstFocusableNode.tabIndex = "0";
     }
   });
 

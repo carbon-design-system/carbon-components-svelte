@@ -119,6 +119,8 @@
             on:change="{({ target }) => {
               selectedValue.set(target.value);
             }}"
+            on:input
+            on:focus
             on:blur
           >
             <slot />
@@ -160,6 +162,8 @@
           on:change="{({ target }) => {
             selectedValue.set(target.value);
           }}"
+          on:input
+          on:focus
           on:blur
         >
           <slot />

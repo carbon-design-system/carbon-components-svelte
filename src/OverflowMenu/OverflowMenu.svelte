@@ -175,6 +175,7 @@
 
 <button
   bind:this="{buttonRef}"
+  type="button"
   aria-haspopup
   aria-expanded="{open}"
   aria-label="{ariaLabel}"

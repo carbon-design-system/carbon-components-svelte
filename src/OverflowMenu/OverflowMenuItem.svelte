@@ -43,16 +43,17 @@
 
   $: primaryFocus = $focusedId === id;
   $: buttonProps = {
+    role: "menuitem",
     tabindex: "-1",
-    title: requireTitle ? text : undefined,
     class: "bx--overflow-menu-options__btn",
     disabled: href ? undefined : disabled,
     href: href ? href : undefined,
+    title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
   };
 </script>
 
 <li
-  role="menuitem"
+  role="none"
   id="{id}"
   class:bx--overflow-menu-options__option="{true}"
   class:bx--overflow-menu--divider="{hasDivider}"

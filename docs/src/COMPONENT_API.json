@@ -2431,9 +2431,9 @@
           "ts": "interface DataTableRow { id: any; [key: string]: DataTableValue; }"
         },
         {
-          "type": "string",
+          "type": "any",
           "name": "DataTableRowId",
-          "ts": "type DataTableRowId = string"
+          "ts": "type DataTableRowId = any"
         },
         {
           "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; }",
@@ -9304,6 +9304,8 @@
       ],
       "events": [
         { "type": "dispatched", "name": "change", "detail": "string" },
+        { "type": "forwarded", "name": "input", "element": "select" },
+        { "type": "forwarded", "name": "focus", "element": "select" },
         { "type": "forwarded", "name": "blur", "element": "select" }
       ],
       "typedefs": [],

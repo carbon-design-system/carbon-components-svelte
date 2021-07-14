@@ -172,7 +172,7 @@
   ]}"
   rows="{[
     {
-      id: 'a',
+      id: 0,
       name: 'Load Balancer 3',
       protocol: 'HTTP',
       port: 3000,

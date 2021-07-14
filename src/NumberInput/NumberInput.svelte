@@ -103,7 +103,7 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, afterUpdate } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16/Add16.svelte";
   import Subtract16 from "carbon-icons-svelte/lib/Subtract16/Subtract16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
@@ -129,12 +129,9 @@
     }
   }
 
-  afterUpdate(() => {
-    dispatch("change", value);
-  });
-
   let inputValue = value;
 
+  $: dispatch("change", value);
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
   $: value = Number(inputValue);
