@@ -127,14 +127,11 @@
       .map(({ key }, i) => ({ key, id: $headerItems[i] }))
       .reduce((a, c) => ({ ...a, [c.key]: c.id }), {})
   );
-  const resolvePath = (object, path, defaultValue) =>
+  const resolvePath = (object, path) =>
     path
       .split(/[\.\[\]\'\"]/)
       .filter((p) => p)
-      .reduce(
-        (o, p) => (o && typeof o === "object" && o[p] ? o[p] : defaultValue),
-        object
-      );
+      .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
 
   setContext("DataTable", {
     sortHeader,
@@ -172,7 +169,7 @@
     ...row,
     cells: headerKeys.map((key, index) => ({
       key,
-      value: resolvePath(row, key, ""),
+      value: resolvePath(row, key),
       display: headers[index].display,
     })),
   }));
