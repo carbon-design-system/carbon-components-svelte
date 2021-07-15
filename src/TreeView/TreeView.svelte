@@ -27,6 +27,12 @@
   export let selectedIds = [];
 
   /**
+   * Set the node ids to be expanded
+   * @type {TreeNodeId[]}
+   */
+  export let expandedIds = [];
+
+  /**
    * Specify the TreeView size
    * @type {"default" | "compact"}
    */
@@ -46,6 +52,7 @@
   const labelId = `label-${Math.random().toString(36)}`;
   const activeNodeId = writable(activeId);
   const selectedNodeIds = writable(selectedIds);
+  const expandedNodeIds = writable(expandedIds);
 
   let ref = null;
   let treeWalker = null;
@@ -53,6 +60,7 @@
   setContext("TreeView", {
     activeNodeId,
     selectedNodeIds,
+    expandedNodeIds,
     clickNode: (node) => {
       activeId = node.id;
       selectedIds = [node.id];
@@ -60,6 +68,13 @@
     },
     selectNode: (node) => {
       selectedIds = [node.id];
+    },
+    expandNode: (node, expanded) => {
+      if (expanded) {
+        expandedIds = [...expandedIds, node.id];
+      } else {
+        expandedIds = expandedIds.filter((_id) => _id !== node.id);
+      }
     },
     focusNode: (node) => dispatch("focus", node),
     toggleNode: (node) => dispatch("toggle", node),
@@ -92,6 +107,7 @@
 
   $: activeNodeId.set(activeId);
   $: selectedNodeIds.set(selectedIds);
+  $: expandedNodeIds.set(expandedIds);
   $: if (ref) {
     treeWalker = document.createTreeWalker(ref, NodeFilter.SHOW_ELEMENT, {
       acceptNode: (node) => {

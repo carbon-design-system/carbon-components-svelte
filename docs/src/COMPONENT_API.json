@@ -13058,6 +13058,17 @@
           "reactive": true
         },
         {
+          "name": "expandedIds",
+          "kind": "let",
+          "description": "Set the node ids to be expanded",
+          "type": "TreeNodeId[]",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
           "name": "size",
           "kind": "let",
           "description": "Specify the TreeView size",
