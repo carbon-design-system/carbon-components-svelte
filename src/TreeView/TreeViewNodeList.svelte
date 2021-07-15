@@ -31,8 +31,10 @@
   const {
     activeNodeId,
     selectedNodeIds,
+    expandedNodeIds,
     clickNode,
     selectNode,
+    expandNode,
     focusNode,
     toggleNode,
   } = getContext("TreeView");
@@ -59,6 +61,7 @@
     refLabel.style.marginLeft = `-${offset()}rem`;
     refLabel.style.paddingLeft = `${offset()}rem`;
   }
+  $: expanded = $expandedNodeIds.includes(id);
 </script>
 
 {#if root}
@@ -100,6 +103,7 @@
 
       if (parent && e.key === 'ArrowLeft') {
         expanded = false;
+        expandNode(node, false);
         toggleNode(node);
       }
 
@@ -108,6 +112,7 @@
           ref.lastChild.firstChild.focus();
         } else {
           expanded = true;
+          expandNode(node, true);
           toggleNode(node);
         }
       }
@@ -118,6 +123,7 @@
         expanded = !expanded;
         toggleNode(node);
         clickNode(node);
+        expandNode(node, expanded);
         ref.focus();
       }
     }}"
@@ -132,6 +138,7 @@
         on:click="{() => {
           if (disabled) return;
           expanded = !expanded;
+          expandNode(node, expanded);
           toggleNode(node);
         }}"
       >

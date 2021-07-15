@@ -3,17 +3,16 @@
 
   let activeId = 1;
   let selectedIds = [];
+  let expandedIds = [1, 2, 14];
   let children = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,
       text: "Analytics",
-      expanded: true,
       children: [
         {
           id: 2,
           text: "IBM Analytics Engine",
-          expanded: true,
           children: [
             { id: 3, text: "Apache Spark" },
             { id: 4, text: "Hadoop" },
@@ -52,6 +51,7 @@
   children="{children}"
   bind:activeId
   bind:selectedIds
+  bind:expandedIds
   on:select="{({ detail }) => console.log('select', detail)}"
   on:toggle="{({ detail }) => console.log('toggle', detail)}"
   on:focus="{({ detail }) => console.log('focus', detail)}"
@@ -59,6 +59,7 @@
 
 <div>Active node id: {activeId}</div>
 <div>Selected ids: {JSON.stringify(selectedIds)}</div>
+<div>Expanded ids: {JSON.stringify(expandedIds)}</div>
 
 <style>
   div {

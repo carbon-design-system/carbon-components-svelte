@@ -4749,6 +4749,7 @@ export interface TreeNode {
 
 | Prop name   | Kind             | Reactive | Type                                                     | Default value          | Description                                                     |
 | :---------- | :--------------- | :------- | :------------------------------------------------------- | ---------------------- | --------------------------------------------------------------- |
+| expandedIds | <code>let</code> | Yes      | <code>TreeNodeId[]</code>                                | <code>[]</code>        | Set the node ids to be expanded                                 |
 | selectedIds | <code>let</code> | Yes      | <code>TreeNodeId[]</code>                                | <code>[]</code>        | Set the node ids to be selected                                 |
 | activeId    | <code>let</code> | Yes      | <code>TreeNodeId</code>                                  | <code>""</code>        | Set the current active node id<br />Only one node can be active |
 | children    | <code>let</code> | No       | <code>Array<TreeNode & { children?: TreeNode[] }></code> | <code>[]</code>        | Provide an array of children nodes to render                    |
