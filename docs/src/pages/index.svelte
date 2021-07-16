@@ -6,8 +6,15 @@
     Column,
     CodeSnippet,
     Link,
+    Tabs,
+    Tab,
+    TabContent,
+    OutboundLink,
+    RadioButtonGroup,
+    RadioButton,
   } from "carbon-components-svelte";
   import TileCard from "../components/TileCard.svelte";
+  import { theme } from "../store";
   import { metatags } from "@sveltech/routify";
 
   metatags.title = "Carbon Components Svelte";
@@ -16,6 +23,13 @@
 
   const installYarn = "yarn add -D carbon-components-svelte";
   const installNpm = "npm i -D carbon-components-svelte";
+  const themes = {
+    white: "White",
+    g10: "Gray 10",
+    g80: "Gray 80",
+    g90: "Gray 90",
+    g100: "Gray 100",
+  };
 </script>
 
 <Content>
@@ -50,23 +64,85 @@
     </Row>
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column>
-        <h3>Install</h3>
-        <h4>Installing with yarn:</h4>
+        <h3>Installation</h3>
+        <p>
+          Install <code>carbon-components-svelte</code> as a development dependency
+          in your project.
+        </p>
+        <h4>Using Yarn:</h4>
         <Row noGutter>
           <CodeSnippet code="{installYarn}" />
         </Row>
-        <h4>Using npm:</h4>
+        <h4>Using NPM:</h4>
         <Row noGutter>
           <CodeSnippet code="{installNpm}" />
         </Row>
       </Column>
     </Row>
+    <Row style="margin-bottom: var(--cds-layout-05)">
+      <Column>
+        <h3>Styling</h3>
+        <p>
+          Before importing components, you will need to first apply Carbon
+          component styles. The Carbon Design System supports five themes (2
+          light, 3 dark).
+        </p>
+        <RadioButtonGroup
+          style="margin-top: var(--cds-spacing-08)"
+          legendText="Carbon themes"
+          bind:selected="{$theme}"
+        >
+          {#each ["white", "g10", "g80", "g90", "g100"] as value}
+            <RadioButton labelText="{themes[value]}" value="{value}" />
+          {/each}
+        </RadioButtonGroup>
+      </Column>
+    </Row>
+
+    <Row style="margin-bottom: var(--cds-layout-02)">
+      <Column xlg="{10}" noGutter>
+        <Tabs>
+          <Tab label="CSS StyleSheet" />
+          <Tab label="CDN" />
+          <Tab label="SCSS" />
+          <div slot="content">
+            <TabContent>
+              <p>
+                This library ships with six pre-compiled CSS StyleSheets built
+                from
+                <OutboundLink
+                  size="lg"
+                  href="https://github.com/carbon-design-system/carbon/tree/main/packages/components"
+                >
+                  carbon-components
+                </OutboundLink>.
+              </p>
+            </TabContent>
+            <TabContent>
+              <p>
+                An alternative to loading styles is to link an external
+                StyleSheet from a Content Delivery Networks (CDN) like
+                <OutboundLink size="lg" href="https://unpkg.com/">
+                  unpkg.com
+                </OutboundLink>.
+              </p>
+              <p>
+                This is best suited for rapid prototyping or if your set-up does
+                not use a CSS loader.
+              </p>
+            </TabContent>
+            <TabContent>Content 3</TabContent>
+          </div>
+        </Tabs>
+      </Column>
+    </Row>
+
     <Row>
       <Column>
         <h3>Portfolio</h3>
         <p>
-          The broader Carbon Svelte effort includes libraries for icons,
-          pictograms, and data visualization.
+          The Carbon Svelte portfolio includes packages for icons, pictograms,
+          and data visualization.
         </p>
       </Column>
     </Row>
@@ -106,7 +182,7 @@
         <TileCard
           borderBottom
           title="Carbon Charts Svelte"
-          subtitle="20 chart types, powered by d3"
+          subtitle="20+ charts, powered by d3"
           target="_blank"
           href="https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte"
         />
@@ -124,3 +200,9 @@
     </Row>
   </Grid>
 </Content>
+
+<style>
+  p {
+    margin-bottom: var(--cds-spacing-05);
+  }
+</style>
