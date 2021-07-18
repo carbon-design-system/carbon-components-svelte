@@ -9,8 +9,8 @@ components: ["OrderedList", "ListItem"]
 
 <InlineNotification svx-ignore title="Tip:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    To render data formatted as a tree structure, use the <Link href="/components/RecursiveList#ordered">RecursiveList</Link> component.
-  </div>
+    Consider using the <Link href="/components/RecursiveList#ordered">RecursiveList</Link> component for rendering tree structured data.
+   </div>
 </InlineNotification>
 
 ### Default
