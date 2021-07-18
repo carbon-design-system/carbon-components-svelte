@@ -13,27 +13,34 @@ The Carbon Svelte portfolio also includes:
 
 - **[Carbon Icons Svelte](https://github.com/IBM/carbon-icons-svelte)**: 6000+ Carbon icons as Svelte components
 - **[Carbon Pictograms Svelte](https://github.com/IBM/carbon-pictograms-svelte)**: 700+ Carbon pictograms as Svelte components
-- **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 20 chart types, powered by d3
+- **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 20+ charts, powered by d3
+- **[Carbon Preprocess Svelte](https://github.com/IBM/carbon-preprocess-svelte)**: Collection of Svelte preprocessors for Carbon
 
 ## [Documentation](http://ibm.biz/carbon-svelte)
 
-<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="34px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
+<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="40px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
 
 The [documentation website](http://ibm.biz/carbon-svelte) contains live demos and examples.
 
 Other forms of documentation are auto-generated:
 
 - **[TypeScript definitions](types)**: Component TypeScript definitions
-- **[Component Index](COMPONENT_INDEX.md)**: Markdown file documenting component props, slots, and events
-- **[Component API](docs/src/COMPONENT_API.json)**: Component API metadata in JSON format
+- **[Component Index](COMPONENT_INDEX.md)**: Component API in Markdown format
+- **[Component API](docs/src/COMPONENT_API.json)**: Component API in JSON format
 
-## Getting started
+## Installation
 
 Install `carbon-components-svelte` as a development dependency.
 
+**Yarn**
+
 ```sh
 yarn add -D carbon-components-svelte
-# OR
+```
+
+**NPM**
+
+```sh
 npm i -D carbon-components-svelte
 ```
 

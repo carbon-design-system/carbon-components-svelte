@@ -11,7 +11,7 @@
           target="_blank"
         >
           <img
-            height="36px"
+            height="40px"
             src="/powered-by-vercel.svg"
             alt="Deploys by Vercel"
           />

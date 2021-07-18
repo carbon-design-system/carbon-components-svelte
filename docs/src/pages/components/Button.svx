@@ -1,5 +1,5 @@
 <script>
-  import { Button } from "carbon-components-svelte";
+  import { InlineNotification, Button } from "carbon-components-svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16";
   import TrashCan16 from "carbon-icons-svelte/lib/TrashCan16";
   import TextBold16 from "carbon-icons-svelte/lib/TextBold16";
@@ -118,7 +118,11 @@ If an `href` value is specified, the component will render an [anchor element](h
 
 Set `expressive` to `true` to use Carbon's expressive typesetting.
 
-Note: the expressive styles only apply to the default, `"lg"`, and `"xl"` button sizes.
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    Expressive styles only work with the default, `"lg"`, and `"xl"` button sizes.
+  </div>
+</InlineNotification>
 
 <Button expressive size="xl">Primary</Button>
 <Button expressive size="xl" kind="secondary">Secondary</Button>
