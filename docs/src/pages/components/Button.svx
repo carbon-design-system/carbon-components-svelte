@@ -37,7 +37,11 @@
 
 ### Danger tertiary, icon-only button
 
-**Note:** you must provide an `iconDescription` for the button tooltip.
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    You must provide an `iconDescription` for the button tooltip.
+  </div>
+</InlineNotification>
 
 <Button kind="danger-tertiary"iconDescription="Delete" icon={TrashCan16} />
 
@@ -51,7 +55,11 @@
 
 ### Icon-only button
 
-**Note:** you must provide an `iconDescription` for the button tooltip.
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    You must provide an `iconDescription` for the button tooltip.
+  </div>
+</InlineNotification>
 
 <Button iconDescription="Tooltip text" icon={Add16} />
 
