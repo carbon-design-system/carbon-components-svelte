@@ -95,7 +95,7 @@
   $: buttonProps = {
     type: href && !disabled ? undefined : type,
     tabindex,
-    disabled,
+    disabled: disabled === true ? true : undefined,
     href,
     "aria-pressed": hasIconOnly && kind === "ghost" ? isSelected : undefined,
     ...$$restProps,

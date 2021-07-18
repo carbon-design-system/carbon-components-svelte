@@ -5,6 +5,7 @@
   import TextBold16 from "carbon-icons-svelte/lib/TextBold16";
   import TextItalic16 from "carbon-icons-svelte/lib/TextItalic16";
   import TextUnderline16 from "carbon-icons-svelte/lib/TextUnderline16";
+  import Login16 from "carbon-icons-svelte/lib/Login16";
   import Preview from "../../components/Preview.svelte";
 
   let index = 1;
@@ -53,6 +54,10 @@
 **Note:** you must provide an `iconDescription` for the button tooltip.
 
 <Button iconDescription="Tooltip text" icon={Add16} />
+
+### Icon-only, link button
+
+<Button iconDescription="Login" icon={Login16} href="#" />
 
 ### Icon-only button (custom tooltip position)
 
