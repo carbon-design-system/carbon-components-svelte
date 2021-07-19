@@ -37,7 +37,7 @@ To render a node with an icon, define an `icon` property with a Carbon Svelte ic
 
 ### Initial expanded nodes
 
-Set `expanded` to `true` on nodes that should be expanded by default.
+Expanded nodes can be set using `expandedIds`.
 
 <FileSource src="/framed/TreeView/TreeViewExpanded" />
 
