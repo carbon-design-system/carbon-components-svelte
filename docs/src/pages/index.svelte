@@ -139,7 +139,7 @@
             <TabContent>
               <p>
                 An alternative to loading styles is to link an external
-                StyleSheet from a Content Delivery Networks (CDN) like
+                StyleSheet from a Content Delivery Network (CDN) like
                 <OutboundLink inline size="lg" href="https://unpkg.com/">
                   unpkg.com
                 </OutboundLink>.
@@ -159,18 +159,22 @@
             <TabContent>
               <p>
                 The most performant method to load styles is to import SCSS
-                directly from <code>carbon-components</code>. Although it
-                requires more set up, you can reduce the size of the bundle CSS
-                by importing individual component styles instead of a
-                pre-compiled CSS StyleSheet.
+                directly from
+                <code>carbon-components</code>. Although it requires more set
+                up, you can reduce the size of the bundle CSS by importing
+                individual component styles instead of a pre-compiled CSS
+                StyleSheet.
               </p>
               <p>
-                Refer to the <OutboundLink
+                Refer to the
+                <OutboundLink
                   inline
                   size="lg"
                   href="https://github.com/carbon-design-system/carbon/blob/main/docs/guides/sass.md"
-                  >official Carbon guide on SASS</OutboundLink
-                > for documentation.
+                >
+                  official Carbon guide on SASS
+                </OutboundLink>
+                for documentation.
               </p>
             </TabContent>
           </div>
