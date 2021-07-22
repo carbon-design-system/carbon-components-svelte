@@ -116,12 +116,13 @@
   }
 </script>
 
-<svelte:body
+<svelte:window
   on:mousemove="{move}"
   on:touchmove="{move}"
   on:mouseup="{stopHolding}"
   on:touchend="{stopHolding}"
-  on:touchcancel="{stopHolding}" />
+  on:touchcancel="{stopHolding}"
+/>
 
 <div
   class:bx--form-item="{true}"

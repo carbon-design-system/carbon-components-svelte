@@ -192,12 +192,13 @@
   $: if ($hasCalendar && !calendar && inputRef) initCalendar();
 </script>
 
-<svelte:body
+<svelte:window
   on:click="{({ target }) => {
     if (!calendar || !calendar.isOpen) return;
     if (datePickerRef && datePickerRef.contains(target)) return;
     if (!calendar.calendarContainer.contains(target)) calendar.close();
-  }}" />
+  }}"
+/>
 
 <div
   class:bx--form-item="{true}"
