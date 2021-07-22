@@ -33,6 +33,12 @@ export interface DatePickerInputProps
   disabled?: boolean;
 
   /**
+   * Specify the helper text
+   * @default ""
+   */
+  helperText?: string;
+
+  /**
    * Specify the ARIA label for the calendar icon
    * @default ""
    */
