@@ -165,13 +165,14 @@
   {@html styles}
 </svelte:head>
 
-<svelte:body
+<svelte:window
   on:click="{({ target }) => {
     if (buttonRef && buttonRef.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
       open = false;
     }
-  }}" />
+  }}"
+/>
 
 <button
   bind:this="{buttonRef}"

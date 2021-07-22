@@ -238,12 +238,13 @@
   $: value = inputValue;
 </script>
 
-<svelte:body
+<svelte:window
   on:click="{({ target }) => {
     if (open && multiSelectRef && !multiSelectRef.contains(target)) {
       open = false;
     }
-  }}" />
+  }}"
+/>
 
 <div
   bind:this="{multiSelectRef}"

@@ -31,10 +31,11 @@
   }
 </script>
 
-<svelte:body
+<svelte:window
   on:keydown="{({ key }) => {
     if (key === 'Escape') hide();
-  }}" />
+  }}"
+/>
 
 <span
   class:bx--tooltip--definition="{true}"

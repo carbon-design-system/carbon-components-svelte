@@ -163,7 +163,7 @@
   };
 </script>
 
-<svelte:body
+<svelte:window
   on:mousedown="{({ target }) => {
     if (open && target.contains(refTooltip)) {
       if (refIcon) {
@@ -174,7 +174,8 @@
 
       open = false;
     }
-  }}" />
+  }}"
+/>
 
 <div
   {...$$restProps}

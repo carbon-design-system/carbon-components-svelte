@@ -35,12 +35,13 @@
   let hidden = false;
 </script>
 
-<svelte:body
+<svelte:window
   on:keydown="{({ key }) => {
     if (key === 'Escape') {
       hidden = true;
     }
-  }}" />
+  }}"
+/>
 
 <button
   bind:this="{ref}"
