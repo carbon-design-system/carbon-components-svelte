@@ -1090,6 +1090,7 @@ None.
 | placeholder     | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the input placeholder text                 |
 | pattern         | <code>let</code> | No       | <code>string</code>                       | <code>"\\d{1,2}\\/\\d{1,2}\\/\\d{4}"</code>      | Specify the Regular Expression for the input value |
 | disabled        | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the input                 |
+| helperText      | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the helper text                            |
 | iconDescription | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the ARIA label for the calendar icon       |
 | id              | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                    |
 | labelText       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                             |

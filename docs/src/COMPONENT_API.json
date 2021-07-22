@@ -2735,6 +2735,17 @@
           "reactive": false
         },
         {
+          "name": "helperText",
+          "kind": "let",
+          "description": "Specify the helper text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "iconDescription",
           "kind": "let",
           "description": "Specify the ARIA label for the calendar icon",

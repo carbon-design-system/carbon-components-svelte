@@ -17,6 +17,9 @@
   /** Set to `true` to disable the input */
   export let disabled = false;
 
+  /** Specify the helper text */
+  export let helperText = "";
+
   /** Specify the ARIA label for the calendar icon */
   export let iconDescription = "";
 
@@ -50,7 +53,7 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { getContext, onMount } from "svelte";
+  import { getContext } from "svelte";
   import Calendar16 from "carbon-icons-svelte/lib/Calendar16/Calendar16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
@@ -160,5 +163,13 @@
   {/if}
   {#if !invalid && warn}
     <div class:bx--form-requirement="{true}">{warnText}</div>
+  {/if}
+  {#if helperText}
+    <div
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}"
+    >
+      {helperText}
+    </div>
   {/if}
 </div>
