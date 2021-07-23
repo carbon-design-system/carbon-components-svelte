@@ -40,6 +40,12 @@
     />
   </head>
 </html>`;
+  $: cssCdnSvelteHead = `<svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/carbon-components-svelte/css/${$theme}.css"
+  />
+</svelte:head>`;
 </script>
 
 <Content>
@@ -144,14 +150,20 @@
                   unpkg.com
                 </OutboundLink>.
               </p>
-              <p>
-                This is best suited for rapid prototyping or if your set-up does
-                not use a CSS loader.
-              </p>
+              <p>This is best suited for rapid prototyping.</p>
+              <h5>HTML</h5>
               <Row padding noGutter>
                 <Column>
                   <p>
                     <CodeSnippet type="multi" code="{cssCdn}" />
+                  </p>
+                </Column>
+              </Row>
+              <h5>svelte:head</h5>
+              <Row padding noGutter>
+                <Column>
+                  <p>
+                    <CodeSnippet type="multi" code="{cssCdnSvelteHead}" />
                   </p>
                 </Column>
               </Row>
