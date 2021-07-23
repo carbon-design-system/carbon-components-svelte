@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.42.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.42.0) - 2021-07-22
+
+**Features**
+
+- add `helperText` prop to `DatePickerInput`
+
+**Fixes**
+
+- replace `svelte:body` with `svelte:window` when listening for an outside click
+
+**Documentation**
+
+- fix typos in styling instructions
+- update expanded nodes guidance
+- add `DatePicker` example "With helper text"
+
+**Refactor**
+
+- omit explicit `treeview.scss` import in `css/*.scss` files as it is included by default in `carbon-components@10.14`
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.40.0
+
 ## [0.41.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.41.0) - 2021-07-18
 
 **Features**
