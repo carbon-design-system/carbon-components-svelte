@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Refactor**
 
-- omit explicit `treeview.scss` import in `css/*.scss` files as it is included by default in `carbon-components@10.14`
+- omit explicit `treeview.scss` import in `css/*.scss` files as it is included by default in `carbon-components@10.40`
 
 **Housekeeping**
 
