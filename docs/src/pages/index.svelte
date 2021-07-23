@@ -206,7 +206,7 @@
         <TileCard
           borderBottom
           title="Carbon Icons Svelte"
-          subtitle="6000+ icons"
+          subtitle="7000+ icons"
           target="_blank"
           href="https://github.com/IBM/carbon-icons-svelte"
         />
