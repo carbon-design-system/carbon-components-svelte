@@ -6,6 +6,7 @@
   export let count = 3;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--skeleton="{true}"
   class:bx--breadcrumb="{true}"

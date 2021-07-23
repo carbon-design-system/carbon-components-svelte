@@ -136,6 +136,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   bind:this="{ref}"
   role="presentation"

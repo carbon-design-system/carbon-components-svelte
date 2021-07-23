@@ -37,6 +37,7 @@
   $: dispatch("change", $selectedValue);
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   role="table"
   class:bx--structured-list="{true}"

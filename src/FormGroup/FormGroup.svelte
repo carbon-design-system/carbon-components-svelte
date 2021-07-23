@@ -18,6 +18,7 @@
   export let legendId = "";
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <fieldset
   data-invalid="{invalid || undefined}"
   class:bx--fieldset="{true}"

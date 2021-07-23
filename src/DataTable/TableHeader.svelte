@@ -27,6 +27,7 @@
   $: ariaLabel = translateWithId();
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if $tableSortable && !disableSorting}
   <th
     aria-sort="{active ? $sortHeader.sortDirection : 'none'}"

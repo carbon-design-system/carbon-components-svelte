@@ -6,6 +6,7 @@
   export let border = false;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--skeleton="{true}"
   class:bx--structured-list="{true}"

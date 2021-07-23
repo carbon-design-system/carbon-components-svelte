@@ -39,6 +39,7 @@
   const dispatch = createEventDispatcher();
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <span
   id="{id}"
   class:bx--file__selected-file="{true}"

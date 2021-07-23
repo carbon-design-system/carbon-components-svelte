@@ -47,6 +47,7 @@
   $: dispatch("check", checked);
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <CheckboxSkeleton
     {...$$restProps}

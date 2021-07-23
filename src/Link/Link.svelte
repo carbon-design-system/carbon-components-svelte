@@ -31,6 +31,7 @@
   export let ref = null;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if disabled}
   <p
     bind:this="{ref}"

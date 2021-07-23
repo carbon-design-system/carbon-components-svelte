@@ -52,6 +52,7 @@
   title="{title}"
   disabled="{disabled}"
 />
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <label
   for="{id}"
   tabindex="{disabled ? undefined : tabindex}"
