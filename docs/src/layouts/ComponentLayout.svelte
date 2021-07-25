@@ -158,6 +158,7 @@
 
   .prose > p > .bx--link {
     font-size: inherit;
+    text-decoration: underline;
   }
 
   .prose .toc {
