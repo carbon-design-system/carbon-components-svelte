@@ -29,7 +29,17 @@
     g80: "Gray 80",
     g90: "Gray 90",
     g100: "Gray 100",
+    all: "All",
   };
+
+  const cssImportAll = `import "carbon-components-svelte/css/all.css";`;
+  const cssThemeToggle = `<script>
+  let theme = "${$theme}"; // "white" | "g10" | "g80" | "g90" | "g100"
+
+  $: document.documentElement.setAttribute("theme", theme);
+<\/script>
+`;
+
   $: cssImport = `import "carbon-components-svelte/css/${$theme}.css";`;
   $: cssCdn = `<!DOCTYPE html>
 <html>
@@ -80,11 +90,6 @@
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column>
         <h3>Installation</h3>
-        <p>
-          Install
-          <code>carbon-components-svelte</code>
-          as a development dependency in your project.
-        </p>
         <h4>Using Yarn:</h4>
         <Row noGutter>
           <CodeSnippet code="{installYarn}" />
@@ -95,7 +100,7 @@
         </Row>
       </Column>
     </Row>
-    <Row style="margin-bottom: var(--cds-layout-05)">
+    <Row style="margin-bottom: var(--cds-layout-04)">
       <Column>
         <h3>Styling</h3>
         <p>
@@ -115,8 +120,8 @@
       </Column>
     </Row>
 
-    <Row style="margin-bottom: var(--cds-layout-02)">
-      <Column xlg="{10}" noGutter>
+    <Row>
+      <Column max="{10}" xlg="{10}" noGutter>
         <Tabs>
           <Tab label="CSS StyleSheet" />
           <Tab label="CDN" />
@@ -194,7 +199,39 @@
       </Column>
     </Row>
 
-    <Row>
+    <Row style="margin-bottom: var(--cds-layout-02)">
+      <Column>
+        <h3>Dynamic theming</h3>
+        <p>Use the "all.css" StyleSheet for dynamic, client-side theming.</p>
+        <Row padding noGutter>
+          <Column>
+            <p>
+              <CodeSnippet type="single" code="{cssImportAll}" />
+            </p>
+          </Column>
+        </Row>
+        <p>
+          Programmatically switch between each of the five Carbon themes by
+          setting the "theme" attribute on the HTML element.
+        </p>
+        <Row padding noGutter>
+          <Column>
+            <p>
+              <CodeSnippet type="multi" code="{cssThemeToggle}" />
+            </p>
+          </Column>
+        </Row>
+        <p>
+          You can use the
+          <Link inline size="lg" href="/components/Theme">
+            Theme utility component
+          </Link>
+          to update the theme at runtime.
+        </p>
+      </Column>
+    </Row>
+
+    <Row style="margin-bottom: var(--cds-layout-02)">
       <Column>
         <h3>Portfolio</h3>
         <p>
