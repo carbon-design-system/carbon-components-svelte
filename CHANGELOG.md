@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.42.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.42.1) - 2021-07-26
+
+**Fixes**
+
+- disable `a11y-mouse-events-have-key-events` warnings
+- upgrade `carbon-icons-svelte` to v10.36.0 to quell `a11y-mouse...` warnings
+
+**Refactor**
+
+- remove `formatStyle` utility in `OverflowMenu`
+
+**Documentation**
+
+- add `svelte:head` example usage for loading CDN styles
+- add instructions for dynamic theming
+- update number of available Carbon icons
+
 ## [0.42.0](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.42.0) - 2021-07-22
 
 **Features**
