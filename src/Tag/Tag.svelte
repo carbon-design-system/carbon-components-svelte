@@ -41,6 +41,7 @@
   const dispatch = createEventDispatcher();
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <TagSkeleton
     size="{size}"

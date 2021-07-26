@@ -23,7 +23,7 @@
     "publish-examples": "node scripts/publish-examples"
   },
   "dependencies": {
-    "carbon-icons-svelte": "^10.27.0",
+    "carbon-icons-svelte": "^10.36.0",
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
@@ -44,7 +44,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.32.6",
     "sveld": "^0.8.2",
-    "svelte": "^3.32.1",
+    "svelte": "^3.40.1",
     "svelte-check": "^1.1.32",
     "typescript": "^4.1.3"
   },

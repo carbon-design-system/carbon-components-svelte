@@ -18,6 +18,7 @@
   export let small = false;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if href}
   <a
     href="{href}"

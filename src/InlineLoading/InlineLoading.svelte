@@ -44,6 +44,7 @@
   });
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--inline-loading="{true}"
   aria-live="assertive"

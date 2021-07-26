@@ -64,8 +64,6 @@
   import OverflowMenuVertical16 from "carbon-icons-svelte/lib/OverflowMenuVertical16/OverflowMenuVertical16.svelte";
   import OverflowMenuHorizontal16 from "carbon-icons-svelte/lib/OverflowMenuHorizontal16/OverflowMenuHorizontal16.svelte";
 
-  import { formatStyle } from "./formatStyle";
-
   const ctxBreadcrumbItem = getContext("BreadcrumbItem");
   const dispatch = createEventDispatcher();
   const items = writable([]);
@@ -155,10 +153,11 @@
   $: if ($items[$currentIndex]) {
     focusedId.set($items[$currentIndex].id);
   }
-  $: dynamicPseudoWidth = `#${id} .bx--overflow-menu-options.bx--overflow-menu-options:after {
+  $: styles = `<style>
+    #${id} .bx--overflow-menu-options.bx--overflow-menu-options:after {
       width: ${buttonWidth ? buttonWidth + "px" : "2rem"};
-    }`;
-  $: styles = formatStyle(dynamicPseudoWidth);
+    }
+  <\/style>`;
 </script>
 
 <svelte:head>
@@ -174,6 +173,7 @@
   }}"
 />
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   bind:this="{buttonRef}"
   type="button"

@@ -9,6 +9,7 @@
   export let tabindex = "0";
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if label}
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <label

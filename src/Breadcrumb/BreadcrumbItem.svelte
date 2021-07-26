@@ -19,6 +19,7 @@
   setContext("BreadcrumbItem", {});
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
   class:bx--breadcrumb-item="{true}"
   class:bx--breadcrumb-item--current="{isCurrentPage &&
