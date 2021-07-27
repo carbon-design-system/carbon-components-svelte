@@ -1,0 +1,23 @@
+
+[build]
+  publish = "dist"
+  functions = "api/netlify"
+  command = "npm run build && cd api/netlify && npm run build"
+
+# Dev doesn't work yet. Any takers?
+# [dev]  
+  # command = "npm run dev:ssr"
+  # targetPort = 5000
+  # publish = "assets"
+  # autoLaunch = true
+
+[[redirects]]
+  # SSR and SPA
+  from = "/*"
+  to = "/.netlify/functions/ssr"
+  status = 200
+  
+  # SPA only
+  # from = "/*"
+  # to = "/__app.html"
+  # status = 200

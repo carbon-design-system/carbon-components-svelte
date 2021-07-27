@@ -1,0 +1,6 @@
+{
+  "container": {
+    "port": 5000,
+    "template": "node"
+  }
+}

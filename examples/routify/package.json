@@ -1,40 +1,61 @@
 {
-  "version": "0.1.0",
-  "private": true,
+  "name": "routify-carbon-app",
+  "version": "1.0.0",
+  "@comments scripts": {
+    "dev": "develop with blazing fast rebuilds",
+    "dev:features": "develop with features like SSR and serviceworker enabled",
+    "build": "run build scripts below",
+    "build:app": "build single page application (SPA)",
+    "build:static": "Generate static pages",
+    "serve": "serve content in 'dist' folder",
+    "rollup": "run the rollup bundler",
+    "nollup": "run the nollup no-bundler",
+    "routify": "run routify"
+  },
   "scripts": {
-    "dev": "run-p dev:*",
-    "dev:rollup": "rollup -cw",
-    "dev:routify": "routify",
-    "build": "routify -b && rollup -c && routify export"
+    "dev": "run-p routify nollup",
+    "dev:ssr": "run-p routify rollup",
+    "build": "run-s build:*",
+    "build:app": "routify -b && rollup -c",
+    "build:static": "spank",
+    "serve": "spassr --ssr",
+    "rollup": "rollup -cw",
+    "nollup": "nollup -c",
+    "routify": "routify"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^13.0.0",
-    "@rollup/plugin-node-resolve": "^8.1.0",
-    "@rollup/plugin-replace": "^2.3.3",
-    "@sveltech/routify": "^1.9.1",
-    "carbon-components-svelte": "^0.12.0",
-    "marked": "^1.1.1",
-    "mdsvex": "^0.8.2",
-    "node-sass": "^4.14.1",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
+    "@roxi/routify": "^2.8.5",
+    "carbon-components-svelte": "^0.27.0",
+    "carbon-icons-svelte": "^10.23.0",
+    "cross-env": "^7.0.2",
+    "fs-extra": "^9.0.1",
+    "nollup": "^0.13.13",
     "npm-run-all": "^4.1.5",
-    "remark-slug": "^6.0.0",
-    "rollup": "^2.18.1",
-    "rollup-plugin-copy": "^3.3.0",
+    "postcss": "^8.1.4",
+    "postcss-import": "^13.0.0",
+    "rollup": "^2.33.1",
+    "rollup-plugin-hot": "^0.1.1",
+    "rollup-plugin-inject-process-env": "^1.3.1",
     "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-postcss": "^3.1.8",
-    "rollup-plugin-svelte": "^5.2.3",
-    "rollup-plugin-svelte-hot": "^0.9.2",
+    "rollup-plugin-svelte": "^6.1.0",
+    "rollup-plugin-svelte-hot": "^0.11.1",
     "rollup-plugin-terser": "^7.0.2",
-    "routify-plugin-frontmatter": "^1.0.1",
-    "spassr": "^1.1.2",
-    "svelte": "^3.23.2"
+    "rollup-plugin-workbox": "^5.2.1",
+    "spank": "^1.5.1",
+    "spassr": "^2.2.0",
+    "svelte": "^3.29.4",
+    "svelte-preprocess": "^4.5.2",
+    "tossr": "^1.3.1"
   },
   "routify": {
-    "extensions": "svelte,md",
-    "routifyDir": ".routify",
-    "dynamicImports": true,
-    "plugins": {
-      "routify-plugin-frontmatter": {}
-    }
+    "extensions": "svelte,html,svx,md"
+  },
+  "spassr": {},
+  "spank": {
+    "blacklist": [
+      "/example/modal/basic/4"
+    ]
   }
 }

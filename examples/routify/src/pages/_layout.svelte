@@ -1,5 +1,5 @@
 <script>
-  import { metatags, page } from "@sveltech/routify";
+  import { metatags, page } from "@roxi/routify";
   import { Content, Grid } from "carbon-components-svelte";
   import Navigation from "./_navigation.svelte";
   import Theme from "../components/Theme.svelte";
