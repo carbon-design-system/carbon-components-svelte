@@ -131,8 +131,7 @@
       highlightedIndex = -1;
 
       if (!selectedItem) {
-        selectedId = undefined;
-        selectedIndex = -1;
+        selectedIndex = 0;
       }
     }
   });
