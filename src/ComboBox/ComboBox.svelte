@@ -129,6 +129,11 @@
       filteredItems = items.filter((item) => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
+
+      if (!selectedItem) {
+        selectedId = undefined;
+        selectedIndex = -1;
+      }
     }
   });
 
