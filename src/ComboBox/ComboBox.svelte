@@ -149,6 +149,7 @@
     : undefined;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
   $: selectedItem = items[selectedIndex];
+  $: inputValue = selectedItem ? selectedItem.text : "";
   $: value = inputValue;
 </script>
 
