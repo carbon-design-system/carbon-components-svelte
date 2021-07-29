@@ -46,31 +46,6 @@ npm i -D carbon-components-svelte
 
 ## Usage
 
-The quickest way to get started is to customize a template from the [examples](examples/) folder.
-
-Example set-ups demonstrate usage with popular application bundlers and frameworks. They include a mix of client-side rendering (CSR) and server-side rendering (SSR) approaches.
-
-- **[examples/rollup](examples/rollup/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup)
-- **[examples/rollup-typescript](examples/rollup-typescript/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup) with TypeScript support
-- **[examples/routify](examples/routify/)**: SPA + static export using [Routify](https://github.com/roxiness/routify)
-- **[examples/sapper](examples/sapper/)**: SSR + static export using [Sapper](https://github.com/sveltejs/sapper)
-- **[examples/svite](examples/svite/)**: SPA developed with Svite, bundled with [Rollup](https://github.com/rollup/rollup)
-- **[examples/webpack](examples/webpack/)**: SPA bundled with [webpack](https://github.com/webpack/webpack)
-
-### Scaffolding
-
-Each example is published in a dedicated branch of the same name.
-
-Use [degit](https://github.com/Rich-Harris/degit) to scaffold a new project:
-
-For example, to use the `svite` template, run the following commands:
-
-```sh
-npx degit ibm/carbon-components-svelte#svite svelte-app
-cd svelte-app
-yarn install
-```
-
 ### Importing components
 
 Import components from `carbon-components-svelte` in the `script` tag of your Svelte file.
@@ -245,6 +220,15 @@ module.exports = {
   },
 };
 ```
+
+## Examples
+
+- [examples/rollup](examples/rollup/)
+- [examples/sapper](examples/sapper/)
+- [examples/snowpack](examples/snowpack/)
+- [examples/sveltekit](examples/sveltekit/)
+- [examples/vite](examples/vite/)
+- [examples/webpack](examples/webpack/)
 
 ## TypeScript support
 
