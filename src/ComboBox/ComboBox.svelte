@@ -129,10 +129,6 @@
       filteredItems = items.filter((item) => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
-
-      if (!selectedItem) {
-        selectedIndex = 0;
-      }
     }
   });
 
@@ -148,7 +144,7 @@
     : undefined;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
   $: selectedItem = items[selectedIndex];
-  $: inputValue = selectedItem ? selectedItem.text : undefined;
+  $: inputValue = selectedItem ? selectedItem.text : "";
   $: value = inputValue;
 </script>
 
