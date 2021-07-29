@@ -1,52 +1,73 @@
-const webpack = require("webpack");
-const path = require("path");
-const CopyPlugin = require("copy-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
+const { optimizeImports } = require("carbon-preprocess-svelte");
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 const PROD = NODE_ENV === "production";
 
 module.exports = {
-  stats: "errors-only",
-  mode: NODE_ENV,
-  devtool: PROD ? false : "cheap-eval-source-map",
-  devServer: { historyApiFallback: true },
-  entry: { bundle: ["./src/index.js"] },
+  entry: { "build/bundle": ["./src/index.js"] },
   resolve: {
-    alias: { svelte: path.resolve("node_modules", "svelte") },
+    alias: { svelte: path.dirname(require.resolve("svelte/package.json")) },
     extensions: [".mjs", ".js", ".svelte"],
     mainFields: ["svelte", "browser", "module", "main"],
   },
-  output: { path: `${__dirname}/build`, filename: "[name].[chunkhash].js" },
+  output: {
+    publicPath: "/",
+    path: path.join(__dirname, "/public"),
+    filename: PROD ? "[name].[contenthash].js" : "[name].js",
+    chunkFilename: "[name].[id].js",
+  },
   module: {
     rules: [
       {
-        test: /\.(svelte)$/,
+        test: /\.svelte$/,
         use: {
           loader: "svelte-loader",
-          options: { emitCss: true, hotReload: true },
+          options: {
+            preprocess: [optimizeImports()],
+            hotReload: !PROD,
+            compilerOptions: { dev: !PROD },
+          },
         },
       },
       {
         test: /\.css$/,
-        sideEffects: true,
-        use: [
-          { loader: MiniCssExtractPlugin.loader, options: { hmr: !PROD } },
-          "css-loader",
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+      {
+        test: /node_modules\/svelte\/.*\.mjs$/,
+        resolve: { fullySpecified: false },
       },
     ],
   },
+  mode: NODE_ENV,
   plugins: [
-    new CleanWebpackPlugin(),
-    new CopyPlugin({ patterns: [{ from: "public" }] }),
     new MiniCssExtractPlugin({
       filename: PROD ? "[name].[chunkhash].css" : "[name].css",
     }),
-    new OptimizeCssAssetsPlugin({}),
-    new HtmlWebpackPlugin({ template: "public/index.html" }),
+    new HtmlWebpackPlugin({
+      templateContent: `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="utf-8" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+          />
+        </head>
+        <body></body>
+      </html>
+      `,
+    }),
   ],
+  stats: "errors-only",
+  devtool: PROD ? false : "source-map",
+  devServer: { hot: true, historyApiFallback: true },
+  optimization: {
+    minimizer: [new ESBuildMinifyPlugin({ target: "es2015" })],
+  },
 };

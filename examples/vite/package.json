@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "next",
+    "carbon-components-svelte": "^0.41.0",
+    "carbon-preprocess-svelte": "^0.6.0",
+    "svelte": "^3.38.2",
+    "svelte-hmr": "^0.14.4",
+    "vite": "^2.3.7"
+  }
+}

@@ -46,53 +46,9 @@ npm i -D carbon-components-svelte
 
 ## Usage
 
-The quickest way to get started is to customize a template from the [examples](examples/) folder.
+### Styling
 
-Example set-ups demonstrate usage with popular application bundlers and frameworks. They include a mix of client-side rendering (CSR) and server-side rendering (SSR) approaches.
-
-- **[examples/rollup](examples/rollup/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup)
-- **[examples/rollup-typescript](examples/rollup-typescript/)**: SPA bundled using [Rollup](https://github.com/rollup/rollup) with TypeScript support
-- **[examples/routify](examples/routify/)**: SPA + static export using [Routify](https://github.com/roxiness/routify)
-- **[examples/sapper](examples/sapper/)**: SSR + static export using [Sapper](https://github.com/sveltejs/sapper)
-- **[examples/svite](examples/svite/)**: SPA developed with Svite, bundled with [Rollup](https://github.com/rollup/rollup)
-- **[examples/webpack](examples/webpack/)**: SPA bundled with [webpack](https://github.com/webpack/webpack)
-
-### Scaffolding
-
-Each example is published in a dedicated branch of the same name.
-
-Use [degit](https://github.com/Rich-Harris/degit) to scaffold a new project:
-
-For example, to use the `svite` template, run the following commands:
-
-```sh
-npx degit ibm/carbon-components-svelte#svite svelte-app
-cd svelte-app
-yarn install
-```
-
-### Importing components
-
-Import components from `carbon-components-svelte` in the `script` tag of your Svelte file.
-
-```html
-<!-- App.svelte -->
-<script>
-  import { Accordion, AccordionItem } from "carbon-components-svelte";
-</script>
-
-<Accordion>
-  <AccordionItem title="Section 1" open> Content 1 </AccordionItem>
-  <AccordionItem title="Section 2"> Content 2 </AccordionItem>
-  <AccordionItem title="Section 3"> Content 3 </AccordionItem>
-</Accordion>
-```
-
-**Refer to [COMPONENT_INDEX.md](COMPONENT_INDEX.md) for component API documentation.**
-
-### Pre-compiled CSS StyleSheets
-
-`carbon-components-svelte` includes pre-compiled CSS StyleSheets for each Carbon theme:
+Before importing components, you will need to first apply Carbon component styles. The Carbon Design System supports five themes (2 light, 3 dark).
 
 - **white.css**: Default Carbon theme (light)
 - **g10.css**: Gray 10 theme (light)
@@ -112,44 +68,72 @@ The compiled CSS is generated from the following `.scss` files:
 - [css/g100.scss](css/g100.scss)
 - [css/all.scss](css/all.scss)
 
-#### Usage
-
-##### `svelte-preprocess`
-
-The easiest way to import a StyleSheet is with [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess).
+#### CSS StyleSheet
 
 ```js
-const svelteOptions = {
-  preprocess: require("svelte-preprocess")(),
-};
+// White theme
+import "carbon-components-svelte/css/white.css";
+
+// Gray 10 theme
+import "carbon-components-svelte/css/g10.css";
+
+// Gray 80 theme
+import "carbon-components-svelte/css/g80.css";
+
+// Gray 90 theme
+import "carbon-components-svelte/css/g90.css";
+
+// Gray 100 theme
+import "carbon-components-svelte/css/g100.css";
+
+// All themes
+import "carbon-components-svelte/css/all.css";
 ```
+
+#### CDN
+
+An alternative to loading styles is to link an external StyleSheet from a Content Delivery Network (CDN) like [unpkg.com](https://unpkg.com/).
+
+This is best suited for rapid prototyping.
+
+##### HTML
 
 ```html
-<!-- App.svelte -->
-<style lang="scss" global>
-  /** Gray 10 theme **/
-  @import "carbon-components-svelte/css/g10";
-</style>
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/carbon-components-svelte/css/white.css"
+    />
+  </head>
+</html>
 ```
 
-##### JavaScript import
+##### `svelte:head`
 
-Importing a CSS file in a JavaScript file will require the appropriate file loader(s).
+```html
+<svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/carbon-components-svelte/css/white.css"
+  />
+</svelte:head>
+```
+
+### SCSS
+
+The most performant method to load styles is to import SCSS directly from carbon-components. Although it requires more set up, you can reduce the size of the bundle CSS by importing individual component styles instead of a pre-compiled CSS StyleSheet.
+
+Refer to the [official Carbon guide on SASS](https://github.com/carbon-design-system/carbon/blob/main/docs/guides/sass.md) for documentation.
+
+### Dynamic theming
+
+Use the "all.css" StyleSheet for dynamic, client-side theming.
 
 ```js
 import "carbon-components-svelte/css/all.css";
-import App from "./App.svelte";
-
-const app = new App({ target: document.body });
-
-export default app;
 ```
-
-See [webpack.config.js](examples/webpack/webpack.config.js) in [examples/webpack](examples/webpack).
-
-#### Dynamic theming
-
-Use `carbon-components-svelte/css/all.css` for dynamic, client-side styling.
 
 Update the theme by setting the `theme` attribute on the `html` element. The default `theme` is `"white"`.
 
@@ -162,89 +146,91 @@ Update the theme by setting the `theme` attribute on the `html` element. The def
 </html>
 ```
 
-Using JavaScript:
+Programmatically switch between each of the five Carbon themes by setting the "theme" attribute on the HTML element.
 
-```svelte
+```html
 <script>
-  /** @type {"white" | "g10" | "g80" | "g90" | "g100"} */
-  let theme = "white";
+  let theme = "white"; // "white" | "g10" | "g80" | "g90" | "g100"
 
   $: document.documentElement.setAttribute("theme", theme);
 </script>
-
-<button on:click="{() => (theme = 'g90')}">Update theme</button>
 ```
+
+### Importing components
+
+Import components from `carbon-components-svelte` in the `script` tag of your Svelte file. Visit the [documentation site](http://ibm.biz/carbon-svelte) for examples.
+
+```html
+<!-- App.svelte -->
+<script>
+  import { Accordion, AccordionItem } from "carbon-components-svelte";
+</script>
+
+<Accordion>
+  <AccordionItem title="Section 1" open> Content 1 </AccordionItem>
+  <AccordionItem title="Section 2"> Content 2 </AccordionItem>
+  <AccordionItem title="Section 3"> Content 3 </AccordionItem>
+</Accordion>
+```
+
+**Refer to [COMPONENT_INDEX.md](COMPONENT_INDEX.md) for component API documentation.**
 
 ## Preprocessors
 
-### optimizeCarbonImports
+[carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte) is a collection of Svelte preprocessors for Carbon.
 
-`optimizeCarbonImports` is a Svelte preprocessor that optimizes base imports inside the `script` block of a Svelte file from the following libraries:
+**Yarn**
 
-- carbon-components-svelte
-- carbon-icons-svelte
-- carbon-pictograms-svelte
-
-The preprocessor rewrites base imports to directly import the source Svelte file. This may lead to faster complile times **during development**.
-
-Example:
-
-**Before**
-
-```js
-import { Button, Header } from "carbon-components-svelte";
-import { Notification20 } from "carbon-icons-svelte";
-import { Airplane } from "carbon-pictograms-svelte";
+```sh
+yarn add -D carbon-preprocess-svelte
 ```
 
-**After**
+**NPM**
 
-```js
-import Button from "carbon-components-svelte/Button/Button.svelte";
-import Header from "carbon-components-svelte/UIShell/GlobalHeader/Header.svelte";
-import Notification20 from "carbon-icons-svelte/lib/Notification20/Notification20.svelte";
-import Airplane from "carbon-pictograms-svelte/lib/Airplane/Airplane.svelte";
+```sh
+npm i -D carbon-preprocess-svelte
 ```
 
-#### svelte.config.js
+### `optimizeImports`
+
+`optimizeImports` is a script preprocessor that rewrites base imports from Carbon components/icons/pictograms packages to their source Svelte code paths. This can greatly speed up compile times during development while preserving typeahead and autocompletion hinting offered by integrated development environments (IDE) like VSCode.
+
+The preprocessor optimizes imports from the following packages:
+
+- [carbon-components-svelte](https://github.com/IBM/carbon-components-svelte)
+- [carbon-icons-svelte](https://github.com/IBM/carbon-icons-svelte)
+- [carbon-pictograms-svelte](https://github.com/IBM/carbon-pictograms-svelte)
+
+**Example**
+
+```diff
+- import { Button } from "carbon-components-svelte";
+- import { Add16 } from "carbon-icons-svelte";
+- import { Airplane } from "carbon-pictograms-svelte";
++ import Button from "carbon-components-svelte/Button/Button.svelte";
++ import Add16 from "carbon-icons-svelte/lib/Add16/Add16.svelte";
++ import Airplane from "carbon-pictograms-svelte/lib/Airplane/Airplane.svelte";
+```
+
+#### Usage
 
 ```js
 // svelte.config.js
-const {
-  optimizeCarbonImports,
-} = require("carbon-components-svelte/preprocess");
+import { optimizeImports } from "carbon-preprocess-svelte";
 
-module.exports = {
-  preprocess: [optimizeCarbonImports()],
+export default {
+  preprocess: [optimizeImports()],
 };
 ```
 
-#### svelte-loader
+## Examples
 
-```js
-// webpack.config.js
-const {
-  optimizeCarbonImports,
-} = require("carbon-components-svelte/preprocess");
-
-module.exports = {
-  // ...
-  module: {
-    rules: [
-      {
-        test: /\.svelte$/,
-        use: {
-          loader: "svelte-loader",
-          options: {
-            hotReload: true,
-            preprocess: [optimizeCarbonImports()],
-          },
-        },
-      },
-    ],
-  },
-};
-```
+- [examples/rollup](examples/rollup/)
+- [examples/sapper](examples/sapper/)
+- [examples/snowpack](examples/snowpack/)
+- [examples/sveltekit](examples/sveltekit/)
+- [examples/vite](examples/vite/)
+- [examples/webpack](examples/webpack/)
 
 ## TypeScript support
 
