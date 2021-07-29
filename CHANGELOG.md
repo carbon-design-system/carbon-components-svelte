@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.42.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.42.2) - 2021-07-29
+
+**Fixes**
+
+- fix reactivity regression in `ComboBox`
+
+**Documentation**
+
+- update example set-ups
+- document styling instructions, `carbon-preprocess-svelte` in README.md
+
 ## [0.42.1](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.42.1) - 2021-07-26
 
 **Fixes**
