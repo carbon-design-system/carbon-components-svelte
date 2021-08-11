@@ -30,10 +30,12 @@
   on:mouseenter
   on:mouseleave
 >
-  <legend
-    class:bx--label="{true}"
-    id="{legendId || $$restProps['aria-labelledby']}">{legendText}</legend
-  >
+  {#if legendText}
+    <legend
+      class:bx--label="{true}"
+      id="{legendId || $$restProps['aria-labelledby']}">{legendText}</legend
+    >
+  {/if}
   <slot />
   {#if message}
     <div class:bx--form__requirement="{true}">{messageText}</div>
