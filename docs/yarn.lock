@@ -837,9 +837,9 @@ caniuse-lite@^1.0.30001173, caniuse-lite@^1.0.30001178:
   integrity sha512-n8JVqXuZMVSPKiPiypjFtDTXc4jWIdjxull0f92WLo7e1MSi3uJ3NvveakSh/aCl1QKFAvIz3vIj0v+0K+FrXw==
 
 carbon-components-svelte@../:
-  version "0.41.0"
+  version "0.42.2"
   dependencies:
-    carbon-icons-svelte "^10.27.0"
+    carbon-icons-svelte "^10.36.0"
     flatpickr "4.6.9"
 
 carbon-components@10.40.0:
@@ -852,10 +852,10 @@ carbon-components@10.40.0:
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
 
-carbon-icons-svelte@^10.27.0:
-  version "10.28.0"
-  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-10.28.0.tgz#812a6eae858d0c9e043067c714910fcfb6249cd2"
-  integrity sha512-C3K+U2PRy63WHFZme1HQNju89rhVIQmUkfgBrZzcezdutkhXbSPOY+o/MI0B2mDcQ7G9gfhEpqsXET8gBTWfJQ==
+carbon-icons-svelte@^10.36.0:
+  version "10.36.0"
+  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-10.36.0.tgz#3f269f2c52520d14fcd42161a633afbb7c68b4bf"
+  integrity sha512-YlrHtjdRqMFiptNVpQ4M+gMvpYDoKQydBY5A82thAXIHk9JrbrVLzq6RgJugTijHT8yzMS1zXaw6YYhqL8Qzqw==
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -3086,9 +3086,9 @@ path-match@^1.2.4:
     path-to-regexp "^1.0.0"
 
 path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.npmjs.org/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-to-regexp@0.1.7:
   version "0.1.7"
