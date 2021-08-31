@@ -123,6 +123,14 @@
     highlightedIndex = index;
   }
 
+  function clear() {
+    selectedIndex = -1;
+    highlightedIndex = -1;
+    open = false;
+    inputValue = "";
+    ref?.focus();
+  }
+
   afterUpdate(() => {
     if (open) {
       ref.focus();
@@ -140,6 +148,8 @@
   $: if (selectedIndex > -1) {
     selectedId = items[selectedIndex].id;
     dispatch("select", { selectedId, selectedIndex, selectedItem });
+  } else {
+    clear();
   }
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
   $: menuId = `menu-${id}`;
@@ -286,13 +296,7 @@
       {#if inputValue}
         <ListBoxSelection
           on:clear
-          on:clear="{() => {
-            selectedIndex = -1;
-            highlightedIndex = -1;
-            open = false;
-            inputValue = '';
-            ref.focus();
-          }}"
+          on:clear="{clear}"
           translateWithId="{translateWithId}"
           disabled="{disabled}"
           open="{open}"
