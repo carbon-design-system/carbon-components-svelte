@@ -150,6 +150,7 @@
     dispatch("select", { selectedId, selectedIndex, selectedItem });
   } else {
     clear();
+    dispatch("clear");
   }
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
   $: menuId = `menu-${id}`;
