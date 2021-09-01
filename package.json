@@ -4,48 +4,53 @@
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "./src/index.js",
-  "main": "./lib/index.js",
-  "module": "./lib/index.mjs",
+  "module": "./lib/carbon-components-svelte.es.js",
+  "main": "./lib/carbon-components-svelte.umd.js",
+  "exports": {
+    ".": {
+      "import": "./lib/carbon-components-svelte.es.js",
+      "require": "./lib/carbon-components-svelte.umd.js"
+    }
+  },
   "types": "./types/index.d.ts",
   "sideEffects": [
     "css/*.css"
   ],
   "scripts": {
+    "dev": "svelte-kit dev --port 3003",
     "test": "run-p test:*",
     "test:types": "svelte-check --workspace tests",
     "test:preprocess": "node tests/preprocess",
+    "build:app": "svelte-kit build",
     "build:css": "node scripts/build-css",
     "build:api": "node scripts/build-api",
-    "build:lib": "rollup -c",
+    "build:lib": "vite build",
     "prepack": "run-p build:*",
-    "format": "prettier --write './**/*.{svelte,js,md}'",
-    "publish-examples": "node scripts/publish-examples"
+    "format": "prettier --write './**/*.{svelte,js,md}'"
   },
   "dependencies": {
     "carbon-icons-svelte": "^10.36.0",
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^17.1.0",
-    "@rollup/plugin-node-resolve": "^11.1.1",
+    "@sveltejs/adapter-static": "next",
+    "@sveltejs/kit": "next",
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.20",
     "@tsconfig/svelte": "^1.0.10",
     "autoprefixer": "^10.2.4",
     "carbon-components": "10.40.0",
-    "gh-pages": "^3.1.0",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.3",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.2.4",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.1.5",
-    "rollup": "^2.38.4",
-    "rollup-plugin-svelte": "^7.1.0",
-    "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.32.6",
     "sveld": "^0.8.2",
     "svelte": "^3.40.1",
     "svelte-check": "^1.1.32",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "vite": "^2.5.3"
   },
   "husky": {
     "hooks": {
@@ -85,5 +90,6 @@
   "contributors": [
     "Eric Liu (https://github.com/metonym)",
     "Josef Aidt (https://github.com/josefaidt)"
-  ]
+  ],
+  "type": "module"
 }
