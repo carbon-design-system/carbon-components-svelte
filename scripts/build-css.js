@@ -1,8 +1,8 @@
-const fs = require("fs");
-const sass = require("sass");
-const autoprefixer = require("autoprefixer");
-const postcss = require("postcss");
-const path = require("path");
+import fs from "fs";
+import sass from "sass";
+import autoprefixer from "autoprefixer";
+import postcss from "postcss";
+import path from "path";
 
 (async () => {
   const scss = fs
@@ -10,7 +10,7 @@ const path = require("path");
     .filter((file) => file.endsWith(".scss"))
     .map((file) => path.parse(file));
 
-  for (const { name, base } of scss) {
+  for await (const { name, base } of scss) {
     const file = `css/${base}`;
     const outFile = `css/${name}.css`;
 

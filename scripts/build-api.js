@@ -1,20 +1,19 @@
-const fs = require("fs");
-const path = require("path");
-const glob = require("glob");
-const pkg = require("../package.json");
+import fs from "fs";
+import path from "path";
+import glob from "glob";
 
-function buildApi() {
-  const components = {};
+const pkg = JSON.parse(
+  fs.readFileSync(new URL("../package.json", import.meta.url), "utf8")
+);
 
-  glob.sync("src/**/*.svelte").forEach((file) => {
-    const { name } = path.parse(file);
-    components[name] = { path: path.join(pkg.name, file) };
-  });
+const components = {};
 
-  fs.writeFileSync(
-    "preprocess/api.json",
-    JSON.stringify({ version: pkg.version, components }, null, 2)
-  );
-}
+glob.sync("src/**/*.svelte").forEach((file) => {
+  const { name } = path.parse(file);
+  components[name] = { path: path.join(pkg.name, file) };
+});
 
-buildApi();
+fs.writeFileSync(
+  "preprocess/api.json",
+  JSON.stringify({ version: pkg.version, components }, null, 2)
+);
