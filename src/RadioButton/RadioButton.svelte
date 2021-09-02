@@ -67,7 +67,7 @@
   />
   <label class:bx--radio-button__label="{true}" for="{id}">
     <span class:bx--radio-button__appearance="{true}"></span>
-    {#if labelText}
+    {#if labelText || $$slots.labelText}
       <span class:bx--visually-hidden="{hideLabel}">
         <slot name="labelText">
           {labelText}
