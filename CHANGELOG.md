@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.42.3](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.42.3) - 2021-09-05
+
+**Fixes**
+
+- `RadioButton` "labelText" slot should render even if `labelText` is falsy
+- only render `FormGroup` `legend` element if `legendText` is truthy
+
 ## [0.42.2](https://github.com/IBM/carbon-components-svelte/releases/tag/v0.42.2) - 2021-07-29
 
 **Fixes**
