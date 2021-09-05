@@ -248,7 +248,7 @@
           title="Carbon Components Svelte"
           subtitle="50+ components"
           target="_blank"
-          href="https://github.com/IBM/carbon-components-svelte"
+          href="https://github.com/carbon-design-system/carbon-components-svelte"
         />
       </Column>
       <Column xlg="{5}" lg="{8}" md="{4}">
@@ -257,7 +257,7 @@
           title="Carbon Icons Svelte"
           subtitle="7000+ icons"
           target="_blank"
-          href="https://github.com/IBM/carbon-icons-svelte"
+          href="https://github.com/carbon-design-system/carbon-icons-svelte"
         />
       </Column>
     </Row>
@@ -269,7 +269,7 @@
           title="Carbon Pictograms Svelte"
           subtitle="700+ pictograms"
           target="_blank"
-          href="https://github.com/IBM/carbon-pictograms-svelte"
+          href="https://github.com/carbon-design-system/carbon-pictograms-svelte"
         />
       </Column>
       <Column xlg="{5}" lg="{8}" md="{4}">
@@ -288,7 +288,7 @@
           title="Carbon Preprocess Svelte"
           subtitle="Collection of Carbon Svelte preprocessors"
           target="_blank"
-          href="https://github.com/IBM/carbon-preprocess-svelte"
+          href="https://github.com/carbon-design-system/carbon-preprocess-svelte"
         />
       </Column>
     </Row>
