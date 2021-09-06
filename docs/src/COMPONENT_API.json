@@ -1588,6 +1588,17 @@
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "clear",
+          "kind": "function",
+          "description": "Clear the combo box programmatically",
+          "type": "() => void",
+          "value": "() => {     selectedIndex = -1;     highlightedIndex = -1;     open = false;     inputValue = \"\";     ref?.focus();   }",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [],

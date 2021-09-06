@@ -123,6 +123,10 @@
     highlightedIndex = index;
   }
 
+  /**
+   * Clear the combo box programmatically
+   * @type {() => void}
+   */
   export function clear() {
     selectedIndex = -1;
     highlightedIndex = -1;
