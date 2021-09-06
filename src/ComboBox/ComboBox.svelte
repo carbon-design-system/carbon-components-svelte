@@ -123,7 +123,7 @@
     highlightedIndex = index;
   }
 
-  function clear() {
+  export function clear() {
     selectedIndex = -1;
     highlightedIndex = -1;
     open = false;
