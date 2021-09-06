@@ -1,6 +1,9 @@
 <script>
   import { ComboBox } from "carbon-components-svelte";
+  import { Button } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
+  let comboboxComponent
+
 </script>
 
 ### Default
@@ -21,6 +24,17 @@ items={[
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}
   ]}  />
+
+### Clear selection
+<ComboBox titleText="Contact" placeholder="Select contact method"
+bind:this={comboboxComponent} 
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+<br>
+<Button on:click={comboboxComponent.clear}>Clear</Button>
 
 ### Multiple combo boxes
 
