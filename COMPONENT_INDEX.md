@@ -1,6 +1,6 @@
 # Component Index
 
-> 172 components exported from carbon-components-svelte@0.43.0.
+> 172 components exported from carbon-components-svelte@0.44.0.
 
 ## Components
 
@@ -1049,19 +1049,20 @@ None.
 
 ### Props
 
-| Prop name      | Kind             | Reactive | Type                                                 | Default value                                    | Description                                                                                       |
-| :------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| valueTo        | <code>let</code> | Yes      | <code>string</code>                                  | <code>""</code>                                  | Specify the date picker end date value (to)<br />Only works with the "range" date picker type     |
-| valueFrom      | <code>let</code> | Yes      | <code>string</code>                                  | <code>""</code>                                  | Specify the date picker start date value (from)<br />Only works with the "range" date picker type |
-| value          | <code>let</code> | Yes      | <code>number &#124; string</code>                    | <code>""</code>                                  | Specify the date picker input value                                                               |
-| datePickerType | <code>let</code> | No       | <code>"simple" &#124; "single" &#124; "range"</code> | <code>"simple"</code>                            | Specify the date picker type                                                                      |
-| dateFormat     | <code>let</code> | No       | <code>string</code>                                  | <code>"m/d/Y"</code>                             | Specify the date format                                                                           |
-| maxDate        | <code>let</code> | No       | <code>null &#124; string &#124; Date</code>          | <code>null</code>                                | Specify the maximum date                                                                          |
-| minDate        | <code>let</code> | No       | <code>null &#124; string &#124; Date</code>          | <code>null</code>                                | Specify the minimum date                                                                          |
-| locale         | <code>let</code> | No       | <code>string</code>                                  | <code>"en"</code>                                | Specify the locale                                                                                |
-| short          | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to use the short variant                                                            |
-| light          | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                                                         |
-| id             | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the date picker element                                                             |
+| Prop name      | Kind             | Reactive | Type                                                        | Default value                                    | Description                                                                                       |
+| :------------- | :--------------- | :------- | :---------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| valueTo        | <code>let</code> | Yes      | <code>string</code>                                         | <code>""</code>                                  | Specify the date picker end date value (to)<br />Only works with the "range" date picker type     |
+| valueFrom      | <code>let</code> | Yes      | <code>string</code>                                         | <code>""</code>                                  | Specify the date picker start date value (from)<br />Only works with the "range" date picker type |
+| value          | <code>let</code> | Yes      | <code>number &#124; string</code>                           | <code>""</code>                                  | Specify the date picker input value                                                               |
+| datePickerType | <code>let</code> | No       | <code>"simple" &#124; "single" &#124; "range"</code>        | <code>"simple"</code>                            | Specify the date picker type                                                                      |
+| dateFormat     | <code>let</code> | No       | <code>string</code>                                         | <code>"m/d/Y"</code>                             | Specify the date format                                                                           |
+| maxDate        | <code>let</code> | No       | <code>null &#124; string &#124; Date</code>                 | <code>null</code>                                | Specify the maximum date                                                                          |
+| minDate        | <code>let</code> | No       | <code>null &#124; string &#124; Date</code>                 | <code>null</code>                                | Specify the minimum date                                                                          |
+| locale         | <code>let</code> | No       | <code>string</code>                                         | <code>"en"</code>                                | Specify the locale                                                                                |
+| short          | <code>let</code> | No       | <code>boolean</code>                                        | <code>false</code>                               | Set to `true` to use the short variant                                                            |
+| light          | <code>let</code> | No       | <code>boolean</code>                                        | <code>false</code>                               | Set to `true` to enable the light variant                                                         |
+| id             | <code>let</code> | No       | <code>string</code>                                         | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the date picker element                                                             |
+| flatpickrProps | <code>let</code> | No       | <code>import("flatpickr/dist/types/options").Options</code> | <code>{}</code>                                  | Override the options passed to the Flatpickr instance<br />https://flatpickr.js.org/options       |
 
 ### Slots
 

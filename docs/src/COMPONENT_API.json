@@ -2670,6 +2670,17 @@
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "flatpickrProps",
+          "kind": "let",
+          "description": "Override the options passed to the Flatpickr instance\nhttps://flatpickr.js.org/options",
+          "type": "import(\"flatpickr/dist/types/options\").Options",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
