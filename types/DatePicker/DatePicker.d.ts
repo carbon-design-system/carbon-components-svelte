@@ -72,10 +72,11 @@ export interface DatePickerProps
   id?: string;
 
   /**
-   * Set to true for correct using in Modal
-   * @default false
+   * Override the options passed to the Flatpickr instance
+   * https://flatpickr.js.org/options
+   * @default {}
    */
-  staticProp?: boolean;
+  flatpickrProps?: import("flatpickr/dist/types/options").Options;
 }
 
 export default class DatePicker extends SvelteComponentTyped<

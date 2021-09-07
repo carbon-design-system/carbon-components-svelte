@@ -56,7 +56,11 @@
   /** Set an id for the date picker element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /** Set to `true` to use in component Modal */
+  /**
+   * Override the options passed to the Flatpickr instance
+   * https://flatpickr.js.org/options
+   * @type {import("flatpickr/dist/types/options").Options}
+   */
   export let flatpickrProps = {};
 
   import {
@@ -141,7 +145,7 @@
         maxDate,
         minDate,
         mode: $mode,
-        ...flatpickrProps
+        ...flatpickrProps,
       },
       base: inputRef,
       input: inputRefTo,

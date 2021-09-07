@@ -3,6 +3,14 @@
 </script>
 
 <DatePicker
+  datePickerType="single"
+  flatpickrProps="{{ static: true }}"
+  on:change
+>
+  <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+<DatePicker
   on:change="{(e) => {
     console.log(e.detail);
   }}"
