@@ -57,7 +57,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /** Set to `true` to use in component Modal */
-  export let staticProp = false;
+  export let flatpickrProps = {};
 
   import {
     createEventDispatcher,
