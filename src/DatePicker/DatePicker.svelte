@@ -56,6 +56,9 @@
   /** Set an id for the date picker element */
   export let id = "ccs-" + Math.random().toString(36);
 
+  /** Set to `true` to use in component Modal */
+  export let flatpickrProps = {};
+
   import {
     createEventDispatcher,
     setContext,
@@ -138,6 +141,7 @@
         maxDate,
         minDate,
         mode: $mode,
+        ...flatpickrProps
       },
       base: inputRef,
       input: inputRefTo,

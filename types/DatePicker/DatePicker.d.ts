@@ -70,6 +70,12 @@ export interface DatePickerProps
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;
+
+  /**
+   * Set to true for correct using in Modal
+   * @default false
+   */
+  staticProp?: boolean;
 }
 
 export default class DatePicker extends SvelteComponentTyped<
