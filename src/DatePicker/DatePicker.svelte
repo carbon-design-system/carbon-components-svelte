@@ -141,7 +141,7 @@
         maxDate,
         minDate,
         mode: $mode,
-        static: staticProp,
+        ...flatpickrProps
       },
       base: inputRef,
       input: inputRefTo,
