@@ -13,5 +13,5 @@ export interface ToolbarBatchActionsProps
 export default class ToolbarBatchActions extends SvelteComponentTyped<
   ToolbarBatchActionsProps,
   {},
-  { default: {} }
+  { default: {}; cancel: {} }
 > {}

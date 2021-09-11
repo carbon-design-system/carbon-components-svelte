@@ -4532,9 +4532,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback            |
+| :-------- | :------ | :---- | :------------------ |
+| --        | Yes     | --    | --                  |
+| cancel    | No      | --    | <code>Cancel</code> |
 
 ### Events
 
