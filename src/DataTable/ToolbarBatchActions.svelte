@@ -51,7 +51,7 @@
         tabindex="{showActions ? '0' : '-1'}"
         on:click="{ctx.resetSelectedRowIds}"
       >
-        Cancel
+        <slot name="cancel">Cancel</slot>
       </Button>
     </div>
   </div>

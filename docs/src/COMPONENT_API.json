@@ -12541,7 +12541,15 @@
           "reactive": false
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "cancel",
+          "default": false,
+          "fallback": "Cancel",
+          "slot_props": "{}"
+        }
+      ],
       "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
