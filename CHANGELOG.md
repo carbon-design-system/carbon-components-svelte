@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.44.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.44.1) - 2021-09-11
+
+**Fixes**
+
+- if `ComboBox` is disabled, clicking the chevron icon should not toggle the dropdown
+- `ToolbarBatchActions` cancel button text should be slottable
+
 ## [0.44.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.44.0) - 2021-09-07
 
 **Features**
