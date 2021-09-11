@@ -309,6 +309,7 @@
       {/if}
       <ListBoxMenuIcon
         on:click="{(e) => {
+          if (disabled) return;
           e.stopPropagation();
           open = !open;
         }}"
