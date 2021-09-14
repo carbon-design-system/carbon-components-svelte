@@ -152,9 +152,6 @@
   $: if (selectedIndex > -1) {
     selectedId = items[selectedIndex].id;
     dispatch("select", { selectedId, selectedIndex, selectedItem });
-  } else {
-    clear();
-    dispatch("clear");
   }
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
   $: menuId = `menu-${id}`;
