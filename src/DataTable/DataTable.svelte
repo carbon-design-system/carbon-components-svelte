@@ -202,7 +202,7 @@
   }
 </script>
 
-<TableContainer {...$$restProps}>
+<TableContainer useStaticWidth="{useStaticWidth}" {...$$restProps}>
   {#if title || $$slots.title || description || $$slots.description}
     <div class:bx--data-table-header="{true}">
       {#if title || $$slots.title}
