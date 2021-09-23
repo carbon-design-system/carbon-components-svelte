@@ -1,6 +1,6 @@
 # Component Index
 
-> 172 components exported from carbon-components-svelte@0.44.2.
+> 172 components exported from carbon-components-svelte@0.44.3.
 
 ## Components
 
@@ -3891,11 +3891,12 @@ None.
 
 ### Props
 
-| Prop name    | Kind             | Reactive | Type                 | Default value      | Description                               |
-| :----------- | :--------------- | :------- | :------------------- | ------------------ | ----------------------------------------- |
-| title        | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the title of the data table       |
-| description  | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the description of the data table |
-| stickyHeader | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable a sticky header   |
+| Prop name      | Kind             | Reactive | Type                 | Default value      | Description                               |
+| :------------- | :--------------- | :------- | :------------------- | ------------------ | ----------------------------------------- |
+| title          | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the title of the data table       |
+| description    | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the description of the data table |
+| stickyHeader   | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable a sticky header   |
+| useStaticWidth | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use static width         |
 
 ### Slots
 
