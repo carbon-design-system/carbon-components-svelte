@@ -7,10 +7,14 @@
 
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
+
+  /** Set to `true` to use static width */
+  export let useStaticWidth = false;
 </script>
 
 <div
   class:bx--data-table-container="{true}"
+  class:bx--data-table-container--static="{useStaticWidth}"
   class:bx--data-table--max-width="{stickyHeader}"
   {...$$restProps}
 >

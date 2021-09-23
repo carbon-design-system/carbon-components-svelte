@@ -20,6 +20,12 @@ export interface TableContainerProps
    * @default false
    */
   stickyHeader?: boolean;
+
+  /**
+   * Set to `true` to use static width
+   * @default false
+   */
+  useStaticWidth?: boolean;
 }
 
 export default class TableContainer extends SvelteComponentTyped<
