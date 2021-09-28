@@ -1,4 +1,6 @@
 <script>
+  /** @restProps {a | p} */
+
   /** Set to `true` to click the tile */
   export let clicked = false;
 

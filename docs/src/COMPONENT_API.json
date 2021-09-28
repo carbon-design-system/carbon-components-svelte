@@ -932,7 +932,7 @@
         { "type": "forwarded", "name": "mouseleave", "element": "Link" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "Link" }
+      "rest_props": { "type": "Element", "name": "a | p" }
     },
     {
       "moduleName": "CodeSnippet",
