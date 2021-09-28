@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: carbon-components-svelte
+    env: static
+    buildCommand: cd docs; yarn; yarn build
+    staticPublishPath: docs/dist
+    pullRequestPreviewsEnabled: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
