@@ -16,11 +16,11 @@ The Carbon Svelte portfolio also includes:
 - **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 20+ charts, powered by d3
 - **[Carbon Preprocess Svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte)**: Collection of Svelte preprocessors for Carbon
 
-## [Documentation](http://ibm.biz/carbon-svelte)
+## [Documentation](https://carbon-components-svelte.onrender.com)
 
-<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="40px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
+The documentation site is deployed to [Render](https://render.com) as a Static Site. See [render.yaml](render.yaml) for details.
 
-The [documentation website](http://ibm.biz/carbon-svelte) contains live demos and examples.
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/carbon-design-system/carbon-components-svelte)
 
 Other forms of documentation are auto-generated:
 
@@ -158,7 +158,7 @@ Programmatically switch between each of the five Carbon themes by setting the "t
 
 ### Importing components
 
-Import components from `carbon-components-svelte` in the `script` tag of your Svelte file. Visit the [documentation site](http://ibm.biz/carbon-svelte) for examples.
+Import components from `carbon-components-svelte` in the `script` tag of your Svelte file. Visit the [documentation site](https://carbon-components-svelte.onrender.com) for examples.
 
 ```html
 <!-- App.svelte -->
