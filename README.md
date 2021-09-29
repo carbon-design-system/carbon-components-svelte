@@ -18,8 +18,6 @@ The Carbon Svelte portfolio also includes:
 
 ## [Documentation](http://ibm.biz/carbon-svelte)
 
-<a href="https://www.vercel.com?utm_source=carbon-components-svelte&utm_campaign=oss" target="_blank"><img height="40px" src="./docs/public/powered-by-vercel.svg" alt="Deploys by Vercel" /></a>
-
 The [documentation website](http://ibm.biz/carbon-svelte) contains live demos and examples.
 
 Other forms of documentation are auto-generated:
