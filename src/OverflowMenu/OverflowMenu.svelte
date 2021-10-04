@@ -238,7 +238,7 @@
       class:bx--overflow-menu-options--sm="{size === 'sm'}"
       class:bx--overflow-menu-options--xl="{size === 'xl'}"
       class:bx--breadcrumb-menu-options="{!!ctxBreadcrumbItem}"
-      class:menuOptionsClass
+      class="{menuOptionsClass}"
     >
       <slot />
     </ul>
