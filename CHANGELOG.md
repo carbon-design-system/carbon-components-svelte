@@ -380,9 +380,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Documentation**
 
-- add DataTable example ["Sortable with nested object values"](https://carbon-svelte.vercel.app/components/DataTable#sortable-with-nested-object-values)
-- add ClickableTile example ["Disabled state"](https://carbon-svelte.vercel.app/components/ClickableTile#disabled-state)
-- add Link example ["Link with icon"](https://carbon-svelte.vercel.app/components/Link#link-with-icon)
+- add DataTable example ["Sortable with nested object values"](https://carbon-components-svelte.onrender.com/components/DataTable#sortable-with-nested-object-values)
+- add ClickableTile example ["Disabled state"](https://carbon-components-svelte.onrender.com/components/ClickableTile#disabled-state)
+- add Link example ["Link with icon"](https://carbon-components-svelte.onrender.com/components/Link#link-with-icon)
 
 **Housekeeping**
 
@@ -728,9 +728,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Documentation**
 
-- add ["Padded columns"](https://carbon-svelte.vercel.app/components/Grid#padded-columns) example to Grid docs
-- demo different transitions in ["Header with app switcher"](https://carbon-svelte.vercel.app/components/UIShell#header-with-app-switcher) example in UI Shell
-- describe use case for [using native styles in OrderedList](https://carbon-svelte.vercel.app/components/OrderedList#native-list-styles)
+- add ["Padded columns"](https://carbon-components-svelte.onrender.com/components/Grid#padded-columns) example to Grid docs
+- demo different transitions in ["Header with app switcher"](https://carbon-components-svelte.onrender.com/components/UIShell#header-with-app-switcher) example in UI Shell
+- describe use case for [using native styles in OrderedList](https://carbon-components-svelte.onrender.com/components/OrderedList#native-list-styles)
 
 **Housekeeping**
 
@@ -756,7 +756,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Documentation**
 
-- Add example ["Skeleton with object headers"](https://carbon-svelte.vercel.app/components/DataTable#skeleton-with-object-headers) to the DataTable docs
+- Add example ["Skeleton with object headers"](https://carbon-components-svelte.onrender.com/components/DataTable#skeleton-with-object-headers) to the DataTable docs
 - Add example ["Header with global search"](https://carbon.vercel.app/components/UIShell#header-with-global-search) to the UI Shell docs
 - deprecate HeaderActionSearch in favor of HeaderSearch
 
@@ -776,17 +776,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Documentation**
 
-- Add [programmatic RadioButton example](https://carbon-svelte.vercel.app/components/RadioButton#programmatic-usage)
-- Add [multiple ComboBox example](https://carbon-svelte.vercel.app/components/ComboBox#multiple-combo-boxes)
-- Add [multiple Dropdown example](https://carbon-svelte.vercel.app/components/Dropdown#multiple-dropdowns)
-- Add [multiple MultiSelect example](https://carbon-svelte.vercel.app/components/MultiSelect#multiple-multi-select-dropdowns)
-- Add [ExpandableAccordion recipe](https://carbon-svelte.vercel.app/recipes/ExpandableAccordion#expandable-accordion)
+- Add [programmatic RadioButton example](https://carbon-components-svelte.onrender.com/components/RadioButton#programmatic-usage)
+- Add [multiple ComboBox example](https://carbon-components-svelte.onrender.com/components/ComboBox#multiple-combo-boxes)
+- Add [multiple Dropdown example](https://carbon-components-svelte.onrender.com/components/Dropdown#multiple-dropdowns)
+- Add [multiple MultiSelect example](https://carbon-components-svelte.onrender.com/components/MultiSelect#multiple-multi-select-dropdowns)
+- Add [ExpandableAccordion recipe](https://carbon-components-svelte.onrender.com/recipes/ExpandableAccordion#expandable-accordion)
 
 ## [0.23.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.23.0) - 2020-11-20
 
 **Features**
 
-- Persist UI Shell Header hamburger menu if `persistentHamburgerMenu` is `true` ([PR #396](https://github.com/carbon-design-system/carbon-components-svelte/pull/396), [issue #374](https://github.com/carbon-design-system/carbon-components-svelte/issues/374), [rendered example](https://carbon-svelte.vercel.app/framed/UIShell/PersistedHamburgerMenu))
+- Persist UI Shell Header hamburger menu if `persistentHamburgerMenu` is `true` ([PR #396](https://github.com/carbon-design-system/carbon-components-svelte/pull/396), [issue #374](https://github.com/carbon-design-system/carbon-components-svelte/issues/374), [rendered example](https://carbon-components-svelte.onrender.com/framed/UIShell/PersistedHamburgerMenu))
 - Disable auto focus in ComposedModal if `selectorPrimaryFocus` is `null` ([PR #393](https://github.com/carbon-design-system/carbon-components-svelte/pull/393))
 - Use small size Toggle variant if `size` is `"sm"`; deprecate ToggleSmall which will be removed in the next major release ([PR #401](https://github.com/carbon-design-system/carbon-components-svelte/pull/401))
 
@@ -804,9 +804,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update auto-generated Component API documentation with output from [sveld](https://github.com/carbon-design-system/sveld)
 - Label reactive component props and list them first
 - Replace back ticks in Component API prop descriptions with a `code` tag ([PR #392](https://github.com/carbon-design-system/carbon-components-svelte/pull/392), [issue #390](https://github.com/carbon-design-system/carbon-components-svelte/issues/390))
-- Simplify date sort method in ["Sortable with custom display and sort methods"](https://carbon-svelte.vercel.app/components/DataTable#sortable-with-custom-display-and-sort-methods) DataTable example ([PR #382](https://github.com/carbon-design-system/carbon-components-svelte/pull/382))
-- Add [programmatic ProgressIndicator](https://carbon-svelte.vercel.app/components/ProgressIndicator#programmatic-usage) example
-- Add [vertical ProgressIndicatorSkeleton](https://carbon-svelte.vercel.app/components/ProgressIndicator#skeleton-vertical) example
+- Simplify date sort method in ["Sortable with custom display and sort methods"](https://carbon-components-svelte.onrender.com/components/DataTable#sortable-with-custom-display-and-sort-methods) DataTable example ([PR #382](https://github.com/carbon-design-system/carbon-components-svelte/pull/382))
+- Add [programmatic ProgressIndicator](https://carbon-components-svelte.onrender.com/components/ProgressIndicator#programmatic-usage) example
+- Add [vertical ProgressIndicatorSkeleton](https://carbon-components-svelte.onrender.com/components/ProgressIndicator#skeleton-vertical) example
 - Add deprecation warning to the ToggleSmall component
 
 **Housekeeping**
@@ -864,7 +864,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Documentation**
 
-- DataTable: add example ["Empty column with overflow menu"](https://carbon-svelte.vercel.app/components/DataTable#empty-column-with-overflow-menu)
+- DataTable: add example ["Empty column with overflow menu"](https://carbon-components-svelte.onrender.com/components/DataTable#empty-column-with-overflow-menu)
 - hand off current theme for examples opened in a new tab
 - add field size examples for `Dropdown`, `MultiSelect`, `Select`
 
@@ -890,13 +890,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Documentation**
 
 - new DataTable examples:
-  - [With custom display and sort methods](https://carbon-svelte.vercel.app/components/DataTable#with-custom-display-and-sort-methods)
-  - [With toolbar](https://carbon-svelte.vercel.app/components/DataTable#with-toolbar)
-  - [With toolbar (small size)](https://carbon-svelte.vercel.app/components/DataTable#with-toolbar-small-size)
-  - [Selectable](https://carbon-svelte.vercel.app/components/DataTable#selectable)
-  - [Initial selected rows](https://carbon-svelte.vercel.app/components/DataTable#initial-selected-rows)
-  - [Selectable with batch actions](https://carbon-svelte.vercel.app/components/DataTable#selectable-with-batch-actions)
-  - [Selectable (radio)](https://carbon-svelte.vercel.app/components/DataTable#selectable-radio)
+  - [With custom display and sort methods](https://carbon-components-svelte.onrender.com/components/DataTable#with-custom-display-and-sort-methods)
+  - [With toolbar](https://carbon-components-svelte.onrender.com/components/DataTable#with-toolbar)
+  - [With toolbar (small size)](https://carbon-components-svelte.onrender.com/components/DataTable#with-toolbar-small-size)
+  - [Selectable](https://carbon-components-svelte.onrender.com/components/DataTable#selectable)
+  - [Initial selected rows](https://carbon-components-svelte.onrender.com/components/DataTable#initial-selected-rows)
+  - [Selectable with batch actions](https://carbon-components-svelte.onrender.com/components/DataTable#selectable-with-batch-actions)
+  - [Selectable (radio)](https://carbon-components-svelte.onrender.com/components/DataTable#selectable-radio)
 - fix(docgen): list both default and named slots in `COMPONENT_INDEX.md`
 
 ## [0.19.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.19.0) - 2020-10-23
