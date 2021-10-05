@@ -757,7 +757,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Documentation**
 
 - Add example ["Skeleton with object headers"](https://carbon-components-svelte.onrender.com/components/DataTable#skeleton-with-object-headers) to the DataTable docs
-- Add example ["Header with global search"](https://carbon.vercel.app/components/UIShell#header-with-global-search) to the UI Shell docs
+- Add example ["Header with global search"](https://carbon-components-svelte.onrender.com/components/UIShell#header-with-global-search) to the UI Shell docs
 - deprecate HeaderActionSearch in favor of HeaderSearch
 
 ## [0.23.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.23.2) - 2020-11-25
@@ -1028,7 +1028,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Documentation**
 
-- Redesign component documentation website (Short link: [ibm.biz/carbon-svelte](http://ibm.biz/carbon-svelte)); deployments sponsored by Vercel
+- Redesign component [documentation website](https://carbon-components-svelte.onrender.com/)
 - Update development workflow in `CONTRIBUTING.md`
 - Typo fixes in `README.md` ([PR #324](https://github.com/carbon-design-system/carbon-components-svelte/pull/324), [PR #325](https://github.com/carbon-design-system/carbon-components-svelte/pull/325))
 
