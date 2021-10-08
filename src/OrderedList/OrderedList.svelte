@@ -4,12 +4,17 @@
 
   /** Set to `true` to use native list styles */
   export let native = false;
+
+  /** Set to `true` to use Carbon's expressive typesetting */
+  export let expressive = false;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <ol
   class:bx--list--ordered="{!native}"
   class:bx--list--ordered--native="{native}"
   class:bx--list--nested="{nested}"
+  class:bx--list--expressive="{expressive}"
   {...$$restProps}
   on:click
   on:mouseover

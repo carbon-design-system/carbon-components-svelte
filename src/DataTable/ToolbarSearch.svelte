@@ -1,4 +1,6 @@
 <script>
+  /** @restProps {input} */
+
   /**
    * Specify the value of the search input
    * @type {number | string}
@@ -45,7 +47,6 @@
 </script>
 
 <Search
-  size="sm"
   tabindex="{tabindex}"
   disabled="{disabled}"
   {...$$restProps}

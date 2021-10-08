@@ -1,0 +1,27 @@
+
+<script>
+  import {
+    Breakpoint, UnorderedList, ListItem
+  } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+The [Carbon Design System grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem><strong>Small</strong>: less than 672px</ListItem>
+  <ListItem><strong>Medium</strong>: 672 - 1056px</ListItem>
+  <ListItem><strong>Large</strong>: 1056 - 1312px</ListItem>
+  <ListItem><strong>X-Large</strong>: 1312 - 1584px</ListItem>
+  <ListItem><strong>Max</strong>: greater than 1584px</ListItem>
+</UnorderedList>
+
+This utility component uses the [Window.matchMedia API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) to declaratively determine the current Carbon breakpoint size.
+
+### Default
+
+Bind to the `size` prop to determine the current breakpoint size. Possible values include: `"sm" | "md" | "lg" | "xlg" | "max"`.
+
+The `"on:match"` event will fire only when a breakpoint change event occurs (e.g., the browser width is resized).
+
+<FileSource src="/framed/Breakpoint/Breakpoint" />

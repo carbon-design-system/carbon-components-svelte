@@ -1,6 +1,7 @@
 export { Accordion, AccordionItem, AccordionSkeleton } from "./Accordion";
 export { AspectRatio } from "./AspectRatio";
 export { Breadcrumb, BreadcrumbItem, BreadcrumbSkeleton } from "./Breadcrumb";
+export { Breakpoint } from "./Breakpoint";
 export { Button, ButtonSkeleton, ButtonSet } from "./Button";
 export { Checkbox, CheckboxSkeleton } from "./Checkbox";
 export { ContentSwitcher, Switch } from "./ContentSwitcher";
@@ -85,6 +86,7 @@ export { OverflowMenu, OverflowMenuItem } from "./OverflowMenu";
 export { Pagination, PaginationSkeleton } from "./Pagination";
 export { PaginationNav } from "./PaginationNav";
 export { Popover } from "./Popover";
+export { ProgressBar } from "./ProgressBar";
 export {
   ProgressIndicator,
   ProgressIndicatorSkeleton,
@@ -92,6 +94,7 @@ export {
 } from "./ProgressIndicator";
 export { RadioButton, RadioButtonSkeleton } from "./RadioButton";
 export { RadioButtonGroup } from "./RadioButtonGroup";
+export { RecursiveList } from "./RecursiveList";
 export { Search, SearchSkeleton } from "./Search";
 export { Select, SelectSkeleton, SelectItem, SelectItemGroup } from "./Select";
 export { SkeletonPlaceholder } from "./SkeletonPlaceholder";
@@ -110,6 +113,7 @@ export { Tabs, Tab, TabContent, TabsSkeleton } from "./Tabs";
 export { Tag, TagSkeleton } from "./Tag";
 export { TextArea, TextAreaSkeleton } from "./TextArea";
 export { TextInput, TextInputSkeleton, PasswordInput } from "./TextInput";
+export { Theme } from "./Theme";
 export {
   Tile,
   ClickableTile,
@@ -124,6 +128,7 @@ export { ToggleSmall, ToggleSmallSkeleton } from "./ToggleSmall";
 export { Tooltip, TooltipFooter } from "./Tooltip";
 export { TooltipDefinition } from "./TooltipDefinition";
 export { TooltipIcon } from "./TooltipIcon";
+export { TreeView } from "./TreeView";
 export { Truncate } from "./Truncate";
 export {
   Header,

@@ -1,5 +1,5 @@
 {
-  "version": "0.32.2",
+  "version": "0.44.5",
   "components": {
     "Accordion": {
       "path": "carbon-components-svelte/src/Accordion/Accordion.svelte"
@@ -21,6 +21,9 @@
     },
     "BreadcrumbSkeleton": {
       "path": "carbon-components-svelte/src/Breadcrumb/BreadcrumbSkeleton.svelte"
+    },
+    "Breakpoint": {
+      "path": "carbon-components-svelte/src/Breakpoint/Breakpoint.svelte"
     },
     "Button": {
       "path": "carbon-components-svelte/src/Button/Button.svelte"
@@ -292,6 +295,9 @@
     "Popover": {
       "path": "carbon-components-svelte/src/Popover/Popover.svelte"
     },
+    "ProgressBar": {
+      "path": "carbon-components-svelte/src/ProgressBar/ProgressBar.svelte"
+    },
     "ProgressIndicator": {
       "path": "carbon-components-svelte/src/ProgressIndicator/ProgressIndicator.svelte"
     },
@@ -309,6 +315,12 @@
     },
     "RadioButtonGroup": {
       "path": "carbon-components-svelte/src/RadioButtonGroup/RadioButtonGroup.svelte"
+    },
+    "RecursiveList": {
+      "path": "carbon-components-svelte/src/RecursiveList/RecursiveList.svelte"
+    },
+    "RecursiveListItem": {
+      "path": "carbon-components-svelte/src/RecursiveList/RecursiveListItem.svelte"
     },
     "Search": {
       "path": "carbon-components-svelte/src/Search/Search.svelte"
@@ -394,6 +406,9 @@
     "TextInputSkeleton": {
       "path": "carbon-components-svelte/src/TextInput/TextInputSkeleton.svelte"
     },
+    "Theme": {
+      "path": "carbon-components-svelte/src/Theme/Theme.svelte"
+    },
     "ClickableTile": {
       "path": "carbon-components-svelte/src/Tile/ClickableTile.svelte"
     },
@@ -441,6 +456,15 @@
     },
     "TooltipIcon": {
       "path": "carbon-components-svelte/src/TooltipIcon/TooltipIcon.svelte"
+    },
+    "TreeView": {
+      "path": "carbon-components-svelte/src/TreeView/TreeView.svelte"
+    },
+    "TreeViewNode": {
+      "path": "carbon-components-svelte/src/TreeView/TreeViewNode.svelte"
+    },
+    "TreeViewNodeList": {
+      "path": "carbon-components-svelte/src/TreeView/TreeViewNodeList.svelte"
     },
     "Truncate": {
       "path": "carbon-components-svelte/src/Truncate/Truncate.svelte"

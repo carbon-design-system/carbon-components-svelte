@@ -49,6 +49,12 @@ Note: rendering a custom icon cannnot be used with the filterable variant.
 Set `interactive` to `true` to render a `button` element instead of a `div`.
 
 <Tag interactive>Machine learning</Tag>
+
+### Disabled
+
+The filterable and interactive tag variants have a disabled state.
+
+<Tag filter disabled>Machine learning</Tag>
 <Tag interactive disabled>Machine learning</Tag>
 
 ### Skeleton

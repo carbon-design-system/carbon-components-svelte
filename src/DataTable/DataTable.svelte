@@ -6,8 +6,8 @@
    * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }} DataTableNonEmptyHeader
    * @typedef {DataTableNonEmptyHeader | DataTableEmptyHeader} DataTableHeader
    * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
-   * @typedef {string} DataTableRowId
-   * @typedef {{ key: DataTableKey; value: DataTableValue; }} DataTableCell
+   * @typedef {any} DataTableRowId
+   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; }} DataTableCell
    * @slot {{ row: DataTableRow; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
    * @slot {{ row: DataTableRow; cell: DataTableCell; }} cell
@@ -37,7 +37,7 @@
 
   /**
    * Set the size of the data table
-   * @type {"compact" | "short" | "tall"}
+   * @type {"compact" | "short" | "medium" | "tall"}
    */
   export let size = undefined;
 
@@ -91,6 +91,9 @@
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
+  /** Set to `true` to use static width */
+  export let useStaticWidth = false;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
   import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16/ChevronRight16.svelte";
@@ -124,14 +127,11 @@
       .map(({ key }, i) => ({ key, id: $headerItems[i] }))
       .reduce((a, c) => ({ ...a, [c.key]: c.id }), {})
   );
-  const resolvePath = (object, path, defaultValue) =>
+  const resolvePath = (object, path) =>
     path
       .split(/[\.\[\]\'\"]/)
       .filter((p) => p)
-      .reduce(
-        (o, p) => (o && typeof o === "object" && o[p] ? o[p] : defaultValue),
-        object
-      );
+      .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
 
   setContext("DataTable", {
     sortHeader,
@@ -167,7 +167,11 @@
   $: headerKeys = headers.map(({ key }) => key);
   $: rows = rows.map((row) => ({
     ...row,
-    cells: headerKeys.map((key) => ({ key, value: resolvePath(row, key, "") })),
+    cells: headerKeys.map((key, index) => ({
+      key,
+      value: resolvePath(row, key),
+      display: headers[index].display,
+    })),
   }));
   $: sortedRows = rows;
   $: ascending = $sortHeader.sortDirection === "ascending";
@@ -198,13 +202,28 @@
   }
 </script>
 
-<TableContainer title="{title}" description="{description}" {...$$restProps}>
+<TableContainer useStaticWidth="{useStaticWidth}" {...$$restProps}>
+  {#if title || $$slots.title || description || $$slots.description}
+    <div class:bx--data-table-header="{true}">
+      {#if title || $$slots.title}
+        <h4 class:bx--data-table-header__title="{true}">
+          <slot name="title">{title}</slot>
+        </h4>
+      {/if}
+      {#if description || $$slots.description}
+        <p class:bx--data-table-header__description="{true}">
+          <slot name="description">{description}</slot>
+        </p>
+      {/if}
+    </div>
+  {/if}
   <slot />
   <Table
     zebra="{zebra}"
     size="{size}"
     stickyHeader="{stickyHeader}"
     sortable="{sortable}"
+    useStaticWidth="{useStaticWidth}"
   >
     <TableHead>
       <TableRow>
@@ -377,9 +396,7 @@
             {#if headers[j].empty}
               <td class:bx--table-column-menu="{headers[j].columnMenu}">
                 <slot name="cell" row="{row}" cell="{cell}">
-                  {headers[j].display
-                    ? headers[j].display(cell.value)
-                    : cell.value}
+                  {cell.display ? cell.display(cell.value) : cell.value}
                 </slot>
               </td>
             {:else}
@@ -390,9 +407,7 @@
                 }}"
               >
                 <slot name="cell" row="{row}" cell="{cell}">
-                  {headers[j].display
-                    ? headers[j].display(cell.value)
-                    : cell.value}
+                  {cell.display ? cell.display(cell.value) : cell.value}
                 </slot>
               </TableCell>
             {/if}
@@ -410,7 +425,9 @@
               parentRowId = null;
             }}"
           >
-            <TableCell colspan="{headers.length + 1}">
+            <TableCell
+              colspan="{selectable ? headers.length + 2 : headers.length + 1}"
+            >
               <div class:bx--child-row-inner-container="{true}">
                 <slot name="expanded-row" row="{row}" />
               </div>

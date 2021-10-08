@@ -4,10 +4,12 @@
     slots: [],
     events: [],
     rest_props: undefined,
+    typedefs: [],
   };
 
   import {
     Link,
+    OutboundLink,
     StructuredList,
     StructuredListHead,
     StructuredListRow,
@@ -17,6 +19,7 @@
     UnorderedList,
     ListItem,
     Tag,
+    CodeSnippet,
   } from "carbon-components-svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
@@ -30,7 +33,7 @@
     Date: "JavaScript Date",
   };
 
-  $: source = `https://github.com/IBM/carbon-components-svelte/tree/master/${component.filePath}`;
+  $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
   $: forwarded_events = component.events.filter(
     (event) => event.type === "forwarded"
   );
@@ -40,20 +43,17 @@
 </script>
 
 <p style="margin-bottom: var(--cds-layout-02)">
-  Component source code:
-  <Link inline size="lg" href="{source}" target="_blank">
+  Source code:
+  <OutboundLink size="lg" inline href="{source}">
     {component.filePath}
-    <Launch16 />
-  </Link>
+  </OutboundLink>
 </p>
 
 <h3 id="props">Props</h3>
 
 {#if component.props.length > 0}
   <div class="overflow">
-    <StructuredList
-      style="margin-left: calc(-1 * var(--cds-spacing-05)); margin-right: calc(-1 * var(--cds-spacing-05))"
-    >
+    <StructuredList flush condensed>
       <StructuredListHead>
         <StructuredListRow head>
           <StructuredListCell head>Prop name</StructuredListCell>
@@ -71,17 +71,19 @@
               <InlineSnippet code="{prop.name}" />
               {#if prop.reactive}
                 <div
-                  style="white-space: nowrap; margin-top: var(--cds-spacing-03)"
+                  style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-03)"
                 >
-                  <Tag type="cyan">Reactive</Tag>
+                  <Tag style="margin-left: 0" size="sm" type="cyan">
+                    Reactive
+                  </Tag>
                 </div>
               {/if}
             </StructuredListCell>
             <StructuredListCell>
-              {#each prop.type.split(" | ") as type, i (type)}
+              {#each (prop.type || "").split(" | ") as type, i (type)}
                 <div
                   class="cell"
-                  style="z-index: {prop.type.split(' | ').length - i}"
+                  style="z-index: {(prop.type || '').split(' | ').length - i}"
                 >
                   {#if type.startsWith("typeof")}
                     <TooltipDefinition
@@ -92,14 +94,12 @@
                       Carbon Svelte icon
                     </TooltipDefinition>
                   {:else if type.startsWith("HTML")}
-                    <Link
+                    <OutboundLink
                       href="{mdn_api}{type}"
-                      target="_blank"
                       style="white-space: nowrap"
                     >
                       {type}
-                      <Launch16 />
-                    </Link>
+                    </OutboundLink>
                   {:else if type in typeMap}
                     <code>{typeMap[type]}</code>
                   {:else if type.startsWith("(")}
@@ -133,6 +133,20 @@
 {:else}
   <p class="my-layout-01-03">No props.</p>
 {/if}
+
+<h3 id="typedefs">Typedefs</h3>
+
+{#if component.typedefs.length > 0}
+  <CodeSnippet
+    style="margin-top: var(--cds-spacing-08)"
+    class="my-layout-01-03"
+    type="multi"
+    code="{component.typedefs.map((t) => t.ts).join(';\n\n')};"
+  />
+{:else}
+  <p class="my-layout-01-03">No typedefs.</p>
+{/if}
+
 <h3 id="slots">Slots</h3>
 {#if component.slots.length > 0}
   <UnorderedList class="my-layout-01-03">
@@ -206,5 +220,9 @@
 
   code {
     word-break: break-word;
+  }
+
+  :global(.cell .bx--snippet--inline code, .bx--snippet--single pre) {
+    white-space: pre-wrap !important;
   }
 </style>

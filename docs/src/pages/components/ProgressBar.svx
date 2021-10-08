@@ -1,0 +1,30 @@
+<script>
+  import { ProgressBar } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+### Default
+
+Without a specified `value` prop, the progress bar is indeterminate.
+
+<ProgressBar helperText="Loading..." />
+
+### Percentage
+
+<ProgressBar value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
+
+### Custom max value
+
+The default `max` value is `100`.
+
+<ProgressBar value={40} max={200} labelText="Upload status" helperText="40 MB of 200 MB" />
+
+### Hidden label
+
+<ProgressBar hideLabel value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
+
+### UX example
+
+This example shows how to animate the progress bar from 0 to 100% with start and end states.
+
+<FileSource src="/framed/ProgressBar/ProgressBarUx" />

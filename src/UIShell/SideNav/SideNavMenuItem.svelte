@@ -1,9 +1,6 @@
 <script>
-  /**
-   * Set to `true` to select the item
-   * @type {boolean}
-   */
-  export let isSelected = undefined;
+  /** Set to `true` to select the item */
+  export let isSelected = false;
 
   /**
    * Specify the `href` attribute

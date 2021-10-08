@@ -59,12 +59,16 @@
   /** Set to `true` to mark the field as required */
   export let required = false;
 
-  /** Set to `true` to use inline version */
+  /** Set to `true` to use the inline variant */
   export let inline = false;
+
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
 
   import { getContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
+  import EditOff16 from "carbon-icons-svelte/lib/EditOff16/EditOff16.svelte";
 
   const ctx = getContext("Form");
 
@@ -73,17 +77,20 @@
   $: warnId = `warn-${id}`;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--form-item="{true}"
   class:bx--text-input-wrapper="{true}"
   class:bx--text-input-wrapper--inline="{inline}"
+  class:bx--text-input-wrapper--light="{light}"
+  class:bx--text-input-wrapper--readonly="{readonly}"
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
 >
   {#if inline}
-    <div class="bx--text-input__label-helper-wrapper">
+    <div class:bx--text-input__label-helper-wrapper="{true}">
       {#if labelText}
         <label
           for="{id}"
@@ -93,7 +100,9 @@
           class:bx--label--inline="{inline}"
           class="{inline && !!size && `bx--label--inline--${size}`}"
         >
-          {labelText}
+          <slot name="labelText">
+            {labelText}
+          </slot>
         </label>
       {/if}
       {#if !isFluid && helperText}
@@ -116,7 +125,9 @@
       class:bx--label--inline="{inline}"
       class="{inline && !!size && `bx--label--inline--${size}`}"
     >
-      {labelText}
+      <slot name="labelText">
+        {labelText}
+      </slot>
     </label>
   {/if}
   <div
@@ -138,6 +149,9 @@
             bx--text-input__invalid-icon--warning"
         />
       {/if}
+      {#if readonly}
+        <EditOff16 class="bx--text-input__readonly-icon" />
+      {/if}
       <input
         bind:this="{ref}"
         data-invalid="{invalid || undefined}"
@@ -151,6 +165,7 @@
         type="{type}"
         value="{value}"
         required="{required}"
+        readonly="{readonly}"
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
         class:bx--text-input--invalid="{invalid}"
@@ -163,6 +178,7 @@
           value = target.value;
         }}"
         on:keydown
+        on:keyup
         on:focus
         on:blur
       />

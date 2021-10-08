@@ -180,6 +180,24 @@ export interface MultiSelectProps
    * @default null
    */
   inputRef?: null | HTMLInputElement;
+
+  /**
+   * Obtain a reference to the outer div element
+   * @default null
+   */
+  multiSelectRef?: null | HTMLDivElement;
+
+  /**
+   * Obtain a reference to the field box element
+   * @default null
+   */
+  fieldRef?: null | HTMLDivElement;
+
+  /**
+   * Obtain a reference to the selection element
+   * @default null
+   */
+  selectionRef?: null | HTMLDivElement;
 }
 
 export default class MultiSelect extends SvelteComponentTyped<
@@ -192,6 +210,7 @@ export default class MultiSelect extends SvelteComponentTyped<
     }>;
     clear: CustomEvent<any>;
     keydown: WindowEventMap["keydown"];
+    keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },

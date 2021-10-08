@@ -30,5 +30,5 @@ export default class ToggleSkeleton extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  {}
+  { labelText: {} }
 > {}

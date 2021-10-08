@@ -9,7 +9,7 @@
 
 <InlineNotification svx-ignore title="Deprecation warning" kind="warning" hideCloseButton>
   <div>
-    This component will be removed in the next major release. Use icons from <OutboundLink href="https://github.com/IBM/carbon-icons-svelte">carbon-icons-svelte</OutboundLink> instead.
+    This component will be removed in the next major release. Use icons from <OutboundLink href="https://github.com/carbon-design-system/carbon-icons-svelte">carbon-icons-svelte</OutboundLink> instead.
   </div>
 </InlineNotification>
 

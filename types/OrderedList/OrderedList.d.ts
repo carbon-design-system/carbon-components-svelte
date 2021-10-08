@@ -14,6 +14,12 @@ export interface OrderedListProps
    * @default false
    */
   native?: boolean;
+
+  /**
+   * Set to `true` to use Carbon's expressive typesetting
+   * @default false
+   */
+  expressive?: boolean;
 }
 
 export default class OrderedList extends SvelteComponentTyped<

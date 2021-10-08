@@ -1,6 +1,6 @@
 # Contributing
 
-Before submitting a pull request (PR), consider [filing an issue](https://github.com/IBM/carbon-components-svelte/issues) to gain clarity and direction.
+Before submitting a pull request (PR), consider [filing an issue](https://github.com/carbon-design-system/carbon-components-svelte/issues) to gain clarity and direction.
 
 ## Prerequisites
 
@@ -105,7 +105,7 @@ export let size = "default";
 
 ### Creating a component
 
-First, [submit an issue](https://github.com/IBM/carbon-components-svelte/issues).
+First, [submit an issue](https://github.com/carbon-design-system/carbon-components-svelte/issues).
 
 If creating a new component, don't forget it from `src/index.js`:
 

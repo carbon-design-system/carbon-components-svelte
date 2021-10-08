@@ -3,9 +3,15 @@ components: ["OrderedList", "ListItem"]
 ---
 
 <script>
-  import { OrderedList, ListItem, Link } from "carbon-components-svelte";
+  import { InlineNotification, OrderedList, ListItem, Link } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
+
+<InlineNotification svx-ignore title="Tip:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    Consider using the <Link href="/components/RecursiveList#ordered">RecursiveList</Link> component for rendering tree structured data.
+   </div>
+</InlineNotification>
 
 ### Default
 
@@ -69,4 +75,14 @@ Use the `native` attribute to enable default browser list styles. This is useful
   </ListItem>
   <ListItem>Ordered list level 1</ListItem>
   <ListItem>Ordered list level 1</ListItem>
+</OrderedList>
+
+### Expressive styles
+
+Set `expressive` to `true` to use Carbon's expressive typesetting.
+
+<OrderedList expressive>
+  <ListItem><Link size="lg" href="#">Ordered list item</Link></ListItem>
+  <ListItem>Ordered list item</ListItem>
+  <ListItem>Ordered list item</ListItem>
 </OrderedList>

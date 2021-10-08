@@ -59,6 +59,7 @@
   });
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if open}
   <div
     role="{role}"
@@ -77,7 +78,7 @@
     on:mouseenter
     on:mouseleave
   >
-    <NotificationIcon kind="{kind}" iconDescription="{iconDescription}" />
+    <NotificationIcon kind="{kind}" />
     <NotificationTextDetails
       title="{title}"
       subtitle="{subtitle}"

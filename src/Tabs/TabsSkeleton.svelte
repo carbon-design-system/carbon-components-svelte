@@ -9,6 +9,7 @@
   export let type = "default";
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--tabs="{true}"
   class:bx--skeleton="{true}"

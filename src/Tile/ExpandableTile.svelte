@@ -51,6 +51,7 @@
   });
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   bind:this="{ref}"
   type="button"

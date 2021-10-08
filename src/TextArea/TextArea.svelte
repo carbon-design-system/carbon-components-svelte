@@ -49,6 +49,7 @@
   $: errorId = `error-${id}`;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   on:click
   on:mouseover
@@ -63,7 +64,9 @@
       class:bx--visually-hidden="{hideLabel}"
       class:bx--label--disabled="{disabled}"
     >
-      {labelText}
+      <slot name="labelText">
+        {labelText}
+      </slot>
     </label>
   {/if}
   <div
@@ -88,11 +91,14 @@
       class:bx--text-area--light="{light}"
       class:bx--text-area--invalid="{invalid}"
       {...$$restProps}
+      readonly="{$$restProps.readonly === true ? true : undefined}"
       on:change
       on:input
       on:input="{({ target }) => {
         value = target.value;
       }}"
+      on:keydown
+      on:keyup
       on:focus
       on:blur></textarea>
   </div>

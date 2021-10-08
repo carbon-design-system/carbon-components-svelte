@@ -13,9 +13,12 @@
 
   /**
    * Specify the size of button
-   * @type {"default" | "field" | "small"}
+   * @type {"default" | "field" | "small" | "lg" | "xl"}
    */
   export let size = "default";
+
+  /** Set to `true` to use Carbon's expressive typesetting */
+  export let expressive = false;
 
   /**
    * Set to `true` to enable the selected state for an icon-only, ghost button
@@ -92,20 +95,31 @@
   $: buttonProps = {
     type: href && !disabled ? undefined : type,
     tabindex,
-    disabled,
+    disabled: disabled === true ? true : undefined,
     href,
     "aria-pressed": hasIconOnly && kind === "ghost" ? isSelected : undefined,
     ...$$restProps,
     class: [
       "bx--btn",
+      expressive && "bx--btn--expressive",
+      ((size === "small" && !expressive) ||
+        (size === "sm" && !expressive) ||
+        (size === "small" && !expressive)) &&
+        "bx--btn--sm",
+      (size === "field" && !expressive) ||
+        (size === "md" && !expressive && "bx--btn--md"),
       size === "field" && "bx--btn--field",
       size === "small" && "bx--btn--sm",
+      size === "lg" && "bx--btn--lg",
+      size === "xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
       hasIconOnly && "bx--tooltip__trigger",
       hasIconOnly && "bx--tooltip--a11y",
-      hasIconOnly && tooltipPosition && `bx--tooltip--${tooltipPosition}`,
+      hasIconOnly &&
+        tooltipPosition &&
+        `bx--btn--icon-only--${tooltipPosition}`,
       hasIconOnly &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
@@ -117,6 +131,7 @@
   };
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <ButtonSkeleton
     href="{href}"

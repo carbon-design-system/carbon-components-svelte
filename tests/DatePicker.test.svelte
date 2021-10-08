@@ -2,8 +2,24 @@
   import { DatePicker, DatePickerSkeleton, DatePickerInput } from "../types";
 </script>
 
-<DatePicker>
-  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+<DatePicker
+  datePickerType="single"
+  flatpickrProps="{{ static: true }}"
+  on:change
+>
+  <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+<DatePicker
+  on:change="{(e) => {
+    console.log(e.detail);
+  }}"
+>
+  <DatePickerInput
+    labelText="Date of birth"
+    helperText="Example: 01/12/1990"
+    placeholder="mm/dd/yyyy"
+  />
 </DatePicker>
 
 <DatePicker>
@@ -51,7 +67,7 @@
   />
 </DatePicker>
 
-<DatePicker datePickerType="single">
+<DatePicker valueFrom="" valueTo="" datePickerType="single">
   <DatePickerInput labelText="Schedule a meeting" placeholder="mm/dd/yyyy" />
 </DatePicker>
 

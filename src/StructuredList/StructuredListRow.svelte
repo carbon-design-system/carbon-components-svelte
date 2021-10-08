@@ -9,10 +9,10 @@
   export let tabindex = "0";
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if label}
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <label
-    role="presentation"
     tabindex="{tabindex}"
     class:bx--structured-list-row="{true}"
     class:bx--structured-list-row--header-row="{head}"
@@ -27,6 +27,7 @@
   </label>
 {:else}
   <div
+    role="row"
     class:bx--structured-list-row="{true}"
     class:bx--structured-list-row--header-row="{head}"
     {...$$restProps}

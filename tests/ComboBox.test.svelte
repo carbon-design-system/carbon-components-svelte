@@ -7,9 +7,14 @@
     { id: "1", text: "Email" },
     { id: "2", text: "Fax" },
   ];
+
+  let ref: ComboBox;
+
+  $: ref?.clear();
 </script>
 
 <ComboBox
+  bind:this="{ref}"
   direction="top"
   titleText="Contact"
   placeholder="Select contact method"

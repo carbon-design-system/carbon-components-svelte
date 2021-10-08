@@ -56,6 +56,7 @@
     }
   }}"
 />
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <label
   for="{id}"
   class:bx--tile="{true}"

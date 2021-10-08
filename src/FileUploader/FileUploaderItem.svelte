@@ -9,6 +9,12 @@
    */
   export let status = "uploading";
 
+  /**
+   * Specify the size of button skeleton
+   * @type {"default" | "field" | "small"}
+   */
+  export let size = "default";
+
   /** Specify the ARIA label used for the status icons */
   export let iconDescription = "";
 
@@ -33,10 +39,13 @@
   const dispatch = createEventDispatcher();
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <span
   id="{id}"
   class:bx--file__selected-file="{true}"
   class:bx--file__selected-file--invalid="{invalid}"
+  class:bx--file__selected-file--md="{size === 'field'}"
+  class:bx--file__selected-file--sm="{size === 'small'}"
   {...$$restProps}
   on:mouseover
   on:mouseenter

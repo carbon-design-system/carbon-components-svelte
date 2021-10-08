@@ -32,16 +32,45 @@
   /** Set to `true` to persist the hamburger menu */
   export let persistentHamburgerMenu = false;
 
+  /**
+   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden
+   * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
+   * small: 320
+   * medium: 672
+   * large: 1056
+   * x-large: 1312
+   * max: 1584
+   */
+  export let expansionBreakpoint = 1056;
+
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the closed state
+   * Defaults to `Menu20`
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let iconMenu = Menu20;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the opened state
+   * Defaults to `Close20`
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let iconClose = Close20;
+
+  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
+  import Menu20 from "carbon-icons-svelte/lib/Menu20/Menu20.svelte";
   import { shouldRenderHamburgerMenu } from "../navStore";
   import HamburgerMenu from "../SideNav/HamburgerMenu.svelte";
 
   let winWidth = undefined;
 
   $: isSideNavOpen =
-    expandedByDefault && winWidth >= 1056 && !persistentHamburgerMenu;
+    expandedByDefault &&
+    winWidth >= expansionBreakpoint &&
+    !persistentHamburgerMenu;
   $: ariaLabel = company
     ? `${company} `
     : "" + (uiShellAriaLabel || $$props["aria-label"] || platformName);
@@ -51,8 +80,12 @@
 
 <header role="banner" aria-label="{ariaLabel}" class:bx--header="{true}">
   <slot name="skip-to-content" />
-  {#if ($shouldRenderHamburgerMenu && winWidth < 1056) || persistentHamburgerMenu}
-    <HamburgerMenu bind:isOpen="{isSideNavOpen}" />
+  {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
+    <HamburgerMenu
+      bind:isOpen="{isSideNavOpen}"
+      iconClose="{iconClose}"
+      iconMenu="{iconMenu}"
+    />
   {/if}
   <a
     href="{href}"

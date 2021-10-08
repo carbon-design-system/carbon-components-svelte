@@ -1,6 +1,6 @@
 <script>
   /**
-   * @dispatch {string} change
+   * @event {string | { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string | { from: string; to: string; } }} change
    */
 
   /**
@@ -16,10 +16,18 @@
   export let value = "";
 
   /**
-   * Specify the element to append the calendar to
-   * @type {HTMLElement}
+   * Specify the date picker start date value (from)
+   * Only works with the "range" date picker type
+   * @type {string}
    */
-  export let appendTo = document.body;
+  export let valueFrom = "";
+
+  /**
+   * Specify the date picker end date value (to)
+   * Only works with the "range" date picker type
+   * @type {string}
+   */
+  export let valueTo = "";
 
   /** Specify the date format */
   export let dateFormat = "m/d/Y";
@@ -48,6 +56,13 @@
   /** Set an id for the date picker element */
   export let id = "ccs-" + Math.random().toString(36);
 
+  /**
+   * Override the options passed to the Flatpickr instance
+   * https://flatpickr.js.org/options
+   * @type {import("flatpickr/dist/types/options").Options}
+   */
+  export let flatpickrProps = {};
+
   import {
     createEventDispatcher,
     setContext,
@@ -65,18 +80,23 @@
     (_) => _.filter(({ labelText }) => !!labelText).length === 0
   );
   const inputValue = writable(value);
+  const inputValueFrom = writable(valueFrom);
+  const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
   const range = derived(mode, (_) => _ === "range");
   const hasCalendar = derived(mode, (_) => _ === "single" || _ === "range");
 
-  let calendar = undefined;
-  let datePickerRef = undefined;
-  let inputRef = undefined;
-  let inputRefTo = undefined;
+  let calendar = null;
+  let datePickerRef = null;
+  let inputRef = null;
+  let inputRefTo = null;
 
   setContext("DatePicker", {
     range,
     inputValue,
+    inputValueFrom,
+    inputValueTo,
+    inputIds,
     hasCalendar,
     add: (data) => {
       inputs.update((_) => [..._, data]);
@@ -115,39 +135,53 @@
     },
   });
 
+  async function initCalendar() {
+    calendar = await createCalendar({
+      options: {
+        appendTo: datePickerRef,
+        dateFormat,
+        defaultDate: $inputValue,
+        locale,
+        maxDate,
+        minDate,
+        mode: $mode,
+        ...flatpickrProps,
+      },
+      base: inputRef,
+      input: inputRefTo,
+      dispatch: (event) => {
+        const detail = { selectedDates: calendar.selectedDates };
+
+        if ($range) {
+          const from = inputRef.value;
+          const to = inputRefTo.value;
+
+          detail.dateStr = {
+            from: inputRef.value,
+            to: inputRefTo.value,
+          };
+
+          valueFrom = from;
+          valueTo = to;
+        } else {
+          detail.dateStr = inputRef.value;
+        }
+
+        return dispatch(event, detail);
+      },
+    });
+  }
+
   afterUpdate(() => {
-    if ($hasCalendar && !calendar) {
-      calendar = createCalendar({
-        options: {
-          appendTo,
-          dateFormat,
-          defaultDate: $inputValue,
-          locale,
-          maxDate,
-          minDate,
-          mode: $mode,
-        },
-        base: inputRef,
-        input: inputRefTo,
-        dispatch: (event) => {
-          const detail = { selectedDates: calendar.selectedDates };
+    if (calendar) {
+      if ($range) {
+        calendar.setDate([$inputValueFrom, $inputValueTo]);
 
-          if ($range) {
-            detail.dateStr = {
-              from: inputRef.value,
-              to: inputRefTo.value,
-            };
-          } else {
-            detail.dateStr = inputRef.value;
-          }
-
-          return dispatch(event, detail);
-        },
-      });
-    }
-
-    if (calendar && !$range) {
-      calendar.setDate($inputValue);
+        // workaround to remove the default range plugin separator "to"
+        inputRef.value = $inputValueFrom;
+      } else {
+        calendar.setDate($inputValue);
+      }
     }
   });
 
@@ -159,21 +193,22 @@
 
   $: inputValue.set(value);
   $: value = $inputValue;
+  $: inputValueFrom.set(valueFrom);
+  $: valueFrom = $inputValueFrom;
+  $: inputValueTo.set(valueTo);
+  $: valueTo = $inputValueTo;
+  $: if ($hasCalendar && !calendar && inputRef) initCalendar();
 </script>
 
-<svelte:body
+<svelte:window
   on:click="{({ target }) => {
-    if (!calendar || !calendar.isOpen) {
-      return;
-    }
-    if (datePickerRef && datePickerRef.contains(target)) {
-      return;
-    }
-    if (!calendar.calendarContainer.contains(target)) {
-      calendar.close();
-    }
-  }}" />
+    if (!calendar || !calendar.isOpen) return;
+    if (datePickerRef && datePickerRef.contains(target)) return;
+    if (!calendar.calendarContainer.contains(target)) calendar.close();
+  }}"
+/>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--form-item="{true}"
   {...$$restProps}

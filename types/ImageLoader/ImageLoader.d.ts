@@ -18,7 +18,7 @@ export interface ImageLoaderProps
   /**
    * Specify the aspect ratio for the image wrapper
    */
-  ratio?: "2x1" | "16x9" | "4x3" | "1x1" | "3x4" | "9x16" | "1x2";
+  ratio?: "2x1" | "16x9" | "4x3" | "1x1" | "3x4" | "3x2" | "9x16" | "1x2";
 
   /**
    * Set to `true` when `loaded` is `true` and `error` is false
@@ -44,17 +44,17 @@ export interface ImageLoaderProps
    * @default false
    */
   fadeIn?: boolean;
-
-  /**
-   * Method invoked to load the image provided a `src` value
-   * @constant
-   * @default (url) => { if (image != null) image = null; loaded = false; error = false; image = new Image(); image.src = url || src; image.onload = () => (loaded = true); image.onerror = () => (error = true); }
-   */
-  loadImage?: (url?: string) => void;
 }
 
 export default class ImageLoader extends SvelteComponentTyped<
   ImageLoaderProps,
   { load: CustomEvent<any>; error: CustomEvent<any> },
   { error: {}; loading: {} }
-> {}
+> {
+  /**
+   * Method invoked to load the image provided a `src` value
+   * @constant
+   * @default (url) => { if (image != null) image = null; loaded = false; error = false; image = new Image(); image.src = url || src; image.onload = () => (loaded = true); image.onerror = () => (error = true); }
+   */
+  loadImage: (url?: string) => void;
+}

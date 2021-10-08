@@ -1,5 +1,4 @@
 import flatpickr from "flatpickr";
-import rangePlugin from "flatpickr/dist/esm/plugins/rangePlugin";
 
 let l10n;
 
@@ -48,7 +47,7 @@ function updateMonthNode(instance) {
   }
 }
 
-function createCalendar({ options, base, input, dispatch }) {
+async function createCalendar({ options, base, input, dispatch }) {
   let locale = options.locale;
 
   if (options.locale === "en" && l10n && l10n.en) {
@@ -59,6 +58,13 @@ function createCalendar({ options, base, input, dispatch }) {
     });
 
     locale = l10n.en;
+  }
+
+  let rangePlugin;
+
+  if (options.mode === "range") {
+    const importee = await import("flatpickr/dist/esm/plugins/rangePlugin");
+    rangePlugin = importee.default;
   }
 
   return new flatpickr(base, {

@@ -1,8 +1,12 @@
 <script>
   /**
+   * @event {any} expand
+   * @event {any} collapse
+   */
+
+  /**
    * @deprecated this prop will be removed in the next major release
    * Use size="sm" instead
-   * @type {boolean} [small=false]
    */
   export let small = false;
 
@@ -15,40 +19,28 @@
   /** Specify the class name passed to the outer div element */
   export let searchClass = "";
 
-  /**
-   * Set to `true` to display the skeleton state
-   * @type {boolean} [skeleton=false]
-   */
+  /** Set to `true` to display the skeleton state  */
   export let skeleton = false;
 
-  /**
-   * Set to `true` to enable the light variant
-   * @type {boolean} [light=false]
-   */
+  /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**
-   * Set to `true` to disable the search input
-   * @type {boolean} [disabled=false]
-   */
+  /** Set to `true` to disable the search input */
   export let disabled = false;
 
-  /**
-   * Specify the value of the search input
-   * @type {string} [value=""]
-   */
+  /** Set to `true` to enable the expandable variant */
+  export let expandable = false;
+
+  /** Set to `true to expand the search input */
+  export let expanded = false;
+
+  /** Specify the value of the search input */
   export let value = "";
 
-  /**
-   * Specify the `type` attribute of the search input
-   * @type {string} [type="text"]
-   */
+  /** Specify the `type` attribute of the search input */
   export let type = "text";
 
-  /**
-   * Specify the `placeholder` attribute of the search input
-   * @type {string} [placeholder="Search..."]
-   */
+  /** Specify the `placeholder` attribute of the search input */
   export let placeholder = "Search...";
 
   /**
@@ -66,6 +58,12 @@
   /** Specify the label text */
   export let labelText = "";
 
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let icon = Search16;
+
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -79,6 +77,11 @@
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
+
+  let searchRef = null;
+
+  $: if (expanded && ref) ref.focus();
+  $: dispatch(expanded ? "expand" : "collapse");
 </script>
 
 {#if skeleton}
@@ -101,12 +104,24 @@
     class:bx--search--sm="{size === 'sm' || small}"
     class:bx--search--lg="{size === 'lg'}"
     class:bx--search--xl="{size === 'xl'}"
+    class:bx--search--expandable="{expandable}"
+    class:bx--search--expanded="{expanded}"
     class="{searchClass}"
   >
-    <Search16 class="bx--search-magnifier" />
-    <label id="{id}-search" for="{id}" class:bx--label="{true}"
-      >{labelText}</label
+    <div
+      bind:this="{searchRef}"
+      class:bx--search-magnifier="{true}"
+      on:click="{() => {
+        if (expandable) expanded = true;
+      }}"
     >
+      <svelte:component this="{icon}" class="bx--search-magnifier-icon" />
+    </div>
+    <label id="{id}-search" for="{id}" class:bx--label="{true}">
+      <slot name="labelText">
+        {labelText}
+      </slot>
+    </label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
       bind:this="{ref}"
@@ -126,7 +141,15 @@
         value = target.value;
       }}"
       on:focus
+      on:focus="{() => {
+        if (expandable) expanded = true;
+      }}"
       on:blur
+      on:blur="{() => {
+        if (expanded && value.trim().length === 0) {
+          expanded = false;
+        }
+      }}"
       on:keydown
       on:keydown="{({ key }) => {
         if (key === 'Escape') {
@@ -134,6 +157,7 @@
           dispatch('clear');
         }
       }}"
+      on:keyup
     />
     <button
       type="button"

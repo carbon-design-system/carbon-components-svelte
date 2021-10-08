@@ -2,7 +2,8 @@
 import { SvelteComponentTyped } from "svelte";
 
 export interface ClickableTileProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]>,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["p"]> {
   /**
    * Set to `true` to click the tile
    * @default false
@@ -14,6 +15,12 @@ export interface ClickableTileProps
    * @default false
    */
   light?: boolean;
+
+  /**
+   * Set to `true` to disable the tile
+   * @default false
+   */
+  disabled?: boolean;
 
   /**
    * Set the `href`

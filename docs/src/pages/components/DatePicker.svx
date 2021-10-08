@@ -13,6 +13,12 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
+### With helper text
+
+<DatePicker>
+  <DatePickerInput labelText="Date of birth" helperText="Example: 01/12/1990" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
 ### Hidden label
 
 <DatePicker>
@@ -57,9 +63,11 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 
 ### Single
 
-<DatePicker datePickerType="single">
-  <DatePickerInput labelText="Schedule a meeting" placeholder="mm/dd/yyyy" />
-</DatePicker>
+<FileSource src="/framed/DatePicker/DatePickerSingle" />
+
+### Range
+
+<FileSource src="/framed/DatePicker/DatePickerRange" />
 
 ### Skeleton
 

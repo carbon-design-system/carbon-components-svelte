@@ -1,6 +1,7 @@
 <script>
   /**
    * @event {{ open: boolean; }} transitionend
+   * @event {{ text: string; }} click:button--secondary
    */
 
   /**
@@ -59,6 +60,13 @@
 
   /** Specify the secondary button text */
   export let secondaryButtonText = "";
+
+  /**
+   * 2-tuple prop to render two secondary buttons for a 3 button modal
+   * supersedes `secondaryButtonText`
+   * @type {[{ text: string; }, { text: string; }]}
+   */
+  export let secondaryButtons = [];
 
   /** Specify a selector to be focused when opening the modal */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
@@ -128,6 +136,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   bind:this="{ref}"
   role="presentation"
@@ -138,11 +147,32 @@
   class:bx--modal--danger="{danger}"
   {...$$restProps}
   on:keydown
-  on:keydown="{({ key }) => {
+  on:keydown="{(e) => {
     if (open) {
-      if (key === 'Escape') {
+      if (e.key === 'Escape') {
         open = false;
-      } else if (shouldSubmitOnEnter && key === 'Enter') {
+      } else if (e.key === 'Tab') {
+        // trap focus
+
+        // taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
+        const selectorTabbable = `
+  a[href], area[href], input:not([disabled]):not([tabindex='-1']),
+  button:not([disabled]):not([tabindex='-1']),select:not([disabled]):not([tabindex='-1']),
+  textarea:not([disabled]):not([tabindex='-1']),
+  iframe, object, embed, *[tabindex]:not([tabindex='-1']):not([disabled]), *[contenteditable=true]
+`;
+
+        const tabbable = Array.from(ref.querySelectorAll(selectorTabbable));
+
+        let index = tabbable.indexOf(document.activeElement);
+        if (index === -1 && e.shiftKey) index = 0;
+
+        index += tabbable.length + (e.shiftKey ? -1 : 1);
+        index %= tabbable.length;
+
+        tabbable[index].focus();
+        e.preventDefault();
+      } else if (shouldSubmitOnEnter && e.key === 'Enter') {
         dispatch('submit');
       }
     }
@@ -236,20 +266,39 @@
       <div class:bx--modal-content--overflow-indicator="{true}"></div>
     {/if}
     {#if !passiveModal}
-      <div class:bx--modal-footer="{true}">
-        <Button
-          kind="secondary"
-          on:click="{() => {
-            dispatch('click:button--secondary');
-          }}"
-        >
-          {secondaryButtonText}
-        </Button>
+      <div
+        class:bx--modal-footer="{true}"
+        class:bx--modal-footer--three-button="{secondaryButtons.length === 2}"
+      >
+        {#if secondaryButtons.length > 0}
+          {#each secondaryButtons as button}
+            <Button
+              kind="secondary"
+              on:click="{() => {
+                dispatch('click:button--secondary', { text: button.text });
+              }}"
+            >
+              {button.text}
+            </Button>
+          {/each}
+        {:else if secondaryButtonText}
+          <Button
+            kind="secondary"
+            on:click="{() => {
+              dispatch('click:button--secondary', {
+                text: secondaryButtonText,
+              });
+            }}"
+          >
+            {secondaryButtonText}
+          </Button>
+        {/if}
         <Button
           kind="{danger ? 'danger' : 'primary'}"
           disabled="{primaryButtonDisabled}"
           on:click="{() => {
             dispatch('submit');
+            dispatch('click:button--primary');
           }}"
         >
           {primaryButtonText}

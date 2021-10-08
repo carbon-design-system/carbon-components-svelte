@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "svelte-kit dev",
+    "build": "svelte-kit build",
+    "preview": "svelte-kit preview"
+  },
+  "devDependencies": {
+    "@sveltejs/kit": "next",
+    "carbon-components-svelte": "^0.41.0",
+    "carbon-preprocess-svelte": "^0.6.0",
+    "svelte": "^3.38.2"
+  }
+}

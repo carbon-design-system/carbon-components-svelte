@@ -96,7 +96,9 @@
         class:bx--visually-hidden="{hideLabel}"
         class:bx--label--disabled="{disabled}"
       >
-        {labelText}
+        <slot name="labelText">
+          {labelText}
+        </slot>
       </label>
     {/if}
     {#if inline}
@@ -117,6 +119,8 @@
             on:change="{({ target }) => {
               selectedValue.set(target.value);
             }}"
+            on:input
+            on:focus
             on:blur
           >
             <slot />
@@ -158,6 +162,8 @@
           on:change="{({ target }) => {
             selectedValue.set(target.value);
           }}"
+          on:input
+          on:focus
           on:blur
         >
           <slot />

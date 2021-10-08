@@ -12,7 +12,7 @@
   on:mouseenter
   on:mouseleave
   target="_blank"
+  icon="{Launch16}"
 >
   <slot />
-  <Launch16 />
 </Link>

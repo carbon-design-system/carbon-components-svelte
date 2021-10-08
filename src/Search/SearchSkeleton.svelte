@@ -12,6 +12,7 @@
   export let size = "xl";
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--skeleton="{true}"
   class:bx--search--sm="{size === 'sm' || small}"

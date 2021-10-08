@@ -64,8 +64,6 @@
   import OverflowMenuVertical16 from "carbon-icons-svelte/lib/OverflowMenuVertical16/OverflowMenuVertical16.svelte";
   import OverflowMenuHorizontal16 from "carbon-icons-svelte/lib/OverflowMenuHorizontal16/OverflowMenuHorizontal16.svelte";
 
-  import { formatStyle } from "./formatStyle";
-
   const ctxBreadcrumbItem = getContext("BreadcrumbItem");
   const dispatch = createEventDispatcher();
   const items = writable([]);
@@ -155,26 +153,30 @@
   $: if ($items[$currentIndex]) {
     focusedId.set($items[$currentIndex].id);
   }
-  $: dynamicPseudoWidth = `#${id} .bx--overflow-menu-options.bx--overflow-menu-options:after {
+  $: styles = `<style>
+    #${id} .bx--overflow-menu-options.bx--overflow-menu-options:after {
       width: ${buttonWidth ? buttonWidth + "px" : "2rem"};
-    }`;
-  $: styles = formatStyle(dynamicPseudoWidth);
+    }
+  <\/style>`;
 </script>
 
 <svelte:head>
   {@html styles}
 </svelte:head>
 
-<svelte:body
+<svelte:window
   on:click="{({ target }) => {
     if (buttonRef && buttonRef.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
       open = false;
     }
-  }}" />
+  }}"
+/>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   bind:this="{buttonRef}"
+  type="button"
   aria-haspopup
   aria-expanded="{open}"
   aria-label="{ariaLabel}"
@@ -236,7 +238,7 @@
       class:bx--overflow-menu-options--sm="{size === 'sm'}"
       class:bx--overflow-menu-options--xl="{size === 'xl'}"
       class:bx--breadcrumb-menu-options="{!!ctxBreadcrumbItem}"
-      class:menuOptionsClass
+      class="{menuOptionsClass}"
     >
       <slot />
     </ul>

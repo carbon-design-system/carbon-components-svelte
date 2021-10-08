@@ -49,6 +49,9 @@
   /** Set to `true` to disable the input */
   export let disabled = false;
 
+  /** Set to `true` to hide the input stepper buttons */
+  export let hideSteppers = false;
+
   /** Specify the ARIA label for the increment icons */
   export let iconDescription = "";
 
@@ -100,11 +103,12 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, afterUpdate } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import Add16 from "carbon-icons-svelte/lib/Add16/Add16.svelte";
   import Subtract16 from "carbon-icons-svelte/lib/Subtract16/Subtract16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
+  import EditOff16 from "carbon-icons-svelte/lib/EditOff16/EditOff16.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
@@ -125,12 +129,9 @@
     }
   }
 
-  afterUpdate(() => {
-    dispatch("change", value);
-  });
-
   let inputValue = value;
 
+  $: dispatch("change", value);
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
   $: value = Number(inputValue);
@@ -142,6 +143,7 @@
     "Numeric input field with increment and decrement buttons";
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--form-item="{true}"
   on:click
@@ -156,6 +158,7 @@
     class:bx--number--readonly="{readonly}"
     class:bx--number--light="{light}"
     class:bx--number--nolabel="{hideLabel}"
+    class:bx--number--nosteppers="{hideSteppers}"
     class:bx--number--mobile="{mobile}"
     class="{size && `bx--number--${size}`}"
   >
@@ -269,38 +272,43 @@
             class="bx--number__invalid bx--number__invalid--warning"
           />
         {/if}
-        <div class:bx--number__controls="{true}">
-          <button
-            type="button"
-            tabindex="-1"
-            title="{decrementLabel || iconDescription}"
-            aria-label="{decrementLabel || iconDescription}"
-            class:bx--number__control-btn="{true}"
-            class:down-icon="{true}"
-            on:click="{() => {
-              updateValue(-1);
-            }}"
-            disabled="{disabled}"
-          >
-            <Subtract16 class="down-icon" />
-          </button>
-          <div class:bx--number__rule-divider="{true}"></div>
-          <button
-            type="button"
-            tabindex="-1"
-            title="{incrementLabel || iconDescription}"
-            aria-label="{incrementLabel || iconDescription}"
-            class:bx--number__control-btn="{true}"
-            class:up-icon="{true}"
-            on:click="{() => {
-              updateValue(1);
-            }}"
-            disabled="{disabled}"
-          >
-            <Add16 class="up-icon" />
-          </button>
-          <div class:bx--number__rule-divider="{true}"></div>
-        </div>
+        {#if readonly}
+          <EditOff16 class="bx--text-input__readonly-icon" />
+        {/if}
+        {#if !hideSteppers}
+          <div class:bx--number__controls="{true}">
+            <button
+              type="button"
+              tabindex="-1"
+              title="{decrementLabel || iconDescription}"
+              aria-label="{decrementLabel || iconDescription}"
+              class:bx--number__control-btn="{true}"
+              class:down-icon="{true}"
+              on:click="{() => {
+                updateValue(-1);
+              }}"
+              disabled="{disabled}"
+            >
+              <Subtract16 class="down-icon" />
+            </button>
+            <div class:bx--number__rule-divider="{true}"></div>
+            <button
+              type="button"
+              tabindex="-1"
+              title="{incrementLabel || iconDescription}"
+              aria-label="{incrementLabel || iconDescription}"
+              class:bx--number__control-btn="{true}"
+              class:up-icon="{true}"
+              on:click="{() => {
+                updateValue(1);
+              }}"
+              disabled="{disabled}"
+            >
+              <Add16 class="up-icon" />
+            </button>
+            <div class:bx--number__rule-divider="{true}"></div>
+          </div>
+        {/if}
       </div>
     {/if}
     {#if !error && !warn && helperText}

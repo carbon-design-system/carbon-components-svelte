@@ -5,6 +5,7 @@ export interface SideNavMenuItemProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
    * Set to `true` to select the item
+   * @default false
    */
   isSelected?: boolean;
 

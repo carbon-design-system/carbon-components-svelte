@@ -15,6 +15,18 @@ export interface StructuredListProps
   border?: boolean;
 
   /**
+   * Set to `true` to use the condensed variant
+   * @default false
+   */
+  condensed?: boolean;
+
+  /**
+   * Set to `true` to flush the list
+   * @default false
+   */
+  flush?: boolean;
+
+  /**
    * Set to `true` to use the selection variant
    * @default false
    */

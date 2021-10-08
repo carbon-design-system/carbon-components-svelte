@@ -98,6 +98,7 @@
   description="Your organization's active load balancers."
   headers="{headers}"
   rows="{rows}"
+  useStaticWidth
 />
 
 <DataTable
@@ -171,7 +172,7 @@
   ]}"
   rows="{[
     {
-      id: 'a',
+      id: 0,
       name: 'Load Balancer 3',
       protocol: 'HTTP',
       port: 3000,

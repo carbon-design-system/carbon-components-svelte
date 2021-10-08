@@ -53,6 +53,7 @@
     },
     submit: () => {
       dispatch("submit");
+      dispatch("click:button--primary");
     },
     declareRef: (ref) => {
       buttonRef = ref;
@@ -96,6 +97,7 @@
   });
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   bind:this="{ref}"
   role="presentation"
@@ -103,6 +105,33 @@
   class:is-visible="{open}"
   class:bx--modal--danger="{danger}"
   {...$$restProps}
+  on:keydown
+  on:keydown="{(e) => {
+    if (open) {
+      if (e.key === 'Escape') {
+        open = false;
+      } else if (e.key === 'Tab') {
+        // taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
+        const selectorTabbable = `
+  a[href], area[href], input:not([disabled]):not([tabindex='-1']),
+  button:not([disabled]):not([tabindex='-1']),select:not([disabled]):not([tabindex='-1']),
+  textarea:not([disabled]):not([tabindex='-1']),
+  iframe, object, embed, *[tabindex]:not([tabindex='-1']):not([disabled]), *[contenteditable=true]
+`;
+
+        const tabbable = Array.from(ref.querySelectorAll(selectorTabbable));
+
+        let index = tabbable.indexOf(document.activeElement);
+        if (index === -1 && e.shiftKey) index = 0;
+
+        index += tabbable.length + (e.shiftKey ? -1 : 1);
+        index %= tabbable.length;
+
+        tabbable[index].focus();
+        e.preventDefault();
+      }
+    }
+  }}"
   on:click
   on:click="{() => {
     if (!didClickInnerModal && !preventCloseOnClickOutside) open = false;

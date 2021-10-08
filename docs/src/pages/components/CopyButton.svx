@@ -1,11 +1,13 @@
 <script>
-  import { CopyButton, InlineNotification, Link } from "carbon-components-svelte";
+  import { CopyButton } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">As of version 0.32, this component will copy the provided `code` text when clicking the button.</div>
-</InlineNotification>
+This component uses the native, asynchronous [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text.
+
+Please note that the `clipboard.writeText` API is not supported in [IE 11 nor Safari iOS version 13.3  or lower](https://caniuse.com/mdn-api_clipboard_writetext).
+
+You can override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
 
 ### Default
 
@@ -14,3 +16,17 @@
 ### Custom feedback text
 
 <CopyButton text="Carbon svelte" feedback="Copied to clipboard" />
+
+### Overriding copy functionality
+
+To override the default copy behavior, pass a custom function to the `copy` prop.
+
+In this example, we use the open source module [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
+
+<FileSource src="/framed/CopyButton/CopyButtonOverride" />
+
+### Preventing copy functionality
+
+To prevent text from being copied entirely, pass a no-op function to the `copy` prop.
+
+<CopyButton text="This text should not be copied" copy={() => {}} />

@@ -5,8 +5,17 @@
    */
   export let selected = undefined;
 
-  /** Set to `true` to use the bordered variant */
+  /**
+   * Set to `true` to use the bordered variant
+   * @deprecated
+   */
   export let border = false;
+
+  /** Set to `true` to use the condensed variant */
+  export let condensed = false;
+
+  /** Set to `true` to flush the list */
+  export let flush = false;
 
   /** Set to `true` to use the selection variant */
   export let selection = false;
@@ -28,11 +37,14 @@
   $: dispatch("change", $selectedValue);
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
-  aria-label="Structured list section"
+  role="table"
   class:bx--structured-list="{true}"
   class:bx--structured-list--border="{border}"
   class:bx--structured-list--selection="{selection}"
+  class:bx--structured-list--condensed="{condensed}"
+  class:bx--structured-list--flush="{flush}"
   {...$$restProps}
   on:click
   on:mouseover

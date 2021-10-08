@@ -95,6 +95,7 @@
   export let listRef = null;
 
   import { createEventDispatcher, afterUpdate, tick } from "svelte";
+  import Checkmark16 from "carbon-icons-svelte/lib/Checkmark16/Checkmark16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
@@ -122,13 +123,24 @@
     highlightedIndex = index;
   }
 
+  /**
+   * Clear the combo box programmatically
+   * @type {() => void}
+   */
+  export function clear() {
+    selectedIndex = -1;
+    highlightedIndex = -1;
+    open = false;
+    inputValue = "";
+    ref?.focus();
+  }
+
   afterUpdate(() => {
     if (open) {
       ref.focus();
       filteredItems = items.filter((item) => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
-      inputValue = selectedItem ? selectedItem.text : "";
 
       if (!selectedItem) {
         selectedId = undefined;
@@ -149,16 +161,17 @@
     : undefined;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
   $: selectedItem = items[selectedIndex];
-  $: inputValue = selectedItem ? selectedItem.text : undefined;
+  $: inputValue = selectedItem ? selectedItem.text : "";
   $: value = inputValue;
 </script>
 
-<svelte:body
+<svelte:window
   on:click="{({ target }) => {
     if (open && ref && !ref.contains(target)) {
       open = false;
     }
-  }}" />
+  }}"
+/>
 
 <div class:bx--list-box__wrapper="{true}">
   {#if titleText}
@@ -217,16 +230,31 @@
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
         class:bx--text-input--empty="{inputValue === ''}"
-        on:input="{({ target }) => {
+        on:input="{async ({ target }) => {
+          if (!open && target.value.length > 0) {
+            open = true;
+          }
+
           inputValue = target.value;
         }}"
         on:keydown
         on:keydown|stopPropagation="{({ key }) => {
           if (key === 'Enter') {
             open = !open;
+
             if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
               selectedIndex = highlightedIndex;
               open = false;
+
+              if (filteredItems[selectedIndex]) {
+                inputValue = filteredItems[selectedIndex].text;
+              }
+            }
+
+            if (highlightedIndex < 0 && selectedIndex > -1) {
+              if (filteredItems[selectedIndex]) {
+                inputValue = filteredItems[selectedIndex].text;
+              }
             }
           } else if (key === 'Tab') {
             open = false;
@@ -238,9 +266,16 @@
             open = false;
           }
         }}"
+        on:keyup
         on:focus
         on:blur
         on:blur="{({ relatedTarget }) => {
+          if (inputValue.length === 0 && selectedIndex > -1) {
+            if (filteredItems[selectedIndex]) {
+              inputValue = filteredItems[selectedIndex].text;
+            }
+          }
+
           if (!open || !relatedTarget) return;
           if (
             relatedTarget &&
@@ -263,11 +298,7 @@
       {#if inputValue}
         <ListBoxSelection
           on:clear
-          on:clear="{() => {
-            selectedIndex = -1;
-            open = false;
-            ref.focus();
-          }}"
+          on:clear="{clear}"
           translateWithId="{translateWithId}"
           disabled="{disabled}"
           open="{open}"
@@ -275,6 +306,7 @@
       {/if}
       <ListBoxMenuIcon
         on:click="{(e) => {
+          if (disabled) return;
           e.stopPropagation();
           open = !open;
         }}"
@@ -299,12 +331,19 @@
                 .map(({ id }) => id)
                 .indexOf(filteredItems[i].id);
               open = false;
+
+              if (filteredItems[i]) {
+                inputValue = filteredItems[i].text;
+              }
             }}"
             on:mouseenter="{() => {
               highlightedIndex = i;
             }}"
           >
             {itemToString(item)}
+            {#if selectedItem && selectedItem.id === item.id}
+              <Checkmark16 class="bx--list-box__menu-item__selected-icon" />
+            {/if}
           </ListBoxMenuItem>
         {/each}
       </ListBoxMenu>

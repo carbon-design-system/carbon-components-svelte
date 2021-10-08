@@ -20,7 +20,7 @@
   import Footer from "../components/Footer.svelte";
 
   const deprecated = ["ToggleSmall", "Icon"];
-  const new_components = ["Popover", "ContextMenu"];
+  const new_components = [];
 
   let isOpen = false;
   let isSideNavOpen = true;
@@ -60,17 +60,19 @@
     <HeaderUtilities>
       <HeaderActionLink
         icon="{LogoGithub20}"
-        href="https://github.com/IBM/carbon-components-svelte"
+        href="https://github.com/carbon-design-system/carbon-components-svelte"
         target="_blank"
       />
       <HeaderAction transition="{false}" bind:isOpen>
         <HeaderPanelLinks>
           <HeaderPanelDivider>Carbon Svelte portfolio</HeaderPanelDivider>
-          <HeaderPanelLink href="https://github.com/IBM/carbon-icons-svelte">
+          <HeaderPanelLink
+            href="https://github.com/carbon-design-system/carbon-icons-svelte"
+          >
             Carbon Icons Svelte
           </HeaderPanelLink>
           <HeaderPanelLink
-            href="https://github.com/IBM/carbon-pictograms-svelte"
+            href="https://github.com/carbon-design-system/carbon-pictograms-svelte"
           >
             Carbon Pictograms Svelte
           </HeaderPanelLink>
@@ -78,6 +80,11 @@
             href="https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte"
           >
             Carbon Charts Svelte
+          </HeaderPanelLink>
+          <HeaderPanelLink
+            href="https://github.com/carbon-design-system/carbon-preprocess-svelte"
+          >
+            Carbon Preprocess Svelte
           </HeaderPanelLink>
           <HeaderPanelDivider>Resources</HeaderPanelDivider>
           <HeaderPanelLink href="https://www.carbondesignsystem.com/">
@@ -264,6 +271,6 @@
   }
 
   .bx--side-nav__submenu[aria-expanded="true"] + .bx--side-nav__menu {
-    max-height: 124rem;
+    max-height: 144rem;
   }
 </style>

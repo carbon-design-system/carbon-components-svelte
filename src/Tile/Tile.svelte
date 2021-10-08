@@ -3,6 +3,7 @@
   export let light = false;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--tile="{true}"
   class:bx--tile--light="{light}"

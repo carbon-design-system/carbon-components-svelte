@@ -13,6 +13,18 @@
    */
   export let code = undefined;
 
+  /**
+   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
+   * @type {(code: string) => void}
+   */
+  export let copy = async (code) => {
+    try {
+      await navigator.clipboard.writeText(code);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   /** Set to `true` to expand a multi-line code snippet (type="multi") */
   export let expanded = false;
 
@@ -77,7 +89,6 @@
   export let ref = null;
 
   import { createEventDispatcher, tick } from "svelte";
-  import copy from "clipboard-copy";
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
   import Button from "../Button/Button.svelte";
   import Copy from "../Copy/Copy.svelte";
@@ -97,12 +108,15 @@
   }
 
   $: expandText = expanded ? showLessText : showMoreText;
+  $: minHeight = expanded ? 16 * 15 : 48;
+  $: maxHeight = expanded ? "none" : 16 * 15 + "px";
   $: if (type === "multi" && ref) {
     if (code === undefined) setShowMoreLess();
     if (code) tick().then(setShowMoreLess);
   }
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <CodeSnippetSkeleton
     type="{type}"
@@ -178,12 +192,12 @@
       tabindex="{type === 'single' && !disabled ? '0' : undefined}"
       aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
       class:bx--snippet-container="{true}"
+      style="width: 100%; min-height: {minHeight}px; max-height: {maxHeight}"
     >
-      <code>
-        <pre bind:this="{ref}">
-            <slot>{code}</slot>
-          </pre>
-      </code>
+      <pre
+        bind:this="{ref}">
+        <code><slot>{code}</slot></code>
+      </pre>
     </div>
     {#if !hideCopyButton}
       <CopyButton

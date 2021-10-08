@@ -7,7 +7,7 @@
 
   /**
    * Specify the size of button skeleton
-   * @type {"default" | "field" | "small"}
+   * @type {"default" | "field" | "small" | "lg" | "xl"}
    */
   export let size = "default";
 
@@ -18,6 +18,7 @@
   export let small = false;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if href}
   <a
     href="{href}"
@@ -27,6 +28,8 @@
     class:bx--btn="{true}"
     class:bx--btn--field="{size === 'field'}"
     class:bx--btn--sm="{size === 'small' || small}"
+    class:bx--btn--lg="{size === 'lg'}"
+    class:bx--btn--xl="{size === 'xl'}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -41,6 +44,8 @@
     class:bx--btn="{true}"
     class:bx--btn--field="{size === 'field'}"
     class:bx--btn--sm="{size === 'small' || small}"
+    class:bx--btn--lg="{size === 'lg'}"
+    class:bx--btn--xl="{size === 'xl'}"
     {...$$restProps}
     on:click
     on:mouseover

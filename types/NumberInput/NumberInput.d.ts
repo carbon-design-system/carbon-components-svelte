@@ -63,6 +63,12 @@ export interface NumberInputProps
   disabled?: boolean;
 
   /**
+   * Set to `true` to hide the input stepper buttons
+   * @default false
+   */
+  hideSteppers?: boolean;
+
+  /**
    * Specify the ARIA label for the increment icons
    * @default ""
    */
@@ -117,13 +123,6 @@ export interface NumberInputProps
   translateWithId?: (id: NumberInputTranslationId) => string;
 
   /**
-   * Default translation ids
-   * @constant
-   * @default { increment: "increment", decrement: "decrement", }
-   */
-  translationIds?: { increment: "increment"; decrement: "decrement" };
-
-  /**
    * Set an id for the input element
    * @default "ccs-" + Math.random().toString(36)
    */
@@ -152,4 +151,11 @@ export default class NumberInput extends SvelteComponentTyped<
     input: WindowEventMap["input"];
   },
   { label: {} }
-> {}
+> {
+  /**
+   * Default translation ids
+   * @constant
+   * @default { increment: "increment", decrement: "decrement", }
+   */
+  translationIds: { increment: "increment"; decrement: "decrement" };
+}

@@ -2,7 +2,7 @@
 import { SvelteComponentTyped } from "svelte";
 
 export interface TooltipDefinitionProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
   /**
    * Specify the tooltip text
    * @default ""

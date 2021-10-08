@@ -44,6 +44,7 @@
   $: value = $selectedValue;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--select="{true}"
   class:bx--time-picker__select="{true}"
@@ -60,7 +61,9 @@
       class:bx--visually-hidden="{hideLabel}"
     >
       <!-- TODO: set to always be `true` after `hideLabel` is deprecated -->
-      {labelText}
+      <slot name="labelText">
+        {labelText}
+      </slot>
     </label>
   {/if}
   <!-- svelte-ignore a11y-no-onchange -->

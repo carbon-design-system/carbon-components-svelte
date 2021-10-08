@@ -3,6 +3,7 @@
   export let size = "default";
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <span
   class:bx--tag="{true}"
   class:bx--tag--sm="{size === 'sm'}"

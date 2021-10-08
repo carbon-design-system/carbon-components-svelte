@@ -18,7 +18,6 @@
   export let ref = null;
 
   import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
-  import Icon from "../../Icon/Icon.svelte";
 </script>
 
 <li class:bx--side-nav__item="{true}" class:bx--side-nav__item--icon="{icon}">
@@ -35,7 +34,7 @@
   >
     {#if icon}
       <div class:bx--side-nav__icon="{true}">
-        <Icon render="{icon}" />
+        <svelte:component this="{icon}" />
       </div>
     {/if}
     <span class:bx--side-nav__submenu-title="{true}">{text}</span>
@@ -44,7 +43,7 @@
       class:bx--side-nav__icon--small="{true}"
       class:bx--side-nav__submenu-chevron="{true}"
     >
-      <Icon title="Open Menu" tabindex="0" render="{ChevronDown16}" />
+      <svelte:component this="{ChevronDown16}" title="Open Menu" tabindex="0" />
     </div>
   </button>
   <ul role="menu" class:bx--side-nav__menu="{true}">

@@ -1,4 +1,5 @@
 <script>
+  import Query16 from "carbon-icons-svelte/lib/Query16";
   import { Search } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
@@ -23,6 +24,10 @@ The "clear" event is dispatched when clicking the "X" button in the search input
 
 <Search value="Cloud functions" on:clear={() => console.log('clear')}/>
 
+### Expandable variant
+
+<Search expandable on:expand on:collapse />
+
 ### Light variant
 
 <Search light />
@@ -35,9 +40,13 @@ The "clear" event is dispatched when clicking the "X" button in the search input
 
 <Search size="sm" />
 
-### Disabled
+### Disabled state
 
 <Search disabled />
+
+### Custom search icon
+
+<Search icon={Query16} />
 
 ### Skeleton
 

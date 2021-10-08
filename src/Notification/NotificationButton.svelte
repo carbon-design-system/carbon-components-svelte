@@ -23,6 +23,7 @@
   import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   type="button"
   aria-label="{iconDescription}"

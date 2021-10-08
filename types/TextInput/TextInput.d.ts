@@ -104,10 +104,16 @@ export interface TextInputProps
   required?: boolean;
 
   /**
-   * Set to `true` to use inline version
+   * Set to `true` to use the inline variant
    * @default false
    */
   inline?: boolean;
+
+  /**
+   * Set to `true` to use the read-only variant
+   * @default false
+   */
+  readonly?: boolean;
 }
 
 export default class TextInput extends SvelteComponentTyped<
@@ -120,8 +126,9 @@ export default class TextInput extends SvelteComponentTyped<
     change: WindowEventMap["change"];
     input: WindowEventMap["input"];
     keydown: WindowEventMap["keydown"];
+    keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  {}
+  { labelText: {} }
 > {}

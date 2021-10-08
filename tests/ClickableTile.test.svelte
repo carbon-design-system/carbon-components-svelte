@@ -6,6 +6,11 @@
   Carbon Design System
 </ClickableTile>
 
-<ClickableTile light href="https://www.carbondesignsystem.com/">
+<ClickableTile
+  light
+  href="https://www.carbondesignsystem.com/"
+  title=""
+  target="_blank"
+>
   Carbon Design System
 </ClickableTile>

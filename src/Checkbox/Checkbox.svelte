@@ -47,6 +47,7 @@
   $: dispatch("check", checked);
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <CheckboxSkeleton
     {...$$restProps}
@@ -79,13 +80,16 @@
       on:change="{() => {
         checked = !checked;
       }}"
+      on:blur
     />
     <label for="{id}" title="{title}" class:bx--checkbox-label="{true}">
       <span
         class:bx--checkbox-label-text="{true}"
         class:bx--visually-hidden="{hideLabel}"
       >
-        {labelText}
+        <slot name="labelText">
+          {labelText}
+        </slot>
       </span>
     </label>
   </div>

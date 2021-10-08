@@ -89,26 +89,28 @@
       class:bx--file__drop-container="{true}"
       class:bx--file__drop-container--drag-over="{over}"
     >
-      {labelText}
-      <input
-        bind:this="{ref}"
-        type="file"
-        tabindex="-1"
-        id="{id}"
-        disabled="{disabled}"
-        accept="{accept}"
-        name="{name}"
-        multiple="{multiple}"
-        class:bx--file-input="{true}"
-        on:change
-        on:change="{({ target }) => {
-          dispatch('add', validateFiles(target.files));
-        }}"
-        on:click
-        on:click="{({ target }) => {
-          target.value = null;
-        }}"
-      />
+      <slot name="labelText">
+        {labelText}
+      </slot>
     </div>
+    <input
+      bind:this="{ref}"
+      type="file"
+      tabindex="-1"
+      id="{id}"
+      disabled="{disabled}"
+      accept="{accept}"
+      name="{name}"
+      multiple="{multiple}"
+      class:bx--file-input="{true}"
+      on:change
+      on:change="{({ target }) => {
+        dispatch('add', validateFiles(target.files));
+      }}"
+      on:click
+      on:click="{({ target }) => {
+        target.value = null;
+      }}"
+    />
   </label>
 </div>

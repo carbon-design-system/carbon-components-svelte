@@ -116,13 +116,15 @@
   }
 </script>
 
-<svelte:body
+<svelte:window
   on:mousemove="{move}"
   on:touchmove="{move}"
   on:mouseup="{stopHolding}"
   on:touchend="{stopHolding}"
-  on:touchcancel="{stopHolding}" />
+  on:touchcancel="{stopHolding}"
+/>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--form-item="{true}"
   {...$$restProps}
@@ -137,7 +139,9 @@
     class:bx--label="{true}"
     class:bx--label--disabled="{disabled}"
   >
-    {labelText}
+    <slot name="labelText">
+      {labelText}
+    </slot>
   </label>
   <div class:bx--slider-container="{true}">
     <span class:bx--slider__range-label="{true}">{minLabel || min}</span>

@@ -4,6 +4,9 @@
   let storage: LocalStorage;
   let toggled = false;
   let events = [];
+
+  $: if (storage) storage.clearItem();
+  $: if (storage) storage.clearAll();
 </script>
 
 <LocalStorage

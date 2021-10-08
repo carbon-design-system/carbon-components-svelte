@@ -68,6 +68,7 @@ function plugin() {
       const formattedCode = format(scriptBlock + node.value, {
         parser: "svelte",
         svelteBracketNewLine: true,
+        svelteSortOrder: "scripts-markup-styles",
       });
       const highlightedCode = Prism.highlight(
         formattedCode,
@@ -237,6 +238,9 @@ module.exports = {
                     <ul class="bx--list--unordered bx--list--nested">
                       <li class="bx--list__item">
                         <a class="bx--link" href="#props">Props</a>
+                      </li>
+                      <li class="bx--list__item">
+                        <a class="bx--link" href="#typedefs">Typedefs</a>
                       </li>
                       <li class="bx--list__item">
                         <a class="bx--link" href="#slots">Slots</a>

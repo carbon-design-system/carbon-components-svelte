@@ -128,6 +128,21 @@
   /** Obtain a reference to the input HTML element */
   export let inputRef = null;
 
+  /** Obtain a reference to the outer div element */
+  export let multiSelectRef = null;
+
+  /**
+   * Obtain a reference to the field box element
+   * @type {null | HTMLDivElement}
+   */
+  export let fieldRef = null;
+
+  /**
+   * Obtain a reference to the selection element
+   * @type {null | HTMLDivElement}
+   */
+  export let selectionRef = null;
+
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
@@ -142,10 +157,6 @@
   } from "../ListBox";
 
   const dispatch = createEventDispatcher();
-
-  let multiSelectRef = null;
-  let fieldRef = null;
-  let selectionRef = null;
 
   let inputValue = "";
   let initialSorted = false;
@@ -227,12 +238,13 @@
   $: value = inputValue;
 </script>
 
-<svelte:body
+<svelte:window
   on:click="{({ target }) => {
     if (open && multiSelectRef && !multiSelectRef.contains(target)) {
       open = false;
     }
-  }}" />
+  }}"
+/>
 
 <div
   bind:this="{multiSelectRef}"
@@ -319,6 +331,12 @@
           }
         }
       }}"
+      on:focus="{() => {
+        if (filterable) {
+          open = true;
+          if (inputRef) inputRef.focus();
+        }
+      }}"
       on:blur="{({ relatedTarget }) => {
         if (
           relatedTarget &&
@@ -342,7 +360,7 @@
               ...item,
               checked: false,
             }));
-            fieldRef.blur();
+            if (fieldRef) fieldRef.blur();
           }}"
           translateWithId="{translateWithId}"
           disabled="{disabled}"
@@ -382,12 +400,17 @@
               change(-1);
             }
           }}"
+          on:keyup
           on:focus
           on:blur
           on:blur="{({ relatedTarget }) => {
             if (
               relatedTarget &&
-              relatedTarget.getAttribute('role') !== 'button'
+              !['INPUT', 'SELECT', 'TEXTAREA'].includes(
+                relatedTarget.tagName
+              ) &&
+              relatedTarget.getAttribute('role') !== 'button' &&
+              relatedTarget.getAttribute('role') !== 'searchbox'
             ) {
               inputRef.focus();
             }
@@ -452,6 +475,9 @@
               labelText="{itemToString(item)}"
               checked="{item.checked}"
               disabled="{disabled}"
+              on:blur="{() => {
+                if (i === filteredItems.length - 1) open = false;
+              }}"
             />
           </ListBoxMenuItem>
         {/each}

@@ -44,10 +44,34 @@ export interface HeaderProps
   persistentHamburgerMenu?: boolean;
 
   /**
+   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden
+   * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
+   * small: 320
+   * medium: 672
+   * large: 1056
+   * x-large: 1312
+   * max: 1584
+   * @default 1056
+   */
+  expansionBreakpoint?: number;
+
+  /**
    * Obtain a reference to the HTML anchor element
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the closed state
+   * Defaults to `Menu20`
+   */
+  iconMenu?: typeof import("carbon-icons-svelte").CarbonIcon;
+
+  /**
+   * Specify the icon from `carbon-icons-svelte` to render for the opened state
+   * Defaults to `Close20`
+   */
+  iconClose?: typeof import("carbon-icons-svelte").CarbonIcon;
 }
 
 export default class Header extends SvelteComponentTyped<

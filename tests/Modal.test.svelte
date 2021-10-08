@@ -10,11 +10,16 @@
   bind:open
   modalHeading="Create database"
   primaryButtonText="Confirm"
+  secondaryButtons="{[{ text: 'Cancel' }, { text: 'Duplicate' }]}"
   secondaryButtonText="Cancel"
-  on:click:button--secondary="{() => (open = false)}"
+  on:click:button--secondary="{({ detail }) => {
+    console.log(detail);
+    open = false;
+  }}"
   on:open
   on:close
   on:submit
+  on:click:button--primary
 >
   <p>Create a new Cloudant database in the US South region.</p>
 </Modal>

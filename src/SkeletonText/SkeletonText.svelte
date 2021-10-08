@@ -26,6 +26,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if paragraph}
   <div {...$$restProps} on:click on:mouseover on:mouseenter on:mouseleave>
     {#each rows as { width }}

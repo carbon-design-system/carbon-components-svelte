@@ -1,33 +1,32 @@
 {
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
+    "start": "node __sapper__/build",
     "dev": "sapper dev",
     "build": "sapper build --legacy",
-    "export": "sapper export --legacy",
-    "start": "node __sapper__/build"
+    "export": "sapper export --legacy"
   },
   "dependencies": {
-    "compression": "^1.7.1",
-    "polka": "next",
-    "sirv": "^1.0.0"
+    "polka": "next"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.14.5",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/runtime": "^7.0.0",
-    "@rollup/plugin-babel": "^5.0.0",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.5",
+    "@babel/runtime": "^7.14.5",
+    "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
-    "@rollup/plugin-replace": "^2.2.0",
-    "carbon-components-svelte": "^0.12.0",
-    "npm-run-all": "^4.1.5",
-    "rollup": "^2.3.4",
-    "rollup-plugin-svelte": "^6.0.0",
+    "@rollup/plugin-replace": "^2.4.2",
+    "@rollup/plugin-url": "^5.0.0",
+    "carbon-components-svelte": "^0.41.0",
+    "carbon-preprocess-svelte": "^0.6.0",
+    "rollup": "^2.51.2",
+    "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.0",
-    "sapper": "^0.28.0",
-    "svelte": "^3.17.3"
+    "sapper": "^0.29.1",
+    "svelte": "^3.38.2"
   }
 }

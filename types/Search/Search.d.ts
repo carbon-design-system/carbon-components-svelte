@@ -38,6 +38,18 @@ export interface SearchProps {
   disabled?: boolean;
 
   /**
+   * Set to `true` to enable the expandable variant
+   * @default false
+   */
+  expandable?: boolean;
+
+  /**
+   * Set to `true to expand the search input
+   * @default false
+   */
+  expanded?: boolean;
+
+  /**
    * Specify the value of the search input
    * @default ""
    */
@@ -80,6 +92,11 @@ export interface SearchProps {
   labelText?: string;
 
   /**
+   * Specify the icon from `carbon-icons-svelte` to render
+   */
+  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+
+  /**
    * Set an id for the input element
    * @default "ccs-" + Math.random().toString(36)
    */
@@ -95,6 +112,8 @@ export interface SearchProps {
 export default class Search extends SvelteComponentTyped<
   SearchProps,
   {
+    expand: CustomEvent<any>;
+    collapse: CustomEvent<any>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
@@ -104,7 +123,8 @@ export default class Search extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
     keydown: WindowEventMap["keydown"];
+    keyup: WindowEventMap["keyup"];
     clear: CustomEvent<any>;
   },
-  {}
+  { labelText: {} }
 > {}

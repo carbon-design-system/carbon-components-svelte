@@ -60,6 +60,7 @@
   );
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <ul
   class:bx--progress="{true}"
   class:bx--progress--vertical="{vertical}"

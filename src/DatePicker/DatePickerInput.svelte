@@ -17,6 +17,9 @@
   /** Set to `true` to disable the input */
   export let disabled = false;
 
+  /** Specify the helper text */
+  export let helperText = "";
+
   /** Specify the ARIA label for the calendar icon */
   export let iconDescription = "";
 
@@ -50,7 +53,7 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { getContext, onMount } from "svelte";
+  import { getContext } from "svelte";
   import Calendar16 from "carbon-icons-svelte/lib/Calendar16/Calendar16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
@@ -60,18 +63,19 @@
     add,
     hasCalendar,
     declareRef,
+    inputIds,
     updateValue,
     blurInput,
     openCalendar,
     focusCalendar,
     inputValue,
+    inputValueFrom,
+    inputValueTo,
   } = getContext("DatePicker");
 
   add({ id, labelText });
 
-  onMount(() => {
-    declareRef({ id, ref });
-  });
+  $: if (ref) declareRef({ id, ref });
 </script>
 
 <div
@@ -85,7 +89,9 @@
       class:bx--visually-hidden="{hideLabel}"
       class:bx--label--disabled="{disabled}"
     >
-      {labelText}
+      <slot name="labelText">
+        {labelText}
+      </slot>
     </label>
   {/if}
   <div
@@ -103,7 +109,11 @@
       pattern="{pattern}"
       disabled="{disabled}"
       {...$$restProps}
-      value="{!$range ? $inputValue : undefined}"
+      value="{$range
+        ? $inputIds.indexOf(id) === 0
+          ? $inputValueFrom
+          : $inputValueTo
+        : $inputValue}"
       class:bx--date-picker__input="{true}"
       class:bx--date-picker__input--invalid="{invalid}"
       class="{size && `bx--date-picker__input--${size}`}"
@@ -120,6 +130,7 @@
           focusCalendar();
         }
       }}"
+      on:keyup
       on:blur
       on:blur="{({ relatedTarget }) => {
         blurInput(relatedTarget);
@@ -152,5 +163,13 @@
   {/if}
   {#if !invalid && warn}
     <div class:bx--form-requirement="{true}">{warnText}</div>
+  {/if}
+  {#if helperText}
+    <div
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}"
+    >
+      {helperText}
+    </div>
   {/if}
 </div>

@@ -41,6 +41,7 @@
   );
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--skeleton="{true}"
   class:bx--data-table-container="{true}"
@@ -86,15 +87,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        {#each cols as col (col)}
-          <td><span></span></td>
-        {/each}
-      </tr>
-      {#each Array.from({ length: rows - 1 }, (_, i) => i) as row (row)}
+      {#each Array.from({ length: rows }, (_, i) => i) as row (row)}
         <tr>
           {#each cols as col (col)}
-            <td></td>
+            <td><span></span></td>
           {/each}
         </tr>
       {/each}

@@ -56,6 +56,7 @@
   });
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if open}
   <div
     role="{role}"
@@ -76,11 +77,7 @@
     on:mouseleave
   >
     <div class:bx--inline-notification__details="{true}">
-      <NotificationIcon
-        notificationType="inline"
-        kind="{kind}"
-        iconDescription="{iconDescription}"
-      />
+      <NotificationIcon notificationType="inline" kind="{kind}" />
       <NotificationTextDetails
         title="{title}"
         subtitle="{subtitle}"

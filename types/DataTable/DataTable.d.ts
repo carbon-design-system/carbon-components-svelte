@@ -28,11 +28,12 @@ export interface DataTableRow {
   [key: string]: DataTableValue;
 }
 
-export type DataTableRowId = string;
+export type DataTableRowId = any;
 
 export interface DataTableCell {
   key: DataTableKey;
   value: DataTableValue;
+  display?: (item: Value) => DataTableValue;
 }
 
 export interface DataTableProps
@@ -53,7 +54,7 @@ export interface DataTableProps
   /**
    * Set the size of the data table
    */
-  size?: "compact" | "short" | "tall";
+  size?: "compact" | "short" | "medium" | "tall";
 
   /**
    * Specify the title of the data table
@@ -128,6 +129,12 @@ export interface DataTableProps
    * @default false
    */
   stickyHeader?: boolean;
+
+  /**
+   * Set to `true` to use static width
+   * @default false
+   */
+  useStaticWidth?: boolean;
 }
 
 export default class DataTable extends SvelteComponentTyped<
@@ -156,6 +163,8 @@ export default class DataTable extends SvelteComponentTyped<
     default: {};
     cell: { row: DataTableRow; cell: DataTableCell };
     ["cell-header"]: { header: DataTableNonEmptyHeader };
+    description: {};
     ["expanded-row"]: { row: DataTableRow };
+    title: {};
   }
 > {}
