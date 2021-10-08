@@ -43,6 +43,12 @@ yarn add -D carbon-components-svelte
 npm i -D carbon-components-svelte
 ```
 
+**pnpm**
+
+```sh
+pnpm i -D carbon-components-svelte
+```
+
 ## Usage
 
 ### Styling
