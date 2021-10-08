@@ -58,7 +58,7 @@
     class:action-text="{text}"
     {...$$restProps}
     on:click
-    on:click|stopPropagation="{() => {
+    on:click="{() => {
       isOpen = !isOpen;
       dispatch(isOpen ? 'open' : 'close');
     }}"
