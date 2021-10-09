@@ -396,7 +396,7 @@
             {#if headers[j].empty}
               <td class:bx--table-column-menu="{headers[j].columnMenu}">
                 <slot name="cell" row="{row}" cell="{cell}">
-                  {cell.display ? cell.display(cell.value) : cell.value}
+                  {cell.display ? cell.display(cell.value) : cell.value ?? ""}
                 </slot>
               </td>
             {:else}
@@ -407,7 +407,7 @@
                 }}"
               >
                 <slot name="cell" row="{row}" cell="{cell}">
-                  {cell.display ? cell.display(cell.value) : cell.value}
+                  {cell.display ? cell.display(cell.value) : cell.value ?? ""}
                 </slot>
               </TableCell>
             {/if}
