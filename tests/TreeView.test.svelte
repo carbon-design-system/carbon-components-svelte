@@ -3,6 +3,7 @@
   import type { TreeNodeId } from "../types/TreeView/TreeView";
   import Analytics16 from "carbon-icons-svelte/lib/Analytics16";
 
+  let treeview: TreeView;
   let activeId: TreeNodeId = "";
   let selectedIds = [];
   let expandedIds = [1];
@@ -46,9 +47,21 @@
       children: [{ id: 15, text: "IBM API Connect", disabled: true }],
     },
   ];
+
+  $: if (treeview) {
+    treeview.expandAll();
+    treeview.expandNodes((node) => {
+      return node.id > 0;
+    });
+    treeview.collapseAll();
+    treeview.collapseNodes((node) => {
+      return node.disabled;
+    });
+  }
 </script>
 
 <TreeView
+  bind:this="{treeview}"
   size="compact"
   labelText="Cloud Products"
   children="{children}"
