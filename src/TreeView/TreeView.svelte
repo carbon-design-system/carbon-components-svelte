@@ -46,6 +46,7 @@
 
   /**
    * Programmatically expand all nodes
+   * @type {() => void}
    */
   export function expandAll() {
     expandedIds = [...nodeIds];
@@ -53,6 +54,7 @@
 
   /**
    * Programmatically collapse all nodes
+   * @type {() => void}
    */
   export function collapseAll() {
     expandedIds = [];
