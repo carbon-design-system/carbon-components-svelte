@@ -709,6 +709,17 @@
       "filePath": "src/Checkbox/Checkbox.svelte",
       "props": [
         {
+          "name": "value",
+          "kind": "let",
+          "description": "Specify the value of the checkbox",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "checked",
           "kind": "let",
           "description": "Specify whether the checkbox is checked",

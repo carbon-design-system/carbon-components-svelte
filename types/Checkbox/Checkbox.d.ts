@@ -3,6 +3,12 @@ import { SvelteComponentTyped } from "svelte";
 
 export interface CheckboxProps {
   /**
+   * Specify the value of the checkbox
+   * @default ""
+   */
+  value?: string;
+
+  /**
    * Specify whether the checkbox is checked
    * @default false
    */
