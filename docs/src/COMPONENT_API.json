@@ -13163,6 +13163,50 @@
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "expandAll",
+          "kind": "function",
+          "description": "Programmatically expand all nodes",
+          "type": "() => void",
+          "value": "() => {     expandedIds = [...nodeIds];   }",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "collapseAll",
+          "kind": "function",
+          "description": "Programmatically collapse all nodes",
+          "type": "() => void",
+          "value": "() => {     expandedIds = [];   }",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "expandNodes",
+          "kind": "function",
+          "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided",
+          "type": "(filterId?: (node: TreeNode) => boolean) => void",
+          "value": "() => {     expandedIds = nodes       .filter((node) => !filterNode(node))       .map((node) => node.id);   }",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "collapseNodes",
+          "kind": "function",
+          "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided",
+          "type": "(filterId?: (node: TreeNode) => boolean) => void",
+          "value": "() => {     expandedIds = nodes       .filter((node) => !filterNode(node))       .map((node) => node.id);   }",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [

@@ -44,6 +44,44 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
+  /**
+   * Programmatically expand all nodes
+   * @type {() => void}
+   */
+  export function expandAll() {
+    expandedIds = [...nodeIds];
+  }
+
+  /**
+   * Programmatically collapse all nodes
+   * @type {() => void}
+   */
+  export function collapseAll() {
+    expandedIds = [];
+  }
+
+  /**
+   * Programmatically expand a subset of nodes.
+   * Expands all nodes if no argument is provided
+   * @type {(filterId?: (node: TreeNode) => boolean) => void}
+   */
+  export function expandNodes(filterNode = (node) => false) {
+    expandedIds = nodes
+      .filter((node) => !filterNode(node))
+      .map((node) => node.id);
+  }
+
+  /**
+   * Programmatically collapse a subset of nodes.
+   * Collapses all nodes if no argument is provided
+   * @type {(filterId?: (node: TreeNode) => boolean) => void}
+   */
+  export function collapseNodes(filterNode = (node) => true) {
+    expandedIds = nodes
+      .filter((node) => !filterNode(node))
+      .map((node) => node.id);
+  }
+
   import { createEventDispatcher, setContext, onMount } from "svelte";
   import { writable } from "svelte/store";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
@@ -105,6 +143,25 @@
     }
   });
 
+  /**
+   * @param {Array<TreeNode & { children?: TreeNode[] }>} children
+   */
+  function traverse(children) {
+    let nodes = [];
+
+    children.forEach((node) => {
+      nodes.push(node);
+
+      if (Array.isArray(node.children)) {
+        nodes = [...nodes, ...traverse(node.children)];
+      }
+    });
+
+    return nodes;
+  }
+
+  $: nodes = traverse(children);
+  $: nodeIds = nodes.map((node) => node.id);
   $: activeNodeId.set(activeId);
   $: selectedNodeIds.set(selectedIds);
   $: expandedNodeIds.set(expandedIds);

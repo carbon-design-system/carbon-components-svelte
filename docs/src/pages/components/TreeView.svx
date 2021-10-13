@@ -46,3 +46,33 @@ Expanded nodes can be set using `expandedIds`.
 Initial multiple selected nodes can be set using `selectedIds`.
 
 <FileSource src="/framed/TreeView/TreeViewMultiselect" />
+
+### Expand all nodes
+
+To programmatically expand all nodes, access the component instance using the [bind:this](https://svelte.dev/docs#bind_element) directive and invoke the `TreeView.expandAll()` method to expand all nodes.
+
+<FileSource src="/framed/TreeView/TreeViewExpandAll" />
+
+### Collapse all nodes
+
+Similarly, invoke `TreeView.collapseAll()` to collapse all nodes.
+
+<FileSource src="/framed/TreeView/TreeViewCollapseAll" />
+
+### Expand a subset of nodes
+
+Use the `TreeView.expandNodes` method to expand only a subset of nodes.
+
+The method accepts an argument that takes a node and returns a boolean.
+
+If no argument is provided, all nodes will be expanded.
+
+<FileSource src="/framed/TreeView/TreeViewExpandNodes" />
+
+### Collapse a subset of nodes
+
+Use the `TreeView.collapseNodes` method to collapse a subset of nodes.
+
+If no argument is provided, all nodes will be collapsed.
+
+<FileSource src="/framed/TreeView/TreeViewCollapseNodes" />
