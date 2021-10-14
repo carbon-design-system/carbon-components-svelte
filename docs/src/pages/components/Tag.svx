@@ -25,6 +25,7 @@
 <Tag type="cool-gray">cool-gray</Tag>
 <Tag type="warm-gray">warm-gray</Tag>
 <Tag type="high-contrast">high-contrast</Tag>
+<Tag type="outline">outline</Tag>
 
 ### Filterable
 

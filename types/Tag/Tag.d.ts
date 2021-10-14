@@ -18,7 +18,8 @@ export interface TagProps
     | "gray"
     | "cool-gray"
     | "warm-gray"
-    | "high-contrast";
+    | "high-contrast"
+    | "outline";
 
   /**
    * @default "default"
