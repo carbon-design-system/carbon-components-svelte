@@ -10,7 +10,7 @@
    * Specify the icon from `carbon-icons-svelte` to render
    * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
-  export let icon = undefined;
+  export let icon = AppSwitcher20;
 
   /**
    * Specify the text
@@ -63,7 +63,7 @@
       dispatch(isOpen ? 'open' : 'close');
     }}"
   >
-    <Icon render="{icon || (isOpen ? Close20 : AppSwitcher20)}" />
+    <Icon render="{icon}" />
     <slot name="text">
       {#if text}<span>{text}</span>{/if}
     </slot>
