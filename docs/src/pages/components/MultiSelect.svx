@@ -71,6 +71,14 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
+### Hidden label
+
+<MultiSelect titleText="Contact" label="Select contact methods..." hideLabel
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ### Light variant
 
 <MultiSelect light titleText="Contact" label="Select contact methods..."
@@ -102,8 +110,6 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
   />
-
-
 
 ### Invalid state
 

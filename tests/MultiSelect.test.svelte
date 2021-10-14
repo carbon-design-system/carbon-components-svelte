@@ -6,6 +6,7 @@
   direction="top"
   titleText="Contact"
   label="Select contact methods..."
+  hideLabel
   items="{[
     { id: '0', text: 'Slack' },
     { id: '1', text: 'Email' },
