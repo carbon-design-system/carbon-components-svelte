@@ -116,6 +116,9 @@
   /** Specify the list box label */
   export let label = "";
 
+  /** Set to `true` to visually hide the label text */
+  export let hideLabel = false;
+
   /** Set an id for the list box component */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -259,6 +262,7 @@
       for="{id}"
       class:bx--label="{true}"
       class:bx--label--disabled="{disabled}"
+      class:bx--visually-hidden="{hideLabel}"
     >
       {titleText}
     </label>
