@@ -1,5 +1,6 @@
 ---
 components: ["SelectableTile"]
+source: Tile/SelectableTile.svelte
 ---
 
 <script>

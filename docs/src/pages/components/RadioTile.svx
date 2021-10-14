@@ -1,5 +1,6 @@
 ---
 components: ["TileGroup", "RadioTile"]
+source: Tile/RadioTile.svelte
 ---
 
 <script>

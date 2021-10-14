@@ -1,14 +1,9 @@
-<script lang="ts">
-  import { TreeView } from "../types";
-  import type { TreeNodeId } from "../types/TreeView/TreeView";
-  import Analytics16 from "carbon-icons-svelte/lib/Analytics16";
+<script>
+  import { TreeView, Button } from "carbon-components-svelte";
 
-  let treeview: TreeView;
-  let activeId: TreeNodeId = "";
-  let selectedIds = [];
-  let expandedIds = [1];
+  let treeview = null;
   let children = [
-    { id: 0, text: "AI / Machine learning", icon: Analytics16 },
+    { id: 0, text: "AI / Machine learning" },
     {
       id: 1,
       text: "Analytics",
@@ -47,28 +42,26 @@
       children: [{ id: 15, text: "IBM API Connect", disabled: true }],
     },
   ];
-
-  $: if (treeview) {
-    treeview.expandAll();
-    treeview.expandNodes((node) => {
-      return node.id > 0;
-    });
-    treeview.collapseAll();
-    treeview.collapseNodes((node) => {
-      return node.disabled;
-    });
-  }
 </script>
+
+<div>
+  <Button
+    on:click="{() => {
+      treeview?.expandNodes((node) => /^IBM/.test(node.text));
+    }}"
+  >
+    Expand nodes starting with "IBM"
+  </Button>
+</div>
 
 <TreeView
   bind:this="{treeview}"
-  size="compact"
   labelText="Cloud Products"
   children="{children}"
-  bind:activeId
-  bind:selectedIds
-  bind:expandedIds
-  on:select="{({ detail }) => console.log('select', detail)}"
-  on:toggle="{({ detail }) => console.log('toggle', detail)}"
-  on:focus="{({ detail }) => console.log('focus', detail)}"
 />
+
+<style>
+  div {
+    margin-bottom: var(--cds-spacing-05);
+  }
+</style>

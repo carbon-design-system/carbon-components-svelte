@@ -1,6 +1,6 @@
 # Component Index
 
-> 172 components exported from carbon-components-svelte@0.44.5.
+> 172 components exported from carbon-components-svelte@0.45.0.
 
 ## Components
 
@@ -463,6 +463,7 @@ None.
 | :------------ | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | ------------------------------------------------- |
 | ref           | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element      |
 | checked       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is checked           |
+| value         | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the value of the checkbox                 |
 | indeterminate | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is indeterminate     |
 | skeleton      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state       |
 | readonly      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` for the checkbox to be read-only    |
@@ -4752,15 +4753,19 @@ export interface TreeNode {
 
 ### Props
 
-| Prop name   | Kind             | Reactive | Type                                                     | Default value          | Description                                                     |
-| :---------- | :--------------- | :------- | :------------------------------------------------------- | ---------------------- | --------------------------------------------------------------- |
-| expandedIds | <code>let</code> | Yes      | <code>TreeNodeId[]</code>                                | <code>[]</code>        | Set the node ids to be expanded                                 |
-| selectedIds | <code>let</code> | Yes      | <code>TreeNodeId[]</code>                                | <code>[]</code>        | Set the node ids to be selected                                 |
-| activeId    | <code>let</code> | Yes      | <code>TreeNodeId</code>                                  | <code>""</code>        | Set the current active node id<br />Only one node can be active |
-| children    | <code>let</code> | No       | <code>Array<TreeNode & { children?: TreeNode[] }></code> | <code>[]</code>        | Provide an array of children nodes to render                    |
-| size        | <code>let</code> | No       | <code>"default" &#124; "compact"</code>                  | <code>"default"</code> | Specify the TreeView size                                       |
-| labelText   | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>        | Specify the label text                                          |
-| hideLabel   | <code>let</code> | No       | <code>boolean</code>                                     | <code>false</code>     | Set to `true` to visually hide the label text                   |
+| Prop name     | Kind                  | Reactive | Type                                                          | Default value                                                                                            | Description                                                                                      |
+| :------------ | :-------------------- | :------- | :------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| expandedIds   | <code>let</code>      | Yes      | <code>TreeNodeId[]</code>                                     | <code>[]</code>                                                                                          | Set the node ids to be expanded                                                                  |
+| selectedIds   | <code>let</code>      | Yes      | <code>TreeNodeId[]</code>                                     | <code>[]</code>                                                                                          | Set the node ids to be selected                                                                  |
+| activeId      | <code>let</code>      | Yes      | <code>TreeNodeId</code>                                       | <code>""</code>                                                                                          | Set the current active node id<br />Only one node can be active                                  |
+| children      | <code>let</code>      | No       | <code>Array<TreeNode & { children?: TreeNode[] }></code>      | <code>[]</code>                                                                                          | Provide an array of children nodes to render                                                     |
+| size          | <code>let</code>      | No       | <code>"default" &#124; "compact"</code>                       | <code>"default"</code>                                                                                   | Specify the TreeView size                                                                        |
+| labelText     | <code>let</code>      | No       | <code>string</code>                                           | <code>""</code>                                                                                          | Specify the label text                                                                           |
+| hideLabel     | <code>let</code>      | No       | <code>boolean</code>                                          | <code>false</code>                                                                                       | Set to `true` to visually hide the label text                                                    |
+| expandAll     | <code>function</code> | No       | <code>() => void</code>                                       | <code>() => { expandedIds = [...nodeIds]; }</code>                                                       | Programmatically expand all nodes                                                                |
+| collapseAll   | <code>function</code> | No       | <code>() => void</code>                                       | <code>() => { expandedIds = []; }</code>                                                                 | Programmatically collapse all nodes                                                              |
+| expandNodes   | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code> | <code>() => { expandedIds = nodes .filter((node) => !filterNode(node)) .map((node) => node.id); }</code> | Programmatically expand a subset of nodes.<br />Expands all nodes if no argument is provided     |
+| collapseNodes | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code> | <code>() => { expandedIds = nodes .filter((node) => !filterNode(node)) .map((node) => node.id); }</code> | Programmatically collapse a subset of nodes.<br />Collapses all nodes if no argument is provided |
 
 ### Slots
 

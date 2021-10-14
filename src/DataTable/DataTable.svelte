@@ -194,6 +194,10 @@
         if (typeof itemA === "number" && typeof itemB === "number")
           return itemA - itemB;
 
+        if ([itemA, itemB].every((item) => !item && item !== 0)) return 0;
+        if (!itemA && itemA !== 0) return ascending ? 1 : -1;
+        if (!itemB && itemB !== 0) return ascending ? -1 : 1;
+
         return itemA
           .toString()
           .localeCompare(itemB.toString(), "en", { numeric: true });

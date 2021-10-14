@@ -3,6 +3,9 @@
    * @event {boolean} check
    */
 
+  /** Specify the value of the checkbox */
+  export let value = "";
+
   /** Specify whether the checkbox is checked */
   export let checked = false;
 
@@ -69,6 +72,7 @@
     <input
       bind:this="{ref}"
       type="checkbox"
+      value="{value}"
       checked="{checked}"
       disabled="{disabled}"
       id="{id}"
