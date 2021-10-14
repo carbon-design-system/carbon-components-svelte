@@ -3,7 +3,7 @@
 
   /**
    * Specify the type of tag
-   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast"}
+   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast" | "outline"}
    */
   export let type = undefined;
 
@@ -70,6 +70,7 @@
     class:bx--tag--cool-gray="{type === 'cool-gray'}"
     class:bx--tag--warm-gray="{type === 'warm-gray'}"
     class:bx--tag--high-contrast="{type === 'high-contrast'}"
+    class:bx--tag--outline="{type === 'outline'}"
     {...$$restProps}
   >
     <slot props="{{ class: 'bx--tag__label' }}">
@@ -112,6 +113,7 @@
     class:bx--tag--cool-gray="{type === 'cool-gray'}"
     class:bx--tag--warm-gray="{type === 'warm-gray'}"
     class:bx--tag--high-contrast="{type === 'high-contrast'}"
+    class:bx--tag--outline="{type === 'outline'}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -144,6 +146,7 @@
     class:bx--tag--cool-gray="{type === 'cool-gray'}"
     class:bx--tag--warm-gray="{type === 'warm-gray'}"
     class:bx--tag--high-contrast="{type === 'high-contrast'}"
+    class:bx--tag--outline="{type === 'outline'}"
     {...$$restProps}
     on:click
     on:mouseover
