@@ -21,6 +21,11 @@ export interface HeaderActionProps
   icon?: typeof import("carbon-icons-svelte").CarbonIcon;
 
   /**
+   * Specify the close icon from `carbon-icons-svelte` to render
+   */
+  closeIcon?: typeof import("carbon-icons-svelte").CarbonIcon;
+
+  /**
    * Specify the text
    * Alternatively, use the named slot "text" (e.g., <div slot="text">...</div>)
    */

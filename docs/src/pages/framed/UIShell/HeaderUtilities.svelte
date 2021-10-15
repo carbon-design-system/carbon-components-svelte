@@ -32,7 +32,11 @@
   </div>
   <HeaderUtilities>
     <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust20}" />
-    <HeaderAction bind:isOpen="{isOpen1}" icon="{UserAvatarFilledAlt20}">
+    <HeaderAction
+      bind:isOpen="{isOpen1}"
+      icon="{UserAvatarFilledAlt20}"
+      closeIcon="{UserAvatarFilledAlt20}"
+    >
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
