@@ -75,6 +75,7 @@
     on:mouseleave
     on:keydown
     on:keydown="{(e) => {
+      if (!step.complete) return;
       if (e.key === ' ' || e.key === 'Enter') {
         change(step.index);
       }
