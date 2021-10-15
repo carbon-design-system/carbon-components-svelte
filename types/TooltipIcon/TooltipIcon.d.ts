@@ -13,7 +13,7 @@ export interface TooltipIconProps
   /**
    * Specify the icon from `carbon-icons-svelte` to render
    */
-  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+  icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Set to `true` to disable the tooltip icon

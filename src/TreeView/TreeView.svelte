@@ -1,7 +1,7 @@
 <script>
   /**
    * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: string; icon?: typeof import("carbon-icons-svelte").CarbonIcon; disabled?: boolean; expanded?: boolean; }} TreeNode
+   * @typedef {{ id: TreeNodeId; text: string; icon?: typeof import("svelte").SvelteComponent; disabled?: boolean; expanded?: boolean; }} TreeNode
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} select
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} toggle
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} focus

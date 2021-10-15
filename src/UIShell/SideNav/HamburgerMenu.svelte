@@ -11,14 +11,14 @@
   /**
    * Specify the icon from `carbon-icons-svelte` to render for the closed state
    * Defaults to `Menu20`
-   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   * @type {typeof import("svelte").SvelteComponent}
    */
   export let iconMenu = Menu20;
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render for the opened state
    * Defaults to `Close20`
-   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   * @type {typeof import("svelte").SvelteComponent}
    */
   export let iconClose = Close20;
 

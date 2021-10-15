@@ -8,13 +8,13 @@
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render
-   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   * @type {typeof import("svelte").SvelteComponent}
    */
   export let icon = AppSwitcher20;
 
   /**
    * Specify the close icon from `carbon-icons-svelte` to render
-   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   * @type {typeof import("svelte").SvelteComponent}
    */
   export let closeIcon = Close20;
 

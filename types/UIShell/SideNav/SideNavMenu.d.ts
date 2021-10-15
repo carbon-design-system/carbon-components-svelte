@@ -17,7 +17,7 @@ export interface SideNavMenuProps
   /**
    * Specify the icon from `carbon-icons-svelte` to render
    */
-  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+  icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Obtain a reference to the HTML button element

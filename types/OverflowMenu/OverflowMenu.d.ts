@@ -40,7 +40,7 @@ export interface OverflowMenuProps
   /**
    * Specify the icon from `carbon-icons-svelte` to render
    */
-  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+  icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Specify the icon class

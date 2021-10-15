@@ -6,7 +6,7 @@ export type TreeNodeId = string | number;
 export interface TreeNode {
   id: TreeNodeId;
   text: string;
-  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+  icon?: typeof import("svelte").SvelteComponent;
   disabled?: boolean;
   expanded?: boolean;
 }
