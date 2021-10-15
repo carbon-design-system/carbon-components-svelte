@@ -23,7 +23,7 @@ export interface LinkProps
    * Specify the icon from `carbon-icons-svelte` to render
    * `inline` must be `false`
    */
-  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+  icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Set to `true` to disable the checkbox

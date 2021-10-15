@@ -65,13 +65,13 @@ export interface HeaderProps
    * Specify the icon from `carbon-icons-svelte` to render for the closed state
    * Defaults to `Menu20`
    */
-  iconMenu?: typeof import("carbon-icons-svelte").CarbonIcon;
+  iconMenu?: typeof import("svelte").SvelteComponent;
 
   /**
    * Specify the icon from `carbon-icons-svelte` to render for the opened state
    * Defaults to `Close20`
    */
-  iconClose?: typeof import("carbon-icons-svelte").CarbonIcon;
+  iconClose?: typeof import("svelte").SvelteComponent;
 }
 
 export default class Header extends SvelteComponentTyped<

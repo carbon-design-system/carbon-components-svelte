@@ -17,7 +17,7 @@
   /**
    * Specify the icon from `carbon-icons-svelte` to render
    * `inline` must be `false`
-   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   * @type {typeof import("svelte").SvelteComponent}
    */
   export let icon = undefined;
 
