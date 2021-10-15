@@ -4383,7 +4383,7 @@
           "name": "closeIcon",
           "kind": "let",
           "description": "Specify the close icon from `carbon-icons-svelte` to render",
-          "type": "typeof import(\"carbon-icons-svelte\").CarbonIcon",
+          "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
@@ -13252,9 +13252,9 @@
           "ts": "type TreeNodeId = string | number"
         },
         {
-          "type": "{ id: TreeNodeId; text: string; icon?: typeof import(\"carbon-icons-svelte\").CarbonIcon; disabled?: boolean; expanded?: boolean; }",
+          "type": "{ id: TreeNodeId; text: string; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; }",
           "name": "TreeNode",
-          "ts": "interface TreeNode { id: TreeNodeId; text: string; icon?: typeof import(\"carbon-icons-svelte\").CarbonIcon; disabled?: boolean; expanded?: boolean; }"
+          "ts": "interface TreeNode { id: TreeNodeId; text: string; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "ul" }
