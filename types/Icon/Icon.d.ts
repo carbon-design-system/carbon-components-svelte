@@ -8,7 +8,7 @@ export interface IconProps
   /**
    * Specify the icon from `carbon-icons-svelte` to render
    */
-  render?: typeof import("carbon-icons-svelte").CarbonIcon;
+  render?: typeof import("svelte").SvelteComponent;
 
   /**
    * Set to `true` to display the skeleton state

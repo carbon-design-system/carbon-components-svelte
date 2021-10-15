@@ -25,7 +25,7 @@ export interface ContextMenuOptionProps
    * Specify the icon from `carbon-icons-svelte` to render
    * Icon is rendered to the left of the label text
    */
-  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+  icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Specify the label text

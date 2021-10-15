@@ -26,7 +26,7 @@
   /**
    * Specify the icon from `carbon-icons-svelte` to render for the tooltip button
    * Icon size must be 16px (e.g., `Add16`, `Task16`)
-   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   * @type {typeof import("svelte").SvelteComponent}
    */
   export let icon = Information16;
 

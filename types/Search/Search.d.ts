@@ -94,7 +94,7 @@ export interface SearchProps {
   /**
    * Specify the icon from `carbon-icons-svelte` to render
    */
-  icon?: typeof import("carbon-icons-svelte").CarbonIcon;
+  icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Set an id for the input element
