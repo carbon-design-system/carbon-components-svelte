@@ -10,7 +10,13 @@
    * Specify the icon from `carbon-icons-svelte` to render
    * @type {typeof import("carbon-icons-svelte").CarbonIcon}
    */
-  export let icon = undefined;
+  export let icon = AppSwitcher20;
+
+  /**
+   * Specify the close icon from `carbon-icons-svelte` to render
+   * @type {typeof import("carbon-icons-svelte").CarbonIcon}
+   */
+  export let closeIcon = Close20;
 
   /**
    * Specify the text
@@ -58,12 +64,13 @@
     class:action-text="{text}"
     {...$$restProps}
     on:click
-    on:click|stopPropagation="{() => {
+    on:click="{() => {
       isOpen = !isOpen;
       dispatch(isOpen ? 'open' : 'close');
     }}"
   >
-    <Icon render="{icon || (isOpen ? Close20 : AppSwitcher20)}" />
+    <Icon render="{icon}" style="{isOpen ? 'display: none' : ''}" />
+    <Icon render="{closeIcon}" style="{!isOpen ? 'display: none' : ''}" />
     <slot name="text">
       {#if text}<span>{text}</span>{/if}
     </slot>

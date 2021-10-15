@@ -19,9 +19,11 @@
     Column,
   } from "carbon-components-svelte";
   import SettingsAdjust20 from "carbon-icons-svelte/lib/SettingsAdjust20";
+  import UserAvatarFilledAlt20 from "carbon-icons-svelte/lib/UserAvatarFilledAlt20";
 
   let isSideNavOpen = false;
-  let isOpen = false;
+  let isOpen1 = false;
+  let isOpen2 = false;
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
@@ -30,7 +32,25 @@
   </div>
   <HeaderUtilities>
     <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust20}" />
-    <HeaderAction bind:isOpen>
+    <HeaderAction
+      bind:isOpen="{isOpen1}"
+      icon="{UserAvatarFilledAlt20}"
+      closeIcon="{UserAvatarFilledAlt20}"
+    >
+      <HeaderPanelLinks>
+        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
+        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+        <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
+        <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
+        <HeaderPanelLink>Switcher item 4</HeaderPanelLink>
+        <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
+        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+        <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
+        <HeaderPanelDivider>Switcher subject 3</HeaderPanelDivider>
+        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+      </HeaderPanelLinks>
+    </HeaderAction>
+    <HeaderAction bind:isOpen="{isOpen2}">
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
