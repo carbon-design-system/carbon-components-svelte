@@ -18,8 +18,7 @@
     "build:api": "node scripts/build-api",
     "build:lib": "rollup -c",
     "prepack": "run-p build:*",
-    "format": "prettier --write './**/*.{svelte,js,md}'",
-    "publish-examples": "node scripts/publish-examples"
+    "format": "prettier --write './**/*.{svelte,js,md}'"
   },
   "dependencies": {
     "carbon-icons-svelte": "^10.36.0",
