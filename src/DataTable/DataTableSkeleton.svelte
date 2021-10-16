@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"./DataTable"} DataTableHeader */
+  /** @extends {"./DataTable.svelte"} DataTableHeader */
 
   /**
    * Specify the number of columns

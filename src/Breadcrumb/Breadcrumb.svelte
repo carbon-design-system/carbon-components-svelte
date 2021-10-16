@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"./BreadcrumbSkeleton"} BreadcrumbSkeletonProps */
+  /** @extends {"./BreadcrumbSkeleton.svelte"} BreadcrumbSkeletonProps */
 
   /** Set to `true` to hide the breadcrumb trailing slash */
   export let noTrailingSlash = false;

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ComboBox } from "../types";
-  import type { ComboBoxItem } from "../types/ComboBox/ComboBox";
+  import type { ComboBoxItem } from "../types/ComboBox/ComboBox.svelte";
 
   const items: ComboBoxItem[] = [
     { id: "0", text: "Slack" },

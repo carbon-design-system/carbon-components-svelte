@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Breakpoint } from "../types";
-  import { BreakpointSize } from "../types/Breakpoint/Breakpoint";
+  import type { BreakpointSize } from "../types/Breakpoint/Breakpoint.svelte";
 
   let size: BreakpointSize;
 </script>

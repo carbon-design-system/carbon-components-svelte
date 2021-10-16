@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"./AccordionSkeleton"} AccordionSkeletonProps */
+  /** @extends {"./AccordionSkeleton.svelte"} AccordionSkeletonProps */
 
   /**
    * Specify alignment of accordion item chevron icon

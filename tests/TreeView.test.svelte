@@ -1,6 +1,6 @@
 <script lang="ts">
   import { TreeView } from "../types";
-  import type { TreeNodeId } from "../types/TreeView/TreeView";
+  import type { TreeNodeId } from "../types/TreeView/TreeView.svelte";
   import Analytics16 from "carbon-icons-svelte/lib/Analytics16";
 
   let treeview: TreeView;
