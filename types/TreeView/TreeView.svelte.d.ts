@@ -69,27 +69,23 @@ export default class TreeView extends SvelteComponentTyped<
 > {
   /**
    * Programmatically expand all nodes
-   * @default () => { expandedIds = [...nodeIds]; }
    */
   expandAll: () => void;
 
   /**
    * Programmatically collapse all nodes
-   * @default () => { expandedIds = []; }
    */
   collapseAll: () => void;
 
   /**
    * Programmatically expand a subset of nodes.
    * Expands all nodes if no argument is provided
-   * @default () => { expandedIds = nodes .filter((node) => !filterNode(node)) .map((node) => node.id); }
    */
   expandNodes: (filterId?: (node: TreeNode) => boolean) => void;
 
   /**
    * Programmatically collapse a subset of nodes.
    * Collapses all nodes if no argument is provided
-   * @default () => { expandedIds = nodes .filter((node) => !filterNode(node)) .map((node) => node.id); }
    */
   collapseNodes: (filterId?: (node: TreeNode) => boolean) => void;
 }

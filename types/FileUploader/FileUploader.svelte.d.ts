@@ -80,8 +80,6 @@ export default class FileUploader extends SvelteComponentTyped<
 > {
   /**
    * Override the default behavior of clearing the array of uploaded files
-   * @constant
-   * @default () => { files = []; }
    */
   clearFiles: () => void;
 }
