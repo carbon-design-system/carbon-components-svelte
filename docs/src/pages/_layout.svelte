@@ -149,6 +149,10 @@
 </Theme>
 
 <style global>
+  .bx--side-nav__overlay-active {
+    z-index: calc(10 + 1); /** supersede the z-index of code snippets */
+  }
+
   .body-short-01 {
     font-size: var(--cds-body-short-01-font-size);
     font-weight: var(--cds-body-short-01-font-weight);
