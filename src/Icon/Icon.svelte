@@ -6,7 +6,7 @@
    */
 
   /**
-   * @extends {"./IconSkeleton"} IconSkeletonProps
+   * @extends {"./IconSkeleton.svelte"} IconSkeletonProps
    * @restProps {svg}
    */
 

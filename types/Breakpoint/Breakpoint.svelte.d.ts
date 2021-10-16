@@ -30,8 +30,6 @@ export default class Breakpoint extends SvelteComponentTyped<
 > {
   /**
    * Reference the Carbon grid breakpoints
-   * @constant
-   * @default { sm: 320, md: 672, lg: 1056, xlg: 1312, max: 1584, }
    */
   breakpoints: Record<BreakpointSize, BreakpointValue>;
 }

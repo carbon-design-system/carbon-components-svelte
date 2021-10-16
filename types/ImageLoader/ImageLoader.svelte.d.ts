@@ -53,8 +53,6 @@ export default class ImageLoader extends SvelteComponentTyped<
 > {
   /**
    * Method invoked to load the image provided a `src` value
-   * @constant
-   * @default (url) => { if (image != null) image = null; loaded = false; error = false; image = new Image(); image.src = url || src; image.onload = () => (loaded = true); image.onerror = () => (error = true); }
    */
   loadImage: (url?: string) => void;
 }

@@ -10,7 +10,7 @@
     Button,
     Link,
   } from "../types";
-  import type { DataTableHeader } from "../types/DataTable/DataTable";
+  import type { DataTableHeader } from "../types/DataTable/DataTable.svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
 
   const headers: DataTableHeader[] = [

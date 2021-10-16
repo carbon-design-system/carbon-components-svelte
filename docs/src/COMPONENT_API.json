@@ -76,7 +76,7 @@
       "rest_props": { "type": "InlineComponent", "name": "AccordionSkeleton" },
       "extends": {
         "interface": "AccordionSkeletonProps",
-        "import": "\"./AccordionSkeleton\""
+        "import": "\"./AccordionSkeleton.svelte\""
       }
     },
     {
@@ -281,7 +281,7 @@
       "rest_props": { "type": "InlineComponent", "name": "BreadcrumbSkeleton" },
       "extends": {
         "interface": "BreadcrumbSkeletonProps",
-        "import": "\"./BreadcrumbSkeleton\""
+        "import": "\"./BreadcrumbSkeleton.svelte\""
       }
     },
     {
@@ -634,7 +634,7 @@
       "rest_props": { "type": "Element", "name": "button | a | div" },
       "extends": {
         "interface": "ButtonSkeletonProps",
-        "import": "\"./ButtonSkeleton\""
+        "import": "\"./ButtonSkeleton.svelte\""
       }
     },
     {
@@ -2169,7 +2169,10 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "Copy" },
-      "extends": { "interface": "CopyProps", "import": "\"../Copy/Copy\"" }
+      "extends": {
+        "interface": "CopyProps",
+        "import": "\"../Copy/Copy.svelte\""
+      }
     },
     {
       "moduleName": "DataTable",
@@ -2555,7 +2558,10 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" },
-      "extends": { "interface": "DataTableHeader", "import": "\"./DataTable\"" }
+      "extends": {
+        "interface": "DataTableHeader",
+        "import": "\"./DataTable.svelte\""
+      }
     },
     {
       "moduleName": "DatePicker",
@@ -4904,7 +4910,7 @@
       "rest_props": { "type": "Element", "name": "svg" },
       "extends": {
         "interface": "IconSkeletonProps",
-        "import": "\"./IconSkeleton\""
+        "import": "\"./IconSkeleton.svelte\""
       }
     },
     {
@@ -7231,7 +7237,7 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "Link" },
-      "extends": { "interface": "LinkProps", "import": "\"./Link\"" }
+      "extends": { "interface": "LinkProps", "import": "\"./Link.svelte\"" }
     },
     {
       "moduleName": "OverflowMenu",
@@ -12615,7 +12621,7 @@
       "rest_props": { "type": "InlineComponent", "name": "OverflowMenu" },
       "extends": {
         "interface": "OverflowMenuProps",
-        "import": "\"../OverflowMenu/OverflowMenu\""
+        "import": "\"../OverflowMenu/OverflowMenu.svelte\""
       }
     },
     {
@@ -12635,7 +12641,7 @@
       "rest_props": { "type": "InlineComponent", "name": "OverflowMenuItem" },
       "extends": {
         "interface": "OverflowMenuItemProps",
-        "import": "\"../OverflowMenu/OverflowMenuItem\""
+        "import": "\"../OverflowMenu/OverflowMenuItem.svelte\""
       }
     },
     {

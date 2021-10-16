@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
-import { CopyProps } from "../Copy/Copy";
+import { CopyProps } from "../Copy/Copy.svelte";
 
 export interface CopyButtonProps extends CopyProps {
   /**

@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"../Copy/Copy"} CopyProps */
+  /** @extends {"../Copy/Copy.svelte"} CopyProps */
 
   /** Set the title and ARIA label for the copy button */
   export let iconDescription = "Copy to clipboard";

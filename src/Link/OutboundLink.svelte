@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"./Link"} LinkProps */
+  /** @extends {"./Link.svelte"} LinkProps */
 
   import Link from "./Link.svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16/Launch16.svelte";
