@@ -27,6 +27,8 @@
 
 <Tag type="high-contrast">high-contrast</Tag>
 
+<Tag type="outline">outline</Tag>
+
 <Tag filter on:click on:close>Filterable</Tag>
 
 <Tag icon="{Add16}">Custom icon</Tag>
