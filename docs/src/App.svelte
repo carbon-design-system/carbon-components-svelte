@@ -84,8 +84,6 @@
   @import "carbon-components/scss/globals/scss/_css--body";
   @import "carbon-components/scss/globals/grid/grid";
 
-  @import "carbon-components/src/components/treeview/treeview";
-
   // Import all component styles
   @import "carbon-components/scss/globals/scss/styles";
 </style>
