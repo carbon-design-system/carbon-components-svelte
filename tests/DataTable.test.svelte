@@ -222,7 +222,12 @@
   ]}"
 />
 
-<DataTable expandable headers="{headers}" rows="{rows}">
+<DataTable
+  expandable
+  nonExpandableRowIds="{['a', 'b']}"
+  headers="{headers}"
+  rows="{rows}"
+>
   <div slot="expanded-row" let:row>
     <pre>
       {JSON.stringify(row, null, 2)}

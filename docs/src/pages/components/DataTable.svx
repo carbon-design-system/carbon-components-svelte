@@ -1025,6 +1025,12 @@ In the following example, each row in the sortable data table has an overflow me
   </div>
 </DataTable>
 
+### Non-expandable rows
+
+Use `nonExpandableRowIds` to specify the ids for rows that should not be expandable.
+
+<FileSource src="/framed/DataTable/DataTableNonExpandableRows" />
+
 ### Expandable (compact size)
 
 <DataTable size="compact" expandable

@@ -100,6 +100,12 @@ export interface DataTableProps
   expandedRowIds?: DataTableRowId[];
 
   /**
+   * Specify the ids for rows that should not be expandable
+   * @default []
+   */
+  nonExpandableRowIds?: DataTableRowId[];
+
+  /**
    * Set to `true` for the radio selection variant
    * @default false
    */

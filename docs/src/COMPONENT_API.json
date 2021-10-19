@@ -2288,6 +2288,17 @@
           "reactive": true
         },
         {
+          "name": "nonExpandableRowIds",
+          "kind": "let",
+          "description": "Specify the ids for rows that should not be expandable",
+          "type": "DataTableRowId[]",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "radio",
           "kind": "let",
           "description": "Set to `true` for the radio selection variant",

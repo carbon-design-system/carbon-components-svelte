@@ -70,6 +70,12 @@
    */
   export let expandedRowIds = [];
 
+  /**
+   * Specify the ids for rows that should not be expandable
+   * @type {DataTableRowId[]}
+   */
+  export let nonExpandableRowIds = [];
+
   /** Set to `true` for the radio selection variant */
   export let radio = false;
 
@@ -343,27 +349,29 @@
                 ? 'collapsed'
                 : undefined}"
             >
-              <button
-                type="button"
-                class:bx--table-expand__button="{true}"
-                aria-label="{expandedRows[row.id]
-                  ? 'Collapse current row'
-                  : 'Expand current row'}"
-                on:click="{() => {
-                  const rowExpanded = !!expandedRows[row.id];
+              {#if !nonExpandableRowIds.includes(row.id)}
+                <button
+                  type="button"
+                  class:bx--table-expand__button="{true}"
+                  aria-label="{expandedRows[row.id]
+                    ? 'Collapse current row'
+                    : 'Expand current row'}"
+                  on:click="{() => {
+                    const rowExpanded = !!expandedRows[row.id];
 
-                  expandedRowIds = rowExpanded
-                    ? expandedRowIds.filter((id) => id !== row.id)
-                    : [...expandedRowIds, row.id];
+                    expandedRowIds = rowExpanded
+                      ? expandedRowIds.filter((id) => id !== row.id)
+                      : [...expandedRowIds, row.id];
 
-                  dispatch('click:row--expand', {
-                    row,
-                    expanded: !rowExpanded,
-                  });
-                }}"
-              >
-                <ChevronRight16 class="bx--table-expand__svg" />
-              </button>
+                    dispatch('click:row--expand', {
+                      row,
+                      expanded: !rowExpanded,
+                    });
+                  }}"
+                >
+                  <ChevronRight16 class="bx--table-expand__svg" />
+                </button>
+              {/if}
             </TableCell>
           {/if}
           {#if selectable}
@@ -418,7 +426,7 @@
           {/each}
         </TableRow>
 
-        {#if expandable && expandedRows[row.id]}
+        {#if expandable && expandedRows[row.id] && !nonExpandableRowIds.includes(row.id)}
           <tr
             data-child-row
             class:bx--expandable-row="{true}"
