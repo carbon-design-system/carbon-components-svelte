@@ -48,7 +48,7 @@
 </script>
 
 <DataTable
-  expandable
+  batchExpansion
   nonExpandableRowIds="{rows
     .filter((row) => row.port < 3000)
     .map((row) => row.id)}"

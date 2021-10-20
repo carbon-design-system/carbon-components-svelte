@@ -345,7 +345,8 @@
             <TableCell
               class="bx--table-expand"
               headers="expand"
-              data-previous-value="{expandedRows[row.id]
+              data-previous-value="{!nonExpandableRowIds.includes(row.id) &&
+              expandedRows[row.id]
                 ? 'collapsed'
                 : undefined}"
             >
