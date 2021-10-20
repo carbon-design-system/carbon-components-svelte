@@ -11,7 +11,7 @@
    */
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render
+   * Specify the icon to render
    * @type {typeof import("svelte").SvelteComponent}
    */
   export let render = undefined;

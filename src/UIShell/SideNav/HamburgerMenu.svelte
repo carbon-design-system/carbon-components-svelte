@@ -9,14 +9,14 @@
   export let isOpen = false;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render for the closed state
+   * Specify the icon to render for the closed state
    * Defaults to `Menu20`
    * @type {typeof import("svelte").SvelteComponent}
    */
   export let iconMenu = Menu20;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render for the opened state
+   * Specify the icon to render for the opened state
    * Defaults to `Close20`
    * @type {typeof import("svelte").SvelteComponent}
    */

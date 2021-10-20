@@ -15,7 +15,7 @@
   export let inline = false;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render
+   * Specify the icon to render
    * `inline` must be `false`
    * @type {typeof import("svelte").SvelteComponent}
    */

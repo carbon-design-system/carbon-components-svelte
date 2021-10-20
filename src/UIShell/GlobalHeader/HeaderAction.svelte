@@ -7,13 +7,13 @@
   export let isOpen = false;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render
+   * Specify the icon to render
    * @type {typeof import("svelte").SvelteComponent}
    */
   export let icon = AppSwitcher20;
 
   /**
-   * Specify the close icon from `carbon-icons-svelte` to render
+   * Specify the icon to render when the action panel is open
    * @type {typeof import("svelte").SvelteComponent}
    */
   export let closeIcon = Close20;

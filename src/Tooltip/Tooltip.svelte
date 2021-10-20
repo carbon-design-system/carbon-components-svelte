@@ -24,7 +24,7 @@
   export let hideIcon = false;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render for the tooltip button
+   * Specify the icon to render for the tooltip button
    * Icon size must be 16px (e.g., `Add16`, `Task16`)
    * @type {typeof import("svelte").SvelteComponent}
    */
