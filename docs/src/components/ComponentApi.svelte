@@ -8,21 +8,18 @@
   };
 
   import {
-    Link,
     OutboundLink,
     StructuredList,
     StructuredListHead,
     StructuredListRow,
     StructuredListCell,
     StructuredListBody,
-    TooltipDefinition,
     UnorderedList,
     ListItem,
     Tag,
     CodeSnippet,
   } from "carbon-components-svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
-  import Launch16 from "carbon-icons-svelte/lib/Launch16";
 
   const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
   const typeMap = {
@@ -85,15 +82,7 @@
                   class="cell"
                   style="z-index: {(prop.type || '').split(' | ').length - i}"
                 >
-                  {#if type.startsWith("typeof")}
-                    <TooltipDefinition
-                      direction="top"
-                      align="start"
-                      tooltipText="{`From "carbon-icons-svelte"`}"
-                    >
-                      Carbon Svelte icon
-                    </TooltipDefinition>
-                  {:else if type.startsWith("HTML")}
+                  {#if type.startsWith("HTML")}
                     <OutboundLink
                       href="{mdn_api}{type}"
                       style="white-space: nowrap"
