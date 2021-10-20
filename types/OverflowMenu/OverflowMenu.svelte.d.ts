@@ -38,7 +38,7 @@ export interface OverflowMenuProps
   menuOptionsClass?: string;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render
+   * Specify the icon to render
    */
   icon?: typeof import("svelte").SvelteComponent;
 

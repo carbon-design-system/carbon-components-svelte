@@ -20,7 +20,7 @@ export interface LinkProps
   inline?: boolean;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render
+   * Specify the icon to render
    * `inline` must be `false`
    */
   icon?: typeof import("svelte").SvelteComponent;

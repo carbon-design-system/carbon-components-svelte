@@ -16,12 +16,12 @@ export interface HeaderActionProps
   isOpen?: boolean;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render
+   * Specify the icon to render
    */
   icon?: typeof import("svelte").SvelteComponent;
 
   /**
-   * Specify the close icon from `carbon-icons-svelte` to render
+   * Specify the icon to render when the action panel is open
    */
   closeIcon?: typeof import("svelte").SvelteComponent;
 

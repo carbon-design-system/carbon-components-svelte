@@ -22,7 +22,7 @@ export interface ContextMenuOptionProps
   indented?: boolean;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render
+   * Specify the icon to render
    * Icon is rendered to the left of the label text
    */
   icon?: typeof import("svelte").SvelteComponent;

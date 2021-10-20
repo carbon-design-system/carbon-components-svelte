@@ -6,7 +6,7 @@ export interface IconProps
   extends IconSkeletonProps,
     svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["svg"]> {
   /**
-   * Specify the icon from `carbon-icons-svelte` to render
+   * Specify the icon to render
    */
   render?: typeof import("svelte").SvelteComponent;
 

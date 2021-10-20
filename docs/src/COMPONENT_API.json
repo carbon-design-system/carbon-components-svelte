@@ -489,7 +489,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -1942,7 +1942,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render\nIcon is rendered to the left of the label text",
+          "description": "Specify the icon to render\nIcon is rendered to the left of the label text",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4339,7 +4339,7 @@
         {
           "name": "iconMenu",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render for the closed state\nDefaults to `Menu20`",
+          "description": "Specify the icon to render for the closed state\nDefaults to `Menu20`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4349,7 +4349,7 @@
         {
           "name": "iconClose",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render for the opened state\nDefaults to `Close20`",
+          "description": "Specify the icon to render for the opened state\nDefaults to `Close20`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4389,7 +4389,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4399,7 +4399,7 @@
         {
           "name": "closeIcon",
           "kind": "let",
-          "description": "Specify the close icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render when the action panel is open",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4489,7 +4489,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4887,7 +4887,7 @@
         {
           "name": "render",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -5260,7 +5260,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render\n`inline` must be `false`",
+          "description": "Specify the icon to render\n`inline` must be `false`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -6737,7 +6737,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -7321,7 +7321,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -9093,7 +9093,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -9753,7 +9753,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -9805,7 +9805,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -11139,7 +11139,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -12788,7 +12788,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render for the tooltip button\nIcon size must be 16px (e.g., `Add16`, `Task16`)",
+          "description": "Specify the icon to render for the tooltip button\nIcon size must be 16px (e.g., `Add16`, `Task16`)",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -13034,7 +13034,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon from `carbon-icons-svelte` to render",
+          "description": "Specify the icon to render",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,

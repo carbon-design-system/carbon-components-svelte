@@ -62,13 +62,13 @@ export interface HeaderProps
   ref?: null | HTMLAnchorElement;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render for the closed state
+   * Specify the icon to render for the closed state
    * Defaults to `Menu20`
    */
   iconMenu?: typeof import("svelte").SvelteComponent;
 
   /**
-   * Specify the icon from `carbon-icons-svelte` to render for the opened state
+   * Specify the icon to render for the opened state
    * Defaults to `Close20`
    */
   iconClose?: typeof import("svelte").SvelteComponent;
