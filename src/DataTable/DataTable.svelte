@@ -165,9 +165,18 @@
   let refSelectAll = null;
 
   $: batchSelectedIds.set(selectedRowIds);
+  $: expandableRowIds = rows
+    .map((row) => row.id)
+    .filter((id) => !nonExpandableRowIds.includes(id));
   $: indeterminate =
     selectedRowIds.length > 0 && selectedRowIds.length < rows.length;
-  $: if (batchExpansion) expandable = true;
+  $: if (batchExpansion) {
+    expandable = true;
+
+    if (expandedRowIds.length < expandableRowIds.length) {
+      expanded = false;
+    }
+  }
   $: if (radio || batchSelection) selectable = true;
   $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
@@ -249,7 +258,7 @@
                 class:bx--table-expand__button="{true}"
                 on:click="{() => {
                   expanded = !expanded;
-                  expandedRowIds = expanded ? rows.map((row) => row.id) : [];
+                  expandedRowIds = expanded ? expandableRowIds : [];
 
                   dispatch('click:header--expand', { expanded });
                 }}"
