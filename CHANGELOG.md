@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.47.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.47.2) - 2021-10-21
+
+**Fixes**
+
+- close the open `Tooltip` when using multiple tooltips
+- collapse batch expansion button in `DataTable` if one or more rows is collapsed
+- omit explicity reference to "carbon-icons-svelte" from `icon` prop descriptions
+
 ## [0.47.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.47.1) - 2021-10-20
 
 **Fixes**
