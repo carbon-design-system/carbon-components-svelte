@@ -165,11 +165,13 @@
 
 <svelte:window
   on:mousedown="{({ target }) => {
-    if (open && target.contains(refTooltip)) {
-      if (refIcon) {
-        refIcon.focus();
-      } else if (ref) {
-        ref.focus();
+    if (open) {
+      if (target.contains(refTooltip)) {
+        if (refIcon) {
+          refIcon.focus();
+        } else if (ref) {
+          ref.focus();
+        }
       }
 
       open = false;
