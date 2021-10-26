@@ -3,9 +3,18 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 ---
 
 <script>
-  import { DatePicker, DatePickerSkeleton, DatePickerInput } from "carbon-components-svelte";
+  import { DatePicker, DatePickerSkeleton, DatePickerInput, InlineNotification, CodeSnippet } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
+
+  const modalCodeSnippet = `<DatePicker datePickerType="single" flatpickrProps="{{ static: true }}">
+  <DatePickerInput />
+</DatePicker>"/>`
 </script>
+
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <span class="body-short-01">If you are using the DatePicker inside of a Modal you might need to add <code>static</code> to the <code>flatpickrProps</code> as shown below to correct the positioning.</span>
+</InlineNotification>
+<CodeSnippet type="multi" code={modalCodeSnippet}/>
 
 ### Default (simple)
 
