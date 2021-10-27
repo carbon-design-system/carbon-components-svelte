@@ -100,6 +100,12 @@
   /** Set to `true` to use static width */
   export let useStaticWidth = false;
 
+  /** Set to `number` to limit the output */
+  export let pageSize = 0;
+
+  /** Set to `number` to set current page */
+  export let page = 0;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
   import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16/ChevronRight16.svelte";
@@ -216,6 +222,12 @@
       });
     }
   }
+  const getDisplayedRows = (rows, page, pageSize) =>
+    page && pageSize
+      ? rows.slice((page - 1) * pageSize, page * pageSize)
+      : rows;
+  $: displayedRows = getDisplayedRows(rows, page, pageSize);
+  $: displayedSortedRows = getDisplayedRows(sortedRows, page, pageSize);
 </script>
 
 <TableContainer useStaticWidth="{useStaticWidth}" {...$$restProps}>
@@ -326,7 +338,7 @@
       </TableRow>
     </TableHead>
     <TableBody>
-      {#each sorting ? sortedRows : rows as row, i (row.id)}
+      {#each sorting ? displayedSortedRows : displayedRows as row, i (row.id)}
         <TableRow
           id="row-{row.id}"
           class="{selectedRowIds.includes(row.id)

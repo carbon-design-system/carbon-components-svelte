@@ -995,6 +995,8 @@ export interface DataTableCell {
 | batchSelection      | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable batch selection                                                                             |
 | stickyHeader        | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to enable a sticky header                                                                             |
 | useStaticWidth      | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code> | Set to `true` to use static width                                                                                   |
+| pageSize            | <code>let</code> | No       | <code>number</code>                                                 | <code>0</code>     | Set to `number` to limit the output                                                                                 |
+| page                | <code>let</code> | No       | <code>number</code>                                                 | <code>0</code>     | Set to `number` to set current page                                                                                 |
 
 ### Slots
 

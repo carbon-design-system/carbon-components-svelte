@@ -2363,6 +2363,28 @@
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "pageSize",
+          "kind": "let",
+          "description": "Set to `number` to limit the output",
+          "type": "number",
+          "value": "0",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "page",
+          "kind": "let",
+          "description": "Set to `number` to set current page",
+          "type": "number",
+          "value": "0",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "slots": [

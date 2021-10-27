@@ -141,6 +141,18 @@ export interface DataTableProps
    * @default false
    */
   useStaticWidth?: boolean;
+
+  /**
+   * Set to `number` to limit the output
+   * @default 0
+   */
+  pageSize?: number;
+
+  /**
+   * Set to `number` to set current page
+   * @default 0
+   */
+  page?: number;
 }
 
 export default class DataTable extends SvelteComponentTyped<
