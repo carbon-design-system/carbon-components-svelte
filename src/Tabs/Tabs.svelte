@@ -46,7 +46,10 @@
       content.update((_) => [..._, { ...data, index: _.length }]);
     },
     update: (id) => {
-      currentIndex = $tabsById[id].index;
+      if (currentIndex !== $tabsById[id].index) {
+        currentIndex = $tabsById[id].index;
+        dispatch("change", currentIndex);
+      }
     },
     change: (direction) => {
       let index = currentIndex + direction;
@@ -86,8 +89,6 @@
   $: currentTab = $tabs[currentIndex] || undefined;
   $: currentContent = $content[currentIndex] || undefined;
   $: {
-    dispatch("change", currentIndex);
-
     if (currentTab) {
       selectedTab.set(currentTab.id);
     }
