@@ -172,10 +172,7 @@
     selectedRowIds.length > 0 && selectedRowIds.length < rows.length;
   $: if (batchExpansion) {
     expandable = true;
-
-    if (expandedRowIds.length < expandableRowIds.length) {
-      expanded = false;
-    }
+    expanded = expandedRowIds.length === expandableRowIds.length;
   }
   $: if (radio || batchSelection) selectable = true;
   $: tableSortable.set(sortable);

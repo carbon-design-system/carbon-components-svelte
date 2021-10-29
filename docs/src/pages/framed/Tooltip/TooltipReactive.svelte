@@ -9,15 +9,15 @@
 </Tooltip>
 
 <div style="margin-top: var(--cds-spacing-12);">
-  <Button size="small" on:click="{() => (open = !open)}">
-    {open ? "Close tooltip" : "Open tooltip"}
+  <Button size="small" disabled="{open}" on:click="{() => (open = true)}">
+    Open
+  </Button>
+  <Button
+    size="small"
+    kind="secondary"
+    disabled="{!open}"
+    on:click="{() => (open = false)}"
+  >
+    Close
   </Button>
 </div>
-
-<div>Open: {open}</div>
-
-<style>
-  div {
-    margin-top: var(--cds-spacing-05);
-  }
-</style>
