@@ -89,8 +89,17 @@
     }
   }
 
-  function openMenu() {
+  function onFocus() {
     open = true;
+  }
+
+  function onMousedown() {
+    // determine the desired state before the focus event triggers.
+    const shouldClose = open;
+    // ensure changes are scheduled at the end, i.e. after the possible focus event.
+    setTimeout(() => {
+      open = shouldClose ? false : true;
+    });
   }
 
   afterUpdate(() => {
@@ -174,7 +183,7 @@
         }
       }
 
-      open = false;
+      if (!ref.contains(target)) open = false;
     }
   }}"
 />
@@ -190,8 +199,8 @@
         bind:this="{refIcon}"
         {...buttonProps}
         aria-describedby="{tooltipId}"
-        on:click|preventDefault|stopPropagation="{openMenu}"
-        on:focus="{openMenu}"
+        on:mousedown="{onMousedown}"
+        on:focus="{onFocus}"
         on:blur="{onBlur}"
         on:keydown="{onKeydown}"
       >
@@ -205,8 +214,8 @@
       bind:this="{ref}"
       {...buttonProps}
       aria-describedby="{tooltipId}"
-      on:click|preventDefault|stopPropagation="{openMenu}"
-      on:focus="{openMenu}"
+      on:mousedown="{onMousedown}"
+      on:focus="{onFocus}"
       on:blur="{onBlur}"
       on:keydown="{onKeydown}"
     >
