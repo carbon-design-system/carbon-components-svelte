@@ -182,8 +182,6 @@
           ref.focus();
         }
       }
-
-      if (!ref.contains(target)) open = false;
     }
   }}"
 />
