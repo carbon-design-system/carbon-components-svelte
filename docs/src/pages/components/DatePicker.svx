@@ -69,6 +69,10 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 
 <FileSource src="/framed/DatePicker/DatePickerRange" />
 
+### DatePicker in a modal
+
+<FileSource src="/framed/DatePicker/DatePickerModal" />
+
 ### Skeleton
 
 <DatePickerSkeleton />
