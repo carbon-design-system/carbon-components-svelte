@@ -184,6 +184,13 @@
       }
     }
   }}"
+  on:click|capture="{({ target }) => {
+    if (open && !ref.contains(target) && !refTooltip.contains(target)) {
+      setTimeout(() => {
+        open = false;
+      });
+    }
+  }}"
 />
 
 <div
