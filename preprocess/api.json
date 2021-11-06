@@ -1,5 +1,5 @@
 {
-  "version": "0.47.3",
+  "version": "0.47.4",
   "components": {
     "Accordion": {
       "path": "carbon-components-svelte/src/Accordion/Accordion.svelte"
