@@ -363,7 +363,7 @@
                   aria-label="{expandedRows[row.id]
                     ? 'Collapse current row'
                     : 'Expand current row'}"
-                  on:click="{() => {
+                  on:click|stopPropagation="{() => {
                     const rowExpanded = !!expandedRows[row.id];
 
                     expandedRowIds = rowExpanded
