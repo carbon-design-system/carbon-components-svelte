@@ -7,11 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.47.5](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.47.5) - 2021-11-07
+
+**Fixes**
+
+- fix `Tooltip` open/close logic to allow two way binding of the `open` prop
+- inline `position: relative` style in `ExpandableTile`
+
 ## [0.47.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.47.4) - 2021-11-06
 
 **Fixes**
 
-- Only dispatch `click:row--expand` when clicking an expandable `DataTable` row chevron
+- only dispatch `click:row--expand` when clicking an expandable `DataTable` row chevron
 
 ## [0.47.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.47.3) - 2021-10-22
 
