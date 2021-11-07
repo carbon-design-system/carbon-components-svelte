@@ -64,7 +64,7 @@
   class:bx--tile--is-expanded="{expanded}"
   class:bx--tile--light="{light}"
   {...$$restProps}
-  style="{expanded
+  style="position: relative; {expanded
     ? $$restProps.style
     : `${$$restProps.style}; max-height: ${tileMaxHeight + tilePadding}px`}"
   on:click
