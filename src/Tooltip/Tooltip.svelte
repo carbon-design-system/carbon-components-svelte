@@ -73,7 +73,7 @@
   setContext("Tooltip", { tooltipOpen });
 
   function onKeydown(e) {
-    if (e.key === "Escape") {
+    if (e.key === "Escape" || e.key === "Tab") {
       e.stopPropagation();
       open = false;
     } else if (e.key === " " || e.key === "Enter") {
@@ -206,7 +206,6 @@
         aria-describedby="{tooltipId}"
         on:mousedown="{onMousedown}"
         on:focus="{onFocus}"
-        on:blur="{onBlur}"
         on:keydown="{onKeydown}"
       >
         <slot name="icon">
@@ -241,6 +240,7 @@
       class:bx--tooltip--align-center="{align === 'center'}"
       class:bx--tooltip--align-start="{align === 'start'}"
       class:bx--tooltip--align-end="{align === 'end'}"
+      on:keydown="{onKeydown}"
     >
       <span class:bx--tooltip__caret="{true}"></span>
       <div
