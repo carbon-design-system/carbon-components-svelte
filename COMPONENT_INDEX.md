@@ -3984,12 +3984,13 @@ None.
 
 ### Props
 
-| Prop name       | Kind             | Reactive | Type                                      | Default value                    | Description                                 |
-| :-------------- | :--------------- | :------- | :---------------------------------------- | -------------------------------- | ------------------------------------------- |
-| selected        | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>                   | Specify the selected tab index              |
-| type            | <code>let</code> | No       | <code>"default" &#124; "container"</code> | <code>"default"</code>           | Specify the type of tabs                    |
-| iconDescription | <code>let</code> | No       | <code>string</code>                       | <code>"Show menu options"</code> | Specify the ARIA label for the chevron icon |
-| triggerHref     | <code>let</code> | No       | <code>string</code>                       | <code>"#"</code>                 | Specify the tab trigger href attribute      |
+| Prop name       | Kind             | Reactive | Type                                      | Default value                    | Description                                  |
+| :-------------- | :--------------- | :------- | :---------------------------------------- | -------------------------------- | -------------------------------------------- |
+| selected        | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>                   | Specify the selected tab index               |
+| type            | <code>let</code> | No       | <code>"default" &#124; "container"</code> | <code>"default"</code>           | Specify the type of tabs                     |
+| autoWidth       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>               | Set to `true` for tabs to have an auto-width |
+| iconDescription | <code>let</code> | No       | <code>string</code>                       | <code>"Show menu options"</code> | Specify the ARIA label for the chevron icon  |
+| triggerHref     | <code>let</code> | No       | <code>string</code>                       | <code>"#"</code>                 | Specify the tab trigger href attribute       |
 
 ### Slots
 

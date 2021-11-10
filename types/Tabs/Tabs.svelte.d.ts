@@ -16,6 +16,12 @@ export interface TabsProps
   type?: "default" | "container";
 
   /**
+   * Set to `true` for tabs to have an auto-width
+   * @default false
+   */
+  autoWidth?: boolean;
+
+  /**
    * Specify the ARIA label for the chevron icon
    * @default "Show menu options"
    */
