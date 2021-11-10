@@ -2,7 +2,13 @@
 import { SvelteComponentTyped } from "svelte";
 
 export interface FormProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["form"]> {}
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["form"]> {
+  /**
+   * Obtain a reference to the form element
+   * @default null
+   */
+  ref?: null | HTMLFormElement;
+}
 
 export default class Form extends SvelteComponentTyped<
   FormProps,

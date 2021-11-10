@@ -3998,7 +3998,19 @@
     {
       "moduleName": "Form",
       "filePath": "src/Form/Form.svelte",
-      "props": [],
+      "props": [
+        {
+          "name": "ref",
+          "kind": "let",
+          "description": "Obtain a reference to the form element",
+          "type": "null | HTMLFormElement",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        }
+      ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
         { "type": "forwarded", "name": "click", "element": "form" },

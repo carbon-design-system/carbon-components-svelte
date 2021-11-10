@@ -9,9 +9,11 @@
     SelectItem,
     Button,
   } from "../types";
+
+  let ref: HTMLFormElement;
 </script>
 
-<Form on:submit>
+<Form on:submit bind:ref>
   <FormGroup legendText="Checkboxes">
     <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
     <Checkbox id="checkbox-1" labelText="Checkbox Label" />
