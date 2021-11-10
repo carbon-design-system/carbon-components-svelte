@@ -175,7 +175,7 @@
         on:change
         on:input
         on:input="{({ target }) => {
-          value = target.value;
+          value = type === 'number' ? Number(target.value) : target.value;
         }}"
         on:keydown
         on:keyup
