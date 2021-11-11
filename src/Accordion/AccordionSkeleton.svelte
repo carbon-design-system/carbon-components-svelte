@@ -17,7 +17,7 @@
   /** Set to `false` to close the first accordion item */
   export let open = true;
 
-  import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16/ChevronRight16.svelte";
+  import ChevronRight16 from "../icons/ChevronRight16.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
 </script>
 

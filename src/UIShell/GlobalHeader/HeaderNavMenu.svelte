@@ -14,7 +14,7 @@
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
-  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
+  import ChevronDown16 from "../../icons/ChevronDown16.svelte";
 </script>
 
 <svelte:window

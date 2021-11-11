@@ -13,7 +13,7 @@
 
   import Close16 from "carbon-icons-svelte/lib/Close16";
   import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
+  import WarningFilled16 from "../icons/WarningFilled16.svelte";
   import { Loading } from "../Loading";
 </script>
 

@@ -28,7 +28,7 @@
 
   import { createEventDispatcher, tick } from "svelte";
   import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
-  import Search20 from "carbon-icons-svelte/lib/Search20/Search20.svelte";
+  import Search20 from "../icons/Search20.svelte";
 
   const dispatch = createEventDispatcher();
 

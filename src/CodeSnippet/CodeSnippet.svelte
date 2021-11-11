@@ -89,7 +89,7 @@
   export let ref = null;
 
   import { createEventDispatcher, tick } from "svelte";
-  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
+  import ChevronDown16 from "../icons/ChevronDown16.svelte";
   import Button from "../Button/Button.svelte";
   import Copy from "../Copy/Copy.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";

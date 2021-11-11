@@ -2,7 +2,7 @@
   /** @extends {"../OverflowMenu/OverflowMenu.svelte"} OverflowMenuProps */
 
   import { getContext } from "svelte";
-  import Settings16 from "carbon-icons-svelte/lib/Settings16";
+  import Settings16 from "../icons/Settings16.svelte";
   import { OverflowMenu } from "../OverflowMenu";
 
   const ctx = getContext("Toolbar");

@@ -15,7 +15,7 @@
   export let iconDescription = "Expand/Collapse";
 
   import { onMount, getContext } from "svelte";
-  import ChevronRight16 from "carbon-icons-svelte/lib/ChevronRight16/ChevronRight16.svelte";
+  import ChevronRight16 from "../icons/ChevronRight16.svelte";
 
   let initialDisabled = disabled;
 

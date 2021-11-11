@@ -23,7 +23,7 @@
   };
 
   import Copy from "../Copy/Copy.svelte";
-  import Copy16 from "carbon-icons-svelte/lib/Copy16/Copy16.svelte";
+  import Copy16 from "../icons/Copy16.svelte";
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();

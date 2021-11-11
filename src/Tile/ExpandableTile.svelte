@@ -33,7 +33,7 @@
   export let ref = null;
 
   import { afterUpdate } from "svelte";
-  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
+  import ChevronDown16 from "../icons/ChevronDown16.svelte";
 
   let refContent = null;
   let refAbove = null;

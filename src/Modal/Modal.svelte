@@ -81,7 +81,7 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount, afterUpdate } from "svelte";
-  import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
+  import Close20 from "../icons/Close20.svelte";
   import Button from "../Button/Button.svelte";
 
   const dispatch = createEventDispatcher();
