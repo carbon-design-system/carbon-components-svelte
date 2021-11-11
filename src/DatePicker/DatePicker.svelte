@@ -188,6 +188,7 @@
   onDestroy(() => {
     if (calendar) {
       calendar.destroy();
+      calendar = null;
     }
   });
 
