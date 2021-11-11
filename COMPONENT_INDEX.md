@@ -1447,7 +1447,9 @@ None.
 
 ### Props
 
-None.
+| Prop name | Kind             | Reactive | Type                                     | Default value     | Description                            |
+| :-------- | :--------------- | :------- | :--------------------------------------- | ----------------- | -------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLFormElement</code> | <code>null</code> | Obtain a reference to the form element |
 
 ### Slots
 
