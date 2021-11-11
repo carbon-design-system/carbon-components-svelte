@@ -1,5 +1,5 @@
 {
-  "version": "0.47.6",
+  "version": "0.48.0",
   "components": {
     "Accordion": {
       "path": "carbon-components-svelte/src/Accordion/Accordion.svelte"
@@ -198,6 +198,123 @@
     },
     "IconSkeleton": {
       "path": "carbon-components-svelte/src/Icon/IconSkeleton.svelte"
+    },
+    "Add16": {
+      "path": "carbon-components-svelte/src/icons/Add16.svelte"
+    },
+    "AppSwitcher20": {
+      "path": "carbon-components-svelte/src/icons/AppSwitcher20.svelte"
+    },
+    "ArrowsVertical20": {
+      "path": "carbon-components-svelte/src/icons/ArrowsVertical20.svelte"
+    },
+    "ArrowUp20": {
+      "path": "carbon-components-svelte/src/icons/ArrowUp20.svelte"
+    },
+    "Calendar16": {
+      "path": "carbon-components-svelte/src/icons/Calendar16.svelte"
+    },
+    "CaretDown16": {
+      "path": "carbon-components-svelte/src/icons/CaretDown16.svelte"
+    },
+    "CaretLeft16": {
+      "path": "carbon-components-svelte/src/icons/CaretLeft16.svelte"
+    },
+    "CaretRight16": {
+      "path": "carbon-components-svelte/src/icons/CaretRight16.svelte"
+    },
+    "Checkmark16": {
+      "path": "carbon-components-svelte/src/icons/Checkmark16.svelte"
+    },
+    "CheckmarkFilled16": {
+      "path": "carbon-components-svelte/src/icons/CheckmarkFilled16.svelte"
+    },
+    "CheckmarkFilled20": {
+      "path": "carbon-components-svelte/src/icons/CheckmarkFilled20.svelte"
+    },
+    "CheckmarkOutline16": {
+      "path": "carbon-components-svelte/src/icons/CheckmarkOutline16.svelte"
+    },
+    "ChevronDown16": {
+      "path": "carbon-components-svelte/src/icons/ChevronDown16.svelte"
+    },
+    "ChevronDownGlyph": {
+      "path": "carbon-components-svelte/src/icons/ChevronDownGlyph.svelte"
+    },
+    "ChevronRight16": {
+      "path": "carbon-components-svelte/src/icons/ChevronRight16.svelte"
+    },
+    "Close16": {
+      "path": "carbon-components-svelte/src/icons/Close16.svelte"
+    },
+    "Close20": {
+      "path": "carbon-components-svelte/src/icons/Close20.svelte"
+    },
+    "Copy16": {
+      "path": "carbon-components-svelte/src/icons/Copy16.svelte"
+    },
+    "EditOff16": {
+      "path": "carbon-components-svelte/src/icons/EditOff16.svelte"
+    },
+    "ErrorFilled16": {
+      "path": "carbon-components-svelte/src/icons/ErrorFilled16.svelte"
+    },
+    "ErrorFilled20": {
+      "path": "carbon-components-svelte/src/icons/ErrorFilled20.svelte"
+    },
+    "Information16": {
+      "path": "carbon-components-svelte/src/icons/Information16.svelte"
+    },
+    "InformationFilled20": {
+      "path": "carbon-components-svelte/src/icons/InformationFilled20.svelte"
+    },
+    "InformationSquareFilled20": {
+      "path": "carbon-components-svelte/src/icons/InformationSquareFilled20.svelte"
+    },
+    "Launch16": {
+      "path": "carbon-components-svelte/src/icons/Launch16.svelte"
+    },
+    "Menu20": {
+      "path": "carbon-components-svelte/src/icons/Menu20.svelte"
+    },
+    "OverflowMenuHorizontal16": {
+      "path": "carbon-components-svelte/src/icons/OverflowMenuHorizontal16.svelte"
+    },
+    "OverflowMenuVertical16": {
+      "path": "carbon-components-svelte/src/icons/OverflowMenuVertical16.svelte"
+    },
+    "Search16": {
+      "path": "carbon-components-svelte/src/icons/Search16.svelte"
+    },
+    "Search20": {
+      "path": "carbon-components-svelte/src/icons/Search20.svelte"
+    },
+    "Settings16": {
+      "path": "carbon-components-svelte/src/icons/Settings16.svelte"
+    },
+    "Subtract16": {
+      "path": "carbon-components-svelte/src/icons/Subtract16.svelte"
+    },
+    "View16": {
+      "path": "carbon-components-svelte/src/icons/View16.svelte"
+    },
+    "ViewOff16": {
+      "path": "carbon-components-svelte/src/icons/ViewOff16.svelte"
+    },
+    "Warning16": {
+      "path": "carbon-components-svelte/src/icons/Warning16.svelte"
+    },
+    "WarningAltFilled16": {
+      "path": "carbon-components-svelte/src/icons/WarningAltFilled16.svelte"
+    },
+    "WarningAltFilled20": {
+      "path": "carbon-components-svelte/src/icons/WarningAltFilled20.svelte"
+    },
+    "WarningFilled16": {
+      "path": "carbon-components-svelte/src/icons/WarningFilled16.svelte"
+    },
+    "WarningFilled20": {
+      "path": "carbon-components-svelte/src/icons/WarningFilled20.svelte"
     },
     "ImageLoader": {
       "path": "carbon-components-svelte/src/ImageLoader/ImageLoader.svelte"

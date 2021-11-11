@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.48.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.48.0) - 2021-11-11
+
+**Breaking Changes**
+
+- remove `carbon-icons-svelte` from direct dependencies
+
+**Features**
+
+- support auto-width `Tabs`
+- add ref prop to `Form`
+
+**Fixes**
+
+- set calendar instance to `null` when destroying `DatePicker`
+
 ## [0.47.6](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.47.6) - 2021-11-10
 
 **Fixes**
