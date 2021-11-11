@@ -15,7 +15,7 @@
    */
   export let translateWithId = (id) => defaultTranslations[id];
 
-  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16";
+  import ChevronDown16 from "../icons/ChevronDown16.svelte";
 
   const defaultTranslations = {
     [translationIds.close]: "Close menu",

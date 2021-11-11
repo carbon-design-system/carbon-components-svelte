@@ -21,7 +21,7 @@
   export let icon = undefined;
 
   import { afterUpdate, getContext } from "svelte";
-  import CaretDown16 from "carbon-icons-svelte/lib/CaretDown16/CaretDown16.svelte";
+  import CaretDown16 from "../icons/CaretDown16.svelte";
   import TreeViewNode, { computeTreeLeafDepth } from "./TreeViewNode.svelte";
 
   let ref = null;

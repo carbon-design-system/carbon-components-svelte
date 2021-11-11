@@ -28,7 +28,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import Close16 from "carbon-icons-svelte/lib/Close16";
+  import Close16 from "../icons/Close16.svelte";
 
   const defaultTranslations = {
     [translationIds.clearAll]: "Clear all selected items",

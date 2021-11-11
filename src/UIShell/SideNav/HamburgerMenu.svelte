@@ -26,7 +26,7 @@
   export let ref = null;
 
   import Close20 from "carbon-icons-svelte/lib/Close20/Close20.svelte";
-  import Menu20 from "carbon-icons-svelte/lib/Menu20/Menu20.svelte";
+  import Menu20 from "../../icons/Menu20.svelte";
 </script>
 
 <button

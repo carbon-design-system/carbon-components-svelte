@@ -24,7 +24,7 @@
   export let name = "";
 
   import { getContext } from "svelte";
-  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16/CheckmarkFilled16.svelte";
+  import CheckmarkFilled16 from "../icons/CheckmarkFilled16.svelte";
 
   const { add, update, selectedValue } = getContext("TileGroup");
 

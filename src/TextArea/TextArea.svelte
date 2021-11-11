@@ -44,7 +44,7 @@
   /** Obtain a reference to the textarea HTML element */
   export let ref = null;
 
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16";
+  import WarningFilled16 from "../icons/WarningFilled16.svelte";
 
   $: errorId = `error-${id}`;
 </script>

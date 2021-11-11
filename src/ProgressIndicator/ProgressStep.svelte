@@ -25,7 +25,7 @@
 
   import { onMount, getContext } from "svelte";
   import CheckmarkOutline16 from "carbon-icons-svelte/lib/CheckmarkOutline16/CheckmarkOutline16.svelte";
-  import Warning16 from "carbon-icons-svelte/lib/Warning16/Warning16.svelte";
+  import Warning16 from "../icons/Warning16.svelte";
 
   let step = {};
 

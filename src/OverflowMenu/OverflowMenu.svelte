@@ -62,7 +62,7 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import OverflowMenuVertical16 from "carbon-icons-svelte/lib/OverflowMenuVertical16/OverflowMenuVertical16.svelte";
-  import OverflowMenuHorizontal16 from "carbon-icons-svelte/lib/OverflowMenuHorizontal16/OverflowMenuHorizontal16.svelte";
+  import OverflowMenuHorizontal16 from "../icons/OverflowMenuHorizontal16.svelte";
 
   const ctxBreadcrumbItem = getContext("BreadcrumbItem");
   const dispatch = createEventDispatcher();

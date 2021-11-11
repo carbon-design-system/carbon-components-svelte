@@ -108,7 +108,7 @@
   import Subtract16 from "carbon-icons-svelte/lib/Subtract16/Subtract16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
   import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
-  import EditOff16 from "carbon-icons-svelte/lib/EditOff16/EditOff16.svelte";
+  import EditOff16 from "../icons/EditOff16.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",

@@ -56,7 +56,7 @@
   import { getContext } from "svelte";
   import Calendar16 from "carbon-icons-svelte/lib/Calendar16/Calendar16.svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
-  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
+  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
 
   const {
     range,

@@ -2,7 +2,7 @@
   /** @extends {"./Link.svelte"} LinkProps */
 
   import Link from "./Link.svelte";
-  import Launch16 from "carbon-icons-svelte/lib/Launch16/Launch16.svelte";
+  import Launch16 from "../icons/Launch16.svelte";
 </script>
 
 <Link

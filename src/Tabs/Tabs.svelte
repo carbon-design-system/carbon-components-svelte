@@ -22,7 +22,7 @@
 
   import { createEventDispatcher, afterUpdate, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
-  import ChevronDownGlyph from "carbon-icons-svelte/lib/ChevronDownGlyph/ChevronDownGlyph.svelte";
+  import ChevronDownGlyph from "../icons/ChevronDownGlyph.svelte";
 
   const dispatch = createEventDispatcher();
 

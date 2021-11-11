@@ -34,7 +34,7 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import ChevronDownGlyph from "carbon-icons-svelte/lib/ChevronDownGlyph";
+  import ChevronDownGlyph from "../icons/ChevronDownGlyph.svelte";
 
   const selectedValue = writable(value);
 

@@ -65,7 +65,7 @@
 
   import { createEventDispatcher, afterUpdate, setContext } from "svelte";
   import { writable } from "svelte/store";
-  import Information16 from "carbon-icons-svelte/lib/Information16/Information16.svelte";
+  import Information16 from "../icons/Information16.svelte";
 
   const dispatch = createEventDispatcher();
   const tooltipOpen = writable(open);

@@ -148,7 +148,7 @@
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
-  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
+  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import {
     ListBox,
