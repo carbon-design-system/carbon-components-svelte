@@ -20,6 +20,23 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   </div>
 </Tabs>
 
+### Auto width
+
+By default, the width of each tab is set to `10rem`.
+
+Set `autoWidth` to `true` for tabs to have an automatically set width.
+
+<Tabs autoWidth>
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <div slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </div>
+</Tabs>
+
 ### Reactive example
 
 <FileSource src="/framed/Tabs/TabsReactive" />

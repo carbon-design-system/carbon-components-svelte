@@ -8,6 +8,9 @@
    */
   export let type = "default";
 
+  /** Set to `true` for tabs to have an auto-width */
+  export let autoWidth = false;
+
   /**
    * Specify the ARIA label for the chevron icon
    * @type {string}
@@ -27,6 +30,7 @@
   const tabsById = derived(tabs, (_) =>
     _.reduce((a, c) => ({ ...a, [c.id]: c }), {})
   );
+  const useAutoWidth = writable(autoWidth);
   const selectedTab = writable(undefined);
   const content = writable([]);
   const contentById = derived(content, (_) =>
@@ -39,6 +43,7 @@
     contentById,
     selectedTab,
     selectedContent,
+    useAutoWidth,
     add: (data) => {
       tabs.update((_) => [..._, { ...data, index: _.length }]);
     },
@@ -99,6 +104,7 @@
   $: if ($selectedTab) {
     dropdownHidden = true;
   }
+  $: useAutoWidth.set(autoWidth);
 </script>
 
 <div

@@ -22,7 +22,7 @@
 
   import { onMount, afterUpdate, getContext, tick } from "svelte";
 
-  const { selectedTab, add, update, change } = getContext("Tabs");
+  const { selectedTab, useAutoWidth, add, update, change } = getContext("Tabs");
 
   add({ id, label, disabled });
 
@@ -81,6 +81,7 @@
     id="{id}"
     href="{href}"
     class:bx--tabs__nav-link="{true}"
+    style="{$useAutoWidth ? 'width: auto' : undefined}"
   >
     <slot>{label}</slot>
   </a>
