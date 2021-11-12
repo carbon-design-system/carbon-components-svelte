@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.48.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.48.1) - 2021-11-12
+
+**Fixes**
+
+- type `DatePicker` locale prop as flatpickr `CustomLocale` or `key`
+- update remaining `carbon-icons-svelte` imports to use inlined icons
+
 ## [0.48.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.48.0) - 2021-11-11
 
 **Breaking Changes**
