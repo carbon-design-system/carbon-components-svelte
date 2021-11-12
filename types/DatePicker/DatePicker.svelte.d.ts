@@ -51,7 +51,9 @@ export interface DatePickerProps
    * Specify the locale
    * @default "en"
    */
-  locale?: string;
+  locale?:
+    | import("flatpickr/dist/types/locale").CustomLocale
+    | import("flatpickr/dist/types/locale").key;
 
   /**
    * Set to `true` to use the short variant

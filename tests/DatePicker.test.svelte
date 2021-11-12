@@ -1,8 +1,10 @@
 <script lang="ts">
   import { DatePicker, DatePickerSkeleton, DatePickerInput } from "../types";
+  import { Russian } from "flatpickr/dist/l10n/ru.js";
 </script>
 
 <DatePicker
+  locale="{Russian}"
   datePickerType="single"
   flatpickrProps="{{ static: true }}"
   on:change
@@ -11,6 +13,7 @@
 </DatePicker>
 
 <DatePicker
+  locale="az"
   on:change="{(e) => {
     console.log(e.detail);
   }}"
