@@ -104,10 +104,10 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import Add16 from "carbon-icons-svelte/lib/Add16/Add16.svelte";
-  import Subtract16 from "carbon-icons-svelte/lib/Subtract16/Subtract16.svelte";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
-  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
+  import Add16 from "../icons/Add16.svelte";
+  import Subtract16 from "../icons/Subtract16.svelte";
+  import WarningFilled16 from "../icons/WarningFilled16.svelte";
+  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
   import EditOff16 from "../icons/EditOff16.svelte";
 
   const defaultTranslations = {

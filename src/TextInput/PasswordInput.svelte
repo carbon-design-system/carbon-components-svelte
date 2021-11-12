@@ -81,9 +81,9 @@
   export let ref = null;
 
   import { getContext } from "svelte";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
-  import WarningAltFilled16 from "carbon-icons-svelte/lib/WarningAltFilled16/WarningAltFilled16.svelte";
-  import View16 from "carbon-icons-svelte/lib/View16/View16.svelte";
+  import WarningFilled16 from "../icons/WarningFilled16.svelte";
+  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
+  import View16 from "../icons/View16.svelte";
   import ViewOff16 from "../icons/ViewOff16.svelte";
 
   const ctx = getContext("Form");

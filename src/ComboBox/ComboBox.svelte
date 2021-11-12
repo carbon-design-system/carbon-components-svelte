@@ -95,8 +95,8 @@
   export let listRef = null;
 
   import { createEventDispatcher, afterUpdate, tick } from "svelte";
-  import Checkmark16 from "carbon-icons-svelte/lib/Checkmark16/Checkmark16.svelte";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import Checkmark16 from "../icons/Checkmark16.svelte";
+  import WarningFilled16 from "../icons/WarningFilled16.svelte";
   import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
   import ListBoxField from "../ListBox/ListBoxField.svelte";
