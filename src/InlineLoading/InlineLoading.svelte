@@ -21,7 +21,7 @@
   export let successDelay = 1500;
 
   import { createEventDispatcher, afterUpdate, onMount } from "svelte";
-  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16/CheckmarkFilled16.svelte";
+  import CheckmarkFilled16 from "../icons/CheckmarkFilled16.svelte";
   import ErrorFilled16 from "../icons/ErrorFilled16.svelte";
   import Loading from "../Loading/Loading.svelte";
 

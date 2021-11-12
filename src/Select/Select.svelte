@@ -62,8 +62,8 @@
 
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";
   import { writable } from "svelte/store";
-  import ChevronDown16 from "carbon-icons-svelte/lib/ChevronDown16/ChevronDown16.svelte";
-  import WarningFilled16 from "carbon-icons-svelte/lib/WarningFilled16/WarningFilled16.svelte";
+  import ChevronDown16 from "../icons/ChevronDown16.svelte";
+  import WarningFilled16 from "../icons/WarningFilled16.svelte";
   import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
 
   const dispatch = createEventDispatcher();

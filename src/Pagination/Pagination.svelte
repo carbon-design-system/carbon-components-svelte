@@ -71,7 +71,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   import { createEventDispatcher } from "svelte";
-  import CaretLeft16 from "carbon-icons-svelte/lib/CaretLeft16/CaretLeft16.svelte";
+  import CaretLeft16 from "../icons/CaretLeft16.svelte";
   import CaretRight16 from "../icons/CaretRight16.svelte";
   import Button from "../Button/Button.svelte";
   import Select from "../Select/Select.svelte";
