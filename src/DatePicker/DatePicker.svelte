@@ -44,7 +44,10 @@
    */
   export let minDate = null;
 
-  /** Specify the locale */
+  /**
+   * Specify the locale
+   * @type {import("flatpickr/dist/types/locale").CustomLocale | import("flatpickr/dist/types/locale").key}
+   */
   export let locale = "en";
 
   /** Set to `true` to use the short variant */

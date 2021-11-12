@@ -2659,7 +2659,7 @@
           "name": "locale",
           "kind": "let",
           "description": "Specify the locale",
-          "type": "string",
+          "type": "import(\"flatpickr/dist/types/locale\").CustomLocale | import(\"flatpickr/dist/types/locale\").key",
           "value": "\"en\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
