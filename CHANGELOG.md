@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.49.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.49.0) - 2021-11-12
+
+**Features**
+
+- support `UIShell` HeaderNavMenu with current item
+- make `InlineNotification` title, subtitle props slottable
+- make `ToastNotification` title, subtitle, and caption props slottable
+
+**Refactor**
+
+- remove unnecessary "position: relative" style in `ExpandableTile`
+- remove unused `refContent` in `ExpandableTile`
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.48.0
+
 ## [0.48.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.48.1) - 2021-11-12
 
 **Fixes**
