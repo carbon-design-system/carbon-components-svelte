@@ -32,7 +32,6 @@
 
   import { createEventDispatcher, onMount } from "svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
-  import NotificationTextDetails from "./NotificationTextDetails.svelte";
   import NotificationButton from "./NotificationButton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -78,13 +77,15 @@
   >
     <div class:bx--inline-notification__details="{true}">
       <NotificationIcon notificationType="inline" kind="{kind}" />
-      <NotificationTextDetails
-        title="{title}"
-        subtitle="{subtitle}"
-        notificationType="inline"
-      >
+      <div class:bx--inline-notification__text-wrapper="{true}">
+        <p class:bx--inline-notification__title="{true}">
+          <slot name="title">{title}</slot>
+        </p>
+        <div class:bx--inline-notification__subtitle="{true}">
+          <slot name="subtitle">{subtitle}</slot>
+        </div>
         <slot />
-      </NotificationTextDetails>
+      </div>
     </div>
     <slot name="actions" />
     {#if !hideCloseButton}

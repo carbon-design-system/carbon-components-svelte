@@ -11,6 +11,13 @@ source: Notification/InlineNotification.svelte
 
 <InlineNotification title="Error:" subtitle="An internal server error occurred." />
 
+### Slottable title, subtitle
+
+<InlineNotification>
+  <strong slot="title">Error: </strong>
+  <strong slot="subtitle">An internal server error occurred.</strong>
+</InlineNotification>
+
 ### Hidden close button
 
 <InlineNotification hideCloseButton kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />

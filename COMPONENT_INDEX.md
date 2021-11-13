@@ -1996,10 +1996,12 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
-| actions   | No      | --    | --       |
+| Slot name | Default | Props | Fallback                |
+| :-------- | :------ | :---- | :---------------------- |
+| --        | Yes     | --    | --                      |
+| actions   | No      | --    | --                      |
+| subtitle  | No      | --    | <code>{subtitle}</code> |
+| title     | No      | --    | <code>{title}</code>    |
 
 ### Events
 
@@ -4385,9 +4387,12 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback                |
+| :-------- | :------ | :---- | :---------------------- |
+| --        | Yes     | --    | --                      |
+| caption   | No      | --    | <code>{caption}</code>  |
+| subtitle  | No      | --    | <code>{subtitle}</code> |
+| title     | No      | --    | <code>{title}</code>    |
 
 ### Events
 

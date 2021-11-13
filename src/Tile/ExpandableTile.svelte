@@ -35,7 +35,6 @@
   import { afterUpdate } from "svelte";
   import ChevronDown16 from "../icons/ChevronDown16.svelte";
 
-  let refContent = null;
   let refAbove = null;
 
   afterUpdate(() => {
@@ -64,7 +63,7 @@
   class:bx--tile--is-expanded="{expanded}"
   class:bx--tile--light="{light}"
   {...$$restProps}
-  style="position: relative; {expanded
+  style="{expanded
     ? $$restProps.style
     : `${$$restProps.style}; max-height: ${tileMaxHeight + tilePadding}px`}"
   on:click
@@ -76,7 +75,7 @@
   on:mouseenter
   on:mouseleave
 >
-  <div bind:this="{refContent}">
+  <div>
     <div bind:this="{refAbove}" class:bx--tile-content="{true}">
       <span class:bx--tile-content__above-the-fold="{true}">
         <slot name="above" />

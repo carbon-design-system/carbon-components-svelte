@@ -14,7 +14,23 @@
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
+  import { setContext } from "svelte";
+  import { writable } from "svelte/store";
   import ChevronDown16 from "../../icons/ChevronDown16.svelte";
+
+  const selectedItems = writable({});
+
+  setContext("HeaderNavMenu", {
+    updateSelectedItems(item) {
+      selectedItems.update((_items) => ({
+        ..._items,
+        [item.id]: item.isSelected,
+      }));
+    },
+  });
+
+  $: isCurrentSubmenu =
+    Object.values($selectedItems).filter(Boolean).length > 0;
 </script>
 
 <svelte:window
@@ -29,7 +45,10 @@
   }}"
 />
 
-<li class:bx--header__submenu="{true}">
+<li
+  class:bx--header__submenu="{true}"
+  class:bx--header__submenu--current="{isCurrentSubmenu}"
+>
   <a
     bind:this="{ref}"
     role="menuitem"
@@ -41,6 +60,7 @@
     class:bx--header__menu-item="{true}"
     class:bx--header__menu-title="{true}"
     {...$$restProps}
+    style="{$$restProps.style}; z-index: 1"
     on:keydown
     on:keydown="{({ key }) => {
       if (key === 'Enter') {

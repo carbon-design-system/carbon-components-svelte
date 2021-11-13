@@ -16,6 +16,13 @@
 
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
+
+  import { getContext } from "svelte";
+
+  const id = "ccs-" + Math.random().toString(36);
+  const ctx = getContext("HeaderNavMenu");
+
+  $: if (ctx) ctx.updateSelectedItems({ id, isSelected });
 </script>
 
 <li>
