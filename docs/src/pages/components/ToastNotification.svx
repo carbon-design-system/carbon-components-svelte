@@ -11,6 +11,14 @@ source: Notification/ToastNotification.svelte
 
 <ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 
+### Slottable title, subtitle, caption
+
+<ToastNotification>
+  <strong slot="title">Error: </strong>
+  <strong slot="subtitle">An internal server error occurred.</strong>
+  <strong slot="caption">{new Date().toLocaleString()}</strong>
+</ToastNotification>
+
 ### Hidden close button
 
 <ToastNotification hideCloseButton kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />

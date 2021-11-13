@@ -36,7 +36,6 @@
   import { createEventDispatcher, onMount } from "svelte";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
-  import NotificationTextDetails from "./NotificationTextDetails.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -79,13 +78,18 @@
     on:mouseleave
   >
     <NotificationIcon kind="{kind}" />
-    <NotificationTextDetails
-      title="{title}"
-      subtitle="{subtitle}"
-      caption="{caption}"
-    >
+    <div class:bx--toast-notification__details="{true}">
+      <h3 class:bx--toast-notification__title="{true}">
+        <slot name="title">{title}</slot>
+      </h3>
+      <div class:bx--toast-notification__subtitle="{true}">
+        <slot name="subtitle">{subtitle}</slot>
+      </div>
+      <div class:bx--toast-notification__caption="{true}">
+        <slot name="caption">{caption}</slot>
+      </div>
       <slot />
-    </NotificationTextDetails>
+    </div>
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription="{iconDescription}"

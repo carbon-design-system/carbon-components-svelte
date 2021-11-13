@@ -12279,7 +12279,27 @@
           "reactive": false
         }
       ],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "caption",
+          "default": false,
+          "fallback": "{caption}",
+          "slot_props": "{}"
+        },
+        {
+          "name": "subtitle",
+          "default": false,
+          "fallback": "{subtitle}",
+          "slot_props": "{}"
+        },
+        {
+          "name": "title",
+          "default": false,
+          "fallback": "{title}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         {
           "type": "dispatched",
