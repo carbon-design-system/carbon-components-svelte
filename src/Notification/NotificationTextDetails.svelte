@@ -1,5 +1,10 @@
 <script>
   /**
+   * @deprecated
+   * This component will be removed in version 1.0.0.
+   */
+
+  /**
    * Set the type of notification
    * @type {"toast" | "inline"}
    */
