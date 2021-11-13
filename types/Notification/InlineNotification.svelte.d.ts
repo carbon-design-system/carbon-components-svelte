@@ -67,5 +67,5 @@ export default class InlineNotification extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {}; actions: {} }
+  { default: {}; actions: {}; subtitle: {}; title: {} }
 > {}

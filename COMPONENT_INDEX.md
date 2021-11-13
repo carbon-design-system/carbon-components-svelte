@@ -1996,10 +1996,12 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
-| actions   | No      | --    | --       |
+| Slot name | Default | Props | Fallback                |
+| :-------- | :------ | :---- | :---------------------- |
+| --        | Yes     | --    | --                      |
+| actions   | No      | --    | --                      |
+| subtitle  | No      | --    | <code>{subtitle}</code> |
+| title     | No      | --    | <code>{title}</code>    |
 
 ### Events
 
