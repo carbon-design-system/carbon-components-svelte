@@ -44,7 +44,7 @@
   $: primaryFocus = $focusedId === id;
   $: buttonProps = {
     role: "menuitem",
-    tabindex: "-1",
+    tabindex: -1,
     class: "bx--overflow-menu-options__btn",
     disabled: href ? undefined : disabled,
     href: href ? href : undefined,
@@ -62,9 +62,9 @@
   {...$$restProps}
 >
   {#if href}
-    <!-- svelte-ignore a11y-missing-attribute -->
     <a
       bind:this="{ref}"
+      {href}
       {...buttonProps}
       on:click
       on:click="{() => {
