@@ -83,6 +83,8 @@
     if (typeof page !== "number") {
       page = Number(page);
     }
+    
+    page = page > totalPages ? totalPages : page;
 
     if (typeof pageSize !== "number") {
       pageSize = Number(pageSize);
