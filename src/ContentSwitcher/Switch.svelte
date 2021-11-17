@@ -17,7 +17,7 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  import { afterUpdate, getContext, onDestroy } from "svelte";
+  import { afterUpdate, getContext, onMount } from "svelte";
 
   const ctx = getContext("ContentSwitcher");
 
@@ -33,8 +33,8 @@
     }
   });
 
-  onDestroy(() => {
-    unsubscribe();
+  onMount(() => {
+    return () => unsubscribe();
   });
 </script>
 
