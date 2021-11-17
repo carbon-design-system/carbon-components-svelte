@@ -70,7 +70,7 @@
     createEventDispatcher,
     setContext,
     afterUpdate,
-    onDestroy,
+    onMount,
   } from "svelte";
   import { writable, derived } from "svelte/store";
   import { createCalendar } from "./createCalendar";
@@ -175,6 +175,15 @@
     });
   }
 
+  onMount(() => {
+    return () => {
+      if (calendar) {
+        calendar.destroy();
+        calendar = null;
+      }
+    };
+  });
+
   afterUpdate(() => {
     if (calendar) {
       if ($range) {
@@ -185,13 +194,6 @@
       } else {
         calendar.setDate($inputValue);
       }
-    }
-  });
-
-  onDestroy(() => {
-    if (calendar) {
-      calendar.destroy();
-      calendar = null;
     }
   });
 

@@ -11,7 +11,7 @@
   /** Set to `true` to disable the option */
   export let disabled = false;
 
-  import { getContext, onDestroy } from "svelte";
+  import { getContext, onMount } from "svelte";
 
   const ctx = getContext("Select") || getContext("TimePickerSelect");
 
@@ -21,8 +21,8 @@
     selected = currentValue === value;
   });
 
-  onDestroy(() => {
-    unsubscribe();
+  onMount(() => {
+    return () => unsubscribe();
   });
 </script>
 
