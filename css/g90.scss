@@ -17,6 +17,7 @@ $css--plex: true;
 @import "carbon-components/src/components/tag/tag";
 @import "carbon-components/src/components/notification/inline-notification";
 @import "carbon-components/src/components/notification/toast-notification";
+@import "carbon-components-10.47/src/components/popover/popover";
 
 $carbon--theme: $carbon--theme--g90;
 @include carbon--theme();

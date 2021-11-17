@@ -844,8 +844,18 @@ caniuse-lite@^1.0.30001173, caniuse-lite@^1.0.30001178:
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001180.tgz#67abcd6d1edf48fa5e7d1e84091d1d65ab76e33b"
   integrity sha512-n8JVqXuZMVSPKiPiypjFtDTXc4jWIdjxull0f92WLo7e1MSi3uJ3NvveakSh/aCl1QKFAvIz3vIj0v+0K+FrXw==
 
+"carbon-components-10.47@npm:carbon-components@10.47":
+  version "10.47.1"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.47.1.tgz#9a6c5b54d9d7dc4e75aa9ba0e8d6c60ef27ab5ff"
+  integrity sha512-1/DajErW6vUWhCSZuiqFdo7kXx3WkGOkOSCW8xcWmQ4BQyGC70fcsselQoAXPwLvUtM4fCGJuGAG/TWwliUpwQ==
+  dependencies:
+    "@carbon/telemetry" "0.0.0-alpha.6"
+    flatpickr "4.6.1"
+    lodash.debounce "^4.0.8"
+    warning "^3.0.0"
+
 carbon-components-svelte@../:
-  version "0.48.1"
+  version "0.49.0"
   dependencies:
     flatpickr "4.6.9"
 

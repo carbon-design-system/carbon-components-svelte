@@ -30,6 +30,7 @@
   @import "carbon-components/src/components/tag/tag";
   @import "carbon-components/src/components/notification/inline-notification";
   @import "carbon-components/src/components/notification/toast-notification";
+  @import "carbon-components-10.47/src/components/popover/popover";
 
   // The default theme is "white" (White)
   :root {
