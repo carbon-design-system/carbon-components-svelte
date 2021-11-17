@@ -12,6 +12,7 @@
     "@sveltech/routify": "^1.9.9",
     "autoprefixer": "^10.2.3",
     "carbon-components": "10.48.0",
+    "carbon-components-10.47": "npm:carbon-components@10.47",
     "carbon-components-svelte": "../",
     "carbon-icons-svelte": "^10.38.0",
     "clipboard-copy": "^4.0.1",
