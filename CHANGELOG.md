@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.50.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.50.0) - 2021-11-18
+
+**Features**
+
+- add `target` prop to `ContextMenu` to support custom trigger element(s)
+- pass clicked element as `event.detail` in `ContextMenu` "open" event
+
 ## [0.49.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.49.2) - 2021-11-18
 
 **Fixes**
