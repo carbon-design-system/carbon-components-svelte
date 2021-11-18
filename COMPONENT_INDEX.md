@@ -780,12 +780,13 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                      | Default value      | Description                                                                      |
-| :-------- | :--------------- | :------- | :---------------------------------------- | ------------------ | -------------------------------------------------------------------------------- |
-| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code> | <code>null</code>  | Obtain a reference to the unordered list HTML element                            |
-| y         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the vertical offset of the menu position                                 |
-| x         | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the horizontal offset of the menu position                               |
-| open      | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero |
+| Prop name | Kind             | Reactive | Type                                                      | Default value      | Description                                                                                                                                        |
+| :-------- | :--------------- | :------- | :-------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>                 | <code>null</code>  | Obtain a reference to the unordered list HTML element                                                                                              |
+| y         | <code>let</code> | Yes      | <code>number</code>                                       | <code>0</code>     | Specify the vertical offset of the menu position                                                                                                   |
+| x         | <code>let</code> | Yes      | <code>number</code>                                       | <code>0</code>     | Specify the horizontal offset of the menu position                                                                                                 |
+| open      | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero                                                                   |
+| target    | <code>let</code> | No       | <code>null &#124; HTMLElement &#124; HTMLElement[]</code> | <code>null</code>  | Specify an element or list of elements to trigger the context menu.<br />If no element is specified, the context menu applies to the entire window |
 
 ### Slots
 
@@ -795,12 +796,12 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| open       | dispatched | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail                   |
+| :--------- | :--------- | :----------------------- |
+| open       | dispatched | <code>HTMLElement</code> |
+| click      | forwarded  | --                       |
+| keydown    | forwarded  | --                       |
+| close      | dispatched | --                       |
 
 ## `ContextMenuDivider`
 
