@@ -1,5 +1,12 @@
 <script>
   /**
+   * Specify an element or list of elements to trigger the context menu.
+   * If no element is specified, the context menu applies to the entire window
+   * @type {null | HTMLElement | HTMLElement[]}
+   */
+  export let target = null;
+
+  /**
    * Set to `true` to open the menu
    * Either `x` and `y` must be greater than zero
    */
@@ -15,6 +22,7 @@
   export let ref = null;
 
   import {
+    onMount,
     setContext,
     getContext,
     afterUpdate,
@@ -43,6 +51,53 @@
     prevY = 0;
     focusIndex = -1;
   }
+
+  /** @type {(e: MouseEvent) => void} */
+  function openMenu(e) {
+    const { height, width } = ref.getBoundingClientRect();
+
+    if (open || x === 0) {
+      if (window.innerWidth - width < e.x) {
+        x = e.x - width;
+      } else {
+        x = e.x;
+      }
+    }
+
+    if (open || y === 0) {
+      menuOffsetX.set(e.x);
+
+      if (window.innerHeight - height < e.y) {
+        y = e.y - height;
+      } else {
+        y = e.y;
+      }
+    }
+    position.set([x, y]);
+    open = true;
+  }
+
+  $: if (target != null) {
+    if (Array.isArray(target)) {
+      target.forEach((node) => node?.addEventListener("contextmenu", openMenu));
+    } else {
+      target.addEventListener("contextmenu", openMenu);
+    }
+  }
+
+  onMount(() => {
+    return () => {
+      if (target != null) {
+        if (Array.isArray(target)) {
+          target.forEach((node) =>
+            node?.removeEventListener("contextmenu", openMenu)
+          );
+        } else {
+          target.removeEventListener("contextmenu", openMenu);
+        }
+      }
+    };
+  });
 
   setContext("ContextMenu", {
     menuOffsetX,
@@ -78,30 +133,10 @@
 
 <svelte:window
   on:contextmenu|preventDefault="{(e) => {
+    if (target != null) return;
     if (level > 1) return;
     if (!ref) return;
-
-    const { height, width } = ref.getBoundingClientRect();
-
-    if (open || x === 0) {
-      if (window.innerWidth - width < e.x) {
-        x = e.x - width;
-      } else {
-        x = e.x;
-      }
-    }
-
-    if (open || y === 0) {
-      menuOffsetX.set(e.x);
-
-      if (window.innerHeight - height < e.y) {
-        y = e.y - height;
-      } else {
-        y = e.y;
-      }
-    }
-    position.set([x, y]);
-    open = true;
+    openMenu(e);
   }}"
   on:click="{(e) => {
     if (!open) return;

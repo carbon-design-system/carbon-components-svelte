@@ -1810,6 +1810,17 @@
       "filePath": "src/ContextMenu/ContextMenu.svelte",
       "props": [
         {
+          "name": "target",
+          "kind": "let",
+          "description": "Specify an element or list of elements to trigger the context menu.\nIf no element is specified, the context menu applies to the entire window",
+          "type": "null | HTMLElement | HTMLElement[]",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "open",
           "kind": "let",
           "description": "Set to `true` to open the menu\nEither `x` and `y` must be greater than zero",
