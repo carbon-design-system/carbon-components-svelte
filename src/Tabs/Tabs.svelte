@@ -52,6 +52,7 @@
     },
     update: (id) => {
       currentIndex = $tabsById[id].index;
+      dispatch("change", currentIndex);
     },
     change: (direction) => {
       let index = currentIndex + direction;
@@ -77,6 +78,7 @@
       }
 
       currentIndex = index;
+      dispatch("change", currentIndex);
     },
   });
 
@@ -91,8 +93,6 @@
   $: currentTab = $tabs[currentIndex] || undefined;
   $: currentContent = $content[currentIndex] || undefined;
   $: {
-    dispatch("change", currentIndex);
-
     if (currentTab) {
       selectedTab.set(currentTab.id);
     }
