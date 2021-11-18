@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.49.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.49.2) - 2021-11-18
+
+**Fixes**
+
+- `Tabs` should not dispatch an initial "change" event when no change has occurred
+- `Pagination` page value should not exceed total pages
+- fix `Popover` relative prop by inlining style
+- replace `onDestroy` with `onMount` return function to avoid running code server-side
+
 ## [0.49.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.49.1) - 2021-11-17
 
 **Fixes**
