@@ -1867,9 +1867,9 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        { "type": "dispatched", "name": "open", "detail": "HTMLElement" },
         { "type": "forwarded", "name": "click", "element": "ul" },
         { "type": "forwarded", "name": "keydown", "element": "ul" },
-        { "type": "dispatched", "name": "open" },
         { "type": "dispatched", "name": "close" }
       ],
       "typedefs": [],

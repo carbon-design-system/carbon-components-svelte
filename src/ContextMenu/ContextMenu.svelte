@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {HTMLElement} open
+   */
+
+  /**
    * Specify an element or list of elements to trigger the context menu.
    * If no element is specified, the context menu applies to the entire window
    * @type {null | HTMLElement | HTMLElement[]}
@@ -42,6 +46,7 @@
   let prevX = 0;
   let prevY = 0;
   let focusIndex = -1;
+  let openDetail = null;
 
   function close() {
     open = false;
@@ -75,6 +80,7 @@
     }
     position.set([x, y]);
     open = true;
+    openDetail = e.target;
   }
 
   $: if (target != null) {
@@ -119,7 +125,7 @@
         prevY = y;
       }
 
-      dispatch("open");
+      dispatch("open", openDetail);
     } else {
       dispatch("close");
     }

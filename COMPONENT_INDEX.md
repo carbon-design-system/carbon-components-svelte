@@ -796,12 +796,12 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| open       | dispatched | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail                   |
+| :--------- | :--------- | :----------------------- |
+| open       | dispatched | <code>HTMLElement</code> |
+| click      | forwarded  | --                       |
+| keydown    | forwarded  | --                       |
+| close      | dispatched | --                       |
 
 ## `ContextMenuDivider`
 

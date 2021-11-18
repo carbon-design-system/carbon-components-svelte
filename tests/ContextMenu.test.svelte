@@ -15,7 +15,7 @@
   $: console.log("selectedId", selectedId);
 </script>
 
-<ContextMenu>
+<ContextMenu open on:open="{(e) => console.log(e.detail)}">
   <ContextMenuOption
     kind="danger"
     indented

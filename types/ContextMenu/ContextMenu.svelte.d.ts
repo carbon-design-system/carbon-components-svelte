@@ -39,9 +39,9 @@ export interface ContextMenuProps
 export default class ContextMenu extends SvelteComponentTyped<
   ContextMenuProps,
   {
+    open: CustomEvent<HTMLElement>;
     click: WindowEventMap["click"];
     keydown: WindowEventMap["keydown"];
-    open: CustomEvent<any>;
     close: CustomEvent<any>;
   },
   { default: {} }
