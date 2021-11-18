@@ -46,10 +46,8 @@
       content.update((_) => [..._, { ...data, index: _.length }]);
     },
     update: (id) => {
-      if (currentIndex !== $tabsById[id].index) {
-        currentIndex = $tabsById[id].index;
-        dispatch("change", currentIndex);
-      }
+      currentIndex = $tabsById[id].index;
+      dispatch("change", currentIndex);
     },
     change: (direction) => {
       let index = currentIndex + direction;
@@ -75,6 +73,7 @@
       }
 
       currentIndex = index;
+      dispatch("change", currentIndex);
     },
   });
 
