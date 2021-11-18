@@ -61,6 +61,7 @@
   class:bx--popover--open="{open}"
   class:bx--popover--relative="{relative}"
   {...$$restProps}
+  style="{$$restProps.style}; {relative && 'position: relative'}"
 >
   <div class:bx--popover-contents="{true}">
     <slot />
