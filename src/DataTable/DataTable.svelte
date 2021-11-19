@@ -336,7 +336,15 @@
             : ''} {expandable && parentRowId === row.id
             ? 'bx--expandable-row--hover'
             : ''}"
-          on:click="{() => {
+          on:click="{({ target }) => {
+            // forgo "click", "click:row" events if target resembles an overflow menu
+            if (
+              [...target.classList].some((name) =>
+                /^bx--overflow-menu/.test(name)
+              )
+            ) {
+              return;
+            }
             dispatch('click', { row });
             dispatch('click:row', row);
           }}"
