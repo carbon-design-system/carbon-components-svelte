@@ -329,9 +329,10 @@
           change(-1);
         } else if (key === 'Enter') {
           if (highlightedIndex > -1) {
-            sortedItems[highlightedIndex].checked = !sortedItems[
-              highlightedIndex
-            ].checked;
+            sortedItems = sortedItems.map((item, i) => {
+              if (i !== highlightedIndex) return item;
+              return { ...item, checked: !item.checked };
+            });
           }
         }
       }}"
@@ -403,9 +404,10 @@
                     return { ...item, checked: !item.checked };
                   });
                 } else {
-                  sortedItems[highlightedIndex].checked = !sortedItems[
-                    highlightedIndex
-                  ].checked;
+                  sortedItems = sortedItems.map((item, i) => {
+                    if (i !== highlightedIndex) return item;
+                    return { ...item, checked: !item.checked };
+                  });
                 }
               }
             } else if (key === 'Tab') {
