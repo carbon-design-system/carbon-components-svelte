@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.50.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.50.2) - 2021-11-27
+
+**Fixes**
+
+- select correct item in filterable `MultiSelect` using keyboard navigation
+- do not mutate `sortedItems` in `MultiSelect`
+
 ## [0.50.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.50.1) - 2021-11-19
 
 **Fixes**
