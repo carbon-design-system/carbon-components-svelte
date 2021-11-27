@@ -392,9 +392,21 @@
           on:keydown|stopPropagation="{({ key }) => {
             if (key === 'Enter') {
               if (highlightedIndex > -1) {
-                sortedItems[highlightedIndex].checked = !sortedItems[
-                  highlightedIndex
-                ].checked;
+                if (filterable) {
+                  const filteredItemId = filteredItems[highlightedIndex].id;
+                  const filteredItemIndex = sortedItems
+                    .map((item) => item.id)
+                    .indexOf(filteredItemId);
+
+                  sortedItems = sortedItems.map((item, i) => {
+                    if (i !== filteredItemIndex) return item;
+                    return { ...item, checked: !item.checked };
+                  });
+                } else {
+                  sortedItems[highlightedIndex].checked = !sortedItems[
+                    highlightedIndex
+                  ].checked;
+                }
               }
             } else if (key === 'Tab') {
               open = false;
