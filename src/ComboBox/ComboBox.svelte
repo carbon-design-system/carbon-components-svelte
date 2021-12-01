@@ -108,7 +108,7 @@
   const dispatch = createEventDispatcher();
 
   let selectedId = undefined;
-  let inputValue = "";
+  let inputValue = value;
   let highlightedIndex = -1;
 
   function change(dir) {
