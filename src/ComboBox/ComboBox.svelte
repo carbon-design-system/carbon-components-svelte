@@ -113,10 +113,10 @@
 
   function change(dir) {
     let index = highlightedIndex + dir;
-
+    let _items = !filteredItems?.length ? items : filteredItems;
     if (index < 0) {
-      index = items.length - 1;
-    } else if (index >= items.length) {
+      index = _items.length - 1;
+    } else if (index >= _items.length) {
       index = 0;
     }
 
@@ -161,7 +161,6 @@
     : undefined;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
   $: selectedItem = items[selectedIndex];
-  $: inputValue = selectedItem ? selectedItem.text : "";
   $: value = inputValue;
 </script>
 
