@@ -150,8 +150,15 @@
   });
 
   $: if (selectedIndex > -1) {
-    selectedId = items[selectedIndex].id;
-    dispatch("select", { selectedId, selectedIndex, selectedItem });
+    let _selectedItem;
+    if (filteredItems?.length === 1) {
+      selectedId = filteredItems[0].id;
+      _selectedItem = filteredItems[0];
+    } else {
+      selectedId = items[selectedIndex].id;
+      _selectedItem = selectedItem;
+    }
+    dispatch("select", { selectedId, selectedIndex, selectedItem: _selectedItem });
   }
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
   $: menuId = `menu-${id}`;
