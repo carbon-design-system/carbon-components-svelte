@@ -111,6 +111,8 @@
   let inputValue = value;
   let highlightedIndex = -1;
 
+  let selectedItem;
+
   function change(dir) {
     let index = highlightedIndex + dir;
     let _items = !filteredItems?.length ? items : filteredItems;
@@ -130,6 +132,7 @@
   export function clear() {
     selectedIndex = -1;
     highlightedIndex = -1;
+    selectedItem = undefined;
     open = false;
     inputValue = "";
     ref?.focus();
@@ -149,16 +152,17 @@
     }
   });
 
-  $: if (selectedIndex > -1) {
-    let _selectedItem;
+  let prevSelectedIndex;
+  $: if (selectedIndex > -1 && prevSelectedIndex !== selectedIndex) {
+    prevSelectedIndex = selectedIndex;
     if (filteredItems?.length === 1) {
       selectedId = filteredItems[0].id;
-      _selectedItem = filteredItems[0];
+      selectedItem = filteredItems[0];
     } else {
       selectedId = items[selectedIndex].id;
-      _selectedItem = selectedItem;
+      selectedItem = items[selectedIndex];
     }
-    dispatch("select", { selectedId, selectedIndex, selectedItem: _selectedItem });
+    dispatch("select", { selectedId, selectedIndex, selectedItem });
   }
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
   $: menuId = `menu-${id}`;
@@ -167,7 +171,6 @@
     ? items[highlightedIndex].id
     : undefined;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
-  $: selectedItem = items[selectedIndex];
   $: value = inputValue;
 </script>
 
