@@ -163,7 +163,7 @@
         name="{name}"
         placeholder="{placeholder}"
         type="{type}"
-        value="{value}"
+        value="{value ?? ''}"
         required="{required}"
         readonly="{readonly}"
         class:bx--text-input="{true}"
