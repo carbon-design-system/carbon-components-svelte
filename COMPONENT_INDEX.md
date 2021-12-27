@@ -462,8 +462,9 @@ None.
 | Prop name     | Kind             | Reactive | Type                                      | Default value                                    | Description                                       |
 | :------------ | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | ------------------------------------------------- |
 | ref           | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element      |
+| group         | <code>let</code> | Yes      | <code>any[]</code>                        | <code>[]</code>                                  | Specify the bound group                           |
 | checked       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is checked           |
-| value         | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the value of the checkbox                 |
+| value         | <code>let</code> | No       | <code>string &#124; any</code>            | <code>""</code>                                  | Specify the value of the checkbox                 |
 | indeterminate | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is indeterminate     |
 | skeleton      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state       |
 | readonly      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` for the checkbox to be read-only    |

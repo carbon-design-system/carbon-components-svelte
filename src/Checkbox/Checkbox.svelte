@@ -3,11 +3,20 @@
    * @event {boolean} check
    */
 
-  /** Specify the value of the checkbox */
+  /**
+   * Specify the value of the checkbox
+   * @type {string | any}
+   */
   export let value = "";
 
   /** Specify whether the checkbox is checked */
   export let checked = false;
+
+  /**
+   * Specify the bound group
+   * @type {any[]}
+   */
+  export let group = [];
 
   /** Specify whether the checkbox is indeterminate */
   export let indeterminate = false;
@@ -71,6 +80,7 @@
   >
     <input
       bind:this="{ref}"
+      bind:group
       type="checkbox"
       value="{value}"
       checked="{checked}"

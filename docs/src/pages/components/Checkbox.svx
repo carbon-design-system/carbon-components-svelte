@@ -26,3 +26,9 @@
 ### Skeleton
 
 <Checkbox skeleton />
+
+### Multiple
+
+Bind a selection list to multiple checkboxes.
+
+<FileSource src="/framed/Checkbox/MultipleCheckboxes" />
