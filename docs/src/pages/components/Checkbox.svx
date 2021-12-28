@@ -23,12 +23,12 @@
 
 <Checkbox labelText="Label text" disabled />
 
+### Multiple
+
+Bind a selection [group](https://svelte.dev/tutorial/group-inputs) to multiple checkboxes.
+
+<FileSource src="/framed/Checkbox/MultipleCheckboxes" />
+
 ### Skeleton
 
 <Checkbox skeleton />
-
-### Multiple
-
-Bind a selection list to multiple checkboxes.
-
-<FileSource src="/framed/Checkbox/MultipleCheckboxes" />
