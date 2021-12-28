@@ -54,7 +54,7 @@
   on:mouseenter
   on:mouseleave
 >
-  {#if labelText}
+  {#if labelText || $$slots.labelText}
     <label
       for="{id}"
       class:bx--label="{true}"

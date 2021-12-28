@@ -74,7 +74,7 @@
     class:bx--select--light="{light}"
   >
     <div class:bx--time-picker__input="{true}">
-      {#if labelText}
+      {#if labelText || $$slots.labelText}
         <label
           for="{id}"
           class:bx--label="{true}"
