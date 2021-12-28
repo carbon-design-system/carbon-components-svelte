@@ -170,7 +170,7 @@
         name="{name}"
         placeholder="{placeholder}"
         type="{type}"
-        value="{value}"
+        value="{value ?? ''}"
         disabled="{disabled}"
         class:bx--text-input="{true}"
         class:bx--password-input="{true}"

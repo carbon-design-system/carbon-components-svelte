@@ -85,7 +85,7 @@
       name="{name}"
       cols="{cols}"
       rows="{rows}"
-      value="{value}"
+      value="{value ?? ''}"
       placeholder="{placeholder}"
       class:bx--text-area="{true}"
       class:bx--text-area--light="{light}"
