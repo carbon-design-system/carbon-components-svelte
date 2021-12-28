@@ -57,6 +57,16 @@
   const dispatch = createEventDispatcher();
 
   $: dispatch("check", checked);
+  $: checked = group.indexOf(value) >= 0;
+
+  const updateGroup = () => {
+    if (checked) {
+      group = [...group, value];
+    } else {
+      group.splice(group.indexOf(value), 1);
+      group = group;
+    }
+  };
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -80,7 +90,6 @@
   >
     <input
       bind:this="{ref}"
-      bind:group
       type="checkbox"
       value="{value}"
       checked="{checked}"
@@ -94,6 +103,7 @@
       on:change="{() => {
         checked = !checked;
       }}"
+      on:change="{updateGroup}"
       on:blur
     />
     <label for="{id}" title="{title}" class:bx--checkbox-label="{true}">
