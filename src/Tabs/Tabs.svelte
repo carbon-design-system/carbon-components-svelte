@@ -130,8 +130,8 @@
       tabindex="-1"
       class:bx--tabs-trigger-text="{true}"
       href="{triggerHref}"
-      on:click
-      on:click="{() => {
+      on:click|preventDefault
+      on:click|preventDefault|stopPropagation="{() => {
         dropdownHidden = !dropdownHidden;
       }}"
     >
