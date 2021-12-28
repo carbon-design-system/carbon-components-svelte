@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.50.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.50.3) - 2021-12-28
+
+**Fixes**
+
+- do not dispatch "click", "click:row" `DataTable` events when selecting a checkbox or radio button
+- render "labelText" slot if `labelText` prop or `$$slots.labelText` is truthy
+- prevent default behavior in `Tabs` mobile variant when clicking a menu option
+- coalesce nullish values to `""` for `TextInput`, `PasswordInput`, `TextArea`
+
 ## [0.50.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.50.2) - 2021-11-27
 
 **Fixes**
