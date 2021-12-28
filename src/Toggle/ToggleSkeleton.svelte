@@ -36,7 +36,7 @@
     class:bx--toggle__label="{true}"
     class:bx--skeleton="{true}"
   >
-    {#if labelText}
+    {#if labelText || $$slots.labelText}
       <span class:bx--toggle__label-text="{true}">
         <slot name="labelText">
           {labelText}
