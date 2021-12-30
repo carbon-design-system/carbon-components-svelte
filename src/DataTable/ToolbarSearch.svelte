@@ -35,6 +35,7 @@
     ref.focus();
   }
 
+  $: expanded = !!value.length;
   $: classes = [
     expanded && "bx--toolbar-search-container-active",
     persistent
