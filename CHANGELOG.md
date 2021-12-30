@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.50.5](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.50.5) - 2021-12-30
+
+**Fixes**
+
+- filterable `MultiSelect` should blur when pressing "Tab"
+- filterable `MultiSelect` menu should close when pressing "Escape"
+- filterable `MultiSelect` menu should open when pressing "Space"
+- `DatePicker` input should not lose focus when pressing "Enter"
+- `ToolbarSearch` should expand if `value` is programmatically set
+
 ## [0.50.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.50.4) - 2021-12-30
 
 **Fixes**
