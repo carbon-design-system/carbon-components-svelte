@@ -712,7 +712,7 @@
           "name": "value",
           "kind": "let",
           "description": "Specify the value of the checkbox",
-          "type": "string | any",
+          "type": "any",
           "value": "\"\"",
           "isFunction": false,
           "isFunctionDeclaration": false,

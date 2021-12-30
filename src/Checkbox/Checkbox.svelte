@@ -5,7 +5,7 @@
 
   /**
    * Specify the value of the checkbox
-   * @type {string | any}
+   * @type {any}
    */
   export let value = "";
 

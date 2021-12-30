@@ -6,7 +6,7 @@ export interface CheckboxProps {
    * Specify the value of the checkbox
    * @default ""
    */
-  value?: string | any;
+  value?: any;
 
   /**
    * Specify whether the checkbox is checked
