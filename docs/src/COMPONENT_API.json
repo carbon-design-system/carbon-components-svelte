@@ -6472,7 +6472,7 @@
           "kind": "let",
           "description": "Override the filtering logic\nThe default filtering is an exact string comparison",
           "type": "(item: MultiSelectItem, value: string) => string",
-          "value": "(item, value) =>     item.text.toLowerCase().includes(value.toLowerCase())",
+          "value": "(item, value) =>     item.text.toLowerCase().includes(value.trim().toLowerCase())",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "constant": false,
