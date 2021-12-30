@@ -64,7 +64,7 @@
    * @type {(item: MultiSelectItem, value: string) => string}
    */
   export let filterItem = (item, value) =>
-    item.text.toLowerCase().includes(value.toLowerCase());
+    item.text.toLowerCase().includes(value.trim().toLowerCase());
 
   /** Set to `true` to open the dropdown */
   export let open = false;
@@ -419,6 +419,8 @@
               change(-1);
             } else if (key === 'Escape') {
               open = false;
+            } else if (key === ' ') {
+              if (!open) open = true;
             }
           }}"
           on:keyup
