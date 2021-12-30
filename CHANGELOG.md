@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.50.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.50.4) - 2021-12-30
+
+**Fixes**
+
+- pressing "Escape" in a `DatePicker` should not propagate past the open calendar
+- prevent menu icon in filterable `MultiSelect` from triggering twice
+
 ## [0.50.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.50.3) - 2021-12-28
 
 **Fixes**
