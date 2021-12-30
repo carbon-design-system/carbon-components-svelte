@@ -412,6 +412,7 @@
               }
             } else if (key === 'Tab') {
               open = false;
+              inputRef.blur();
             } else if (key === 'ArrowDown') {
               change(1);
             } else if (key === 'ArrowUp') {
