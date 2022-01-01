@@ -15,7 +15,7 @@
     "carbon-components": "10.48.0",
     "carbon-components-10.47": "npm:carbon-components@10.47",
     "carbon-components-svelte": "../",
-    "carbon-icons-svelte": "^10.38.0",
+    "carbon-icons-svelte": "^10.44.3",
     "clipboard-copy": "^4.0.1",
     "cross-env": "^7.0.3",
     "mdsvex": "^0.8.8",
