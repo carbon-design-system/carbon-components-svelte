@@ -60,9 +60,9 @@
   ]}"
   rows="{rows}"
 >
-  <div slot="expanded-row" let:row>
+  <svelte:fragment slot="expanded-row" let:row>
     <pre>
       {JSON.stringify(row, null, 2)}
     </pre>
-  </div>
+  </svelte:fragment>
 </DataTable>

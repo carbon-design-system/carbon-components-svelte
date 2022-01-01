@@ -41,9 +41,9 @@
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
-  <div slot="skip-to-content">
+  <svelte:fragment slot="skip-to-content">
     <SkipToContent />
-  </div>
+  </svelte:fragment>
   <HeaderUtilities>
     <HeaderAction bind:isOpen transition="{transitions[selected].value}">
       <HeaderPanelLinks>

@@ -48,9 +48,9 @@
     expandedByDefault="{true}"
     bind:isSideNavOpen
   >
-    <div slot="skip-to-content">
+    <svelte:fragment slot="skip-to-content">
       <SkipToContent />
-    </div>
+    </svelte:fragment>
 
     <span slot="platform" class="platform-name">
       Carbon Components Svelte
