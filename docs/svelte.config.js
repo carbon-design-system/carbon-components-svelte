@@ -99,7 +99,6 @@ function plugin() {
       );
       const formattedCode = format(sourceCode, {
         parser: "svelte",
-        svelteBracketNewLine: true,
       });
       const highlightedCode = Prism.highlight(
         formattedCode,

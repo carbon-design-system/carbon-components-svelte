@@ -57,8 +57,7 @@
     ]
   },
   "prettier": {
-    "svelteStrictMode": true,
-    "svelteBracketNewLine": true
+    "svelteStrictMode": true
   },
   "repository": {
     "type": "git",
