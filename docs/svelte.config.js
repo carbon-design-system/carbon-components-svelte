@@ -67,7 +67,7 @@ function plugin() {
       const scriptBlock = createImports(node.value);
       const formattedCode = format(scriptBlock + node.value, {
         parser: "svelte",
-        svelteSortOrder: "scripts-markup-styles",
+        svelteSortOrder: "scripts-markup-styles-options",
       });
       const highlightedCode = Prism.highlight(
         formattedCode,
