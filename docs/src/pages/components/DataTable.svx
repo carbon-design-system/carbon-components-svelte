@@ -131,20 +131,20 @@ The slot name for the table header cells is `"cell-header"`.
     },
   ]}"
 >
- <span slot="cell-header" let:header>
+ <svelte:fragment slot="cell-header" let:header>
     {#if header.key === 'port'}
       {header.value} (network)
     {:else}
       {header.value}
     {/if}
-  </span>
-  <span slot="cell" let:row let:cell>
+  </svelte:fragment>
+  <svelte:fragment slot="cell" let:row let:cell>
     {#if cell.key === 'rule' && cell.value === 'Round robin'}
       <Link icon={Launch16} href="https://en.wikipedia.org/wiki/Round-robin_DNS" target="_blank">{cell.value}</Link>
     {:else}
       {cell.value}
     {/if}
-  </span>
+  </svelte:fragment>
 </DataTable>
 
 ### With title, description
@@ -1018,11 +1018,11 @@ In the following example, each row in the sortable data table has an overflow me
     },
   ]}"
 >
-  <div slot="expanded-row" let:row>
+  <svelte:fragment slot="expanded-row" let:row>
     <pre>
       {JSON.stringify(row, null, 2)}
     </pre>
-  </div>
+  </svelte:fragment>
 </DataTable>
 
 ### Non-expandable rows
@@ -1085,11 +1085,11 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
     },
   ]}"
 >
-  <div slot="expanded-row" let:row>
+  <svelte:fragment slot="expanded-row" let:row>
     <pre>
       {JSON.stringify(row, null, 2)}
     </pre>
-  </div>
+  </svelte:fragment>
 </DataTable>
 
 ### Expandable (short size)
@@ -1146,11 +1146,11 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
     },
   ]}"
 >
-  <div slot="expanded-row" let:row>
+  <svelte:fragment slot="expanded-row" let:row>
     <pre>
       {JSON.stringify(row, null, 2)}
     </pre>
-  </div>
+  </svelte:fragment>
 </DataTable>
 
 ### Expandable (tall size)
@@ -1207,11 +1207,11 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
     },
   ]}"
 >
-  <div slot="expanded-row" let:row>
+  <svelte:fragment slot="expanded-row" let:row>
     <pre>
       {JSON.stringify(row, null, 2)}
     </pre>
-  </div>
+  </svelte:fragment>
 </DataTable>
 
 ### Batch expansion
@@ -1268,11 +1268,11 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
     },
   ]}"
 >
-  <div slot="expanded-row" let:row>
+  <svelte:fragment slot="expanded-row" let:row>
     <pre>
       {JSON.stringify(row, null, 2)}
     </pre>
-  </div>
+  </svelte:fragment>
 </DataTable>
 
 ### Skeleton

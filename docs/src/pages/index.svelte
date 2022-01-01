@@ -131,7 +131,7 @@
           <Tab label="CSS StyleSheet" />
           <Tab label="CDN" />
           <Tab label="SCSS" />
-          <div slot="content">
+          <svelte:fragment slot="content">
             <TabContent>
               <p>
                 This library ships with six pre-compiled CSS StyleSheets built
@@ -199,7 +199,7 @@
                 for documentation.
               </p>
             </TabContent>
-          </div>
+          </svelte:fragment>
         </Tabs>
       </Column>
     </Row>

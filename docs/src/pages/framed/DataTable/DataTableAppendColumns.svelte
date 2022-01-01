@@ -23,7 +23,7 @@
 </script>
 
 <DataTable sortable headers="{headers}" rows="{rows}">
-  <span slot="cell" let:cell>
+  <svelte:fragment slot="cell" let:cell>
     {#if cell.key === "overflow"}
       <OverflowMenu flipped>
         <OverflowMenuItem text="Restart" />
@@ -34,5 +34,5 @@
         <OverflowMenuItem danger text="Stop" />
       </OverflowMenu>
     {:else}{cell.value}{/if}
-  </span>
+  </svelte:fragment>
 </DataTable>

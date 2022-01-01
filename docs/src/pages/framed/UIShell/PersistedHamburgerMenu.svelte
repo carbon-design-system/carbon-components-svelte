@@ -25,10 +25,9 @@
   platformName="Carbon Svelte"
   bind:isSideNavOpen
 >
-  <div slot="skip-to-content">
+  <svelte:fragment slot="skip-to-content">
     <SkipToContent />
-  </div>
-
+  </svelte:fragment>
   <HeaderNav>
     <HeaderNavItem href="/" text="Link 1" />
     <HeaderNavItem href="/" text="Link 2" />

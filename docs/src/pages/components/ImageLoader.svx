@@ -16,12 +16,12 @@ This utility component uses the [Image API](https://developer.mozilla.org/en-US/
 Use the "loading" and "error" named slots to render an element when the image is loading or has an error.
 
 <ImageLoader src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg">
-    <div slot="loading">
+    <svelte:fragment slot="loading">
         <InlineLoading />
-    </div>
-    <div slot="error">
+    </svelte:fragment>
+    <svelte:fragment slot="error">
         An error occurred.
-    </div>
+    </svelte:fragment>
 </ImageLoader>
 
 ### With aspect ratio

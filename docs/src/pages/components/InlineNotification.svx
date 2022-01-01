@@ -25,9 +25,9 @@ source: Notification/InlineNotification.svelte
 ### With actions
 
 <InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours.">
-  <div slot="actions">
+  <svelte:fragment slot="actions">
     <NotificationActionButton>Learn more</NotificationActionButton>
-  </div>
+  </svelte:fragment>
 </InlineNotification>
 
 ### Notification variants

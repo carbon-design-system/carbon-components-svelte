@@ -66,9 +66,9 @@
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte">
-  <div slot="skip-to-content">
+  <svelte:fragment slot="skip-to-content">
     <SkipToContent />
-  </div>
+  </svelte:fragment>
   <HeaderUtilities>
     <HeaderSearch
       bind:ref
