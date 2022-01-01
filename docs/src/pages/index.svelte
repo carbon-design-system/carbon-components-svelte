@@ -23,6 +23,7 @@
 
   const installYarn = "yarn add -D carbon-components-svelte";
   const installNpm = "npm i -D carbon-components-svelte";
+  const installPnpm = "pnpm i -D carbon-components-svelte";
   const themes = {
     white: "White",
     g10: "Gray 10",
@@ -97,6 +98,10 @@
         <h4>Using NPM:</h4>
         <Row noGutter>
           <CodeSnippet code="{installNpm}" />
+        </Row>
+        <h4>Using pnpm:</h4>
+        <Row noGutter>
+          <CodeSnippet code="{installPnpm}" />
         </Row>
       </Column>
     </Row>
