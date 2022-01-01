@@ -1647,12 +1647,13 @@ mdast-util-to-string@^1.0.0:
   resolved "https://registry.npmjs.org/mdast-util-to-string/-/mdast-util-to-string-1.1.0.tgz#27055500103f51637bd07d01da01eb1967a43527"
   integrity sha512-jVU0Nr2B9X3MU4tSK7JP1CMkSvOj7X5l/GboG1tKRw52lLF1x2Ju92Ms9tNetCcbfX3hzlM73zYo2NKkWSfF/A==
 
-mdsvex@^0.8.8:
-  version "0.8.8"
-  resolved "https://registry.npmjs.org/mdsvex/-/mdsvex-0.8.8.tgz#1d7d7a9fd681a7d0f9418a24a0c282ff9f2e828d"
-  integrity sha512-T496FO26UdKs6R7oD8GkuMgFyd37M4QZmePm4mOvT5judvF5fxes7xfICIiTSKz3If1iieXVmI6XEhNI0qqi5A==
+mdsvex@^0.9.8:
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/mdsvex/-/mdsvex-0.9.8.tgz#f430988b86c4d9080381de2fbe54326c046487bc"
+  integrity sha512-5QvThjRKoKkGH00qdHxLZ5ROd80RgGiJvM2B9opeFreaiGFTLoKKFUgEBCslLrwM24cVGJLmIM3rR83OFDf3tQ==
   dependencies:
     "@types/unist" "^2.0.3"
+    prism-svelte "^0.4.7"
     prismjs "^1.17.1"
     vfile-message "^2.0.4"
 

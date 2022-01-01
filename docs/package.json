@@ -18,7 +18,7 @@
     "carbon-icons-svelte": "^10.44.3",
     "clipboard-copy": "^4.0.1",
     "cross-env": "^7.0.3",
-    "mdsvex": "^0.8.8",
+    "mdsvex": "^0.9.8",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.2.4",
     "prettier": "^2.5.1",
