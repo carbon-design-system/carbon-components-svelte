@@ -95,6 +95,12 @@ export interface SelectProps
    * @default null
    */
   ref?: null | HTMLSelectElement;
+
+  /**
+   * Set to `true` to mark the field as required
+   * @default false
+   */
+  required?: boolean;
 }
 
 export default class Select extends SvelteComponentTyped<

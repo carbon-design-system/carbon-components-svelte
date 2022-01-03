@@ -198,10 +198,8 @@
         class:bx--btn--disabled="{disabled}"
         class:bx--tooltip__trigger="{true}"
         class:bx--tooltip--a11y="{true}"
-        class="{tooltipPosition &&
-          `bx--tooltip--${tooltipPosition}`}
-        {tooltipAlignment &&
-          `bx--tooltip--align-${tooltipAlignment}`}"
+        class="{tooltipPosition && `bx--tooltip--${tooltipPosition}`}
+        {tooltipAlignment && `bx--tooltip--align-${tooltipAlignment}`}"
         on:click="{() => {
           type = type === 'password' ? 'text' : 'password';
         }}"
