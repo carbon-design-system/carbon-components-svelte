@@ -67,8 +67,7 @@ function plugin() {
       const scriptBlock = createImports(node.value);
       const formattedCode = format(scriptBlock + node.value, {
         parser: "svelte",
-        svelteBracketNewLine: true,
-        svelteSortOrder: "scripts-markup-styles",
+        svelteSortOrder: "scripts-markup-styles-options",
       });
       const highlightedCode = Prism.highlight(
         formattedCode,
@@ -100,7 +99,6 @@ function plugin() {
       );
       const formattedCode = format(sourceCode, {
         parser: "svelte",
-        svelteBracketNewLine: true,
       });
       const highlightedCode = Prism.highlight(
         formattedCode,

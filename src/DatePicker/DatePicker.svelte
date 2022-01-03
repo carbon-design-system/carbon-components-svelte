@@ -234,6 +234,20 @@
       {datePickerType === 'range' &&
       $labelTextEmpty &&
       'bx--date-picker--nolabel'}"
+    on:keydown="{(e) => {
+      if (calendar?.isOpen && e.key === 'Escape') {
+        e.stopPropagation();
+        calendar.close();
+      }
+
+      if (
+        $hasCalendar &&
+        /INPUT/.test(document.activeElement?.tagName) &&
+        e.key === 'Enter'
+      ) {
+        e.stopPropagation();
+      }
+    }}"
   >
     <slot />
   </div>

@@ -74,7 +74,7 @@ export interface MultiSelectProps
   /**
    * Override the filtering logic
    * The default filtering is an exact string comparison
-   * @default (item, value) => item.text.toLowerCase().includes(value.toLowerCase())
+   * @default (item, value) => item.text.toLowerCase().includes(value.trim().toLowerCase())
    */
   filterItem?: (item: MultiSelectItem, value: string) => string;
 

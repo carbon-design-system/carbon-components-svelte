@@ -3,11 +3,20 @@
    * @event {boolean} check
    */
 
-  /** Specify the value of the checkbox */
+  /**
+   * Specify the value of the checkbox
+   * @type {any}
+   */
   export let value = "";
 
   /** Specify whether the checkbox is checked */
   export let checked = false;
+
+  /**
+   * Specify the bound group
+   * @type {any[]}
+   */
+  export let group = [];
 
   /** Specify whether the checkbox is indeterminate */
   export let indeterminate = false;
@@ -73,7 +82,7 @@
       bind:this="{ref}"
       type="checkbox"
       value="{value}"
-      checked="{checked}"
+      checked="{checked || group.includes(value)}"
       disabled="{disabled}"
       id="{id}"
       indeterminate="{indeterminate}"
@@ -83,6 +92,9 @@
       on:change
       on:change="{() => {
         checked = !checked;
+        group = group.includes(value)
+          ? group.filter((_value) => _value !== value)
+          : [...group, value];
       }}"
       on:blur
     />

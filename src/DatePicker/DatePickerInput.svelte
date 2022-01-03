@@ -82,7 +82,7 @@
   class:bx--date-picker-container="{true}"
   class:bx--date-picker--nolabel="{!labelText}"
 >
-  {#if labelText}
+  {#if labelText || $$slots.labelText}
     <label
       for="{id}"
       class:bx--label="{true}"

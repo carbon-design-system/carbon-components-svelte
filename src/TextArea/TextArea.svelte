@@ -57,7 +57,7 @@
   on:mouseleave
   class:bx--form-item="{true}"
 >
-  {#if labelText && !hideLabel}
+  {#if (labelText || $$slots.labelText) && !hideLabel}
     <label
       for="{id}"
       class:bx--label="{true}"
@@ -85,7 +85,7 @@
       name="{name}"
       cols="{cols}"
       rows="{rows}"
-      value="{value}"
+      value="{value ?? ''}"
       placeholder="{placeholder}"
       class:bx--text-area="{true}"
       class:bx--text-area--light="{light}"

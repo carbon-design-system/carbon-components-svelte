@@ -6,13 +6,19 @@ export interface CheckboxProps {
    * Specify the value of the checkbox
    * @default ""
    */
-  value?: string;
+  value?: any;
 
   /**
    * Specify whether the checkbox is checked
    * @default false
    */
   checked?: boolean;
+
+  /**
+   * Specify the bound group
+   * @default []
+   */
+  group?: any[];
 
   /**
    * Specify whether the checkbox is indeterminate

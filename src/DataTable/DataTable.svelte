@@ -337,10 +337,11 @@
             ? 'bx--expandable-row--hover'
             : ''}"
           on:click="{({ target }) => {
-            // forgo "click", "click:row" events if target resembles an overflow menu
+            // forgo "click", "click:row" events if target
+            // resembles an overflow menu, a checkbox, or radio button
             if (
               [...target.classList].some((name) =>
-                /^bx--overflow-menu/.test(name)
+                /^bx--(overflow-menu|checkbox|radio-button)/.test(name)
               )
             ) {
               return;

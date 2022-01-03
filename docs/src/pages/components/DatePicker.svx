@@ -71,6 +71,12 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 
 ### DatePicker in a modal
 
+Use `flatpickrProps` to set `static: true` for the calendar to be positioned relative to the input element.
+
+This is needed when placing a `DatePicker` inside of a `Modal` component.
+
+Refer to [flatpickr options](https://flatpickr.js.org/options/) for a full list of config options.
+
 <FileSource src="/framed/DatePicker/DatePickerModal" />
 
 ### Skeleton

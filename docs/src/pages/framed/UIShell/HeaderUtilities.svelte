@@ -27,9 +27,9 @@
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
-  <div slot="skip-to-content">
+  <svelte:fragment slot="skip-to-content">
     <SkipToContent />
-  </div>
+  </svelte:fragment>
   <HeaderUtilities>
     <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust20}" />
     <HeaderAction

@@ -23,6 +23,7 @@
 
   const installYarn = "yarn add -D carbon-components-svelte";
   const installNpm = "npm i -D carbon-components-svelte";
+  const installPnpm = "pnpm i -D carbon-components-svelte";
   const themes = {
     white: "White",
     g10: "Gray 10",
@@ -98,6 +99,10 @@
         <Row noGutter>
           <CodeSnippet code="{installNpm}" />
         </Row>
+        <h4>Using pnpm:</h4>
+        <Row noGutter>
+          <CodeSnippet code="{installPnpm}" />
+        </Row>
       </Column>
     </Row>
     <Row style="margin-bottom: var(--cds-layout-04)">
@@ -126,7 +131,7 @@
           <Tab label="CSS StyleSheet" />
           <Tab label="CDN" />
           <Tab label="SCSS" />
-          <div slot="content">
+          <svelte:fragment slot="content">
             <TabContent>
               <p>
                 This library ships with six pre-compiled CSS StyleSheets built
@@ -194,7 +199,7 @@
                 for documentation.
               </p>
             </TabContent>
-          </div>
+          </svelte:fragment>
         </Tabs>
       </Column>
     </Row>

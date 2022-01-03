@@ -18,9 +18,9 @@
 </Button>
 
 <ImageLoader bind:this="{imageLoader}" bind:error fadeIn src="{src}">
-  <div slot="error">
+  <svelte:fragment slot="error">
     <Button kind="ghost" on:click="{() => imageLoader.loadImage(src)}">
       Error. Try again
     </Button>
-  </div>
+  </svelte:fragment>
 </ImageLoader>
