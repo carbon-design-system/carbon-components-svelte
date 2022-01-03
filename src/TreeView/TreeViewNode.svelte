@@ -55,13 +55,8 @@
   let refLabel = null;
   let prevActiveId = undefined;
 
-  const {
-    activeNodeId,
-    selectedNodeIds,
-    clickNode,
-    selectNode,
-    focusNode,
-  } = getContext("TreeView");
+  const { activeNodeId, selectedNodeIds, clickNode, selectNode, focusNode } =
+    getContext("TreeView");
   const offset = () =>
     computeTreeLeafDepth(refLabel) + (leaf && icon ? 2 : 2.5);
 

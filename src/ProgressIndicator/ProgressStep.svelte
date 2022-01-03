@@ -95,8 +95,7 @@
         <title>{description}</title>
         <path
           d="M8 1C4.1 1 1 4.1 1 8s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7zm0 13c-3.3
-          0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"
-        ></path>
+          0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"></path>
       </svg>
     {/if}
     <slot props="{{ class: 'bx--progress-label' }}">

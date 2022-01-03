@@ -2292,10 +2292,10 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-sveld@^0.10.2:
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.10.2.tgz#24366250a2b8021d76a0c4c641adc4f858c2a56f"
-  integrity sha512-51pf6aNw9Ks13/7DiA7UvriqittW6320g/14a9XxiN5/f7Yg6/IfByoKkFHyTf2RdeREvjITuJT5G8Me0tDvxw==
+sveld@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.11.1.tgz#2b24fb8dae6fcd9bb14f826c89480cf88b079dca"
+  integrity sha512-cb6sUB6yVomLgeDny0sXSGxgNGrwYPg8CHuI0k80DcGFNF2ML6k7yZeVeFjWjh2Tmj8+/PgSLJj5IYuZEjyQVA==
   dependencies:
     "@rollup/plugin-node-resolve" "^11.0.1"
     acorn "^8.4.1"
