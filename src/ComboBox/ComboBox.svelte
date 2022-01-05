@@ -138,6 +138,7 @@
     ref?.focus();
   }
 
+  let prevInputValue;
   afterUpdate(() => {
     if (open) {
       ref.focus();
@@ -164,13 +165,8 @@
       highlightedIndex = -1;
       highlightedId = undefined;
     } else {
-      if (filteredItems?.length === 1) {
-        selectedId = filteredItems[0].id;
-        selectedItem = filteredItems[0];
-      } else {
-        selectedId = items[selectedIndex].id;
-        selectedItem = items[selectedIndex];
-      }
+      selectedId = items[selectedIndex].id;
+      selectedItem = items[selectedIndex];
     }
     dispatch("select", { selectedId, selectedIndex, selectedItem });
   }
@@ -268,8 +264,8 @@
                 inputValue = filteredItems[selectedIndex].text;
                 selectedItem = filteredItems[selectedIndex];
                 selectedId = filteredItems[selectedIndex].id;
-              } else {
               }
+              selectedIndex = items.findIndex((item) => item.id === selectedId);
             } else {
               selectedIndex = 0;
               open = false;
@@ -278,6 +274,9 @@
                 inputValue = filteredItems[selectedIndex].text;
                 selectedItem = filteredItems[selectedIndex];
                 selectedId = filteredItems[selectedIndex].id;
+                selectedIndex = items.findIndex(
+                  (item) => item.id === selectedId
+                );
               }
             }
           } else if (key === 'Tab') {
