@@ -20,13 +20,11 @@
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /** Specify a name attribute for the input */
-  export let name = "";
-
   import { getContext } from "svelte";
   import CheckmarkFilled16 from "../icons/CheckmarkFilled16.svelte";
 
-  const { add, update, selectedValue } = getContext("TileGroup");
+  const { add, update, selectedValue, name, required } =
+    getContext("TileGroup");
 
   add({ value, checked });
 
@@ -36,11 +34,12 @@
 <input
   type="radio"
   id="{id}"
-  name="{name}"
+  name="{$name}"
   value="{value}"
   checked="{checked}"
   tabindex="{disabled ? undefined : tabindex}"
   disabled="{disabled}"
+  required="{$required}"
   class:bx--tile-input="{true}"
   on:change
   on:change="{() => {
