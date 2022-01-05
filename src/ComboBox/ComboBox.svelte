@@ -121,7 +121,6 @@
     } else if (index >= _items.length) {
       index = 0;
     }
-
     highlightedIndex = index;
   }
 
@@ -132,6 +131,7 @@
   export function clear() {
     selectedIndex = -1;
     highlightedIndex = -1;
+    highlightedId = undefined;
     selectedItem = undefined;
     open = false;
     inputValue = "";
@@ -144,10 +144,13 @@
       filteredItems = items.filter((item) => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
-
+      filteredItems = [];
       if (!selectedItem) {
         selectedId = undefined;
         selectedIndex = -1;
+      } else {
+        // programmatically set selectedIndex
+        inputValue = selectedItem.text;
       }
     }
   });
@@ -155,21 +158,27 @@
   let prevSelectedIndex;
   $: if (selectedIndex > -1 && prevSelectedIndex !== selectedIndex) {
     prevSelectedIndex = selectedIndex;
-    if (filteredItems?.length === 1) {
+    if (filteredItems?.length === 1 && open) {
       selectedId = filteredItems[0].id;
       selectedItem = filteredItems[0];
+      highlightedIndex = -1;
+      highlightedId = undefined;
     } else {
-      selectedId = items[selectedIndex].id;
-      selectedItem = items[selectedIndex];
+      if (filteredItems?.length === 1) {
+        selectedId = filteredItems[0].id;
+        selectedItem = filteredItems[0];
+      } else {
+        selectedId = items[selectedIndex].id;
+        selectedItem = items[selectedIndex];
+      }
     }
     dispatch("select", { selectedId, selectedIndex, selectedItem });
   }
+
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
-  $: highlightedId = items[highlightedIndex]
-    ? items[highlightedIndex].id
-    : undefined;
+  $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
   $: value = inputValue;
 </script>
@@ -254,15 +263,21 @@
             if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
               selectedIndex = highlightedIndex;
               open = false;
-
+              highlightedIndex = -1;
               if (filteredItems[selectedIndex]) {
                 inputValue = filteredItems[selectedIndex].text;
+                selectedItem = filteredItems[selectedIndex];
+                selectedId = filteredItems[selectedIndex].id;
+              } else {
               }
-            }
-
-            if (highlightedIndex < 0 && selectedIndex > -1) {
+            } else {
+              selectedIndex = 0;
+              open = false;
+              highlightedIndex = -1;
               if (filteredItems[selectedIndex]) {
                 inputValue = filteredItems[selectedIndex].text;
+                selectedItem = filteredItems[selectedIndex];
+                selectedId = filteredItems[selectedIndex].id;
               }
             }
           } else if (key === 'Tab') {
@@ -282,6 +297,8 @@
           if (inputValue.length === 0 && selectedIndex > -1) {
             if (filteredItems[selectedIndex]) {
               inputValue = filteredItems[selectedIndex].text;
+              selectedItem = filteredItems[selectedIndex];
+              selectedId = filteredItems[selectedIndex].id;
             }
           }
 
