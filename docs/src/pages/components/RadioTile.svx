@@ -22,6 +22,16 @@ source: Tile/RadioTile.svelte
   </RadioTile>
 </TileGroup>
 
+### Reactive (one-way binding)
+
+<FileSource src="/framed/RadioTile/RadioTileReactiveOneWay" />
+
+### Reactive (two-way binding)
+
+Binding to the `selected` prop is a more concise approach to managing state.
+
+<FileSource src="/framed/RadioTile/RadioTileReactive" />
+
 ### Light variant
 
 <TileGroup legend="Service pricing tiers">
