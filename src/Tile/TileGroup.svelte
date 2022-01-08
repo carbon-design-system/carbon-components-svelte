@@ -39,13 +39,14 @@
     },
     update: (value) => {
       selectedValue.set(value);
+      dispatch("select", value);
     },
   });
 
   $: selected = $selectedValue;
+  $: selectedValue.set(selected);
   $: inputsName.set(name);
   $: inputsRequired.set(required);
-  $: dispatch("select", $selectedValue);
 </script>
 
 <fieldset disabled="{disabled}" class:bx--tile-group="{true}" {...$$restProps}>

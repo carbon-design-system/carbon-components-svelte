@@ -14,6 +14,10 @@
 
 <FileSource src="/framed/Modal/PassiveModal" />
 
+### Multiple modals
+
+<FileSource src="/framed/Modal/ModalMultiple" />
+
 ### Multiple secondary buttons
 
 Use the `secondaryButtons` prop to render two secondary buttons for a "3-button modal". The prop is a 2-tuple type that supersedes `secondaryButtonText`.
