@@ -198,7 +198,6 @@
       bind:this="{ref}"
       class:bx--list-box__field="{true}"
       tabindex="0"
-      role="button"
       aria-expanded="{open}"
       on:keydown="{(e) => {
         const { key } = e;
