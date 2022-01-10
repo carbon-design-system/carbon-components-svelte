@@ -293,14 +293,6 @@
         on:focus
         on:blur
         on:blur="{({ relatedTarget }) => {
-          if (inputValue.length === 0 && selectedIndex > -1) {
-            if (filteredItems[selectedIndex]) {
-              inputValue = filteredItems[selectedIndex].text;
-              selectedItem = filteredItems[selectedIndex];
-              selectedId = filteredItems[selectedIndex].id;
-            }
-          }
-
           if (!open || !relatedTarget) return;
           if (
             relatedTarget &&
