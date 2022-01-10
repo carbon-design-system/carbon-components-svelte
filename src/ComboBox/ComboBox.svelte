@@ -108,10 +108,11 @@
   const dispatch = createEventDispatcher();
 
   let selectedId = undefined;
+  let selectedItem = undefined;
   let inputValue = value;
+  let prevInputValue = undefined;
+  let prevSelectedIndex = undefined;
   let highlightedIndex = -1;
-
-  let selectedItem;
 
   function change(dir) {
     let index = highlightedIndex + dir;
@@ -132,13 +133,13 @@
     selectedIndex = -1;
     highlightedIndex = -1;
     highlightedId = undefined;
+    selectedId = undefined;
     selectedItem = undefined;
     open = false;
     inputValue = "";
     ref?.focus();
   }
 
-  let prevInputValue;
   afterUpdate(() => {
     if (open) {
       ref.focus();
@@ -156,7 +157,6 @@
     }
   });
 
-  let prevSelectedIndex;
   $: if (selectedIndex > -1 && prevSelectedIndex !== selectedIndex) {
     prevSelectedIndex = selectedIndex;
     if (filteredItems?.length === 1 && open) {
@@ -250,6 +250,10 @@
           }
 
           inputValue = target.value;
+          if (!inputValue.length) {
+            clear();
+            open = true;
+          }
         }}"
         on:keydown
         on:keydown|stopPropagation="{({ key }) => {
