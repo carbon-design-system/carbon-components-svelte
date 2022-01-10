@@ -60,6 +60,9 @@
   /** Obtain a reference to the select HTML element */
   export let ref = null;
 
+  /** Set to `true` to mark the field as required */
+  export let required = false;
+
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown16 from "../icons/ChevronDown16.svelte";
@@ -112,6 +115,7 @@
             aria-describedby="{invalid ? errorId : undefined}"
             aria-invalid="{invalid || undefined}"
             disabled="{disabled || undefined}"
+            required="{required || undefined}"
             id="{id}"
             name="{name}"
             class:bx--select-input="{true}"
@@ -156,6 +160,7 @@
           name="{name}"
           aria-describedby="{invalid ? errorId : undefined}"
           disabled="{disabled || undefined}"
+          required="{required || undefined}"
           aria-invalid="{invalid || undefined}"
           class:bx--select-input="{true}"
           class="{size && `bx--select-input--${size}`}"

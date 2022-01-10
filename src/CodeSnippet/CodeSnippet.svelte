@@ -150,14 +150,10 @@
       feedback="{feedback}"
       feedbackTimeout="{feedbackTimeout}"
       class="bx--snippet {type && `bx--snippet--${type}`}
-          {type ===
-        'inline' && 'bx--btn--copy'}
-          {expanded &&
-        'bx--snippet--expand'}
-          {light &&
-        'bx--snippet--light'}
-          {hideCopyButton &&
-        'bx--snippet--no-copy'}
+          {type === 'inline' && 'bx--btn--copy'}
+          {expanded && 'bx--snippet--expand'}
+          {light && 'bx--snippet--light'}
+          {hideCopyButton && 'bx--snippet--no-copy'}
           {wrapText && 'bx--snippet--wraptext'}"
       {...$$restProps}
       on:click
@@ -194,8 +190,7 @@
       class:bx--snippet-container="{true}"
       style="width: 100%; min-height: {minHeight}px; max-height: {maxHeight}"
     >
-      <pre
-        bind:this="{ref}">
+      <pre bind:this="{ref}">
         <code><slot>{code}</slot></code>
       </pre>
     </div>

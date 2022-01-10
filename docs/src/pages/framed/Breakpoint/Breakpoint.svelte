@@ -13,7 +13,7 @@
 
 <h6>on:match</h6>
 <pre>
-  {JSON.stringify(events,null, 2)}
+  {JSON.stringify(events, null, 2)}
 </pre>
 
 <style>

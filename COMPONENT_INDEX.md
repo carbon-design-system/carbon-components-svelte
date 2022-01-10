@@ -1,6 +1,6 @@
 # Component Index
 
-> 172 components exported from carbon-components-svelte@0.51.0.
+> 172 components exported from carbon-components-svelte@0.51.1.
 
 ## Components
 
@@ -3242,6 +3242,7 @@ None.
 | noLabel     | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to not render a label             |
 | labelText   | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the label text                          |
 | hideLabel   | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to visually hide the label text   |
+| required    | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to mark the field as required     |
 
 ### Slots
 
