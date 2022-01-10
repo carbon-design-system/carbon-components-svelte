@@ -39,7 +39,7 @@
 
 <InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    You must provide an `iconDescription` for the button tooltip.
+    You must provide an <strong>iconDescription</strong> for the button tooltip.
   </div>
 </InlineNotification>
 
@@ -57,7 +57,7 @@
 
 <InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    You must provide an <code>iconDescription</code> for the button tooltip.
+    You must provide an <strong>iconDescription</strong> for the button tooltip.
   </div>
 </InlineNotification>
 
