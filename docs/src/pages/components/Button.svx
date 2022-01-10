@@ -57,7 +57,7 @@
 
 <InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    You must provide an `iconDescription` for the button tooltip.
+    You must provide an <code>iconDescription</code> for the button tooltip.
   </div>
 </InlineNotification>
 
@@ -133,7 +133,7 @@ Set `expressive` to `true` to use Carbon's expressive typesetting.
 
 <InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    Expressive styles only work with the default, `"lg"`, and `"xl"` button sizes.
+    Expressive styles only work with the default, "lg", and "xl" button sizes.
   </div>
 </InlineNotification>
 

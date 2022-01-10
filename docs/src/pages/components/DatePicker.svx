@@ -63,14 +63,11 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 
 ### Single
 
-<InlineNotification
-  svx-ignore
-  lowContrast
-  title="Note:"
-  subtitle="If using Rollup, specify `inlineDynamicImports: true` in your `rollup.config.js`."
-  kind="info"
-  hideCloseButton
-/>
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    If using Rollup, specify <code>inlineDynamicImports: true</code> in your <strong>rollup.config.js</strong>.
+  </div>
+</InlineNotification>
 
 <FileSource src="/framed/DatePicker/DatePickerSingle" />
 
