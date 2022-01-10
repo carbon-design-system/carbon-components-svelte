@@ -2350,10 +2350,10 @@ svelte@^3.42.4:
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.43.2.tgz#217fc6059f52afa281f39200b6253ac1b83812b4"
   integrity sha512-Lj+TJfSeod8UGnoG2opysdlCy4MCck/hHQsZwtNPXdYTwLTz+WC37QwewPhZtd+h3dpfps4h9QzFxWGVI4tzQw==
 
-svelte@^3.44.3:
-  version "3.44.3"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.44.3.tgz#795b1ced6ed3da44969099e5061b850c93c95e9a"
-  integrity sha512-aGgrNCip5PQFNfq9e9tmm7EYxWLVHoFsEsmKrtOeRD8dmoGDdyTQ+21xd7qgFd8MNdKGSYvg7F9dr+Tc0yDymg==
+svelte@^3.45.0:
+  version "3.45.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.45.0.tgz#bcb90a72e984f809c419529f8cf9100ad9937a4b"
+  integrity sha512-6AWftH2eqqKLYH1HvKpuUWe8OfjflarhegN57P/Cqwc2Rb2F5oIdDtANU/jMscyZMzG0v6nTQox0siZR9cmRVQ==
 
 terser@^5.0.0:
   version "5.3.0"
