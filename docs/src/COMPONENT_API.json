@@ -1616,7 +1616,7 @@
           "kind": "function",
           "description": "Clear the combo box programmatically",
           "type": "() => void",
-          "value": "() => {     selectedIndex = -1;     highlightedIndex = -1;     highlightedId = undefined;     selectedItem = undefined;     open = false;     inputValue = \"\";     ref?.focus();   }",
+          "value": "() => {     selectedIndex = -1;     highlightedIndex = -1;     highlightedId = undefined;     selectedId = undefined;     selectedItem = undefined;     open = false;     inputValue = \"\";     ref?.focus();   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "constant": false,
