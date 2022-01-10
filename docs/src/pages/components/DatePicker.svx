@@ -3,7 +3,7 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 ---
 
 <script>
-  import { DatePicker, DatePickerSkeleton, DatePickerInput } from "carbon-components-svelte";
+  import { DatePicker, DatePickerSkeleton, DatePickerInput, InlineNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -62,6 +62,15 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 </DatePicker>
 
 ### Single
+
+<InlineNotification
+  svx-ignore
+  lowContrast
+  title="Note:"
+  subtitle="If using Rollup, specify `inlineDynamicImports: true` in your `rollup.config.js`."
+  kind="info"
+  hideCloseButton
+/>
 
 <FileSource src="/framed/DatePicker/DatePickerSingle" />
 
