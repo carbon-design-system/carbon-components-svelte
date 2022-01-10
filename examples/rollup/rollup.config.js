@@ -9,6 +9,7 @@ const production = !process.env.ROLLUP_WATCH;
 
 export default {
   input: "src/index.js",
+  inlineDynamicImports: true,
   output: {
     sourcemap: !production,
     format: "iife",
