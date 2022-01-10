@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.51.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.51.2) - 2022-01-10
+
+**Fixes**
+
+- correctly reset values in `ComboBox` when manually clearing selection
+- fix filterable `ComboBox` keyboard selection
+- remove redundant role attributes from `Dropdown`, `Header` to fix a11y warnings
+- fix `TileGroup` two-way binding on the `selected` prop
+
+**Documentation**
+
+- document `DatePicker` usage with a Rollup set-up
+- add multiple modals example for `Modal`
+- add reactive examples for `RadioTile`
+
 ## [0.51.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.51.1) - 2022-01-03
 
 **Fixes**
