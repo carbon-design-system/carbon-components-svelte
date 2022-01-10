@@ -5,7 +5,6 @@
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "./src/index.js",
   "main": "./src/index.js",
-  "module": "./lib/index.mjs",
   "types": "./types/index.d.ts",
   "sideEffects": [
     "css/*.css"
