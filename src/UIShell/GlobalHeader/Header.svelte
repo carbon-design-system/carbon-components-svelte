@@ -78,7 +78,7 @@
 
 <svelte:window bind:innerWidth="{winWidth}" />
 
-<header role="banner" aria-label="{ariaLabel}" class:bx--header="{true}">
+<header aria-label="{ariaLabel}" class:bx--header="{true}">
   <slot name="skip-to-content" />
   {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
     <HamburgerMenu
