@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.51.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.51.3) - 2022-01-12
+
+**Fixes**
+
+- fix `selectedIndex` reactivity in `ComboBox`
+
+**Refactor**
+
+- remove redundant `null` in `null | HTMLElement` prop types
+
 ## [0.51.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.51.2) - 2022-01-10
 
 **Fixes**
