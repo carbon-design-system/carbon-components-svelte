@@ -136,13 +136,13 @@
 
   /**
    * Obtain a reference to the field box element
-   * @type {null | HTMLDivElement}
+   * @type {HTMLDivElement}
    */
   export let fieldRef = null;
 
   /**
    * Obtain a reference to the selection element
-   * @type {null | HTMLDivElement}
+   * @type {HTMLDivElement}
    */
   export let selectionRef = null;
 

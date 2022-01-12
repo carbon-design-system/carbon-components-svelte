@@ -22,7 +22,7 @@
   /**
    * Finds the nearest parent tree node
    * @param {HTMLElement} node
-   * @returns {null | HTMLElement}
+   * @returns {HTMLElement}
    */
   function findParentTreeNode(node) {
     if (node.classList.contains("bx--tree-parent-node")) return node;
