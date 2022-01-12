@@ -9,13 +9,16 @@
   import CopyFile16 from "carbon-icons-svelte/lib/CopyFile16";
   import Cut16 from "carbon-icons-svelte/lib/Cut16";
 
+  let target: HTMLElement = null;
   let selectedId = "0";
   let selectedIds = [];
 
   $: console.log("selectedId", selectedId);
 </script>
 
-<ContextMenu open on:open="{(e) => console.log(e.detail)}">
+<div bind:this="{target}"></div>
+
+<ContextMenu open on:open="{(e) => console.log(e.detail)}" bind:target>
   <ContextMenuOption
     kind="danger"
     indented

@@ -9,6 +9,7 @@
   ];
 
   let ref: ComboBox;
+  let listRef: HTMLDivElement = null;
 
   $: ref?.clear();
 </script>
@@ -19,6 +20,7 @@
   titleText="Contact"
   placeholder="Select contact method"
   items="{items}"
+  bind:listRef
 />
 
 <ComboBox
