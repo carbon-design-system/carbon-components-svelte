@@ -25,9 +25,9 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Programmatically set selected index
+### Reactive example
 
-<FileSource src="/framed/ComboBox/ProgSelectedIndexComboBox" />
+<FileSource src="/framed/ComboBox/ReactiveComboBox" />
 
 ### Clear selection
 
