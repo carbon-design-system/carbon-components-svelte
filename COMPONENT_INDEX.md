@@ -658,7 +658,7 @@ export interface ComboBoxItem {
 
 | Prop name        | Kind                  | Reactive | Type                                                        | Default value                                                                                                                                                                               | Description                                                              |
 | :--------------- | :-------------------- | :------- | :---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| listRef          | <code>let</code>      | Yes      | <code>null &#124; HTMLDivElement</code>                     | <code>null</code>                                                                                                                                                                           | Obtain a reference to the list HTML element                              |
+| listRef          | <code>let</code>      | Yes      | <code>HTMLDivElement</code>                                 | <code>null</code>                                                                                                                                                                           | Obtain a reference to the list HTML element                              |
 | ref              | <code>let</code>      | Yes      | <code>null &#124; HTMLInputElement</code>                   | <code>null</code>                                                                                                                                                                           | Obtain a reference to the input HTML element                             |
 | open             | <code>let</code>      | Yes      | <code>boolean</code>                                        | <code>false</code>                                                                                                                                                                          | Set to `true` to open the combobox menu dropdown                         |
 | value            | <code>let</code>      | Yes      | <code>string</code>                                         | <code>""</code>                                                                                                                                                                             | Specify the selected combobox value                                      |
@@ -781,13 +781,13 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                                      | Default value      | Description                                                                                                                                        |
-| :-------- | :--------------- | :------- | :-------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>                 | <code>null</code>  | Obtain a reference to the unordered list HTML element                                                                                              |
-| y         | <code>let</code> | Yes      | <code>number</code>                                       | <code>0</code>     | Specify the vertical offset of the menu position                                                                                                   |
-| x         | <code>let</code> | Yes      | <code>number</code>                                       | <code>0</code>     | Specify the horizontal offset of the menu position                                                                                                 |
-| open      | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero                                                                   |
-| target    | <code>let</code> | No       | <code>null &#124; HTMLElement &#124; HTMLElement[]</code> | <code>null</code>  | Specify an element or list of elements to trigger the context menu.<br />If no element is specified, the context menu applies to the entire window |
+| Prop name | Kind             | Reactive | Type                                          | Default value      | Description                                                                                                                                        |
+| :-------- | :--------------- | :------- | :-------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ref       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>     | <code>null</code>  | Obtain a reference to the unordered list HTML element                                                                                              |
+| y         | <code>let</code> | Yes      | <code>number</code>                           | <code>0</code>     | Specify the vertical offset of the menu position                                                                                                   |
+| x         | <code>let</code> | Yes      | <code>number</code>                           | <code>0</code>     | Specify the horizontal offset of the menu position                                                                                                 |
+| open      | <code>let</code> | Yes      | <code>boolean</code>                          | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero                                                                   |
+| target    | <code>let</code> | No       | <code>HTMLElement &#124; HTMLElement[]</code> | <code>null</code>  | Specify an element or list of elements to trigger the context menu.<br />If no element is specified, the context menu applies to the entire window |
 
 ### Slots
 
@@ -2413,8 +2413,8 @@ export interface MultiSelectItem {
 
 | Prop name         | Kind             | Reactive | Type                                                                                           | Default value                                                                              | Description                                                                           |
 | :---------------- | :--------------- | :------- | :--------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| selectionRef      | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                        | <code>null</code>                                                                          | Obtain a reference to the selection element                                           |
-| fieldRef          | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                        | <code>null</code>                                                                          | Obtain a reference to the field box element                                           |
+| selectionRef      | <code>let</code> | Yes      | <code>HTMLDivElement</code>                                                                    | <code>null</code>                                                                          | Obtain a reference to the selection element                                           |
+| fieldRef          | <code>let</code> | Yes      | <code>HTMLDivElement</code>                                                                    | <code>null</code>                                                                          | Obtain a reference to the field box element                                           |
 | multiSelectRef    | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                        | <code>null</code>                                                                          | Obtain a reference to the outer div element                                           |
 | inputRef          | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                      | <code>null</code>                                                                          | Obtain a reference to the input HTML element                                          |
 | open              | <code>let</code> | Yes      | <code>boolean</code>                                                                           | <code>false</code>                                                                         | Set to `true` to open the dropdown                                                    |
@@ -4612,14 +4612,14 @@ None.
 
 ### Props
 
-| Prop name  | Kind             | Reactive | Type                                      | Default value      | Description                                   |
-| :--------- | :--------------- | :------- | :---------------------------------------- | ------------------ | --------------------------------------------- |
-| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>  | Obtain a reference to the input HTML element  |
-| expanded   | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to expand the search bar        |
-| value      | <code>let</code> | Yes      | <code>number &#124; string</code>         | <code>""</code>    | Specify the value of the search input         |
-| persistent | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to keep the search bar expanded |
-| disabled   | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to disable the search bar       |
-| tabindex   | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>   | Specify the tabindex                          |
+| Prop name  | Kind             | Reactive | Type                              | Default value      | Description                                   |
+| :--------- | :--------------- | :------- | :-------------------------------- | ------------------ | --------------------------------------------- |
+| ref        | <code>let</code> | Yes      | <code>HTMLInputElement</code>     | <code>null</code>  | Obtain a reference to the input HTML element  |
+| expanded   | <code>let</code> | Yes      | <code>boolean</code>              | <code>false</code> | Set to `true` to expand the search bar        |
+| value      | <code>let</code> | Yes      | <code>number &#124; string</code> | <code>""</code>    | Specify the value of the search input         |
+| persistent | <code>let</code> | No       | <code>boolean</code>              | <code>false</code> | Set to `true` to keep the search bar expanded |
+| disabled   | <code>let</code> | No       | <code>boolean</code>              | <code>false</code> | Set to `true` to disable the search bar       |
+| tabindex   | <code>let</code> | No       | <code>string</code>               | <code>"0"</code>   | Specify the tabindex                          |
 
 ### Slots
 

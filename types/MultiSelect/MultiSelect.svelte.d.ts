@@ -197,13 +197,13 @@ export interface MultiSelectProps
    * Obtain a reference to the field box element
    * @default null
    */
-  fieldRef?: null | HTMLDivElement;
+  fieldRef?: HTMLDivElement;
 
   /**
    * Obtain a reference to the selection element
    * @default null
    */
-  selectionRef?: null | HTMLDivElement;
+  selectionRef?: HTMLDivElement;
 }
 
 export default class MultiSelect extends SvelteComponentTyped<

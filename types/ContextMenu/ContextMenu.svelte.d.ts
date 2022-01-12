@@ -8,7 +8,7 @@ export interface ContextMenuProps
    * If no element is specified, the context menu applies to the entire window
    * @default null
    */
-  target?: null | HTMLElement | HTMLElement[];
+  target?: HTMLElement | HTMLElement[];
 
   /**
    * Set to `true` to open the menu

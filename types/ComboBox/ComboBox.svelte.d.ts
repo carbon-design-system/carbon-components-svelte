@@ -135,7 +135,7 @@ export interface ComboBoxProps
    * Obtain a reference to the list HTML element
    * @default null
    */
-  listRef?: null | HTMLDivElement;
+  listRef?: HTMLDivElement;
 }
 
 export default class ComboBox extends SvelteComponentTyped<
