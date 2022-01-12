@@ -110,7 +110,6 @@
   let selectedId = undefined;
   let selectedItem = undefined;
   let inputValue = value;
-  let prevInputValue = undefined;
   let prevSelectedIndex = undefined;
   let highlightedIndex = -1;
 
@@ -130,6 +129,7 @@
    * @type {() => void}
    */
   export function clear() {
+    prevSelectedIndex = undefined;
     selectedIndex = -1;
     highlightedIndex = -1;
     highlightedId = undefined;
@@ -150,6 +150,10 @@
       if (!selectedItem) {
         selectedId = undefined;
         selectedIndex = -1;
+        inputValue = "";
+        highlightedIndex = -1;
+        highlightedId = undefined;
+        prevSelectedIndex = undefined;
       } else {
         // programmatically set selectedIndex
         inputValue = selectedItem.text;
@@ -157,18 +161,23 @@
     }
   });
 
-  $: if (selectedIndex > -1 && prevSelectedIndex !== selectedIndex) {
-    prevSelectedIndex = selectedIndex;
-    if (filteredItems?.length === 1 && open) {
-      selectedId = filteredItems[0].id;
-      selectedItem = filteredItems[0];
-      highlightedIndex = -1;
-      highlightedId = undefined;
-    } else {
-      selectedId = items[selectedIndex].id;
-      selectedItem = items[selectedIndex];
+  $: if (selectedIndex > -1) {
+    if (prevSelectedIndex !== selectedIndex) {
+      prevSelectedIndex = selectedIndex;
+      if (filteredItems?.length === 1 && open) {
+        selectedId = filteredItems[0].id;
+        selectedItem = filteredItems[0];
+        highlightedIndex = -1;
+        highlightedId = undefined;
+      } else {
+        selectedId = items[selectedIndex].id;
+        selectedItem = items[selectedIndex];
+      }
+      dispatch("select", { selectedId, selectedIndex, selectedItem });
     }
-    dispatch("select", { selectedId, selectedIndex, selectedItem });
+  } else {
+    prevSelectedIndex = selectedIndex;
+    selectedItem = undefined;
   }
 
   $: ariaLabel = $$props["aria-label"] || "Choose an item";

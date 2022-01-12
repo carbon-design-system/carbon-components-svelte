@@ -3,7 +3,7 @@
   import { Button } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
   let comboboxComponent
-
+  let selectedIndex = 1
 </script>
 
 ### Default
@@ -25,7 +25,12 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+### Reactive example
+
+<FileSource src="/framed/ComboBox/ReactiveComboBox" />
+
 ### Clear selection
+
 <ComboBox titleText="Contact" placeholder="Select contact method"
 bind:this={comboboxComponent} 
 items={[
