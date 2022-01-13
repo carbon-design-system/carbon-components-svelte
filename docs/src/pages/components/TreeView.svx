@@ -49,7 +49,7 @@ Initial multiple selected nodes can be set using `selectedIds`.
 
 ### Expand all nodes
 
-To programmatically expand all nodes, access the component instance using the [bind:this](https://svelte.dev/docs#bind_element) directive and invoke the `TreeView.expandAll()` method to expand all nodes.
+To programmatically expand all nodes, access the component instance using the [bind:this](https://svelte.dev/docs#bind_element) directive and invoke the `TreeView.expandAll()` accessor.
 
 <FileSource src="/framed/TreeView/TreeViewExpandAll" />
 
