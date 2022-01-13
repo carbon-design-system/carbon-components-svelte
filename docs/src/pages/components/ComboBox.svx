@@ -1,9 +1,6 @@
 <script>
   import { ComboBox } from "carbon-components-svelte";
-  import { Button } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
-  let comboboxComponent
-  let selectedIndex = 1
 </script>
 
 ### Default
@@ -31,15 +28,11 @@ items={[
 
 ### Clear selection
 
-<ComboBox titleText="Contact" placeholder="Select contact method"
-bind:this={comboboxComponent} 
-items={[
-  {id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
-  ]}  />
-<br>
-<Button on:click={comboboxComponent.clear}>Clear</Button>
+To programmatically clear the selection, access the component instance using the [bind:this](https://svelte.dev/docs#bind_element) directive and invoke the `ComboBox.clear()` accessor.
+
+Specify `focus: false` in the method options to avoid re-focusing the input.
+
+<FileSource src="/framed/ComboBox/ComboBoxClear" />
 
 ### Multiple combo boxes
 

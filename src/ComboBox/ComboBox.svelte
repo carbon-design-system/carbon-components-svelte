@@ -126,9 +126,9 @@
 
   /**
    * Clear the combo box programmatically
-   * @type {() => void}
+   * @type {(options?: { focus?: boolean; }) => void}
    */
-  export function clear() {
+  export function clear(options = {}) {
     prevSelectedIndex = undefined;
     selectedIndex = -1;
     highlightedIndex = -1;
@@ -137,7 +137,7 @@
     selectedItem = undefined;
     open = false;
     inputValue = "";
-    ref?.focus();
+    if (options?.focus !== false) ref?.focus();
   }
 
   afterUpdate(() => {

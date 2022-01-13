@@ -158,5 +158,5 @@ export default class ComboBox extends SvelteComponentTyped<
   /**
    * Clear the combo box programmatically
    */
-  clear: () => void;
+  clear: (options?: { focus?: boolean }) => void;
 }
