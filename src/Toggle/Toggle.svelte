@@ -81,10 +81,14 @@
     </slot>
     <span class:bx--toggle__switch="{true}">
       <span aria-hidden="true" class:bx--toggle__text--off="{true}">
-        {labelA}
+        <slot name="labelA">
+          {labelA}
+        </slot>
       </span>
       <span aria-hidden="true" class:bx--toggle__text--on="{true}">
-        {labelB}
+        <slot name="labelB">
+          {labelB}
+        </slot>
       </span>
     </span>
   </label>

@@ -64,5 +64,5 @@ export default class Toggle extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  { labelText: {} }
+  { labelA: {}; labelB: {}; labelText: {} }
 > {}

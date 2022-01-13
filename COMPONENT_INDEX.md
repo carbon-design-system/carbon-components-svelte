@@ -4426,6 +4426,8 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 | Slot name | Default | Props | Fallback                 |
 | :-------- | :------ | :---- | :----------------------- |
+| labelA    | No      | --    | <code>{labelA}</code>    |
+| labelB    | No      | --    | <code>{labelB}</code>    |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events

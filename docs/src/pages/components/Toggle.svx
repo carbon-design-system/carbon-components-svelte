@@ -27,6 +27,15 @@ components: ["Toggle", "ToggleSkeleton"]
 
 <Toggle labelText="Push notifications" labelA="No" labelB="Yes" />
 
+### Slottable labels
+
+An alternative to the "labelA" and "labelB" props is to use the corresponding named slots.
+
+<Toggle labelText="Push notifications">
+  <span slot="labelA" style="color: red">No</span>
+  <span slot="labelB" style="color: green">Yes</span>
+</Toggle>
+
 ### Disabled
 
 <Toggle labelText="Push notifications" disabled />
