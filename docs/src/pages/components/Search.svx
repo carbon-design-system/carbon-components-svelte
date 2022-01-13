@@ -20,7 +20,7 @@ The `Search` component size is extra-large by default. There are [large](#large-
 
 ### on:clear
 
-The "clear" event is dispatched when clicking the "X" button in the search input element.
+The "clear" event is dispatched when clicking the "X" button or when pressing the "Escape" key.
 
 <Search value="Cloud functions" on:clear={() => console.log('clear')}/>
 
