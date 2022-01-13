@@ -11,6 +11,7 @@
   let ref: ComboBox;
   let listRef: HTMLDivElement = null;
 
+  $: ref?.clear({ focus: false });
   $: ref?.clear();
 </script>
 
