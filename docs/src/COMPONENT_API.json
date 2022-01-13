@@ -12441,6 +12441,18 @@
       ],
       "slots": [
         {
+          "name": "labelA",
+          "default": false,
+          "fallback": "{labelA}",
+          "slot_props": "{}"
+        },
+        {
+          "name": "labelB",
+          "default": false,
+          "fallback": "{labelB}",
+          "slot_props": "{}"
+        },
+        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
