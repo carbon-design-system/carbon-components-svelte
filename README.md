@@ -196,6 +196,12 @@ yarn add -D carbon-preprocess-svelte
 npm i -D carbon-preprocess-svelte
 ```
 
+**pnpm**
+
+```sh
+pnpm i -D carbon-preprocess-svelte
+```
+
 ### `optimizeImports`
 
 `optimizeImports` is a script preprocessor that rewrites base imports from Carbon components/icons/pictograms packages to their source Svelte code paths. This can greatly speed up compile times during development while preserving typeahead and autocompletion hinting offered by integrated development environments (IDE) like VSCode.
