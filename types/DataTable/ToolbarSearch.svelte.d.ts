@@ -37,7 +37,7 @@ export interface ToolbarSearchProps
    * Obtain a reference to the input HTML element
    * @default null
    */
-  ref?: HTMLInputElement;
+  ref?: null | HTMLInputElement;
 }
 
 export default class ToolbarSearch extends SvelteComponentTyped<

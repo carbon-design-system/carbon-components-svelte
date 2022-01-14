@@ -21,7 +21,7 @@
 
   /**
    * Obtain a reference to the input HTML element
-   * @type {HTMLInputElement}
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
 
