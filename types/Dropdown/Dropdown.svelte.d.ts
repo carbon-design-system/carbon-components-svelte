@@ -25,10 +25,9 @@ export interface DropdownProps
   itemToString?: (item: DropdownItem) => string;
 
   /**
-   * Specify the selected item index
-   * @default -1
+   * Specify the selected item id
    */
-  selectedIndex?: number;
+  selectedId?: DropdownItemId;
 
   /**
    * Specify the type of dropdown

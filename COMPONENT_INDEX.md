@@ -1166,7 +1166,7 @@ export interface DropdownItem {
 | ref             | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>  | <code>null</code>                                     | Obtain a reference to the button HTML element |
 | inline          | <code>let</code> | Yes      | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to use the inline variant       |
 | open            | <code>let</code> | Yes      | <code>boolean</code>                        | <code>false</code>                                    | Set to `true` to open the dropdown            |
-| selectedIndex   | <code>let</code> | Yes      | <code>number</code>                         | <code>-1</code>                                       | Specify the selected item index               |
+| selectedId      | <code>let</code> | Yes      | <code>DropdownItemId</code>                 | --                                                    | Specify the selected item id                  |
 | items           | <code>let</code> | No       | <code>DropdownItem[]</code>                 | <code>[]</code>                                       | Set the dropdown items                        |
 | itemToString    | <code>let</code> | No       | <code>(item: DropdownItem) => string</code> | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a dropdown item       |
 | type            | <code>let</code> | No       | <code>"default" &#124; "inline"</code>      | <code>"default"</code>                                | Specify the type of dropdown                  |

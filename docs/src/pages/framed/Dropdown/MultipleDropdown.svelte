@@ -7,28 +7,29 @@
     { id: "2", text: "Fax" },
   ];
 
-  let dropdown1_selectedIndex = 0;
-  let dropdown2_selectedIndex = 1;
+  let dropdown1_selectedId = "0";
+  let dropdown2_selectedId = "1";
 
-  const formatSelected = (i) => (items[i] ? items[i].text : "N/A");
+  const formatSelected = (id) =>
+    items.find((item) => item.id === id)?.text ?? "N/A";
 
-  $: primary = formatSelected(dropdown1_selectedIndex);
-  $: secondary = formatSelected(dropdown2_selectedIndex);
+  $: primary = formatSelected(dropdown1_selectedId);
+  $: secondary = formatSelected(dropdown2_selectedId);
 </script>
 
 <Dropdown
   titleText="Primary contact"
-  bind:selectedIndex="{dropdown1_selectedIndex}"
+  bind:selectedId="{dropdown1_selectedId}"
   items="{items}"
 />
 
 <div>Primary: {primary}</div>
 
 <Dropdown
-  invalid="{dropdown1_selectedIndex === dropdown2_selectedIndex}"
+  invalid="{dropdown1_selectedId === dropdown2_selectedId}"
   invalidText="Secondary contact method must be different from the primary contact"
   titleText="Secondary contact"
-  bind:selectedIndex="{dropdown2_selectedIndex}"
+  bind:selectedId="{dropdown2_selectedId}"
   items="{items}"
 />
 
