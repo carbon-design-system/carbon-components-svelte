@@ -55,7 +55,10 @@
   /** Set to `true` to disable the primary button */
   export let primaryButtonDisabled = false;
 
-  /** Set to `true` for the primary button to be triggered when pressing "Enter" */
+  /**
+   * Set to `true` for the "submit" and "click:button--primary" events
+   * to be dispatched when pressing "Enter"
+   */
   export let shouldSubmitOnEnter = true;
 
   /** Specify the secondary button text */
@@ -174,6 +177,7 @@
         e.preventDefault();
       } else if (shouldSubmitOnEnter && e.key === 'Enter') {
         dispatch('submit');
+        dispatch('click:button--primary');
       }
     }
   }}"

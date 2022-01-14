@@ -78,7 +78,8 @@ export interface ModalProps
   primaryButtonDisabled?: boolean;
 
   /**
-   * Set to `true` for the primary button to be triggered when pressing "Enter"
+   * Set to `true` for the "submit" and "click:button--primary" events
+   * to be dispatched when pressing "Enter"
    * @default true
    */
   shouldSubmitOnEnter?: boolean;

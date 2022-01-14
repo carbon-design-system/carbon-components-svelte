@@ -6041,7 +6041,7 @@
         {
           "name": "shouldSubmitOnEnter",
           "kind": "let",
-          "description": "Set to `true` for the primary button to be triggered when pressing \"Enter\"",
+          "description": "Set to `true` for the \"submit\" and \"click:button--primary\" events\nto be dispatched when pressing \"Enter\"",
           "type": "boolean",
           "value": "true",
           "isFunction": false,
