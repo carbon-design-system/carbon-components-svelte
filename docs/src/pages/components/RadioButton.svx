@@ -41,11 +41,11 @@ Use the named "legendText" slot to customize the legend text.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-### Programmatic usage
+### Reactive example
 
-Bind the selected value using the `selected` prop.
+Use the `selected` prop to bind and update the selected value.
 
-<FileSource src="/framed/RadioButton/ProgrammaticRadioButton" />
+<FileSource src="/framed/RadioButton/RadioButtonReactive" />
 
 ### Left-aligned label text
 
