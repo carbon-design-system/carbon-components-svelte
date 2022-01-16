@@ -17,6 +17,10 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
+### Reactive example
+
+<FileSource src="/framed/Select/SelectReactive" />
+
 ### Helper text
 
 <Select helperText="Carbon offers 4 themes (2 light, 3 dark)" labelText="Carbon theme" selected="g10" >
