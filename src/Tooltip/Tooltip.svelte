@@ -75,6 +75,7 @@
   function onKeydown(e) {
     if (e.key === "Escape" || e.key === "Tab") {
       e.stopPropagation();
+      if (e.key === "Escape") refIcon?.focus();
       open = false;
     } else if (e.key === " " || e.key === "Enter") {
       e.stopPropagation();
