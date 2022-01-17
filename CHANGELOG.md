@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - restore explicit typing of `null | HTMLElement` for TypeScript strict mode
 - dispatch `click:button--primary` in `Modal` if `shouldSubmitOnEnter` is true
 
-- **Documentation**
+**Documentation**
 
 - simplify reactive `RadioButton` example
 - add reactive `Select` example for `Select`
