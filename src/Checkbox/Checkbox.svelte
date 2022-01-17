@@ -89,13 +89,13 @@
       name="{name}"
       readonly="{readonly}"
       class:bx--checkbox="{true}"
-      on:change
       on:change="{() => {
         checked = !checked;
         group = group.includes(value)
           ? group.filter((_value) => _value !== value)
           : [...group, value];
       }}"
+      on:change
       on:blur
     />
     <label for="{id}" title="{title}" class:bx--checkbox-label="{true}">
