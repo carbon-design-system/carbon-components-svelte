@@ -1,7 +1,7 @@
 <script>
   /**
    * @typedef {{ id: string; text: string; }} ComboBoxItem
-   * @event {{ selectedId: string; selectedIndex: number; selectedItem: ComboBoxItem }} select
+   * @event {{ selectedId: string; selectedItem: ComboBoxItem }} select
    */
 
   /**
@@ -16,8 +16,11 @@
    */
   export let itemToString = (item) => item.text || item.id;
 
-  /** Set the selected item by value index */
-  export let selectedIndex = -1;
+  /**
+   * Set the selected item by value id
+   * @type {string}
+   */
+  export let selectedId = undefined;
 
   /** Specify the selected combobox value */
   export let value = "";
@@ -107,10 +110,9 @@
 
   const dispatch = createEventDispatcher();
 
-  let selectedId = undefined;
   let selectedItem = undefined;
   let inputValue = value;
-  let prevSelectedIndex = undefined;
+  let prevSelectedId = null;
   let highlightedIndex = -1;
 
   function change(dir) {
@@ -129,8 +131,7 @@
    * @type {(options?: { focus?: boolean; }) => void}
    */
   export function clear(options = {}) {
-    prevSelectedIndex = undefined;
-    selectedIndex = -1;
+    prevSelectedId = null;
     highlightedIndex = -1;
     highlightedId = undefined;
     selectedId = undefined;
@@ -149,34 +150,31 @@
       filteredItems = [];
       if (!selectedItem) {
         selectedId = undefined;
-        selectedIndex = -1;
         inputValue = "";
         highlightedIndex = -1;
         highlightedId = undefined;
-        prevSelectedIndex = undefined;
       } else {
-        // programmatically set selectedIndex
+        // programmatically set inputValue
         inputValue = selectedItem.text;
       }
     }
   });
 
-  $: if (selectedIndex > -1) {
-    if (prevSelectedIndex !== selectedIndex) {
-      prevSelectedIndex = selectedIndex;
+  $: if (selectedId !== undefined) {
+    if (prevSelectedId !== selectedId) {
+      prevSelectedId = selectedId;
       if (filteredItems?.length === 1 && open) {
         selectedId = filteredItems[0].id;
         selectedItem = filteredItems[0];
         highlightedIndex = -1;
         highlightedId = undefined;
       } else {
-        selectedId = items[selectedIndex].id;
-        selectedItem = items[selectedIndex];
+        selectedItem = items.find((item) => item.id === selectedId);
       }
-      dispatch("select", { selectedId, selectedIndex, selectedItem });
+      dispatch("select", { selectedId, selectedItem });
     }
   } else {
-    prevSelectedIndex = selectedIndex;
+    prevSelectedId = selectedId;
     selectedItem = undefined;
   }
 
@@ -269,29 +267,25 @@
           if (key === 'Enter') {
             open = !open;
 
-            if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
-              selectedIndex = highlightedIndex;
+            if (
+              highlightedIndex > -1 &&
+              filteredItems[highlightedIndex]?.id !== selectedId
+            ) {
               open = false;
-              highlightedIndex = -1;
-              if (filteredItems[selectedIndex]) {
-                inputValue = filteredItems[selectedIndex].text;
-                selectedItem = filteredItems[selectedIndex];
-                selectedId = filteredItems[selectedIndex].id;
+              if (filteredItems[highlightedIndex]) {
+                inputValue = filteredItems[highlightedIndex].text;
+                selectedItem = filteredItems[highlightedIndex];
+                selectedId = filteredItems[highlightedIndex].id;
               }
-              selectedIndex = items.findIndex((item) => item.id === selectedId);
             } else {
-              selectedIndex = 0;
               open = false;
-              highlightedIndex = -1;
-              if (filteredItems[selectedIndex]) {
-                inputValue = filteredItems[selectedIndex].text;
-                selectedItem = filteredItems[selectedIndex];
-                selectedId = filteredItems[selectedIndex].id;
-                selectedIndex = items.findIndex(
-                  (item) => item.id === selectedId
-                );
+              if (filteredItems[0]) {
+                inputValue = filteredItems[0].text;
+                selectedItem = filteredItems[0];
+                selectedId = filteredItems[0].id;
               }
             }
+            highlightedIndex = -1;
           } else if (key === 'Tab') {
             open = false;
           } else if (key === 'ArrowDown') {
@@ -354,12 +348,10 @@
         {#each filteredItems as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"
-            active="{selectedIndex === i || selectedId === item.id}"
-            highlighted="{highlightedIndex === i || selectedIndex === i}"
+            active="{selectedId === item.id}"
+            highlighted="{highlightedIndex === i}"
             on:click="{() => {
-              selectedIndex = items
-                .map(({ id }) => id)
-                .indexOf(filteredItems[i].id);
+              selectedId = item.id;
               open = false;
 
               if (filteredItems[i]) {

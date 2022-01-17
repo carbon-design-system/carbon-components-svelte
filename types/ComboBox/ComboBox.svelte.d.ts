@@ -21,10 +21,9 @@ export interface ComboBoxProps
   itemToString?: (item: ComboBoxItem) => string;
 
   /**
-   * Set the selected item by value index
-   * @default -1
+   * Set the selected item by value id
    */
-  selectedIndex?: number;
+  selectedId?: string;
 
   /**
    * Specify the selected combobox value
@@ -141,11 +140,7 @@ export interface ComboBoxProps
 export default class ComboBox extends SvelteComponentTyped<
   ComboBoxProps,
   {
-    select: CustomEvent<{
-      selectedId: string;
-      selectedIndex: number;
-      selectedItem: ComboBoxItem;
-    }>;
+    select: CustomEvent<{ selectedId: string; selectedItem: ComboBoxItem }>;
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
