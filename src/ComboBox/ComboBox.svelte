@@ -230,7 +230,6 @@
         ref.focus();
       }}"
       id="{id}"
-      name="{name}"
       disabled="{disabled}"
       translateWithId="{translateWithId}"
     >
@@ -249,6 +248,7 @@
         placeholder="{placeholder}"
         id="{id}"
         value="{inputValue}"
+        name="{name}"
         {...$$restProps}
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
