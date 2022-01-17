@@ -145,7 +145,6 @@ export default class Dropdown extends SvelteComponentTyped<
   {
     select: CustomEvent<{
       selectedId: DropdownItemId;
-      selectedIndex: number;
       selectedItem: DropdownItem;
     }>;
   },

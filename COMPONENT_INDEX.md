@@ -1192,9 +1192,9 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                                                                         |
-| :--------- | :--------- | :--------------------------------------------------------------------------------------------- |
-| select     | dispatched | <code>{ selectedId: DropdownItemId, selectedIndex: number, selectedItem: DropdownItem }</code> |
+| Event name | Type       | Detail                                                                  |
+| :--------- | :--------- | :---------------------------------------------------------------------- |
+| select     | dispatched | <code>{ selectedId: DropdownItemId, selectedItem: DropdownItem }</code> |
 
 ## `DropdownSkeleton`
 

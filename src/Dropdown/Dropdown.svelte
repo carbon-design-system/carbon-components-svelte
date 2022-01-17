@@ -3,7 +3,7 @@
    * @typedef {string} DropdownItemId
    * @typedef {string} DropdownItemText
    * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
-   * @event {{ selectedId: DropdownItemId, selectedIndex: number, selectedItem: DropdownItem }} select
+   * @event {{ selectedId: DropdownItemId, selectedItem: DropdownItem }} select
    */
 
   /**
@@ -126,11 +126,10 @@
   }
 
   $: if (selectedId !== undefined) {
-    dispatch("select", { selectedId, selectedIndex, selectedItem });
+    dispatch("select", { selectedId, selectedItem });
   }
   $: inline = type === "inline";
-  $: selectedIndex = items.findIndex((item) => item.id === selectedId);
-  $: selectedItem = items[selectedIndex];
+  $: selectedItem = items.find((item) => item.id === selectedId);
   $: if (!open) {
     highlightedIndex = -1;
   }

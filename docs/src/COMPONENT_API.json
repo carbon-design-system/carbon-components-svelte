@@ -3228,7 +3228,7 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{ selectedId: DropdownItemId, selectedIndex: number, selectedItem: DropdownItem }"
+          "detail": "{ selectedId: DropdownItemId, selectedItem: DropdownItem }"
         }
       ],
       "typedefs": [
