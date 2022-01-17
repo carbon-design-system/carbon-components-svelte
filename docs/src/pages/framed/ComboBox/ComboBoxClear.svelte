@@ -7,7 +7,7 @@
 <ComboBox
   titleText="Contact"
   placeholder="Select contact method"
-  selectedIndex="{1}"
+  selectedId="1"
   bind:this="{ref}"
   items="{[
     { id: '0', text: 'Slack' },

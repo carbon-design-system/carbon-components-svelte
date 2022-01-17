@@ -7,17 +7,18 @@
     { id: "2", text: "Fax" },
   ];
 
-  let comboBox1_selectedIndex = -1;
-  let comboBox2_selectedIndex = -1;
+  let comboBox1_selectedId = undefined;
+  let comboBox2_selectedId = undefined;
 
-  const formatSelected = (i) => (items[i] ? items[i].text : "N/A");
+  const formatSelected = (id) =>
+    items.find((item) => item.id === id)?.text ?? "N/A";
 
-  $: primary = formatSelected(comboBox1_selectedIndex);
-  $: secondary = formatSelected(comboBox2_selectedIndex);
+  $: primary = formatSelected(comboBox1_selectedId);
+  $: secondary = formatSelected(comboBox2_selectedId);
 </script>
 
 <ComboBox
-  bind:selectedIndex="{comboBox1_selectedIndex}"
+  bind:selectedId="{comboBox1_selectedId}"
   titleText="Primary contact"
   placeholder="Select primary contact method"
   items="{items}"
@@ -26,7 +27,7 @@
 <div>Primary: {primary}</div>
 
 <ComboBox
-  bind:selectedIndex="{comboBox2_selectedIndex}"
+  bind:selectedId="{comboBox2_selectedId}"
   titleText="Secondary contact"
   placeholder="Select secondary contact method"
   items="{items}"
