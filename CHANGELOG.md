@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.52.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.52.0) - 2022-01-17
+
+**Features**
+
+- make `Toggle` labels slottable
+- add option to `ComboBox.clear` to not re-focus input (`clear({ focus: false })`)
+
+**Fixes**
+
+- break out of trap focus in `Tooltip` when pressing "Escape"
+- pass "name" prop in `ComboBox` to input element
+- emit `change` event in `Checkbox` after modifying state
+- restore explicit typing of `null | HTMLElement` for TypeScript strict mode
+- dispatch `click:button--primary` in `Modal` if `shouldSubmitOnEnter` is true
+
+- **Documentation**
+
+- simplify reactive `RadioButton` example
+- add reactive `Select` example for `Select`
+- fix grammar in `TreeView` "Expand all nodes" example
+- note that `Search` clear event is also dispatched when pressing "Escape"
+- demo reactivity in expandable `Search` example
+
 ## [0.51.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.51.3) - 2022-01-12
 
 **Fixes**
