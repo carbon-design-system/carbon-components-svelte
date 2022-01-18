@@ -226,7 +226,15 @@
       <span class="bx--list-box__label">
         {#if selectedItem}{itemToString(selectedItem)}{:else}{label}{/if}
       </span>
-      <ListBoxMenuIcon open="{open}" translateWithId="{translateWithId}" />
+      <ListBoxMenuIcon
+        on:click="{(e) => {
+          e.stopPropagation();
+          if (disabled) return;
+          open = !open;
+        }}"
+        translateWithId="{translateWithId}"
+        open="{open}"
+      />
     </button>
     {#if open}
       <ListBoxMenu aria-labelledby="{id}" id="{id}">
