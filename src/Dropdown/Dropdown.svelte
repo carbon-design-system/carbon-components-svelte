@@ -3,7 +3,7 @@
    * @typedef {string} DropdownItemId
    * @typedef {string} DropdownItemText
    * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
-   * @event {{ selectedId: DropdownItemId, selectedIndex: number, selectedItem: DropdownItem }} select
+   * @event {{ selectedId: DropdownItemId, selectedItem: DropdownItem }} select
    */
 
   /**
@@ -18,8 +18,11 @@
    */
   export let itemToString = (item) => item.text || item.id;
 
-  /** Specify the selected item index */
-  export let selectedIndex = -1;
+  /**
+   * Specify the selected item id
+   * @type {DropdownItemId}
+   */
+  export let selectedId = undefined;
 
   /**
    * Specify the type of dropdown
@@ -108,7 +111,6 @@
 
   const dispatch = createEventDispatcher();
 
-  let selectedId = undefined;
   let highlightedIndex = -1;
 
   function change(dir) {
@@ -123,12 +125,11 @@
     highlightedIndex = index;
   }
 
-  $: if (selectedIndex > -1) {
-    dispatch("select", { selectedId, selectedIndex, selectedItem });
+  $: if (selectedId !== undefined) {
+    dispatch("select", { selectedId, selectedItem });
   }
   $: inline = type === "inline";
-  $: selectedItem = items[selectedIndex];
-  $: selectedId = items[selectedIndex] ? items[selectedIndex].id : undefined;
+  $: selectedItem = items.find((item) => item.id === selectedId);
   $: if (!open) {
     highlightedIndex = -1;
   }
@@ -206,8 +207,11 @@
         }
         if (key === 'Enter') {
           open = !open;
-          if (highlightedIndex > -1 && highlightedIndex !== selectedIndex) {
-            selectedIndex = highlightedIndex;
+          if (
+            highlightedIndex > -1 &&
+            items[highlightedIndex].id !== selectedId
+          ) {
+            selectedId = items[highlightedIndex].id;
             open = false;
           }
         } else if (key === 'Tab') {
@@ -233,11 +237,10 @@
         {#each items as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"
-            active="{selectedIndex === i || selectedId === item.id}"
-            highlighted="{highlightedIndex === i || selectedIndex === i}"
+            active="{selectedId === item.id}"
+            highlighted="{highlightedIndex === i || selectedId === item.id}"
             on:click="{() => {
               selectedId = item.id;
-              selectedIndex = i;
               ref.focus();
             }}"
             on:mouseenter="{() => {

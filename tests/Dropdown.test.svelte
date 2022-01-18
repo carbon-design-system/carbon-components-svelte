@@ -5,7 +5,7 @@
 <Dropdown
   direction="top"
   titleText="Contact"
-  selectedIndex="{0}"
+  selectedId="0"
   items="{[
     { id: '0', text: 'Slack' },
     { id: '1', text: 'Email' },
@@ -18,7 +18,7 @@
     return item.text + ' (' + item.id + ')';
   }}"
   titleText="Contact"
-  selectedIndex="{0}"
+  selectedId="0"
   items="{[
     { id: '0', text: 'Slack' },
     { id: '1', text: 'Email' },
@@ -29,7 +29,7 @@
 <Dropdown
   light
   titleText="Contact"
-  selectedIndex="{0}"
+  selectedId="0"
   items="{[
     { id: '0', text: 'Slack' },
     { id: '1', text: 'Email' },
@@ -40,7 +40,7 @@
 <Dropdown
   type="inline"
   titleText="Contact"
-  selectedIndex="{0}"
+  selectedId="0"
   items="{[
     { id: '0', text: 'Slack' },
     { id: '1', text: 'Email' },
@@ -51,7 +51,7 @@
 <Dropdown
   size="xl"
   titleText="Contact"
-  selectedIndex="{0}"
+  selectedId="0"
   items="{[
     { id: '0', text: 'Slack' },
     { id: '1', text: 'Email' },
@@ -62,7 +62,7 @@
 <Dropdown
   size="sm"
   titleText="Contact"
-  selectedIndex="{0}"
+  selectedId="0"
   items="{[
     { id: '0', text: 'Slack' },
     { id: '1', text: 'Email' },
@@ -73,7 +73,7 @@
 <Dropdown
   disabled
   titleText="Contact"
-  selectedIndex="{0}"
+  selectedId="0"
   items="{[
     { id: '0', text: 'Slack' },
     { id: '1', text: 'Email' },

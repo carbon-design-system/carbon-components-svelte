@@ -3008,11 +3008,10 @@
           "reactive": false
         },
         {
-          "name": "selectedIndex",
+          "name": "selectedId",
           "kind": "let",
-          "description": "Specify the selected item index",
-          "type": "number",
-          "value": "-1",
+          "description": "Specify the selected item id",
+          "type": "DropdownItemId",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
@@ -3229,7 +3228,7 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{ selectedId: DropdownItemId, selectedIndex: number, selectedItem: DropdownItem }"
+          "detail": "{ selectedId: DropdownItemId, selectedItem: DropdownItem }"
         }
       ],
       "typedefs": [

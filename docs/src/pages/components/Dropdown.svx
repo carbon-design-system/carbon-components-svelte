@@ -9,13 +9,13 @@ components: ["Dropdown", "DropdownSkeleton"]
 
 ### Default
 
-<Dropdown titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
 ### Hidden label
 
-<Dropdown hideLabel titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown hideLabel titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -25,7 +25,7 @@ Use the `itemToString` prop to format the display of individual items.
 
 <Dropdown itemToString={item => {
   return item.text + ' (' + item.id +')'
-}} titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+}} titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -37,49 +37,49 @@ Use the `itemToString` prop to format the display of individual items.
 
 Set `direction` to `"top"` for the dropdown menu to appear above the input.
 
-<Dropdown direction="top" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown direction="top" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
 ### Light variant
 
-<Dropdown light titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown light titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
 ### Inline variant
 
-<Dropdown type="inline" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown type="inline" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
 ### Extra-large size
 
-<Dropdown size="xl" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown size="xl" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
 ### Small size
 
-<Dropdown size="sm" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown size="sm" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
 ### Invalid state
 
-<Dropdown invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
 ### Warning state
 
-<Dropdown warn warnText="This contact method is not associated with your account" titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown warn warnText="This contact method is not associated with your account" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
 ### Disabled state
 
-<Dropdown disabled titleText="Contact" selectedIndex={0} items="{[{id: "0", text: "Slack"},
+<Dropdown disabled titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
