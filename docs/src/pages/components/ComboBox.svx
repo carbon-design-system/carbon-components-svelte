@@ -12,10 +12,10 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Selected index
+### Selected id
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
-selectedIndex={1}
+selectedId="1"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},

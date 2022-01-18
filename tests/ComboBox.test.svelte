@@ -25,7 +25,7 @@
 <ComboBox
   titleText="Contact"
   placeholder="Select contact method"
-  selectedIndex="{1}"
+  selectedId="1"
   items="{items}"
 />
 
