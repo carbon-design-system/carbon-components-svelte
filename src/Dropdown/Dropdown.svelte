@@ -176,6 +176,7 @@
       {disabled && 'bx--dropdown--disabled'}
       {light && 'bx--dropdown--light'}"
     on:click="{({ target }) => {
+      if (disabled) return;
       open = ref.contains(target) ? !open : false;
     }}"
     disabled="{disabled}"
