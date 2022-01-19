@@ -143,7 +143,7 @@ export interface DataTableProps
   useStaticWidth?: boolean;
 
   /**
-   * Set to `number` to limit the output
+   * Specify the number of items to display in a page
    * @default 0
    */
   pageSize?: number;
