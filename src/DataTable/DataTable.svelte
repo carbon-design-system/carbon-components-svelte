@@ -100,7 +100,7 @@
   /** Set to `true` to use static width */
   export let useStaticWidth = false;
 
-  /** Set to `number` to limit the output */
+  /** Specify the number of items to display in a page */
   export let pageSize = 0;
 
   /** Set to `number` to set current page */
