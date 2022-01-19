@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.53.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.53.0) - 2022-01-18
+
+**Breaking Changes**
+
+- replace `selectedIndex` with `selectedId` in `Dropdown`
+- replace `selectedIndex` with `selectedId` in `ComboBox`
+
+**Fixes**
+
+- prevent `Dropdown` icon from being clickable when disabled
+
 ## [0.52.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.52.0) - 2022-01-17
 
 **Features**
