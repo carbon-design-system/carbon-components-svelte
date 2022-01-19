@@ -1,11 +1,13 @@
 ---
-components: ["DataTable", "Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions"]
+components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions"]
 ---
 
 <script>
-  import { InlineNotification, DataTable, DataTableSkeleton, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
+  import { InlineNotification, DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
   import Launch16 from "carbon-icons-svelte/lib/Launch16";
   import Preview from "../../components/Preview.svelte";
+
+  const pagination = { pageSize: 5, page: 1}
 </script>
 
 `DataTable` is keyed for both rendering and sorting purposes.
@@ -790,6 +792,84 @@ In the example below, the "Protocol" column is not sortable.
       rule: "DNS delegation"
     },
   ]}"
+/>
+
+### Sortable with pagination
+
+If you want `DataTable` to sort the whole dataset but still display paginated content, you need to pass the whole dataset in the `rows` prop, 
+and then limit displayed content by using `pageSize` and `page` props, which are corresponding to the same props in the `Pagination` component.
+
+<DataTable sortable title="Load balancers" description="Your organization's active load balancers."
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "cost", value: "Cost", display: (cost) => cost + " €" },
+    {
+      key: "expireDate",
+      value: "Expire date",
+      display: (date) => new Date(date).toLocaleString(),
+      sort: (a, b) => new Date(a) - new Date(b),
+    },
+  ]}"
+  pageSize={pagination.pageSize}
+  page={pagination.page}
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      cost: 100,
+      expireDate: "2020-10-21",
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      cost: 200,
+      expireDate: "2020-09-10",
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      cost: 150,
+      expireDate: "2020-11-24",
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      cost: 250,
+      expireDate: "2020-12-01",
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      cost: 550,
+      expireDate: "2021-03-21",
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      cost: 400,
+      expireDate: "2020-11-14",
+    },
+  ]}"
+/>
+<Pagination 
+  bind:pageSize={pagination.pageSize}
+  bind:page={pagination.page}
+  totalItems={6}
+  pageSizeInputDisabled
 />
 
 ### Sortable with custom display and sort methods
