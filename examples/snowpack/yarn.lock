@@ -571,10 +571,10 @@ callsites@^3.0.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-carbon-components-svelte@^0.51.1:
-  version "0.51.1"
-  resolved "https://registry.yarnpkg.com/carbon-components-svelte/-/carbon-components-svelte-0.51.1.tgz#08672cb9ffe9d8c421003b0fc49dcfba3d2d944a"
-  integrity sha512-aS05IH9FnHY0ZsqNJXpH26j1LkWgpQ9X6s7rJOlN2lB1NFDV/Vb8Miu7pJKgQu9QtdSNf+HMd+wZbmMayRfCSQ==
+carbon-components-svelte@^0.54.0:
+  version "0.54.0"
+  resolved "https://registry.yarnpkg.com/carbon-components-svelte/-/carbon-components-svelte-0.54.0.tgz#b04dda2577ff90a57d1161bf99db409b98d4e60f"
+  integrity sha512-HN5BUb8/60IeKasUBIqkYeQ+MugQne3HVVIgh2vXkXq62aVEMzEStlYpnUmhhVfUs5ZZOqRS77eHkXxHvZKYOQ==
   dependencies:
     flatpickr "4.6.9"
 
@@ -2794,10 +2794,10 @@ svelte-preprocess@^4.7.2, svelte-preprocess@^4.7.3:
     sorcery "^0.10.0"
     strip-indent "^3.0.0"
 
-svelte@^3.45.0:
-  version "3.45.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.45.0.tgz#bcb90a72e984f809c419529f8cf9100ad9937a4b"
-  integrity sha512-6AWftH2eqqKLYH1HvKpuUWe8OfjflarhegN57P/Cqwc2Rb2F5oIdDtANU/jMscyZMzG0v6nTQox0siZR9cmRVQ==
+svelte@^3.46.2:
+  version "3.46.2"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.46.2.tgz#f0ffbffaea3a9a760edcbefc0902b41998a686ad"
+  integrity sha512-RXSAtYNefe01Sb1lXtZ2I+gzn3t/h/59hoaRNeRrm8IkMIu6BSiAkbpi41xb+C44x54YKnbk9+dtfs3pM4hECA==
 
 tar@^6.0.2, tar@^6.1.0:
   version "6.1.11"

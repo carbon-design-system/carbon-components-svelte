@@ -129,10 +129,10 @@ builtin-modules@^3.1.0:
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-3.2.0.tgz#45d5db99e7ee5e6bc4f362e008bf917ab5049887"
   integrity sha512-lGzLKcioL90C7wMczpkY0n/oART3MbBa8R9OFGE1rJxoVI86u4WAGfEk8Wjv10eKSyTHVGkSo3bvBylCEtk7LA==
 
-carbon-components-svelte@^0.51.1:
-  version "0.51.1"
-  resolved "https://registry.yarnpkg.com/carbon-components-svelte/-/carbon-components-svelte-0.51.1.tgz#08672cb9ffe9d8c421003b0fc49dcfba3d2d944a"
-  integrity sha512-aS05IH9FnHY0ZsqNJXpH26j1LkWgpQ9X6s7rJOlN2lB1NFDV/Vb8Miu7pJKgQu9QtdSNf+HMd+wZbmMayRfCSQ==
+carbon-components-svelte@^0.54.0:
+  version "0.54.0"
+  resolved "https://registry.yarnpkg.com/carbon-components-svelte/-/carbon-components-svelte-0.54.0.tgz#b04dda2577ff90a57d1161bf99db409b98d4e60f"
+  integrity sha512-HN5BUb8/60IeKasUBIqkYeQ+MugQne3HVVIgh2vXkXq62aVEMzEStlYpnUmhhVfUs5ZZOqRS77eHkXxHvZKYOQ==
   dependencies:
     flatpickr "4.6.9"
 
@@ -451,10 +451,10 @@ rollup-pluginutils@^2.8.2:
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@^2.63.0:
-  version "2.63.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.63.0.tgz#fe2f7fec2133f3fab9e022b9ac245628d817c6bb"
-  integrity sha512-nps0idjmD+NXl6OREfyYXMn/dar3WGcyKn+KBzPdaLecub3x/LrId0wUcthcr8oZUAcZAR8NKcfGGFlNgGL1kQ==
+rollup@^2.64.0:
+  version "2.64.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.64.0.tgz#f0f59774e21fbb56de438a37d06a2189632b207a"
+  integrity sha512-+c+lbw1lexBKSMb1yxGDVfJ+vchJH3qLbmavR+awDinTDA2C5Ug9u7lkOzj62SCu0PKUExsW36tpgW7Fmpn3yQ==
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -529,10 +529,10 @@ svelte-preprocess@^4.7.3:
     detect-indent "^6.0.0"
     strip-indent "^3.0.0"
 
-svelte@^3.45.0:
-  version "3.45.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.45.0.tgz#bcb90a72e984f809c419529f8cf9100ad9937a4b"
-  integrity sha512-6AWftH2eqqKLYH1HvKpuUWe8OfjflarhegN57P/Cqwc2Rb2F5oIdDtANU/jMscyZMzG0v6nTQox0siZR9cmRVQ==
+svelte@^3.46.2:
+  version "3.46.2"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.46.2.tgz#f0ffbffaea3a9a760edcbefc0902b41998a686ad"
+  integrity sha512-RXSAtYNefe01Sb1lXtZ2I+gzn3t/h/59hoaRNeRrm8IkMIu6BSiAkbpi41xb+C44x54YKnbk9+dtfs3pM4hECA==
 
 terser@^5.0.0:
   version "5.7.1"
