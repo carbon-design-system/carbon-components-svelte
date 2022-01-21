@@ -1,9 +1,9 @@
 <script>
   /**
-   * @typedef {string} MultiSelectItemId
+   * @typedef {any} MultiSelectItemId
    * @typedef {string} MultiSelectItemText
    * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
-   * @event {{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
+   * @event {{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
    * @event {any} clear
    */
 
@@ -15,7 +15,7 @@
 
   /**
    * Override the display of a multiselect item
-   * @type {(item: MultiSelectItem) => string}
+   * @type {(item: MultiSelectItem) => any}
    */
   export let itemToString = (item) => item.text || item.id;
 
