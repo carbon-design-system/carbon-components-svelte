@@ -1,6 +1,6 @@
 <script>
   /**
-   * @typedef {string} DropdownItemId
+   * @typedef {any} DropdownItemId
    * @typedef {string} DropdownItemText
    * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
    * @event {{ selectedId: DropdownItemId, selectedItem: DropdownItem }} select
