@@ -6409,7 +6409,7 @@
           "name": "itemToString",
           "kind": "let",
           "description": "Override the display of a multiselect item",
-          "type": "(item: MultiSelectItem) => string",
+          "type": "(item: MultiSelectItem) => any",
           "value": "(item) => item.text || item.id",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -6749,7 +6749,7 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }"
+          "detail": "{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }"
         },
         { "type": "dispatched", "name": "clear", "detail": "any" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
@@ -6759,9 +6759,9 @@
       ],
       "typedefs": [
         {
-          "type": "string",
+          "type": "any",
           "name": "MultiSelectItemId",
-          "ts": "type MultiSelectItemId = string"
+          "ts": "type MultiSelectItemId = any"
         },
         {
           "type": "string",
