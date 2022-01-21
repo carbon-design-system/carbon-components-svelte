@@ -5,6 +5,7 @@ export interface TextInputProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the size of the input
+   * @default undefined
    */
   size?: "sm" | "xl";
 
@@ -52,6 +53,7 @@ export interface TextInputProps
 
   /**
    * Specify a name attribute for the input
+   * @default undefined
    */
   name?: string;
 

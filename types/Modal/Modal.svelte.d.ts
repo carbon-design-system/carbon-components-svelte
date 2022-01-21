@@ -5,6 +5,7 @@ export interface ModalProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the size of the modal
+   * @default undefined
    */
   size?: "xs" | "sm" | "lg";
 
@@ -34,16 +35,19 @@ export interface ModalProps
 
   /**
    * Specify the modal heading
+   * @default undefined
    */
   modalHeading?: string;
 
   /**
    * Specify the modal label
+   * @default undefined
    */
   modalLabel?: string;
 
   /**
    * Specify the ARIA label for the modal
+   * @default undefined
    */
   modalAriaLabel?: string;
 

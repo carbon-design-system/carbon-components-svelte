@@ -5,6 +5,7 @@ export interface TimePickerProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Specify the size of the input
+   * @default undefined
    */
   size?: "sm" | "xl";
 
@@ -82,6 +83,7 @@ export interface TimePickerProps
 
   /**
    * Specify a name attribute for the input
+   * @default undefined
    */
   name?: string;
 

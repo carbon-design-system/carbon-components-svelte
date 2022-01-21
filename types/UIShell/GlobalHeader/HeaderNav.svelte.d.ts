@@ -5,6 +5,7 @@ export interface HeaderNavProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
   /**
    * Specify the ARIA label for the nav
+   * @default undefined
    */
   ariaLabel?: string;
 }

@@ -30,6 +30,7 @@ export interface TooltipProps
   /**
    * Specify the icon to render for the tooltip button
    * Icon size must be 16px (e.g., `Add16`, `Task16`)
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 

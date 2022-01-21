@@ -5,6 +5,7 @@ export interface DatePickerInputProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the size of the input
+   * @default undefined
    */
   size?: "sm" | "xl";
 
@@ -88,6 +89,7 @@ export interface DatePickerInputProps
 
   /**
    * Set a name for the input element
+   * @default undefined
    */
   name?: string;
 

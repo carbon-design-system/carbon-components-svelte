@@ -5,11 +5,13 @@ export interface LinkProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["p"]> {
   /**
    * Specify the size of the link
+   * @default undefined
    */
   size?: "sm" | "lg";
 
   /**
    * Specify the href value
+   * @default undefined
    */
   href?: string;
 
@@ -22,6 +24,7 @@ export interface LinkProps
   /**
    * Specify the icon to render
    * `inline` must be `false`
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 

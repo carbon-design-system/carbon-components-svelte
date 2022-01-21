@@ -38,6 +38,7 @@ export interface MultiSelectProps
 
   /**
    * Set the size of the combobox
+   * @default undefined
    */
   size?: "sm" | "lg" | "xl";
 
@@ -113,6 +114,7 @@ export interface MultiSelectProps
 
   /**
    * Override the default translation ids
+   * @default undefined
    */
   translateWithId?: (id: any) => string;
 
@@ -178,6 +180,7 @@ export interface MultiSelectProps
 
   /**
    * Specify a name attribute for the select
+   * @default undefined
    */
   name?: string;
 

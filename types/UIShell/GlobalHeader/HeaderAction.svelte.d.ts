@@ -17,17 +17,20 @@ export interface HeaderActionProps
 
   /**
    * Specify the icon to render
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Specify the icon to render when the action panel is open
+   * @default undefined
    */
   closeIcon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Specify the text
    * Alternatively, use the named slot "text" (e.g., <div slot="text">...</div>)
+   * @default undefined
    */
   text?: string;
 

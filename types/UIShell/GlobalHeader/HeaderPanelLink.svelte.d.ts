@@ -5,6 +5,7 @@ export interface HeaderPanelLinkProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
    * Specify the `href` attribute
+   * @default undefined
    */
   href?: string;
 

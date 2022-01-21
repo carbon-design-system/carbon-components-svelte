@@ -77,6 +77,7 @@ export interface TextAreaProps
 
   /**
    * Specify a name attribute for the input
+   * @default undefined
    */
   name?: string;
 

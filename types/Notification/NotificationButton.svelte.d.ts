@@ -11,11 +11,13 @@ export interface NotificationButtonProps
 
   /**
    * Specify the icon to render
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Specify the title of the icon
+   * @default undefined
    */
   title?: string;
 

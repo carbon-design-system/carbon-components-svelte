@@ -31,6 +31,7 @@ export interface ThemeProps {
 
   /**
    * Render a toggle or select dropdown to control the theme
+   * @default undefined
    */
   render?: "toggle" | "select";
 

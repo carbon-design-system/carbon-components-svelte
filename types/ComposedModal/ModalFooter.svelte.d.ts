@@ -17,6 +17,7 @@ export interface ModalFooterProps
 
   /**
    * Specify a class for the primary button
+   * @default undefined
    */
   primaryClass?: string;
 
@@ -35,6 +36,7 @@ export interface ModalFooterProps
 
   /**
    * Specify a class for the secondary button
+   * @default undefined
    */
   secondaryClass?: string;
 

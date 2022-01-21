@@ -6,6 +6,7 @@ export interface TagProps
     svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
   /**
    * Specify the type of tag
+   * @default undefined
    */
   type?:
     | "red"
@@ -58,6 +59,7 @@ export interface TagProps
 
   /**
    * Specify the icon to render
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 

@@ -26,6 +26,7 @@ export interface DropdownProps
 
   /**
    * Specify the selected item id
+   * @default undefined
    */
   selectedId?: DropdownItemId;
 
@@ -43,6 +44,7 @@ export interface DropdownProps
 
   /**
    * Specify the size of the dropdown field
+   * @default undefined
    */
   size?: "sm" | "lg" | "xl";
 
@@ -108,6 +110,7 @@ export interface DropdownProps
 
   /**
    * Specify the list box label
+   * @default undefined
    */
   label?: string;
 
@@ -119,6 +122,7 @@ export interface DropdownProps
 
   /**
    * Override the default translation ids
+   * @default undefined
    */
   translateWithId?: (id: any) => string;
 
@@ -130,6 +134,7 @@ export interface DropdownProps
 
   /**
    * Specify a name attribute for the list box
+   * @default undefined
    */
   name?: string;
 
