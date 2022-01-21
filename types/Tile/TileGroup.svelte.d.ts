@@ -5,6 +5,7 @@ export interface TileGroupProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> {
   /**
    * Specify the selected tile value
+   * @default undefined
    */
   selected?: string;
 

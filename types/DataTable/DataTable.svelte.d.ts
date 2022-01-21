@@ -53,6 +53,7 @@ export interface DataTableProps
 
   /**
    * Set the size of the data table
+   * @default undefined
    */
   size?: "compact" | "short" | "medium" | "tall";
 

@@ -46,11 +46,13 @@ export interface ButtonProps
 
   /**
    * Specify the icon to render
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Specify the ARIA label for the button icon
+   * @default undefined
    */
   iconDescription?: string;
 
@@ -88,6 +90,7 @@ export interface ButtonProps
 
   /**
    * Set the `href` to use an anchor link
+   * @default undefined
    */
   href?: string;
 

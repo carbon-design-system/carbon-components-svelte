@@ -47,6 +47,7 @@ export interface ToggleProps
 
   /**
    * Specify a name attribute for the checkbox input
+   * @default undefined
    */
   name?: string;
 }

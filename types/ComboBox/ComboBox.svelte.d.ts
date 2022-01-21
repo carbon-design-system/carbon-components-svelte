@@ -24,6 +24,7 @@ export interface ComboBoxProps
 
   /**
    * Set the selected item by value id
+   * @default undefined
    */
   selectedId?: ComboBoxItemId;
 
@@ -41,6 +42,7 @@ export interface ComboBoxProps
 
   /**
    * Set the size of the combobox
+   * @default undefined
    */
   size?: "sm" | "xl";
 
@@ -112,6 +114,7 @@ export interface ComboBoxProps
 
   /**
    * Override the default translation ids
+   * @default undefined
    */
   translateWithId?: (id: any) => string;
 
@@ -123,6 +126,7 @@ export interface ComboBoxProps
 
   /**
    * Specify a name attribute for the input
+   * @default undefined
    */
   name?: string;
 

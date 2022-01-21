@@ -5,6 +5,7 @@ export interface ProgressBarProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the current value
+   * @default undefined
    */
   value?: number;
 

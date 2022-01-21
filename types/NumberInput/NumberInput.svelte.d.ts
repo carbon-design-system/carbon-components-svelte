@@ -7,6 +7,7 @@ export interface NumberInputProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Set the size of the input
+   * @default undefined
    */
   size?: "sm" | "xl";
 
@@ -24,11 +25,13 @@ export interface NumberInputProps
 
   /**
    * Specify the maximum value
+   * @default undefined
    */
   max?: number;
 
   /**
    * Specify the minimum value
+   * @default undefined
    */
   min?: number;
 
@@ -130,6 +133,7 @@ export interface NumberInputProps
 
   /**
    * Specify a name attribute for the input
+   * @default undefined
    */
   name?: string;
 

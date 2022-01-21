@@ -8,6 +8,7 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 export interface BreakpointProps {
   /**
    * Determine the current Carbon grid breakpoint size
+   * @default undefined
    */
   size?: BreakpointSize;
 

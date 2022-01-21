@@ -5,6 +5,7 @@ export interface TableProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["section"]> {
   /**
    * Set the size of the table
+   * @default undefined
    */
   size?: "compact" | "short" | "medium" | "tall";
 

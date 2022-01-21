@@ -17,6 +17,7 @@ export interface AccordionSkeletonProps
 
   /**
    * Specify the size of the accordion
+   * @default undefined
    */
   size?: "sm" | "xl";
 

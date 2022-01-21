@@ -12,6 +12,7 @@ export interface TooltipIconProps
 
   /**
    * Specify the icon to render
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 

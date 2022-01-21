@@ -11,11 +11,13 @@ export interface SideNavMenuProps
 
   /**
    * Specify the text
+   * @default undefined
    */
   text?: string;
 
   /**
    * Specify the icon to render
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 

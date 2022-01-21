@@ -7,6 +7,7 @@ export interface ListBoxSelectionProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the number of selected items
+   * @default undefined
    */
   selectionCount?: number;
 

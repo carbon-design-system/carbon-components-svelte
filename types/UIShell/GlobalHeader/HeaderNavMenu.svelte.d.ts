@@ -17,6 +17,7 @@ export interface HeaderNavMenuProps
 
   /**
    * Specify the text
+   * @default undefined
    */
   text?: string;
 

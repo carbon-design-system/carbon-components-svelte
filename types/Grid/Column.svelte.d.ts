@@ -45,31 +45,37 @@ export interface ColumnProps
 
   /**
    * Specify the aspect ratio of the column
+   * @default undefined
    */
   aspectRatio?: "2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1";
 
   /**
    * Set the small breakpoint
+   * @default undefined
    */
   sm?: ColumnBreakpoint;
 
   /**
    * Set the medium breakpoint
+   * @default undefined
    */
   md?: ColumnBreakpoint;
 
   /**
    * Set the large breakpoint
+   * @default undefined
    */
   lg?: ColumnBreakpoint;
 
   /**
    * Set the extra large breakpoint
+   * @default undefined
    */
   xlg?: ColumnBreakpoint;
 
   /**
    * Set the maximum breakpoint
+   * @default undefined
    */
   max?: ColumnBreakpoint;
 }

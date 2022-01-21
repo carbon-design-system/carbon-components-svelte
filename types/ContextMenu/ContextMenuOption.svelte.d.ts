@@ -24,6 +24,7 @@ export interface ContextMenuOptionProps
   /**
    * Specify the icon to render
    * Icon is rendered to the left of the label text
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 

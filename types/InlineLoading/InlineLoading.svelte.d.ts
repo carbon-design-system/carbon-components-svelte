@@ -11,11 +11,13 @@ export interface InlineLoadingProps
 
   /**
    * Set the loading description
+   * @default undefined
    */
   description?: string;
 
   /**
    * Specify the ARIA label for the loading icon
+   * @default undefined
    */
   iconDescription?: string;
 

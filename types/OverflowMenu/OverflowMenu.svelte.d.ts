@@ -5,6 +5,7 @@ export interface OverflowMenuProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
    * Specify the size of the overflow menu
+   * @default undefined
    */
   size?: "sm" | "xl";
 
@@ -34,16 +35,19 @@ export interface OverflowMenuProps
 
   /**
    * Specify the menu options class
+   * @default undefined
    */
   menuOptionsClass?: string;
 
   /**
    * Specify the icon to render
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 
   /**
    * Specify the icon class
+   * @default undefined
    */
   iconClass?: string;
 

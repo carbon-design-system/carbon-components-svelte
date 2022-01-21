@@ -5,6 +5,7 @@ export interface StructuredListProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the selected structured list row value
+   * @default undefined
    */
   selected?: string;
 

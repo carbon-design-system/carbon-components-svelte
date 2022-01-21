@@ -5,6 +5,7 @@ export interface RadioButtonGroupProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the selected radio button value
+   * @default undefined
    */
   selected?: string;
 
@@ -34,6 +35,7 @@ export interface RadioButtonGroupProps
 
   /**
    * Set an id for the container div element
+   * @default undefined
    */
   id?: string;
 }

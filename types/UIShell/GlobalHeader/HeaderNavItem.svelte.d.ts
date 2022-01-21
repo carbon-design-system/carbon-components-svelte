@@ -5,11 +5,13 @@ export interface HeaderNavItemProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
    * Specify the `href` attribute
+   * @default undefined
    */
   href?: string;
 
   /**
    * Specify the text
+   * @default undefined
    */
   text?: string;
 

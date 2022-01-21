@@ -11,6 +11,7 @@ export interface HeaderGlobalActionProps
 
   /**
    * Specify the icon to render
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 

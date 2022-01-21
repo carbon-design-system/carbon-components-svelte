@@ -5,6 +5,7 @@ export interface ListBoxProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the size of the list box
+   * @default undefined
    */
   size?: "sm" | "xl";
 

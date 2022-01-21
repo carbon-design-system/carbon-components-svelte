@@ -11,11 +11,13 @@ export interface HeaderActionLinkProps
 
   /**
    * Specify the `href` attribute
+   * @default undefined
    */
   href?: string;
 
   /**
    * Specify the icon to render
+   * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 

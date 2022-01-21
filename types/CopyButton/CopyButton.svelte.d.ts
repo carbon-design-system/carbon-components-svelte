@@ -11,6 +11,7 @@ export interface CopyButtonProps extends CopyProps {
 
   /**
    * Specify the text to copy
+   * @default undefined
    */
   text?: string;
 

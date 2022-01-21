@@ -5,6 +5,7 @@ export interface ComposedModalProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Set the size of the composed modal
+   * @default undefined
    */
   size?: "xs" | "sm" | "lg";
 

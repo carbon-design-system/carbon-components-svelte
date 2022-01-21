@@ -17,16 +17,19 @@ export interface HeaderProps
 
   /**
    * Specify the ARIA label for the header
+   * @default undefined
    */
   uiShellAriaLabel?: string;
 
   /**
    * Specify the `href` attribute
+   * @default undefined
    */
   href?: string;
 
   /**
    * Specify the company name
+   * @default undefined
    */
   company?: string;
 
@@ -64,12 +67,14 @@ export interface HeaderProps
   /**
    * Specify the icon to render for the closed state
    * Defaults to `Menu20`
+   * @default undefined
    */
   iconMenu?: typeof import("svelte").SvelteComponent;
 
   /**
    * Specify the icon to render for the opened state
    * Defaults to `Close20`
+   * @default undefined
    */
   iconClose?: typeof import("svelte").SvelteComponent;
 }

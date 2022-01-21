@@ -7,6 +7,7 @@ export interface IconProps
     svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["svg"]> {
   /**
    * Specify the icon to render
+   * @default undefined
    */
   render?: typeof import("svelte").SvelteComponent;
 
