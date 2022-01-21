@@ -648,8 +648,10 @@ None.
 ### Types
 
 ```ts
+export type ComboBoxItemId = any;
+
 export interface ComboBoxItem {
-  id: string;
+  id: ComboBoxItemId;
   text: string;
 }
 ```
@@ -662,7 +664,7 @@ export interface ComboBoxItem {
 | ref              | <code>let</code>      | Yes      | <code>null &#124; HTMLInputElement</code>                   | <code>null</code>                                                                                                                                                                                                            | Obtain a reference to the input HTML element                             |
 | open             | <code>let</code>      | Yes      | <code>boolean</code>                                        | <code>false</code>                                                                                                                                                                                                           | Set to `true` to open the combobox menu dropdown                         |
 | value            | <code>let</code>      | Yes      | <code>string</code>                                         | <code>""</code>                                                                                                                                                                                                              | Specify the selected combobox value                                      |
-| selectedId       | <code>let</code>      | Yes      | <code>string</code>                                         | --                                                                                                                                                                                                                           | Set the selected item by value id                                        |
+| selectedId       | <code>let</code>      | Yes      | <code>ComboBoxItemId</code>                                 | --                                                                                                                                                                                                                           | Set the selected item by value id                                        |
 | items            | <code>let</code>      | No       | <code>ComboBoxItem[]</code>                                 | <code>[]</code>                                                                                                                                                                                                              | Set the combobox items                                                   |
 | itemToString     | <code>let</code>      | No       | <code>(item: ComboBoxItem) => string</code>                 | <code>(item) => item.text &#124;&#124; item.id</code>                                                                                                                                                                        | Override the display of a combobox item                                  |
 | direction        | <code>let</code>      | No       | <code>"bottom" &#124; "top"</code>                          | <code>"bottom"</code>                                                                                                                                                                                                        | Specify the direction of the combobox dropdown menu                      |
@@ -688,15 +690,15 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                                          |
-| :--------- | :--------- | :-------------------------------------------------------------- |
-| select     | dispatched | <code>{ selectedId: string; selectedItem: ComboBoxItem }</code> |
-| keydown    | forwarded  | --                                                              |
-| keyup      | forwarded  | --                                                              |
-| focus      | forwarded  | --                                                              |
-| blur       | forwarded  | --                                                              |
-| clear      | forwarded  | --                                                              |
-| scroll     | forwarded  | --                                                              |
+| Event name | Type       | Detail                                                                  |
+| :--------- | :--------- | :---------------------------------------------------------------------- |
+| select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }</code> |
+| keydown    | forwarded  | --                                                                      |
+| keyup      | forwarded  | --                                                                      |
+| focus      | forwarded  | --                                                                      |
+| blur       | forwarded  | --                                                                      |
+| clear      | forwarded  | --                                                                      |
+| scroll     | forwarded  | --                                                                      |
 
 ## `ComposedModal`
 
@@ -1151,7 +1153,7 @@ None.
 ### Types
 
 ```ts
-export type DropdownItemId = string;
+export type DropdownItemId = any;
 
 export type DropdownItemText = string;
 
@@ -2401,7 +2403,7 @@ None.
 ### Types
 
 ```ts
-export type MultiSelectItemId = string;
+export type MultiSelectItemId = any;
 
 export type MultiSelectItemText = string;
 
@@ -2423,7 +2425,7 @@ export interface MultiSelectItem {
 | value             | <code>let</code> | Yes      | <code>string</code>                                                                            | <code>""</code>                                                                            | Specify the multiselect value                                                         |
 | selectedIds       | <code>let</code> | Yes      | <code>MultiSelectItemId[]</code>                                                               | <code>[]</code>                                                                            | Set the selected ids                                                                  |
 | items             | <code>let</code> | Yes      | <code>MultiSelectItem[]</code>                                                                 | <code>[]</code>                                                                            | Set the multiselect items                                                             |
-| itemToString      | <code>let</code> | No       | <code>(item: MultiSelectItem) => string</code>                                                 | <code>(item) => item.text &#124;&#124; item.id</code>                                      | Override the display of a multiselect item                                            |
+| itemToString      | <code>let</code> | No       | <code>(item: MultiSelectItem) => any</code>                                                    | <code>(item) => item.text &#124;&#124; item.id</code>                                      | Override the display of a multiselect item                                            |
 | size              | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                      | --                                                                                         | Set the size of the combobox                                                          |
 | type              | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                         | <code>"default"</code>                                                                     | Specify the type of multiselect                                                       |
 | direction         | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                             | <code>"bottom"</code>                                                                      | Specify the direction of the multiselect dropdown menu                                |
@@ -2454,14 +2456,14 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                                                                              |
-| :--------- | :--------- | :-------------------------------------------------------------------------------------------------- |
-| select     | dispatched | <code>{ selectedIds: string[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
-| clear      | dispatched | <code>any</code>                                                                                    |
-| keydown    | forwarded  | --                                                                                                  |
-| keyup      | forwarded  | --                                                                                                  |
-| focus      | forwarded  | --                                                                                                  |
-| blur       | forwarded  | --                                                                                                  |
+| Event name | Type       | Detail                                                                                                         |
+| :--------- | :--------- | :------------------------------------------------------------------------------------------------------------- |
+| select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
+| clear      | dispatched | <code>any</code>                                                                                               |
+| keydown    | forwarded  | --                                                                                                             |
+| keyup      | forwarded  | --                                                                                                             |
+| focus      | forwarded  | --                                                                                                             |
+| blur       | forwarded  | --                                                                                                             |
 
 ## `NotificationActionButton`
 

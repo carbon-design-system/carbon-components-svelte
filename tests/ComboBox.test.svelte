@@ -3,7 +3,7 @@
   import type { ComboBoxItem } from "../types/ComboBox/ComboBox.svelte";
 
   const items: ComboBoxItem[] = [
-    { id: "0", text: "Slack" },
+    { id: 0, text: "Slack" },
     { id: "1", text: "Email" },
     { id: "2", text: "Fax" },
   ];
@@ -20,6 +20,9 @@
   titleText="Contact"
   placeholder="Select contact method"
   items="{items}"
+  on:select="{(e) => {
+    console.log(e.detail.selectedId);
+  }}"
 />
 
 <ComboBox

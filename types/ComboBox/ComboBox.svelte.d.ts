@@ -1,8 +1,10 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
 
+export type ComboBoxItemId = any;
+
 export interface ComboBoxItem {
-  id: string;
+  id: ComboBoxItemId;
   text: string;
 }
 
@@ -23,7 +25,7 @@ export interface ComboBoxProps
   /**
    * Set the selected item by value id
    */
-  selectedId?: string;
+  selectedId?: ComboBoxItemId;
 
   /**
    * Specify the selected combobox value
@@ -140,7 +142,10 @@ export interface ComboBoxProps
 export default class ComboBox extends SvelteComponentTyped<
   ComboBoxProps,
   {
-    select: CustomEvent<{ selectedId: string; selectedItem: ComboBoxItem }>;
+    select: CustomEvent<{
+      selectedId: ComboBoxItemId;
+      selectedItem: ComboBoxItem;
+    }>;
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];

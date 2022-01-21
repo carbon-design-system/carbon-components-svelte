@@ -1,7 +1,7 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
 
-export type MultiSelectItemId = string;
+export type MultiSelectItemId = any;
 
 export type MultiSelectItemText = string;
 
@@ -22,7 +22,7 @@ export interface MultiSelectProps
    * Override the display of a multiselect item
    * @default (item) => item.text || item.id
    */
-  itemToString?: (item: MultiSelectItem) => string;
+  itemToString?: (item: MultiSelectItem) => any;
 
   /**
    * Set the selected ids
@@ -210,7 +210,7 @@ export default class MultiSelect extends SvelteComponentTyped<
   MultiSelectProps,
   {
     select: CustomEvent<{
-      selectedIds: string[];
+      selectedIds: MultiSelectItemId[];
       selected: MultiSelectItem[];
       unselected: MultiSelectItem[];
     }>;

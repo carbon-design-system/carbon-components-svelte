@@ -8,7 +8,7 @@
   label="Select contact methods..."
   hideLabel
   items="{[
-    { id: '0', text: 'Slack' },
+    { id: 0, text: 'Slack' },
     { id: '1', text: 'Email' },
     { id: '2', text: 'Fax' },
   ]}"
