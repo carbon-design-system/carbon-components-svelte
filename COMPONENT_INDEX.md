@@ -1153,7 +1153,7 @@ None.
 ### Types
 
 ```ts
-export type DropdownItemId = string;
+export type DropdownItemId = any;
 
 export type DropdownItemText = string;
 

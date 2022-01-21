@@ -3259,9 +3259,9 @@
       ],
       "typedefs": [
         {
-          "type": "string",
+          "type": "any",
           "name": "DropdownItemId",
-          "ts": "type DropdownItemId = string"
+          "ts": "type DropdownItemId = any"
         },
         {
           "type": "string",
