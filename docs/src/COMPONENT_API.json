@@ -1398,7 +1398,7 @@
           "name": "selectedId",
           "kind": "let",
           "description": "Set the selected item by value id",
-          "type": "string",
+          "type": "ComboBoxItemId",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
@@ -1627,7 +1627,7 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{ selectedId: string; selectedItem: ComboBoxItem }"
+          "detail": "{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }"
         },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
@@ -1638,9 +1638,14 @@
       ],
       "typedefs": [
         {
-          "type": "{ id: string; text: string; }",
+          "type": "any",
+          "name": "ComboBoxItemId",
+          "ts": "type ComboBoxItemId = any"
+        },
+        {
+          "type": "{ id: ComboBoxItemId; text: string; }",
           "name": "ComboBoxItem",
-          "ts": "interface ComboBoxItem { id: string; text: string; }"
+          "ts": "interface ComboBoxItem { id: ComboBoxItemId; text: string; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "input" }
