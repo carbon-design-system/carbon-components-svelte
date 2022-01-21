@@ -1,7 +1,8 @@
 <script>
   /**
-   * @typedef {{ id: string; text: string; }} ComboBoxItem
-   * @event {{ selectedId: string; selectedItem: ComboBoxItem }} select
+   * @typedef {any} ComboBoxItemId
+   * @typedef {{ id: ComboBoxItemId; text: string; }} ComboBoxItem
+   * @event {{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }} select
    */
 
   /**
@@ -18,7 +19,7 @@
 
   /**
    * Set the selected item by value id
-   * @type {string}
+   * @type {ComboBoxItemId}
    */
   export let selectedId = undefined;
 
