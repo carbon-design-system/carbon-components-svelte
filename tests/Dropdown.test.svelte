@@ -7,10 +7,13 @@
   titleText="Contact"
   selectedId="0"
   items="{[
-    { id: '0', text: 'Slack' },
+    { id: 0, text: 'Slack' },
     { id: '1', text: 'Email' },
     { id: '2', text: 'Fax' },
   ]}"
+  on:select="{(e) => {
+    console.log(e.detail.selectedId);
+  }}"
 />
 
 <Dropdown
