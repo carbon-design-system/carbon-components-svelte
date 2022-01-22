@@ -121,22 +121,14 @@ export {
 } from "./ComposedModal";
 ```
 
-### Build
+### Run `yarn build:docs`
 
-Verify that you can build the library by running the following command at the project root:
+Run the following command to re-generate TypeScript definitions and documentation.
 
 ```sh
 # carbon-components-svelte/
-yarn prepack
+yarn build:docs
 ```
-
-This does several things:
-
-- uses `node-sass` to pre-compile CSS StyleSheets in the `css` folder
-- uses Rollup to bundle the Svelte components in `src` in ESM/UMD formats; emitted to `lib`
-- uses a Rollup plugin to:
-  - generate component documentation in Markdown format (`COMPONENT_INDEX.md`)
-  - generate TypeScript definitions (`types/index.d.ts`)
 
 ## Submit a Pull Request
 
