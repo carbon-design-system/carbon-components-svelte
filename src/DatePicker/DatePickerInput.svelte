@@ -154,10 +154,7 @@
         class="bx--date-picker__icon"
         aria-label="{iconDescription}"
         title="{iconDescription}"
-        on:click="{() => {
-          if (disabled || ref.matches(':disabled')) return;
-          openCalendar();
-        }}"
+        on:click="{openCalendar}"
       />
     {/if}
   </div>

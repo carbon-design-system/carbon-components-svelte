@@ -26,6 +26,8 @@
   import { onMount, getContext } from "svelte";
   import CheckmarkOutline16 from "../icons/CheckmarkOutline16.svelte";
   import Warning16 from "../icons/Warning16.svelte";
+  import CircleDash16 from "../icons/CircleDash16.svelte";
+  import Incomplete16 from "../icons/Incomplete16.svelte";
 
   let step = {};
 
@@ -84,19 +86,11 @@
     {#if invalid}
       <Warning16 class="bx--progress__warning" title="{description}" />
     {:else if current}
-      <svg>
-        <path d="M 7, 7 m -7, 0 a 7,7 0 1,0 14,0 a 7,7 0 1,0 -14,0"></path>
-        <title>{description}</title>
-      </svg>
+      <Incomplete16 title="{description}" />
     {:else if complete}
       <CheckmarkOutline16 title="{description}" />
     {:else}
-      <svg>
-        <title>{description}</title>
-        <path
-          d="M8 1C4.1 1 1 4.1 1 8s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7zm0 13c-3.3
-          0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"></path>
-      </svg>
+      <CircleDash16 title="{description}" />
     {/if}
     <slot props="{{ class: 'bx--progress-label' }}">
       <p class:bx--progress-label="{true}">{label}</p>
