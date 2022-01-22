@@ -2998,17 +2998,18 @@ None.
 
 ### Props
 
-| Prop name     | Kind             | Reactive | Type                                      | Default value                                    | Description                                     |
-| :------------ | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | ----------------------------------------------- |
-| ref           | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element    |
-| checked       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the radio button         |
-| value         | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the value of the radio button           |
-| disabled      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | et to `true` to disable the radio button        |
-| labelPosition | <code>let</code> | No       | <code>"right" &#124; "left"</code>        | <code>"right"</code>                             | Specify the label position                      |
-| labelText     | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                          |
-| hideLabel     | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to visually hide the label text   |
-| id            | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
-| name          | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify a name attribute for the checkbox input |
+| Prop name     | Kind             | Reactive | Type                                      | Default value                                    | Description                                         |
+| :------------ | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | --------------------------------------------------- |
+| ref           | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element        |
+| checked       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the radio button             |
+| value         | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the value of the radio button               |
+| disabled      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the radio button           |
+| required      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to mark the field as required         |
+| labelPosition | <code>let</code> | No       | <code>"right" &#124; "left"</code>        | <code>"right"</code>                             | Specify the label position                          |
+| labelText     | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                              |
+| hideLabel     | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to visually hide the label text       |
+| id            | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                     |
+| name          | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify a name attribute for the radio button input |
 
 ### Slots
 

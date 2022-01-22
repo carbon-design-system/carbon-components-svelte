@@ -5,8 +5,11 @@
   /** Set to `true` to check the radio button */
   export let checked = false;
 
-  /** et to `true` to disable the radio button */
+  /** Set to `true` to disable the radio button */
   export let disabled = false;
+
+  /** Set to `true` to mark the field as required */
+  export let required = false;
 
   /**
    * Specify the label position
@@ -23,7 +26,7 @@
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /** Specify a name attribute for the checkbox input */
+  /** Specify a name attribute for the radio button input */
   export let name = "";
 
   /** Obtain a reference to the input HTML element */
@@ -56,6 +59,7 @@
     name="{name}"
     checked="{checked}"
     disabled="{disabled}"
+    required="{required}"
     value="{value}"
     class:bx--radio-button="{true}"
     on:change
