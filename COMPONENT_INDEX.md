@@ -2603,6 +2603,8 @@ export type NumberInputTranslationId = "increment" | "decrement";
 | mouseenter | forwarded  | --                  |
 | mouseleave | forwarded  | --                  |
 | input      | forwarded  | --                  |
+| focus      | forwarded  | --                  |
+| blur       | forwarded  | --                  |
 
 ## `NumberInputSkeleton`
 

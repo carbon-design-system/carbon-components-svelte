@@ -215,6 +215,8 @@
           on:input="{({ target }) => {
             inputValue = target.value;
           }}"
+          on:focus
+          on:blur
         />
         <button
           type="button"
@@ -268,6 +270,8 @@
           on:input="{({ target }) => {
             inputValue = target.value;
           }}"
+          on:focus
+          on:blur
         />
         {#if invalid}
           <WarningFilled16 class="bx--number__invalid" />

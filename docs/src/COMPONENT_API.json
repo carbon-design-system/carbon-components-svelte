@@ -7232,7 +7232,9 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "input", "element": "input" }
+        { "type": "forwarded", "name": "input", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [
         {
