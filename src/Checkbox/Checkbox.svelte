@@ -24,6 +24,9 @@
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
+  /** Set to `true` to mark the field as required */
+  export let required = false;
+
   /** Set to `true` for the checkbox to be read-only */
   export let readonly = false;
 
@@ -87,6 +90,7 @@
       id="{id}"
       indeterminate="{indeterminate}"
       name="{name}"
+      required="{required}"
       readonly="{readonly}"
       class:bx--checkbox="{true}"
       on:change="{() => {

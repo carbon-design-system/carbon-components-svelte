@@ -33,6 +33,12 @@ export interface CheckboxProps {
   skeleton?: boolean;
 
   /**
+   * Set to `true` to mark the field as required
+   * @default false
+   */
+  required?: boolean;
+
+  /**
    * Set to `true` for the checkbox to be read-only
    * @default false
    */
