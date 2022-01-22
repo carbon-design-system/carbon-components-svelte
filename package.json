@@ -16,6 +16,7 @@
     "test:preprocess": "node tests/preprocess",
     "build:css": "node scripts/build-css",
     "build:api": "node scripts/build-api",
+    "build:docs": "node scripts/build-docs",
     "build:lib": "rollup -c",
     "prepack": "run-p build:*",
     "format": "prettier --write \"./**/*.{svelte,js,md}\""
