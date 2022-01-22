@@ -131,10 +131,15 @@
 
   let inputValue = value;
 
+  const normalizeValue = (_value) => {
+    if (_value === undefined || _value === "") return _value;
+    return Number(_value);
+  };
+
   $: dispatch("change", value);
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: value = Number(inputValue);
+  $: value = normalizeValue(inputValue);
   $: error =
     invalid || (!allowEmpty && value === "") || value > max || value < min;
   $: errorId = `error-${id}`;
