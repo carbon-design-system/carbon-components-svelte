@@ -16,10 +16,16 @@ export interface RadioButtonProps
   checked?: boolean;
 
   /**
-   * et to `true` to disable the radio button
+   * Set to `true` to disable the radio button
    * @default false
    */
   disabled?: boolean;
+
+  /**
+   * Set to `true` to mark the field as required
+   * @default false
+   */
+  required?: boolean;
 
   /**
    * Specify the label position
@@ -46,7 +52,7 @@ export interface RadioButtonProps
   id?: string;
 
   /**
-   * Specify a name attribute for the checkbox input
+   * Specify a name attribute for the radio button input
    * @default ""
    */
   name?: string;
