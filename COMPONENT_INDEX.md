@@ -467,6 +467,7 @@ None.
 | value         | <code>let</code> | No       | <code>any</code>                          | <code>""</code>                                  | Specify the value of the checkbox                 |
 | indeterminate | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is indeterminate     |
 | skeleton      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state       |
+| required      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to mark the field as required       |
 | readonly      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` for the checkbox to be read-only    |
 | disabled      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the checkbox             |
 | labelText     | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                            |
