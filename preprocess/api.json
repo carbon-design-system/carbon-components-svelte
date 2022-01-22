@@ -1,5 +1,5 @@
 {
-  "version": "0.54.0",
+  "version": "0.55.0",
   "components": {
     "Accordion": {
       "path": "carbon-components-svelte/src/Accordion/Accordion.svelte"
@@ -244,6 +244,9 @@
     "ChevronRight16": {
       "path": "carbon-components-svelte/src/icons/ChevronRight16.svelte"
     },
+    "CircleDash16": {
+      "path": "carbon-components-svelte/src/icons/CircleDash16.svelte"
+    },
     "Close16": {
       "path": "carbon-components-svelte/src/icons/Close16.svelte"
     },
@@ -261,6 +264,9 @@
     },
     "ErrorFilled20": {
       "path": "carbon-components-svelte/src/icons/ErrorFilled20.svelte"
+    },
+    "Incomplete16": {
+      "path": "carbon-components-svelte/src/icons/Incomplete16.svelte"
     },
     "Information16": {
       "path": "carbon-components-svelte/src/icons/Information16.svelte"

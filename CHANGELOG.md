@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.55.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.55.0) - 2022-01-22
+
+**Features**
+
+- forward `focus`, `blur` events to `NumberInput`
+- update `ProgressStep` icons for current, incomplete steps
+- type `id` as `any` instead of `string` in `ComboBox`, `Dropdown`, `MultiSelect`
+
+**Fixes**
+
+- do not coerce empty value to `0` in `NumberInput` if `allowEmpty` is true
+- label `Slider` input if `aria-label` not explicitly defined
+- add missing `required` prop to `RadioButton`
+- add missing `required` prop to `Checkbox`
+- include `@default undefined` annotations for props that are `undefined` by default
+
+**Refactor**
+
+- remove hotfix in `DatePicker` to prevent disabled icon from being clickable
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.51.0
+
 ## [0.54.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.54.0) - 2022-01-19
 
 **Features**
