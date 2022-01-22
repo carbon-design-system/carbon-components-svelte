@@ -17,6 +17,18 @@ export interface RadioButtonGroupProps extends RestProps {
   disabled?: boolean;
 
   /**
+   * Set to `true` to require the selection of a radio button
+   * @default false
+   */
+  required?: boolean;
+
+  /**
+   * Specify a name attribute for the radio button inputs
+   * @default ""
+   */
+  name?: string;
+
+  /**
    * Specify the legend text
    * @default ""
    */

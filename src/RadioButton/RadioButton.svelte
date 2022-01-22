@@ -35,13 +35,16 @@
   import { getContext } from "svelte";
   import { writable } from "svelte/store";
 
-  const ctx = getContext("RadioButtonGroup");
-  const selectedValue = ctx
-    ? ctx.selectedValue
-    : writable(checked ? value : undefined);
+  const { add, update, selectedValue, groupName, groupRequired } = getContext(
+    "RadioButtonGroup"
+  ) ?? {
+    groupName: writable(name),
+    groupRequired: writable(required),
+    selectedValue: writable(checked ? value : undefined),
+  };
 
-  if (ctx) {
-    ctx.add({ id, checked, disabled, value });
+  if (add) {
+    add({ id, checked, disabled, value });
   }
 
   $: checked = $selectedValue === value;
@@ -56,16 +59,16 @@
     bind:this="{ref}"
     type="radio"
     id="{id}"
-    name="{name}"
+    name="{'name' in $$props ? name : $groupName}"
     checked="{checked}"
     disabled="{disabled}"
-    required="{required}"
+    required="{'required' in $$props ? required : $groupRequired}"
     value="{value}"
     class:bx--radio-button="{true}"
     on:change
     on:change="{() => {
-      if (ctx) {
-        ctx.update(value);
+      if (update) {
+        update(value);
       }
     }}"
   />

@@ -8,6 +8,12 @@
   /** Set to `true` to disable the radio buttons */
   export let disabled = false;
 
+  /** Set to `true` to require the selection of a radio button */
+  export let required = false;
+
+  /** Specify a name attribute for the radio button inputs */
+  export let name = "";
+
   /** Specify the legend text */
   export let legendText = "";
 
@@ -42,9 +48,13 @@
 
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);
+  const groupName = writable(name);
+  const groupRequired = writable(required);
 
   setContext("RadioButtonGroup", {
     selectedValue,
+    groupName: { subscribe: groupName.subscribe },
+    groupRequired: { subscribe: groupRequired.subscribe },
     add: ({ checked, value }) => {
       if (checked) {
         selectedValue.set(value);
@@ -67,6 +77,9 @@
     selected = value;
     dispatch("change", value);
   });
+
+  $: $groupName = name;
+  $: $groupRequired = required;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
