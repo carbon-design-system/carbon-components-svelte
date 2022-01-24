@@ -5,10 +5,10 @@
       "has": [
         {
           "type": "host",
-          "value": "https://carbon-components-svelte.onrender.com"
+          "value": "carbon-svelte.vercel.app"
         }
       ],
-      "destination": "/:path*"
+      "destination": "https://carbon-components-svelte.onrender.com/:path*"
     }
   ]
 }
