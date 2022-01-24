@@ -5,7 +5,7 @@
       "has": [
         {
           "type": "host",
-          "value": "carbon-components-svelte.onrender.com"
+          "value": "https://carbon-components-svelte.onrender.com"
         }
       ],
       "destination": "/:path*"
