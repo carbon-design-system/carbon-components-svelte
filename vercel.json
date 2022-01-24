@@ -1,14 +1,9 @@
 {
-  "rewrites": [
+  "redirects": [
     {
       "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "carbon-svelte.vercel.app"
-        }
-      ],
-      "destination": "https://carbon-components-svelte.onrender.com/:path*"
+      "destination": "https://carbon-components-svelte.onrender.com/:path*",
+      "permanent": true
     }
   ]
 }
