@@ -1,14 +1,15 @@
 {
-    "rewrites": [
-      {
-        "source": "/:path*",
-        "has": [
-          {
-            "type": "host",
-            "value": "carbon-components-svelte.onrender.com"
-          }
-        ],
-        "destination": "/:path*"
-      }
-    ]
-  }
+  "rewrites": [
+    { "source": "/*", "destination": "/index.html" },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "carbon-components-svelte.onrender.com"
+        }
+      ],
+      "destination": "/:path*"
+    }
+  ]
+}
