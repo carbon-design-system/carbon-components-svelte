@@ -9,12 +9,18 @@ source: Tile/ClickableTile.svelte
 
 ### Default
 
-<ClickableTile href="https://www.carbondesignsystem.com/">Carbon Design System</ClickableTile>
+<ClickableTile href="https://www.carbondesignsystem.com/">
+Carbon Design System
+</ClickableTile>
 
 ### Light variant
 
-<ClickableTile light href="https://www.carbondesignsystem.com/">Carbon Design System</ClickableTile>
+<ClickableTile light href="https://www.carbondesignsystem.com/">
+Carbon Design System
+</ClickableTile>
 
 ### Disabled state
 
-<ClickableTile disabled href="https://www.carbondesignsystem.com/">Carbon Design System</ClickableTile>
+<ClickableTile disabled href="https://www.carbondesignsystem.com/">
+Carbon Design System
+</ClickableTile>
