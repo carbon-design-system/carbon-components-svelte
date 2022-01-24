@@ -16,6 +16,7 @@
     "test:preprocess": "node tests/preprocess",
     "build:css": "node scripts/build-css",
     "build:api": "node scripts/build-api",
+    "build:docs": "node scripts/build-docs",
     "build:lib": "rollup -c",
     "prepack": "run-p build:*",
     "format": "prettier --write \"./**/*.{svelte,js,md}\""
@@ -41,7 +42,7 @@
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.42.1",
-    "sveld": "^0.12.1",
+    "sveld": "^0.13.1",
     "svelte": "^3.45.0",
     "svelte-check": "^1.1.32",
     "typescript": "^4.1.3"
