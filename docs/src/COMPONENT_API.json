@@ -735,7 +735,6 @@
           "kind": "let",
           "description": "Specify the bound group",
           "type": "any[]",
-          "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,

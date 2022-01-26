@@ -16,7 +16,7 @@ export interface CheckboxProps {
 
   /**
    * Specify the bound group
-   * @default []
+   * @default undefined
    */
   group?: any[];
 
