@@ -16,7 +16,7 @@
    * Specify the bound group
    * @type {any[]}
    */
-  export let group = [];
+  export let group = undefined;
 
   /** Specify whether the checkbox is indeterminate */
   export let indeterminate = false;
@@ -59,6 +59,8 @@
 
   const dispatch = createEventDispatcher();
 
+  $: useGroup = Array.isArray(group);
+  $: checked = useGroup ? group.includes(value) : checked;
   $: dispatch("check", checked);
 </script>
 
@@ -85,7 +87,7 @@
       bind:this="{ref}"
       type="checkbox"
       value="{value}"
-      checked="{checked || group.includes(value)}"
+      checked="{checked}"
       disabled="{disabled}"
       id="{id}"
       indeterminate="{indeterminate}"
@@ -94,10 +96,13 @@
       readonly="{readonly}"
       class:bx--checkbox="{true}"
       on:change="{() => {
-        checked = !checked;
-        group = group.includes(value)
-          ? group.filter((_value) => _value !== value)
-          : [...group, value];
+        if (useGroup) {
+          group = group.includes(value)
+            ? group.filter((_value) => _value !== value)
+            : [...group, value];
+        } else {
+          checked = !checked;
+        }
       }}"
       on:change
       on:blur
