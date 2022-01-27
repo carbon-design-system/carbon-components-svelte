@@ -1,5 +1,5 @@
 <script>
-  import { Checkbox } from "carbon-components-svelte";
+  import { Checkbox, InlineNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
