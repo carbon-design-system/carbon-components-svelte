@@ -6969,9 +6969,9 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the input value",
-          "type": "number | string",
-          "value": "\"\"",
+          "description": "Specify the input value.\nType `null` denotes \"no value\"",
+          "type": "null | number",
+          "value": "null",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
@@ -7226,7 +7226,7 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "change", "detail": "number" },
+        { "type": "dispatched", "name": "change", "detail": "null | number" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },

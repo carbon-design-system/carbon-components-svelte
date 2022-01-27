@@ -12,10 +12,11 @@ export interface NumberInputProps
   size?: "sm" | "xl";
 
   /**
-   * Specify the input value
-   * @default ""
+   * Specify the input value.
+   * Type `null` denotes "no value"
+   * @default null
    */
-  value?: number | string;
+  value?: null | number;
 
   /**
    * Specify the step increment
@@ -147,7 +148,7 @@ export interface NumberInputProps
 export default class NumberInput extends SvelteComponentTyped<
   NumberInputProps,
   {
-    change: CustomEvent<number>;
+    change: CustomEvent<null | number>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
