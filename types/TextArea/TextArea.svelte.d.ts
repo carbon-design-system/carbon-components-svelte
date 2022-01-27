@@ -40,6 +40,12 @@ export interface TextAreaProps
   disabled?: boolean;
 
   /**
+   * Set to `true` to use the read-only variant
+   * @default false
+   */
+  readonly?: boolean;
+
+  /**
    * Specify the helper text
    * @default ""
    */
