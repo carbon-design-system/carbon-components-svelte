@@ -1,11 +1,14 @@
 <script lang="ts">
   import { NumberInput, NumberInputSkeleton } from "../types";
+  import type { NumberInputProps } from "../types/NumberInput/NumberInput.svelte";
+
+  let value: NumberInputProps["value"] = null;
 </script>
 
 <NumberInput
   label="Clusters"
   on:change="{(e) => {
-    console.log(e.detail); // number
+    console.log(e.detail); // null | number
   }}"
 />
 
