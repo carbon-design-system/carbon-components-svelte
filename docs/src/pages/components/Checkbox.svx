@@ -1,5 +1,5 @@
 <script>
-  import { Checkbox } from "carbon-components-svelte";
+  import { Checkbox, InlineNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -23,9 +23,21 @@
 
 <Checkbox labelText="Label text" disabled />
 
-### Multiple
+### Reactive example (bind:checked)
 
-Bind a selection [group](https://svelte.dev/tutorial/group-inputs) to multiple checkboxes.
+The `checked` prop supports two-way binding.
+
+<FileSource src="/framed/Checkbox/CheckboxReactive" />
+
+### Reactive example (bind:group)
+
+An alternative to `checked` is binding an array of values using `group`. This API in inspired by Svelte [group inputs]([group](https://svelte.dev/tutorial/group-inputs)).
+
+<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    If using <strong>bind:group</strong>, <strong>bind:checked</strong> will only support one-way binding.
+  </div>
+</InlineNotification>
 
 <FileSource src="/framed/Checkbox/MultipleCheckboxes" />
 
