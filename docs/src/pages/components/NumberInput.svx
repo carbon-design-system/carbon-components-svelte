@@ -9,11 +9,15 @@ components: ["NumberInput", "NumberInputSkeleton"]
 
 ### Default
 
-<NumberInput label="Clusters" />
+This component requires a numerical value for `value`.
+
+See [#no-value](#no-value) to allow for an empty value.
+
+<NumberInput label="Clusters" value={0} />
 
 ### With helper text
 
-<NumberInput label="Clusters" helperText="Clusters provisioned in your region" />
+<NumberInput label="Clusters" value={0} helperText="Clusters provisioned in your region" />
 
 ### Minimum and maximum values
 
@@ -29,39 +33,39 @@ Set `value` to `null` to denote "no value."
 
 ### Hidden label
 
-<NumberInput hideLabel label="Clusters" />
+<NumberInput hideLabel label="Clusters" value={0} />
 
 ### Hidden steppers
 
-<NumberInput hideSteppers label="Clusters" />
+<NumberInput hideSteppers label="Clusters" value={0} />
 
 ### Light variant
 
-<NumberInput light label="Clusters" />
+<NumberInput light label="Clusters" value={0} />
 
 ### Read-only variant
 
-<NumberInput readonly label="Clusters" />
+<NumberInput readonly label="Clusters" value={0} />
 
 ### Extra-large size
 
-<NumberInput size="xl" label="Clusters" />
+<NumberInput size="xl" label="Clusters" value={0} />
 
 ### Small size
 
-<NumberInput size="sm" label="Clusters" />
+<NumberInput size="sm" label="Clusters" value={0} />
 
 ### Invalid state
 
-<NumberInput invalid invalidText="Invalid value" label="Clusters" />
+<NumberInput invalid invalidText="Invalid value" label="Clusters" value={0} />
 
 ### Warning state
 
-<NumberInput warn warnText="A high number may impact initial rollout" label="Clusters" value="25" />
+<NumberInput warn warnText="A high number may impact initial rollout" label="Clusters" value={25} />
 
 ### Disabled state
 
-<NumberInput disabled label="Clusters" />
+<NumberInput disabled label="Clusters" value={0} />
 
 ### Skeleton
 
