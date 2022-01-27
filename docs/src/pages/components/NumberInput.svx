@@ -19,6 +19,14 @@ components: ["NumberInput", "NumberInputSkeleton"]
 
 <NumberInput min="{4}" max="{20}" value="{4}" invalidText="Number must be between 4 and 20." helperText="Clusters provisioned in your region" label="Clusters (4 min, 20 max)" />
 
+### No value
+
+Set `allowEmpty` to `true` to allow for no value.
+
+Set `value` to `null` to denote "no value."
+
+<FileSource src="/framed/NumberInput/NumberInputEmpty" />
+
 ### Hidden label
 
 <NumberInput hideLabel label="Clusters" />
