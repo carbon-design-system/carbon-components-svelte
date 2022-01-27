@@ -6969,7 +6969,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the input value.\nType `null` denotes \"no value\"",
+          "description": "Specify the input value.\nUse `null` to denote \"no value\"",
           "type": "null | number",
           "value": "null",
           "isFunction": false,

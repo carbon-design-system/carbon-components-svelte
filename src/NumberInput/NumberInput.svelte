@@ -12,7 +12,7 @@
 
   /**
    * Specify the input value.
-   * Type `null` denotes "no value"
+   * Use `null` to denote "no value"
    * @type {null | number}
    */
   export let value = null;

@@ -13,7 +13,7 @@ export interface NumberInputProps
 
   /**
    * Specify the input value.
-   * Type `null` denotes "no value"
+   * Use `null` to denote "no value"
    * @default null
    */
   value?: null | number;
