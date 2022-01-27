@@ -1,7 +1,7 @@
 <script>
   /**
    * @typedef {"increment" | "decrement"} NumberInputTranslationId
-   * @event {number} change
+   * @event {null | number} change
    */
 
   /**
@@ -11,10 +11,11 @@
   export let size = undefined;
 
   /**
-   * Specify the input value
-   * @type {number | string}
+   * Specify the input value.
+   * Type `null` denotes "no value"
+   * @type {null | number}
    */
-  export let value = "";
+  export let value = null;
 
   /** Specify the step increment */
   export let step = 1;
@@ -131,17 +132,12 @@
 
   let inputValue = value;
 
-  const normalizeValue = (_value) => {
-    if (_value === undefined || _value === "") return _value;
-    return Number(_value);
-  };
-
   $: dispatch("change", value);
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: value = normalizeValue(inputValue);
+  $: value = inputValue ? Number(inputValue) : null;
   $: error =
-    invalid || (!allowEmpty && value === "") || value > max || value < min;
+    invalid || (!allowEmpty && value == null) || value > max || value < min;
   $: errorId = `error-${id}`;
   $: ariaLabel =
     $$props["aria-label"] ||
@@ -208,7 +204,7 @@
           max="{max}"
           min="{min}"
           step="{step}"
-          value="{value}"
+          value="{value ?? ''}"
           readonly="{readonly}"
           {...$$restProps}
           on:input
@@ -263,7 +259,7 @@
           max="{max}"
           min="{min}"
           step="{step}"
-          value="{value}"
+          value="{value ?? ''}"
           readonly="{readonly}"
           {...$$restProps}
           on:input
