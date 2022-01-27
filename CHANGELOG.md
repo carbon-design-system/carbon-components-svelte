@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.56.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.56.0) - 2022-01-27
+
+**Breaking Changes**
+
+- type `NumberInput` value as `null | number` instead of `string | number` (`null` signifies "no value")
+
+**Fixes**
+
+- export `readonly` as a prop in `TextArea`
+- fix `Checkbox` two-way binding for `checked`, `group` props
+
+**Documentation**
+
+- add `Checkbox` reactive example for `bind:checked`
+- update `Checkbox` reactive example for `bind:group` to demo two-way binding
+- simplify `Tabs` reactive example
+- add `NumberInput` "No value" example
+
 ## [0.55.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.55.0) - 2022-01-22
 
 **Features**
