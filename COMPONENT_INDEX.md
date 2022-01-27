@@ -4110,6 +4110,7 @@ None.
 | rows        | <code>let</code> | No       | <code>number</code>                          | <code>4</code>                                   | Specify the number of rows                      |
 | light       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to enable the light variant       |
 | disabled    | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to disable the input              |
+| readonly    | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to use the read-only variant      |
 | helperText  | <code>let</code> | No       | <code>string</code>                          | <code>""</code>                                  | Specify the helper text                         |
 | labelText   | <code>let</code> | No       | <code>string</code>                          | <code>""</code>                                  | Specify the label text                          |
 | hideLabel   | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to visually hide the label text   |

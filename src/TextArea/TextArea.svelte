@@ -17,6 +17,9 @@
   /**  Set to `true` to disable the input */
   export let disabled = false;
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
   /** Specify the helper text */
   export let helperText = "";
 
@@ -87,11 +90,11 @@
       rows="{rows}"
       value="{value ?? ''}"
       placeholder="{placeholder}"
+      readonly="{readonly}"
       class:bx--text-area="{true}"
       class:bx--text-area--light="{light}"
       class:bx--text-area--invalid="{invalid}"
       {...$$restProps}
-      readonly="{$$restProps.readonly === true ? true : undefined}"
       on:change
       on:input
       on:input="{({ target }) => {
