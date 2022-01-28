@@ -6074,6 +6074,17 @@
           "reactive": false
         },
         {
+          "name": "primaryButtonProps",
+          "kind": "let",
+          "description": "Specify the primary button props",
+          "type": "ButtonProps",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "shouldSubmitOnEnter",
           "kind": "let",
           "description": "Set to `true` for the \"submit\" and \"click:button--primary\" events\nto be dispatched when pressing \"Enter\"",
@@ -6232,6 +6243,17 @@
           "description": "Specify the primary button text",
           "type": "string",
           "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "primaryButtonProps",
+          "kind": "let",
+          "description": "Specify the primary button props",
+          "type": "ButtonProps",
+          "value": "{}",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,

@@ -56,6 +56,12 @@
   export let primaryButtonDisabled = false;
 
   /**
+   * Specify the primary button props
+   * @type {ButtonProps}
+   */
+  export let primaryButtonProps = {};
+
+  /**
    * Set to `true` for the "submit" and "click:button--primary" events
    * to be dispatched when pressing "Enter"
    */
@@ -304,6 +310,7 @@
             dispatch('submit');
             dispatch('click:button--primary');
           }}"
+          {...primaryButtonProps}
         >
           {primaryButtonText}
         </Button>

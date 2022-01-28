@@ -6,6 +6,12 @@
   /** Specify the primary button text */
   export let primaryButtonText = "";
 
+  /**
+   * Specify the primary button props
+   * @type {ButtonProps}
+   */
+  export let primaryButtonProps = {};
+
   /**  Set to `true` to disable the primary button */
   export let primaryButtonDisabled = false;
 
@@ -75,6 +81,7 @@
       disabled="{primaryButtonDisabled}"
       class="{primaryClass}"
       on:click="{submit}"
+      {...primaryButtonProps}
     >
       {primaryButtonText}
     </Button>

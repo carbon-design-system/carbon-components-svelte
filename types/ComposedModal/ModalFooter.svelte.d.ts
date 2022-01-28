@@ -10,6 +10,12 @@ export interface ModalFooterProps
   primaryButtonText?: string;
 
   /**
+   * Specify the primary button props
+   * @default {}
+   */
+  primaryButtonProps?: ButtonProps;
+
+  /**
    * Set to `true` to disable the primary button
    * @default false
    */
