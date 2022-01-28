@@ -42,3 +42,6 @@ Use the `secondaryButtons` prop to render two secondary buttons for a "3-button 
 
 <FileSource src="/framed/Modal/ModalPreventOutsideClick" />
 
+### Button with icon
+
+<FileSource src="/framed/Modal/ModalButtonWithIcon" />

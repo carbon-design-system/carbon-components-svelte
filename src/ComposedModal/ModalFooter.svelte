@@ -6,6 +6,12 @@
   /** Specify the primary button text */
   export let primaryButtonText = "";
 
+  /**
+   * Specify the primary button icon
+   * @type {typeof import("svelte").SvelteComponent}
+   */
+  export let primaryButtonIcon = undefined;
+
   /**  Set to `true` to disable the primary button */
   export let primaryButtonDisabled = false;
 
@@ -74,6 +80,7 @@
       kind="{danger ? 'danger' : 'primary'}"
       disabled="{primaryButtonDisabled}"
       class="{primaryClass}"
+      icon="{primaryButtonIcon}"
       on:click="{submit}"
     >
       {primaryButtonText}

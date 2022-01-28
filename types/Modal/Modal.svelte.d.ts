@@ -82,6 +82,12 @@ export interface ModalProps
   primaryButtonDisabled?: boolean;
 
   /**
+   * Specify the primary button icon
+   * @default undefined
+   */
+  primaryButtonIcon?: typeof import("svelte").SvelteComponent;
+
+  /**
    * Set to `true` for the "submit" and "click:button--primary" events
    * to be dispatched when pressing "Enter"
    * @default true
