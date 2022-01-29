@@ -56,6 +56,12 @@
   export let primaryButtonDisabled = false;
 
   /**
+   * Specify the primary button icon
+   * @type {typeof import("svelte").SvelteComponent}
+   */
+  export let primaryButtonIcon = undefined;
+
+  /**
    * Set to `true` for the "submit" and "click:button--primary" events
    * to be dispatched when pressing "Enter"
    */
@@ -300,6 +306,7 @@
         <Button
           kind="{danger ? 'danger' : 'primary'}"
           disabled="{primaryButtonDisabled}"
+          icon="{primaryButtonIcon}"
           on:click="{() => {
             dispatch('submit');
             dispatch('click:button--primary');
