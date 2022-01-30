@@ -2600,11 +2600,11 @@ export type NumberInputTranslationId = "increment" | "decrement";
 | Event name | Type       | Detail                          |
 | :--------- | :--------- | :------------------------------ |
 | change     | dispatched | <code>null &#124; number</code> |
+| input      | dispatched | <code>null &#124; number</code> |
 | click      | forwarded  | --                              |
 | mouseover  | forwarded  | --                              |
 | mouseenter | forwarded  | --                              |
 | mouseleave | forwarded  | --                              |
-| input      | forwarded  | --                              |
 | focus      | forwarded  | --                              |
 | blur       | forwarded  | --                              |
 
