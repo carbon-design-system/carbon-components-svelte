@@ -2,6 +2,7 @@
   /**
    * @typedef {"increment" | "decrement"} NumberInputTranslationId
    * @event {null | number} change
+   * @event {null | number} input
    */
 
   /**
@@ -128,20 +129,33 @@
     } else {
       value = nextValue;
     }
+
+    dispatch("input", value);
+    dispatch("change", value);
   }
 
-  let inputValue = value;
-
-  $: dispatch("change", value);
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: value = inputValue != null ? Number(inputValue) : null;
   $: error =
     invalid || (!allowEmpty && value == null) || value > max || value < min;
   $: errorId = `error-${id}`;
   $: ariaLabel =
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
+
+  function parse(raw) {
+    return raw != "" ? Number(raw) : null;
+  }
+
+  function onInput({ target }) {
+    value = parse(target.value);
+
+    dispatch("input", value);
+  }
+
+  function onChange({ target }) {
+    dispatch("change", parse(target.value));
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -207,10 +221,8 @@
           value="{value ?? ''}"
           readonly="{readonly}"
           {...$$restProps}
-          on:input
-          on:input="{({ target }) => {
-            inputValue = target.value;
-          }}"
+          on:change="{onChange}"
+          on:input="{onInput}"
           on:focus
           on:blur
         />
@@ -262,10 +274,8 @@
           value="{value ?? ''}"
           readonly="{readonly}"
           {...$$restProps}
-          on:input
-          on:input="{({ target }) => {
-            inputValue = target.value;
-          }}"
+          on:change="{onChange}"
+          on:input="{onInput}"
           on:focus
           on:blur
         />

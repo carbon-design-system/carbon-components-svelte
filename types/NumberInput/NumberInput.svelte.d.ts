@@ -149,11 +149,11 @@ export default class NumberInput extends SvelteComponentTyped<
   NumberInputProps,
   {
     change: CustomEvent<null | number>;
+    input: CustomEvent<null | number>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    input: WindowEventMap["input"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
