@@ -135,7 +135,7 @@
   $: dispatch("change", value);
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: value = inputValue != null ? Number(inputValue) : null;
+  $: value = inputValue != "" ? Number(inputValue) : null;
   $: error =
     invalid || (!allowEmpty && value == null) || value > max || value < min;
   $: errorId = `error-${id}`;
