@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.57.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.57.0) - 2022-01-30
+
+**Breaking Changes**
+
+- make `NumberInput` "input" event type consistent with "change" (`null | number`)
+
+**Features**
+
+- dispatch `NumberInput` input, change events when clicking the steppers
+- add `primaryButtonIcon` prop to `Modal`, `ModalFooter`
+
+**Fixes**
+
+- prevent `NumberInput` from coercing empty string to `0`
+
 ## [0.56.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.56.1) - 2022-01-27
 
 **Fixes**
