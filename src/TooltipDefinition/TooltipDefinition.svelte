@@ -25,9 +25,15 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
+
   const hide = () => (open = false);
 
   const show = () => (open = true);
+
+  $: dispatch(open ? "open" : "close");
 </script>
 
 <svelte:window
