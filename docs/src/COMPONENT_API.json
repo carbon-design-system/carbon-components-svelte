@@ -13090,6 +13090,8 @@
         }
       ],
       "events": [
+        { "type": "dispatched", "name": "open", "detail": "any" },
+        { "type": "dispatched", "name": "close", "detail": "any" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mousedown", "element": "div" }
       ],
