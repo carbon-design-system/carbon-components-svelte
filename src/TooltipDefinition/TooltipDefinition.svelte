@@ -25,13 +25,9 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  function hide() {
-    open = false;
-  }
+  const hide = () => (open = false);
 
-  function show() {
-    open = true;
-  }
+  const show = () => (open = true);
 </script>
 
 <svelte:window
