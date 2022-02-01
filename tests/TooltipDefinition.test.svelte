@@ -1,8 +1,13 @@
 <script lang="ts">
   import { TooltipDefinition } from "../types";
+
+  let open = false;
 </script>
 
 <TooltipDefinition
+  bind:open
+  on:open
+  on:close
   tooltipText="IBM Corporate Headquarters is based in Armonk, New York."
 >
   Armonk
