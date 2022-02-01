@@ -4679,10 +4679,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mousedown  | forwarded | --     |
+| Event name | Type       | Detail           |
+| :--------- | :--------- | :--------------- |
+| open       | dispatched | <code>any</code> |
+| close      | dispatched | <code>any</code> |
+| click      | forwarded  | --               |
+| mousedown  | forwarded  | --               |
 
 ## `TooltipDefinition`
 

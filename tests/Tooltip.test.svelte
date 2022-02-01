@@ -1,9 +1,11 @@
 <script lang="ts">
   import { Tooltip, Link, Button } from "../types";
   import Catalog16 from "carbon-icons-svelte/lib/Catalog16";
+
+  let open = true;
 </script>
 
-<Tooltip>
+<Tooltip bind:open on:open on:close>
   <p>Resources are provisioned based on your account's organization.</p>
 </Tooltip>
 

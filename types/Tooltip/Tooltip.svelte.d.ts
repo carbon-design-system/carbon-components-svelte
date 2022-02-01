@@ -91,6 +91,11 @@ export interface TooltipProps
 
 export default class Tooltip extends SvelteComponentTyped<
   TooltipProps,
-  { click: WindowEventMap["click"]; mousedown: WindowEventMap["mousedown"] },
+  {
+    open: CustomEvent<any>;
+    close: CustomEvent<any>;
+    click: WindowEventMap["click"];
+    mousedown: WindowEventMap["mousedown"];
+  },
   { default: {}; icon: {}; triggerText: {} }
 > {}
