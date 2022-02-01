@@ -46,6 +46,7 @@
 >
   <button
     bind:this="{ref}"
+    type="button"
     aria-describedby="{id}"
     class:bx--tooltip--a11y="{true}"
     class:bx--tooltip__trigger="{true}"
