@@ -1,4 +1,9 @@
 <script>
+  /**
+   * @event {any} open
+   * @event {any} close
+   */
+
   /** Specify the tooltip text */
   export let tooltipText = "";
 

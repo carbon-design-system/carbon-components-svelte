@@ -10,6 +10,12 @@ export interface TooltipDefinitionProps
   tooltipText?: string;
 
   /**
+   * Set to `true` to open the tooltip
+   * @default false
+   */
+  open?: boolean;
+
+  /**
    * Set the alignment of the tooltip relative to the icon
    * @default "center"
    */
@@ -37,6 +43,8 @@ export interface TooltipDefinitionProps
 export default class TooltipDefinition extends SvelteComponentTyped<
   TooltipDefinitionProps,
   {
+    open: CustomEvent<any>;
+    close: CustomEvent<any>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
