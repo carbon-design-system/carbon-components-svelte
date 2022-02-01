@@ -1,5 +1,10 @@
 <script>
   /**
+   * @event {any} open
+   * @event {any} close
+   */
+
+  /**
    * Set the alignment of the tooltip relative to the icon
    * @type {"start" | "center" | "end"}
    */
