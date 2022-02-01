@@ -3,6 +3,11 @@
   export let tooltipText = "";
 
   /**
+   * Set to `true` to open the tooltip
+   */
+  export let open = false;
+
+  /**
    * Set the alignment of the tooltip relative to the icon
    * @type {"start" | "center" | "end"}
    */
@@ -20,14 +25,12 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  let visible = false;
-
   function hide() {
-    visible = false;
+    open = false;
   }
 
   function show() {
-    visible = true;
+    open = true;
   }
 </script>
 
@@ -51,8 +54,8 @@
     class:bx--tooltip--a11y="{true}"
     class:bx--tooltip__trigger="{true}"
     class:bx--tooltip__trigger--definition="{true}"
-    class:bx--tooltip--hidden="{!visible}"
-    class:bx--tooltip--visible="{visible}"
+    class:bx--tooltip--hidden="{!open}"
+    class:bx--tooltip--visible="{open}"
     class:bx--tooltip--top="{direction === 'top'}"
     class:bx--tooltip--bottom="{direction === 'bottom'}"
     class:bx--tooltip--align-start="{align === 'start'}"
