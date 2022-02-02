@@ -155,7 +155,7 @@
       if (refSelectAll) refSelectAll.checked = false;
     },
     add: (id) => {
-      headerItems.update((_) => [..._, id]);
+      headerItems.update((_) => [id, ..._]);
     },
   });
 
