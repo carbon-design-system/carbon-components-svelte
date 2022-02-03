@@ -6,13 +6,13 @@
   export let size = undefined;
 
   /**
-   * Specify the input value
-   * @type {number | string}
+   * Specify the input value.
+   *
+   * `value` will be set to `null` if type="number"
+   * and the value is empty.
+   * @type {null | number | string}
    */
   export let value = "";
-
-  /** Specify the input type */
-  export let type = "";
 
   /** Specify the placeholder text */
   export let placeholder = "";
@@ -75,6 +75,9 @@
   $: isFluid = !!ctx && ctx.isFluid;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
+  $: if ($$restProps.type === "number" && value !== "") {
+    value = value === "" ? null : Number(value);
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -162,8 +165,7 @@
         id="{id}"
         name="{name}"
         placeholder="{placeholder}"
-        type="{type}"
-        value="{value ?? ''}"
+        bind:value
         required="{required}"
         readonly="{readonly}"
         class:bx--text-input="{true}"
@@ -174,9 +176,6 @@
         class="{size && `bx--text-input--${size}`}"
         on:change
         on:input
-        on:input="{({ target }) => {
-          value = type === 'number' ? Number(target.value) : target.value;
-        }}"
         on:keydown
         on:keyup
         on:focus
