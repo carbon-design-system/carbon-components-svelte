@@ -11764,12 +11764,20 @@
         }
       ],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "change",
+          "detail": "null | number | string"
+        },
+        {
+          "type": "dispatched",
+          "name": "input",
+          "detail": "null | number | string"
+        },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "forwarded", "name": "change", "element": "input" },
-        { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },

@@ -118,12 +118,12 @@ export interface TextInputProps
 export default class TextInput extends SvelteComponentTyped<
   TextInputProps,
   {
+    change: CustomEvent<null | number | string>;
+    input: CustomEvent<null | number | string>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    change: WindowEventMap["change"];
-    input: WindowEventMap["input"];
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
