@@ -1,8 +1,15 @@
 <script lang="ts">
   import { TextInput, TextInputSkeleton } from "../types";
+
+  let value = null;
 </script>
 
-<TextInput labelText="User name" placeholder="Enter user name..." />
+<TextInput
+  type="number"
+  labelText="User name"
+  placeholder="Enter user name..."
+  bind:value
+/>
 
 <TextInput
   labelText="User name"
