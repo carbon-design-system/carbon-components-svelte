@@ -1,5 +1,10 @@
 <script>
   /**
+   * @event {null | number | string} change
+   * @event {null | number | string} input
+   */
+
+  /**
    * Set the size of the input
    * @type {"sm" | "xl"}
    */
@@ -65,19 +70,33 @@
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
-  import { getContext } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   import WarningFilled16 from "../icons/WarningFilled16.svelte";
   import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
   import EditOff16 from "../icons/EditOff16.svelte";
 
   const ctx = getContext("Form");
+  const dispatch = createEventDispatcher();
+
+  function parse(raw) {
+    if ($$restProps.type !== "number") return raw;
+    return raw != "" ? Number(raw) : null;
+  }
+
+  /** @type {(e: Event) => void} */
+  const onInput = (e) => {
+    value = parse(e.target.value);
+    dispatch("input", value);
+  };
+
+  /** @type {(e: Event) => void} */
+  const onChange = (e) => {
+    dispatch("change", parse(e.target.value));
+  };
 
   $: isFluid = !!ctx && ctx.isFluid;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
-  $: if ($$restProps.type === "number") {
-    value = value !== "" && value !== null ? Number(value) : null;
-  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -174,8 +193,8 @@
         class:bx--text-input--warn="{warn}"
         {...$$restProps}
         class="{size && `bx--text-input--${size}`}"
-        on:change
-        on:input
+        on:change="{onChange}"
+        on:input="{onInput}"
         on:keydown
         on:keyup
         on:focus
