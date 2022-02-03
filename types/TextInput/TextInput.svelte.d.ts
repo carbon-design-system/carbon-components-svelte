@@ -10,16 +10,13 @@ export interface TextInputProps
   size?: "sm" | "xl";
 
   /**
-   * Specify the input value
+   * Specify the input value.
+   *
+   * `value` will be set to `null` if type="number"
+   * and the value is empty.
    * @default ""
    */
-  value?: number | string;
-
-  /**
-   * Specify the input type
-   * @default ""
-   */
-  type?: string;
+  value?: null | number | string;
 
   /**
    * Specify the placeholder text

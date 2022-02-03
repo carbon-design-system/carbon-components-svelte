@@ -11571,24 +11571,13 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the input value",
-          "type": "number | string",
+          "description": "Specify the input value.\n\n`value` will be set to `null` if type=\"number\"\nand the value is empty.",
+          "type": "null | number | string",
           "value": "\"\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": true
-        },
-        {
-          "name": "type",
-          "kind": "let",
-          "description": "Specify the input type",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": false
         },
         {
           "name": "placeholder",
