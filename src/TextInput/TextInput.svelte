@@ -75,8 +75,8 @@
   $: isFluid = !!ctx && ctx.isFluid;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
-  $: if ($$restProps.type === "number" && value !== "") {
-    value = value === "" ? null : Number(value);
+  $: if ($$restProps.type === "number") {
+    value = value !== "" && value !== null ? Number(value) : null;
   }
 </script>
 
