@@ -11,10 +11,6 @@
 
 <SkeletonText heading />
 
-### Heading variant
-
-<SkeletonText heading />
-
 ### Paragraph variant
 
 <SkeletonText paragraph />
