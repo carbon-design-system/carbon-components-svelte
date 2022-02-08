@@ -268,8 +268,7 @@
     </label>
   {/if}
   <ListBox
-    aria-label="{ariaLabel}"
-    id="{id}"
+    role="{undefined}"
     disabled="{disabled}"
     invalid="{invalid}"
     invalidText="{invalidText}"
@@ -470,10 +469,17 @@
       {/if}
     </ListBoxField>
     {#if open}
-      <ListBoxMenu aria-label="{ariaLabel}" id="{id}">
+      <ListBoxMenu
+        aria-label="{ariaLabel}"
+        id="{id}"
+        aria-multiselectable="true"
+      >
         {#each filterable ? filteredItems : sortedItems as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"
+            role="option"
+            aria-labelledby="checkbox-{item.id}"
+            aria-selected="{item.checked}"
             active="{item.checked}"
             highlighted="{highlightedIndex === i}"
             on:click="{() => {
