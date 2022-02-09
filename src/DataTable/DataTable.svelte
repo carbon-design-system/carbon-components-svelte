@@ -154,9 +154,6 @@
       selectedRowIds = [];
       if (refSelectAll) refSelectAll.checked = false;
     },
-    add: (id) => {
-      headerItems.update((_) => [..._, id]);
-    },
   });
 
   let expanded = false;
