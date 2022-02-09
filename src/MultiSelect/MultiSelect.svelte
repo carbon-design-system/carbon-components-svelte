@@ -20,6 +20,13 @@
   export let itemToString = (item) => item.text || item.id;
 
   /**
+   * Override the input name attribute of a multiselect item.
+   * Defaults to using the item id
+   * @type {(item: MultiSelectItem) => any}
+   */
+  export let itemToName = (item) => item.id;
+
+  /**
    * Set the selected ids
    * @type {MultiSelectItemId[]}
    */
@@ -491,7 +498,7 @@
               tabindex="-1"
               id="checkbox-{item.id}"
               title="{useTitleInItem ? itemToString(item) : undefined}"
-              name="{itemToString(item)}"
+              name="{itemToName(item)}"
               labelText="{itemToString(item)}"
               checked="{item.checked}"
               disabled="{disabled}"
