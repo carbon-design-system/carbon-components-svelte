@@ -6447,6 +6447,17 @@
           "reactive": false
         },
         {
+          "name": "itemToName",
+          "kind": "let",
+          "description": "Override the input name attribute of a multiselect item.\nDefaults to using the item id",
+          "type": "(item: MultiSelectItem) => any",
+          "value": "(item) => item.id",
+          "isFunction": true,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "selectedIds",
           "kind": "let",
           "description": "Set the selected ids",
