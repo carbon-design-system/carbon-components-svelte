@@ -2461,12 +2461,12 @@ None.
 
 | Event name | Type       | Detail                                                                                                         |
 | :--------- | :--------- | :------------------------------------------------------------------------------------------------------------- |
+| blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         |
 | select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
 | clear      | dispatched | <code>any</code>                                                                                               |
 | keydown    | forwarded  | --                                                                                                             |
 | keyup      | forwarded  | --                                                                                                             |
 | focus      | forwarded  | --                                                                                                             |
-| blur       | forwarded  | --                                                                                                             |
 
 ## `NotificationActionButton`
 
