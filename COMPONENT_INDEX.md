@@ -4167,27 +4167,26 @@ None.
 
 ### Props
 
-| Prop name   | Kind             | Reactive | Type                                      | Default value                                    | Description                                   |
-| :---------- | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | --------------------------------------------- |
-| ref         | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element  |
-| value       | <code>let</code> | Yes      | <code>number &#124; string</code>         | <code>""</code>                                  | Specify the input value                       |
-| size        | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>             | <code>undefined</code>                           | Set the size of the input                     |
-| type        | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the input type                        |
-| placeholder | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the placeholder text                  |
-| light       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant     |
-| disabled    | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the input            |
-| helperText  | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the helper text                       |
-| id          | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element               |
-| name        | <code>let</code> | No       | <code>string</code>                       | <code>undefined</code>                           | Specify a name attribute for the input        |
-| labelText   | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                        |
-| hideLabel   | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to visually hide the label text |
-| invalid     | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to indicate an invalid state    |
-| invalidText | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the invalid state text                |
-| warn        | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to indicate an warning state    |
-| warnText    | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the warning state text                |
-| required    | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to mark the field as required   |
-| inline      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to use the inline variant       |
-| readonly    | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to use the read-only variant    |
+| Prop name   | Kind             | Reactive | Type                                          | Default value                                    | Description                                                                                                     |
+| :---------- | :--------------- | :------- | :-------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| ref         | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>     | <code>null</code>                                | Obtain a reference to the input HTML element                                                                    |
+| value       | <code>let</code> | Yes      | <code>null &#124; number &#124; string</code> | <code>""</code>                                  | Specify the input value.<br /><br />`value` will be set to `null` if type="number"<br />and the value is empty. |
+| size        | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                 | <code>undefined</code>                           | Set the size of the input                                                                                       |
+| placeholder | <code>let</code> | No       | <code>string</code>                           | <code>""</code>                                  | Specify the placeholder text                                                                                    |
+| light       | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to enable the light variant                                                                       |
+| disabled    | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to disable the input                                                                              |
+| helperText  | <code>let</code> | No       | <code>string</code>                           | <code>""</code>                                  | Specify the helper text                                                                                         |
+| id          | <code>let</code> | No       | <code>string</code>                           | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                                                                 |
+| name        | <code>let</code> | No       | <code>string</code>                           | <code>undefined</code>                           | Specify a name attribute for the input                                                                          |
+| labelText   | <code>let</code> | No       | <code>string</code>                           | <code>""</code>                                  | Specify the label text                                                                                          |
+| hideLabel   | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to visually hide the label text                                                                   |
+| invalid     | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to indicate an invalid state                                                                      |
+| invalidText | <code>let</code> | No       | <code>string</code>                           | <code>""</code>                                  | Specify the invalid state text                                                                                  |
+| warn        | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to indicate an warning state                                                                      |
+| warnText    | <code>let</code> | No       | <code>string</code>                           | <code>""</code>                                  | Specify the warning state text                                                                                  |
+| required    | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to mark the field as required                                                                     |
+| inline      | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to use the inline variant                                                                         |
+| readonly    | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to use the read-only variant                                                                      |
 
 ### Slots
 
@@ -4197,18 +4196,18 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| keydown    | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
+| Event name | Type       | Detail                                        |
+| :--------- | :--------- | :-------------------------------------------- |
+| change     | dispatched | <code>null &#124; number &#124; string</code> |
+| input      | dispatched | <code>null &#124; number &#124; string</code> |
+| click      | forwarded  | --                                            |
+| mouseover  | forwarded  | --                                            |
+| mouseenter | forwarded  | --                                            |
+| mouseleave | forwarded  | --                                            |
+| keydown    | forwarded  | --                                            |
+| keyup      | forwarded  | --                                            |
+| focus      | forwarded  | --                                            |
+| blur       | forwarded  | --                                            |
 
 ## `TextInputSkeleton`
 

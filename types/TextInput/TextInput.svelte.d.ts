@@ -10,16 +10,13 @@ export interface TextInputProps
   size?: "sm" | "xl";
 
   /**
-   * Specify the input value
+   * Specify the input value.
+   *
+   * `value` will be set to `null` if type="number"
+   * and the value is empty.
    * @default ""
    */
-  value?: number | string;
-
-  /**
-   * Specify the input type
-   * @default ""
-   */
-  type?: string;
+  value?: null | number | string;
 
   /**
    * Specify the placeholder text
@@ -121,12 +118,12 @@ export interface TextInputProps
 export default class TextInput extends SvelteComponentTyped<
   TextInputProps,
   {
+    change: CustomEvent<null | number | string>;
+    input: CustomEvent<null | number | string>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    change: WindowEventMap["change"];
-    input: WindowEventMap["input"];
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
