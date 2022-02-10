@@ -48,6 +48,7 @@
 />
 
 <li
+  role="none"
   class:bx--header__submenu="{true}"
   class:bx--header__submenu--current="{isCurrentSubmenu}"
   on:click="{(e) => {
@@ -65,6 +66,7 @@
 >
   <a
     bind:this="{ref}"
+    role="menuitem"
     tabindex="0"
     aria-haspopup="menu"
     aria-expanded="{expanded}"

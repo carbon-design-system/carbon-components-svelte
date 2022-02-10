@@ -26,7 +26,7 @@
   $: updateSelectedItems({ id, isSelected });
 </script>
 
-<li>
+<li role="none">
   <a
     bind:this="{ref}"
     role="menuitem"
