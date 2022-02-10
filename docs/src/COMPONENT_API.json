@@ -6447,11 +6447,11 @@
           "reactive": false
         },
         {
-          "name": "itemToName",
+          "name": "itemToInput",
           "kind": "let",
-          "description": "Override the input name attribute of a multiselect item.\nDefaults to using the item id",
-          "type": "(item: MultiSelectItem) => any",
-          "value": "(item) => item.id",
+          "description": "Override the item name, title, labelText passed to the checkbox input",
+          "type": "(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; }",
+          "value": "(item) => {}",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "constant": false,
