@@ -14,10 +14,6 @@
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
-  export function toggle() {
-    expanded = !expanded;
-  }
-
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown16 from "../../icons/ChevronDown16.svelte";
@@ -52,6 +48,7 @@
 />
 
 <li
+  role="none"
   class:bx--header__submenu="{true}"
   class:bx--header__submenu--current="{isCurrentSubmenu}"
   on:click="{(e) => {
@@ -69,6 +66,7 @@
 >
   <a
     bind:this="{ref}"
+    role="menuitem"
     tabindex="0"
     aria-haspopup="menu"
     aria-expanded="{expanded}"

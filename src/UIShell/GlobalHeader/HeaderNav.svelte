@@ -13,7 +13,7 @@
 </script>
 
 <nav {...props} class:bx--header__nav="{true}" {...$$restProps}>
-  <ul {...props} class:bx--header__menu-bar="{true}">
+  <ul {...props} role="menubar" class:bx--header__menu-bar="{true}">
     <slot />
   </ul>
 </nav>
