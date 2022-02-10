@@ -6447,6 +6447,17 @@
           "reactive": false
         },
         {
+          "name": "itemToInput",
+          "kind": "let",
+          "description": "Override the item name, title, labelText passed to the checkbox input",
+          "type": "(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; }",
+          "value": "(item) => {}",
+          "isFunction": true,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "selectedIds",
           "kind": "let",
           "description": "Set the selected ids",

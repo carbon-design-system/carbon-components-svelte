@@ -25,6 +25,16 @@ export interface MultiSelectProps
   itemToString?: (item: MultiSelectItem) => any;
 
   /**
+   * Override the item name, title, labelText passed to the checkbox input
+   * @default (item) => {}
+   */
+  itemToInput?: (item: MultiSelectItem) => {
+    name?: string;
+    labelText?: any;
+    title?: string;
+  };
+
+  /**
    * Set the selected ids
    * @default []
    */
