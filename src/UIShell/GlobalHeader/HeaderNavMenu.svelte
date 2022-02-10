@@ -14,10 +14,6 @@
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
-  export function toggle() {
-    expanded = !expanded;
-  }
-
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown16 from "../../icons/ChevronDown16.svelte";
