@@ -1,14 +1,28 @@
 name: CI
-on: [pull_request]
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
       - name: Install dependencies and build the library
         run: |
           yarn
           yarn build:api
           yarn build:lib
+
       - name: Run unit tests and validate TypeScript definitions
         run: yarn test
