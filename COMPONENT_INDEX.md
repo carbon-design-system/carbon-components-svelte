@@ -4692,6 +4692,7 @@ None.
 | Prop name   | Kind             | Reactive | Type                                              | Default value                                    | Description                                           |
 | :---------- | :--------------- | :------- | :------------------------------------------------ | ------------------------------------------------ | ----------------------------------------------------- |
 | ref         | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>        | <code>null</code>                                | Obtain a reference to the button HTML element         |
+| open        | <code>let</code> | Yes      | <code>boolean</code>                              | <code>false</code>                               | Set to `true` to open the tooltip                     |
 | tooltipText | <code>let</code> | No       | <code>string</code>                               | <code>""</code>                                  | Specify the tooltip text                              |
 | align       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code> | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon |
 | direction   | <code>let</code> | No       | <code>"top" &#124; "bottom"</code>                | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the icon |
@@ -4706,13 +4707,15 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| focus      | forwarded | --     |
+| Event name | Type       | Detail           |
+| :--------- | :--------- | :--------------- |
+| open       | dispatched | <code>any</code> |
+| close      | dispatched | <code>any</code> |
+| click      | forwarded  | --               |
+| mouseover  | forwarded  | --               |
+| mouseenter | forwarded  | --               |
+| mouseleave | forwarded  | --               |
+| focus      | forwarded  | --               |
 
 ## `TooltipFooter`
 

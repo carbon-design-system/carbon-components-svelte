@@ -1,6 +1,16 @@
 <script>
+  /**
+   * @event {any} open
+   * @event {any} close
+   */
+
   /** Specify the tooltip text */
   export let tooltipText = "";
+
+  /**
+   * Set to `true` to open the tooltip
+   */
+  export let open = false;
 
   /**
    * Set the alignment of the tooltip relative to the icon
@@ -20,15 +30,15 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  let visible = false;
+  import { createEventDispatcher } from "svelte";
 
-  function hide() {
-    visible = false;
-  }
+  const dispatch = createEventDispatcher();
 
-  function show() {
-    visible = true;
-  }
+  const hide = () => (open = false);
+
+  const show = () => (open = true);
+
+  $: dispatch(open ? "open" : "close");
 </script>
 
 <svelte:window
@@ -51,8 +61,8 @@
     class:bx--tooltip--a11y="{true}"
     class:bx--tooltip__trigger="{true}"
     class:bx--tooltip__trigger--definition="{true}"
-    class:bx--tooltip--hidden="{!visible}"
-    class:bx--tooltip--visible="{visible}"
+    class:bx--tooltip--hidden="{!open}"
+    class:bx--tooltip--visible="{open}"
     class:bx--tooltip--top="{direction === 'top'}"
     class:bx--tooltip--bottom="{direction === 'bottom'}"
     class:bx--tooltip--align-start="{align === 'start'}"
