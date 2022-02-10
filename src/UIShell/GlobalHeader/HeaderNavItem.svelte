@@ -20,9 +20,10 @@
   import { getContext } from "svelte";
 
   const id = "ccs-" + Math.random().toString(36);
-  const ctx = getContext("HeaderNavMenu");
+  const { selectedItems, updateSelectedItems, closeMenu } =
+    getContext("HeaderNavMenu");
 
-  $: if (ctx) ctx.updateSelectedItems({ id, isSelected });
+  $: updateSelectedItems({ id, isSelected });
 </script>
 
 <li>
@@ -43,6 +44,10 @@
     on:keydown
     on:focus
     on:blur
+    on:blur="{() => {
+      const ids = Object.keys($selectedItems);
+      if (ids.indexOf(id) === ids.length - 1) closeMenu();
+    }}"
   >
     <span class:bx--text-truncate--end="{true}">{text}</span>
   </a>

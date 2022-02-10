@@ -14,18 +14,28 @@
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
+  export function toggle() {
+    expanded = !expanded;
+  }
+
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown16 from "../../icons/ChevronDown16.svelte";
 
   const selectedItems = writable({});
 
+  let menuRef = null;
+
   setContext("HeaderNavMenu", {
+    selectedItems,
     updateSelectedItems(item) {
       selectedItems.update((_items) => ({
         ..._items,
         [item.id]: item.isSelected,
       }));
+    },
+    closeMenu() {
+      expanded = false;
     },
   });
 
@@ -34,13 +44,9 @@
 </script>
 
 <svelte:window
-  on:mouseup="{({ target }) => {
-    if (ref.contains(target) || target === ref) {
-      expanded = !expanded;
-    } else {
-      if (expanded) {
-        expanded = false;
-      }
+  on:click="{({ target }) => {
+    if (!ref.contains(target)) {
+      expanded = false;
     }
   }}"
 />
@@ -48,10 +54,21 @@
 <li
   class:bx--header__submenu="{true}"
   class:bx--header__submenu--current="{isCurrentSubmenu}"
+  on:click="{(e) => {
+    if (!menuRef.contains(e.target)) {
+      e.preventDefault();
+    }
+    expanded = !expanded;
+  }}"
+  on:keydown="{(e) => {
+    if (e.key === 'Enter') {
+      e.stopPropagation();
+      expanded = !expanded;
+    }
+  }}"
 >
   <a
     bind:this="{ref}"
-    role="menuitem"
     tabindex="0"
     aria-haspopup="menu"
     aria-expanded="{expanded}"
@@ -62,8 +79,8 @@
     {...$$restProps}
     style="{$$restProps.style}; z-index: 1"
     on:keydown
-    on:keydown="{({ key }) => {
-      if (key === 'Enter') {
+    on:keydown="{(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
         expanded = !expanded;
       }
     }}"
@@ -78,7 +95,12 @@
     {text}
     <ChevronDown16 class="bx--header__menu-arrow" />
   </a>
-  <ul role="menu" aria-label="{text}" class:bx--header__menu="{true}">
+  <ul
+    bind:this="{menuRef}"
+    role="menu"
+    aria-label="{text}"
+    class:bx--header__menu="{true}"
+  >
     <slot />
   </ul>
 </li>
