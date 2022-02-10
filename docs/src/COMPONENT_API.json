@@ -6778,14 +6778,18 @@
       "events": [
         {
           "type": "dispatched",
+          "name": "blur",
+          "detail": "FocusEvent | CustomEvent<FocusEvent>"
+        },
+        {
+          "type": "dispatched",
           "name": "select",
           "detail": "{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }"
         },
         { "type": "dispatched", "name": "clear", "detail": "any" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
-        { "type": "forwarded", "name": "focus", "element": "input" },
-        { "type": "forwarded", "name": "blur", "element": "input" }
+        { "type": "forwarded", "name": "focus", "element": "input" }
       ],
       "typedefs": [
         {

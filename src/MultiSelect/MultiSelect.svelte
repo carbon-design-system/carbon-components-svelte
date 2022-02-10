@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {FocusEvent | CustomEvent<FocusEvent>} blur
+   */
+
+  /**
    * @typedef {any} MultiSelectItemId
    * @typedef {string} MultiSelectItemText
    * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
@@ -336,6 +340,9 @@
           open = true;
           if (inputRef) inputRef.focus();
         }
+      }}"
+      on:blur="{(e) => {
+        if (!filterable) dispatch('blur', e);
       }}"
       id="{id}"
       disabled="{disabled}"

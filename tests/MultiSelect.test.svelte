@@ -17,6 +17,9 @@
     console.log(e.detail.selected);
     console.log(e.detail.unselected);
   }}"
+  on:blur="{(e) => {
+    e.detail; // number | FocusEvent
+  }}"
 />
 
 <MultiSelect
