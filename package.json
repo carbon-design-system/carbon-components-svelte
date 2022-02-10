@@ -29,7 +29,7 @@
     "@rollup/plugin-node-resolve": "^11.1.1",
     "@tsconfig/svelte": "^1.0.10",
     "autoprefixer": "^10.2.4",
-    "carbon-components": "10.51.0",
+    "carbon-components": "10.52.0",
     "carbon-components-10.47": "npm:carbon-components@10.47",
     "carbon-icons-svelte": "^10.38.0",
     "husky": "^4.3.8",
