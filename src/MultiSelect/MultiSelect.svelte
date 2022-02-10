@@ -337,16 +337,6 @@
           if (inputRef) inputRef.focus();
         }
       }}"
-      on:blur="{({ relatedTarget }) => {
-        if (
-          relatedTarget &&
-          !['INPUT', 'SELECT', 'TEXTAREA'].includes(relatedTarget.tagName) &&
-          relatedTarget.getAttribute('role') !== 'button' &&
-          relatedTarget.getAttribute('role') !== 'searchbox'
-        ) {
-          fieldRef.focus();
-        }
-      }}"
       id="{id}"
       disabled="{disabled}"
       translateWithId="{translateWithId}"
@@ -421,18 +411,6 @@
           on:keyup
           on:focus
           on:blur
-          on:blur="{({ relatedTarget }) => {
-            if (
-              relatedTarget &&
-              !['INPUT', 'SELECT', 'TEXTAREA'].includes(
-                relatedTarget.tagName
-              ) &&
-              relatedTarget.getAttribute('role') !== 'button' &&
-              relatedTarget.getAttribute('role') !== 'searchbox'
-            ) {
-              inputRef.focus();
-            }
-          }}"
           disabled="{disabled}"
           placeholder="{placeholder}"
           id="{id}"
