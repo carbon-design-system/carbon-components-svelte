@@ -17,13 +17,24 @@
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
 
   const id = "ccs-" + Math.random().toString(36);
-  const { selectedItems, updateSelectedItems, closeMenu } =
-    getContext("HeaderNavMenu");
+  const ctx = getContext("HeaderNavMenu");
 
-  $: updateSelectedItems({ id, isSelected });
+  let selectedItemIds = [];
+
+  const unsubSelectedItems = ctx?.selectedItems.subscribe((_selectedItems) => {
+    selectedItemIds = Object.keys(_selectedItems);
+  });
+
+  $: ctx?.updateSelectedItems({ id, isSelected });
+
+  onMount(() => {
+    return () => {
+      if (unsubSelectedItems) unsubSelectedItems();
+    };
+  });
 </script>
 
 <li role="none">
@@ -45,8 +56,9 @@
     on:focus
     on:blur
     on:blur="{() => {
-      const ids = Object.keys($selectedItems);
-      if (ids.indexOf(id) === ids.length - 1) closeMenu();
+      if (selectedItemIds.indexOf(id) === selectedItemIds.length - 1) {
+        ctx?.closeMenu();
+      }
     }}"
   >
     <span class:bx--text-truncate--end="{true}">{text}</span>
