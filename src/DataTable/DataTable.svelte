@@ -136,7 +136,7 @@
   const headerItems = writable([]);
   const thKeys = derived(headerItems, () =>
     headers
-      .map(({ key }, i) => ({ key, id: $headerItems[i] }))
+      .map(({ key }, i) => ({ key, id: key }))
       .reduce((a, c) => ({ ...a, [c.key]: c.id }), {})
   );
   const resolvePath = (object, path) =>
@@ -153,9 +153,6 @@
       selectAll = false;
       selectedRowIds = [];
       if (refSelectAll) refSelectAll.checked = false;
-    },
-    add: (id) => {
-      headerItems.update((_) => [..._, id]);
     },
   });
 

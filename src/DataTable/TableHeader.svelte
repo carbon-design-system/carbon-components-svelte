@@ -18,9 +18,7 @@
   import ArrowUp20 from "../icons/ArrowUp20.svelte";
   import ArrowsVertical20 from "../icons/ArrowsVertical20.svelte";
 
-  const { sortHeader, tableSortable, add } = getContext("DataTable");
-
-  add(id);
+  const { sortHeader, tableSortable } = getContext("DataTable");
 
   $: active = $sortHeader.id === id;
   // TODO: translate with id
