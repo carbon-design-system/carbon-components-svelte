@@ -45,7 +45,7 @@
 
 <div
   bind:this="{ref}"
-  role="{ariaExpanded ? 'combobox' : role}"
+  role="{role}"
   aria-expanded="{ariaExpanded}"
   aria-owns="{(ariaExpanded && menuId) || undefined}"
   aria-controls="{(ariaExpanded && menuId) || undefined}"
