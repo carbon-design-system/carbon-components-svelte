@@ -180,7 +180,12 @@ export default class DataTable extends SvelteComponentTyped<
   },
   {
     default: {};
-    cell: { row: DataTableRow; cell: DataTableCell };
+    cell: {
+      row: DataTableRow;
+      cell: DataTableCell;
+      rowIndex: number;
+      cellIndex: number;
+    };
     ["cell-header"]: { header: DataTableNonEmptyHeader };
     description: {};
     ["expanded-row"]: { row: DataTableRow };

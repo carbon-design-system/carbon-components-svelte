@@ -2429,7 +2429,7 @@
           "name": "cell",
           "default": false,
           "fallback": "{cell.display ? cell.display(cell.value) : cell.value}",
-          "slot_props": "{ row: DataTableRow; cell: DataTableCell; }"
+          "slot_props": "{ row: DataTableRow; cell: DataTableCell; rowIndex: number; cellIndex: number; }"
         },
         {
           "name": "cell-header",
