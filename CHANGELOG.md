@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.58.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.58.0) - 2022-02-11
+
+**Breaking Changes**
+
+- if `TextInput` is `type="number"`, value can be a `number` or `null` to signify "no value"
+- `TextInput` dispatches instead of forwards `input`, `change` events (detail: `null | number | string`)
+
+**Features**
+
+- pass `rowIndex`, `cellIndex` to `DataTable` "cell" slot
+- add `itemToInput` prop to `MultiSelect` to customize name, title, labelText values
+- add `open` prop to `TooltipDefinition`; dispatch `open`, `close` events
+
+**Fixes**
+
+- `DataTable` headers should be reactive
+- `DataTable` batch selection checkbox should be reactive
+- `MultiSelect` should correctly lose focus
+- non-filterable `MultiSelect` should dispatch a `blur` event
+- resolve `MultiSelect` accessibility issues
+- toggle `HeaderNavMenu` when pressing "Enter" or "Space"
+- close `HeaderNavMenu` menu when pressing "Enter" on an item
+- resolve `HeaderNavMenu` accessibility issues
+- fix `TextInput` reactivity by using native `bind:value`
+
+**Documentation**
+
+- remove duplicate "Heading variant" example
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.52.0
+
 ## [0.57.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.57.1) - 2022-02-01
 
 **Fixes**
