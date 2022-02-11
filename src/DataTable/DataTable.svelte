@@ -164,7 +164,7 @@
     {}
   );
 
-  let selectAll = false;
+  $: selectAll = rows.length > 0 && selectedRowIds.length === rows.length;
   let refSelectAll = null;
 
   $: batchSelectedIds.set(selectedRowIds);
