@@ -5,23 +5,27 @@ export type DataTableKey = string;
 
 export type DataTableValue = any;
 
-export interface DataTableEmptyHeader {
-  key: DataTableKey;
+export interface DataTableEmptyHeader<Row extends DataTableRow = DataTableRow> {
+  key: keyof Row;
   empty: boolean;
   display?: (item: Value) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
 }
 
-export interface DataTableNonEmptyHeader {
-  key: DataTableKey;
+export interface DataTableNonEmptyHeader<
+  Row extends DataTableRow = DataTableRow
+> {
+  key: keyof Row;
   value: DataTableValue;
   display?: (item: Value) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
 }
 
-export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;
+export type DataTableHeader<Row extends DataTableRow = DataTableRow> =
+  | DataTableNonEmptyHeader<Row>
+  | DataTableEmptyHeader<Row>;
 
 export interface DataTableRow {
   id: any;
@@ -30,26 +34,26 @@ export interface DataTableRow {
 
 export type DataTableRowId = any;
 
-export interface DataTableCell {
-  key: DataTableKey;
+export interface DataTableCell<Row extends DataTableRow = DataTableRow> {
+  key: keyof Row;
   value: DataTableValue;
   display?: (item: Value) => DataTableValue;
 }
 
-export interface DataTableProps
+export interface DataTableProps<Row extends DataTableRow = DataTableRow>
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
    * Specify the data table headers
    * @default []
    */
-  headers?: DataTableHeader[];
+  headers?: DataTableHeader<Row>[];
 
   /**
    * Specify the rows the data table should render
    * keys defined in `headers` are used for the row ids
    * @default []
    */
-  rows?: DataTableRow[];
+  rows?: Row[];
 
   /**
    * Set the size of the data table
@@ -156,34 +160,36 @@ export interface DataTableProps
   page?: number;
 }
 
-export default class DataTable extends SvelteComponentTyped<
-  DataTableProps,
+export default class DataTable<
+  Row extends DataTableRow = DataTableRow
+> extends SvelteComponentTyped<
+  DataTableProps<Row>,
   {
     click: CustomEvent<{
-      header?: DataTableHeader;
-      row?: DataTableRow;
-      cell?: DataTableCell;
+      header?: DataTableHeader<Row>;
+      row?: Row;
+      cell?: DataTableCell<Row>;
     }>;
     ["click:header--expand"]: CustomEvent<{ expanded: boolean }>;
     ["click:header"]: CustomEvent<{
-      header: DataTableHeader;
+      header: DataTableHeader<Row>;
       sortDirection?: "ascending" | "descending" | "none";
     }>;
-    ["click:row"]: CustomEvent<DataTableRow>;
-    ["mouseenter:row"]: CustomEvent<DataTableRow>;
-    ["mouseleave:row"]: CustomEvent<DataTableRow>;
+    ["click:row"]: CustomEvent<Row>;
+    ["mouseenter:row"]: CustomEvent<Row>;
+    ["mouseleave:row"]: CustomEvent<Row>;
     ["click:row--expand"]: CustomEvent<{
       expanded: boolean;
-      row: DataTableRow;
+      row: Row;
     }>;
-    ["click:cell"]: CustomEvent<DataTableCell>;
+    ["click:cell"]: CustomEvent<DataTableCell<Row>>;
   },
   {
     default: {};
-    cell: { row: DataTableRow; cell: DataTableCell };
-    ["cell-header"]: { header: DataTableNonEmptyHeader };
+    cell: { row: Row; cell: DataTableCell<Row> };
+    ["cell-header"]: { header: DataTableNonEmptyHeader<Row> };
     description: {};
-    ["expanded-row"]: { row: DataTableRow };
+    ["expanded-row"]: { row: Row };
     title: {};
   }
 > {}
