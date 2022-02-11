@@ -78,6 +78,7 @@
     style="{$$restProps.style}; z-index: 1"
     on:keydown
     on:keydown="{(e) => {
+      if (e.key === ' ') e.preventDefault();
       if (e.key === 'Enter' || e.key === ' ') {
         expanded = !expanded;
       }
