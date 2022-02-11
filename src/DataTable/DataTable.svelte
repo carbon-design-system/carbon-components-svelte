@@ -10,7 +10,7 @@
    * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; }} DataTableCell
    * @slot {{ row: DataTableRow; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
-   * @slot {{ row: DataTableRow; cell: DataTableCell; }} cell
+   * @slot {{ row: DataTableRow; cell: DataTableCell; rowIndex: number; cellIndex: number; }} cell
    * @event {{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }} click
    * @event {{ expanded: boolean; }} click:header--expand
    * @event {{ header: DataTableHeader; sortDirection?: "ascending" | "descending" | "none" }} click:header
@@ -432,7 +432,13 @@
           {#each row.cells as cell, j (cell.key)}
             {#if headers[j].empty}
               <td class:bx--table-column-menu="{headers[j].columnMenu}">
-                <slot name="cell" row="{row}" cell="{cell}">
+                <slot
+                  name="cell"
+                  row="{row}"
+                  cell="{cell}"
+                  rowIndex="{i}"
+                  cellIndex="{j}"
+                >
                   {cell.display ? cell.display(cell.value) : cell.value}
                 </slot>
               </td>
@@ -443,7 +449,13 @@
                   dispatch('click:cell', cell);
                 }}"
               >
-                <slot name="cell" row="{row}" cell="{cell}">
+                <slot
+                  name="cell"
+                  row="{row}"
+                  cell="{cell}"
+                  rowIndex="{i}"
+                  cellIndex="{j}"
+                >
                   {cell.display ? cell.display(cell.value) : cell.value}
                 </slot>
               </TableCell>
