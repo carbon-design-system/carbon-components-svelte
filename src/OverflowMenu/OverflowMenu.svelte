@@ -80,26 +80,39 @@
 
   setContext("OverflowMenu", {
     focusedId,
-    add: ({ id, text, primaryFocus }) => {
+    add: ({ id, text, primaryFocus, disabled }) => {
       items.update((_) => {
         if (primaryFocus) {
           currentIndex.set(_.length);
         }
 
-        return [..._, { id, text, primaryFocus, index: _.length }];
+        return [..._, { id, text, primaryFocus, disabled, index: _.length }];
       });
     },
     update: (id) => {
       currentId.set(id);
     },
     change: (direction) => {
-      // TODO: skip disabled
       let index = $currentIndex + direction;
 
       if (index < 0) {
         index = $items.length - 1;
       } else if (index >= $items.length) {
         index = 0;
+      }
+
+      let disabled = $items[index].disabled;
+
+      while (disabled) {
+        index = index + direction;
+
+        if (index < 0) {
+          index = $items.length - 1;
+        } else if (index >= $items.length) {
+          index = 0;
+        }
+
+        disabled = $items[index].disabled;
       }
 
       currentIndex.set(index);

@@ -33,7 +33,7 @@
 
   const { focusedId, add, update, change } = getContext("OverflowMenu");
 
-  add({ id, text, primaryFocus });
+  add({ id, text, primaryFocus, disabled });
 
   afterUpdate(() => {
     if (ref && primaryFocus) {
