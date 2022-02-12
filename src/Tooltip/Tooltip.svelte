@@ -172,7 +172,7 @@
     "aria-expanded": open,
     "aria-describedby": open ? tooltipId : undefined,
     "aria-labelledby": triggerText ? triggerId : undefined,
-    "aria-label": triggerText ? iconDescription : undefined,
+    "aria-label": triggerText ? undefined : iconDescription,
     tabindex,
     style: hideIcon ? $$restProps.style : undefined,
   };
