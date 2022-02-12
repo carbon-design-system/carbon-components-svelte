@@ -1,14 +1,14 @@
 <script lang="ts">
   import { Breakpoint } from "../types";
-  import type { BreakpointSize } from "../types/Breakpoint/Breakpoint.svelte";
+  import type { BreakpointProps } from "../types/Breakpoint/Breakpoint.svelte";
 
-  let size: BreakpointSize;
+  let size: BreakpointProps["size"];
 </script>
 
 <Breakpoint
   bind:size
   let:size="{currentSize}"
-  on:match="{(e) => {
+  on:change="{(e) => {
     console.log(e.detail);
   }}"
 >
