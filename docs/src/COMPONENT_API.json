@@ -387,17 +387,6 @@
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": true
-        },
-        {
-          "name": "breakpoints",
-          "kind": "const",
-          "description": "Reference the Carbon grid breakpoints",
-          "type": "Record<BreakpointSize, BreakpointValue>",
-          "value": "{     sm: 320,     md: 672,     lg: 1056,     xlg: 1312,     max: 1584,   }",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": true,
-          "reactive": false
         }
       ],
       "slots": [
@@ -410,22 +399,11 @@
       "events": [
         {
           "type": "dispatched",
-          "name": "match",
+          "name": "change",
           "detail": "{ size: BreakpointSize; breakpointValue: BreakpointValue; }"
         }
       ],
-      "typedefs": [
-        {
-          "type": "\"sm\" | \"md\" | \"lg\" | \"xlg\" | \"max\"",
-          "name": "BreakpointSize",
-          "ts": "type BreakpointSize = \"sm\" | \"md\" | \"lg\" | \"xlg\" | \"max\""
-        },
-        {
-          "type": "320 | 672 | 1056 | 1312 | 1584",
-          "name": "BreakpointValue",
-          "ts": "type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584"
-        }
-      ]
+      "typedefs": []
     },
     {
       "moduleName": "Button",
