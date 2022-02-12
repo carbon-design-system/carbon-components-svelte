@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.58.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.58.2) - 2022-02-12
+
+**Fixes**
+
+- `Tooltip` `aria-label` should use `iconDescription` if `triggerText` is falsy
+- `OverflowMenu` keyboard navigation should skip disabled items
+- UI Shell `HeaderPanelDivider` should use `hr` element to represent divider
+- `Button` should not set `aria-pressed` on icon-only, link buttons
+
 ## [0.58.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.58.1) - 2022-02-11
 
 **Fixes**
