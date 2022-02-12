@@ -1,22 +1,27 @@
-<li class="subject-divider">
-  <span>
-    <slot />
-  </span>
-</li>
+{#if $$slots.default}
+  <li>
+    <span>
+      <slot />
+    </span>
+  </li>
+{/if}
+<hr class:bx--switcher__item--divider="{true}" {...$$restProps} />
 
 <style>
-  .subject-divider {
-    color: #525252;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #525252;
-    margin: 32px 1rem 8px;
-  }
+  /**
+    * Carbon does not support a divider with a subject.
+    * We apply custom styles using the switcher subject divider
+    * from https://carbondesignsystem.com/ as a reference.
+    */
 
-  .subject-divider span {
+  li {
+    margin: 2rem 1rem 0;
+    color: #525252;
+  }
+  span {
     font-size: 0.75rem;
-    font-weight: 400;
-    line-height: 1rem;
-    letter-spacing: 0.32px;
+    line-height: 1.3;
+    letter-spacing: 0.02rem;
     color: #c6c6c6;
   }
 </style>
