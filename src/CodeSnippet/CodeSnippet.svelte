@@ -190,9 +190,7 @@
       class:bx--snippet-container="{true}"
       style="width: 100%; min-height: {minHeight}px; max-height: {maxHeight}"
     >
-      <pre bind:this="{ref}">
-        <code><slot>{code}</slot></code>
-      </pre>
+      <pre bind:this="{ref}"><code><slot>{code}</slot></code></pre>
     </div>
     {#if !hideCopyButton}
       <CopyButton
