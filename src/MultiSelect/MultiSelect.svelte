@@ -339,6 +339,8 @@
               return { ...item, checked: !item.checked };
             });
           }
+        } else if (key === 'Escape') {
+          open = false;
         }
       }}"
       on:focus="{() => {
