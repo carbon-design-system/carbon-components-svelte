@@ -315,9 +315,13 @@
           open = !open;
         }
       }}"
-      on:keydown="{({ key }) => {
+      on:keydown="{(e) => {
         if (filterable) {
           return;
+        }
+        const key = e.key;
+        if ([' ', 'ArrowUp', 'ArrowDown'].includes(key)) {
+          e.preventDefault();
         }
         if (key === ' ') {
           open = !open;
