@@ -41,6 +41,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   bind:this="{ref}"
+  type="button"
   role="tab"
   tabindex="{selected ? '0' : '-1'}"
   aria-selected="{selected}"
