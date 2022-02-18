@@ -46,6 +46,7 @@
   class:bx--structured-list--condensed="{condensed}"
   class:bx--structured-list--flush="{flush}"
   {...$$restProps}
+  style="overflow-y: visible; {$$restProps.style}"
   on:click
   on:mouseover
   on:mouseenter
