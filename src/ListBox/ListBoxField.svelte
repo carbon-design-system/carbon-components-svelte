@@ -60,7 +60,7 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:keydown|preventDefault|stopPropagation
+  on:keydown|stopPropagation
   on:focus
   on:blur
 >
