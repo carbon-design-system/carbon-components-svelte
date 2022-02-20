@@ -10,6 +10,12 @@ export interface FileUploaderProps
   status?: "uploading" | "edit" | "complete";
 
   /**
+   * Set to `true` to disable the file uploader
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
    * Specify the accepted file types
    * @default []
    */
