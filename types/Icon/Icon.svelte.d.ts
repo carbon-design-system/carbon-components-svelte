@@ -18,6 +18,10 @@ export interface IconProps
   skeleton?: boolean;
 }
 
+/**
+ * @deprecated This component is deprecated.
+ * Use icons from "carbon-icons-svelte" instead.
+ */
 export default class Icon extends SvelteComponentTyped<
   IconProps,
   {

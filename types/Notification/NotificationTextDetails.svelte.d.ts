@@ -27,6 +27,9 @@ export interface NotificationTextDetailsProps {
   caption?: string;
 }
 
+/**
+ * @deprecated This component is deprecated.
+ */
 export default class NotificationTextDetails extends SvelteComponentTyped<
   NotificationTextDetailsProps,
   {},

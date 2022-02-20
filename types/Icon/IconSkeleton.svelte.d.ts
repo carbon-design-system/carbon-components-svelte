@@ -10,6 +10,9 @@ export interface IconSkeletonProps
   size?: number;
 }
 
+/**
+ * @deprecated This component is deprecated.
+ */
 export default class IconSkeleton extends SvelteComponentTyped<
   IconSkeletonProps,
   {

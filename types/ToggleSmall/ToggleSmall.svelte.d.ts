@@ -46,6 +46,10 @@ export interface ToggleSmallProps
   name?: string;
 }
 
+/**
+ * @deprecated This component is deprecated.
+ * Use`<Toggle size="sm" />` instead.
+ */
 export default class ToggleSmall extends SvelteComponentTyped<
   ToggleSmallProps,
   {

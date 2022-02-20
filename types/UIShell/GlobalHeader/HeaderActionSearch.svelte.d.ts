@@ -9,6 +9,10 @@ export interface HeaderActionSearchProps {
   searchIsActive?: boolean;
 }
 
+/**
+ * @deprecated
+ * This component is deprecated. Use `HeaderSearch` instead.
+ */
 export default class HeaderActionSearch extends SvelteComponentTyped<
   HeaderActionSearchProps,
   {
