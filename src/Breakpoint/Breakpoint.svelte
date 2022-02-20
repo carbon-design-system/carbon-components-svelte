@@ -1,5 +1,7 @@
 <script>
   /**
+   * @typedef {"sm" | "md" | "lg" | "xlg" | "max"} BreakpointSize
+   * @typedef {320 | 672 | 1056 | 1312 | 1584} BreakpointValue
    * @event {{ size: BreakpointSize; breakpointValue: BreakpointValue; }} change
    * @slot {{ size: BreakpointSize; sizes: Record<BreakpointSize, boolean>; }}
    */

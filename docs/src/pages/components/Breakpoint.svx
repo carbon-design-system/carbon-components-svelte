@@ -22,6 +22,14 @@ This utility component uses the [Window.matchMedia API](https://developer.mozill
 
 Bind to the `size` prop to determine the current breakpoint size. Possible values include: `"sm" | "md" | "lg" | "xlg" | "max"`.
 
-The `"on:match"` event will fire only when a breakpoint change event occurs (e.g., the browser width is resized).
+The `"on:change"` event will fire when the size is initially determined and when a breakpoint change event occurs (e.g., the browser width is resized).
 
 <FileSource src="/framed/Breakpoint/Breakpoint" />
+
+### Store and Breakpoint Values
+
+As an alternative to the component, `breakpointObserver` can be used to get the current size as a Svelte store. The store has two additional functions which create derived stores that return a `boolean` indicating whether the size is smaller/larger than a certain breakpoint.
+
+There also exists a `breakpoints` dictionary mapping from `BreakpointSize` to `BreakpointValue`.
+
+<FileSource src="/framed/Breakpoint/BreakpointObserver" />

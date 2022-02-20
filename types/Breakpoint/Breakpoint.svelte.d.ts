@@ -1,6 +1,10 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
 
+export type BreakpointSize = "sm" | "md" | "lg" | "xlg" | "max";
+
+export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
+
 export interface BreakpointProps {
   /**
    * Determine the current Carbon grid breakpoint size

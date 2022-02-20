@@ -403,7 +403,18 @@
           "detail": "{ size: BreakpointSize; breakpointValue: BreakpointValue; }"
         }
       ],
-      "typedefs": []
+      "typedefs": [
+        {
+          "type": "\"sm\" | \"md\" | \"lg\" | \"xlg\" | \"max\"",
+          "name": "BreakpointSize",
+          "ts": "type BreakpointSize = \"sm\" | \"md\" | \"lg\" | \"xlg\" | \"max\""
+        },
+        {
+          "type": "320 | 672 | 1056 | 1312 | 1584",
+          "name": "BreakpointValue",
+          "ts": "type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584"
+        }
+      ]
     },
     {
       "moduleName": "Button",

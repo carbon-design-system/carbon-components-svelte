@@ -348,6 +348,14 @@ None.
 
 ## `Breakpoint`
 
+### Types
+
+```ts
+export type BreakpointSize = "sm" | "md" | "lg" | "xlg" | "max";
+
+export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
+```
+
 ### Props
 
 | Prop name | Kind             | Reactive | Type                                         | Default value                                                             | Description                                       |

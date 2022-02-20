@@ -53,19 +53,30 @@ export function breakpointObserver() {
 
   return {
     subscribe: store.subscribe,
+
     /**
      * Returns a store readable store that returns whether the current
-     * breakpoint smaller than {@link size}.
+     * breakpoint is smaller than {@link size}.
      * @param {BreakpointSize} size Size to compare against.
      */
-    smallerThan: (size) =>
-      derived(store, ($size) => breakpoints[$size] < breakpoints[size]),
+    smallerThan: (size) => {
+      checkSizeValid(size);
+      return derived(store, ($size) => breakpoints[$size] < breakpoints[size]);
+    },
+
     /**
      * Returns a store readable store that returns whether the current
-     * breakpoint larger than {@link size}.
+     * breakpoint is larger than {@link size}.
      * @param {BreakpointSize} size Size to compare against.
      */
-    largerThan: (size) =>
-      derived(store, ($size) => breakpoints[$size] > breakpoints[size]),
+    largerThan: (size) => {
+      checkSizeValid(size);
+      return derived(store, ($size) => breakpoints[$size] > breakpoints[size]);
+    },
   };
+}
+
+function checkSizeValid(size) {
+  if (size in breakpoints == false)
+    throw new Error(`"${size}" is not a valid breakpoint size.`);
 }
