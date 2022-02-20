@@ -138,7 +138,7 @@
       {/if}
     </div>
   {/if}
-  {#if !inline && labelText}
+  {#if !inline && (labelText || $$slots.labelText)}
     <label
       for="{id}"
       class:bx--label="{true}"
