@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.58.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.58.3) - 2022-02-20
+
+**Fixes**
+
+- correctly set deprecation comments for deprecated components
+- `TextInput` and `PasswordInput` should render label if "labelText" slot is used
+- `PasswordInput` should not render `label` if no `labelText` is provided
+- `StructuredList` overflow-y should not be "hidden"
+- `MultiSelect` should not prevent default key behavior when open
+- `Switch` should have `type="button"`
+
 ## [0.58.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.58.2) - 2022-02-12
 
 **Fixes**
