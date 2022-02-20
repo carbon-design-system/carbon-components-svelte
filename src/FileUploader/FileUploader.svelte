@@ -11,6 +11,9 @@
    */
   export let status = "uploading";
 
+  /** Set to `true` to disable the file uploader */
+  export let disabled = false;
+
   /**
    * Specify the accepted file types
    * @type {string[]}
@@ -99,9 +102,20 @@
   on:mouseenter
   on:mouseleave
 >
-  <p class:bx--file--label="{true}">{labelTitle}</p>
-  <p class:bx--label-description="{true}">{labelDescription}</p>
+  <p
+    class:bx--file--label="{true}"
+    class:bx--label-description--disabled="{disabled}"
+  >
+    {labelTitle}
+  </p>
+  <p
+    class:bx--label-description="{true}"
+    class:bx--label-description--disabled="{disabled}"
+  >
+    {labelDescription}
+  </p>
   <FileUploaderButton
+    disabled="{disabled}"
     disableLabelChanges
     labelText="{buttonLabel}"
     accept="{accept}"
