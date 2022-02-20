@@ -11422,6 +11422,16 @@
           "reactive": false
         },
         {
+          "name": "maxCount",
+          "kind": "let",
+          "description": "Specify the max character count",
+          "type": "number",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "light",
           "kind": "let",
           "description": "Set to `true` to enable the light variant",

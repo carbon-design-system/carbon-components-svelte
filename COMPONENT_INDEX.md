@@ -4113,6 +4113,7 @@ None.
 | placeholder | <code>let</code> | No       | <code>string</code>                          | <code>""</code>                                  | Specify the placeholder text                    |
 | cols        | <code>let</code> | No       | <code>number</code>                          | <code>50</code>                                  | Specify the number of cols                      |
 | rows        | <code>let</code> | No       | <code>number</code>                          | <code>4</code>                                   | Specify the number of rows                      |
+| maxCount    | <code>let</code> | No       | <code>number</code>                          | <code>undefined</code>                           | Specify the max character count                 |
 | light       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to enable the light variant       |
 | disabled    | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to disable the input              |
 | readonly    | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to use the read-only variant      |
