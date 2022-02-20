@@ -11,6 +11,14 @@ components: ["TextArea", "TextAreaSkeleton"]
 
 <TextArea labelText="App description" placeholder="Enter a description..." />
 
+### Maximum character count
+
+Specify the max character count using the `maxCount` prop. A character counter will be displayed to the right of the label.
+
+You can always use the native `maxlength` attribute if you'd prefer that a counter not be shown.
+
+<TextArea labelText="App description" placeholder="Enter a description..." maxCount={100} />
+
 ### With helper text
 
 <TextArea labelText="App description" helperText="A rich description helps us better recommend related products and services" placeholder="Enter a description..." />
