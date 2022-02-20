@@ -1,10 +1,4 @@
 <script>
-  /**
-   * @deprecated
-   * This component will be removed in version 1.0.0.
-   * Use `<Toggle size="sm" />` instead
-   */
-
   /** Set to `true` to toggle the checkbox input */
   export let toggled = false;
 
@@ -29,6 +23,11 @@
    */
   export let name = undefined;
 </script>
+
+<!-- @component
+@deprecated This component is deprecated.
+Use`<Toggle size="sm" />` instead.
+-->
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div

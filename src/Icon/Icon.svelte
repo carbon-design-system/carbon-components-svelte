@@ -1,11 +1,5 @@
 <script>
   /**
-   * @deprecated
-   * This component will be removed in version 1.0.0.
-   * Use icons from "carbon-icons-svelte" instead
-   */
-
-  /**
    * @extends {"./IconSkeleton.svelte"} IconSkeletonProps
    * @restProps {svg}
    */
@@ -21,6 +15,11 @@
 
   import IconSkeleton from "./IconSkeleton.svelte";
 </script>
+
+<!-- @component
+@deprecated This component is deprecated.
+Use icons from "carbon-icons-svelte" instead.
+-->
 
 {#if skeleton}
   <IconSkeleton

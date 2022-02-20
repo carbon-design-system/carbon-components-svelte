@@ -1,12 +1,11 @@
 <script>
-  /**
-   * @deprecated
-   * This component will be removed in version 1.0.0.
-   */
-
   /** Set the size of the icon */
   export let size = 16;
 </script>
+
+<!-- @component
+@deprecated This component is deprecated.
+-->
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div

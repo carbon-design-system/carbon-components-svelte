@@ -1,16 +1,15 @@
 <script>
-  /**
-   * @deprecated
-   * This component will be removed in version 1.0.0.
-   * Use `<ToggleSkeleton size="sm" />` instead
-   */
-
   /** Specify the label text */
   export let labelText = "";
 
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 </script>
+
+<!-- @component
+@deprecated This component is deprecated.
+Use`<ToggleSkeleton size="sm" />` instead.
+-->
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
