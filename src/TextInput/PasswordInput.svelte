@@ -128,7 +128,8 @@
         {helperText}
       </div>
     {/if}
-  {:else}
+  {/if}
+  {#if !inline && labelText}
     <label
       for="{id}"
       class:bx--label="{true}"
