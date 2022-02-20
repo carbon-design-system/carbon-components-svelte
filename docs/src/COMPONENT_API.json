@@ -4608,7 +4608,8 @@
         { "type": "dispatched", "name": "focusInputSearch" },
         { "type": "dispatched", "name": "focusOutInputSearch" }
       ],
-      "typedefs": []
+      "typedefs": [],
+      "componentComment": "\n@deprecated\nThis component is deprecated. Use `HeaderSearch` instead."
     },
     {
       "moduleName": "HeaderGlobalAction",
@@ -4991,7 +4992,8 @@
       "extends": {
         "interface": "IconSkeletonProps",
         "import": "\"./IconSkeleton.svelte\""
-      }
+      },
+      "componentComment": "\n@deprecated This component is deprecated.\nUse icons from \"carbon-icons-svelte\" instead."
     },
     {
       "moduleName": "IconSkeleton",
@@ -5017,7 +5019,8 @@
         { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "div" },
+      "componentComment": "\n@deprecated This component is deprecated."
     },
     {
       "moduleName": "ImageLoader",
@@ -6985,7 +6988,8 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
-      "typedefs": []
+      "typedefs": [],
+      "componentComment": "\n@deprecated This component is deprecated."
     },
     {
       "moduleName": "NumberInput",
@@ -12716,7 +12720,8 @@
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "div" },
+      "componentComment": "\n@deprecated This component is deprecated.\nUse`<Toggle size=\"sm\" />` instead."
     },
     {
       "moduleName": "ToggleSmallSkeleton",
@@ -12753,7 +12758,8 @@
         { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "div" },
+      "componentComment": "\n@deprecated This component is deprecated.\nUse`<ToggleSkeleton size=\"sm\" />` instead."
     },
     {
       "moduleName": "Toolbar",

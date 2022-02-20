@@ -16,6 +16,10 @@ export interface ToggleSmallSkeletonProps
   id?: string;
 }
 
+/**
+ * @deprecated This component is deprecated.
+ * Use`<ToggleSkeleton size="sm" />` instead.
+ */
 export default class ToggleSmallSkeleton extends SvelteComponentTyped<
   ToggleSmallSkeletonProps,
   {

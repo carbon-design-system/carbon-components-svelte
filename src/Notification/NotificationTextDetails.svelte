@@ -1,10 +1,5 @@
 <script>
   /**
-   * @deprecated
-   * This component will be removed in version 1.0.0.
-   */
-
-  /**
    * Set the type of notification
    * @type {"toast" | "inline"}
    */
@@ -19,6 +14,10 @@
   /** Specify the caption text */
   export let caption = "Caption";
 </script>
+
+<!-- @component
+@deprecated This component is deprecated.
+-->
 
 {#if notificationType === "toast"}
   <div class:bx--toast-notification__details="{true}">

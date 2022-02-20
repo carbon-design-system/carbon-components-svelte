@@ -1,11 +1,5 @@
 <script>
   /**
-   * @deprecated
-   * This component will be removed in version 1.0.0.
-   * Use `HeaderSearch` instead
-   */
-
-  /**
    * @event {{ action: "search"; textInput: string; }} inputSearch
    */
 
@@ -64,6 +58,10 @@
   }}"
 />
 
+<!-- @component
+@deprecated
+This component is deprecated. Use `HeaderSearch` instead.
+-->
 <div
   bind:this="{elTypeSearch}"
   role="search"
