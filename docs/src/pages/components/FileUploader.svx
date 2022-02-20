@@ -15,6 +15,10 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
+### File uploader (disabled state)
+
+<FileUploader disabled multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
+
 ### Item (uploading)
 
 <FileUploaderItem name="README.md" status="uploading" />
