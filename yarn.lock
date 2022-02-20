@@ -469,10 +469,10 @@ caniuse-lite@^1.0.30001181:
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
 
-carbon-components@10.52.0:
-  version "10.52.0"
-  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.52.0.tgz#07db35dddbc5f9e5042e8621a781e9cb96fce0fa"
-  integrity sha512-itiG52GdDGxGh4IyuIV7gsuQCE1LLD2FCTEp5bPGhF/Onn042QzGendjl+yE7kfUk3FVlWmHN216dh/mA2sdZg==
+carbon-components@10.53.0:
+  version "10.53.0"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.53.0.tgz#260d77550a6f33b6cf69e3e61ce0be8089308f48"
+  integrity sha512-w1my4Jm//CYeraDM002TT/rMULxDSJ8wG0MCWPHGXFF/9OPHVGWo9idbLppM3lCS/PMfl/gpLvfpUVedFr7Yfw==
   dependencies:
     "@carbon/telemetry" "0.0.0-alpha.6"
     flatpickr "4.6.1"
