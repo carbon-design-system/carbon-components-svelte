@@ -101,7 +101,7 @@
     }}"
   />
   <div class:bx--file-container="{true}">
-    {#each files as { name }, i (name)}
+    {#each files as { name }, i}
       <span class:bx--file__selected-file="{true}">
         <p class:bx--file-filename="{true}">{name}</p>
         <span class:bx--file__state-container="{true}">
