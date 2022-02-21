@@ -10,7 +10,7 @@
   export let accept = [];
 
   /**
-   * Obtain the uploaded file names
+   * Obtain a reference to the uploaded files
    * @type {File[]}
    */
   export let files = [];

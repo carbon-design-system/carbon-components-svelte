@@ -10,7 +10,7 @@ export interface FileUploaderButtonProps
   accept?: string[];
 
   /**
-   * Obtain the uploaded file names
+   * Obtain a reference to the uploaded files
    * @default []
    */
   files?: File[];

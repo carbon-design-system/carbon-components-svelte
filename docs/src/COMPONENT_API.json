@@ -3481,7 +3481,7 @@
         {
           "name": "files",
           "kind": "let",
-          "description": "Obtain the uploaded file names",
+          "description": "Obtain a reference to the uploaded files",
           "type": "File[]",
           "value": "[]",
           "isFunction": false,
@@ -3610,7 +3610,7 @@
         {
           "name": "files",
           "kind": "let",
-          "description": "Obtain the uploaded file names",
+          "description": "Obtain a reference to the uploaded files",
           "type": "File[]",
           "value": "[]",
           "isFunction": false,
