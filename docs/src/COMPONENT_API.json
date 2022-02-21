@@ -3503,7 +3503,7 @@
         {
           "name": "clearFiles",
           "kind": "const",
-          "description": "Override the default behavior of clearing the array of uploaded files",
+          "description": "Programmatically clear the uploaded files",
           "type": "() => void",
           "value": "() => {     files = [];   }",
           "isFunction": true,
