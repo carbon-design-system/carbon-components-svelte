@@ -3,7 +3,7 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
 ---
 
 <script>
-  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton } from "carbon-components-svelte";
+  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, UnorderedList, ListItem } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -14,6 +14,17 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
 ### File uploader
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
+
+### Clear files
+
+There are two ways to clear files in `FileUploader`:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem>programmatically using the <strong>clearFiles</strong> accessor</ListItem>
+  <ListItem>two-way binding by setting <strong>files</strong> to <strong>[]</strong></ListItem>
+</UnorderedList>
+
+<FileSource src="/framed/FileUploader/FileUploaderClearFiles" />
 
 ### File uploader (disabled state)
 
