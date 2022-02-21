@@ -18,7 +18,7 @@ export interface LocalStorageProps {
 export default class LocalStorage extends SvelteComponentTyped<
   LocalStorageProps,
   {
-    save: CustomEvent<any>;
+    save: CustomEvent<null>;
     update: CustomEvent<{ prevValue: any; value: any }>;
   },
   {}
