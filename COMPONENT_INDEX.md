@@ -1285,11 +1285,11 @@ None.
 | :--------- | :--------- | :------------------ |
 | add        | dispatched | <code>File[]</code> |
 | remove     | dispatched | <code>File[]</code> |
+| change     | dispatched | <code>File[]</code> |
 | click      | forwarded  | --                  |
 | mouseover  | forwarded  | --                  |
 | mouseenter | forwarded  | --                  |
 | mouseleave | forwarded  | --                  |
-| change     | forwarded  | --                  |
 | keydown    | forwarded  | --                  |
 
 ## `FileUploaderButton`
@@ -1318,11 +1318,11 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| keydown    | forwarded | --     |
-| change     | forwarded | --     |
-| click      | forwarded | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| change     | dispatched | <code>File[]</code> |
+| keydown    | forwarded  | --                  |
+| click      | forwarded  | --                  |
 
 ## `FileUploaderDropContainer`
 

@@ -69,11 +69,11 @@ export default class FileUploader extends SvelteComponentTyped<
   {
     add: CustomEvent<File[]>;
     remove: CustomEvent<File[]>;
+    change: CustomEvent<File[]>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    change: WindowEventMap["change"];
     keydown: WindowEventMap["keydown"];
   },
   {}
