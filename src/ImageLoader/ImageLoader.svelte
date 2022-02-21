@@ -1,7 +1,7 @@
 <script>
   /**
-   * @event {any} load
-   * @event {any} error
+   * @event {null} load
+   * @event {null} error
    */
 
   /**

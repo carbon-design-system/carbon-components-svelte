@@ -113,8 +113,8 @@ export interface SearchProps {
 export default class Search extends SvelteComponentTyped<
   SearchProps,
   {
-    expand: CustomEvent<any>;
-    collapse: CustomEvent<any>;
+    expand: CustomEvent<null>;
+    collapse: CustomEvent<null>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];

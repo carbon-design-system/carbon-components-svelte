@@ -13,6 +13,10 @@
   fadeIn
   ratio="16x9"
   src=""
-  on:load="{() => {}}"
-  on:error="{() => {}}"
+  on:load="{(e) => {
+    console.log(e.detail); // null
+  }}"
+  on:error="{(e) => {
+    console.log(e.detail); // null
+  }}"
 />

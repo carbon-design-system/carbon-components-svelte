@@ -1,7 +1,7 @@
 <script>
   /**
-   * @event {any} open
-   * @event {any} close
+   * @event {null} open
+   * @event {null} close
    */
 
   /** Specify the tooltip text */
