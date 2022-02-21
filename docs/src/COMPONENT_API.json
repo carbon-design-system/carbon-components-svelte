@@ -3582,15 +3582,11 @@
       "events": [
         { "type": "dispatched", "name": "add", "detail": "File[]" },
         { "type": "dispatched", "name": "remove", "detail": "File[]" },
+        { "type": "dispatched", "name": "change", "detail": "File[]" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "FileUploaderButton"
-        },
         { "type": "forwarded", "name": "keydown", "element": "Filename" }
       ],
       "typedefs": [],
@@ -3731,8 +3727,8 @@
         }
       ],
       "events": [
+        { "type": "dispatched", "name": "change", "detail": "File[]" },
         { "type": "forwarded", "name": "keydown", "element": "label" },
-        { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "click", "element": "input" }
       ],
       "typedefs": [],

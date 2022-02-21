@@ -73,8 +73,8 @@ export interface FileUploaderButtonProps
 export default class FileUploaderButton extends SvelteComponentTyped<
   FileUploaderButtonProps,
   {
+    change: CustomEvent<File[]>;
     keydown: WindowEventMap["keydown"];
-    change: WindowEventMap["change"];
     click: WindowEventMap["click"];
   },
   { labelText: {} }
