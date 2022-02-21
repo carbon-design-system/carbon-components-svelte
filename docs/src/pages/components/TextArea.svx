@@ -31,6 +31,10 @@ components: ["TextArea", "TextAreaSkeleton"]
 
 <TextArea invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
 
+### Warning state
+
+<TextArea warn warnText="It is recommended to enter a longer description" labelText="App description" placeholder="Enter a description..." />
+
 ### Disabled state
 
 <TextArea disabled labelText="App description" placeholder="Enter a description..." />
