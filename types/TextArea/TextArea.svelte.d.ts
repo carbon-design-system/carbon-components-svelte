@@ -28,6 +28,12 @@ export interface TextAreaProps
   rows?: number;
 
   /**
+   * Specify the max character count
+   * @default undefined
+   */
+  maxCount?: number;
+
+  /**
    * Set to `true` to enable the light variant
    * @default false
    */

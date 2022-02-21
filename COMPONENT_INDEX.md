@@ -1265,6 +1265,7 @@ None.
 | :--------------- | :----------------- | :------- | :----------------------------------------------------------------------------------------- | --------------------------------------- | ----------------------------------------------------------- |
 | files            | <code>let</code>   | Yes      | <code>File[]</code>                                                                        | <code>[]</code>                         | Obtain a reference to the uploaded files                    |
 | status           | <code>let</code>   | No       | <code>"uploading" &#124; "edit" &#124; "complete"</code>                                   | <code>"uploading"</code>                | Specify the file uploader status                            |
+| disabled         | <code>let</code>   | No       | <code>boolean</code>                                                                       | <code>false</code>                      | Set to `true` to disable the file uploader                  |
 | accept           | <code>let</code>   | No       | <code>string[]</code>                                                                      | <code>[]</code>                         | Specify the accepted file types                             |
 | multiple         | <code>let</code>   | No       | <code>boolean</code>                                                                       | <code>false</code>                      | Set to `true` to allow multiple files                       |
 | clearFiles       | <code>const</code> | No       | <code>() => void</code>                                                                    | <code>() => { files = []; }</code>      | Programmatically clear the uploaded files                   |
@@ -4113,6 +4114,7 @@ None.
 | placeholder | <code>let</code> | No       | <code>string</code>                          | <code>""</code>                                  | Specify the placeholder text                    |
 | cols        | <code>let</code> | No       | <code>number</code>                          | <code>50</code>                                  | Specify the number of cols                      |
 | rows        | <code>let</code> | No       | <code>number</code>                          | <code>4</code>                                   | Specify the number of rows                      |
+| maxCount    | <code>let</code> | No       | <code>number</code>                          | <code>undefined</code>                           | Specify the max character count                 |
 | light       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to enable the light variant       |
 | disabled    | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to disable the input              |
 | readonly    | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to use the read-only variant      |

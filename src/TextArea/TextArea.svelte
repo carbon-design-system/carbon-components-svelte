@@ -11,6 +11,12 @@
   /** Specify the number of rows */
   export let rows = 4;
 
+  /**
+   * Specify the max character count
+   * @type {number}
+   */
+  export let maxCount = undefined;
+
   /** Set to `true` to enable the light variant */
   export let light = false;
 
@@ -61,16 +67,23 @@
   class:bx--form-item="{true}"
 >
   {#if (labelText || $$slots.labelText) && !hideLabel}
-    <label
-      for="{id}"
-      class:bx--label="{true}"
-      class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}"
-    >
-      <slot name="labelText">
-        {labelText}
-      </slot>
-    </label>
+    <div class:bx--text-area__label-wrapper="{true}">
+      <label
+        for="{id}"
+        class:bx--label="{true}"
+        class:bx--visually-hidden="{hideLabel}"
+        class:bx--label--disabled="{disabled}"
+      >
+        <slot name="labelText">
+          {labelText}
+        </slot>
+      </label>
+      {#if maxCount}
+        <div class:bx--label="{true}" class:bx--label--disabled="{disabled}">
+          {value.length}/{maxCount}
+        </div>
+      {/if}
+    </div>
   {/if}
   <div
     class:bx--text-area__wrapper="{true}"
@@ -94,6 +107,7 @@
       class:bx--text-area="{true}"
       class:bx--text-area--light="{light}"
       class:bx--text-area--invalid="{invalid}"
+      maxlength="{maxCount ?? undefined}"
       {...$$restProps}
       on:change
       on:input
