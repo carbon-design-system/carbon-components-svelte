@@ -9,6 +9,12 @@
    */
   export let accept = [];
 
+  /**
+   * Obtain a reference to the uploaded files
+   * @type {File[]}
+   */
+  export let files = [];
+
   /** Set to `true` to allow multiple files */
   export let multiple = false;
 
@@ -45,6 +51,13 @@
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
+
+  let initialLabelText = labelText;
+
+  $: if (ref && files.length === 0) {
+    labelText = initialLabelText;
+    ref.value = null;
+  }
 </script>
 
 <label
@@ -80,13 +93,13 @@
   class:bx--visually-hidden="{true}"
   {...$$restProps}
   on:change|stopPropagation="{({ target }) => {
-    const files = target.files;
-    const length = files.length;
+    files = [...target.files];
+
     if (files && !disableLabelChanges) {
-      labelText = length > 1 ? `${length} files` : files[0].name;
+      labelText = files.length > 1 ? `${files.length} files` : files[0].name;
     }
 
-    dispatch('change', [...files]);
+    dispatch('change', files);
   }}"
   on:click
   on:click="{({ target }) => {
