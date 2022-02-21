@@ -27,7 +27,7 @@
   export let multiple = false;
 
   /**
-   * Override the default behavior of clearing the array of uploaded files
+   * Programmatically clear the uploaded files
    * @type {() => void}
    */
   export const clearFiles = () => {
