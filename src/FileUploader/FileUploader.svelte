@@ -61,15 +61,28 @@
 
   const dispatch = createEventDispatcher();
 
-  $: prevFiles = [];
+  let prevFiles = [];
+
+  /** @type {(file: File) => string} */
+  const getFileId = (file) => file.lastModified + file.name;
 
   afterUpdate(() => {
-    if (files.length > prevFiles.length) {
-      dispatch("add", files);
-    } else {
+    const fileIds = files.map(getFileId);
+    const prevFileIds = prevFiles.map(getFileId);
+    const addedIds = fileIds.filter((_) => !prevFileIds.includes(_));
+    const removedIds = prevFileIds.filter((_) => !fileIds.includes(_));
+
+    if (addedIds.length > 0) {
+      dispatch(
+        "add",
+        addedIds.map((id) => files.find((file) => id === getFileId(file)))
+      );
+    }
+
+    if (removedIds.length > 0) {
       dispatch(
         "remove",
-        prevFiles.filter((_) => !files.includes(_))
+        removedIds.map((id) => prevFiles.find((file) => id === getFileId(file)))
       );
     }
 
