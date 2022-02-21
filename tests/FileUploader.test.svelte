@@ -6,6 +6,10 @@
     FileUploaderItem,
     FileUploaderSkeleton,
   } from "../types";
+
+  let fileUploader: FileUploader;
+
+  $: fileUploader?.clearFiles();
 </script>
 
 <FileUploaderButton
@@ -16,6 +20,7 @@
 />
 
 <FileUploader
+  bind:this="{fileUploader}"
   multiple
   labelTitle="Upload files"
   buttonLabel="Add files"
