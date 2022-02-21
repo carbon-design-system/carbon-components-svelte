@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.59.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.59.0) - 2022-02-21
+
+**Features**
+
+- add `maxCount` prop to `TextArea`
+- add `disabled` prop to `FileUploader`
+- add `files` prop to `FileUploaderDropContainer`
+- add `files` prop to `FileUploaderButton`
+
+**Fixes**
+
+- change `add`, `change` events in `FileUploaderDropContainer` to dispatch `File[]` instead of `FileList`
+- update `files` prop description in `FileUploader`
+
+**Documentation**
+
+- add `TextArea` "Maximum character count" example
+- add `FileUploader` disabled state example
+- add `FileUploader` "Clear files" example
+- document `validateFiles` prop for `FileUploaderDropContainer`
+- add descriptions for `FileUploaderButton`, `FileUploader` examples
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.53.0
+
 ## [0.58.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.58.4) - 2022-02-21
 
 **Fixes**
