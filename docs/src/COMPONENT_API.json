@@ -3608,6 +3608,17 @@
           "reactive": false
         },
         {
+          "name": "files",
+          "kind": "let",
+          "description": "Obtain the uploaded file names",
+          "type": "File[]",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
           "name": "multiple",
           "kind": "let",
           "description": "Set to `true` to allow multiple files",
