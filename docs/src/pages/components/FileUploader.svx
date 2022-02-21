@@ -17,6 +17,12 @@ Set `multiple` to `true` for multiple files to be uploaded.
 
 ### File uploader
 
+The `FileUploader` wraps `FileUploaderButton` and lists out uploaded files.
+
+The example below accepts multiple files with an extension of `.jpg` or `.jpeg`. It sets the status to `"complete"`; by default, the status is `"loading"`.
+
+See the [item examples below](#item-uploading) for different statuses.
+
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
 ### Clear files
