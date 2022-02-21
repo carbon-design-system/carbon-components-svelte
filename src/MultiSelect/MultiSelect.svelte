@@ -8,7 +8,7 @@
    * @typedef {string} MultiSelectItemText
    * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
    * @event {{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
-   * @event {any} clear
+   * @event {null} clear
    */
 
   /**

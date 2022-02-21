@@ -1,8 +1,8 @@
 <script>
   /**
-   * @event {any} open
-   * @event {any} close
-   * @event {any} click:overlay
+   * @event {null} open
+   * @event {null} close
+   * @event {null} click:overlay
    */
 
   /** Set to `true` to use the fixed variant */

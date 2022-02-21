@@ -1,7 +1,7 @@
 <script>
   /**
-   * @event {any} expand
-   * @event {any} collapse
+   * @event {null} expand
+   * @event {null} collapse
    */
 
   /**
