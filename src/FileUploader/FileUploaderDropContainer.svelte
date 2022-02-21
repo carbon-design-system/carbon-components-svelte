@@ -1,6 +1,7 @@
 <script>
   /**
-   * @event {FileList} add
+   * @event {File[]} add
+   * @event {File[]} change
    */
 
   /**
@@ -9,13 +10,19 @@
    */
   export let accept = [];
 
+  /**
+   * Obtain a reference to the uploaded files
+   * @type {File[]}
+   */
+  export let files = [];
+
   /** Set to `true` to allow multiple files */
   export let multiple = false;
 
   /**
    * Override the default behavior of validating uploaded files
    * The default behavior does not validate files
-   * @type {(files: FileList) => FileList}
+   * @type {(files: File) => File}
    */
   export let validateFiles = (files) => files;
 
@@ -68,7 +75,9 @@
   on:drop|preventDefault|stopPropagation="{({ dataTransfer }) => {
     if (!disabled) {
       over = false;
-      dispatch('add', validateFiles(dataTransfer.files));
+      files = validateFiles([...dataTransfer.files]);
+      dispatch('add', files);
+      dispatch('change', files);
     }
   }}"
 >
@@ -104,9 +113,10 @@
     name="{name}"
     multiple="{multiple}"
     class:bx--file-input="{true}"
-    on:change
     on:change="{({ target }) => {
-      dispatch('add', validateFiles(target.files));
+      files = validateFiles([...target.files]);
+      dispatch('add', files);
+      dispatch('change', files);
     }}"
     on:click
     on:click="{({ target }) => {

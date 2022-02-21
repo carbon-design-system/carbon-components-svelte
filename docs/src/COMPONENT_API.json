@@ -3761,6 +3761,17 @@
           "reactive": false
         },
         {
+          "name": "files",
+          "kind": "let",
+          "description": "Obtain a reference to the uploaded files",
+          "type": "File[]",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
           "name": "multiple",
           "kind": "let",
           "description": "Set to `true` to allow multiple files",
@@ -3775,7 +3786,7 @@
           "name": "validateFiles",
           "kind": "let",
           "description": "Override the default behavior of validating uploaded files\nThe default behavior does not validate files",
-          "type": "(files: FileList) => FileList",
+          "type": "(files: File) => File",
           "value": "(files) => files",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -3869,12 +3880,12 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "add", "detail": "FileList" },
+        { "type": "dispatched", "name": "add", "detail": "File[]" },
+        { "type": "dispatched", "name": "change", "detail": "File[]" },
         { "type": "forwarded", "name": "dragover", "element": "div" },
         { "type": "forwarded", "name": "dragleave", "element": "div" },
         { "type": "forwarded", "name": "drop", "element": "div" },
         { "type": "forwarded", "name": "keydown", "element": "label" },
-        { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "click", "element": "input" }
       ],
       "typedefs": [],
