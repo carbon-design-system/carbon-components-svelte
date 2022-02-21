@@ -1,6 +1,7 @@
 <script>
   /**
-   * @event {File} add
+   * @event {File[]} add
+   * @event {File[]} change
    */
 
   /**
@@ -76,6 +77,7 @@
       over = false;
       files = validateFiles([...dataTransfer.files]);
       dispatch('add', files);
+      dispatch('change', files);
     }
   }}"
 >
@@ -111,10 +113,10 @@
     name="{name}"
     multiple="{multiple}"
     class:bx--file-input="{true}"
-    on:change
     on:change="{({ target }) => {
       files = validateFiles([...target.files]);
       dispatch('add', files);
+      dispatch('change', files);
     }}"
     on:click
     on:click="{({ target }) => {
