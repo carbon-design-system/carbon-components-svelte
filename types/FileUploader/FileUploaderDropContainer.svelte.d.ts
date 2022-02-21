@@ -10,6 +10,12 @@ export interface FileUploaderDropContainerProps
   accept?: string[];
 
   /**
+   * Obtain a reference to the uploaded files
+   * @default []
+   */
+  files?: File[];
+
+  /**
    * Set to `true` to allow multiple files
    * @default false
    */
@@ -20,7 +26,7 @@ export interface FileUploaderDropContainerProps
    * The default behavior does not validate files
    * @default (files) => files
    */
-  validateFiles?: (files: FileList) => FileList;
+  validateFiles?: (files: File) => File;
 
   /**
    * Specify the label text
@@ -68,12 +74,12 @@ export interface FileUploaderDropContainerProps
 export default class FileUploaderDropContainer extends SvelteComponentTyped<
   FileUploaderDropContainerProps,
   {
-    add: CustomEvent<FileList>;
+    add: CustomEvent<File[]>;
+    change: CustomEvent<File[]>;
     dragover: WindowEventMap["dragover"];
     dragleave: WindowEventMap["dragleave"];
     drop: WindowEventMap["drop"];
     keydown: WindowEventMap["keydown"];
-    change: WindowEventMap["change"];
     click: WindowEventMap["click"];
   },
   { labelText: {} }

@@ -1328,18 +1328,19 @@ None.
 
 ### Props
 
-| Prop name     | Kind             | Reactive | Type                                       | Default value                                    | Description                                                                                                  |
-| :------------ | :--------------- | :------- | :----------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| ref           | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>  | <code>null</code>                                | Obtain a reference to the input HTML element                                                                 |
-| accept        | <code>let</code> | No       | <code>string[]</code>                      | <code>[]</code>                                  | Specify the accepted file types                                                                              |
-| multiple      | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to allow multiple files                                                                        |
-| validateFiles | <code>let</code> | No       | <code>(files: FileList) => FileList</code> | <code>(files) => files</code>                    | Override the default behavior of validating uploaded files<br />The default behavior does not validate files |
-| labelText     | <code>let</code> | No       | <code>string</code>                        | <code>"Add file"</code>                          | Specify the label text                                                                                       |
-| role          | <code>let</code> | No       | <code>string</code>                        | <code>"button"</code>                            | Specify the `role` attribute of the drop container                                                           |
-| disabled      | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to disable the input                                                                           |
-| tabindex      | <code>let</code> | No       | <code>string</code>                        | <code>"0"</code>                                 | Specify `tabindex` attribute                                                                                 |
-| id            | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                                                              |
-| name          | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify a name attribute for the input                                                                       |
+| Prop name     | Kind             | Reactive | Type                                      | Default value                                    | Description                                                                                                  |
+| :------------ | :--------------- | :------- | :---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| ref           | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element                                                                 |
+| files         | <code>let</code> | Yes      | <code>File[]</code>                       | <code>[]</code>                                  | Obtain a reference to the uploaded files                                                                     |
+| accept        | <code>let</code> | No       | <code>string[]</code>                     | <code>[]</code>                                  | Specify the accepted file types                                                                              |
+| multiple      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to allow multiple files                                                                        |
+| validateFiles | <code>let</code> | No       | <code>(files: File) => File</code>        | <code>(files) => files</code>                    | Override the default behavior of validating uploaded files<br />The default behavior does not validate files |
+| labelText     | <code>let</code> | No       | <code>string</code>                       | <code>"Add file"</code>                          | Specify the label text                                                                                       |
+| role          | <code>let</code> | No       | <code>string</code>                       | <code>"button"</code>                            | Specify the `role` attribute of the drop container                                                           |
+| disabled      | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the input                                                                           |
+| tabindex      | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify `tabindex` attribute                                                                                 |
+| id            | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                                                              |
+| name          | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify a name attribute for the input                                                                       |
 
 ### Slots
 
@@ -1349,15 +1350,15 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                |
-| :--------- | :--------- | :-------------------- |
-| add        | dispatched | <code>FileList</code> |
-| dragover   | forwarded  | --                    |
-| dragleave  | forwarded  | --                    |
-| drop       | forwarded  | --                    |
-| keydown    | forwarded  | --                    |
-| change     | forwarded  | --                    |
-| click      | forwarded  | --                    |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| add        | dispatched | <code>File[]</code> |
+| change     | dispatched | <code>File[]</code> |
+| dragover   | forwarded  | --                  |
+| dragleave  | forwarded  | --                  |
+| drop       | forwarded  | --                  |
+| keydown    | forwarded  | --                  |
+| click      | forwarded  | --                  |
 
 ## `FileUploaderItem`
 
