@@ -306,6 +306,7 @@
             <th scope="col"></th>
           {:else}
             <TableHeader
+              id="{header.key}"
               disableSorting="{header.sort === false}"
               on:click="{() => {
                 dispatch('click', { header });
