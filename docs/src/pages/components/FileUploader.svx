@@ -52,7 +52,22 @@ The default `FileUploaderItem` size is "default".
 
 ### Drop container
 
-<FileUploaderDropContainer labelText="Drag and drop files here or click to upload" multiple />
+The `FileUploaderDropContainer` accepts files through click and drop events.
+
+Use the `validateFiles` prop to filter out files before they are set.
+
+The following example accepts files smaller than 1 kB.
+
+<FileUploaderDropContainer
+  labelText="Drag and drop files here or click to upload" 
+  multiple
+  validateFiles={files => {
+    return files.filter(file => file.size < 1_024)
+  }}
+  on:change={e=> {
+    console.log("files", e.detail)
+  }}
+/>
 
 ### Skeleton
 
