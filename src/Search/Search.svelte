@@ -12,7 +12,7 @@
 
   /**
    * Specify the size of the search input
-   * @type {"sm" | "lg" | "xl"} [size="xl"]
+   * @type {"sm" | "lg" | "xl"}
    */
   export let size = "xl";
 
