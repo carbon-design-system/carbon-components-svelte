@@ -2,6 +2,7 @@
   /**
    * @event {File[]} add
    * @event {File[]} remove
+   * @event {File[]} change
    */
 
   /**
@@ -95,8 +96,8 @@
     multiple="{multiple}"
     kind="{kind}"
     on:change
-    on:change="{({ target }) => {
-      files = [...target.files];
+    on:change="{(e) => {
+      files = e.detail;
     }}"
   />
   <div class:bx--file-container="{true}">

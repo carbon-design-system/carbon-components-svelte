@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {File[]} change
+   */
+
+  /**
    * Specify the accepted file types
    * @type {string[]}
    */
@@ -37,6 +41,10 @@
 
   /** Obtain a reference to the input HTML element */
   export let ref = null;
+
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
 </script>
 
 <label
@@ -71,13 +79,14 @@
   name="{name}"
   class:bx--visually-hidden="{true}"
   {...$$restProps}
-  on:change|stopPropagation
   on:change|stopPropagation="{({ target }) => {
     const files = target.files;
     const length = files.length;
     if (files && !disableLabelChanges) {
       labelText = length > 1 ? `${length} files` : files[0].name;
     }
+
+    dispatch('change', [...files]);
   }}"
   on:click
   on:click="{({ target }) => {
