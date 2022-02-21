@@ -1,6 +1,6 @@
 <script>
   /**
-   * @event {any} save
+   * @event {null} save
    * @event {{ prevValue: any; value: any; }} update
    */
 

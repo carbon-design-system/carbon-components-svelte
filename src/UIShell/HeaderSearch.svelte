@@ -1,9 +1,9 @@
 <script>
   /**
    * @typedef {{ href: string; text: string; description?: string; }} HeaderSearchResult
-   * @event {any} active
-   * @event {any} inactive
-   * @event {any} clear
+   * @event {null} active
+   * @event {null} inactive
+   * @event {null} clear
    * @event {{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }} select
    * @slot {{ result: HeaderSearchResult; index: number }}
    */

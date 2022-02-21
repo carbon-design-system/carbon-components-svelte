@@ -3503,7 +3503,7 @@
         {
           "name": "clearFiles",
           "kind": "const",
-          "description": "Override the default behavior of clearing the array of uploaded files",
+          "description": "Programmatically clear the uploaded files",
           "type": "() => void",
           "value": "() => {     files = [];   }",
           "isFunction": true,
@@ -4926,9 +4926,9 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "active", "detail": "any" },
-        { "type": "dispatched", "name": "inactive", "detail": "any" },
-        { "type": "dispatched", "name": "clear", "detail": "any" },
+        { "type": "dispatched", "name": "active", "detail": "null" },
+        { "type": "dispatched", "name": "inactive", "detail": "null" },
+        { "type": "dispatched", "name": "clear", "detail": "null" },
         {
           "type": "dispatched",
           "name": "select",
@@ -5126,8 +5126,8 @@
         { "name": "loading", "default": false, "slot_props": "{}" }
       ],
       "events": [
-        { "type": "dispatched", "name": "load", "detail": "any" },
-        { "type": "dispatched", "name": "error", "detail": "any" }
+        { "type": "dispatched", "name": "load", "detail": "null" },
+        { "type": "dispatched", "name": "error", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "img" }
@@ -5931,7 +5931,7 @@
       ],
       "slots": [],
       "events": [
-        { "type": "dispatched", "name": "save", "detail": "any" },
+        { "type": "dispatched", "name": "save", "detail": "null" },
         {
           "type": "dispatched",
           "name": "update",
@@ -6807,7 +6807,7 @@
           "name": "select",
           "detail": "{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }"
         },
-        { "type": "dispatched", "name": "clear", "detail": "any" },
+        { "type": "dispatched", "name": "clear", "detail": "null" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" }
@@ -9272,8 +9272,8 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "expand", "detail": "any" },
-        { "type": "dispatched", "name": "collapse", "detail": "any" },
+        { "type": "dispatched", "name": "expand", "detail": "null" },
+        { "type": "dispatched", "name": "collapse", "detail": "null" },
         { "type": "forwarded", "name": "click", "element": "SearchSkeleton" },
         {
           "type": "forwarded",
@@ -9842,9 +9842,9 @@
       ],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        { "type": "dispatched", "name": "open", "detail": "any" },
-        { "type": "dispatched", "name": "close", "detail": "any" },
-        { "type": "dispatched", "name": "click:overlay", "detail": "any" }
+        { "type": "dispatched", "name": "open", "detail": "null" },
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "dispatched", "name": "click:overlay", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "nav" }
@@ -13115,8 +13115,8 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "open", "detail": "any" },
-        { "type": "dispatched", "name": "close", "detail": "any" },
+        { "type": "dispatched", "name": "open", "detail": "null" },
+        { "type": "dispatched", "name": "close", "detail": "null" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mousedown", "element": "div" }
       ],
@@ -13204,8 +13204,8 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "open", "detail": "any" },
-        { "type": "dispatched", "name": "close", "detail": "any" },
+        { "type": "dispatched", "name": "open", "detail": "null" },
+        { "type": "dispatched", "name": "close", "detail": "null" },
         { "type": "forwarded", "name": "click", "element": "button" },
         { "type": "forwarded", "name": "mouseover", "element": "button" },
         { "type": "forwarded", "name": "mouseenter", "element": "button" },

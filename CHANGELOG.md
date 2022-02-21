@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.58.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.58.4) - 2022-02-21
+
+**Fixes**
+
+- dispatched events without a `detail` type should be `null` instead of `any`
+- `FileUploader` `clearFiles` description should reflect that it's an accessor, not a prop
+- `FileUploader` should correctly fire `add` and `remove` events
+- `FileUploader` files should not be keyed by file name
+- `FileUploader` change event detail signature should be `File[]`
+- fix `DataTable` regression where sort icon indicators don't update
+
+**Refactor**
+
+- remove unnecessary JSDoc default type notation
+
 ## [0.58.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.58.3) - 2022-02-20
 
 **Fixes**

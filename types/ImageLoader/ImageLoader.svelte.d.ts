@@ -49,7 +49,7 @@ export interface ImageLoaderProps
 
 export default class ImageLoader extends SvelteComponentTyped<
   ImageLoaderProps,
-  { load: CustomEvent<any>; error: CustomEvent<any> },
+  { load: CustomEvent<null>; error: CustomEvent<null> },
   { error: {}; loading: {} }
 > {
   /**

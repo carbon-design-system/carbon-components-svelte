@@ -1,7 +1,7 @@
 <script>
   /**
-   * @event {any} expand
-   * @event {any} collapse
+   * @event {null} expand
+   * @event {null} collapse
    */
 
   /**
@@ -12,7 +12,7 @@
 
   /**
    * Specify the size of the search input
-   * @type {"sm" | "lg" | "xl"} [size="xl"]
+   * @type {"sm" | "lg" | "xl"}
    */
   export let size = "xl";
 

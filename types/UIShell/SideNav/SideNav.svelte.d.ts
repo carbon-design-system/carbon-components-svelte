@@ -43,9 +43,9 @@ export interface SideNavProps
 export default class SideNav extends SvelteComponentTyped<
   SideNavProps,
   {
-    open: CustomEvent<any>;
-    close: CustomEvent<any>;
-    ["click:overlay"]: CustomEvent<any>;
+    open: CustomEvent<null>;
+    close: CustomEvent<null>;
+    ["click:overlay"]: CustomEvent<null>;
   },
   { default: {} }
 > {}

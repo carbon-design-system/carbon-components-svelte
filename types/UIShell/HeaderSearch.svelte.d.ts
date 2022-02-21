@@ -43,9 +43,9 @@ export interface HeaderSearchProps
 export default class HeaderSearch extends SvelteComponentTyped<
   HeaderSearchProps,
   {
-    active: CustomEvent<any>;
-    inactive: CustomEvent<any>;
-    clear: CustomEvent<any>;
+    active: CustomEvent<null>;
+    inactive: CustomEvent<null>;
+    clear: CustomEvent<null>;
     select: CustomEvent<{
       value: string;
       selectedResultIndex: number;

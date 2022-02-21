@@ -1,6 +1,6 @@
 # Component Index
 
-> 172 components exported from carbon-components-svelte@0.58.3.
+> 172 components exported from carbon-components-svelte@0.58.4.
 
 ## Components
 
@@ -1864,9 +1864,9 @@ export interface HeaderSearchResult {
 
 | Event name | Type       | Detail                                                                                          |
 | :--------- | :--------- | :---------------------------------------------------------------------------------------------- |
-| active     | dispatched | <code>any</code>                                                                                |
-| inactive   | dispatched | <code>any</code>                                                                                |
-| clear      | dispatched | <code>any</code>                                                                                |
+| active     | dispatched | <code>null</code>                                                                               |
+| inactive   | dispatched | <code>null</code>                                                                               |
+| clear      | dispatched | <code>null</code>                                                                               |
 | select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }</code> |
 | change     | forwarded  | --                                                                                              |
 | input      | forwarded  | --                                                                                              |
@@ -1957,10 +1957,10 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail           |
-| :--------- | :--------- | :--------------- |
-| load       | dispatched | <code>any</code> |
-| error      | dispatched | <code>any</code> |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| load       | dispatched | <code>null</code> |
+| error      | dispatched | <code>null</code> |
 
 ## `InlineLoading`
 
@@ -2275,7 +2275,7 @@ None.
 
 | Event name | Type       | Detail                                       |
 | :--------- | :--------- | :------------------------------------------- |
-| save       | dispatched | <code>any</code>                             |
+| save       | dispatched | <code>null</code>                            |
 | update     | dispatched | <code>{ prevValue: any; value: any; }</code> |
 
 ## `Modal`
@@ -2465,7 +2465,7 @@ None.
 | :--------- | :--------- | :------------------------------------------------------------------------------------------------------------- |
 | blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         |
 | select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
-| clear      | dispatched | <code>any</code>                                                                                               |
+| clear      | dispatched | <code>null</code>                                                                                              |
 | keydown    | forwarded  | --                                                                                                             |
 | keyup      | forwarded  | --                                                                                                             |
 | focus      | forwarded  | --                                                                                                             |
@@ -3194,21 +3194,21 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail           |
-| :--------- | :--------- | :--------------- |
-| expand     | dispatched | <code>any</code> |
-| collapse   | dispatched | <code>any</code> |
-| click      | forwarded  | --               |
-| mouseover  | forwarded  | --               |
-| mouseenter | forwarded  | --               |
-| mouseleave | forwarded  | --               |
-| change     | forwarded  | --               |
-| input      | forwarded  | --               |
-| focus      | forwarded  | --               |
-| blur       | forwarded  | --               |
-| keydown    | forwarded  | --               |
-| keyup      | forwarded  | --               |
-| clear      | dispatched | --               |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| expand     | dispatched | <code>null</code> |
+| collapse   | dispatched | <code>null</code> |
+| click      | forwarded  | --                |
+| mouseover  | forwarded  | --                |
+| mouseenter | forwarded  | --                |
+| mouseleave | forwarded  | --                |
+| change     | forwarded  | --                |
+| input      | forwarded  | --                |
+| focus      | forwarded  | --                |
+| blur       | forwarded  | --                |
+| keydown    | forwarded  | --                |
+| keyup      | forwarded  | --                |
+| clear      | dispatched | --                |
 
 ## `SearchSkeleton`
 
@@ -3384,11 +3384,11 @@ None.
 
 ### Events
 
-| Event name    | Type       | Detail           |
-| :------------ | :--------- | :--------------- |
-| open          | dispatched | <code>any</code> |
-| close         | dispatched | <code>any</code> |
-| click:overlay | dispatched | <code>any</code> |
+| Event name    | Type       | Detail            |
+| :------------ | :--------- | :---------------- |
+| open          | dispatched | <code>null</code> |
+| close         | dispatched | <code>null</code> |
+| click:overlay | dispatched | <code>null</code> |
 
 ## `SideNavDivider`
 
@@ -4680,12 +4680,12 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail           |
-| :--------- | :--------- | :--------------- |
-| open       | dispatched | <code>any</code> |
-| close      | dispatched | <code>any</code> |
-| click      | forwarded  | --               |
-| mousedown  | forwarded  | --               |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| open       | dispatched | <code>null</code> |
+| close      | dispatched | <code>null</code> |
+| click      | forwarded  | --                |
+| mousedown  | forwarded  | --                |
 
 ## `TooltipDefinition`
 
@@ -4709,15 +4709,15 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail           |
-| :--------- | :--------- | :--------------- |
-| open       | dispatched | <code>any</code> |
-| close      | dispatched | <code>any</code> |
-| click      | forwarded  | --               |
-| mouseover  | forwarded  | --               |
-| mouseenter | forwarded  | --               |
-| mouseleave | forwarded  | --               |
-| focus      | forwarded  | --               |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| open       | dispatched | <code>null</code> |
+| close      | dispatched | <code>null</code> |
+| click      | forwarded  | --                |
+| mouseover  | forwarded  | --                |
+| mouseenter | forwarded  | --                |
+| mouseleave | forwarded  | --                |
+| focus      | forwarded  | --                |
 
 ## `TooltipFooter`
 
