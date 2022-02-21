@@ -3,17 +3,38 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
 ---
 
 <script>
-  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton } from "carbon-components-svelte";
+  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, UnorderedList, ListItem } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
 ### File uploader (button-only)
 
+By default, the file uploader only accepts one file.
+
+Set `multiple` to `true` for multiple files to be uploaded.
+
 <FileUploaderButton labelText="Add files" />
 
 ### File uploader
 
+The `FileUploader` wraps `FileUploaderButton` and lists out uploaded files.
+
+The example below accepts multiple files with an extension of `.jpg` or `.jpeg`. It sets the status to `"complete"`; by default, the status is `"loading"`.
+
+See the [item examples below](#item-uploading) for different statuses.
+
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
+
+### Clear files
+
+There are two ways to clear files in `FileUploader`:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem>programmatically using the <strong>clearFiles</strong> accessor</ListItem>
+  <ListItem>two-way binding by setting <strong>files</strong> to <strong>[]</strong></ListItem>
+</UnorderedList>
+
+<FileSource src="/framed/FileUploader/FileUploaderClearFiles" />
 
 ### File uploader (disabled state)
 
@@ -41,7 +62,22 @@ The default `FileUploaderItem` size is "default".
 
 ### Drop container
 
-<FileUploaderDropContainer labelText="Drag and drop files here or click to upload" multiple />
+The `FileUploaderDropContainer` accepts files through click and drop events.
+
+Use the `validateFiles` prop to filter out files before they are set.
+
+The following example accepts files smaller than 1 kB.
+
+<FileUploaderDropContainer
+  multiple
+  labelText="Drag and drop files here or click to upload" 
+  validateFiles={files => {
+    return files.filter(file => file.size < 1_024)
+  }}
+  on:change={e=> {
+    console.log("files", e.detail)
+  }}
+/>
 
 ### Skeleton
 
