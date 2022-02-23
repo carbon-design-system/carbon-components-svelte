@@ -138,18 +138,11 @@
     },
   });
 
-  async function initCalendar() {
+  async function initCalendar(options) {
+    calendar?.destroy();
+    calendar = null;
     calendar = await createCalendar({
-      options: {
-        appendTo: datePickerRef,
-        dateFormat,
-        defaultDate: $inputValue,
-        locale,
-        maxDate,
-        minDate,
-        mode: $mode,
-        ...flatpickrProps,
-      },
+      options,
       base: inputRef,
       input: inputRefTo,
       dispatch: (event) => {
@@ -203,7 +196,17 @@
   $: valueFrom = $inputValueFrom;
   $: inputValueTo.set(valueTo);
   $: valueTo = $inputValueTo;
-  $: if ($hasCalendar && !calendar && inputRef) initCalendar();
+  $: if ($hasCalendar && inputRef)
+    initCalendar({
+      appendTo: datePickerRef,
+      dateFormat,
+      defaultDate: $inputValue,
+      locale,
+      maxDate,
+      minDate,
+      mode: $mode,
+      ...flatpickrProps,
+    });
 </script>
 
 <svelte:window
