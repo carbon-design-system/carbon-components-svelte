@@ -8355,6 +8355,17 @@
           "reactive": false
         },
         {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the size",
+          "type": "\"sm\" | \"md\"",
+          "value": "\"md\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "labelText",
           "kind": "let",
           "description": "Specify the label text",

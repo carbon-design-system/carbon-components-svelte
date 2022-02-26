@@ -16,6 +16,12 @@ export interface ProgressBarProps
   max?: number;
 
   /**
+   * Specify the size
+   * @default "md"
+   */
+  size?: "sm" | "md";
+
+  /**
    * Specify the label text
    * @default ""
    */
