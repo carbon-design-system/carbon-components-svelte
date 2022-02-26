@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.60.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.60.0) - 2022-02-26
+
+**Features**
+
+- add `RadioButtonGroup` `hiddenLegend` prop to visually hide the legend
+- add `ProgressBar` `size` prop to support small size variant
+
+**Fixes**
+
+- update `DatePicker` calendar instance if options change
+
+**Refactor**
+
+- remove `StructuredList` `overflow-y` style monkey patch
+
+**Documentation**
+
+- add `RadioButton` "Hidden legend" example
+- add `ProgressBar` "Small size" example
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.54.0
+
 ## [0.59.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.59.0) - 2022-02-21
 
 **Features**
