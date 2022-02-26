@@ -22,6 +22,12 @@ export interface RadioButtonGroupProps
   legendText?: string;
 
   /**
+   * Set to `true` to visually hide the legend
+   * @default false
+   */
+  hideLegend?: boolean;
+
+  /**
    * Specify the label position
    * @default "right"
    */
