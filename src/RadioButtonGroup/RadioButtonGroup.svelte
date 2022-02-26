@@ -11,6 +11,9 @@
   /** Specify the legend text */
   export let legendText = "";
 
+  /** Set to `true` to visually hide the legend */
+  export let hideLegend = false;
+
   /**
    * Specify the label position
    * @type {"right" | "left"}
@@ -84,7 +87,7 @@
     disabled="{disabled}"
   >
     {#if legendText || $$slots.legendText}
-      <legend class:bx--label="{true}">
+      <legend class:bx--label="{true}" class:bx--visually-hidden="{hideLegend}">
         <slot name="legendText">{legendText}</slot>
       </legend>
     {/if}

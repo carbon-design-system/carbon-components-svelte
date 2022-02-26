@@ -2903,14 +2903,15 @@ None.
 
 ### Props
 
-| Prop name  | Kind             | Reactive | Type                 | Default value                                    | Description                                   |
-| :--------- | :--------------- | :------- | :------------------- | ------------------------------------------------ | --------------------------------------------- |
-| value      | <code>let</code> | No       | <code>number</code>  | <code>undefined</code>                           | Specify the current value                     |
-| max        | <code>let</code> | No       | <code>number</code>  | <code>100</code>                                 | Specify the maximum value                     |
-| labelText  | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the label text                        |
-| hideLabel  | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to visually hide the label text |
-| helperText | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the helper text                       |
-| id         | <code>let</code> | No       | <code>string</code>  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the progress bar element        |
+| Prop name  | Kind             | Reactive | Type                          | Default value                                    | Description                                   |
+| :--------- | :--------------- | :------- | :---------------------------- | ------------------------------------------------ | --------------------------------------------- |
+| value      | <code>let</code> | No       | <code>number</code>           | <code>undefined</code>                           | Specify the current value                     |
+| max        | <code>let</code> | No       | <code>number</code>           | <code>100</code>                                 | Specify the maximum value                     |
+| size       | <code>let</code> | No       | <code>"sm" &#124; "md"</code> | <code>"md"</code>                                | Specify the size                              |
+| labelText  | <code>let</code> | No       | <code>string</code>           | <code>""</code>                                  | Specify the label text                        |
+| hideLabel  | <code>let</code> | No       | <code>boolean</code>          | <code>false</code>                               | Set to `true` to visually hide the label text |
+| helperText | <code>let</code> | No       | <code>string</code>           | <code>""</code>                                  | Specify the helper text                       |
+| id         | <code>let</code> | No       | <code>string</code>           | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the progress bar element        |
 
 ### Slots
 
@@ -3040,6 +3041,7 @@ None.
 | selected      | <code>let</code> | Yes      | <code>string</code>                         | <code>undefined</code>    | Set the selected radio button value          |
 | disabled      | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to disable the radio buttons   |
 | legendText    | <code>let</code> | No       | <code>string</code>                         | <code>""</code>           | Specify the legend text                      |
+| hideLegend    | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to visually hide the legend    |
 | labelPosition | <code>let</code> | No       | <code>"right" &#124; "left"</code>          | <code>"right"</code>      | Specify the label position                   |
 | orientation   | <code>let</code> | No       | <code>"horizontal" &#124; "vertical"</code> | <code>"horizontal"</code> | Specify the orientation of the radio buttons |
 | id            | <code>let</code> | No       | <code>string</code>                         | <code>undefined</code>    | Set an id for the container div element      |

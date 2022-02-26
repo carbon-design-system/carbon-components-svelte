@@ -8,6 +8,12 @@
   /** Specify the maximum value */
   export let max = 100;
 
+  /**
+   * Specify the size
+   * @type {"sm" | "md"}
+   */
+  export let size = "md";
+
   /** Specify the label text */
   export let labelText = "";
 
@@ -29,6 +35,8 @@
 <div
   class:bx--progress-bar="{true}"
   class:bx--progress-bar--indeterminate="{indeterminate}"
+  class:bx--progress-bar--big="{size === 'md'}"
+  class:bx--progress-bar--small="{size === 'sm'}"
   {...$$restProps}
 >
   <label
