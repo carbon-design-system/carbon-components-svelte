@@ -17,6 +17,8 @@ Specify `size="sm"` to use the small variant.
 
 ### Percentage
 
+Specify a `value` for the progress bar to be determinate.
+
 <ProgressBar value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
 ### Custom max value
@@ -26,6 +28,10 @@ The default `max` value is `100`.
 <ProgressBar value={40} max={200} labelText="Upload status" helperText="40 MB of 200 MB" />
 
 ### Hidden label
+
+It's recommended that you provide a `labelText` for accessibility.
+
+Use `hideLabel` to visually hide the label text.
 
 <ProgressBar hideLabel value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
