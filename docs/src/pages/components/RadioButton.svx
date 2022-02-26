@@ -41,6 +41,18 @@ Use the named "legendText" slot to customize the legend text.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
+### Hidden legend
+
+It's recommended that you provide a legend for accessibility.
+
+Use `hideLegend` to visually hide the legend text.
+
+<RadioButtonGroup hideLegend legendText="Storage tier (disk)" selected="standard">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
 ### Reactive example
 
 Use the `selected` prop to bind and update the selected value.
