@@ -24,7 +24,7 @@
     "prettier": "^2.5.1",
     "prettier-plugin-svelte": "^2.5.1",
     "prism-svelte": "^0.4.7",
-    "prismjs": "^1.21.0",
+    "prismjs": "^1.27.0",
     "remark-slug": "^6.0.0",
     "sass": "^1.42.1",
     "svelte": "^3.44.3",
