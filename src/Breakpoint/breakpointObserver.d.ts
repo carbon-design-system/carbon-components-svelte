@@ -1,19 +1,22 @@
+import type { Readable, Subscriber, Unsubscriber } from "svelte/store";
+import type { BreakpointSize, BreakpointValue } from "./breakpoints";
+
 /**
- * Creates a readable store that returns the current {@link BreakpointSize}.
+ * Creates a readable store that returns the current breakpoint size.
  * It also provides functions for creating derived stores used to do comparisons.
  */
 export function breakpointObserver(): {
-    subscribe: (this: void, run: import("svelte/store").Subscriber<any>, invalidate?: (value?: any) => void) => import("svelte/store").Unsubscriber;
+    subscribe: (this: void, run: Subscriber<any>, invalidate?: (value?: any) => void) => Unsubscriber;
     /**
      * Returns a store readable store that returns whether the current
      * breakpoint is smaller than {@link size}.
      * @param {BreakpointSize} size Size to compare against.
      */
-    smallerThan: (size: BreakpointSize) => import("svelte/store").Readable<boolean>;
+    smallerThan: (size: BreakpointSize) => Readable<boolean>;
     /**
      * Returns a store readable store that returns whether the current
      * breakpoint is larger than {@link size}.
      * @param {BreakpointSize} size Size to compare against.
      */
-    largerThan: (size: BreakpointSize) => import("svelte/store").Readable<boolean>;
+    largerThan: (size: BreakpointSize) => Readable<boolean>;
 };

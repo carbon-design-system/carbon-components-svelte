@@ -1,18 +1,16 @@
-/// <reference path="./types.d.ts"/>
-
 import { onMount } from "svelte";
 import { derived, writable } from "svelte/store";
-import { breakpoints } from "./constants";
+import { breakpoints } from "./breakpoints";
 
 /**
- * Creates a readable store that returns the current {@link BreakpointSize}.
+ * Creates a readable store that returns the current breakpoint size.
  * It also provides functions for creating derived stores used to do comparisons.
  */
 export function breakpointObserver() {
   const store = writable(undefined);
 
   onMount(() => {
-    /** @type {Record<BreakpointSize, MediaQueryList>} */
+    /** @type {Record<import("./breakpoints").BreakpointSize, MediaQueryList>} */
     const match = {
       sm: window.matchMedia(`(max-width: ${breakpoints.md}px)`),
       md: window.matchMedia(
@@ -57,7 +55,7 @@ export function breakpointObserver() {
     /**
      * Returns a store readable store that returns whether the current
      * breakpoint is smaller than {@link size}.
-     * @param {BreakpointSize} size Size to compare against.
+     * @param {import("./breakpoints").BreakpointSize} size Size to compare against.
      */
     smallerThan: (size) => {
       checkSizeValid(size);
@@ -67,7 +65,7 @@ export function breakpointObserver() {
     /**
      * Returns a store readable store that returns whether the current
      * breakpoint is larger than {@link size}.
-     * @param {BreakpointSize} size Size to compare against.
+     * @param {import("./breakpoints").BreakpointSize} size Size to compare against.
      */
     largerThan: (size) => {
       checkSizeValid(size);

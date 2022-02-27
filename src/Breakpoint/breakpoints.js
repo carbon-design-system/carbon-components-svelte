@@ -1,8 +1,6 @@
-/// <reference path="./types.d.ts"/>
-
 /**
  * Pixel sizes of Carbon grid breakpoints.
- * @type {Record<BreakpointSize, BreakpointValue>}
+ * @type {Record<import("./breakpoints").BreakpointSize, BreakpointValue>}
  */
 export const breakpoints = Object.freeze({
   sm: 320,
