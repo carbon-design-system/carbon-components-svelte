@@ -103,7 +103,7 @@
         expanded="{$isActive($url('')) || $isActive($url('/components'))}"
         text="Components"
       >
-        {#each components.children as child, i (child.path)}
+        {#each components.children.filter((child) => !deprecated.includes(child.title)) as child, i (child.path)}
           <SideNavMenuItem
             text="{child.title}"
             href="{$url(child.path)}"
