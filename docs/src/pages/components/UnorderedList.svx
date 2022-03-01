@@ -7,7 +7,7 @@ components: ["UnorderedList", "ListItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-<InlineNotification svx-ignore title="Tip:" kind="info" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Tip:" kind="info" hideCloseButton>
   <div class="body-short-01">
    Consider using the <Link href="/components/RecursiveList#unordered">RecursiveList</Link> component for rendering tree structured data.
   </div>

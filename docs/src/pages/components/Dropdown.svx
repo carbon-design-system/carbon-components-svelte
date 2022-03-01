@@ -7,7 +7,7 @@ components: ["Dropdown", "DropdownSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
     Since version 0.53, <strong>selectedIndex</strong> has been replaced with <strong>selectedId</strong>.
   </div>

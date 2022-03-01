@@ -37,7 +37,7 @@
 
 ### Danger tertiary, icon-only button
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
     You must provide an <strong>iconDescription</strong> for the button tooltip.
   </div>
@@ -55,7 +55,7 @@
 
 ### Icon-only button
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
     You must provide an <strong>iconDescription</strong> for the button tooltip.
   </div>
@@ -131,7 +131,7 @@ If an `href` value is specified, the component will render an [anchor element](h
 
 Set `expressive` to `true` to use Carbon's expressive typesetting.
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
     Expressive styles only work with the default, "lg", and "xl" button sizes.
   </div>

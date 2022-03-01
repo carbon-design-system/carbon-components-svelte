@@ -11,7 +11,7 @@ Optional properties include `disabled`, `expanded`, `icon`, and `children`.
 
 A parent node contains `children` while a leaf node does not.
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every node must have a unique id.</div>
 </InlineNotification>
 
