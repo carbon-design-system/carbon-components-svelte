@@ -17,7 +17,6 @@
   } from "carbon-components-svelte";
   import LogoGithub20 from "carbon-icons-svelte/lib/LogoGithub20";
   import Theme from "../components/Theme.svelte";
-  import Footer from "../components/Footer.svelte";
 
   const deprecated = ["ToggleSmall", "Icon"];
   const new_components = [];
@@ -145,7 +144,6 @@
     </SideNavItems>
   </SideNav>
   <slot />
-  <Footer />
 </Theme>
 
 <style global>
