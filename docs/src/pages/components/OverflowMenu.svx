@@ -82,3 +82,20 @@ By default, the first overflow menu item is focused when opening the dropdown.
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
+
+### Disabled items
+
+Disable menu items by setting `disabled` to `true`.
+
+<OverflowMenu>
+  <OverflowMenuItem text="Create key" />
+  <OverflowMenuItem text="Import key" />
+  <OverflowMenuItem text="Revoke key" disabled />
+  <OverflowMenuItem text="Duplicate key" disabled />
+  <OverflowMenuItem
+    hasDivider
+    href="https://cloud.ibm.com/docs/api-gateway/"
+    text="API documentation"
+  />
+  <OverflowMenuItem hasDivider danger text="Delete service" />
+</OverflowMenu>
