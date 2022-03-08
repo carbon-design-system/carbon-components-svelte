@@ -22,15 +22,10 @@ export interface BreakpointProps {
 export default class Breakpoint extends SvelteComponentTyped<
   BreakpointProps,
   {
-    match: CustomEvent<{
+    change: CustomEvent<{
       size: BreakpointSize;
       breakpointValue: BreakpointValue;
     }>;
   },
   { default: { size: BreakpointSize; sizes: Record<BreakpointSize, boolean> } }
-> {
-  /**
-   * Reference the Carbon grid breakpoints
-   */
-  breakpoints: Record<BreakpointSize, BreakpointValue>;
-}
+> {}
