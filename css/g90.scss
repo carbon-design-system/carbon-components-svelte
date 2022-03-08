@@ -21,7 +21,7 @@ $css--plex: true;
 @import "carbon-components/src/components/tag/tag";
 @import "carbon-components/src/components/notification/inline-notification";
 @import "carbon-components/src/components/notification/toast-notification";
-@import "carbon-components-10.47/src/components/popover/popover";
+@import "./popover";
 
 @import "carbon-components/scss/globals/scss/_css--reset";
 @import "carbon-components/scss/globals/scss/_css--font-face";
