@@ -22,7 +22,7 @@
   /**
    * Override the default behavior of validating uploaded files
    * The default behavior does not validate files
-   * @type {(files: File) => File}
+   * @type {(files: File[]) => File[]}
    */
   export let validateFiles = (files) => files;
 

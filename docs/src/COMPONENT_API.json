@@ -3797,7 +3797,7 @@
           "name": "validateFiles",
           "kind": "let",
           "description": "Override the default behavior of validating uploaded files\nThe default behavior does not validate files",
-          "type": "(files: File) => File",
+          "type": "(files: File[]) => File[]",
           "value": "(files) => files",
           "isFunction": true,
           "isFunctionDeclaration": false,
