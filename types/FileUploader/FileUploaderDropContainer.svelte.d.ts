@@ -26,7 +26,7 @@ export interface FileUploaderDropContainerProps
    * The default behavior does not validate files
    * @default (files) => files
    */
-  validateFiles?: (files: File) => File;
+  validateFiles?: (files: File[]) => File[];
 
   /**
    * Specify the label text
