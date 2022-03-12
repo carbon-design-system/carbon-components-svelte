@@ -4517,8 +4517,8 @@
         {
           "name": "transition",
           "kind": "let",
-          "description": "Customize the panel transition (i.e., `transition:slide`)\nSet to `false` to disable the transition",
-          "type": "false | HeaderActionSlideTransition",
+          "description": "Customize the panel transition (i.e., `transition:slide`).\nSet to `false` to disable the transition",
+          "type": "false | import(\"svelte/transition\").SlideParams",
           "value": "{ duration: 200 }",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4539,13 +4539,7 @@
         { "type": "forwarded", "name": "click", "element": "button" },
         { "type": "dispatched", "name": "close" }
       ],
-      "typedefs": [
-        {
-          "type": "{ delay?: number; duration?: number; easing?: (t: number) => number; }",
-          "name": "HeaderActionSlideTransition",
-          "ts": "interface HeaderActionSlideTransition { delay?: number; duration?: number; easing?: (t: number) => number; }"
-        }
-      ],
+      "typedefs": [],
       "rest_props": { "type": "Element", "name": "button" }
     },
     {

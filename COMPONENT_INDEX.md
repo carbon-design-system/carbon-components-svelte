@@ -1608,26 +1608,16 @@ None.
 
 ## `HeaderAction`
 
-### Types
-
-```ts
-export interface HeaderActionSlideTransition {
-  delay?: number;
-  duration?: number;
-  easing?: (t: number) => number;
-}
-```
-
 ### Props
 
-| Prop name  | Kind             | Reactive | Type                                                  | Default value                  | Description                                                                                                   |
-| :--------- | :--------------- | :------- | :---------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>            | <code>null</code>              | Obtain a reference to the button HTML element                                                                 |
-| isOpen     | <code>let</code> | Yes      | <code>boolean</code>                                  | <code>false</code>             | Set to `true` to open the panel                                                                               |
-| icon       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>  | <code>undefined</code>         | Specify the icon to render                                                                                    |
-| closeIcon  | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>  | <code>undefined</code>         | Specify the icon to render when the action panel is open                                                      |
-| text       | <code>let</code> | No       | <code>string</code>                                   | <code>undefined</code>         | Specify the text<br />Alternatively, use the named slot "text" (e.g., &lt;div slot="text"&gt;...&lt;/div&gt;) |
-| transition | <code>let</code> | No       | <code>false &#124; HeaderActionSlideTransition</code> | <code>{ duration: 200 }</code> | Customize the panel transition (i.e., `transition:slide`)<br />Set to `false` to disable the transition       |
+| Prop name  | Kind             | Reactive | Type                                                              | Default value                  | Description                                                                                                   |
+| :--------- | :--------------- | :------- | :---------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| ref        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                        | <code>null</code>              | Obtain a reference to the button HTML element                                                                 |
+| isOpen     | <code>let</code> | Yes      | <code>boolean</code>                                              | <code>false</code>             | Set to `true` to open the panel                                                                               |
+| icon       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render                                                                                    |
+| closeIcon  | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render when the action panel is open                                                      |
+| text       | <code>let</code> | No       | <code>string</code>                                               | <code>undefined</code>         | Specify the text<br />Alternatively, use the named slot "text" (e.g., &lt;div slot="text"&gt;...&lt;/div&gt;) |
+| transition | <code>let</code> | No       | <code>false &#124; import("svelte/transition").SlideParams</code> | <code>{ duration: 200 }</code> | Customize the panel transition (i.e., `transition:slide`).<br />Set to `false` to disable the transition      |
 
 ### Slots
 
