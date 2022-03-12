@@ -22,7 +22,6 @@
   bind:this="{ref}"
   class:bx--header__action="{true}"
   class:bx--header__action--active="{linkIsActive}"
-  class:action-link="{true}"
   href="{href}"
   rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
   {...$$restProps}
@@ -31,11 +30,11 @@
 </a>
 
 <style>
-  .action-link {
-    text-align: center;
+  .bx--header__action {
+    display: flex;
     align-items: center;
-    vertical-align: middle;
     justify-content: center;
-    padding-top: 10px;
+    /** Hot fix to align icon with `HeaderAction` */
+    padding-bottom: 2px;
   }
 </style>
