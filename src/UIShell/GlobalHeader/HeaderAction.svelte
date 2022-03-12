@@ -1,8 +1,4 @@
 <script>
-  /**
-   * @typedef {{ delay?: number; duration?: number; easing?: (t: number) => number; }} HeaderActionSlideTransition
-   */
-
   /** Set to `true` to open the panel */
   export let isOpen = false;
 
@@ -29,9 +25,9 @@
   export let ref = null;
 
   /**
-   * Customize the panel transition (i.e., `transition:slide`)
+   * Customize the panel transition (i.e., `transition:slide`).
    * Set to `false` to disable the transition
-   * @type {false | HeaderActionSlideTransition}
+   * @type {false | import("svelte/transition").SlideParams}
    */
   export let transition = { duration: 200 };
 
