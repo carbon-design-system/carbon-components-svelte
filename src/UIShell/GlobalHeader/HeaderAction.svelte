@@ -92,16 +92,23 @@
 
 <style>
   .action-text {
-    font-size: 16px;
-    line-height: 20px;
-    text-decoration: none;
-    color: #fff;
-    width: 100%;
-    padding: 0 1rem;
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+
+    /** 2px bottom padding aligns icon with `HeaderAction` */
+    padding: 0 1rem 2px 1rem;
+
+    /** `body-short-01` styles */
+    font-size: 0.875rem;
+    line-height: 1.28572;
+    letter-spacing: 0.16px;
+
+    /** Same color as `Header` platformName */
+    color: #f4f4f4;
   }
 
   .action-text > span {
     margin-left: 0.75rem;
-    vertical-align: top;
   }
 </style>
