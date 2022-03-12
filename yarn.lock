@@ -1559,6 +1559,11 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+mri@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/mri/-/mri-1.2.0.tgz#6721480fec2a11a4889861115a48b6cbe7cc8f0b"
+  integrity sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
@@ -1764,6 +1769,11 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
+
+picocolors@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
+  integrity sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==
 
 picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.2.1, picomatch@^2.2.2:
   version "2.2.2"
@@ -2005,6 +2015,13 @@ rxjs@^6.6.3:
   integrity sha512-trsQc+xYYXZ3urjOiJOuCOa5N3jAZ3eiSpQB5hIT8zGlL2QfnHLJ2r7GMkBGuIausdJN1OneaI6gQlsqNHHmZQ==
   dependencies:
     tslib "^1.9.0"
+
+sade@^1.7.4:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/sade/-/sade-1.8.1.tgz#0a78e81d658d394887be57d2a409bf703a3b2701"
+  integrity sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==
+  dependencies:
+    mri "^1.1.0"
 
 safe-buffer@^5.1.0, safe-buffer@~5.2.0:
   version "5.2.1"
@@ -2316,16 +2333,17 @@ sveld@^0.13.2:
     svelte-preprocess "^4.10.2"
     typescript "^4.5.5"
 
-svelte-check@^1.1.32:
-  version "1.1.32"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-1.1.32.tgz#a3b6865130ad82861122664b27f93f9e57350484"
-  integrity sha512-tnG79CAz9F5kY8EYGeTfKNSN2OPbSQR/BVAFB60cFYa4P59Ti+6iGZ4gxNFm+dmzFSgZ5bjDq/AJneA0h7Pxow==
+svelte-check@^2.4.5:
+  version "2.4.5"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-2.4.5.tgz#a2001993034d495118980bd95577fb3e7980661a"
+  integrity sha512-nRft8BbG2wcxyCdHDZ7X43xLcvDzua3xLwq6wzHGcAF3ka3Jyhv2rvgq0+SF9NwHLMefp9C2XkM6etzsxK/cMQ==
   dependencies:
-    chalk "^4.0.0"
     chokidar "^3.4.1"
-    glob "^7.1.6"
+    fast-glob "^3.2.7"
     import-fresh "^3.2.1"
     minimist "^1.2.5"
+    picocolors "^1.0.0"
+    sade "^1.7.4"
     source-map "^0.7.3"
     svelte-preprocess "^4.0.0"
     typescript "*"

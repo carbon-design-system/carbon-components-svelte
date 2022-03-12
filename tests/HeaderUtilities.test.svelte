@@ -3,7 +3,6 @@
     Header,
     HeaderUtilities,
     HeaderAction,
-    HeaderActionSearch,
     HeaderGlobalAction,
     HeaderPanelLinks,
     HeaderPanelDivider,
@@ -31,7 +30,6 @@
     <SkipToContent />
   </div>
   <HeaderUtilities>
-    <HeaderActionSearch />
     <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust20}" />
     <HeaderAction
       bind:isOpen
