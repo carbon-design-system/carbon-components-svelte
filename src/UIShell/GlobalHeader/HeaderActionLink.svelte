@@ -16,8 +16,6 @@
 
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;
-
-  import Icon from "../../Icon/Icon.svelte";
 </script>
 
 <a
@@ -29,7 +27,7 @@
   rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
   {...$$restProps}
 >
-  <Icon render="{icon}" />
+  <svelte:component this="{icon}" />
 </a>
 
 <style>

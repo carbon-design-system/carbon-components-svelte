@@ -39,7 +39,6 @@
   import { slide } from "svelte/transition";
   import Close20 from "../../icons/Close20.svelte";
   import AppSwitcher20 from "../../icons/AppSwitcher20.svelte";
-  import Icon from "../../Icon/Icon.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -69,8 +68,11 @@
       dispatch(isOpen ? 'open' : 'close');
     }}"
   >
-    <Icon render="{icon}" style="{isOpen ? 'display: none' : ''}" />
-    <Icon render="{closeIcon}" style="{!isOpen ? 'display: none' : ''}" />
+    <svelte:component this="{icon}" style="{isOpen ? 'display: none' : ''}" />
+    <svelte:component
+      this="{closeIcon}"
+      style="{!isOpen ? 'display: none' : ''}"
+    />
     <slot name="text">
       {#if text}<span>{text}</span>{/if}
     </slot>
