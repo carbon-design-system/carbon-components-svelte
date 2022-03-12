@@ -54,43 +54,41 @@
   }}"
 />
 
-<div>
-  <button
-    bind:this="{ref}"
-    type="button"
-    class:bx--header__action="{true}"
-    class:bx--header__action--active="{isOpen}"
-    class:action-text="{text}"
-    {...$$restProps}
-    on:click
-    on:click="{() => {
-      isOpen = !isOpen;
-      dispatch(isOpen ? 'open' : 'close');
+<button
+  bind:this="{ref}"
+  type="button"
+  class:bx--header__action="{true}"
+  class:bx--header__action--active="{isOpen}"
+  class:action-text="{text}"
+  {...$$restProps}
+  on:click
+  on:click="{() => {
+    isOpen = !isOpen;
+    dispatch(isOpen ? 'open' : 'close');
+  }}"
+>
+  <svelte:component this="{icon}" style="{isOpen ? 'display: none' : ''}" />
+  <svelte:component
+    this="{closeIcon}"
+    style="{!isOpen ? 'display: none' : ''}"
+  />
+  <slot name="text">
+    {#if text}<span>{text}</span>{/if}
+  </slot>
+</button>
+{#if isOpen}
+  <div
+    bind:this="{refPanel}"
+    class:bx--header-panel="{true}"
+    class:bx--header-panel--expanded="{true}"
+    transition:slide="{{
+      ...transition,
+      duration: transition === false ? 0 : transition.duration,
     }}"
   >
-    <svelte:component this="{icon}" style="{isOpen ? 'display: none' : ''}" />
-    <svelte:component
-      this="{closeIcon}"
-      style="{!isOpen ? 'display: none' : ''}"
-    />
-    <slot name="text">
-      {#if text}<span>{text}</span>{/if}
-    </slot>
-  </button>
-  {#if isOpen}
-    <div
-      bind:this="{refPanel}"
-      class:bx--header-panel="{true}"
-      class:bx--header-panel--expanded="{true}"
-      transition:slide="{{
-        ...transition,
-        duration: transition === false ? 0 : transition.duration,
-      }}"
-    >
-      <slot />
-    </div>
-  {/if}
-</div>
+    <slot />
+  </div>
+{/if}
 
 <style>
   .action-text {
