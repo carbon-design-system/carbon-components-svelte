@@ -1,12 +1,13 @@
 <script>
-  import { ToggleSmall, CodeSnippet } from "carbon-components-svelte";
+  import { Toggle, CodeSnippet } from "carbon-components-svelte";
 
   let toggled = false;
 
   const code = Array.from({ length: 20 }, (_, i) => i + 1).join("\n");
 </script>
 
-<ToggleSmall
+<Toggle
+  size="sm"
   style="margin-bottom: var(--cds-spacing-05)"
   labelText="Show code snippets"
   bind:toggled

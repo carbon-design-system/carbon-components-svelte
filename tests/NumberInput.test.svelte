@@ -5,6 +5,8 @@
   let value: NumberInputProps["value"] = null;
 </script>
 
+{value}
+
 <NumberInput
   label="Clusters"
   on:change="{(e) => {
