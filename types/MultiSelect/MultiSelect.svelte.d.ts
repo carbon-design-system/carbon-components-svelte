@@ -222,7 +222,7 @@ export interface MultiSelectProps
    * Id of the highlighted ListBoxMenuItem
    * @default null
    */
-  highlightedId?: null | string;
+  highlightedId?: null | MultiSelectItemId;
 }
 
 export default class MultiSelect extends SvelteComponentTyped<

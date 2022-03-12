@@ -6809,7 +6809,7 @@
           "name": "highlightedId",
           "kind": "let",
           "description": "Id of the highlighted ListBoxMenuItem",
-          "type": "null | string",
+          "type": "null | MultiSelectItemId",
           "value": "null",
           "isFunction": false,
           "isFunctionDeclaration": false,

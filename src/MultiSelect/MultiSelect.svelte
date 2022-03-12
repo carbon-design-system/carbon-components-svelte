@@ -158,7 +158,7 @@
 
   /**
    * Id of the highlighted ListBoxMenuItem
-   * @type {null | string}
+   * @type {null | MultiSelectItemId}
    */
   export let highlightedId = null;
 
