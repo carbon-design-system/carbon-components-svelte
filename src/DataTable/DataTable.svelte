@@ -109,8 +109,8 @@
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
   import ChevronRight16 from "../icons/ChevronRight16.svelte";
-  import { InlineCheckbox } from "../Checkbox";
-  import { RadioButton } from "../RadioButton";
+  import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
+  import RadioButton from "../RadioButton/RadioButton.svelte";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
   import TableCell from "./TableCell.svelte";
