@@ -6804,6 +6804,17 @@
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "highlightedId",
+          "kind": "let",
+          "description": "Id of the highlighted ListBoxMenuItem",
+          "type": "null | MultiSelectItemId",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
         }
       ],
       "slots": [],

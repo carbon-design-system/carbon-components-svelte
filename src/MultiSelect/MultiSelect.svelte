@@ -156,6 +156,12 @@
    */
   export let selectionRef = null;
 
+  /**
+   * Id of the highlighted ListBoxMenuItem
+   * @type {null | MultiSelectItemId}
+   */
+  export let highlightedId = null;
+
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import WarningFilled16 from "../icons/WarningFilled16.svelte";
   import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
@@ -191,10 +197,10 @@
 
   function change(direction) {
     let index = highlightedIndex + direction;
-
+    const length = filterable ? filteredItems.length : items.length;
     if (index < 0) {
-      index = items.length - 1;
-    } else if (index >= items.length) {
+      index = length - 1;
+    } else if (index >= length) {
       index = 0;
     }
 
@@ -245,9 +251,10 @@
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
   $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
-  $: highlightedId = sortedItems[highlightedIndex]
-    ? sortedItems[highlightedIndex].id
-    : undefined;
+  $: highlightedId =
+    highlightedIndex > -1
+      ? (filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ?? null
+      : null;
   $: value = inputValue;
 </script>
 
@@ -394,23 +401,14 @@
           on:keydown
           on:keydown|stopPropagation="{({ key }) => {
             if (key === 'Enter') {
-              if (highlightedIndex > -1) {
-                if (filterable) {
-                  const filteredItemId = filteredItems[highlightedIndex].id;
-                  const filteredItemIndex = sortedItems
-                    .map((item) => item.id)
-                    .indexOf(filteredItemId);
-
-                  sortedItems = sortedItems.map((item, i) => {
-                    if (i !== filteredItemIndex) return item;
-                    return { ...item, checked: !item.checked };
-                  });
-                } else {
-                  sortedItems = sortedItems.map((item, i) => {
-                    if (i !== highlightedIndex) return item;
-                    return { ...item, checked: !item.checked };
-                  });
-                }
+              if (highlightedId) {
+                const filteredItemIndex = sortedItems.findIndex(
+                  (item) => item.id === highlightedId
+                );
+                sortedItems = sortedItems.map((item, i) => {
+                  if (i !== filteredItemIndex) return item;
+                  return { ...item, checked: !item.checked };
+                });
               }
             } else if (key === 'Tab') {
               open = false;
