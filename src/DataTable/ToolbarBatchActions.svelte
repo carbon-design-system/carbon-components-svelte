@@ -7,7 +7,7 @@
     `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
 
   import { onMount, getContext } from "svelte";
-  import { Button } from "../Button";
+  import Button from "../Button/Button.svelte";
 
   let batchSelectedIds = [];
 

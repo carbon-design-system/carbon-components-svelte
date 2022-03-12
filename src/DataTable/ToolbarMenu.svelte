@@ -3,7 +3,7 @@
 
   import { getContext } from "svelte";
   import Settings16 from "../icons/Settings16.svelte";
-  import { OverflowMenu } from "../OverflowMenu";
+  import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
 
   const ctx = getContext("Toolbar");
 

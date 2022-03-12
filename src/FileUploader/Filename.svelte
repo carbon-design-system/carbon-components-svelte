@@ -14,7 +14,7 @@
   import Close16 from "../icons/Close16.svelte";
   import CheckmarkFilled16 from "../icons/CheckmarkFilled16.svelte";
   import WarningFilled16 from "../icons/WarningFilled16.svelte";
-  import { Loading } from "../Loading";
+  import Loading from "../Loading/Loading.svelte";
 </script>
 
 {#if status === "uploading"}
