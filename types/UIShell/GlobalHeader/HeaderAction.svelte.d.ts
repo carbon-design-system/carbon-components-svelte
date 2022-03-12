@@ -1,12 +1,6 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
 
-export interface HeaderActionSlideTransition {
-  delay?: number;
-  duration?: number;
-  easing?: (t: number) => number;
-}
-
 export interface HeaderActionProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
   /**
@@ -41,11 +35,11 @@ export interface HeaderActionProps
   ref?: null | HTMLButtonElement;
 
   /**
-   * Customize the panel transition (i.e., `transition:slide`)
+   * Customize the panel transition (i.e., `transition:slide`).
    * Set to `false` to disable the transition
    * @default { duration: 200 }
    */
-  transition?: false | HeaderActionSlideTransition;
+  transition?: false | import("svelte/transition").SlideParams;
 }
 
 export default class HeaderAction extends SvelteComponentTyped<
