@@ -1044,6 +1044,12 @@ In the following example, each row in the sortable data table has an overflow me
 
 <FileSource src="/framed/DataTable/RadioSelectableDataTable" />
 
+### Non-selectable rows
+
+Use `nonSelectableRowIds` to specify the ids for rows that should not be selectable.
+
+<FileSource src="/framed/DataTable/DataTableNonSelectableRows" />
+
 ### Expandable
 
 <DataTable expandable
