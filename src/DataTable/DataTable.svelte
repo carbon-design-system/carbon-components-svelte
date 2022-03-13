@@ -170,7 +170,6 @@
     {}
   );
 
-  $: selectAll = rows.length > 0 && selectedRowIds.length === rows.length;
   let refSelectAll = null;
 
   $: batchSelectedIds.set(selectedRowIds);
@@ -181,8 +180,12 @@
   $: selectableRowIds = rowIds.filter(
     (id) => !nonSelectableRowIds.includes(id)
   );
+  $: selectAll =
+    selectableRowIds.length > 0 &&
+    selectedRowIds.length === selectableRowIds.length;
   $: indeterminate =
-    selectedRowIds.length > 0 && selectedRowIds.length < rows.length;
+    selectedRowIds.length > 0 &&
+    selectedRowIds.length < selectableRowIds.length;
   $: if (batchExpansion) {
     expandable = true;
     expanded = expandedRowIds.length === expandableRowIds.length;
