@@ -12,11 +12,11 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
 
 `DataTable` is keyed for both rendering and sorting purposes.
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every <code>headers</code> object must have a unique "key" property.</div>
 </InlineNotification>
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every <code>rows</code> object must have a unique "id" property.</div>
 </InlineNotification>
 

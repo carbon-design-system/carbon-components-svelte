@@ -7,7 +7,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-<InlineNotification svx-ignore title="Deprecation warning" kind="warning" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Deprecation warning" kind="warning" hideCloseButton>
   <div>
     This component will be removed in the next major release. Use icons from <OutboundLink href="https://github.com/carbon-design-system/carbon-icons-svelte">carbon-icons-svelte</OutboundLink> instead.
   </div>

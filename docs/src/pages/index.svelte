@@ -60,7 +60,7 @@
 </script>
 
 <Content>
-  <Grid>
+  <Grid style="margin-bottom: var(--cds-layout-06);">
     <Row>
       <Column>
         <h1>Carbon Components Svelte</h1>
@@ -91,18 +91,26 @@
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column>
         <h3>Installation</h3>
-        <h4>Using Yarn:</h4>
-        <Row noGutter>
-          <CodeSnippet code="{installYarn}" />
-        </Row>
-        <h4>Using NPM:</h4>
-        <Row noGutter>
-          <CodeSnippet code="{installNpm}" />
-        </Row>
-        <h4>Using pnpm:</h4>
-        <Row noGutter>
-          <CodeSnippet code="{installPnpm}" />
-        </Row>
+      </Column>
+    </Row>
+    <Row style="margin-bottom: var(--cds-layout-02)">
+      <Column noGutter>
+        <Tabs>
+          <Tab label="Yarn" />
+          <Tab label="NPM" />
+          <Tab label="pnpm" />
+          <div slot="content" style="margin: 1rem -1rem">
+            <TabContent>
+              <CodeSnippet code="{installYarn}" />
+            </TabContent>
+            <TabContent>
+              <CodeSnippet code="{installNpm}" />
+            </TabContent>
+            <TabContent>
+              <CodeSnippet code="{installPnpm}" />
+            </TabContent>
+          </div>
+        </Tabs>
       </Column>
     </Row>
     <Row style="margin-bottom: var(--cds-layout-04)">

@@ -33,7 +33,7 @@ The `checked` prop supports two-way binding.
 
 An alternative to `checked` is binding an array of values using `group`. This API in inspired by Svelte [group inputs]([group](https://svelte.dev/tutorial/group-inputs)).
 
-<InlineNotification svx-ignore title="Note:" kind="info" hideCloseButton>
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
     If using <strong>bind:group</strong>, <strong>bind:checked</strong> will only support one-way binding.
   </div>
