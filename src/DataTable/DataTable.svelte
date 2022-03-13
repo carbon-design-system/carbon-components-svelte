@@ -174,12 +174,13 @@
   let refSelectAll = null;
 
   $: batchSelectedIds.set(selectedRowIds);
-  $: expandableRowIds = rows
-    .map((row) => row.id)
-    .filter((id) => !nonExpandableRowIds.includes(id));
-  $: selectableRowIds = rows
-    .map((row) => row.id)
-    .filter((id) => !nonSelectableRowIds.includes(id));
+  $: rowIds = rows.map((row) => row.id);
+  $: expandableRowIds = rowIds.filter(
+    (id) => !nonExpandableRowIds.includes(id)
+  );
+  $: selectableRowIds = rowIds.filter(
+    (id) => !nonSelectableRowIds.includes(id)
+  );
   $: indeterminate =
     selectedRowIds.length > 0 && selectedRowIds.length < rows.length;
   $: if (batchExpansion) {
