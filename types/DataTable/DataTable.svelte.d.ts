@@ -132,6 +132,12 @@ export interface DataTableProps
   selectedRowIds?: DataTableRowId[];
 
   /**
+   * Specify the ids of rows that should not be selectable
+   * @default []
+   */
+  nonSelectableRowIds?: DataTableRowId[];
+
+  /**
    * Set to `true` to enable a sticky header
    * @default false
    */

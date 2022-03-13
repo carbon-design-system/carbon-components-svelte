@@ -94,6 +94,12 @@
    */
   export let selectedRowIds = [];
 
+  /**
+   * Specify the ids of rows that should not be selectable
+   * @type {DataTableRowId[]}
+   */
+  export let nonSelectableRowIds = [];
+
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
@@ -164,15 +170,22 @@
     {}
   );
 
-  $: selectAll = rows.length > 0 && selectedRowIds.length === rows.length;
   let refSelectAll = null;
 
   $: batchSelectedIds.set(selectedRowIds);
-  $: expandableRowIds = rows
-    .map((row) => row.id)
-    .filter((id) => !nonExpandableRowIds.includes(id));
+  $: rowIds = rows.map((row) => row.id);
+  $: expandableRowIds = rowIds.filter(
+    (id) => !nonExpandableRowIds.includes(id)
+  );
+  $: selectableRowIds = rowIds.filter(
+    (id) => !nonSelectableRowIds.includes(id)
+  );
+  $: selectAll =
+    selectableRowIds.length > 0 &&
+    selectedRowIds.length === selectableRowIds.length;
   $: indeterminate =
-    selectedRowIds.length > 0 && selectedRowIds.length < rows.length;
+    selectedRowIds.length > 0 &&
+    selectedRowIds.length < selectableRowIds.length;
   $: if (batchExpansion) {
     expandable = true;
     expanded = expandedRowIds.length === expandableRowIds.length;
@@ -293,7 +306,7 @@
                 }
 
                 if (e.target.checked) {
-                  selectedRowIds = rows.map((row) => row.id);
+                  selectedRowIds = selectableRowIds;
                 } else {
                   selectedRowIds = [];
                 }
@@ -405,28 +418,30 @@
               class:bx--table-column-checkbox="{true}"
               class:bx--table-column-radio="{radio}"
             >
-              {#if radio}
-                <RadioButton
-                  name="select-row-{row.id}"
-                  checked="{selectedRowIds.includes(row.id)}"
-                  on:change="{() => {
-                    selectedRowIds = [row.id];
-                  }}"
-                />
-              {:else}
-                <InlineCheckbox
-                  name="select-row-{row.id}"
-                  checked="{selectedRowIds.includes(row.id)}"
-                  on:change="{() => {
-                    if (selectedRowIds.includes(row.id)) {
-                      selectedRowIds = selectedRowIds.filter(
-                        (id) => id !== row.id
-                      );
-                    } else {
-                      selectedRowIds = [...selectedRowIds, row.id];
-                    }
-                  }}"
-                />
+              {#if !nonSelectableRowIds.includes(row.id)}
+                {#if radio}
+                  <RadioButton
+                    name="select-row-{row.id}"
+                    checked="{selectedRowIds.includes(row.id)}"
+                    on:change="{() => {
+                      selectedRowIds = [row.id];
+                    }}"
+                  />
+                {:else}
+                  <InlineCheckbox
+                    name="select-row-{row.id}"
+                    checked="{selectedRowIds.includes(row.id)}"
+                    on:change="{() => {
+                      if (selectedRowIds.includes(row.id)) {
+                        selectedRowIds = selectedRowIds.filter(
+                          (id) => id !== row.id
+                        );
+                      } else {
+                        selectedRowIds = [...selectedRowIds, row.id];
+                      }
+                    }}"
+                  />
+                {/if}
               {/if}
             </td>
           {/if}
