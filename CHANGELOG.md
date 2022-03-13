@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.61.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.61.0) - 2022-03-13
+
+**Breaking Changes**
+
+- remove `HeaderActionSlideTransition` interface from `HeaderAction`; transition prop is typed as `SlideParams` from `svelte/transition` instead
+- `Breakpoint` "on:match" event renamed to "on:change"
+
+**Features**
+
+- support `DataTable` non-selectable rows
+- expose `MultiSelect` highlightedId as a prop
+- add `breakpointObserver` store as an alternative to `Breakpoint`
+
+**Fixes**
+
+- audit `HeaderAction` text styles
+- visually align `HeaderActionLink` icon with `HeaderAction` icon
+- fix `MultiSelect` filterable selection error
+- correctly type `FileUploaderDropContainer` validateFiles prop
+- inline `Popover` SCSS from `carbon-components@10.47`
+
+**Refactor**
+
+- remove usage of deprecated `Icon` component
+- use direct component imports where possible
+
+**Documentation**
+
+- add `DataTable` "Non-selectable rows" example
+- add `OverflowMenu` "Disabled items" example
+- add `Breakpoint` "Store and Breakpoint Values" example
+
 ## [0.60.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.60.0) - 2022-02-26
 
 **Features**
