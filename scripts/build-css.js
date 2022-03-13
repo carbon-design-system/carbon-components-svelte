@@ -15,7 +15,7 @@ const path = require("path");
 
   const scss = fs
     .readdirSync("css")
-    .filter((file) => file.endsWith(".scss"))
+    .filter((file) => file.endsWith(".scss") && !/^\_popover/.test(file))
     .map((file) => path.parse(file));
 
   for (const { name, base } of scss) {
