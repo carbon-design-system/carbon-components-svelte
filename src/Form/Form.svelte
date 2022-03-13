@@ -13,7 +13,7 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:submit|preventDefault
+  on:submit
 >
   <slot />
 </form>
