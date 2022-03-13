@@ -2368,6 +2368,17 @@
           "reactive": true
         },
         {
+          "name": "nonSelectableRowIds",
+          "kind": "let",
+          "description": "Specify the ids of rows that should not be selectable",
+          "type": "DataTableRowId[]",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "stickyHeader",
           "kind": "let",
           "description": "Set to `true` to enable a sticky header",
