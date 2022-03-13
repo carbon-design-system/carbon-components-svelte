@@ -17,8 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Breaking Changes**
 
-- remove `HeaderActionSlideTransition` interface from `HeaderAction`; transition prop is typed as `SlideParams` from `svelte/transition` instead
-- `Breakpoint` "on:match" event renamed to "on:change"
+- remove `HeaderActionSlideTransition` interface from `HeaderAction`; type transition prop as `SlideParams`
+- rename `Breakpoint` "on:match" event to "on:change"
+- move `Breakpoint` breakpoints to `carbon-components-svelte/src/Breakpoint/breakpoints`
 
 **Features**
 
