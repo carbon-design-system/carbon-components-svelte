@@ -18,7 +18,6 @@ export { default as ContextMenuDivider } from "./ContextMenu/ContextMenuDivider.
 export { default as ContextMenuGroup } from "./ContextMenu/ContextMenuGroup.svelte";
 export { default as ContextMenuOption } from "./ContextMenu/ContextMenuOption.svelte";
 export { default as ContextMenuRadioGroup } from "./ContextMenu/ContextMenuRadioGroup.svelte";
-export { default as Copy } from "./Copy/Copy.svelte";
 export { default as CopyButton } from "./CopyButton/CopyButton.svelte";
 export { default as ComboBox } from "./ComboBox/ComboBox.svelte";
 export { default as ComposedModal } from "./ComposedModal/ComposedModal.svelte";
