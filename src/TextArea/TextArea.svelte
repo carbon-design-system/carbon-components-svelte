@@ -20,7 +20,7 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /**  Set to `true` to disable the input */
+  /** Set to `true` to disable the input */
   export let disabled = false;
 
   /** Set to `true` to use the read-only variant */

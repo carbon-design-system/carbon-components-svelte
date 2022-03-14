@@ -12,7 +12,7 @@
    */
   export let primaryButtonIcon = undefined;
 
-  /**  Set to `true` to disable the primary button */
+  /** Set to `true` to disable the primary button */
   export let primaryButtonDisabled = false;
 
   /**

@@ -383,7 +383,9 @@ title="Load balancers" description="Your organization's active load balancers."
       <ToolbarSearch />
       <ToolbarMenu>
         <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
-        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API documentation</ToolbarMenuItem>
+        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">
+          API documentation
+        </ToolbarMenuItem>
         <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
       </ToolbarMenu>
       <Button>Create balancer</Button>
