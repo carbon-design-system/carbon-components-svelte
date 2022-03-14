@@ -88,14 +88,17 @@
   /** Obtain a reference to the pre HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, tick } from "svelte";
+  import { createEventDispatcher, tick, onMount } from "svelte";
   import ChevronDown16 from "../icons/ChevronDown16.svelte";
   import Button from "../Button/Button.svelte";
-  import Copy from "../Copy/Copy.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
+
+  /** @type {"fade-in" | "fade-out"} */
+  let animation = undefined;
+  let timeout = undefined;
 
   function setShowMoreLess() {
     const { height } = ref.getBoundingClientRect();
@@ -114,6 +117,10 @@
     if (code === undefined) setShowMoreLess();
     if (code) tick().then(setShowMoreLess);
   }
+
+  onMount(() => {
+    return () => clearTimeout(timeout);
+  });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -144,20 +151,35 @@
       </code>
     </span>
   {:else}
-    <Copy
+    <button
+      type="button"
+      aria-live="polite"
+      class:bx--copy="{true}"
+      class:bx--btn--copy="{true}"
+      class:bx--copy-btn--animating="{animation}"
+      class:bx--copy-btn--fade-in="{animation === 'fade-in'}"
+      class:bx--copy-btn--fade-out="{animation === 'fade-out'}"
+      class:bx--snippet="{true}"
+      class:bx--snippet--inline="{type === 'inline'}"
+      class:bx--snippet--expand="{expanded}"
+      class:bx--snippet--light="{light}"
+      class:bx--snippet--wraptext="{wrapText}"
       aria-label="{copyLabel}"
-      aria-describedby="{id}"
-      feedback="{feedback}"
-      feedbackTimeout="{feedbackTimeout}"
-      class="bx--snippet {type && `bx--snippet--${type}`}
-          {type === 'inline' && 'bx--btn--copy'}
-          {expanded && 'bx--snippet--expand'}
-          {light && 'bx--snippet--light'}
-          {hideCopyButton && 'bx--snippet--no-copy'}
-          {wrapText && 'bx--snippet--wraptext'}"
       {...$$restProps}
       on:click
-      on:click="{copyCode}"
+      on:click="{() => {
+        copyCode();
+        if (animation === 'fade-in') return;
+        animation = 'fade-in';
+        timeout = setTimeout(() => {
+          animation = 'fade-out';
+        }, feedbackTimeout);
+      }}"
+      on:animationend="{({ animationName }) => {
+        if (animationName === 'hide-feedback') {
+          animation = undefined;
+        }
+      }}"
       on:mouseover
       on:mouseenter
       on:mouseleave
@@ -165,7 +187,14 @@
       <code id="{id}">
         <slot>{code}</slot>
       </code>
-    </Copy>
+      <span
+        aria-hidden="true"
+        class:bx--assistive-text="{true}"
+        class:bx--copy-btn__feedback="{true}"
+      >
+        {feedback}
+      </span>
+    </button>
   {/if}
 {:else}
   <div
