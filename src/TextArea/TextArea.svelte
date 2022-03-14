@@ -94,6 +94,7 @@
     {/if}
     <textarea
       bind:this="{ref}"
+      bind:value
       aria-invalid="{invalid || undefined}"
       aria-describedby="{invalid ? errorId : undefined}"
       disabled="{disabled}"
@@ -101,7 +102,6 @@
       name="{name}"
       cols="{cols}"
       rows="{rows}"
-      value="{value ?? ''}"
       placeholder="{placeholder}"
       readonly="{readonly}"
       class:bx--text-area="{true}"
@@ -111,9 +111,6 @@
       {...$$restProps}
       on:change
       on:input
-      on:input="{({ target }) => {
-        value = target.value;
-      }}"
       on:keydown
       on:keyup
       on:focus
