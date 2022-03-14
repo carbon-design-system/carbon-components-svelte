@@ -12,7 +12,6 @@ export {
   ContextMenuOption,
   ContextMenuRadioGroup,
 } from "./ContextMenu";
-export { Copy } from "./Copy";
 export { CopyButton } from "./CopyButton";
 export { ComboBox } from "./ComboBox";
 export {
