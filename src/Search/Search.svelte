@@ -5,6 +5,12 @@
    */
 
   /**
+   * Specify the value of the search input
+   * @type {any}
+   */
+  export let value = "";
+
+  /**
    * @deprecated this prop will be removed in the next major release
    * Use size="sm" instead
    */
@@ -33,9 +39,6 @@
 
   /** Set to `true to expand the search input */
   export let expanded = false;
-
-  /** Specify the value of the search input */
-  export let value = "";
 
   /** Specify the `placeholder` attribute of the search input */
   export let placeholder = "Search...";
