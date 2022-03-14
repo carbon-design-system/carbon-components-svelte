@@ -3172,7 +3172,6 @@ None.
 | light                | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant               |
 | disabled             | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to disable the search input               |
 | expandable           | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the expandable variant          |
-| type                 | <code>let</code> | No       | <code>string</code>                                  | <code>"text"</code>                              | Specify the `type` attribute of the search input        |
 | placeholder          | <code>let</code> | No       | <code>string</code>                                  | <code>"Search..."</code>                         | Specify the `placeholder` attribute of the search input |
 | autocomplete         | <code>let</code> | No       | <code>"on" &#124; "off"</code>                       | <code>"off"</code>                               | Specify the `autocomplete` attribute                    |
 | autofocus            | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to auto focus the search element          |

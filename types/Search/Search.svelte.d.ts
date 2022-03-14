@@ -56,12 +56,6 @@ export interface SearchProps {
   value?: string;
 
   /**
-   * Specify the `type` attribute of the search input
-   * @default "text"
-   */
-  type?: string;
-
-  /**
    * Specify the `placeholder` attribute of the search input
    * @default "Search..."
    */

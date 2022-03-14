@@ -9214,17 +9214,6 @@
           "reactive": true
         },
         {
-          "name": "type",
-          "kind": "let",
-          "description": "Specify the `type` attribute of the search input",
-          "type": "string",
-          "value": "\"text\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "placeholder",
           "kind": "let",
           "description": "Specify the `placeholder` attribute of the search input",
