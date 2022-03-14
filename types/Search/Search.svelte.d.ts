@@ -3,6 +3,12 @@ import { SvelteComponentTyped } from "svelte";
 
 export interface SearchProps {
   /**
+   * Specify the value of the search input
+   * @default ""
+   */
+  value?: any;
+
+  /**
    * @default false
    */
   small?: boolean;
@@ -48,12 +54,6 @@ export interface SearchProps {
    * @default false
    */
   expanded?: boolean;
-
-  /**
-   * Specify the value of the search input
-   * @default ""
-   */
-  value?: string;
 
   /**
    * Specify the `placeholder` attribute of the search input
