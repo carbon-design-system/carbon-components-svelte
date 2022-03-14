@@ -3163,8 +3163,8 @@ None.
 | Prop name            | Kind             | Reactive | Type                                                 | Default value                                    | Description                                             |
 | :------------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
 | ref                  | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>            | <code>null</code>                                | Obtain a reference to the input HTML element            |
-| value                | <code>let</code> | Yes      | <code>string</code>                                  | <code>""</code>                                  | Specify the value of the search input                   |
 | expanded             | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true to expand the search input                 |
+| value                | <code>let</code> | Yes      | <code>any</code>                                     | <code>""</code>                                  | Specify the value of the search input                   |
 | small                | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | --                                                      |
 | size                 | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>            | <code>"xl"</code>                                | Specify the size of the search input                    |
 | searchClass          | <code>let</code> | No       | <code>string</code>                                  | <code>""</code>                                  | Specify the class name passed to the outer div element  |
@@ -3172,7 +3172,6 @@ None.
 | light                | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant               |
 | disabled             | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to disable the search input               |
 | expandable           | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the expandable variant          |
-| type                 | <code>let</code> | No       | <code>string</code>                                  | <code>"text"</code>                              | Specify the `type` attribute of the search input        |
 | placeholder          | <code>let</code> | No       | <code>string</code>                                  | <code>"Search..."</code>                         | Specify the `placeholder` attribute of the search input |
 | autocomplete         | <code>let</code> | No       | <code>"on" &#124; "off"</code>                       | <code>"off"</code>                               | Specify the `autocomplete` attribute                    |
 | autofocus            | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to auto focus the search element          |

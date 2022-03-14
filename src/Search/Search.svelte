@@ -5,6 +5,12 @@
    */
 
   /**
+   * Specify the value of the search input
+   * @type {any}
+   */
+  export let value = "";
+
+  /**
    * @deprecated this prop will be removed in the next major release
    * Use size="sm" instead
    */
@@ -33,12 +39,6 @@
 
   /** Set to `true to expand the search input */
   export let expanded = false;
-
-  /** Specify the value of the search input */
-  export let value = "";
-
-  /** Specify the `type` attribute of the search input */
-  export let type = "text";
 
   /** Specify the `placeholder` attribute of the search input */
   export let placeholder = "Search...";
@@ -125,6 +125,8 @@
     <!-- svelte-ignore a11y-autofocus -->
     <input
       bind:this="{ref}"
+      bind:value
+      type="text"
       role="searchbox"
       class:bx--search-input="{true}"
       autofocus="{autofocus === true ? true : undefined}"
@@ -132,14 +134,9 @@
       disabled="{disabled}"
       id="{id}"
       placeholder="{placeholder}"
-      type="{type}"
-      value="{value}"
       {...$$restProps}
       on:change
       on:input
-      on:input="{({ target }) => {
-        value = target.value;
-      }}"
       on:focus
       on:focus="{() => {
         if (expandable) expanded = true;

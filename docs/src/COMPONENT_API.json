@@ -9116,6 +9116,17 @@
       "filePath": "src/Search/Search.svelte",
       "props": [
         {
+          "name": "value",
+          "kind": "let",
+          "description": "Specify the value of the search input",
+          "type": "any",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
           "name": "small",
           "kind": "let",
           "type": "boolean",
@@ -9201,28 +9212,6 @@
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": true
-        },
-        {
-          "name": "value",
-          "kind": "let",
-          "description": "Specify the value of the search input",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": true
-        },
-        {
-          "name": "type",
-          "kind": "let",
-          "description": "Specify the `type` attribute of the search input",
-          "type": "string",
-          "value": "\"text\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": false
         },
         {
           "name": "placeholder",
