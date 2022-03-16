@@ -1,5 +1,9 @@
 <script>
-  /** @extends {"../Copy/Copy.svelte"} CopyProps */
+  /** Set the feedback text shown after clicking the button */
+  export let feedback = "Copied!";
+
+  /** Set the timeout duration (ms) to display feedback text */
+  export let feedbackTimeout = 2000;
 
   /** Set the title and ARIA label for the copy button */
   export let iconDescription = "Copy to clipboard";
@@ -22,15 +26,28 @@
     }
   };
 
-  import Copy from "../Copy/Copy.svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import Copy16 from "../icons/Copy16.svelte";
-  import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
+
+  /** @type {"fade-in" | "fade-out"} */
+  let animation = undefined;
+  let timeout = undefined;
+
+  onMount(() => {
+    return () => clearTimeout(timeout);
+  });
 </script>
 
-<Copy
-  class="bx--copy-btn"
+<button
+  type="button"
+  aria-live="polite"
+  class:bx--copy-btn="{true}"
+  class:bx--copy="{true}"
+  class:bx--copy-btn--animating="{animation}"
+  class:bx--copy-btn--fade-in="{animation === 'fade-in'}"
+  class:bx--copy-btn--fade-out="{animation === 'fade-out'}"
   aria-label="{iconDescription}"
   title="{iconDescription}"
   {...$$restProps}
@@ -40,8 +57,26 @@
       copy(text);
       dispatch('copy');
     }
+
+    if (animation === 'fade-in') return;
+    animation = 'fade-in';
+    timeout = setTimeout(() => {
+      animation = 'fade-out';
+    }, feedbackTimeout);
   }}"
   on:animationend
+  on:animationend="{({ animationName }) => {
+    if (animationName === 'hide-feedback') {
+      animation = undefined;
+    }
+  }}"
 >
   <Copy16 class="bx--snippet__icon" />
-</Copy>
+  <span
+    aria-hidden="true"
+    class:bx--assistive-text="{true}"
+    class:bx--copy-btn__feedback="{true}"
+  >
+    {feedback}
+  </span>
+</button>

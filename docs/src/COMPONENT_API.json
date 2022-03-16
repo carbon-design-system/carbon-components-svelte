@@ -2181,6 +2181,28 @@
       "filePath": "src/CopyButton/CopyButton.svelte",
       "props": [
         {
+          "name": "feedback",
+          "kind": "let",
+          "description": "Set the feedback text shown after clicking the button",
+          "type": "string",
+          "value": "\"Copied!\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "feedbackTimeout",
+          "kind": "let",
+          "description": "Set the timeout duration (ms) to display feedback text",
+          "type": "number",
+          "value": "2000",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "iconDescription",
           "kind": "let",
           "description": "Set the title and ARIA label for the copy button",
@@ -2216,16 +2238,12 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        { "type": "forwarded", "name": "click", "element": "Copy" },
-        { "type": "forwarded", "name": "animationend", "element": "Copy" },
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "animationend", "element": "button" },
         { "type": "dispatched", "name": "copy" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "Copy" },
-      "extends": {
-        "interface": "CopyProps",
-        "import": "\"../Copy/Copy.svelte\""
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "DataTable",
@@ -9222,6 +9240,17 @@
       "filePath": "src/Search/Search.svelte",
       "props": [
         {
+          "name": "value",
+          "kind": "let",
+          "description": "Specify the value of the search input",
+          "type": "any",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
           "name": "small",
           "kind": "let",
           "type": "boolean",
@@ -9307,28 +9336,6 @@
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": true
-        },
-        {
-          "name": "value",
-          "kind": "let",
-          "description": "Specify the value of the search input",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": true
-        },
-        {
-          "name": "type",
-          "kind": "let",
-          "description": "Specify the `type` attribute of the search input",
-          "type": "string",
-          "value": "\"text\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": false
         },
         {
           "name": "placeholder",

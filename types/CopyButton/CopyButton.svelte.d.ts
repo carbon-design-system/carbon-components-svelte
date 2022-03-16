@@ -1,8 +1,20 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
-import { CopyProps } from "../Copy/Copy.svelte";
 
-export interface CopyButtonProps extends CopyProps {
+export interface CopyButtonProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
+  /**
+   * Set the feedback text shown after clicking the button
+   * @default "Copied!"
+   */
+  feedback?: string;
+
+  /**
+   * Set the timeout duration (ms) to display feedback text
+   * @default 2000
+   */
+  feedbackTimeout?: number;
+
   /**
    * Set the title and ARIA label for the copy button
    * @default "Copy to clipboard"
