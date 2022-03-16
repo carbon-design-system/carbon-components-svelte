@@ -386,7 +386,7 @@ title="Load balancers" description="Your organization's active load balancers."
         <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">
           API documentation
         </ToolbarMenuItem>
-        <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
+        <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
       </ToolbarMenu>
       <Button>Create balancer</Button>
     </ToolbarContent>
@@ -453,7 +453,7 @@ title="Load balancers" description="Your organization's active load balancers."
       <ToolbarMenu>
         <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
         <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API documentation</ToolbarMenuItem>
-        <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
+        <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
       </ToolbarMenu>
       <Button>Create balancer</Button>
     </ToolbarContent>
