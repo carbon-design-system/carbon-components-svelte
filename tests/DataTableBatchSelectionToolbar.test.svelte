@@ -43,7 +43,7 @@
         <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">
           API documentation
         </ToolbarMenuItem>
-        <ToolbarMenuItem danger>Stop all</ToolbarMenuItem>
+        <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
       </ToolbarMenu>
       <Button>Create balancer</Button>
     </ToolbarContent>
