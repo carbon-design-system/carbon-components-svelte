@@ -28,6 +28,23 @@ export interface ToolbarSearchProps
   disabled?: boolean;
 
   /**
+   * Set to `true` to filter table rows using the search value.
+   *
+   * If `true`, the default search excludes `id`, `cells` fields and
+   * only does a basic comparison on string and number type cell values.
+   *
+   * To implement your own client-side filtering, pass a function
+   * that accepts a row and value and returns a boolean.
+   * @default false
+   */
+  shouldFilterRows?:
+    | boolean
+    | ((
+        rows: import("./DataTable.svelte").DataTableRow,
+        value: number | string
+      ) => boolean);
+
+  /**
    * Specify the tabindex
    * @default "0"
    */
