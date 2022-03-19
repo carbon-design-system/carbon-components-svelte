@@ -3,10 +3,10 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`ComboBox` is keyed for performance reasons.
+
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    Since version 0.53, <strong>selectedIndex</strong> has been replaced with <strong>selectedId</strong>.
-  </div>
+  <div class="body-short-01">Every <code>items</code> object must have a unique "id" property.</div>
 </InlineNotification>
 
 ### Default

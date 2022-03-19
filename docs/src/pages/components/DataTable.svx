@@ -10,7 +10,7 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
   const pagination = { pageSize: 5, page: 1}
 </script>
 
-`DataTable` is keyed for both rendering and sorting purposes.
+`DataTable` is keyed for performance reasons.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every <code>headers</code> object must have a unique "key" property.</div>
@@ -21,6 +21,10 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
 </InlineNotification>
 
 ### Default
+
+The key value in `headers` corresponds to the key value defined in `rows`.
+
+For example, the header key `"name"` will use the value of `rows[index].name`.
 
 <DataTable
   headers="{[

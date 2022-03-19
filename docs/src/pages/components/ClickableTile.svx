@@ -13,6 +13,20 @@ source: Tile/ClickableTile.svelte
 Carbon Design System
 </ClickableTile>
 
+### Prevent default behavior
+
+Use the forwarded `click` event and invoke `e.preventDefault()` to prevent the native link behavior.
+
+<ClickableTile
+  href="/"
+  on:click={(e) => {
+    e.preventDefault();
+    // custom behavior
+  }}
+>
+  Carbon Design System
+</ClickableTile>
+
 ### Light variant
 
 <ClickableTile light href="https://www.carbondesignsystem.com/">
