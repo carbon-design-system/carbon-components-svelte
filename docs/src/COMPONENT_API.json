@@ -1,5 +1,5 @@
 {
-  "total": 172,
+  "total": 171,
   "components": [
     {
       "moduleName": "Accordion",
@@ -2134,60 +2134,6 @@
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
-    },
-    {
-      "moduleName": "Copy",
-      "filePath": "src/Copy/Copy.svelte",
-      "props": [
-        {
-          "name": "feedback",
-          "kind": "let",
-          "description": "Set the feedback text shown after clicking the button",
-          "type": "string",
-          "value": "\"Copied!\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "feedbackTimeout",
-          "kind": "let",
-          "description": "Set the timeout duration (ms) to display feedback text",
-          "type": "number",
-          "value": "2000",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "ref",
-          "kind": "let",
-          "description": "Obtain a reference to the button HTML element",
-          "type": "null | HTMLButtonElement",
-          "value": "null",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": true
-        }
-      ],
-      "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "fallback": "{#if animation}{feedback || $$restProps[\"aria-label\"]}{/if}",
-          "slot_props": "{}"
-        }
-      ],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "button" },
-        { "type": "forwarded", "name": "animationend", "element": "button" }
-      ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "CopyButton",

@@ -85,9 +85,6 @@
     "ContextMenuRadioGroup": {
       "path": "carbon-components-svelte/src/ContextMenu/ContextMenuRadioGroup.svelte"
     },
-    "Copy": {
-      "path": "carbon-components-svelte/src/Copy/Copy.svelte"
-    },
     "CopyButton": {
       "path": "carbon-components-svelte/src/CopyButton/CopyButton.svelte"
     },

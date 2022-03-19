@@ -1,6 +1,6 @@
 # Component Index
 
-> 172 components exported from carbon-components-svelte@0.61.1.
+> 171 components exported from carbon-components-svelte@0.61.1.
 
 ## Components
 
@@ -30,7 +30,6 @@
 - [`ContextMenuGroup`](#contextmenugroup)
 - [`ContextMenuOption`](#contextmenuoption)
 - [`ContextMenuRadioGroup`](#contextmenuradiogroup)
-- [`Copy`](#copy)
 - [`CopyButton`](#copybutton)
 - [`DataTable`](#datatable)
 - [`DataTableSkeleton`](#datatableskeleton)
@@ -894,29 +893,6 @@ None.
 ### Events
 
 None.
-
-## `Copy`
-
-### Props
-
-| Prop name       | Kind             | Reactive | Type                                       | Default value          | Description                                            |
-| :-------------- | :--------------- | :------- | :----------------------------------------- | ---------------------- | ------------------------------------------------------ |
-| ref             | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>      | Obtain a reference to the button HTML element          |
-| feedback        | <code>let</code> | No       | <code>string</code>                        | <code>"Copied!"</code> | Set the feedback text shown after clicking the button  |
-| feedbackTimeout | <code>let</code> | No       | <code>number</code>                        | <code>2000</code>      | Set the timeout duration (ms) to display feedback text |
-
-### Slots
-
-| Slot name | Default | Props | Fallback                                                                           |
-| :-------- | :------ | :---- | :--------------------------------------------------------------------------------- |
-| --        | Yes     | --    | <code>{#if animation}{feedback &#124;&#124; $$restProps["aria-label"]}{/if}</code> |
-
-### Events
-
-| Event name   | Type      | Detail |
-| :----------- | :-------- | :----- |
-| click        | forwarded | --     |
-| animationend | forwarded | --     |
 
 ## `CopyButton`
 
