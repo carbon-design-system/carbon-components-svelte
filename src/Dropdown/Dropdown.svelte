@@ -4,6 +4,7 @@
    * @typedef {string} DropdownItemText
    * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
    * @event {{ selectedId: DropdownItemId, selectedItem: DropdownItem }} select
+   * @slot {{ item: DropdownItem; index: number; }}
    */
 
   /**
@@ -256,7 +257,9 @@
               highlightedIndex = i;
             }}"
           >
-            {itemToString(item)}
+            <slot item="{item}" index="{i}">
+              {itemToString(item)}
+            </slot>
           </ListBoxMenuItem>
         {/each}
       </ListBoxMenu>
