@@ -153,5 +153,5 @@ export default class Dropdown extends SvelteComponentTyped<
       selectedItem: DropdownItem;
     }>;
   },
-  {}
+  { default: { item: DropdownItem; index: number } }
 > {}
