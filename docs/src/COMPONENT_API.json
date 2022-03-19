@@ -3311,7 +3311,14 @@
         }
       ],
       "moduleExports": [],
-      "slots": [],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "fallback": "{itemToString(item)}",
+          "slot_props": "{ item: DropdownItem; index: number; }"
+        }
+      ],
       "events": [
         {
           "type": "dispatched",

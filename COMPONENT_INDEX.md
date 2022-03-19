@@ -1195,7 +1195,9 @@ export interface DropdownItem {
 
 ### Slots
 
-None.
+| Slot name | Default | Props                                                | Fallback                          |
+| :-------- | :------ | :--------------------------------------------------- | :-------------------------------- |
+| --        | Yes     | <code>{ item: DropdownItem; index: number; } </code> | <code>{itemToString(item)}</code> |
 
 ### Events
 
