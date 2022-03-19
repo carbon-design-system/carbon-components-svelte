@@ -10152,6 +10152,12 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": "__default__",
+          "default": true,
+          "fallback": "{text}",
+          "slot_props": "{}"
+        },
+        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this=\"{icon}\" />",
