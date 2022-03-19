@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - add `shouldFilterRows` prop to `ToolbarSearch` to support auto-filterable `DataTable` rows
 - make `SideNavLink` text slottable
-- make `icon` prop slottable in `ContextMenuOption`, `Link`, `Tag`, `HeaderAction`, `HeaderActionLink`, `SideNavLink`, `SideNavMenu` components
+- make `icon` prop slottable in `ContextMenuOption`, `Link`, `Tag`, `HeaderAction`, `HeaderActionLink`, `SideNavLink`, `SideNavMenu`
 - make `MultiSelect` slottable
 - make `Dropdown` slottable
 - make `ComboBox` slottable
@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add `ComboBox` "Custom slot" example
 - add note that `items` object in `ComboBox`, `Dropdown`, `MultiSelect` requires a unique `id`
 - add `ClickableTile` "Prevent default behavior" example
+- add `Form` "Prevent default behavior" example
 - fix broken link in `Checkbox` docs
 
 ## [0.61.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.61.1) - 2022-03-13
