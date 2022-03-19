@@ -1,8 +1,6 @@
 import { optimizeImports } from "carbon-preprocess-svelte";
 
 /** @type {import('@sveltejs/kit').Config} */
-const config = {
+export default {
   preprocess: [optimizeImports()],
 };
-
-export default config;
