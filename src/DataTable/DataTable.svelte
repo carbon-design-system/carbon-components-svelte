@@ -140,6 +140,7 @@
     sortDirection: "none",
   });
   const headerItems = writable([]);
+  const tableRows = writable(rows);
   const thKeys = derived(headerItems, () =>
     headers
       .map(({ key }, i) => ({ key, id: key }))
@@ -155,6 +156,7 @@
     sortHeader,
     tableSortable,
     batchSelectedIds,
+    tableRows,
     resetSelectedRowIds: () => {
       selectAll = false;
       selectedRowIds = [];
@@ -173,7 +175,7 @@
   let refSelectAll = null;
 
   $: batchSelectedIds.set(selectedRowIds);
-  $: rowIds = rows.map((row) => row.id);
+  $: rowIds = $tableRows.map((row) => row.id);
   $: expandableRowIds = rowIds.filter(
     (id) => !nonExpandableRowIds.includes(id)
   );
@@ -193,23 +195,25 @@
   $: if (radio || batchSelection) selectable = true;
   $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
-  $: rows = rows.map((row) => ({
-    ...row,
-    cells: headerKeys.map((key, index) => ({
-      key,
-      value: resolvePath(row, key),
-      display: headers[index].display,
-    })),
-  }));
-  $: sortedRows = rows;
+  $: tableRows.set(
+    rows.map((row) => ({
+      ...row,
+      cells: headerKeys.map((key, index) => ({
+        key,
+        value: resolvePath(row, key),
+        display: headers[index].display,
+      })),
+    }))
+  );
+  $: sortedRows = [...$tableRows];
   $: ascending = $sortHeader.sortDirection === "ascending";
   $: sortKey = $sortHeader.key;
   $: sorting = sortable && sortKey != null;
   $: if (sorting) {
     if ($sortHeader.sortDirection === "none") {
-      sortedRows = rows;
+      sortedRows = $tableRows;
     } else {
-      sortedRows = [...rows].sort((a, b) => {
+      sortedRows = [...$tableRows].sort((a, b) => {
         const itemA = ascending
           ? resolvePath(a, sortKey, "")
           : resolvePath(b, sortKey, "");
@@ -236,7 +240,7 @@
     page && pageSize
       ? rows.slice((page - 1) * pageSize, page * pageSize)
       : rows;
-  $: displayedRows = getDisplayedRows(rows, page, pageSize);
+  $: displayedRows = getDisplayedRows($tableRows, page, pageSize);
   $: displayedSortedRows = getDisplayedRows(sortedRows, page, pageSize);
 </script>
 
