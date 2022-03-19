@@ -58,16 +58,16 @@
   class:action-text="{text}"
   {...$$restProps}
   on:click
-  on:click="{() => {
+  on:click|stopPropagation="{() => {
     isOpen = !isOpen;
     dispatch(isOpen ? 'open' : 'close');
   }}"
 >
-  <svelte:component this="{icon}" style="{isOpen ? 'display: none' : ''}" />
-  <svelte:component
-    this="{closeIcon}"
-    style="{!isOpen ? 'display: none' : ''}"
-  />
+  {#if isOpen}
+    <svelte:component this="{closeIcon}" />
+  {:else}
+    <svelte:component this="{icon}" />
+  {/if}
   <slot name="text">
     {#if text}<span>{text}</span>{/if}
   </slot>
