@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.62.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.62.0) - 2022-03-19
+
+**Breaking Changes**
+
+- remove `Copy` component
+- do not prevent default submit behavior in `Form`
+
+**Features**
+
+- add `shouldFilterRows` prop to `ToolbarSearch` to support auto-filterable `DataTable` rows
+- make `SideNavLink` text slottable
+- make `icon` prop slottable in `ContextMenuOption`, `Link`, `Tag`, `HeaderAction`, `HeaderActionLink`, `SideNavLink`, `SideNavMenu` components
+- make `MultiSelect` slottable
+- make `Dropdown` slottable
+- make `ComboBox` slottable
+
+**Fixes**
+
+- stop click propagation on `HeaderAction` button
+
+**Refactor**
+
+- inline `Copy` component in `CopyButton`, `CodeSnippet`
+- use native `bind:value` in `Search`
+- use native `bind:value` in `TextArea`
+
+**Documentation**
+
+- add `DataTable` "Filterable" and "Filterable (custom)" examples
+- add `MultiSelect` "Custom slot" example
+- add `Dropdown` "Custom slot" example
+- add `ComboBox` "Custom slot" example
+- add note that `items` object in `ComboBox`, `Dropdown`, `MultiSelect` requires a unique `id`
+- add `ClickableTile` "Prevent default behavior" example
+- fix broken link in `Checkbox` docs
+
 ## [0.61.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.61.1) - 2022-03-13
 
 **Fixes**
