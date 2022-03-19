@@ -23,7 +23,12 @@
   on:select="{(e) => {
     console.log(e.detail.selectedId);
   }}"
-/>
+  let:item
+  let:index
+>
+  {item.id}
+  {index}
+</ComboBox>
 
 <ComboBox
   titleText="Contact"
