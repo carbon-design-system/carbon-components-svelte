@@ -22,6 +22,10 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
 
 ### Default
 
+The key value in `headers` corresponds to the key value defined in `rows`.
+
+For example, the header key `"name"` will use the value of `rows[index].name`.
+
 <DataTable
   headers="{[
     { key: "name", value: "Name" },
