@@ -45,9 +45,14 @@
     on:mouseenter
     on:mouseleave
   >
-    <slot />{#if !inline && icon}<div class:bx--link__icon="{true}">
-        <svelte:component this="{icon}" />
-      </div>{/if}
+    <slot />
+    {#if !inline && ($$slots.icon || icon)}
+      <div class:bx--link__icon="{true}">
+        <slot name="icon">
+          <svelte:component this="{icon}" />
+        </slot>
+      </div>
+    {/if}
   </p>
 {:else}
   <a
@@ -65,8 +70,14 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
-    ><slot />{#if !inline && icon}<div class:bx--link__icon="{true}">
-        <svelte:component this="{icon}" />
-      </div>{/if}</a
   >
+    <slot />
+    {#if !inline && ($$slots.icon || icon)}
+      <div class:bx--link__icon="{true}">
+        <slot name="icon">
+          <svelte:component this="{icon}" />
+        </slot>
+      </div>
+    {/if}
+  </a>
 {/if}

@@ -64,9 +64,13 @@
   }}"
 >
   {#if isOpen}
-    <svelte:component this="{closeIcon}" />
+    <slot name="closeIcon">
+      <svelte:component this="{closeIcon}" />
+    </slot>
   {:else}
-    <svelte:component this="{icon}" />
+    <slot name="icon">
+      <svelte:component this="{icon}" />
+    </slot>
   {/if}
   <slot name="text">
     {#if text}<span>{text}</span>{/if}
