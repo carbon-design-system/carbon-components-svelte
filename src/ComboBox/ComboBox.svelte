@@ -3,6 +3,7 @@
    * @typedef {any} ComboBoxItemId
    * @typedef {{ id: ComboBoxItemId; text: string; }} ComboBoxItem
    * @event {{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }} select
+   * @slot {{ item: ComboBoxItem; index: number }}
    */
 
   /**
@@ -363,7 +364,9 @@
               highlightedIndex = i;
             }}"
           >
-            {itemToString(item)}
+            <slot item="{item}" index="{i}">
+              {itemToString(item)}
+            </slot>
             {#if selectedItem && selectedItem.id === item.id}
               <Checkmark16 class="bx--list-box__menu-item__selected-icon" />
             {/if}

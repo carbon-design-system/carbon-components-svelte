@@ -686,7 +686,9 @@ export interface ComboBoxItem {
 
 ### Slots
 
-None.
+| Slot name | Default | Props                                               | Fallback                          |
+| :-------- | :------ | :-------------------------------------------------- | :-------------------------------- |
+| --        | Yes     | <code>{ item: ComboBoxItem; index: number } </code> | <code>{itemToString(item)}</code> |
 
 ### Events
 

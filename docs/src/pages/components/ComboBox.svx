@@ -18,6 +18,12 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+### Custom slot
+
+Override the default slot to customize the display of each item. Access the item and index through the `let:` directive.
+
+<FileSource src="/framed/ComboBox/ComboBoxSlot" />
+
 ### Selected id
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
