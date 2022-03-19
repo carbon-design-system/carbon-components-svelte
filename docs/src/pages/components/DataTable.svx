@@ -10,7 +10,7 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
   const pagination = { pageSize: 5, page: 1}
 </script>
 
-`DataTable` is keyed for both rendering and sorting purposes.
+`DataTable` is keyed for performance reasons.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every <code>headers</code> object must have a unique "key" property.</div>

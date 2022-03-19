@@ -1,7 +1,13 @@
 <script>
-  import { MultiSelect } from "carbon-components-svelte";
+  import { MultiSelect, InlineNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
+
+`MultiSelect` is keyed for performance reasons.
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">Every <code>items</code> object must have a unique "id" property.</div>
+</InlineNotification>
 
 ### Default
 
