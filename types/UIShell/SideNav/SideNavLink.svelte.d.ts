@@ -37,5 +37,5 @@ export interface SideNavLinkProps
 export default class SideNavLink extends SvelteComponentTyped<
   SideNavLinkProps,
   { click: WindowEventMap["click"] },
-  { icon: {} }
+  { default: {}; icon: {} }
 > {}

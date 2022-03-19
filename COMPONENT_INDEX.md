@@ -3444,6 +3444,7 @@ None.
 
 | Slot name | Default | Props | Fallback                                              |
 | :-------- | :------ | :---- | :---------------------------------------------------- |
+| --        | Yes     | --    | <code>{text}</code>                                   |
 | icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
