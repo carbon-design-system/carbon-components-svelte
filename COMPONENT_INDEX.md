@@ -2456,15 +2456,17 @@ export interface MultiSelectItem {
 
 ### Slots
 
-None.
+| Slot name | Default | Props                                                  | Fallback                          |
+| :-------- | :------ | :----------------------------------------------------- | :-------------------------------- |
+| --        | Yes     | <code>{ item: MultiSelectItem; index: number } </code> | <code>{itemToString(item)}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                                                                                                         |
 | :--------- | :--------- | :------------------------------------------------------------------------------------------------------------- |
-| blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         |
 | select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
 | clear      | dispatched | <code>null</code>                                                                                              |
+| blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         |
 | keydown    | forwarded  | --                                                                                                             |
 | keyup      | forwarded  | --                                                                                                             |
 | focus      | forwarded  | --                                                                                                             |

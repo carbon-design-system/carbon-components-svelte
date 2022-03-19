@@ -20,7 +20,12 @@
   on:blur="{(e) => {
     e.detail; // number | FocusEvent
   }}"
-/>
+  let:item
+  let:index
+>
+  {item.id}
+  {index}
+</MultiSelect>
 
 <MultiSelect
   titleText="Contact"

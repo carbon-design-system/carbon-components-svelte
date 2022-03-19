@@ -228,16 +228,16 @@ export interface MultiSelectProps
 export default class MultiSelect extends SvelteComponentTyped<
   MultiSelectProps,
   {
-    blur: FocusEvent | CustomEvent<FocusEvent>;
     select: CustomEvent<{
       selectedIds: MultiSelectItemId[];
       selected: MultiSelectItem[];
       unselected: MultiSelectItem[];
     }>;
     clear: CustomEvent<null>;
+    blur: FocusEvent | CustomEvent<FocusEvent>;
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
   },
-  {}
+  { default: { item: MultiSelectItem; index: number } }
 > {}
