@@ -14,7 +14,12 @@
   on:select="{(e) => {
     console.log(e.detail.selectedId);
   }}"
-/>
+  let:item
+  let:index
+>
+  {item.id}
+  {index}
+</Dropdown>
 
 <Dropdown
   itemToString="{(item) => {
