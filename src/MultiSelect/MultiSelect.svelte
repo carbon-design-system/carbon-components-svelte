@@ -1,14 +1,12 @@
 <script>
   /**
-   * @event {FocusEvent | CustomEvent<FocusEvent>} blur
-   */
-
-  /**
    * @typedef {any} MultiSelectItemId
    * @typedef {string} MultiSelectItemText
    * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
    * @event {{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
    * @event {null} clear
+   * @event {FocusEvent | CustomEvent<FocusEvent>} blur
+   * @slot {{ item: MultiSelectItem; index: number }}
    */
 
   /**
@@ -487,7 +485,6 @@
           >
             <Checkbox
               name="{item.id}"
-              labelText="{itemToString(item)}"
               title="{useTitleInItem ? itemToString(item) : undefined}"
               {...itemToInput(item)}
               readonly
@@ -498,7 +495,11 @@
               on:blur="{() => {
                 if (i === filteredItems.length - 1) open = false;
               }}"
-            />
+            >
+              <slot slot="labelText" item="{item}" index="{i}">
+                {itemToString(item)}
+              </slot>
+            </Checkbox>
           </ListBoxMenuItem>
         {/each}
       </ListBoxMenu>
