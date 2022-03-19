@@ -13,6 +13,12 @@ By default, items will be ordered alphabetically based on the `item.text` value.
     {id: "2", text: "Fax"}]}"
   />
 
+### Custom slot
+
+Override the default slot to customize the display of each item. Access the item and index through the `let:` directive.
+
+<FileSource src="/framed/MultiSelect/MultiSelectSlot" />
+
 ### No alphabetical ordering
 
 To prevent alphabetical item ordering, pass an empty function to the `sortItem` prop.
