@@ -9,12 +9,6 @@
   <div class="body-short-01">Every <code>items</code> object must have a unique "id" property.</div>
 </InlineNotification>
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    Since version 0.53, <strong>selectedIndex</strong> has been replaced with <strong>selectedId</strong>.
-  </div>
-</InlineNotification>
-
 ### Default
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
