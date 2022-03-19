@@ -19,6 +19,12 @@ components: ["Dropdown", "DropdownSkeleton"]
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Custom slot
+
+Override the default slot to customize the display of each item. Access the item and index through the `let:` directive.
+
+<FileSource src="/framed/Dropdown/DropdownSlot" />
+
 ### Hidden label
 
 <Dropdown hideLabel titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
