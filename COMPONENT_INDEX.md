@@ -860,11 +860,12 @@ None.
 
 ### Slots
 
-| Slot name    | Default | Props | Fallback                    |
-| :----------- | :------ | :---- | :-------------------------- |
-| --           | Yes     | --    | --                          |
-| labelText    | No      | --    | <code>{labelText}</code>    |
-| shortcutText | No      | --    | <code>{shortcutText}</code> |
+| Slot name    | Default | Props | Fallback                                              |
+| :----------- | :------ | :---- | :---------------------------------------------------- |
+| --           | Yes     | --    | --                                                    |
+| icon         | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
+| labelText    | No      | --    | <code>{labelText}</code>                              |
+| shortcutText | No      | --    | <code>{shortcutText}</code>                           |
 
 ### Events
 
@@ -1631,6 +1632,8 @@ None.
 | Slot name | Default | Props | Fallback                                                    |
 | :-------- | :------ | :---- | :---------------------------------------------------------- |
 | --        | Yes     | --    | --                                                          |
+| closeIcon | No      | --    | <code>&lt;svelte:component this="{closeIcon}" /&gt;</code>  |
+| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code>       |
 | text      | No      | --    | <code>{#if text}&lt;span&gt;{text}&lt;/span&gt;{/if}</code> |
 
 ### Events
@@ -1653,7 +1656,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                                              |
+| :-------- | :------ | :---- | :---------------------------------------------------- |
+| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 
@@ -2035,9 +2040,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback                                              |
+| :-------- | :------ | :---- | :---------------------------------------------------- |
+| --        | Yes     | --    | --                                                    |
+| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 
@@ -3436,7 +3442,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback                                              |
+| :-------- | :------ | :---- | :---------------------------------------------------- |
+| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 
@@ -3457,9 +3465,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props | Fallback                                              |
+| :-------- | :------ | :---- | :---------------------------------------------------- |
+| --        | Yes     | --    | --                                                    |
+| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 
@@ -4068,9 +4077,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                                                  | Fallback |
-| :-------- | :------ | :----------------------------------------------------- | :------- |
-| --        | Yes     | <code>{ props: { class: 'bx--tag\_\_label' } } </code> | --       |
+| Slot name | Default | Props                                                  | Fallback                                              |
+| :-------- | :------ | :----------------------------------------------------- | :---------------------------------------------------- |
+| --        | Yes     | <code>{ props: { class: 'bx--tag\_\_label' } } </code> | --                                                    |
+| icon      | No      | --                                                     | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 

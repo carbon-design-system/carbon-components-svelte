@@ -26,7 +26,9 @@
   rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
   {...$$restProps}
 >
-  <svelte:component this="{icon}" />
+  <slot name="icon">
+    <svelte:component this="{icon}" />
+  </slot>
 </a>
 
 <style>

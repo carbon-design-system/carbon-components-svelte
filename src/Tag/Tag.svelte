@@ -120,9 +120,11 @@
     on:mouseenter
     on:mouseleave
   >
-    {#if icon}
+    {#if $$slots.icon || icon}
       <div class:bx--tag__custom-icon="{true}">
-        <svelte:component this="{icon}" />
+        <slot name="icon">
+          <svelte:component this="{icon}" />
+        </slot>
       </div>
     {/if}
     <span>
@@ -153,9 +155,11 @@
     on:mouseenter
     on:mouseleave
   >
-    {#if icon}
+    {#if $$slots.icon || icon}
       <div class:bx--tag__custom-icon="{true}">
-        <svelte:component this="{icon}" />
+        <slot name="icon">
+          <svelte:component this="{icon}" />
+        </slot>
       </div>
     {/if}
     <span>

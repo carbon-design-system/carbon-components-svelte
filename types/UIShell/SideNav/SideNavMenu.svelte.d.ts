@@ -31,5 +31,5 @@ export interface SideNavMenuProps
 export default class SideNavMenu extends SvelteComponentTyped<
   SideNavMenuProps,
   { click: WindowEventMap["click"] },
-  { default: {} }
+  { default: {}; icon: {} }
 > {}
