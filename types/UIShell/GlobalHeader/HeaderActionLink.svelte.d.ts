@@ -31,5 +31,5 @@ export interface HeaderActionLinkProps
 export default class HeaderActionLink extends SvelteComponentTyped<
   HeaderActionLinkProps,
   {},
-  {}
+  { icon: {} }
 > {}

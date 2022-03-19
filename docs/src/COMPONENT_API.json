@@ -2076,6 +2076,12 @@
       "slots": [
         { "name": "__default__", "default": true, "slot_props": "{}" },
         {
+          "name": "icon",
+          "default": false,
+          "fallback": "<svelte:component this=\"{icon}\" />",
+          "slot_props": "{}"
+        },
+        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
@@ -4622,6 +4628,18 @@
       "slots": [
         { "name": "__default__", "default": true, "slot_props": "{}" },
         {
+          "name": "closeIcon",
+          "default": false,
+          "fallback": "<svelte:component this=\"{closeIcon}\" />",
+          "slot_props": "{}"
+        },
+        {
+          "name": "icon",
+          "default": false,
+          "fallback": "<svelte:component this=\"{icon}\" />",
+          "slot_props": "{}"
+        },
+        {
           "name": "text",
           "default": false,
           "fallback": "{#if text}<span>{text}</span>{/if}",
@@ -4683,7 +4701,14 @@
         }
       ],
       "moduleExports": [],
-      "slots": [],
+      "slots": [
+        {
+          "name": "icon",
+          "default": false,
+          "fallback": "<svelte:component this=\"{icon}\" />",
+          "slot_props": "{}"
+        }
+      ],
       "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "a" }
@@ -5507,7 +5532,15 @@
         }
       ],
       "moduleExports": [],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "icon",
+          "default": false,
+          "fallback": "<svelte:component this=\"{icon}\" />",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "p" },
         { "type": "forwarded", "name": "mouseover", "element": "p" },
@@ -10117,7 +10150,14 @@
         }
       ],
       "moduleExports": [],
-      "slots": [],
+      "slots": [
+        {
+          "name": "icon",
+          "default": false,
+          "fallback": "<svelte:component this=\"{icon}\" />",
+          "slot_props": "{}"
+        }
+      ],
       "events": [{ "type": "forwarded", "name": "click", "element": "a" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "a" }
@@ -10170,7 +10210,15 @@
         }
       ],
       "moduleExports": [],
-      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "slots": [
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        {
+          "name": "icon",
+          "default": false,
+          "fallback": "<svelte:component this=\"{icon}\" />",
+          "slot_props": "{}"
+        }
+      ],
       "events": [{ "type": "forwarded", "name": "click", "element": "button" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "button" }
@@ -11546,6 +11594,12 @@
           "name": "__default__",
           "default": true,
           "slot_props": "{ props: { class: 'bx--tag__label' } }"
+        },
+        {
+          "name": "icon",
+          "default": false,
+          "fallback": "<svelte:component this=\"{icon}\" />",
+          "slot_props": "{}"
         }
       ],
       "events": [
