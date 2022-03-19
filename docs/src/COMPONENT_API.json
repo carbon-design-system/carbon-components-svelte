@@ -6921,19 +6921,26 @@
         }
       ],
       "moduleExports": [],
-      "slots": [],
-      "events": [
+      "slots": [
         {
-          "type": "dispatched",
-          "name": "blur",
-          "detail": "FocusEvent | CustomEvent<FocusEvent>"
-        },
+          "name": "__default__",
+          "default": true,
+          "fallback": "{itemToString(item)}",
+          "slot_props": "{ item: MultiSelectItem; index: number }"
+        }
+      ],
+      "events": [
         {
           "type": "dispatched",
           "name": "select",
           "detail": "{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }"
         },
         { "type": "dispatched", "name": "clear", "detail": "null" },
+        {
+          "type": "dispatched",
+          "name": "blur",
+          "detail": "FocusEvent | CustomEvent<FocusEvent>"
+        },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" }
