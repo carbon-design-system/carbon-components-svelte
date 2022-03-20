@@ -11,12 +11,6 @@
   export let value = "";
 
   /**
-   * @deprecated this prop will be removed in the next major release
-   * Use size="sm" instead
-   */
-  export let small = false;
-
-  /**
    * Specify the size of the search input
    * @type {"sm" | "lg" | "xl"}
    */
@@ -86,7 +80,6 @@
 
 {#if skeleton}
   <SearchSkeleton
-    small="{small}"
     size="{size}"
     {...$$restProps}
     on:click
@@ -101,7 +94,7 @@
     class:bx--search="{true}"
     class:bx--search--light="{light}"
     class:bx--search--disabled="{disabled}"
-    class:bx--search--sm="{size === 'sm' || small}"
+    class:bx--search--sm="{size === 'sm'}"
     class:bx--search--lg="{size === 'lg'}"
     class:bx--search--xl="{size === 'xl'}"
     class:bx--search--expandable="{expandable}"

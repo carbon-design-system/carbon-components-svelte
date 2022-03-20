@@ -10,12 +10,6 @@
    * @type {"default" | "field" | "small" | "lg" | "xl"}
    */
   export let size = "default";
-
-  /**
-   * @deprecated this prop will be removed in the next major release
-   * Use size="small" instead
-   */
-  export let small = false;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -27,7 +21,7 @@
     class:bx--skeleton="{true}"
     class:bx--btn="{true}"
     class:bx--btn--field="{size === 'field'}"
-    class:bx--btn--sm="{size === 'small' || small}"
+    class:bx--btn--sm="{size === 'small'}"
     class:bx--btn--lg="{size === 'lg'}"
     class:bx--btn--xl="{size === 'xl'}"
     {...$$restProps}
@@ -43,7 +37,7 @@
     class:bx--skeleton="{true}"
     class:bx--btn="{true}"
     class:bx--btn--field="{size === 'field'}"
-    class:bx--btn--sm="{size === 'small' || small}"
+    class:bx--btn--sm="{size === 'small'}"
     class:bx--btn--lg="{size === 'lg'}"
     class:bx--btn--xl="{size === 'xl'}"
     {...$$restProps}

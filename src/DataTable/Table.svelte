@@ -11,12 +11,6 @@
   /** Set to `true` to use static width */
   export let useStaticWidth = false;
 
-  /**
-   * Set to `true` for the bordered variant
-   * @deprecated this prop will be removed in the next major release
-   */
-  export let shouldShowBorder = false;
-
   /** Set to `true` for the sortable variant */
   export let sortable = false;
 
@@ -35,7 +29,6 @@
       class:bx--data-table--sort="{sortable}"
       class:bx--data-table--zebra="{zebra}"
       class:bx--data-table--static="{useStaticWidth}"
-      class:bx--data-table--no-border="{!shouldShowBorder}"
       class:bx--data-table--sticky-header="{stickyHeader}"
     >
       <slot />
@@ -51,7 +44,6 @@
     class:bx--data-table--sort="{sortable}"
     class:bx--data-table--zebra="{zebra}"
     class:bx--data-table--static="{useStaticWidth}"
-    class:bx--data-table--no-border="{!shouldShowBorder}"
     class:bx--data-table--sticky-header="{stickyHeader}"
     {...$$restProps}
   >

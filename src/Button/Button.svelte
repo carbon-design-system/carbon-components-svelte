@@ -26,12 +26,6 @@
   export let isSelected = false;
 
   /**
-   * Set to `true` for the icon-only variant
-   * @deprecated inferred using the $$slots API
-   */
-  export let hasIconOnly = false;
-
-  /**
    * Specify the icon to render
    * @type {typeof import("svelte").SvelteComponent}
    */
@@ -44,8 +38,8 @@
   export let iconDescription = undefined;
 
   /**
-   * Set the alignment of the tooltip relative to the icon
-   * `hasIconOnly` must be set to `true`
+   * Set the alignment of the tooltip relative to the icon.
+   * Only applies to icon-only buttons
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
