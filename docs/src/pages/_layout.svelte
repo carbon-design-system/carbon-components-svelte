@@ -18,7 +18,7 @@
   import LogoGithub20 from "carbon-icons-svelte/lib/LogoGithub20";
   import Theme from "../components/Theme.svelte";
 
-  const deprecated = ["ToggleSmall", "Icon"];
+  const deprecated = [];
   const new_components = [];
 
   let isOpen = false;
