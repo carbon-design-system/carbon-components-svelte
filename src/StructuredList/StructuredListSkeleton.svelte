@@ -1,16 +1,12 @@
 <script>
   /** Specify the number of rows */
   export let rows = 5;
-
-  /** Set to `true` to use the bordered variant */
-  export let border = false;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--skeleton="{true}"
   class:bx--structured-list="{true}"
-  class:bx--structured-list--border="{border}"
   {...$$restProps}
   on:click
   on:mouseover
