@@ -40,7 +40,7 @@
   import { tick, getContext } from "svelte";
   import Search from "../Search/Search.svelte";
 
-  const { tableRows } = getContext("DataTable");
+  const { tableRows } = getContext("DataTable") ?? {};
 
   $: originalRows = tableRows ? [...$tableRows] : [];
   $: if (shouldFilterRows) {
