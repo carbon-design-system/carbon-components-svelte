@@ -21,7 +21,6 @@
 
 <Button
   icon="{Add16}"
-  hasIconOnly
   tooltipPosition="bottom"
   tooltipAlignment="center"
   iconDescription="Tooltip text"
