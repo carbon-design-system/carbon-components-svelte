@@ -158,7 +158,6 @@
       </span>
     {/if}
     <Button
-      hasIconOnly
       kind="ghost"
       tooltipAlignment="center"
       tooltipPosition="top"
@@ -174,7 +173,6 @@
       }}"
     />
     <Button
-      hasIconOnly
       kind="ghost"
       tooltipAlignment="end"
       tooltipPosition="top"
