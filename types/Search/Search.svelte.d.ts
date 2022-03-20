@@ -9,11 +9,6 @@ export interface SearchProps {
   value?: any;
 
   /**
-   * @default false
-   */
-  small?: boolean;
-
-  /**
    * Specify the size of the search input
    * @default "xl"
    */

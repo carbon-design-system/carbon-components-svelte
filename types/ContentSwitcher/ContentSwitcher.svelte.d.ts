@@ -10,12 +10,6 @@ export interface ContentSwitcherProps
   selectedIndex?: number;
 
   /**
-   * Set to `true` to enable the light variant
-   * @default false
-   */
-  light?: boolean;
-
-  /**
    * Specify the size of the content switcher
    * @default undefined
    */

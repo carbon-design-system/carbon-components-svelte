@@ -190,12 +190,6 @@
     "Row": {
       "path": "carbon-components-svelte/src/Grid/Row.svelte"
     },
-    "Icon": {
-      "path": "carbon-components-svelte/src/Icon/Icon.svelte"
-    },
-    "IconSkeleton": {
-      "path": "carbon-components-svelte/src/Icon/IconSkeleton.svelte"
-    },
     "Add16": {
       "path": "carbon-components-svelte/src/icons/Add16.svelte"
     },
@@ -375,9 +369,6 @@
     },
     "NotificationIcon": {
       "path": "carbon-components-svelte/src/Notification/NotificationIcon.svelte"
-    },
-    "NotificationTextDetails": {
-      "path": "carbon-components-svelte/src/Notification/NotificationTextDetails.svelte"
     },
     "ToastNotification": {
       "path": "carbon-components-svelte/src/Notification/ToastNotification.svelte"
@@ -559,12 +550,6 @@
     "ToggleSkeleton": {
       "path": "carbon-components-svelte/src/Toggle/ToggleSkeleton.svelte"
     },
-    "ToggleSmall": {
-      "path": "carbon-components-svelte/src/ToggleSmall/ToggleSmall.svelte"
-    },
-    "ToggleSmallSkeleton": {
-      "path": "carbon-components-svelte/src/ToggleSmall/ToggleSmallSkeleton.svelte"
-    },
     "Tooltip": {
       "path": "carbon-components-svelte/src/Tooltip/Tooltip.svelte"
     },
@@ -600,9 +585,6 @@
     },
     "HeaderActionLink": {
       "path": "carbon-components-svelte/src/UIShell/GlobalHeader/HeaderActionLink.svelte"
-    },
-    "HeaderActionSearch": {
-      "path": "carbon-components-svelte/src/UIShell/GlobalHeader/HeaderActionSearch.svelte"
     },
     "HeaderNav": {
       "path": "carbon-components-svelte/src/UIShell/GlobalHeader/HeaderNav.svelte"

@@ -10,12 +10,6 @@ export interface StructuredListProps
   selected?: string;
 
   /**
-   * Set to `true` to use the bordered variant
-   * @default false
-   */
-  border?: boolean;
-
-  /**
    * Set to `true` to use the condensed variant
    * @default false
    */

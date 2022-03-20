@@ -28,11 +28,6 @@ export interface TimePickerSelectProps
   labelText?: string;
 
   /**
-   * @default true
-   */
-  hideLabel?: boolean;
-
-  /**
    * Set an id for the select element
    * @default "ccs-" + Math.random().toString(36)
    */
