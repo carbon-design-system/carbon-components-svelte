@@ -54,7 +54,6 @@ export { FormGroup } from "./FormGroup";
 export { FormItem } from "./FormItem";
 export { FormLabel } from "./FormLabel";
 export { Grid, Row, Column } from "./Grid";
-export { Icon, IconSkeleton } from "./Icon";
 export { ImageLoader } from "./ImageLoader";
 export { InlineLoading } from "./InlineLoading";
 export { Link, OutboundLink } from "./Link";
@@ -77,7 +76,6 @@ export {
   NotificationActionButton,
   NotificationButton,
   NotificationIcon,
-  NotificationTextDetails,
 } from "./Notification";
 export { NumberInput, NumberInputSkeleton } from "./NumberInput";
 export { OrderedList } from "./OrderedList";
@@ -123,7 +121,6 @@ export {
 } from "./Tile";
 export { TimePicker, TimePickerSelect } from "./TimePicker";
 export { Toggle, ToggleSkeleton } from "./Toggle";
-export { ToggleSmall, ToggleSmallSkeleton } from "./ToggleSmall";
 export { Tooltip, TooltipFooter } from "./Tooltip";
 export { TooltipDefinition } from "./TooltipDefinition";
 export { TooltipIcon } from "./TooltipIcon";
@@ -133,7 +130,6 @@ export {
   Header,
   HeaderAction,
   HeaderActionLink,
-  HeaderActionSearch,
   HeaderNav,
   HeaderNavItem,
   HeaderNavMenu,
