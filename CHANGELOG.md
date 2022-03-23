@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.62.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.62.2) - 2022-03-23
+
+**Fixes**
+
+- `DataTable` expandable variant should work with zebra styles
+- `DatePicker` `flatpickrProps` should override default `flatpickr` options
+
+**Documentation**
+
+- add `DataTable` "Expandable (zebra styles)" example
+
 ## [0.62.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.62.1) - 2022-03-20
 
 **Fixes**
