@@ -1139,6 +1139,10 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
 
 <FileSource src="/framed/DataTable/DataTableNonExpandableRows" />
 
+### Expandable (zebra styles)
+
+<FileSource src="/framed/DataTable/DataTableExpandableZebra" />
+
 ### Expandable (compact size)
 
 <DataTable size="compact" expandable
