@@ -68,7 +68,6 @@ async function createCalendar({ options, base, input, dispatch }) {
   }
 
   return new flatpickr(base, {
-    ...options,
     allowInput: true,
     disableMobile: true,
     clickOpens: true,
@@ -94,6 +93,7 @@ async function createCalendar({ options, base, input, dispatch }) {
       updateClasses(instance);
       updateMonthNode(instance);
     },
+    ...options,
   });
 }
 
