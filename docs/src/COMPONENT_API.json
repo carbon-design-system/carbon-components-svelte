@@ -1,5 +1,5 @@
 {
-  "total": 171,
+  "total": 173,
   "components": [
     {
       "moduleName": "Accordion",
@@ -5995,7 +5995,7 @@
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
-          "reactive": false
+          "reactive": true
         },
         {
           "name": "value",
@@ -6013,7 +6013,7 @@
           "kind": "function",
           "description": "Remove the persisted key value from the browser's local storage",
           "type": "() => void",
-          "value": "() => {     localStorage.removeItem(key);   }",
+          "value": "() => {     storage.removeItem(key);   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "constant": false,
@@ -6024,7 +6024,7 @@
           "kind": "function",
           "description": "Clear all key values from the browser's local storage",
           "type": "() => void",
-          "value": "() => {     localStorage.clear();   }",
+          "value": "() => {     storage.clear();   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "constant": false,
@@ -6034,12 +6034,9 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        { "type": "dispatched", "name": "save", "detail": "null" },
-        {
-          "type": "dispatched",
-          "name": "update",
-          "detail": "{ prevValue: any; value: any; }"
-        }
+        { "type": "forwarded", "name": "save", "element": "WebStorage" },
+        { "type": "forwarded", "name": "update", "element": "WebStorage" },
+        { "type": "forwarded", "name": "updateKey", "element": "WebStorage" }
       ],
       "typedefs": []
     },
@@ -9951,6 +9948,64 @@
       "rest_props": { "type": "Element", "name": "label" }
     },
     {
+      "moduleName": "SessionStorage",
+      "filePath": "src/LocalStorage/SessionStorage.svelte",
+      "props": [
+        {
+          "name": "key",
+          "kind": "let",
+          "description": "Specify the local storage key",
+          "type": "string",
+          "value": "\"session-storage-key\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "value",
+          "kind": "let",
+          "description": "Provide a value to persist",
+          "type": "any",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "clearItem",
+          "kind": "function",
+          "description": "Remove the persisted key value from the browser's local storage",
+          "type": "() => void",
+          "value": "() => {     storage.removeItem(key);   }",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "clearAll",
+          "kind": "function",
+          "description": "Clear all key values from the browser's local storage",
+          "type": "() => void",
+          "value": "() => {     storage.clear();   }",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [],
+      "events": [
+        { "type": "forwarded", "name": "save", "element": "WebStorage" },
+        { "type": "forwarded", "name": "update", "element": "WebStorage" },
+        { "type": "forwarded", "name": "updateKey", "element": "WebStorage" }
+      ],
+      "typedefs": []
+    },
+    {
       "moduleName": "SideNav",
       "filePath": "src/UIShell/SideNav/SideNav.svelte",
       "props": [
@@ -13838,6 +13893,83 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "ul" }
+    },
+    {
+      "moduleName": "WebStorage",
+      "filePath": "src/LocalStorage/WebStorage.svelte",
+      "props": [
+        {
+          "name": "key",
+          "kind": "let",
+          "description": "Specify the local storage key",
+          "type": "string",
+          "value": "\"storage-key\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "value",
+          "kind": "let",
+          "description": "Provide a value to persist",
+          "type": "any",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "storage",
+          "kind": "let",
+          "description": "Select WebStorage to use",
+          "type": "\"local\"|\"session\"",
+          "value": "\"local\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "clearItem",
+          "kind": "function",
+          "description": "Remove the persisted key value from the browser's selected WebStorage",
+          "type": "() => void",
+          "value": "() => {     webStorage.removeItem(key);   }",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "clearAll",
+          "kind": "function",
+          "description": "Clear all key values from the browser's selected WebStorage",
+          "type": "() => void",
+          "value": "() => {     webStorage.clear();   }",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [],
+      "events": [
+        { "type": "dispatched", "name": "save", "detail": "null" },
+        {
+          "type": "dispatched",
+          "name": "updateKey",
+          "detail": "{ prevKey: any; key: any; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "update",
+          "detail": "{ prevValue: any; value: any; }"
+        }
+      ],
+      "typedefs": []
     }
   ]
 }

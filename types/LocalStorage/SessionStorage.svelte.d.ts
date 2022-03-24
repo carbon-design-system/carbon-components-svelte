@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from "svelte";
 
-export interface LocalStorageProps {
+export interface SessionStorageProps {
   /**
    * Specify the local storage key
-   * @default "local-storage-key"
+   * @default "session-storage-key"
    */
   key?: string;
 
@@ -15,8 +15,8 @@ export interface LocalStorageProps {
   value?: any;
 }
 
-export default class LocalStorage extends SvelteComponentTyped<
-  LocalStorageProps,
+export default class SessionStorage extends SvelteComponentTyped<
+  SessionStorageProps,
   {
     save: WindowEventMap["save"];
     update: WindowEventMap["update"];
