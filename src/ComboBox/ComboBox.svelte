@@ -350,6 +350,7 @@
         {#each filteredItems as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"
+            title="{itemToString(item)}"
             active="{selectedId === item.id}"
             highlighted="{highlightedIndex === i}"
             on:click="{() => {
