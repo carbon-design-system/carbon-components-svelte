@@ -178,7 +178,7 @@
     class="{size && `bx--number--${size}`}"
   >
     {#if mobile}
-      {#if label}
+      {#if $$slots.label || label}
         <label
           for="{id}"
           class:bx--label="{true}"
@@ -243,7 +243,7 @@
         </button>
       </div>
     {:else}
-      {#if label}
+      {#if $$slots.label || label}
         <label
           for="{id}"
           class:bx--label="{true}"
