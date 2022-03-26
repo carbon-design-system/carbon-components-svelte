@@ -121,6 +121,11 @@
     winston "^3.3.3"
     yargs "^16.1.1"
 
+"@carbon/telemetry@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@carbon/telemetry/-/telemetry-0.1.0.tgz#57b331cd5a855b4abbf55457456da8211624d879"
+  integrity sha512-kNWt0bkgPwGW0i5h7HFuljbKRXPvIhsKbB+1tEURAYLXoJg9iJLF1eGvWN5iVoFCS2zje4GR3OGOsvvKVe7Hlg==
+
 "@dabh/diagnostics@^2.0.2":
   version "2.0.2"
   resolved "https://registry.npmjs.org/@dabh/diagnostics/-/diagnostics-2.0.2.tgz#290d08f7b381b8f94607dc8f471a12c675f9db31"
@@ -464,12 +469,12 @@ caniuse-lite@^1.0.30001297, caniuse-lite@^1.0.30001313:
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
 
-carbon-components@10.54.0:
-  version "10.54.0"
-  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.54.0.tgz#f70d0a9fcc7e84f8fb00a45b6b9894d77155acce"
-  integrity sha512-gl0b4wRG1E/ns02nG/M0FaNm4FCT91iTr1XFzqY+h1wFsjG1/2OOu7A6lth8Qtk0jsr//YZcB0MNjq8WFaFciw==
+carbon-components@10.56.0:
+  version "10.56.0"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.56.0.tgz#bb5890f00f81cebcddfa2dbae4794477deb539f4"
+  integrity sha512-GPLqHiu2SWvMxcQOi/CcgA/XA3aX/5HiEPSQjLwzjKAJsnkpzq043Jf7QwgLOVbTBzGSjFbFkJnE2lc73I2WBw==
   dependencies:
-    "@carbon/telemetry" "0.0.0-alpha.6"
+    "@carbon/telemetry" "0.1.0"
     flatpickr "4.6.1"
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
