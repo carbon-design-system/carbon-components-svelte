@@ -67,7 +67,11 @@
    */
   export function expandNodes(filterNode = (node) => false) {
     expandedIds = nodes
-      .filter((node) => !filterNode(node))
+      .filter(
+        (node) =>
+          filterNode(node) ||
+          node.children?.some((child) => filterNode(child) && child.children)
+      )
       .map((node) => node.id);
   }
 
@@ -78,7 +82,7 @@
    */
   export function collapseNodes(filterNode = (node) => true) {
     expandedIds = nodes
-      .filter((node) => !filterNode(node))
+      .filter((node) => expandedIds.includes(node.id) && !filterNode(node))
       .map((node) => node.id);
   }
 
