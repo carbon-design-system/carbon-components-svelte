@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.62.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.62.3) - 2022-03-26
+
+**Fixes**
+
+- fix `TreeView` filter logic in expandNodes/collapseNodes
+- correctly render slotted label in `NumberInput`
+- only render expandable `DataTable` row content when expanded
+
 ## [0.62.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.62.2) - 2022-03-23
 
 **Fixes**
