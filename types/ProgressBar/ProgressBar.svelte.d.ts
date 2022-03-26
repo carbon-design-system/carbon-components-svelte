@@ -16,6 +16,12 @@ export interface ProgressBarProps
   max?: number;
 
   /**
+   * Specify the kind of progress bar
+   * @default "default"
+   */
+  kind?: "default" | "inline" | "indented";
+
+  /**
    * Specify the size
    * @default "md"
    */
