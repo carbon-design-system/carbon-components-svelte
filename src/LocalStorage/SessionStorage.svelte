@@ -4,7 +4,7 @@
   /**
    * Specify the local storage key
    */
-  export let key = "local-storage-key";
+  export let key = "session-storage-key";
 
   /**
    * Provide a value to persist
@@ -36,7 +36,7 @@
   bind:this="{storage}"
   bind:key
   bind:value
-  storage="local"
+  storage="session"
   on:save
   on:update
   on:updateKey

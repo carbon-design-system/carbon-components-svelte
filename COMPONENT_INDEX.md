@@ -1,6 +1,6 @@
 # Component Index
 
-> 171 components exported from carbon-components-svelte@0.62.2.
+> 173 components exported from carbon-components-svelte@0.62.2.
 
 ## Components
 
@@ -116,6 +116,7 @@
 - [`SelectItemGroup`](#selectitemgroup)
 - [`SelectSkeleton`](#selectskeleton)
 - [`SelectableTile`](#selectabletile)
+- [`SessionStorage`](#sessionstorage)
 - [`SideNav`](#sidenav)
 - [`SideNavDivider`](#sidenavdivider)
 - [`SideNavItems`](#sidenavitems)
@@ -175,6 +176,7 @@
 - [`TreeView`](#treeview)
 - [`Truncate`](#truncate)
 - [`UnorderedList`](#unorderedlist)
+- [`WebStorage`](#webstorage)
 
 ---
 
@@ -2240,12 +2242,12 @@ None.
 
 ### Props
 
-| Prop name | Kind                  | Reactive | Type                    | Default value                                        | Description                                                     |
-| :-------- | :-------------------- | :------- | :---------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
-| value     | <code>let</code>      | Yes      | <code>any</code>        | <code>""</code>                                      | Provide a value to persist                                      |
-| key       | <code>let</code>      | No       | <code>string</code>     | <code>"local-storage-key"</code>                     | Specify the local storage key                                   |
-| clearItem | <code>function</code> | No       | <code>() => void</code> | <code>() => { localStorage.removeItem(key); }</code> | Remove the persisted key value from the browser's local storage |
-| clearAll  | <code>function</code> | No       | <code>() => void</code> | <code>() => { localStorage.clear(); }</code>         | Clear all key values from the browser's local storage           |
+| Prop name | Kind                  | Reactive | Type                    | Default value                                   | Description                                                     |
+| :-------- | :-------------------- | :------- | :---------------------- | ----------------------------------------------- | --------------------------------------------------------------- |
+| value     | <code>let</code>      | Yes      | <code>any</code>        | <code>""</code>                                 | Provide a value to persist                                      |
+| key       | <code>let</code>      | Yes      | <code>string</code>     | <code>"local-storage-key"</code>                | Specify the local storage key                                   |
+| clearItem | <code>function</code> | No       | <code>() => void</code> | <code>() => { storage.removeItem(key); }</code> | Remove the persisted key value from the browser's local storage |
+| clearAll  | <code>function</code> | No       | <code>() => void</code> | <code>() => { storage.clear(); }</code>         | Clear all key values from the browser's local storage           |
 
 ### Slots
 
@@ -2253,10 +2255,11 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                       |
-| :--------- | :--------- | :------------------------------------------- |
-| save       | dispatched | <code>null</code>                            |
-| update     | dispatched | <code>{ prevValue: any; value: any; }</code> |
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| save       | forwarded | --     |
+| update     | forwarded | --     |
+| updateKey  | forwarded | --     |
 
 ## `Modal`
 
@@ -3347,6 +3350,29 @@ None.
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
 | keydown    | forwarded | --     |
+
+## `SessionStorage`
+
+### Props
+
+| Prop name | Kind                  | Reactive | Type                    | Default value                                   | Description                                                     |
+| :-------- | :-------------------- | :------- | :---------------------- | ----------------------------------------------- | --------------------------------------------------------------- |
+| value     | <code>let</code>      | Yes      | <code>any</code>        | <code>""</code>                                 | Provide a value to persist                                      |
+| key       | <code>let</code>      | Yes      | <code>string</code>     | <code>"session-storage-key"</code>              | Specify the local storage key                                   |
+| clearItem | <code>function</code> | No       | <code>() => void</code> | <code>() => { storage.removeItem(key); }</code> | Remove the persisted key value from the browser's local storage |
+| clearAll  | <code>function</code> | No       | <code>() => void</code> | <code>() => { storage.clear(); }</code>         | Clear all key values from the browser's local storage           |
+
+### Slots
+
+None.
+
+### Events
+
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| save       | forwarded | --     |
+| update     | forwarded | --     |
+| updateKey  | forwarded | --     |
 
 ## `SideNav`
 
@@ -4847,3 +4873,27 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `WebStorage`
+
+### Props
+
+| Prop name | Kind                  | Reactive | Type                                | Default value                                      | Description                                                           |
+| :-------- | :-------------------- | :------- | :---------------------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
+| value     | <code>let</code>      | Yes      | <code>any</code>                    | <code>""</code>                                    | Provide a value to persist                                            |
+| key       | <code>let</code>      | No       | <code>string</code>                 | <code>"storage-key"</code>                         | Specify the local storage key                                         |
+| storage   | <code>let</code>      | No       | <code>"local"&#124;"session"</code> | <code>"local"</code>                               | Select WebStorage to use                                              |
+| clearItem | <code>function</code> | No       | <code>() => void</code>             | <code>() => { webStorage.removeItem(key); }</code> | Remove the persisted key value from the browser's selected WebStorage |
+| clearAll  | <code>function</code> | No       | <code>() => void</code>             | <code>() => { webStorage.clear(); }</code>         | Clear all key values from the browser's selected WebStorage           |
+
+### Slots
+
+None.
+
+### Events
+
+| Event name | Type       | Detail                                       |
+| :--------- | :--------- | :------------------------------------------- |
+| save       | dispatched | <code>null</code>                            |
+| updateKey  | dispatched | <code>{ prevKey: any; key: any; }</code>     |
+| update     | dispatched | <code>{ prevValue: any; value: any; }</code> |

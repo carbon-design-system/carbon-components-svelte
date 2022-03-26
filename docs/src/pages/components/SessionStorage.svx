@@ -1,0 +1,23 @@
+<script>
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+This utility component wraps the [Window.sessionStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) and is useful for persisting ephemeral data (e.g., color theme) at the browser level for the duration of the current tab session.
+  
+### Reactive example
+
+In the example below, toggle the switch and reload the page. The updated theme should be persisted locally.
+  
+<FileSource src="/framed/LocalStorage/SessionStorage" />
+
+### Clear item, clear all
+
+Use the `bind:this` directive to access the `clearItem` and `clearAll` methods.
+
+Invoking `clearItem` will remove the persisted key value from the browser's session storage.
+
+Invoking `clearAll` will remove all key values.
+
+In the following example, toggle the switch and reload the page. Then, click the "Clear storage" button. Refresh the page; the theme should be reset to the untoggled state.
+
+<FileSource src="/framed/LocalStorage/SessionStorageClear" />
