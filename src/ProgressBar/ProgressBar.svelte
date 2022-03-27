@@ -9,6 +9,12 @@
   export let max = 100;
 
   /**
+   * Specify the kind of progress bar
+   * @type {"default" | "inline" | "indented"}
+   */
+  export let kind = "default";
+
+  /**
    * Specify the size
    * @type {"sm" | "md"}
    */
@@ -37,6 +43,8 @@
   class:bx--progress-bar--indeterminate="{indeterminate}"
   class:bx--progress-bar--big="{size === 'md'}"
   class:bx--progress-bar--small="{size === 'sm'}"
+  class:bx--progress-bar--inline="{kind === 'inline'}"
+  class:bx--progress-bar--indented="{kind === 'indented'}"
   {...$$restProps}
 >
   <label

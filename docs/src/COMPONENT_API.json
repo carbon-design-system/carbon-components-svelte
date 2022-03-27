@@ -8261,6 +8261,17 @@
           "reactive": false
         },
         {
+          "name": "kind",
+          "kind": "let",
+          "description": "Specify the kind of progress bar",
+          "type": "\"default\" | \"inline\" | \"indented\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "size",
           "kind": "let",
           "description": "Specify the size",

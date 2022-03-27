@@ -5,21 +5,11 @@
 <ProgressBar helperText="Loading..." />
 
 <ProgressBar
+  kind="inline"
+  size="md"
   value="{40}"
+  max="{100}"
   labelText="Upload status"
-  helperText="40 MB of 100 MB"
-/>
-
-<ProgressBar
-  value="{40}"
-  max="{200}"
-  labelText="Upload status"
-  helperText="40 MB of 100 MB"
-/>
-
-<ProgressBar
   hideLabel
-  value="{40}"
-  labelText="Upload status"
   helperText="40 MB of 100 MB"
 />
