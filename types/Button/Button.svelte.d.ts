@@ -39,12 +39,6 @@ export interface ButtonProps
   isSelected?: boolean;
 
   /**
-   * Set to `true` for the icon-only variant
-   * @default false
-   */
-  hasIconOnly?: boolean;
-
-  /**
    * Specify the icon to render
    * @default undefined
    */
@@ -57,8 +51,8 @@ export interface ButtonProps
   iconDescription?: string;
 
   /**
-   * Set the alignment of the tooltip relative to the icon
-   * `hasIconOnly` must be set to `true`
+   * Set the alignment of the tooltip relative to the icon.
+   * Only applies to icon-only buttons
    * @default "center"
    */
   tooltipAlignment?: "start" | "center" | "end";

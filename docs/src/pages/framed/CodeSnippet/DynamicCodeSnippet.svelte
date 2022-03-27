@@ -1,5 +1,5 @@
 <script>
-  import { ToggleSmall, CodeSnippet } from "carbon-components-svelte";
+  import { Toggle, CodeSnippet } from "carbon-components-svelte";
 
   let toggled = false;
 
@@ -7,9 +7,10 @@
   $: code = Array.from({ length }, (_, i) => i + 1).join("\n");
 </script>
 
-<ToggleSmall
-  style="margin-bottom: var(--cds-spacing-05)"
-  labelText="Trigger snippet overflow"
+<Toggle
   bind:toggled
+  size="sm"
+  labelText="Trigger snippet overflow"
+  style="margin-bottom: var(--cds-spacing-05)"
 />
 <CodeSnippet type="multi" code="{code}" />

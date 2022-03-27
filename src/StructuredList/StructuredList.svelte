@@ -5,12 +5,6 @@
    */
   export let selected = undefined;
 
-  /**
-   * Set to `true` to use the bordered variant
-   * @deprecated
-   */
-  export let border = false;
-
   /** Set to `true` to use the condensed variant */
   export let condensed = false;
 
@@ -41,7 +35,6 @@
 <div
   role="table"
   class:bx--structured-list="{true}"
-  class:bx--structured-list--border="{border}"
   class:bx--structured-list--selection="{selection}"
   class:bx--structured-list--condensed="{condensed}"
   class:bx--structured-list--flush="{flush}"

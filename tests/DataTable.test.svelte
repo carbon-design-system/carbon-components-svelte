@@ -111,7 +111,7 @@
     <ToolbarContent>
       <ToolbarSearch
         shouldFilterRows="{(row, value) => {
-          return true;
+          return row.name.includes(value);
         }}"
       />
       <ToolbarMenu>

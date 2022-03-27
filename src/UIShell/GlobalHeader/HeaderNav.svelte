@@ -1,13 +1,6 @@
 <script>
-  /**
-   * Specify the ARIA label for the nav
-   * @deprecated use "aria-label" instead
-   * @type {string}
-   */
-  export let ariaLabel = undefined;
-
   $: props = {
-    "aria-label": ariaLabel || $$props["aria-label"],
+    "aria-label": $$props["aria-label"],
     "aria-labelledby": $$props["aria-labelledby"],
   };
 </script>

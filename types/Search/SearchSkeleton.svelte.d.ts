@@ -4,11 +4,6 @@ import { SvelteComponentTyped } from "svelte";
 export interface SearchSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
-   * @default false
-   */
-  small?: boolean;
-
-  /**
    * Specify the size of the search input
    * @default "xl"
    */

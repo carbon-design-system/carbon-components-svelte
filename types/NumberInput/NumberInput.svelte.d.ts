@@ -49,12 +49,6 @@ export interface NumberInputProps
   readonly?: boolean;
 
   /**
-   * Set to `true` to enable the mobile variant
-   * @default false
-   */
-  mobile?: boolean;
-
-  /**
    * Set to `true` to allow for an empty value
    * @default false
    */

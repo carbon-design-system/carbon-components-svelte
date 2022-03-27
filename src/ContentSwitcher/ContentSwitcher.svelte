@@ -7,12 +7,6 @@
   export let selectedIndex = 0;
 
   /**
-   * Set to `true` to enable the light variant
-   * @deprecated
-   */
-  export let light = false;
-
-  /**
    * Specify the size of the content switcher
    * @type {"sm" | "xl"}
    */
@@ -67,7 +61,6 @@
 <div
   role="tablist"
   class:bx--content-switcher="{true}"
-  class:bx--content-switcher--light="{light}"
   class:bx--content-switcher--sm="{size === 'sm'}"
   class:bx--content-switcher--xl="{size === 'xl'}"
   {...$$restProps}

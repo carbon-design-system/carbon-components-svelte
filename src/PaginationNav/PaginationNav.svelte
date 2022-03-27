@@ -71,7 +71,6 @@
   <ul class:bx--pagination-nav__list="{true}">
     <li class:bx--pagination-nav__list-item="{true}">
       <Button
-        hasIconOnly
         kind="ghost"
         tooltipAlignment="center"
         tooltipPosition="bottom"
@@ -129,7 +128,6 @@
     {/if}
     <li class:bx--pagination-nav__list-item="{true}">
       <Button
-        hasIconOnly
         kind="ghost"
         tooltipAlignment="center"
         tooltipPosition="bottom"

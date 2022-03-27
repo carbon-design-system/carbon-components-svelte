@@ -1,7 +1,6 @@
 export { default as Header } from "./GlobalHeader/Header.svelte";
 export { default as HeaderAction } from "./GlobalHeader/HeaderAction.svelte";
 export { default as HeaderActionLink } from "./GlobalHeader/HeaderActionLink.svelte";
-export { default as HeaderActionSearch } from "./GlobalHeader/HeaderActionSearch.svelte";
 export { default as HeaderNav } from "./GlobalHeader/HeaderNav.svelte";
 export { default as HeaderNavItem } from "./GlobalHeader/HeaderNavItem.svelte";
 export { default as HeaderNavMenu } from "./GlobalHeader/HeaderNavMenu.svelte";

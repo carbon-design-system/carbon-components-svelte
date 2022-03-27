@@ -22,12 +22,6 @@ export interface TableProps
   useStaticWidth?: boolean;
 
   /**
-   * Set to `true` for the bordered variant
-   * @default false
-   */
-  shouldShowBorder?: boolean;
-
-  /**
    * Set to `true` for the sortable variant
    * @default false
    */

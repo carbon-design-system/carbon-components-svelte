@@ -2,13 +2,7 @@
 import { SvelteComponentTyped } from "svelte";
 
 export interface HeaderNavProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
-  /**
-   * Specify the ARIA label for the nav
-   * @default undefined
-   */
-  ariaLabel?: string;
-}
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {}
 
 export default class HeaderNav extends SvelteComponentTyped<
   HeaderNavProps,

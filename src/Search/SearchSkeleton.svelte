@@ -1,11 +1,5 @@
 <script>
   /**
-   * @deprecated this prop will be removed in the next major release
-   * Set to `true` to use the small variant
-   */
-  export let small = false;
-
-  /**
    * Specify the size of the search input
    * @type {"sm" | "lg" | "xl"}
    */
@@ -15,7 +9,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   class:bx--skeleton="{true}"
-  class:bx--search--sm="{size === 'sm' || small}"
+  class:bx--search--sm="{size === 'sm'}"
   class:bx--search--lg="{size === 'lg'}"
   class:bx--search--xl="{size === 'xl'}"
   {...$$restProps}

@@ -39,12 +39,6 @@
   /** Set to `true` for the input to be read-only */
   export let readonly = false;
 
-  /**
-   * Set to `true` to enable the mobile variant
-   * @deprecated
-   */
-  export let mobile = false;
-
   /** Set to `true` to allow for an empty value */
   export let allowEmpty = false;
 
@@ -174,158 +168,90 @@
     class:bx--number--light="{light}"
     class:bx--number--nolabel="{hideLabel}"
     class:bx--number--nosteppers="{hideSteppers}"
-    class:bx--number--mobile="{mobile}"
     class="{size && `bx--number--${size}`}"
   >
-    {#if mobile}
-      {#if $$slots.label || label}
-        <label
-          for="{id}"
-          class:bx--label="{true}"
-          class:bx--label--disabled="{disabled}"
-          class:bx--visually-hidden="{hideLabel}"
-        >
-          <slot name="label">{label}</slot>
-        </label>
-      {/if}
-      <div
-        class:bx--number__input-wrapper="{true}"
-        class:bx--number__input-wrapper--warning="{!invalid && warn}"
+    {#if $$slots.label || label}
+      <label
+        for="{id}"
+        class:bx--label="{true}"
+        class:bx--label--disabled="{disabled}"
+        class:bx--visually-hidden="{hideLabel}"
       >
-        <button
-          type="button"
-          aria-live="polite"
-          aria-atomic="true"
-          title="{decrementLabel}"
-          aria-label="{decrementLabel || iconDescription}"
-          class:bx--number__control-btn="{true}"
-          class:down-icon="{true}"
-          on:click="{() => {
-            updateValue(-1);
-          }}"
-          disabled="{disabled}"
-        >
-          <Subtract16 class="down-icon" />
-        </button>
-        <input
-          bind:this="{ref}"
-          type="number"
-          pattern="[0-9]*"
-          aria-label="{label ? undefined : ariaLabel}"
-          disabled="{disabled}"
-          id="{id}"
-          name="{name}"
-          max="{max}"
-          min="{min}"
-          step="{step}"
-          value="{value ?? ''}"
-          readonly="{readonly}"
-          {...$$restProps}
-          on:change="{onChange}"
-          on:input="{onInput}"
-          on:focus
-          on:blur
-        />
-        <button
-          type="button"
-          aria-live="polite"
-          aria-atomic="true"
-          title="{incrementLabel}"
-          aria-label="{incrementLabel || iconDescription}"
-          class:bx--number__control-btn="{true}"
-          class:up-icon="{true}"
-          on:click="{() => {
-            updateValue(1);
-          }}"
-          disabled="{disabled}"
-        >
-          <Add16 class="up-icon" />
-        </button>
-      </div>
-    {:else}
-      {#if $$slots.label || label}
-        <label
-          for="{id}"
-          class:bx--label="{true}"
-          class:bx--label--disabled="{disabled}"
-          class:bx--visually-hidden="{hideLabel}"
-        >
-          <slot name="label">{label}</slot>
-        </label>
-      {/if}
-      <div
-        class:bx--number__input-wrapper="{true}"
-        class:bx--number__input-wrapper--warning="{!invalid && warn}"
-      >
-        <input
-          bind:this="{ref}"
-          type="number"
-          pattern="[0-9]*"
-          aria-describedby="{errorId}"
-          data-invalid="{invalid || undefined}"
-          aria-invalid="{invalid || undefined}"
-          aria-label="{label ? undefined : ariaLabel}"
-          disabled="{disabled}"
-          id="{id}"
-          name="{name}"
-          max="{max}"
-          min="{min}"
-          step="{step}"
-          value="{value ?? ''}"
-          readonly="{readonly}"
-          {...$$restProps}
-          on:change="{onChange}"
-          on:input="{onInput}"
-          on:focus
-          on:blur
-        />
-        {#if invalid}
-          <WarningFilled16 class="bx--number__invalid" />
-        {/if}
-        {#if !invalid && warn}
-          <WarningAltFilled16
-            class="bx--number__invalid bx--number__invalid--warning"
-          />
-        {/if}
-        {#if readonly}
-          <EditOff16 class="bx--text-input__readonly-icon" />
-        {/if}
-        {#if !hideSteppers}
-          <div class:bx--number__controls="{true}">
-            <button
-              type="button"
-              tabindex="-1"
-              title="{decrementLabel || iconDescription}"
-              aria-label="{decrementLabel || iconDescription}"
-              class:bx--number__control-btn="{true}"
-              class:down-icon="{true}"
-              on:click="{() => {
-                updateValue(-1);
-              }}"
-              disabled="{disabled}"
-            >
-              <Subtract16 class="down-icon" />
-            </button>
-            <div class:bx--number__rule-divider="{true}"></div>
-            <button
-              type="button"
-              tabindex="-1"
-              title="{incrementLabel || iconDescription}"
-              aria-label="{incrementLabel || iconDescription}"
-              class:bx--number__control-btn="{true}"
-              class:up-icon="{true}"
-              on:click="{() => {
-                updateValue(1);
-              }}"
-              disabled="{disabled}"
-            >
-              <Add16 class="up-icon" />
-            </button>
-            <div class:bx--number__rule-divider="{true}"></div>
-          </div>
-        {/if}
-      </div>
+        <slot name="label">{label}</slot>
+      </label>
     {/if}
+    <div
+      class:bx--number__input-wrapper="{true}"
+      class:bx--number__input-wrapper--warning="{!invalid && warn}"
+    >
+      <input
+        bind:this="{ref}"
+        type="number"
+        pattern="[0-9]*"
+        aria-describedby="{errorId}"
+        data-invalid="{invalid || undefined}"
+        aria-invalid="{invalid || undefined}"
+        aria-label="{label ? undefined : ariaLabel}"
+        disabled="{disabled}"
+        id="{id}"
+        name="{name}"
+        max="{max}"
+        min="{min}"
+        step="{step}"
+        value="{value ?? ''}"
+        readonly="{readonly}"
+        {...$$restProps}
+        on:change="{onChange}"
+        on:input="{onInput}"
+        on:focus
+        on:blur
+      />
+      {#if invalid}
+        <WarningFilled16 class="bx--number__invalid" />
+      {/if}
+      {#if !invalid && warn}
+        <WarningAltFilled16
+          class="bx--number__invalid bx--number__invalid--warning"
+        />
+      {/if}
+      {#if readonly}
+        <EditOff16 class="bx--text-input__readonly-icon" />
+      {/if}
+      {#if !hideSteppers}
+        <div class:bx--number__controls="{true}">
+          <button
+            type="button"
+            tabindex="-1"
+            title="{decrementLabel || iconDescription}"
+            aria-label="{decrementLabel || iconDescription}"
+            class:bx--number__control-btn="{true}"
+            class:down-icon="{true}"
+            on:click="{() => {
+              updateValue(-1);
+            }}"
+            disabled="{disabled}"
+          >
+            <Subtract16 class="down-icon" />
+          </button>
+          <div class:bx--number__rule-divider="{true}"></div>
+          <button
+            type="button"
+            tabindex="-1"
+            title="{incrementLabel || iconDescription}"
+            aria-label="{incrementLabel || iconDescription}"
+            class:bx--number__control-btn="{true}"
+            class:up-icon="{true}"
+            on:click="{() => {
+              updateValue(1);
+            }}"
+            disabled="{disabled}"
+          >
+            <Add16 class="up-icon" />
+          </button>
+          <div class:bx--number__rule-divider="{true}"></div>
+        </div>
+      {/if}
+    </div>
     {#if !error && !warn && helperText}
       <div
         class:bx--form__helper-text="{true}"

@@ -14,12 +14,6 @@
   /** Specify the label text */
   export let labelText = "";
 
-  /**
-   * @deprecated The `hideLabel` prop for `TimePickerSelect` is no longer needed and has been deprecated. It will be removed in the next major release.
-   * Set to `false` to show the label text
-   */
-  export let hideLabel = true;
-
   /** Set an id for the select element */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -58,9 +52,8 @@
     <label
       for="{id}"
       class:bx--label="{true}"
-      class:bx--visually-hidden="{hideLabel}"
+      class:bx--visually-hidden="{true}"
     >
-      <!-- TODO: set to always be `true` after `hideLabel` is deprecated -->
       <slot name="labelText">
         {labelText}
       </slot>

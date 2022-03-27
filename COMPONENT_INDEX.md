@@ -1,6 +1,6 @@
 # Component Index
 
-> 171 components exported from carbon-components-svelte@0.62.3.
+> 165 components exported from carbon-components-svelte@0.62.3.
 
 ## Components
 
@@ -54,7 +54,6 @@
 - [`Header`](#header)
 - [`HeaderAction`](#headeraction)
 - [`HeaderActionLink`](#headeractionlink)
-- [`HeaderActionSearch`](#headeractionsearch)
 - [`HeaderGlobalAction`](#headerglobalaction)
 - [`HeaderNav`](#headernav)
 - [`HeaderNavItem`](#headernavitem)
@@ -64,8 +63,6 @@
 - [`HeaderPanelLinks`](#headerpanellinks)
 - [`HeaderSearch`](#headersearch)
 - [`HeaderUtilities`](#headerutilities)
-- [`Icon`](#icon)
-- [`IconSkeleton`](#iconskeleton)
 - [`ImageLoader`](#imageloader)
 - [`InlineLoading`](#inlineloading)
 - [`InlineNotification`](#inlinenotification)
@@ -87,7 +84,6 @@
 - [`NotificationActionButton`](#notificationactionbutton)
 - [`NotificationButton`](#notificationbutton)
 - [`NotificationIcon`](#notificationicon)
-- [`NotificationTextDetails`](#notificationtextdetails)
 - [`NumberInput`](#numberinput)
 - [`NumberInputSkeleton`](#numberinputskeleton)
 - [`OrderedList`](#orderedlist)
@@ -160,8 +156,6 @@
 - [`ToastNotification`](#toastnotification)
 - [`Toggle`](#toggle)
 - [`ToggleSkeleton`](#toggleskeleton)
-- [`ToggleSmall`](#togglesmall)
-- [`ToggleSmallSkeleton`](#togglesmallskeleton)
 - [`Toolbar`](#toolbar)
 - [`ToolbarBatchActions`](#toolbarbatchactions)
 - [`ToolbarContent`](#toolbarcontent)
@@ -381,14 +375,13 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 | Prop name        | Kind             | Reactive | Type                                                                                                                                      | Default value          | Description                                                                                                                                                                                   |
 | :--------------- | :--------------- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ref              | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code>                                                                       | <code>null</code>      | Obtain a reference to the HTML element                                                                                                                                                        |
-| hasIconOnly      | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` for the icon-only variant                                                                                                                                                       |
 | kind             | <code>let</code> | No       | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger" &#124; "danger-tertiary" &#124; "danger-ghost"</code> | <code>"primary"</code> | Specify the kind of button                                                                                                                                                                    |
 | size             | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small" &#124; "lg" &#124; "xl"</code>                                                              | <code>"default"</code> | Specify the size of button                                                                                                                                                                    |
 | expressive       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to use Carbon's expressive typesetting                                                                                                                                          |
 | isSelected       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to enable the selected state for an icon-only, ghost button                                                                                                                     |
 | icon             | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>                                                                                      | <code>undefined</code> | Specify the icon to render                                                                                                                                                                    |
 | iconDescription  | <code>let</code> | No       | <code>string</code>                                                                                                                       | <code>undefined</code> | Specify the ARIA label for the button icon                                                                                                                                                    |
-| tooltipAlignment | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                                                                                         | <code>"center"</code>  | Set the alignment of the tooltip relative to the icon<br />`hasIconOnly` must be set to `true`                                                                                                |
+| tooltipAlignment | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                                                                                         | <code>"center"</code>  | Set the alignment of the tooltip relative to the icon.<br />Only applies to icon-only buttons                                                                                                 |
 | tooltipPosition  | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                                                                           | <code>"bottom"</code>  | Set the position of the tooltip relative to the icon                                                                                                                                          |
 | as               | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to render a custom HTML element<br />Props are destructured as `props` in the default slot (e.g., &lt;Button let:props&gt;&lt;div {...props}&gt;...&lt;/div&gt;&lt;/Button&gt;) |
 | skeleton         | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to display the skeleton state                                                                                                                                                   |
@@ -438,7 +431,6 @@ None.
 | :-------- | :--------------- | :------- | :--------------------------------------------------------------------------- | ---------------------- | ------------------------------------ |
 | href      | <code>let</code> | No       | <code>string</code>                                                          | <code>undefined</code> | Set the `href` to use an anchor link |
 | size      | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small" &#124; "lg" &#124; "xl"</code> | <code>"default"</code> | Specify the size of button skeleton  |
-| small     | <code>let</code> | No       | <code>boolean</code>                                                         | <code>false</code>     | --                                   |
 
 ### Slots
 
@@ -761,7 +753,6 @@ None.
 | Prop name     | Kind             | Reactive | Type                          | Default value          | Description                               |
 | :------------ | :--------------- | :------- | :---------------------------- | ---------------------- | ----------------------------------------- |
 | selectedIndex | <code>let</code> | Yes      | <code>number</code>           | <code>0</code>         | Set the selected index of the switch item |
-| light         | <code>let</code> | No       | <code>boolean</code>          | <code>false</code>     | Set to `true` to enable the light variant |
 | size          | <code>let</code> | No       | <code>"sm" &#124; "xl"</code> | <code>undefined</code> | Specify the size of the content switcher  |
 
 ### Slots
@@ -1640,26 +1631,6 @@ None.
 
 None.
 
-## `HeaderActionSearch`
-
-### Props
-
-| Prop name      | Kind             | Reactive | Type                 | Default value      | Description                       |
-| :------------- | :--------------- | :------- | :------------------- | ------------------ | --------------------------------- |
-| searchIsActive | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code> | Set to `true` to focus the search |
-
-### Slots
-
-None.
-
-### Events
-
-| Event name          | Type       | Detail                                                |
-| :------------------ | :--------- | :---------------------------------------------------- |
-| inputSearch         | dispatched | <code>{ action: "search"; textInput: string; }</code> |
-| focusInputSearch    | dispatched | --                                                    |
-| focusOutInputSearch | dispatched | --                                                    |
-
 ## `HeaderGlobalAction`
 
 ### Props
@@ -1686,9 +1657,7 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                | Default value          | Description                        |
-| :-------- | :--------------- | :------- | :------------------ | ---------------------- | ---------------------------------- |
-| ariaLabel | <code>let</code> | No       | <code>string</code> | <code>undefined</code> | Specify the ARIA label for the nav |
+None.
 
 ### Slots
 
@@ -1868,49 +1837,6 @@ None.
 ### Events
 
 None.
-
-## `Icon`
-
-### Props
-
-| Prop name | Kind             | Reactive | Type                                                 | Default value          | Description                                 |
-| :-------- | :--------------- | :------- | :--------------------------------------------------- | ---------------------- | ------------------------------------------- |
-| render    | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code> | Specify the icon to render                  |
-| skeleton  | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>     | Set to `true` to display the skeleton state |
-
-### Slots
-
-None.
-
-### Events
-
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-
-## `IconSkeleton`
-
-### Props
-
-| Prop name | Kind             | Reactive | Type                | Default value   | Description              |
-| :-------- | :--------------- | :------- | :------------------ | --------------- | ------------------------ |
-| size      | <code>let</code> | No       | <code>number</code> | <code>16</code> | Set the size of the icon |
-
-### Slots
-
-None.
-
-### Events
-
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
 
 ## `ImageLoader`
 
@@ -2516,27 +2442,6 @@ None.
 
 None.
 
-## `NotificationTextDetails`
-
-### Props
-
-| Prop name        | Kind             | Reactive | Type                                 | Default value          | Description                  |
-| :--------------- | :--------------- | :------- | :----------------------------------- | ---------------------- | ---------------------------- |
-| notificationType | <code>let</code> | No       | <code>"toast" &#124; "inline"</code> | <code>"toast"</code>   | Set the type of notification |
-| title            | <code>let</code> | No       | <code>string</code>                  | <code>"Title"</code>   | Specify the title text       |
-| subtitle         | <code>let</code> | No       | <code>string</code>                  | <code>""</code>        | Specify the subtitle text    |
-| caption          | <code>let</code> | No       | <code>string</code>                  | <code>"Caption"</code> | Specify the caption text     |
-
-### Slots
-
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
-
-### Events
-
-None.
-
 ## `NumberInput`
 
 ### Types
@@ -2557,7 +2462,6 @@ export type NumberInputTranslationId = "increment" | "decrement";
 | min             | <code>let</code>   | No       | <code>number</code>                                             | <code>undefined</code>                                           | Specify the minimum value                                     |
 | light           | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to enable the light variant                     |
 | readonly        | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` for the input to be read-only                   |
-| mobile          | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to enable the mobile variant                    |
 | allowEmpty      | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to allow for an empty value                     |
 | disabled        | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to disable the input                            |
 | hideSteppers    | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to hide the input stepper buttons               |
@@ -3155,7 +3059,6 @@ None.
 | ref                  | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>            | <code>null</code>                                | Obtain a reference to the input HTML element            |
 | expanded             | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true to expand the search input                 |
 | value                | <code>let</code> | Yes      | <code>any</code>                                     | <code>""</code>                                  | Specify the value of the search input                   |
-| small                | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | --                                                      |
 | size                 | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>            | <code>"xl"</code>                                | Specify the size of the search input                    |
 | searchClass          | <code>let</code> | No       | <code>string</code>                                  | <code>""</code>                                  | Specify the class name passed to the outer div element  |
 | skeleton             | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to display the skeleton state             |
@@ -3198,10 +3101,9 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                                      | Default value      | Description                          |
-| :-------- | :--------------- | :------- | :---------------------------------------- | ------------------ | ------------------------------------ |
-| small     | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | --                                   |
-| size      | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code>  | Specify the size of the search input |
+| Prop name | Kind             | Reactive | Type                                      | Default value     | Description                          |
+| :-------- | :--------------- | :------- | :---------------------------------------- | ----------------- | ------------------------------------ |
+| size      | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code> | Specify the size of the search input |
 
 ### Slots
 
@@ -3608,7 +3510,6 @@ None.
 | Prop name | Kind             | Reactive | Type                 | Default value          | Description                                    |
 | :-------- | :--------------- | :------- | :------------------- | ---------------------- | ---------------------------------------------- |
 | selected  | <code>let</code> | Yes      | <code>string</code>  | <code>undefined</code> | Specify the selected structured list row value |
-| border    | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to use the bordered variant      |
 | condensed | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to use the condensed variant     |
 | flush     | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to flush the list                |
 | selection | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to use the selection variant     |
@@ -3746,10 +3647,9 @@ None.
 
 ### Props
 
-| Prop name | Kind             | Reactive | Type                 | Default value      | Description                               |
-| :-------- | :--------------- | :------- | :------------------- | ------------------ | ----------------------------------------- |
-| rows      | <code>let</code> | No       | <code>number</code>  | <code>5</code>     | Specify the number of rows                |
-| border    | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the bordered variant |
+| Prop name | Kind             | Reactive | Type                | Default value  | Description                |
+| :-------- | :--------------- | :------- | :------------------ | -------------- | -------------------------- |
+| rows      | <code>let</code> | No       | <code>number</code> | <code>5</code> | Specify the number of rows |
 
 ### Slots
 
@@ -3842,14 +3742,13 @@ None.
 
 ### Props
 
-| Prop name        | Kind             | Reactive | Type                                                                | Default value          | Description                             |
-| :--------------- | :--------------- | :------- | :------------------------------------------------------------------ | ---------------------- | --------------------------------------- |
-| size             | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | <code>undefined</code> | Set the size of the table               |
-| zebra            | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use zebra styles       |
-| useStaticWidth   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use static width       |
-| shouldShowBorder | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the bordered variant  |
-| sortable         | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the sortable variant  |
-| stickyHeader     | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to enable a sticky header |
+| Prop name      | Kind             | Reactive | Type                                                                | Default value          | Description                             |
+| :------------- | :--------------- | :------- | :------------------------------------------------------------------ | ---------------------- | --------------------------------------- |
+| size           | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | <code>undefined</code> | Set the size of the table               |
+| zebra          | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use zebra styles       |
+| useStaticWidth | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use static width       |
+| sortable       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the sortable variant  |
+| stickyHeader   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to enable a sticky header |
 
 ### Slots
 
@@ -4354,7 +4253,6 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 | disabled        | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to disable the select             |
 | iconDescription | <code>let</code> | No       | <code>string</code>                        | <code>"Open list of options"</code>              | Specify the ARIA label for the chevron icon     |
 | labelText       | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the label text                          |
-| hideLabel       | <code>let</code> | No       | <code>boolean</code>                       | <code>true</code>                                | --                                              |
 | id              | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the select element                |
 | name            | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code>                           | Specify a name attribute for the select element |
 
@@ -4461,59 +4359,6 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 | Slot name | Default | Props | Fallback                 |
 | :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
-
-### Events
-
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-
-## `ToggleSmall`
-
-### Props
-
-| Prop name | Kind             | Reactive | Type                 | Default value                                    | Description                                     |
-| :-------- | :--------------- | :------- | :------------------- | ------------------------------------------------ | ----------------------------------------------- |
-| toggled   | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
-| disabled  | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to disable checkbox input         |
-| labelA    | <code>let</code> | No       | <code>string</code>  | <code>"Off"</code>                               | Specify the label for the untoggled state       |
-| labelB    | <code>let</code> | No       | <code>string</code>  | <code>"On"</code>                                | Specify the label for the toggled state         |
-| labelText | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the label text                          |
-| id        | <code>let</code> | No       | <code>string</code>  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
-| name      | <code>let</code> | No       | <code>string</code>  | <code>undefined</code>                           | Specify a name attribute for the checkbox input |
-
-### Slots
-
-None.
-
-### Events
-
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-
-## `ToggleSmallSkeleton`
-
-### Props
-
-| Prop name | Kind             | Reactive | Type                | Default value                                    | Description                     |
-| :-------- | :--------------- | :------- | :------------------ | ------------------------------------------------ | ------------------------------- |
-| labelText | <code>let</code> | No       | <code>string</code> | <code>""</code>                                  | Specify the label text          |
-| id        | <code>let</code> | No       | <code>string</code> | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element |
-
-### Slots
-
-None.
 
 ### Events
 
