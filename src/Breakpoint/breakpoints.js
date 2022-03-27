@@ -9,3 +9,5 @@ export const breakpoints = Object.freeze({
   xlg: 1312,
   max: 1584,
 });
+
+export default breakpoints;

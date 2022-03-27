@@ -1,7 +1,9 @@
 export { Accordion, AccordionItem, AccordionSkeleton } from "./Accordion";
 export { AspectRatio } from "./AspectRatio";
 export { Breadcrumb, BreadcrumbItem, BreadcrumbSkeleton } from "./Breadcrumb";
-export { Breakpoint, breakpointObserver, breakpoints } from "./Breakpoint";
+export { Breakpoint } from "./Breakpoint";
+export { default as breakpointObserver } from "./Breakpoint/breakpointObserver";
+export { default as breakpoints } from "./Breakpoint/breakpoints";
 export { Button, ButtonSkeleton, ButtonSet } from "./Button";
 export { Checkbox, CheckboxSkeleton } from "./Checkbox";
 export { ContentSwitcher, Switch } from "./ContentSwitcher";
