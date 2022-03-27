@@ -8,12 +8,6 @@ export interface StructuredListSkeletonProps
    * @default 5
    */
   rows?: number;
-
-  /**
-   * Set to `true` to use the bordered variant
-   * @default false
-   */
-  border?: boolean;
 }
 
 export default class StructuredListSkeleton extends SvelteComponentTyped<

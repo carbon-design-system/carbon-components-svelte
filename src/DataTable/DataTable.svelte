@@ -356,6 +356,7 @@
       {#each sorting ? displayedSortedRows : displayedRows as row, i (row.id)}
         <TableRow
           id="row-{row.id}"
+          data-parent-row="{expandable ? true : undefined}"
           class="{selectedRowIds.includes(row.id)
             ? 'bx--data-table--selected'
             : ''} {expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable
@@ -483,24 +484,28 @@
           {/each}
         </TableRow>
 
-        {#if expandable && expandedRows[row.id] && !nonExpandableRowIds.includes(row.id)}
+        {#if expandable}
           <tr
             data-child-row
             class:bx--expandable-row="{true}"
             on:mouseenter="{() => {
+              if (nonExpandableRowIds.includes(row.id)) return;
               parentRowId = row.id;
             }}"
             on:mouseleave="{() => {
+              if (nonExpandableRowIds.includes(row.id)) return;
               parentRowId = null;
             }}"
           >
-            <TableCell
-              colspan="{selectable ? headers.length + 2 : headers.length + 1}"
-            >
-              <div class:bx--child-row-inner-container="{true}">
-                <slot name="expanded-row" row="{row}" />
-              </div>
-            </TableCell>
+            {#if expandedRows[row.id] && !nonExpandableRowIds.includes(row.id)}
+              <TableCell
+                colspan="{selectable ? headers.length + 2 : headers.length + 1}"
+              >
+                <div class:bx--child-row-inner-container="{true}">
+                  <slot name="expanded-row" row="{row}" />
+                </div>
+              </TableCell>
+            {/if}
           </tr>
         {/if}
       {/each}

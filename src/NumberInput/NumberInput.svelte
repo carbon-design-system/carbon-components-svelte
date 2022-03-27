@@ -170,7 +170,7 @@
     class:bx--number--nosteppers="{hideSteppers}"
     class="{size && `bx--number--${size}`}"
   >
-    {#if label}
+    {#if $$slots.label || label}
       <label
         for="{id}"
         class:bx--label="{true}"
