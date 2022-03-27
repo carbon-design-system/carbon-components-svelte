@@ -1,3 +1,5 @@
+const fs = require("fs");
+const glob = require("glob");
 const { sveld } = require("sveld");
 const pkg = require("../package.json");
 
@@ -17,4 +19,9 @@ sveld({
   jsonOptions: {
     outFile: "docs/src/COMPONENT_API.json",
   },
+});
+
+glob.sync("./src/**/*.d.ts").forEach((file) => {
+  console.log("Copying", file, " to types/");
+  fs.copyFileSync(file, file.replace(/src/, "types"));
 });
