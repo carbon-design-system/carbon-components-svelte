@@ -11,12 +11,11 @@
     "css/*.css"
   ],
   "scripts": {
-    "test": "run-p test:*",
     "test:types": "svelte-check --workspace tests",
     "build:css": "node scripts/build-css",
     "build:docs": "node scripts/build-docs",
     "build:lib": "rollup -c",
-    "prepack": "run-p build:*",
+    "prepack": "yarn build:docs & yarn build:lib",
     "format": "prettier --write \"./**/*.{svelte,js,md}\""
   },
   "dependencies": {

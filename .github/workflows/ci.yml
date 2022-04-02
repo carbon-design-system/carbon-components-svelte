@@ -3,8 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
   build:
@@ -22,6 +21,4 @@ jobs:
         run: |
           yarn
           yarn build:lib
-
-      - name: Run unit tests and validate TypeScript definitions
-        run: yarn test
+          yarn test:types
