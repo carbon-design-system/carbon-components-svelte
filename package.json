@@ -75,8 +75,7 @@
     "lib",
     "src",
     "types",
-    "css",
-    "actions"
+    "css"
   ],
   "contributors": [
     "Eric Liu (https://github.com/metonym)",
