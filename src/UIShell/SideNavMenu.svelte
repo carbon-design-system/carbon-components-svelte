@@ -17,7 +17,7 @@
   /** Obtain a reference to the HTML button element */
   export let ref = null;
 
-  import ChevronDown16 from "../../icons/ChevronDown16.svelte";
+  import ChevronDown16 from "../icons/ChevronDown16.svelte";
 </script>
 
 <li class:bx--side-nav__item="{true}" class:bx--side-nav__item--icon="{icon}">

@@ -33,8 +33,8 @@
 
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
-  import Close20 from "../../icons/Close20.svelte";
-  import AppSwitcher20 from "../../icons/AppSwitcher20.svelte";
+  import Close20 from "../icons/Close20.svelte";
+  import AppSwitcher20 from "../icons/AppSwitcher20.svelte";
 
   const dispatch = createEventDispatcher();
 

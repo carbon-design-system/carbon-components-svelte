@@ -60,10 +60,10 @@
    */
   export let iconClose = Close20;
 
-  import Close20 from "../../icons/Close20.svelte";
-  import Menu20 from "../../icons/Menu20.svelte";
-  import { shouldRenderHamburgerMenu } from "../navStore";
-  import HamburgerMenu from "../SideNav/HamburgerMenu.svelte";
+  import Close20 from "../icons/Close20.svelte";
+  import Menu20 from "../icons/Menu20.svelte";
+  import { shouldRenderHamburgerMenu } from "./navStore";
+  import HamburgerMenu from "./HamburgerMenu.svelte";
 
   let winWidth = undefined;
 
