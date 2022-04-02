@@ -47,7 +47,7 @@
   </div>
 </div>
 
-<style global>
+<style>
   .preview {
     margin-bottom: var(--cds-layout-04);
     margin-left: -1rem;
@@ -55,89 +55,8 @@
     max-width: 56rem;
   }
 
-  .code-override .bx--snippet {
-    max-width: none;
-  }
-
-  .code-override .bx--copy-btn,
-  .code-override .bx--snippet,
-  .code-override button.bx--btn.bx--snippet-btn--expand {
-    background-color: #262626;
-    color: #f4f4f4;
-  }
-
-  .code-override .bx--copy-btn:hover,
-  .code-override button.bx--btn.bx--snippet-btn--expand:hover {
-    background-color: #393939;
-  }
-
-  .code-override .bx--snippet__icon {
-    fill: #f4f4f4;
-  }
-
-  .code-override .bx--snippet-container pre {
-    font-size: var(--cds-code-02-font-size);
-    line-height: var(--cds-code-02-line-height);
-    letter-spacing: var(--cds-code-02-letter-spacing);
-    cursor: text;
-  }
-
-  .code-override .bx--snippet--multi .bx--snippet-container pre {
-    overflow-x: auto;
-  }
-
-  .token.tag,
-  .token.operator {
-    color: #6ea6ff;
-  }
-
-  .token.attr-name {
-    color: #3ddbd9; /* teal 30 */
-  }
-
-  .token.function {
-    color: #9ef0f0;
-  }
-
-  .token.token.language-javascript,
-  .token.attr-value {
-    color: #d4bbff; /* purple 30 */
-  }
-
-  .token.keyword {
-    color: #bb8eff;
-  }
-
-  .token.punctuation {
-    color: #a8a8a8; /* gray 40 */
-  }
-
-  .token.script .token.language-javascript {
-    color: #3ddbd9; /* teal 30 */
-  }
-
-  .token.string {
-    color: #fa75a6;
-  }
-
-  .token.boolean {
-    color: #bb8eff;
-  }
-
-  .token.number {
-    color: #a7f0ba;
-  }
-
-  .token.comment {
-    color: #bebebe;
-  }
-
   .code-override {
     border: 1px solid #262626;
-  }
-
-  html[theme="g90"] .code-override {
-    border: 1px solid var(--cds-ui-03);
   }
 
   .preview-viewer {

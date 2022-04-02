@@ -128,20 +128,18 @@ const NODE_ENV = process.env.NODE_ENV || "production";
 module.exports = {
   extensions: [".svelte", ".svx"],
   preprocess: [
-    require("svelte-preprocess")({
-      typescript: false,
-      replace: [
-        ["process.env.VERSION", JSON.stringify(pkg.version)],
-        ["process.env.NODE_ENV", JSON.stringify(NODE_ENV)],
-      ],
-      postcss: {
-        plugins: [
-          require("autoprefixer")({
-            overrideBrowserslist: ["last 1 version", "ie >= 11"],
-          }),
-        ],
+    {
+      markup: ({ filename, content }) => {
+        if (/node_modules/.test(filename) || !filename.endsWith(".svelte"))
+          return;
+        return {
+          code: content.replace(
+            /process.env.VERSION/g,
+            JSON.stringify(pkg.version)
+          ),
+        };
       },
-    }),
+    },
     mdsvex({
       remarkPlugins: [plugin, slug, carbonify],
       layout: {

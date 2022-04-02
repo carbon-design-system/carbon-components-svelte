@@ -149,51 +149,12 @@
   </Column>
 </Content>
 
-<style global>
-  .override-tabs a.bx--tabs__nav-link,
-  .override-tabs a.bx--tabs__nav-link:focus,
-  .override-tabs a.bx--tabs__nav-link:active {
-    width: auto !important;
-  }
-
-  #select-theme {
-    width: auto;
-  }
-
-  .prose > p > .bx--link {
-    font-size: inherit;
-    text-decoration: underline;
-  }
-
-  .prose .toc {
-    margin-bottom: var(--cds-layout-01);
-  }
-
-  .table {
-    position: sticky;
-    max-height: calc(100vh - 3rem);
-    top: 3rem;
-    padding-top: var(--cds-spacing-05);
-    padding-bottom: var(--cds-spacing-05);
-    padding-left: var(--cds-spacing-08);
-    overflow-y: auto;
-  }
-
+<style>
   .bar {
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--cds-layout-02);
     border-bottom: 1px solid var(--cds-ui-03);
-  }
-
-  [data-components] {
-    z-index: 2;
-    position: relative;
-    display: flex;
-  }
-
-  [data-components] .bx--grid {
-    width: 100%;
   }
 
   .toc h5 {
@@ -205,25 +166,8 @@
   }
 
   @media (max-width: 1056px) {
-    .table {
-      display: none;
-    }
-
     .toc.mobile {
       display: block;
     }
-  }
-
-  .preview-viewer > .bx--aspect-ratio,
-  .preview-viewer [data-outline] {
-    outline: 1px solid var(--cds-interactive-04);
-  }
-
-  [data-outline] {
-    position: relative;
-  }
-
-  [data-outline] ~ [data-outline] {
-    margin-top: var(--cds-spacing-08);
   }
 </style>
