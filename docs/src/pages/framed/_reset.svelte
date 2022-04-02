@@ -21,4 +21,8 @@
     width: 100%;
     padding: var(--cds-spacing-06) var(--cds-spacing-05);
   }
+
+  :global(.framed [class^="bx--col"]) {
+    outline: 1px solid var(--cds-interactive-04);
+  }
 </style>

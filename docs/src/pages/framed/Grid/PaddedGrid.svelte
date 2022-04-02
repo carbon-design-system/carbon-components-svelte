@@ -2,28 +2,48 @@
   import { Grid, Row, Column } from "carbon-components-svelte";
 </script>
 
-<Grid narrow padding>
+<div>Adding padding to Grid applies it to all child columns:</div>
+
+<Grid padding>
   <Row>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
   </Row>
 </Grid>
 
-<Grid narrow>
+<div>Adding padding to a Row only applies its child columns:</div>
+
+<Grid>
   <Row padding>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
   </Row>
   <Row>
-    <Column padding style="outline: 1px solid var(--cds-interactive-04)">
-      Column
-    </Column>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
-    <Column style="outline: 1px solid var(--cds-interactive-04)">Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
   </Row>
 </Grid>
+
+<div>Adding padding to a specific column only applies it to the column:</div>
+
+<Grid>
+  <Row>
+    <Column padding>Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
+    <Column>Column</Column>
+  </Row>
+</Grid>
+
+<style>
+  div {
+    margin-top: var(--cds-spacing-05);
+    padding: var(--cds-spacing-05);
+  }
+</style>
