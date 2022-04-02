@@ -1,7 +1,6 @@
 
 <script>
-  import { Truncate } from "carbon-components-svelte";
-  import { truncate } from "carbon-components-svelte/actions";
+  import { Truncate, truncate } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -25,9 +24,7 @@ Set `clamp` to `"front"` to clamp the text from the front.
 
 ### use:truncate
 
-The `truncate` action can be used on other HTML elements.
-
-Import path: `import { truncate } from "carbon-components-svelte/actions";`
+The `truncate` action can be used on plain HTML elements.
 
 <h4 use:truncate>
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
