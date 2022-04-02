@@ -146,106 +146,7 @@
   <slot />
 </Theme>
 
-<style global>
-  .bx--side-nav__overlay-active {
-    z-index: calc(10 + 1); /** supersede the z-index of code snippets */
-  }
-
-  .body-short-01 {
-    font-size: var(--cds-body-short-01-font-size);
-    font-weight: var(--cds-body-short-01-font-weight);
-    letter-spacing: var(--cds-body-short-01-letter-spacing);
-    line-height: var(--cds-body-short-01-line-height);
-  }
-
-  .bx--col > h1 {
-    font-size: var(--cds-display-01-font-size);
-    font-weight: var(--cds-display-01-font-weight);
-    letter-spacing: var(--cds-display-01-letter-spacing);
-    line-height: var(--cds-display-01-line-height);
-    margin-bottom: var(--cds-layout-01);
-  }
-
-  .big-paragraph {
-    font-size: var(--cds-expressive-heading-03-font-size);
-    font-weight: var(--cds-expressive-heading-03-font-weight);
-    letter-spacing: var(--cds-expressive-heading-03-letter-spacing);
-    line-height: var(--cds-expressive-heading-03-line-height);
-    margin-top: var(--cds-layout-03);
-    margin-bottom: var(--cds-layout-06);
-  }
-
-  .big-link,
-  .bx--col > .big-paragraph > code {
-    font-size: var(--cds-expressive-heading-03-font-size);
-    font-weight: var(--cds-expressive-heading-03-font-weight);
-    letter-spacing: var(--cds-expressive-heading-03-letter-spacing);
-    line-height: var(--cds-expressive-heading-03-line-height);
-  }
-
-  .bx--col > p {
-    max-width: 44rem;
-  }
-
-  .bx--col > p > code {
-    font-size: var(--cds-code-02-font-size);
-    font-weight: var(--cds-code-02-font-weight);
-    line-height: var(--cds-code-02-line-height);
-    letter-spacing: var(--cds-code-02-letter-spacing);
-    background-color: var(--cds-ui-03);
-    border-radius: 0.25rem;
-    padding: 0 var(--cds-spacing-02);
-  }
-
-  .bx--col > h2 {
-    font-size: var(--cds-expressive-heading-05-font-size);
-    font-weight: var(--cds-expressive-heading-05-font-weight);
-    letter-spacing: var(--cds-expressive-heading-05-letter-spacing);
-    line-height: var(--cds-expressive-heading-05-line-height);
-    padding-top: var(--cds-layout-04);
-    margin-bottom: var(--cds-layout-01);
-  }
-
-  .bx--col > h3 {
-    font-size: var(--cds-expressive-heading-04-font-size);
-    font-weight: var(--cds-expressive-heading-04-font-weight);
-    letter-spacing: var(--cds-expressive-heading-04-letter-spacing);
-    line-height: var(--cds-expressive-heading-04-line-height);
-    padding-top: var(--cds-layout-04);
-    margin-bottom: var(--cds-layout-01);
-  }
-
-  .bx--col > h4 {
-    font-size: var(--cds-expressive-heading-02-font-size);
-    font-weight: var(--cds-expressive-heading-02-font-weight);
-    letter-spacing: var(--cds-expressive-heading-02-letter-spacing);
-    line-height: var(--cds-expressive-heading-02-line-height);
-    padding-top: var(--cds-layout-04);
-    margin-bottom: var(--cds-layout-01);
-  }
-
-  .bx--col > p {
-    margin-bottom: var(--cds-layout-02);
-  }
-
-  main.bx--content {
-    background: none;
-    min-height: calc(100vh - 3rem - 3rem);
-  }
-
-  @media (max-width: 1056px) {
-    .bx--side-nav ~ .bx--content {
-      margin-left: 0;
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-
-    .bx--side-nav--expanded ~ .bx--content {
-      white-space: nowrap;
-      min-width: 28rem;
-    }
-  }
-
+<style>
   .platform-name {
     display: flex;
     align-items: baseline;
@@ -264,15 +165,5 @@
     .platform-name code {
       display: none;
     }
-  }
-
-  @media (min-width: 1057px) {
-    .bx--side-nav__navigation {
-      z-index: 1;
-    }
-  }
-
-  .bx--side-nav__submenu[aria-expanded="true"] + .bx--side-nav__menu {
-    max-height: 144rem;
   }
 </style>

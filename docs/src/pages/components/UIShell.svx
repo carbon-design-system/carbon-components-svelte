@@ -23,8 +23,17 @@ components: ["Header",
 ---
 
 <script>
+   import { InlineNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    Currently, the UI Shell is not themable and only supports dark mode.
+  </div>
+</InlineNotification>
+
+Open the following examples in a new tab to experience them in full.
 
 ### Header
 

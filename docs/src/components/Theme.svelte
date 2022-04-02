@@ -9,14 +9,20 @@
   const isValidTheme = (value) => themes.includes(value);
 
   onMount(() => {
-    const persisted_theme = localStorage.getItem(persistKey);
-    if (isValidTheme(persisted_theme)) theme.set(persisted_theme);
+    try {
+      const persisted_theme = localStorage.getItem(persistKey);
+      if (isValidTheme(persisted_theme)) theme.set(persisted_theme);
+    } catch (e) {}
   });
 
   afterUpdate(() => {
     if (isValidTheme($theme)) {
       document.documentElement.setAttribute("theme", $theme);
-      if (persist) localStorage.setItem(persistKey, $theme);
+      if (persist) {
+        try {
+          localStorage.setItem(persistKey, $theme);
+        } catch (e) {}
+      }
     }
   });
 </script>
