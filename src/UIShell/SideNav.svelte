@@ -32,7 +32,7 @@
   export let expansionBreakpoint = 1056;
 
   import { onMount, createEventDispatcher } from "svelte";
-  import { shouldRenderHamburgerMenu } from "../navStore";
+  import { shouldRenderHamburgerMenu } from "./navStore";
 
   const dispatch = createEventDispatcher();
 

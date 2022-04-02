@@ -25,8 +25,8 @@
   /** Obtain a reference to the HTML button element */
   export let ref = null;
 
-  import Close20 from "../../icons/Close20.svelte";
-  import Menu20 from "../../icons/Menu20.svelte";
+  import Close20 from "../icons/Close20.svelte";
+  import Menu20 from "../icons/Menu20.svelte";
 </script>
 
 <button

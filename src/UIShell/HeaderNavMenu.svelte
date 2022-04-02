@@ -16,7 +16,7 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import ChevronDown16 from "../../icons/ChevronDown16.svelte";
+  import ChevronDown16 from "../icons/ChevronDown16.svelte";
 
   const selectedItems = writable({});
 
