@@ -4336,7 +4336,7 @@
     },
     {
       "moduleName": "Header",
-      "filePath": "src/UIShell/GlobalHeader/Header.svelte",
+      "filePath": "src/UIShell/Header.svelte",
       "props": [
         {
           "name": "expandedByDefault",
@@ -4472,7 +4472,7 @@
     },
     {
       "moduleName": "HeaderAction",
-      "filePath": "src/UIShell/GlobalHeader/HeaderAction.svelte",
+      "filePath": "src/UIShell/HeaderAction.svelte",
       "props": [
         {
           "name": "isOpen",
@@ -4569,7 +4569,7 @@
     },
     {
       "moduleName": "HeaderActionLink",
-      "filePath": "src/UIShell/GlobalHeader/HeaderActionLink.svelte",
+      "filePath": "src/UIShell/HeaderActionLink.svelte",
       "props": [
         {
           "name": "linkIsActive",
@@ -4679,7 +4679,7 @@
     },
     {
       "moduleName": "HeaderNav",
-      "filePath": "src/UIShell/GlobalHeader/HeaderNav.svelte",
+      "filePath": "src/UIShell/HeaderNav.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -4689,7 +4689,7 @@
     },
     {
       "moduleName": "HeaderNavItem",
-      "filePath": "src/UIShell/GlobalHeader/HeaderNavItem.svelte",
+      "filePath": "src/UIShell/HeaderNavItem.svelte",
       "props": [
         {
           "name": "href",
@@ -4751,7 +4751,7 @@
     },
     {
       "moduleName": "HeaderNavMenu",
-      "filePath": "src/UIShell/GlobalHeader/HeaderNavMenu.svelte",
+      "filePath": "src/UIShell/HeaderNavMenu.svelte",
       "props": [
         {
           "name": "expanded",
@@ -4814,7 +4814,7 @@
     },
     {
       "moduleName": "HeaderPanelDivider",
-      "filePath": "src/UIShell/GlobalHeader/HeaderPanelDivider.svelte",
+      "filePath": "src/UIShell/HeaderPanelDivider.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -4823,7 +4823,7 @@
     },
     {
       "moduleName": "HeaderPanelLink",
-      "filePath": "src/UIShell/GlobalHeader/HeaderPanelLink.svelte",
+      "filePath": "src/UIShell/HeaderPanelLink.svelte",
       "props": [
         {
           "name": "href",
@@ -4855,7 +4855,7 @@
     },
     {
       "moduleName": "HeaderPanelLinks",
-      "filePath": "src/UIShell/GlobalHeader/HeaderPanelLinks.svelte",
+      "filePath": "src/UIShell/HeaderPanelLinks.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -4957,7 +4957,7 @@
     },
     {
       "moduleName": "HeaderUtilities",
-      "filePath": "src/UIShell/GlobalHeader/HeaderUtilities.svelte",
+      "filePath": "src/UIShell/HeaderUtilities.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -9730,7 +9730,7 @@
     },
     {
       "moduleName": "SideNav",
-      "filePath": "src/UIShell/SideNav/SideNav.svelte",
+      "filePath": "src/UIShell/SideNav.svelte",
       "props": [
         {
           "name": "fixed",
@@ -9809,7 +9809,7 @@
     },
     {
       "moduleName": "SideNavItems",
-      "filePath": "src/UIShell/SideNav/SideNavItems.svelte",
+      "filePath": "src/UIShell/SideNavItems.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -9818,7 +9818,7 @@
     },
     {
       "moduleName": "SideNavLink",
-      "filePath": "src/UIShell/SideNav/SideNavLink.svelte",
+      "filePath": "src/UIShell/SideNavLink.svelte",
       "props": [
         {
           "name": "isSelected",
@@ -9894,7 +9894,7 @@
     },
     {
       "moduleName": "SideNavMenu",
-      "filePath": "src/UIShell/SideNav/SideNavMenu.svelte",
+      "filePath": "src/UIShell/SideNavMenu.svelte",
       "props": [
         {
           "name": "expanded",
@@ -9955,7 +9955,7 @@
     },
     {
       "moduleName": "SideNavMenuItem",
-      "filePath": "src/UIShell/SideNav/SideNavMenuItem.svelte",
+      "filePath": "src/UIShell/SideNavMenuItem.svelte",
       "props": [
         {
           "name": "isSelected",
