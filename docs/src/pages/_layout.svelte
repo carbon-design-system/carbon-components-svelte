@@ -229,7 +229,6 @@
   }
 
   main.bx--content {
-    background: none;
     min-height: calc(100vh - 3rem - 3rem);
   }
 
