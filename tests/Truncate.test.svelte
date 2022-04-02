@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Truncate } from "../types";
-  import { truncate } from "../actions";
+  import { truncate } from "../types";
 </script>
 
 <Truncate>

@@ -128,6 +128,7 @@ export { TooltipDefinition } from "./TooltipDefinition";
 export { TooltipIcon } from "./TooltipIcon";
 export { TreeView } from "./TreeView";
 export { Truncate } from "./Truncate";
+export { default as truncate } from "./Truncate/truncate";
 export {
   Header,
   HeaderAction,

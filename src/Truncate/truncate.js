@@ -1,16 +1,12 @@
 /**
  * Svelte action that applies single-line text truncation to an element
- * @param {HTMLElement} node
- * @param {{ clamp?: "end" | "front" }} params
+ * @typedef {{ clamp?: "end" | "front" }} TruncateOptions
+ * @type {(node: HTMLElement, options?: TruncateOptions) => { update: (options?: TruncateOptions) => void; }}
  * @example
- * <script>
- *   import { truncate } from "carbon-components-svelte/actions";
- * </script>
- *
  * <h1 use:truncate>...</h1>
  * <h1 use:truncate={{ clamp: "front" }}>...</h1>
  */
-export function truncate(node, params = {}) {
+export function truncate(node, options = {}) {
   const prefix = "bx--text-truncate--";
 
   function toggleClass(front = false) {
@@ -21,11 +17,13 @@ export function truncate(node, params = {}) {
     node.className = `${classes} ${prefix}${front ? "front" : "end"}`;
   }
 
-  toggleClass(params.clamp === "front");
+  toggleClass(options.clamp === "front");
 
   return {
-    update(params) {
-      toggleClass(params.clamp === "front");
+    update(options) {
+      toggleClass(options.clamp === "front");
     },
   };
 }
+
+export default truncate;
