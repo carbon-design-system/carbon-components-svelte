@@ -23,7 +23,6 @@
     "prismjs": "^1.27.0",
     "remark-slug": "^6.0.0",
     "svelte": "^3.46.6",
-    "svelte-preprocess": "^4.10.4",
     "vite": "^2.9.1"
   },
   "routify": {
