@@ -101,8 +101,8 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import WarningFilled16 from "../icons/WarningFilled16.svelte";
-  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import {
     ListBox,
     ListBoxMenu,
@@ -190,10 +190,10 @@
     warnText="{warnText}"
   >
     {#if invalid}
-      <WarningFilled16 class="bx--list-box__invalid-icon" />
+      <WarningFilled class="bx--list-box__invalid-icon" />
     {/if}
     {#if !invalid && warn}
-      <WarningAltFilled16
+      <WarningAltFilled
         class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
     {/if}

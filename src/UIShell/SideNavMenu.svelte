@@ -17,7 +17,7 @@
   /** Obtain a reference to the HTML button element */
   export let ref = null;
 
-  import ChevronDown16 from "../icons/ChevronDown16.svelte";
+  import ChevronDown from "../icons/ChevronDown.svelte";
 </script>
 
 <li class:bx--side-nav__item="{true}" class:bx--side-nav__item--icon="{icon}">
@@ -45,7 +45,7 @@
       class:bx--side-nav__icon--small="{true}"
       class:bx--side-nav__submenu-chevron="{true}"
     >
-      <svelte:component this="{ChevronDown16}" title="Open Menu" tabindex="0" />
+      <svelte:component this="{ChevronDown}" title="Open Menu" tabindex="0" />
     </div>
   </button>
   <ul role="menu" class:bx--side-nav__menu="{true}">

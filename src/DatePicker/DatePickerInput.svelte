@@ -54,9 +54,9 @@
   export let ref = null;
 
   import { getContext } from "svelte";
-  import Calendar16 from "../icons/Calendar16.svelte";
-  import WarningFilled16 from "../icons/WarningFilled16.svelte";
-  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
+  import Calendar from "../icons/Calendar.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
 
   const {
     range,
@@ -138,22 +138,20 @@
     />
     {#if !$hasCalendar}
       {#if invalid}
-        <WarningFilled16
+        <WarningFilled
           class="bx--date-picker__icon bx--date-picker__icon--invalid"
         />
       {/if}
       {#if !invalid && warn}
-        <WarningAltFilled16
+        <WarningAltFilled
           class="bx--date-picker__icon bx--date-picker__icon--warn"
         />
       {/if}
     {/if}
     {#if $hasCalendar}
-      <Calendar16
-        role="img"
+      <Calendar
         class="bx--date-picker__icon"
         aria-label="{iconDescription}"
-        title="{iconDescription}"
         on:click="{openCalendar}"
       />
     {/if}

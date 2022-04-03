@@ -89,7 +89,7 @@
   export let ref = null;
 
   import { createEventDispatcher, tick, onMount } from "svelte";
-  import ChevronDown16 from "../icons/ChevronDown16.svelte";
+  import ChevronDown from "../icons/ChevronDown.svelte";
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
@@ -243,7 +243,7 @@
         }}"
       >
         <span class:bx--snippet-btn--text="{true}">{expandText}</span>
-        <ChevronDown16
+        <ChevronDown
           class="bx--icon-chevron--down bx--snippet__icon"
           aria-label="{expandText}"
         />

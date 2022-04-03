@@ -71,8 +71,8 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   import { afterUpdate, createEventDispatcher } from "svelte";
-  import CaretLeft16 from "../icons/CaretLeft16.svelte";
-  import CaretRight16 from "../icons/CaretRight16.svelte";
+  import CaretLeft from "../icons/CaretLeft.svelte";
+  import CaretRight from "../icons/CaretRight.svelte";
   import Button from "../Button/Button.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
@@ -161,7 +161,7 @@
       kind="ghost"
       tooltipAlignment="center"
       tooltipPosition="top"
-      icon="{CaretLeft16}"
+      icon="{CaretLeft}"
       iconDescription="{backwardText}"
       disabled="{backButtonDisabled}"
       class="bx--pagination__button bx--pagination__button--backward {backButtonDisabled
@@ -176,7 +176,7 @@
       kind="ghost"
       tooltipAlignment="end"
       tooltipPosition="top"
-      icon="{CaretRight16}"
+      icon="{CaretRight}"
       iconDescription="{forwardText}"
       disabled="{forwardButtonDisabled}"
       class="bx--pagination__button bx--pagination__button--forward {forwardButtonDisabled

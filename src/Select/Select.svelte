@@ -65,9 +65,9 @@
 
   import { createEventDispatcher, setContext, afterUpdate } from "svelte";
   import { writable } from "svelte/store";
-  import ChevronDown16 from "../icons/ChevronDown16.svelte";
-  import WarningFilled16 from "../icons/WarningFilled16.svelte";
-  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
+  import ChevronDown from "../icons/ChevronDown.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
 
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);
@@ -129,9 +129,9 @@
           >
             <slot />
           </select>
-          <ChevronDown16 class="bx--select__arrow" />
+          <ChevronDown class="bx--select__arrow" />
           {#if invalid}
-            <WarningFilled16 class="bx--select__invalid-icon" />
+            <WarningFilled class="bx--select__invalid-icon" />
           {/if}
         </div>
         {#if invalid}
@@ -173,12 +173,12 @@
         >
           <slot />
         </select>
-        <ChevronDown16 class="bx--select__arrow" />
+        <ChevronDown class="bx--select__arrow" />
         {#if invalid}
-          <WarningFilled16 class="bx--select__invalid-icon" />
+          <WarningFilled class="bx--select__invalid-icon" />
         {/if}
         {#if !invalid && warn}
-          <WarningAltFilled16
+          <WarningAltFilled
             class="bx--select__invalid-icon bx--select__invalid-icon--warning"
           />
         {/if}

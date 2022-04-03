@@ -100,11 +100,11 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import Add16 from "../icons/Add16.svelte";
-  import Subtract16 from "../icons/Subtract16.svelte";
-  import WarningFilled16 from "../icons/WarningFilled16.svelte";
-  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
-  import EditOff16 from "../icons/EditOff16.svelte";
+  import Add from "../icons/Add.svelte";
+  import Subtract from "../icons/Subtract.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import EditOff from "../icons/EditOff.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
@@ -207,15 +207,15 @@
         on:blur
       />
       {#if invalid}
-        <WarningFilled16 class="bx--number__invalid" />
+        <WarningFilled class="bx--number__invalid" />
       {/if}
       {#if !invalid && warn}
-        <WarningAltFilled16
+        <WarningAltFilled
           class="bx--number__invalid bx--number__invalid--warning"
         />
       {/if}
       {#if readonly}
-        <EditOff16 class="bx--text-input__readonly-icon" />
+        <EditOff class="bx--text-input__readonly-icon" />
       {/if}
       {#if !hideSteppers}
         <div class:bx--number__controls="{true}">
@@ -231,7 +231,7 @@
             }}"
             disabled="{disabled}"
           >
-            <Subtract16 class="down-icon" />
+            <Subtract class="down-icon" />
           </button>
           <div class:bx--number__rule-divider="{true}"></div>
           <button
@@ -246,7 +246,7 @@
             }}"
             disabled="{disabled}"
           >
-            <Add16 class="up-icon" />
+            <Add class="up-icon" />
           </button>
           <div class:bx--number__rule-divider="{true}"></div>
         </div>

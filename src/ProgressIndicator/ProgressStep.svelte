@@ -24,10 +24,10 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   import { onMount, getContext } from "svelte";
-  import CheckmarkOutline16 from "../icons/CheckmarkOutline16.svelte";
-  import Warning16 from "../icons/Warning16.svelte";
-  import CircleDash16 from "../icons/CircleDash16.svelte";
-  import Incomplete16 from "../icons/Incomplete16.svelte";
+  import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
+  import Warning from "../icons/Warning.svelte";
+  import CircleDash from "../icons/CircleDash.svelte";
+  import Incomplete from "../icons/Incomplete.svelte";
 
   let step = {};
 
@@ -84,13 +84,13 @@
     }}"
   >
     {#if invalid}
-      <Warning16 class="bx--progress__warning" title="{description}" />
+      <Warning class="bx--progress__warning" title="{description}" />
     {:else if current}
-      <Incomplete16 title="{description}" />
+      <Incomplete title="{description}" />
     {:else if complete}
-      <CheckmarkOutline16 title="{description}" />
+      <CheckmarkOutline title="{description}" />
     {:else}
-      <CircleDash16 title="{description}" />
+      <CircleDash title="{description}" />
     {/if}
     <slot props="{{ class: 'bx--progress-label' }}">
       <p class:bx--progress-label="{true}">{label}</p>

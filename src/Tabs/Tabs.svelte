@@ -22,7 +22,7 @@
 
   import { createEventDispatcher, afterUpdate, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
-  import ChevronDownGlyph from "../icons/ChevronDownGlyph.svelte";
+  import ChevronDown from "../icons/ChevronDown.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -137,7 +137,7 @@
     >
       {#if currentTab}{currentTab.label}{/if}
     </a>
-    <ChevronDownGlyph aria-hidden="true" title="{iconDescription}" />
+    <ChevronDown aria-hidden="true" title="{iconDescription}" />
   </div>
   <ul
     role="tablist"

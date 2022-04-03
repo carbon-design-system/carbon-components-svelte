@@ -50,8 +50,8 @@
 
   import { onMount, getContext, createEventDispatcher, tick } from "svelte";
   import ContextMenu from "./ContextMenu.svelte";
-  import Checkmark16 from "../icons/Checkmark16.svelte";
-  import CaretRight16 from "../icons/CaretRight16.svelte";
+  import Checkmark from "../icons/Checkmark.svelte";
+  import CaretRight from "../icons/CaretRight.svelte";
 
   const dispatch = createEventDispatcher();
   const ctx = getContext("ContextMenu");
@@ -145,7 +145,7 @@
 
       if (selected) {
         if (ctxGroup) ctxGroup.addOption({ id });
-        icon = Checkmark16;
+        icon = Checkmark;
       } else {
         icon = undefined;
       }
@@ -158,7 +158,7 @@
 
       if (selected) {
         if (ctxRadioGroup) ctxRadioGroup.setOption({ id });
-        icon = Checkmark16;
+        icon = Checkmark;
       } else {
         icon = undefined;
       }
@@ -253,7 +253,7 @@
       <span class:bx--menu-option__label="{true}" title="{labelText}">
         <slot name="labelText">{labelText}</slot>
       </span>
-      <div class:bx--menu-option__info="{true}"><CaretRight16 /></div>
+      <div class:bx--menu-option__info="{true}"><CaretRight /></div>
     </div>
 
     <ContextMenu

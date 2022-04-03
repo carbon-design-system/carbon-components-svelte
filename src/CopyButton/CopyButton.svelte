@@ -27,7 +27,7 @@
   };
 
   import { createEventDispatcher, onMount } from "svelte";
-  import Copy16 from "../icons/Copy16.svelte";
+  import Copy from "../icons/Copy.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -71,7 +71,7 @@
     }
   }}"
 >
-  <Copy16 class="bx--snippet__icon" />
+  <Copy class="bx--snippet__icon" />
   <span
     aria-hidden="true"
     class:bx--assistive-text="{true}"

@@ -14,25 +14,26 @@
   /** Specify the ARIA label for the icon */
   export let iconDescription = "Closes notification";
 
-  import CheckmarkFilled20 from "../icons/CheckmarkFilled20.svelte";
-  import ErrorFilled20 from "../icons/ErrorFilled20.svelte";
-  import InformationFilled20 from "../icons/InformationFilled20.svelte";
-  import InformationSquareFilled20 from "../icons/InformationSquareFilled20.svelte";
-  import WarningFilled20 from "../icons/WarningFilled20.svelte";
-  import WarningAltFilled20 from "../icons/WarningAltFilled20.svelte";
+  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import ErrorFilled from "../icons/ErrorFilled.svelte";
+  import InformationFilled from "../icons/InformationFilled.svelte";
+  import InformationSquareFilled from "../icons/InformationSquareFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
 
   const icons = {
-    error: ErrorFilled20,
-    "info-square": InformationSquareFilled20,
-    info: InformationFilled20,
-    success: CheckmarkFilled20,
-    warning: WarningFilled20,
-    "warning-alt": WarningAltFilled20,
+    error: ErrorFilled,
+    "info-square": InformationSquareFilled,
+    info: InformationFilled,
+    success: CheckmarkFilled,
+    warning: WarningFilled,
+    "warning-alt": WarningAltFilled,
   };
 </script>
 
 <svelte:component
   this="{icons[kind]}"
+  size="{20}"
   title="{iconDescription}"
   class="bx--{notificationType}-notification__icon"
 />

@@ -21,7 +21,7 @@
   export let iconDescription = "Close";
 
   import { getContext } from "svelte";
-  import Close20 from "../icons/Close20.svelte";
+  import Close from "../icons/Close.svelte";
 
   const { closeModal, updateLabel } = getContext("ComposedModal");
 
@@ -57,6 +57,6 @@
     on:click
     on:click="{closeModal}"
   >
-    <Close20 class="bx--modal-close__icon {closeIconClass}" />
+    <Close size="{20}" class="bx--modal-close__icon {closeIconClass}" />
   </button>
 </div>

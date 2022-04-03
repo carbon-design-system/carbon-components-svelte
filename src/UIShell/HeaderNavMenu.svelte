@@ -16,7 +16,7 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import ChevronDown16 from "../icons/ChevronDown16.svelte";
+  import ChevronDown from "../icons/ChevronDown.svelte";
 
   const selectedItems = writable({});
 
@@ -92,7 +92,7 @@
     on:blur
   >
     {text}
-    <ChevronDown16 class="bx--header__menu-arrow" />
+    <ChevronDown class="bx--header__menu-arrow" />
   </a>
   <ul
     bind:this="{menuRef}"

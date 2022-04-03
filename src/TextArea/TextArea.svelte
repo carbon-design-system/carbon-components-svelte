@@ -53,7 +53,7 @@
   /** Obtain a reference to the textarea HTML element */
   export let ref = null;
 
-  import WarningFilled16 from "../icons/WarningFilled16.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   $: errorId = `error-${id}`;
 </script>
@@ -90,7 +90,7 @@
     data-invalid="{invalid || undefined}"
   >
     {#if invalid}
-      <WarningFilled16 class="bx--text-area__invalid-icon" />
+      <WarningFilled class="bx--text-area__invalid-icon" />
     {/if}
     <textarea
       bind:this="{ref}"

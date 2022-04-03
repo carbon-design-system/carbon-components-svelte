@@ -35,7 +35,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   import { createEventDispatcher } from "svelte";
-  import Close16 from "../icons/Close16.svelte";
+  import Close from "../icons/Close.svelte";
   import TagSkeleton from "./TagSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -89,7 +89,7 @@
       on:mouseenter
       on:mouseleave
     >
-      <Close16 />
+      <Close />
     </button>
   </div>
 {:else if interactive}

@@ -15,7 +15,7 @@
   export let iconDescription = "Expand/Collapse";
 
   import { onMount, getContext } from "svelte";
-  import ChevronRight16 from "../icons/ChevronRight16.svelte";
+  import ChevronRight from "../icons/ChevronRight.svelte";
 
   let initialDisabled = disabled;
 
@@ -68,10 +68,7 @@
       }
     }}"
   >
-    <ChevronRight16
-      class="bx--accordion__arrow"
-      aria-label="{iconDescription}"
-    />
+    <ChevronRight class="bx--accordion__arrow" aria-label="{iconDescription}" />
     <div class:bx--accordion__title="{true}">
       <slot name="title">{title}</slot>
     </div>

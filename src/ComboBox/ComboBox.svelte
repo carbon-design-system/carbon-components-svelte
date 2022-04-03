@@ -100,9 +100,9 @@
   export let listRef = null;
 
   import { createEventDispatcher, afterUpdate, tick } from "svelte";
-  import Checkmark16 from "../icons/Checkmark16.svelte";
-  import WarningFilled16 from "../icons/WarningFilled16.svelte";
-  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
+  import Checkmark from "../icons/Checkmark.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
   import ListBoxField from "../ListBox/ListBoxField.svelte";
   import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
@@ -314,10 +314,10 @@
         }}"
       />
       {#if invalid}
-        <WarningFilled16 class="bx--list-box__invalid-icon" />
+        <WarningFilled class="bx--list-box__invalid-icon" />
       {/if}
       {#if !invalid && warn}
-        <WarningAltFilled16
+        <WarningAltFilled
           class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
         />
       {/if}
@@ -368,7 +368,7 @@
               {itemToString(item)}
             </slot>
             {#if selectedItem && selectedItem.id === item.id}
-              <Checkmark16 class="bx--list-box__menu-item__selected-icon" />
+              <Checkmark class="bx--list-box__menu-item__selected-icon" />
             {/if}
           </ListBoxMenuItem>
         {/each}

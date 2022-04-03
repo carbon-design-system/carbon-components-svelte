@@ -3,16 +3,18 @@
   export let isOpen = false;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render when the action panel is closed.
+   * Defaults to `<Switcher size={20} />`
    * @type {typeof import("svelte").SvelteComponent}
    */
-  export let icon = AppSwitcher20;
+  export let icon = Switcher;
 
   /**
-   * Specify the icon to render when the action panel is open
+   * Specify the icon to render when the action panel is open.
+   * Defaults to `<Close size={20} />`
    * @type {typeof import("svelte").SvelteComponent}
    */
-  export let closeIcon = Close20;
+  export let closeIcon = Close;
 
   /**
    * Specify the text
@@ -33,8 +35,8 @@
 
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
-  import Close20 from "../icons/Close20.svelte";
-  import AppSwitcher20 from "../icons/AppSwitcher20.svelte";
+  import Close from "../icons/Close.svelte";
+  import Switcher from "../icons/Switcher.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -65,11 +67,11 @@
 >
   {#if isOpen}
     <slot name="closeIcon">
-      <svelte:component this="{closeIcon}" />
+      <svelte:component this="{closeIcon}" size="{20}" />
     </slot>
   {:else}
     <slot name="icon">
-      <svelte:component this="{icon}" />
+      <svelte:component this="{icon}" size="{20}" />
     </slot>
   {/if}
   <slot name="text">

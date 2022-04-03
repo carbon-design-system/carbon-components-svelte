@@ -161,8 +161,8 @@
   export let highlightedId = null;
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
-  import WarningFilled16 from "../icons/WarningFilled16.svelte";
-  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import {
     ListBox,
@@ -300,10 +300,10 @@
       {checked.length > 0 && 'bx--multi-select--selected'}"
   >
     {#if invalid}
-      <WarningFilled16 class="bx--list-box__invalid-icon" />
+      <WarningFilled class="bx--list-box__invalid-icon" />
     {/if}
     {#if !invalid && warn}
-      <WarningAltFilled16
+      <WarningAltFilled
         class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
     {/if}
@@ -431,7 +431,7 @@
           value="{inputValue}"
         />
         {#if invalid}
-          <WarningFilled16 class="bx--list-box__invalid-icon" />
+          <WarningFilled class="bx--list-box__invalid-icon" />
         {/if}
         {#if inputValue}
           <ListBoxSelection

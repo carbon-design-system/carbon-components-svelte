@@ -24,7 +24,7 @@
   export let name = "";
 
   import { getContext } from "svelte";
-  import CheckmarkFilled16 from "../icons/CheckmarkFilled16.svelte";
+  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
 
   const { add, update, selectedValue } = getContext("TileGroup");
 
@@ -71,10 +71,7 @@
   on:mouseleave
 >
   <span class:bx--tile__checkmark="{true}">
-    <CheckmarkFilled16
-      aria-label="{iconDescription}"
-      title="{iconDescription}"
-    />
+    <CheckmarkFilled aria-label="{iconDescription}" title="{iconDescription}" />
   </span>
   <span class:bx--tile-content="{true}">
     <slot />

@@ -27,8 +27,8 @@
   export let selectedResultIndex = 0;
 
   import { createEventDispatcher, tick } from "svelte";
-  import Close20 from "../icons/Close20.svelte";
-  import Search20 from "../icons/Search20.svelte";
+  import Close from "../icons/Close.svelte";
+  import Search from "../icons/Search.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -72,7 +72,7 @@
         active = true;
       }}"
     >
-      <Search20 title="Search" />
+      <Search size="{20}" title="Search" />
     </button>
     <input
       bind:this="{ref}"
@@ -125,7 +125,7 @@
         dispatch('clear');
       }}"
     >
-      <Close20 title="Close" />
+      <Close size="{20}" title="Close" />
     </button>
   </div>
 

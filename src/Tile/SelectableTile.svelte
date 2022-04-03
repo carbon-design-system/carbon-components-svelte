@@ -33,7 +33,7 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import CheckmarkFilled16 from "../icons/CheckmarkFilled16.svelte";
+  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -80,10 +80,7 @@
   }}"
 >
   <span class:bx--tile__checkmark="{true}">
-    <CheckmarkFilled16
-      aria-label="{iconDescription}"
-      title="{iconDescription}"
-    />
+    <CheckmarkFilled aria-label="{iconDescription}" title="{iconDescription}" />
   </span>
   <span class:bx--tile-content="{true}">
     <slot />

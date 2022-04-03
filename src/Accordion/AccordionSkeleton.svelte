@@ -17,7 +17,7 @@
   /** Set to `false` to close the first accordion item */
   export let open = true;
 
-  import ChevronRight16 from "../icons/ChevronRight16.svelte";
+  import ChevronRight from "../icons/ChevronRight.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
 </script>
 
@@ -41,7 +41,7 @@
       class:bx--accordion__item--active="{true}"
     >
       <span class:bx--accordion__heading="{true}">
-        <ChevronRight16 class="bx--accordion__arrow" />
+        <ChevronRight class="bx--accordion__arrow" />
         <SkeletonText class="bx--accordion__title" />
       </span>
       <div class="bx--accordion__content">
@@ -54,7 +54,7 @@
   {#each Array.from({ length: open ? count - 1 : count }, (_, i) => i) as item (item)}
     <li class="bx--accordion__item">
       <span class="bx--accordion__heading">
-        <ChevronRight16 class="bx--accordion__arrow" />
+        <ChevronRight class="bx--accordion__arrow" />
         <SkeletonText class="bx--accordion__title" />
       </span>
     </li>
