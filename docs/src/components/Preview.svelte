@@ -6,7 +6,7 @@
 
   import copy from "clipboard-copy";
   import { CodeSnippet, Button } from "carbon-components-svelte";
-  import Launch16 from "carbon-icons-svelte/lib/Launch16";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import { url } from "@sveltech/routify";
   import { theme } from "../store";
 
@@ -27,7 +27,7 @@
         target="_blank"
         size="field"
         href="{themedSrcUrl}"
-        icon="{Launch16}"
+        icon="{Launch}"
       >
         Open in new tab
       </Button>

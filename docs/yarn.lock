@@ -185,10 +185,10 @@ carbon-components-svelte@../:
   dependencies:
     flatpickr "4.6.9"
 
-carbon-icons-svelte@^10.45.1:
-  version "10.45.1"
-  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-10.45.1.tgz#210b8d8906bbdc4611dbc06f1030bca26169c2d9"
-  integrity sha512-Uz3byPkSBzjpvLmjt/ZWYJkQG1omfqKh1vzF1FeFYOYqbGOCwc4sHbyF8oet2CseT2cECn1BbEyY4yWvlWYd/w==
+carbon-icons-svelte@^11.0.1:
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-11.0.1.tgz#65b09832e9e0fa899d631564323e92e6ab878930"
+  integrity sha512-0CCJLmHW3yJ8T9DM2HNGQx304b2VLGY13Xeg6T1cJWeU2oTPIvBbTfveChIULBBI9FIFGLB9m8ZZgeYWEjAAew==
 
 caseless@~0.12.0:
   version "0.12.0"

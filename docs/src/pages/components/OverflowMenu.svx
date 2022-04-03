@@ -4,7 +4,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
 
 <script>
   import { OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
-  import Add16 from "carbon-icons-svelte/lib/Add16";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -68,7 +68,7 @@ By default, the first overflow menu item is focused when opening the dropdown.
 
 ### Custom trigger icon
 
-<OverflowMenu icon={Add16}>
+<OverflowMenu icon={Add}>
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />

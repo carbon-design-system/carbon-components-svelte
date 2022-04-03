@@ -4,7 +4,7 @@ components: ["Link", "OutboundLink"]
 
 <script>
   import { Link, OutboundLink } from "carbon-components-svelte";
-  import Carbon16 from "carbon-icons-svelte/lib/Carbon16"
+  import Carbon from "carbon-icons-svelte/lib/Carbon.svelte"
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -39,7 +39,7 @@ Note that `inline` must be `false` when rendering a link with an icon.
 
 <div>
   Visit the
-  <Link href="https://www.carbondesignsystem.com/" icon={Carbon16}>Carbon Design System</Link>.
+  <Link href="https://www.carbondesignsystem.com/" icon={Carbon}>Carbon Design System</Link>.
 </div>
 
 ### Large size

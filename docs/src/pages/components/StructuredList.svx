@@ -4,7 +4,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
 
 <script>
   import { StructuredList, StructuredListSkeleton, StructuredListBody, StructuredListHead, StructuredListCell ,StructuredListRow, StructuredListInput } from "carbon-components-svelte";
-  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
+  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 

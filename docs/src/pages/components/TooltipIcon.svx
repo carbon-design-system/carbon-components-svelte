@@ -1,29 +1,29 @@
 <script>
   import { TooltipIcon } from "carbon-components-svelte";
-  import Carbon24 from "carbon-icons-svelte/lib/Carbon24";
-  import Filter20 from "carbon-icons-svelte/lib/Filter20";
+  import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
+  import Filter from "carbon-icons-svelte/lib/Filter.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
 ### Default ("bottom" direction, "center" aligned)
 
-<TooltipIcon tooltipText="Carbon is an open source design system by IBM." icon={Carbon24} />
+<TooltipIcon tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
 
 ### Directions
 
-<TooltipIcon tooltipText="Top start" direction="top" align="start" icon={Filter20} />
-<TooltipIcon tooltipText="Right end" direction="right" align="end" icon={Filter20} />
-<TooltipIcon tooltipText="Bottom start" direction="bottom" align="start" icon={Filter20} />
-<TooltipIcon tooltipText="Left start" direction="left" align="start" icon={Filter20} />
+<TooltipIcon tooltipText="Top start" direction="top" align="start" icon={Filter} />
+<TooltipIcon tooltipText="Right end" direction="right" align="end" icon={Filter} />
+<TooltipIcon tooltipText="Bottom start" direction="bottom" align="start" icon={Filter} />
+<TooltipIcon tooltipText="Left start" direction="left" align="start" icon={Filter} />
 
 ### Custom tooltip text
 
 Use the "text" slot to customize the tooltip text.
 
-<TooltipIcon icon={Carbon24}>
+<TooltipIcon icon={Carbon}>
   <span slot="tooltipText" style="color: red">Carbon is an open source design system by IBM.</span>
 </TooltipIcon>
 
 ### Disabled
 
-<TooltipIcon disabled tooltipText="Carbon is an open source design system by IBM." icon={Carbon24} />
+<TooltipIcon disabled tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />

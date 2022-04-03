@@ -219,8 +219,8 @@ The preprocessor optimizes imports from the following packages:
 - import { Add16 } from "carbon-icons-svelte";
 - import { Airplane } from "carbon-pictograms-svelte";
 + import Button from "carbon-components-svelte/src/Button/Button.svelte";
-+ import Add16 from "carbon-icons-svelte/lib/Add16/Add16.svelte";
-+ import Airplane from "carbon-pictograms-svelte/lib/Airplane/Airplane.svelte";
++ import Add16 from "carbon-icons-svelte/lib/Add16.svelte";
++ import Airplane from "carbon-pictograms-svelte/lib/Airplane.svelte";
 ```
 
 #### Usage

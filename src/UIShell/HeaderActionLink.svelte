@@ -27,7 +27,7 @@
   {...$$restProps}
 >
   <slot name="icon">
-    <svelte:component this="{icon}" />
+    <svelte:component this="{icon}" size="{20}" />
   </slot>
 </a>
 

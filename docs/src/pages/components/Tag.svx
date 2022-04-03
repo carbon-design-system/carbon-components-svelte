@@ -1,6 +1,6 @@
 <script>
   import { Tag } from "carbon-components-svelte";
-  import IbmCloud16 from "carbon-icons-svelte/lib/IbmCloud16";
+  import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -43,7 +43,7 @@
 
 Note: rendering a custom icon cannnot be used with the filterable variant.
 
-<Tag icon={IbmCloud16}>IBM Cloud</Tag>
+<Tag icon={IbmCloud}>IBM Cloud</Tag>
 
 ### Interactive variant
 

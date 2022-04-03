@@ -9,7 +9,7 @@
     ToolbarBatchActions,
     Button,
   } from "carbon-components-svelte";
-  import Save16 from "carbon-icons-svelte/lib/Save16";
+  import Save from "carbon-icons-svelte/lib/Save.svelte";
 
   const headers = [
     { key: "name", value: "Name" },
@@ -34,7 +34,7 @@
 <DataTable batchSelection bind:selectedRowIds headers="{headers}" rows="{rows}">
   <Toolbar>
     <ToolbarBatchActions>
-      <Button icon="{Save16}">Save</Button>
+      <Button icon="{Save}">Save</Button>
     </ToolbarBatchActions>
     <ToolbarContent>
       <ToolbarSearch />

@@ -1,5 +1,5 @@
 <script>
-  import Query16 from "carbon-icons-svelte/lib/Query16";
+  import Query from "carbon-icons-svelte/lib/Query.svelte";
   import { Search } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>

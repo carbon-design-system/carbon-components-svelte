@@ -18,8 +18,8 @@
     Row,
     Column,
   } from "carbon-components-svelte";
-  import SettingsAdjust20 from "carbon-icons-svelte/lib/SettingsAdjust20";
-  import UserAvatarFilledAlt20 from "carbon-icons-svelte/lib/UserAvatarFilledAlt20";
+  import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
+  import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
 
   let isSideNavOpen = false;
   let isOpen1 = false;
@@ -31,11 +31,11 @@
     <SkipToContent />
   </svelte:fragment>
   <HeaderUtilities>
-    <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust20}" />
+    <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust}" />
     <HeaderAction
       bind:isOpen="{isOpen1}"
-      icon="{UserAvatarFilledAlt20}"
-      closeIcon="{UserAvatarFilledAlt20}"
+      icon="{UserAvatarFilledAlt}"
+      closeIcon="{UserAvatarFilledAlt}"
     >
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>

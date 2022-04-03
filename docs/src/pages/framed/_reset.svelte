@@ -22,7 +22,11 @@
     padding: var(--cds-spacing-06) var(--cds-spacing-05);
   }
 
-  :global(.framed [class^="bx--col"]) {
+  :global(.framed :not(.bx--content) [class^="bx--col"]) {
     outline: 1px solid var(--cds-interactive-04);
+  }
+
+  :global(.framed .bx--content [class^="bx--col"]) {
+    outline: 0;
   }
 </style>
