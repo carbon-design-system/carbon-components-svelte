@@ -22,5 +22,5 @@
   {...$$restProps}
 >
   {#if title}<title>{title}</title>{/if}
-  <path d="M5 8L0 4 5 0z"></path>
-</svg>/svg>
+  <path d="M20 24L10 16 20 8z"></path>
+</svg>
