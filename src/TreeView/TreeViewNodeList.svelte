@@ -21,7 +21,7 @@
   export let icon = undefined;
 
   import { afterUpdate, getContext } from "svelte";
-  import CaretDown16 from "../icons/CaretDown16.svelte";
+  import CaretDown from "../icons/CaretDown.svelte";
   import TreeViewNode, { computeTreeLeafDepth } from "./TreeViewNode.svelte";
 
   let ref = null;
@@ -142,7 +142,7 @@
           toggleNode(node);
         }}"
       >
-        <CaretDown16
+        <CaretDown
           class="bx--tree-parent-node__toggle-icon {expanded &&
             'bx--tree-parent-node__toggle-icon--expanded'}"
         />

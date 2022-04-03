@@ -15,7 +15,7 @@
    */
   export let translateWithId = (id) => defaultTranslations[id];
 
-  import ChevronDown16 from "../icons/ChevronDown16.svelte";
+  import ChevronDown from "../icons/ChevronDown.svelte";
 
   const defaultTranslations = {
     [translationIds.close]: "Close menu",
@@ -31,5 +31,5 @@
   {...$$restProps}
   on:click|preventDefault
 >
-  <ChevronDown16 aria-label="{description}" title="{description}" />
+  <ChevronDown aria-label="{description}" title="{description}" />
 </div>

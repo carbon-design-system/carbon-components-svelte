@@ -29,11 +29,11 @@
   export let hideIcon = false;
 
   /**
-   * Specify the icon to render for the tooltip button
-   * Icon size must be 16px (e.g., `Add16`, `Task16`)
+   * Specify the icon to render for the tooltip button.
+   * Default to `<Information />`
    * @type {typeof import("svelte").SvelteComponent}
    */
-  export let icon = Information16;
+  export let icon = Information;
 
   /** Specify the ARIA label for the tooltip button */
   export let iconDescription = "";
@@ -70,7 +70,7 @@
 
   import { createEventDispatcher, afterUpdate, setContext } from "svelte";
   import { writable } from "svelte/store";
-  import Information16 from "../icons/Information16.svelte";
+  import Information from "../icons/Information.svelte";
 
   const dispatch = createEventDispatcher();
   const tooltipOpen = writable(open);

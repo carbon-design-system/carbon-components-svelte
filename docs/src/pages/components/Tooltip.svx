@@ -4,7 +4,7 @@ components: ["Tooltip", "TooltipFooter"]
 
 <script>
   import { Tooltip, TooltipFooter, Link, Button } from "carbon-components-svelte";
-  import Catalog16 from "carbon-icons-svelte/lib/Catalog16";
+  import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -57,7 +57,7 @@ By default, the tooltip is triggered by an information icon.
 
 ### Custom icon (component)
 
-<Tooltip triggerText="Resource list" icon={Catalog16}>
+<Tooltip triggerText="Resource list" icon={Catalog}>
   <p>
     Resources are provisioned based on your account's organization.
   </p>

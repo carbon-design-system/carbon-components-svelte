@@ -4,7 +4,7 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
 
 <script>
   import { InlineNotification, DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
-  import Launch16 from "carbon-icons-svelte/lib/Launch16";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import Preview from "../../components/Preview.svelte";
 
   const pagination = { pageSize: 5, page: 1}
@@ -146,7 +146,7 @@ The slot name for the table header cells is `"cell-header"`.
   </svelte:fragment>
   <svelte:fragment slot="cell" let:row let:cell>
     {#if cell.key === 'rule' && cell.value === 'Round robin'}
-      <Link icon={Launch16} href="https://en.wikipedia.org/wiki/Round-robin_DNS" target="_blank">{cell.value}</Link>
+      <Link icon={Launch} href="https://en.wikipedia.org/wiki/Round-robin_DNS" target="_blank">{cell.value}</Link>
     {:else}
       {cell.value}
     {/if}

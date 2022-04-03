@@ -18,7 +18,7 @@
     Row,
     Column,
   } from "../types";
-  import SettingsAdjust20 from "carbon-icons-svelte/lib/SettingsAdjust20";
+  import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
   import { quintOut } from "svelte/easing";
 
   let isSideNavOpen = false;
@@ -30,7 +30,7 @@
     <SkipToContent />
   </div>
   <HeaderUtilities>
-    <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust20}" />
+    <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust}" />
     <HeaderAction
       bind:isOpen
       transition="{{ duration: 400, easing: quintOut }}"

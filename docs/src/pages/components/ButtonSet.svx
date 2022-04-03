@@ -4,7 +4,7 @@ source: Button/ButtonSet.svelte
 
 <script>
   import { Button, ButtonSet } from "carbon-components-svelte";
-  import Login16 from "carbon-icons-svelte/lib/Login16";
+  import Login from "carbon-icons-svelte/lib/Login.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -22,6 +22,6 @@ Buttons in a button set are juxtaposed by default.
 Set `stacked` to `true` to use the stacked variant.
 
 <ButtonSet stacked>
-  <Button icon={Login16}>Log in</Button>
+  <Button icon={Login}>Log in</Button>
   <Button kind="ghost">Sign up</Button>
 </ButtonSet>

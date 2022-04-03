@@ -1,32 +1,33 @@
 <script lang="ts">
   import { TooltipIcon } from "../types";
-  import Carbon24 from "carbon-icons-svelte/lib/Carbon24";
-  import Filter20 from "carbon-icons-svelte/lib/Filter20";
+  import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
+  import Filter from "carbon-icons-svelte/lib/Filter.svelte";
+  import FilterReset from "carbon-icons-svelte/lib/FilterReset.svelte";
 </script>
 
 <TooltipIcon tooltipText="Carbon is an open source design system by IBM.">
-  <Carbon24 />
+  <Carbon />
 </TooltipIcon>
 
 <TooltipIcon tooltipText="Top start" direction="top" align="start">
-  <Filter20 />
+  <Filter />
 </TooltipIcon>
 
 <TooltipIcon tooltipText="Right end" direction="right" align="end">
-  <Filter20 />
+  <Filter />
 </TooltipIcon>
 
 <TooltipIcon tooltipText="Bottom start" direction="bottom" align="start">
-  <Filter20 />
+  <FilterReset />
 </TooltipIcon>
 
 <TooltipIcon tooltipText="Left start" direction="left" align="start">
-  <Filter20 />
+  <FilterReset />
 </TooltipIcon>
 
 <TooltipIcon>
   <span slot="text" style="color: red"
     >Carbon is an open source design system by IBM.</span
   >
-  <Carbon24 />
+  <Carbon />
 </TooltipIcon>

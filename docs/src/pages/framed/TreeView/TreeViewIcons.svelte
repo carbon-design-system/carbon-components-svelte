@@ -1,76 +1,74 @@
 <script>
   import { TreeView } from "carbon-components-svelte";
-  import WatsonMachineLearning16 from "carbon-icons-svelte/lib/WatsonMachineLearning16";
-  import Analytics16 from "carbon-icons-svelte/lib/Analytics16";
-  import Blockchain16 from "carbon-icons-svelte/lib/Blockchain16";
-  import DataBase16 from "carbon-icons-svelte/lib/DataBase16";
-  import SignalStrength16 from "carbon-icons-svelte/lib/SignalStrength16";
+  import WatsonMachineLearning from "carbon-icons-svelte/lib/WatsonMachineLearning.svelte";
+  import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
+  import Blockchain from "carbon-icons-svelte/lib/Blockchain.svelte";
+  import DataBase from "carbon-icons-svelte/lib/DataBase.svelte";
+  import SignalStrength from "carbon-icons-svelte/lib/SignalStrength.svelte";
 
   let activeId = 1;
   let selectedIds = [];
   let children = [
-    { id: 0, text: "AI / Machine learning", icon: WatsonMachineLearning16 },
+    { id: 0, text: "AI / Machine learning", icon: WatsonMachineLearning },
     {
       id: 1,
       text: "Analytics",
-      icon: Analytics16,
+      icon: Analytics,
       expanded: true,
       children: [
         {
           id: 2,
           text: "IBM Analytics Engine",
-          icon: Analytics16,
+          icon: Analytics,
           expanded: true,
           children: [
-            { id: 3, text: "Apache Spark", icon: Analytics16 },
-            { id: 4, text: "Hadoop", icon: Analytics16 },
+            { id: 3, text: "Apache Spark", icon: Analytics },
+            { id: 4, text: "Hadoop", icon: Analytics },
           ],
         },
-        { id: 5, text: "IBM Cloud SQL Query", icon: Analytics16 },
-        { id: 6, text: "IBM Db2 Warehouse on Cloud", icon: Analytics16 },
+        { id: 5, text: "IBM Cloud SQL Query", icon: Analytics },
+        { id: 6, text: "IBM Db2 Warehouse on Cloud", icon: Analytics },
       ],
     },
     {
       id: 7,
       text: "Blockchain",
-      icon: Blockchain16,
-      children: [
-        { id: 8, text: "IBM Blockchain Platform", icon: Blockchain16 },
-      ],
+      icon: Blockchain,
+      children: [{ id: 8, text: "IBM Blockchain Platform", icon: Blockchain }],
     },
     {
       id: 9,
       text: "Databases",
-      icon: DataBase16,
+      icon: DataBase,
       children: [
         {
           id: 10,
           text: "IBM Cloud Databases for Elasticsearch",
-          icon: DataBase16,
+          icon: DataBase,
         },
         {
           id: 11,
           text: "IBM Cloud Databases for Enterprise DB",
-          icon: DataBase16,
+          icon: DataBase,
         },
-        { id: 12, text: "IBM Cloud Databases for MongoDB", icon: DataBase16 },
+        { id: 12, text: "IBM Cloud Databases for MongoDB", icon: DataBase },
         {
           id: 13,
           text: "IBM Cloud Databases for PostgreSQL",
-          icon: DataBase16,
+          icon: DataBase,
         },
       ],
     },
     {
       id: 14,
       text: "Integration",
-      icon: SignalStrength16,
+      icon: SignalStrength,
       disabled: true,
       children: [
         {
           id: 15,
           text: "IBM API Connect",
-          icon: SignalStrength16,
+          icon: SignalStrength,
           disabled: true,
         },
       ],

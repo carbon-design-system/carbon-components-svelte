@@ -33,7 +33,7 @@
   export let ref = null;
 
   import { afterUpdate } from "svelte";
-  import ChevronDown16 from "../icons/ChevronDown16.svelte";
+  import ChevronDown from "../icons/ChevronDown.svelte";
 
   let refAbove = null;
 
@@ -83,7 +83,7 @@
     </div>
     <div class:bx--tile__chevron="{true}">
       <span>{expanded ? tileExpandedLabel : tileCollapsedLabel}</span>
-      <ChevronDown16 />
+      <ChevronDown />
     </div>
     <div class:bx--tile-content="{true}">
       <span class:bx--tile-content__below-the-fold="{true}">

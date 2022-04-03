@@ -13,7 +13,7 @@
     Tab,
     TabContent,
   } from "carbon-components-svelte";
-  import Code16 from "carbon-icons-svelte/lib/Code16";
+  import Code from "carbon-icons-svelte/lib/Code.svelte";
   import { page, metatags } from "@sveltech/routify";
   import { onMount } from "svelte";
   import { theme } from "../store";
@@ -71,7 +71,7 @@
             target="_blank"
             size="field"
             href="{sourceCode}"
-            icon="{Code16}"
+            icon="{Code}"
           >
             Source code
           </Button>

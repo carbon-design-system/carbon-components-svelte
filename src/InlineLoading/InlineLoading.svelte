@@ -21,8 +21,8 @@
   export let successDelay = 1500;
 
   import { createEventDispatcher, afterUpdate, onMount } from "svelte";
-  import CheckmarkFilled16 from "../icons/CheckmarkFilled16.svelte";
-  import ErrorFilled16 from "../icons/ErrorFilled16.svelte";
+  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import ErrorFilled from "../icons/ErrorFilled.svelte";
   import Loading from "../Loading/Loading.svelte";
 
   const dispatch = createEventDispatcher();
@@ -56,12 +56,12 @@
 >
   <div class:bx--inline-loading__animation="{true}">
     {#if status === "error"}
-      <ErrorFilled16
+      <ErrorFilled
         class="bx--inline-loading--error"
         title="{iconDescription}"
       />
     {:else if status === "finished"}
-      <CheckmarkFilled16
+      <CheckmarkFilled
         class="bx--inline-loading__checkmark-container"
         title="{iconDescription}"
       />

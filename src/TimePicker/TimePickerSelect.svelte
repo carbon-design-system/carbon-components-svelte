@@ -28,7 +28,7 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import ChevronDownGlyph from "../icons/ChevronDownGlyph.svelte";
+  import ChevronDown from "../icons/ChevronDown.svelte";
 
   const selectedValue = writable(value);
 
@@ -73,7 +73,7 @@
   >
     <slot />
   </select>
-  <ChevronDownGlyph
+  <ChevronDown
     aria-label="{iconDescription}"
     title="{iconDescription}"
     class="bx--select__arrow"

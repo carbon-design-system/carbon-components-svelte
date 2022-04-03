@@ -5,8 +5,8 @@
     ContextMenuGroup,
     ContextMenuOption,
   } from "carbon-components-svelte";
-  import CopyFile16 from "carbon-icons-svelte/lib/CopyFile16";
-  import Cut16 from "carbon-icons-svelte/lib/Cut16";
+  import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
+  import Cut from "carbon-icons-svelte/lib/Cut.svelte";
 
   let selectedIds = [];
 
@@ -18,14 +18,9 @@
     indented
     labelText="Copy"
     shortcutText="⌘C"
-    icon="{CopyFile16}"
+    icon="{CopyFile}"
   />
-  <ContextMenuOption
-    indented
-    labelText="Cut"
-    shortcutText="⌘X"
-    icon="{Cut16}"
-  />
+  <ContextMenuOption indented labelText="Cut" shortcutText="⌘X" icon="{Cut}" />
   <ContextMenuDivider />
   <ContextMenuOption indented labelText="Export as">
     <ContextMenuGroup labelText="Export options" bind:selectedIds>

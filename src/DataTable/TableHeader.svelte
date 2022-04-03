@@ -15,8 +15,8 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   import { getContext } from "svelte";
-  import ArrowUp20 from "../icons/ArrowUp20.svelte";
-  import ArrowsVertical20 from "../icons/ArrowsVertical20.svelte";
+  import ArrowUp from "../icons/ArrowUp.svelte";
+  import ArrowsVertical from "../icons/ArrowsVertical.svelte";
 
   const { sortHeader, tableSortable } = getContext("DataTable");
 
@@ -46,8 +46,13 @@
       <div class:bx--table-header-label="{true}">
         <slot />
       </div>
-      <ArrowUp20 aria-label="{ariaLabel}" class="bx--table-sort__icon" />
-      <ArrowsVertical20
+      <ArrowUp
+        size="{20}"
+        aria-label="{ariaLabel}"
+        class="bx--table-sort__icon"
+      />
+      <ArrowsVertical
+        size="{20}"
         aria-label="{ariaLabel}"
         class="bx--table-sort__icon-unsorted"
       />

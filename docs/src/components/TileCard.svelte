@@ -6,8 +6,8 @@
   export let borderBottom = false;
 
   import { AspectRatio, ClickableTile, Tile } from "carbon-components-svelte";
-  import LogoGithub32 from "carbon-icons-svelte/lib/LogoGithub32";
-  import Launch20 from "carbon-icons-svelte/lib/Launch20";
+  import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 
   $: tileComponent = href ? ClickableTile : Tile;
 </script>
@@ -29,10 +29,11 @@
         </div>
         <div class="card-footer">
           <svelte:component
-            this="{LogoGithub32}"
+            this="{LogoGithub}"
+            size="{32}"
             style="fill: var(--cds-icon-01)"
           />
-          <Launch20 style="fill: var(--cds-icon-01)" />
+          <Launch size="{20}" style="fill: var(--cds-icon-01)" />
         </div>
       </div>
     </svelte:component>

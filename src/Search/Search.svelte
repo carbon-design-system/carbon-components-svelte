@@ -53,10 +53,11 @@
   export let labelText = "";
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
+   * Defaults to `<Search />`
    * @type {typeof import("svelte").SvelteComponent}
    */
-  export let icon = Search16;
+  export let icon = IconSearch;
 
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
@@ -65,9 +66,8 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import Close16 from "../icons/Close16.svelte";
-  import Close20 from "../icons/Close20.svelte";
-  import Search16 from "../icons/Search16.svelte";
+  import Close from "../icons/Close.svelte";
+  import IconSearch from "../icons/IconSearch.svelte";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -162,7 +162,7 @@
         dispatch('clear');
       }}"
     >
-      <svelte:component this="{size === 'xl' ? Close20 : Close16}" />
+      <svelte:component this="{Close}" size="{size === 'xl' ? 20 : 16}" />
     </button>
   </div>
 {/if}

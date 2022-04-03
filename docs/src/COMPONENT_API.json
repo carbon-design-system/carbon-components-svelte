@@ -4053,8 +4053,8 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        { "type": "forwarded", "name": "click", "element": "Close16" },
-        { "type": "forwarded", "name": "keydown", "element": "Close16" }
+        { "type": "forwarded", "name": "click", "element": "Close" },
+        { "type": "forwarded", "name": "keydown", "element": "Close" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "Loading" }
@@ -4437,7 +4437,7 @@
         {
           "name": "iconMenu",
           "kind": "let",
-          "description": "Specify the icon to render for the closed state\nDefaults to `Menu20`",
+          "description": "Specify the icon to render for the closed state.\nDefaults to `<Menu size={20} />`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4447,7 +4447,7 @@
         {
           "name": "iconClose",
           "kind": "let",
-          "description": "Specify the icon to render for the opened state\nDefaults to `Close20`",
+          "description": "Specify the icon to render for the opened state.\nDefaults to `<Close size={20} />`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4488,7 +4488,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render when the action panel is closed.\nDefaults to `<Switcher size={20} />`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4498,7 +4498,7 @@
         {
           "name": "closeIcon",
           "kind": "let",
-          "description": "Specify the icon to render when the action panel is open",
+          "description": "Specify the icon to render when the action panel is open.\nDefaults to `<Close size={20} />`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4544,13 +4544,13 @@
         {
           "name": "closeIcon",
           "default": false,
-          "fallback": "<svelte:component this=\"{closeIcon}\" />",
+          "fallback": "<svelte:component this=\"{closeIcon}\" size=\"{20}\" />",
           "slot_props": "{}"
         },
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" />",
+          "fallback": "<svelte:component this=\"{icon}\" size=\"{20}\" />",
           "slot_props": "{}"
         },
         {
@@ -4619,7 +4619,7 @@
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" />",
+          "fallback": "<svelte:component this=\"{icon}\" size=\"{20}\" />",
           "slot_props": "{}"
         }
       ],
@@ -7371,7 +7371,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render.\nDefaults to `<OverflowMenuVertical />`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -9183,7 +9183,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render.\nDefaults to `<Search />`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -12860,7 +12860,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render for the tooltip button\nIcon size must be 16px (e.g., `Add16`, `Task16`)",
+          "description": "Specify the icon to render for the tooltip button.\nDefault to `<Information />`",
           "type": "typeof import(\"svelte\").SvelteComponent",
           "isFunction": false,
           "isFunctionDeclaration": false,

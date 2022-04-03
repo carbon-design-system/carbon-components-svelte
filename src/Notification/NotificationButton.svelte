@@ -9,7 +9,7 @@
    * Specify the icon to render
    * @type {typeof import("svelte").SvelteComponent}
    */
-  export let icon = Close20;
+  export let icon = Close;
 
   /**
    * Specify the title of the icon
@@ -20,7 +20,7 @@
   /** Specify the ARIA label for the icon */
   export let iconDescription = "Close icon";
 
-  import Close20 from "../icons/Close20.svelte";
+  import Close from "../icons/Close.svelte";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -38,6 +38,7 @@
 >
   <svelte:component
     this="{icon}"
+    size="{20}"
     title="{title}"
     class="bx--{notificationType}-notification__close-icon"
   />

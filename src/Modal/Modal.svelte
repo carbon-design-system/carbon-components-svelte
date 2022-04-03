@@ -90,7 +90,7 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount, afterUpdate } from "svelte";
-  import Close20 from "../icons/Close20.svelte";
+  import Close from "../icons/Close.svelte";
   import Button from "../Button/Button.svelte";
 
   const dispatch = createEventDispatcher();
@@ -228,7 +228,8 @@
             open = false;
           }}"
         >
-          <Close20
+          <Close
+            size="{20}"
             aria-label="{iconDescription}"
             class="bx--modal-close__icon"
           />
@@ -253,7 +254,8 @@
             open = false;
           }}"
         >
-          <Close20
+          <Close
+            size="{20}"
             aria-label="{iconDescription}"
             class="bx--modal-close__icon"
           />

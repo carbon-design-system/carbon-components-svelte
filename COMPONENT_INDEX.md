@@ -1564,8 +1564,8 @@ None.
 | platformName            | <code>let</code> | No       | <code>string</code>                                  | <code>""</code>        | Specify the platform name<br />Alternatively, use the named slot "platform" (e.g., &lt;span slot="platform"&gt;...&lt;/span&gt;)                                                                                                                                 |
 | persistentHamburgerMenu | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>     | Set to `true` to persist the hamburger menu                                                                                                                                                                                                                      |
 | expansionBreakpoint     | <code>let</code> | No       | <code>number</code>                                  | <code>1056</code>      | The window width (px) at which the SideNav is expanded and the hamburger menu is hidden<br />1056 represents the "large" breakpoint in pixels from the Carbon Design System:<br />small: 320<br />medium: 672<br />large: 1056<br />x-large: 1312<br />max: 1584 |
-| iconMenu                | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code> | Specify the icon to render for the closed state<br />Defaults to `Menu20`                                                                                                                                                                                        |
-| iconClose               | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code> | Specify the icon to render for the opened state<br />Defaults to `Close20`                                                                                                                                                                                       |
+| iconMenu                | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code> | Specify the icon to render for the closed state.<br />Defaults to `&lt;Menu size={20} /&gt;`                                                                                                                                                                     |
+| iconClose               | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code> | Specify the icon to render for the opened state.<br />Defaults to `&lt;Close size={20} /&gt;`                                                                                                                                                                    |
 
 ### Slots
 
@@ -1589,19 +1589,19 @@ None.
 | :--------- | :--------------- | :------- | :---------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | ref        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                        | <code>null</code>              | Obtain a reference to the button HTML element                                                                 |
 | isOpen     | <code>let</code> | Yes      | <code>boolean</code>                                              | <code>false</code>             | Set to `true` to open the panel                                                                               |
-| icon       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render                                                                                    |
-| closeIcon  | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render when the action panel is open                                                      |
+| icon       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render when the action panel is closed.<br />Defaults to `&lt;Switcher size={20} /&gt;`   |
+| closeIcon  | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render when the action panel is open.<br />Defaults to `&lt;Close size={20} /&gt;`        |
 | text       | <code>let</code> | No       | <code>string</code>                                               | <code>undefined</code>         | Specify the text<br />Alternatively, use the named slot "text" (e.g., &lt;div slot="text"&gt;...&lt;/div&gt;) |
 | transition | <code>let</code> | No       | <code>false &#124; import("svelte/transition").SlideParams</code> | <code>{ duration: 200 }</code> | Customize the panel transition (i.e., `transition:slide`).<br />Set to `false` to disable the transition      |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                    |
-| :-------- | :------ | :---- | :---------------------------------------------------------- |
-| --        | Yes     | --    | --                                                          |
-| closeIcon | No      | --    | <code>&lt;svelte:component this="{closeIcon}" /&gt;</code>  |
-| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code>       |
-| text      | No      | --    | <code>{#if text}&lt;span&gt;{text}&lt;/span&gt;{/if}</code> |
+| Slot name | Default | Props | Fallback                                                               |
+| :-------- | :------ | :---- | :--------------------------------------------------------------------- |
+| --        | Yes     | --    | --                                                                     |
+| closeIcon | No      | --    | <code>&lt;svelte:component this="{closeIcon}" size="{20}" /&gt;</code> |
+| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code>      |
+| text      | No      | --    | <code>{#if text}&lt;span&gt;{text}&lt;/span&gt;{/if}</code>            |
 
 ### Events
 
@@ -1623,9 +1623,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                              |
-| :-------- | :------ | :---- | :---------------------------------------------------- |
-| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
+| Slot name | Default | Props | Fallback                                                          |
+| :-------- | :------ | :---- | :---------------------------------------------------------------- |
+| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code> |
 
 ### Events
 
@@ -2568,20 +2568,20 @@ None.
 
 ### Props
 
-| Prop name        | Kind             | Reactive | Type                                                 | Default value                                    | Description                                                       |
-| :--------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
-| menuRef          | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>            | <code>null</code>                                | Obtain a reference to the overflow menu element                   |
-| buttonRef        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>           | <code>null</code>                                | Obtain a reference to the trigger button element                  |
-| icon             | <code>let</code> | Yes      | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code>                           | Specify the icon to render                                        |
-| open             | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to open the menu                                    |
-| size             | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                        | <code>undefined</code>                           | Specify the size of the overflow menu                             |
-| direction        | <code>let</code> | No       | <code>"top" &#124; "bottom"</code>                   | <code>"bottom"</code>                            | Specify the direction of the overflow menu relative to the button |
-| light            | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                         |
-| flipped          | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to flip the menu relative to the button             |
-| menuOptionsClass | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                           | Specify the menu options class                                    |
-| iconClass        | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                           | Specify the icon class                                            |
-| iconDescription  | <code>let</code> | No       | <code>string</code>                                  | <code>"Open and close list of options"</code>    | Specify the ARIA label for the icon                               |
-| id               | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                  |
+| Prop name        | Kind             | Reactive | Type                                                 | Default value                                    | Description                                                                   |
+| :--------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
+| menuRef          | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>            | <code>null</code>                                | Obtain a reference to the overflow menu element                               |
+| buttonRef        | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>           | <code>null</code>                                | Obtain a reference to the trigger button element                              |
+| icon             | <code>let</code> | Yes      | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code>                           | Specify the icon to render.<br />Defaults to `&lt;OverflowMenuVertical /&gt;` |
+| open             | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to open the menu                                                |
+| size             | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                        | <code>undefined</code>                           | Specify the size of the overflow menu                                         |
+| direction        | <code>let</code> | No       | <code>"top" &#124; "bottom"</code>                   | <code>"bottom"</code>                            | Specify the direction of the overflow menu relative to the button             |
+| light            | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                                     |
+| flipped          | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to flip the menu relative to the button                         |
+| menuOptionsClass | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                           | Specify the menu options class                                                |
+| iconClass        | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                           | Specify the icon class                                                        |
+| iconDescription  | <code>let</code> | No       | <code>string</code>                                  | <code>"Open and close list of options"</code>    | Specify the ARIA label for the icon                                           |
+| id               | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                              |
 
 ### Slots
 
@@ -3055,24 +3055,24 @@ None.
 
 ### Props
 
-| Prop name            | Kind             | Reactive | Type                                                 | Default value                                    | Description                                             |
-| :------------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
-| ref                  | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>            | <code>null</code>                                | Obtain a reference to the input HTML element            |
-| expanded             | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true to expand the search input                 |
-| value                | <code>let</code> | Yes      | <code>any</code>                                     | <code>""</code>                                  | Specify the value of the search input                   |
-| size                 | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>            | <code>"xl"</code>                                | Specify the size of the search input                    |
-| searchClass          | <code>let</code> | No       | <code>string</code>                                  | <code>""</code>                                  | Specify the class name passed to the outer div element  |
-| skeleton             | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to display the skeleton state             |
-| light                | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant               |
-| disabled             | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to disable the search input               |
-| expandable           | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the expandable variant          |
-| placeholder          | <code>let</code> | No       | <code>string</code>                                  | <code>"Search..."</code>                         | Specify the `placeholder` attribute of the search input |
-| autocomplete         | <code>let</code> | No       | <code>"on" &#124; "off"</code>                       | <code>"off"</code>                               | Specify the `autocomplete` attribute                    |
-| autofocus            | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to auto focus the search element          |
-| closeButtonLabelText | <code>let</code> | No       | <code>string</code>                                  | <code>"Clear search input"</code>                | Specify the close button label text                     |
-| labelText            | <code>let</code> | No       | <code>string</code>                                  | <code>""</code>                                  | Specify the label text                                  |
-| icon                 | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code>                           | Specify the icon to render                              |
-| id                   | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                         |
+| Prop name            | Kind             | Reactive | Type                                                 | Default value                                    | Description                                                     |
+| :------------------- | :--------------- | :------- | :--------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------- |
+| ref                  | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>            | <code>null</code>                                | Obtain a reference to the input HTML element                    |
+| expanded             | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true to expand the search input                         |
+| value                | <code>let</code> | Yes      | <code>any</code>                                     | <code>""</code>                                  | Specify the value of the search input                           |
+| size                 | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>            | <code>"xl"</code>                                | Specify the size of the search input                            |
+| searchClass          | <code>let</code> | No       | <code>string</code>                                  | <code>""</code>                                  | Specify the class name passed to the outer div element          |
+| skeleton             | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to display the skeleton state                     |
+| light                | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                       |
+| disabled             | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to disable the search input                       |
+| expandable           | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the expandable variant                  |
+| placeholder          | <code>let</code> | No       | <code>string</code>                                  | <code>"Search..."</code>                         | Specify the `placeholder` attribute of the search input         |
+| autocomplete         | <code>let</code> | No       | <code>"on" &#124; "off"</code>                       | <code>"off"</code>                               | Specify the `autocomplete` attribute                            |
+| autofocus            | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to auto focus the search element                  |
+| closeButtonLabelText | <code>let</code> | No       | <code>string</code>                                  | <code>"Clear search input"</code>                | Specify the close button label text                             |
+| labelText            | <code>let</code> | No       | <code>string</code>                                  | <code>""</code>                                  | Specify the label text                                          |
+| icon                 | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code>                           | Specify the icon to render.<br />Defaults to `&lt;Search /&gt;` |
+| id                   | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                 |
 
 ### Slots
 
@@ -4490,22 +4490,22 @@ None.
 
 ### Props
 
-| Prop name       | Kind             | Reactive | Type                                                            | Default value                                    | Description                                                                                             |
-| :-------------- | :--------------- | :------- | :-------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| refIcon         | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the icon HTML element                                                             |
-| refTooltip      | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the tooltip HTML element                                                          |
-| ref             | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the trigger text HTML element                                                     |
-| open            | <code>let</code> | Yes      | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to open the tooltip                                                                       |
-| align           | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon                                                   |
-| direction       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the button                                                 |
-| hideIcon        | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to hide the tooltip icon                                                                  |
-| icon            | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>            | <code>undefined</code>                           | Specify the icon to render for the tooltip button<br />Icon size must be 16px (e.g., `Add16`, `Task16`) |
-| iconDescription | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the ARIA label for the tooltip button                                                           |
-| iconName        | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the icon name attribute                                                                         |
-| tabindex        | <code>let</code> | No       | <code>string</code>                                             | <code>"0"</code>                                 | Set the button tabindex                                                                                 |
-| tooltipId       | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the tooltip                                                                               |
-| triggerId       | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the tooltip button                                                                        |
-| triggerText     | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Set the tooltip button text                                                                             |
+| Prop name       | Kind             | Reactive | Type                                                            | Default value                                    | Description                                                                                |
+| :-------------- | :--------------- | :------- | :-------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| refIcon         | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the icon HTML element                                                |
+| refTooltip      | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the tooltip HTML element                                             |
+| ref             | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the trigger text HTML element                                        |
+| open            | <code>let</code> | Yes      | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to open the tooltip                                                          |
+| align           | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon                                      |
+| direction       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the button                                    |
+| hideIcon        | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to hide the tooltip icon                                                     |
+| icon            | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>            | <code>undefined</code>                           | Specify the icon to render for the tooltip button.<br />Default to `&lt;Information /&gt;` |
+| iconDescription | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the ARIA label for the tooltip button                                              |
+| iconName        | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the icon name attribute                                                            |
+| tabindex        | <code>let</code> | No       | <code>string</code>                                             | <code>"0"</code>                                 | Set the button tabindex                                                                    |
+| tooltipId       | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the tooltip                                                                  |
+| triggerId       | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the tooltip button                                                           |
+| triggerText     | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Set the tooltip button text                                                                |
 
 ### Slots
 

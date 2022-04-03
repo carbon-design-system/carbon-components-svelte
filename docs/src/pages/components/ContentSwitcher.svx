@@ -4,8 +4,8 @@ components: ["ContentSwitcher", "Switch"]
 
 <script>
   import { ContentSwitcher, Switch } from "carbon-components-svelte";
-  import Bullhorn16 from "carbon-icons-svelte/lib/Bullhorn16";
-  import Analytics16 from "carbon-icons-svelte/lib/Analytics16";
+  import Bullhorn from "carbon-icons-svelte/lib/Bullhorn.svelte";
+  import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -33,12 +33,12 @@ components: ["ContentSwitcher", "Switch"]
 <ContentSwitcher>
   <Switch>
     <div style="display: flex; align-items: center;">
-      <Bullhorn16 style="margin-right: 0.5rem;" /> Latest news
+      <Bullhorn style="margin-right: 0.5rem;" /> Latest news
     </div>
   </Switch>
   <Switch>
     <div style="display: flex; align-items: center;">
-      <Analytics16 style="margin-right: 0.5rem;" /> Trending
+      <Analytics style="margin-right: 0.5rem;" /> Trending
     </div>
   </Switch>
 </ContentSwitcher>

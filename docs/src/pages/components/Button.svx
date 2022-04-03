@@ -1,11 +1,11 @@
 <script>
   import { InlineNotification, Button } from "carbon-components-svelte";
-  import Add16 from "carbon-icons-svelte/lib/Add16";
-  import TrashCan16 from "carbon-icons-svelte/lib/TrashCan16";
-  import TextBold16 from "carbon-icons-svelte/lib/TextBold16";
-  import TextItalic16 from "carbon-icons-svelte/lib/TextItalic16";
-  import TextUnderline16 from "carbon-icons-svelte/lib/TextUnderline16";
-  import Login16 from "carbon-icons-svelte/lib/Login16";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
+  import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
+  import TextItalic from "carbon-icons-svelte/lib/TextItalic.svelte";
+  import TextUnderline from "carbon-icons-svelte/lib/TextUnderline.svelte";
+  import Login from "carbon-icons-svelte/lib/Login.svelte";
   import Preview from "../../components/Preview.svelte";
 
   let index = 1;
@@ -43,7 +43,7 @@
   </div>
 </InlineNotification>
 
-<Button kind="danger-tertiary"iconDescription="Delete" icon={TrashCan16} />
+<Button kind="danger-tertiary"iconDescription="Delete" icon={TrashCan} />
 
 ### Danger ghost button
 
@@ -51,7 +51,7 @@
 
 ### Button with icon
 
-<Button icon={Add16}>With icon</Button>
+<Button icon={Add}>With icon</Button>
 
 ### Icon-only button
 
@@ -61,17 +61,17 @@
   </div>
 </InlineNotification>
 
-<Button iconDescription="Tooltip text" icon={Add16} />
+<Button iconDescription="Tooltip text" icon={Add} />
 
 ### Icon-only, link button
 
-<Button iconDescription="Login" icon={Login16} href="#" />
+<Button iconDescription="Login" icon={Login} href="#" />
 
 ### Icon-only button (custom tooltip position)
 
 The tooltip position and alignment can be controlled by `tooltipPosition` and `tooltipAlignment`.
 
-<Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add16} />
+<Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add} />
 
 ### Selected icon-only, ghost button
 

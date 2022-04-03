@@ -11,7 +11,7 @@
     Link,
   } from "../types";
   import type { DataTableHeader } from "../types/DataTable/DataTable.svelte";
-  import Launch16 from "carbon-icons-svelte/lib/Launch16";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 
   const headers: DataTableHeader[] = [
     { key: "name", value: "Name" },
@@ -87,7 +87,7 @@
         target="_blank"
       >
         {cell.value}
-        <Launch16 />
+        <Launch />
       </Link>
     {:else}{cell.value}{/if}
   </span>

@@ -2,7 +2,7 @@
   /** @extends {"./Link.svelte"} LinkProps */
 
   import Link from "./Link.svelte";
-  import Launch16 from "../icons/Launch16.svelte";
+  import Launch from "../icons/Launch.svelte";
 </script>
 
 <Link
@@ -12,7 +12,7 @@
   on:mouseenter
   on:mouseleave
   target="_blank"
-  icon="{Launch16}"
+  icon="{Launch}"
 >
   <slot />
 </Link>

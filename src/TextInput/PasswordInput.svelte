@@ -81,10 +81,10 @@
   export let ref = null;
 
   import { getContext } from "svelte";
-  import WarningFilled16 from "../icons/WarningFilled16.svelte";
-  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
-  import View16 from "../icons/View16.svelte";
-  import ViewOff16 from "../icons/ViewOff16.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import View from "../icons/View.svelte";
+  import ViewOff from "../icons/ViewOff.svelte";
 
   const ctx = getContext("Form");
 
@@ -154,10 +154,10 @@
       data-invalid="{invalid || undefined}"
     >
       {#if invalid}
-        <WarningFilled16 class="bx--text-input__invalid-icon" />
+        <WarningFilled class="bx--text-input__invalid-icon" />
       {/if}
       {#if !invalid && warn}
-        <WarningAltFilled16
+        <WarningAltFilled
           class="bx--text-input__invalid-icon
             bx--text-input__invalid-icon--warning"
         />
@@ -213,9 +213,9 @@
           </span>
         {/if}
         {#if type === "text"}
-          <ViewOff16 class="bx--icon-visibility-off" />
+          <ViewOff class="bx--icon-visibility-off" />
         {:else}
-          <View16 class="bx--icon-visibility-on" />
+          <View class="bx--icon-visibility-on" />
         {/if}
       </button>
     </div>

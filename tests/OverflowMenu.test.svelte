@@ -1,6 +1,6 @@
 <script lang="ts">
   import { OverflowMenu, OverflowMenuItem } from "../types";
-  import Add16 from "carbon-icons-svelte/lib/Add16";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 
 <OverflowMenu
@@ -61,7 +61,7 @@
   <OverflowMenuItem primaryFocus danger text="Delete service" />
 </OverflowMenu>
 
-<OverflowMenu icon="{Add16}">
+<OverflowMenu icon="{Add}">
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem
     href="https://cloud.ibm.com/docs/api-gateway/"

@@ -1,14 +1,14 @@
 <script lang="ts">
   import { TreeView } from "../types";
   import type { TreeNodeId } from "../types/TreeView/TreeView.svelte";
-  import Analytics16 from "carbon-icons-svelte/lib/Analytics16";
+  import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 
   let treeview: TreeView;
   let activeId: TreeNodeId = "";
   let selectedIds = [];
   let expandedIds = [1];
   let children = [
-    { id: 0, text: "AI / Machine learning", icon: Analytics16 },
+    { id: 0, text: "AI / Machine learning", icon: Analytics },
     {
       id: 1,
       text: "Analytics",

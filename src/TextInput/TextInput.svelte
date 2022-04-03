@@ -71,9 +71,9 @@
   export let readonly = false;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import WarningFilled16 from "../icons/WarningFilled16.svelte";
-  import WarningAltFilled16 from "../icons/WarningAltFilled16.svelte";
-  import EditOff16 from "../icons/EditOff16.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import EditOff from "../icons/EditOff.svelte";
 
   const ctx = getContext("Form");
   const dispatch = createEventDispatcher();
@@ -163,16 +163,16 @@
       class:bx--text-input__field-wrapper--warning="{!invalid && warn}"
     >
       {#if invalid}
-        <WarningFilled16 class="bx--text-input__invalid-icon" />
+        <WarningFilled class="bx--text-input__invalid-icon" />
       {/if}
       {#if !invalid && warn}
-        <WarningAltFilled16
+        <WarningAltFilled
           class="bx--text-input__invalid-icon
             bx--text-input__invalid-icon--warning"
         />
       {/if}
       {#if readonly}
-        <EditOff16 class="bx--text-input__readonly-icon" />
+        <EditOff class="bx--text-input__readonly-icon" />
       {/if}
       <input
         bind:this="{ref}"

@@ -31,10 +31,11 @@
   export let menuOptionsClass = undefined;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
+   * Defaults to `<OverflowMenuVertical />`
    * @type {typeof import("svelte").SvelteComponent}
    */
-  export let icon = OverflowMenuVertical16;
+  export let icon = OverflowMenuVertical;
 
   /**
    * Specify the icon class
@@ -61,8 +62,8 @@
     afterUpdate,
   } from "svelte";
   import { writable } from "svelte/store";
-  import OverflowMenuVertical16 from "../icons/OverflowMenuVertical16.svelte";
-  import OverflowMenuHorizontal16 from "../icons/OverflowMenuHorizontal16.svelte";
+  import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
+  import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
 
   const ctxBreadcrumbItem = getContext("BreadcrumbItem");
   const dispatch = createEventDispatcher();
@@ -75,7 +76,7 @@
   let onMountAfterUpdate = true;
 
   $: if (ctxBreadcrumbItem) {
-    icon = OverflowMenuHorizontal16;
+    icon = OverflowMenuHorizontal;
   }
 
   setContext("OverflowMenu", {

@@ -24,8 +24,8 @@
   export let backwardText = "Previous page";
 
   import { afterUpdate, createEventDispatcher } from "svelte";
-  import CaretLeft16 from "../icons/CaretLeft16.svelte";
-  import CaretRight16 from "../icons/CaretRight16.svelte";
+  import CaretLeft from "../icons/CaretLeft.svelte";
+  import CaretRight from "../icons/CaretRight.svelte";
   import PaginationItem from "./PaginationItem.svelte";
   import PaginationOverflow from "./PaginationOverflow.svelte";
   import Button from "../Button/Button.svelte";
@@ -76,7 +76,7 @@
         tooltipPosition="bottom"
         iconDescription="{backwardText}"
         disabled="{!loop && page === 0}"
-        icon="{CaretLeft16}"
+        icon="{CaretLeft}"
         on:click="{() => {
           if (page - 1 < 0) {
             if (loop) page = total - 1;
@@ -133,7 +133,7 @@
         tooltipPosition="bottom"
         iconDescription="{forwardText}"
         disabled="{!loop && page === total - 1}"
-        icon="{CaretRight16}"
+        icon="{CaretRight}"
         on:click="{() => {
           if (page + 1 >= total) {
             if (loop) page = 0;

@@ -28,7 +28,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import Close16 from "../icons/Close16.svelte";
+  import Close from "../icons/Close.svelte";
 
   const defaultTranslations = {
     [translationIds.clearAll]: "Clear all selected items",
@@ -75,7 +75,7 @@
       aria-label="{translationIds.clearAll}"
       title="{description}"
     >
-      <Close16 />
+      <Close />
     </div>
   </div>
 {:else}
@@ -101,6 +101,6 @@
     }}"
   >
     {#if selectionCount !== undefined}{selectionCount}{/if}
-    <Close16 />
+    <Close />
   </div>
 {/if}

@@ -8,7 +8,7 @@
     StructuredListRow,
     StructuredListInput,
   } from "../types";
-  import CheckmarkFilled16 from "carbon-icons-svelte/lib/CheckmarkFilled16";
+  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
 </script>
 
 <StructuredList>
@@ -80,7 +80,7 @@
           name="row-{item}-name"
         />
         <StructuredListCell>
-          <CheckmarkFilled16
+          <CheckmarkFilled
             class="bx--structured-list-svg"
             aria-label="select an option"
             title="select an option"

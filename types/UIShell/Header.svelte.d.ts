@@ -65,15 +65,15 @@ export interface HeaderProps
   ref?: null | HTMLAnchorElement;
 
   /**
-   * Specify the icon to render for the closed state
-   * Defaults to `Menu20`
+   * Specify the icon to render for the closed state.
+   * Defaults to `<Menu size={20} />`
    * @default undefined
    */
   iconMenu?: typeof import("svelte").SvelteComponent;
 
   /**
-   * Specify the icon to render for the opened state
-   * Defaults to `Close20`
+   * Specify the icon to render for the opened state.
+   * Defaults to `<Close size={20} />`
    * @default undefined
    */
   iconClose?: typeof import("svelte").SvelteComponent;

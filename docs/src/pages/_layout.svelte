@@ -15,7 +15,7 @@
     SideNavMenuItem,
     Tag,
   } from "carbon-components-svelte";
-  import LogoGithub20 from "carbon-icons-svelte/lib/LogoGithub20";
+  import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import Theme from "../components/Theme.svelte";
 
   const deprecated = [];
@@ -58,7 +58,7 @@
 
     <HeaderUtilities>
       <HeaderActionLink
-        icon="{LogoGithub20}"
+        icon="{LogoGithub}"
         href="https://github.com/carbon-design-system/carbon-components-svelte"
         target="_blank"
       />

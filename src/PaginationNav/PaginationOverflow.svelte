@@ -10,7 +10,7 @@
   export let count = 0;
 
   import { createEventDispatcher } from "svelte";
-  import OverflowMenuHorizontal16 from "../icons/OverflowMenuHorizontal16.svelte";
+  import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import PaginationItem from "./PaginationItem.svelte";
 
   const dispatch = createEventDispatcher();
@@ -40,7 +40,7 @@
         {/each}
       </select>
       <div class:bx--pagination-nav__select-icon-wrapper="{true}">
-        <OverflowMenuHorizontal16 class="bx--pagination-nav__select-icon" />
+        <OverflowMenuHorizontal class="bx--pagination-nav__select-icon" />
       </div>
     </div>
   </li>

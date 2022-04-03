@@ -114,7 +114,7 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { writable, derived } from "svelte/store";
-  import ChevronRight16 from "../icons/ChevronRight16.svelte";
+  import ChevronRight from "../icons/ChevronRight.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
   import Table from "./Table.svelte";
@@ -286,7 +286,7 @@
                   dispatch('click:header--expand', { expanded });
                 }}"
               >
-                <ChevronRight16 class="bx--table-expand__svg" />
+                <ChevronRight class="bx--table-expand__svg" />
               </button>
             {/if}
           </th>
@@ -413,7 +413,7 @@
                     });
                   }}"
                 >
-                  <ChevronRight16 class="bx--table-expand__svg" />
+                  <ChevronRight class="bx--table-expand__svg" />
                 </button>
               {/if}
             </TableCell>

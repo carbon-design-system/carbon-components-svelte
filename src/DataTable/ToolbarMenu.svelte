@@ -2,7 +2,7 @@
   /** @extends {"../OverflowMenu/OverflowMenu.svelte"} OverflowMenuProps */
 
   import { getContext } from "svelte";
-  import Settings16 from "../icons/Settings16.svelte";
+  import Settings from "../icons/Settings.svelte";
   import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
 
   const ctx = getContext("Toolbar");
@@ -15,7 +15,7 @@
 
 <OverflowMenu
   bind:menuRef
-  icon="{Settings16}"
+  icon="{Settings}"
   {...$$restProps}
   class="bx--toolbar-action bx--overflow-menu {$$restProps.class}"
   flipped

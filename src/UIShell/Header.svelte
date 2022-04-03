@@ -47,21 +47,21 @@
   export let ref = null;
 
   /**
-   * Specify the icon to render for the closed state
-   * Defaults to `Menu20`
+   * Specify the icon to render for the closed state.
+   * Defaults to `<Menu size={20} />`
    * @type {typeof import("svelte").SvelteComponent}
    */
-  export let iconMenu = Menu20;
+  export let iconMenu = Menu;
 
   /**
-   * Specify the icon to render for the opened state
-   * Defaults to `Close20`
+   * Specify the icon to render for the opened state.
+   * Defaults to `<Close size={20} />`
    * @type {typeof import("svelte").SvelteComponent}
    */
-  export let iconClose = Close20;
+  export let iconClose = Close;
 
-  import Close20 from "../icons/Close20.svelte";
-  import Menu20 from "../icons/Menu20.svelte";
+  import Close from "../icons/Close.svelte";
+  import Menu from "../icons/Menu.svelte";
   import { shouldRenderHamburgerMenu } from "./navStore";
   import HamburgerMenu from "./HamburgerMenu.svelte";
 

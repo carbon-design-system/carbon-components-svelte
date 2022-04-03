@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button } from "../types";
-  import Add16 from "carbon-icons-svelte/lib/Add16";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 
 <Button>Primary button</Button>
@@ -17,10 +17,10 @@
 
 <Button kind="danger-ghost">Danger ghost button</Button>
 
-<Button icon="{Add16}">With icon</Button>
+<Button icon="{Add}">With icon</Button>
 
 <Button
-  icon="{Add16}"
+  icon="{Add}"
   tooltipPosition="bottom"
   tooltipAlignment="center"
   iconDescription="Tooltip text"
