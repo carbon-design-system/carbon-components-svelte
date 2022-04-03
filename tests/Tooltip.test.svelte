@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Tooltip, Link, Button } from "../types";
-  import Catalog16 from "carbon-icons-svelte/lib/Catalog16";
+  import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
 
   let open = true;
 </script>
@@ -41,7 +41,7 @@
 
 <Button size="small">Manage</Button>
 
-<Tooltip triggerText="Resource list" icon="{Catalog16}">
+<Tooltip triggerText="Resource list" icon="{Catalog}">
   <p>Resources are provisioned based on your account's organization.</p>
 </Tooltip>
 

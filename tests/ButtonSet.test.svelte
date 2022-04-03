@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button, ButtonSet } from "../types";
-  import Login16 from "carbon-icons-svelte/lib/Login16";
+  import Login from "carbon-icons-svelte/lib/Login.svelte";
 </script>
 
 <ButtonSet>
@@ -9,6 +9,6 @@
 </ButtonSet>
 
 <ButtonSet stacked>
-  <Button icon="{Login16}">Log in</Button>
+  <Button icon="{Login}">Log in</Button>
   <Button kind="ghost">Sign up</Button>
 </ButtonSet>

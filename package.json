@@ -28,7 +28,7 @@
     "autoprefixer": "^10.4.4",
     "carbon-components": "10.56.0",
     "carbon-components-10.47": "npm:carbon-components@10.47",
-    "carbon-icons-svelte": "^10.45.1",
+    "carbon-icons-svelte": "^11.0.1",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.3",
     "postcss": "^8.4.12",

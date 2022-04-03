@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Tag } from "../types";
-  import Add16 from "carbon-icons-svelte/lib/Add16";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 
 <Tag class="my-class" style="margin: 1rem;">IBM Cloud</Tag>
@@ -31,7 +31,7 @@
 
 <Tag filter on:click on:close>Filterable</Tag>
 
-<Tag icon="{Add16}">Custom icon</Tag>
+<Tag icon="{Add}">Custom icon</Tag>
 
 <Tag interactive>Text</Tag>
 
