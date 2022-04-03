@@ -10,13 +10,15 @@ export interface HeaderActionProps
   isOpen?: boolean;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render when the action panel is closed.
+   * Defaults to `<Switcher size={20} />`
    * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;
 
   /**
-   * Specify the icon to render when the action panel is open
+   * Specify the icon to render when the action panel is open.
+   * Defaults to `<Close size={20} />`
    * @default undefined
    */
   closeIcon?: typeof import("svelte").SvelteComponent;

@@ -28,7 +28,7 @@
 
   import { createEventDispatcher, tick } from "svelte";
   import Close from "../icons/Close.svelte";
-  import Search from "../icons/Search.svelte";
+  import IconSearch from "../icons/IconSearch.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -72,7 +72,7 @@
         active = true;
       }}"
     >
-      <Search size="{20}" title="Search" />
+      <IconSearch size="{20}" title="Search" />
     </button>
     <input
       bind:this="{ref}"

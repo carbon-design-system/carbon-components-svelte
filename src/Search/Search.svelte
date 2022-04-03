@@ -53,10 +53,11 @@
   export let labelText = "";
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
+   * Defaults to `<Search />`
    * @type {typeof import("svelte").SvelteComponent}
    */
-  export let icon = Search;
+  export let icon = IconSearch;
 
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
@@ -66,7 +67,7 @@
 
   import { createEventDispatcher } from "svelte";
   import Close from "../icons/Close.svelte";
-  import Search from "../icons/Search.svelte";
+  import IconSearch from "../icons/IconSearch.svelte";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

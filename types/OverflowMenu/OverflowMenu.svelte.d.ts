@@ -40,7 +40,8 @@ export interface OverflowMenuProps
   menuOptionsClass?: string;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
+   * Defaults to `<OverflowMenuVertical />`
    * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent;

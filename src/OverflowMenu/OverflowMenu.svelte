@@ -31,7 +31,8 @@
   export let menuOptionsClass = undefined;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
+   * Defaults to `<OverflowMenuVertical />`
    * @type {typeof import("svelte").SvelteComponent}
    */
   export let icon = OverflowMenuVertical;
