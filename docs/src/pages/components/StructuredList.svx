@@ -169,7 +169,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
           name="row-{item}-name"
         />
         <StructuredListCell>
-          <CheckmarkFilled16
+          <CheckmarkFilled
             class="bx--structured-list-svg"
             aria-label="select an option"
             title="select an option"
