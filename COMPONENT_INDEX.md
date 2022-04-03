@@ -1623,9 +1623,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                              |
-| :-------- | :------ | :---- | :---------------------------------------------------- |
-| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
+| Slot name | Default | Props | Fallback                                                          |
+| :-------- | :------ | :---- | :---------------------------------------------------------------- |
+| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code> |
 
 ### Events
 
