@@ -1,9 +1,9 @@
-/coverage
 /lib
 /css
-/**/__sapper__
-/**/.routify
-/**/dist
-/**/client
-/**/build
+__sapper__
+.svelte-kit
+.routify
+dist
+client
+build
 *.svx
