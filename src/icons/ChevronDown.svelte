@@ -13,7 +13,7 @@
 
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 16 16"
+  viewBox="0 0 32 32"
   fill="currentColor"
   preserveAspectRatio="xMidYMid meet"
   width="{size}"
@@ -22,5 +22,5 @@
   {...$$restProps}
 >
   {#if title}<title>{title}</title>{/if}
-  <path d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"></path>
+  <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
 </svg>
