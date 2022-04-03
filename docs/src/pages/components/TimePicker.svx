@@ -10,11 +10,11 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 ### Default
 
 <TimePicker labelText="Cron job" placeholder="hh:mm">
-  <TimePickerSelect value="PM">
+  <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
-  <TimePickerSelect value="PDT">
+  <TimePickerSelect value="pdt">
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
@@ -23,11 +23,11 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 ### Light variant
 
 <TimePicker light labelText="Cron job" placeholder="hh:mm">
-  <TimePickerSelect value="PM">
+  <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
-  <TimePickerSelect value="PDT">
+  <TimePickerSelect value="pdt">
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
@@ -36,11 +36,11 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 ### Extra-large size
 
 <TimePicker size="xl" labelText="Cron job" placeholder="hh:mm">
-  <TimePickerSelect value="PM">
+  <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
-  <TimePickerSelect value="PDT">
+  <TimePickerSelect value="pdt">
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
@@ -49,11 +49,11 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 ### Small size
 
 <TimePicker size="sm" labelText="Cron job" placeholder="hh:mm">
-  <TimePickerSelect value="PM">
+  <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
-  <TimePickerSelect value="PDT">
+  <TimePickerSelect value="pdt">
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
@@ -62,11 +62,11 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 ### Invalid state
 
 <TimePicker invalid invalidText="A valid value is required" labelText="Cron job" placeholder="hh:mm">
-  <TimePickerSelect value="PM">
+  <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
-  <TimePickerSelect value="PDT">
+  <TimePickerSelect value="pdt">
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
@@ -76,11 +76,11 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 ### Disabled state
 
 <TimePicker labelText="Cron job" placeholder="hh:mm" disabled>
-  <TimePickerSelect value="PM" disabled>
+  <TimePickerSelect value="pm" disabled>
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
-  <TimePickerSelect value="PDT" disabled>
+  <TimePickerSelect value="pdt" disabled>
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
