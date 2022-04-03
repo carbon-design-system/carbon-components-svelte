@@ -1,53 +1,30 @@
 <script>
-  let className = undefined;
-  export { className as class };
-  export let id = undefined;
-  export let tabindex = undefined;
-  export let focusable = false;
-  export let title = undefined;
-  export let style = undefined;
+  export let size = 16;
 
-  $: ariaLabel = $$props["aria-label"];
-  $: ariaLabelledBy = $$props["aria-labelledby"];
-  $: labelled = ariaLabel || ariaLabelledBy || title;
+  export let title = undefined;
+
+  $: labelled = $$props["aria-label"] || $$props["aria-labelledby"] || title;
   $: attributes = {
-    "aria-label": ariaLabel,
-    "aria-labelledby": ariaLabelledBy,
     "aria-hidden": labelled ? undefined : true,
     role: labelled ? "img" : undefined,
-    focusable: tabindex === "0" ? true : focusable,
-    tabindex,
+    focusable: Number($$props["tabindex"]) === 0 ? true : undefined,
   };
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <svg
-  data-carbon-icon="Settings16"
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
-  on:keyup
-  on:keydown
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 16 16"
+  viewBox="0 0 32 32"
   fill="currentColor"
-  width="16"
-  height="16"
-  class="{className}"
   preserveAspectRatio="xMidYMid meet"
-  style="{style}"
-  id="{id}"
+  width="{size}"
+  height="{size}"
   {...attributes}
+  {...$$restProps}
 >
+  {#if title}<title>{title}</title>{/if}
   <path
-    d="M13.5,8.4c0-0.1,0-0.3,0-0.4c0-0.1,0-0.3,0-0.4l1-0.8c0.4-0.3,0.4-0.9,0.2-1.3l-1.2-2C13.3,3.2,13,3,12.6,3	c-0.1,0-0.2,0-0.3,0.1l-1.2,0.4c-0.2-0.1-0.4-0.3-0.7-0.4l-0.3-1.3C10.1,1.3,9.7,1,9.2,1H6.8c-0.5,0-0.9,0.3-1,0.8L5.6,3.1	C5.3,3.2,5.1,3.3,4.9,3.4L3.7,3C3.6,3,3.5,3,3.4,3C3,3,2.7,3.2,2.5,3.5l-1.2,2C1.1,5.9,1.2,6.4,1.6,6.8l0.9,0.9c0,0.1,0,0.3,0,0.4	c0,0.1,0,0.3,0,0.4L1.6,9.2c-0.4,0.3-0.5,0.9-0.2,1.3l1.2,2C2.7,12.8,3,13,3.4,13c0.1,0,0.2,0,0.3-0.1l1.2-0.4	c0.2,0.1,0.4,0.3,0.7,0.4l0.3,1.3c0.1,0.5,0.5,0.8,1,0.8h2.4c0.5,0,0.9-0.3,1-0.8l0.3-1.3c0.2-0.1,0.4-0.2,0.7-0.4l1.2,0.4	c0.1,0,0.2,0.1,0.3,0.1c0.4,0,0.7-0.2,0.9-0.5l1.1-2c0.2-0.4,0.2-0.9-0.2-1.3L13.5,8.4z M12.6,12l-1.7-0.6c-0.4,0.3-0.9,0.6-1.4,0.8	L9.2,14H6.8l-0.4-1.8c-0.5-0.2-0.9-0.5-1.4-0.8L3.4,12l-1.2-2l1.4-1.2c-0.1-0.5-0.1-1.1,0-1.6L2.2,6l1.2-2l1.7,0.6	C5.5,4.2,6,4,6.5,3.8L6.8,2h2.4l0.4,1.8c0.5,0.2,0.9,0.5,1.4,0.8L12.6,4l1.2,2l-1.4,1.2c0.1,0.5,0.1,1.1,0,1.6l1.4,1.2L12.6,12z"
+    d="M30.94,15.66A16.69,16.69,0,0,0,16,5,16.69,16.69,0,0,0,1.06,15.66a1,1,0,0,0,0,.68A16.69,16.69,0,0,0,16,27,16.69,16.69,0,0,0,30.94,16.34,1,1,0,0,0,30.94,15.66ZM16,25c-5.3,0-10.9-3.93-12.93-9C5.1,10.93,10.7,7,16,7s10.9,3.93,12.93,9C26.9,21.07,21.3,25,16,25Z"
   ></path><path
-    d="M8,11c-1.7,0-3-1.3-3-3s1.3-3,3-3s3,1.3,3,3C11,9.6,9.7,11,8,11C8,11,8,11,8,11z M8,6C6.9,6,6,6.8,6,7.9C6,7.9,6,8,6,8	c0,1.1,0.8,2,1.9,2c0,0,0.1,0,0.1,0c1.1,0,2-0.8,2-1.9c0,0,0-0.1,0-0.1C10,6.9,9.2,6,8,6C8.1,6,8,6,8,6z"
+    d="M16,10a6,6,0,1,0,6,6A6,6,0,0,0,16,10Zm0,10a4,4,0,1,1,4-4A4,4,0,0,1,16,20Z"
   ></path>
-  <slot>
-    {#if title}
-      <title>{title}</title>
-    {/if}
-  </slot>
 </svg>
