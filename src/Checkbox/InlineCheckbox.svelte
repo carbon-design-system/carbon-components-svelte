@@ -18,20 +18,22 @@
   export let ref = null;
 </script>
 
-<input
-  bind:this="{ref}"
-  type="checkbox"
-  class:bx--checkbox="{true}"
-  checked="{indeterminate ? false : checked}"
-  indeterminate="{indeterminate}"
-  id="{id}"
-  {...$$restProps}
-  aria-label="{undefined}"
-  aria-checked="{indeterminate ? 'mixed' : checked}"
-  on:change
-/>
-<label
-  for="{id}"
-  title="{title}"
-  aria-label="{$$props['aria-label']}"
-  class:bx--checkbox-label="{true}"></label>
+<div class:bx--checkbox--inline="{true}">
+  <input
+    bind:this="{ref}"
+    type="checkbox"
+    class:bx--checkbox="{true}"
+    checked="{indeterminate ? false : checked}"
+    indeterminate="{indeterminate}"
+    id="{id}"
+    {...$$restProps}
+    aria-label="{undefined}"
+    aria-checked="{indeterminate ? 'mixed' : checked}"
+    on:change
+  />
+  <label
+    for="{id}"
+    title="{title}"
+    aria-label="{$$props['aria-label']}"
+    class:bx--checkbox-label="{true}"></label>
+</div>
