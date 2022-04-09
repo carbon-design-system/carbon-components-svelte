@@ -1,5 +1,5 @@
 <script>
-  /** @restProps {p | a} */
+  /** @restProps {a | p} */
 
   /**
    * Specify the size of the link
