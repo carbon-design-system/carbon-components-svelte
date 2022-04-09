@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
-import { SvelteComponentTyped } from "svelte";
-import { BreadcrumbSkeletonProps } from "./BreadcrumbSkeleton.svelte";
+import type { SvelteComponentTyped } from "svelte";
+import type { BreadcrumbSkeletonProps } from "./BreadcrumbSkeleton.svelte";
 
 export interface BreadcrumbProps extends BreadcrumbSkeletonProps {
   /**

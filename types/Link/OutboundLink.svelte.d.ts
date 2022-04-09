@@ -1,6 +1,6 @@
 /// <reference types="svelte" />
-import { SvelteComponentTyped } from "svelte";
-import { LinkProps } from "./Link.svelte";
+import type { SvelteComponentTyped } from "svelte";
+import type { LinkProps } from "./Link.svelte";
 
 export interface OutboundLinkProps extends LinkProps {}
 
