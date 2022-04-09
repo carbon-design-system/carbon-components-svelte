@@ -2,7 +2,8 @@
 import { SvelteComponentTyped } from "svelte";
 
 export interface LinkProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["p"]> {
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["p"]>,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
   /**
    * Specify the size of the link
    * @default undefined
