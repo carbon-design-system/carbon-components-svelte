@@ -1,29 +1,9 @@
 <script lang="ts">
-  import { Link } from "../types";
+  import { Link, OutboundLink } from "../types";
 </script>
 
-<Link href="https://www.carbondesignsystem.com/">Carbon Design System</Link>
-
-<Link href="https://www.carbondesignsystem.com/" target="_blank">
+<Link size="sm" inline disabled download visited href="/" target="_blank">
   Carbon Design System
 </Link>
 
-<Link inline href="https://www.carbondesignsystem.com/">
-  Carbon Design System
-</Link>
-
-<Link size="lg" href="https://www.carbondesignsystem.com/">
-  Carbon Design System
-</Link>
-
-<Link size="sm" href="https://www.carbondesignsystem.com/">
-  Carbon Design System
-</Link>
-
-<Link disabled href="https://www.carbondesignsystem.com/">
-  Carbon Design System
-</Link>
-
-<Link visited href="https://www.carbondesignsystem.com/">
-  Carbon Design System
-</Link>
+<OutboundLink inline href="https://www.carbondesignsystem.com/" />
