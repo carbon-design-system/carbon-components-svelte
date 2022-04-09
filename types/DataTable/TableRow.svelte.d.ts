@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import { SvelteComponentTyped } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface TableRowProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["tr"]> {}
