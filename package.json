@@ -16,7 +16,8 @@
     "build:docs": "node scripts/build-docs",
     "build:lib": "rollup -c",
     "prepack": "yarn build:docs & yarn build:lib",
-    "format": "prettier --write \"./**/*.{svelte,js,md}\""
+    "format": "prettier --write \"./**/*.{svelte,js,md}\"",
+    "prepare": "husky install"
   },
   "dependencies": {
     "flatpickr": "4.6.9"
@@ -28,7 +29,7 @@
     "autoprefixer": "^10.4.4",
     "carbon-components": "10.56.0",
     "carbon-icons-svelte": "^11.0.1",
-    "husky": "^4.3.8",
+    "husky": ">=6",
     "lint-staged": "^10.5.3",
     "postcss": "^8.4.12",
     "prettier": "^2.6.2",
@@ -42,15 +43,11 @@
     "svelte-check": "^2.4.6",
     "typescript": "^4.6.3"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.{svelte,md,js,json}": [
       "prettier --write"
-    ]
+    ],
+    "*.{svelte,js,md}": "prettier --write"
   },
   "prettier": {
     "svelteStrictMode": true
