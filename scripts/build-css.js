@@ -5,14 +5,6 @@ const postcss = require("postcss");
 const path = require("path");
 
 (async () => {
-  const popover = fs.readFileSync(
-    "node_modules/carbon-components-10.47/src/components/popover/_popover.scss",
-    "utf-8"
-  );
-  const popover_mod = popover.replace(/..\/..\//g, "carbon-components/scss/");
-
-  fs.writeFileSync("css/_popover.scss", popover_mod);
-
   const scss = fs
     .readdirSync("css")
     .filter((file) => file.endsWith(".scss") && !/^\_popover/.test(file))
