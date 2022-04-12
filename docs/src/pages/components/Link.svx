@@ -66,6 +66,8 @@ Note that `inline` must be `false` when rendering a link with an icon.
 
 ### Disabled
 
+A `disabled` link will render a `p` tag instead of an anchor element.
+
 <Link disabled href="https://www.carbondesignsystem.com/">
   Carbon Design System
 </Link>
