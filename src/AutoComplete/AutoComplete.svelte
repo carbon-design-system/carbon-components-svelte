@@ -118,7 +118,7 @@
 
   function onKeydown(event) {
     let key = event.key;
-    console.log(key);
+
     if (["Enter", "ArrowDown", "ArrowUp"].includes(key)) {
       event.preventDefault();
     }
@@ -174,14 +174,7 @@
   }}"
 />
 
-<div
-  class:bx--auto-complete__wrapper="{true}"
-  class:bx--list-box__wrapper="{true}"
-  class:bx--auto-complete__wrapper--inline="{inline}"
-  class:bx--list-box__wrapper--inline="{inline}"
-  class:bx--auto-complete__wrapper--inline--invalid="{inline && invalid}"
-  {...$$restProps}
->
+<div {...$$restProps}>
   {#if titleText}
     <label
       for="{id}"
@@ -234,12 +227,9 @@
       type="text"
       role="searchbox"
       class="
-        bx--auto-complete__input
-        {light && 'bx--auto-complete__input--light'}
-        {invalid && 'bx--auto-complete__input--invalid'}
-        {warn && 'bx--auto-complete__input--warn'}
-        {size === 'sm' && 'bx--auto-complete__input--sm'}
-        {size === 'xl' && 'bx--auto-complete__input--xl'}
+        auto-complete__input
+        {size === 'sm' && 'auto-complete__input--sm'}
+        {size === 'xl' && 'auto-complete__input--xl'}
       "
       autocomplete="false"
       disabled="{disabled}"
@@ -288,7 +278,7 @@
 </div>
 
 <style>
-  .bx--auto-complete__input {
+  .auto-complete__input {
     font-size: var(--cds-body-short-01-font-size, 0.875rem);
     font-weight: var(--cds-body-short-01-font-weight, 400);
     line-height: var(--cds-body-short-01-line-height, 1.28572);
@@ -309,21 +299,21 @@
       outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 
-  .bx--auto-complete__input:focus {
+  .auto-complete__input:focus {
     outline: 2px solid var(--cds-focus, #0f62fe);
     outline-offset: -2px;
   }
 
-  .bx--auto-complete__input--sm {
+  .auto-complete__input--sm {
     height: 2rem;
   }
 
-  .bx--auto-complete__input--xl,
-  .bx--auto-complete__input--lg {
+  .auto-complete__input--xl,
+  .auto-complete__input--lg {
     height: 3rem;
   }
 
-  .bx--auto-complete__input:disabled {
+  .auto-complete__input:disabled {
     outline: 2px solid transparent;
     outline-offset: -2px;
     border-bottom: 1px solid transparent;
