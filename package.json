@@ -1,6 +1,6 @@
 {
   "name": "carbon-components-svelte",
-  "version": "0.62.3",
+  "version": "0.62.4",
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "./src/index.js",
@@ -20,6 +20,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "carbon-preprocess-svelte": "^0.8.2",
     "flatpickr": "4.6.9"
   },
   "devDependencies": {

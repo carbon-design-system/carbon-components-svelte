@@ -1,0 +1,101 @@
+---
+components: ["AutoComplete", "AutoCompleteSkeleton"]
+---
+
+<script>
+  import { AutoComplete, AutoCompleteSkeleton, InlineNotification } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+`AutoComplete` is keyed for performance reasons.
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">Every <code>items</code> object must have a unique "id" property.</div>
+</InlineNotification>
+
+### Default
+
+<AutoComplete titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "11", text: "Email1"},
+  {id: "12", text: "Email2"},
+  {id: "2", text: "Fax"}]}" />
+
+### Custom slot
+
+Override the default slot to customize the display of each item. Access the item and index through the `let:` directive.
+
+<FileSource src="/framed/AutoComplete/AutoCompleteSlot" />
+
+### Hidden label
+
+<AutoComplete hideLabel titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Format item display text
+
+Use the `itemToString` prop to format the display of individual items.
+
+<AutoComplete itemToString={item => {
+  return item.text + ' (' + item.id +')'
+}} titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Multiple dropdowns
+
+<FileSource src="/framed/AutoComplete/MultipleAutoComplete" />
+
+### Top direction
+
+Set `direction` to `"top"` for the dropdown menu to appear above the input.
+
+<AutoComplete direction="top" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Light variant
+
+<AutoComplete light titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Inline variant
+
+<AutoComplete type="inline" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Extra-large size
+
+<AutoComplete size="xl" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Small size
+
+<AutoComplete size="sm" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Invalid state
+
+<AutoComplete invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Warning state
+
+<AutoComplete warn warnText="This contact method is not associated with your account" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Disabled state
+
+<AutoComplete disabled titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Skeleton
+
+<AutoCompleteSkeleton />
