@@ -77,6 +77,7 @@
       <span class:bx--tag__label="{true}">{type}</span>
     </slot>
     <button
+      type="button"
       aria-labelledby="{id}"
       class:bx--tag__close-icon="{true}"
       disabled="{disabled}"
@@ -94,6 +95,7 @@
   </div>
 {:else if interactive}
   <button
+    type="button"
     id="{id}"
     disabled="{disabled}"
     aria-disabled="{disabled}"
