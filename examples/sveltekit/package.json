@@ -9,7 +9,7 @@
   "devDependencies": {
     "@sveltejs/kit": "next",
     "carbon-components-svelte": "^0.62.2",
-    "carbon-preprocess-svelte": "^0.7.0",
+    "carbon-preprocess-svelte": "^0.8.1",
     "svelte": "^3.46.4"
   }
 }

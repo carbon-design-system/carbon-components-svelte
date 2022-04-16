@@ -121,6 +121,21 @@ export {
 } from "./ComposedModal";
 ```
 
+Then fork [carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte).
+
+```sh
+cd carbon-preprocess-svelte
+```
+
+Link `"carbon-components-svelte"`:
+
+```sh
+yarn link "carbon-components-svelte"
+yarn install
+```
+
+Add it to `src/carbon-components-svelte.js`
+
 ### Run `yarn build:docs`
 
 Run the following command to re-generate TypeScript definitions and documentation.

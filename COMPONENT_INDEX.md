@@ -1,6 +1,6 @@
 # Component Index
 
-> 167 components exported from carbon-components-svelte@0.62.4.
+> 167 components exported from carbon-components-svelte@0.62.3.
 
 ## Components
 
@@ -311,7 +311,7 @@ export interface AutoCompleteItem {
 | hideLabel     | <code>let</code> | No       | <code>boolean</code>                            | <code>false</code>                                    | Set to `true` to visually hide the label text |
 | id            | <code>let</code> | No       | <code>string</code>                             | <code>"ccs-" + Math.random().toString(36)</code>      | Set an id for the list box component          |
 | name          | <code>let</code> | No       | <code>string</code>                             | <code>undefined</code>                                | Specify a name attribute for the list box     |
-| placeholder   | <code>let</code> | No       | --                                              | <code>null</code>                                     | ????                                          |
+| placeholder   | <code>let</code> | No       | --                                              | <code>null</code>                                     | Specify the placeholder text                  |
 
 ### Slots
 

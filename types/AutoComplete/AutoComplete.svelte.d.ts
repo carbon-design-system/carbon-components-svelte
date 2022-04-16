@@ -138,7 +138,7 @@ export interface AutoCompleteProps
   ref?: null | HTMLInputElement;
 
   /**
-   * ????
+   * Specify the placeholder text
    * @default null
    */
   placeholder?: undefined;

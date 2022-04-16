@@ -28,6 +28,12 @@
   export let selectedId = undefined;
 
   /**
+   * Specify the selected item
+   * @type {AutoCompleteItem}
+   */
+  export let selectedItem = undefined;
+
+  /**
    * Specify the type of dropdown
    * @type {"default" | "inline"}
    */
@@ -90,7 +96,7 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  /** ???? */
+  /** Specify the placeholder text */
   export let placeholder = null;
 
   import { createEventDispatcher } from "svelte";
@@ -129,11 +135,13 @@
         highlightedIndex > -1 &&
         filteredItems[highlightedIndex].id !== selectedId
       ) {
-        selectedId = filteredItems[highlightedIndex].id;
-        innerValue = filteredItems[highlightedIndex].text;
+        selectedItem = filteredItems[highlightedIndex];
+        selectedId = selectedItem.id;
+        innerValue = selectedItem.text;
         open = false;
       }
     } else if (key === "Backspace") {
+      selectedItem = undefined;
       selectedId = undefined;
       open = innerValue.length > 0 && filteredItems.length > 0;
     } else if (key === "Tab") {
@@ -160,7 +168,6 @@
     (item) => innerValue?.length > 0 && item.text.startsWith(innerValue)
   );
   $: inline = type === "inline";
-  $: selectedItem = filteredItems.find((item) => item.id === selectedId);
   $: if (!open) {
     highlightedIndex = -1;
   }
@@ -251,6 +258,7 @@
             active="{selectedId === item.id}"
             highlighted="{highlightedIndex === i || selectedId === item.id}"
             on:click="{() => {
+              selectedItem = item;
               selectedId = item.id;
               innerValue = item.text;
               ref.focus();

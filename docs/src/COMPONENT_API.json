@@ -238,23 +238,13 @@
         {
           "name": "items",
           "kind": "let",
-          "description": "Set the dropdown items",
+          "description": "Set full list of items",
           "type": "AutoCompleteItem[]",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": false
-        },
-        {
-          "name": "filteredItems",
-          "kind": "let",
-          "type": "[]",
-          "value": "[]",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": true
         },
         {
           "name": "itemToString",
@@ -272,6 +262,16 @@
           "kind": "let",
           "description": "Specify the selected item id",
           "type": "AutoCompleteItemId",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "selectedItem",
+          "kind": "let",
+          "description": "Specify the selected item",
+          "type": "AutoCompleteItem",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
@@ -465,7 +465,7 @@
         {
           "name": "placeholder",
           "kind": "let",
-          "description": "????",
+          "description": "Specify the placeholder text",
           "value": "null",
           "isFunction": false,
           "isFunctionDeclaration": false,
