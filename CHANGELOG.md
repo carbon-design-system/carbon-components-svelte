@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.63.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.0) - 2022-04-17
+
+**Breaking Changes**
+
+- remove deprecated components: `Icon`, `IconSkeleton`, `NotificationTextDetails`, `ToggleSmall`, `ToggleSmallSkeleton`, `HeaderActionSearch`
+- remove deprecated component props
+- remove `optimizeCarbonImports` preprocessor
+- remove `GlobalHeader` and `SideNav` subfolders
+- move `truncate` action from `actions` to `src/Truncate`
+
+**Features**
+
+- add `breakpointObserver`, `breakpoints` to base exports
+- add `ProgressBar` `kind` prop to support inline, indented variants
+
+**Fixes**
+
+- add explicit `type="button"` attribute to interactive, filterable tag variants
+- add TypeScript support for `sveltekit:` attributes for anchor elements
+- `Link` types should extend `a` or `p` attributes
+- prevent selectable `DataTable` with sticky header from jumping
+
+**Refactor**
+
+- use icons from `carbon-icons-svelte` v11
+
+**Documentation**
+
+- add `DataTable` "Sticky header" example
+- refactor `Grid` examples
+- add note to `UIShell` that theming is not supported
+- add `ProgressBar` examples "Inline variant" and "Indented variant"
+
+**Housekeeping**
+
+- upgrade `carbon-components` to v10.56.0
+
 ## [0.62.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.62.3) - 2022-03-26
 
 **Fixes**
