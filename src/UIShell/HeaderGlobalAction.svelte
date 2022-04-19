@@ -21,6 +21,6 @@
   on:click
 >
   <slot>
-    <svelte:component this="{icon}" />
+    <svelte:component this="{icon}" size="{20}" />
   </slot>
 </button>
