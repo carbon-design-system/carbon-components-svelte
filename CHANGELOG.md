@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.63.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.1) - 2022-04-18
+
+**Fixes**
+
+- `HeaderGlobalAction` icon size should be `20` by default
+- fix `rows` reactivity in `DataTable`
+
 ## [0.63.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.0) - 2022-04-17
 
 **Breaking Changes**
