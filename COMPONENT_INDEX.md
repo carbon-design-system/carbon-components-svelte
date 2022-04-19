@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@0.63.0.
+> 165 components exported from carbon-components-svelte@0.63.1.
 
 ## Components
 
@@ -1643,9 +1643,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                        |
-| :-------- | :------ | :---- | :-------------------------------------------------------------- |
-| --        | Yes     | --    | <code>&lt;svelte:component this="{icon}" size={20} /&gt;</code> |
+| Slot name | Default | Props | Fallback                                                          |
+| :-------- | :------ | :---- | :---------------------------------------------------------------- |
+| --        | Yes     | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code> |
 
 ### Events
 

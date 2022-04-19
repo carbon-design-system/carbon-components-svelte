@@ -4669,7 +4669,7 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "<svelte:component this=\"{icon}\" size={20} />",
+          "fallback": "<svelte:component this=\"{icon}\" size=\"{20}\" />",
           "slot_props": "{}"
         }
       ],
