@@ -36,6 +36,12 @@ export interface AutoCompleteProps
   selectedId?: AutoCompleteItemId;
 
   /**
+   * Specify the selected item
+   * @default undefined
+   */
+  selectedItem?: AutoCompleteItem;
+
+  /**
    * Specify the type of dropdown
    * @default "default"
    */
@@ -118,6 +124,12 @@ export interface AutoCompleteProps
    * @default false
    */
   hideLabel?: boolean;
+
+  /**
+   * Override the default translation ids
+   * @default undefined
+   */
+  translateWithId?: (id: any) => string;
 
   /**
    * Set an id for the list box component
