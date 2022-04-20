@@ -2,7 +2,7 @@
   import { Grid, Row, Column } from "carbon-components-svelte";
 </script>
 
-<div>Adding padding to Grid applies it to all child columns:</div>
+<div>Adding padding to Grid applies it to columns in all rows:</div>
 
 <Grid padding>
   <Row>
@@ -13,7 +13,7 @@
   </Row>
 </Grid>
 
-<div>Adding padding to a Row only applies its child columns:</div>
+<div>Adding padding to a Row only applies to its columns:</div>
 
 <Grid>
   <Row padding>

@@ -81,7 +81,7 @@ Set `isSelected` to `true` to enable the selected state for an icon-only, ghost 
 
 ### Link button
 
-If an `href` value is specified, the component will render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) with a "button" role.
+If an `href` value is specified, the component will render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) instead of a `button` element.
 
 <Button href="#">Link button</Button>
 

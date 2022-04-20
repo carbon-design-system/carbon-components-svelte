@@ -195,16 +195,14 @@
   $: if (radio || batchSelection) selectable = true;
   $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
-  $: tableRows.set(
-    rows.map((row) => ({
-      ...row,
-      cells: headerKeys.map((key, index) => ({
-        key,
-        value: resolvePath(row, key),
-        display: headers[index].display,
-      })),
-    }))
-  );
+  $: $tableRows = rows.map((row) => ({
+    ...row,
+    cells: headerKeys.map((key, index) => ({
+      key,
+      value: resolvePath(row, key),
+      display: headers[index].display,
+    })),
+  }));
   $: sortedRows = [...$tableRows];
   $: ascending = $sortHeader.sortDirection === "ascending";
   $: sortKey = $sortHeader.key;

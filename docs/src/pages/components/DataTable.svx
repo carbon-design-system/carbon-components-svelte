@@ -328,6 +328,29 @@ title="Load balancers" description="Your organization's active load balancers."
   ]}"
 />
 
+### Sticky header
+
+Set `stickyHeader` to `true` for the header to be fixed in place.
+
+A maximum height will applied to the datatable to force a scrollbar.
+
+<DataTable
+  stickyHeader
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" },
+  ]}
+  rows={Array.from({ length: 20 }).map((_, i) => ({
+    id: i,
+    name: "Load Balancer " + (i + 1),
+    protocol: "HTTP",
+    port: i % 3 ? (i % 2 ? 3000 : 80) : 443,
+    rule: i % 3 ? "Round robin" : "DNS delegation",
+  }))}
+/>
+
 ### With toolbar
 
 <DataTable title="Load balancers" description="Your organization's active load balancers."
