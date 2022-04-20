@@ -84,6 +84,12 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
+  /**
+   * Override the default translation ids
+   * @type {(id: any) => string}
+   */
+  export let translateWithId = undefined;
+
   /** Set an id for the list box component */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -243,6 +249,7 @@
       id="{id}"
       name="{name}"
       placeholder="{placeholder}"
+      translateWithId="{translateWithId}"
       {...$$restProps}
       on:change
       on:focus

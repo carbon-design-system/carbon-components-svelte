@@ -19,7 +19,7 @@ cd carbon-components-svelte
 Set the original repository as the upstream:
 
 ```sh
-git remote add upstream git@github.com:IBM/carbon-components-svelte.git
+git remote add upstream git@github.com:carbon-design-system/carbon-components-svelte.git
 # verify that the upstream is added
 git remote -v
 ```

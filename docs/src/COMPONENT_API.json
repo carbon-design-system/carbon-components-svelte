@@ -365,6 +365,16 @@
           "reactive": false
         },
         {
+          "name": "translateWithId",
+          "kind": "let",
+          "description": "Override the default translation ids",
+          "type": "(id: any) => string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "invalid",
           "kind": "let",
           "description": "Set to `true` to indicate an invalid state",
