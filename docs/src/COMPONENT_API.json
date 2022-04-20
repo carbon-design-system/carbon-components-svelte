@@ -238,23 +238,13 @@
         {
           "name": "items",
           "kind": "let",
-          "description": "Set full list of items",
+          "description": "Set the full list of items",
           "type": "AutoCompleteItem[]",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": false
-        },
-        {
-          "name": "filteredItems",
-          "kind": "let",
-          "type": "[]",
-          "value": "[]",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": true
         },
         {
           "name": "itemToString",

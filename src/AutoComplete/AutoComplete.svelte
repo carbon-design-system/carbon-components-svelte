@@ -8,12 +8,10 @@
    */
 
   /**
-   * Set the dropdown items
+   * Set the full list of items
    * @type {AutoCompleteItem[]}
    */
   export let items = [];
-
-  export let filteredItems = [];
 
   /**
    * Override the display of a dropdown item
@@ -111,6 +109,8 @@
   import { ListBox, ListBoxMenu, ListBoxMenuItem } from "../ListBox";
 
   const dispatch = createEventDispatcher();
+
+  let filteredItems = [];
 
   let highlightedIndex = -1;
 

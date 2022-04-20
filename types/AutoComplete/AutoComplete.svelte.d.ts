@@ -13,15 +13,10 @@ export interface AutoCompleteItem {
 export interface AutoCompleteProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
-   * Set the dropdown items
+   * Set the full list of items
    * @default []
    */
   items?: AutoCompleteItem[];
-
-  /**
-   * @default []
-   */
-  filteredItems?: [];
 
   /**
    * Override the display of a dropdown item

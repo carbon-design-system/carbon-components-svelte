@@ -295,8 +295,7 @@ export interface AutoCompleteItem {
 | open            | <code>let</code> | Yes      | <code>boolean</code>                            | <code>false</code>                                    | Set to `true` to open the dropdown            |
 | selectedItem    | <code>let</code> | Yes      | <code>AutoCompleteItem</code>                   | <code>undefined</code>                                | Specify the selected item                     |
 | selectedId      | <code>let</code> | Yes      | <code>AutoCompleteItemId</code>                 | <code>undefined</code>                                | Specify the selected item id                  |
-| filteredItems   | <code>let</code> | Yes      | <code>[]</code>                                 | <code>[]</code>                                       | --                                            |
-| items           | <code>let</code> | No       | <code>AutoCompleteItem[]</code>                 | <code>[]</code>                                       | Set the dropdown items                        |
+| items           | <code>let</code> | No       | <code>AutoCompleteItem[]</code>                 | <code>[]</code>                                       | Set the full list of items                    |
 | itemToString    | <code>let</code> | No       | <code>(item: AutoCompleteItem) => string</code> | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a dropdown item       |
 | type            | <code>let</code> | No       | <code>"default" &#124; "inline"</code>          | <code>"default"</code>                                | Specify the type of dropdown                  |
 | direction       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>              | <code>"bottom"</code>                                 | Specify the direction of the dropdown menu    |
