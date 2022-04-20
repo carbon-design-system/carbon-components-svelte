@@ -1,5 +1,6 @@
 export { Accordion, AccordionItem, AccordionSkeleton } from "./Accordion";
 export { AspectRatio } from "./AspectRatio";
+export { AutoComplete, AutoCompleteSkeleton } from "./AutoComplete";
 export { Breadcrumb, BreadcrumbItem, BreadcrumbSkeleton } from "./Breadcrumb";
 export { Breakpoint } from "./Breakpoint";
 export { default as breakpointObserver } from "./Breakpoint/breakpointObserver";

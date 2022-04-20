@@ -1,5 +1,5 @@
 {
-  "total": 165,
+  "total": 167,
   "components": [
     {
       "moduleName": "Accordion",
@@ -228,6 +228,325 @@
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "AutoComplete",
+      "filePath": "src/AutoComplete/AutoComplete.svelte",
+      "props": [
+        {
+          "name": "items",
+          "kind": "let",
+          "description": "Set full list of items",
+          "type": "AutoCompleteItem[]",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "itemToString",
+          "kind": "let",
+          "description": "Override the display of a dropdown item",
+          "type": "(item: AutoCompleteItem) => string",
+          "value": "(item) => item.text || item.id",
+          "isFunction": true,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "selectedId",
+          "kind": "let",
+          "description": "Specify the selected item id",
+          "type": "AutoCompleteItemId",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "selectedItem",
+          "kind": "let",
+          "description": "Specify the selected item",
+          "type": "AutoCompleteItem",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "type",
+          "kind": "let",
+          "description": "Specify the type of dropdown",
+          "type": "\"default\" | \"inline\"",
+          "value": "\"default\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "direction",
+          "kind": "let",
+          "description": "Specify the direction of the dropdown menu",
+          "type": "\"bottom\" | \"top\"",
+          "value": "\"bottom\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the size of the dropdown field",
+          "type": "\"sm\" | \"lg\" | \"xl\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "open",
+          "kind": "let",
+          "description": "Set to `true` to open the dropdown",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "inline",
+          "kind": "let",
+          "description": "Set to `true` to use the inline variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "light",
+          "kind": "let",
+          "description": "Set to `true` to enable the light variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the dropdown",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "titleText",
+          "kind": "let",
+          "description": "Specify the title text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "translateWithId",
+          "kind": "let",
+          "description": "Override the default translation ids",
+          "type": "(id: any) => string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "invalid",
+          "kind": "let",
+          "description": "Set to `true` to indicate an invalid state",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "invalidText",
+          "kind": "let",
+          "description": "Specify the invalid state text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "warn",
+          "kind": "let",
+          "description": "Set to `true` to indicate an warning state",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "warnText",
+          "kind": "let",
+          "description": "Specify the warning state text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "helperText",
+          "kind": "let",
+          "description": "Specify the helper text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "hideLabel",
+          "kind": "let",
+          "description": "Set to `true` to visually hide the label text",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "id",
+          "kind": "let",
+          "description": "Set an id for the list box component",
+          "type": "string",
+          "value": "\"ccs-\" + Math.random().toString(36)",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "name",
+          "kind": "let",
+          "description": "Specify a name attribute for the list box",
+          "type": "string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "ref",
+          "kind": "let",
+          "description": "Obtain a reference to the button HTML element",
+          "type": "null | HTMLInputElement",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "placeholder",
+          "kind": "let",
+          "description": "Specify the placeholder text",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "fallback": "{itemToString(item)}",
+          "slot_props": "{ item: AutoCompleteItem; index: number; }"
+        }
+      ],
+      "events": [
+        {
+          "type": "dispatched",
+          "name": "select",
+          "detail": "{ selectedId: AutoCompleteItemId, selectedItem: AutoCompleteItem }"
+        },
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "input", "element": "input" },
+        { "type": "dispatched", "name": "clear" }
+      ],
+      "typedefs": [
+        {
+          "type": "any",
+          "name": "AutoCompleteItemId",
+          "ts": "type AutoCompleteItemId = any"
+        },
+        {
+          "type": "string",
+          "name": "AutoCompleteItemText",
+          "ts": "type AutoCompleteItemText = string"
+        },
+        {
+          "type": "{ id: AutoCompleteItemId; text: AutoCompleteItemText; }",
+          "name": "AutoCompleteItem",
+          "ts": "interface AutoCompleteItem { id: AutoCompleteItemId; text: AutoCompleteItemText; }"
+        }
+      ],
+      "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "AutoCompleteSkeleton",
+      "filePath": "src/AutoComplete/AutoCompleteSkeleton.svelte",
+      "props": [
+        {
+          "name": "hideLabel",
+          "kind": "let",
+          "description": "Set to `true` to hide the label text",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [],
+      "events": [
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
+      ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },

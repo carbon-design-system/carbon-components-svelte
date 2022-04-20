@@ -19,7 +19,7 @@ cd carbon-components-svelte
 Set the original repository as the upstream:
 
 ```sh
-git remote add upstream git@github.com:IBM/carbon-components-svelte.git
+git remote add upstream git@github.com:carbon-design-system/carbon-components-svelte.git
 # verify that the upstream is added
 git remote -v
 ```
@@ -120,6 +120,21 @@ export {
   ModalFooter,
 } from "./ComposedModal";
 ```
+
+Then fork [carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte).
+
+```sh
+cd carbon-preprocess-svelte
+```
+
+Link `"carbon-components-svelte"`:
+
+```sh
+yarn link "carbon-components-svelte"
+yarn install
+```
+
+Add it to `src/carbon-components-svelte.js`
 
 ### Run `yarn build:docs`
 
