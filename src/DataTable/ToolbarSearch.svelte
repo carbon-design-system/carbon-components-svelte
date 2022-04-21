@@ -68,6 +68,7 @@
   }
 
   async function expandSearch() {
+    await tick();
     if (disabled || persistent || expanded) return;
     expanded = true;
     await tick();
@@ -94,6 +95,7 @@
   bind:ref
   bind:value
   on:clear
+  on:clear="{expandSearch}"
   on:change
   on:input
   on:focus
