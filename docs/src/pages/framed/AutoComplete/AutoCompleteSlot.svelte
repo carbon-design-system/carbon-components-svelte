@@ -1,15 +1,40 @@
 <script>
   import { AutoComplete } from "carbon-components-svelte";
+
+  let items = [];
+
+  fetch("https://restcountries.com/v3.1/all?fields=name,ccn3")
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Failed!");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      let _items = [];
+      Object.values(data).forEach((country) => {
+        _items.push({ id: country.ccn3, text: country.name.common });
+      });
+
+      items = _items;
+
+      return items;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  function filteredItems(value) {
+    return value
+      ? items.filter((country) => country.text.startsWith(value))
+      : [];
+  }
 </script>
 
 <AutoComplete
   titleText="Contact"
   selectedId="0"
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
+  shouldFilterItem="{filteredItems}"
   let:item
   let:index
 >

@@ -8,12 +8,6 @@
    */
 
   /**
-   * Set the full list of items
-   * @type {AutoCompleteItem[]}
-   */
-  export let items = [];
-
-  /**
    * Override the display of a dropdown item
    * @type {(item: AutoCompleteItem) => string}
    */
@@ -32,10 +26,10 @@
   export let selectedItem = undefined;
 
   /**
-   * Specify the type of dropdown
-   * @type {"default" | "inline"}
+   * Determine if an item should be filtered given the current combobox value
+   * @type {(value: string) => AutoCompleteItem[]}
    */
-  export let type = "default";
+  export let shouldFilterItem = () => [];
 
   /**
    * Specify the direction of the dropdown menu
@@ -51,9 +45,6 @@
 
   /** Set to `true` to open the dropdown */
   export let open = false;
-
-  /** Set to `true` to use the inline variant */
-  export let inline = false;
 
   /** Set to `true` to enable the light variant */
   export let light = false;
@@ -103,80 +94,100 @@
   /** Specify the placeholder text */
   export let placeholder = null;
 
-  import { createEventDispatcher } from "svelte";
+  /**
+   * Obtain a reference to the list HTML element
+   * @type {null | HTMLDivElement}
+   */
+  export let listRef = null;
+
+  import { createEventDispatcher, afterUpdate, tick } from "svelte";
+  import Checkmark from "../icons/Checkmark.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import { ListBox, ListBoxMenu, ListBoxMenuItem } from "../ListBox";
+  import ListBox from "../ListBox/ListBox.svelte";
+  import ListBoxField from "../ListBox/ListBoxField.svelte";
+  import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
+  import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
+  import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
+  import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
 
   const dispatch = createEventDispatcher();
 
   let filteredItems = [];
-
+  let inputValue = value;
+  let prevSelectedId = null;
   let highlightedIndex = -1;
-
-  let innerValue = undefined;
 
   function change(dir) {
     let index = highlightedIndex + dir;
-
     if (index < 0) {
       index = filteredItems.length - 1;
     } else if (index >= filteredItems.length) {
       index = 0;
     }
-
     highlightedIndex = index;
   }
 
-  function onKeydown(event) {
-    let key = event.key;
-
-    if (["Enter", "ArrowDown", "ArrowUp"].includes(key)) {
-      event.preventDefault();
-    }
-
-    if (key === "Enter") {
-      open = !open;
-      if (
-        highlightedIndex > -1 &&
-        filteredItems[highlightedIndex].id !== selectedId
-      ) {
-        selectedItem = filteredItems[highlightedIndex];
-        selectedId = selectedItem.id;
-        innerValue = selectedItem.text;
-        open = false;
-      }
-    } else if (key === "Backspace") {
-      selectedItem = undefined;
-      selectedId = undefined;
-      open = innerValue.length > 0 && filteredItems.length > 0;
-    } else if (key === "Tab") {
-      open = false;
-      ref.blur();
-    } else if (key === "ArrowDown") {
-      change(1);
-    } else if (key === "ArrowUp") {
-      change(-1);
-    } else if (key === "Escape") {
-      innerValue = "";
-      dispatch("clear");
-      open = false;
-    } else {
-      if (!open) open = filteredItems.length > 0;
-    }
+  /**
+   * Clear the combo box programmatically
+   * @type {(options?: { focus?: boolean; }) => void}
+   */
+  export function clear(options = {}) {
+    prevSelectedId = null;
+    highlightedIndex = -1;
+    highlightedId = undefined;
+    selectedId = undefined;
+    selectedItem = undefined;
+    open = false;
+    inputValue = "";
+    if (options?.focus !== false) ref?.focus();
   }
+
+  afterUpdate(() => {
+    if (open) {
+      ref.focus();
+      filteredItems = shouldFilterItem(value);
+    } else {
+      highlightedIndex = -1;
+      filteredItems = [];
+      if (!selectedItem) {
+        selectedId = undefined;
+        inputValue = "";
+        highlightedIndex = -1;
+        highlightedId = undefined;
+      } else {
+        // programmatically set inputValue
+        inputValue = selectedItem.text;
+      }
+    }
+  });
 
   $: if (selectedId !== undefined) {
-    dispatch("select", { selectedId, selectedItem });
+    if (prevSelectedId !== selectedId) {
+      prevSelectedId = selectedId;
+      if (filteredItems?.length === 1 && open) {
+        selectedId = filteredItems[0].id;
+        selectedItem = filteredItems[0];
+        highlightedIndex = -1;
+        highlightedId = undefined;
+      } else {
+        selectedItem = filteredItems.find((item) => item.id === selectedId);
+      }
+      dispatch("select", { selectedId, selectedItem });
+    }
+  } else {
+    prevSelectedId = selectedId;
+    selectedItem = undefined;
   }
 
-  $: filteredItems = items.filter(
-    (item) => innerValue?.length > 0 && item.text.startsWith(innerValue)
-  );
-  $: inline = type === "inline";
-  $: if (!open) {
-    highlightedIndex = -1;
-  }
+  $: ariaLabel = $$props["aria-label"] || "Choose an item";
+  $: menuId = `menu-${id}`;
+  $: comboId = `combo-${id}`;
+  $: highlightedId = filteredItems[highlightedIndex]
+    ? filteredItems[highlightedIndex].id
+    : 0;
+  $: filteredItems = shouldFilterItem(value);
+  $: value = inputValue;
 </script>
 
 <svelte:window
@@ -187,88 +198,169 @@
   }}"
 />
 
-<div {...$$restProps}>
-  {#if titleText}
+<div class:bx--list-box__wrapper="{true}">
+  {#if titleText && !hideLabel}
     <label
       for="{id}"
       class:bx--label="{true}"
       class:bx--label--disabled="{disabled}"
-      class:bx--visually-hidden="{hideLabel}"
     >
       {titleText}
     </label>
   {/if}
   <ListBox
-    type="{type}"
-    size="{size}"
-    id="{id}"
-    name="{name}"
-    aria-label="{$$props['aria-label']}"
-    class="bx--dropdown {direction === 'top' && 'bx--list-box--up'} {invalid &&
-      'bx--dropdown--invalid'} {!invalid &&
-      warn &&
-      'bx--dropdown--warning'} {open && 'bx--dropdown--open'}
-      {size === 'sm' && 'bx--dropdown--sm'}
-      {size === 'xl' && 'bx--dropdown--xl'}
-      {inline && 'bx--dropdown--inline'}
-      {disabled && 'bx--dropdown--disabled'}
-      {light && 'bx--dropdown--light'}"
-    on:click="{({ target }) => {
-      if (disabled) return;
-      open = ref.contains(target) ? !open : false;
-    }}"
+    class="bx--combo-box {direction === 'top' &&
+      'bx--list-box--up'} {!invalid && warn && 'bx--combo-box--warning'}"
+    id="{comboId}"
+    aria-label="{ariaLabel}"
     disabled="{disabled}"
-    open="{open}"
     invalid="{invalid}"
     invalidText="{invalidText}"
+    open="{open}"
     light="{light}"
+    size="{size}"
     warn="{warn}"
     warnText="{warnText}"
   >
-    {#if invalid}
-      <WarningFilled class="bx--text-input__invalid-icon" />
-    {/if}
-    {#if !invalid && warn}
-      <WarningAltFilled
-        class="bx--text-input__invalid-icon
-          bx--text-input__invalid-icon--warning"
-      />
-    {/if}
-    <input
-      bind:this="{ref}"
-      bind:value="{innerValue}"
-      type="text"
-      role="searchbox"
-      class="
-        auto-complete__input
-        {size === 'sm' && 'auto-complete__input--sm'}
-        {size === 'xl' && 'auto-complete__input--xl'}
-      "
-      autocomplete="false"
-      disabled="{disabled}"
+    <ListBoxField
+      role="button"
+      aria-expanded="{open}"
+      on:click="{async () => {
+        if (disabled) return;
+        open = true;
+        await tick();
+        ref.focus();
+      }}"
       id="{id}"
-      name="{name}"
-      placeholder="{placeholder}"
+      disabled="{disabled}"
       translateWithId="{translateWithId}"
-      {...$$restProps}
-      on:change
-      on:focus
-      on:blur
-      on:input
-      on:keydown="{onKeydown}"
-    />
+    >
+      <input
+        bind:this="{ref}"
+        tabindex="0"
+        autocomplete="off"
+        aria-autocomplete="list"
+        aria-expanded="{open}"
+        aria-activedescendant="{highlightedId}"
+        aria-labelledby="{comboId}"
+        aria-disabled="{disabled}"
+        aria-controls="{open ? menuId : undefined}"
+        aria-owns="{open ? menuId : undefined}"
+        disabled="{disabled}"
+        placeholder="{placeholder}"
+        id="{id}"
+        value="{inputValue}"
+        name="{name}"
+        {...$$restProps}
+        class:bx--text-input="{true}"
+        class:bx--text-input--light="{light}"
+        class:bx--text-input--empty="{inputValue === ''}"
+        on:input="{async ({ target }) => {
+          if (!open && target.value.length > 0) {
+            open = true;
+          }
+
+          inputValue = target.value;
+          if (!inputValue.length) {
+            clear();
+            open = true;
+          }
+        }}"
+        on:keydown
+        on:keydown|stopPropagation="{({ key }) => {
+          if (key === 'Enter') {
+            open = !open;
+
+            if (
+              highlightedIndex > -1 &&
+              filteredItems[highlightedIndex]?.id !== selectedId
+            ) {
+              open = false;
+              if (filteredItems[highlightedIndex]) {
+                inputValue = filteredItems[highlightedIndex].text;
+                selectedItem = filteredItems[highlightedIndex];
+                selectedId = filteredItems[highlightedIndex].id;
+              }
+            } else {
+              open = false;
+              if (filteredItems[0]) {
+                inputValue = filteredItems[0].text;
+                selectedItem = filteredItems[0];
+                selectedId = filteredItems[0].id;
+              }
+            }
+            highlightedIndex = -1;
+          } else if (key === 'Tab') {
+            open = false;
+          } else if (key === 'ArrowDown') {
+            change(1);
+          } else if (key === 'ArrowUp') {
+            change(-1);
+          } else if (key === 'Escape') {
+            open = false;
+          }
+        }}"
+        on:keyup
+        on:focus
+        on:blur
+        on:blur="{({ relatedTarget }) => {
+          if (!open || !relatedTarget) return;
+          if (
+            relatedTarget &&
+            !['INPUT', 'SELECT', 'TEXTAREA'].includes(relatedTarget.tagName) &&
+            relatedTarget.getAttribute('role') !== 'button' &&
+            relatedTarget.getAttribute('role') !== 'searchbox'
+          ) {
+            ref.focus();
+          }
+        }}"
+      />
+      {#if invalid}
+        <WarningFilled class="bx--list-box__invalid-icon" />
+      {/if}
+      {#if !invalid && warn}
+        <WarningAltFilled
+          class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+        />
+      {/if}
+      {#if inputValue}
+        <ListBoxSelection
+          on:clear
+          on:clear="{clear}"
+          translateWithId="{translateWithId}"
+          disabled="{disabled}"
+          open="{open}"
+        />
+      {/if}
+      <ListBoxMenuIcon
+        on:click="{(e) => {
+          if (disabled) return;
+          e.stopPropagation();
+          open = !open;
+        }}"
+        translateWithId="{translateWithId}"
+        open="{open}"
+      />
+    </ListBoxField>
     {#if open}
-      <ListBoxMenu aria-labelledby="{id}" id="{id}">
+      <ListBoxMenu
+        aria-label="{ariaLabel}"
+        id="{id}"
+        on:scroll
+        bind:ref="{listRef}"
+      >
         {#each filteredItems as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"
             active="{selectedId === item.id}"
-            highlighted="{highlightedIndex === i || selectedId === item.id}"
+            highlighted="{highlightedIndex === i}"
             on:click="{() => {
-              selectedItem = item;
               selectedId = item.id;
-              innerValue = item.text;
-              ref.focus();
+              open = false;
+
+              if (filteredItems[i]) {
+                inputValue = filteredItems[i].text;
+              }
             }}"
             on:mouseenter="{() => {
               highlightedIndex = i;
@@ -277,12 +369,15 @@
             <slot item="{item}" index="{i}">
               {itemToString(item)}
             </slot>
+            {#if selectedItem && selectedItem.id === item.id}
+              <Checkmark class="bx--list-box__menu-item__selected-icon" />
+            {/if}
           </ListBoxMenuItem>
         {/each}
       </ListBoxMenu>
     {/if}
   </ListBox>
-  {#if !inline && !invalid && !warn && helperText}
+  {#if !invalid && helperText && !warn}
     <div
       class:bx--form__helper-text="{true}"
       class:bx--form__helper-text--disabled="{disabled}"
@@ -291,50 +386,3 @@
     </div>
   {/if}
 </div>
-
-<style>
-  .auto-complete__input {
-    font-size: var(--cds-body-short-01-font-size, 0.875rem);
-    font-weight: var(--cds-body-short-01-font-weight, 400);
-    line-height: var(--cds-body-short-01-line-height, 1.28572);
-    letter-spacing: var(--cds-body-short-01-letter-spacing, 0.16px);
-    outline: 2px solid transparent;
-    outline-offset: -2px;
-    width: 100%;
-    height: 2.5rem;
-    padding: 0 1rem;
-    border: none;
-    border-bottom-color: currentcolor;
-    border-bottom-style: none;
-    border-bottom-width: medium;
-    border-bottom: 1px solid var(--cds-ui-04, #8d8d8d);
-    background-color: var(--cds-field-01, #f4f4f4);
-    color: var(--cds-text-01, #161616);
-    transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
-      outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
-  }
-
-  .auto-complete__input:focus {
-    outline: 2px solid var(--cds-focus, #0f62fe);
-    outline-offset: -2px;
-  }
-
-  .auto-complete__input--sm {
-    height: 2rem;
-  }
-
-  .auto-complete__input--xl,
-  .auto-complete__input--lg {
-    height: 3rem;
-  }
-
-  .auto-complete__input:disabled {
-    outline: 2px solid transparent;
-    outline-offset: -2px;
-    border-bottom: 1px solid transparent;
-    background-color: var(--cds-field, #f4f4f4);
-    color: var(--cds-text-disabled, #c6c6c6);
-    cursor: not-allowed;
-    -webkit-text-fill-color: var(--cds-disabled-02, #c6c6c6);
-  }
-</style>
