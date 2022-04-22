@@ -43,6 +43,7 @@ export {
 } from "./DataTable";
 export { DatePicker, DatePickerInput, DatePickerSkeleton } from "./DatePicker";
 export { Dropdown, DropdownSkeleton } from "./Dropdown";
+export { Editor, EditorSkeleton } from "./Editor";
 export {
   FileUploader,
   FileUploaderButton,

@@ -75,7 +75,7 @@ export interface EditorProps {
   text?: string;
 
   /**
-   * @default { modules: { toolbar }, theme: 'snow', placeholder }
+   * @default { modules: { toolbar, }, theme: "snow", placeholder, }
    */
   options?: { modules: { toolbar }; theme: "snow"; placeholder };
 }

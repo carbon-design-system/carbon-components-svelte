@@ -50,6 +50,8 @@ export { default as DatePickerInput } from "./DatePicker/DatePickerInput.svelte"
 export { default as DatePickerSkeleton } from "./DatePicker/DatePickerSkeleton.svelte";
 export { default as Dropdown } from "./Dropdown/Dropdown.svelte";
 export { default as DropdownSkeleton } from "./Dropdown/DropdownSkeleton.svelte";
+export { default as Editor } from "./Editor/Editor.svelte";
+export { default as EditorSkeleton } from "./Editor/EditorSkeleton.svelte";
 export { default as FileUploader } from "./FileUploader/FileUploader.svelte";
 export { default as FileUploaderButton } from "./FileUploader/FileUploaderButton.svelte";
 export { default as FileUploaderItem } from "./FileUploader/FileUploaderItem.svelte";
