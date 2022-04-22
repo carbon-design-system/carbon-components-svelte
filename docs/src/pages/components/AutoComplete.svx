@@ -6,31 +6,29 @@ components: ["AutoComplete", "AutoCompleteSkeleton"]
   import { AutoComplete, AutoCompleteSkeleton, InlineNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 
-  let items = [];
+  let filteredItems = [];
 
-  fetch('https://restcountries.com/v3.1/all?fields=name,ccn3')
-    .then(res => {
-      if (!res.ok) {
-        throw new Error("Failed!");
-      }
-      return res.json();
-    })
-    .then(data => {
-      let _items = [];
-      Object.values(data).forEach(country => {
-        _items.push({ id: country.ccn3, text: country.name.common});
+  function shouldFilterItem(value) {
+    if (!value) return [];
+
+    fetch('https://restcountries.com/v3.1/all?fields=name,ccn3')
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(data => {
+        let _items = [];
+        Object.values(data).forEach(country => {
+          if (country.name.common.startsWith(value)) _items.push({ id: country.ccn3, text: country.name.common});
+        });
+
+        filteredItems = _items;
+      })
+      .catch(err => {
+        console.log(err);
       });
-
-      items = _items;
-
-      return items;
-    })
-    .catch(err => {
-      console.log(err);
-    });
-
-  function filteredItems(value) {
-    return value ? items.filter(country => country.text.startsWith(value)) : [];
   }
 </script>
 
@@ -42,7 +40,7 @@ components: ["AutoComplete", "AutoCompleteSkeleton"]
 
 ### Default
 
-<AutoComplete titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
+<AutoComplete titleText="Contact" selectedId="0" filteredItems="{filteredItems}" shouldFilterItem="{shouldFilterItem}" />
 
 ### Custom slot
 
@@ -52,41 +50,37 @@ Override the default slot to customize the display of each item. Access the item
 
 ### Hidden label
 
-<AutoComplete hideLabel titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
+<AutoComplete hideLabel titleText="Contact" selectedId="0" filteredItems="{filteredItems}" shouldFilterItem="{shouldFilterItem}" />
 
 ### Top direction
 
 Set `direction` to `"top"` for the dropdown menu to appear above the input.
 
-<AutoComplete direction="top" titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
+<AutoComplete direction="top" titleText="Contact" selectedId="0" filteredItems="{filteredItems}" shouldFilterItem="{shouldFilterItem}" />
 
 ### Light variant
 
-<AutoComplete light titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
-
-### Inline variant
-
-<AutoComplete type="inline" titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
+<AutoComplete light titleText="Contact" selectedId="0" filteredItems="{filteredItems}" shouldFilterItem="{shouldFilterItem}" />
 
 ### Extra-large size
 
-<AutoComplete size="xl" titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
+<AutoComplete size="xl" titleText="Contact" selectedId="0" filteredItems="{filteredItems}" shouldFilterItem="{shouldFilterItem}" />
 
 ### Small size
 
-<AutoComplete size="sm" titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
+<AutoComplete size="sm" titleText="Contact" selectedId="0" filteredItems="{filteredItems}" shouldFilterItem="{shouldFilterItem}" />
 
 ### Invalid state
 
-<AutoComplete invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
+<AutoComplete invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" selectedId="0" filteredItems="{filteredItems}" shouldFilterItem="{shouldFilterItem}" />
 
 ### Warning state
 
-<AutoComplete warn warnText="This contact method is not associated with your account" titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
+<AutoComplete warn warnText="This contact method is not associated with your account" titleText="Contact" selectedId="0" filteredItems="{filteredItems}" shouldFilterItem="{shouldFilterItem}" />
 
 ### Disabled state
 
-<AutoComplete disabled titleText="Contact" selectedId="0" shouldFilterItem="{filteredItems}" />
+<AutoComplete disabled titleText="Contact" selectedId="0" filteredItems="{filteredItems}" shouldFilterItem="{shouldFilterItem}" />
 
 ### Skeleton
 

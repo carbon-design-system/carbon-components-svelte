@@ -27,9 +27,9 @@
 
   /**
    * Determine if an item should be filtered given the current combobox value
-   * @type {(value: string) => AutoCompleteItem[]}
+   * @type {(value: string) => {}}
    */
-  export let shouldFilterItem = () => [];
+  export let shouldFilterItem = () => {};
 
   /**
    * Specify the direction of the dropdown menu
@@ -113,8 +113,8 @@
 
   const dispatch = createEventDispatcher();
 
-  let filteredItems = [];
-  let inputValue = value;
+  export let filteredItems = [];
+  let inputValue = ""; //value;
   let prevSelectedId = null;
   let highlightedIndex = -1;
 
@@ -146,7 +146,7 @@
   afterUpdate(() => {
     if (open) {
       ref.focus();
-      filteredItems = shouldFilterItem(value);
+      //filteredItems = shouldFilterItem(value);
     } else {
       highlightedIndex = -1;
       filteredItems = [];
@@ -171,7 +171,10 @@
         highlightedIndex = -1;
         highlightedId = undefined;
       } else {
-        selectedItem = filteredItems.find((item) => item.id === selectedId);
+        selectedItem =
+          filteredItems?.length > 0
+            ? filteredItems.find((item) => item.id === selectedId)
+            : null;
       }
       dispatch("select", { selectedId, selectedItem });
     }
@@ -186,8 +189,12 @@
   $: highlightedId = filteredItems[highlightedIndex]
     ? filteredItems[highlightedIndex].id
     : 0;
-  $: filteredItems = shouldFilterItem(value);
-  $: value = inputValue;
+  $: if (inputValue) {
+    shouldFilterItem(inputValue);
+  } else {
+    filteredItems = [];
+  }
+  //$: value = inputValue;
 </script>
 
 <svelte:window

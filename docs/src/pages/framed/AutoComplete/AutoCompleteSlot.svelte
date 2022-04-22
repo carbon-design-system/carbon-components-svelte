@@ -1,40 +1,38 @@
 <script>
   import { AutoComplete } from "carbon-components-svelte";
 
-  let items = [];
+  let filteredItems = [];
 
-  fetch("https://restcountries.com/v3.1/all?fields=name,ccn3")
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("Failed!");
-      }
-      return res.json();
-    })
-    .then((data) => {
-      let _items = [];
-      Object.values(data).forEach((country) => {
-        _items.push({ id: country.ccn3, text: country.name.common });
+  function shouldFilterItem(value) {
+    if (!value) return [];
+
+    fetch("https://restcountries.com/v3.1/all?fields=name,ccn3")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        let _items = [];
+        Object.values(data).forEach((country) => {
+          if (country.name.common.startsWith(value))
+            _items.push({ id: country.ccn3, text: country.name.common });
+        });
+
+        filteredItems = _items;
+      })
+      .catch((err) => {
+        console.log(err);
       });
-
-      items = _items;
-
-      return items;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  function filteredItems(value) {
-    return value
-      ? items.filter((country) => country.text.startsWith(value))
-      : [];
   }
 </script>
 
 <AutoComplete
   titleText="Contact"
   selectedId="0"
-  shouldFilterItem="{filteredItems}"
+  filteredItems="{filteredItems}"
+  shouldFilterItem="{shouldFilterItem}"
   let:item
   let:index
 >
