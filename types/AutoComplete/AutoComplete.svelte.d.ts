@@ -32,9 +32,9 @@ export interface AutoCompleteProps
 
   /**
    * Determine if an item should be filtered given the current combobox value
-   * @default () => []
+   * @default () => {}
    */
-  shouldFilterItem?: (value: string) => AutoCompleteItem[];
+  shouldFilterItem?: (value: string) => {};
 
   /**
    * Specify the direction of the dropdown menu
@@ -143,6 +143,11 @@ export interface AutoCompleteProps
    * @default null
    */
   listRef?: null | HTMLDivElement;
+
+  /**
+   * @default []
+   */
+  filteredItems?: [];
 }
 
 export default class AutoComplete extends SvelteComponentTyped<

@@ -18,15 +18,6 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### `shouldFilterItem`
-
-<ComboBox shouldFilterItem={(item, value) => item.text.startsWith(value)} titleText="Contact" placeholder="Select contact method"
-items={[
-  {id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
-  ]}  />
-
 ### Custom slot
 
 Override the default slot to customize the display of each item. Access the item and index through the `let:` directive.
