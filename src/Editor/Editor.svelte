@@ -48,6 +48,7 @@
    */
   export let text = undefined;
 
+  import { onMount } from "svelte";
   import { quill } from "./quill";
 
   console.log(invalidText);
@@ -68,6 +69,21 @@
     placeholder,
   };
 
+  onMount(() => {
+    let container = document.getElementById(id);
+    if (invalid) {
+      let style = "2px solid red";
+      container.style["borderLeft"] = style;
+      container.style["borderBottom"] = style;
+      container.style["borderRight"] = style;
+      let toolbar =
+        container.parentNode.getElementsByClassName("ql-toolbar")[0];
+      toolbar.style["borderLeft"] = style;
+      toolbar.style["borderTop"] = style;
+      toolbar.style["borderRight"] = style;
+    }
+  });
+
   const onTextChange = (event) => {
     html = event.detail.html;
     text = event.detail.text;
@@ -87,7 +103,11 @@
 {#if disabled}
   {@html html}
 {:else}
-  <div use:quill="{{ options, html }}" on:text-change="{onTextChange}"></div>
+  <div
+    id="{id}"
+    use:quill="{{ options, html }}"
+    on:text-change="{onTextChange}"
+  ></div>
 {/if}
 {#if invalid}
   <div class:bx--form-requirement="{true}">{invalidText}</div>
