@@ -11,13 +11,7 @@ export interface AutoCompleteItem {
 }
 
 export interface AutoCompleteProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
-  /**
-   * Set the full list of items
-   * @default []
-   */
-  items?: AutoCompleteItem[];
-
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
   /**
    * Override the display of a dropdown item
    * @default (item) => item.text || item.id
@@ -37,10 +31,10 @@ export interface AutoCompleteProps
   selectedItem?: AutoCompleteItem;
 
   /**
-   * Specify the type of dropdown
-   * @default "default"
+   * Determine if an item should be filtered given the current combobox value
+   * @default () => []
    */
-  type?: "default" | "inline";
+  shouldFilterItem?: (value: string) => AutoCompleteItem[];
 
   /**
    * Specify the direction of the dropdown menu
@@ -59,12 +53,6 @@ export interface AutoCompleteProps
    * @default false
    */
   open?: boolean;
-
-  /**
-   * Set to `true` to use the inline variant
-   * @default false
-   */
-  inline?: boolean;
 
   /**
    * Set to `true` to enable the light variant
@@ -149,6 +137,12 @@ export interface AutoCompleteProps
    * @default null
    */
   placeholder?: undefined;
+
+  /**
+   * Obtain a reference to the list HTML element
+   * @default null
+   */
+  listRef?: null | HTMLDivElement;
 }
 
 export default class AutoComplete extends SvelteComponentTyped<
@@ -158,11 +152,17 @@ export default class AutoComplete extends SvelteComponentTyped<
       selectedId: AutoCompleteItemId;
       selectedItem: AutoCompleteItem;
     }>;
-    change: WindowEventMap["change"];
+    keydown: WindowEventMap["keydown"];
+    keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
-    input: WindowEventMap["input"];
-    clear: CustomEvent<any>;
+    clear: WindowEventMap["clear"];
+    scroll: WindowEventMap["scroll"];
   },
   { default: { item: AutoCompleteItem; index: number } }
-> {}
+> {
+  /**
+   * Clear the combo box programmatically
+   */
+  clear: (options?: { focus?: boolean }) => void;
+}

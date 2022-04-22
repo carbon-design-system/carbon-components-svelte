@@ -1,0 +1,42 @@
+---
+components: ["Editor", "EditorSkeleton"]
+---
+
+<script>
+  import { Editor, EditorSkeleton, InlineNotification } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+`Editor` is keyed for performance reasons.
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01"><code>html</code> attribute contains pure html.</div>
+</InlineNotification>
+
+### Default
+
+<Editor titleText="Document" html="<p>Hello</p>" />
+
+### Extra-large size
+
+<Editor titleText="Document" html="<p>Hello</p>" />
+
+### Small size
+
+<Editor titleText="Document" html="<p>Hello</p>" />
+
+### Invalid state
+
+<Editor invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Document" html="<p>Hello</p>" />
+
+### Warning state
+
+<Editor warn warnText="This contact method is not associated with your account" titleText="Document" html="<p>Hello</p>" />
+
+### Disabled state
+
+<Editor disabled titleText="Document" html="<p>Hello</p>" />
+
+### Skeleton
+
+<EditorSkeleton />
