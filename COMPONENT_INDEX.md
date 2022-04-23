@@ -927,8 +927,8 @@ export interface DataTableEmptyHeader {
   display?: (item: Value) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
-  minWidth?: string;
   width?: string;
+  minWidth?: string;
 }
 
 export interface DataTableNonEmptyHeader {
@@ -937,8 +937,8 @@ export interface DataTableNonEmptyHeader {
   display?: (item: Value) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
-  minWidth?: string;
   width?: string;
+  minWidth?: string;
 }
 
 export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;
@@ -3752,13 +3752,14 @@ None.
 
 ### Props
 
-| Prop name      | Kind             | Reactive | Type                                                                | Default value          | Description                             |
-| :------------- | :--------------- | :------- | :------------------------------------------------------------------ | ---------------------- | --------------------------------------- |
-| size           | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | <code>undefined</code> | Set the size of the table               |
-| zebra          | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use zebra styles       |
-| useStaticWidth | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use static width       |
-| sortable       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the sortable variant  |
-| stickyHeader   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to enable a sticky header |
+| Prop name      | Kind             | Reactive | Type                                                                | Default value          | Description                                    |
+| :------------- | :--------------- | :------- | :------------------------------------------------------------------ | ---------------------- | ---------------------------------------------- |
+| size           | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | <code>undefined</code> | Set the size of the table                      |
+| zebra          | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use zebra styles              |
+| useStaticWidth | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use static width              |
+| sortable       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the sortable variant         |
+| stickyHeader   | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to enable a sticky header        |
+| tableStyle     | <code>let</code> | No       | <code>string</code>                                                 | <code>undefined</code> | Set the style attribute on the `table` element |
 
 ### Slots
 

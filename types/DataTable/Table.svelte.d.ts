@@ -32,6 +32,12 @@ export interface TableProps
    * @default false
    */
   stickyHeader?: boolean;
+
+  /**
+   * Set the style attribute on the `table` element
+   * @default undefined
+   */
+  tableStyle?: string;
 }
 
 export default class Table extends SvelteComponentTyped<
