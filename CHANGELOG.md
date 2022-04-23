@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.63.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.2) - 2022-04-23
+
+**Fixes**
+
+- set `type="button"` on `Dropdown` to fix usage in a form
+- re-focus search bar when clearing `ToolbarSearch` value
+
 ## [0.63.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.1) - 2022-04-18
 
 **Fixes**
