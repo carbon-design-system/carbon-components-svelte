@@ -199,6 +199,7 @@
     {/if}
     <button
       bind:this="{ref}"
+      type="button"
       class:bx--list-box__field="{true}"
       tabindex="0"
       aria-expanded="{open}"
