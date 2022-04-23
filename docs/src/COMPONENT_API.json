@@ -2495,14 +2495,14 @@
           "ts": "type DataTableValue = any"
         },
         {
-          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }",
+          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; minWidth?: string; width?: string; }",
           "name": "DataTableEmptyHeader",
-          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }"
+          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; minWidth?: string; width?: string; }"
         },
         {
-          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }",
+          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; minWidth?: string; width?: string; }",
           "name": "DataTableNonEmptyHeader",
-          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }"
+          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; minWidth?: string; width?: string; }"
         },
         {
           "type": "DataTableNonEmptyHeader | DataTableEmptyHeader",
