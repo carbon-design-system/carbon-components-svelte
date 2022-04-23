@@ -15,7 +15,7 @@
 
   const headers: DataTableHeader[] = [
     { key: "name", value: "Name" },
-    { key: "protocol", value: "Protocol" },
+    { key: "protocol", value: "Protocol", width: "400px", minWidth: "40%" },
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule", sort: false },
   ];
