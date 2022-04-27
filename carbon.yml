@@ -3,7 +3,7 @@ library:
   id: carbon-components-svelte
   name: Carbon Components Svelte
   description: Svelte implementation of Carbon Components.
-  externalDocsUrl: https://react.carbondesignsystem.com
+  externalDocsUrl: https://carbon-components-svelte.onrender.com
   inherits: carbon-styles
 assets:
   accordion:
@@ -726,3 +726,4 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/UnorderedList
     tags:
       - data-display
+      
