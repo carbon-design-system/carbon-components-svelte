@@ -85,7 +85,6 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/Checkbox
   clickable-tile:
     name: Clickable tile
-    description: ''
     status: stable
     type: component
     platform: web
@@ -125,7 +124,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -150,7 +148,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -194,7 +191,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/DatePicker
+        url: https://carbon-components-svelte.onrender.com/components/Dropdown
   expandable-tile:
     name: Expandable tile
     status: stable
@@ -203,7 +200,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -229,7 +225,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -262,7 +257,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -288,7 +282,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -322,7 +315,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -366,7 +358,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -376,13 +367,11 @@ assets:
       - data-display
   overflow-menu:
     name: Overflow menu
-    description: ''
     status: stable
     type: component
     platform: web
     framework: svelte
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -415,7 +404,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -468,7 +456,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -484,7 +471,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -519,7 +505,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -535,7 +520,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -546,14 +530,12 @@ assets:
       - shell
   skeleton-text:
     name: Skeleton text
-    description: ''
     status: stable
     type: component
     platform: web
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -648,7 +630,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -690,7 +671,6 @@ assets:
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -708,14 +688,12 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/TreeView
   truncate:
     name: Truncate
-    description: ''
     status: stable
     type: component
     platform: web
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
@@ -735,14 +713,12 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/UIShell
   unordered-list:
     name: Unordered list
-    description: ''
     status: stable
     type: component
     platform: web
     framework: svelte
     #TODO: add thumbnail
     thumbnailPath: ''
-    noIndex: true
     demoLinks:
       - type: storybook
         name: Storybook
