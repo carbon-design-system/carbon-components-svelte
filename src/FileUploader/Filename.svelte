@@ -30,14 +30,17 @@
   {#if invalid}
     <WarningFilled class="bx--file-invalid" />
   {/if}
-  <Close
+  <button
     aria-label="{iconDescription}"
-    title="{iconDescription}"
-    class="bx--file-close"
+    class:bx--file-close="{true}"
+    type="button"
+    tabindex="0"
     {...$$restProps}
     on:click
     on:keydown
-  />
+  >
+    <Close />
+  </button>
 {/if}
 
 {#if status === "complete"}
