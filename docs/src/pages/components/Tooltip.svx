@@ -12,8 +12,8 @@ components: ["Tooltip", "TooltipFooter"]
 
 By default, the tooltip is triggered by an information icon.
 
-<Tooltip tooltipBodyId="tooltip-body">
-  <p id="tooltip-body">
+<Tooltip>
+  <p>
     Resources are provisioned based on your account's organization.
   </p>
 </Tooltip>
