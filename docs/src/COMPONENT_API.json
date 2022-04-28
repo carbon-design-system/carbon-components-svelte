@@ -4053,8 +4053,8 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        { "type": "forwarded", "name": "click", "element": "Close" },
-        { "type": "forwarded", "name": "keydown", "element": "Close" }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "Loading" }
