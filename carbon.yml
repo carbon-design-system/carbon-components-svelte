@@ -447,7 +447,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ProgressIndicator
+        url: https://carbon-components-svelte.onrender.com/components/RadioButton
   radio-tile:
     name: Radio tile
     status: stable
