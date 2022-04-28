@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.63.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.3) - 2022-04-28
+
+**Fixes**
+
+- fix `FileUploaderItem` regression where `delete` event should be dispatched if status is "edit"
+
+**Documentation**
+
+- add `FileUploader` "Item (edit)" example
+- revise `FileUploader` "Item (edit status, invalid state)" example to include `on:delete` usage
+- add `FileUploader` "Item (edit status, invalid state with subject, body)" example
+
 ## [0.63.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.2) - 2022-04-23
 
 **Fixes**
