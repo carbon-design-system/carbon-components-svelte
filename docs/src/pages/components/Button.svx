@@ -2,9 +2,6 @@
   import { InlineNotification, Button } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
-  import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
-  import TextItalic from "carbon-icons-svelte/lib/TextItalic.svelte";
-  import TextUnderline from "carbon-icons-svelte/lib/TextUnderline.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
   import Preview from "../../components/Preview.svelte";
 
