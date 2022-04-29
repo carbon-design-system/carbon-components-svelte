@@ -5,16 +5,25 @@ const slug = require("remark-slug");
 const visit = require("unist-util-visit");
 const { format } = require("prettier");
 const pkg = require("../package.json");
+const component_api = require("./src/COMPONENT_API.json");
 const fs = require("fs");
 const Prism = require("prismjs");
 require("prism-svelte");
+
+const component_api_by_name = component_api.components.reduce((a, c) => {
+  return {
+    ...a,
+    [c.moduleName]: true,
+  };
+}, {});
 
 function createImports(source) {
   const inlineComponents = new Set();
   const icons = new Set();
 
-  // TODO: [refactor] better determine if component is a Carbon icon
-  const isIcon = (text) => text.match(/(16|20|24|32)/);
+  // heuristic to guess if the inline component or expression name is a Carbon icon
+  const isIcon = (text) =>
+    /[A-Z][a-z]*/.test(text) && !(text in component_api_by_name);
 
   walk(parse(source), {
     enter(node) {
@@ -48,7 +57,8 @@ function createImports(source) {
       icons.size > 0
         ? icon_imports
             .map(
-              (icon) => `import ${icon} from "carbon-icons-svelte/lib/${icon}";`
+              (icon) =>
+                `import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`
             )
             .join("\n")
         : ""
