@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@snowpack/plugin-svelte": "^3.7.0",
-    "carbon-components-svelte": "^0.63.0",
+    "carbon-components-svelte": "^0.63.4",
     "carbon-preprocess-svelte": "^0.9.0",
     "snowpack": "^3.8.8"
   }
