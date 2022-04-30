@@ -1,9 +1,14 @@
 <script>
   import { DataTable } from "carbon-components-svelte";
+
+  let selectedRowIds = [];
+
+  $: console.log("selectedRowIds", selectedRowIds);
 </script>
 
 <DataTable
   batchSelection
+  bind:selectedRowIds
   headers="{[
     { key: 'name', value: 'Name' },
     { key: 'port', value: 'Port' },
