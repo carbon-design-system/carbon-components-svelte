@@ -20,6 +20,7 @@ const component_api_by_name = component_api.components.reduce((a, c) => {
 function createImports(source) {
   const inlineComponents = new Set();
   const icons = new Set();
+  const actions = new Set();
 
   // heuristic to guess if the inline component or expression name is a Carbon icon
   const isIcon = (text) =>
@@ -40,15 +41,20 @@ function createImports(source) {
         ) {
           icons.add(node.expression.name);
         }
+      } else if (node.type === "Action") {
+        actions.add(node.name);
       }
     },
   });
 
-  const ccs_imports = Array.from(inlineComponents.keys());
+  const action_imports = Array.from(actions.keys());
+  const ccs_imports = [
+    ...Array.from(inlineComponents.keys()),
+    ...action_imports,
+  ];
   const icon_imports = Array.from(icons.keys());
 
   if (ccs_imports.length === 0) return "";
-  // TODO: determine if action is used, and generate import accordingly
 
   return `
   <script>
