@@ -1077,9 +1077,15 @@ In the following example, each row in the sortable data table has an overflow me
 
 <FileSource src="/framed/DataTable/SelectableDataTable" />
 
-### Initial selected rows
+### Batch selection
 
 <FileSource src="/framed/DataTable/DataTableBatchSelection" />
+
+### Batch selection with initial selected rows
+
+Use the `selectedRowIds` prop to specify which rows should be selected.
+
+<FileSource src="/framed/DataTable/DataTableBatchSelectionInitial" />
 
 ### Selectable with batch actions
 
