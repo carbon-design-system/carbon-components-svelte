@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.63.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.4) - 2022-04-30
+
+**Fixes**
+
+- add missing `"2x3"` ratio value to `AspectRatio`
+- fix typo in `ToolbarSearch` shouldFilterRows type annotation
+
+**Documentation**
+
+- correctly generate icon, action imports in examples
+- remove unnecessary `tooltipBodyId` in `Tooltip` examples
+- add `DataTable` "Expandable and selectable" example
+- add `DataTable` "Batch selection" example
+
 ## [0.63.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.3) - 2022-04-28
 
 **Fixes**
