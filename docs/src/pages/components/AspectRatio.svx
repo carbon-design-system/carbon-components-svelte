@@ -13,6 +13,12 @@ Supported aspect ratios include `"2x1"`, `"16x9"`, `"4x3"`, `"1x1"`, `"3x4"`, `"
   2x1
 </AspectRatio>
 
+### Ratio 2x3
+
+<AspectRatio ratio="2x3">
+  2x3
+</AspectRatio>
+
 ### Ratio 16x9
 
 <AspectRatio ratio="16x9">
