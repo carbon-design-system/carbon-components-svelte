@@ -1410,6 +1410,10 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
   </svelte:fragment>
 </DataTable>
 
+### Expandable and selectable
+
+<FileSource src="/framed/DataTable/DataTableExpandableSelectable" />
+
 ### Skeleton
 
 <DataTableSkeleton />
