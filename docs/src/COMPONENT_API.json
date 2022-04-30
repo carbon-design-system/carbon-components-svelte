@@ -12767,7 +12767,7 @@
           "name": "shouldFilterRows",
           "kind": "let",
           "description": "Set to `true` to filter table rows using the search value.\n\nIf `true`, the default search excludes `id`, `cells` fields and\nonly does a basic comparison on string and number type cell values.\n\nTo implement your own client-side filtering, pass a function\nthat accepts a row and value and returns a boolean.",
-          "type": "boolean | ((rows: import(\"./DataTable.svelte\").DataTableRow, value: number | string) => boolean)",
+          "type": "boolean | ((row: import(\"./DataTable.svelte\").DataTableRow, value: number | string) => boolean)",
           "value": "false",
           "isFunction": false,
           "isFunctionDeclaration": false,

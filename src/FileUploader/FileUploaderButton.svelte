@@ -26,7 +26,7 @@
 
   /**
    * Specify the kind of file uploader button
-   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"}]
+   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"}
    */
   export let kind = "primary";
 
