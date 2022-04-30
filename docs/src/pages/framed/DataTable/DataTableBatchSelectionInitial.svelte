@@ -1,13 +1,13 @@
 <script>
   import { DataTable } from "carbon-components-svelte";
 
-  let selectedRowIds = [];
+  let selectedRowIds = [2, 4];
 
   $: console.log("selectedRowIds", selectedRowIds);
 </script>
 
 <DataTable
-  selectable
+  batchSelection
   bind:selectedRowIds
   headers="{[
     { key: 'name', value: 'Name' },

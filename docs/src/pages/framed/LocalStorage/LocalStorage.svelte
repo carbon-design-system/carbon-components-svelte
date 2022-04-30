@@ -22,6 +22,4 @@
 
 <br />
 
-<pre>
-  {JSON.stringify(events, null, 2)}
-</pre>
+<pre>{JSON.stringify(events, null, 2)}</pre>

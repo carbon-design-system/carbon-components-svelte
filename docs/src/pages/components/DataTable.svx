@@ -1077,9 +1077,15 @@ In the following example, each row in the sortable data table has an overflow me
 
 <FileSource src="/framed/DataTable/SelectableDataTable" />
 
-### Initial selected rows
+### Batch selection
 
 <FileSource src="/framed/DataTable/DataTableBatchSelection" />
+
+### Batch selection with initial selected rows
+
+Use the `selectedRowIds` prop to specify which rows should be selected.
+
+<FileSource src="/framed/DataTable/DataTableBatchSelectionInitial" />
 
 ### Selectable with batch actions
 
@@ -1150,9 +1156,7 @@ Use `nonSelectableRowIds` to specify the ids for rows that should not be selecta
   ]}"
 >
   <svelte:fragment slot="expanded-row" let:row>
-    <pre>
-      {JSON.stringify(row, null, 2)}
-    </pre>
+    <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>
 
@@ -1221,9 +1225,7 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
   ]}"
 >
   <svelte:fragment slot="expanded-row" let:row>
-    <pre>
-      {JSON.stringify(row, null, 2)}
-    </pre>
+    <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>
 
@@ -1282,9 +1284,7 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
   ]}"
 >
   <svelte:fragment slot="expanded-row" let:row>
-    <pre>
-      {JSON.stringify(row, null, 2)}
-    </pre>
+    <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>
 
@@ -1343,9 +1343,7 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
   ]}"
 >
   <svelte:fragment slot="expanded-row" let:row>
-    <pre>
-      {JSON.stringify(row, null, 2)}
-    </pre>
+    <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>
 
@@ -1404,11 +1402,13 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
   ]}"
 >
   <svelte:fragment slot="expanded-row" let:row>
-    <pre>
-      {JSON.stringify(row, null, 2)}
-    </pre>
+    <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>
+
+### Expandable and selectable
+
+<FileSource src="/framed/DataTable/DataTableExpandableSelectable" />
 
 ### Skeleton
 
