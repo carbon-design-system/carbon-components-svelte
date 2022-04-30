@@ -40,7 +40,7 @@ export interface ToolbarSearchProps
   shouldFilterRows?:
     | boolean
     | ((
-        rows: import("./DataTable.svelte").DataTableRow,
+        row: import("./DataTable.svelte").DataTableRow,
         value: number | string
       ) => boolean);
 
