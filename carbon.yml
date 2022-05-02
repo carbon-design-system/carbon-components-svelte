@@ -38,8 +38,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/breakpoint.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -64,8 +63,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/button-set.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -89,8 +87,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/clickable-tile.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -122,8 +119,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/composed-modal.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -146,8 +142,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/context-menu.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -198,8 +193,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/expandable-tile.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -223,8 +217,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/fluid-form.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -280,8 +273,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/inline-loading.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -308,13 +300,12 @@ assets:
         action: link
         url: https://carbon-components-svelte.onrender.com/components/Loading
   local-storage:
-    name: local-storage
+    name: Local storage
     status: stable
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/local-storage.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -356,8 +347,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/ordered-list.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -402,8 +392,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/password-input.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -469,8 +458,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/recursive-list.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -503,8 +491,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/selectable-tile.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -518,8 +505,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/skeleton-placeholder.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -534,8 +520,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/skeleton-text.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -628,8 +613,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/toast-notification.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -669,8 +653,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/tooltip-icon.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -692,8 +675,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/truncate.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -717,8 +699,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/unordered-list.svg'
     demoLinks:
       - type: storybook
         name: Storybook

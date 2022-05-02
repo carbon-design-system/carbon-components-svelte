@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>selectable-tile</title>
+    <defs>
+        <circle id="path-1" cx="8" cy="8" r="7"></circle>
+        <polygon id="path-3" points="7 10.75 4.5 8.25 5.295 7.5 7 9.175 10.705 5.5 11.5 6.29"></polygon>
+    </defs>
+    <g id="selectable-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(72.000000, 41.000000)" fill="#F3F3F3">
+            <rect id="Rectangle" x="0" y="0" width="176" height="98"></rect>
+            <rect id="Rectangle" stroke="#161616" x="0" y="0" width="176" height="98"></rect>
+        </g>
+        <rect id="Rectangle-Copy-4" fill="#C6C6C6" x="86" y="55" width="90" height="8"></rect>
+        <g id="Group" transform="translate(222.000000, 51.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="icon-color" fill="#000000" xlink:href="#path-1"></use>
+            <mask id="mask-4" fill="white">
+                <use xlink:href="#path-3"></use>
+            </mask>
+            <use id="icon-color" fill="#FFFFFF" xlink:href="#path-3"></use>
+        </g>
+    </g>
+</svg>
