@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>selectable-tile</title>
+    <title>radio-tile</title>
     <defs>
         <circle id="path-1" cx="6.5" cy="6.5" r="5.6875"></circle>
         <polygon id="path-3" points="5.6875 8.734375 3.65625 6.703125 4.3021875 6.09375 5.6875 7.4546875 8.6978125 4.46875 9.34375 5.110625"></polygon>
-        <circle id="path-5" cx="6.5" cy="6.5" r="5.6875"></circle>
-        <polygon id="path-7" points="5.6875 8.734375 3.65625 6.703125 4.3021875 6.09375 5.6875 7.4546875 8.6978125 4.46875 9.34375 5.110625"></polygon>
     </defs>
-    <g id="selectable-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="radio-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group-Copy-2" transform="translate(56.000000, 109.000000)" fill="#F3F3F3">
             <rect id="Rectangle" x="0" y="0" width="141" height="38"></rect>
             <rect id="Rectangle" x="0" y="0" width="208" height="38"></rect>
         </g>
         <g id="Group" transform="translate(56.000000, 33.000000)" fill="#F3F3F3">
             <rect id="Rectangle" x="0" y="0" width="141" height="38"></rect>
-            <rect id="Rectangle" stroke="#161616" stroke-width="0.8" x="0" y="0" width="208" height="38"></rect>
+            <rect id="Rectangle" x="0" y="0" width="208" height="38"></rect>
         </g>
         <g id="Group-Copy" transform="translate(56.000000, 71.000000)" fill="#F3F3F3">
             <rect id="Rectangle" x="0" y="0" width="141" height="38"></rect>
@@ -22,7 +20,7 @@
         </g>
         <rect id="Rectangle-Copy-4" fill="#C6C6C6" x="67" y="44" width="72" height="6"></rect>
         <rect id="Rectangle-Copy-5" fill="#C6C6C6" x="67" y="82" width="72" height="6"></rect>
-        <g id="icon/status/checkmark-filled/16" transform="translate(243.000000, 41.000000)">
+        <g id="icon/status/checkmark-filled/16" transform="translate(243.000000, 79.000000)">
             <mask id="mask-2" fill="white">
                 <use xlink:href="#path-1"></use>
             </mask>
@@ -31,16 +29,6 @@
                 <use xlink:href="#path-3"></use>
             </mask>
             <use id="icon-color" fill="#FFFFFF" xlink:href="#path-3"></use>
-        </g>
-        <g id="icon/status/checkmark-filled/16" transform="translate(243.000000, 79.000000)">
-            <mask id="mask-6" fill="white">
-                <use xlink:href="#path-5"></use>
-            </mask>
-            <use id="icon-color" fill="#000000" xlink:href="#path-5"></use>
-            <mask id="mask-8" fill="white">
-                <use xlink:href="#path-7"></use>
-            </mask>
-            <use id="icon-color" fill="#FFFFFF" xlink:href="#path-7"></use>
         </g>
         <rect id="Rectangle-Copy-6" fill="#C6C6C6" x="67" y="120" width="72" height="6"></rect>
     </g>

@@ -248,8 +248,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/image-loader.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -443,8 +442,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    #TODO: add thumbnail
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/radio-tile.svg'
     demoLinks:
       - type: storybook
         name: Storybook
