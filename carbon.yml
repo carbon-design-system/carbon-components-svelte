@@ -402,7 +402,6 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/PasswordInput
     #TODO: @aubrey to  check tag
     tags:
-      - contextual-navigation
       - form
       - contextual-navigation
   popover:
