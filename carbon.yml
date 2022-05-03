@@ -201,7 +201,8 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/ExpandableTile
     #TODO: @aubrey check tag
     tags:
-      - input-control
+      - data-display
+      - content-element
   file-uploader:
     status: stable
     framework: svelte
