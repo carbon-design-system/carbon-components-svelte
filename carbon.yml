@@ -259,6 +259,7 @@ assets:
     tags:
       - shell
       - media
+      - media
   inline-loading:
     status: stable
     framework: svelte
