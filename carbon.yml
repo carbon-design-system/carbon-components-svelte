@@ -683,7 +683,7 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/Truncate
     #TODO: @aubrey check tag
     tags:
-      - contextual-navigation
+      - data-display
   ui-shell-header:
     status: stable
     framework: svelte
