@@ -514,7 +514,7 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/SkeletonPlaceholder
     #TODO: @aubrey to check tag
     tags:
-      - shell
+      - system-feedback
   skeleton-text:
     name: Skeleton text
     status: stable
