@@ -44,7 +44,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/Breakpoint
-    #TODO: @aubrey check tag
     tags:
       - shell
   button:
@@ -69,7 +68,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/ButtonSet
-    #TODO: @aubrey check tag
     tags:
       - input-control
   checkbox:
@@ -93,7 +91,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/ClickableTile
-    #TODO: @aubrey to check
     tags:
       - contextual-navigation
   code-snippet:
@@ -148,7 +145,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/ContextMenu
-    #TODO: @aubrey to check tag
     tags:
       - input-control
       - contextual-navigation
@@ -199,7 +195,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/ExpandableTile
-    #TODO: @aubrey check tag
     tags:
       - data-display
       - content-element
@@ -255,7 +250,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/ImageLoader
-    #TODO: @aubrey check tag
     tags:
       - shell
       - media
@@ -313,7 +307,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/LocalStorage
-    #TODO: @aubrey to check tag
     tags:
       - input-control
   modal:
@@ -400,7 +393,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/PasswordInput
-    #TODO: @aubrey to  check tag
     tags:
       - form
       - contextual-navigation
@@ -465,7 +457,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/RecursiveList
-    #TODO: @aubrey to check tag
     tags:
       - data-display
   search:
@@ -512,7 +503,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/SkeletonPlaceholder
-    #TODO: @aubrey to check tag
     tags:
       - system-feedback
   skeleton-text:
@@ -681,7 +671,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/Truncate
-    #TODO: @aubrey check tag
     tags:
       - data-display
   ui-shell-header:
