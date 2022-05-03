@@ -46,7 +46,7 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/Breakpoint
     #TODO: @aubrey check tag
     tags:
-      - structural-navigation
+      - shell
   button:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/button/usage
