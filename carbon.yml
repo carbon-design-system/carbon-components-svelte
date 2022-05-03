@@ -258,6 +258,7 @@ assets:
     #TODO: @aubrey check tag
     tags:
       - shell
+      - media
   inline-loading:
     status: stable
     framework: svelte
