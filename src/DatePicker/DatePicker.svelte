@@ -253,14 +253,6 @@
         e.stopPropagation();
         calendar.close();
       }
-
-      if (
-        $hasCalendar &&
-        /INPUT/.test(document.activeElement?.tagName) &&
-        e.key === 'Enter'
-      ) {
-        e.stopPropagation();
-      }
     }}"
   >
     <slot />
