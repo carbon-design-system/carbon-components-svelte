@@ -95,7 +95,7 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/ClickableTile
     #TODO: @aubrey to check
     tags:
-      - input-control
+      - contextual-navigation
   code-snippet:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/code-snippet/usage
