@@ -467,7 +467,7 @@ assets:
         url: https://carbon-components-svelte.onrender.com/components/RecursiveList
     #TODO: @aubrey to check tag
     tags:
-      - input-control
+      - data-display
   search:
     status: stable
     framework: svelte
