@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>toast-notification</title>
+    <defs>
+        <circle id="path-1" cx="6.125" cy="6.125" r="6.125"></circle>
+        <polygon id="path-3" points="3.00668244 -0.342156092 3.99105744 -0.342156092 3.99105744 7.33596891 3.00668244 7.33596891"></polygon>
+    </defs>
+    <g id="toast-notification" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle-2-Copy-27" fill="#393939" x="60" y="56" width="200" height="68"></rect>
+        <rect id="Path-Copy-2" fill="#DA1E28" x="60" y="56" width="3" height="68"></rect>
+        <g id="Group" transform="translate(73.000000, 68.000000)">
+            <g id="Group" transform="translate(7.000000, 7.000000) scale(-1, 1) translate(-7.000000, -7.000000) ">
+                <g id="error--filled" transform="translate(0.875000, 0.875000)">
+                    <g id="icon-2">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="icon-color" fill="#DA1E28" xlink:href="#path-1"></use>
+                    </g>
+                    <g id="icon-1" transform="translate(2.625000, 2.625000)">
+                        <mask id="mask-4" fill="white">
+                            <use xlink:href="#path-3"></use>
+                        </mask>
+                        <use id="icon-color" fill="#000000" transform="translate(3.498870, 3.496906) rotate(-45.000000) translate(-3.498870, -3.496906) " xlink:href="#path-3"></use>
+                    </g>
+                </g>
+                <rect id="transparent-rectangle" x="0" y="0" width="14" height="14"></rect>
+            </g>
+        </g>
+        <rect id="Rectangle-Copy-14" fill="#F4F4F4" x="95" y="72" width="71.1191279" height="5"></rect>
+        <rect id="Rectangle-Copy-23" fill="#E0E0E0" x="95" y="105" width="93.8444444" height="5"></rect>
+        <rect id="Rectangle-Copy-24" fill="#E0E0E0" x="95" y="82" width="123" height="5"></rect>
+    </g>
+</svg>

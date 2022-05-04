@@ -1,0 +1,699 @@
+# yaml-language-server: $schema=https://unpkg.com/@carbon-platform/schemas@v1/carbon-resources.schema.json
+library:
+  id: carbon-components-svelte
+  name: Carbon Components Svelte
+  description: Svelte implementation of Carbon Components.
+  externalDocsUrl: https://carbon-components-svelte.onrender.com
+  inherits: carbon-styles
+assets:
+  accordion:
+    status: stable
+    externalDocsUrl: https://www.carbondesignsystem.com/components/accordion/usage
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Accordion
+  aspect-ratio:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/AspectRatio
+  breadcrumb:
+    status: stable
+    externalDocsUrl: https://www.carbondesignsystem.com/components/breadcrumb/usage
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Breadcrumb
+  breakpoint:
+    name: Breakpoint
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/breakpoint.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Breakpoint
+    tags:
+      - shell
+  button:
+    status: stable
+    externalDocsUrl: https://www.carbondesignsystem.com/components/button/usage
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Button
+  button-set:
+    name: Button set
+    description: Buttons in a button set are juxtaposed by default.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/button-set.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ButtonSet
+    tags:
+      - input-control
+  checkbox:
+    status: stable
+    externalDocsUrl: https://www.carbondesignsystem.com/components/checkbox/usage
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Checkbox
+  clickable-tile:
+    name: Clickable tile
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/clickable-tile.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ClickableTile
+    tags:
+      - contextual-navigation
+  code-snippet:
+    status: stable
+    externalDocsUrl: https://www.carbondesignsystem.com/components/code-snippet/usage
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/CodeSnippet
+  combo-box:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ComboBox
+  composed-modal:
+    name: Composed modal
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/composed-modal.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ComposedModal
+    tags:
+      - input-control
+  content-switcher:
+    status: stable
+    externalDocsUrl: https://www.carbondesignsystem.com/components/content-switcher/usage
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ContentSwitcher
+  context-menu:
+    name: Context menu
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/context-menu.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ContextMenu
+    tags:
+      - input-control
+      - contextual-navigation
+  copy-button:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/CopyButton
+  data-table:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/data-table/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/DataTable
+  date-picker:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/date-picker/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/DatePicker
+  dropdown:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/dropdown/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Dropdown
+  expandable-tile:
+    name: Expandable tile
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/expandable-tile.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ExpandableTile
+    tags:
+      - data-display
+      - content-element
+  file-uploader:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/file-uploader/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/FileUploader
+  fluid-form:
+    name: Fluid form
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/fluid-form.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/FluidForm
+    tags:
+      - form
+  form:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/form/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Form
+  grid:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Grid
+  image-loader:
+    name: Image loader
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/image-loader.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ImageLoader
+    tags:
+      - shell
+      - media
+      - media
+  inline-loading:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/inline-loading/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/InlineLoading
+  inline-notification:
+    name: Inline notification
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/inline-loading.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/InlineNotification
+    tags:
+      - system-feedback
+  link:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/link/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Link
+  loading:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/loading/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Loading
+  local-storage:
+    name: Local storage
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/local-storage.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/LocalStorage
+    tags:
+      - input-control
+  modal:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/modal/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Modal
+  multiselect:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/dropdown/usage/#multiselect
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/MultiSelect
+  number-input:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/number-input/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/NumberInput
+  ordered-list:
+    name: Ordered list
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/ordered-list.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/OrderedList
+    tags:
+      - data-display
+  overflow-menu:
+    name: Overflow menu
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: ''
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/OverflowMenu
+    tags:
+      - input-control
+  pagination:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/pagination/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Pagination
+  pagination-nav:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/PaginationNav
+  password-input:
+    name: Password input
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/password-input.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/PasswordInput
+    tags:
+      - form
+      - contextual-navigation
+  popover:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Popover
+  progress-bar:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/progress-bar/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ProgressBar
+  progress-indicator:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/progress-indicator/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ProgressIndicator
+  radio-button:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/radio-button/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/RadioButton
+  radio-tile:
+    name: Radio tile
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/radio-tile.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/RadioTile
+    tags:
+      - input-control
+  recursive-list:
+    name: Recursive list
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/recursive-list.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/RecursiveList
+    tags:
+      - data-display
+  search:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/search/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Search
+  select:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/select/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Select
+  selectable-tile:
+    name: Selectable tile
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/selectable-tile.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/SelectableTile
+    tags:
+      - input-control
+  skeleton-placeholder:
+    name: Skeleton placeholder
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/skeleton-placeholder.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/SkeletonPlaceholder
+    tags:
+      - system-feedback
+  skeleton-text:
+    name: Skeleton text
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/skeleton-text.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/SkeletonText
+    tags:
+      - shell
+  slider:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/slider/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Slider
+  structured-list:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/structured-list/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/StructuredList
+  tabs:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/tabs/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Tabs
+  tag:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/tag/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Tag
+  text-area:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/TextArea
+  text-input:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/text-input/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/TextInput
+  theme:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Theme
+  tile:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/tile/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Tile
+  time-picker:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/TimePicker
+  toast-notification:
+    name: Toast notification
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/toast-notification.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/ToastNotification
+    tags:
+      - input-control
+  toggle:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/toggle/usage 
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Toggle
+  tooltip:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/tooltip/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Tooltip
+  tooltip-definition:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/TooltipDefinition
+  tooltip-icon:
+    name: Tootlip icon
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tooltip-icon.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/TooltipIcon
+    tags:
+      - content-element
+  tree-view:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/TreeView
+  truncate:
+    name: Truncate
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/truncate.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/Truncate
+    tags:
+      - data-display
+  ui-shell-header:
+    status: stable
+    framework: svelte
+    externalDocsUrl: https://www.carbondesignsystem.com/components/UI-shell-header/usage
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/UIShell
+  unordered-list:
+    name: Unordered list
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/unordered-list.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/UnorderedList
+    tags:
+      - data-display
+      

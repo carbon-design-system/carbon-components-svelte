@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>local-storage</title>
+    <g id="local-storage" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Button" transform="translate(86.000000, 106.000000)">
+            <rect id="Background" fill="#0F62FE" x="0" y="0" width="148" height="32"></rect>
+            <text id="Label" font-family="IBMPlexSans, IBM Plex Sans" font-size="12" font-weight="normal" line-spacing="16" letter-spacing="0.137142854" fill="#FFFFFF">
+                <tspan x="16" y="20">Clear storage</tspan>
+            </text>
+        </g>
+        <g id="Group" transform="translate(86.000000, 60.000000)">
+            <g>
+                <rect id="pill" fill="#8D8D8D" x="0" y="0" width="32" height="16" rx="8"></rect>
+                <circle id="handle" fill="#FFFFFF" cx="8" cy="8" r="5"></circle>
+            </g>
+            <text id="Text" font-family="IBMPlexSans, IBM Plex Sans" font-size="14" font-weight="normal" line-spacing="18" letter-spacing="0.159999996" fill="#161616">
+                <tspan x="40" y="13">Off</tspan>
+            </text>
+        </g>
+        <rect id="Rectangle-3-Copy-6" fill="#A8A8A8" opacity="0.754768008" x="86" y="42" width="70" height="5"></rect>
+    </g>
+</svg>
