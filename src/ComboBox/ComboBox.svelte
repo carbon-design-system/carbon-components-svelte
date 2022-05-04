@@ -87,7 +87,7 @@
    * Defaults to "Clear selected item" since a combo box can only have on selection.
    * @type {(id: "clearSelection") => string}
    */
-  export let translateWithIdInput = undefined;
+  export let translateWithIdSelection = undefined;
 
   /** Set an id for the list box component */
   export let id = "ccs-" + Math.random().toString(36);
@@ -333,7 +333,7 @@
         <ListBoxSelection
           on:clear
           on:clear="{clear}"
-          translateWithId="{translateWithIdInput}"
+          translateWithId="{translateWithIdSelection}"
           disabled="{disabled}"
           open="{open}"
         />
