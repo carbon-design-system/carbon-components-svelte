@@ -14,6 +14,10 @@
   on:select="{(e) => {
     console.log(e.detail.selectedId);
   }}"
+  translateWithId="{(id) => {
+    console.log(id); // "open" | "close"
+    return id;
+  }}"
   let:item
   let:index
 >
