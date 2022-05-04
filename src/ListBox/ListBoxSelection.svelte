@@ -41,9 +41,12 @@
     ctx.declareRef({ key: "selection", ref });
   }
 
-  $: description = selectionCount
-    ? translateWithId("clearAll")
-    : translateWithId("clearSelection");
+  $: translationId = selectionCount
+    ? translationIds.clearAll
+    : translationIds.clearSelection;
+
+  $: description =
+    translateWithId?.(translationId) ?? defaultTranslations[translationId];
 </script>
 
 {#if selectionCount !== undefined}

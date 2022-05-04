@@ -22,7 +22,9 @@
     [translationIds.open]: "Open menu",
   };
 
-  $: description = open ? translateWithId("close") : translateWithId("open");
+  $: translationId = open ? translationIds.close : translationIds.open;
+  $: description =
+    translateWithId?.(translationId) ?? defaultTranslations[translationId];
 </script>
 
 <div
