@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.63.6](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.6) - 2022-05-04
+
+**Fixes**
+
+- add `translateWithIdsSelection` prop to `ComboBox`, `MultiSelect` to customize clear selection description
+- use default values in `ListBoxMenuIcon` if `translateWithIds` is undefined
+- use default values in `ListBoxSelection` if `translateWithIds` is undefined
+
 ## [0.63.5](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.5) - 2022-05-02
 
 **Fixes**
