@@ -121,10 +121,13 @@ export interface DropdownProps
   hideLabel?: boolean;
 
   /**
-   * Override the default translation ids
+   * Override the chevron icon label based on the open state.
+   * Defaults to "Open menu" when closed and "Close menu" when open
    * @default undefined
    */
-  translateWithId?: (id: any) => string;
+  translateWithId?: (
+    id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId
+  ) => string;
 
   /**
    * Set an id for the list box component
