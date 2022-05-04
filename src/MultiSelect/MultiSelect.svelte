@@ -100,6 +100,18 @@
    */
   export let translateWithId = undefined;
 
+  /**
+   * Override the default translation ids for the menu
+   * @type {(id: any) => string}
+   */
+  export let translateWithIdMenu = undefined;
+
+  /**
+   * Override the default translation ids for the input
+   * @type {(id: any) => string}
+   */
+  export let translateWithIdInput = undefined;
+
   /** Specify the title text */
   export let titleText = "";
 
@@ -361,7 +373,7 @@
       }}"
       id="{id}"
       disabled="{disabled}"
-      translateWithId="{translateWithId}"
+      translateWithId="{translateWithIdMenu}"
     >
       {#if checked.length > 0}
         <ListBoxSelection
@@ -374,7 +386,7 @@
             }));
             if (fieldRef) fieldRef.blur();
           }}"
-          translateWithId="{translateWithId}"
+          translateWithId="{translateWithIdInput}"
           disabled="{disabled}"
         />
       {/if}
@@ -439,7 +451,7 @@
               inputValue = '';
               open = false;
             }}"
-            translateWithId="{translateWithId}"
+            translateWithId="{translateWithIdInput}"
             disabled="{disabled}"
             open="{open}"
           />
