@@ -119,6 +119,18 @@ export interface ComboBoxProps
   translateWithId?: (id: any) => string;
 
   /**
+   * Override the default translation ids for the menu
+   * @default undefined
+   */
+  translateWithIdMenu?: (id: any) => string;
+
+  /**
+   * Override the default translation ids for the input
+   * @default undefined
+   */
+  translateWithIdInput?: (id: any) => string;
+
+  /**
    * Set an id for the list box component
    * @default "ccs-" + Math.random().toString(36)
    */

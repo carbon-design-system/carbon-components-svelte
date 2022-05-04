@@ -129,6 +129,18 @@ export interface MultiSelectProps
   translateWithId?: (id: any) => string;
 
   /**
+   * Override the default translation ids for the menu
+   * @default undefined
+   */
+  translateWithIdMenu?: (id: any) => string;
+
+  /**
+   * Override the default translation ids for the input
+   * @default undefined
+   */
+  translateWithIdInput?: (id: any) => string;
+
+  /**
    * Specify the title text
    * @default ""
    */

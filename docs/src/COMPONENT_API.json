@@ -1563,6 +1563,26 @@
           "reactive": false
         },
         {
+          "name": "translateWithIdMenu",
+          "kind": "let",
+          "description": "Override the default translation ids for the menu",
+          "type": "(id: any) => string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "translateWithIdInput",
+          "kind": "let",
+          "description": "Override the default translation ids for the input",
+          "type": "(id: any) => string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "id",
           "kind": "let",
           "description": "Set an id for the list box component",
@@ -6584,6 +6604,26 @@
           "name": "translateWithId",
           "kind": "let",
           "description": "Override the default translation ids",
+          "type": "(id: any) => string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "translateWithIdMenu",
+          "kind": "let",
+          "description": "Override the default translation ids for the menu",
+          "type": "(id: any) => string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "translateWithIdInput",
+          "kind": "let",
+          "description": "Override the default translation ids for the input",
           "type": "(id: any) => string",
           "isFunction": false,
           "isFunctionDeclaration": false,
