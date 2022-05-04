@@ -126,7 +126,7 @@ export interface ComboBoxProps
    * Defaults to "Clear selected item" since a combo box can only have on selection.
    * @default undefined
    */
-  translateWithIdInput?: (id: "clearSelection") => string;
+  translateWithIdSelection?: (id: "clearSelection") => string;
 
   /**
    * Set an id for the list box component

@@ -133,10 +133,10 @@ export interface MultiSelectProps
 
   /**
    * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item" and "Clear all items"
+   * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected
    * @default undefined
    */
-  translateWithIdInput?: (
+  translateWithIdSelection?: (
     id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId
   ) => string;
 
