@@ -102,12 +102,6 @@
   export let translateWithId = undefined;
 
   /**
-   * Override the default translation ids for the menu
-   * @type {(id: any) => string}
-   */
-  export let translateWithIdMenu = undefined;
-
-  /**
    * Override the label of the clear button when the input has a selection.
    * Defaults to "Clear selected item" and "Clear all items"
    * @type {(id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string}
@@ -375,7 +369,7 @@
       }}"
       id="{id}"
       disabled="{disabled}"
-      translateWithId="{translateWithIdMenu}"
+      translateWithId="{translateWithId}"
     >
       {#if checked.length > 0}
         <ListBoxSelection
