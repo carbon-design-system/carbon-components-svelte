@@ -81,6 +81,18 @@
    */
   export let translateWithId = undefined;
 
+  /**
+   * Override the default translation ids for the menu
+   * @type {(id: any) => string}
+   */
+  export let translateWithIdMenu = undefined;
+
+  /**
+   * Override the default translation ids for the input
+   * @type {(id: any) => string}
+   */
+  export let translateWithIdInput = undefined;
+
   /** Set an id for the list box component */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -231,7 +243,7 @@
       }}"
       id="{id}"
       disabled="{disabled}"
-      translateWithId="{translateWithId}"
+      translateWithId="{translateWithIdMenu}"
     >
       <input
         bind:this="{ref}"
@@ -325,7 +337,7 @@
         <ListBoxSelection
           on:clear
           on:clear="{clear}"
-          translateWithId="{translateWithId}"
+          translateWithId="{translateWithIdInput}"
           disabled="{disabled}"
           open="{open}"
         />

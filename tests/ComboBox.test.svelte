@@ -23,6 +23,15 @@
   on:select="{(e) => {
     console.log(e.detail.selectedId);
   }}"
+  translateWithId="{(id) => {
+    return id;
+  }}"
+  translateWithIdMenu="{(id) => {
+    return id;
+  }}"
+  translateWithIdInput="{(id) => {
+    return id;
+  }}"
   let:item
   let:index
 >
