@@ -21,12 +21,14 @@
     e.detail; // number | FocusEvent
   }}"
   translateWithId="{(id) => {
+    console.log(id); // "open" | "close"
     return id;
   }}"
   translateWithIdMenu="{(id) => {
     return id;
   }}"
   translateWithIdInput="{(id) => {
+    console.log(id); // "clearAll" | "clearSelection"
     return id;
   }}"
   let:item

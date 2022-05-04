@@ -76,20 +76,23 @@
   export let shouldFilterItem = () => true;
 
   /**
-   * Override the default translation ids
-   * @type {(id: any) => string}
+   * Override the chevron icon label based on the open state.
+   * Defaults to "Open menu" when closed and "Close menu" when open
+   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
    */
   export let translateWithId = undefined;
 
   /**
-   * Override the default translation ids for the menu
+   * Override the menu label based on the open state.
+   * Defaults to "Open menu" and "Close menu"
    * @type {(id: any) => string}
    */
   export let translateWithIdMenu = undefined;
 
   /**
-   * Override the default translation ids for the input
-   * @type {(id: any) => string}
+   * Override the label of the clear button when the input has a selection.
+   * Defaults to "Clear selected item" since a combo box can only have on selection.
+   * @type {(id: "clearSelection") => string}
    */
   export let translateWithIdInput = undefined;
 
