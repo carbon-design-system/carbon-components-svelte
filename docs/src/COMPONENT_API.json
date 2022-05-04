@@ -1563,19 +1563,9 @@
           "reactive": false
         },
         {
-          "name": "translateWithIdMenu",
+          "name": "translateWithIdSelection",
           "kind": "let",
-          "description": "Override the menu label based on the open state.\nDefaults to \"Open menu\" and \"Close menu\"",
-          "type": "(id: any) => string",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "translateWithIdInput",
-          "kind": "let",
-          "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\"",
+          "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\" since a combo box can only have on selection.",
           "type": "(id: \"clearSelection\") => string",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -6611,19 +6601,9 @@
           "reactive": false
         },
         {
-          "name": "translateWithIdMenu",
+          "name": "translateWithIdSelection",
           "kind": "let",
-          "description": "Override the default translation ids for the menu",
-          "type": "(id: any) => string",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "translateWithIdInput",
-          "kind": "let",
-          "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\" and \"Clear all items\"",
+          "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\" and \"Clear all items\" if more than one item is selected",
           "type": "(id: import(\"../ListBox/ListBoxSelection.svelte\").ListBoxSelectionTranslationId) => string",
           "isFunction": false,
           "isFunctionDeclaration": false,

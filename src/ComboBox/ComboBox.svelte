@@ -83,18 +83,11 @@
   export let translateWithId = undefined;
 
   /**
-   * Override the menu label based on the open state.
-   * Defaults to "Open menu" and "Close menu"
-   * @type {(id: any) => string}
-   */
-  export let translateWithIdMenu = undefined;
-
-  /**
    * Override the label of the clear button when the input has a selection.
    * Defaults to "Clear selected item" since a combo box can only have on selection.
    * @type {(id: "clearSelection") => string}
    */
-  export let translateWithIdInput = undefined;
+  export let translateWithIdSelection = undefined;
 
   /** Set an id for the list box component */
   export let id = "ccs-" + Math.random().toString(36);
@@ -246,7 +239,7 @@
       }}"
       id="{id}"
       disabled="{disabled}"
-      translateWithId="{translateWithIdMenu}"
+      translateWithId="{translateWithId}"
     >
       <input
         bind:this="{ref}"
@@ -340,7 +333,7 @@
         <ListBoxSelection
           on:clear
           on:clear="{clear}"
-          translateWithId="{translateWithIdInput}"
+          translateWithId="{translateWithIdSelection}"
           disabled="{disabled}"
           open="{open}"
         />
