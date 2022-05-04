@@ -132,12 +132,6 @@ export interface MultiSelectProps
   ) => string;
 
   /**
-   * Override the default translation ids for the menu
-   * @default undefined
-   */
-  translateWithIdMenu?: (id: any) => string;
-
-  /**
    * Override the label of the clear button when the input has a selection.
    * Defaults to "Clear selected item" and "Clear all items"
    * @default undefined

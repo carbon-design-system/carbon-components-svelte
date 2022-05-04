@@ -122,15 +122,8 @@ export interface ComboBoxProps
   ) => string;
 
   /**
-   * Override the menu label based on the open state.
-   * Defaults to "Open menu" and "Close menu"
-   * @default undefined
-   */
-  translateWithIdMenu?: (id: any) => string;
-
-  /**
    * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item"
+   * Defaults to "Clear selected item" since a combo box can only have on selection.
    * @default undefined
    */
   translateWithIdInput?: (id: "clearSelection") => string;
