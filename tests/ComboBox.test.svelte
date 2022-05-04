@@ -27,7 +27,7 @@
     console.log(id); // "open" | "close"
     return id;
   }}"
-  translateWithIdInput="{(id) => {
+  translateWithIdSelection="{(id) => {
     console.log(id); // "clearSelection"
     return id;
   }}"
