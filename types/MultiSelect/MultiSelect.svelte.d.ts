@@ -123,10 +123,13 @@ export interface MultiSelectProps
     | (() => void);
 
   /**
-   * Override the default translation ids
+   * Override the chevron icon label based on the open state.
+   * Defaults to "Open menu" when closed and "Close menu" when open
    * @default undefined
    */
-  translateWithId?: (id: any) => string;
+  translateWithId?: (
+    id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId
+  ) => string;
 
   /**
    * Override the default translation ids for the menu
@@ -135,10 +138,13 @@ export interface MultiSelectProps
   translateWithIdMenu?: (id: any) => string;
 
   /**
-   * Override the default translation ids for the input
+   * Override the label of the clear button when the input has a selection.
+   * Defaults to "Clear selected item" and "Clear all items"
    * @default undefined
    */
-  translateWithIdInput?: (id: any) => string;
+  translateWithIdInput?: (
+    id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId
+  ) => string;
 
   /**
    * Specify the title text
