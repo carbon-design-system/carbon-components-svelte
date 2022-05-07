@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.63.8](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.8) - 2022-05-07
+
+**Fixes**
+
+- elevate `Toolbar` z-index so overflow menu is not clipped by the table
+
 ## [0.63.7](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.7) - 2022-05-04
 
 **Fixes**
