@@ -33,6 +33,8 @@
     <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust}" />
     <HeaderAction
       bind:isOpen
+      on:open
+      on:close
       transition="{{ duration: 400, easing: quintOut }}"
     >
       <HeaderPanelLinks>
