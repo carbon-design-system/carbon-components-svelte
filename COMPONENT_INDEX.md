@@ -563,14 +563,16 @@ None.
 
 ### Events
 
-| Event name   | Type       | Detail |
-| :----------- | :--------- | :----- |
-| click        | forwarded  | --     |
-| mouseover    | forwarded  | --     |
-| mouseenter   | forwarded  | --     |
-| mouseleave   | forwarded  | --     |
-| animationend | forwarded  | --     |
-| copy         | dispatched | --     |
+| Event name   | Type       | Detail            |
+| :----------- | :--------- | :---------------- |
+| expand       | dispatched | <code>null</code> |
+| collapse     | dispatched | <code>null</code> |
+| click        | forwarded  | --                |
+| mouseover    | forwarded  | --                |
+| mouseenter   | forwarded  | --                |
+| mouseleave   | forwarded  | --                |
+| animationend | forwarded  | --                |
+| copy         | dispatched | --                |
 
 ## `CodeSnippetSkeleton`
 

@@ -1158,6 +1158,8 @@
         }
       ],
       "events": [
+        { "type": "dispatched", "name": "expand", "detail": "null" },
+        { "type": "dispatched", "name": "collapse", "detail": "null" },
         {
           "type": "forwarded",
           "name": "click",
