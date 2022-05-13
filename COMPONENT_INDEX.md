@@ -572,7 +572,7 @@ None.
 | mouseenter   | forwarded  | --                |
 | mouseleave   | forwarded  | --                |
 | animationend | forwarded  | --                |
-| copy         | dispatched | --                |
+| copy         | dispatched | <code>null</code> |
 
 ## `CodeSnippetSkeleton`
 
@@ -726,10 +726,10 @@ export interface ComboBoxItem {
 | mouseover             | forwarded  | --                              |
 | mouseenter            | forwarded  | --                              |
 | mouseleave            | forwarded  | --                              |
-| submit                | dispatched | --                              |
-| click:button--primary | dispatched | --                              |
-| close                 | dispatched | --                              |
-| open                  | dispatched | --                              |
+| submit                | dispatched | <code>null</code>               |
+| click:button--primary | dispatched | <code>null</code>               |
+| close                 | dispatched | <code>null</code>               |
+| open                  | dispatched | <code>null</code>               |
 
 ## `Content`
 
@@ -799,7 +799,7 @@ None.
 | open       | dispatched | <code>HTMLElement</code> |
 | click      | forwarded  | --                       |
 | keydown    | forwarded  | --                       |
-| close      | dispatched | --                       |
+| close      | dispatched | <code>null</code>        |
 
 ## `ContextMenuDivider`
 
@@ -862,12 +862,12 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| keydown    | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| click      | dispatched | --     |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| keydown    | forwarded  | --                |
+| mouseenter | forwarded  | --                |
+| mouseleave | forwarded  | --                |
+| click      | dispatched | <code>null</code> |
 
 ## `ContextMenuRadioGroup`
 
@@ -906,11 +906,11 @@ None.
 
 ### Events
 
-| Event name   | Type       | Detail |
-| :----------- | :--------- | :----- |
-| click        | forwarded  | --     |
-| animationend | forwarded  | --     |
-| copy         | dispatched | --     |
+| Event name   | Type       | Detail            |
+| :----------- | :--------- | :---------------- |
+| click        | forwarded  | --                |
+| animationend | forwarded  | --                |
+| copy         | dispatched | <code>null</code> |
 
 ## `DataTable`
 
@@ -1888,13 +1888,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| success    | dispatched | --     |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| click      | forwarded  | --                |
+| mouseover  | forwarded  | --                |
+| mouseenter | forwarded  | --                |
+| mouseleave | forwarded  | --                |
+| success    | dispatched | <code>null</code> |
 
 ## `InlineNotification`
 
@@ -2235,10 +2235,10 @@ None.
 | mouseover               | forwarded  | --                              |
 | mouseenter              | forwarded  | --                              |
 | mouseleave              | forwarded  | --                              |
-| submit                  | dispatched | --                              |
-| click:button--primary   | dispatched | --                              |
-| close                   | dispatched | --                              |
-| open                    | dispatched | --                              |
+| submit                  | dispatched | <code>null</code>               |
+| click:button--primary   | dispatched | <code>null</code>               |
+| close                   | dispatched | <code>null</code>               |
+| open                    | dispatched | <code>null</code>               |
 
 ## `ModalBody`
 
@@ -2785,9 +2785,9 @@ None.
 
 ### Events
 
-| Event name    | Type       | Detail |
-| :------------ | :--------- | :----- |
-| click:outside | dispatched | --     |
+| Event name    | Type       | Detail            |
+| :------------ | :--------- | :---------------- |
+| click:outside | dispatched | <code>null</code> |
 
 ## `ProgressBar`
 
@@ -3101,7 +3101,7 @@ None.
 | blur       | forwarded  | --                |
 | keydown    | forwarded  | --                |
 | keyup      | forwarded  | --                |
-| clear      | dispatched | --                |
+| clear      | dispatched | <code>null</code> |
 
 ## `SearchSkeleton`
 
@@ -3966,13 +3966,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| click      | forwarded  | --                |
+| mouseover  | forwarded  | --                |
+| mouseenter | forwarded  | --                |
+| mouseleave | forwarded  | --                |
+| close      | dispatched | <code>null</code> |
 
 ## `TagSkeleton`
 

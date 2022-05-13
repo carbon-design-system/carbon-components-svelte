@@ -75,7 +75,7 @@ export default class ContextMenuOption extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    click: CustomEvent<any>;
+    click: CustomEvent<null>;
   },
   { default: {}; icon: {}; labelText: {}; shortcutText: {} }
 > {}

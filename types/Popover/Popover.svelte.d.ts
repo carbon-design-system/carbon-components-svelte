@@ -60,6 +60,6 @@ export interface PopoverProps
 
 export default class Popover extends SvelteComponentTyped<
   PopoverProps,
-  { ["click:outside"]: CustomEvent<any> },
+  { ["click:outside"]: CustomEvent<null> },
   { default: {} }
 > {}

@@ -42,7 +42,7 @@ export default class ContextMenu extends SvelteComponentTyped<
     open: CustomEvent<HTMLElement>;
     click: WindowEventMap["click"];
     keydown: WindowEventMap["keydown"];
-    close: CustomEvent<any>;
+    close: CustomEvent<null>;
   },
   { default: {} }
 > {}

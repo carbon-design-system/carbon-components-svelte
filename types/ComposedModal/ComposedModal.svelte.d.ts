@@ -55,10 +55,10 @@ export default class ComposedModal extends SvelteComponentTyped<
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    submit: CustomEvent<any>;
-    ["click:button--primary"]: CustomEvent<any>;
-    close: CustomEvent<any>;
-    open: CustomEvent<any>;
+    submit: CustomEvent<null>;
+    ["click:button--primary"]: CustomEvent<null>;
+    close: CustomEvent<null>;
+    open: CustomEvent<null>;
   },
   { default: {} }
 > {}

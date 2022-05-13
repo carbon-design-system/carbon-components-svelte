@@ -1185,7 +1185,7 @@
           "name": "animationend",
           "element": "CopyButton"
         },
-        { "type": "dispatched", "name": "copy" }
+        { "type": "dispatched", "name": "copy", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "CodeSnippetSkeleton" }
@@ -1759,10 +1759,14 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "submit" },
-        { "type": "dispatched", "name": "click:button--primary" },
-        { "type": "dispatched", "name": "close" },
-        { "type": "dispatched", "name": "open" }
+        { "type": "dispatched", "name": "submit", "detail": "null" },
+        {
+          "type": "dispatched",
+          "name": "click:button--primary",
+          "detail": "null"
+        },
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "dispatched", "name": "open", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -1893,7 +1897,7 @@
         { "type": "dispatched", "name": "open", "detail": "HTMLElement" },
         { "type": "forwarded", "name": "click", "element": "ul" },
         { "type": "forwarded", "name": "keydown", "element": "ul" },
-        { "type": "dispatched", "name": "close" }
+        { "type": "dispatched", "name": "close", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "ul" }
@@ -2078,7 +2082,7 @@
         { "type": "forwarded", "name": "keydown", "element": "li" },
         { "type": "forwarded", "name": "mouseenter", "element": "li" },
         { "type": "forwarded", "name": "mouseleave", "element": "li" },
-        { "type": "dispatched", "name": "click" }
+        { "type": "dispatched", "name": "click", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "li" }
@@ -2179,7 +2183,7 @@
       "events": [
         { "type": "forwarded", "name": "click", "element": "button" },
         { "type": "forwarded", "name": "animationend", "element": "button" },
-        { "type": "dispatched", "name": "copy" }
+        { "type": "dispatched", "name": "copy", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "button" }
@@ -5135,7 +5139,7 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "success" }
+        { "type": "dispatched", "name": "success", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -6172,10 +6176,14 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "submit" },
-        { "type": "dispatched", "name": "click:button--primary" },
-        { "type": "dispatched", "name": "close" },
-        { "type": "dispatched", "name": "open" }
+        { "type": "dispatched", "name": "submit", "detail": "null" },
+        {
+          "type": "dispatched",
+          "name": "click:button--primary",
+          "detail": "null"
+        },
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "dispatched", "name": "open", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -8254,7 +8262,9 @@
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [{ "type": "dispatched", "name": "click:outside" }],
+      "events": [
+        { "type": "dispatched", "name": "click:outside", "detail": "null" }
+      ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
@@ -9270,7 +9280,7 @@
         { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
-        { "type": "dispatched", "name": "clear" }
+        { "type": "dispatched", "name": "clear", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "SearchSkeleton" }
@@ -11327,7 +11337,7 @@
         { "type": "forwarded", "name": "mouseover", "element": "TagSkeleton" },
         { "type": "forwarded", "name": "mouseenter", "element": "TagSkeleton" },
         { "type": "forwarded", "name": "mouseleave", "element": "TagSkeleton" },
-        { "type": "dispatched", "name": "close" }
+        { "type": "dispatched", "name": "close", "detail": "null" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div | span" }
