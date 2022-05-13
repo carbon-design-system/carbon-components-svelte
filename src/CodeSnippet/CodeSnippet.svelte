@@ -1,5 +1,10 @@
 <script>
   /**
+   * @event {null} expand
+   * @event {null} collapse
+   */
+
+  /**
    * Set the type of code snippet
    * @type {"single" | "inline" | "multi"}
    */
@@ -117,6 +122,7 @@
     if (code === undefined) setShowMoreLess();
     if (code) tick().then(setShowMoreLess);
   }
+  $: if (type === "multi") dispatch(expanded ? "expand" : "collapse");
 
   onMount(() => {
     return () => clearTimeout(timeout);
