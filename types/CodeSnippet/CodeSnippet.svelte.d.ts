@@ -127,7 +127,7 @@ export default class CodeSnippet extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     animationend: WindowEventMap["animationend"];
-    copy: CustomEvent<any>;
+    copy: CustomEvent<null>;
   },
   { default: {} }
 > {}

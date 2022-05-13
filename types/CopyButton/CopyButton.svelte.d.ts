@@ -39,7 +39,7 @@ export default class CopyButton extends SvelteComponentTyped<
   {
     click: WindowEventMap["click"];
     animationend: WindowEventMap["animationend"];
-    copy: CustomEvent<any>;
+    copy: CustomEvent<null>;
   },
   {}
 > {}
