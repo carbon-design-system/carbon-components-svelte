@@ -235,7 +235,7 @@
     {#if showMoreLess}
       <Button
         kind="ghost"
-        size="field"
+        size="small"
         class="bx--snippet-btn--expand"
         disabled="{disabled}"
         on:click="{() => {
