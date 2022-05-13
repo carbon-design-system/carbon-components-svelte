@@ -14,6 +14,8 @@
   on:animationend
   on:click
   on:copy
+  on:expand
+  on:collapse
 >
   yarn add -D carbon-components-svelte
 </CodeSnippet>
