@@ -1608,10 +1608,11 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| close      | dispatched | --     |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| open       | dispatched | <code>null</code> |
+| close      | dispatched | <code>null</code> |
+| click      | forwarded  | --                |
 
 ## `HeaderActionLink`
 

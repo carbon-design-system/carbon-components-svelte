@@ -4573,8 +4573,9 @@
         }
       ],
       "events": [
-        { "type": "forwarded", "name": "click", "element": "button" },
-        { "type": "dispatched", "name": "close" }
+        { "type": "dispatched", "name": "open", "detail": "null" },
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "forwarded", "name": "click", "element": "button" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "button" }
