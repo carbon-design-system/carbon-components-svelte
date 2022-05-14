@@ -60,6 +60,18 @@ To prevent text from being copied entirely, pass a no-op function to the `copy` 
 
 <CodeSnippet type="multi" {code} />
 
+### Expanded by default
+
+Use the `expanded` prop to control whether the multi-line code snippet is expanded or not.
+
+<CodeSnippet type="multi" {code} expanded />
+
+### Reactive example
+
+The multi-line code snippet also dispatches "expand" and "collapse" events.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetReactive" />
+
 ### Custom copy feedback text
 
 Use the `feedback` prop to override the default copy button feedback text.
@@ -67,6 +79,8 @@ Use the `feedback` prop to override the default copy button feedback text.
 <CodeSnippet type="multi" {code} feedback="Copied to clipboard" />
 
 ### Hidden copy button
+
+Set `hideCopyButton` to `true` to hide the copy button.
 
 <CodeSnippet type="multi" {code} hideCopyButton />
 
