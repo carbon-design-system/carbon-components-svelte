@@ -353,7 +353,7 @@
     <TableBody>
       {#each sorting ? displayedSortedRows : displayedRows as row, i (row.id)}
         <TableRow
-          id="row-{row.id}"
+          data-row="{row.id}"
           data-parent-row="{expandable ? true : undefined}"
           class="{selectedRowIds.includes(row.id)
             ? 'bx--data-table--selected'
