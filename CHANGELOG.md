@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.64.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.64.0) - 2022-05-14
+
+**Breaking Changes**
+
+- set `flatpickrProps.static` in `DatePicker` to be true by default
+- use data attribute instead of id for `DataTable` headers/rows
+
+**Features**
+
+- support custom column widths in `DataTable`
+- dispatch "expand" and "collapse" events in `CodeSnippet`
+
+**Fixes**
+
+- use `@see` tag for flatpickr options link in `DatePicker`
+- pressing "Enter" in `DatePicker` should update the value
+- dispatched event type without detail should be `null`, not `any`
+- type missing "open" event in `HeaderAction`
+- use small button in multi-line `CodeSnippet`
+
+**Documentation**
+
+- make calendar variants of `DatePicker` more prominent
+- add `DataTable` example "Custom column widths"
+- add `CodeSnippet` examples "Expanded by default" and "Reactive example"
+
 ## [0.63.8](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.8) - 2022-05-07
 
 **Fixes**
