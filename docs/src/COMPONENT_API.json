@@ -2751,7 +2751,7 @@
         {
           "name": "flatpickrProps",
           "kind": "let",
-          "description": "Override the options passed to the Flatpickr instance\nhttps://flatpickr.js.org/options",
+          "description": "Override the options passed to the Flatpickr instance.\n@see https://flatpickr.js.org/options",
           "type": "import(\"flatpickr/dist/types/options\").Options",
           "value": "{}",
           "isFunction": false,

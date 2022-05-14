@@ -1050,7 +1050,7 @@ None.
 | short          | <code>let</code> | No       | <code>boolean</code>                                                                                             | <code>false</code>                               | Set to `true` to use the short variant                                                            |
 | light          | <code>let</code> | No       | <code>boolean</code>                                                                                             | <code>false</code>                               | Set to `true` to enable the light variant                                                         |
 | id             | <code>let</code> | No       | <code>string</code>                                                                                              | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the date picker element                                                             |
-| flatpickrProps | <code>let</code> | No       | <code>import("flatpickr/dist/types/options").Options</code>                                                      | <code>{}</code>                                  | Override the options passed to the Flatpickr instance<br />https://flatpickr.js.org/options       |
+| flatpickrProps | <code>let</code> | No       | <code>import("flatpickr/dist/types/options").Options</code>                                                      | <code>{}</code>                                  | Override the options passed to the Flatpickr instance.<br />@see https://flatpickr.js.org/options |
 
 ### Slots
 
