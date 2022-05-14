@@ -328,6 +328,14 @@ title="Load balancers" description="Your organization's active load balancers."
   ]}"
 />
 
+### Custom column widths
+
+Specify a `width` or `minWidth` property in the `headers` object to customize the width of each column.
+
+A [table-layout: fixed](https://developer.mozilla.org/en-US/docs/Web/CSS/table-layout#values) rule will be applied to the `table` element when using custom widths.
+
+<FileSource src="/framed/DataTable/DataTableHeaderWidth" />
+
 ### Sticky header
 
 Set `stickyHeader` to `true` for the header to be fixed in place.

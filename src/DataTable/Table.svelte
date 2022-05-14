@@ -16,6 +16,12 @@
 
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
+
+  /**
+   * Set the style attribute on the `table` element
+   * @type {string}
+   */
+  export let tableStyle = undefined;
 </script>
 
 {#if stickyHeader}
@@ -30,6 +36,7 @@
       class:bx--data-table--zebra="{zebra}"
       class:bx--data-table--static="{useStaticWidth}"
       class:bx--data-table--sticky-header="{stickyHeader}"
+      style="{tableStyle}"
     >
       <slot />
     </table>
@@ -46,6 +53,7 @@
     class:bx--data-table--static="{useStaticWidth}"
     class:bx--data-table--sticky-header="{stickyHeader}"
     {...$$restProps}
+    style="{tableStyle}"
   >
     <slot />
   </table>

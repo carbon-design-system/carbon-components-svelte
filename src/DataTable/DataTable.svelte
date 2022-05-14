@@ -2,8 +2,8 @@
   /**
    * @typedef {string} DataTableKey
    * @typedef {any} DataTableValue
-   * @typedef {{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }} DataTableEmptyHeader
-   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; }} DataTableNonEmptyHeader
+   * @typedef {{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableEmptyHeader
+   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableNonEmptyHeader
    * @typedef {DataTableNonEmptyHeader | DataTableEmptyHeader} DataTableHeader
    * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
    * @typedef {any} DataTableRowId
@@ -240,6 +240,20 @@
       : rows;
   $: displayedRows = getDisplayedRows($tableRows, page, pageSize);
   $: displayedSortedRows = getDisplayedRows(sortedRows, page, pageSize);
+
+  $: hasCustomHeaderWidth = headers.some(
+    (header) => header.width || header.minWidth
+  );
+
+  /** @type {(header: DataTableHeader) => undefined | string} */
+  const formatHeaderWidth = (header) => {
+    const styles = [
+      header.width && `width: ${header.width}`,
+      header.minWidth && `min-width: ${header.minWidth}`,
+    ].filter(Boolean);
+    if (styles.length === 0) return undefined;
+    return styles.join(";");
+  };
 </script>
 
 <TableContainer useStaticWidth="{useStaticWidth}" {...$$restProps}>
@@ -264,6 +278,7 @@
     stickyHeader="{stickyHeader}"
     sortable="{sortable}"
     useStaticWidth="{useStaticWidth}"
+    tableStyle="{hasCustomHeaderWidth && 'table-layout: fixed'}"
   >
     <TableHead>
       <TableRow>
@@ -322,6 +337,7 @@
           {:else}
             <TableHeader
               id="{header.key}"
+              style="{formatHeaderWidth(header)}"
               disableSorting="{header.sort === false}"
               on:click="{() => {
                 dispatch('click', { header });
