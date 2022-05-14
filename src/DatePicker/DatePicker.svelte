@@ -60,8 +60,8 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Override the options passed to the Flatpickr instance
-   * https://flatpickr.js.org/options
+   * Override the options passed to the Flatpickr instance.
+   * @see https://flatpickr.js.org/options
    * @type {import("flatpickr/dist/types/options").Options}
    */
   export let flatpickrProps = {};
