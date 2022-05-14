@@ -10863,16 +10863,6 @@
           "isFunctionDeclaration": false,
           "constant": false,
           "reactive": false
-        },
-        {
-          "name": "tableStyle",
-          "kind": "let",
-          "description": "Set the style attribute on the `table` element",
-          "type": "string",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "constant": false,
-          "reactive": false
         }
       ],
       "moduleExports": [],
@@ -10934,6 +10924,16 @@
           "description": "Set to `true` to enable a sticky header",
           "type": "boolean",
           "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "tableStyle",
+          "kind": "let",
+          "description": "Set the style attribute on the `table` element",
+          "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
