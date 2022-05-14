@@ -69,6 +69,16 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
   </div>
 </InlineNotification>
 
+Carbon uses the zero dependency [flatpickr](https://github.com/flatpickr/flatpickr) library for its underlying calendar implementation.
+
+Set `datePickerType` to `"single"` or `"range"` for the calendar functionality.
+
+By default, the `flatpickr` option `static` is set to `true` so that the calendar is positioned inside the wrapper and next to the input element. This is required for the calendar position to work inside a [Modal](/components/Modal).
+
+Set `flatpickrProps.static` to `false` to opt out of this behavior.
+
+Specify [flatpickr options](https://flatpickr.js.org/options/) through the `flatpickrProps` prop.
+
 <FileSource src="/framed/DatePicker/DatePickerSingle" />
 
 ### Range
@@ -76,12 +86,6 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 <FileSource src="/framed/DatePicker/DatePickerRange" />
 
 ### DatePicker in a modal
-
-Use `flatpickrProps` to set `static: true` for the calendar to be positioned relative to the input element.
-
-This is needed when placing a `DatePicker` inside of a `Modal` component.
-
-Refer to [flatpickr options](https://flatpickr.js.org/options/) for a full list of config options.
 
 <FileSource src="/framed/DatePicker/DatePickerModal" />
 
