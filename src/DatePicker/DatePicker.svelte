@@ -64,7 +64,7 @@
    * @see https://flatpickr.js.org/options
    * @type {import("flatpickr/dist/types/options").Options}
    */
-  export let flatpickrProps = {};
+  export let flatpickrProps = { static: true };
 
   import {
     createEventDispatcher,
