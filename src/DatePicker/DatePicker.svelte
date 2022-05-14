@@ -216,6 +216,9 @@
       locale,
       maxDate,
       minDate,
+      // default to static: true so the
+      // date picker works inside a modal
+      static: true,
       ...flatpickrProps,
     });
   }
