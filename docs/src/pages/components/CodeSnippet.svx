@@ -68,6 +68,8 @@ Use the `feedback` prop to override the default copy button feedback text.
 
 ### Hidden copy button
 
+Set `hideCopyButton` to `true` to hide the copy button.
+
 <CodeSnippet type="multi" {code} hideCopyButton />
 
 ### Disabled
