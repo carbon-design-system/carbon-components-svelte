@@ -2753,7 +2753,7 @@
           "kind": "let",
           "description": "Override the options passed to the Flatpickr instance.\n@see https://flatpickr.js.org/options",
           "type": "import(\"flatpickr/dist/types/options\").Options",
-          "value": "{}",
+          "value": "{ static: true }",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "constant": false,
