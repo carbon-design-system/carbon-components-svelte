@@ -77,7 +77,7 @@ export default class Tag extends SvelteComponentTyped<
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    close: CustomEvent<any>;
+    close: CustomEvent<null>;
   },
   { default: { props: { class: "bx--tag__label" } }; icon: {} }
 > {}

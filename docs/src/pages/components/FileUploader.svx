@@ -48,9 +48,35 @@ There are two ways to clear files in `FileUploader`:
 
 <FileUploaderItem name="README.md" status="complete" />
 
-### Item (invalid)
+### Item (edit)
 
-<FileUploaderItem invalid name="README.md" status="edit" />
+If the `status` is `"edit"`, clicking the close icon will dispatch a `delete` event.
+
+The event detail contains the item `id`.
+
+<FileUploaderItem id="readme" name="README.md" status="edit" on:delete={(e) => {
+  console.log(e.detail); // "readme"
+}} />
+
+### Item (edit status, invalid state)
+
+An item can also have an edit status with an invalid state.
+
+<FileUploaderItem invalid id="readme" name="README.md" status="edit" on:delete />
+
+### Item (edit status, invalid state with subject, body)
+
+Use the `errorSubject` and `errorBody` props to customize the error message.
+
+<FileUploaderItem
+  invalid
+  id="readme"
+  name="README.md"
+  errorSubject="File size exceeds 500kb limit"
+  errorBody="Please select a new file."
+  status="edit"
+  on:delete
+/>
 
 ### Item sizes
 

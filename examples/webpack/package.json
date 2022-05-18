@@ -5,7 +5,7 @@
     "build": "rm -rf public && NODE_ENV=production webpack"
   },
   "devDependencies": {
-    "carbon-components-svelte": "^0.63.0",
+    "carbon-components-svelte": "^0.63.4",
     "carbon-preprocess-svelte": "^0.9.0",
     "css-loader": "^6.7.1",
     "esbuild-loader": "^2.18.0",

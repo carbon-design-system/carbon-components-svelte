@@ -11,6 +11,8 @@ export interface DataTableEmptyHeader {
   display?: (item: Value) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
+  width?: string;
+  minWidth?: string;
 }
 
 export interface DataTableNonEmptyHeader {
@@ -19,6 +21,8 @@ export interface DataTableNonEmptyHeader {
   display?: (item: Value) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
+  width?: string;
+  minWidth?: string;
 }
 
 export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;

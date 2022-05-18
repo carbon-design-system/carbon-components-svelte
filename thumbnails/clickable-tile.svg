@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>clickable-tile</title>
+    <defs>
+        <polygon id="path-1" points="17.9403457 21.1863925 13.5219224 23.061902 10.9929768 17.1040795 7.2 20.8970563 7.2 1.90294373 20.8970563 15.6 15.5690628 15.6"></polygon>
+        <filter x="-25.6%" y="-15.2%" width="156.3%" height="137.2%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="0.25" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.75" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <polygon id="path-3" points="17.9403457 21.1863925 13.5219224 23.061902 10.9929768 17.1040795 7.2 20.8970563 7.2 1.90294373 20.8970563 15.6 15.5690628 15.6"></polygon>
+        <filter x="-13.7%" y="-5.3%" width="127.4%" height="117.7%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="0.75" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="clickable-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" stroke="#0F62FE" stroke-width="1.5" fill="#E0E0E0" x="72" y="41" width="176" height="98"></rect>
+        <rect id="Rectangle-Copy-4" fill="#A8A8A8" x="85" y="54" width="90" height="8"></rect>
+        <g id="Group" transform="translate(212.000000, 97.000000)">
+            <g id="Soft-Shadow" fill="black" fill-opacity="1">
+                <use filter="url(#filter-2)" xlink:href="#path-1"></use>
+            </g>
+            <g id="Hard-Shadow" fill="black" fill-opacity="1">
+                <use filter="url(#filter-4)" xlink:href="#path-3"></use>
+            </g>
+            <polygon id="Ouline" fill="#FFFFFF" points="17.9403457 21.1863925 13.5219224 23.061902 10.9929768 17.1040795 7.2 20.8970563 7.2 1.90294373 20.8970563 15.6 15.5690628 15.6"></polygon>
+            <polygon id="Arrow" fill="#000000" points="13.7560605 14.4 18 14.4 8.4 4.8 8.4 18 11.4024434 14.9975566 14.1576509 21.4884188 16.3668625 20.5506641"></polygon>
+        </g>
+    </g>
+</svg>

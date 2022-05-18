@@ -95,10 +95,18 @@
     a.text.localeCompare(b.text, locale, { numeric: true });
 
   /**
-   * Override the default translation ids
-   * @type {(id: any) => string}
+   * Override the chevron icon label based on the open state.
+   * Defaults to "Open menu" when closed and "Close menu" when open
+   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
    */
   export let translateWithId = undefined;
+
+  /**
+   * Override the label of the clear button when the input has a selection.
+   * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected
+   * @type {(id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string}
+   */
+  export let translateWithIdSelection = undefined;
 
   /** Specify the title text */
   export let titleText = "";
@@ -374,7 +382,7 @@
             }));
             if (fieldRef) fieldRef.blur();
           }}"
-          translateWithId="{translateWithId}"
+          translateWithId="{translateWithIdSelection}"
           disabled="{disabled}"
         />
       {/if}
@@ -439,7 +447,7 @@
               inputValue = '';
               open = false;
             }}"
-            translateWithId="{translateWithId}"
+            translateWithId="{translateWithIdSelection}"
             disabled="{disabled}"
             open="{open}"
           />

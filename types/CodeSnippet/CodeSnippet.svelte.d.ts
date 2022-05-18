@@ -120,12 +120,14 @@ export interface CodeSnippetProps {
 export default class CodeSnippet extends SvelteComponentTyped<
   CodeSnippetProps,
   {
+    expand: CustomEvent<null>;
+    collapse: CustomEvent<null>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     animationend: WindowEventMap["animationend"];
-    copy: CustomEvent<any>;
+    copy: CustomEvent<null>;
   },
   { default: {} }
 > {}

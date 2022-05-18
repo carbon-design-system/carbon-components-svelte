@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>expandable-tile</title>
+    <defs>
+        <filter x="-54.7%" y="-48.6%" width="209.4%" height="197.2%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <polygon id="path-2" points="5 0 10 5 9.293 5.707 5 1.414 0.707 5.707 0 5"></polygon>
+    </defs>
+    <g id="expandable-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(72.000000, 33.000000)">
+            <rect id="Rectangle" stroke="#0F62FE" stroke-width="1.5" fill="#E0E0E0" x="0" y="8" width="176" height="98"></rect>
+            <rect id="Rectangle-Copy-4" fill="#A8A8A8" x="13" y="21" width="90" height="8"></rect>
+            <rect id="Rectangle-Copy-5" x="13" y="0" width="90" height="8"></rect>
+            <g transform="translate(153.000000, 90.000000)" fill="#FFFFFF" id="hand-cursor">
+                <g filter="url(#filter-1)" transform="translate(4.000000, 2.000000)">
+                    <polygon id="Rectangle" points="7 4 10 4 10 8 7 8"></polygon>
+                    <polygon id="Rectangle-Copy" points="10 7 13 7 13 11 10 11"></polygon>
+                    <path d="M13.2815687,10.7869723 C13.2793405,10.8536671 13.2719207,10.9325894 13.2592869,11.023739 C13.2280924,11.2519911 13.1705384,11.4609684 13.0866028,11.6506708 C12.819221,12.2583277 12.3420114,12.5621673 11.6549961,12.5621673 C11.2561516,12.5621673 10.9546118,12.5695705 10.7503544,12.5843989 L10.5631872,12.5843989 L10.5631872,11.6506708 L10.5631872,9.9832991 M10.5631872,11.6506708 C10.560959,11.7173657 10.5535391,11.7962879 10.5409053,11.8874376 C10.5097108,12.1156896 10.4521569,12.3246669 10.3682213,12.5143693 C10.1008395,13.1220485 9.62362982,13.4258659 8.93661459,13.4258659 C8.53777008,13.4258659 8.23623026,13.4332912 8.03197286,13.4480975 L7.8448056,13.4480975 L7.8448056,10.8469976 M7.8448056,13.4480975 L7.8448056,16.2292735 C7.84331272,16.2959684 7.83662817,16.3748906 7.82475197,16.466018 C7.79578561,16.6942701 7.74266576,16.9032474 7.66543698,17.0929498 C7.43444139,17.6605898 7.0337475,17.9629621 6.463333,18 C5.89365381,17.9629621 5.49333871,17.6605898 5.26234312,17.0929498 C5.18509206,16.9032474 5.1319945,16.6942479 5.10302813,16.466018 C5.09112964,16.3748684 5.08408859,16.2959684 5.08186041,16.2292735 L5.08186041,7.93576665 C3.06312787,10.4279316 0.851739859,10.1112215 4.4408921e-15,8.1137102 C2.40124447,5.97131542 4.45574138,3.84533708 5.26234312,0 L14.1505595,0.0222316227 C14.4558204,0.863320603 14.8049096,1.37327819 15.1978049,2.81166418 C15.5914577,4.25005017 15.8569679,5.81524778 15.9943798,8.51490042 L15.9999503,9.64871318 C16.0006856,9.72430069 15.9932657,9.81916303 15.9776685,9.93327795 C15.9464739,10.16153 15.88892,10.3705073 15.8049844,10.5602097 C15.5376026,11.1678666 15.0603929,11.4717062 14.3733777,11.4717062 C13.9745332,11.4717062 13.6729934,11.4791094 13.468736,11.4939379 L13.2815687,11.5161695 L13.2815687,10.7869723 C13.2815687,10.7780796 13.2782264,9.23853974 13.2782264,9.23853974 L13.2815687,8.89283801 M13.2715419,8.69386498 L13.3043009,9.23853974" id="Shape" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(8.000000, 9.000000) scale(1, -1) translate(-8.000000, -9.000000) "></path>
+                </g>
+            </g>
+            <g transform="translate(144.000000, 79.000000)" id="icon/navigation/chevron/up/16-copy-46">
+                <g transform="translate(8.000000, 8.000000) scale(1, -1) translate(-8.000000, -8.000000) " id="Group">
+                    <g id="chevron--up" transform="translate(3.000000, 5.000000)">
+                        <mask id="mask-3" fill="white">
+                            <use xlink:href="#path-2"></use>
+                        </mask>
+                        <use id="Mask" fill="#000000" fill-rule="nonzero" xlink:href="#path-2"></use>
+                        <g id="Group" mask="url(#mask-3)">
+                            <g transform="translate(-3.000000, -5.000000)" id="icon-color">
+                                <rect id="Rectangle" fill="#000000" x="0" y="0" width="40" height="40"></rect>
+                            </g>
+                        </g>
+                    </g>
+                    <polygon id="transparent-rectangle" transform="translate(8.000000, 8.000000) rotate(-90.000000) translate(-8.000000, -8.000000) " points="1.77635684e-15 -7.90206676e-15 16 -7.90206676e-15 16 16 1.77635684e-15 16"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

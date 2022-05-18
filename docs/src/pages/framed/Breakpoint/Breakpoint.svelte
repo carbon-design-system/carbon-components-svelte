@@ -12,9 +12,7 @@
 <h1>{size}</h1>
 
 <h6>on:change</h6>
-<pre>
-  {JSON.stringify(events, null, 2)}
-</pre>
+<pre>{JSON.stringify(events, null, 2)}</pre>
 
 <style>
   p,

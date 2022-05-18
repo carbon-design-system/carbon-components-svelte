@@ -1,4 +1,9 @@
 <script>
+  /**
+   * @event {null} open
+   * @event {null} close
+   */
+
   /** Set to `true` to open the panel */
   export let isOpen = false;
 

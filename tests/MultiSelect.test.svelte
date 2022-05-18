@@ -20,6 +20,14 @@
   on:blur="{(e) => {
     e.detail; // number | FocusEvent
   }}"
+  translateWithId="{(id) => {
+    console.log(id); // "open" | "close"
+    return id;
+  }}"
+  translateWithIdSelection="{(id) => {
+    console.log(id); // "clearAll" | "clearSelection"
+    return id;
+  }}"
   let:item
   let:index
 >

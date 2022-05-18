@@ -1,24 +1,24 @@
 <script>
   import { DataTable } from "carbon-components-svelte";
 
-  const headers = [
-    { key: "name", value: "Name" },
-    { key: "port", value: "Port" },
-    { key: "rule", value: "Rule" },
-  ];
-
-  const rows = [
-    { id: "a", name: "Load Balancer 3", port: 3000, rule: "Round robin" },
-    { id: "b", name: "Load Balancer 1", port: 443, rule: "Round robin" },
-    { id: "c", name: "Load Balancer 2", port: 80, rule: "DNS delegation" },
-    { id: "d", name: "Load Balancer 6", port: 3000, rule: "Round robin" },
-    { id: "e", name: "Load Balancer 4", port: 443, rule: "Round robin" },
-    { id: "f", name: "Load Balancer 5", port: 80, rule: "DNS delegation" },
-  ];
-
   let selectedRowIds = [];
 
   $: console.log("selectedRowIds", selectedRowIds);
 </script>
 
-<DataTable selectable bind:selectedRowIds headers="{headers}" rows="{rows}" />
+<DataTable
+  selectable
+  bind:selectedRowIds
+  headers="{[
+    { key: 'name', value: 'Name' },
+    { key: 'port', value: 'Port' },
+    { key: 'rule', value: 'Rule' },
+  ]}"
+  rows="{Array.from({ length: 6 }).map((_, i) => ({
+    id: i,
+    name: 'Load Balancer ' + (i + 1),
+    protocol: 'HTTP',
+    port: i % 3 ? (i % 2 ? 3000 : 80) : 443,
+    rule: i % 3 ? 'Round robin' : 'DNS delegation',
+  }))}"
+/>

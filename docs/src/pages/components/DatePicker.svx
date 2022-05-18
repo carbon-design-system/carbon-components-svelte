@@ -7,7 +7,39 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (simple)
+Carbon uses the zero dependency [flatpickr](https://github.com/flatpickr/flatpickr) library for its underlying calendar implementation.
+
+Set `datePickerType` to `"single"` or `"range"` for the calendar functionality.
+
+Specify [flatpickr options](https://flatpickr.js.org/options/) through the `flatpickrProps` prop.
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    If using Rollup, specify <strong>inlineDynamicImports: true</strong> in your <strong>rollup.config.js</strong>.
+  </div>
+</InlineNotification>
+
+### Single
+
+By default, the `flatpickr` option `static` is set to `true` so that the calendar is positioned inside the wrapper and next to the input element. This is required for the calendar position to work inside a [Modal](/components/Modal).
+
+Set `flatpickrProps.static` to `false` to opt out of this behavior.
+
+<FileSource src="/framed/DatePicker/DatePickerSingle" />
+
+### Range
+
+Set `datePickerType` to `"range"` for the range variant.
+
+<FileSource src="/framed/DatePicker/DatePickerRange" />
+
+### DatePicker in a modal
+
+<FileSource src="/framed/DatePicker/DatePickerModal" />
+
+### Simple
+
+By default, the "simple" date picker does not have a dropdown calendar.
 
 <DatePicker>
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
@@ -60,30 +92,6 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 <DatePicker>
   <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
-
-### Single
-
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    If using Rollup, specify <strong>inlineDynamicImports: true</strong> in your <strong>rollup.config.js</strong>.
-  </div>
-</InlineNotification>
-
-<FileSource src="/framed/DatePicker/DatePickerSingle" />
-
-### Range
-
-<FileSource src="/framed/DatePicker/DatePickerRange" />
-
-### DatePicker in a modal
-
-Use `flatpickrProps` to set `static: true` for the calendar to be positioned relative to the input element.
-
-This is needed when placing a `DatePicker` inside of a `Modal` component.
-
-Refer to [flatpickr options](https://flatpickr.js.org/options/) for a full list of config options.
-
-<FileSource src="/framed/DatePicker/DatePickerModal" />
 
 ### Skeleton
 

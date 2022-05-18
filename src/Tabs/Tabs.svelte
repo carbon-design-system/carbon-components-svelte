@@ -52,7 +52,6 @@
     },
     update: (id) => {
       currentIndex = $tabsById[id].index;
-      dispatch("change", currentIndex);
     },
     change: (direction) => {
       let index = currentIndex + direction;
@@ -78,16 +77,22 @@
       }
 
       currentIndex = index;
-      dispatch("change", currentIndex);
     },
   });
 
   afterUpdate(() => {
     selected = currentIndex;
+
+    if (prevIndex > -1 && prevIndex !== currentIndex) {
+      dispatch("change", currentIndex);
+    }
+
+    prevIndex = currentIndex;
   });
 
   let dropdownHidden = true;
   let currentIndex = selected;
+  let prevIndex = -1;
 
   $: currentIndex = selected;
   $: currentTab = $tabs[currentIndex] || undefined;

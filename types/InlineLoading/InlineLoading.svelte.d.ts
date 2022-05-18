@@ -35,7 +35,7 @@ export default class InlineLoading extends SvelteComponentTyped<
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    success: CustomEvent<any>;
+    success: CustomEvent<null>;
   },
   {}
 > {}

@@ -7,6 +7,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.64.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.64.0) - 2022-05-14
+
+**Breaking Changes**
+
+- set `flatpickrProps.static` in `DatePicker` to be true by default
+- use data attribute instead of id for `DataTable` headers/rows
+
+**Features**
+
+- support custom column widths in `DataTable`
+- dispatch "expand" and "collapse" events in `CodeSnippet`
+
+**Fixes**
+
+- use `@see` tag for flatpickr options link in `DatePicker`
+- pressing "Enter" in `DatePicker` should update the value
+- dispatched event type without detail should be `null`, not `any`
+- type missing "open" event in `HeaderAction`
+- use small button in multi-line `CodeSnippet`
+
+**Documentation**
+
+- make calendar variants of `DatePicker` more prominent
+- add `DataTable` example "Custom column widths"
+- add `CodeSnippet` examples "Expanded by default" and "Reactive example"
+
+## [0.63.8](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.8) - 2022-05-07
+
+**Fixes**
+
+- elevate `Toolbar` z-index so overflow menu is not clipped by the table
+
+## [0.63.7](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.7) - 2022-05-04
+
+**Fixes**
+
+- strongly type `translateWithId` prop in `Dropdown`
+
+## [0.63.6](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.6) - 2022-05-04
+
+**Fixes**
+
+- add `translateWithIdsSelection` prop to `ComboBox`, `MultiSelect` to customize clear selection description
+- use default values in `ListBoxMenuIcon` if `translateWithIds` is undefined
+- use default values in `ListBoxSelection` if `translateWithIds` is undefined
+
+## [0.63.5](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.5) - 2022-05-02
+
+**Fixes**
+
+- dispatch "change" event in `Tabs` only if selected index has changed
+
+## [0.63.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.4) - 2022-04-30
+
+**Fixes**
+
+- add missing `"2x3"` ratio value to `AspectRatio`
+- fix typo in `ToolbarSearch` shouldFilterRows type annotation
+
+**Documentation**
+
+- correctly generate icon, action imports in examples
+- remove unnecessary `tooltipBodyId` in `Tooltip` examples
+- add `DataTable` "Expandable and selectable" example
+- add `DataTable` "Batch selection" example
+
+## [0.63.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.3) - 2022-04-28
+
+**Fixes**
+
+- fix `FileUploaderItem` regression where `delete` event should be dispatched if status is "edit"
+
+**Documentation**
+
+- add `FileUploader` "Item (edit)" example
+- revise `FileUploader` "Item (edit status, invalid state)" example to include `on:delete` usage
+- add `FileUploader` "Item (edit status, invalid state with subject, body)" example
+
 ## [0.63.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.63.2) - 2022-04-23
 
 **Fixes**

@@ -1,6 +1,6 @@
 {
   "name": "carbon-components-svelte",
-  "version": "0.63.2",
+  "version": "0.64.0",
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "./src/index.js",
@@ -38,7 +38,7 @@
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.49.11",
-    "sveld": "^0.15.0",
+    "sveld": "^0.15.3",
     "svelte": "^3.46.6",
     "svelte-check": "^2.4.6",
     "typescript": "^4.6.3"

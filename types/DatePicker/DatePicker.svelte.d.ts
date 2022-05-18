@@ -74,9 +74,9 @@ export interface DatePickerProps
   id?: string;
 
   /**
-   * Override the options passed to the Flatpickr instance
-   * https://flatpickr.js.org/options
-   * @default {}
+   * Override the options passed to the Flatpickr instance.
+   * @see https://flatpickr.js.org/options
+   * @default { static: true }
    */
   flatpickrProps?: import("flatpickr/dist/types/options").Options;
 }

@@ -113,10 +113,20 @@ export interface ComboBoxProps
   shouldFilterItem?: (item: ComboBoxItem, value: string) => boolean;
 
   /**
-   * Override the default translation ids
+   * Override the chevron icon label based on the open state.
+   * Defaults to "Open menu" when closed and "Close menu" when open
    * @default undefined
    */
-  translateWithId?: (id: any) => string;
+  translateWithId?: (
+    id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId
+  ) => string;
+
+  /**
+   * Override the label of the clear button when the input has a selection.
+   * Defaults to "Clear selected item" since a combo box can only have on selection.
+   * @default undefined
+   */
+  translateWithIdSelection?: (id: "clearSelection") => string;
 
   /**
    * Set an id for the list box component

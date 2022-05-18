@@ -23,6 +23,14 @@
   on:select="{(e) => {
     console.log(e.detail.selectedId);
   }}"
+  translateWithId="{(id) => {
+    console.log(id); // "open" | "close"
+    return id;
+  }}"
+  translateWithIdSelection="{(id) => {
+    console.log(id); // "clearSelection"
+    return id;
+  }}"
   let:item
   let:index
 >

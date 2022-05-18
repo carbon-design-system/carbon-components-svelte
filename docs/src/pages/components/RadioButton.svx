@@ -30,8 +30,8 @@ Use the named "legendText" slot to customize the legend text.
 <RadioButtonGroup selected="standard">
   <div slot="legendText" style="display: flex">
     Storage tier (disk)
-    <Tooltip tooltipBodyId="tooltip-body">
-      <p id="tooltip-body">
+    <Tooltip>
+      <p>
         Storage tiers may vary based on geolocation.
       </p>
     </Tooltip>

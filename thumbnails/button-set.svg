@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>button-set</title>
+    <g id="button-set" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle-Copy-2" fill="#393939" x="56" y="74" width="104" height="32"></rect>
+        <rect id="Rectangle-Copy-4" fill="#FFFFFF" x="159" y="74" width="1" height="32"></rect>
+        <rect id="Rectangle-Copy-3" fill="#0E62FE" x="160" y="74" width="104" height="32"></rect>
+        <text id="Cancel" font-family="IBMPlexSans, IBM Plex Sans" font-size="12" font-weight="normal" fill="#F4F4F4">
+            <tspan x="68" y="95">Cancel</tspan>
+        </text>
+        <text id="Submit" font-family="IBMPlexSans, IBM Plex Sans" font-size="12" font-weight="normal" fill="#FFFFFF">
+            <tspan x="172" y="95">Submit</tspan>
+        </text>
+    </g>
+</svg>

@@ -1,9 +1,19 @@
 <script>
-  import { Theme } from "carbon-components-svelte";
+  import { InlineNotification, CodeSnippet } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
+
+  let code = `import "carbon-components-svelte/css/all.css";`;
 </script>
 
-This utility component dynamically updates the Carbon theme on the client-side using CSS variables.
+The `Theme` component can dyanmically update the Carbon theme on the client-side. It can persist the theme locally using [window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">You must use the "all.css" StyleSheet with the <code>Theme</code> component.</div>
+</InlineNotification>
+
+The `all.css` StyleSheet uses [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) for dynamic theming.
+  
+<CodeSnippet svx-ignore {code} />
 
 ### Default
 

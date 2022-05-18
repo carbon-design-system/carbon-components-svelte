@@ -24,7 +24,7 @@
    *
    * To implement your own client-side filtering, pass a function
    * that accepts a row and value and returns a boolean.
-   * @type {boolean | ((rows: import("./DataTable.svelte").DataTableRow, value: number | string) => boolean)}
+   * @type {boolean | ((row: import("./DataTable.svelte").DataTableRow, value: number | string) => boolean)}
    */
   export let shouldFilterRows = false;
 

@@ -8,7 +8,7 @@
   primaryButtonText="Confirm"
   secondaryButtonText="Cancel"
 >
-  <DatePicker datePickerType="single" flatpickrProps="{{ static: true }}">
+  <DatePicker datePickerType="single" style="min-height: 420px">
     <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" />
   </DatePicker>
 </Modal>
