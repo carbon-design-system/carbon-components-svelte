@@ -50,13 +50,16 @@
   <slot />
   <button
     type="button"
-    title="{iconDescription}"
     aria-label="{iconDescription}"
     class:bx--modal-close="{true}"
     class="{closeClass}"
     on:click
     on:click="{closeModal}"
   >
-    <Close size="{20}" class="bx--modal-close__icon {closeIconClass}" />
+    <Close
+      size="{20}"
+      class="bx--modal-close__icon {closeIconClass}"
+      aria-hidden="true"
+    />
   </button>
 </div>

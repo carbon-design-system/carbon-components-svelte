@@ -222,17 +222,12 @@
           bind:this="{buttonRef}"
           type="button"
           aria-label="{iconDescription}"
-          title="{iconDescription}"
           class:bx--modal-close="{true}"
           on:click="{() => {
             open = false;
           }}"
         >
-          <Close
-            size="{20}"
-            aria-label="{iconDescription}"
-            class="bx--modal-close__icon"
-          />
+          <Close size="{20}" class="bx--modal-close__icon" aria-hidden="true" />
         </button>
       {/if}
       {#if modalLabel}
@@ -248,17 +243,12 @@
           bind:this="{buttonRef}"
           type="button"
           aria-label="{iconDescription}"
-          title="{iconDescription}"
           class:bx--modal-close="{true}"
           on:click="{() => {
             open = false;
           }}"
         >
-          <Close
-            size="{20}"
-            aria-label="{iconDescription}"
-            class="bx--modal-close__icon"
-          />
+          <Close size="{20}" class="bx--modal-close__icon" aria-hidden="true" />
         </button>
       {/if}
     </div>
