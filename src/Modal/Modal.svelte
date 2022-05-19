@@ -222,7 +222,6 @@
           bind:this="{buttonRef}"
           type="button"
           aria-label="{iconDescription}"
-          title="{iconDescription}"
           class:bx--modal-close="{true}"
           on:click="{() => {
             open = false;
@@ -248,7 +247,6 @@
           bind:this="{buttonRef}"
           type="button"
           aria-label="{iconDescription}"
-          title="{iconDescription}"
           class:bx--modal-close="{true}"
           on:click="{() => {
             open = false;

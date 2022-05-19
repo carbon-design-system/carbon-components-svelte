@@ -50,7 +50,6 @@
   <slot />
   <button
     type="button"
-    title="{iconDescription}"
     aria-label="{iconDescription}"
     class:bx--modal-close="{true}"
     class="{closeClass}"
