@@ -227,7 +227,7 @@
             open = false;
           }}"
         >
-          <Close size="{20}" class="bx--modal-close__icon" />
+          <Close size="{20}" class="bx--modal-close__icon" aria-hidden="true" />
         </button>
       {/if}
       {#if modalLabel}
@@ -248,7 +248,7 @@
             open = false;
           }}"
         >
-          <Close size="{20}" class="bx--modal-close__icon" />
+          <Close size="{20}" class="bx--modal-close__icon" aria-hidden="true" />
         </button>
       {/if}
     </div>

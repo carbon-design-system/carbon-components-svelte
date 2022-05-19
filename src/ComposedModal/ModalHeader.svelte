@@ -56,6 +56,10 @@
     on:click
     on:click="{closeModal}"
   >
-    <Close size="{20}" class="bx--modal-close__icon {closeIconClass}" />
+    <Close
+      size="{20}"
+      class="bx--modal-close__icon {closeIconClass}"
+      aria-hidden="true"
+    />
   </button>
 </div>
