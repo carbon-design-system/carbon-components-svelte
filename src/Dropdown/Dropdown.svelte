@@ -23,7 +23,7 @@
    * Specify the selected item id
    * @type {DropdownItemId}
    */
-  export let selectedId = undefined;
+  export let selectedId;
 
   /**
    * Specify the type of dropdown
