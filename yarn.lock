@@ -1330,10 +1330,10 @@ supports-color@^9.2.1:
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-9.2.2.tgz#502acaf82f2b7ee78eb7c83dcac0f89694e5a7bb"
   integrity sha512-XC6g/Kgux+rJXmwokjm9ECpD6k/smUoS5LKlUCcsYr4IY3rW0XyAympon2RmxGrlnZURMpg5T18gWDP9CsHXFA==
 
-sveld@^0.15.3:
-  version "0.15.3"
-  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.15.3.tgz#75fe72f472b9cfbe863f6f0b074612d4132dc960"
-  integrity sha512-3TYhrLpm8z8elnZ6ffQeq1SeoxzC2zsFY/9QeNHu1UcQxAZ6LqfyUufnOkNkelYJMq9uBn4bGUAYJpbpTMjnOA==
+sveld@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.17.0.tgz#af1f3d24a507d7bc84a356bf7f5c4b599ea444c2"
+  integrity sha512-OB15S0KyT033fXsZL9hnyuQDaSvpuRQs4CwIRVVnwbLy6IbBQyvNl9LG7Cu7z982qoYY3AMkZ0GzjpTtiMI4OQ==
   dependencies:
     "@rollup/plugin-node-resolve" "^13.2.1"
     acorn "^8.7.0"
