@@ -25,7 +25,7 @@ export interface CopyButtonProps
    * Specify the text to copy
    * @default undefined
    */
-  text?: string;
+  text: string;
 
   /**
    * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text

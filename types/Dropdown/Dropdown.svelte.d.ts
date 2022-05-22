@@ -28,7 +28,7 @@ export interface DropdownProps
    * Specify the selected item id
    * @default undefined
    */
-  selectedId?: DropdownItemId;
+  selectedId: DropdownItemId;
 
   /**
    * Specify the type of dropdown
