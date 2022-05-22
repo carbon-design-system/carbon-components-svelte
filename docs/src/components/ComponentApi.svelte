@@ -68,12 +68,17 @@
               <InlineSnippet code="{prop.name}" />
               {#if prop.reactive}
                 <div
-                  style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-03)"
+                  style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-{prop.isRequired
+                    ? '01'
+                    : '03'})"
                 >
                   <Tag style="margin-left: 0" size="sm" type="cyan">
                     Reactive
                   </Tag>
                 </div>
+              {/if}
+              {#if prop.isRequired}
+                <Tag size="sm" type="magenta">Required</Tag>
               {/if}
             </StructuredListCell>
             <StructuredListCell>

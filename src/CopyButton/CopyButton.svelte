@@ -12,7 +12,7 @@
    * Specify the text to copy
    * @type {string}
    */
-  export let text = undefined;
+  export let text;
 
   /**
    * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
