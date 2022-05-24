@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.64.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.64.1) - 2022-05-23
+
+**Fixes**
+
+- mark `CopyButton` text prop as required
+- mark `Dropdown` selectedId prop as required
+- use `@see` tag in `Theme` tokens prop description
+- remove `title` attribute from `Modal`, `ModalHeader` close button
+- remove redundant `aria-label` from `Modal` close button icon
+- add `aria-hidden="true"` to `Modal`, `ModalHeader` close button icon
+
+**Documentation**
+
+- update `Theme` docs to specify that it must be used with `all.css`
+- update `DataTable` docs to note that custom widths do not work with `stickyHeader`
+
 ## [0.64.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.64.0) - 2022-05-14
 
 **Breaking Changes**
