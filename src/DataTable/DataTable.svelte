@@ -333,7 +333,7 @@
         {/if}
         {#each headers as header, i (header.key)}
           {#if header.empty}
-            <th scope="col"></th>
+            <th scope="col" style="{formatHeaderWidth(header)}"></th>
           {:else}
             <TableHeader
               id="{header.key}"
