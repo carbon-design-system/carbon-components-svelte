@@ -62,6 +62,11 @@
   $: useGroup = Array.isArray(group);
   $: checked = useGroup ? group.includes(value) : checked;
   $: dispatch("check", checked);
+
+  let refLabel = null;
+
+  $: isTruncated = refLabel?.offsetWidth < refLabel?.scrollWidth;
+  $: title = isTruncated ? refLabel?.innerText : title;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -109,6 +114,7 @@
     />
     <label for="{id}" title="{title}" class:bx--checkbox-label="{true}">
       <span
+        bind:this="{refLabel}"
         class:bx--checkbox-label-text="{true}"
         class:bx--visually-hidden="{hideLabel}"
       >
