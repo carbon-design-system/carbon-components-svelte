@@ -168,7 +168,8 @@
     class:bx--number--light="{light}"
     class:bx--number--nolabel="{hideLabel}"
     class:bx--number--nosteppers="{hideSteppers}"
-    class="{size && `bx--number--${size}`}"
+    class:bx--number--sm="{size === 'sm'}"
+    class:bx--number--xl="{size === 'xl'}"
   >
     {#if $$slots.label || label}
       <label

@@ -67,7 +67,11 @@
   class:bx--btn="{true}"
   class:bx--btn--sm="{true}"
   class:bx--btn--disabled="{disabled}"
-  class="{kind && `bx--btn--${kind}`}"
+  class:bx--btn--primary="{kind === 'primary'}"
+  class:bx--btn--secondary="{kind === 'secondary'}"
+  class:bx--btn--tertiary="{kind === 'tertiary'}"
+  class:bx--btn--ghost="{kind === 'ghost'}"
+  class:bx--btn--danger="{kind === 'danger'}"
   on:keydown
   on:keydown="{({ key }) => {
     if (key === ' ' || key === 'Enter') {

@@ -44,7 +44,7 @@
         <ChevronRight class="bx--accordion__arrow" />
         <SkeletonText class="bx--accordion__title" />
       </span>
-      <div class="bx--accordion__content">
+      <div class:bx--accordion__content="{true}">
         <SkeletonText width="90%" />
         <SkeletonText width="80%" />
         <SkeletonText width="95%" />
@@ -52,8 +52,8 @@
     </li>
   {/if}
   {#each Array.from({ length: open ? count - 1 : count }, (_, i) => i) as item (item)}
-    <li class="bx--accordion__item">
-      <span class="bx--accordion__heading">
+    <li class:bx--accordion__item="{true}">
+      <span class:bx--accordion__heading="{true}">
         <ChevronRight class="bx--accordion__arrow" />
         <SkeletonText class="bx--accordion__title" />
       </span>
