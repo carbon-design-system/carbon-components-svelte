@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.64.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.64.3) - 2022-05-29
+
+**Fixes**
+
+- active tab in `Tabs` should not steal focus if programmatically selected
+- set title attribute in `CheckBox`, `MultiSelect`, `Dropdown`, `ComboBox` if label is truncated
+
+**Refactor**
+
+- refactor components to use `class:` directive instead of the class attribute
+
+**Documentation**
+
+- add `Tabs` example "Disabled tabs"
+
 ## [0.64.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.64.2) - 2022-05-25
 
 **Fixes**
