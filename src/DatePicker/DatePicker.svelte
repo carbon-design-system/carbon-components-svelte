@@ -247,10 +247,11 @@
     class:bx--date-picker="{true}"
     class:bx--date-picker--short="{short}"
     class:bx--date-picker--light="{light}"
-    class="{datePickerType && `bx--date-picker--${datePickerType}`}
-      {datePickerType === 'range' &&
-      $labelTextEmpty &&
-      'bx--date-picker--nolabel'}"
+    class:bx--date-picker--simple="{datePickerType === 'simple'}"
+    class:bx--date-picker--single="{datePickerType === 'single'}"
+    class:bx--date-picker--range="{datePickerType === 'range'}"
+    class:bx--date-picker--nolabel="{datePickerType === 'range' &&
+      $labelTextEmpty}"
     on:keydown="{(e) => {
       if (calendar?.isOpen && e.key === 'Escape') {
         e.stopPropagation();

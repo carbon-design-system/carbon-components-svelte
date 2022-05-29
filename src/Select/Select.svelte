@@ -119,7 +119,8 @@
             id="{id}"
             name="{name}"
             class:bx--select-input="{true}"
-            class="{size && `bx--select-input--${size}`}"
+            class:bx--select-input--sm="{size === 'sm'}"
+            class:bx--select-input--xl="{size === 'xl'}"
             on:change="{({ target }) => {
               selectedValue.set(target.value);
             }}"
@@ -163,7 +164,8 @@
           required="{required || undefined}"
           aria-invalid="{invalid || undefined}"
           class:bx--select-input="{true}"
-          class="{size && `bx--select-input--${size}`}"
+          class:bx--select-input--sm="{size === 'sm'}"
+          class:bx--select-input--xl="{size === 'xl'}"
           on:change="{({ target }) => {
             selectedValue.set(target.value);
           }}"

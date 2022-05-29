@@ -120,7 +120,8 @@
           class:bx--visually-hidden="{hideLabel}"
           class:bx--label--disabled="{disabled}"
           class:bx--label--inline="{inline}"
-          class="{inline && !!size && `bx--label--inline--${size}`}"
+          class:bx--label--inline--sm="{size === 'sm'}"
+          class:bx--label--inline--xl="{size === 'xl'}"
         >
           <slot name="labelText">
             {labelText}
@@ -191,8 +192,9 @@
         class:bx--text-input--light="{light}"
         class:bx--text-input--invalid="{invalid}"
         class:bx--text-input--warn="{warn}"
+        class:bx--text-input--sm="{size === 'sm'}"
+        class:bx--text-input--xl="{size === 'xl'}"
         {...$$restProps}
-        class="{size && `bx--text-input--${size}`}"
         on:change="{onChange}"
         on:input="{onInput}"
         on:keydown

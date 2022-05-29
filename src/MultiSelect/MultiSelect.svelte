@@ -463,7 +463,7 @@
         />
       {/if}
       {#if !filterable}
-        <span class="bx--list-box__label">{label}</span>
+        <span class:bx--list-box__label="{true}">{label}</span>
         <ListBoxMenuIcon open="{open}" translateWithId="{translateWithId}" />
       {/if}
     </ListBoxField>

@@ -231,7 +231,7 @@
       translateWithId="{translateWithId}"
       id="{id}"
     >
-      <span class="bx--list-box__label">
+      <span class:bx--list-box__label="{true}">
         {#if selectedItem}{itemToString(selectedItem)}{:else}{label}{/if}
       </span>
       <ListBoxMenuIcon

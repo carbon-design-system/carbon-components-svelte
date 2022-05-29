@@ -178,8 +178,9 @@
         class:bx--text-input--light="{light}"
         class:bx--text-input--invalid="{invalid}"
         class:bx--text-input--warning="{warn}"
+        class:bx--text-input--sm="{size === 'sm'}"
+        class:bx--text-input--xl="{size === 'xl'}"
         {...$$restProps}
-        class="{size && `bx--text-input--${size}`}"
         on:change
         on:input
         on:input="{({ target }) => {
@@ -199,8 +200,13 @@
         class:bx--btn--disabled="{disabled}"
         class:bx--tooltip__trigger="{true}"
         class:bx--tooltip--a11y="{true}"
-        class="{tooltipPosition && `bx--tooltip--${tooltipPosition}`}
-        {tooltipAlignment && `bx--tooltip--align-${tooltipAlignment}`}"
+        class:bx--tooltip--top="{tooltipPosition === 'top'}"
+        class:bx--tooltip--right="{tooltipPosition === 'right'}"
+        class:bx--tooltip--bottom="{tooltipPosition === 'bottom'}"
+        class:bx--tooltip--left="{tooltipPosition === 'left'}"
+        class:bx--tooltip--align-start="{tooltipAlignment === 'start'}"
+        class:bx--tooltip--align-center="{tooltipAlignment === 'center'}"
+        class:bx--tooltip--align-end="{tooltipAlignment === 'end'}"
         on:click="{() => {
           type = type === 'password' ? 'text' : 'password';
         }}"
