@@ -31,21 +31,14 @@ Other forms of documentation are auto-generated:
 
 Install `carbon-components-svelte` as a development dependency.
 
-**Yarn**
-
 ```sh
+# Yarn
 yarn add -D carbon-components-svelte
-```
 
-**NPM**
-
-```sh
+# npm
 npm i -D carbon-components-svelte
-```
 
-**pnpm**
-
-```sh
+# pnpm
 pnpm i -D carbon-components-svelte
 ```
 
@@ -184,21 +177,14 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 
 [carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte) is a collection of Svelte preprocessors for Carbon.
 
-**Yarn**
-
 ```sh
+# Yarn
 yarn add -D carbon-preprocess-svelte
-```
 
-**NPM**
-
-```sh
+# npm
 npm i -D carbon-preprocess-svelte
-```
 
-**pnpm**
-
-```sh
+# pnpm
 pnpm i -D carbon-preprocess-svelte
 ```
 
