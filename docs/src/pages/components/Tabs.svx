@@ -41,6 +41,25 @@ Set `autoWidth` to `true` for tabs to have an automatically set width.
 
 <FileSource src="/framed/Tabs/TabsReactive" />
 
+### Disabled tabs
+
+Setting `disabled` to `true` on the `Tab` component will prevent it from being clickable.
+
+Using keyboard navigation (left and right arrow keys) will skip to the next non-disabled tab.
+
+<Tabs>
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" disabled />
+  <Tab label="Tab label 3" disabled />
+  <Tab label="Tab label 4" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+    <TabContent>Content 4</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ### Container type
 
 <Tabs type="container">
