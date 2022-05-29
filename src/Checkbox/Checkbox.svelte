@@ -66,7 +66,7 @@
   let refLabel = null;
 
   $: isTruncated = refLabel?.offsetWidth < refLabel?.scrollWidth;
-  $: title = isTruncated ? refLabel?.innerText : title;
+  $: title = !title && isTruncated ? refLabel?.innerText : title;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

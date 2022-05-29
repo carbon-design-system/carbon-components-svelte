@@ -452,6 +452,7 @@ None.
 | Prop name     | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                       |
 | :------------ | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | ------------------------------------------------- |
 | ref           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element      |
+| title         | No       | <code>let</code> | Yes      | <code>string</code>                       | <code>undefined</code>                           | Specify the title attribute for the label element |
 | group         | No       | <code>let</code> | Yes      | <code>any[]</code>                        | <code>undefined</code>                           | Specify the bound group                           |
 | checked       | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is checked           |
 | value         | No       | <code>let</code> | No       | <code>any</code>                          | <code>""</code>                                  | Specify the value of the checkbox                 |
@@ -463,7 +464,6 @@ None.
 | labelText     | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                            |
 | hideLabel     | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to visually hide the label text     |
 | name          | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Set a name for the input element                  |
-| title         | No       | <code>let</code> | No       | <code>string</code>                       | <code>undefined</code>                           | Specify the title attribute for the label element |
 | id            | No       | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input label                     |
 
 ### Slots
