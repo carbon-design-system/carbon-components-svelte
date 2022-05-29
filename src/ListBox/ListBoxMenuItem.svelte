@@ -4,6 +4,11 @@
 
   /** Set to `true` to enable the highlighted state */
   export let highlighted = false;
+
+  let ref = null;
+
+  $: isTruncated = ref?.offsetWidth < ref?.scrollWidth;
+  $: title = isTruncated ? ref?.innerText : undefined;
 </script>
 
 <div
@@ -15,7 +20,11 @@
   on:mouseenter
   on:mouseleave
 >
-  <div class:bx--list-box__menu-item__option="{true}">
+  <div
+    bind:this="{ref}"
+    title="{title}"
+    class:bx--list-box__menu-item__option="{true}"
+  >
     <slot />
   </div>
 </div>
