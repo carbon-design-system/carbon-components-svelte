@@ -20,7 +20,7 @@
   /** Specify the tab trigger href attribute */
   export let triggerHref = "#";
 
-  import { createEventDispatcher, afterUpdate, setContext } from "svelte";
+  import { createEventDispatcher, afterUpdate, setContext, tick } from "svelte";
   import { writable, derived } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
 
@@ -38,6 +38,8 @@
   );
   const selectedContent = writable(undefined);
 
+  let refTabList = null;
+
   setContext("Tabs", {
     tabs,
     contentById,
@@ -53,7 +55,7 @@
     update: (id) => {
       currentIndex = $tabsById[id].index;
     },
-    change: (direction) => {
+    change: async (direction) => {
       let index = currentIndex + direction;
 
       if (index < 0) {
@@ -77,6 +79,11 @@
       }
 
       currentIndex = index;
+
+      await tick();
+      const activeTab =
+        refTabList?.querySelectorAll("[role='tab']")[currentIndex];
+      activeTab?.focus();
     },
   });
 
@@ -145,6 +152,7 @@
     <ChevronDown aria-hidden="true" title="{iconDescription}" />
   </div>
   <ul
+    bind:this="{refTabList}"
     role="tablist"
     class:bx--tabs__nav="{true}"
     class:bx--tabs__nav--hidden="{dropdownHidden}"
