@@ -55,12 +55,6 @@ export interface DropdownProps
   open?: boolean;
 
   /**
-   * Set to `true` to use the inline variant
-   * @default false
-   */
-  inline?: boolean;
-
-  /**
    * Set to `true` to enable the light variant
    * @default false
    */
