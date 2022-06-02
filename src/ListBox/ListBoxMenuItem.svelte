@@ -5,6 +5,9 @@
   /** Set to `true` to enable the highlighted state */
   export let highlighted = false;
 
+  /** Set to `true` to disable the menu item */
+  export let disabled = false;
+
   let ref = null;
 
   $: isTruncated = ref?.offsetWidth < ref?.scrollWidth;
@@ -17,6 +20,7 @@
   class:bx--list-box__menu-item--active="{active}"
   class:bx--list-box__menu-item--highlighted="{highlighted}"
   aria-selected="{active}"
+  disabled="{disabled ? true : undefined}"
   {...$$restProps}
   on:click
   on:mouseenter

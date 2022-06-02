@@ -2,7 +2,7 @@
   /**
    * @typedef {any} MultiSelectItemId
    * @typedef {string} MultiSelectItemText
-   * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; }} MultiSelectItem
+   * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }} MultiSelectItem
    * @event {{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
    * @event {null} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
@@ -208,6 +208,20 @@
       index = length - 1;
     } else if (index >= length) {
       index = 0;
+    }
+
+    let disabled = items[index].disabled;
+
+    while (disabled) {
+      index = index + direction;
+
+      if (index < 0) {
+        index = items.length - 1;
+      } else if (index >= items.length) {
+        index = 0;
+      }
+
+      disabled = items[index].disabled;
     }
 
     highlightedIndex = index;
@@ -481,13 +495,19 @@
             aria-selected="{item.checked}"
             active="{item.checked}"
             highlighted="{highlightedIndex === i}"
-            on:click="{() => {
+            disabled="{item.disabled}"
+            on:click="{(e) => {
+              if (item.disabled) {
+                e.stopPropagation();
+                return;
+              }
               sortedItems = sortedItems.map((_) =>
                 _.id === item.id ? { ..._, checked: !_.checked } : _
               );
               fieldRef.focus();
             }}"
             on:mouseenter="{() => {
+              if (item.disabled) return;
               highlightedIndex = i;
             }}"
           >
@@ -499,7 +519,7 @@
               tabindex="-1"
               id="checkbox-{item.id}"
               checked="{item.checked}"
-              disabled="{disabled}"
+              disabled="{item.disabled}"
               on:blur="{() => {
                 if (i === filteredItems.length - 1) open = false;
               }}"
