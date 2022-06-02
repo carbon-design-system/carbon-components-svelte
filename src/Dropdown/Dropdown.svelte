@@ -46,9 +46,6 @@
   /** Set to `true` to open the dropdown */
   export let open = false;
 
-  /** Set to `true` to use the inline variant */
-  export let inline = false;
-
   /** Set to `true` to enable the light variant */
   export let light = false;
 
