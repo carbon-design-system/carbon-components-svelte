@@ -6,6 +6,7 @@ export type ComboBoxItemId = any;
 export interface ComboBoxItem {
   id: ComboBoxItemId;
   text: string;
+  disabled?: boolean;
 }
 
 export interface ComboBoxProps

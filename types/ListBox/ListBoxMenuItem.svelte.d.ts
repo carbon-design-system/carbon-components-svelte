@@ -14,6 +14,12 @@ export interface ListBoxMenuItemProps
    * @default false
    */
   highlighted?: boolean;
+
+  /**
+   * Set to `true` to disable the menu item
+   * @default false
+   */
+  disabled?: boolean;
 }
 
 export default class ListBoxMenuItem extends SvelteComponentTyped<

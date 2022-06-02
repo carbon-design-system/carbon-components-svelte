@@ -1769,9 +1769,9 @@
           "ts": "type ComboBoxItemId = any"
         },
         {
-          "type": "{ id: ComboBoxItemId; text: string; }",
+          "type": "{ id: ComboBoxItemId; text: string; disabled?: boolean; }",
           "name": "ComboBoxItem",
-          "ts": "interface ComboBoxItem { id: ComboBoxItemId; text: string; }"
+          "ts": "interface ComboBoxItem { id: ComboBoxItemId; text: string; disabled?: boolean; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "input" }
@@ -3505,9 +3505,9 @@
           "ts": "type DropdownItemText = string"
         },
         {
-          "type": "{ id: DropdownItemId; text: DropdownItemText; }",
+          "type": "{ id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }",
           "name": "DropdownItem",
-          "ts": "interface DropdownItem { id: DropdownItemId; text: DropdownItemText; }"
+          "ts": "interface DropdownItem { id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "div" }
@@ -6075,6 +6075,18 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the menu item",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
@@ -7308,9 +7320,9 @@
           "ts": "type MultiSelectItemText = string"
         },
         {
-          "type": "{ id: MultiSelectItemId; text: MultiSelectItemText; }",
+          "type": "{ id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }",
           "name": "MultiSelectItem",
-          "ts": "interface MultiSelectItem { id: MultiSelectItemId; text: MultiSelectItemText; }"
+          "ts": "interface MultiSelectItem { id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "input" }
