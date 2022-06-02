@@ -12,9 +12,11 @@
 </script>
 
 <div
+  role="option"
   class:bx--list-box__menu-item="{true}"
   class:bx--list-box__menu-item--active="{active}"
   class:bx--list-box__menu-item--highlighted="{highlighted}"
+  aria-selected="{active}"
   {...$$restProps}
   on:click
   on:mouseenter
