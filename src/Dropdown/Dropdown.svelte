@@ -164,9 +164,9 @@
     </label>
   {/if}
   <ListBox
+    role="{undefined}"
     type="{type}"
     size="{size}"
-    id="{id}"
     name="{name}"
     aria-label="{$$props['aria-label']}"
     class="bx--dropdown {direction === 'top' && 'bx--list-box--up'} {invalid &&
