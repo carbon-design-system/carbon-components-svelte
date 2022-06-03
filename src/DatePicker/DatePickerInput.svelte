@@ -135,6 +135,7 @@
       on:blur="{({ relatedTarget }) => {
         blurInput(relatedTarget);
       }}"
+      on:paste
     />
     {#if !$hasCalendar}
       {#if invalid}

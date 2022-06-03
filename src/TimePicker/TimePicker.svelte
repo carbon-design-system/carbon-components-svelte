@@ -111,6 +111,7 @@
         on:keyup
         on:focus
         on:blur
+        on:paste
       />
     </div>
     <slot />

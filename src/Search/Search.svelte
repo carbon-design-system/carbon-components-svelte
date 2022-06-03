@@ -148,6 +148,7 @@
         }
       }}"
       on:keyup
+      on:paste
     />
     <button
       type="button"

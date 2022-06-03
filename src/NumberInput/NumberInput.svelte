@@ -206,6 +206,7 @@
         on:input="{onInput}"
         on:focus
         on:blur
+        on:paste
       />
       {#if invalid}
         <WarningFilled class="bx--number__invalid" />

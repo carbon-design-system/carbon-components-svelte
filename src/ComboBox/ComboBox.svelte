@@ -320,6 +320,7 @@
             ref.focus();
           }
         }}"
+        on:paste
       />
       {#if invalid}
         <WarningFilled class="bx--list-box__invalid-icon" />

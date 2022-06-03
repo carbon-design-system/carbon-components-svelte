@@ -201,6 +201,7 @@
         on:keyup
         on:focus
         on:blur
+        on:paste
       />
       {#if isFluid}
         <hr class:bx--text-input__divider="{true}" />
