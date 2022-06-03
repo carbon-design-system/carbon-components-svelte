@@ -8,6 +8,7 @@ export type MultiSelectItemText = string;
 export interface MultiSelectItem {
   id: MultiSelectItemId;
   text: MultiSelectItemText;
+  disabled?: boolean;
 }
 
 export interface MultiSelectProps

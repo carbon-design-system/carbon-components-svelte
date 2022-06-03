@@ -1,7 +1,7 @@
 <script>
   /**
    * @typedef {any} ComboBoxItemId
-   * @typedef {{ id: ComboBoxItemId; text: string; }} ComboBoxItem
+   * @typedef {{ id: ComboBoxItemId; text: string; disabled?: boolean; }} ComboBoxItem
    * @event {{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }} select
    * @slot {{ item: ComboBoxItem; index: number }}
    */
@@ -133,6 +133,20 @@
     } else if (index >= _items.length) {
       index = 0;
     }
+    let disabled = items[index].disabled;
+
+    while (disabled) {
+      index = index + dir;
+
+      if (index < 0) {
+        index = items.length - 1;
+      } else if (index >= items.length) {
+        index = 0;
+      }
+
+      disabled = items[index].disabled;
+    }
+
     highlightedIndex = index;
   }
 
@@ -360,7 +374,12 @@
             id="{item.id}"
             active="{selectedId === item.id}"
             highlighted="{highlightedIndex === i}"
-            on:click="{() => {
+            disabled="{item.disabled}"
+            on:click="{(e) => {
+              if (item.disabled) {
+                e.stopPropagation();
+                return;
+              }
               selectedId = item.id;
               open = false;
 
@@ -369,6 +388,7 @@
               }
             }}"
             on:mouseenter="{() => {
+              if (item.disabled) return;
               highlightedIndex = i;
             }}"
           >

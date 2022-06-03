@@ -2,7 +2,7 @@
   /**
    * @typedef {any} DropdownItemId
    * @typedef {string} DropdownItemText
-   * @typedef {{ id: DropdownItemId; text: DropdownItemText; }} DropdownItem
+   * @typedef {{ id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }} DropdownItem
    * @event {{ selectedId: DropdownItemId, selectedItem: DropdownItem }} select
    * @slot {{ item: DropdownItem; index: number; }}
    */
@@ -119,6 +119,20 @@
       index = items.length - 1;
     } else if (index >= items.length) {
       index = 0;
+    }
+
+    let disabled = items[index].disabled;
+
+    while (disabled) {
+      index = index + dir;
+
+      if (index < 0) {
+        index = items.length - 1;
+      } else if (index >= items.length) {
+        index = 0;
+      }
+
+      disabled = items[index].disabled;
     }
 
     highlightedIndex = index;
@@ -248,11 +262,17 @@
             id="{item.id}"
             active="{selectedId === item.id}"
             highlighted="{highlightedIndex === i || selectedId === item.id}"
-            on:click="{() => {
+            disabled="{item.disabled}"
+            on:click="{(e) => {
+              if (item.disabled) {
+                e.stopPropagation();
+                return;
+              }
               selectedId = item.id;
               ref.focus();
             }}"
             on:mouseenter="{() => {
+              if (item.disabled) return;
               highlightedIndex = i;
             }}"
           >

@@ -646,6 +646,7 @@ export type ComboBoxItemId = any;
 export interface ComboBoxItem {
   id: ComboBoxItemId;
   text: string;
+  disabled?: boolean;
 }
 ```
 
@@ -1140,6 +1141,7 @@ export type DropdownItemText = string;
 export interface DropdownItem {
   id: DropdownItemId;
   text: DropdownItemText;
+  disabled?: boolean;
 }
 ```
 
@@ -2085,6 +2087,7 @@ None.
 | :---------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------------------- |
 | active      | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the active state      |
 | highlighted | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the highlighted state |
+| disabled    | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the menu item        |
 
 ### Slots
 
@@ -2327,6 +2330,7 @@ export type MultiSelectItemText = string;
 export interface MultiSelectItem {
   id: MultiSelectItemId;
   text: MultiSelectItemText;
+  disabled?: boolean;
 }
 ```
 

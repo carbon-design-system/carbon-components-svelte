@@ -8,6 +8,7 @@ export type DropdownItemText = string;
 export interface DropdownItem {
   id: DropdownItemId;
   text: DropdownItemText;
+  disabled?: boolean;
 }
 
 export interface DropdownProps

@@ -146,3 +146,17 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
   />
+
+### Disabled items
+
+Use the `disabled` property in the `items` prop to disable specific items.
+
+<MultiSelect
+  titleText="Contact"
+  label="Select contact methods..."
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email", disabled: true },
+    { id: "2", text: "Fax" },
+  ]}
+/>
