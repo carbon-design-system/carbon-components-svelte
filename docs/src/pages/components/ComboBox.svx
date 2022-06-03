@@ -112,7 +112,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Disabled
+### Disabled state
 
 <ComboBox disabled titleText="Contact" placeholder="Select contact method"
 items={[
@@ -120,3 +120,17 @@ items={[
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}
   ]}  />
+
+### Disabled items
+
+Use the `disabled` property in the `items` prop to disable specific items.
+
+<ComboBox
+  titleText="Contact"
+  placeholder="Select contact method"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email", disabled: true },
+    { id: "2", text: "Fax" },
+  ]}
+/>
