@@ -92,6 +92,7 @@
   import { createEventDispatcher, onMount, afterUpdate } from "svelte";
   import Close from "../icons/Close.svelte";
   import Button from "../Button/Button.svelte";
+  import { modalsOpen, addModalId, removeModalId } from "./modalStore";
 
   const dispatch = createEventDispatcher();
 
@@ -108,6 +109,7 @@
 
   onMount(() => {
     return () => {
+      removeModalId(id);
       document.body.classList.remove("bx--body--with-modal-open");
     };
   });
@@ -117,13 +119,17 @@
       if (!open) {
         opened = false;
         dispatch("close");
-        document.body.classList.remove("bx--body--with-modal-open");
       }
     } else if (open) {
       opened = true;
       focus();
       dispatch("open");
+    }
+
+    if ($modalsOpen.length > 0) {
       document.body.classList.add("bx--body--with-modal-open");
+    } else {
+      document.body.classList.remove("bx--body--with-modal-open");
     }
   });
 
@@ -142,6 +148,11 @@
       alertDialogProps.role = "alertdialog";
       alertDialogProps["aria-describedby"] = modalBodyId;
     }
+  }
+  $: if (open) {
+    addModalId(id);
+  } else {
+    removeModalId(id);
   }
 </script>
 
