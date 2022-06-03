@@ -19,6 +19,7 @@
   on:change="{(e) => {
     console.log(e.detail); // null | number
   }}"
+  on:paste
 />
 
 <NumberInputSkeleton hideLabel />

@@ -113,6 +113,7 @@
             break;
         }
       }}"
+      on:paste
     />
     <button
       type="button"

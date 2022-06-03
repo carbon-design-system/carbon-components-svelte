@@ -2,7 +2,12 @@
   import { TimePicker, TimePickerSelect, SelectItem } from "../types";
 </script>
 
-<TimePicker spellcheck="{false}" labelText="Cron job" placeholder="hh:mm">
+<TimePicker
+  spellcheck="{false}"
+  labelText="Cron job"
+  placeholder="hh:mm"
+  on:paste
+>
   <TimePickerSelect value="PM">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />

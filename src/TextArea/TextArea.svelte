@@ -114,7 +114,8 @@
       on:keydown
       on:keyup
       on:focus
-      on:blur></textarea>
+      on:blur
+      on:paste></textarea>
   </div>
   {#if !invalid && helperText}
     <div

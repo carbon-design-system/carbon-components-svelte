@@ -446,6 +446,7 @@
           on:keyup
           on:focus
           on:blur
+          on:paste
           disabled="{disabled}"
           placeholder="{placeholder}"
           id="{id}"

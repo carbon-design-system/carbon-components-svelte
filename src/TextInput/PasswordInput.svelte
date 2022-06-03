@@ -190,6 +190,7 @@
         on:keyup
         on:focus
         on:blur
+        on:paste
       />
       <button
         type="button"

@@ -38,9 +38,9 @@
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.49.11",
-    "sveld": "^0.17.0",
+    "sveld": "^0.17.1",
     "svelte": "^3.46.6",
-    "svelte-check": "^2.4.6",
+    "svelte-check": "^2.7.2",
     "typescript": "^4.6.3"
   },
   "lint-staged": {

@@ -20,6 +20,7 @@
   on:blur="{(e) => {
     e.detail; // number | FocusEvent
   }}"
+  on:paste
   translateWithId="{(id) => {
     console.log(id); // "open" | "close"
     return id;

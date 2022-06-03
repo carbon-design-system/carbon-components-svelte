@@ -9,7 +9,7 @@
   flatpickrProps="{{ static: true }}"
   on:change
 >
-  <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" on:paste />
 </DatePicker>
 
 <DatePicker
