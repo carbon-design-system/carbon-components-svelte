@@ -9,6 +9,7 @@
   type="text"
   placeholder="Enter password..."
   value="as_lta0890sdfpo__!9901"
+  on:paste
 />
 
 <PasswordInput hideLabel labelText="Password" placeholder="Enter password..." />

@@ -73,6 +73,7 @@
       on:select="{(e) => {
         console.log('on:select', e.detail);
       }}"
+      on:paste
       let:result
       let:index
     >

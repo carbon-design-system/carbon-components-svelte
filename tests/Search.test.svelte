@@ -2,7 +2,7 @@
   import { Search } from "../types";
 </script>
 
-<Search />
+<Search on:paste />
 
 <Search placeholder="Search catalog..." value="Cloud functions" />
 
