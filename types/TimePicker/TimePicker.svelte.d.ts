@@ -107,6 +107,7 @@ export default class TimePicker extends SvelteComponentTyped<
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
+    paste: DocumentAndElementEventHandlersEventMap["paste"];
   },
   { default: {}; labelText: {} }
 > {}

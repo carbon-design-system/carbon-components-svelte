@@ -250,6 +250,7 @@ export default class MultiSelect extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
+    paste: DocumentAndElementEventHandlersEventMap["paste"];
   },
   { default: { item: MultiSelectItem; index: number } }
 > {}

@@ -693,6 +693,7 @@ export interface ComboBoxItem {
 | keyup      | forwarded  | --                                                                      |
 | focus      | forwarded  | --                                                                      |
 | blur       | forwarded  | --                                                                      |
+| paste      | forwarded  | --                                                                      |
 | clear      | forwarded  | --                                                                      |
 | scroll     | forwarded  | --                                                                      |
 
@@ -1105,6 +1106,7 @@ None.
 | keydown    | forwarded | --     |
 | keyup      | forwarded | --     |
 | blur       | forwarded | --     |
+| paste      | forwarded | --     |
 
 ## `DatePickerSkeleton`
 
@@ -1828,6 +1830,7 @@ export interface HeaderSearchResult {
 | focus      | forwarded  | --                                                                                              |
 | blur       | forwarded  | --                                                                                              |
 | keydown    | forwarded  | --                                                                                              |
+| paste      | forwarded  | --                                                                                              |
 
 ## `HeaderUtilities`
 
@@ -2386,6 +2389,7 @@ export interface MultiSelectItem {
 | keydown    | forwarded  | --                                                                                                             |
 | keyup      | forwarded  | --                                                                                                             |
 | focus      | forwarded  | --                                                                                                             |
+| paste      | forwarded  | --                                                                                                             |
 
 ## `NotificationActionButton`
 
@@ -2504,6 +2508,7 @@ export type NumberInputTranslationId = "increment" | "decrement";
 | mouseleave | forwarded  | --                              |
 | focus      | forwarded  | --                              |
 | blur       | forwarded  | --                              |
+| paste      | forwarded  | --                              |
 
 ## `NumberInputSkeleton`
 
@@ -2765,6 +2770,7 @@ None.
 | keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
+| paste      | forwarded | --     |
 
 ## `Popover`
 
@@ -3104,6 +3110,7 @@ None.
 | blur       | forwarded  | --                |
 | keydown    | forwarded  | --                |
 | keyup      | forwarded  | --                |
+| paste      | forwarded  | --                |
 | clear      | dispatched | <code>null</code> |
 
 ## `SearchSkeleton`
@@ -4042,6 +4049,7 @@ None.
 | keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
+| paste      | forwarded | --     |
 
 ## `TextAreaSkeleton`
 
@@ -4109,6 +4117,7 @@ None.
 | keyup      | forwarded  | --                                            |
 | focus      | forwarded  | --                                            |
 | blur       | forwarded  | --                                            |
+| paste      | forwarded  | --                                            |
 
 ## `TextInputSkeleton`
 
@@ -4251,6 +4260,7 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 | keyup      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
+| paste      | forwarded | --     |
 
 ## `TimePickerSelect`
 

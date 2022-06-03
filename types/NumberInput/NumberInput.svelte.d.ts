@@ -150,6 +150,7 @@ export default class NumberInput extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
+    paste: DocumentAndElementEventHandlersEventMap["paste"];
   },
   { label: {} }
 > {

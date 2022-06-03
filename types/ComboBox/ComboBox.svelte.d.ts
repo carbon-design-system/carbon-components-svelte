@@ -164,6 +164,7 @@ export default class ComboBox extends SvelteComponentTyped<
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
+    paste: DocumentAndElementEventHandlersEventMap["paste"];
     clear: WindowEventMap["clear"];
     scroll: WindowEventMap["scroll"];
   },

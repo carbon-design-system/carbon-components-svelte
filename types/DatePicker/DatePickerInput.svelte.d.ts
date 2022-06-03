@@ -107,6 +107,7 @@ export default class DatePickerInput extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     blur: WindowEventMap["blur"];
+    paste: DocumentAndElementEventHandlersEventMap["paste"];
   },
   { labelText: {} }
 > {}
