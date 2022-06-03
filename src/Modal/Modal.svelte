@@ -139,16 +139,6 @@
   $: ariaLabel =
     modalLabel || $$props["aria-label"] || modalAriaLabel || modalHeading;
 
-  let alertDialogProps = {};
-  $: if (alert) {
-    if (passiveModal) {
-      alertDialogProps.role = "alert";
-    }
-    if (!passiveModal) {
-      alertDialogProps.role = "alertdialog";
-      alertDialogProps["aria-describedby"] = modalBodyId;
-    }
-  }
   $: if (open) {
     addModalId(id);
   } else {
@@ -214,9 +204,9 @@
 >
   <div
     bind:this="{innerModal}"
-    role="dialog"
     tabindex="-1"
-    {...alertDialogProps}
+    role="{alert ? (passiveModal ? 'alert' : 'alertdialog') : 'dialog'}"
+    aria-describedby="{alert && !passiveModal ? modalBodyId : undefined}"
     aria-modal="true"
     aria-label="{ariaLabel}"
     class:bx--modal-container="{true}"
