@@ -14,13 +14,19 @@
 
 <FileSource src="/framed/Modal/PassiveModal" />
 
+### Has scrolling content
+
+Setting `hasScrollingContent` to `true` increases the vertical space within the modal.
+
+<FileSource src="/framed/Modal/ModalScrollingContent" />
+
 ### Multiple modals
 
 <FileSource src="/framed/Modal/ModalMultiple" />
 
 ### Multiple secondary buttons
 
-Use the `secondaryButtons` prop to render two secondary buttons for a "3-button modal". The prop is a 2-tuple type that supersedes `secondaryButtonText`.
+Use the `secondaryButtons` prop to render two secondary buttons. The prop is a 2-tuple type that supersedes `secondaryButtonText`.
 
 <FileSource src="/framed/Modal/3ButtonModal" />
 
