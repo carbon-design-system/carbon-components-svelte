@@ -1,8 +1,12 @@
 <script>
-  import { Modal } from "carbon-components-svelte";
+  import { Button, Modal } from "carbon-components-svelte";
+
+  let open = false;
 </script>
 
-<Modal open passiveModal modalHeading="About Cloudant" hasScrollingContent>
+<Button on:click="{() => (open = true)}">Create database</Button>
+
+<Modal bind:open passiveModal modalHeading="About Cloudant" hasScrollingContent>
   <p>
     Cloudant is a fully managed, distributed database optimized for heavy
     workloads and fast-growing web and mobile apps, IBM Cloudant is available as
