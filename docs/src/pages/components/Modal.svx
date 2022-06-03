@@ -6,6 +6,14 @@
 
 <FileSource src="/framed/Modal/Modal" />
 
+### Custom focus
+
+By default, the modal close button will be focused when opened.
+
+Use the `selectorPrimaryFocus` to specify the element that should be focused when the modal is opened (e.g., `#id`, `.class`, `[data-attribute]`).
+
+<FileSource src="/framed/Modal/ModalCustomFocus" />
+
 ### Danger modal
 
 <FileSource src="/framed/Modal/DangerModal" />
@@ -14,13 +22,19 @@
 
 <FileSource src="/framed/Modal/PassiveModal" />
 
+### Has scrolling content
+
+Setting `hasScrollingContent` to `true` increases the vertical space within the modal.
+
+<FileSource src="/framed/Modal/ModalScrollingContent" />
+
 ### Multiple modals
 
 <FileSource src="/framed/Modal/ModalMultiple" />
 
 ### Multiple secondary buttons
 
-Use the `secondaryButtons` prop to render two secondary buttons for a "3-button modal". The prop is a 2-tuple type that supersedes `secondaryButtonText`.
+Use the `secondaryButtons` prop to render two secondary buttons. The prop is a 2-tuple type that supersedes `secondaryButtonText`.
 
 <FileSource src="/framed/Modal/3ButtonModal" />
 
