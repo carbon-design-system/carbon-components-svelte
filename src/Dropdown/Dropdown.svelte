@@ -9,7 +9,7 @@
 
   /**
    * Set the dropdown items
-   * @type {DropdownItem[]}
+   * @type {ReadonlyArray<DropdownItem>}
    */
   export let items = [];
 

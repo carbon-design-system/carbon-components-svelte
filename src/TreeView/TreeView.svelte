@@ -22,13 +22,13 @@
 
   /**
    * Set the node ids to be selected
-   * @type {TreeNodeId[]}
+   * @type {ReadonlyArray<TreeNodeId>}
    */
   export let selectedIds = [];
 
   /**
    * Set the node ids to be expanded
-   * @type {TreeNodeId[]}
+   * @type {ReadonlyArray<TreeNodeId>}
    */
   export let expandedIds = [];
 

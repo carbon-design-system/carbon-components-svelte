@@ -14,7 +14,7 @@
 
   /**
    * Specify the bound group
-   * @type {any[]}
+   * @type {ReadonlyArray<any>}
    */
   export let group = undefined;
 

@@ -47,7 +47,7 @@
 
   /**
    * Specify the available page sizes
-   * @type {number[]}
+   * @type {ReadonlyArray<number>}
    */
   export let pageSizes = [10];
 

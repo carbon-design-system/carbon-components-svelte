@@ -1,8 +1,8 @@
 <script>
   /**
-   * @event {File[]} add
-   * @event {File[]} remove
-   * @event {File[]} change
+   * @event {ReadonlyArray<File>} add
+   * @event {ReadonlyArray<File>} remove
+   * @event {ReadonlyArray<File>} change
    */
 
   /**
@@ -16,13 +16,13 @@
 
   /**
    * Specify the accepted file types
-   * @type {string[]}
+   * @type {ReadonlyArray<string>}
    */
   export let accept = [];
 
   /**
    * Obtain a reference to the uploaded files
-   * @type {File[]}
+   * @type {ReadonlyArray<File>}
    */
   export let files = [];
 
