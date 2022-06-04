@@ -6,8 +6,15 @@
     FileUploaderItem,
     FileUploaderSkeleton,
   } from "../types";
+  import type { FileUploaderProps } from "../types/FileUploader/FileUploader.svelte";
 
   let fileUploader: FileUploader;
+  let files: FileUploaderProps["files"] = [];
+
+  $: {
+    // @ts-expect-error
+    files[0] = null;
+  }
 
   $: fileUploader?.clearFiles();
 </script>
@@ -27,6 +34,7 @@
   labelDescription="Only JPEG files are accepted."
   accept="{['.jpg', '.jpeg']}"
   status="complete"
+  bind:files
   on:add="{(e) => {
     console.log(e.detail); // File[]
   }}"

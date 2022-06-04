@@ -1,5 +1,13 @@
 <script lang="ts">
   import { MultiSelect } from "../types";
+  import type { MultiSelectProps } from "../types/MultiSelect/MultiSelect.svelte";
+
+  let selectedIds: MultiSelectProps["selectedIds"] = [0];
+
+  $: {
+    // @ts-expect-error
+    selectedIds[0] = [0];
+  }
 </script>
 
 <MultiSelect
@@ -7,6 +15,7 @@
   titleText="Contact"
   label="Select contact methods..."
   hideLabel
+  bind:selectedIds
   items="{[
     { id: 0, text: 'Slack' },
     { id: '1', text: 'Email' },
