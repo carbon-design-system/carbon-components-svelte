@@ -17,7 +17,7 @@ export interface DropdownProps
    * Set the dropdown items
    * @default []
    */
-  items?: DropdownItem[];
+  items?: ReadonlyArray<DropdownItem>;
 
   /**
    * Override the display of a dropdown item

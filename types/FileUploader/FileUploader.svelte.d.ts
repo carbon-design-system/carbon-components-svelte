@@ -19,13 +19,13 @@ export interface FileUploaderProps
    * Specify the accepted file types
    * @default []
    */
-  accept?: string[];
+  accept?: ReadonlyArray<string>;
 
   /**
    * Obtain a reference to the uploaded files
    * @default []
    */
-  files?: File[];
+  files?: ReadonlyArray<File>;
 
   /**
    * Set to `true` to allow multiple files
@@ -73,9 +73,9 @@ export interface FileUploaderProps
 export default class FileUploader extends SvelteComponentTyped<
   FileUploaderProps,
   {
-    add: CustomEvent<File[]>;
-    remove: CustomEvent<File[]>;
-    change: CustomEvent<File[]>;
+    add: CustomEvent<ReadonlyArray<File>>;
+    remove: CustomEvent<ReadonlyArray<File>>;
+    change: CustomEvent<ReadonlyArray<File>>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];

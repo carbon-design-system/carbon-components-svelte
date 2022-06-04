@@ -41,7 +41,7 @@ export interface DataTableSkeletonProps
    * Supersedes `columns` if value is a non-empty array
    * @default []
    */
-  headers?: string[] | Partial<DataTableHeader>[];
+  headers?: ReadonlyArray<string | Partial<DataTableHeader>>;
 
   /**
    * Set to `false` to hide the toolbar

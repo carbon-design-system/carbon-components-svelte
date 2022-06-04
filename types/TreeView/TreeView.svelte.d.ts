@@ -30,13 +30,13 @@ export interface TreeViewProps
    * Set the node ids to be selected
    * @default []
    */
-  selectedIds?: TreeNodeId[];
+  selectedIds?: ReadonlyArray<TreeNodeId>;
 
   /**
    * Set the node ids to be expanded
    * @default []
    */
-  expandedIds?: TreeNodeId[];
+  expandedIds?: ReadonlyArray<TreeNodeId>;
 
   /**
    * Specify the TreeView size

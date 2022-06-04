@@ -46,14 +46,14 @@ export interface DataTableProps
    * Specify the data table headers
    * @default []
    */
-  headers?: DataTableHeader[];
+  headers?: ReadonlyArray<DataTableHeader>;
 
   /**
    * Specify the rows the data table should render
    * keys defined in `headers` are used for the row ids
    * @default []
    */
-  rows?: DataTableRow[];
+  rows?: ReadonlyArray<DataTableRow>;
 
   /**
    * Set the size of the data table
@@ -102,13 +102,13 @@ export interface DataTableProps
    * Specify the row ids to be expanded
    * @default []
    */
-  expandedRowIds?: DataTableRowId[];
+  expandedRowIds?: ReadonlyArray<DataTableRowId>;
 
   /**
    * Specify the ids for rows that should not be expandable
    * @default []
    */
-  nonExpandableRowIds?: DataTableRowId[];
+  nonExpandableRowIds?: ReadonlyArray<DataTableRowId>;
 
   /**
    * Set to `true` for the radio selection variant
@@ -133,13 +133,13 @@ export interface DataTableProps
    * Specify the row ids to be selected
    * @default []
    */
-  selectedRowIds?: DataTableRowId[];
+  selectedRowIds?: ReadonlyArray<DataTableRowId>;
 
   /**
    * Specify the ids of rows that should not be selectable
    * @default []
    */
-  nonSelectableRowIds?: DataTableRowId[];
+  nonSelectableRowIds?: ReadonlyArray<DataTableRowId>;
 
   /**
    * Set to `true` to enable a sticky header

@@ -5,7 +5,7 @@ export interface ContextMenuGroupProps {
   /**
    * @default []
    */
-  selectedIds?: string[];
+  selectedIds?: ReadonlyArray<string>;
 
   /**
    * Specify the label text

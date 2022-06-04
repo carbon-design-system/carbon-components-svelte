@@ -31,7 +31,7 @@ export interface HeaderSearchProps
    * Render a list of search results
    * @default []
    */
-  results?: HeaderSearchResult[];
+  results?: ReadonlyArray<HeaderSearchResult>;
 
   /**
    * Specify the selected result index
