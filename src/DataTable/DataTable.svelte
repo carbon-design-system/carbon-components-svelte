@@ -148,7 +148,7 @@
   const tableRows = writable(rows);
   const thKeys = derived(headerItems, () =>
     headers
-      .map(({ key }, i) => ({ key, id: key }))
+      .map(({ key }) => ({ key, id: key }))
       .reduce((a, c) => ({ ...a, [c.key]: c.id }), {})
   );
   const resolvePath = (object, path) => {
@@ -339,7 +339,7 @@
             />
           </th>
         {/if}
-        {#each headers as header, i (header.key)}
+        {#each headers as header (header.key)}
           {#if header.empty}
             <th scope="col" style="{formatHeaderWidth(header)}"></th>
           {:else}
