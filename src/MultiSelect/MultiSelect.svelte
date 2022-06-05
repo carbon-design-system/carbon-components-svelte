@@ -11,7 +11,7 @@
 
   /**
    * Set the multiselect items
-   * @type {MultiSelectItem[]}
+   * @type {ReadonlyArray<MultiSelectItem>}
    */
   export let items = [];
 
@@ -29,7 +29,7 @@
 
   /**
    * Set the selected ids
-   * @type {MultiSelectItemId[]}
+   * @type {ReadonlyArray<MultiSelectItemId>}
    */
   export let selectedIds = [];
 

@@ -9,13 +9,16 @@
   import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
   import Cut from "carbon-icons-svelte/lib/Cut.svelte";
 
+  let ref: HTMLElement;
   let selectedId = "0";
   let selectedIds = [];
 
   $: console.log("selectedId", selectedId);
 </script>
 
-<ContextMenu open on:open="{(e) => console.log(e.detail)}">
+<div bind:this="{ref}"></div>
+
+<ContextMenu target="{null}" open on:open="{(e) => console.log(e.detail)}">
   <ContextMenuOption
     kind="danger"
     indented
@@ -42,7 +45,7 @@
   </ContextMenuGroup>
 </ContextMenu>
 
-<ContextMenu on:open on:close>
+<ContextMenu target="{[null, ref]}" on:open on:close>
   <ContextMenuOption indented labelText="Open" />
   <ContextMenuDivider />
   <ContextMenuRadioGroup bind:selectedId labelText="Radio group">

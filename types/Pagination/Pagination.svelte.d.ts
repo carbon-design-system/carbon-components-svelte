@@ -73,7 +73,7 @@ export interface PaginationProps
    * Specify the available page sizes
    * @default [10]
    */
-  pageSizes?: number[];
+  pageSizes?: ReadonlyArray<number>;
 
   /**
    * Set to `true` if the number of pages is unknown

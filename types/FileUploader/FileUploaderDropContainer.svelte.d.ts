@@ -7,13 +7,13 @@ export interface FileUploaderDropContainerProps
    * Specify the accepted file types
    * @default []
    */
-  accept?: string[];
+  accept?: ReadonlyArray<string>;
 
   /**
    * Obtain a reference to the uploaded files
    * @default []
    */
-  files?: File[];
+  files?: ReadonlyArray<File>;
 
   /**
    * Set to `true` to allow multiple files
@@ -22,11 +22,11 @@ export interface FileUploaderDropContainerProps
   multiple?: boolean;
 
   /**
-   * Override the default behavior of validating uploaded files
-   * The default behavior does not validate files
+   * Override the default behavior of validating uploaded files.
+   * By default, files are not validated
    * @default (files) => files
    */
-  validateFiles?: (files: File[]) => File[];
+  validateFiles?: (files: ReadonlyArray<File>) => ReadonlyArray<File>;
 
   /**
    * Specify the label text
@@ -74,8 +74,8 @@ export interface FileUploaderDropContainerProps
 export default class FileUploaderDropContainer extends SvelteComponentTyped<
   FileUploaderDropContainerProps,
   {
-    add: CustomEvent<File[]>;
-    change: CustomEvent<File[]>;
+    add: CustomEvent<ReadonlyArray<File>>;
+    change: CustomEvent<ReadonlyArray<File>>;
     dragover: WindowEventMap["dragover"];
     dragleave: WindowEventMap["dragleave"];
     drop: WindowEventMap["drop"];

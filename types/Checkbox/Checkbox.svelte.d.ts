@@ -18,7 +18,7 @@ export interface CheckboxProps {
    * Specify the bound group
    * @default undefined
    */
-  group?: any[];
+  group?: ReadonlyArray<any>;
 
   /**
    * Specify whether the checkbox is indeterminate

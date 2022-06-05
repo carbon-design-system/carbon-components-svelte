@@ -7,13 +7,13 @@ export interface FileUploaderButtonProps
    * Specify the accepted file types
    * @default []
    */
-  accept?: string[];
+  accept?: ReadonlyArray<string>;
 
   /**
    * Obtain a reference to the uploaded files
    * @default []
    */
-  files?: File[];
+  files?: ReadonlyArray<File>;
 
   /**
    * Set to `true` to allow multiple files
@@ -79,7 +79,7 @@ export interface FileUploaderButtonProps
 export default class FileUploaderButton extends SvelteComponentTyped<
   FileUploaderButtonProps,
   {
-    change: CustomEvent<File[]>;
+    change: CustomEvent<ReadonlyArray<File>>;
     keydown: WindowEventMap["keydown"];
     click: WindowEventMap["click"];
   },

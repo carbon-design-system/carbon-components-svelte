@@ -17,7 +17,7 @@ export interface MultiSelectProps
    * Set the multiselect items
    * @default []
    */
-  items?: MultiSelectItem[];
+  items?: ReadonlyArray<MultiSelectItem>;
 
   /**
    * Override the display of a multiselect item
@@ -39,7 +39,7 @@ export interface MultiSelectProps
    * Set the selected ids
    * @default []
    */
-  selectedIds?: MultiSelectItemId[];
+  selectedIds?: ReadonlyArray<MultiSelectItemId>;
 
   /**
    * Specify the multiselect value

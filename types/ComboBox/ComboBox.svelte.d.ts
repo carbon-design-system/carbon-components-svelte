@@ -15,7 +15,7 @@ export interface ComboBoxProps
    * Set the combobox items
    * @default []
    */
-  items?: ComboBoxItem[];
+  items?: ReadonlyArray<ComboBoxItem>;
 
   /**
    * Override the display of a combobox item

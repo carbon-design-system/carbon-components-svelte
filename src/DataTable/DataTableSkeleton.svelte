@@ -25,7 +25,7 @@
   /**
    * Set the column headers
    * Supersedes `columns` if value is a non-empty array
-   * @type {string[] | Partial<DataTableHeader>[]}
+   * @type {ReadonlyArray<string | Partial<DataTableHeader>>}
    */
   export let headers = [];
 

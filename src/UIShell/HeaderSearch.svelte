@@ -19,7 +19,7 @@
 
   /**
    * Render a list of search results
-   * @type {HeaderSearchResult[]}
+   * @type {ReadonlyArray<HeaderSearchResult>}
    */
   export let results = [];
 

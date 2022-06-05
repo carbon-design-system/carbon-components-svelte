@@ -24,14 +24,14 @@
 
   /**
    * Specify the data table headers
-   * @type {DataTableHeader[]}
+   * @type {ReadonlyArray<DataTableHeader>}
    */
   export let headers = [];
 
   /**
    * Specify the rows the data table should render
    * keys defined in `headers` are used for the row ids
-   * @type {DataTableRow[]}
+   * @type {ReadonlyArray<DataTableRow>}
    */
   export let rows = [];
 
@@ -66,13 +66,13 @@
 
   /**
    * Specify the row ids to be expanded
-   * @type {DataTableRowId[]}
+   * @type {ReadonlyArray<DataTableRowId>}
    */
   export let expandedRowIds = [];
 
   /**
    * Specify the ids for rows that should not be expandable
-   * @type {DataTableRowId[]}
+   * @type {ReadonlyArray<DataTableRowId>}
    */
   export let nonExpandableRowIds = [];
 
@@ -90,13 +90,13 @@
 
   /**
    * Specify the row ids to be selected
-   * @type {DataTableRowId[]}
+   * @type {ReadonlyArray<DataTableRowId>}
    */
   export let selectedRowIds = [];
 
   /**
    * Specify the ids of rows that should not be selectable
-   * @type {DataTableRowId[]}
+   * @type {ReadonlyArray<DataTableRowId>}
    */
   export let nonSelectableRowIds = [];
 

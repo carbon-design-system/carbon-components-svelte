@@ -1,18 +1,18 @@
 <script>
   /**
-   * @event {File[]} add
-   * @event {File[]} change
+   * @event {ReadonlyArray<File>} add
+   * @event {ReadonlyArray<File>} change
    */
 
   /**
    * Specify the accepted file types
-   * @type {string[]}
+   * @type {ReadonlyArray<string>}
    */
   export let accept = [];
 
   /**
    * Obtain a reference to the uploaded files
-   * @type {File[]}
+   * @type {ReadonlyArray<File>}
    */
   export let files = [];
 
@@ -20,9 +20,9 @@
   export let multiple = false;
 
   /**
-   * Override the default behavior of validating uploaded files
-   * The default behavior does not validate files
-   * @type {(files: File[]) => File[]}
+   * Override the default behavior of validating uploaded files.
+   * By default, files are not validated
+   * @type {(files: ReadonlyArray<File>) => ReadonlyArray<File>}
    */
   export let validateFiles = (files) => files;
 

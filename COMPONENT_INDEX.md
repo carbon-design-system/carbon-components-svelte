@@ -453,7 +453,7 @@ None.
 | :------------ | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | ------------------------------------------------- |
 | ref           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element      |
 | title         | No       | <code>let</code> | Yes      | <code>string</code>                       | <code>undefined</code>                           | Specify the title attribute for the label element |
-| group         | No       | <code>let</code> | Yes      | <code>any[]</code>                        | <code>undefined</code>                           | Specify the bound group                           |
+| group         | No       | <code>let</code> | Yes      | <code>ReadonlyArray<any></code>           | <code>undefined</code>                           | Specify the bound group                           |
 | checked       | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is checked           |
 | value         | No       | <code>let</code> | No       | <code>any</code>                          | <code>""</code>                                  | Specify the value of the checkbox                 |
 | indeterminate | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is indeterminate     |
@@ -659,7 +659,7 @@ export interface ComboBoxItem {
 | open                     | No       | <code>let</code>      | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                           | Set to `true` to open the combobox menu dropdown                                                                                                            |
 | value                    | No       | <code>let</code>      | Yes      | <code>string</code>                                                                                   | <code>""</code>                                                                                                                                                                                                              | Specify the selected combobox value                                                                                                                         |
 | selectedId               | No       | <code>let</code>      | Yes      | <code>ComboBoxItemId</code>                                                                           | <code>undefined</code>                                                                                                                                                                                                       | Set the selected item by value id                                                                                                                           |
-| items                    | No       | <code>let</code>      | No       | <code>ComboBoxItem[]</code>                                                                           | <code>[]</code>                                                                                                                                                                                                              | Set the combobox items                                                                                                                                      |
+| items                    | No       | <code>let</code>      | No       | <code>ReadonlyArray<ComboBoxItem></code>                                                              | <code>[]</code>                                                                                                                                                                                                              | Set the combobox items                                                                                                                                      |
 | itemToString             | No       | <code>let</code>      | No       | <code>(item: ComboBoxItem) => string</code>                                                           | <code>(item) => item.text &#124;&#124; item.id</code>                                                                                                                                                                        | Override the display of a combobox item                                                                                                                     |
 | direction                | No       | <code>let</code>      | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                                                                                                                                                                                                        | Specify the direction of the combobox dropdown menu                                                                                                         |
 | size                     | No       | <code>let</code>      | No       | <code>"sm" &#124; "xl"</code>                                                                         | <code>undefined</code>                                                                                                                                                                                                       | Set the size of the combobox                                                                                                                                |
@@ -780,13 +780,13 @@ None.
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                                                      | Default value      | Description                                                                                                                                        |
-| :-------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>                 | <code>null</code>  | Obtain a reference to the unordered list HTML element                                                                                              |
-| y         | No       | <code>let</code> | Yes      | <code>number</code>                                       | <code>0</code>     | Specify the vertical offset of the menu position                                                                                                   |
-| x         | No       | <code>let</code> | Yes      | <code>number</code>                                       | <code>0</code>     | Specify the horizontal offset of the menu position                                                                                                 |
-| open      | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero                                                                   |
-| target    | No       | <code>let</code> | No       | <code>null &#124; HTMLElement &#124; HTMLElement[]</code> | <code>null</code>  | Specify an element or list of elements to trigger the context menu.<br />If no element is specified, the context menu applies to the entire window |
+| Prop name | Required | Kind             | Reactive | Type                                                            | Default value      | Description                                                                                                                                        |
+| :-------- | :------- | :--------------- | :------- | --------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>                       | <code>null</code>  | Obtain a reference to the unordered list HTML element                                                                                              |
+| y         | No       | <code>let</code> | Yes      | <code>number</code>                                             | <code>0</code>     | Specify the vertical offset of the menu position                                                                                                   |
+| x         | No       | <code>let</code> | Yes      | <code>number</code>                                             | <code>0</code>     | Specify the horizontal offset of the menu position                                                                                                 |
+| open      | No       | <code>let</code> | Yes      | <code>boolean</code>                                            | <code>false</code> | Set to `true` to open the menu<br />Either `x` and `y` must be greater than zero                                                                   |
+| target    | No       | <code>let</code> | No       | <code>null &#124; ReadonlyArray<null &#124; HTMLElement></code> | <code>null</code>  | Specify an element or list of elements to trigger the context menu.<br />If no element is specified, the context menu applies to the entire window |
 
 ### Slots
 
@@ -821,10 +821,10 @@ None.
 
 ### Props
 
-| Prop name   | Required | Kind             | Reactive | Type                  | Default value   | Description            |
-| :---------- | :------- | :--------------- | :------- | --------------------- | --------------- | ---------------------- |
-| selectedIds | No       | <code>let</code> | Yes      | <code>string[]</code> | <code>[]</code> | --                     |
-| labelText   | No       | <code>let</code> | No       | <code>string</code>   | <code>""</code> | Specify the label text |
+| Prop name   | Required | Kind             | Reactive | Type                               | Default value   | Description            |
+| :---------- | :------- | :--------------- | :------- | ---------------------------------- | --------------- | ---------------------- |
+| selectedIds | No       | <code>let</code> | Yes      | <code>ReadonlyArray<string></code> | <code>[]</code> | --                     |
+| labelText   | No       | <code>let</code> | No       | <code>string</code>                | <code>""</code> | Specify the label text |
 
 ### Slots
 
@@ -963,22 +963,22 @@ export interface DataTableCell {
 
 | Prop name           | Required | Kind             | Reactive | Type                                                                | Default value          | Description                                                                                                         |
 | :------------------ | :------- | :--------------- | :------- | ------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| selectedRowIds      | No       | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                                       | <code>[]</code>        | Specify the row ids to be selected                                                                                  |
+| selectedRowIds      | No       | <code>let</code> | Yes      | <code>ReadonlyArray<DataTableRowId></code>                          | <code>[]</code>        | Specify the row ids to be selected                                                                                  |
 | selectable          | No       | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the selectable variant<br />Automatically set to `true` if `radio` or `batchSelection` are `true` |
-| expandedRowIds      | No       | <code>let</code> | Yes      | <code>DataTableRowId[]</code>                                       | <code>[]</code>        | Specify the row ids to be expanded                                                                                  |
+| expandedRowIds      | No       | <code>let</code> | Yes      | <code>ReadonlyArray<DataTableRowId></code>                          | <code>[]</code>        | Specify the row ids to be expanded                                                                                  |
 | expandable          | No       | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the expandable variant<br />Automatically set to `true` if `batchExpansion` is `true`             |
-| headers             | No       | <code>let</code> | No       | <code>DataTableHeader[]</code>                                      | <code>[]</code>        | Specify the data table headers                                                                                      |
-| rows                | No       | <code>let</code> | No       | <code>DataTableRow[]</code>                                         | <code>[]</code>        | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
+| headers             | No       | <code>let</code> | No       | <code>ReadonlyArray<DataTableHeader></code>                         | <code>[]</code>        | Specify the data table headers                                                                                      |
+| rows                | No       | <code>let</code> | No       | <code>ReadonlyArray<DataTableRow></code>                            | <code>[]</code>        | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
 | size                | No       | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | <code>undefined</code> | Set the size of the data table                                                                                      |
 | title               | No       | <code>let</code> | No       | <code>string</code>                                                 | <code>""</code>        | Specify the title of the data table                                                                                 |
 | description         | No       | <code>let</code> | No       | <code>string</code>                                                 | <code>""</code>        | Specify the description of the data table                                                                           |
 | zebra               | No       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use zebra styles                                                                                   |
 | sortable            | No       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the sortable variant                                                                              |
 | batchExpansion      | No       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to enable batch expansion                                                                             |
-| nonExpandableRowIds | No       | <code>let</code> | No       | <code>DataTableRowId[]</code>                                       | <code>[]</code>        | Specify the ids for rows that should not be expandable                                                              |
+| nonExpandableRowIds | No       | <code>let</code> | No       | <code>ReadonlyArray<DataTableRowId></code>                          | <code>[]</code>        | Specify the ids for rows that should not be expandable                                                              |
 | radio               | No       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the radio selection variant                                                                       |
 | batchSelection      | No       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to enable batch selection                                                                             |
-| nonSelectableRowIds | No       | <code>let</code> | No       | <code>DataTableRowId[]</code>                                       | <code>[]</code>        | Specify the ids of rows that should not be selectable                                                               |
+| nonSelectableRowIds | No       | <code>let</code> | No       | <code>ReadonlyArray<DataTableRowId></code>                          | <code>[]</code>        | Specify the ids of rows that should not be selectable                                                               |
 | stickyHeader        | No       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to enable a sticky header                                                                             |
 | useStaticWidth      | No       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use static width                                                                                   |
 | pageSize            | No       | <code>let</code> | No       | <code>number</code>                                                 | <code>0</code>         | Specify the number of items to display in a page                                                                    |
@@ -1012,15 +1012,15 @@ export interface DataTableCell {
 
 ### Props
 
-| Prop name   | Required | Kind             | Reactive | Type                                                    | Default value          | Description                                                                                  |
-| :---------- | :------- | :--------------- | :------- | ------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------- |
-| columns     | No       | <code>let</code> | No       | <code>number</code>                                     | <code>5</code>         | Specify the number of columns<br />Superseded by `headers` if `headers` is a non-empty array |
-| rows        | No       | <code>let</code> | No       | <code>number</code>                                     | <code>5</code>         | Specify the number of rows                                                                   |
-| size        | No       | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code>     | <code>undefined</code> | Set the size of the data table                                                               |
-| zebra       | No       | <code>let</code> | No       | <code>boolean</code>                                    | <code>false</code>     | Set to `true` to apply zebra styles to the datatable rows                                    |
-| showHeader  | No       | <code>let</code> | No       | <code>boolean</code>                                    | <code>true</code>      | Set to `false` to hide the header                                                            |
-| headers     | No       | <code>let</code> | No       | <code>string[] &#124; Partial<DataTableHeader>[]</code> | <code>[]</code>        | Set the column headers<br />Supersedes `columns` if value is a non-empty array               |
-| showToolbar | No       | <code>let</code> | No       | <code>boolean</code>                                    | <code>true</code>      | Set to `false` to hide the toolbar                                                           |
+| Prop name   | Required | Kind             | Reactive | Type                                                               | Default value          | Description                                                                                  |
+| :---------- | :------- | :--------------- | :------- | ------------------------------------------------------------------ | ---------------------- | -------------------------------------------------------------------------------------------- |
+| columns     | No       | <code>let</code> | No       | <code>number</code>                                                | <code>5</code>         | Specify the number of columns<br />Superseded by `headers` if `headers` is a non-empty array |
+| rows        | No       | <code>let</code> | No       | <code>number</code>                                                | <code>5</code>         | Specify the number of rows                                                                   |
+| size        | No       | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code>                | <code>undefined</code> | Set the size of the data table                                                               |
+| zebra       | No       | <code>let</code> | No       | <code>boolean</code>                                               | <code>false</code>     | Set to `true` to apply zebra styles to the datatable rows                                    |
+| showHeader  | No       | <code>let</code> | No       | <code>boolean</code>                                               | <code>true</code>      | Set to `false` to hide the header                                                            |
+| headers     | No       | <code>let</code> | No       | <code>ReadonlyArray<string &#124; Partial<DataTableHeader>></code> | <code>[]</code>        | Set the column headers<br />Supersedes `columns` if value is a non-empty array               |
+| showToolbar | No       | <code>let</code> | No       | <code>boolean</code>                                               | <code>true</code>      | Set to `false` to hide the toolbar                                                           |
 
 ### Slots
 
@@ -1154,7 +1154,7 @@ export interface DropdownItem {
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                                                            | <code>null</code>                                     | Obtain a reference to the button HTML element                                                                                |
 | open            | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to open the dropdown                                                                                           |
 | selectedId      | Yes      | <code>let</code> | Yes      | <code>DropdownItemId</code>                                                                           | <code>undefined</code>                                | Specify the selected item id                                                                                                 |
-| items           | No       | <code>let</code> | No       | <code>DropdownItem[]</code>                                                                           | <code>[]</code>                                       | Set the dropdown items                                                                                                       |
+| items           | No       | <code>let</code> | No       | <code>ReadonlyArray<DropdownItem></code>                                                              | <code>[]</code>                                       | Set the dropdown items                                                                                                       |
 | itemToString    | No       | <code>let</code> | No       | <code>(item: DropdownItem) => string</code>                                                           | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a dropdown item                                                                                      |
 | type            | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                                | <code>"default"</code>                                | Specify the type of dropdown                                                                                                 |
 | direction       | No       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                                 | Specify the direction of the dropdown menu                                                                                   |
@@ -1247,10 +1247,10 @@ None.
 
 | Prop name        | Required | Kind               | Reactive | Type                                                                                       | Default value                           | Description                                                 |
 | :--------------- | :------- | :----------------- | :------- | ------------------------------------------------------------------------------------------ | --------------------------------------- | ----------------------------------------------------------- |
-| files            | No       | <code>let</code>   | Yes      | <code>File[]</code>                                                                        | <code>[]</code>                         | Obtain a reference to the uploaded files                    |
+| files            | No       | <code>let</code>   | Yes      | <code>ReadonlyArray<File></code>                                                           | <code>[]</code>                         | Obtain a reference to the uploaded files                    |
 | status           | No       | <code>let</code>   | No       | <code>"uploading" &#124; "edit" &#124; "complete"</code>                                   | <code>"uploading"</code>                | Specify the file uploader status                            |
 | disabled         | No       | <code>let</code>   | No       | <code>boolean</code>                                                                       | <code>false</code>                      | Set to `true` to disable the file uploader                  |
-| accept           | No       | <code>let</code>   | No       | <code>string[]</code>                                                                      | <code>[]</code>                         | Specify the accepted file types                             |
+| accept           | No       | <code>let</code>   | No       | <code>ReadonlyArray<string></code>                                                         | <code>[]</code>                         | Specify the accepted file types                             |
 | multiple         | No       | <code>let</code>   | No       | <code>boolean</code>                                                                       | <code>false</code>                      | Set to `true` to allow multiple files                       |
 | clearFiles       | No       | <code>const</code> | No       | <code>() => void</code>                                                                    | <code>() => { files = []; }</code>      | Programmatically clear the uploaded files                   |
 | labelDescription | No       | <code>let</code>   | No       | <code>string</code>                                                                        | <code>""</code>                         | Specify the label description                               |
@@ -1266,16 +1266,16 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| add        | dispatched | <code>File[]</code> |
-| remove     | dispatched | <code>File[]</code> |
-| change     | dispatched | <code>File[]</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
-| keydown    | forwarded  | --                  |
+| Event name | Type       | Detail                           |
+| :--------- | :--------- | :------------------------------- |
+| add        | dispatched | <code>ReadonlyArray<File></code> |
+| remove     | dispatched | <code>ReadonlyArray<File></code> |
+| change     | dispatched | <code>ReadonlyArray<File></code> |
+| click      | forwarded  | --                               |
+| mouseover  | forwarded  | --                               |
+| mouseenter | forwarded  | --                               |
+| mouseleave | forwarded  | --                               |
+| keydown    | forwarded  | --                               |
 
 ## `FileUploaderButton`
 
@@ -1285,8 +1285,8 @@ None.
 | :------------------ | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------ | -------------------------------------------- |
 | ref                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                  | <code>null</code>                                | Obtain a reference to the input HTML element |
 | labelText           | No       | <code>let</code> | Yes      | <code>string</code>                                                                        | <code>"Add file"</code>                          | Specify the label text                       |
-| files               | No       | <code>let</code> | Yes      | <code>File[]</code>                                                                        | <code>[]</code>                                  | Obtain a reference to the uploaded files     |
-| accept              | No       | <code>let</code> | No       | <code>string[]</code>                                                                      | <code>[]</code>                                  | Specify the accepted file types              |
+| files               | No       | <code>let</code> | Yes      | <code>ReadonlyArray<File></code>                                                           | <code>[]</code>                                  | Obtain a reference to the uploaded files     |
+| accept              | No       | <code>let</code> | No       | <code>ReadonlyArray<string></code>                                                         | <code>[]</code>                                  | Specify the accepted file types              |
 | multiple            | No       | <code>let</code> | No       | <code>boolean</code>                                                                       | <code>false</code>                               | Set to `true` to allow multiple files        |
 | disabled            | No       | <code>let</code> | No       | <code>boolean</code>                                                                       | <code>false</code>                               | Set to `true` to disable the input           |
 | disableLabelChanges | No       | <code>let</code> | No       | <code>boolean</code>                                                                       | <code>false</code>                               | Set to `true` to disable label changes       |
@@ -1304,29 +1304,29 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>File[]</code> |
-| keydown    | forwarded  | --                  |
-| click      | forwarded  | --                  |
+| Event name | Type       | Detail                           |
+| :--------- | :--------- | :------------------------------- |
+| change     | dispatched | <code>ReadonlyArray<File></code> |
+| keydown    | forwarded  | --                               |
+| click      | forwarded  | --                               |
 
 ## `FileUploaderDropContainer`
 
 ### Props
 
-| Prop name     | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                                                                                  |
-| :------------ | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| ref           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element                                                                 |
-| files         | No       | <code>let</code> | Yes      | <code>File[]</code>                       | <code>[]</code>                                  | Obtain a reference to the uploaded files                                                                     |
-| accept        | No       | <code>let</code> | No       | <code>string[]</code>                     | <code>[]</code>                                  | Specify the accepted file types                                                                              |
-| multiple      | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to allow multiple files                                                                        |
-| validateFiles | No       | <code>let</code> | No       | <code>(files: File[]) => File[]</code>    | <code>(files) => files</code>                    | Override the default behavior of validating uploaded files<br />The default behavior does not validate files |
-| labelText     | No       | <code>let</code> | No       | <code>string</code>                       | <code>"Add file"</code>                          | Specify the label text                                                                                       |
-| role          | No       | <code>let</code> | No       | <code>string</code>                       | <code>"button"</code>                            | Specify the `role` attribute of the drop container                                                           |
-| disabled      | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the input                                                                           |
-| tabindex      | No       | <code>let</code> | No       | <code>string</code>                       | <code>"0"</code>                                 | Specify `tabindex` attribute                                                                                 |
-| id            | No       | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                                                              |
-| name          | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify a name attribute for the input                                                                       |
+| Prop name     | Required | Kind             | Reactive | Type                                                             | Default value                                    | Description                                                                                          |
+| :------------ | :------- | :--------------- | :------- | ---------------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| ref           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                        | <code>null</code>                                | Obtain a reference to the input HTML element                                                         |
+| files         | No       | <code>let</code> | Yes      | <code>ReadonlyArray<File></code>                                 | <code>[]</code>                                  | Obtain a reference to the uploaded files                                                             |
+| accept        | No       | <code>let</code> | No       | <code>ReadonlyArray<string></code>                               | <code>[]</code>                                  | Specify the accepted file types                                                                      |
+| multiple      | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                               | Set to `true` to allow multiple files                                                                |
+| validateFiles | No       | <code>let</code> | No       | <code>(files: ReadonlyArray<File>) => ReadonlyArray<File></code> | <code>(files) => files</code>                    | Override the default behavior of validating uploaded files.<br />By default, files are not validated |
+| labelText     | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"Add file"</code>                          | Specify the label text                                                                               |
+| role          | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"button"</code>                            | Specify the `role` attribute of the drop container                                                   |
+| disabled      | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                               | Set to `true` to disable the input                                                                   |
+| tabindex      | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"0"</code>                                 | Specify `tabindex` attribute                                                                         |
+| id            | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                                                      |
+| name          | No       | <code>let</code> | No       | <code>string</code>                                              | <code>""</code>                                  | Specify a name attribute for the input                                                               |
 
 ### Slots
 
@@ -1336,15 +1336,15 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| add        | dispatched | <code>File[]</code> |
-| change     | dispatched | <code>File[]</code> |
-| dragover   | forwarded  | --                  |
-| dragleave  | forwarded  | --                  |
-| drop       | forwarded  | --                  |
-| keydown    | forwarded  | --                  |
-| click      | forwarded  | --                  |
+| Event name | Type       | Detail                           |
+| :--------- | :--------- | :------------------------------- |
+| add        | dispatched | <code>ReadonlyArray<File></code> |
+| change     | dispatched | <code>ReadonlyArray<File></code> |
+| dragover   | forwarded  | --                               |
+| dragleave  | forwarded  | --                               |
+| drop       | forwarded  | --                               |
+| keydown    | forwarded  | --                               |
+| click      | forwarded  | --                               |
 
 ## `FileUploaderItem`
 
@@ -1805,13 +1805,13 @@ export interface HeaderSearchResult {
 
 ### Props
 
-| Prop name           | Required | Kind             | Reactive | Type                                      | Default value      | Description                                        |
-| :------------------ | :------- | :--------------- | :------- | ----------------------------------------- | ------------------ | -------------------------------------------------- |
-| selectedResultIndex | No       | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the selected result index                  |
-| ref                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>  | Obtain a reference to the input HTML element       |
-| active              | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to activate and focus the search bar |
-| value               | No       | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>    | Specify the search input value                     |
-| results             | No       | <code>let</code> | No       | <code>HeaderSearchResult[]</code>         | <code>[]</code>    | Render a list of search results                    |
+| Prop name           | Required | Kind             | Reactive | Type                                           | Default value      | Description                                        |
+| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | ------------------ | -------------------------------------------------- |
+| selectedResultIndex | No       | <code>let</code> | Yes      | <code>number</code>                            | <code>0</code>     | Specify the selected result index                  |
+| ref                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>      | <code>null</code>  | Obtain a reference to the input HTML element       |
+| active              | No       | <code>let</code> | Yes      | <code>boolean</code>                           | <code>false</code> | Set to `true` to activate and focus the search bar |
+| value               | No       | <code>let</code> | Yes      | <code>string</code>                            | <code>""</code>    | Specify the search input value                     |
+| results             | No       | <code>let</code> | No       | <code>ReadonlyArray<HeaderSearchResult></code> | <code>[]</code>    | Render a list of search results                    |
 
 ### Slots
 
@@ -2348,8 +2348,8 @@ export interface MultiSelectItem {
 | inputRef                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                               | <code>null</code>                                                                          | Obtain a reference to the input HTML element                                                                                                                          |
 | open                     | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                    | <code>false</code>                                                                         | Set to `true` to open the dropdown                                                                                                                                    |
 | value                    | No       | <code>let</code> | Yes      | <code>string</code>                                                                                     | <code>""</code>                                                                            | Specify the multiselect value                                                                                                                                         |
-| selectedIds              | No       | <code>let</code> | Yes      | <code>MultiSelectItemId[]</code>                                                                        | <code>[]</code>                                                                            | Set the selected ids                                                                                                                                                  |
-| items                    | No       | <code>let</code> | Yes      | <code>MultiSelectItem[]</code>                                                                          | <code>[]</code>                                                                            | Set the multiselect items                                                                                                                                             |
+| selectedIds              | No       | <code>let</code> | Yes      | <code>ReadonlyArray<MultiSelectItemId></code>                                                           | <code>[]</code>                                                                            | Set the selected ids                                                                                                                                                  |
+| items                    | No       | <code>let</code> | Yes      | <code>ReadonlyArray<MultiSelectItem></code>                                                             | <code>[]</code>                                                                            | Set the multiselect items                                                                                                                                             |
 | itemToString             | No       | <code>let</code> | No       | <code>(item: MultiSelectItem) => any</code>                                                             | <code>(item) => item.text &#124;&#124; item.id</code>                                      | Override the display of a multiselect item                                                                                                                            |
 | itemToInput              | No       | <code>let</code> | No       | <code>(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; }</code>             | <code>(item) => {}</code>                                                                  | Override the item name, title, labelText passed to the checkbox input                                                                                                 |
 | size                     | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                               | <code>undefined</code>                                                                     | Set the size of the combobox                                                                                                                                          |
@@ -2664,7 +2664,7 @@ None.
 | itemRangeText         | No       | <code>let</code> | No       | <code>(min: number, max: number, total: number) => string</code> | <code>(min, max, total) => \`${min}–${max} of ${total} items\`</code>          | Override the item range text                     |
 | pageInputDisabled     | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                             | Set to `true` to disable the page input          |
 | pageSizeInputDisabled | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                             | Set to `true` to disable the page size input     |
-| pageSizes             | No       | <code>let</code> | No       | <code>number[]</code>                                            | <code>[10]</code>                                                              | Specify the available page sizes                 |
+| pageSizes             | No       | <code>let</code> | No       | <code>ReadonlyArray<number></code>                               | <code>[10]</code>                                                              | Specify the available page sizes                 |
 | pagesUnknown          | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                             | Set to `true` if the number of pages is unknown  |
 | pageText              | No       | <code>let</code> | No       | <code>(page: number) => string</code>                            | <code>(page) => \`page ${page}\`</code>                                        | Override the page text                           |
 | pageRangeText         | No       | <code>let</code> | No       | <code>(current: number, total: number) => string</code>          | <code>(current, total) => \`of ${total} page${total === 1 ? "" : "s"}\`</code> | Override the page range text                     |
@@ -4648,8 +4648,8 @@ export interface TreeNode {
 
 | Prop name     | Required | Kind                  | Reactive | Type                                                          | Default value                                                                                                                                                                              | Description                                                                                      |
 | :------------ | :------- | :-------------------- | :------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| expandedIds   | No       | <code>let</code>      | Yes      | <code>TreeNodeId[]</code>                                     | <code>[]</code>                                                                                                                                                                            | Set the node ids to be expanded                                                                  |
-| selectedIds   | No       | <code>let</code>      | Yes      | <code>TreeNodeId[]</code>                                     | <code>[]</code>                                                                                                                                                                            | Set the node ids to be selected                                                                  |
+| expandedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                        | <code>[]</code>                                                                                                                                                                            | Set the node ids to be expanded                                                                  |
+| selectedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                        | <code>[]</code>                                                                                                                                                                            | Set the node ids to be selected                                                                  |
 | activeId      | No       | <code>let</code>      | Yes      | <code>TreeNodeId</code>                                       | <code>""</code>                                                                                                                                                                            | Set the current active node id<br />Only one node can be active                                  |
 | children      | No       | <code>let</code>      | No       | <code>Array<TreeNode & { children?: TreeNode[] }></code>      | <code>[]</code>                                                                                                                                                                            | Provide an array of children nodes to render                                                     |
 | size          | No       | <code>let</code>      | No       | <code>"default" &#124; "compact"</code>                       | <code>"default"</code>                                                                                                                                                                     | Specify the TreeView size                                                                        |

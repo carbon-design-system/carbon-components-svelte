@@ -1,5 +1,5 @@
 <script>
-  /** @type {string[]} */
+  /** @type {ReadonlyArray<string>} */
   export let selectedIds = [];
 
   /** Specify the label text */

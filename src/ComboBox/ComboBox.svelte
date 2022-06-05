@@ -8,7 +8,7 @@
 
   /**
    * Set the combobox items
-   * @type {ComboBoxItem[]}
+   * @type {ReadonlyArray<ComboBoxItem>}
    */
   export let items = [];
 
