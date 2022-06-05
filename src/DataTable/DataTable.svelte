@@ -213,11 +213,11 @@
     } else {
       sortedRows = [...$tableRows].sort((a, b) => {
         const itemA = ascending
-          ? resolvePath(a, sortKey, "")
-          : resolvePath(b, sortKey, "");
+          ? resolvePath(a, sortKey)
+          : resolvePath(b, sortKey);
         const itemB = ascending
-          ? resolvePath(b, sortKey, "")
-          : resolvePath(a, sortKey, "");
+          ? resolvePath(b, sortKey)
+          : resolvePath(a, sortKey);
 
         if ($sortHeader.sort) return $sortHeader.sort(itemA, itemB);
 
