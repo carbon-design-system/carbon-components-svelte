@@ -155,7 +155,6 @@
   };
 
   setContext("DataTable", {
-    sortHeader,
     tableSortable,
     batchSelectedIds,
     tableRows,
@@ -344,7 +343,9 @@
             <TableHeader
               id="{header.key}"
               style="{formatHeaderWidth(header)}"
-              disableSorting="{header.sort === false}"
+              sortable="{sortable && header.sort !== false}"
+              sortDirection="{$sortHeader.sortDirection}"
+              active="{$sortHeader.id === header.key}"
               on:click="{() => {
                 dispatch('click', { header });
 

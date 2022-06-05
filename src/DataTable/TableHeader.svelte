@@ -1,6 +1,15 @@
 <script>
-  /** Set to `true` to disable sorting on this specific cell */
-  export let disableSorting = false;
+  /** Set to `true` for the sortable variant */
+  export let sortable = false;
+
+  /**
+   * Specify the sort direction
+   * @type {"none" | "ascending" | "descending"}
+   */
+  export let sortDirection = "none";
+
+  /** Set to `true` if the column sorting */
+  export let active = false;
 
   /** Specify the `scope` attribute */
   export let scope = "col";
@@ -14,21 +23,17 @@
   /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  import { getContext } from "svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
 
-  const { sortHeader, tableSortable } = getContext("DataTable");
-
-  $: active = $sortHeader.id === id;
   // TODO: translate with id
   $: ariaLabel = translateWithId();
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-{#if $tableSortable && !disableSorting}
+{#if sortable}
   <th
-    aria-sort="{active ? $sortHeader.sortDirection : 'none'}"
+    aria-sort="{active ? sortDirection : 'none'}"
     scope="{scope}"
     data-header="{id}"
     {...$$restProps}
@@ -40,7 +45,7 @@
       class:bx--table-sort="{true}"
       class:bx--table-sort--active="{active}"
       class:bx--table-sort--ascending="{active &&
-        $sortHeader.sortDirection === 'descending'}"
+        sortDirection === 'descending'}"
       on:click
     >
       <div class:bx--table-header-label="{true}">
