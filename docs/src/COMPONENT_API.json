@@ -2422,6 +2422,30 @@
           "reactive": false
         },
         {
+          "name": "sortKey",
+          "kind": "let",
+          "description": "Specify the header key to sort by",
+          "type": "DataTableKey",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "sortDirection",
+          "kind": "let",
+          "description": "Specify the sort direction",
+          "type": "\"none\" | \"ascending\" | \"descending\"",
+          "value": "\"none\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
           "name": "expandable",
           "kind": "let",
           "description": "Set to `true` for the expandable variant\nAutomatically set to `true` if `batchExpansion` is `true`",

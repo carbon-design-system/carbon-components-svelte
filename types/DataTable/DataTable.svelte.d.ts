@@ -86,6 +86,18 @@ export interface DataTableProps
   sortable?: boolean;
 
   /**
+   * Specify the header key to sort by
+   * @default null
+   */
+  sortKey?: DataTableKey;
+
+  /**
+   * Specify the sort direction
+   * @default "none"
+   */
+  sortDirection?: "none" | "ascending" | "descending";
+
+  /**
    * Set to `true` for the expandable variant
    * Automatically set to `true` if `batchExpansion` is `true`
    * @default false
