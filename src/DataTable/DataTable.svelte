@@ -146,11 +146,13 @@
       .map(({ key }, i) => ({ key, id: key }))
       .reduce((a, c) => ({ ...a, [c.key]: c.id }), {})
   );
-  const resolvePath = (object, path) =>
-    path
+  const resolvePath = (object, path) => {
+    if (path in object) return object[path];
+    return path
       .split(/[\.\[\]\'\"]/)
       .filter((p) => p)
       .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
+  };
 
   setContext("DataTable", {
     sortHeader,
