@@ -4,10 +4,22 @@ import type { SvelteComponentTyped } from "svelte";
 export interface TableHeaderProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["th"]> {
   /**
-   * Set to `true` to disable sorting on this specific cell
+   * Set to `true` for the sortable variant
    * @default false
    */
-  disableSorting?: boolean;
+  sortable?: boolean;
+
+  /**
+   * Specify the sort direction
+   * @default "none"
+   */
+  sortDirection?: "none" | "ascending" | "descending";
+
+  /**
+   * Set to `true` if the column sorting
+   * @default false
+   */
+  active?: boolean;
 
   /**
    * Specify the `scope` attribute
