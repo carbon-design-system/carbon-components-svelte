@@ -1075,6 +1075,18 @@ and then limit displayed content by using `pageSize` and `page` props, which are
   ]}"
 />
 
+### Programmatic sorting
+
+Use the reactive `sortKey` and `sortDirection` props for programmatic sorting.
+
+By default, the table is not sorted by a specific key. The `sortKey` value must be a valid `key` specified in the `headers` object.
+
+Possible values for `sortDirection` include `"none"` or `"ascending"` or `"descending"`.
+
+Setting `sortKey` to `null` and `sortDirection` to `"none"` should reset the table rows to their initial order.
+
+<FileSource src="/framed/DataTable/DataTableProgrammaticSorting" />
+
 ### Empty column with overflow menu
 
 Some use cases require an empty column in the table body without a corresponding table header.

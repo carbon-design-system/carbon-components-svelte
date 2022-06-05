@@ -54,6 +54,18 @@
   export let sortable = false;
 
   /**
+   * Specify the header key to sort by
+   * @type {DataTableKey}
+   */
+  export let sortKey = null;
+
+  /**
+   * Specify the sort direction
+   * @type {"none" | "ascending" | "descending"}
+   */
+  export let sortDirection = "none";
+
+  /**
    * Set to `true` for the expandable variant
    * Automatically set to `true` if `batchExpansion` is `true`
    */
@@ -132,18 +144,11 @@
   };
   const dispatch = createEventDispatcher();
   const batchSelectedIds = writable(false);
-  const tableSortable = writable(sortable);
-  const sortHeader = writable({
-    id: null,
-    key: null,
-    sort: undefined,
-    sortDirection: "none",
-  });
   const headerItems = writable([]);
   const tableRows = writable(rows);
   const thKeys = derived(headerItems, () =>
     headers
-      .map(({ key }, i) => ({ key, id: key }))
+      .map(({ key }) => ({ key, id: key }))
       .reduce((a, c) => ({ ...a, [c.key]: c.id }), {})
   );
   const resolvePath = (object, path) => {
@@ -155,8 +160,6 @@
   };
 
   setContext("DataTable", {
-    sortHeader,
-    tableSortable,
     batchSelectedIds,
     tableRows,
     resetSelectedRowIds: () => {
@@ -195,7 +198,6 @@
     expanded = expandedRowIds.length === expandableRowIds.length;
   }
   $: if (radio || batchSelection) selectable = true;
-  $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
   $: tableCellsByRowId = rows.reduce(
     (rows, row) => ({
@@ -210,11 +212,11 @@
   );
   $: $tableRows = rows;
   $: sortedRows = [...$tableRows];
-  $: ascending = $sortHeader.sortDirection === "ascending";
-  $: sortKey = $sortHeader.key;
+  $: ascending = sortDirection === "ascending";
   $: sorting = sortable && sortKey != null;
+  $: sortingHeader = headers.find((header) => header.key === sortKey);
   $: if (sorting) {
-    if ($sortHeader.sortDirection === "none") {
+    if (sortDirection === "none") {
       sortedRows = $tableRows;
     } else {
       sortedRows = [...$tableRows].sort((a, b) => {
@@ -225,7 +227,7 @@
           ? resolvePath(b, sortKey)
           : resolvePath(a, sortKey);
 
-        if ($sortHeader.sort) return $sortHeader.sort(itemA, itemB);
+        if (sortingHeader?.sort) return sortingHeader.sort(itemA, itemB);
 
         if (typeof itemA === "number" && typeof itemB === "number")
           return itemA - itemB;
@@ -337,32 +339,26 @@
             />
           </th>
         {/if}
-        {#each headers as header, i (header.key)}
+        {#each headers as header (header.key)}
           {#if header.empty}
             <th scope="col" style="{formatHeaderWidth(header)}"></th>
           {:else}
             <TableHeader
               id="{header.key}"
               style="{formatHeaderWidth(header)}"
-              disableSorting="{header.sort === false}"
+              sortable="{sortable && header.sort !== false}"
+              sortDirection="{sortDirection}"
+              active="{sortKey !== null && sortKey === header.key}"
               on:click="{() => {
                 dispatch('click', { header });
 
                 if (header.sort === false) {
                   dispatch('click:header', { header });
                 } else {
-                  let active = header.key === $sortHeader.key;
-                  let currentSortDirection = active
-                    ? $sortHeader.sortDirection
-                    : 'none';
-                  let sortDirection = sortDirectionMap[currentSortDirection];
+                  sortDirection = sortDirectionMap[sortDirection];
+                  sortKey =
+                    sortDirection === 'none' ? null : $thKeys[header.key];
                   dispatch('click:header', { header, sortDirection });
-                  sortHeader.set({
-                    id: sortDirection === 'none' ? null : $thKeys[header.key],
-                    key: header.key,
-                    sort: header.sort,
-                    sortDirection,
-                  });
                 }
               }}"
             >

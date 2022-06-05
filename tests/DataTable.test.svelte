@@ -70,7 +70,14 @@
   }
 </script>
 
-<DataTable headers="{headers}" rows="{rows}" style="" class="class" />
+<DataTable
+  headers="{headers}"
+  rows="{rows}"
+  style=""
+  sortKey="name"
+  sortDirection="descending"
+  class="class"
+/>
 
 <DataTable headers="{headers}" rows="{rows}">
   <span slot="cell-header" let:header>

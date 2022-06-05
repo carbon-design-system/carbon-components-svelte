@@ -967,6 +967,8 @@ export interface DataTableCell {
 | selectable          | No       | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the selectable variant<br />Automatically set to `true` if `radio` or `batchSelection` are `true` |
 | expandedRowIds      | No       | <code>let</code> | Yes      | <code>ReadonlyArray<DataTableRowId></code>                          | <code>[]</code>        | Specify the row ids to be expanded                                                                                  |
 | expandable          | No       | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the expandable variant<br />Automatically set to `true` if `batchExpansion` is `true`             |
+| sortDirection       | No       | <code>let</code> | Yes      | <code>"none" &#124; "ascending" &#124; "descending"</code>          | <code>"none"</code>    | Specify the sort direction                                                                                          |
+| sortKey             | No       | <code>let</code> | Yes      | <code>DataTableKey</code>                                           | <code>null</code>      | Specify the header key to sort by                                                                                   |
 | headers             | No       | <code>let</code> | No       | <code>ReadonlyArray<DataTableHeader></code>                         | <code>[]</code>        | Specify the data table headers                                                                                      |
 | rows                | No       | <code>let</code> | No       | <code>ReadonlyArray<DataTableRow></code>                            | <code>[]</code>        | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
 | size                | No       | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | <code>undefined</code> | Set the size of the data table                                                                                      |
@@ -3864,12 +3866,14 @@ None.
 
 ### Props
 
-| Prop name       | Required | Kind             | Reactive | Type                      | Default value                                    | Description                                            |
-| :-------------- | :------- | :--------------- | :------- | ------------------------- | ------------------------------------------------ | ------------------------------------------------------ |
-| disableSorting  | No       | <code>let</code> | No       | <code>boolean</code>      | <code>false</code>                               | Set to `true` to disable sorting on this specific cell |
-| scope           | No       | <code>let</code> | No       | <code>string</code>       | <code>"col"</code>                               | Specify the `scope` attribute                          |
-| translateWithId | No       | <code>let</code> | No       | <code>() => string</code> | <code>() => ""</code>                            | Override the default id translations                   |
-| id              | No       | <code>let</code> | No       | <code>string</code>       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element                    |
+| Prop name       | Required | Kind             | Reactive | Type                                                       | Default value                                    | Description                            |
+| :-------------- | :------- | :--------------- | :------- | ---------------------------------------------------------- | ------------------------------------------------ | -------------------------------------- |
+| sortable        | No       | <code>let</code> | No       | <code>boolean</code>                                       | <code>false</code>                               | Set to `true` for the sortable variant |
+| sortDirection   | No       | <code>let</code> | No       | <code>"none" &#124; "ascending" &#124; "descending"</code> | <code>"none"</code>                              | Specify the sort direction             |
+| active          | No       | <code>let</code> | No       | <code>boolean</code>                                       | <code>false</code>                               | Set to `true` if the column sorting    |
+| scope           | No       | <code>let</code> | No       | <code>string</code>                                        | <code>"col"</code>                               | Specify the `scope` attribute          |
+| translateWithId | No       | <code>let</code> | No       | <code>() => string</code>                                  | <code>() => ""</code>                            | Override the default id translations   |
+| id              | No       | <code>let</code> | No       | <code>string</code>                                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element    |
 
 ### Slots
 
