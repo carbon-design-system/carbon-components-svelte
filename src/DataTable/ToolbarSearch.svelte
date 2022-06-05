@@ -50,7 +50,7 @@
       if (shouldFilterRows === true) {
         rows = rows.filter((row) => {
           return Object.entries(row)
-            .filter(([key]) => !["cells", "id"].includes(key))
+            .filter(([key]) => key !== "id")
             .some(([key, _value]) => {
               if (typeof _value === "string" || typeof _value === "number") {
                 return (_value + "")

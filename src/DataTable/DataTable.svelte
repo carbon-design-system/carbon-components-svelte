@@ -195,14 +195,18 @@
   $: if (radio || batchSelection) selectable = true;
   $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
-  $: $tableRows = rows.map((row) => ({
-    ...row,
-    cells: headerKeys.map((key, index) => ({
-      key,
-      value: resolvePath(row, key),
-      display: headers[index].display,
-    })),
-  }));
+  $: tableCellsByRowId = rows.reduce(
+    (rows, row) => ({
+      ...rows,
+      [row.id]: headerKeys.map((key, index) => ({
+        key,
+        value: resolvePath(row, key),
+        display: headers[index].display,
+      })),
+    }),
+    {}
+  );
+  $: $tableRows = rows;
   $: sortedRows = [...$tableRows];
   $: ascending = $sortHeader.sortDirection === "ascending";
   $: sortKey = $sortHeader.key;
@@ -464,7 +468,7 @@
               {/if}
             </td>
           {/if}
-          {#each row.cells as cell, j (cell.key)}
+          {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
             {#if headers[j].empty}
               <td class:bx--table-column-menu="{headers[j].columnMenu}">
                 <slot
