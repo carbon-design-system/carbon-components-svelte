@@ -144,7 +144,6 @@
   };
   const dispatch = createEventDispatcher();
   const batchSelectedIds = writable(false);
-  const tableSortable = writable(sortable);
   const headerItems = writable([]);
   const tableRows = writable(rows);
   const thKeys = derived(headerItems, () =>
@@ -161,7 +160,6 @@
   };
 
   setContext("DataTable", {
-    tableSortable,
     batchSelectedIds,
     tableRows,
     resetSelectedRowIds: () => {
@@ -200,7 +198,6 @@
     expanded = expandedRowIds.length === expandableRowIds.length;
   }
   $: if (radio || batchSelection) selectable = true;
-  $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
   $: tableCellsByRowId = rows.reduce(
     (rows, row) => ({
