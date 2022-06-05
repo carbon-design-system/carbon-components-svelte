@@ -199,17 +199,14 @@
   }
   $: if (radio || batchSelection) selectable = true;
   $: headerKeys = headers.map(({ key }) => key);
-  $: tableCellsByRowId = rows.reduce(
-    (rows, row) => ({
-      ...rows,
-      [row.id]: headerKeys.map((key, index) => ({
-        key,
-        value: resolvePath(row, key),
-        display: headers[index].display,
-      })),
-    }),
-    {}
-  );
+  $: tableCellsByRowId = rows.reduce((rows, row) => {
+    rows[row.id] = headerKeys.map((key, index) => ({
+      key,
+      value: resolvePath(row, key),
+      display: headers[index].display,
+    }));
+    return rows;
+  }, {});
   $: $tableRows = rows;
   $: sortedRows = [...$tableRows];
   $: ascending = sortDirection === "ascending";
