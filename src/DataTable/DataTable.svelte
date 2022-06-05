@@ -146,11 +146,13 @@
       .map(({ key }, i) => ({ key, id: key }))
       .reduce((a, c) => ({ ...a, [c.key]: c.id }), {})
   );
-  const resolvePath = (object, path) =>
-    path
+  const resolvePath = (object, path) => {
+    if (path in object) return object[path];
+    return path
       .split(/[\.\[\]\'\"]/)
       .filter((p) => p)
       .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
+  };
 
   setContext("DataTable", {
     sortHeader,
@@ -195,14 +197,18 @@
   $: if (radio || batchSelection) selectable = true;
   $: tableSortable.set(sortable);
   $: headerKeys = headers.map(({ key }) => key);
-  $: $tableRows = rows.map((row) => ({
-    ...row,
-    cells: headerKeys.map((key, index) => ({
-      key,
-      value: resolvePath(row, key),
-      display: headers[index].display,
-    })),
-  }));
+  $: tableCellsByRowId = rows.reduce(
+    (rows, row) => ({
+      ...rows,
+      [row.id]: headerKeys.map((key, index) => ({
+        key,
+        value: resolvePath(row, key),
+        display: headers[index].display,
+      })),
+    }),
+    {}
+  );
+  $: $tableRows = rows;
   $: sortedRows = [...$tableRows];
   $: ascending = $sortHeader.sortDirection === "ascending";
   $: sortKey = $sortHeader.key;
@@ -213,11 +219,11 @@
     } else {
       sortedRows = [...$tableRows].sort((a, b) => {
         const itemA = ascending
-          ? resolvePath(a, sortKey, "")
-          : resolvePath(b, sortKey, "");
+          ? resolvePath(a, sortKey)
+          : resolvePath(b, sortKey);
         const itemB = ascending
-          ? resolvePath(b, sortKey, "")
-          : resolvePath(a, sortKey, "");
+          ? resolvePath(b, sortKey)
+          : resolvePath(a, sortKey);
 
         if ($sortHeader.sort) return $sortHeader.sort(itemA, itemB);
 
@@ -464,7 +470,7 @@
               {/if}
             </td>
           {/if}
-          {#each row.cells as cell, j (cell.key)}
+          {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
             {#if headers[j].empty}
               <td class:bx--table-column-menu="{headers[j].columnMenu}">
                 <slot
