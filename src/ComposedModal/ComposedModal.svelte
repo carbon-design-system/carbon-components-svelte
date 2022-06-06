@@ -38,7 +38,7 @@
     afterUpdate,
   } from "svelte";
   import { writable } from "svelte/store";
-  import { modalsOpen, addModalId, removeModalId } from "../Modal/modalStore";
+  import { trackModal } from "../Modal/modalStore";
 
   const dispatch = createEventDispatcher();
   const label = writable(undefined);
@@ -74,15 +74,14 @@
   let opened = false;
   $: didOpen = open;
 
+  const openStore = writable(open);
+  $: $openStore = open;
+  trackModal(openStore);
+
   onMount(() => {
     tick().then(() => {
       focus();
     });
-
-    return () => {
-      removeModalId(id);
-      document.body.classList.remove("bx--body--with-modal-open");
-    };
   });
 
   afterUpdate(() => {
@@ -95,15 +94,7 @@
       opened = true;
       dispatch("open");
     }
-
-    document.body.classList.toggle("bx--body--with-modal-open", $modalsOpen.length > 0);
   });
-
-  $: if (open) {
-    addModalId(id);
-  } else {
-    removeModalId(id);
-  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
