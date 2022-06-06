@@ -46,7 +46,7 @@
   let buttonRef = null;
   let innerModal = null;
   let didClickInnerModal = false;
-  let id = "ccs-" + Math.random().toString(36);
+  const id = "ccs-" + Math.random().toString(36);
 
   setContext("ComposedModal", {
     closeModal: () => {
