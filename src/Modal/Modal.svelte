@@ -126,11 +126,7 @@
       dispatch("open");
     }
 
-    if ($modalsOpen.length > 0) {
-      document.body.classList.add("bx--body--with-modal-open");
-    } else {
-      document.body.classList.remove("bx--body--with-modal-open");
-    }
+    document.body.classList.toggle("bx--body--with-modal-open", $modalsOpen.length > 0);
   });
 
   $: modalLabelId = `bx--modal-header__label--modal-${id}`;
