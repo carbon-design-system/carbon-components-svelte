@@ -7,6 +7,9 @@ const stores = new Set();
 /** Store for the number of open modals. */
 const modalsOpen = writable(0);
 
+const updateModalsOpen = () =>
+  modalsOpen.set([...stores].filter((open) => get(open)).length);
+
 /**
  * Adds a modal's store to the open modal tracking.
  * Has to be called during component initialization.
@@ -17,16 +20,13 @@ const modalsOpen = writable(0);
 export const trackModal = (openStore) =>
   onMount(() => {
     stores.add(openStore);
-
-    const unsubscribe = openStore.subscribe(() =>
-      modalsOpen.set([...stores].filter((open) => get(open)).length)
-    );
+    const unsubscribe = openStore.subscribe(updateModalsOpen);
 
     return () => {
       unsubscribe();
-      if (get(openStore)) modalsOpen.update((count) => count - 1);
-
       stores.delete(openStore);
+
+      updateModalsOpen();
     };
   });
 
