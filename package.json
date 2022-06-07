@@ -1,6 +1,6 @@
 {
   "name": "carbon-components-svelte",
-  "version": "0.64.3",
+  "version": "0.65.0",
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "./src/index.js",

@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.65.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.65.0) - 2022-06-07
+
+**Breaking Changes**
+
+- mark array-type props as read-only
+
+**Features**
+
+- add `sortKey`, `sortDirection` props to `DataTable` for programmatic sorting
+- forward `paste` event to `ComboBox`, `DatePicker`, `MultiSelect`, `NumberInput`, `Search`, `TextArea`, `TextInput`, `PasswordInput`, `TimePicker`, `HeaderSearch`
+- support disabled items in `Dropdown`, `MultiSelect`, `ComboBox`
+
+**Fixes**
+
+- do not overwrite `cells` property in `rows` object in `DataTable`
+- correctly toggle the body class if using nested modals
+- remove useless `inline` prop from `Dropdown`
+- remove redundant `Dropdown` list box role and id
+- add missing `role="option"` and `aria-selected` attributes to `ListBoxMenuItem`
+
+**Refactor**
+
+- set alert `Modal` attributes in markup instead of script
+
+**Documentation**
+
+- add `DataTable` example "Programmatic sorting"
+- add `Modal` example "Has scrolling content"
+- add `Modal` example "Custom focus"
+- add `Dropdown` example "Disabled items"
+- add `MultiSelect` example "Disabled items"
+- add `ComboBox` example "Disabled items"
+
 ## [0.64.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.64.3) - 2022-05-29
 
 **Fixes**
