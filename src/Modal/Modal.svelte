@@ -89,10 +89,11 @@
   /** Obtain a reference to the top-level HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, onMount, afterUpdate } from "svelte";
+  import { createEventDispatcher, afterUpdate } from "svelte";
   import Close from "../icons/Close.svelte";
   import Button from "../Button/Button.svelte";
-  import { modalsOpen, addModalId, removeModalId } from "./modalStore";
+  import { trackModal } from "./modalStore";
+  import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
 
@@ -107,12 +108,9 @@
     node.focus();
   }
 
-  onMount(() => {
-    return () => {
-      removeModalId(id);
-      document.body.classList.remove("bx--body--with-modal-open");
-    };
-  });
+  const openStore = writable(open);
+  $: $openStore = open;
+  trackModal(openStore);
 
   afterUpdate(() => {
     if (opened) {
@@ -125,12 +123,6 @@
       focus();
       dispatch("open");
     }
-
-    if ($modalsOpen.length > 0) {
-      document.body.classList.add("bx--body--with-modal-open");
-    } else {
-      document.body.classList.remove("bx--body--with-modal-open");
-    }
   });
 
   $: modalLabelId = `bx--modal-header__label--modal-${id}`;
@@ -138,12 +130,6 @@
   $: modalBodyId = `bx--modal-body--${id}`;
   $: ariaLabel =
     modalLabel || $$props["aria-label"] || modalAriaLabel || modalHeading;
-
-  $: if (open) {
-    addModalId(id);
-  } else {
-    removeModalId(id);
-  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

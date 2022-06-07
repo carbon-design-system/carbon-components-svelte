@@ -38,7 +38,7 @@
     afterUpdate,
   } from "svelte";
   import { writable } from "svelte/store";
-  import { modalsOpen, addModalId, removeModalId } from "../Modal/modalStore";
+  import { trackModal } from "../Modal/modalStore";
 
   const dispatch = createEventDispatcher();
   const label = writable(undefined);
@@ -46,7 +46,6 @@
   let buttonRef = null;
   let innerModal = null;
   let didClickInnerModal = false;
-  let id = "ccs-" + Math.random().toString(36);
 
   setContext("ComposedModal", {
     closeModal: () => {
@@ -74,15 +73,14 @@
   let opened = false;
   $: didOpen = open;
 
+  const openStore = writable(open);
+  $: $openStore = open;
+  trackModal(openStore);
+
   onMount(() => {
     tick().then(() => {
       focus();
     });
-
-    return () => {
-      removeModalId(id);
-      document.body.classList.remove("bx--body--with-modal-open");
-    };
   });
 
   afterUpdate(() => {
@@ -95,19 +93,7 @@
       opened = true;
       dispatch("open");
     }
-
-    if ($modalsOpen.length > 0) {
-      document.body.classList.add("bx--body--with-modal-open");
-    } else {
-      document.body.classList.remove("bx--body--with-modal-open");
-    }
   });
-
-  $: if (open) {
-    addModalId(id);
-  } else {
-    removeModalId(id);
-  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
