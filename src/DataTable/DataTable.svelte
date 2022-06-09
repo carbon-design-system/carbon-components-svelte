@@ -344,15 +344,17 @@
               id="{header.key}"
               style="{formatHeaderWidth(header)}"
               sortable="{sortable && header.sort !== false}"
-              sortDirection="{sortDirection}"
-              active="{sortKey !== null && sortKey === header.key}"
+              sortDirection="{sortKey === header.key ? sortDirection : 'none'}"
+              active="{sortKey === header.key}"
               on:click="{() => {
                 dispatch('click', { header });
 
                 if (header.sort === false) {
                   dispatch('click:header', { header });
                 } else {
-                  sortDirection = sortDirectionMap[sortDirection];
+                  let currentSortDirection =
+                    sortKey === header.key ? sortDirection : 'none';
+                  sortDirection = sortDirectionMap[currentSortDirection];
                   sortKey =
                     sortDirection === 'none' ? null : $thKeys[header.key];
                   dispatch('click:header', { header, sortDirection });
