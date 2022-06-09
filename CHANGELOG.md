@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.65.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.65.0) - 2022-06-09
+
+**Fixes**
+
+- `DataTable` column sort direction order should be independent
+
 ## [0.65.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.65.0) - 2022-06-07
 
 **Breaking Changes**
