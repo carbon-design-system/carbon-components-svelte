@@ -183,7 +183,6 @@
 
   const dispatch = createEventDispatcher();
 
-  let inputValue = "";
   let initialSorted = false;
   let highlightedIndex = -1;
   let prevChecked = [];
@@ -255,7 +254,7 @@
       }
 
       highlightedIndex = -1;
-      inputValue = "";
+      value = "";
     }
 
     items = sortedItems;
@@ -275,7 +274,6 @@
     highlightedIndex > -1
       ? (filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ?? null
       : null;
-  $: value = inputValue;
 </script>
 
 <svelte:window
@@ -403,6 +401,7 @@
       {#if filterable}
         <input
           bind:this="{inputRef}"
+          bind:value
           {...$$restProps}
           role="combobox"
           tabindex="0"
@@ -413,11 +412,8 @@
           aria-disabled="{disabled}"
           aria-controls="{menuId}"
           class:bx--text-input="{true}"
-          class:bx--text-input--empty="{inputValue === ''}"
+          class:bx--text-input--empty="{value === ''}"
           class:bx--text-input--light="{light}"
-          on:input="{({ target }) => {
-            inputValue = target.value;
-          }}"
           on:keydown
           on:keydown|stopPropagation="{({ key }) => {
             if (key === 'Enter') {
@@ -451,15 +447,14 @@
           placeholder="{placeholder}"
           id="{id}"
           name="{name}"
-          value="{inputValue}"
         />
         {#if invalid}
           <WarningFilled class="bx--list-box__invalid-icon" />
         {/if}
-        {#if inputValue}
+        {#if value}
           <ListBoxSelection
             on:clear="{() => {
-              inputValue = '';
+              value = '';
               open = false;
             }}"
             translateWithId="{translateWithIdSelection}"

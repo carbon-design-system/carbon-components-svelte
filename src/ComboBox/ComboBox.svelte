@@ -121,7 +121,6 @@
   const dispatch = createEventDispatcher();
 
   let selectedItem = undefined;
-  let inputValue = value;
   let prevSelectedId = null;
   let highlightedIndex = -1;
 
@@ -161,7 +160,7 @@
     selectedId = undefined;
     selectedItem = undefined;
     open = false;
-    inputValue = "";
+    value = "";
     if (options?.focus !== false) ref?.focus();
   }
 
@@ -174,12 +173,12 @@
       filteredItems = [];
       if (!selectedItem) {
         selectedId = undefined;
-        inputValue = "";
+        value = "";
         highlightedIndex = -1;
         highlightedId = undefined;
       } else {
-        // programmatically set inputValue
-        inputValue = selectedItem.text;
+        // programmatically set value
+        value = selectedItem.text;
       }
     }
   });
@@ -207,7 +206,6 @@
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
-  $: value = inputValue;
 </script>
 
 <svelte:window
@@ -257,6 +255,7 @@
     >
       <input
         bind:this="{ref}"
+        bind:value
         tabindex="0"
         autocomplete="off"
         aria-autocomplete="list"
@@ -269,19 +268,17 @@
         disabled="{disabled}"
         placeholder="{placeholder}"
         id="{id}"
-        value="{inputValue}"
         name="{name}"
         {...$$restProps}
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
-        class:bx--text-input--empty="{inputValue === ''}"
-        on:input="{async ({ target }) => {
+        class:bx--text-input--empty="{value === ''}"
+        on:input="{({ target }) => {
           if (!open && target.value.length > 0) {
             open = true;
           }
 
-          inputValue = target.value;
-          if (!inputValue.length) {
+          if (!value.length) {
             clear();
             open = true;
           }
@@ -297,14 +294,14 @@
             ) {
               open = false;
               if (filteredItems[highlightedIndex]) {
-                inputValue = filteredItems[highlightedIndex].text;
+                value = filteredItems[highlightedIndex].text;
                 selectedItem = filteredItems[highlightedIndex];
                 selectedId = filteredItems[highlightedIndex].id;
               }
             } else {
               open = false;
               if (filteredItems[0]) {
-                inputValue = filteredItems[0].text;
+                value = filteredItems[0].text;
                 selectedItem = filteredItems[0];
                 selectedId = filteredItems[0].id;
               }
@@ -344,7 +341,7 @@
           class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
         />
       {/if}
-      {#if inputValue}
+      {#if value}
         <ListBoxSelection
           on:clear
           on:clear="{clear}"
@@ -385,7 +382,7 @@
               open = false;
 
               if (filteredItems[i]) {
-                inputValue = filteredItems[i].text;
+                value = filteredItems[i].text;
               }
             }}"
             on:mouseenter="{() => {
