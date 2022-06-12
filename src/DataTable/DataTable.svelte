@@ -145,9 +145,7 @@
   const dispatch = createEventDispatcher();
   const batchSelectedIds = writable(false);
   const tableRows = writable(rows);
-  $: thKeys = headers
-    .map(({ key }) => ({ key, id: key }))
-    .reduce((a, c) => ({ ...a, [c.key]: c.id }), {});
+  $: thKeys = headers.reduce((a, c) => ({ ...a, [c.key]: c.key }), {});
   const resolvePath = (object, path) => {
     if (path in object) return object[path];
     return path
