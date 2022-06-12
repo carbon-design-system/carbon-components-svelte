@@ -16,12 +16,6 @@ export interface TimePickerProps
   value?: string;
 
   /**
-   * Specify the input type
-   * @default "text"
-   */
-  type?: string;
-
-  /**
    * Specify the input placeholder text
    * @default "hh:mm"
    */

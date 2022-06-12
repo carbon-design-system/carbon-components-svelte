@@ -1732,7 +1732,7 @@
           "kind": "function",
           "description": "Clear the combo box programmatically",
           "type": "(options?: { focus?: boolean; }) => void",
-          "value": "() => {     prevSelectedId = null;     highlightedIndex = -1;     highlightedId = undefined;     selectedId = undefined;     selectedItem = undefined;     open = false;     inputValue = \"\";     if (options?.focus !== false) ref?.focus();   }",
+          "value": "() => {     prevSelectedId = null;     highlightedIndex = -1;     highlightedId = undefined;     selectedId = undefined;     selectedItem = undefined;     open = false;     value = \"\";     if (options?.focus !== false) ref?.focus();   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -12983,18 +12983,6 @@
           "isRequired": false,
           "constant": false,
           "reactive": true
-        },
-        {
-          "name": "type",
-          "kind": "let",
-          "description": "Specify the input type",
-          "type": "string",
-          "value": "\"text\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
         },
         {
           "name": "placeholder",

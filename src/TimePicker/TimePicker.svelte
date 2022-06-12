@@ -11,12 +11,6 @@
    */
   export let value = "";
 
-  /**
-   * Specify the input type
-   * @type {string}
-   */
-  export let type = "text";
-
   /** Specify the input placeholder text */
   export let placeholder = "hh:mm";
 
@@ -88,14 +82,14 @@
       {/if}
       <input
         bind:this="{ref}"
+        bind:value
+        type="text"
         data-invalid="{invalid || undefined}"
         pattern="{pattern}"
         placeholder="{placeholder}"
         maxlength="{maxlength}"
         id="{id}"
         name="{name}"
-        type="{type}"
-        value="{value}"
         disabled="{disabled}"
         {...$$restProps}
         class:bx--time-picker__input-field="{true}"
@@ -104,9 +98,6 @@
         class:bx--text-input--invalid="{invalid}"
         on:change
         on:input
-        on:input="{({ target }) => {
-          value = target.value;
-        }}"
         on:keydown
         on:keyup
         on:focus
