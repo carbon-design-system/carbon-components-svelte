@@ -144,13 +144,8 @@
   };
   const dispatch = createEventDispatcher();
   const batchSelectedIds = writable(false);
-  const headerItems = writable([]);
   const tableRows = writable(rows);
-  const thKeys = derived(headerItems, () =>
-    headers
-      .map(({ key }) => ({ key, id: key }))
-      .reduce((a, c) => ({ ...a, [c.key]: c.id }), {})
-  );
+  $: thKeys = headers.reduce((a, c) => ({ ...a, [c.key]: c.key }), {});
   const resolvePath = (object, path) => {
     if (path in object) return object[path];
     return path
@@ -356,7 +351,7 @@
                     sortKey === header.key ? sortDirection : 'none';
                   sortDirection = sortDirectionMap[currentSortDirection];
                   sortKey =
-                    sortDirection === 'none' ? null : $thKeys[header.key];
+                    sortDirection === 'none' ? null : thKeys[header.key];
                   dispatch('click:header', { header, sortDirection });
                 }
               }}"
