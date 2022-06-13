@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
-## [0.65.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.65.0) - 2022-06-09
+## [0.65.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.65.2) - 2022-06-12
+
+**Fixes**
+
+- `DataTable` header keys should be reactive
+- use native binding for value prop in `TimePicker`
+- use native binding for value prop in `ComboBox`, `MultiSelect`
+
+## [0.65.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.65.1) - 2022-06-09
 
 **Fixes**
 
