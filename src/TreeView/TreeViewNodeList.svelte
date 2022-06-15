@@ -109,7 +109,7 @@
 
       if (parent && e.key === 'ArrowRight') {
         if (expanded) {
-          ref.lastChild.firstChild.focus();
+          ref.lastChild.firstElementChild?.focus();
         } else {
           expanded = true;
           expandNode(node, true);
