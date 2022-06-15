@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.65.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.65.3) - 2022-06-15
+
+**Fixes**
+
+- fix `TreeView` type error when keyboard navigating an expanded node
+
 ## [0.65.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.65.2) - 2022-06-12
 
 **Fixes**
