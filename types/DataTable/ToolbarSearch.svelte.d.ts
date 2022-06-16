@@ -28,6 +28,12 @@ export interface ToolbarSearchProps
   disabled?: boolean;
 
   /**
+   * Specify the `placeholder` attribute of the search input
+   * @default "Search..."
+   */
+  placeholder?: string;
+
+  /**
    * Set to `true` to filter table rows using the search value.
    *
    * If `true`, the default search excludes `id`, `cells` fields and
