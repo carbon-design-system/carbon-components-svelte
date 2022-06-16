@@ -16,6 +16,9 @@
   /** Set to `true` to disable the search bar */
   export let disabled = false;
 
+  /** Specify the `placeholder` attribute of the search input */
+  export let placeholder = "Search...";
+
   /**
    * Set to `true` to filter table rows using the search value.
    *
@@ -91,6 +94,7 @@
   tabindex="{tabindex}"
   disabled="{disabled}"
   {...$$restProps}
+  placeholder="{placeholder}"
   searchClass="{classes} {$$restProps.class}"
   bind:ref
   bind:value
