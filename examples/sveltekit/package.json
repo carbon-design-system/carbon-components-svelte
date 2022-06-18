@@ -7,8 +7,8 @@
     "preview": "svelte-kit preview"
   },
   "devDependencies": {
-    "@sveltejs/kit": "1.0.0-next.345",
-    "carbon-components-svelte": "^0.64.3",
+    "@sveltejs/kit": "1.0.0-next.350",
+    "carbon-components-svelte": "^0.66.0",
     "carbon-pictograms-svelte": "^12.0.3",
     "carbon-preprocess-svelte": "^0.9.0",
     "svelte": "^3.48.0"

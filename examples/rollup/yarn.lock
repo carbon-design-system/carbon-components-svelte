@@ -134,10 +134,10 @@ builtin-modules@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-3.3.0.tgz#cae62812b89801e9656336e46223e030386be7b6"
   integrity sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==
 
-carbon-components-svelte@^0.64.3:
-  version "0.64.3"
-  resolved "https://registry.yarnpkg.com/carbon-components-svelte/-/carbon-components-svelte-0.64.3.tgz#ec4f950e8da17097a2810c71433de83f8c486491"
-  integrity sha512-N4stSTV71Mkw1bXrh2Ui5PFXRGlniWqTK3ASZpscvj/a7rJc0eQ7D7/+wgSoszehb0ST0H6g2cy2LUFexwSeYg==
+carbon-components-svelte@^0.66.0:
+  version "0.66.0"
+  resolved "https://registry.yarnpkg.com/carbon-components-svelte/-/carbon-components-svelte-0.66.0.tgz#3229c6883f3103f9c05b886993fa02c3f34dd9c7"
+  integrity sha512-kMTPBAUG1pCTsDMMmqms5wHpNOlJ9f4AJ0IWMDsVlcjAsSe/sDuQ108/e9c/3tFRgTmWPTG8c/xUr2mzjQKEWw==
   dependencies:
     flatpickr "4.6.9"
 
@@ -504,10 +504,10 @@ rollup-pluginutils@^2.8.2:
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@^2.75.3:
-  version "2.75.3"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.75.3.tgz#11bd3e8ace526911feea8af17f2a286fbfdb4cf8"
-  integrity sha512-YA29fLU6MAYSaDxIQYrGGOcbXlDmG96h0krGGYObroezcQ0KgEPM3+7MtKD/qeuUbFuAJXvKZee5dA1dpwq1PQ==
+rollup@^2.75.6:
+  version "2.75.6"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.75.6.tgz#ac4dc8600f95942a0180f61c7c9d6200e374b439"
+  integrity sha512-OEf0TgpC9vU6WGROJIk1JA3LR5vk/yvqlzxqdrE2CzzXnqKXNzbAwlWUXis8RS3ZPe7LAq+YUxsRa0l3r27MLA==
   optionalDependencies:
     fsevents "~2.3.2"
 
