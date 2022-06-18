@@ -11,6 +11,12 @@ components: ["Slider", "SliderSkeleton"]
 
 <Slider />
 
+### Full width
+
+Set `fullWidth` to `true` for the slider to span the full width of its containing element.
+
+<Slider fullWidth />
+
 ### Hidden text input
 
 <Slider hideTextInput />
