@@ -76,6 +76,13 @@ export interface SliderProps
   hideTextInput?: boolean;
 
   /**
+   * Set to `true` for the slider to span
+   * the full width of its containing element.
+   * @default false
+   */
+  fullWidth?: boolean;
+
+  /**
    * Set an id for the slider div element
    * @default "ccs-" + Math.random().toString(36)
    */
