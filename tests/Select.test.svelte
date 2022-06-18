@@ -14,8 +14,8 @@
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-<Select labelText="Carbon theme" selected="g10">
-  <SelectItem value="0" text="Select a theme" disabled hidden />
+<Select labelText="Carbon theme" selected="{0}">
+  <SelectItem value="{0}" text="Select a theme" disabled hidden />
   <SelectItemGroup label="Light theme">
     <SelectItem value="white" text="White" />
     <SelectItem value="g10" text="Gray 10" />
