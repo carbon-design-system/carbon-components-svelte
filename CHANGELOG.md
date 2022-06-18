@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.66.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.66.0) - 2022-06-18
+
+**Features**
+
+- add `fullWidth` prop to `Slider`
+- support number type for `selected` prop in `Select`
+
+**Fixes**
+
+- only dispatch "change" in `Select` if `selected` value has changed
+- use first `SelectItem` value as default `selected` value in `Select` if `undefined`
+
+**Documentation**
+
+- revise `Select` example "Default" to demo usage without `selected` prop
+
 ## [0.65.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.65.3) - 2022-06-15
 
 **Fixes**
