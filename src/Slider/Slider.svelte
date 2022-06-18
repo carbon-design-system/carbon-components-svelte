@@ -35,6 +35,12 @@
   /** Set to `true` to hide the text input */
   export let hideTextInput = false;
 
+  /**
+   * Set to `true` for the slider to span
+   * the full width of its containing element.
+   */
+  export let fullWidth = false;
+
   /** Set an id for the slider div element */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -143,7 +149,10 @@
       {labelText}
     </slot>
   </label>
-  <div class:bx--slider-container="{true}">
+  <div
+    class:bx--slider-container="{true}"
+    style="{fullWidth ? 'width: 100%' : undefined}"
+  >
     <span class:bx--slider__range-label="{true}">{minLabel || min}</span>
     <div
       bind:this="{ref}"
@@ -151,6 +160,7 @@
       tabindex="-1"
       class:bx--slider="{true}"
       class:bx--slider--disabled="{disabled}"
+      style="{fullWidth ? 'max-width: none' : undefined}"
       on:mousedown="{startDragging}"
       on:mousedown="{startHolding}"
       on:touchstart="{startHolding}"

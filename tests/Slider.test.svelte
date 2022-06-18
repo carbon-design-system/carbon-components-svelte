@@ -10,6 +10,7 @@
   max="{990}"
   maxLabel="990 MB"
   value="{100}"
+  fullWidth
 />
 
 <Slider
