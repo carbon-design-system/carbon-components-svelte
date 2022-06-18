@@ -1,6 +1,6 @@
 <script>
   /**
-   * @event {string} change
+   * @event {string | number} change
    */
 
   /**
