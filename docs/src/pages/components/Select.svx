@@ -9,7 +9,33 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
 
 ### Default
 
-<Select labelText="Carbon theme" selected="g10" >
+If the `selected` prop is not set, the value of the first `SelectItem` will be used as the default value.
+
+<Select labelText="Carbon theme" on:change={e => console.log("value", e.detail)}>
+  <SelectItem value="white" />
+  <SelectItem value="g10" />
+  <SelectItem value="g80" />
+  <SelectItem value="g90" />
+  <SelectItem value="g100" />
+</Select>
+
+### Custom item text
+
+Use the `text` prop on `SelectItem` to customize the display value.
+
+<Select labelText="Carbon theme" on:change={e => console.log("value", e.detail)}>
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+### Initial selected value
+
+Use the `selected` prop to specify an initial value.
+
+<Select labelText="Carbon theme" selected="g10" on:change={e => console.log("value", e.detail)}>
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g80" text="Gray 80" />
@@ -18,6 +44,8 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
 </Select>
 
 ### Reactive example
+
+The `selected` prop is reactive and supports two-way binding.
 
 <FileSource src="/framed/Select/SelectReactive" />
 
