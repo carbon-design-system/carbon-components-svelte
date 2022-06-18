@@ -3173,12 +3173,12 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>string</code> |
-| input      | forwarded  | --                  |
-| focus      | forwarded  | --                  |
-| blur       | forwarded  | --                  |
+| Event name | Type       | Detail                            |
+| :--------- | :--------- | :-------------------------------- |
+| change     | dispatched | <code>string &#124; number</code> |
+| input      | forwarded  | --                                |
+| focus      | forwarded  | --                                |
+| blur       | forwarded  | --                                |
 
 ## `SelectItem`
 
