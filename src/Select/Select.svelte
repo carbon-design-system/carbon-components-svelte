@@ -108,9 +108,16 @@
     selectedValue.set(value);
   };
 
+  let prevSelected = undefined;
+
   afterUpdate(() => {
     selected = $selectedValue;
-    dispatch("change", $selectedValue);
+
+    if (prevSelected !== undefined && selected !== prevSelected) {
+      dispatch("change", $selectedValue);
+    }
+
+    prevSelected = selected;
   });
 
   $: errorId = `error-${id}`;
