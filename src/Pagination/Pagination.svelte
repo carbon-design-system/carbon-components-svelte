@@ -85,17 +85,7 @@
     }
   });
 
-  $: {
-    if (typeof page !== "number") {
-      page = Number(page);
-    }
-
-    if (typeof pageSize !== "number") {
-      pageSize = Number(pageSize);
-    }
-
-    dispatch("update", { pageSize, page });
-  }
+  $: dispatch("update", { pageSize, page });
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: selectItems = Array.from({ length: totalPages }, (_, i) => i);
   $: backButtonDisabled = disabled || page === 1;
