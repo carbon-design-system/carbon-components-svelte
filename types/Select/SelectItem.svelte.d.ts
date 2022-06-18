@@ -6,7 +6,7 @@ export interface SelectItemProps {
    * Specify the option value
    * @default ""
    */
-  value?: string;
+  value?: string | number;
 
   /**
    * Specify the option text
