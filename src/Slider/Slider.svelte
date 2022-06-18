@@ -160,6 +160,7 @@
       tabindex="-1"
       class:bx--slider="{true}"
       class:bx--slider--disabled="{disabled}"
+      style="{fullWidth ? 'max-width: none' : undefined}"
       on:mousedown="{startDragging}"
       on:mousedown="{startHolding}"
       on:touchstart="{startHolding}"
