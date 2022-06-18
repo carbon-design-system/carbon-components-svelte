@@ -3147,7 +3147,7 @@ None.
 | Prop name   | Required | Kind             | Reactive | Type                                       | Default value                                    | Description                                     |
 | :---------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ----------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLSelectElement</code> | <code>null</code>                                | Obtain a reference to the select HTML element   |
-| selected    | No       | <code>let</code> | Yes      | <code>string</code>                        | <code>undefined</code>                           | Specify the selected item value                 |
+| selected    | No       | <code>let</code> | Yes      | <code>string &#124; number</code>          | <code>undefined</code>                           | Specify the selected item value                 |
 | size        | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>              | <code>undefined</code>                           | Set the size of the select input                |
 | inline      | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to use the inline variant         |
 | light       | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to enable the light variant       |
@@ -3184,12 +3184,12 @@ None.
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                         |
-| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ----------------------------------- |
-| value     | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the option value            |
-| text      | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the option text             |
-| hidden    | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to hide the option    |
-| disabled  | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the option |
+| Prop name | Required | Kind             | Reactive | Type                              | Default value      | Description                         |
+| :-------- | :------- | :--------------- | :------- | --------------------------------- | ------------------ | ----------------------------------- |
+| value     | No       | <code>let</code> | No       | <code>string &#124; number</code> | <code>""</code>    | Specify the option value            |
+| text      | No       | <code>let</code> | No       | <code>string</code>               | <code>""</code>    | Specify the option text             |
+| hidden    | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code> | Set to `true` to hide the option    |
+| disabled  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code> | Set to `true` to disable the option |
 
 ### Slots
 

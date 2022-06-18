@@ -7,7 +7,7 @@ export interface SelectProps
    * Specify the selected item value
    * @default undefined
    */
-  selected?: string;
+  selected?: string | number;
 
   /**
    * Set the size of the select input

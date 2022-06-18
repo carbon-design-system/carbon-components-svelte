@@ -5,7 +5,7 @@
 
   /**
    * Specify the selected item value
-   * @type {string}
+   * @type {string | number}
    */
   export let selected = undefined;
 
@@ -73,6 +73,7 @@
   const selectedValue = writable(selected);
   const defaultSelectId = writable(null);
   const defaultValue = writable(null);
+  const itemTypesByValue = writable({});
 
   setContext("Select", {
     selectedValue,
@@ -89,8 +90,23 @@
           selectedValue.set(value);
         }
       }
+
+      itemTypesByValue.update((types) => ({
+        ...types,
+        [value]: typeof value,
+      }));
     },
   });
+
+  const handleChange = ({ target }) => {
+    let value = target.value;
+
+    if ($itemTypesByValue[value] === "number") {
+      value = Number(value);
+    }
+
+    selectedValue.set(value);
+  };
 
   afterUpdate(() => {
     selected = $selectedValue;
@@ -139,9 +155,7 @@
             class:bx--select-input="{true}"
             class:bx--select-input--sm="{size === 'sm'}"
             class:bx--select-input--xl="{size === 'xl'}"
-            on:change="{({ target }) => {
-              selectedValue.set(target.value);
-            }}"
+            on:change="{handleChange}"
             on:input
             on:focus
             on:blur
@@ -184,9 +198,7 @@
           class:bx--select-input="{true}"
           class:bx--select-input--sm="{size === 'sm'}"
           class:bx--select-input--xl="{size === 'xl'}"
-          on:change="{({ target }) => {
-            selectedValue.set(target.value);
-          }}"
+          on:change="{handleChange}"
           on:input
           on:focus
           on:blur
