@@ -1,5 +1,8 @@
 <script>
-  /** Specify the option value */
+  /**
+   * Specify the option value
+   * @type {string | number}
+   */
   export let value = "";
 
   /** Specify the option text */
