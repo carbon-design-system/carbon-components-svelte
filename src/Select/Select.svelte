@@ -71,8 +71,26 @@
 
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);
+  const defaultSelectId = writable(null);
+  const defaultValue = writable(null);
 
-  setContext("Select", { selectedValue });
+  setContext("Select", {
+    selectedValue,
+    setDefaultValue: (id, value) => {
+      /**
+       * Use the first `SelectItem` value as the
+       * default value if `selected` is `undefined`.
+       */
+      if ($defaultValue === null) {
+        defaultSelectId.set(id);
+        defaultValue.set(value);
+      } else {
+        if ($defaultSelectId === id) {
+          selectedValue.set(value);
+        }
+      }
+    },
+  });
 
   afterUpdate(() => {
     selected = $selectedValue;
@@ -80,7 +98,7 @@
   });
 
   $: errorId = `error-${id}`;
-  $: selectedValue.set(selected);
+  $: selectedValue.set(selected ?? $defaultValue);
 </script>
 
 <div class:bx--form-item="{true}" {...$$restProps}>
