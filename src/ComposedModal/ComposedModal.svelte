@@ -66,7 +66,7 @@
   function focus(element) {
     if (selectorPrimaryFocus == null) return;
     const node =
-      (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
+      (element || innerModal)?.querySelector(selectorPrimaryFocus) || buttonRef;
     if (node != null) node.focus();
   }
 
