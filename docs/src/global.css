@@ -262,7 +262,3 @@ main.bx--content {
     z-index: 1;
   }
 }
-
-.bx--side-nav__submenu[aria-expanded="true"] + .bx--side-nav__menu {
-  max-height: 144rem;
-}

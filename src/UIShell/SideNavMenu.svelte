@@ -48,7 +48,11 @@
       <svelte:component this="{ChevronDown}" title="Open Menu" tabindex="0" />
     </div>
   </button>
-  <ul role="menu" class:bx--side-nav__menu="{true}">
+  <ul
+    role="menu"
+    class:bx--side-nav__menu="{true}"
+    style="{expanded && 'max-height: none'}"
+  >
     <slot />
   </ul>
 </li>
