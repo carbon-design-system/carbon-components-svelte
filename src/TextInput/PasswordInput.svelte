@@ -192,39 +192,47 @@
         on:blur
         on:paste
       />
-      <button
-        type="button"
-        disabled="{disabled}"
-        class:bx--text-input--password__visibility__toggle="{true}"
-        class:bx--btn="{true}"
-        class:bx--btn--icon-only="{true}"
-        class:bx--btn--disabled="{disabled}"
-        class:bx--tooltip__trigger="{true}"
-        class:bx--tooltip--a11y="{true}"
-        class:bx--tooltip--top="{tooltipPosition === 'top'}"
-        class:bx--tooltip--right="{tooltipPosition === 'right'}"
-        class:bx--tooltip--bottom="{tooltipPosition === 'bottom'}"
-        class:bx--tooltip--left="{tooltipPosition === 'left'}"
-        class:bx--tooltip--align-start="{tooltipAlignment === 'start'}"
-        class:bx--tooltip--align-center="{tooltipAlignment === 'center'}"
-        class:bx--tooltip--align-end="{tooltipAlignment === 'end'}"
-        on:click="{() => {
-          type = type === 'password' ? 'text' : 'password';
-        }}"
-      >
-        {#if !disabled}
-          <span class:bx--assistive-text="{true}">
-            {#if type === "text"}
-              {hidePasswordLabel}
-            {:else}{showPasswordLabel}{/if}
-          </span>
-        {/if}
-        {#if type === "text"}
-          <ViewOff class="bx--icon-visibility-off" />
-        {:else}
-          <View class="bx--icon-visibility-on" />
-        {/if}
-      </button>
+      {#if isFluid && invalid}
+        <hr class="bx--text-input__divider" />
+        <div class="bx--form-requirement" id="{errorId}">
+          {invalidText}
+        </div>
+      {/if}
+      {#if !(isFluid && invalid)}
+        <button
+          type="button"
+          disabled="{disabled}"
+          class:bx--text-input--password__visibility__toggle="{true}"
+          class:bx--btn="{true}"
+          class:bx--btn--icon-only="{true}"
+          class:bx--btn--disabled="{disabled}"
+          class:bx--tooltip__trigger="{true}"
+          class:bx--tooltip--a11y="{true}"
+          class:bx--tooltip--top="{tooltipPosition === 'top'}"
+          class:bx--tooltip--right="{tooltipPosition === 'right'}"
+          class:bx--tooltip--bottom="{tooltipPosition === 'bottom'}"
+          class:bx--tooltip--left="{tooltipPosition === 'left'}"
+          class:bx--tooltip--align-start="{tooltipAlignment === 'start'}"
+          class:bx--tooltip--align-center="{tooltipAlignment === 'center'}"
+          class:bx--tooltip--align-end="{tooltipAlignment === 'end'}"
+          on:click="{() => {
+            type = type === 'password' ? 'text' : 'password';
+          }}"
+        >
+          {#if !disabled}
+            <span class:bx--assistive-text="{true}">
+              {#if type === "text"}
+                {hidePasswordLabel}
+              {:else}{showPasswordLabel}{/if}
+            </span>
+          {/if}
+          {#if type === "text"}
+            <ViewOff class="bx--icon-visibility-off" />
+          {:else}
+            <View class="bx--icon-visibility-on" />
+          {/if}
+        </button>
+      {/if}
     </div>
     {#if !isFluid && invalid}
       <div class:bx--form-requirement="{true}" id="{errorId}">
