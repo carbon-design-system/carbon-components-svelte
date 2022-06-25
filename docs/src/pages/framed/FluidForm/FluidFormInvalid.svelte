@@ -4,23 +4,22 @@
     TextInput,
     PasswordInput,
   } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
+
+  let password = "";
+  let invalid = false;
+
+  $: invalid = !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(password);
 </script>
-
-### Fluid form
-
-Note that the `inline` input variants cannot be used within a `FluidForm`.
 
 <FluidForm>
   <TextInput labelText="User name" placeholder="Enter user name..." required />
   <PasswordInput
+    bind:value="{password}"
+    invalid="{invalid}"
+    invalidText="Your password must be at least 6 characters as well as contain at least one uppercase, one lowercase, and one number."
     required
     type="password"
     labelText="Password"
     placeholder="Enter password..."
   />
 </FluidForm>
-
-### Invalid state
-
-<FileSource src="/framed/FluidForm/FluidFormInvalid" />
