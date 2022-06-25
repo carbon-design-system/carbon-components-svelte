@@ -110,11 +110,6 @@
     if (height > 0) showMoreLess = ref.getBoundingClientRect().height > 255;
   }
 
-  function copyCode() {
-    copy(code);
-    dispatch("copy");
-  }
-
   $: expandText = expanded ? showLessText : showMoreText;
   $: minHeight = expanded ? 16 * 15 : 48;
   $: maxHeight = expanded ? "none" : 16 * 15 + "px";
@@ -174,7 +169,8 @@
       {...$$restProps}
       on:click
       on:click="{() => {
-        copyCode();
+        copy(code);
+        dispatch('copy');
         if (animation === 'fade-in') return;
         animation = 'fade-in';
         timeout = setTimeout(() => {
@@ -229,12 +225,14 @@
     </div>
     {#if !hideCopyButton}
       <CopyButton
+        text="{code}"
+        copy="{copy}"
         disabled="{disabled}"
         feedback="{feedback}"
         feedbackTimeout="{feedbackTimeout}"
         iconDescription="{copyButtonDescription}"
         on:click
-        on:click="{copyCode}"
+        on:copy
         on:animationend
       />
     {/if}
