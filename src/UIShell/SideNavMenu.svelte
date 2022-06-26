@@ -45,7 +45,7 @@
       class:bx--side-nav__icon--small="{true}"
       class:bx--side-nav__submenu-chevron="{true}"
     >
-      <svelte:component this="{ChevronDown}" title="Open Menu" />
+      <ChevronDown />
     </div>
   </button>
   <ul
