@@ -24,7 +24,7 @@ Override the default slot to customize the display of each item. Access the item
 
 <FileSource src="/framed/ComboBox/ComboBoxSlot" />
 
-### Selected id
+### Initial selected id
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
 selectedId="1"
