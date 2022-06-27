@@ -567,12 +567,12 @@ None.
 | :----------- | :--------- | :---------------- |
 | expand       | dispatched | <code>null</code> |
 | collapse     | dispatched | <code>null</code> |
+| copy         | dispatched | <code>null</code> |
 | click        | forwarded  | --                |
 | mouseover    | forwarded  | --                |
 | mouseenter   | forwarded  | --                |
 | mouseleave   | forwarded  | --                |
 | animationend | forwarded  | --                |
-| copy         | dispatched | <code>null</code> |
 
 ## `CodeSnippetSkeleton`
 

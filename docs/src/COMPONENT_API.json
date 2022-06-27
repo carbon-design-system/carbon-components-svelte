@@ -1235,6 +1235,7 @@
       "events": [
         { "type": "dispatched", "name": "expand", "detail": "null" },
         { "type": "dispatched", "name": "collapse", "detail": "null" },
+        { "type": "dispatched", "name": "copy", "detail": "null" },
         {
           "type": "forwarded",
           "name": "click",
@@ -1255,12 +1256,7 @@
           "name": "mouseleave",
           "element": "CodeSnippetSkeleton"
         },
-        {
-          "type": "forwarded",
-          "name": "animationend",
-          "element": "CopyButton"
-        },
-        { "type": "dispatched", "name": "copy", "detail": "null" }
+        { "type": "forwarded", "name": "animationend", "element": "CopyButton" }
       ],
       "typedefs": [],
       "rest_props": { "type": "InlineComponent", "name": "CodeSnippetSkeleton" }
