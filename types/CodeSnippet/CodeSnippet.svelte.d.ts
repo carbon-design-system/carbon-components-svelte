@@ -122,12 +122,12 @@ export default class CodeSnippet extends SvelteComponentTyped<
   {
     expand: CustomEvent<null>;
     collapse: CustomEvent<null>;
+    copy: CustomEvent<null>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     animationend: WindowEventMap["animationend"];
-    copy: CustomEvent<null>;
   },
   { default: {} }
 > {}
