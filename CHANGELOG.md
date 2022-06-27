@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.66.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.66.1) - 2022-06-27
+
+**Fixes**
+
+- support `PasswordInput` invalid state when used in a `FluidForm`
+- remove title attribute from `SideNavMenu` icon
+- remove tabindex attribute from `SideNavMenu` icon
+- override max-height in an expanded `SideNavMenu`
+- fix `ComposedModal` type error where the focus node is possibly `null`
+
+**Refactor**
+
+- pass required `text` prop from `CodeSnippet` to `CopyButton` to prevent development warning
+
+**Documentation**
+
+- add `PasswordInput` example "Invalid state"
+- rename `ComboBox` example "Selected id" to "Initial selected id"
+- revise `DatePicker` example "DatePicker in a modal" to prevent iframe from stealing focus
+
 ## [0.66.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.66.0) - 2022-06-18
 
 **Features**
