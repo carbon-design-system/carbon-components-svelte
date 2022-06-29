@@ -31,6 +31,8 @@ Other forms of documentation are auto-generated:
 
 Install `carbon-components-svelte` as a development dependency.
 
+A minimum Svelte version of 3.48.0 is required to use this library.
+
 ```sh
 # Yarn
 yarn add -D carbon-components-svelte
