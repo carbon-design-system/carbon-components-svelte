@@ -3,13 +3,28 @@ source: Notification/ToastNotification.svelte
 ---
 
 <script>
-  import { ToastNotification } from "carbon-components-svelte";
+  import { ToastNotification, InlineNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
 ### Default (error)
 
 <ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
+
+### Prevent default close behavior
+
+`ToastNotification` is a controlled component. Prevent the default close behavior using the `e.preventDefault()` method in the dispatched `on:close` event.
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    Svelte version 3.48.0 or greater is required.
+  </div>
+</InlineNotification>
+
+<ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" on:close={(e) => {
+  e.preventDefault();
+  // custom close logic (e.g., transitions)
+}} />
 
 ### Slottable title, subtitle, caption
 

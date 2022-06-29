@@ -11,6 +11,21 @@ source: Notification/InlineNotification.svelte
 
 <InlineNotification title="Error:" subtitle="An internal server error occurred." />
 
+### Prevent default close behavior
+
+`InlineNotification` is a controlled component. Prevent the default close behavior using the `e.preventDefault()` method in the dispatched `on:close` event.
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    Svelte version 3.48.0 or greater is required.
+  </div>
+</InlineNotification>
+
+<InlineNotification title="Error" subtitle="An internal server error occurred." on:close={(e) => {
+  e.preventDefault();
+  // custom close logic (e.g., transitions)
+}} />
+
 ### Slottable title, subtitle
 
 <InlineNotification>
