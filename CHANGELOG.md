@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.66.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.66.3) - 2022-06-29
+
+**Fixes**
+
+- revert [924b6d35](924b6d352eebf5c82da63f0ead450dc59e80ca30) and re-publish since v0.66.2 contains breaking changes
+
 ## [0.66.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.66.2) - 2022-06-29
 
 **Fixes**
