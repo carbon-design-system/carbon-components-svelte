@@ -43,8 +43,14 @@
   let timeoutId = undefined;
 
   function close(closeFromTimeout) {
-    open = false;
-    dispatch("close", { timeout: closeFromTimeout === true });
+    const shouldContinue = dispatch(
+      "close",
+      { timeout: closeFromTimeout === true },
+      { cancelable: true }
+    );
+    if (shouldContinue) {
+      open = false;
+    }
   }
 
   onMount(() => {
