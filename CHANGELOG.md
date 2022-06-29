@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.66.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.66.2) - 2022-06-29
+
+**Fixes**
+
+- allow close event in `ToastNotification`, `InlineNotification` to be cancellable
+
+**Documentation**
+
+- add `ToastNotification` example "Prevent default close behavior"
+- add `InlineNotification` example "Prevent default close behavior"
+
 ## [0.66.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.66.1) - 2022-06-27
 
 **Fixes**
