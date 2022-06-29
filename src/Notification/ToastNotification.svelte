@@ -43,7 +43,11 @@
   let timeoutId = undefined;
 
   function close(closeFromTimeout) {
-    const shouldContinue = dispatch("close", { timeout: closeFromTimeout === true }, { cancelable: true });
+    const shouldContinue = dispatch(
+      "close",
+      { timeout: closeFromTimeout === true },
+      { cancelable: true }
+    );
     if (shouldContinue) {
       open = false;
     }
