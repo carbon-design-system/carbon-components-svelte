@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.67.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.1) - 2022-07-12
+
+**Fixes**
+
+- set a high `z-index` on the `SideNav` overlay to avoid it being covered by other elements
+
 ## [0.67.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.0) - 2022-06-29
 
 **Breaking Changes**
