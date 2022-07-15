@@ -11,7 +11,7 @@
     "esbuild-loader": "^2.19.0",
     "html-webpack-plugin": "5.5.0",
     "mini-css-extract-plugin": "^2.6.0",
-    "svelte": "^3.48.0",
+    "svelte": "^3.49.0",
     "svelte-loader": "^3.0.0",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
