@@ -5,7 +5,7 @@
     "build": "snowpack build"
   },
   "dependencies": {
-    "svelte": "^3.48.0"
+    "svelte": "^3.49.0"
   },
   "devDependencies": {
     "@snowpack/plugin-svelte": "^3.7.0",
