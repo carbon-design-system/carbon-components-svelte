@@ -11,6 +11,6 @@
     "carbon-components-svelte": "^0.64.3",
     "carbon-pictograms-svelte": "^12.0.3",
     "carbon-preprocess-svelte": "^0.9.0",
-    "svelte": "^3.48.0"
+    "svelte": "^3.49.0"
   }
 }
