@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://unpkg.com/@carbon-platform/schemas@v1/carbon-resources.schema.json
 library:
   id: carbon-components-svelte
-  name: Carbon Components Svelte
+  name: Carbon Svelte
   description: Svelte implementation of Carbon Components.
   externalDocsUrl: https://carbon-components-svelte.onrender.com
   inherits: carbon-styles
