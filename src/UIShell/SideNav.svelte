@@ -74,3 +74,9 @@
 >
   <slot />
 </nav>
+
+<style>
+  :global(.bx--side-nav--collapsed ~ .bx--content) {
+    margin-left: 0;
+  }
+</style>
