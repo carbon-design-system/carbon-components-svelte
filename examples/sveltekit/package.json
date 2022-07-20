@@ -2,15 +2,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "svelte-kit dev",
-    "build": "svelte-kit build",
-    "preview": "svelte-kit preview"
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "@sveltejs/kit": "1.0.0-next.345",
-    "carbon-components-svelte": "^0.64.3",
+    "@sveltejs/kit": "1.0.0-next.384",
+    "carbon-components-svelte": "^0.67.1",
     "carbon-pictograms-svelte": "^12.0.3",
-    "carbon-preprocess-svelte": "^0.9.0",
-    "svelte": "^3.48.0"
+    "carbon-preprocess-svelte": "^0.9.1",
+    "svelte": "^3.49.0",
+    "vite": "^3.0.2"
   }
 }

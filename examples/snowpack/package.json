@@ -5,12 +5,12 @@
     "build": "snowpack build"
   },
   "dependencies": {
-    "svelte": "^3.48.0"
+    "svelte": "^3.49.0"
   },
   "devDependencies": {
     "@snowpack/plugin-svelte": "^3.7.0",
-    "carbon-components-svelte": "^0.64.3",
-    "carbon-preprocess-svelte": "^0.9.0",
+    "carbon-components-svelte": "^0.67.1",
+    "carbon-preprocess-svelte": "^0.9.1",
     "snowpack": "^3.8.8"
   }
 }
