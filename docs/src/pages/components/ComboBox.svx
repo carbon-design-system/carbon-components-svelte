@@ -54,6 +54,12 @@ Specify `focus: false` in the method options to avoid re-focusing the input.
 
 <FileSource src="/framed/ComboBox/FilterableComboBox" />
 
+### Filterable with custom label
+
+Combine a custom label `itemToString` with the filterable option, e.g., when working with internationalization.
+
+<FileSource src="/framed/ComboBox/FilterableComboBoxCustomLabel" />
+
 ### Top direction
 
 Set `direction` to `"top"` for the combobox dropdown menu to appear above the input.

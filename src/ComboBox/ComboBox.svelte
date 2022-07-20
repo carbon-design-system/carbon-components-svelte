@@ -178,7 +178,7 @@
         highlightedId = undefined;
       } else {
         // programmatically set value
-        value = selectedItem.text;
+        value = itemToString(selectedItem);
       }
     }
   });
@@ -294,14 +294,14 @@
             ) {
               open = false;
               if (filteredItems[highlightedIndex]) {
-                value = filteredItems[highlightedIndex].text;
+                value = itemToString(filteredItems[highlightedIndex]);
                 selectedItem = filteredItems[highlightedIndex];
                 selectedId = filteredItems[highlightedIndex].id;
               }
             } else {
               open = false;
               if (filteredItems[0]) {
-                value = filteredItems[0].text;
+                value = itemToString(filteredItems[0]);
                 selectedItem = filteredItems[0];
                 selectedId = filteredItems[0].id;
               }
@@ -382,7 +382,7 @@
               open = false;
 
               if (filteredItems[i]) {
-                value = filteredItems[i].text;
+                value = itemToString(filteredItems[i]);
               }
             }}"
             on:mouseenter="{() => {
