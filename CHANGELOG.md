@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.67.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.2) - 2022-07-23
+
+**Fixes**
+
+- display correct `ComboBox` value if using `itemToString` and `shouldFilterItem` props
+
 ## [0.67.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.1) - 2022-07-12
 
 **Fixes**
