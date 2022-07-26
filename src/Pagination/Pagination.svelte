@@ -27,14 +27,15 @@
    * Override the item text
    * @type {(min: number, max: number) => string}
    */
-  export let itemText = (min, max) => `${min}–${max} items`;
+  export let itemText = (min, max) =>
+    `${min}–${max} item${max === 1 ? "" : "s"}`;
 
   /**
    * Override the item range text
    * @type {(min: number, max: number, total: number) => string}
    */
   export let itemRangeText = (min, max, total) =>
-    `${min}–${max} of ${total} items`;
+    `${min}–${max} of ${total} item${max === 1 ? "" : "s"}`;
 
   /** Set to `true` to disable the page input */
   export let pageInputDisabled = false;
