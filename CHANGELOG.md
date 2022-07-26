@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.67.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.3) - 2022-07-26
+
+**Fixes**
+
+- correctly pluralize `Pagination` items display text
+- prevent label text selection in `Toggle`
+- add missing `hideLabel` prop to `Toggle`
+
 ## [0.67.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.2) - 2022-07-23
 
 **Fixes**
