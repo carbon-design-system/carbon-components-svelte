@@ -13495,6 +13495,18 @@
           "reactive": false
         },
         {
+          "name": "hideLabel",
+          "kind": "let",
+          "description": "Set to `true` to visually hide the label text",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "id",
           "kind": "let",
           "description": "Set an id for the input element",

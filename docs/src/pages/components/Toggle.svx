@@ -23,6 +23,12 @@ components: ["Toggle", "ToggleSkeleton"]
 
 <Toggle labelText="Push notifications" on:toggle={e => console.log(e.detail)} />
 
+### Hidden label text
+
+Set `hideLabel` to `true` to visually hide the label text. It's recommended to still specify `labelText` for screen reader accessibility.
+
+<Toggle labelText="Push notifications" hideLabel />
+
 ### Custom labels
 
 <Toggle labelText="Push notifications" labelA="No" labelB="Yes" />

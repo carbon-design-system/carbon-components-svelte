@@ -24,6 +24,9 @@
   /** Specify the label text */
   export let labelText = "";
 
+  /** Set to `true` to visually hide the label text */
+  export let hideLabel = false;
+
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -76,9 +79,11 @@
     for="{id}"
     class:bx--toggle-input__label="{true}"
   >
-    <slot name="labelText">
-      {labelText}
-    </slot>
+    <span class:bx--visually-hidden="{hideLabel}">
+      <slot name="labelText">
+        {labelText}
+      </slot>
+    </span>
     <span class:bx--toggle__switch="{true}">
       <span aria-hidden="true" class:bx--toggle__text--off="{true}">
         <slot name="labelA">
