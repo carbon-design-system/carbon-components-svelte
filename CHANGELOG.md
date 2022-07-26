@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.67.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.4) - 2022-07-26
+
+**Fixes**
+
+- override `Toggle` margin-top style if `hideLabel` is true
+
 ## [0.67.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.3) - 2022-07-26
 
 **Fixes**
