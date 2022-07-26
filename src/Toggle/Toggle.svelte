@@ -85,7 +85,10 @@
         {labelText}
       </slot>
     </span>
-    <span class:bx--toggle__switch="{true}">
+    <span
+      class:bx--toggle__switch="{true}"
+      style="{hideLabel && 'margin-top: 0'}"
+    >
       <span aria-hidden="true" class:bx--toggle__text--off="{true}">
         <slot name="labelA">
           {labelA}
