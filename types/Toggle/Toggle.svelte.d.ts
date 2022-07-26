@@ -40,6 +40,12 @@ export interface ToggleProps
   labelText?: string;
 
   /**
+   * Set to `true` to visually hide the label text
+   * @default false
+   */
+  hideLabel?: boolean;
+
+  /**
    * Set an id for the input element
    * @default "ccs-" + Math.random().toString(36)
    */
