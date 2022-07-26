@@ -2,7 +2,7 @@
   import { Toggle, ToggleSkeleton } from "../types";
 </script>
 
-<Toggle labelText="Push notifications" />
+<Toggle labelText="Push notifications" hideLabel />
 
 <Toggle
   labelText="Push notifications"
