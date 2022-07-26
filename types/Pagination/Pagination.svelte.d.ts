@@ -41,13 +41,13 @@ export interface PaginationProps
 
   /**
    * Override the item text
-   * @default (min, max) => `${min}–${max} items`
+   * @default (min, max) => `${min}–${max} item${max === 1 ? "" : "s"}`
    */
   itemText?: (min: number, max: number) => string;
 
   /**
    * Override the item range text
-   * @default (min, max, total) => `${min}–${max} of ${total} items`
+   * @default (min, max, total) => `${min}–${max} of ${total} item${max === 1 ? "" : "s"}`
    */
   itemRangeText?: (min: number, max: number, total: number) => string;
 
