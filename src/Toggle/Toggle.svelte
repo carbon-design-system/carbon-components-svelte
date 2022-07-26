@@ -47,6 +47,7 @@
 <div
   class:bx--form-item="{true}"
   {...$$restProps}
+  style="{$$restProps['style']}; user-select: none"
   on:click
   on:mouseover
   on:mouseenter
