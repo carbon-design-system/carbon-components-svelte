@@ -205,7 +205,9 @@
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
-  $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
+  $: /** @type Array<ComboBoxItem> */ filteredItems = items.filter((item) =>
+    shouldFilterItem(item, value)
+  );
 </script>
 
 <svelte:window
@@ -287,7 +289,6 @@
         on:keydown|stopPropagation="{({ key }) => {
           if (key === 'Enter') {
             open = !open;
-
             if (
               highlightedIndex > -1 &&
               filteredItems[highlightedIndex]?.id !== selectedId
@@ -299,11 +300,33 @@
                 selectedId = filteredItems[highlightedIndex].id;
               }
             } else {
-              open = false;
-              if (filteredItems[0]) {
-                value = itemToString(filteredItems[0]);
-                selectedItem = filteredItems[0];
-                selectedId = filteredItems[0].id;
+              // searching typed value in text list with lowercase
+              /** @type Array<ComboBoxItem> */
+              const listOfItems = filteredItems.map((e) => {
+                return {
+                  id: e.id,
+                  text: e.text?.toLowerCase(),
+                  disabled: e.disabled,
+                };
+              });
+              const matchedItem = listOfItems.find(
+                (e) => e.text === value?.toLowerCase()
+              );
+              if (matchedItem) {
+                // typed value has matched
+                open = false;
+                selectedItem = filteredItems.find(
+                  (e) => e.id === matchedItem.id
+                );
+                value = selectedItem.text;
+                selectedId = selectedItem.id;
+              } else {
+                open = false;
+                if (filteredItems[0]) {
+                  value = itemToString(filteredItems[0]);
+                  selectedItem = filteredItems[0];
+                  selectedId = filteredItems[0].id;
+                }
               }
             }
             highlightedIndex = -1;
