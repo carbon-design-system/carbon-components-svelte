@@ -287,7 +287,6 @@
         on:keydown|stopPropagation="{({ key }) => {
           if (key === 'Enter') {
             open = !open;
-
             if (
               highlightedIndex > -1 &&
               filteredItems[highlightedIndex]?.id !== selectedId
@@ -299,11 +298,18 @@
                 selectedId = filteredItems[highlightedIndex].id;
               }
             } else {
-              open = false;
-              if (filteredItems[0]) {
-                value = itemToString(filteredItems[0]);
-                selectedItem = filteredItems[0];
-                selectedId = filteredItems[0].id;
+              // searching typed value in text list with lowercase
+              const matchedItem =
+                filteredItems.find(
+                  (e) =>
+                    e.text.toLowerCase() === value?.toLowerCase() && !e.disabled
+                ) ?? filteredItems.find((e) => !e.disabled);
+              if (matchedItem) {
+                // typed value has matched or fallback to first enabled item
+                open = false;
+                selectedItem = matchedItem;
+                value = itemToString(selectedItem);
+                selectedId = selectedItem.id;
               }
             }
             highlightedIndex = -1;
