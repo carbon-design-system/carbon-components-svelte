@@ -308,7 +308,7 @@
                 // typed value has matched or fallback to first enabled item
                 open = false;
                 selectedItem = matchedItem;
-                value = itemToString(selectedItem.text);
+                value = itemToString(selectedItem);
                 selectedId = selectedItem.id;
               }
             }
