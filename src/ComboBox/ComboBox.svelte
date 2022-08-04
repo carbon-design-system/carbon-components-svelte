@@ -299,25 +299,17 @@
               }
             } else {
               // searching typed value in text list with lowercase
-              const matchedItem = filteredItems.find(
-                (e) =>
-                  e.text.toLowerCase() === value?.toLowerCase() && !e.disabled
-              );
+              const matchedItem =
+                filteredItems.find(
+                  (e) =>
+                    e.text.toLowerCase() === value?.toLowerCase() && !e.disabled
+                ) ?? filteredItems.find((e) => !e.disabled);
               if (matchedItem) {
-                // typed value has matched
+                // typed value has matched or fallback to first enabled item
                 open = false;
                 selectedItem = matchedItem;
                 value = selectedItem.text;
                 selectedId = selectedItem.id;
-              } else {
-                open = false;
-                // find first enabled item
-                const matchedItem = filteredItems.find((e) => !e.disabled);
-                if (matchedItem) {
-                  value = itemToString(matchedItem);
-                  selectedItem = matchedItem;
-                  selectedId = matchedItem.id;
-                }
               }
             }
             highlightedIndex = -1;
