@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.67.5](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.5) - 2022-8-04
+
+**Fixes**
+
+- correctly select a `ComboBox` item when pressing "Enter"
+
 ## [0.67.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.4) - 2022-07-26
 
 **Fixes**
