@@ -311,10 +311,12 @@
                 selectedId = selectedItem.id;
               } else {
                 open = false;
-                if (filteredItems[0]) {
-                  value = itemToString(filteredItems[0]);
-                  selectedItem = filteredItems[0];
-                  selectedId = filteredItems[0].id;
+                // find first enabled item
+                const matchedItem = filteredItems.find((e) => !e.disabled);
+                if (matchedItem) {
+                  value = itemToString(matchedItem);
+                  selectedItem = matchedItem;
+                  selectedId = matchedItem.id;
                 }
               }
             }
