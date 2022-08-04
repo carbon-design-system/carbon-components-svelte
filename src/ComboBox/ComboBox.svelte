@@ -205,9 +205,7 @@
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
-  $: /** @type Array<ComboBoxItem> */ filteredItems = items.filter((item) =>
-    shouldFilterItem(item, value)
-  );
+  $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
 </script>
 
 <svelte:window
@@ -301,23 +299,14 @@
               }
             } else {
               // searching typed value in text list with lowercase
-              /** @type Array<ComboBoxItem> */
-              const listOfItems = filteredItems.map((e) => {
-                return {
-                  id: e.id,
-                  text: e.text?.toLowerCase(),
-                  disabled: e.disabled,
-                };
-              });
-              const matchedItem = listOfItems.find(
-                (e) => e.text === value?.toLowerCase()
+              const matchedItem = filteredItems.find(
+                (e) =>
+                  e.text.toLowerCase() === value?.toLowerCase() && !e.disabled
               );
               if (matchedItem) {
                 // typed value has matched
                 open = false;
-                selectedItem = filteredItems.find(
-                  (e) => e.id === matchedItem.id
-                );
+                selectedItem = matchedItem;
                 value = selectedItem.text;
                 selectedId = selectedItem.id;
               } else {
