@@ -116,7 +116,8 @@
         : $inputValue}"
       class:bx--date-picker__input="{true}"
       class:bx--date-picker__input--invalid="{invalid}"
-      class="{size && `bx--date-picker__input--${size}`}"
+      class:bx--date-picker__input--sm="{size === 'sm'}"
+      class:bx--date-picker__input--xl="{size === 'xl'}"
       on:input
       on:input="{({ target }) => {
         updateValue({ type: 'input', value: target.value });

@@ -146,7 +146,8 @@
       class:bx--visually-hidden="{hideLabel}"
       class:bx--label--disabled="{disabled}"
       class:bx--label--inline="{inline}"
-      class="{inline && !!size && `bx--label--inline--${size}`}"
+      class:bx--label--inline-sm="{inline && size === 'sm'}"
+      class:bx--label--inline-xl="{inline && size === 'xl'}"
     >
       <slot name="labelText">
         {labelText}
