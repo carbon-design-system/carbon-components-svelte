@@ -204,6 +204,8 @@
         {...$$restProps}
         on:change="{onChange}"
         on:input="{onInput}"
+        on:keydown
+        on:keyup
         on:focus
         on:blur
         on:paste
