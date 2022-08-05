@@ -225,7 +225,6 @@ export default {
 ## Examples
 
 - [examples/rollup](examples/rollup/)
-- [examples/snowpack](examples/snowpack/)
 - [examples/sveltekit](examples/sveltekit/)
 - [examples/vite](examples/vite/)
 - [examples/webpack](examples/webpack/)
