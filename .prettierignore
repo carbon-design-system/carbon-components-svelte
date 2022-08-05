@@ -1,6 +1,5 @@
 /lib
 /css
-__sapper__
 .svelte-kit
 .routify
 dist
