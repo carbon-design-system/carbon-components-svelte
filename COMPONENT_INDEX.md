@@ -2512,6 +2512,8 @@ export type NumberInputTranslationId = "increment" | "decrement";
 | mouseover  | forwarded  | --                              |
 | mouseenter | forwarded  | --                              |
 | mouseleave | forwarded  | --                              |
+| keydown    | forwarded  | --                              |
+| keyup      | forwarded  | --                              |
 | focus      | forwarded  | --                              |
 | blur       | forwarded  | --                              |
 | paste      | forwarded  | --                              |

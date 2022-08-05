@@ -148,6 +148,8 @@ export default class NumberInput extends SvelteComponentTyped<
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
+    keydown: WindowEventMap["keydown"];
+    keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
     paste: DocumentAndElementEventHandlersEventMap["paste"];

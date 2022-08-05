@@ -7779,6 +7779,8 @@
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
         { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "paste", "element": "input" }
