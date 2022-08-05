@@ -40,6 +40,8 @@
     this="{icon}"
     size="{20}"
     title="{title}"
-    class="bx--{notificationType}-notification__close-icon"
+    class="{notificationType === 'toast' &&
+      'bx--toast-notification__close-icon'} {notificationType === 'inline' &&
+      'bx--inline-notification__close-icon'}"
   />
 </button>

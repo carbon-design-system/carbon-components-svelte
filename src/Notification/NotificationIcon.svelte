@@ -35,5 +35,7 @@
   this="{icons[kind]}"
   size="{20}"
   title="{iconDescription}"
-  class="bx--{notificationType}-notification__icon"
+  class="{notificationType === 'toast' &&
+    'bx--toast-notification__icon'} {notificationType === 'inline' &&
+    'bx--inline-notification__icon'}"
 />
