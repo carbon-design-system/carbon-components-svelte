@@ -19,6 +19,8 @@
   on:change="{(e) => {
     console.log(e.detail); // null | number
   }}"
+  on:keydown
+  on:keyup
   on:paste
 />
 
