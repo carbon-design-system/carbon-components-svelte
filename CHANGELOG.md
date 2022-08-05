@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.67.6](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.6) - 2022-8-05
+
+**Refactor**
+
+- use class directive in `TextInput`, `DatePickerInput`
+
+**Fixes**
+
+- avoid dynamic class names in `NotificationButton`, `NotificationIcon`
+- forward keydown, keyup events to `NumberInput`
+
 ## [0.67.5](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.5) - 2022-8-04
 
 **Fixes**
