@@ -188,41 +188,30 @@ module.exports = {
             "</Layout_MDSVEX_DEFAULT>",
             `<div slot="aside">
                 <ul class="bx--list--unordered">
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#usage">Usage</a>
-                    <ul class="bx--list--unordered bx--list--nested">
                     ${toc
-                      .map((item) => {
-                        return `
-                          <li class="bx--list__item">
-                            <a class="bx--link" href="\#${item.id}">${item.text}</a>
-                          </li>`;
-                      })
+                      .map(
+                        (item) =>
+                          `<li class="bx--list__item"><a class="bx--link" href="\#${item.id}">${item.text}</a></li>`
+                      )
                       .join("")}
-                    </ul>
+                  <h5>Component API</h5>
+                  <li class="bx--list__item">
+                    <a class="bx--link" href="#props">Props</a>
                   </li>
                   <li class="bx--list__item">
-                    <a class="bx--link" href="#component-api">Component API</a>
-                    <ul class="bx--list--unordered bx--list--nested">
-                      <li class="bx--list__item">
-                        <a class="bx--link" href="#props">Props</a>
-                      </li>
-                      <li class="bx--list__item">
-                        <a class="bx--link" href="#typedefs">Typedefs</a>
-                      </li>
-                      <li class="bx--list__item">
-                        <a class="bx--link" href="#slots">Slots</a>
-                      </li>
-                      <li class="bx--list__item">
-                        <a class="bx--link" href="#forwarded-events">Forwarded events</a>
-                      </li>
-                      <li class="bx--list__item">
-                        <a class="bx--link" href="#dispatched-events">Dispatched events</a>
-                      </li>
-                      <li class="bx--list__item">
-                        <a class="bx--link" href="#rest-props">restProps</a>
-                      </li>
-                    </ul>
+                    <a class="bx--link" href="#typedefs">Typedefs</a>
+                  </li>
+                  <li class="bx--list__item">
+                    <a class="bx--link" href="#slots">Slots</a>
+                  </li>
+                  <li class="bx--list__item">
+                    <a class="bx--link" href="#forwarded-events">Forwarded events</a>
+                  </li>
+                  <li class="bx--list__item">
+                    <a class="bx--link" href="#dispatched-events">Dispatched events</a>
+                  </li>
+                  <li class="bx--list__item">
+                    <a class="bx--link" href="#rest-props">restProps</a>
                   </li>
                 </ul>
               </div>

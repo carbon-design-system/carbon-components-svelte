@@ -100,12 +100,11 @@
     <Row>
       <Column class="prose">
         <div class="toc mobile">
-          <h5>Table of Contents</h5>
+          <h5>Examples</h5>
           <slot name="aside" />
         </div>
-        <h2 id="usage">Usage</h2>
         <slot />
-        <h2 id="component-api">Component API</h2>
+        <h3 id="component-api">Component API</h3>
         <p>
           API documentation is
           <Link
@@ -143,7 +142,7 @@
 
   <Column class="table" xlg="{4}" lg="{5}">
     <div class="toc">
-      <h5>Table of Contents</h5>
+      <h5>Examples</h5>
       <slot name="aside" />
     </div>
   </Column>
@@ -157,7 +156,8 @@
     border-bottom: 1px solid var(--cds-ui-03);
   }
 
-  .toc h5 {
+  :global(.toc h5) {
+    margin-top: var(--cds-spacing-06);
     margin-bottom: var(--cds-spacing-03);
   }
 
@@ -168,6 +168,7 @@
   @media (max-width: 1056px) {
     .toc.mobile {
       display: block;
+      margin-bottom: var(--cds-spacing-09);
     }
   }
 </style>
