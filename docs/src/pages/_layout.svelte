@@ -11,7 +11,6 @@
     SkipToContent,
     SideNav,
     SideNavItems,
-    SideNavMenu,
     SideNavMenuItem,
     Tag,
   } from "carbon-components-svelte";
@@ -29,7 +28,6 @@
   $: components = $layout.children.filter(
     (child) => child.title === "components"
   )[0];
-  $: recipes = $layout.children.filter((child) => child.title === "recipes")[0];
 
   $beforeUrlChange(() => {
     if (isMobile) isSideNavOpen = false;
@@ -99,48 +97,33 @@
 
   <SideNav bind:isOpen="{isSideNavOpen}">
     <SideNavItems>
-      <SideNavMenu
-        expanded="{$isActive($url('')) || $isActive($url('/components'))}"
-        text="Components"
-      >
-        {#each components.children.filter((child) => !deprecated.includes(child.title)) as child, i (child.path)}
-          <SideNavMenuItem
-            text="{child.title}"
-            href="{$url(child.path)}"
-            isSelected="{$isActive($url(child.path))}"
-          >
-            {child.title}
-            {#if deprecated.includes(child.title)}
-              <Tag
-                size="sm"
-                type="red"
-                style="margin-top: 0; margin-bottom: 0; cursor: inherit"
-              >
-                Deprecated
-              </Tag>
-            {/if}
-            {#if new_components.includes(child.title)}
-              <Tag
-                size="sm"
-                type="green"
-                style="margin-top: 0; margin-bottom: 0; cursor: inherit"
-              >
-                New
-              </Tag>
-            {/if}
-          </SideNavMenuItem>
-        {/each}
-      </SideNavMenu>
-      <SideNavMenu expanded="{$isActive($url('/recipes'))}" text="Recipes">
-        {#each recipes.children as child, i (child.path)}
-          <SideNavMenuItem
-            href="{$url(child.path)}"
-            isSelected="{$isActive($url(child.path))}"
-          >
-            {child.title}
-          </SideNavMenuItem>
-        {/each}
-      </SideNavMenu>
+      {#each components.children.filter((child) => !deprecated.includes(child.title)) as child (child.path)}
+        <SideNavMenuItem
+          text="{child.title}"
+          href="{$url(child.path)}"
+          isSelected="{$isActive($url(child.path))}"
+        >
+          {child.title}
+          {#if deprecated.includes(child.title)}
+            <Tag
+              size="sm"
+              type="red"
+              style="margin-top: 0; margin-bottom: 0; cursor: inherit"
+            >
+              Deprecated
+            </Tag>
+          {/if}
+          {#if new_components.includes(child.title)}
+            <Tag
+              size="sm"
+              type="green"
+              style="margin-top: 0; margin-bottom: 0; cursor: inherit"
+            >
+              New
+            </Tag>
+          {/if}
+        </SideNavMenuItem>
+      {/each}
     </SideNavItems>
   </SideNav>
   <slot />
