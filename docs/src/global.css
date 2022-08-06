@@ -246,7 +246,6 @@ main.bx--content {
 
 @media (max-width: 1056px) {
   .bx--side-nav ~ .bx--content {
-    margin-left: 0;
     padding-left: 1rem;
     padding-right: 1rem;
   }
