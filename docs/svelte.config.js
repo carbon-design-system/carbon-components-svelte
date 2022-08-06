@@ -139,8 +139,6 @@ function carbonify() {
   };
 }
 
-const NODE_ENV = process.env.NODE_ENV || "production";
-
 module.exports = {
   extensions: [".svelte", ".svx"],
   preprocess: [
@@ -159,14 +157,13 @@ module.exports = {
     mdsvex({
       remarkPlugins: [plugin, slug, carbonify],
       layout: {
-        recipe: path.join(__dirname, "src/layouts/Recipe.svelte"),
         _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
       },
     }),
     {
       markup({ content, filename }) {
         if (/node_modules/.test(filename)) return null;
-        if (filename.endsWith(".svx") && filename.match(/pages\/(recipes)/)) {
+        if (filename.endsWith(".svx")) {
           const toc = [];
 
           walk(parse(content), {

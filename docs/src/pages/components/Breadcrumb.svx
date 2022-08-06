@@ -12,8 +12,6 @@ components: ["Breadcrumb", "BreadcrumbItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-See the [Breadcrumbs recipe](/recipes/Breadcrumbs) for a reusable breadcrumbs component.
-
 ### Default
 
 <Breadcrumb>
@@ -42,6 +40,10 @@ See the [Breadcrumbs recipe](/recipes/Breadcrumbs) for a reusable breadcrumbs co
   </BreadcrumbItem>
   <BreadcrumbItem href="/api/data/latest/usage" isCurrentPage>Usage</BreadcrumbItem>
 </Breadcrumb>
+
+### Breadcrumb trail
+
+<FileSource src="/framed/Breadcrumbs/Breadcrumbs" />
 
 ### Skeleton
 

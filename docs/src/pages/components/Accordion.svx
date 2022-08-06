@@ -10,8 +10,6 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-See the [ExpandableAccordion recipe](/recipes/ExpandableAccordion) for a toggleable accordion component.
-
 ### Default
 
 <Accordion>
@@ -83,6 +81,12 @@ See the [ExpandableAccordion recipe](/recipes/ExpandableAccordion) for a togglea
     <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
   </AccordionItem>
 </Accordion>
+
+### Programmatic example
+
+This example demonstrates how a list of items can be programmatically expanded and collapsed.
+
+<FileSource src="/framed/Accordion/ExpandableAccordion" />
 
 ### Extra-large size
 

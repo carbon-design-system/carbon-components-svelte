@@ -1,5 +1,7 @@
 <script>
-  export let items = [
+  import { Accordion, AccordionItem, Button } from "carbon-components-svelte";
+
+  const items = [
     {
       title: "Natural Language Classifier",
       description:
@@ -17,26 +19,17 @@
     },
   ];
 
-  import { Accordion, AccordionItem, Button } from "carbon-components-svelte";
-
   let open = false;
 </script>
 
-<Button
-  kind="ghost"
-  size="field"
-  on:click="{() => {
-    open = !open;
-  }}"
->
+<Button kind="ghost" size="field" on:click="{() => (open = !open)}">
   {open ? "Collapse" : "Expand"}
   all
 </Button>
 
 <Accordion>
   {#each items as item}
-    <AccordionItem open="{open}">
-      <h5 slot="title">{item.title}</h5>
+    <AccordionItem title="{item.title}" open="{open}">
       <p>{item.description}</p>
     </AccordionItem>
   {/each}
