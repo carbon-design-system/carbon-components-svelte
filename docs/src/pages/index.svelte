@@ -61,7 +61,7 @@
 </script>
 
 <Content>
-  <Grid style="margin-bottom: var(--cds-layout-06);">
+  <Grid>
     <Row>
       <Column>
         <h1>Carbon Components Svelte</h1>
