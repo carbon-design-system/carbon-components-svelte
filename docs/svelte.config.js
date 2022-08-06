@@ -163,71 +163,30 @@ module.exports = {
     {
       markup({ content, filename }) {
         if (/node_modules/.test(filename)) return null;
-        if (filename.endsWith(".svx")) {
-          const toc = [];
+        if (!filename.match(/pages\/(components)/)) return null;
 
-          walk(parse(content), {
-            enter(node) {
-              if (node.type === "Element") {
-                if (node.name === "h2") {
-                  const id = node.attributes.find(
-                    (attribute) => attribute.name === "id"
-                  );
-                  toc.push({
-                    id: id.value[0].raw,
-                    text: node.children[0].raw,
-                  });
-                }
+        const toc = [];
+
+        walk(parse(content), {
+          enter(node) {
+            if (node.type === "Element") {
+              if (node.name === "h3") {
+                const id = node.attributes.find(
+                  (attribute) => attribute.name === "id"
+                );
+                toc.push({
+                  id: id.value[0].raw,
+                  text: node.children[0].raw,
+                });
               }
-            },
-          });
+            }
+          },
+        });
 
-          return {
-            code: content.replace(
-              "</Layout_MDSVEX_DEFAULT>",
-              `<div slot="aside">
-                <ul class="bx--list--unordered">
-                ${toc
-                  .map((item) => {
-                    return `
-                      <li class="bx--list__item">
-                        <a class="bx--link" href="\#${item.id}">${item.text}</a>
-                      </li>`;
-                  })
-                  .join("")}
-                </ul>
-              </div>
-            </Layout_MDSVEX_DEFAULT>`
-            ),
-          };
-        }
-
-        if (
-          filename.endsWith(".svx") &&
-          filename.match(/pages\/(components)/)
-        ) {
-          const toc = [];
-
-          walk(parse(content), {
-            enter(node) {
-              if (node.type === "Element") {
-                if (node.name === "h3") {
-                  const id = node.attributes.find(
-                    (attribute) => attribute.name === "id"
-                  );
-                  toc.push({
-                    id: id.value[0].raw,
-                    text: node.children[0].raw,
-                  });
-                }
-              }
-            },
-          });
-
-          return {
-            code: content.replace(
-              "</Layout_MDSVEX_DEFAULT>",
-              `<div slot="aside">
+        return {
+          code: content.replace(
+            "</Layout_MDSVEX_DEFAULT>",
+            `<div slot="aside">
                 <ul class="bx--list--unordered">
                   <li class="bx--list__item">
                     <a class="bx--link" href="#usage">Usage</a>
@@ -268,9 +227,8 @@ module.exports = {
                 </ul>
               </div>
             </Layout_MDSVEX_DEFAULT>`
-            ),
-          };
-        }
+          ),
+        };
       },
     },
   ],
