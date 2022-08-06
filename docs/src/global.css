@@ -114,6 +114,7 @@ html[theme="g90"] .code-override {
   position: sticky;
   max-height: calc(100vh - 3rem);
   top: 3rem;
+  margin-top: -3rem;
   padding-top: var(--cds-spacing-05);
   padding-bottom: var(--cds-spacing-05);
   padding-left: var(--cds-spacing-08);
@@ -183,10 +184,10 @@ html[theme="g90"] .code-override {
 }
 
 .bx--col > h1 {
-  font-size: var(--cds-display-01-font-size);
-  font-weight: var(--cds-display-01-font-weight);
-  letter-spacing: var(--cds-display-01-letter-spacing);
-  line-height: var(--cds-display-01-line-height);
+  font-size: var(--cds-expressive-heading-05-font-size);
+  font-weight: var(--cds-expressive-heading-05-font-weight);
+  letter-spacing: var(--cds-expressive-heading-05-letter-spacing);
+  line-height: var(--cds-expressive-heading-05-line-height);
   margin-bottom: var(--cds-layout-01);
 }
 
@@ -226,7 +227,7 @@ html[theme="g90"] .code-override {
   font-weight: var(--cds-expressive-heading-05-font-weight);
   letter-spacing: var(--cds-expressive-heading-05-letter-spacing);
   line-height: var(--cds-expressive-heading-05-line-height);
-  padding-top: var(--cds-layout-04);
+  padding-top: var(--cds-layout-03);
   margin-bottom: var(--cds-layout-01);
 }
 
@@ -235,7 +236,7 @@ html[theme="g90"] .code-override {
   font-weight: var(--cds-expressive-heading-04-font-weight);
   letter-spacing: var(--cds-expressive-heading-04-letter-spacing);
   line-height: var(--cds-expressive-heading-04-line-height);
-  padding-top: var(--cds-layout-04);
+  padding-top: var(--cds-layout-03);
   margin-bottom: var(--cds-layout-01);
 }
 

@@ -206,7 +206,11 @@
     overflow-x: auto;
   }
 
-  :global(.my-layout-01-03),
+  :global(.my-layout-01-03) {
+    margin-top: var(--cds-layout-01);
+    margin-bottom: var(--cds-layout-03);
+  }
+
   :global(.overflow .bx--structured-list) {
     margin-top: var(--cds-layout-01);
     margin-bottom: var(--cds-layout-04);
