@@ -239,25 +239,3 @@ html[theme="g90"] .code-override {
 .bx--col > p {
   margin-bottom: var(--cds-layout-02);
 }
-
-main.bx--content {
-  min-height: calc(100vh - 3rem - 3rem);
-}
-
-@media (max-width: 1056px) {
-  .bx--side-nav ~ .bx--content {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .bx--side-nav--expanded ~ .bx--content {
-    white-space: nowrap;
-    min-width: 28rem;
-  }
-}
-
-@media (min-width: 1057px) {
-  .bx--side-nav__navigation {
-    z-index: 1;
-  }
-}
