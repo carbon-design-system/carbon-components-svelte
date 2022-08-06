@@ -89,6 +89,18 @@ html[theme="g90"] .code-override {
   width: auto;
 }
 
+/*
+ * Main content needs to supersede z-index of SideNav but not that of the Header.
+ * UI Shell Header shares the same z-index.
+ */
+[aria-label="Navigation"] {
+  z-index: calc(8000 + 2);
+}
+
+[aria-label="Navigation"] ~ [data-components] {
+  z-index: calc(8000 + 1);
+}
+
 .prose > p > .bx--link {
   font-size: inherit;
   text-decoration: underline;
