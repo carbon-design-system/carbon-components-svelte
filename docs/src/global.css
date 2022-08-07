@@ -101,6 +101,12 @@ html[theme="g90"] .code-override {
   z-index: calc(8000 + 1);
 }
 
+@media (max-width: 65.98rem) {
+  [aria-label="Navigation"] ~ [data-components] {
+    z-index: 1;
+  }
+}
+
 .prose > p > .bx--link {
   font-size: inherit;
   text-decoration: underline;
@@ -122,7 +128,6 @@ html[theme="g90"] .code-override {
 }
 
 [data-components] {
-  z-index: 2;
   position: relative;
   display: flex;
 }
@@ -170,10 +175,6 @@ html[theme="g90"] .code-override {
   padding-bottom: var(--cds-spacing-05);
   padding-left: var(--cds-spacing-08);
   overflow-y: auto;
-}
-
-.bx--side-nav__overlay-active {
-  z-index: calc(10 + 1); /** supersede the z-index of code snippets */
 }
 
 .body-short-01 {
