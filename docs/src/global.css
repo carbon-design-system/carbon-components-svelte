@@ -250,6 +250,12 @@ html[theme="g90"] .code-override {
   margin-bottom: var(--cds-layout-01);
 }
 
+.bx--col > h2,
+.bx--col > h3,
+.bx--col > h4 {
+  scroll-margin-top: 3rem;
+}
+
 .bx--col > p {
   margin-bottom: var(--cds-layout-02);
 }
