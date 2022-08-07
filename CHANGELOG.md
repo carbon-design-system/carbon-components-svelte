@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.67.7](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.7) - 2022-8-07
+
+**Fixes**
+
+- remove UI Shell `Content` left margin if `SideNav` is collapsed
+
 ## [0.67.6](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.6) - 2022-8-05
 
 **Refactor**
