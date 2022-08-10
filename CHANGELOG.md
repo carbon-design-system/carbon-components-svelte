@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.67.8](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.8) - 2022-08-10
+
+**Fixes**
+
+- remove `aria-checked="mixed"` if `InlineCheckbox` is indeterminate
+- add `aria-labelledby` to `Slider` thumb
+- add `role="switch"` to `Toggle` input
+
 ## [0.67.7](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.7) - 2022-08-07
 
 **Fixes**
