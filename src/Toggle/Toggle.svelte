@@ -54,6 +54,7 @@
   on:mouseleave
 >
   <input
+    role="switch"
     type="checkbox"
     class:bx--toggle-input="{true}"
     class:bx--toggle-input--small="{size === 'sm'}"
