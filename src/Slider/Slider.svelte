@@ -185,6 +185,7 @@
         aria-valuemax="{max}"
         aria-valuemin="{min}"
         aria-valuenow="{value}"
+        aria-labelledby="{labelId}"
         id="{id}"
       ></div>
       <div bind:this="{trackRef}" class:bx--slider__track="{true}"></div>
