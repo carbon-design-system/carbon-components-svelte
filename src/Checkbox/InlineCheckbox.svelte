@@ -27,7 +27,7 @@
     indeterminate="{indeterminate}"
     id="{id}"
     {...$$restProps}
-    aria-checked="{indeterminate ? 'mixed' : checked}"
+    aria-checked="{indeterminate ? undefined : checked}"
     on:change
   />
   <label
