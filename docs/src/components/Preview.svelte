@@ -52,7 +52,7 @@
     margin-bottom: var(--cds-layout-04);
     margin-left: -1rem;
     margin-right: -1rem;
-    max-width: 56rem;
+    max-width: 66rem;
   }
 
   .code-override {
