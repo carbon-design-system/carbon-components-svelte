@@ -1,4 +1,6 @@
 <script>
+  /** @extends {"../Button/Button.svelte"} ButtonProps */
+
   import Button from "../Button/Button.svelte";
 </script>
 

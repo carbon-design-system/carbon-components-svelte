@@ -7376,7 +7376,11 @@
         { "type": "forwarded", "name": "mouseleave", "element": "Button" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "Button" }
+      "rest_props": { "type": "InlineComponent", "name": "Button" },
+      "extends": {
+        "interface": "ButtonProps",
+        "import": "\"../Button/Button.svelte\""
+      }
     },
     {
       "moduleName": "NotificationButton",
