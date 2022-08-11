@@ -6,6 +6,12 @@
   export let formatTotalSelected = (totalSelected) =>
     `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
 
+   /** 
+   * Override the default behavior of the cancel button 
+   * @type {function}
+   */
+  export let cancel ;
+  
   import { onMount, getContext } from "svelte";
   import Button from "../Button/Button.svelte";
 
@@ -14,6 +20,15 @@
   $: showActions = batchSelectedIds.length > 0;
 
   const ctx = getContext("DataTable");
+  
+  $: cancelClick =  () => {
+    if (typeof cancel === "function") {
+      cancel();
+    } else {
+      ctx.resetSelectedRowIds()
+    }
+  };
+  
   const unsubscribe = ctx.batchSelectedIds.subscribe((value) => {
     batchSelectedIds = value;
   });
@@ -49,7 +64,7 @@
       <Button
         class="bx--batch-summary__cancel"
         tabindex="{showActions ? '0' : '-1'}"
-        on:click="{ctx.resetSelectedRowIds}"
+        on:click="{cancelClick}"
       >
         <slot name="cancel">Cancel</slot>
       </Button>
