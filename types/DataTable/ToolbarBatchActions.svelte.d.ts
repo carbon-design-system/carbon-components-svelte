@@ -8,6 +8,12 @@ export interface ToolbarBatchActionsProps
    * @default (totalSelected) => `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`
    */
   formatTotalSelected?: (totalSelected: number) => string;
+
+  /**
+   * Set to `true` to show the toolbar regardless of row selection
+   * @default false
+   */
+  active?: boolean;
 }
 
 export default class ToolbarBatchActions extends SvelteComponentTyped<
