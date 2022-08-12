@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.67.9](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.9) - 2022-08-11
+
+**Fixes**
+
+- `NotificationActionButton` types should extend `Button` props
+
 ## [0.67.8](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.8) - 2022-08-10
 
 **Fixes**
