@@ -7,7 +7,7 @@
     `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
   
   /** 
-   * Set to `true` to show the ToolbarBatchActions regardless of row selection
+   * Set to `true` to show the toolbar regardless of row selection
    * @type {boolean}
    */
   export let show = false;
