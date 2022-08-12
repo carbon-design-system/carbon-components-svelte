@@ -4435,7 +4435,9 @@ None.
 
 ### Events
 
-None.
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| cancel     | dispatched | <code>null</code> |
 
 ## `ToolbarContent`
 
