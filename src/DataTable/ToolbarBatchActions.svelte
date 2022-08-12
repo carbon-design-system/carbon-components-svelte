@@ -10,6 +10,12 @@
   export let formatTotalSelected = (totalSelected) =>
     `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
 
+  /**
+   * Set to `true` to show the toolbar regardless of row selection
+   * @type {boolean}
+   */
+  export let active = false;
+
   import { onMount, getContext, createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
 
@@ -17,7 +23,7 @@
 
   const dispatch = createEventDispatcher();
 
-  $: showActions = batchSelectedIds.length > 0;
+  $: showActions = batchSelectedIds.length > 0 || active;
 
   const ctx = getContext("DataTable");
 
