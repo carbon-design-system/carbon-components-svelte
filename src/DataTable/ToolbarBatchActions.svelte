@@ -10,14 +10,14 @@
    * Set to `true` to show the toolbar regardless of row selection
    * @type {boolean}
    */
-  export let show = false;
+  export let active = false;
   
   import { onMount, getContext } from "svelte";
   import Button from "../Button/Button.svelte";
 
   let batchSelectedIds = [];
 
-  $: showActions = batchSelectedIds.length > 0 || show;
+  $: showActions = batchSelectedIds.length > 0 || active;
 
   const ctx = getContext("DataTable");
   const unsubscribe = ctx.batchSelectedIds.subscribe((value) => {
