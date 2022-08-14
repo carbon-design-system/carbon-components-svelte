@@ -1,4 +1,5 @@
 ---
+components: ["InlineNotification", "NotificationActionButton"]
 source: Notification/InlineNotification.svelte
 ---
 
