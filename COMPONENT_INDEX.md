@@ -4422,10 +4422,10 @@ None.
 
 ### Props
 
-| Prop name           | Required | Kind             | Reactive | Type                                           | Default value                                                                                       | Description                                                   |
-| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| formatTotalSelected | No       | <code>let</code> | No       | <code>(totalSelected: number) => string</code> | <code>(totalSelected) => \`${totalSelected} item${totalSelected === 1 ? "" : "s"} selected\`</code> | Override the total items selected text                        |
-| active              | No       | <code>let</code> | No       | <code>boolean</code>                           | <code>false</code>                                                                                  | Set to `true` to show the toolbar regardless of row selection |
+| Prop name           | Required | Kind             | Reactive | Type                                           | Default value                                                                                       | Description                               |
+| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| active              | No       | <code>let</code> | Yes      | <code>undefined &#124; boolean</code>          | <code>undefined</code>                                                                              | Use a boolean to show or hide the toolbar |
+| formatTotalSelected | No       | <code>let</code> | No       | <code>(totalSelected: number) => string</code> | <code>(totalSelected) => \`${totalSelected} item${totalSelected === 1 ? "" : "s"} selected\`</code> | Override the total items selected text    |
 
 ### Slots
 

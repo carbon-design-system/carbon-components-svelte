@@ -9,21 +9,26 @@
    */
   export let formatTotalSelected = (totalSelected) =>
     `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
-  
-  /** 
-   * Set to `true` to show the toolbar regardless of row selection
-   * @type {boolean}
+
+  /**
+   * Use a boolean to show or hide the toolbar
+   * @type {undefined | boolean}
    */
-  export let active = false;
-  
-  import { onMount, getContext, createEventDispatcher } from "svelte";
+  export let active = undefined;
+
+  import {
+    onMount,
+    getContext,
+    createEventDispatcher,
+    afterUpdate,
+  } from "svelte";
 
   import Button from "../Button/Button.svelte";
 
   let batchSelectedIds = [];
+  let prevActive;
 
   const dispatch = createEventDispatcher();
-
 
   const ctx = getContext("DataTable");
 
@@ -36,6 +41,14 @@
   }
 
   $: showActions = batchSelectedIds.length > 0 || active;
+  $: {
+    if (prevActive !== active && active === false) {
+      showActions = false;
+    }
+
+    prevActive = active;
+  }
+
   const unsubscribe = ctx.batchSelectedIds.subscribe((value) => {
     batchSelectedIds = value;
   });
@@ -52,6 +65,12 @@
       unsubscribe();
       unsubscribeOverflow();
     };
+  });
+
+  afterUpdate(() => {
+    if (active === false && showActions) {
+      active = true;
+    }
   });
 </script>
 
