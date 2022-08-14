@@ -13676,14 +13676,13 @@
         {
           "name": "active",
           "kind": "let",
-          "description": "Set to `true` to show the toolbar regardless of row selection",
-          "type": "boolean",
-          "value": "false",
+          "description": "Use a boolean to show or hide the toolbar",
+          "type": "undefined | boolean",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
           "constant": false,
-          "reactive": false
+          "reactive": true
         }
       ],
       "moduleExports": [],

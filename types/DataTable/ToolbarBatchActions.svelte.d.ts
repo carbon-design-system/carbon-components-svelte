@@ -10,10 +10,10 @@ export interface ToolbarBatchActionsProps
   formatTotalSelected?: (totalSelected: number) => string;
 
   /**
-   * Set to `true` to show the toolbar regardless of row selection
-   * @default false
+   * Use a boolean to show or hide the toolbar
+   * @default undefined
    */
-  active?: boolean;
+  active?: undefined | boolean;
 }
 
 export default class ToolbarBatchActions extends SvelteComponentTyped<
