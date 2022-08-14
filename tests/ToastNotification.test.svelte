@@ -2,7 +2,7 @@
   import { ToastNotification } from "../types";
 </script>
 
-<ToastNotification />
+<ToastNotification fullWidth />
 
 <ToastNotification
   hideCloseButton

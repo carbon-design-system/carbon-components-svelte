@@ -62,6 +62,13 @@ export interface ToastNotificationProps
    * @default false
    */
   hideCloseButton?: boolean;
+
+  /**
+   * Set to `true` for the notification to span
+   * the full width of its containing element.
+   * @default false
+   */
+  fullWidth?: boolean;
 }
 
 export default class ToastNotification extends SvelteComponentTyped<

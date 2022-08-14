@@ -33,6 +33,12 @@
   /** Set to `true` to hide the close button */
   export let hideCloseButton = false;
 
+  /**
+   * Set to `true` for the notification to span
+   * the full width of its containing element.
+   */
+  export let fullWidth = false;
+
   import { createEventDispatcher, onMount } from "svelte";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
@@ -78,6 +84,7 @@
     class:bx--toast-notification--warning="{kind === 'warning'}"
     class:bx--toast-notification--warning-alt="{kind === 'warning-alt'}"
     {...$$restProps}
+    style="{fullWidth && 'width: 100%;'}{$$restProps.style}"
     on:click
     on:mouseover
     on:mouseenter
