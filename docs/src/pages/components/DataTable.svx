@@ -1111,7 +1111,7 @@ Use the `selectedRowIds` prop to specify which rows should be selected.
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionInitial" />
 
-### Selectable with batch actions
+### Batch selection with batch actions toolbar
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionToolbar" />
 
