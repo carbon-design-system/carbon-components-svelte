@@ -26,6 +26,12 @@ source: Notification/ToastNotification.svelte
   // custom close logic (e.g., transitions)
 }} />
 
+### Full width
+
+Set `fullWidth` to `true` for the notification to span the full width of its containing element.
+
+<ToastNotification fullWidth title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
+
 ### Slottable title, subtitle, caption
 
 <ToastNotification>
