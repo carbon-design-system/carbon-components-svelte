@@ -13696,7 +13696,7 @@
           "slot_props": "{}"
         }
       ],
-      "events": [],
+      "events": [{ "type": "dispatched", "name": "cancel", "detail": "null" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },

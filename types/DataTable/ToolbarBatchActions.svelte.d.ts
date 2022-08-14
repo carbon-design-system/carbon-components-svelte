@@ -18,6 +18,6 @@ export interface ToolbarBatchActionsProps
 
 export default class ToolbarBatchActions extends SvelteComponentTyped<
   ToolbarBatchActionsProps,
-  {},
+  { cancel: CustomEvent<null> },
   { default: {}; cancel: {} }
 > {}

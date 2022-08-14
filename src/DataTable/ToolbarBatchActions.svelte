@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {null} cancel
+   */
+
+  /**
    * Override the total items selected text
    * @type {(totalSelected: number) => string}
    */
@@ -12,14 +16,26 @@
    */
   export let active = false;
   
-  import { onMount, getContext } from "svelte";
+  import { onMount, getContext, createEventDispatcher } from "svelte";
+
   import Button from "../Button/Button.svelte";
 
   let batchSelectedIds = [];
 
-  $: showActions = batchSelectedIds.length > 0 || active;
+  const dispatch = createEventDispatcher();
+
 
   const ctx = getContext("DataTable");
+
+  function cancel() {
+    const shouldContinue = dispatch("cancel", null, { cancelable: true });
+
+    if (shouldContinue) {
+      ctx.resetSelectedRowIds();
+    }
+  }
+
+  $: showActions = batchSelectedIds.length > 0 || active;
   const unsubscribe = ctx.batchSelectedIds.subscribe((value) => {
     batchSelectedIds = value;
   });
@@ -55,7 +71,7 @@
       <Button
         class="bx--batch-summary__cancel"
         tabindex="{showActions ? '0' : '-1'}"
-        on:click="{ctx.resetSelectedRowIds}"
+        on:click="{cancel}"
       >
         <slot name="cancel">Cancel</slot>
       </Button>
