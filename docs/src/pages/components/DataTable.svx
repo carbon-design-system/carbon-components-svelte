@@ -1111,9 +1111,19 @@ Use the `selectedRowIds` prop to specify which rows should be selected.
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionInitial" />
 
-### Selectable with batch actions
+### Batch selection with batch actions toolbar
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionToolbar" />
+
+### Batch selection with controlled toolbar
+
+By default, `ToolbarBatchActions` is activated if one or more rows is selected. Clicking "Cancel" will deactivate it.
+
+Use the `active` prop to control the toolbar. Note that it will still activate if one or more rows are selected.
+
+You can also prevent the default "Cancel" behavior in the dispatched `on:cancel` event.
+
+<FileSource src="/framed/DataTable/DataTableBatchSelectionToolbarControlled" />
 
 ### Selectable (radio)
 
