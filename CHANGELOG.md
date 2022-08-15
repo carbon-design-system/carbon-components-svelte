@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.68.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.68.0) - 2022-08-15
+
+**Features**
+
+- add `fullWidth` prop to `ToastNotification`
+- dispatch cancelable `on:cancel` event in `ToolbarBatchActions`
+- add `active` prop to `ToolbarBatchActions`
+
+**Documentation**
+
+- add `ToastNotification` example "Full width"
+- add `DataTable` example "Batch selection with controlled toolbar"
+
 ## [0.67.9](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.67.9) - 2022-08-11
 
 **Fixes**
