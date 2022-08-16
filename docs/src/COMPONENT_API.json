@@ -2665,6 +2665,11 @@
         },
         {
           "type": "dispatched",
+          "name": "click:row--select",
+          "detail": "{ selected: boolean; row: DataTableRow; }"
+        },
+        {
+          "type": "dispatched",
           "name": "click:cell",
           "detail": "DataTableCell"
         }
