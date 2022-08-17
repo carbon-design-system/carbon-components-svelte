@@ -1448,7 +1448,9 @@ Set `batchExpansion` to `true` for the ability to expand and collapse all rows a
   </svelte:fragment>
 </DataTable>
 
-### Expandable and selectable
+### Expandable and selectable rows
+
+The `batchExpansion` and `batchSelection` props can be used together.
 
 <FileSource src="/framed/DataTable/DataTableExpandableSelectable" />
 
