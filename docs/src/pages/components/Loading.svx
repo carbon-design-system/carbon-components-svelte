@@ -3,14 +3,14 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (with overlay)
+## Default (with overlay)
 
 <FileSource src="/framed/Loading/Loading" />
 
-### No overlay
+## No overlay
 
 <Loading withOverlay={false} />
 
-### Small size
+## Small size
 
 <Loading withOverlay={false} small />

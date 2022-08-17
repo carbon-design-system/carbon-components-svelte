@@ -13,7 +13,7 @@ components: ["OrderedList", "ListItem"]
    </div>
 </InlineNotification>
 
-### Default
+## Default
 
 <OrderedList>
   <ListItem>Ordered list item</ListItem>
@@ -21,7 +21,7 @@ components: ["OrderedList", "ListItem"]
   <ListItem>Ordered list item</ListItem>
 </OrderedList>
 
-### With links
+## With links
 
 <OrderedList>
   <ListItem>
@@ -35,7 +35,7 @@ components: ["OrderedList", "ListItem"]
   </ListItem>
 </OrderedList>
 
-### Nested
+## Nested
 
 <OrderedList>
   <ListItem>
@@ -55,7 +55,7 @@ components: ["OrderedList", "ListItem"]
   <ListItem>Ordered list level 1</ListItem>
 </OrderedList>
 
-### Native list styles
+## Native list styles
 
 Use the `native` attribute to enable default browser list styles. This is useful for large lists (i.e., 1000 or more items) where the list number may overlap with the list item text.
 
@@ -77,7 +77,7 @@ Use the `native` attribute to enable default browser list styles. This is useful
   <ListItem>Ordered list level 1</ListItem>
 </OrderedList>
 
-### Expressive styles
+## Expressive styles
 
 Set `expressive` to `true` to use Carbon's expressive typesetting.
 

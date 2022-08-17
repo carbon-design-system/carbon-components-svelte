@@ -9,7 +9,7 @@
   <div class="body-short-01">Every <code>items</code> object must have a unique "id" property.</div>
 </InlineNotification>
 
-### Default
+## Default
 
 By default, items will be ordered alphabetically based on the `item.text` value. To prevent this, see [#no-alphabetical-ordering](#no-alphabetical-ordering).
 
@@ -19,13 +19,13 @@ By default, items will be ordered alphabetically based on the `item.text` value.
     {id: "2", text: "Fax"}]}"
   />
 
-### Custom slot
+## Custom slot
 
 Override the default slot to customize the display of each item. Access the item and index through the `let:` directive.
 
 <FileSource src="/framed/MultiSelect/MultiSelectSlot" />
 
-### No alphabetical ordering
+## No alphabetical ordering
 
 To prevent alphabetical item ordering, pass an empty function to the `sortItem` prop.
 
@@ -36,7 +36,7 @@ To prevent alphabetical item ordering, pass an empty function to the `sortItem` 
     sortItem="{() => {}}"
   />
 
-### Filterable
+## Filterable
 
 `$$restProps` are spread to the underlying input element.
 
@@ -46,7 +46,7 @@ To prevent alphabetical item ordering, pass an empty function to the `sortItem` 
     {id: "2", text: "Fax"}]}"
   />
 
-### Initial selected items
+## Initial selected items
 
 To select (or bind) items, pass an array of item ids to `selectedIds`.
 
@@ -56,11 +56,11 @@ To select (or bind) items, pass an array of item ids to `selectedIds`.
     {id: "2", text: "Fax"}]}" 
   />
 
-### Multiple multi-select dropdowns
+## Multiple multi-select dropdowns
 
 <FileSource src="/framed/MultiSelect/MultipleMultiSelect" />
 
-### Format item display text
+## Format item display text
 
 Use the `itemToString` prop to format the display of individual items.
 
@@ -73,7 +73,7 @@ Use the `itemToString` prop to format the display of individual items.
     sortItem="{() => {}}"
   />
 
-### Top direction
+## Top direction
 
 Set `direction` to `"top"` for the dropdown menu to appear above the input.
 
@@ -83,7 +83,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Hidden label
+## Hidden label
 
 <MultiSelect titleText="Contact" label="Select contact methods..." hideLabel
     items="{[{id: "0", text: "Slack"},
@@ -91,7 +91,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Light variant
+## Light variant
 
 <MultiSelect light titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -99,7 +99,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Inline variant
+## Inline variant
 
 <MultiSelect type="inline" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -107,7 +107,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Extra-large size
+## Extra-large size
 
 <MultiSelect size="xl" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -115,7 +115,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Small size
+## Small size
 
 <MultiSelect size="sm" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -123,7 +123,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Invalid state
+## Invalid state
 
 <MultiSelect invalid invalidText="A contact method is required" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -131,7 +131,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Warning state
+## Warning state
 
 <MultiSelect warn warnText="One or more contact methods are not associated with your account" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -139,7 +139,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Disabled state
+## Disabled state
 
 <MultiSelect disabled titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -147,7 +147,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-### Disabled items
+## Disabled items
 
 Use the `disabled` property in the `items` prop to disable specific items.
 

@@ -3,33 +3,33 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (unchecked)
+## Default (unchecked)
 
 <Checkbox labelText="Label text" />
 
-### Checked
+## Checked
 
 <Checkbox labelText="Label text" checked />
 
-### Indeterminate
+## Indeterminate
 
 <Checkbox labelText="Label text" indeterminate />
 
-### Hidden label
+## Hidden label
 
 <Checkbox labelText="Label text" hideLabel />
 
-### Disabled
+## Disabled
 
 <Checkbox labelText="Label text" disabled />
 
-### Reactive example (bind:checked)
+## Reactive example (bind:checked)
 
 The `checked` prop supports two-way binding.
 
 <FileSource src="/framed/Checkbox/CheckboxReactive" />
 
-### Reactive example (bind:group)
+## Reactive example (bind:group)
 
 An alternative to `checked` is binding an array of values using `group`. This API in inspired by Svelte [group inputs](https://svelte.dev/tutorial/group-inputs).
 
@@ -41,6 +41,6 @@ An alternative to `checked` is binding an array of values using `group`. This AP
 
 <FileSource src="/framed/Checkbox/MultipleCheckboxes" />
 
-### Skeleton
+## Skeleton
 
 <Checkbox skeleton />

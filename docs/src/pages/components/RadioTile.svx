@@ -8,7 +8,7 @@ source: Tile/RadioTile.svelte
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <TileGroup legend="Service pricing tiers">
   <RadioTile value="0" checked>
@@ -22,17 +22,17 @@ source: Tile/RadioTile.svelte
   </RadioTile>
 </TileGroup>
 
-### Reactive (one-way binding)
+## Reactive (one-way binding)
 
 <FileSource src="/framed/RadioTile/RadioTileReactiveOneWay" />
 
-### Reactive (two-way binding)
+## Reactive (two-way binding)
 
 Binding to the `selected` prop is a more concise approach to managing state.
 
 <FileSource src="/framed/RadioTile/RadioTileReactive" />
 
-### Light variant
+## Light variant
 
 <TileGroup legend="Service pricing tiers">
   <RadioTile light value="0" checked>
@@ -46,7 +46,7 @@ Binding to the `selected` prop is a more concise approach to managing state.
   </RadioTile>
 </TileGroup>
 
-### Disabled state
+## Disabled state
 
 <TileGroup legend="Service pricing tiers">
   <RadioTile value="0" checked>

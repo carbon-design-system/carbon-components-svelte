@@ -6,11 +6,11 @@ components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Composed modal
+## Composed modal
 
 <FileSource src="/framed/Modal/ComposedModal" />
 
-### Multiple secondary buttons
+## Multiple secondary buttons
 
 Use the `secondaryButtons` prop in `ModalFooter` to render two secondary buttons for a "3-button modal". The prop is a 2-tuple type that supersedes `secondaryButtonText`.
 

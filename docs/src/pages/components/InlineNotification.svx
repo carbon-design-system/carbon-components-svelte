@@ -8,11 +8,11 @@ source: Notification/InlineNotification.svelte
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (error)
+## Default (error)
 
 <InlineNotification title="Error:" subtitle="An internal server error occurred." />
 
-### Prevent default close behavior
+## Prevent default close behavior
 
 `InlineNotification` is a controlled component. Prevent the default close behavior using the `e.preventDefault()` method in the dispatched `on:close` event.
 
@@ -21,18 +21,18 @@ source: Notification/InlineNotification.svelte
   // custom close logic (e.g., transitions)
 }} />
 
-### Slottable title, subtitle
+## Slottable title, subtitle
 
 <InlineNotification>
   <strong slot="title">Error: </strong>
   <strong slot="subtitle">An internal server error occurred.</strong>
 </InlineNotification>
 
-### Hidden close button
+## Hidden close button
 
 <InlineNotification hideCloseButton kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 
-### With actions
+## With actions
 
 <InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours.">
   <svelte:fragment slot="actions">
@@ -40,7 +40,7 @@ source: Notification/InlineNotification.svelte
   </svelte:fragment>
 </InlineNotification>
 
-### Notification variants
+## Notification variants
 
 <InlineNotification kind="error" title="Error:" subtitle="An internal server error occurred." />
 <InlineNotification kind="info" title="New updates:" subtitle="Restart to get the latest updates." />
@@ -49,7 +49,7 @@ source: Notification/InlineNotification.svelte
 <InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 <InlineNotification kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 
-### Low contrast
+## Low contrast
 
 <InlineNotification lowContrast kind="error" title="Error:" subtitle="An internal server error occurred." />
 <InlineNotification lowContrast kind="info" title="New updates:" subtitle="Restart to get the latest updates." />

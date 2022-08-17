@@ -9,7 +9,7 @@
   <div class="body-short-01">Every <code>items</code> object must have a unique "id" property.</div>
 </InlineNotification>
 
-### Default
+## Default
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
 items={[
@@ -18,13 +18,13 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Custom slot
+## Custom slot
 
 Override the default slot to customize the display of each item. Access the item and index through the `let:` directive.
 
 <FileSource src="/framed/ComboBox/ComboBoxSlot" />
 
-### Initial selected id
+## Initial selected id
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
 selectedId="1"
@@ -34,11 +34,11 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Reactive example
+## Reactive example
 
 <FileSource src="/framed/ComboBox/ReactiveComboBox" />
 
-### Clear selection
+## Clear selection
 
 To programmatically clear the selection, access the component instance using the [bind:this](https://svelte.dev/docs#bind_element) directive and invoke the `ComboBox.clear()` accessor.
 
@@ -46,21 +46,21 @@ Specify `focus: false` in the method options to avoid re-focusing the input.
 
 <FileSource src="/framed/ComboBox/ComboBoxClear" />
 
-### Multiple combo boxes
+## Multiple combo boxes
 
 <FileSource src="/framed/ComboBox/MultipleComboBox" />
 
-### Filterable
+## Filterable
 
 <FileSource src="/framed/ComboBox/FilterableComboBox" />
 
-### Filterable with custom label
+## Filterable with custom label
 
 Combine a custom label `itemToString` with the filterable option (e.g., internationalization).
 
 <FileSource src="/framed/ComboBox/FilterableComboBoxCustomLabel" />
 
-### Top direction
+## Top direction
 
 Set `direction` to `"top"` for the combobox dropdown menu to appear above the input.
 
@@ -71,7 +71,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Light variant
+## Light variant
 
 <ComboBox light titleText="Contact" placeholder="Select contact method"
 items={[
@@ -80,7 +80,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Extra-large size
+## Extra-large size
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
 size="xl"
@@ -90,7 +90,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Small size
+## Small size
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
 size="sm"
@@ -100,7 +100,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Invalid state
+## Invalid state
 
 <ComboBox invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" placeholder="Select contact method"
 items={[
@@ -109,7 +109,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Warning state
+## Warning state
 
 <ComboBox warn warnText="This contact method is not associated with your account" titleText="Contact" placeholder="Select contact method"
 items={[
@@ -118,7 +118,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Disabled state
+## Disabled state
 
 <ComboBox disabled titleText="Contact" placeholder="Select contact method"
 items={[
@@ -127,7 +127,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-### Disabled items
+## Disabled items
 
 Use the `disabled` property in the `items` prop to disable specific items.
 

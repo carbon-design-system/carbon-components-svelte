@@ -8,7 +8,7 @@ components: ["Tooltip", "TooltipFooter"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 By default, the tooltip is triggered by an information icon.
 
@@ -18,7 +18,7 @@ By default, the tooltip is triggered by an information icon.
   </p>
 </Tooltip>
 
-### With trigger text
+## With trigger text
 
 <Tooltip triggerText="Resource list">
   <p>
@@ -26,24 +26,24 @@ By default, the tooltip is triggered by an information icon.
   </p>
 </Tooltip>
 
-### Reactive example
+## Reactive example
 
 <FileSource src="/framed/Tooltip/TooltipReactive" />
 
-### Directions
+## Directions
 
 <Tooltip triggerText="Top" direction="top"><p>Top</p></Tooltip>
 <Tooltip triggerText="Right" direction="right"><p>Right</p></Tooltip>
 <Tooltip triggerText="Bottom" direction="bottom"><p>Bottom</p></Tooltip>
 <Tooltip triggerText="Left" direction="left"><p>Left</p></Tooltip>
 
-### Alignment
+## Alignment
 
 <Tooltip triggerText="Start" align="start"><p>Start</p></Tooltip>
 <Tooltip triggerText="End" align="end"><p>End</p></Tooltip>
 <Tooltip triggerText="Center" align="center"><p>Center</p></Tooltip>
 
-### Interactive
+## Interactive
 
 <Tooltip triggerText="Resource list">
   <p>
@@ -55,7 +55,7 @@ By default, the tooltip is triggered by an information icon.
 </TooltipFooter>
 </Tooltip>
 
-### Custom icon (component)
+## Custom icon (component)
 
 <Tooltip triggerText="Resource list" icon={Catalog}>
   <p>
@@ -63,7 +63,7 @@ By default, the tooltip is triggered by an information icon.
   </p>
 </Tooltip>
 
-### Custom icon (slot)
+## Custom icon (slot)
 
 <Tooltip triggerText="Resource list">
   <div slot="icon" style="width: 1rem; height: 1rem; outline: 1px solid red;"></div>
@@ -72,7 +72,7 @@ By default, the tooltip is triggered by an information icon.
   </p>
 </Tooltip>
 
-### Hidden icon
+## Hidden icon
 
 <Tooltip hideIcon triggerText="Resource list">
   <p>

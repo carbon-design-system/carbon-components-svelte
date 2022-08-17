@@ -2,11 +2,11 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (transactional)
+## Default (transactional)
 
 <FileSource src="/framed/Modal/Modal" />
 
-### Custom focus
+## Custom focus
 
 By default, the modal close button will be focused when opened.
 
@@ -14,48 +14,48 @@ Use the `selectorPrimaryFocus` to specify the element that should be focused whe
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
-### Danger modal
+## Danger modal
 
 <FileSource src="/framed/Modal/DangerModal" />
 
-### Passive modal
+## Passive modal
 
 <FileSource src="/framed/Modal/PassiveModal" />
 
-### Has scrolling content
+## Has scrolling content
 
 Setting `hasScrollingContent` to `true` increases the vertical space within the modal.
 
 <FileSource src="/framed/Modal/ModalScrollingContent" />
 
-### Multiple modals
+## Multiple modals
 
 <FileSource src="/framed/Modal/ModalMultiple" />
 
-### Multiple secondary buttons
+## Multiple secondary buttons
 
 Use the `secondaryButtons` prop to render two secondary buttons. The prop is a 2-tuple type that supersedes `secondaryButtonText`.
 
 <FileSource src="/framed/Modal/3ButtonModal" />
 
-### Extra-small size
+## Extra-small size
 
 <FileSource src="/framed/Modal/ModalExtraSmall" />
 
-### Small size
+## Small size
 
 <FileSource src="/framed/Modal/ModalSmall" />
 
-### Large size
+## Large size
 
 <FileSource src="/framed/Modal/ModalLarge" />
 
-### Prevent close on outside click
+## Prevent close on outside click
 
 `preventCloseOnClickOutside` prevents the modal from being closed when clicking outside of an open modal. This prop is intended to be used for transactional modals.
 
 <FileSource src="/framed/Modal/ModalPreventOutsideClick" />
 
-### Button with icon
+## Button with icon
 
 <FileSource src="/framed/Modal/ModalButtonWithIcon" />

@@ -35,23 +35,23 @@ components: ["Header",
 
 Open the following examples in a new tab to experience them in full.
 
-### Header
+## Header
 
 <FileSource src="/framed/UIShell/Header" />
 
-### Header with side navigation
+## Header with side navigation
 
 The hamburger menu will automatically be rendered if the `SideNav` component is used.
 
 <FileSource src="/framed/UIShell/HeaderNav" />
 
-### Header with side navigation (rail)
+## Header with side navigation (rail)
 
 Set `rail` to `true` on `SideNav` to use the rail variant.
 
 <FileSource src="/framed/UIShell/HeaderNavRail" />
 
-### Header with app switcher
+## Header with app switcher
 
 The `HeaderAction` component uses the [transition:slide API](https://svelte.dev/docs#slide); you can customize the transition duration, delay, and easing with the `transition` prop.
 
@@ -59,14 +59,14 @@ You can disable the `transition` by setting it to `false`.
 
 <FileSource src="/framed/UIShell/HeaderSwitcher" />
 
-### Header with global search
+## Header with global search
 
 <FileSource src="/framed/UIShell/HeaderSearch" />
 
-### Header with utilities
+## Header with utilities
 
 <FileSource src="/framed/UIShell/HeaderUtilities" />
 
-### Header with persisted hamburger menu
+## Header with persisted hamburger menu
 
 <FileSource src="/framed/UIShell/PersistedHamburgerMenu" />

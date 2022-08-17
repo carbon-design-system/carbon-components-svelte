@@ -7,7 +7,7 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### File uploader (button-only)
+## File uploader (button-only)
 
 By default, the file uploader only accepts one file.
 
@@ -15,7 +15,7 @@ Set `multiple` to `true` for multiple files to be uploaded.
 
 <FileUploaderButton labelText="Add files" />
 
-### File uploader
+## File uploader
 
 The `FileUploader` wraps `FileUploaderButton` and lists out uploaded files.
 
@@ -25,7 +25,7 @@ See the [item examples below](#item-uploading) for different statuses.
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
-### Clear files
+## Clear files
 
 There are two ways to clear files in `FileUploader`:
 
@@ -36,19 +36,19 @@ There are two ways to clear files in `FileUploader`:
 
 <FileSource src="/framed/FileUploader/FileUploaderClearFiles" />
 
-### File uploader (disabled state)
+## File uploader (disabled state)
 
 <FileUploader disabled multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
-### Item (uploading)
+## Item (uploading)
 
 <FileUploaderItem name="README.md" status="uploading" />
 
-### Item (complete)
+## Item (complete)
 
 <FileUploaderItem name="README.md" status="complete" />
 
-### Item (edit)
+## Item (edit)
 
 If the `status` is `"edit"`, clicking the close icon will dispatch a `delete` event.
 
@@ -58,13 +58,13 @@ The event detail contains the item `id`.
   console.log(e.detail); // "readme"
 }} />
 
-### Item (edit status, invalid state)
+## Item (edit status, invalid state)
 
 An item can also have an edit status with an invalid state.
 
 <FileUploaderItem invalid id="readme" name="README.md" status="edit" on:delete />
 
-### Item (edit status, invalid state with subject, body)
+## Item (edit status, invalid state with subject, body)
 
 Use the `errorSubject` and `errorBody` props to customize the error message.
 
@@ -78,7 +78,7 @@ Use the `errorSubject` and `errorBody` props to customize the error message.
   on:delete
 />
 
-### Item sizes
+## Item sizes
 
 The default `FileUploaderItem` size is "default".
 
@@ -86,7 +86,7 @@ The default `FileUploaderItem` size is "default".
 <FileUploaderItem size="field" name="README.md" status="uploading" />
 <FileUploaderItem size="small" name="README.md" status="uploading" />
 
-### Drop container
+## Drop container
 
 The `FileUploaderDropContainer` accepts files through click and drop events.
 
@@ -105,6 +105,6 @@ The following example accepts files smaller than 1 kB.
   }}
 />
 
-### Skeleton
+## Skeleton
 
 <FileUploaderSkeleton />

@@ -8,7 +8,7 @@ source: Button/ButtonSet.svelte
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 Buttons in a button set are juxtaposed by default.
 
@@ -17,7 +17,7 @@ Buttons in a button set are juxtaposed by default.
   <Button>Submit</Button>
 </ButtonSet>
 
-### Stacked
+## Stacked
 
 Set `stacked` to `true` to use the stacked variant.
 

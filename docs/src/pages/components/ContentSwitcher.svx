@@ -9,14 +9,14 @@ components: ["ContentSwitcher", "Switch"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <ContentSwitcher>
   <Switch text="Latest news" />
   <Switch text="Trending" />
 </ContentSwitcher>
 
-### Initial selected index
+## Initial selected index
 
 <ContentSwitcher selectedIndex={1}>
   <Switch text="Latest news" />
@@ -24,11 +24,11 @@ components: ["ContentSwitcher", "Switch"]
   <Switch text="Recommended" />
 </ContentSwitcher>
 
-### Reactive example
+## Reactive example
 
 <FileSource src="/framed/ContentSwitcher/ContentSwitcherReactive" />
 
-### Custom switch slot
+## Custom switch slot
 
 <ContentSwitcher>
   <Switch>
@@ -43,21 +43,21 @@ components: ["ContentSwitcher", "Switch"]
   </Switch>
 </ContentSwitcher>
 
-### Extra-large size
+## Extra-large size
 
 <ContentSwitcher size="xl">
   <Switch text="All" />
   <Switch text="Archived" />
 </ContentSwitcher>
 
-### Small size
+## Small size
 
 <ContentSwitcher size="sm">
   <Switch text="All" />
   <Switch text="Archived" />
 </ContentSwitcher>
 
-### Disabled
+## Disabled
 
 <ContentSwitcher>
   <Switch disabled text="All" />

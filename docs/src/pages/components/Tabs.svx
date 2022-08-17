@@ -7,7 +7,7 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <Tabs>
   <Tab label="Tab label 1" />
@@ -20,7 +20,7 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   </svelte:fragment>
 </Tabs>
 
-### Auto width
+## Auto width
 
 By default, the width of each tab is set to `10rem`.
 
@@ -37,11 +37,11 @@ Set `autoWidth` to `true` for tabs to have an automatically set width.
   </svelte:fragment>
 </Tabs>
 
-### Reactive example
+## Reactive example
 
 <FileSource src="/framed/Tabs/TabsReactive" />
 
-### Disabled tabs
+## Disabled tabs
 
 Setting `disabled` to `true` on the `Tab` component will prevent it from being clickable.
 
@@ -60,7 +60,7 @@ Using keyboard navigation (left and right arrow keys) will skip to the next non-
   </svelte:fragment>
 </Tabs>
 
-### Container type
+## Container type
 
 <Tabs type="container">
   <Tab label="Tab label 1" />
@@ -73,10 +73,10 @@ Using keyboard navigation (left and right arrow keys) will skip to the next non-
   </svelte:fragment>
 </Tabs>
 
-### Skeleton (default)
+## Skeleton (default)
 
 <TabsSkeleton count={3} />
 
-### Skeleton (container)
+## Skeleton (container)
 
 <TabsSkeleton type="container" count={3} />

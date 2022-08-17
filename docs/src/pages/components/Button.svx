@@ -8,31 +8,31 @@
   let index = 1;
 </script>
 
-### Primary button
+## Primary button
 
 <Button>Primary button</Button>
 
-### Secondary button
+## Secondary button
 
 <Button kind="secondary">Secondary button</Button>
 
-### Tertiary button
+## Tertiary button
 
 <Button kind="tertiary">Tertiary button</Button>
 
-### Ghost button
+## Ghost button
 
 <Button kind="ghost">Ghost button</Button>
 
-### Danger button
+## Danger button
 
 <Button kind="danger">Danger button</Button>
 
-### Danger tertiary button
+## Danger tertiary button
 
 <Button kind="danger-tertiary">Danger tertiary button</Button>
 
-### Danger tertiary, icon-only button
+## Danger tertiary, icon-only button
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -42,15 +42,15 @@
 
 <Button kind="danger-tertiary"iconDescription="Delete" icon={TrashCan} />
 
-### Danger ghost button
+## Danger ghost button
 
 <Button kind="danger-ghost">Danger ghost button</Button>
 
-### Button with icon
+## Button with icon
 
 <Button icon={Add}>With icon</Button>
 
-### Icon-only button
+## Icon-only button
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -60,35 +60,35 @@
 
 <Button iconDescription="Tooltip text" icon={Add} />
 
-### Icon-only, link button
+## Icon-only, link button
 
 <Button iconDescription="Login" icon={Login} href="#" />
 
-### Icon-only button (custom tooltip position)
+## Icon-only button (custom tooltip position)
 
 The tooltip position and alignment can be controlled by `tooltipPosition` and `tooltipAlignment`.
 
 <Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add} />
 
-### Selected icon-only, ghost button
+## Selected icon-only, ghost button
 
 Set `isSelected` to `true` to enable the selected state for an icon-only, ghost button.
 
 <FileSource src="/framed/Button/SelectedIconOnlyButton" />
 
-### Link button
+## Link button
 
 If an `href` value is specified, the component will render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) instead of a `button` element.
 
 <Button href="#">Link button</Button>
 
-### Custom element
+## Custom element
 
 <Button as let:props>
   <p {...props}>Custom element</p>
 </Button>
 
-### Field size
+## Field size
 
 <Button size="field">Primary</Button>
 <Button size="field" kind="secondary">Secondary</Button>
@@ -96,7 +96,7 @@ If an `href` value is specified, the component will render an [anchor element](h
 <Button size="field" kind="ghost">Ghost</Button>
 <Button size="field" kind="danger">Danger</Button>
 
-### Small size
+## Small size
 
 <Button size="small">Primary</Button>
 <Button size="small" kind="secondary">Secondary</Button>
@@ -104,7 +104,7 @@ If an `href` value is specified, the component will render an [anchor element](h
 <Button size="small" kind="ghost">Ghost</Button>
 <Button size="small" kind="danger">Danger</Button>
 
-### Large size
+## Large size
 
 <Button size="lg">Primary</Button>
 <Button size="lg" kind="secondary">Secondary</Button>
@@ -112,7 +112,7 @@ If an `href` value is specified, the component will render an [anchor element](h
 <Button size="lg" kind="ghost">Ghost</Button>
 <Button size="lg" kind="danger">Danger</Button>
 
-### Extra-large size
+## Extra-large size
 
 <Button size="xl">Primary</Button>
 <Button size="xl" kind="secondary">Secondary</Button>
@@ -120,11 +120,11 @@ If an `href` value is specified, the component will render an [anchor element](h
 <Button size="xl" kind="ghost">Ghost</Button>
 <Button size="xl" kind="danger">Danger</Button>
 
-### Disabled button
+## Disabled button
 
 <Button disabled>Disabled button</Button>
 
-### Expressive styles
+## Expressive styles
 
 Set `expressive` to `true` to use Carbon's expressive typesetting.
 
@@ -152,7 +152,7 @@ Set `expressive` to `true` to use Carbon's expressive typesetting.
 <Button expressive kind="ghost">Ghost</Button>
 <Button expressive kind="danger">Danger</Button>
 
-### Skeleton
+## Skeleton
 
 <Button size="xl" skeleton />
 <Button size="lg" skeleton />

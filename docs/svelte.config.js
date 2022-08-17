@@ -170,7 +170,7 @@ module.exports = {
         walk(parse(content), {
           enter(node) {
             if (node.type === "Element") {
-              if (node.name === "h3") {
+              if (node.name === "h2") {
                 const id = node.attributes.find(
                   (attribute) => attribute.name === "id"
                 );

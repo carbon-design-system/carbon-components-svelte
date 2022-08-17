@@ -13,7 +13,7 @@ A child node can render text, a link, HTML content, and other children.
   </div>
 </InlineNotification>
 
-### Unordered
+## Unordered
 
 The `children` prop accepts an array of child nodes.
 
@@ -21,13 +21,13 @@ By default, the list type is unordered.
 
 <FileSource src="/framed/RecursiveList/RecursiveList" />
 
-### Ordered
+## Ordered
 
 Set `type` to `"ordered"` to use the ordered list variant.
 
 <FileSource src="/framed/RecursiveList/RecursiveListOrdered" />
 
-### Ordered (native styles)
+## Ordered (native styles)
 
 Set `type` to `"ordered-native"` to use the native styles for an ordered list.
 

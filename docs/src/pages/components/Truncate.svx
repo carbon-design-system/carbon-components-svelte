@@ -6,7 +6,7 @@
 
 This utility component wraps the `.bx--text-truncate--*` CSS selectors from [carbon-components](https://github.com/carbon-design-system/carbon/blob/master/packages/components/src/globals/scss/_helper-classes.scss#L11) for single-line text truncation.
 
-### Default
+## Default
 
 By default, text will be clamped at the end of the line. Text is wrapped with a paragraph (`p`) element. Use the [truncate action](#usetruncate) to truncate text in other elements.
 
@@ -14,7 +14,7 @@ By default, text will be clamped at the end of the line. Text is wrapped with a 
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </Truncate>
 
-### Clamp front
+## Clamp front
 
 Set `clamp` to `"front"` to clamp the text from the front.
 
@@ -22,7 +22,7 @@ Set `clamp` to `"front"` to clamp the text from the front.
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </Truncate>
 
-### use:truncate
+## use:truncate
 
 The `truncate` action can be used on plain HTML elements.
 

@@ -13,7 +13,7 @@ components: ["UnorderedList", "ListItem"]
   </div>
 </InlineNotification>
 
-### Default
+## Default
 
 <UnorderedList>
   <ListItem>Unordered list item</ListItem>
@@ -21,7 +21,7 @@ components: ["UnorderedList", "ListItem"]
   <ListItem>Unordered list item</ListItem>
 </UnorderedList>
 
-### With links
+## With links
 
 <UnorderedList>
   <ListItem>
@@ -35,7 +35,7 @@ components: ["UnorderedList", "ListItem"]
   </ListItem>
 </UnorderedList>
 
-### Nested
+## Nested
 
 <UnorderedList>
   <ListItem>
@@ -55,7 +55,7 @@ components: ["UnorderedList", "ListItem"]
   <ListItem>Unordered list level 1</ListItem>
 </UnorderedList>
 
-### Expressive styles
+## Expressive styles
 
 Set `expressive` to `true` to use Carbon's expressive typesetting.
 

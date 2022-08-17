@@ -7,7 +7,7 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (horizontal)
+## Default (horizontal)
 
 <ProgressIndicator currentIndex={2}>
   <ProgressStep complete
@@ -28,7 +28,7 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
   />
 </ProgressIndicator>
 
-### Prevent change on click
+## Prevent change on click
 
 By default, clicking any step that is complete will update the current step index.
 
@@ -53,13 +53,13 @@ Set `preventChangeOnClick` to `true` to prevent this behavior.
   />
 </ProgressIndicator>
 
-### Programmatic usage
+## Programmatic usage
 
 When programmatically updating the `currentIndex`, keep in mind that only completed steps should be selectable.
 
 <FileSource src="/framed/ProgressIndicator/ProgrammaticProgressIndicator" />
 
-### Invalid step
+## Invalid step
 
 <ProgressIndicator>
   <ProgressStep complete
@@ -76,7 +76,7 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
   />
 </ProgressIndicator>
 
-### Disabled steps
+## Disabled steps
 
 <ProgressIndicator>
   <ProgressStep complete
@@ -93,7 +93,7 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
   />
 </ProgressIndicator>
 
-### Spaced-equally
+## Spaced-equally
 
 <ProgressIndicator spaceEqually>
   <ProgressStep
@@ -110,7 +110,7 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
   />
 </ProgressIndicator>
 
-### Vertical
+## Vertical
 
 <ProgressIndicator vertical>
   <ProgressStep
@@ -127,12 +127,12 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
   />
 </ProgressIndicator>
 
-### Skeleton
+## Skeleton
 
 Use the `count` prop to specify the number of progress steps to render.
 
 <ProgressIndicatorSkeleton />
 
-### Skeleton (vertical)
+## Skeleton (vertical)
 
 <ProgressIndicatorSkeleton vertical />

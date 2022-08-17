@@ -104,7 +104,7 @@
           <slot name="aside" />
         </div>
         <slot />
-        <h3 id="component-api">Component API</h3>
+        <h2 id="component-api">Component API</h2>
         <p>
           API documentation is
           <Link

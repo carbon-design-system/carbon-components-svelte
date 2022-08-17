@@ -8,7 +8,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <OverflowMenu>
   <OverflowMenuItem text="Manage credentials" />
@@ -16,7 +16,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-### Flipped
+## Flipped
 
 <OverflowMenu open flipped>
   <OverflowMenuItem text="Manage credentials" />
@@ -24,7 +24,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-### Menu direction top
+## Menu direction top
 
 <OverflowMenu flipped direction="top">
   <OverflowMenuItem text="Manage credentials" />
@@ -32,7 +32,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-### Light variant
+## Light variant
 
 <OverflowMenu light>
   <OverflowMenuItem text="Manage credentials" />
@@ -40,7 +40,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-### Extra-large size
+## Extra-large size
 
 <OverflowMenu size="xl">
   <OverflowMenuItem text="Manage credentials" />
@@ -48,7 +48,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-### Small size
+## Small size
 
 <OverflowMenu size="sm">
   <OverflowMenuItem text="Manage credentials" />
@@ -56,7 +56,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-### Custom primary focus
+## Custom primary focus
 
 By default, the first overflow menu item is focused when opening the dropdown.
 
@@ -66,7 +66,7 @@ By default, the first overflow menu item is focused when opening the dropdown.
   <OverflowMenuItem primaryFocus danger text="Delete service" />
 </OverflowMenu>
 
-### Custom trigger icon
+## Custom trigger icon
 
 <OverflowMenu icon={Add}>
   <OverflowMenuItem text="Manage credentials" />
@@ -74,7 +74,7 @@ By default, the first overflow menu item is focused when opening the dropdown.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-### Custom trigger slot
+## Custom trigger slot
 
 <OverflowMenu style="width: auto;">
   <div slot="menu" style="padding: 1rem; color: red;">Custom trigger</div>
@@ -83,7 +83,7 @@ By default, the first overflow menu item is focused when opening the dropdown.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-### Disabled items
+## Disabled items
 
 Disable menu items by setting `disabled` to `true`.
 

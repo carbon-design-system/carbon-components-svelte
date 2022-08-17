@@ -15,41 +15,41 @@ The `all.css` StyleSheet uses [CSS variables](https://developer.mozilla.org/en-U
   
 <CodeSnippet svx-ignore {code} />
 
-### Default
+## Default
 
 <FileSource src="/framed/Theme/Theme" />
 
-### Persist locally
+## Persist locally
 
 Set `persist` to `true` to persist the theme locally using the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
 
 <FileSource src="/framed/Theme/ThemePersist" />
 
-### Custom theme
+## Custom theme
 
 Define keys and values in the `tokens` prop that override default Carbon theme tokens. Refer to the [Carbon website](https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme) for guidance on customizing a theme using token values.
 
 <FileSource src="/framed/Theme/ThemeTokens" />
 
-### Theme toggle
+## Theme toggle
 
 Set `render` to `"toggle"` to render a toggle switch to control the theme.
 
 <FileSource src="/framed/Theme/ThemeToggle" />
 
-### Theme toggle (custom)
+## Theme toggle (custom)
 
 Customize the toggle using the `toggle` prop.
 
 <FileSource src="/framed/Theme/ThemeToggleCustom" />
 
-### Theme select
+## Theme select
 
 Set `render` to `"select"` to render a select dropdown to control the theme.
 
 <FileSource src="/framed/Theme/ThemeSelect" />
 
-### Theme select (custom)
+## Theme select (custom)
 
 Customize the select using the `select` prop.
 

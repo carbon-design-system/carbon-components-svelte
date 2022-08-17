@@ -6,34 +6,34 @@ components: ["Grid", "Row", "Column"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <FileSource src="/framed/Grid/Grid" />
 
-### Full width
+## Full width
 
 <FileSource src="/framed/Grid/FullWidthGrid" />
 
-### Narrow
+## Narrow
 
 <FileSource src="/framed/Grid/NarrowGrid" />
 
-### Condensed
+## Condensed
 
 <FileSource src="/framed/Grid/CondensedGrid" />
 
-### Responsive
+## Responsive
 
 <FileSource src="/framed/Grid/ResponsiveGrid" />
 
-### Offset columns
+## Offset columns
 
 <FileSource src="/framed/Grid/OffsetColumns" />
 
-### Aspect ratio columns
+## Aspect ratio columns
 
 <FileSource src="/framed/Grid/AspectRatioColumns" />
 
-### Padded columns
+## Padded columns
 
 <FileSource src="/framed/Grid/PaddedGrid" />

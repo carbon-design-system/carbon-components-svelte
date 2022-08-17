@@ -8,24 +8,24 @@ components: ["ContextMenu", "ContextMenuGroup", "ContextMenuRadioGroup", "Contex
 
 In the examples, right click anywhere within the iframe.
   
-### Default
+## Default
 
 By default, the context menu will trigger when right clicking anywhere in the `window`.
   
 <FileSource src="/framed/ContextMenu/ContextMenu" />
 
-### Custom target
+## Custom target
 
 Specify a custom `HTMLElement` using the `target` prop.
 
 <FileSource src="/framed/ContextMenu/ContextMenuTarget" />
 
-### Multiple targets
+## Multiple targets
 
 The `target` prop also accepts an array of elements.
 
 <FileSource src="/framed/ContextMenu/ContextMenuTargets" />
 
-### Radio groups
+## Radio groups
   
 <FileSource src="/framed/ContextMenu/ContextMenuGroups" />

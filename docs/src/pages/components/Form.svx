@@ -14,7 +14,7 @@ components: ["Form", "FormGroup"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Form
+## Form
 
 <Form on:submit>
   <FormGroup legendText="Checkboxes">
@@ -61,7 +61,7 @@ components: ["Form", "FormGroup"]
   <Button type="submit">Submit</Button>
 </Form>
 
-### Prevent default behavior
+## Prevent default behavior
 
 The forwarded `submit` event is not modified. Use `e.preventDefault()` to prevent the native form submission behavior.
 
