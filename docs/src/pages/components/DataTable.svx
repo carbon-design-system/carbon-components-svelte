@@ -1097,7 +1097,9 @@ In the following example, each row in the sortable data table has an overflow me
 
 <FileSource src="/framed/DataTable/DataTableAppendColumns" />
 
-### Selectable
+### Selectable rows (checkbox)
+
+Set `selectable` to `true` for rows to be multi-selectable.
 
 <FileSource src="/framed/DataTable/SelectableDataTable" />
 
