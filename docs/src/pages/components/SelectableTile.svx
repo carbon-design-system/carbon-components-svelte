@@ -8,7 +8,7 @@ source: Tile/SelectableTile.svelte
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Multi-selectable tiles
+## Multi-selectable tiles
 
 <div role="group" aria-label="selectable tiles">
   <SelectableTile selected>
@@ -22,7 +22,7 @@ source: Tile/SelectableTile.svelte
   </SelectableTile>
 </div>
 
-### Light variant
+## Light variant
 
 <div role="group" aria-label="selectable tiles">
   <SelectableTile light selected>
@@ -36,7 +36,7 @@ source: Tile/SelectableTile.svelte
   </SelectableTile>
 </div>
 
-### Disabled state
+## Disabled state
 
 <div role="group" aria-label="selectable tiles">
   <SelectableTile selected>

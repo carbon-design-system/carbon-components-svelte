@@ -7,26 +7,26 @@ components: ["Pagination", "PaginationSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <Pagination totalItems={102} pageSizes="{[10, 15, 20]}" />
 
-### Current page
+## Current page
 
 <Pagination totalItems={102} page={4} />
 
-### Custom page sizes
+## Custom page sizes
 
 <Pagination totalItems={102} pageSizes="{[16, 36, 99]}" pageSize="{36}" />
 
-### Hidden page input
+## Hidden page input
 
 <Pagination totalItems={102} pageInputDisabled />
 
-### Hidden page size
+## Hidden page size
 
 <Pagination totalItems={102} pageSizeInputDisabled />
 
-### Skeleton
+## Skeleton
 
 <PaginationSkeleton />

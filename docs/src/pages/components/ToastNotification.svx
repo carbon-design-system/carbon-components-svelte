@@ -7,11 +7,11 @@ source: Notification/ToastNotification.svelte
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (error)
+## Default (error)
 
 <ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 
-### Prevent default close behavior
+## Prevent default close behavior
 
 `ToastNotification` is a controlled component. Prevent the default close behavior using the `e.preventDefault()` method in the dispatched `on:close` event.
 
@@ -20,13 +20,13 @@ source: Notification/ToastNotification.svelte
   // custom close logic (e.g., transitions)
 }} />
 
-### Full width
+## Full width
 
 Set `fullWidth` to `true` for the notification to span the full width of its containing element.
 
 <ToastNotification fullWidth title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 
-### Slottable title, subtitle, caption
+## Slottable title, subtitle, caption
 
 <ToastNotification>
   <strong slot="title">Error: </strong>
@@ -34,11 +34,11 @@ Set `fullWidth` to `true` for the notification to span the full width of its con
   <strong slot="caption">{new Date().toLocaleString()}</strong>
 </ToastNotification>
 
-### Hidden close button
+## Hidden close button
 
 <ToastNotification hideCloseButton kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
 
-### Notification variants
+## Notification variants
 
 <ToastNotification kind="error" title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 <ToastNotification kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="{new Date().toLocaleString()}"  />
@@ -47,7 +47,7 @@ Set `fullWidth` to `true` for the notification to span the full width of its con
 <ToastNotification kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
 <ToastNotification kind="warning-alt" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
 
-### Low contrast
+## Low contrast
 
 <ToastNotification lowContrast kind="error" title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 <ToastNotification lowContrast kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="{new Date().toLocaleString()}" />

@@ -34,11 +34,11 @@ Please note that the `clipboard.writeText` API is not supported in [IE 11 nor Sa
 You can override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
 
 
-### Default (single-line)
+## Default (single-line)
 
 <CodeSnippet code="yarn add -D carbon-components-svelte" />
 
-### Overriding copy functionality
+## Overriding copy functionality
 
 To override the default copy behavior, pass a custom function to the `copy` prop.
 
@@ -46,45 +46,45 @@ In this example, we use the open source module [clipboard-copy](https://github.c
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
 
-### Preventing copy functionality
+## Preventing copy functionality
 
 To prevent text from being copied entirely, pass a no-op function to the `copy` prop.
 
 <CodeSnippet code="yarn add -D carbon-components-svelte" copy={() => {}} />
 
-### Inline
+## Inline
 
 <CodeSnippet type="inline" code="rm -rf node_modules/" />
 
-### Multi-line
+## Multi-line
 
 <CodeSnippet type="multi" {code} />
 
-### Expanded by default
+## Expanded by default
 
 Use the `expanded` prop to control whether the multi-line code snippet is expanded or not.
 
 <CodeSnippet type="multi" {code} expanded />
 
-### Reactive example
+## Reactive example
 
 The multi-line code snippet also dispatches "expand" and "collapse" events.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetReactive" />
 
-### Custom copy feedback text
+## Custom copy feedback text
 
 Use the `feedback` prop to override the default copy button feedback text.
 
 <CodeSnippet type="multi" {code} feedback="Copied to clipboard" />
 
-### Hidden copy button
+## Hidden copy button
 
 Set `hideCopyButton` to `true` to hide the copy button.
 
 <CodeSnippet type="multi" {code} hideCopyButton />
 
-### Disabled
+## Disabled
 
 The `disabled` prop applies only to the `"single"` and `"multi"` code snippet types.
 
@@ -92,19 +92,19 @@ The `disabled` prop applies only to the `"single"` and `"multi"` code snippet ty
 <br />
 <CodeSnippet disabled type="multi" code="{comment}" />
 
-### Wrapped text
+## Wrapped text
 
 `wrapText` only applies to the `"multi"` type.
 
 <CodeSnippet wrapText type="multi" code="{comment}" />
 
-### Dynamic multi-line code
+## Dynamic multi-line code
 
 For dynamically updated code, you must use the `code` prop instead of the default slot.
 
 <FileSource src="/framed/CodeSnippet/DynamicCodeSnippet" />
 
-### Hidden multi-line code
+## Hidden multi-line code
 
 There may be cases where your code snippet is hidden in the DOM. The logic to render the "Show more" button relies on the element's computed height. For hidden content, the button will not appear because the computed height is `0`.
 
@@ -112,12 +112,12 @@ The recommended workaround is to re-render the component. See the example below.
 
 <FileSource src="/framed/CodeSnippet/HiddenCodeSnippet" />
 
-### Skeleton
+## Skeleton
 
 The default skeleton type is `"single"`.
 
 <CodeSnippet skeleton />
 
-### Skeleton (multi-line)
+## Skeleton (multi-line)
 
 <CodeSnippet type="multi" skeleton />

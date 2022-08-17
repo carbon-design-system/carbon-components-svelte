@@ -7,11 +7,11 @@ components: ["TextArea", "TextAreaSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <TextArea labelText="App description" placeholder="Enter a description..." />
 
-### Maximum character count
+## Maximum character count
 
 Specify the max character count using the `maxCount` prop. A character counter will be displayed to the right of the label.
 
@@ -19,34 +19,34 @@ You can always use the native `maxlength` attribute if you'd prefer that a count
 
 <TextArea labelText="App description" placeholder="Enter a description..." maxCount={100} />
 
-### With helper text
+## With helper text
 
 <TextArea labelText="App description" helperText="A rich description helps us better recommend related products and services" placeholder="Enter a description..." />
 
-### Hidden label
+## Hidden label
 
 <TextArea hideLabel labelText="App description" placeholder="Enter a description..." />
 
-### Light variant
+## Light variant
 
 <TextArea light labelText="App description" placeholder="Enter a description..." />
 
-### Custom rows
+## Custom rows
 
 <TextArea rows={10} labelText="App description" placeholder="Enter a description..." />
 
-### Invalid state
+## Invalid state
 
 <TextArea invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
 
-### Disabled state
+## Disabled state
 
 <TextArea disabled labelText="App description" placeholder="Enter a description..." />
 
-### Skeleton
+## Skeleton
 
 <TextAreaSkeleton />
 
-### Skeleton without label
+## Skeleton without label
 
 <TextAreaSkeleton hideLabel />

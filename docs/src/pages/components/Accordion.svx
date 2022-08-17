@@ -10,7 +10,7 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <Accordion>
   <AccordionItem title="Natural Language Classifier">
@@ -25,7 +25,7 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   </AccordionItem>
 </Accordion>
 
-### Left-aligned chevron
+## Left-aligned chevron
 
 <Accordion align="start">
   <AccordionItem title="Natural Language Classifier">
@@ -40,7 +40,7 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   </AccordionItem>
 </Accordion>
 
-### Custom title slot
+## Custom title slot
 
 <Accordion>
   <AccordionItem>
@@ -67,7 +67,7 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   </AccordionItem>
 </Accordion>
 
-### First item open
+## First item open
 
 <Accordion>
   <AccordionItem open title="Natural Language Classifier">
@@ -82,13 +82,13 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   </AccordionItem>
 </Accordion>
 
-### Programmatic example
+## Programmatic example
 
 This example demonstrates how a list of items can be programmatically expanded and collapsed.
 
 <FileSource src="/framed/Accordion/ExpandableAccordion" />
 
-### Extra-large size
+## Extra-large size
 
 <Accordion size="xl">
   <AccordionItem title="Natural Language Classifier">
@@ -103,7 +103,7 @@ This example demonstrates how a list of items can be programmatically expanded a
   </AccordionItem>
 </Accordion>
 
-### Small size
+## Small size
 
 <Accordion size="sm">
   <AccordionItem title="Natural Language Classifier">
@@ -118,7 +118,7 @@ This example demonstrates how a list of items can be programmatically expanded a
   </AccordionItem>
 </Accordion>
 
-### Disabled
+## Disabled
 
 <Accordion disabled>
   <AccordionItem title="Natural Language Classifier">
@@ -133,7 +133,7 @@ This example demonstrates how a list of items can be programmatically expanded a
   </AccordionItem>
 </Accordion>
 
-### Disabled (item)
+## Disabled (item)
 
 <Accordion>
   <AccordionItem disabled title="Natural Language Classifier">
@@ -148,27 +148,27 @@ This example demonstrates how a list of items can be programmatically expanded a
   </AccordionItem>
 </Accordion>
 
-### Skeleton
+## Skeleton
 
 <Accordion skeleton />
 
-### Skeleton (left-aligned chevron)
+## Skeleton (left-aligned chevron)
 
 <Accordion skeleton align="start" />
 
-### Skeleton (custom count)
+## Skeleton (custom count)
 
 <Accordion skeleton count={3} />
 
-### Skeleton (closed)
+## Skeleton (closed)
 
 <Accordion skeleton open={false} />
 
-### Skeleton (extra-large)
+## Skeleton (extra-large)
 
 <Accordion skeleton size="xl" />
 
-### Skeleton (small)
+## Skeleton (small)
 
 <Accordion skeleton size="sm" />
 

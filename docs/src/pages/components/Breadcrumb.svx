@@ -12,7 +12,7 @@ components: ["Breadcrumb", "BreadcrumbItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <Breadcrumb>
   <BreadcrumbItem href="/">Dashboard</BreadcrumbItem>
@@ -20,14 +20,14 @@ components: ["Breadcrumb", "BreadcrumbItem"]
   <BreadcrumbItem href="/reports/2019" isCurrentPage>2019</BreadcrumbItem>
 </Breadcrumb>
 
-### No trailing slash
+## No trailing slash
 
 <Breadcrumb noTrailingSlash>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
   <BreadcrumbItem href="/profile" isCurrentPage>Profile</BreadcrumbItem>
 </Breadcrumb>
 
-### Overflow menu
+## Overflow menu
 
 <Breadcrumb>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
@@ -41,10 +41,10 @@ components: ["Breadcrumb", "BreadcrumbItem"]
   <BreadcrumbItem href="/api/data/latest/usage" isCurrentPage>Usage</BreadcrumbItem>
 </Breadcrumb>
 
-### Breadcrumb trail
+## Breadcrumb trail
 
 <FileSource src="/framed/Breadcrumbs/Breadcrumbs" />
 
-### Skeleton
+## Skeleton
 
 <Breadcrumb noTrailingSlash skeleton count={3} />

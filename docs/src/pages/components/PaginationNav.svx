@@ -3,10 +3,10 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <PaginationNav />
 
-### Loopable
+## Loopable
 
 <PaginationNav total={3} loop />

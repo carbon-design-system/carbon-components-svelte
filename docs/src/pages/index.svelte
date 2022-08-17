@@ -91,7 +91,7 @@
     </Row>
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column max="{10}" xlg="{10}">
-        <h3 style="margin-top: var(--cds-layout-02)">Installation</h3>
+        <h2 style="margin-top: var(--cds-layout-02)">Installation</h2>
         <InlineNotification
           style="max-width: calc(48rem - 1rem);"
           kind="info"
@@ -123,7 +123,7 @@
     </Row>
     <Row style="margin-bottom: var(--cds-layout-04)">
       <Column>
-        <h3>Styling</h3>
+        <h2>Styling</h2>
         <p>
           Before importing components, you will need to first apply Carbon
           component styles. The Carbon Design System supports five themes (2
@@ -222,7 +222,7 @@
 
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column>
-        <h3>Dynamic theming</h3>
+        <h2>Dynamic theming</h2>
         <p>Use the "all.css" StyleSheet for dynamic, client-side theming.</p>
         <Row padding noGutter>
           <Column>
@@ -254,7 +254,7 @@
 
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column>
-        <h3>Portfolio</h3>
+        <h2>Portfolio</h2>
         <p>
           The Carbon Svelte portfolio includes packages for icons, pictograms,
           and data visualization.

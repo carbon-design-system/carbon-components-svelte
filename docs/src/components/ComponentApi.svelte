@@ -46,7 +46,7 @@
   </OutboundLink>
 </p>
 
-<h3 id="props">Props</h3>
+<h2 id="props">Props</h2>
 
 {#if component.props.length > 0}
   <div class="overflow">
@@ -128,7 +128,7 @@
   <p class="my-layout-01-03">No props.</p>
 {/if}
 
-<h3 id="typedefs">Typedefs</h3>
+<h2 id="typedefs">Typedefs</h2>
 
 {#if component.typedefs.length > 0}
   <CodeSnippet
@@ -141,7 +141,7 @@
   <p class="my-layout-01-03">No typedefs.</p>
 {/if}
 
-<h3 id="slots">Slots</h3>
+<h2 id="slots">Slots</h2>
 {#if component.slots.length > 0}
   <UnorderedList class="my-layout-01-03">
     {#each component.slots as slot (slot.name)}
@@ -152,7 +152,7 @@
   <p class="my-layout-01-03">No slots.</p>
 {/if}
 
-<h3 id="forwarded-events">Forwarded events</h3>
+<h2 id="forwarded-events">Forwarded events</h2>
 {#if forwarded_events.length > 0}
   <UnorderedList class="my-layout-01-03">
     {#each forwarded_events as event (event.name)}
@@ -163,7 +163,7 @@
   <p class="my-layout-01-03">No forwarded events.</p>
 {/if}
 
-<h3 id="dispatched-events">Dispatched events</h3>
+<h2 id="dispatched-events">Dispatched events</h2>
 
 {#if dispatched_events.length > 0}
   <UnorderedList class="my-layout-01-03">
@@ -175,7 +175,7 @@
   <p class="my-layout-01-03">No dispatched events.</p>
 {/if}
 
-<h3 id="rest-props">$$restProps</h3>
+<h2 id="rest-props">$$restProps</h2>
 
 <div class="my-layout-01-03">
   {#if component.rest_props}

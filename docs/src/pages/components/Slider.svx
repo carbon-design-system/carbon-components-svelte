@@ -7,44 +7,44 @@ components: ["Slider", "SliderSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <Slider />
 
-### Full width
+## Full width
 
 Set `fullWidth` to `true` for the slider to span the full width of its containing element.
 
 <Slider fullWidth />
 
-### Hidden text input
+## Hidden text input
 
 <Slider hideTextInput />
 
-### Custom minimum, maximum values
+## Custom minimum, maximum values
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} />
 
-### Custom step value
+## Custom step value
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
-### Light variant
+## Light variant
 
 <Slider light labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
 
-### Invalid state
+## Invalid state
 
 <Slider invalid labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
 
-### Disabled state
+## Disabled state
 
 <Slider disabled labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
 
-### Skeleton
+## Skeleton
 
 <SliderSkeleton />
 
-### Skeleton (hidden label)
+## Skeleton (hidden label)
 
 <SliderSkeleton hideLabel />

@@ -3,10 +3,10 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <SkeletonPlaceholder />
 
-### Custom size
+## Custom size
 
 <SkeletonPlaceholder style="height: 12rem; width: 12rem;" />

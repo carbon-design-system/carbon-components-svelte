@@ -7,7 +7,7 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <RadioButtonGroup selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -15,7 +15,7 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-### With legend text
+## With legend text
 
 <RadioButtonGroup legendText="Storage tier (disk)" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -23,7 +23,7 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-### Legend text slot
+## Legend text slot
 
 Use the named "legendText" slot to customize the legend text.
 
@@ -41,7 +41,7 @@ Use the named "legendText" slot to customize the legend text.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-### Hidden legend
+## Hidden legend
 
 It's recommended that you provide a legend for accessibility.
 
@@ -53,13 +53,13 @@ Use `hideLegend` to visually hide the legend text.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-### Reactive example
+## Reactive example
 
 Use the `selected` prop to bind and update the selected value.
 
 <FileSource src="/framed/RadioButton/RadioButtonReactive" />
 
-### Left-aligned label text
+## Left-aligned label text
 
 <RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -67,7 +67,7 @@ Use the `selected` prop to bind and update the selected value.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-### Disabled buttons
+## Disabled buttons
 
 <RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" selected="standard">
   <RadioButton disabled labelText="Free (1 GB)" value="free" />
@@ -75,7 +75,7 @@ Use the `selected` prop to bind and update the selected value.
   <RadioButton disabled labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-### Vertical orientation
+## Vertical orientation
 
 <RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -83,7 +83,7 @@ Use the `selected` prop to bind and update the selected value.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-### Skeleton
+## Skeleton
 
 <RadioButtonGroup legendText="Storage tier (disk)">
   <RadioButtonSkeleton />
@@ -91,7 +91,7 @@ Use the `selected` prop to bind and update the selected value.
   <RadioButtonSkeleton />
 </RadioButtonGroup>
 
-### Skeleton (vertical)
+## Skeleton (vertical)
 
 <RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)">
   <RadioButtonSkeleton />

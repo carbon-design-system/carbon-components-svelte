@@ -3,31 +3,31 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 Without a specified `value` prop, the progress bar is indeterminate.
 
 <ProgressBar helperText="Loading..." />
 
-### Small size
+## Small size
 
 Specify `size="sm"` to use the small variant.
 
 <ProgressBar size="sm" helperText="Loading..." />
 
-### Percentage
+## Percentage
 
 Specify a `value` for the progress bar to be determinate.
 
 <ProgressBar value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
-### Custom max value
+## Custom max value
 
 The default `max` value is `100`.
 
 <ProgressBar value={40} max={200} labelText="Upload status" helperText="40 MB of 200 MB" />
 
-### Hidden label
+## Hidden label
 
 It's recommended that you provide a `labelText` for accessibility.
 
@@ -35,17 +35,17 @@ Use `hideLabel` to visually hide the label text.
 
 <ProgressBar hideLabel value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
-### Inline variant
+## Inline variant
 
 The inline variant visually hides the `helperText`.
 
 <ProgressBar kind="inline" value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
-### Indented variant
+## Indented variant
 
 <ProgressBar kind="indented" value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
-### UX example
+## UX example
 
 This example shows how to animate the progress bar from 0 to 100% with start and end states.
 

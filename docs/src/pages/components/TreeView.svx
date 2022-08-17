@@ -3,7 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 The `children` prop accepts an array of child nodes. Each node should contain `id` and `text` properties.
 
@@ -17,49 +17,49 @@ A parent node contains `children` while a leaf node does not.
 
 <FileSource src="/framed/TreeView/TreeView" />
 
-### Initial active node
+## Initial active node
 
 The active node can be set through `activeId`.
 
 <FileSource src="/framed/TreeView/TreeViewActive" />
 
-### Compact size
+## Compact size
 
 Set `size` to `"compact"` to use the compact variant.
 
 <FileSource src="/framed/TreeView/TreeViewCompact" />
 
-### With icons
+## With icons
 
 To render a node with an icon, define an `icon` property with a Carbon Svelte icon as its value.
 
 <FileSource src="/framed/TreeView/TreeViewIcons" />
 
-### Initial expanded nodes
+## Initial expanded nodes
 
 Expanded nodes can be set using `expandedIds`.
 
 <FileSource src="/framed/TreeView/TreeViewExpanded" />
 
-### Initial multiple selected nodes
+## Initial multiple selected nodes
 
 Initial multiple selected nodes can be set using `selectedIds`.
 
 <FileSource src="/framed/TreeView/TreeViewMultiselect" />
 
-### Expand all nodes
+## Expand all nodes
 
 To programmatically expand all nodes, access the component instance using the [bind:this](https://svelte.dev/docs#bind_element) directive and invoke the `TreeView.expandAll()` accessor.
 
 <FileSource src="/framed/TreeView/TreeViewExpandAll" />
 
-### Collapse all nodes
+## Collapse all nodes
 
 Similarly, invoke `TreeView.collapseAll()` to collapse all nodes.
 
 <FileSource src="/framed/TreeView/TreeViewCollapseAll" />
 
-### Expand a subset of nodes
+## Expand a subset of nodes
 
 Use the `TreeView.expandNodes` method to expand only a subset of nodes.
 
@@ -69,7 +69,7 @@ If no argument is provided, all nodes will be expanded.
 
 <FileSource src="/framed/TreeView/TreeViewExpandNodes" />
 
-### Collapse a subset of nodes
+## Collapse a subset of nodes
 
 Use the `TreeView.collapseNodes` method to collapse a subset of nodes.
 

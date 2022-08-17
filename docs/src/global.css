@@ -223,16 +223,8 @@ html[theme="g90"] .code-override {
   padding: 0 var(--cds-spacing-02);
 }
 
-.bx--col > h2 {
-  font-size: var(--cds-expressive-heading-05-font-size);
-  font-weight: var(--cds-expressive-heading-05-font-weight);
-  letter-spacing: var(--cds-expressive-heading-05-letter-spacing);
-  line-height: var(--cds-expressive-heading-05-line-height);
-  padding-top: var(--cds-layout-03);
-  margin-bottom: var(--cds-layout-01);
-}
-
-.bx--col > h3 {
+[class*="bx--col"] > h2,
+.bx--tab-content > h2 {
   font-size: var(--cds-expressive-heading-04-font-size);
   font-weight: var(--cds-expressive-heading-04-font-weight);
   letter-spacing: var(--cds-expressive-heading-04-letter-spacing);
@@ -251,6 +243,7 @@ html[theme="g90"] .code-override {
 }
 
 .bx--col > h2,
+.bx--tab-content > h2,
 .bx--col > h3,
 .bx--col > h4 {
   scroll-margin-top: 3rem;

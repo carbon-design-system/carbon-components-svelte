@@ -19,7 +19,7 @@ Specify [flatpickr options](https://flatpickr.js.org/options/) through the `flat
   </div>
 </InlineNotification>
 
-### Single
+## Single
 
 By default, the `flatpickr` option `static` is set to `true` so that the calendar is positioned inside the wrapper and next to the input element. This is required for the calendar position to work inside a [Modal](/components/Modal).
 
@@ -27,17 +27,17 @@ Set `flatpickrProps.static` to `false` to opt out of this behavior.
 
 <FileSource src="/framed/DatePicker/DatePickerSingle" />
 
-### Range
+## Range
 
 Set `datePickerType` to `"range"` for the range variant.
 
 <FileSource src="/framed/DatePicker/DatePickerRange" />
 
-### DatePicker in a modal
+## DatePicker in a modal
 
 <FileSource src="/framed/DatePicker/DatePickerModal" />
 
-### Simple
+## Simple
 
 By default, the "simple" date picker does not have a dropdown calendar.
 
@@ -45,54 +45,54 @@ By default, the "simple" date picker does not have a dropdown calendar.
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-### With helper text
+## With helper text
 
 <DatePicker>
   <DatePickerInput labelText="Date of birth" helperText="Example: 01/12/1990" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-### Hidden label
+## Hidden label
 
 <DatePicker>
   <DatePickerInput hideLabel labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-### Light variant
+## Light variant
 
 <DatePicker light>
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-### Extra-large size
+## Extra-large size
 
 <DatePicker>
   <DatePickerInput size="xl" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-### Small size
+## Small size
 
 <DatePicker>
   <DatePickerInput size="sm" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-### Invalid state
+## Invalid state
 
 <DatePicker>
   <DatePickerInput invalid invalidText="Invalid date" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-### Warning state
+## Warning state
 
 <DatePicker>
   <DatePickerInput warn warnText="This info will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-### Disabled state
+## Disabled state
 
 <DatePicker>
   <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-### Skeleton
+## Skeleton
 
 <DatePickerSkeleton />

@@ -7,7 +7,7 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <TimePicker labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -20,7 +20,7 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   </TimePickerSelect>
 </TimePicker>
 
-### Light variant
+## Light variant
 
 <TimePicker light labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -33,7 +33,7 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   </TimePickerSelect>
 </TimePicker>
 
-### Extra-large size
+## Extra-large size
 
 <TimePicker size="xl" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -46,7 +46,7 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   </TimePickerSelect>
 </TimePicker>
 
-### Small size
+## Small size
 
 <TimePicker size="sm" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -59,7 +59,7 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   </TimePickerSelect>
 </TimePicker>
 
-### Invalid state
+## Invalid state
 
 <TimePicker invalid invalidText="A valid value is required" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -73,7 +73,7 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 </TimePicker>
 
 
-### Disabled state
+## Disabled state
 
 <TimePicker labelText="Cron job" placeholder="hh:mm" disabled>
   <TimePickerSelect value="pm" disabled>

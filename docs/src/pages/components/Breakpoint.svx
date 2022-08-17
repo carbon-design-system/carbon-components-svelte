@@ -18,7 +18,7 @@ The [Carbon Design System grid implementation](https://carbondesignsystem.com/gu
 
 This utility component uses the [Window.matchMedia API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) to declaratively determine the current Carbon breakpoint size.
 
-### Default
+## Default
 
 Bind to the `size` prop to determine the current breakpoint size. Possible values include: `"sm" | "md" | "lg" | "xlg" | "max"`.
 
@@ -26,7 +26,7 @@ The `"on:change"` event will fire when the size is initially determined and when
 
 <FileSource src="/framed/Breakpoint/Breakpoint" />
 
-### Store and Breakpoint Values
+## Store and Breakpoint Values
 
 As an alternative to the component, `breakpointObserver` can be used to get the current size as a Svelte store. The store has two additional functions which create derived stores that return a `boolean` indicating whether the size is smaller/larger than a certain breakpoint.
 

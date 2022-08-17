@@ -4,15 +4,15 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <Tag>IBM Cloud</Tag>
 
-### Small size
+## Small size
 
 <Tag size="sm">IBM Cloud</Tag>
 
-### Tag types
+## Tag types
 
 <Tag type="red">red</Tag>
 <Tag type="magenta">magenta</Tag>
@@ -27,41 +27,41 @@
 <Tag type="high-contrast">high-contrast</Tag>
 <Tag type="outline">outline</Tag>
 
-### Filterable
+## Filterable
 
 <Tag filter on:close>carbon-components</Tag>
 
-### Filterable (disabled)
+## Filterable (disabled)
 
 <Tag filter disabled on:close>carbon-components</Tag>
 
-### Filterable (small)
+## Filterable (small)
 
 <Tag size="sm" filter on:close>carbon-components</Tag>
 
-### Custom icon
+## Custom icon
 
 Note: rendering a custom icon cannnot be used with the filterable variant.
 
 <Tag icon={IbmCloud}>IBM Cloud</Tag>
 
-### Interactive variant
+## Interactive variant
 
 Set `interactive` to `true` to render a `button` element instead of a `div`.
 
 <Tag interactive>Machine learning</Tag>
 
-### Disabled
+## Disabled
 
 The filterable and interactive tag variants have a disabled state.
 
 <Tag filter disabled>Machine learning</Tag>
 <Tag interactive disabled>Machine learning</Tag>
 
-### Skeleton
+## Skeleton
 
 <Tag skeleton />
 
-### Skeleton (small)
+## Skeleton (small)
 
 <Tag size="sm" skeleton />

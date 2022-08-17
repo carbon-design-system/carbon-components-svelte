@@ -7,7 +7,7 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 If the `selected` prop is not set, the value of the first `SelectItem` will be used as the default value.
 
@@ -19,7 +19,7 @@ If the `selected` prop is not set, the value of the first `SelectItem` will be u
   <SelectItem value="g100" />
 </Select>
 
-### Custom item text
+## Custom item text
 
 Use the `text` prop on `SelectItem` to customize the display value.
 
@@ -31,7 +31,7 @@ Use the `text` prop on `SelectItem` to customize the display value.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Initial selected value
+## Initial selected value
 
 Use the `selected` prop to specify an initial value.
 
@@ -43,13 +43,13 @@ Use the `selected` prop to specify an initial value.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Reactive example
+## Reactive example
 
 The `selected` prop is reactive and supports two-way binding.
 
 <FileSource src="/framed/Select/SelectReactive" />
 
-### Helper text
+## Helper text
 
 <Select helperText="Carbon offers 4 themes (2 light, 3 dark)" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -59,7 +59,7 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Hidden label
+## Hidden label
 
 <Select hideLabel labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -69,7 +69,7 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Item groups
+## Item groups
 
 <Select labelText="Carbon theme" selected="0">
   <SelectItem value="0" text="Select a theme" disabled hidden />
@@ -84,7 +84,7 @@ The `selected` prop is reactive and supports two-way binding.
   </SelectItemGroup>
 </Select>
 
-### Light variant
+## Light variant
 
 <Select light labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -94,7 +94,7 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Inline variant
+## Inline variant
 
 <Select inline labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -104,7 +104,7 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Extra-large size
+## Extra-large size
 
 <Select size="xl" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -114,7 +114,7 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Small size
+## Small size
 
 <Select size="sm" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -124,7 +124,7 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Invalid state
+## Invalid state
 
 <Select invalid invalidText="Theme must be a dark variant" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -134,7 +134,7 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Warning state
+## Warning state
 
 <Select warn warnText="The selected theme will not be persisted" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -144,7 +144,7 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Disabled state
+## Disabled state
 
 <Select disabled labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -154,10 +154,10 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-### Skeleton
+## Skeleton
 
 <SelectSkeleton />
 
-### Skeleton (hidden label)
+## Skeleton (hidden label)
 
 <SelectSkeleton hideLabel />

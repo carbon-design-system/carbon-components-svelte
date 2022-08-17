@@ -3,22 +3,22 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <SkeletonText />
 
-### Heading variant
+## Heading variant
 
 <SkeletonText heading />
 
-### Paragraph variant
+## Paragraph variant
 
 <SkeletonText paragraph />
 
-### Paragraph with custom line count
+## Paragraph with custom line count
 
 <SkeletonText paragraph lines={8} />
 
-### Paragraph with max width
+## Paragraph with max width
 
 <SkeletonText paragraph width="50%" />

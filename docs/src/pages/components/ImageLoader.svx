@@ -7,11 +7,11 @@
 
 This utility component uses the [Image API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image) to programmatically load an image with slottable loading and error states.
   
-### Default
+## Default
   
 <ImageLoader src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
 
-### Slots
+## Slots
 
 Use the "loading" and "error" named slots to render an element when the image is loading or has an error.
 
@@ -24,7 +24,7 @@ Use the "loading" and "error" named slots to render an element when the image is
     </svelte:fragment>
 </ImageLoader>
 
-### With aspect ratio
+## With aspect ratio
 
 If `ratio` is set, this component uses the [AspectRatio](/components/AspectRatio) to constrain the image.
 
@@ -32,14 +32,14 @@ Supported aspect ratios include `"2x1"`, `"2x3"`, `"16x9"`, `"4x3"`, `"1x1"`, `"
   
 <ImageLoader ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
 
-### Fade in
+## Fade in
 
 Set `fadeIn` to `true` to fade in the image if successfully loaded.
 
 <Button kind="ghost" on:click="{() => { key++;}}">Reload image</Button>
 {#key key}<ImageLoader fadeIn ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />{/key}
 
-### Programmatic usage
+## Programmatic usage
 
 In this example, a component reference is obtained to programmatically trigger the `loadImage` method.
 

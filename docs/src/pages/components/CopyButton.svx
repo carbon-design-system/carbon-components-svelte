@@ -9,15 +9,15 @@ Please note that the `clipboard.writeText` API is not supported in [IE 11 nor Sa
 
 You can override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
 
-### Default
+## Default
 
 <CopyButton text="Carbon svelte" />
 
-### Custom feedback text
+## Custom feedback text
 
 <CopyButton text="Carbon svelte" feedback="Copied to clipboard" />
 
-### Overriding copy functionality
+## Overriding copy functionality
 
 To override the default copy behavior, pass a custom function to the `copy` prop.
 
@@ -25,7 +25,7 @@ In this example, we use the open source module [clipboard-copy](https://github.c
 
 <FileSource src="/framed/CopyButton/CopyButtonOverride" />
 
-### Preventing copy functionality
+## Preventing copy functionality
 
 To prevent text from being copied entirely, pass a no-op function to the `copy` prop.
 

@@ -3,21 +3,21 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <InlineLoading />
 
-### With description
+## With description
 
 <InlineLoading description="Loading metrics..." />
 
-### Status states
+## Status states
 
 <InlineLoading status="active" description="Submitting..." />
 <InlineLoading status="inactive" description="Cancelling..." />
 <InlineLoading status="finished" description="Success" />
 <InlineLoading status="error" description="An error occurred" />
 
-### UX example
+## UX example
 
 <FileSource src="/framed/InlineLoading/InlineLoadingUx" />

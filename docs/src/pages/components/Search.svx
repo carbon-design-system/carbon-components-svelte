@@ -4,60 +4,60 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 The `Search` component size is extra-large by default. There are [large](#large-size) and [small](#small-size) size variants.
 
 <Search />
 
-### Default value
+## Default value
 
 <Search placeholder="Search catalog..." value="Cloud functions" />
 
-### Reactive example
+## Reactive example
 
 <FileSource src="/framed/Search/SearchReactive" />
 
-### on:clear
+## on:clear
 
 The "clear" event is dispatched when clicking the "X" button or when pressing the "Escape" key.
 
 <Search value="Cloud functions" on:clear={() => console.log('clear')}/>
 
-### Expandable variant
+## Expandable variant
 
 Set `expandable` to `true` to use the expandable variant.
 
 <FileSource src="/framed/Search/SearchExpandableReactive" />
 
-### Light variant
+## Light variant
 
 <Search light />
 
-### Large size
+## Large size
 
 <Search size="lg" />
 
-### Small size
+## Small size
 
 <Search size="sm" />
 
-### Disabled state
+## Disabled state
 
 <Search disabled />
 
-### Custom search icon
+## Custom search icon
 
 <Search icon={Query} />
 
-### Skeleton
+## Skeleton
 
 <Search skeleton />
 
-### Skeleton (large)
+## Skeleton (large)
 
 <Search size="lg" skeleton />
 
-### Skeleton (small)
+## Skeleton (small)
 
 <Search size="sm" skeleton />

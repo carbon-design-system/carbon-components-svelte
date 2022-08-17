@@ -7,13 +7,13 @@ source: Tile/ClickableTile.svelte
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <ClickableTile href="https://www.carbondesignsystem.com/">
 Carbon Design System
 </ClickableTile>
 
-### Prevent default behavior
+## Prevent default behavior
 
 Use the forwarded `click` event and invoke `e.preventDefault()` to prevent the native link behavior.
 
@@ -27,13 +27,13 @@ Use the forwarded `click` event and invoke `e.preventDefault()` to prevent the n
   Carbon Design System
 </ClickableTile>
 
-### Light variant
+## Light variant
 
 <ClickableTile light href="https://www.carbondesignsystem.com/">
 Carbon Design System
 </ClickableTile>
 
-### Disabled state
+## Disabled state
 
 <ClickableTile disabled href="https://www.carbondesignsystem.com/">
 Carbon Design System

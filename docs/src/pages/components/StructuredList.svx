@@ -8,7 +8,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default (read-only)
+## Default (read-only)
 
 <StructuredList>
   <StructuredListHead>
@@ -52,7 +52,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
   </StructuredListBody>
 </StructuredList>
 
-### Condensed variant
+## Condensed variant
 
 <StructuredList condensed>
   <StructuredListHead>
@@ -96,7 +96,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
   </StructuredListBody>
 </StructuredList>
 
-### Flush
+## Flush
 
 <StructuredList flush>
   <StructuredListHead>
@@ -140,7 +140,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
   </StructuredListBody>
 </StructuredList>
 
-### Selectable rows
+## Selectable rows
 
 <StructuredList selection selected="row-1-value">
   <StructuredListHead>
@@ -180,6 +180,6 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
   </StructuredListBody>
 </StructuredList>
 
-### Skeleton
+## Skeleton
 
 <StructuredListSkeleton rows={3} />

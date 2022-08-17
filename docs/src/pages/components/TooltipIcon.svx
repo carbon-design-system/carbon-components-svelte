@@ -5,18 +5,18 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default ("bottom" direction, "center" aligned)
+## Default ("bottom" direction, "center" aligned)
 
 <TooltipIcon tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
 
-### Directions
+## Directions
 
 <TooltipIcon tooltipText="Top start" direction="top" align="start" icon={Filter} />
 <TooltipIcon tooltipText="Right end" direction="right" align="end" icon={Filter} />
 <TooltipIcon tooltipText="Bottom start" direction="bottom" align="start" icon={Filter} />
 <TooltipIcon tooltipText="Left start" direction="left" align="start" icon={Filter} />
 
-### Custom tooltip text
+## Custom tooltip text
 
 Use the "text" slot to customize the tooltip text.
 
@@ -24,6 +24,6 @@ Use the "text" slot to customize the tooltip text.
   <span slot="tooltipText" style="color: red">Carbon is an open source design system by IBM.</span>
 </TooltipIcon>
 
-### Disabled
+## Disabled
 
 <TooltipIcon disabled tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />

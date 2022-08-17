@@ -8,13 +8,13 @@ components: ["Link", "OutboundLink"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <Link href="https://www.carbondesignsystem.com/">
   Carbon Design System
 </Link>
 
-### Target _blank
+## Target _blank
 
 If setting `target` to `"_blank"`, the `Link` component will automatically set `rel="noopener noreferrer"` to guard against [potential cross-origin security exploits](https://web.dev/external-anchors-use-rel-noopener/).
 
@@ -24,7 +24,7 @@ You can override the `rel` attribute with a custom value.
   Carbon Design System
 </Link>
 
-### Outbound link
+## Outbound link
 
 An alternative to manually setting `target` to `"_blank"` is to use the `OutboundLink`.
 
@@ -32,7 +32,7 @@ An alternative to manually setting `target` to `"_blank"` is to use the `Outboun
   Carbon Design System
 </OutboundLink>
 
-### Inline variant
+## Inline variant
 
 <div>
   Visit the
@@ -41,7 +41,7 @@ An alternative to manually setting `target` to `"_blank"` is to use the `Outboun
   </Link>.
 </div>
 
-### Link with icon
+## Link with icon
 
 Note that `inline` must be `false` when rendering a link with an icon.
 
@@ -52,19 +52,19 @@ Note that `inline` must be `false` when rendering a link with an icon.
   </Link>.
 </div>
 
-### Large size
+## Large size
 
 <Link size="lg" href="https://www.carbondesignsystem.com/">
   Carbon Design System
 </Link>
 
-### Small size
+## Small size
 
 <Link size="sm" href="https://www.carbondesignsystem.com/">
   Carbon Design System
 </Link>
 
-### Disabled
+## Disabled
 
 A `disabled` link will render a `p` tag instead of an anchor element.
 
@@ -72,7 +72,7 @@ A `disabled` link will render a `p` tag instead of an anchor element.
   Carbon Design System
 </Link>
 
-### Visited styles
+## Visited styles
 
 <Link visited href="https://www.carbondesignsystem.com/">
   Carbon Design System

@@ -7,10 +7,10 @@ source: Tile/Tile.svelte
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Default
+## Default
 
 <Tile>Content</Tile>
 
-### Light variant
+## Light variant
 
 <Tile light>Content</Tile>

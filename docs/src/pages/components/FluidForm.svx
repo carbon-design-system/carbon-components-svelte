@@ -7,7 +7,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-### Fluid form
+## Fluid form
 
 Note that the `inline` input variants cannot be used within a `FluidForm`.
 
@@ -21,6 +21,6 @@ Note that the `inline` input variants cannot be used within a `FluidForm`.
   />
 </FluidForm>
 
-### Invalid state
+## Invalid state
 
 <FileSource src="/framed/FluidForm/FluidFormInvalid" />
