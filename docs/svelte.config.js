@@ -77,6 +77,7 @@ function plugin() {
     if (
       node.lang !== "svelte" &&
       !node.value.startsWith("<FileSource") &&
+      !node.value.startsWith("<Playground") &&
       !node.value.startsWith("<script>") &&
       !node.value.match(/svx-ignore/g)
     ) {
