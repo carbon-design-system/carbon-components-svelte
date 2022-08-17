@@ -1127,7 +1127,9 @@ You can also prevent the default "Cancel" behavior in the dispatched `on:cancel`
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionToolbarControlled" />
 
-### Selectable (radio)
+### Selectable rows (radio)
+
+Set `radio` to `true` for only one row to be selected at a time.
 
 <FileSource src="/framed/DataTable/RadioSelectableDataTable" />
 
