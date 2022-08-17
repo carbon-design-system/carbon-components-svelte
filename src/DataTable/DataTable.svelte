@@ -18,6 +18,7 @@
    * @event {DataTableRow} mouseenter:row
    * @event {DataTableRow} mouseleave:row
    * @event {{ expanded: boolean; row: DataTableRow; }} click:row--expand
+   * @event {{ selected: boolean; row: DataTableRow; }} click:row--select
    * @event {DataTableCell} click:cell
    * @restProps {div}
    */
@@ -440,6 +441,7 @@
                     checked="{selectedRowIds.includes(row.id)}"
                     on:change="{() => {
                       selectedRowIds = [row.id];
+                      dispatch('click:row--select', { row, selected: true });
                     }}"
                   />
                 {:else}
@@ -451,8 +453,10 @@
                         selectedRowIds = selectedRowIds.filter(
                           (id) => id !== row.id
                         );
+                        dispatch('click:row--select', { row, selected: false });
                       } else {
                         selectedRowIds = [...selectedRowIds, row.id];
+                        dispatch('click:row--select', { row, selected: true });
                       }
                     }}"
                   />

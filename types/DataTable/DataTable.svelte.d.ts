@@ -198,6 +198,10 @@ export default class DataTable extends SvelteComponentTyped<
       expanded: boolean;
       row: DataTableRow;
     }>;
+    ["click:row--select"]: CustomEvent<{
+      selected: boolean;
+      row: DataTableRow;
+    }>;
     ["click:cell"]: CustomEvent<DataTableCell>;
   },
   {

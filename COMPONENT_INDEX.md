@@ -1008,6 +1008,7 @@ export interface DataTableCell {
 | mouseenter:row       | dispatched | <code>DataTableRow</code>                                                                               |
 | mouseleave:row       | dispatched | <code>DataTableRow</code>                                                                               |
 | click:row--expand    | dispatched | <code>{ expanded: boolean; row: DataTableRow; }</code>                                                  |
+| click:row--select    | dispatched | <code>{ selected: boolean; row: DataTableRow; }</code>                                                  |
 | click:cell           | dispatched | <code>DataTableCell</code>                                                                              |
 
 ## `DataTableSkeleton`
