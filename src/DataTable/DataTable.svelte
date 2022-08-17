@@ -14,6 +14,7 @@
    * @event {{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }} click
    * @event {{ expanded: boolean; }} click:header--expand
    * @event {{ header: DataTableHeader; sortDirection?: "ascending" | "descending" | "none" }} click:header
+   * @event {{ indeterminate: boolean; selected: boolean; }} click:header--select
    * @event {DataTableRow} click:row
    * @event {DataTableRow} mouseenter:row
    * @event {DataTableRow} mouseleave:row
@@ -316,6 +317,11 @@
               checked="{selectAll}"
               indeterminate="{indeterminate}"
               on:change="{(e) => {
+                dispatch('click:header--select', {
+                  indeterminate,
+                  selected: !indeterminate && e.target.checked,
+                });
+
                 if (indeterminate) {
                   e.target.checked = false;
                   selectAll = false;

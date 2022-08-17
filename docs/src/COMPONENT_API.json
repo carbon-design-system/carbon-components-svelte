@@ -2647,6 +2647,11 @@
           "name": "click:header",
           "detail": "{ header: DataTableHeader; sortDirection?: \"ascending\" | \"descending\" | \"none\" }"
         },
+        {
+          "type": "dispatched",
+          "name": "click:header--select",
+          "detail": "{ indeterminate: boolean; selected: boolean; }"
+        },
         { "type": "dispatched", "name": "click:row", "detail": "DataTableRow" },
         {
           "type": "dispatched",
