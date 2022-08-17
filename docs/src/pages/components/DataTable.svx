@@ -1139,7 +1139,9 @@ Use `nonSelectableRowIds` to specify the ids for rows that should not be selecta
 
 <FileSource src="/framed/DataTable/DataTableNonSelectableRows" />
 
-### Expandable
+### Expandable rows
+
+Set `expandable` to `true` for rows to be expandable.
 
 <DataTable expandable
   headers="{[
