@@ -1004,6 +1004,7 @@ export interface DataTableCell {
 | click                | dispatched | <code>{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }</code>                    |
 | click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                     |
 | click:header         | dispatched | <code>{ header: DataTableHeader; sortDirection?: "ascending" &#124; "descending" &#124; "none" }</code> |
+| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                             |
 | click:row            | dispatched | <code>DataTableRow</code>                                                                               |
 | mouseenter:row       | dispatched | <code>DataTableRow</code>                                                                               |
 | mouseleave:row       | dispatched | <code>DataTableRow</code>                                                                               |

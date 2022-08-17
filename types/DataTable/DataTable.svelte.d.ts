@@ -191,6 +191,10 @@ export default class DataTable extends SvelteComponentTyped<
       header: DataTableHeader;
       sortDirection?: "ascending" | "descending" | "none";
     }>;
+    ["click:header--select"]: CustomEvent<{
+      indeterminate: boolean;
+      selected: boolean;
+    }>;
     ["click:row"]: CustomEvent<DataTableRow>;
     ["mouseenter:row"]: CustomEvent<DataTableRow>;
     ["mouseleave:row"]: CustomEvent<DataTableRow>;
