@@ -1097,7 +1097,9 @@ In the following example, each row in the sortable data table has an overflow me
 
 <FileSource src="/framed/DataTable/DataTableAppendColumns" />
 
-### Selectable
+### Selectable rows (checkbox)
+
+Set `selectable` to `true` for rows to be multi-selectable.
 
 <FileSource src="/framed/DataTable/SelectableDataTable" />
 
@@ -1125,7 +1127,9 @@ You can also prevent the default "Cancel" behavior in the dispatched `on:cancel`
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionToolbarControlled" />
 
-### Selectable (radio)
+### Selectable rows (radio)
+
+Set `radio` to `true` for only one row to be selected at a time.
 
 <FileSource src="/framed/DataTable/RadioSelectableDataTable" />
 
@@ -1135,7 +1139,9 @@ Use `nonSelectableRowIds` to specify the ids for rows that should not be selecta
 
 <FileSource src="/framed/DataTable/DataTableNonSelectableRows" />
 
-### Expandable
+### Expandable rows
+
+Set `expandable` to `true` for rows to be expandable.
 
 <DataTable expandable
   headers="{[
@@ -1383,6 +1389,8 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
 
 ### Batch expansion
 
+Set `batchExpansion` to `true` for the ability to expand and collapse all rows at once.
+
 <DataTable batchExpansion
   headers="{[
     { key: "name", value: "Name" },
@@ -1440,7 +1448,9 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
   </svelte:fragment>
 </DataTable>
 
-### Expandable and selectable
+### Expandable and selectable rows
+
+The `batchExpansion` and `batchSelection` props can be used together.
 
 <FileSource src="/framed/DataTable/DataTableExpandableSelectable" />
 
