@@ -1389,6 +1389,8 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
 
 ### Batch expansion
 
+Set `batchExpansion` to `true` for the ability to expand and collapse all rows at once.
+
 <DataTable batchExpansion
   headers="{[
     { key: "name", value: "Name" },
