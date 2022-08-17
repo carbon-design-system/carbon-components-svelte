@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.69.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.69.0) - 2022-08-17
+
+**Features**
+
+- dispatch `on:click:header--select` event in `DataTable`
+- dispatch `on:click:row--select` event in `DataTable`
+
 ## [0.68.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.68.0) - 2022-08-15
 
 **Features**
