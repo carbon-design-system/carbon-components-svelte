@@ -888,7 +888,7 @@ Svelte version >=3.48.0 is required.
 
 **Features**
 
-- add `nonExpandableRowsIds` prop to `DataTable` to specify rows that should not be expandable
+- add `nonExpandableRowIds` prop to `DataTable` to specify rows that should not be expandable
 
 ## [0.46.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.46.0) - 2021-10-17
 
