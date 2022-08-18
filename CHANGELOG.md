@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.70.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.0) - 2022-08-18
+
+**Features**
+
+- add `filteredRowIds` prop to `ToolbarSearch` to support pagination
+
 ## [0.69.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.69.0) - 2022-08-17
 
 **Features**
