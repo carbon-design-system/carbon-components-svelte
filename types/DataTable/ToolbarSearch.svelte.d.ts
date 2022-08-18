@@ -45,6 +45,12 @@ export interface ToolbarSearchProps
       ) => boolean);
 
   /**
+   * The filtered row ids
+   * @default []
+   */
+  filteredRowIds?: ReadonlyArray<import("./DataTable.svelte").DataTableRowId>;
+
+  /**
    * Specify the tabindex
    * @default "0"
    */
