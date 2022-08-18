@@ -505,13 +505,15 @@ By default, `ToolbarSearch` will not filter `DataTable` rows.
 
 Set `shouldFilterRows` to `true` to enable client-side filtering. The default filtering performs a basic string comparison on cell values that are of a string or a number type.
 
+To use filtering with pagination, bind to the `filteredRowIds` prop and pass its length to `totalItems` in `Pagination`.
+
 Note that in-memory filtering is not optimal for large data sets, where you might consider using server-side search.
 
 <FileSource src="/framed/DataTable/DataTableFilterable" />
 
 ## Filterable (custom)
 
-`shouldFilterRows` also accepts a function and passes it the current row and value. It expects the function to return a boolean.
+`shouldFilterRows` also accepts a function and passes it the current row and search value. It expects the function to return a boolean.
 
 <FileSource src="/framed/DataTable/DataTableFilterCustom" />
 

@@ -13830,6 +13830,18 @@
           "reactive": false
         },
         {
+          "name": "filteredRowIds",
+          "kind": "let",
+          "description": "The filtered row ids",
+          "type": "ReadonlyArray<import(\"./DataTable.svelte\").DataTableRowId>",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
           "name": "tabindex",
           "kind": "let",
           "description": "Specify the tabindex",

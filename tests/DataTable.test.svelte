@@ -68,6 +68,8 @@
     if (new Date(a) > new Date(b)) return 1;
     return 0;
   }
+
+  let filteredRowIds = [];
 </script>
 
 <DataTable
@@ -117,6 +119,7 @@
   <Toolbar>
     <ToolbarContent>
       <ToolbarSearch
+        bind:filteredRowIds
         shouldFilterRows="{(row, value) => {
           return row.name.includes(value);
         }}"
