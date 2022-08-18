@@ -28,6 +28,12 @@
    */
   export let shouldFilterRows = false;
 
+  /**
+   * The filtered row ids
+   * @type {ReadonlyArray<import("./DataTable.svelte").DataTableRowId>}
+   */
+  export let filteredRowIds = [];
+
   /** Specify the tabindex */
   export let tabindex = "0";
 
@@ -65,6 +71,7 @@
     }
 
     tableRows.set(rows);
+    filteredRowIds = rows.map((row) => row.id);
   }
 
   async function expandSearch() {
