@@ -4,9 +4,7 @@
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
-    ToolbarMenu,
-    ToolbarMenuItem,
-    Button,
+    Pagination,
   } from "carbon-components-svelte";
 
   let rows = Array.from({ length: 10 }).map((_, i) => ({
@@ -16,12 +14,14 @@
     port: 3000 + i * 10,
     rule: i % 2 ? "Round robin" : "DNS delegation",
   }));
+  let pageSize = 5;
+  let page = 1;
+  let filteredRowIds = [];
+
+  $: console.log("filteredRowIds", filteredRowIds);
 </script>
 
 <DataTable
-  sortable
-  title="Load balancers"
-  description="Your organization's active load balancers."
   headers="{[
     { key: 'name', value: 'Name' },
     { key: 'protocol', value: 'Protocol' },
@@ -29,6 +29,8 @@
     { key: 'rule', value: 'Rule' },
   ]}"
   rows="{rows}"
+  pageSize="{pageSize}"
+  page="{page}"
 >
   <Toolbar>
     <ToolbarContent>
@@ -41,15 +43,15 @@
             row.rule.toLowerCase().includes(value.toLowerCase())
           );
         }}"
+        bind:filteredRowIds
       />
-      <ToolbarMenu>
-        <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
-        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">
-          API documentation
-        </ToolbarMenuItem>
-        <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
-      </ToolbarMenu>
-      <Button>Create balancer</Button>
     </ToolbarContent>
   </Toolbar>
 </DataTable>
+
+<Pagination
+  bind:pageSize
+  bind:page
+  totalItems="{filteredRowIds.length}"
+  pageSizeInputDisabled
+/>
