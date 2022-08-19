@@ -269,7 +269,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    thumbnailPath: './thumbnails/inline-loading.svg'
+    thumbnailPath: './thumbnails/inline-notification.svg'
     demoLinks:
       - type: storybook
         name: Storybook
