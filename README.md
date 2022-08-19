@@ -11,7 +11,7 @@ Design systems facilitate design and development through reuse, consistency, and
 The Carbon Svelte portfolio also includes:
 
 - **[Carbon Icons Svelte](https://github.com/carbon-design-system/carbon-icons-svelte)**: 1900+ Carbon icons as Svelte components
-- **[Carbon Pictograms Svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte)**: 700+ Carbon pictograms as Svelte components
+- **[Carbon Pictograms Svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte)**: 900+ Carbon pictograms as Svelte components
 - **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 20+ charts, powered by d3
 - **[Carbon Preprocess Svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte)**: Collection of Svelte preprocessors for Carbon
 
