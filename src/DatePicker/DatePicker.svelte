@@ -180,6 +180,11 @@
         return dispatch(event, detail);
       },
     });
+    calendar?.calendarContainer?.setAttribute("role", "application");
+    calendar?.calendarContainer?.setAttribute(
+      "aria-label",
+      "calendar-container"
+    );
   }
 
   onMount(() => {
