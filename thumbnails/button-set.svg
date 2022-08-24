@@ -1,8 +1,8 @@
 <svg width="640" height="360" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="button-set">
-<rect width="320" height="180" transform="scale(2)" fill="white"/>
+<rect width="320" height="180" transform="scale(2)"/>
 <rect id="Rectangle Copy 2" x="112" y="148" width="208" height="64" fill="#393939"/>
-<rect id="Rectangle Copy 4" x="318" y="148" width="2" height="64" fill="white"/>
+<rect id="Rectangle Copy 4" x="318" y="148" width="2" height="64"/>
 <rect id="Rectangle Copy 3" x="320" y="148" width="208" height="64" fill="#0E62FE"/>
 <g id="Cancel">
 <path d="M144.137 190.288C146.921 190.288 148.961 188.824 150.017 186.472L148.409 185.464C147.737 187.288 146.273 188.488 144.137 188.488C141.257 188.488 139.553 186.4 139.553 182.968V180.472C139.553 177.04 141.257 174.76 144.137 174.76C146.201 174.76 147.593 175.888 148.265 177.616L149.897 176.632C148.841 174.304 146.921 172.96 144.137 172.96C139.913 172.96 137.393 176.128 137.393 181.72C137.393 187.312 139.913 190.288 144.137 190.288Z" fill="#F4F4F4"/>
