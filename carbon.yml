@@ -2,7 +2,7 @@
 library:
   id: carbon-components-svelte
   name: Carbon Svelte
-  description: Svelte implementation of Carbon Components.
+  description: Build user interfaces with Carbon's core components.
   externalDocsUrl: https://carbon-components-svelte.onrender.com
   inherits: carbon-styles
 assets:
@@ -269,7 +269,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    thumbnailPath: './thumbnails/inline-loading.svg'
+    thumbnailPath: './thumbnails/inline-notification.svg'
     demoLinks:
       - type: storybook
         name: Storybook
