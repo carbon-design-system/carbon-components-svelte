@@ -1,7 +1,10 @@
-const fs = require("fs");
-const glob = require("glob");
-const { sveld } = require("sveld");
-const pkg = require("../package.json");
+import fs from "fs";
+import glob from "glob";
+import { sveld } from "sveld";
+
+const pkg = JSON.parse(
+  fs.readFileSync(new URL("../package.json", import.meta.url), "utf8")
+);
 
 sveld({
   glob: true,
