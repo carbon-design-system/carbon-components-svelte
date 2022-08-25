@@ -6,19 +6,17 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: actions/cache@v2
         id: yarn-cache
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Install dependencies and build the library
+      
+      - name: Test TypeScript definitions
         run: |
           yarn
-          yarn build:lib
           yarn test:types
