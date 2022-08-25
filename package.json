@@ -13,8 +13,7 @@
     "test:types": "svelte-check --workspace tests",
     "build:css": "node scripts/build-css",
     "build:docs": "node scripts/build-docs",
-    "build:lib": "rollup -c",
-    "prepack": "yarn build:docs & yarn build:lib",
+    "prepack": "yarn build:docs",
     "format": "prettier --write \"./**/*.{svelte,js,md}\"",
     "prepare": "husky install"
   },
@@ -22,8 +21,6 @@
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^21.0.3",
-    "@rollup/plugin-node-resolve": "^13.3.0",
     "@tsconfig/svelte": "^3.0.0",
     "autoprefixer": "^10.4.8",
     "carbon-components": "10.56.0",
@@ -33,9 +30,6 @@
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
-    "rollup": "^2.78.1",
-    "rollup-plugin-svelte": "^7.1.0",
-    "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.49.11",
     "sveld": "^0.17.2",
     "svelte": "^3.46.6",
@@ -65,7 +59,6 @@
     "carbon design system"
   ],
   "files": [
-    "lib",
     "src",
     "types",
     "css"
