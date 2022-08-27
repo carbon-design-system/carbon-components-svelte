@@ -50,8 +50,9 @@
     </svelte:fragment>
 
     <span slot="platform" class="platform-name">
-      Carbon Components Svelte
-      <code>v{process.env.VERSION || ""}</code>
+      Carbon Components Svelte &nbsp;<code class="code-01"
+        >v{process.env.VERSION || ""}</code
+      >
     </span>
 
     <HeaderUtilities>
@@ -133,15 +134,6 @@
   .platform-name {
     display: flex;
     align-items: baseline;
-  }
-
-  .platform-name code {
-    margin-left: var(--cds-spacing-02);
-    font-size: var(--cds-code-01-font-size);
-    font-weight: var(--cds-code-01-font-weight);
-    letter-spacing: var(--cds-code-01-letter-spacing);
-    line-height: var(--cds-code-01-line-height);
-    color: #c6c6c6;
   }
 
   @media (max-width: 580px) {

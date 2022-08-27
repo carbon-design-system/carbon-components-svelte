@@ -18,7 +18,9 @@ components: ["OverflowMenu", "OverflowMenuItem"]
 
 ## Flipped
 
-<OverflowMenu open flipped>
+Set `flipped` to `true` for the menu to be positioned to the left of the button.
+
+<OverflowMenu flipped>
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />

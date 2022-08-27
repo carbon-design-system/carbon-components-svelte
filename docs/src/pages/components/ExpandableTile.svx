@@ -3,7 +3,7 @@ source: Tile/ExpandableTile.svelte
 ---
 
 <script>
-  import { ExpandableTile } from "carbon-components-svelte";
+  import { ExpandableTile, Button } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -32,5 +32,25 @@ source: Tile/ExpandableTile.svelte
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <div slot="above" style="height: 10rem">Above the fold content here</div>
+  <div slot="below" style="height: 10rem">Below the fold content here</div>
+</ExpandableTile>
+
+## With interactive content
+
+For tiles containing interactive content, use `stopPropagation` to prevent the tile from toggling.
+
+<ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
+  <div slot="above" style="height: 10rem">
+    <a href="/" on:click|preventDefault|stopPropagation={() => console.log("Hello world")}>
+      Native element
+    </a>
+    <br /><br />
+    <Button on:click={e => {
+      e.stopPropagation();
+      console.log("Hello world");
+    }}>
+      Svelte component
+    </Button>
+  </div>
   <div slot="below" style="height: 10rem">Below the fold content here</div>
 </ExpandableTile>
