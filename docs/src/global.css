@@ -177,6 +177,13 @@ html[theme="g90"] .code-override {
   overflow-y: auto;
 }
 
+.code-01 {
+  font-size: var(--cds-code-01-font-size);
+  font-weight: var(--cds-code-01-font-weight);
+  letter-spacing: var(--cds-code-01-letter-spacing);
+  line-height: var(--cds-code-01-line-height);
+}
+
 .body-short-01 {
   font-size: var(--cds-body-short-01-font-size);
   font-weight: var(--cds-body-short-01-font-weight);

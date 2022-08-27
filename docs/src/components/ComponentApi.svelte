@@ -95,16 +95,18 @@
                       {type}
                     </OutboundLink>
                   {:else if type in typeMap}
-                    <code>{typeMap[type]}</code>
+                    <code class="code-01">{typeMap[type]}</code>
                   {:else if type.startsWith("(")}
-                    <code>{type}</code>
+                    <code class="code-01">{type}</code>
                   {:else}
                     <InlineSnippet code="{type}" />
                   {/if}
                 </div>
               {/each}
             </StructuredListCell>
-            <StructuredListCell><code>{prop.value}</code></StructuredListCell>
+            <StructuredListCell
+              ><code class="code-01">{prop.value}</code></StructuredListCell
+            >
             <StructuredListCell>
               {#if prop.description}
                 {#each prop.description.split("\n") as line}
