@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.70.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.2) - 2022-08-29
+
+**Fixes**
+
+- allow `$$restProps.style` to be correctly set on `Content`
+
 ## [0.70.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.1) - 2022-08-23
 
 **Fixes**
