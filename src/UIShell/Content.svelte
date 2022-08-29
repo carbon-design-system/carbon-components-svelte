@@ -18,7 +18,7 @@
   id="{id}"
   class:bx--content="{true}"
   {...$$restProps}
-  style="{unsetLeftMargin && 'margin-left: 0;'} {$$restProps.style}}"
+  style="{unsetLeftMargin ? 'margin-left: 0;' : ''} {$$restProps.style}"
 >
   <slot />
 </main>
