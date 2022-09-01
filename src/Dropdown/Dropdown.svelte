@@ -236,6 +236,8 @@
           change(1);
         } else if (key === 'ArrowUp') {
           change(-1);
+        } else if (key === 'Escape') {
+          open = false;
         }
       }}"
       disabled="{disabled}"
