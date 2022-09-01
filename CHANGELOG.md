@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.70.3](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.3) - 2022-08-31
+
+**Fixes**
+
+- close menu in `Dropdown`, `MultiSelect` when pressing "Escape"
+- prevent default behavior in `ComboBox` when pressing "Enter," "ArrowUp," or "ArrowDown"
+- scroll item into view when keyboard navigating `Dropdown`, `ComboBox`, `MultiSelect`
+
 ## [0.70.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.2) - 2022-08-29
 
 **Fixes**
