@@ -14,7 +14,7 @@
   $: title = isTruncated ? ref?.innerText : undefined;
   $: if (highlighted && !ref?.matches(":hover")) {
     // Scroll highlighted item into view if using keyboard navigation
-    ref.scrollIntoView({ block: "end" });
+    ref.scrollIntoView({ block: "nearest" });
   }
 </script>
 
