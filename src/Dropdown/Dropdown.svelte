@@ -261,7 +261,7 @@
           <ListBoxMenuItem
             id="{item.id}"
             active="{selectedId === item.id}"
-            highlighted="{highlightedIndex === i || selectedId === item.id}"
+            highlighted="{highlightedIndex === i}"
             disabled="{item.disabled}"
             on:click="{(e) => {
               if (item.disabled) {
