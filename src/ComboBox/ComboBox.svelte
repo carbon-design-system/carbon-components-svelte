@@ -284,7 +284,11 @@
           }
         }}"
         on:keydown
-        on:keydown|stopPropagation="{({ key }) => {
+        on:keydown|stopPropagation="{(e) => {
+          const { key } = e;
+          if (['Enter', 'ArrowDown', 'ArrowUp'].includes(key)) {
+            e.preventDefault();
+          }
           if (key === 'Enter') {
             open = !open;
             if (
