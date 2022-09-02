@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.70.5](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.5) - 2022-09-02
+
+**Fixes**
+
+- avoid left margin style if `Button` is icon-only
+
 ## [0.70.4](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.4) - 2022-08-31
 
 **Fixes**
