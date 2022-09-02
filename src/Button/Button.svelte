@@ -175,7 +175,7 @@
     <slot /><svelte:component
       this="{icon}"
       aria-hidden="true"
-      class="bx--btn__icon"
+      class="{hasIconOnly ? '' : 'bx--btn__icon'}"
       aria-label="{iconDescription}"
     />
   </button>
