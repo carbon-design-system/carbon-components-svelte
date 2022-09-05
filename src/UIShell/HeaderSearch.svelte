@@ -61,10 +61,11 @@
 
 <div bind:this="{refSearch}" role="search" class:active>
   <label for="search-input" id="search-label">Search</label>
-  <div role="combobox" aria-expanded="{active}">
+  <div aria-owns="search-menu" aria-haspopup="menu">
     <button
       type="button"
       aria-label="Search"
+      aria-expanded="{active}"
       tabindex="{active ? '-1' : '0'}"
       class:bx--header__action="{true}"
       class:disabled="{active}"
@@ -83,6 +84,8 @@
       class:active
       {...$$restProps}
       id="search-input"
+      aria-autocomplete="list"
+      aria-controls="search-menu"
       aria-activedescendant="{selectedId}"
       bind:value
       on:change
@@ -133,7 +136,7 @@
   {#if active && results.length > 0}
     <ul aria-labelledby="search-label" role="menu" id="search-menu">
       {#each results as result, i}
-        <li>
+        <li role="none">
           <a
             tabindex="-1"
             id="search-menuitem-{i}"

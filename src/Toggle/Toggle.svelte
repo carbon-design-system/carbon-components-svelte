@@ -53,6 +53,7 @@
   on:mouseenter
   on:mouseleave
 >
+  <!-- svelte-ignore a11y-role-has-required-aria-props -->
   <input
     role="switch"
     type="checkbox"
