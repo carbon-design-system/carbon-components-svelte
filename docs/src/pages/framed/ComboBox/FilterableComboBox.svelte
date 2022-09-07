@@ -1,6 +1,7 @@
 <script>
   import { ComboBox } from "carbon-components-svelte";
 
+  let selectedId
   function shouldFilterItem(item, value) {
     if (!value) return true;
     return item.text.toLowerCase().includes(value.toLowerCase());
@@ -8,6 +9,7 @@
 </script>
 
 <ComboBox
+  bind:selectedId
   titleText="Contact"
   placeholder="Select contact method"
   items="{[
@@ -16,4 +18,5 @@
     { id: '2', text: 'Fax' },
   ]}"
   shouldFilterItem="{shouldFilterItem}"
+  helperText="selectedId: {selectedId}"
 />

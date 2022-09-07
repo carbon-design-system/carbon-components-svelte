@@ -289,7 +289,7 @@
           if (['Enter', 'ArrowDown', 'ArrowUp'].includes(key)) {
             e.preventDefault();
           }
-          if (key === 'Enter') {
+          if (key === 'Enter' || key === 'Tab') {
             open = !open;
             if (
               highlightedIndex > -1 &&
@@ -317,8 +317,6 @@
               }
             }
             highlightedIndex = -1;
-          } else if (key === 'Tab') {
-            open = false;
           } else if (key === 'ArrowDown') {
             change(1);
           } else if (key === 'ArrowUp') {
