@@ -307,9 +307,9 @@
                 filteredItems.find(
                   (e) =>
                     e.text.toLowerCase() === value?.toLowerCase() && !e.disabled
-                ) ?? filteredItems.find((e) => !e.disabled);
+                );
               if (matchedItem) {
-                // typed value has matched or fallback to first enabled item
+                // typed value has matched or remains unchanged
                 open = false;
                 selectedItem = matchedItem;
                 value = itemToString(selectedItem);
