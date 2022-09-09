@@ -155,6 +155,7 @@ module.exports = {
       },
     },
     mdsvex({
+      smartypants: false,
       remarkPlugins: [plugin, slug, carbonify],
       layout: {
         _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
