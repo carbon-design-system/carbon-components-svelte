@@ -168,7 +168,11 @@
 
         tabbable[index].focus();
         e.preventDefault();
-      } else if (shouldSubmitOnEnter && e.key === 'Enter') {
+      } else if (
+        shouldSubmitOnEnter &&
+        e.key === 'Enter' &&
+        !primaryButtonDisabled
+      ) {
         dispatch('submit');
         dispatch('click:button--primary');
       }
