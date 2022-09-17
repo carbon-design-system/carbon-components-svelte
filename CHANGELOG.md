@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.70.7](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.7) - 2022-09-17
+
+**Fixes**
+
+- prevent `submit` event on `Modal` if primary button is disabled
+
 ## [0.70.6](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.6) - 2022-09-05
 
 **Fixes**
