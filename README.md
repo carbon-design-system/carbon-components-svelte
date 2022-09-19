@@ -125,7 +125,7 @@ This is best suited for rapid prototyping.
 
 The most performant method to load styles is to import SCSS directly from carbon-components. Although it requires more set up, you can reduce the size of the bundle CSS by importing individual component styles instead of a pre-compiled CSS StyleSheet.
 
-Refer to the [official Carbon guide on SASS](https://github.com/carbon-design-system/carbon/blob/main/docs/guides/sass.md) for documentation.
+Refer to the [official Carbon guide on SASS](https://github.com/carbon-design-system/carbon/blob/v10/docs/guides/sass.md) for documentation.
 
 ### Dynamic theming
 
