@@ -113,4 +113,5 @@
   }}"
   on:keyup
   on:keydown
+  on:paste
 />
