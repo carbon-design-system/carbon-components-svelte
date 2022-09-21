@@ -111,4 +111,6 @@
   on:blur="{() => {
     expanded = !persistent && !!value.length;
   }}"
+  on:keyup
+  on:keydown
 />
