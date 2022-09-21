@@ -13873,7 +13873,10 @@
         { "type": "forwarded", "name": "change", "element": "Search" },
         { "type": "forwarded", "name": "input", "element": "Search" },
         { "type": "forwarded", "name": "focus", "element": "Search" },
-        { "type": "forwarded", "name": "blur", "element": "Search" }
+        { "type": "forwarded", "name": "blur", "element": "Search" },
+        { "type": "forwarded", "name": "keyup", "element": "Search" },
+        { "type": "forwarded", "name": "keydown", "element": "Search" },
+        { "type": "forwarded", "name": "paste", "element": "Search" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "input" }

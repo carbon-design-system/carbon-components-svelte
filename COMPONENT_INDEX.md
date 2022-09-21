@@ -4522,6 +4522,9 @@ None.
 | input      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
+| keyup      | forwarded | --     |
+| keydown    | forwarded | --     |
+| paste      | forwarded | --     |
 
 ## `Tooltip`
 
