@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.70.9](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.9) - 2022-09-23
+
+**Fixes**
+
+- fix visual regression in next/previous buttons in `Pagination`, `PaginationNav`
+
 ## [0.70.8](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.8) - 2022-09-21
 
 **Fixes**
