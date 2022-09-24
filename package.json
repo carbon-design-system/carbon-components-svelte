@@ -24,11 +24,11 @@
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
+    "@carbon/styles": "^1.13.0",
     "@rollup/plugin-commonjs": "^21.0.3",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@tsconfig/svelte": "^4.0.1",
     "autoprefixer": "^10.4.8",
-    "carbon-components": "10.57.0",
     "carbon-icons-svelte": "^12.1.0",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
