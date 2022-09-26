@@ -8405,8 +8405,8 @@
       "events": [
         {
           "type": "dispatched",
-          "name": "update",
-          "detail": "{ pageSize: number; page: number; }"
+          "name": "change",
+          "detail": "{ page?: number; pageSize?: number }"
         },
         {
           "type": "dispatched",
@@ -8417,6 +8417,11 @@
           "type": "dispatched",
           "name": "click:button--next",
           "detail": "{ page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "update",
+          "detail": "{ pageSize: number; page: number; }"
         }
       ],
       "typedefs": [],

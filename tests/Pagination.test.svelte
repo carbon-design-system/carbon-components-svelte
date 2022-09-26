@@ -5,6 +5,9 @@
 <Pagination
   totalItems="{102}"
   pageSizes="{[10, 15, 20]}"
+  on:change="{(e) => {
+    console.log(e.detail); // { pageSize?: number, page?: number }
+  }}"
   on:update="{(e) => {
     console.log(e.detail); // { pageSize: number; page: number; }
   }}"
