@@ -10252,8 +10252,8 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "change", "detail": "string | number" },
-        { "type": "forwarded", "name": "input", "element": "select" },
+        { "type": "dispatched", "name": "input", "detail": "string | number" },
+        { "type": "forwarded", "name": "change", "element": "select" },
         { "type": "forwarded", "name": "focus", "element": "select" },
         { "type": "forwarded", "name": "blur", "element": "select" }
       ],

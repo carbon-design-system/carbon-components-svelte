@@ -109,8 +109,8 @@ export interface SelectProps
 export default class Select extends SvelteComponentTyped<
   SelectProps,
   {
-    change: CustomEvent<string | number>;
-    input: WindowEventMap["input"];
+    input: CustomEvent<string | number>;
+    change: WindowEventMap["change"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },

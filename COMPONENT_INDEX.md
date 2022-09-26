@@ -3179,8 +3179,8 @@ None.
 
 | Event name | Type       | Detail                            |
 | :--------- | :--------- | :-------------------------------- |
-| change     | dispatched | <code>string &#124; number</code> |
-| input      | forwarded  | --                                |
+| input      | dispatched | <code>string &#124; number</code> |
+| change     | forwarded  | --                                |
 | focus      | forwarded  | --                                |
 | blur       | forwarded  | --                                |
 
