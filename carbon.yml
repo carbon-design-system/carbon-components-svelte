@@ -5,6 +5,9 @@ library:
   description: Build user interfaces with Carbon's core components.
   externalDocsUrl: https://carbon-components-svelte.onrender.com
   inherits: carbon-styles
+  navData:
+  - title: Get started
+    path: "https://github.com/carbon-design-system/carbon-website/blob/carbon-platform/src/pages/developing/frameworks/svelte.mdx"
   designKits:
     carbon-white-sketch:
       $ref: https://unpkg.com/@carbon-platform/resources/carbon.yml#/designKits/carbon-white-sketch
