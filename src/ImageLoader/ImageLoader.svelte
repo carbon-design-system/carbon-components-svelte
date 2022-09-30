@@ -86,7 +86,7 @@
       style="width: 100%;{$$restProps.style}"
       src="{src}"
       alt="{alt}"
-      transition:fade="{{ duration: fadeIn ? fast02 : 0 }}"
+      transition:fade|local="{{ duration: fadeIn ? fast02 : 0 }}"
     />
   {/if}
   {#if error}
@@ -103,7 +103,7 @@
         style="width: 100%;{$$restProps.style}"
         src="{src}"
         alt="{alt}"
-        transition:fade="{{ duration: fadeIn ? fast02 : 0 }}"
+        transition:fade|local="{{ duration: fadeIn ? fast02 : 0 }}"
       />
     {/if}
     {#if error}
