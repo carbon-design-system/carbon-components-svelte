@@ -197,7 +197,7 @@
     outline-offset: -2px;
   }
 
-  [role="combobox"] {
+  [aria-haspopup="menu"] {
     display: flex;
     flex-grow: 1;
     border-bottom: 1px solid #393939;
