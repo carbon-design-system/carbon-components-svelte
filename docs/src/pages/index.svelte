@@ -12,7 +12,6 @@
     OutboundLink,
     RadioButtonGroup,
     RadioButton,
-    InlineNotification,
   } from "carbon-components-svelte";
   import TileCard from "../components/TileCard.svelte";
   import { theme } from "../store";
@@ -92,13 +91,6 @@
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column max="{10}" xlg="{10}">
         <h2 style="margin-top: var(--cds-layout-02)">Installation</h2>
-        <InlineNotification
-          style="max-width: calc(48rem - 1rem);"
-          kind="info"
-          subtitle="A minimum Svelte version of 3.48.0 is required to use this library."
-          lowContrast
-          hideCloseButton
-        />
       </Column>
     </Row>
     <Row style="margin-bottom: var(--cds-layout-02)">
@@ -208,7 +200,7 @@
                 <OutboundLink
                   inline
                   size="lg"
-                  href="https://github.com/carbon-design-system/carbon/blob/main/docs/guides/sass.md"
+                  href="https://github.com/carbon-design-system/carbon/blob/v10/docs/guides/sass.md"
                 >
                   official Carbon guide on SASS
                 </OutboundLink>
