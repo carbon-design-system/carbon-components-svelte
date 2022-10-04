@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.70.10](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.10) - 2022-10-04
+
+**Fixes**
+
+- avoid element reference error in `ListBoxMenuItem`
+- display warn/invalid icons in `DatePickerInput` with calendar
+- fix layout regression in `HeaderSearch`
+- localize `HeaderAction`, `ImageLoader` transitions
+
 ## [0.70.9](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.9) - 2022-09-23
 
 **Fixes**
