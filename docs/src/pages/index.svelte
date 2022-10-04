@@ -208,7 +208,7 @@
                 <OutboundLink
                   inline
                   size="lg"
-                  href="https://github.com/carbon-design-system/carbon/blob/main/docs/guides/sass.md"
+                  href="https://github.com/carbon-design-system/carbon/blob/v10/docs/guides/sass.md"
                 >
                   official Carbon guide on SASS
                 </OutboundLink>
