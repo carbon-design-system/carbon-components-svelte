@@ -200,7 +200,7 @@ The preprocessor optimizes imports from the following packages:
 - [carbon-icons-svelte](https://github.com/carbon-design-system/carbon-icons-svelte)
 - [carbon-pictograms-svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte)
 
-**Example**
+**Before & After**
 
 ```diff
 - import { Button } from "carbon-components-svelte";
@@ -219,6 +219,21 @@ import { optimizeImports } from "carbon-preprocess-svelte";
 
 export default {
   preprocess: [optimizeImports()],
+};
+```
+
+`svelte-preprocess` should be invoked before any preprocessor from `carbon-preprocess-svelte`.
+
+```diff
+// svelte.config.js
++ import sveltePreprocess from "svelte-preprocess";
+import { optimizeImports } from "carbon-preprocess-svelte";
+
+export default {
+  preprocess: [
++   sveltePreprocess(),
+    optimizeImports()
+  ],
 };
 ```
 
