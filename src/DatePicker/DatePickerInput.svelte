@@ -138,19 +138,17 @@
       }}"
       on:paste
     />
-    {#if !$hasCalendar}
-      {#if invalid}
-        <WarningFilled
-          class="bx--date-picker__icon bx--date-picker__icon--invalid"
-        />
-      {/if}
-      {#if !invalid && warn}
-        <WarningAltFilled
-          class="bx--date-picker__icon bx--date-picker__icon--warn"
-        />
-      {/if}
+    {#if invalid}
+      <WarningFilled
+        class="bx--date-picker__icon bx--date-picker__icon--invalid"
+      />
     {/if}
-    {#if $hasCalendar}
+    {#if !invalid && warn}
+      <WarningAltFilled
+        class="bx--date-picker__icon bx--date-picker__icon--warn"
+      />
+    {/if}
+    {#if $hasCalendar && !invalid && !warn}
       <Calendar
         class="bx--date-picker__icon"
         aria-label="{iconDescription}"
