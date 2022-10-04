@@ -88,7 +88,7 @@
     bind:this="{refPanel}"
     class:bx--header-panel="{true}"
     class:bx--header-panel--expanded="{true}"
-    transition:slide="{{
+    transition:slide|local="{{
       ...transition,
       duration: transition === false ? 0 : transition.duration,
     }}"
