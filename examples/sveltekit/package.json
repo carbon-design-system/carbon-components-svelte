@@ -7,11 +7,11 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@sveltejs/kit": "1.0.0-next.470",
-    "carbon-components-svelte": "^0.70.6",
+    "@sveltejs/kit": "1.0.0-next.511",
+    "carbon-components-svelte": "^0.70.10",
     "carbon-pictograms-svelte": "^12.2.0",
     "carbon-preprocess-svelte": "^0.9.1",
-    "svelte": "^3.50.0",
-    "vite": "^3.1.0"
+    "svelte": "^3.50.1",
+    "vite": "^3.1.6"
   }
 }
