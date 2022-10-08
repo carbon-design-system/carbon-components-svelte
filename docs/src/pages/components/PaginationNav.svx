@@ -9,6 +9,12 @@
 
 <PaginationNav />
 
+## Reactive example
+
+Use the `page` prop to bind to the current page number.
+
+<FileSource src="/framed/PaginationNav/PaginationNavReactive" />
+
 ## Total
 
 Use the `total` prop to specify the number of pages.

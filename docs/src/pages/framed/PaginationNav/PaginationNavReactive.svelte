@@ -1,0 +1,16 @@
+<script>
+  import { PaginationNav, Button } from "carbon-components-svelte";
+
+  let page = 2;
+</script>
+
+<PaginationNav bind:page />
+
+<div style="margin: var(--cds-layout-01) 0">
+  <Button on:click="{() => (page = 0)}" disabled="{page === 0}">
+    Set page to 0
+  </Button>
+</div>
+
+<strong>page:</strong>
+{page}
