@@ -5,8 +5,41 @@
 
 ## Default
 
+`PaginationNav` renders `10` items and does not loop by default.
+
 <PaginationNav />
+
+## Reactive example
+
+Use the `page` prop to bind to the current page number.
+
+<FileSource src="/framed/PaginationNav/PaginationNavReactive" />
+
+## Total
+
+Use the `total` prop to specify the number of pages.
+
+<PaginationNav total={3} />
 
 ## Loopable
 
+Set `loop` to `true` for navigation to be looped.
+
 <PaginationNav total={3} loop />
+
+## Shown
+
+If `total` is greater than `10`, the number of items shown will be truncated to `10`.
+
+Use `shown` to override the number of items shown.
+
+<PaginationNav total={100} shown={5}  />
+
+## Custom button text
+
+Use the `forwardText` and `backwardText` props to customize the button text.
+
+<PaginationNav
+  forwardText="Next"
+  backwardText="Previous"
+/>
