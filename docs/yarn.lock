@@ -15,6 +15,11 @@
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.14.54.tgz#de2a4be678bd4d0d1ffbb86e6de779cde5999028"
   integrity sha512-bZBrLAIX1kpWelV0XemxBZllyRmM6vgFQQG2GdNb+r3Fkp0FOh1NJSvekXDs7jq70k4euu1cryLMfU+mTXlEpw==
 
+"@ibm/plex@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@ibm/plex/-/plex-6.1.1.tgz#eddfd98fe86ecafc74bc8ec7595e7615bb88eb34"
+  integrity sha512-b2z/Gsc8KHOVrYo/yPauRvRDNMwF6zhEZZsvogs1rCmmyfVXBTY9uUkf6TyplhQs/L4UcjBus8R/RDp7yASTBA==
+
 "@jridgewell/gen-mapping@^0.3.0":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.3.tgz#7e02e6eb5df901aaedb08514203b096614024098"
