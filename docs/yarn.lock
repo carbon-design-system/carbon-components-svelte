@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.14.54.tgz#de2a4be678bd4d0d1ffbb86e6de779cde5999028"
   integrity sha512-bZBrLAIX1kpWelV0XemxBZllyRmM6vgFQQG2GdNb+r3Fkp0FOh1NJSvekXDs7jq70k4euu1cryLMfU+mTXlEpw==
 
+"@ibm/plex@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@ibm/plex/-/plex-6.1.1.tgz#eddfd98fe86ecafc74bc8ec7595e7615bb88eb34"
+  integrity sha512-b2z/Gsc8KHOVrYo/yPauRvRDNMwF6zhEZZsvogs1rCmmyfVXBTY9uUkf6TyplhQs/L4UcjBus8R/RDp7yASTBA==
+
 "@rollup/pluginutils@^4.2.1":
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.2.1.tgz#e6c6c3aba0744edce3fb2074922d3776c0af2a6d"
@@ -165,7 +170,7 @@ bufferutil@^4.0.1:
     node-gyp-build "~3.7.0"
 
 carbon-components-svelte@../:
-  version "0.70.1"
+  version "0.70.9"
   dependencies:
     flatpickr "4.6.9"
 

@@ -1,0 +1,8 @@
+@use '@carbon/styles' with ($prefix: 'bx');
+@use '@carbon/themes';
+@use '@ibm/plex/scss/ibm-plex.scss';
+
+:root {
+  // Emit CSS Custom Properties for the current theme
+  @include themes.theme();
+}
