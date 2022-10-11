@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: carbon-components-svelte
+    name: carbon-components-svelte-v11
     env: static
     buildCommand: cd docs; yarn; yarn build
     staticPublishPath: docs/dist
