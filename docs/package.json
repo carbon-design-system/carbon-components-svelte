@@ -10,6 +10,7 @@
     "build:svite": "vite build"
   },
   "devDependencies": {
+    "@ibm/plex": "^6.1.1",
     "@sveltech/routify": "^1.9.10",
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "carbon-components-svelte": "../",

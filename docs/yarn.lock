@@ -120,6 +120,11 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.19.9.tgz#b2da6219b603e3fa371a78f53f5361260d0c5585"
   integrity sha512-oxoQgglOP7RH6iasDrhY+R/3cHrfwIDvRlT4CGChflq6twk8iENeVvMJjmvBb94Ik1Z+93iGO27err7w6l54GQ==
 
+"@ibm/plex@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@ibm/plex/-/plex-6.1.1.tgz#eddfd98fe86ecafc74bc8ec7595e7615bb88eb34"
+  integrity sha512-b2z/Gsc8KHOVrYo/yPauRvRDNMwF6zhEZZsvogs1rCmmyfVXBTY9uUkf6TyplhQs/L4UcjBus8R/RDp7yASTBA==
+
 "@jridgewell/gen-mapping@^0.3.0":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.3.tgz#7e02e6eb5df901aaedb08514203b096614024098"
@@ -399,7 +404,7 @@ bufferutil@^4.0.1:
     node-gyp-build "~3.7.0"
 
 carbon-components-svelte@../:
-  version "0.82.5"
+  version "0.82.7"
   dependencies:
     flatpickr "4.6.9"
 
