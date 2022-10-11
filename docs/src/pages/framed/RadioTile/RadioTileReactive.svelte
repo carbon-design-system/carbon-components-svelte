@@ -26,6 +26,6 @@
 
 <style>
   div {
-    margin: var(--cds-spacing-05) 0;
+    margin: var(--bx-spacing-05) 0;
   }
 </style>

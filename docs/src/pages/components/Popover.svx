@@ -10,7 +10,7 @@ By default, the position of the popover component is absolute.
 <div data-outline>
     Parent
     <Popover open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        <div style="padding: var(--bx-spacing-05)">Content</div>
     </Popover>
 </div>
 
@@ -21,7 +21,7 @@ Set `relative` to `true` to use a relative position.
 <div data-outline>
     Parent
     <Popover relative open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        <div style="padding: var(--bx-spacing-05)">Content</div>
     </Popover>
 </div>
 
@@ -32,7 +32,7 @@ Set `closeOnOutsideClick` to set `open` to `false` when clicking outside of the 
 <div data-outline>
     Parent
     <Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        <div style="padding: var(--bx-spacing-05)">Content</div>
     </Popover>
 </div>
 
@@ -45,67 +45,67 @@ The default `align` value is `"top"`.
 <div data-outline>
     Parent
     <Popover open align="top-left">
-        <div style="padding: var(--cds-spacing-05)">top-left</div>
+        <div style="padding: var(--bx-spacing-05)">top-left</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="top-right">
-        <div style="padding: var(--cds-spacing-05)">top-right</div>
+        <div style="padding: var(--bx-spacing-05)">top-right</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="bottom">
-        <div style="padding: var(--cds-spacing-05)">bottom</div>
+        <div style="padding: var(--bx-spacing-05)">bottom</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="bottom-left">
-        <div style="padding: var(--cds-spacing-05)">bottom-left</div>
+        <div style="padding: var(--bx-spacing-05)">bottom-left</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="bottom-right">
-        <div style="padding: var(--cds-spacing-05)">bottom-right</div>
+        <div style="padding: var(--bx-spacing-05)">bottom-right</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="left">
-        <div style="padding: var(--cds-spacing-05)">left</div>
+        <div style="padding: var(--bx-spacing-05)">left</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="left-bottom">
-        <div style="padding: var(--cds-spacing-05)">left-bottom</div>
+        <div style="padding: var(--bx-spacing-05)">left-bottom</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="left-right">
-        <div style="padding: var(--cds-spacing-05)">left-right</div>
+        <div style="padding: var(--bx-spacing-05)">left-right</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="right">
-        <div style="padding: var(--cds-spacing-05)">right</div>
+        <div style="padding: var(--bx-spacing-05)">right</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="right-bottom">
-        <div style="padding: var(--cds-spacing-05)">right-bottom</div>
+        <div style="padding: var(--bx-spacing-05)">right-bottom</div>
     </Popover>
 </div>
 <div data-outline>
     Parent
     <Popover open align="right-top">
-        <div style="padding: var(--cds-spacing-05)">right-top</div>
+        <div style="padding: var(--bx-spacing-05)">right-top</div>
     </Popover>
 </div>
 
@@ -114,7 +114,7 @@ The default `align` value is `"top"`.
 <div data-outline>
     Parent
     <Popover caret open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        <div style="padding: var(--bx-spacing-05)">Content</div>
     </Popover>
 </div>
 
@@ -127,7 +127,7 @@ Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`
 <div data-outline>
     Parent
     <Popover caret align="top-left" open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        <div style="padding: var(--bx-spacing-05)">Content</div>
     </Popover>
 </div>
 
@@ -136,7 +136,7 @@ Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`
 <div data-outline>
     Parent
     <Popover light open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        <div style="padding: var(--bx-spacing-05)">Content</div>
     </Popover>
 </div>
 
@@ -145,7 +145,7 @@ Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`
 <div data-outline>
     Parent
     <Popover highContrast open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        <div style="padding: var(--bx-spacing-05)">Content</div>
     </Popover>
 </div>
 

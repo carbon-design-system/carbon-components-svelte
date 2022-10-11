@@ -16,7 +16,7 @@
   helperText="{helperText}"
 />
 
-<ButtonSet style="margin-top: var(--cds-spacing-08)">
+<ButtonSet style="margin-top: var(--bx-spacing-08)">
   <Button
     disabled="{value > 0}"
     on:click="{() => {
