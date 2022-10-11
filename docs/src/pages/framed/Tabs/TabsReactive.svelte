@@ -15,7 +15,7 @@
   </svelte:fragment>
 </Tabs>
 
-<div style="margin: var(--cds-layout-01) 0">
+<div style="margin: var(--bx-layout-01) 0">
   <Button on:click="{() => (selected = 1)}">Set index to 1</Button>
 </div>
 

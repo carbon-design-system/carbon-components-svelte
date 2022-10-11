@@ -17,10 +17,10 @@
 <style>
   p,
   h1 {
-    margin-bottom: var(--cds-spacing-08);
+    margin-bottom: var(--bx-spacing-08);
   }
 
   h6 {
-    margin-bottom: var(--cds-spacing-03);
+    margin-bottom: var(--bx-spacing-03);
   }
 </style>

@@ -12,7 +12,7 @@
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-<div style="margin: var(--cds-layout-01) 0">
+<div style="margin: var(--bx-layout-01) 0">
   Selected: <strong>{selected}</strong>
 </div>
 

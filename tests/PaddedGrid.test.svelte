@@ -4,16 +4,16 @@
 
 <Grid padding>
   <Row padding>
-    <Column padding style="outline: 1px solid var(--cds-interactive-04)">
+    <Column padding style="outline: 1px solid var(--bx-interactive-04)">
       Column
     </Column>
-    <Column padding style="outline: 1px solid var(--cds-interactive-04)">
+    <Column padding style="outline: 1px solid var(--bx-interactive-04)">
       Column
     </Column>
-    <Column padding style="outline: 1px solid var(--cds-interactive-04)">
+    <Column padding style="outline: 1px solid var(--bx-interactive-04)">
       Column
     </Column>
-    <Column padding style="outline: 1px solid var(--cds-interactive-04)">
+    <Column padding style="outline: 1px solid var(--bx-interactive-04)">
       Column
     </Column>
   </Row>

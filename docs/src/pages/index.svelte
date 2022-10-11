@@ -88,12 +88,12 @@
         </p>
       </Column>
     </Row>
-    <Row style="margin-bottom: var(--cds-layout-02)">
+    <Row style="margin-bottom: var(--bx-layout-02)">
       <Column max="{10}" xlg="{10}">
         <h2 style="margin-top: var(--cds-layout-02)">Installation</h2>
       </Column>
     </Row>
-    <Row style="margin-bottom: var(--cds-layout-02)">
+    <Row style="margin-bottom: var(--bx-layout-02)">
       <Column noGutter>
         <Tabs>
           <Tab label="Yarn" />
@@ -113,7 +113,7 @@
         </Tabs>
       </Column>
     </Row>
-    <Row style="margin-bottom: var(--cds-layout-04)">
+    <Row style="margin-bottom: var(--bx-layout-04)">
       <Column>
         <h2>Styling</h2>
         <p>
@@ -122,7 +122,7 @@
           light, 3 dark).
         </p>
         <RadioButtonGroup
-          style="margin-top: var(--cds-spacing-08)"
+          style="margin-top: var(--bx-spacing-08)"
           legendText="Carbon themes"
           bind:selected="{$theme}"
         >
@@ -212,7 +212,7 @@
       </Column>
     </Row>
 
-    <Row style="margin-bottom: var(--cds-layout-02)">
+    <Row style="margin-bottom: var(--bx-layout-02)">
       <Column>
         <h2>Dynamic theming</h2>
         <p>Use the "all.css" StyleSheet for dynamic, client-side theming.</p>
@@ -244,7 +244,7 @@
       </Column>
     </Row>
 
-    <Row style="margin-bottom: var(--cds-layout-02)">
+    <Row style="margin-bottom: var(--bx-layout-02)">
       <Column>
         <h2>Portfolio</h2>
         <p>
@@ -310,6 +310,6 @@
 
 <style>
   p {
-    margin-bottom: var(--cds-spacing-05);
+    margin-bottom: var(--bx-spacing-05);
   }
 </style>

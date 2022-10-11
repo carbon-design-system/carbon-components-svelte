@@ -48,11 +48,11 @@
 <style>
   div {
     position: absolute;
-    width: calc(100% - var(--cds-spacing-05));
-    height: calc(100% - var(--cds-spacing-06));
+    width: calc(100% - var(--bx-spacing-05));
+    height: calc(100% - var(--bx-spacing-06));
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--cds-text-02);
+    color: var(--bx-text-02);
   }
 </style>
