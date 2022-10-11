@@ -150,7 +150,7 @@
             {#each api_components as component (component.moduleName)}
               <Tab label="{component.moduleName}" />
             {/each}
-            <div slot="content" style="padding-top: var(--cds-spacing-06)">
+            <div slot="content" style="padding-top: var(--bx-spacing-06)">
               {#each api_components as component (component.moduleName)}
                 <TabContent>
                   <ComponentApi component="{component}" />
@@ -177,13 +177,13 @@
   .bar {
     display: flex;
     justify-content: space-between;
-    margin-bottom: var(--cds-layout-02);
-    border-bottom: 1px solid var(--cds-ui-03);
+    margin-bottom: var(--bx-layout-02);
+    border-bottom: 1px solid var(--bx-ui-03);
   }
 
   :global(.toc h5) {
-    margin-top: var(--cds-spacing-06);
-    margin-bottom: var(--cds-spacing-03);
+    margin-top: var(--bx-spacing-06);
+    margin-bottom: var(--bx-spacing-03);
   }
 
   .toc.mobile {
@@ -193,7 +193,7 @@
   @media (max-width: 1056px) {
     .toc.mobile {
       display: block;
-      margin-bottom: var(--cds-spacing-09);
+      margin-bottom: var(--bx-spacing-09);
     }
   }
 </style>

@@ -8,7 +8,7 @@
 
 <Toggle
   size="sm"
-  style="margin-bottom: var(--cds-spacing-05)"
+  style="margin-bottom: var(--bx-spacing-05)"
   labelText="Show code snippets"
   bind:toggled
 />

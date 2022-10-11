@@ -79,7 +79,7 @@
 
   $: if (typeof window !== "undefined") {
     Object.entries(tokens).forEach(([token, value]) => {
-      document.documentElement.style.setProperty(`--cds-${token}`, value);
+      document.documentElement.style.setProperty(`--bx-${token}`, value);
     });
 
     if (theme in themes) {

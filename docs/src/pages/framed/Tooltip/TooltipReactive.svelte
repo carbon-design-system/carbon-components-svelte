@@ -8,7 +8,7 @@
   <p>Resources are provisioned based on your account's organization.</p>
 </Tooltip>
 
-<div style="margin-top: var(--cds-spacing-12);">
+<div style="margin-top: var(--bx-spacing-12);">
   <Button size="small" on:click="{() => (open = !open)}">
     {open ? "Close tooltip" : "Open tooltip"}
   </Button>
@@ -18,6 +18,6 @@
 
 <style>
   div {
-    margin-top: var(--cds-spacing-05);
+    margin-top: var(--bx-spacing-05);
   }
 </style>

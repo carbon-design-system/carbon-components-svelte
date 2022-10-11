@@ -16,5 +16,5 @@
     console.log('on:click:outside');
   }}"
 >
-  <div style="padding: var(--cds-spacing-05)">Content</div>
+  <div style="padding: var(--bx-spacing-05)">Content</div>
 </Popover>

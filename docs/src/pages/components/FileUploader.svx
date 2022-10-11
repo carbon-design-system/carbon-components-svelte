@@ -44,7 +44,7 @@ See the [item examples below](#item-uploading) for different statuses.
 
 There are two ways to clear files in `FileUploader`:
 
-<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+<UnorderedList svx-ignore style="margin-bottom: var(--bx-spacing-08)">
   <ListItem>programmatically using the <strong>clearFiles</strong> accessor</ListItem>
   <ListItem>two-way binding by setting <strong>files</strong> to <strong>[]</strong></ListItem>
 </UnorderedList>
@@ -111,7 +111,7 @@ The following example accepts files smaller than 1 kB.
 
 <FileUploaderDropContainer
   multiple
-  labelText="Drag and drop files here or click to upload" 
+  labelText="Drag and drop files here or click to upload"
   validateFiles={files => {
     return files.filter(file => file.size < 1_024)
   }}
