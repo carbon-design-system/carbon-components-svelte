@@ -8431,7 +8431,7 @@
           "kind": "let",
           "description": "Specify the current page index",
           "type": "number",
-          "value": "0",
+          "value": "1",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,

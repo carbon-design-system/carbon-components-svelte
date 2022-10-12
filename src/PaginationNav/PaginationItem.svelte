@@ -1,6 +1,6 @@
 <script>
   /** Specify the current page index */
-  export let page = 0;
+  export let page = 1;
 
   /** Set to `true` to use the active state */
   export let active = false;

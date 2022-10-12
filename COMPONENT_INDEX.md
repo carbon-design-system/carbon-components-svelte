@@ -2694,7 +2694,7 @@ None.
 
 | Prop name    | Required | Kind             | Reactive | Type                 | Default value                | Description                               |
 | :----------- | :------- | :--------------- | :------- | -------------------- | ---------------------------- | ----------------------------------------- |
-| page         | No       | <code>let</code> | Yes      | <code>number</code>  | <code>0</code>               | Specify the current page index            |
+| page         | No       | <code>let</code> | Yes      | <code>number</code>  | <code>1</code>               | Specify the current page index            |
 | total        | No       | <code>let</code> | No       | <code>number</code>  | <code>10</code>              | Specify the total number of pages         |
 | shown        | No       | <code>let</code> | No       | <code>number</code>  | <code>10</code>              | Specify the total number of pages to show |
 | loop         | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>           | Set to `true` to loop the navigation      |
