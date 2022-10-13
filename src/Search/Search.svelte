@@ -62,6 +62,12 @@
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
+  /**
+   * Specify a name attribute for the input
+   * @type {string}
+   */
+  export let name = undefined;
+
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
@@ -126,6 +132,7 @@
       autocomplete="{autocomplete}"
       disabled="{disabled}"
       id="{id}"
+      name="{name}"
       placeholder="{placeholder}"
       {...$$restProps}
       on:change

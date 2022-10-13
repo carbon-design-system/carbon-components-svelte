@@ -3097,6 +3097,7 @@ None.
 | labelText            | No       | <code>let</code> | No       | <code>string</code>                                  | <code>""</code>                                  | Specify the label text                                          |
 | icon                 | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code> | <code>undefined</code>                           | Specify the icon to render.<br />Defaults to `&lt;Search /&gt;` |
 | id                   | No       | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                 |
+| name                 | No       | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                           | Specify a name attribute for the input                          |
 
 ### Slots
 

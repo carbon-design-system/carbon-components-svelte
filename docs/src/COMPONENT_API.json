@@ -9951,6 +9951,17 @@
           "reactive": false
         },
         {
+          "name": "name",
+          "kind": "let",
+          "description": "Specify a name attribute for the input",
+          "type": "string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "ref",
           "kind": "let",
           "description": "Obtain a reference to the input HTML element",

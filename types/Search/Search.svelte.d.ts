@@ -94,6 +94,12 @@ export interface SearchProps {
   id?: string;
 
   /**
+   * Specify a name attribute for the input
+   * @default undefined
+   */
+  name?: string;
+
+  /**
    * Obtain a reference to the input HTML element
    * @default null
    */
