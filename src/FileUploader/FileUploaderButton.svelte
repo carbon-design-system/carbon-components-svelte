@@ -60,6 +60,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <label
   aria-disabled="{disabled}"
   for="{id}"

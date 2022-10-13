@@ -12,6 +12,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if label}
   <!-- svelte-ignore a11y-label-has-associated-control -->
+  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <label
     tabindex="{tabindex}"
     class:bx--structured-list-row="{true}"

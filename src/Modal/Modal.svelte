@@ -243,6 +243,7 @@
         </button>
       {/if}
     </div>
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       id="{modalBodyId}"
       class:bx--modal-content="{true}"

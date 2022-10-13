@@ -6,6 +6,7 @@
   export let hasScrollingContent = false;
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div
   tabindex="{hasScrollingContent ? '0' : undefined}"
   role="{hasScrollingContent ? 'region' : undefined}"

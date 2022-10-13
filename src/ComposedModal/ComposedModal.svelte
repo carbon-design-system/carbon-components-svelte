@@ -150,6 +150,7 @@
     }
   }}"
 >
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
     bind:this="{innerModal}"
     role="dialog"

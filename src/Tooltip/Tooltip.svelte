@@ -249,6 +249,7 @@
       on:keydown="{onKeydown}"
     >
       <span class:bx--tooltip__caret="{true}"></span>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         on:click|stopPropagation
         on:mousedown|stopPropagation
