@@ -2,6 +2,7 @@
   /**
    * @event {null} expand
    * @event {null} collapse
+   * @restProps {input}
    */
 
   /**
