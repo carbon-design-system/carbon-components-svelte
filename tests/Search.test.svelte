@@ -6,7 +6,7 @@
 
 <Search placeholder="Search catalog..." value="Cloud functions" />
 
-<Search light />
+<Search light name="search" dirname="search" />
 
 <Search size="lg" />
 
