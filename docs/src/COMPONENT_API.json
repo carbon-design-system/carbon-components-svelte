@@ -10001,7 +10001,7 @@
         { "type": "dispatched", "name": "clear", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "SearchSkeleton" }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "SearchSkeleton",
