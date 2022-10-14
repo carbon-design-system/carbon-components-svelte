@@ -215,6 +215,7 @@
     on:mouseenter
     on:mouseleave
   >
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       role="{type === 'single' ? 'textbox' : undefined}"
       tabindex="{type === 'single' && !disabled ? '0' : undefined}"

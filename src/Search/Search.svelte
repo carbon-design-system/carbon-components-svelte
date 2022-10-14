@@ -101,6 +101,7 @@
     class:bx--search--expanded="{expanded}"
     class="{searchClass}"
   >
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div
       bind:this="{searchRef}"
       class:bx--search-magnifier="{true}"

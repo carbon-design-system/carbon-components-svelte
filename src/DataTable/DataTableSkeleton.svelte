@@ -63,6 +63,7 @@
       </div>
     </section>
   {/if}
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <table
     class:bx--skeleton="{true}"
     class:bx--data-table="{true}"

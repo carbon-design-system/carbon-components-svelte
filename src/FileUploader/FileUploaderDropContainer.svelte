@@ -81,6 +81,7 @@
     }
   }}"
 >
+  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <label
     for="{id}"
     tabindex="{tabindex}"
