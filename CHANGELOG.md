@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.70.11](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.11) - 2022-10-13
+
+**Fixes**
+
+- ignore false positive a11y warnings from Svelte version 3.51
+- `NumberInput` with `allowInput` should not be invalid if `value` is `null`
+
 ## [0.70.10](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.10) - 2022-10-04
 
 **Fixes**
