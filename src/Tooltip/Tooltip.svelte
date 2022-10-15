@@ -42,7 +42,7 @@
   export let iconName = "";
 
   /** Set the button tabindex */
-  export let tabindex = "0";
+  export let tabindex = 0;
 
   /**
    * Set an id for the tooltip

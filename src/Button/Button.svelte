@@ -69,7 +69,7 @@
   export let href = undefined;
 
   /** Specify the tabindex */
-  export let tabindex = "0";
+  export let tabindex = 0;
 
   /** Specify the `type` attribute for the button element */
   export let type = "button";

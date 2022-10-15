@@ -31,7 +31,7 @@ export interface RadioTileProps
    * Specify the tabindex
    * @default "0"
    */
-  tabindex?: string;
+  tabindex?: number;
 
   /**
    * Specify the ARIA label for the radio tile checkmark icon

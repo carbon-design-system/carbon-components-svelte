@@ -54,7 +54,7 @@ export interface ToolbarSearchProps
    * Specify the tabindex
    * @default "0"
    */
-  tabindex?: string;
+  tabindex?: number;
 
   /**
    * Obtain a reference to the input HTML element

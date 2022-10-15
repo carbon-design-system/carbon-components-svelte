@@ -19,7 +19,7 @@ export interface StructuredListRowProps
    * Specify the tabindex
    * @default "0"
    */
-  tabindex?: string;
+  tabindex?: number;
 }
 
 export default class StructuredListRow extends SvelteComponentTyped<

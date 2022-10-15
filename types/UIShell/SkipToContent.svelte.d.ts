@@ -13,7 +13,7 @@ export interface SkipToContentProps
    * Specify the tabindex
    * @default "0"
    */
-  tabindex?: string;
+  tabindex?: number;
 
   /**
    * SvelteKit attribute to enable data prefetching

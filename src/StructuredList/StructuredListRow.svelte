@@ -6,7 +6,7 @@
   export let label = false;
 
   /** Specify the tabindex */
-  export let tabindex = "0";
+  export let tabindex = 0;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

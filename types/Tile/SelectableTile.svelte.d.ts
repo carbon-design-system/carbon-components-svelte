@@ -37,7 +37,7 @@ export interface SelectableTileProps
    * Specify the tabindex
    * @default "0"
    */
-  tabindex?: string;
+  tabindex?: number;
 
   /**
    * Specify the ARIA label for the selectable tile checkmark icon
