@@ -33,13 +33,13 @@
   <p>Resources are provisioned based on your account's organization.</p>
   <div class="bx--tooltip__footer">
     <Link href="/">Learn more</Link>
-    <Button size="small">Manage</Button>
+    <Button size="sm">Manage</Button>
   </div>
 </Tooltip>
 
 <Link href="/">Learn more</Link>
 
-<Button size="small">Manage</Button>
+<Button size="sm">Manage</Button>
 
 <Tooltip triggerText="Resource list" icon="{Catalog}">
   <p>Resources are provisioned based on your account's organization.</p>
