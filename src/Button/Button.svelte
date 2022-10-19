@@ -26,6 +26,11 @@
   export let isSelected = false;
 
   /**
+   * Set to `true` for the icon-only variant
+   */
+   export let iconOnly = false;
+
+  /**
    * Specify the icon to render
    * @type {typeof import("svelte").SvelteComponent}
    */
@@ -85,7 +90,7 @@
   $: if (ctx && ref) {
     ctx.declareRef(ref);
   }
-  $: hasIconOnly = icon && !$$slots.default;
+  $: hasIconOnly = iconOnly || (icon && !$$slots.default);
   $: buttonProps = {
     type: href && !disabled ? undefined : type,
     tabindex,
@@ -152,8 +157,10 @@
   >
     {#if hasIconOnly}
       <span class:bx--assistive-text="{true}">{iconDescription}</span>
+    {:else}
+      <slot />
     {/if}
-    <slot /><svelte:component
+    <svelte:component
       this="{icon}"
       aria-hidden="true"
       class="bx--btn__icon"
@@ -171,8 +178,10 @@
   >
     {#if hasIconOnly}
       <span class:bx--assistive-text="{true}">{iconDescription}</span>
+    {:else}
+      <slot />
     {/if}
-    <slot /><svelte:component
+    <svelte:component
       this="{icon}"
       aria-hidden="true"
       class="bx--btn__icon"

@@ -39,6 +39,12 @@ export interface ButtonProps
   isSelected?: boolean;
 
   /**
+   * Set to `true` for the icon-only variant
+   * @default false
+   */
+   iconOnly?: boolean;
+
+  /**
    * Specify the icon to render
    * @default undefined
    */
