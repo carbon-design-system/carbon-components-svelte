@@ -7,7 +7,7 @@
 
   /**
    * Specify the size of button skeleton
-   * @type {"default" | "field" | "small" | "lg" | "xl"}
+   * @type {"default" | "field" | "sm" | "lg" | "xl"}
    */
   export let size = "default";
 </script>
@@ -21,7 +21,7 @@
     class:bx--skeleton="{true}"
     class:bx--btn="{true}"
     class:bx--btn--field="{size === 'field'}"
-    class:bx--btn--sm="{size === 'small'}"
+    class:bx--btn--sm="{size === 'sm'}"
     class:bx--btn--lg="{size === 'lg'}"
     class:bx--btn--xl="{size === 'xl'}"
     {...$$restProps}
@@ -37,7 +37,7 @@
     class:bx--skeleton="{true}"
     class:bx--btn="{true}"
     class:bx--btn--field="{size === 'field'}"
-    class:bx--btn--sm="{size === 'small'}"
+    class:bx--btn--sm="{size === 'sm'}"
     class:bx--btn--lg="{size === 'lg'}"
     class:bx--btn--xl="{size === 'xl'}"
     {...$$restProps}
