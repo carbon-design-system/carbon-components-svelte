@@ -26,6 +26,12 @@ export interface TableContainerProps
    * @default false
    */
   useStaticWidth?: boolean;
+
+  /**
+   * Obtain a reference to the Div HTML element
+   * @type {null | HTMLDivElement}
+   */
+   ref?: null | HTMLDivElement;
 }
 
 export default class TableContainer extends SvelteComponentTyped<

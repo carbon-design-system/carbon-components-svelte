@@ -49,6 +49,9 @@
   /** Set an id for the button element */
   export let id = "ccs-" + Math.random().toString(36);
 
+  /** Obtain a reference to the trigger parent element */
+  export let parentRef = null;
+
   /** Obtain a reference to the trigger button element */
   export let buttonRef = null;
 
@@ -128,9 +131,19 @@
     }
 
     if (open) {
-      const { width, height } = buttonRef.getBoundingClientRect();
+      const { width, height, bottom } = buttonRef.getBoundingClientRect();
 
       buttonWidth = width;
+
+      // if menu height is bigger than the offset then flip  the direction to top
+      if (parentRef) {
+        if (
+          menuRef.getBoundingClientRect().height >
+          parentRef.getBoundingClientRect().bottom - bottom
+        ) {
+          direction = "top";
+        }
+      }
 
       if (!onMountAfterUpdate && $currentIndex < 0) {
         menuRef.focus();

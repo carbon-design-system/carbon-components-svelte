@@ -176,6 +176,12 @@ export interface DataTableProps
    * @default 0
    */
   page?: number;
+
+  /**
+   * Obtain a reference to the TableContainer Div HTML element
+   * @type {null | HTMLDivElement}
+   */
+  tref?: null | HTMLDivElement;
 }
 
 export default class DataTable extends SvelteComponentTyped<
