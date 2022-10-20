@@ -129,6 +129,12 @@ export interface DataTableProps
   radio?: boolean;
 
   /**
+   * Set to `true` for the overflow menu selection variant
+   * @default false
+   */
+   overflowMenu?: boolean;
+
+  /**
    * Set to `true` for the selectable variant
    * Automatically set to `true` if `radio` or `batchSelection` are `true`
    * @default false
@@ -176,6 +182,12 @@ export interface DataTableProps
    * @default 0
    */
   page?: number;
+
+  /**
+   * Obtain a reference to the TableContainer Div HTML element
+   * @type {null | HTMLDivElement}
+   */
+  tref?: null | HTMLDivElement;
 }
 
 export default class DataTable extends SvelteComponentTyped<

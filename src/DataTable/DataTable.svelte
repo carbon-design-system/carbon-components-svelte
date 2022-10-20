@@ -93,6 +93,9 @@
   /** Set to `true` for the radio selection variant */
   export let radio = false;
 
+  /** Set to `true` for the overflow menu selection variant */
+  export let overflowMenu = false;
+
   /**
    * Set to `true` for the selectable variant
    * Automatically set to `true` if `radio` or `batchSelection` are `true`
@@ -126,11 +129,15 @@
   /** Set to `number` to set current page */
   export let page = 0;
 
+  /** Obtain a reference to the trigger body element */
+  export let tRef = null;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
+  import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
   import TableCell from "./TableCell.svelte";
@@ -194,7 +201,7 @@
     expandable = true;
     expanded = expandedRowIds.length === expandableRowIds.length;
   }
-  $: if (radio || batchSelection) selectable = true;
+  $: if (radio || batchSelection || OverflowMenu) selectable = true;
   $: headerKeys = headers.map(({ key }) => key);
   $: tableCellsByRowId = rows.reduce((rows, row) => {
     rows[row.id] = headerKeys.map((key, index) => ({
@@ -258,7 +265,7 @@
   };
 </script>
 
-<TableContainer useStaticWidth="{useStaticWidth}" {...$$restProps}>
+<TableContainer bind:ref={tRef} useStaticWidth="{useStaticWidth}" {...$$restProps}>
   {#if title || $$slots.title || description || $$slots.description}
     <div class:bx--data-table-header="{true}">
       {#if title || $$slots.title}
@@ -309,7 +316,7 @@
         {#if selectable && !batchSelection}
           <th scope="col"></th>
         {/if}
-        {#if batchSelection && !radio}
+        {#if batchSelection && !radio && !overflowMenu}
           <th scope="col" class:bx--table-column-checkbox="{true}">
             <InlineCheckbox
               bind:ref="{refSelectAll}"
@@ -450,6 +457,10 @@
                       dispatch('click:row--select', { row, selected: true });
                     }}"
                   />
+                {:else if overflowMenu}
+                  <svelte:component this={OverflowMenu} bind:parentRef={tRef}>
+                    <slot name="overflowMenu" row="{row}" />
+                  </svelte:component>
                 {:else}
                   <InlineCheckbox
                     name="select-row-{row.id}"
