@@ -127,7 +127,7 @@
   export let page = 0;
 
   import { createEventDispatcher, setContext } from "svelte";
-  import { writable, derived } from "svelte/store";
+  import { writable } from "svelte/store";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
