@@ -31,7 +31,8 @@
 
   let step = {};
 
-  const { stepsById, add, change } = getContext("ProgressIndicator");
+  const { stepsById, add, change, preventChangeOnClick } =
+    getContext("ProgressIndicator");
 
   $: add({ id, complete, disabled });
 
@@ -66,7 +67,8 @@
     aria-disabled="{disabled}"
     tabindex="{!current && !disabled ? '0' : '-1'}"
     class:bx--progress-step-button="{true}"
-    class:bx--progress-step-button--unclickable="{current}"
+    class:bx--progress-step-button--unclickable="{current ||
+      $preventChangeOnClick}"
     on:click
     on:click="{() => {
       if (!step.complete) return;
