@@ -92,12 +92,14 @@
     {:else}
       <CircleDash title="{description}" />
     {/if}
-    <slot props="{{ class: 'bx--progress-label' }}">
-      <p class:bx--progress-label="{true}">{label}</p>
-    </slot>
-    {#if secondaryLabel}
-      <p class:bx--progress-optional="{true}">{secondaryLabel}</p>
-    {/if}
+    <div class:bx--progress-text="{true}">
+      <slot props="{{ class: 'bx--progress-label' }}">
+        <p class:bx--progress-label="{true}">{label}</p>
+      </slot>
+      {#if secondaryLabel}
+        <p class:bx--progress-optional="{true}">{secondaryLabel}</p>
+      {/if}
+    </div>
     <span class:bx--progress-line="{true}"></span>
   </button>
 </li>
