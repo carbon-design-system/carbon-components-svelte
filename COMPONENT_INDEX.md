@@ -2615,14 +2615,14 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                        |
-| :--------- | :--------- | :-------------------------------------------- |
-| close      | dispatched | <code>{ index: number; text: string; }</code> |
-| click      | forwarded  | --                                            |
-| mouseover  | forwarded  | --                                            |
-| mouseenter | forwarded  | --                                            |
-| mouseleave | forwarded  | --                                            |
-| keydown    | forwarded  | --                                            |
+| Event name | Type       | Detail                                                    |
+| :--------- | :--------- | :-------------------------------------------------------- |
+| close      | dispatched | <code>null &#124; { index: number; text: string; }</code> |
+| click      | forwarded  | --                                                        |
+| mouseover  | forwarded  | --                                                        |
+| mouseenter | forwarded  | --                                                        |
+| mouseleave | forwarded  | --                                                        |
+| keydown    | forwarded  | --                                                        |
 
 ## `OverflowMenuItem`
 
