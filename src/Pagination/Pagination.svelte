@@ -140,7 +140,6 @@
         labelText="Page number, of {totalPages} pages"
         inline
         hideLabel
-        on:input="{() => console.log('select input event')}"
         on:change="{() => {
           dispatch('change', { page });
         }}"
