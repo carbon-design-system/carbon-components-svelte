@@ -32,7 +32,7 @@
   />
 </ProgressIndicator>
 
-<div style="margin: var(--bx-layout-02) 0">
+<div style="margin: var(--bx-spacing-06) 0">
   <Button
     kind="{currentIndex === 2 ? 'secondary' : 'primary'}"
     on:click="{() => {

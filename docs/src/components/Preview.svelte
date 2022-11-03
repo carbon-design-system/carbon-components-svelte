@@ -47,7 +47,7 @@
 
 <style>
   .preview {
-    margin-bottom: var(--bx-layout-04);
+    margin-bottom: var(--bx-spacing-09);
     margin-left: -1rem;
     margin-right: -1rem;
     max-width: 66rem;
