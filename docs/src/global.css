@@ -187,28 +187,28 @@ html[theme="g90"] .code-override {
 }
 
 .bx--col > h1 {
-  font-size: var(--bx-expressive-heading-05-font-size);
-  font-weight: var(--bx-expressive-heading-05-font-weight);
-  letter-spacing: var(--bx-expressive-heading-05-letter-spacing);
-  line-height: var(--bx-expressive-heading-05-line-height);
+  font-size: var(--bx-fluid-heading-05-font-size);
+  font-weight: var(--bx-fluid-heading-05-font-weight);
+  letter-spacing: var(--bx-fluid-heading-05-letter-spacing);
+  line-height: var(--bx-fluid-heading-05-line-height);
   margin-bottom: var(--bx-spacing-05);
 }
 
 .big-paragraph {
-  font-size: var(--bx-expressive-heading-03-font-size);
-  font-weight: var(--bx-expressive-heading-03-font-weight);
-  letter-spacing: var(--bx-expressive-heading-03-letter-spacing);
-  line-height: var(--bx-expressive-heading-03-line-height);
+  font-size: var(--bx-fluid-heading-03-font-size);
+  font-weight: var(--bx-fluid-heading-03-font-weight);
+  letter-spacing: var(--bx-fluid-heading-03-letter-spacing);
+  line-height: var(--bx-fluid-heading-03-line-height);
   margin-top: var(--bx-spacing-07);
   margin-bottom: var(--bx-spacing-12);
 }
 
 .big-link,
 .bx--col > .big-paragraph > code {
-  font-size: var(--bx-expressive-heading-03-font-size);
-  font-weight: var(--bx-expressive-heading-03-font-weight);
-  letter-spacing: var(--bx-expressive-heading-03-letter-spacing);
-  line-height: var(--bx-expressive-heading-03-line-height);
+  font-size: var(--bx-fluid-heading-03-font-size);
+  font-weight: var(--bx-fluid-heading-03-font-weight);
+  letter-spacing: var(--bx-fluid-heading-03-letter-spacing);
+  line-height: var(--bx-fluid-heading-03-line-height);
 }
 
 .bx--col > p {
@@ -227,19 +227,19 @@ html[theme="g90"] .code-override {
 
 [class*="bx--col"] > h2,
 .bx--tab-content > h2 {
-  font-size: var(--bx-expressive-heading-04-font-size);
-  font-weight: var(--bx-expressive-heading-04-font-weight);
-  letter-spacing: var(--bx-expressive-heading-04-letter-spacing);
-  line-height: var(--bx-expressive-heading-04-line-height);
+  font-size: var(--bx-fluid-heading-04-font-size);
+  font-weight: var(--bx-fluid-heading-04-font-weight);
+  letter-spacing: var(--bx-fluid-heading-04-letter-spacing);
+  line-height: var(--bx-fluid-heading-04-line-height);
   padding-top: var(--bx-spacing-07);
   margin-bottom: var(--bx-spacing-05);
 }
 
 .bx--col > h4 {
-  font-size: var(--bx-expressive-heading-02-font-size);
-  font-weight: var(--bx-expressive-heading-02-font-weight);
-  letter-spacing: var(--bx-expressive-heading-02-letter-spacing);
-  line-height: var(--bx-expressive-heading-02-line-height);
+  font-size: var(--bx-fluid-heading-02-font-size);
+  font-weight: var(--bx-fluid-heading-02-font-weight);
+  letter-spacing: var(--bx-fluid-heading-02-letter-spacing);
+  line-height: var(--bx-fluid-heading-02-line-height);
   padding-top: var(--bx-spacing-09);
   margin-bottom: var(--bx-spacing-05);
 }
