@@ -39,7 +39,7 @@
   );
 </script>
 
-<p style="margin-bottom: var(--bx-layout-02)">
+<p style="margin-bottom: var(--bx-spacing-06)">
   Source code:
   <OutboundLink size="lg" inline href="{source}">
     {component.filePath}
@@ -231,13 +231,13 @@
   }
 
   :global(.my-layout-01-03) {
-    margin-top: var(--bx-layout-01);
-    margin-bottom: var(--bx-layout-03);
+    margin-top: var(--bx-spacing-05);
+    margin-bottom: var(--bx-spacing-07);
   }
 
   :global(.overflow .bx--structured-list) {
-    margin-top: var(--bx-layout-01);
-    margin-bottom: var(--bx-layout-04);
+    margin-top: var(--bx-spacing-05);
+    margin-bottom: var(--bx-spacing-09);
   }
 
   code {

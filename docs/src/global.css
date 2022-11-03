@@ -118,7 +118,7 @@ html[theme="g90"] .code-override {
 }
 
 .prose .toc {
-  margin-bottom: var(--bx-layout-01);
+  margin-bottom: var(--bx-spacing-05);
 }
 
 .table {
@@ -169,7 +169,7 @@ html[theme="g90"] .code-override {
 }
 
 .prose .toc {
-  margin-bottom: var(--bx-layout-01);
+  margin-bottom: var(--bx-spacing-05);
 }
 
 .code-01 {
@@ -191,7 +191,7 @@ html[theme="g90"] .code-override {
   font-weight: var(--bx-expressive-heading-05-font-weight);
   letter-spacing: var(--bx-expressive-heading-05-letter-spacing);
   line-height: var(--bx-expressive-heading-05-line-height);
-  margin-bottom: var(--bx-layout-01);
+  margin-bottom: var(--bx-spacing-05);
 }
 
 .big-paragraph {
@@ -199,8 +199,8 @@ html[theme="g90"] .code-override {
   font-weight: var(--bx-expressive-heading-03-font-weight);
   letter-spacing: var(--bx-expressive-heading-03-letter-spacing);
   line-height: var(--bx-expressive-heading-03-line-height);
-  margin-top: var(--bx-layout-03);
-  margin-bottom: var(--bx-layout-06);
+  margin-top: var(--bx-spacing-07);
+  margin-bottom: var(--bx-spacing-12);
 }
 
 .big-link,
@@ -231,8 +231,8 @@ html[theme="g90"] .code-override {
   font-weight: var(--bx-expressive-heading-04-font-weight);
   letter-spacing: var(--bx-expressive-heading-04-letter-spacing);
   line-height: var(--bx-expressive-heading-04-line-height);
-  padding-top: var(--bx-layout-03);
-  margin-bottom: var(--bx-layout-01);
+  padding-top: var(--bx-spacing-07);
+  margin-bottom: var(--bx-spacing-05);
 }
 
 .bx--col > h4 {
@@ -240,8 +240,8 @@ html[theme="g90"] .code-override {
   font-weight: var(--bx-expressive-heading-02-font-weight);
   letter-spacing: var(--bx-expressive-heading-02-letter-spacing);
   line-height: var(--bx-expressive-heading-02-line-height);
-  padding-top: var(--bx-layout-04);
-  margin-bottom: var(--bx-layout-01);
+  padding-top: var(--bx-spacing-09);
+  margin-bottom: var(--bx-spacing-05);
 }
 
 .bx--col > h2,
@@ -252,5 +252,5 @@ html[theme="g90"] .code-override {
 }
 
 .bx--col > p {
-  margin-bottom: var(--bx-layout-02);
+  margin-bottom: var(--bx-spacing-06);
 }

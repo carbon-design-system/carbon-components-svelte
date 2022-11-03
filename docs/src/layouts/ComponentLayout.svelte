@@ -177,7 +177,7 @@
   .bar {
     display: flex;
     justify-content: space-between;
-    margin-bottom: var(--bx-layout-02);
+    margin-bottom: var(--bx-spacing-06);
     border-bottom: 1px solid var(--bx-ui-03);
   }
 
