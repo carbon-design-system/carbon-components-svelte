@@ -37,6 +37,6 @@
 
 <style>
   div {
-    margin: var(--bx-layout-01) 0 var(--bx-layout-03);
+    margin: var(--bx-spacing-05) 0 var(--bx-spacing-07);
   }
 </style>

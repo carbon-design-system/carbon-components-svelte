@@ -6,7 +6,7 @@
 
 <NumberInput allowEmpty bind:value />
 
-<div style="margin: var(--bx-layout-01) 0">
+<div style="margin: var(--bx-spacing-05) 0">
   <Button on:click="{() => (value = null)}">Set to null</Button>
   <Button on:click="{() => (value = 0)}">Set to 0</Button>
 </div>
