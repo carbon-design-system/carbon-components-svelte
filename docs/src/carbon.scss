@@ -1,4 +1,7 @@
-@use '@carbon/styles' with ($prefix: 'bx');
+@use '@carbon/styles' with (
+  $prefix: 'bx',
+  $use-flexbox-grid: true
+);
 @use '@carbon/themes';
 @use '@ibm/plex/scss/ibm-plex.scss';
 
