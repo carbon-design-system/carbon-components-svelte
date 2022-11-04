@@ -3942,8 +3942,6 @@ None.
 
 | Event name | Type       | Detail |
 | :--------- | :--------- | :----- |
-| keypress   | forwarded  | --     |
-| click      | forwarded  | --     |
 | change     | dispatched | --     |
 
 ## `TabsSkeleton`

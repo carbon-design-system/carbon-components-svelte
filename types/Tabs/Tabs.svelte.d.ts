@@ -36,10 +36,6 @@ export interface TabsProps
 
 export default class Tabs extends SvelteComponentTyped<
   TabsProps,
-  {
-    keypress: WindowEventMap["keypress"];
-    click: WindowEventMap["click"];
-    change: CustomEvent<any>;
-  },
+  { change: CustomEvent<any> },
   { default: {}; content: {} }
 > {}

@@ -11702,13 +11702,13 @@
         }
       ],
       "events": [
-        { "type": "forwarded", "name": "click", "element": "li" },
-        { "type": "forwarded", "name": "mouseover", "element": "li" },
-        { "type": "forwarded", "name": "mouseenter", "element": "li" },
-        { "type": "forwarded", "name": "mouseleave", "element": "li" }
+        { "type": "forwarded", "name": "click", "element": "a" },
+        { "type": "forwarded", "name": "mouseover", "element": "a" },
+        { "type": "forwarded", "name": "mouseenter", "element": "a" },
+        { "type": "forwarded", "name": "mouseleave", "element": "a" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "li" }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "TabContent",
@@ -12086,11 +12086,7 @@
         { "name": "__default__", "default": true, "slot_props": "{}" },
         { "name": "content", "default": false, "slot_props": "{}" }
       ],
-      "events": [
-        { "type": "forwarded", "name": "keypress", "element": "div" },
-        { "type": "forwarded", "name": "click", "element": "a" },
-        { "type": "dispatched", "name": "change" }
-      ],
+      "events": [{ "type": "dispatched", "name": "change" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
