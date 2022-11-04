@@ -11,10 +11,10 @@ export interface TabsProps extends RestProps {
   selected?: number;
 
   /**
-   * Specify the type of tabs
-   * @default "default"
+   * Set to `true` for tabs to be contained
+   * @default false
    */
-  type?: "default" | "container";
+  contained?: boolean;
 
   /**
    * Set to `true` for tabs to have an auto-width
@@ -22,27 +22,11 @@ export interface TabsProps extends RestProps {
    */
   autoWidth?: boolean;
 
-  /**
-   * Specify the ARIA label for the chevron icon
-   * @default "Show menu options"
-   */
-  iconDescription?: string;
-
-  /**
-   * Specify the tab trigger href attribute
-   * @default "#"
-   */
-  triggerHref?: string;
-
   [key: `data-${string}`]: any;
 }
 
 export default class Tabs extends SvelteComponentTyped<
   TabsProps,
-  {
-    keypress: WindowEventMap["keypress"];
-    click: WindowEventMap["click"];
-    change: CustomEvent<any>;
-  },
+  { change: CustomEvent<any> },
   { default: {}; content: {} }
 > {}

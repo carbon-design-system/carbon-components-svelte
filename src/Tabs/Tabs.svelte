@@ -3,26 +3,15 @@
   export let selected = 0;
 
   /**
-   * Specify the type of tabs
-   * @type {"default" | "container"}
+   * Set to `true` for tabs to be contained
    */
-  export let type = "default";
+  export let contained = false;
 
   /** Set to `true` for tabs to have an auto-width */
   export let autoWidth = false;
 
-  /**
-   * Specify the ARIA label for the chevron icon
-   * @type {string}
-   */
-  export let iconDescription = "Show menu options";
-
-  /** Specify the tab trigger href attribute */
-  export let triggerHref = "#";
-
   import { createEventDispatcher, afterUpdate, setContext, tick } from "svelte";
   import { writable, derived } from "svelte/store";
-  import ChevronDown from "../icons/ChevronDown.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -122,43 +111,11 @@
 <div
   role="navigation"
   class:bx--tabs="{true}"
-  class:bx--tabs--container="{type === 'container'}"
+  class:bx--tabs--contained="{contained}"
   {...$$restProps}
 >
-  <div
-    role="listbox"
-    tabindex="0"
-    class:bx--tabs-trigger="{true}"
-    aria-label="{$$props['aria-label'] || 'listbox'}"
-    on:click="{() => {
-      dropdownHidden = !dropdownHidden;
-    }}"
-    on:keypress
-    on:keypress="{() => {
-      dropdownHidden = !dropdownHidden;
-    }}"
-  >
-    <a
-      tabindex="-1"
-      class:bx--tabs-trigger-text="{true}"
-      href="{triggerHref}"
-      on:click|preventDefault
-      on:click|preventDefault|stopPropagation="{() => {
-        dropdownHidden = !dropdownHidden;
-      }}"
-    >
-      {#if currentTab}{currentTab.label}{/if}
-    </a>
-    <ChevronDown aria-hidden="true" title="{iconDescription}" />
-  </div>
-  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-  <ul
-    bind:this="{refTabList}"
-    role="tablist"
-    class:bx--tabs__nav="{true}"
-    class:bx--tabs__nav--hidden="{dropdownHidden}"
-  >
+  <div bind:this="{refTabList}" role="tablist" class:bx--tab--list="{true}">
     <slot />
-  </ul>
+  </div>
 </div>
 <slot name="content" />

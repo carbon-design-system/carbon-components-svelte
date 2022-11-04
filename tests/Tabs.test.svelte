@@ -19,7 +19,7 @@
 
 <TabContent>Content 3</TabContent>
 
-<Tabs type="container">
+<Tabs contained>
   <Tab label="Tab label 1" />
   <Tab label="Tab label 2" />
   <Tab label="Tab label 3" />
