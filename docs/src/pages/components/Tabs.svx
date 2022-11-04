@@ -60,9 +60,9 @@ Using keyboard navigation (left and right arrow keys) will skip to the next non-
   </svelte:fragment>
 </Tabs>
 
-## Container type
+## Contained
 
-<Tabs type="container">
+<Tabs contained>
   <Tab label="Tab label 1" />
   <Tab label="Tab label 2" />
   <Tab label="Tab label 3" />
@@ -77,6 +77,6 @@ Using keyboard navigation (left and right arrow keys) will skip to the next non-
 
 <TabsSkeleton count={3} />
 
-## Skeleton (container)
+## Skeleton (contained)
 
-<TabsSkeleton type="container" count={3} />
+<TabsSkeleton contained count={3} />

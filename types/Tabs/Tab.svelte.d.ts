@@ -1,7 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["li"];
+type RestProps = SvelteHTMLElements["a"];
 
 export interface TabProps extends RestProps {
   /**
