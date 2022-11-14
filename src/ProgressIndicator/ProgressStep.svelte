@@ -62,6 +62,7 @@
   {...$$restProps}
 >
   <button
+    type="button"
     disabled="{disabled}"
     aria-disabled="{disabled}"
     tabindex="{!current && !disabled ? '0' : '-1'}"
