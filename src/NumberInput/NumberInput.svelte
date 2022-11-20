@@ -113,16 +113,13 @@
 
   const dispatch = createEventDispatcher();
 
-  function updateValue(direction) {
-    const nextValue = (value += direction * step);
-
-    if (nextValue < min) {
-      value = min;
-    } else if (nextValue > max) {
-      value = max;
+  function updateValue(isIncrementing) {
+    if (isIncrementing) {
+      ref.stepUp();
     } else {
-      value = nextValue;
+      ref.stepDown();
     }
+    value = ref.value;
 
     dispatch("input", value);
     dispatch("change", value);
@@ -235,7 +232,7 @@
             class:bx--number__control-btn="{true}"
             class:down-icon="{true}"
             on:click="{() => {
-              updateValue(-1);
+              updateValue(false);
             }}"
             disabled="{disabled}"
           >
@@ -250,7 +247,7 @@
             class:bx--number__control-btn="{true}"
             class:up-icon="{true}"
             on:click="{() => {
-              updateValue(1);
+              updateValue(true);
             }}"
             disabled="{disabled}"
           >
