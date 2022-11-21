@@ -15,6 +15,12 @@
   export let kind = "default";
 
   /**
+   * Specify the status of progress bar
+   * @type {"active" | "finished" | "error"}
+   */
+  export let status = "active";
+
+  /**
    * Specify the size
    * @type {"sm" | "md"}
    */
@@ -32,6 +38,14 @@
   /** Set an id for the progress bar element */
   export let id = "ccs-" + Math.random().toString(36);
 
+  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import ErrorFilled from "../icons/ErrorFilled.svelte";
+
+  const statusIcons = {
+    error: ErrorFilled,
+    finished: CheckmarkFilled,
+  };
+
   let helperId = "ccs-" + Math.random().toString(36);
 
   $: indeterminate = value === undefined;
@@ -45,6 +59,8 @@
   class:bx--progress-bar--small="{size === 'sm'}"
   class:bx--progress-bar--inline="{kind === 'inline'}"
   class:bx--progress-bar--indented="{kind === 'indented'}"
+  class:bx--progress-bar--error="{status === 'error'}"
+  class:bx--progress-bar--finished="{status === 'finished'}"
   {...$$restProps}
 >
   <label
@@ -55,6 +71,11 @@
     <slot name="labelText">
       {labelText}
     </slot>
+    {#if status === "error" || status === "finished"}
+      <span class="bx--progress-bar__status-icon">
+        <svelte:component this="{statusIcons[status]}" />
+      </span>
+    {/if}
   </label>
   <div
     role="progressbar"
@@ -76,3 +97,38 @@
     </div>
   {/if}
 </div>
+
+<style>
+  .bx--progress-bar--error .bx--progress-bar__bar {
+    background-color: var(--cds-support-error, #da1e28);
+  }
+
+  .bx--progress-bar__status-icon {
+    float: right;
+  }
+
+  .bx--progress-bar--error .bx--progress-bar__helper-text,
+  .bx--progress-bar--error .bx--progress-bar__status-icon {
+    color: var(--cds-support-error, #da1e28);
+  }
+
+  .bx--progress-bar--finished .bx--progress-bar__bar {
+    background-color: var(--cds-support-success, #198038);
+  }
+
+  .bx--progress-bar--finished .bx--progress-bar__status-icon {
+    color: var(--cds-support-success, #198038);
+  }
+
+  .bx--progress-bar__status-icon {
+    flex-shrink: 0;
+    margin-left: 1rem;
+  }
+
+  .bx--progress-bar--error .bx--progress-bar__bar,
+  .bx--progress-bar--finished .bx--progress-bar__bar {
+    transform: scaleX(
+      1
+    ) !important; /* Overwrite the style applied to the div */
+  }
+</style>
