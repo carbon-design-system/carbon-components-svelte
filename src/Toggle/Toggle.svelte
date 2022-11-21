@@ -60,17 +60,17 @@
     class:bx--toggle-input="{true}"
     class:bx--toggle-input--small="{size === 'sm'}"
     checked="{toggled}"
-    on:change
     on:change="{() => {
       toggled = !toggled;
     }}"
-    on:keyup
+    on:change
     on:keyup="{(e) => {
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         toggled = !toggled;
       }
     }}"
+    on:keyup
     on:focus
     on:blur
     disabled="{disabled}"
