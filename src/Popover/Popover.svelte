@@ -33,8 +33,8 @@
 <svelte:window
   on:click="{(e) => {
     if (!open) return;
-    if (e.target.contains(ref)) {
-      dispatch('click:outside');
+    if (!ref.contains(e.target)) {
+      dispatch('click:outside', { target: e.target });
       if (closeOnOutsideClick) open = false;
     }
   }}"
