@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @event {{ target: HTMLElement; }} click:outside
+   */
+
   /** Set to `true` to display the popover */
   export let open = false;
 

@@ -2804,9 +2804,9 @@ None.
 
 ### Events
 
-| Event name    | Type       | Detail            |
-| :------------ | :--------- | :---------------- |
-| click:outside | dispatched | <code>null</code> |
+| Event name    | Type       | Detail                                |
+| :------------ | :--------- | :------------------------------------ |
+| click:outside | dispatched | <code>{ target: HTMLElement; }</code> |
 
 ## `ProgressBar`
 
