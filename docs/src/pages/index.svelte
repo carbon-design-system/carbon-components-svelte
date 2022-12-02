@@ -147,7 +147,7 @@
                 <OutboundLink
                   inline
                   size="lg"
-                  href="https://github.com/carbon-design-system/carbon/tree/main/packages/components"
+                  href="https://github.com/carbon-design-system/carbon/tree/main/packages/carbon-components"
                 >
                   carbon-components
                 </OutboundLink>.
