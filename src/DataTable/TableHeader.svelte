@@ -42,6 +42,7 @@
     on:mouseleave
   >
     <button
+      type="button"
       class:bx--table-sort="{true}"
       class:bx--table-sort--active="{active}"
       class:bx--table-sort--ascending="{active &&
