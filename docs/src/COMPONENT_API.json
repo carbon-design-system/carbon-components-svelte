@@ -8063,7 +8063,7 @@
         {
           "type": "dispatched",
           "name": "close",
-          "detail": "{ index: number; text: string; }"
+          "detail": "null | { index: number; text: string; }"
         },
         { "type": "forwarded", "name": "click", "element": "button" },
         { "type": "forwarded", "name": "mouseover", "element": "button" },

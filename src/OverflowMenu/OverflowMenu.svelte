@@ -1,6 +1,6 @@
 <script>
   /**
-   * @event {{ index: number; text: string; }} close
+   * @event {null | { index: number; text: string; }} close
    */
 
   /**
@@ -205,6 +205,7 @@
   on:click="{({ target }) => {
     if (!(menuRef && menuRef.contains(target))) {
       open = !open;
+      if (!open) dispatch('close');
     }
   }}"
   on:mouseover
@@ -217,6 +218,7 @@
         e.preventDefault();
       } else if (e.key === 'Escape') {
         e.stopPropagation();
+        dispatch('close');
         open = false;
         buttonRef.focus();
       }
@@ -225,6 +227,7 @@
   on:focusout="{(e) => {
     if (open) {
       if (!buttonRef.contains(e.relatedTarget)) {
+        dispatch('close');
         open = false;
       }
     }
