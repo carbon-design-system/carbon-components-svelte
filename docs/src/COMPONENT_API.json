@@ -8908,7 +8908,11 @@
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        { "type": "dispatched", "name": "click:outside", "detail": "null" }
+        {
+          "type": "dispatched",
+          "name": "click:outside",
+          "detail": "{ target: HTMLElement; }"
+        }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
