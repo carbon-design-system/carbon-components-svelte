@@ -14320,7 +14320,7 @@
           "name": "children",
           "kind": "let",
           "description": "Provide an array of children nodes to render",
-          "type": "Array<TreeNode & { children?: TreeNode[] }>",
+          "type": "Array<TreeNode>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -14483,9 +14483,9 @@
           "ts": "type TreeNodeId = string | number"
         },
         {
-          "type": "{ id: TreeNodeId; text: string; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; }",
+          "type": "{ id: TreeNodeId; text: string; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; children?: TreeNode[]; }",
           "name": "TreeNode",
-          "ts": "interface TreeNode { id: TreeNodeId; text: string; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; }"
+          "ts": "interface TreeNode { id: TreeNodeId; text: string; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; children?: TreeNode[]; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "ul" }
