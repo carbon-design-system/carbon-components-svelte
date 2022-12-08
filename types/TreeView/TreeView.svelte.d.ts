@@ -5,7 +5,7 @@ export type TreeNodeId = string | number;
 
 export interface TreeNode {
   id: TreeNodeId;
-  text: string;
+  text: any;
   icon?: typeof import("svelte").SvelteComponent;
   disabled?: boolean;
   expanded?: boolean;
