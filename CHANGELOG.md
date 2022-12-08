@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.70.13](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.13) - 2022-12-08
+
+**Fixes**
+
+- support `NumberInput` incrementing/decrementing floating point values
+- allow arrow keys to open and navigate `Dropdown` menu
+- only fire `Dropdown` "select" event on interaction
+- avoid runtime error if `Dropdown` items is an empty array
+- avoid runtime error if `MultiSelect` items is an empty array
+- avoid runtime error if `ComboBox` items is an empty array
+- fire `OverflowMenu` "close" event when clicking outside menu
+- fire `Popover` "click:outside" event when clicking sibling elements
+- forward `Toggle` "change" and "keyup" events after `toggled` updates
+- fix `ProgressStep` label text if `vertical`
+- make `ProgressStep` inherit unclickable styles if `preventChangeOnClick`
+- add explicit `type="button"` to `TableHeader` button
+- add explicit `type="button"` to `ProgressStep` button
+- loosen `TreeView` text prop type from `string` to `any`
+- make `TreeView` children prop type work recursively
+- remove unused `derived` import from `DataTable`
+
 ## [0.70.12](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.12) - 2022-10-13
 
 **Fixes**
