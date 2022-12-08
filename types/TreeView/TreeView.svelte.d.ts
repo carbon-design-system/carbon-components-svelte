@@ -9,6 +9,7 @@ export interface TreeNode {
   icon?: typeof import("svelte").SvelteComponent;
   disabled?: boolean;
   expanded?: boolean;
+  children?: TreeNode[];
 }
 
 export interface TreeViewProps
@@ -17,7 +18,7 @@ export interface TreeViewProps
    * Provide an array of children nodes to render
    * @default []
    */
-  children?: Array<TreeNode & { children?: TreeNode[] }>;
+  children?: Array<TreeNode>;
 
   /**
    * Set the current active node id

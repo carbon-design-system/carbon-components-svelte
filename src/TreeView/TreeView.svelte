@@ -1,7 +1,7 @@
 <script>
   /**
    * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: string; icon?: typeof import("svelte").SvelteComponent; disabled?: boolean; expanded?: boolean; }} TreeNode
+   * @typedef {{ id: TreeNodeId; text: string; icon?: typeof import("svelte").SvelteComponent; disabled?: boolean; expanded?: boolean; children?: TreeNode[]; }} TreeNode
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} select
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} toggle
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} focus
@@ -9,7 +9,7 @@
 
   /**
    * Provide an array of children nodes to render
-   * @type {Array<TreeNode & { children?: TreeNode[] }>}
+   * @type {Array<TreeNode>}
    */
   export let children = [];
 
