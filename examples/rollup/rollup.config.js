@@ -9,12 +9,12 @@ const production = !process.env.ROLLUP_WATCH;
 
 export default {
   input: "src/index.js",
-  inlineDynamicImports: true,
   output: {
     sourcemap: !production,
     format: "iife",
     name: "app",
     file: "public/build/bundle.js",
+    inlineDynamicImports: true,
   },
   plugins: [
     svelte({
