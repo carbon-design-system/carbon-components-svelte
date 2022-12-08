@@ -119,7 +119,7 @@
     } else {
       ref.stepDown();
     }
-    value = ref.value;
+    value = +ref.value;
 
     dispatch("input", value);
     dispatch("change", value);
