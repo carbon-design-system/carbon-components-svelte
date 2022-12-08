@@ -121,6 +121,7 @@
   function change(dir) {
     let index = highlightedIndex + dir;
 
+    if (items.length === 0) return;
     if (index < 0) {
       index = items.length - 1;
     } else if (index >= items.length) {
