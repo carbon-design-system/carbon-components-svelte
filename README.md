@@ -55,7 +55,7 @@ Before importing components, you will need to first apply Carbon component style
 - **g100.css**: Gray 100 theme (dark)
 - **all.css**: All themes (White, Gray 10, Gray 90, Gray 100) using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 
-Each StyleSheet is [generated](scripts/build-css.js) from the flagship [carbon-components](https://github.com/carbon-design-system/carbon/tree/master/packages/components) library.
+Each StyleSheet is [generated](scripts/build-css.js) from the flagship [carbon-components](https://github.com/carbon-design-system/carbon/tree/main/packages/carbon-components) library.
 
 The compiled CSS is generated from the following `.scss` files:
 
