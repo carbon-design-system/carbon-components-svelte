@@ -36,12 +36,6 @@ Set `closeOnOutsideClick` to set `open` to `false` when clicking outside of the 
     </Popover>
 </div>
 
-## Manage open state with a Button
-
-You can bind the `open` prop and manage the open state of the popover with an external button.
-
-<FileSource src="/framed/Popover/WithButton" />
-
 ## Popover alignment
 
 Customize the popover alignment using the `align` prop. Valid values include: `"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"`.
@@ -154,3 +148,9 @@ Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`
         <div style="padding: var(--cds-spacing-05)">Content</div>
     </Popover>
 </div>
+
+## External element
+
+Use the `open` prop to manage state with an external element, like a button.
+
+<FileSource src="/framed/Popover/WithButton" />
