@@ -112,6 +112,12 @@
 
   let highlightedIndex = -1;
 
+  $: inline = type === "inline";
+  $: selectedItem = items.find((item) => item.id === selectedId);
+  $: if (!open) {
+    highlightedIndex = -1;
+  }
+
   function change(dir) {
     let index = highlightedIndex + dir;
 
@@ -138,14 +144,9 @@
     highlightedIndex = index;
   }
 
-  $: if (selectedId !== undefined) {
+  const dispatchSelect = () => {
     dispatch("select", { selectedId, selectedItem });
-  }
-  $: inline = type === "inline";
-  $: selectedItem = items.find((item) => item.id === selectedId);
-  $: if (!open) {
-    highlightedIndex = -1;
-  }
+  };
 </script>
 
 <svelte:window
@@ -227,16 +228,37 @@
             items[highlightedIndex].id !== selectedId
           ) {
             selectedId = items[highlightedIndex].id;
+            dispatchSelect();
             open = false;
           }
         } else if (key === 'Tab') {
           open = false;
           ref.blur();
         } else if (key === 'ArrowDown') {
+          if (!open) open = true;
           change(1);
         } else if (key === 'ArrowUp') {
+          if (!open) open = true;
           change(-1);
         } else if (key === 'Escape') {
+          open = false;
+        }
+      }}"
+      on:keyup="{(e) => {
+        const { key } = e;
+        if ([' '].includes(key)) {
+          e.preventDefault();
+        } else {
+          return;
+        }
+        open = !open;
+
+        if (
+          highlightedIndex > -1 &&
+          items[highlightedIndex].id !== selectedId
+        ) {
+          selectedId = items[highlightedIndex].id;
+          dispatchSelect();
           open = false;
         }
       }}"
@@ -271,6 +293,7 @@
                 return;
               }
               selectedId = item.id;
+              dispatchSelect();
               ref.focus();
             }}"
             on:mouseenter="{() => {
