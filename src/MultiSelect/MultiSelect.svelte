@@ -203,6 +203,7 @@
   function change(direction) {
     let index = highlightedIndex + direction;
     const length = filterable ? filteredItems.length : items.length;
+    if (length === 0) return;
     if (index < 0) {
       index = length - 1;
     } else if (index >= length) {
