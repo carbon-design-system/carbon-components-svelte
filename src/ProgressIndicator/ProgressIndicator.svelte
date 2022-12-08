@@ -19,10 +19,12 @@
   const stepsById = derived(steps, ($) =>
     $.reduce((a, c) => ({ ...a, [c.id]: c }), {})
   );
+  const preventChangeOnClickStore = writable(preventChangeOnClick);
 
   setContext("ProgressIndicator", {
     steps,
     stepsById,
+    preventChangeOnClick: { subscribe: preventChangeOnClickStore.subscribe },
     add: (step) => {
       steps.update((_) => {
         if (step.id in $stepsById) {
@@ -58,6 +60,7 @@
       current: i === currentIndex,
     }))
   );
+  $: preventChangeOnClickStore.set(preventChangeOnClick);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
