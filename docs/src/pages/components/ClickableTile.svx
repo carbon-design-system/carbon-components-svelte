@@ -1,7 +1,3 @@
----
-source: Tile/ClickableTile.svelte
----
-
 <script>
   import { ClickableTile } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

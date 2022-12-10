@@ -1,7 +1,3 @@
----
-source: Button/ButtonSet.svelte
----
-
 <script>
   import { Button, ButtonSet } from "carbon-components-svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
