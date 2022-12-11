@@ -1,7 +1,3 @@
----
-source: Tile/ExpandableTile.svelte
----
-
 <script>
   import { ExpandableTile, Button } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";

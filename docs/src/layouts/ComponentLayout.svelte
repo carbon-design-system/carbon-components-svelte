@@ -22,7 +22,6 @@
 
   export let component = $page.title;
   export let components = [component];
-  export let source = "";
   export let unreleased = false;
   export let unstable = false;
 
@@ -42,10 +41,28 @@
     }
   });
 
+  function formatSourceURL(multiple) {
+    const filePath = api_components[0]?.filePath ?? "";
+
+    if (multiple) {
+      /**
+       * Link to folder for doc with multiple components.
+       * @example "src/Breadcrumb"
+       */
+      return filePath.split("/").slice(0, -1).join("/");
+    }
+
+    /**
+     * Else, link to the component source.
+     * @example "src/Tile/ClickableTile.svelte"
+     */
+    return filePath;
+  }
+
   // TODO: [refactor] read from package.json value
-  $: sourceCode = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/src/${
-    source || `${$page.title}/${$page.title}.svelte`
-  }`;
+  $: sourceCode = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${formatSourceURL(
+    multiple
+  )}`;
 </script>
 
 <Content data-components>

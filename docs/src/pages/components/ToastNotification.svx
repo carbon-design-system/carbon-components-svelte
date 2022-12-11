@@ -1,7 +1,3 @@
----
-source: Notification/ToastNotification.svelte
----
-
 <script>
   import { ToastNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
