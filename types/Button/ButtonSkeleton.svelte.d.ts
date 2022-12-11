@@ -13,7 +13,7 @@ export interface ButtonSkeletonProps
    * Specify the size of button skeleton
    * @default "default"
    */
-  size?: "default" | "field" | "small" | "lg" | "xl";
+  size?: "default" | "field" | "sm" | "lg" | "xl";
 
   /**
    * SvelteKit attribute to enable data prefetching

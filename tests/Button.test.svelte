@@ -42,15 +42,15 @@
 
 <Button size="field" kind="danger">Danger</Button>
 
-<Button size="small">Primary</Button>
+<Button size="sm">Primary</Button>
 
-<Button size="small" kind="secondary">Secondary</Button>
+<Button size="sm" kind="secondary">Secondary</Button>
 
-<Button size="small" kind="tertiary">Tertiary</Button>
+<Button size="sm" kind="tertiary">Tertiary</Button>
 
-<Button size="small" kind="ghost">Ghost</Button>
+<Button size="sm" kind="ghost">Ghost</Button>
 
-<Button size="small" kind="danger">Danger</Button>
+<Button size="sm" kind="danger">Danger</Button>
 
 <Button disabled>Disabled button</Button>
 
@@ -58,4 +58,4 @@
 
 <Button skeleton size="field" />
 
-<Button skeleton size="small" />
+<Button skeleton size="sm" />
