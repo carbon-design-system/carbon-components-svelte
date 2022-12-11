@@ -35,7 +35,7 @@
   export let filteredRowIds = [];
 
   /** Specify the tabindex */
-  export let tabindex = "0";
+  export let tabindex = 0;
 
   /**
    * Obtain a reference to the input HTML element

@@ -12,7 +12,7 @@
   export let value = "";
 
   /** Specify the tabindex */
-  export let tabindex = "0";
+  export let tabindex = 0;
 
   /** Specify the ARIA label for the radio tile checkmark icon */
   export let iconDescription = "Tile checkmark";

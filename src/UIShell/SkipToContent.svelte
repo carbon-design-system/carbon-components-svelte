@@ -3,7 +3,7 @@
   export let href = "#main-content";
 
   /** Specify the tabindex */
-  export let tabindex = "0";
+  export let tabindex = 0;
 </script>
 
 <a

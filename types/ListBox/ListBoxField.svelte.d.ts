@@ -21,7 +21,7 @@ export interface ListBoxFieldProps
    * Specify the tabindex
    * @default "-1"
    */
-  tabindex?: string;
+  tabindex?: number;
 
   /**
    * Override the default translation ids

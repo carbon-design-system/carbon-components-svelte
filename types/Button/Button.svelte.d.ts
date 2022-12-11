@@ -90,9 +90,9 @@ export interface ButtonProps
 
   /**
    * Specify the tabindex
-   * @default "0"
+   * @default 0
    */
-  tabindex?: string;
+  tabindex?: number;
 
   /**
    * Specify the `type` attribute for the button element

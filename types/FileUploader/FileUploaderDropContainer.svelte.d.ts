@@ -50,7 +50,7 @@ export interface FileUploaderDropContainerProps
    * Specify `tabindex` attribute
    * @default "0"
    */
-  tabindex?: string;
+  tabindex?: number;
 
   /**
    * Set an id for the input element

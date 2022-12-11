@@ -12,7 +12,7 @@
   export let disabled = false;
 
   /** Specify the tabindex */
-  export let tabindex = "0";
+  export let tabindex = 0;
 
   /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);

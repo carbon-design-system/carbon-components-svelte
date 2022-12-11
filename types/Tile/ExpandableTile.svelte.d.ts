@@ -55,7 +55,7 @@ export interface ExpandableTileProps
    * Specify the tabindex
    * @default "0"
    */
-  tabindex?: string;
+  tabindex?: number;
 
   /**
    * Set an id for the top-level div element

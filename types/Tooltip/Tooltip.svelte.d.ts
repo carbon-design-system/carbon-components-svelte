@@ -50,7 +50,7 @@ export interface TooltipProps
    * Set the button tabindex
    * @default "0"
    */
-  tabindex?: string;
+  tabindex?: number;
 
   /**
    * Set an id for the tooltip
