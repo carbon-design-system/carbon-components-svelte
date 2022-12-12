@@ -3180,8 +3180,9 @@ None.
 
 | Event name | Type       | Detail                            |
 | :--------- | :--------- | :-------------------------------- |
-| input      | dispatched | <code>string &#124; number</code> |
+| update     | dispatched | <code>string &#124; number</code> |
 | change     | forwarded  | --                                |
+| input      | forwarded  | --                                |
 | focus      | forwarded  | --                                |
 | blur       | forwarded  | --                                |
 
