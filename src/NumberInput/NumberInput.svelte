@@ -39,8 +39,8 @@
   /** Set to `true` for the input to be read-only */
   export let readonly = false;
 
-  /** Set to `true` to allow for an empty value */
-  export let allowEmpty = false;
+  /** Set to `true` for the input to be required */
+  export let required = true;
 
   /** Set to `true` to disable the input */
   export let disabled = false;
@@ -99,6 +99,8 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
+  let error = false;
+
   import { createEventDispatcher } from "svelte";
   import Add from "../icons/Add.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -127,11 +129,6 @@
 
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: error =
-    invalid ||
-    (!allowEmpty && value == null) ||
-    value > max ||
-    (typeof value === "number" && value < min);
   $: errorId = `error-${id}`;
   $: ariaLabel =
     $$props["aria-label"] ||
@@ -143,11 +140,14 @@
 
   function onInput({ target }) {
     value = parse(target.value);
+    error = !ref.checkValidity() || invalid;
 
     dispatch("input", value);
   }
 
   function onChange({ target }) {
+    error = !ref.checkValidity() || invalid;
+
     dispatch("change", parse(target.value));
   }
 </script>
@@ -202,6 +202,7 @@
         step="{step}"
         value="{value ?? ''}"
         readonly="{readonly}"
+        required="{required}"
         {...$$restProps}
         on:change="{onChange}"
         on:input="{onInput}"
@@ -211,10 +212,10 @@
         on:blur
         on:paste
       />
-      {#if invalid}
+      {#if invalid || error}
         <WarningFilled class="bx--number__invalid" />
       {/if}
-      {#if !invalid && warn}
+      {#if !invalid && !error && warn}
         <WarningAltFilled
           class="bx--number__invalid bx--number__invalid--warning"
         />
@@ -265,7 +266,7 @@
         {helperText}
       </div>
     {/if}
-    {#if error}
+    {#if invalid || error}
       <div id="{errorId}" class:bx--form-requirement="{true}">
         {invalidText}
       </div>
