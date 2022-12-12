@@ -1,6 +1,6 @@
 <script>
   /**
-   * @event {string | number} update
+   * @event {string | number} update The selected value.
    */
 
   /**

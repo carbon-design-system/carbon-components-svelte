@@ -8406,7 +8406,8 @@
         {
           "type": "dispatched",
           "name": "change",
-          "detail": "{ page?: number; pageSize?: number }"
+          "detail": "{ page?: number; pageSize?: number }",
+          "description": "Dispatched after any user interaction"
         },
         {
           "type": "dispatched",
@@ -10257,7 +10258,12 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "update", "detail": "string | number" },
+        {
+          "type": "dispatched",
+          "name": "update",
+          "detail": "string | number",
+          "description": "The selected value."
+        },
         { "type": "forwarded", "name": "change", "element": "select" },
         { "type": "forwarded", "name": "input", "element": "select" },
         { "type": "forwarded", "name": "focus", "element": "select" },
