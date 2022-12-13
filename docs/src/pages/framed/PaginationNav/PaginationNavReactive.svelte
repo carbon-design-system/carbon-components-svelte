@@ -7,8 +7,8 @@
 <PaginationNav bind:page />
 
 <div style="margin: var(--cds-layout-01) 0">
-  <Button on:click="{() => (page = 0)}" disabled="{page === 0}">
-    Set page to 0
+  <Button on:click="{() => (page = 1)}" disabled="{page === 0}">
+    Set page to 1
   </Button>
 </div>
 

@@ -34,7 +34,7 @@
       >
         <option value="" hidden></option>
         {#each Array.from({ length: count }, (_, i) => i) as i}
-          <option value="{fromIndex + i}" data-page="{fromIndex + i + 1}">
+          <option value="{fromIndex + i + 1}" data-page="{fromIndex + i + 1}">
             {fromIndex + i + 1}
           </option>
         {/each}

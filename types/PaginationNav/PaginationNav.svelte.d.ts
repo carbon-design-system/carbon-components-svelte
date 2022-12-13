@@ -5,7 +5,7 @@ export interface PaginationNavProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
   /**
    * Specify the current page index
-   * @default 0
+   * @default 1
    */
   page?: number;
 
