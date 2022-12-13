@@ -133,6 +133,7 @@
   $: ariaLabel =
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
+  $: if (ref) ref.setCustomValidity(invalid ? invalidText : "");
 
   function parse(raw) {
     return raw != "" ? Number(raw) : null;
@@ -153,8 +154,6 @@
 
     dispatch("change", parse(target.value));
   }
-
-  $: if (ref) ref.setCustomValidity(invalid ? invalidText : "");
 
   onMount(() => {
     error = getValidity();
