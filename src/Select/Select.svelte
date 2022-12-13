@@ -1,6 +1,6 @@
 <script>
   /**
-   * @event {string | number} change
+   * @event {string | number} update The selected value.
    */
 
   /**
@@ -114,7 +114,7 @@
     selected = $selectedValue;
 
     if (prevSelected !== undefined && selected !== prevSelected) {
-      dispatch("change", $selectedValue);
+      dispatch("update", $selectedValue);
     }
 
     prevSelected = selected;
@@ -163,6 +163,7 @@
             class:bx--select-input--sm="{size === 'sm'}"
             class:bx--select-input--xl="{size === 'xl'}"
             on:change="{handleChange}"
+            on:change
             on:input
             on:focus
             on:blur
@@ -206,6 +207,7 @@
           class:bx--select-input--sm="{size === 'sm'}"
           class:bx--select-input--xl="{size === 'xl'}"
           on:change="{handleChange}"
+          on:change
           on:input
           on:focus
           on:blur

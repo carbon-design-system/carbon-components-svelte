@@ -168,11 +168,33 @@
 <h2 id="dispatched-events">Dispatched events</h2>
 
 {#if dispatched_events.length > 0}
-  <UnorderedList class="my-layout-01-03">
-    {#each dispatched_events as event (event.name)}
-      <ListItem>on:{event.name}</ListItem>
-    {/each}
-  </UnorderedList>
+  {@const hasDescription = dispatched_events.find((el) => el.description)}
+  <StructuredList flush>
+    <StructuredListHead>
+      <StructuredListRow>
+        <StructuredListCell>Event name</StructuredListCell>
+        <StructuredListCell><code>event.details</code> type</StructuredListCell>
+        {#if hasDescription}
+          <StructuredListCell>Description</StructuredListCell>
+        {/if}
+      </StructuredListRow>
+    </StructuredListHead>
+    <StructuredListBody>
+      {#each dispatched_events as event (event.name)}
+        <StructuredListRow>
+          <StructuredListCell>
+            <strong>on:{event.name}</strong>
+          </StructuredListCell>
+          <StructuredListCell>
+            <code>{event.detail}</code>
+          </StructuredListCell>
+          <StructuredListCell>
+            {event.description ?? ""}
+          </StructuredListCell>
+        </StructuredListRow>
+      {/each}
+    </StructuredListBody>
+  </StructuredList>
 {:else}
   <p class="my-layout-01-03">No dispatched events.</p>
 {/if}

@@ -11,7 +11,7 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
 
 If the `selected` prop is not set, the value of the first `SelectItem` will be used as the default value.
 
-<Select labelText="Carbon theme" on:change={e => console.log("value", e.detail)}>
+<Select labelText="Carbon theme" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" />
   <SelectItem value="g10" />
   <SelectItem value="g80" />
@@ -23,7 +23,7 @@ If the `selected` prop is not set, the value of the first `SelectItem` will be u
 
 Use the `text` prop on `SelectItem` to customize the display value.
 
-<Select labelText="Carbon theme" on:change={e => console.log("value", e.detail)}>
+<Select labelText="Carbon theme" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g80" text="Gray 80" />
@@ -35,7 +35,7 @@ Use the `text` prop on `SelectItem` to customize the display value.
 
 Use the `selected` prop to specify an initial value.
 
-<Select labelText="Carbon theme" selected="g10" on:change={e => console.log("value", e.detail)}>
+<Select labelText="Carbon theme" selected="g10" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g80" text="Gray 80" />

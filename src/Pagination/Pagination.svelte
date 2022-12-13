@@ -1,8 +1,9 @@
 <script>
   /**
-   * @event {{ pageSize: number; page: number; }} update
+   * @event {{ page?: number; pageSize?: number }} change - Dispatched after any user interaction
    * @event {{ page: number; }} click:button--previous
    * @event {{ page: number; }} click:button--next
+   * @event {{ pageSize: number; page: number; }} update
    */
 
   /** Specify the current page index */
@@ -109,6 +110,9 @@
         hideLabel
         noLabel
         inline
+        on:change="{() => {
+          dispatch('change', { pageSize });
+        }}"
         bind:selected="{pageSize}"
       >
         {#each pageSizes as size, i (size)}
@@ -136,6 +140,9 @@
         labelText="Page number, of {totalPages} pages"
         inline
         hideLabel
+        on:change="{() => {
+          dispatch('change', { page });
+        }}"
         bind:selected="{page}"
       >
         {#each selectItems as size, i (size)}
@@ -161,6 +168,7 @@
       on:click="{() => {
         page--;
         dispatch('click:button--previous', { page });
+        dispatch('change', { page });
       }}"
     />
     <Button
@@ -176,6 +184,7 @@
       on:click="{() => {
         page++;
         dispatch('click:button--next', { page });
+        dispatch('change', { page });
       }}"
     />
   </div>

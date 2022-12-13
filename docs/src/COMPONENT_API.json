@@ -8405,8 +8405,9 @@
       "events": [
         {
           "type": "dispatched",
-          "name": "update",
-          "detail": "{ pageSize: number; page: number; }"
+          "name": "change",
+          "detail": "{ page?: number; pageSize?: number }",
+          "description": "Dispatched after any user interaction"
         },
         {
           "type": "dispatched",
@@ -8417,6 +8418,11 @@
           "type": "dispatched",
           "name": "click:button--next",
           "detail": "{ page: number; }"
+        },
+        {
+          "type": "dispatched",
+          "name": "update",
+          "detail": "{ pageSize: number; page: number; }"
         }
       ],
       "typedefs": [],
@@ -10252,7 +10258,13 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "change", "detail": "string | number" },
+        {
+          "type": "dispatched",
+          "name": "update",
+          "detail": "string | number",
+          "description": "The selected value."
+        },
+        { "type": "forwarded", "name": "change", "element": "select" },
         { "type": "forwarded", "name": "input", "element": "select" },
         { "type": "forwarded", "name": "focus", "element": "select" },
         { "type": "forwarded", "name": "blur", "element": "select" }
