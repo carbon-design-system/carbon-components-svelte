@@ -72,9 +72,10 @@
       {labelText}
     </slot>
     {#if status === "error" || status === "finished"}
-      <span class="bx--progress-bar__status-icon">
-        <svelte:component this="{statusIcons[status]}" />
-      </span>
+      <svelte:component
+        this="{statusIcons[status]}"
+        class="bx--progress-bar__status-icon"
+      />
     {/if}
   </label>
   <div
