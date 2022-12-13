@@ -88,7 +88,7 @@
   >
     <div
       class:bx--progress-bar__bar="{true}"
-      style="transform: scaleX({capped / max})"
+      style="--scale-x: {indeterminate ? 0 : capped / max}"
     ></div>
   </div>
   {#if helperText}
@@ -99,36 +99,10 @@
 </div>
 
 <style>
-  .bx--progress-bar--error .bx--progress-bar__bar {
-    background-color: var(--cds-support-error, #da1e28);
-  }
-
-  .bx--progress-bar__status-icon {
-    float: right;
-  }
-
-  .bx--progress-bar--error .bx--progress-bar__helper-text,
-  .bx--progress-bar--error .bx--progress-bar__status-icon {
-    color: var(--cds-support-error, #da1e28);
-  }
-
-  .bx--progress-bar--finished .bx--progress-bar__bar {
-    background-color: var(--cds-support-success, #198038);
-  }
-
-  .bx--progress-bar--finished .bx--progress-bar__status-icon {
-    color: var(--cds-support-success, #198038);
-  }
-
-  .bx--progress-bar__status-icon {
-    flex-shrink: 0;
-    margin-left: 1rem;
-  }
-
-  .bx--progress-bar--error .bx--progress-bar__bar,
-  .bx--progress-bar--finished .bx--progress-bar__bar {
-    transform: scaleX(
-      1
-    ) !important; /* Overwrite the style applied to the div */
+  .bx--progress-bar:not(.bx--progress-bar--indeterminate):not(
+      .bx--progress-bar--error
+    ):not(.bx--progress-bar--finished)
+    .bx--progress-bar__bar {
+    transform: scaleX(var(--scale-x));
   }
 </style>
