@@ -55,7 +55,7 @@
   export let invalid = false;
 
   /** Specify the invalid state text */
-  export let invalidText = "";
+  export let invalidText = "Number is not valid";
 
   /** Set to `true` to indicate an warning state */
   export let warn = false;
@@ -101,7 +101,7 @@
 
   let error = false;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import Add from "../icons/Add.svelte";
   import Subtract from "../icons/Subtract.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -138,18 +138,27 @@
     return raw != "" ? Number(raw) : null;
   }
 
-  function onInput({ target }) {
-    value = parse(target.value);
-    error = !ref.checkValidity() || invalid;
+  function getValidity() {
+    return !ref.checkValidity() || invalid;
+  }
 
-    dispatch("input", value);
+  function onInput({ target }) {
+    error = getValidity();
+
+    dispatch("input", parse(target.value));
   }
 
   function onChange({ target }) {
-    error = !ref.checkValidity() || invalid;
+    error = getValidity();
 
     dispatch("change", parse(target.value));
   }
+
+  $: if (ref) ref.setCustomValidity(invalid ? invalidText : "");
+
+  onMount(() => {
+    error = getValidity();
+  });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -162,7 +171,7 @@
   on:mouseleave
 >
   <div
-    data-invalid="{error || undefined}"
+    data-invalid="{invalid || error ? true : undefined}"
     class:bx--number="{true}"
     class:bx--number--helpertext="{true}"
     class:bx--number--readonly="{readonly}"
@@ -258,7 +267,7 @@
         </div>
       {/if}
     </div>
-    {#if !error && !warn && helperText}
+    {#if !invalid && !error && !warn && helperText}
       <div
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"

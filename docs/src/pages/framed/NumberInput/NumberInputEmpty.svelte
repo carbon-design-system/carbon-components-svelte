@@ -2,14 +2,22 @@
   import { NumberInput, Button } from "carbon-components-svelte";
 
   let value = null;
+  let invalid = false;
 </script>
 
-<NumberInput allowEmpty bind:value />
+<NumberInput required="{false}" bind:value="{value}" invalid="{invalid}" />
 
 <div style="margin: var(--cds-layout-01) 0">
   <Button on:click="{() => (value = null)}">Set to null</Button>
   <Button on:click="{() => (value = 0)}">Set to 0</Button>
+  <Button on:click="{() => (invalid = !invalid)}">Toggle invalid</Button>
 </div>
 
-<strong>Value:</strong>
-{value}
+<p>
+  <strong>Value:</strong>
+  {value}
+</p>
+<p>
+  <strong>Invalid:</strong>
+  {invalid}
+</p>
