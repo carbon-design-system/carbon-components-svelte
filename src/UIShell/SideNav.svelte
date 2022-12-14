@@ -35,7 +35,9 @@
   import {
     shouldRenderHamburgerMenu,
     isSideNavCollapsed,
+    isSideNavFixed,
     isSideNavRail,
+    isSideNavExpanded,
   } from "./navStore";
 
   const dispatch = createEventDispatcher();
@@ -43,7 +45,9 @@
   let winWidth = undefined;
 
   $: dispatch(isOpen ? "open" : "close");
-  $: $isSideNavCollapsed = !isOpen;
+  $: $isSideNavExpanded = !rail && winWidth >= expansionBreakpoint;
+  $: $isSideNavCollapsed = !$isSideNavExpanded;
+  $: $isSideNavFixed = !rail & isOpen;
   $: $isSideNavRail = rail;
 
   onMount(() => {
