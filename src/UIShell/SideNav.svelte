@@ -76,10 +76,10 @@
   class:bx--side-nav__navigation="{true}"
   class:bx--side-nav="{true}"
   class:bx--side-nav--ux="{true}"
-  class:bx--side-nav--fixed="{isOpen && !rail}"
-  class:bx--side-nav--expanded="{!rail && winWidth >= expansionBreakpoint}"
-  class:bx--side-nav--collapsed="{!isOpen && !rail}"
-  class:bx--side-nav--rail="{rail}"
+  class:bx--side-nav--fixed="{$isSideNavFixed}"
+  class:bx--side-nav--expanded="{$isSideNavExpanded}"
+  class:bx--side-nav--collapsed="{$isSideNavCollapsed}"
+  class:bx--side-nav--rail="{$isSideNavRail}"
   {...$$restProps}
 >
   <slot />
