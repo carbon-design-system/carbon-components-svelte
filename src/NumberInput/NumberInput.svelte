@@ -101,7 +101,7 @@
 
   let error = false;
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, tick } from "svelte";
   import Add from "../icons/Add.svelte";
   import Subtract from "../icons/Subtract.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -121,10 +121,16 @@
     } else {
       ref.stepDown();
     }
-    value = parse(ref.value);
+    value = +ref.value;
 
     dispatch("input", value);
     dispatch("change", value);
+  }
+
+  async function setErrorState() {
+    // We need to wait for the values to be synced before checking the validity.
+    await tick();
+    error = !ref.checkValidity() || invalid;
   }
 
   $: incrementLabel = translateWithId("increment");
@@ -134,30 +140,7 @@
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
   $: if (ref) ref.setCustomValidity(invalid ? invalidText : "");
-
-  function parse(raw) {
-    return raw != "" ? Number(raw) : null;
-  }
-
-  function getValidity() {
-    return !ref.checkValidity() || invalid;
-  }
-
-  function onInput({ target }) {
-    error = getValidity();
-
-    dispatch("input", parse(target.value));
-  }
-
-  function onChange({ target }) {
-    error = getValidity();
-
-    dispatch("change", parse(target.value));
-  }
-
-  onMount(() => {
-    error = getValidity();
-  });
+  $: value, invalid, required, min, max, setErrorState();
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -199,31 +182,31 @@
         type="number"
         pattern="[0-9]*"
         aria-describedby="{errorId}"
-        data-invalid="{invalid || error ? true : undefined}"
-        aria-invalid="{invalid || error ? true : undefined}"
-        aria-label="{label ? undefined : ariaLabel}"
+        data-invalid="{error ? true : undefined}"
+        aria-invalid="{error ? true : undefined}"
+        aria-label="{label ? ariaLabel : undefined}"
         disabled="{disabled}"
         id="{id}"
         name="{name}"
         max="{max}"
         min="{min}"
         step="{step}"
-        value="{value ?? ''}"
+        bind:value="{value}"
         readonly="{readonly}"
         required="{required}"
         {...$$restProps}
-        on:change="{onChange}"
-        on:input="{onInput}"
+        on:change
+        on:input
         on:keydown
         on:keyup
         on:focus
         on:blur
         on:paste
       />
-      {#if invalid || error}
+      {#if error}
         <WarningFilled class="bx--number__invalid" />
       {/if}
-      {#if !invalid && !error && warn}
+      {#if !error && warn}
         <WarningAltFilled
           class="bx--number__invalid bx--number__invalid--warning"
         />
@@ -266,7 +249,7 @@
         </div>
       {/if}
     </div>
-    {#if !invalid && !error && !warn && helperText}
+    {#if !error && !warn && helperText}
       <div
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
@@ -274,7 +257,7 @@
         {helperText}
       </div>
     {/if}
-    {#if invalid || error}
+    {#if error}
       <div id="{errorId}" class:bx--form-requirement="{true}">
         {invalidText}
       </div>

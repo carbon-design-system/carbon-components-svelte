@@ -33,7 +33,9 @@ Set `required` to `false` to allow for no value.
 
 Set `value` to `null` to denote "no value."
 
-Set `invalid` to `true` to set the input in `invalid` state.
+Set `invalid` to `true` to force a `error` state for the input.
+
+The input is reactive to `min`, `max` and `required` attributes.
 
 <FileSource src="/framed/NumberInput/NumberInputEmpty" />
 
