@@ -39,7 +39,7 @@
   /** Set to `true` for the input to be read-only */
   export let readonly = false;
 
-  /** Set to `true` for the input to be required */
+  /** Set to `false` for the input to not be required */
   export let required = true;
 
   /** Set to `true` to disable the input */
