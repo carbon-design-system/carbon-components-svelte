@@ -3,6 +3,13 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+Toasts are non-modal, time-based window elements used to display short messages;
+they usually appear at the top of the screen and disappear after a few seconds.
+
+See [detailed
+usage](https://carbondesignsystem.com/components/notification/usage).  
+See also: [InlineNotification](InlineNotification)
+
 ## Default (error)
 
 <ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
@@ -29,6 +36,19 @@ Set `fullWidth` to `true` for the notification to span the full width of its con
   <strong slot="subtitle">An internal server error occurred.</strong>
   <strong slot="caption">{new Date().toLocaleString()}</strong>
 </ToastNotification>
+
+## Accessible icon descriptions
+
+The status icon and close button icon descriptions appear on cursor hover and are read
+by assistive technology. Default descriptions are provided in English and can be
+overridden via `statusIconDescription` and `closeButtonDescription`.
+
+<ToastNotification 
+  title="错误"
+  subtitle="发生内部服务器错误"
+  statusIconDescription="错误图标"
+  closeButtonDescription="关闭通知"
+/>
 
 ## Hidden close button
 

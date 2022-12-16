@@ -27,8 +27,14 @@
   /** Specify the caption text */
   export let caption = "";
 
-  /** Specify the ARIA label for the icon */
-  export let iconDescription = "Closes notification";
+  /**
+   * Specify the ARIA label for the status icon
+   * @type {string}
+   * */
+  export let statusIconDescription = kind + " icon";
+
+  /** Specify the ARIA label for the close button */
+  export let closeButtonDescription = "Close notification";
 
   /** Set to `true` to hide the close button */
   export let hideCloseButton = false;
@@ -90,7 +96,7 @@
     on:mouseenter
     on:mouseleave
   >
-    <NotificationIcon kind="{kind}" />
+    <NotificationIcon kind="{kind}" iconDescription="{statusIconDescription}" />
     <div class:bx--toast-notification__details="{true}">
       <h3 class:bx--toast-notification__title="{true}">
         <slot name="title">{title}</slot>
@@ -105,7 +111,7 @@
     </div>
     {#if !hideCloseButton}
       <NotificationButton
-        iconDescription="{iconDescription}"
+        iconDescription="{closeButtonDescription}"
         on:click="{close}"
       />
     {/if}

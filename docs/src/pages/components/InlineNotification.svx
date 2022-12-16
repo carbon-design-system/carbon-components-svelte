@@ -7,6 +7,10 @@ components: ["InlineNotification", "NotificationActionButton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+Notification that appears inline.
+
+See also: [ToastNotification](ToastNotification)
+
 ## Default (error)
 
 <InlineNotification title="Error:" subtitle="An internal server error occurred." />
