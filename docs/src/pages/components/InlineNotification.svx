@@ -9,6 +9,8 @@ components: ["InlineNotification", "NotificationActionButton"]
 
 Notification that appears inline.
 
+See [detailed
+usage](https://carbondesignsystem.com/components/notification/usage).  
 See also: [ToastNotification](ToastNotification)
 
 ## Default (error)
