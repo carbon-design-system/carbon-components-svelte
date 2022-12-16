@@ -9008,7 +9008,7 @@
           "kind": "let",
           "description": "Set to `true` to allow for an empty value",
           "type": "boolean",
-          "value": "false",
+          "value": "true",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9980,9 +9980,8 @@
       "events": [
         {
           "type": "dispatched",
-          "name": "change",
-          "detail": "{ page?: number; pageSize?: number }",
-          "description": "Dispatched after any user interaction"
+          "name": "update",
+          "detail": "{ pageSize: number; page: number; }"
         },
         {
           "type": "dispatched",
@@ -9993,11 +9992,6 @@
           "type": "dispatched",
           "name": "click:button--next",
           "detail": "{ page: number; }"
-        },
-        {
-          "type": "dispatched",
-          "name": "update",
-          "detail": "{ pageSize: number; page: number; }"
         }
       ],
       "typedefs": [],
@@ -10015,7 +10009,7 @@
           "kind": "let",
           "description": "Specify the current page index",
           "type": "number",
-          "value": "1",
+          "value": "0",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
