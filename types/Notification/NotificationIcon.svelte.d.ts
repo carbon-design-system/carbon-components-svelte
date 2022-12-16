@@ -22,9 +22,9 @@ export interface NotificationIconProps {
 
   /**
    * Specify the ARIA label for the icon
-   * @default "Closes notification"
+   * @default undefined
    */
-  iconDescription?: string;
+  iconDescription: undefined;
 }
 
 export default class NotificationIcon extends SvelteComponentTyped<

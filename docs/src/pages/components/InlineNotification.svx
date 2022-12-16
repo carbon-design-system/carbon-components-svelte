@@ -27,6 +27,19 @@ components: ["InlineNotification", "NotificationActionButton"]
   <strong slot="subtitle">An internal server error occurred.</strong>
 </InlineNotification>
 
+## Accessible icon descriptions
+
+The status icon and close button icon descriptions appear on cursor hover and are read
+by assistive technology. Default descriptions are provided in English and can be
+overridden via `statusIconDescription` and `closeButtonDescription`.
+
+<InlineNotification 
+  title="错误"
+  subtitle="发生内部服务器错误"
+  statusIconDescription="错误图标"
+  closeButtonDescription="关闭通知"
+/>
+
 ## Hidden close button
 
 <InlineNotification hideCloseButton kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />

@@ -5627,11 +5627,23 @@
           "reactive": false
         },
         {
-          "name": "iconDescription",
+          "name": "statusIconDescription",
           "kind": "let",
-          "description": "Specify the ARIA label for the icon",
+          "description": "Specify the ARIA label for the status icon",
           "type": "string",
-          "value": "\"Closes notification\"",
+          "value": "kind + \" icon\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "closeButtonDescription",
+          "kind": "let",
+          "description": "Specify the ARIA label for the close button",
+          "type": "string",
+          "value": "\"Close notification\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7486,11 +7498,9 @@
           "name": "iconDescription",
           "kind": "let",
           "description": "Specify the ARIA label for the icon",
-          "type": "string",
-          "value": "\"Closes notification\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
-          "isRequired": false,
+          "isRequired": true,
           "constant": false,
           "reactive": false
         }
@@ -8511,7 +8521,8 @@
         {
           "type": "dispatched",
           "name": "change",
-          "detail": "{ page: number; }"
+          "detail": "{ page: number; }",
+          "description": "fires after every user interaction"
         },
         {
           "type": "dispatched",

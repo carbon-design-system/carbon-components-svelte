@@ -27,8 +27,14 @@
   /** Set to `true` to hide the close button */
   export let hideCloseButton = false;
 
-  /** Specify the ARIA label for the icon */
-  export let iconDescription = "Closes notification";
+  /**
+   * Specify the ARIA label for the status icon
+   * @type {string}
+   * */
+  export let statusIconDescription = kind + " icon";
+
+  /** Specify the ARIA label for the close button */
+  export let closeButtonDescription = "Close notification";
 
   import { createEventDispatcher, onMount } from "svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
@@ -82,7 +88,11 @@
     on:mouseleave
   >
     <div class:bx--inline-notification__details="{true}">
-      <NotificationIcon notificationType="inline" kind="{kind}" />
+      <NotificationIcon
+        notificationType="inline"
+        kind="{kind}"
+        iconDescription="{statusIconDescription}"
+      />
       <div class:bx--inline-notification__text-wrapper="{true}">
         <p class:bx--inline-notification__title="{true}">
           <slot name="title">{title}</slot>
@@ -96,7 +106,7 @@
     <slot name="actions" />
     {#if !hideCloseButton}
       <NotificationButton
-        iconDescription="{iconDescription}"
+        iconDescription="{closeButtonDescription}"
         notificationType="inline"
         on:click="{close}"
       />
