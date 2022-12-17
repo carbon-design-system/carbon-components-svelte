@@ -8511,7 +8511,8 @@
         {
           "type": "dispatched",
           "name": "change",
-          "detail": "{ page: number; }"
+          "detail": "{ page: number; }",
+          "description": "fires after every user interaction"
         },
         {
           "type": "dispatched",
