@@ -41,6 +41,8 @@
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
 
+  let isActiveAndDeterminate = false;
+
   const statusIcons = {
     error: ErrorFilled,
     finished: CheckmarkFilled,
@@ -89,7 +91,9 @@
   >
     <div
       class:bx--progress-bar__bar="{true}"
-      style="--scale-x: {indeterminate ? 0 : capped / max}"
+      style="{!indeterminate && status === 'active'
+        ? `transform: scaleX(${capped / max})`
+        : ''}"
     ></div>
   </div>
   {#if helperText}
@@ -98,12 +102,3 @@
     </div>
   {/if}
 </div>
-
-<style>
-  .bx--progress-bar:not(.bx--progress-bar--indeterminate):not(
-      .bx--progress-bar--error
-    ):not(.bx--progress-bar--finished)
-    .bx--progress-bar__bar {
-    transform: scaleX(var(--scale-x));
-  }
-</style>
