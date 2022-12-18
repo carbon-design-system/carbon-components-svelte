@@ -52,10 +52,16 @@ export interface InlineNotificationProps
   hideCloseButton?: boolean;
 
   /**
-   * Specify the ARIA label for the icon
-   * @default "Closes notification"
+   * Specify the ARIA label for the status icon
+   * @default kind + " icon"
    */
-  iconDescription?: string;
+  statusIconDescription?: string;
+
+  /**
+   * Specify the ARIA label for the close button
+   * @default "Close notification"
+   */
+  closeButtonDescription?: string;
 }
 
 export default class InlineNotification extends SvelteComponentTyped<

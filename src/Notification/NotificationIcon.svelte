@@ -12,7 +12,7 @@
   export let notificationType = "toast";
 
   /** Specify the ARIA label for the icon */
-  export let iconDescription = "Closes notification";
+  export let iconDescription;
 
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
