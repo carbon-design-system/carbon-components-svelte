@@ -2,23 +2,26 @@
   /** Specify the id for the main element */
   export let id = "main-content";
 
-  import { isSideNavExpanded, isSideNavRail } from "./navStore";
-
-  /**
-   * By default, the `SideNav` applies a left margin of `3rem` to `Content`
-   * if it's a sibling component (e.g., .bx--side-nav ~ .bx--content).
-   *
-   * We manually unset the left margin if the `SideNav`
-   * is collapsed and if it's not the `rail` variant.
-   */
-  $: unsetLeftMargin = !$isSideNavRail && !$isSideNavExpanded;
+  import { Grid, Row, Column } from "../Grid";
 </script>
 
-<main
-  id="{id}"
-  class:bx--content="{true}"
-  style="{unsetLeftMargin ? 'margin-left: 0' : ''}"
-  {...$$restProps}
+<div
+  style="padding: 3em; display: flex; flex-direction: column; align-items: center;"
 >
-  <slot />
-</main>
+  <div style="position: relative; width: 100%; z-index: 0;">
+    <main
+      id="{id}"
+      class:bx--content="{true}"
+      style="height: 100%; margin: 0px; width: 100%;"
+      {...$$restProps}
+    >
+      <Grid narrow noGutter>
+        <Row>
+          <Column lg="{{ span: 13, offset: 3 }}">
+            <slot />
+          </Column>
+        </Row>
+      </Grid>
+    </main>
+  </div>
+</div>
