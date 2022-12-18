@@ -3,6 +3,7 @@
   export let id = "main-content";
 
   import { Grid, Row, Column } from "../Grid";
+  import { shouldRenderHamburgerMenu } from "./navStore";
 </script>
 
 <div
@@ -17,7 +18,9 @@
     >
       <Grid narrow noGutter>
         <Row>
-          <Column lg="{{ span: 13, offset: 3 }}">
+          <Column
+            lg="{$shouldRenderHamburgerMenu ? { span: 13, offset: 3 } : {}}"
+          >
             <slot />
           </Column>
         </Row>
