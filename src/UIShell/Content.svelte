@@ -18,7 +18,7 @@
       {...$$restProps}
       style="{`height: 100%; margin: 0px; width: 100%; ${$$restProps.style}`}"
     >
-      <Grid narrow noGutter>
+      <Grid>
         <Row>
           <Column
             lg="{$shouldRenderHamburgerMenu ? { span: 13, offset: 3 } : {}}"
