@@ -3,7 +3,10 @@
   export let id = "main-content";
 
   import { Grid, Row, Column } from "../Grid";
-  import { shouldRenderHamburgerMenu } from "./navStore";
+  import {
+    shouldRenderHamburgerMenu,
+    isPersistentHamburgerMenu,
+  } from "./navStore";
 </script>
 
 <div
@@ -19,7 +22,9 @@
       <Grid>
         <Row>
           <Column
-            lg="{$shouldRenderHamburgerMenu ? { span: 13, offset: 3 } : {}}"
+            lg="{$shouldRenderHamburgerMenu && !$isPersistentHamburgerMenu
+              ? { span: 13, offset: 3 }
+              : {}}"
           >
             <slot />
           </Column>

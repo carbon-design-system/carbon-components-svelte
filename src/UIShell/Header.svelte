@@ -62,11 +62,15 @@
 
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/Menu.svelte";
-  import { shouldRenderHamburgerMenu } from "./navStore";
+  import {
+    shouldRenderHamburgerMenu,
+    isPersistentHamburgerMenu,
+  } from "./navStore";
   import HamburgerMenu from "./HamburgerMenu.svelte";
 
   let winWidth = undefined;
 
+  $: $isPersistentHamburgerMenu = persistentHamburgerMenu;
   $: isSideNavOpen =
     expandedByDefault &&
     winWidth >= expansionBreakpoint &&
