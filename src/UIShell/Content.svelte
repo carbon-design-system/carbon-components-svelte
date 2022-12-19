@@ -4,6 +4,8 @@
 
   import { Grid, Row, Column } from "../Grid";
   import { shouldRenderHamburgerMenu } from "./navStore";
+
+  const { style, ...rest } = $$restProps;
 </script>
 
 <div
@@ -13,8 +15,8 @@
     <main
       id="{id}"
       class:bx--content="{true}"
-      style="height: 100%; margin: 0px; width: 100%;"
       {...$$restProps}
+      style="{`height: 100%; margin: 0px; width: 100%; ${$$restProps.style}`}"
     >
       <Grid narrow noGutter>
         <Row>
