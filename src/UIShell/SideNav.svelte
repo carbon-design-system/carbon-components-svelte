@@ -26,6 +26,7 @@
   const dispatch = createEventDispatcher();
 
   let winWidth = undefined;
+  let railIsOpen = false;
 
   $: dispatch(isOpen ? "open" : "close");
 
@@ -50,12 +51,18 @@
   ></div>
 {/if}
 <nav
+  on:mouseenter="{() => {
+    if (rail) railIsOpen = true;
+  }}"
+  on:mouseleave="{() => {
+    if (railIsOpen) railIsOpen = false;
+  }}"
   aria-hidden="{!isOpen}"
   aria-label="{ariaLabel}"
   class:bx--side-nav__navigation="{true}"
   class:bx--side-nav="{true}"
   class:bx--side-nav--ux="{true}"
-  class:bx--side-nav--expanded="{isOpen && !rail}"
+  class:bx--side-nav--expanded="{isOpen || railIsOpen}"
   class:bx--side-nav--collapsed="{!isOpen && !rail}"
   class:bx--side-nav--rail="{rail}"
   {...$$restProps}
