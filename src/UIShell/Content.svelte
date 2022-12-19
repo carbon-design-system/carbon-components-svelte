@@ -4,8 +4,6 @@
 
   import { Grid, Row, Column } from "../Grid";
   import { shouldRenderHamburgerMenu } from "./navStore";
-
-  const { style, ...rest } = $$restProps;
 </script>
 
 <div
