@@ -140,7 +140,7 @@
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
   $: if (ref) ref.setCustomValidity(invalid ? invalidText : "");
-  $: value, invalid, required, min, max, setErrorState();
+  $: value, invalid, required, step, min, max, setErrorState();
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
