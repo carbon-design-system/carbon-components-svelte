@@ -281,7 +281,7 @@
             active="{selectedId === item.id}"
             highlighted="{highlightedIndex === i}"
             disabled="{item.disabled}"
-            on:click="{(e) => {
+            on:mousedown="{(e) => {
               if (item.disabled) {
                 e.stopPropagation();
                 return;

@@ -27,6 +27,7 @@
   disabled="{disabled ? true : undefined}"
   {...$$restProps}
   on:click
+  on:mousedown
   on:mouseenter
   on:mouseleave
 >
