@@ -98,7 +98,7 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import {
@@ -148,7 +148,21 @@
   const dispatchSelect = () => {
     dispatch("select", { selectedId, selectedItem });
   };
+
+  const pageClickHandler = ({ target }) => {
+    if (open && ref && !ref.contains(target)) {
+      open = false;
+    }
+  };
+
+  onMount(() => {
+    if (parent) {
+      parent.addEventListener("click", pageClickHandler);
+    }
+  });
 </script>
+
+<svelte:window on:click="{pageClickHandler}" />
 
 <div
   class:bx--dropdown__wrapper="{true}"
@@ -237,7 +251,6 @@
           open = false;
         }
       }}"
-      on:blur="{() => (open = false)}"
       on:keyup="{(e) => {
         const { key } = e;
         if ([' '].includes(key)) {
@@ -281,7 +294,7 @@
             active="{selectedId === item.id}"
             highlighted="{highlightedIndex === i}"
             disabled="{item.disabled}"
-            on:mousedown="{(e) => {
+            on:click="{(e) => {
               if (item.disabled) {
                 e.stopPropagation();
                 return;
