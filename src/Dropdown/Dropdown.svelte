@@ -111,6 +111,7 @@
   const dispatch = createEventDispatcher();
 
   let highlightedIndex = -1;
+  let mainDivRef;
 
   $: inline = type === "inline";
   $: selectedItem = items.find((item) => item.id === selectedId);
@@ -165,6 +166,7 @@
 <svelte:window on:click="{pageClickHandler}" />
 
 <div
+  bind:this="{mainDivRef}"
   class:bx--dropdown__wrapper="{true}"
   class:bx--list-box__wrapper="{true}"
   class:bx--dropdown__wrapper--inline="{inline}"
