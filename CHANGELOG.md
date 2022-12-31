@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- ## Unreleased -->
 
+## [0.71.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.13) - 2022-12-08
+
+**Breaking Changes**
+
+- `Select`: rename dispatched `change` event to `update`
+- `Select`: forward `change` event
+- `PaginationNav`: use 1-indexing to be consistent with `Pagination`
+- `InlineNotification`: remove `iconDescription` prop (replaced with `closeButtonDescription` and `statusIconDescription`)
+
+**Features**
+
+- `Pagination`: dispatch `change` event when user interacts with previous/next buttons, or page/page size dropdowns
+- `InlineNotification`: add `iconDescription` and `closeButtonDescription` props
+
+**Documentation**
+
+- link 'source code' to folder for multiple components
+- `PaginationNav`: add description for `change` event
+
 ## [0.70.13](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.70.13) - 2022-12-08
 
 **Fixes**
