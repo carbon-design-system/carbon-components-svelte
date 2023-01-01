@@ -173,7 +173,7 @@
     <StructuredListHead>
       <StructuredListRow>
         <StructuredListCell>Event name</StructuredListCell>
-        <StructuredListCell><code>event.details</code> type</StructuredListCell>
+        <StructuredListCell><code>event.detail</code> type</StructuredListCell>
         {#if hasDescription}
           <StructuredListCell>Description</StructuredListCell>
         {/if}
