@@ -25,13 +25,13 @@ Specify a `value` for the progress bar to be determinate.
 
 Specify `status="finished"` for the progress bar.
 
-<ProgressBar value={100} status="finished" labelText="Upload status" helperText="100 MB of 100 MB" />
+<ProgressBar value={100} status="finished" labelText="Upload file" helperText="Upload complete" />
 
 ## Error status
 
 Specify `status="error"` for the progress bar.
 
-<ProgressBar value={40} status="error" labelText="Upload status" helperText="40 MB of 100 MB" />
+<ProgressBar value={0} status="error" labelText="Upload file" helperText="Invalid file format" />
 
 ## Custom max value
 
@@ -59,7 +59,7 @@ The inline variant visually hides the `helperText`.
 
 ## Indented status variant
 
-<ProgressBar kind="indented" status="finished" value={40} labelText="Upload status" helperText="100 MB of 100 MB" />
+<ProgressBar kind="indented" status="finished" value={40} labelText="Upload file" helperText="Upload complete" />
 
 ## UX example
 

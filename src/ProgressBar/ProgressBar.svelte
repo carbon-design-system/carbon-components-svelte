@@ -41,8 +41,6 @@
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
 
-  let isActiveAndDeterminate = false;
-
   const statusIcons = {
     error: ErrorFilled,
     finished: CheckmarkFilled,
