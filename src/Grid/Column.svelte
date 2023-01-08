@@ -4,18 +4,10 @@
    * @typedef {{span?: ColumnSize; offset: number;}} ColumnSizeDescriptor
    * @typedef {ColumnSize | ColumnSizeDescriptor} ColumnBreakpoint
    * @restProps {div}
-   * @slot {{props: { class: string; [key: string]: any; }}}
    */
 
-  /**
-   * @slot {{ props?: { class: string; } }}
-   */
-
-  /**
-   * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot (e.g., <Column let:props><article {...props}>...</article></Column>)
-   */
-  export let as = false;
+  /** Specify the element tag */
+  export let tag = "div";
 
   /** Set to `true` to remove the gutter */
   export let noGutter = false;
@@ -98,22 +90,22 @@
     class: [
       $$restProps.class,
       columnClass,
-      !columnClass && "bx--col",
-      noGutter && "bx--no-gutter",
-      noGutterLeft && "bx--no-gutter--left",
-      noGutterRight && "bx--no-gutter--right",
-      aspectRatio && `bx--aspect-ratio bx--aspect-ratio--${aspectRatio}`,
-      padding && "bx--col-padding",
+      aspectRatio && `bx--aspect-ratio--${aspectRatio}`,
     ]
       .filter(Boolean)
       .join(" "),
   };
 </script>
 
-{#if as}
-  <slot props="{props}" />
-{:else}
-  <div {...props}>
-    <slot />
-  </div>
-{/if}
+<svelte:element
+  this="{tag}"
+  {...props}
+  class:bx--col="{!columnClass}"
+  class:bx--no-gutter="{noGutter}"
+  class:bx--no-gutter--left="{noGutterLeft}"
+  class:bx--no-gutter--right="{noGutterRight}"
+  class:bx--row-padding="{padding}"
+  class:bx--aspect-ratio="{aspectRatio}"
+>
+  <slot />
+</svelte:element>
