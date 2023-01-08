@@ -4,11 +4,10 @@ import type { SvelteComponentTyped } from "svelte";
 export interface GridProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
   /**
-   * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot (e.g., <Grid let:props><header {...props}>...</header></Grid>)
-   * @default false
+   * Specify the element tag
+   * @default "div"
    */
-  as?: boolean;
+  tag?: string;
 
   /**
    * Set to `true` to use the condensed variant
@@ -56,5 +55,5 @@ export interface GridProps
 export default class Grid extends SvelteComponentTyped<
   GridProps,
   {},
-  { default: { props: { class: string; [key: string]: any } } }
+  { default: {} }
 > {}
