@@ -9686,11 +9686,11 @@
       "filePath": "src/Grid/Row.svelte",
       "props": [
         {
-          "name": "as",
+          "name": "tag",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot (e.g., <Row let:props><section {...props}>...</section></Row>)",
-          "type": "boolean",
-          "value": "false",
+          "description": "Specify the element tag",
+          "type": "string",
+          "value": "\"div\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9771,13 +9771,7 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{ props: { class: string; [key: string]: any; } }"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }

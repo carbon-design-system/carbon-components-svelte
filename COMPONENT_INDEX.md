@@ -3057,21 +3057,21 @@ None.
 
 ### Props
 
-| Prop name     | Required | Kind             | Reactive | Type                 | Default value      | Description                                                                                                                                                                                     |
-| :------------ | :------- | :--------------- | :------- | -------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| as            | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a custom HTML element<br />Props are destructured as `props` in the default slot (e.g., &lt;Row let:props&gt;&lt;section {...props}&gt;...&lt;/section&gt;&lt;/Row&gt;) |
-| condensed     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the condensed variant                                                                                                                                                      |
-| narrow        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the narrow variant                                                                                                                                                         |
-| noGutter      | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to remove the gutter                                                                                                                                                              |
-| noGutterLeft  | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to remove the left gutter                                                                                                                                                         |
-| noGutterRight | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to remove the right gutter                                                                                                                                                        |
-| padding       | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to add top and bottom padding to all columns                                                                                                                                      |
+| Prop name     | Required | Kind             | Reactive | Type                 | Default value      | Description                                                |
+| :------------ | :------- | :--------------- | :------- | -------------------- | ------------------ | ---------------------------------------------------------- |
+| tag           | No       | <code>let</code> | No       | <code>string</code>  | <code>"div"</code> | Specify the element tag                                    |
+| condensed     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the condensed variant                 |
+| narrow        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the narrow variant                    |
+| noGutter      | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to remove the gutter                         |
+| noGutterLeft  | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to remove the left gutter                    |
+| noGutterRight | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to remove the right gutter                   |
+| padding       | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to add top and bottom padding to all columns |
 
 ### Slots
 
-| Slot name | Default | Props                                                           | Fallback |
-| :-------- | :------ | :-------------------------------------------------------------- | :------- |
-| --        | Yes     | <code>{ props: { class: string; [key: string]: any; } } </code> | --       |
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
 
 ### Events
 
