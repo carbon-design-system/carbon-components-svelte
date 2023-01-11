@@ -42,6 +42,12 @@ export interface HeaderActionProps
    * @default { duration: 200 }
    */
   transition?: false | import("svelte/transition").SlideParams;
+
+  /**
+   * Set to `true` to prevent the panel from closing when clicking outside
+   * @default false
+   */
+  preventCloseOnClickOutside?: boolean;
 }
 
 export default class HeaderAction extends SvelteComponentTyped<

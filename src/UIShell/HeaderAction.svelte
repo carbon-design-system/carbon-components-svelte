@@ -38,6 +38,9 @@
    */
   export let transition = { duration: 200 };
 
+  /** Set to `true` to prevent the panel from closing when clicking outside */
+  export let preventCloseOnClickOutside = false;
+
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
   import Close from "../icons/Close.svelte";
@@ -50,7 +53,12 @@
 
 <svelte:window
   on:click="{({ target }) => {
-    if (isOpen && !ref.contains(target) && !refPanel.contains(target)) {
+    if (
+      isOpen &&
+      !ref.contains(target) &&
+      !refPanel.contains(target) &&
+      !preventCloseOnClickOutside
+    ) {
       isOpen = false;
       dispatch('close');
     }
