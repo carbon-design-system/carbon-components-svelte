@@ -57,7 +57,7 @@
 
   import { onMount, createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  import AspectRatio from "../AspectRatio/AspectRatio.svelte";
+  import AspectRatio from "../carbon-components-svelte/AspectRatio/AspectRatio.svelte";
 
   const dispatch = createEventDispatcher();
 
