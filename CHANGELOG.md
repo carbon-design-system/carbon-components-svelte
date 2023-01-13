@@ -1,11 +1,15 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### [0.71.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.71.0...v0.71.2) (2023-01-13)
 
-<!-- ## Unreleased -->
+
+### Features
+
+* some thing ([1f7a0b3](https://github.com/carbon-design-system/carbon-components-svelte/commit/1f7a0b3a30d28bf725d8d1e23a11148dfbad73d2))
+
+### [0.71.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.71.0...v0.71.1) (2023-01-13)
 
 ## [0.71.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.71.0) - 2022-12-31
 

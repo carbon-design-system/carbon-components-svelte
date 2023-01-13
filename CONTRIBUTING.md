@@ -2,6 +2,19 @@
 
 Before submitting a pull request (PR), consider [filing an issue](https://github.com/carbon-design-system/carbon-components-svelte/issues) to gain clarity and direction.
 
+- [Prerequisites](#prerequisites)
+- [Project set-up](#project-set-up)
+  - [Install](#install)
+- [Documentation set-up](#documentation-set-up)
+- [Development workflow](#development-workflow)
+  - [Component Format](#component-format)
+  - [Editing a component](#editing-a-component)
+  - [Creating a component](#creating-a-component)
+  - [Run `yarn build:docs`](#run-yarn-builddocs)
+- [Submit a Pull Request](#submit-a-pull-request)
+  - [Sync Your Fork](#sync-your-fork)
+  - [Submit a PR](#submit-a-pr)
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en/download/package-manager/) (version >=12)
@@ -145,3 +158,28 @@ git merge upstream/master
 ### Submit a PR
 
 After you've pushed your changes to remote, submit your PR. Make sure you are comparing `<YOUR_USER_ID>/feature` to `origin/master`.
+
+## Release
+
+Locally, while on `master` and the branch is clean, run `yarn release`. This command will:
+
+- Build library and docs
+- Bump package.json version
+- Add notes to Changelog
+
+Afterwards, perform the following manually:
+
+```sh
+# 1. Stage prepared files for a commit
+git add .
+
+# 2. Commit based on the current version, either manually or with jq
+git commit -m "v$(jq -r '.version' package.json)"
+
+# 3. Create a tag based on the current version, either manually or with `jq`:
+git tag "v$(jq -r '.version' package.json)"
+
+# 4. Push files, then publish
+git push
+npm publish
+```

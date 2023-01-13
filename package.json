@@ -18,7 +18,7 @@
     "build:lib": "rollup -c",
     "format": "prettier --write \"./**/*.{svelte,js,md}\"",
     "prepack": "yarn build:docs & yarn build:lib",
-    "release": "standard-version"
+    "release": "standard-version && yarn prepack"
   },
   "dependencies": {
     "flatpickr": "4.6.9"
@@ -42,6 +42,11 @@
     "svelte": "^3.51.0",
     "svelte-check": "^2.8.1",
     "typescript": "^4.7.4"
+  },
+  "standard-version": {
+    "skip": {
+      "commit": true
+    }
   },
   "prettier": {
     "svelteStrictMode": true
