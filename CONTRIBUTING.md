@@ -182,4 +182,6 @@ git tag "v$(jq -r '.version' package.json)"
 # 4. Push files, then publish
 git push
 npm publish
+
+# 5. Generate release notes on GitHub, and comment on issues and pull requests
 ```
