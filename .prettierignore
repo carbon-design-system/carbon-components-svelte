@@ -1,5 +1,6 @@
 /lib
 /css
+/types
 .svelte-kit
 .routify
 dist
