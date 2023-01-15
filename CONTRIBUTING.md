@@ -159,7 +159,11 @@ git merge upstream/master
 
 After you've pushed your changes to remote, submit your PR. Make sure you are comparing `<YOUR_USER_ID>/feature` to `origin/master`.
 
-## Release
+## Maintainer guide
+
+The following items only apply to project maintainers.
+
+### Release
 
 Locally, while on `master` and the branch is clean, run `yarn release`. This command will:
 
@@ -167,7 +171,7 @@ Locally, while on `master` and the branch is clean, run `yarn release`. This com
 - Bump package.json version
 - Add notes to Changelog
 
-Afterwards, perform the following manually:
+This command will not create a commit nor tag. Afterwards, perform the following manually:
 
 ```sh
 # 1. Stage prepared files for a commit
