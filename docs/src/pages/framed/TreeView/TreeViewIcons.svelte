@@ -14,13 +14,11 @@
       id: 1,
       text: "Analytics",
       icon: Analytics,
-      expanded: true,
       children: [
         {
           id: 2,
           text: "IBM Analytics Engine",
           icon: Analytics,
-          expanded: true,
           children: [
             { id: 3, text: "Apache Spark", icon: Analytics },
             { id: 4, text: "Hadoop", icon: Analytics },

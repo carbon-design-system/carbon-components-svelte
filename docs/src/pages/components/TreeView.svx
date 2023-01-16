@@ -7,7 +7,7 @@
 
 The `children` prop accepts an array of child nodes. Each node should contain `id` and `text` properties.
 
-Optional properties include `disabled`, `expanded`, `icon`, and `children`.
+Optional properties include `disabled`, `icon`, and `children`.
 
 A parent node contains `children` while a leaf node does not.
 
