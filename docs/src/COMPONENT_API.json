@@ -14522,9 +14522,9 @@
           "ts": "type TreeNodeId = string | number"
         },
         {
-          "type": "{ id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; children?: TreeNode[]; }",
+          "type": "{ id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; children?: TreeNode[]; }",
           "name": "TreeNode",
-          "ts": "interface TreeNode { id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; children?: TreeNode[]; }"
+          "ts": "interface TreeNode { id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; children?: TreeNode[]; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "ul" }
