@@ -98,7 +98,7 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onDestroy, onMount } from "svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import {
@@ -148,15 +148,27 @@
   const dispatchSelect = () => {
     dispatch("select", { selectedId, selectedItem });
   };
-</script>
 
-<svelte:window
-  on:click="{({ target }) => {
+  const pageClickHandler = ({ target }) => {
     if (open && ref && !ref.contains(target)) {
       open = false;
     }
-  }}"
-/>
+  };
+
+  onMount(() => {
+    if (parent) {
+      parent.addEventListener("click", pageClickHandler);
+    }
+  });
+
+  onDestroy(() => {
+    if (parent) {
+      parent.removeEventListener("click", pageClickHandler);
+    }
+  });
+</script>
+
+<svelte:window on:click="{pageClickHandler}" />
 
 <div
   class:bx--dropdown__wrapper="{true}"
@@ -182,10 +194,11 @@
     size="{size}"
     name="{name}"
     aria-label="{$$props['aria-label']}"
-    class="bx--dropdown {direction === 'top' && 'bx--list-box--up'} {invalid &&
-      'bx--dropdown--invalid'} {!invalid &&
-      warn &&
-      'bx--dropdown--warning'} {open && 'bx--dropdown--open'}
+    class="bx--dropdown 
+      {direction === 'top' && 'bx--list-box--up'} 
+      {invalid && 'bx--dropdown--invalid'} 
+      {!invalid && warn && 'bx--dropdown--warning'} 
+      {open && 'bx--dropdown--open'}
       {size === 'sm' && 'bx--dropdown--sm'}
       {size === 'xl' && 'bx--dropdown--xl'}
       {inline && 'bx--dropdown--inline'}
