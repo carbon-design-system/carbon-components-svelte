@@ -8,7 +8,6 @@ export interface TreeNode {
   text: any;
   icon?: typeof import("svelte").SvelteComponent;
   disabled?: boolean;
-  expanded?: boolean;
   children?: TreeNode[];
 }
 
