@@ -183,9 +183,9 @@ git commit -m "v$(jq -r '.version' package.json)"
 # 3. Create a tag based on the current version, either manually or with `jq`:
 git tag "v$(jq -r '.version' package.json)"
 
-# 4. Push files, then publish
-git push
-npm publish
+# 4. Push branch and tag, then publish
+git push master [tag]
+yarn publish
 
 # 5. Generate release notes on GitHub, and comment on issues and pull requests
 ```
