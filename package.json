@@ -4,6 +4,7 @@
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "type": "module",
+  "module": "src/carbon-components-svelte",
   "scripts": {
     "test:types": "svelte-check --workspace tests",
     "lint": "prettier --write \"**/*.{svelte,md,js,json,ts}\"",
