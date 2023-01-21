@@ -12,7 +12,7 @@
   /** Set to `true` if the breadcrumb item represents the current page */
   export let isCurrentPage = false;
 
-  import Link from "../../Link/Link.svelte";
+  import Link from "../Link/Link.svelte";
 
   import { setContext } from "svelte";
 
@@ -43,3 +43,9 @@
     />
   {/if}
 </li>
+
+<style>
+  .bx--breadcrumb-item {
+    color: red;
+  }
+</style>
