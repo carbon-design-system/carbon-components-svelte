@@ -1,6 +1,6 @@
 <script>
   import { Content, Grid, Row, Column, Link } from "carbon-components-svelte";
-  import { url, metatags } from "@sveltech/routify";
+  import { url, metatags } from "@roxi/routify";
 
   metatags.title = "404";
 </script>

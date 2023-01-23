@@ -7,7 +7,7 @@
   import copy from "clipboard-copy";
   import { CodeSnippet, Button } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
-  import { url } from "@sveltech/routify";
+  import { url } from "@roxi/routify";
   import { theme } from "../store";
 
   $: themedSrcUrl = $url(`${src}?theme=${$theme}`);
