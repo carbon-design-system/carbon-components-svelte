@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { HTMLLabelAttributes } from "svelte/elements";
-
   /**
    * @event {null | number | string} change
    * @event {null | number | string} input
@@ -11,9 +9,6 @@
    * @type {"sm" | "xl"}
    */
   export let size = undefined;
-
-  // TODO: complete implementation
-  export let labelAttributes: HTMLLabelAttributes = {};
 
   /**
    * Specify the input value.

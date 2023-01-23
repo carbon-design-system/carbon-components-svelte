@@ -181,7 +181,3 @@
     />
   </button>
 {/if}
-
-<style lang="scss">
-  @use "@carbon/styles/scss/components/button";
-</style>
