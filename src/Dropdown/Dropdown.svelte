@@ -98,7 +98,7 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, onDestroy, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import {
@@ -159,11 +159,11 @@
     if (parent) {
       parent.addEventListener("click", pageClickHandler);
     }
-  });
 
-  onDestroy(() => {
-    if (parent) {
-      parent.removeEventListener("click", pageClickHandler);
+    return () => {
+      if (parent) {
+        parent.removeEventListener("click", pageClickHandler);
+      }
     }
   });
 </script>
