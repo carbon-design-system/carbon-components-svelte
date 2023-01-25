@@ -1,6 +1,6 @@
 {
   "name": "carbon-components-svelte",
-  "version": "0.72.0",
+  "version": "0.72.1",
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "./src/index.js",
@@ -45,7 +45,8 @@
   },
   "standard-version": {
     "skip": {
-      "commit": true
+      "commit": true,
+      "tag": true
     }
   },
   "prettier": {

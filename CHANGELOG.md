@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.72.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.72.0...v0.72.1) (2023-01-25)
+
+
+### Bug Fixes
+
+* **dropdown:** fix ssr issue ([#1639](https://github.com/carbon-design-system/carbon-components-svelte/issues/1639)) ([8cb5d53](https://github.com/carbon-design-system/carbon-components-svelte/commit/8cb5d538f7ad10d7c93e10c04f01d2c77b4eba44)), closes [#1638](https://github.com/carbon-design-system/carbon-components-svelte/issues/1638)
+
 ## [0.72.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.71.0...v0.72.0) (2023-01-18)
 
 
