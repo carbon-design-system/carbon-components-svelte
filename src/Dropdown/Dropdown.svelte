@@ -159,11 +159,11 @@
     if (parent) {
       parent.addEventListener("click", pageClickHandler);
     }
-  });
 
-  onDestroy(() => {
-    if (parent) {
-      parent.removeEventListener("click", pageClickHandler);
+    return () => {
+      if (parent) {
+        parent.removeEventListener("click", pageClickHandler);
+      }
     }
   });
 </script>
