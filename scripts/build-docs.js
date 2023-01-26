@@ -6,6 +6,7 @@ import pkg from "../package.json" assert { type: "json" };
 sveld({
   glob: true,
   markdown: true,
+  types: false,
   markdownOptions: {
     onAppend: (type, document, components) => {
       if (type === "h1")
