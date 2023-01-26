@@ -4121,19 +4121,19 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                        |
-| :--------- | :--------- | :-------------------------------------------- |
-| change     | dispatched | <code>null &#124; number &#124; string</code> |
-| input      | dispatched | <code>null &#124; number &#124; string</code> |
-| click      | forwarded  | --                                            |
-| mouseover  | forwarded  | --                                            |
-| mouseenter | forwarded  | --                                            |
-| mouseleave | forwarded  | --                                            |
-| keydown    | forwarded  | --                                            |
-| keyup      | forwarded  | --                                            |
-| focus      | forwarded  | --                                            |
-| blur       | forwarded  | --                                            |
-| paste      | forwarded  | --                                            |
+| Event name | Type       | Detail |
+| :--------- | :--------- | :----- |
+| click      | forwarded  | --     |
+| mouseover  | forwarded  | --     |
+| mouseenter | forwarded  | --     |
+| mouseleave | forwarded  | --     |
+| keydown    | forwarded  | --     |
+| keyup      | forwarded  | --     |
+| focus      | forwarded  | --     |
+| blur       | forwarded  | --     |
+| paste      | forwarded  | --     |
+| input      | dispatched | --     |
+| change     | dispatched | --     |
 
 ## `TextInputSkeleton`
 

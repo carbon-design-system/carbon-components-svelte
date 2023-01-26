@@ -3,7 +3,7 @@
   "components": [
     {
       "moduleName": "Accordion",
-      "filePath": "src/Accordion/Accordion.svelte",
+      "filePath": "src/carbon-components-svelte/Accordion/Accordion.svelte",
       "props": [
         {
           "name": "align",
@@ -86,7 +86,7 @@
     },
     {
       "moduleName": "AccordionItem",
-      "filePath": "src/Accordion/AccordionItem.svelte",
+      "filePath": "src/carbon-components-svelte/Accordion/AccordionItem.svelte",
       "props": [
         {
           "name": "title",
@@ -160,7 +160,7 @@
     },
     {
       "moduleName": "AccordionSkeleton",
-      "filePath": "src/Accordion/AccordionSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Accordion/AccordionSkeleton.svelte",
       "props": [
         {
           "name": "count",
@@ -223,7 +223,7 @@
     },
     {
       "moduleName": "AspectRatio",
-      "filePath": "src/AspectRatio/AspectRatio.svelte",
+      "filePath": "src/carbon-components-svelte/AspectRatio/AspectRatio.svelte",
       "props": [
         {
           "name": "ratio",
@@ -246,7 +246,7 @@
     },
     {
       "moduleName": "Breadcrumb",
-      "filePath": "src/Breadcrumb/Breadcrumb.svelte",
+      "filePath": "src/carbon-components-svelte/Breadcrumb/Breadcrumb.svelte",
       "props": [
         {
           "name": "noTrailingSlash",
@@ -306,7 +306,7 @@
     },
     {
       "moduleName": "BreadcrumbItem",
-      "filePath": "src/Breadcrumb/BreadcrumbItem.svelte",
+      "filePath": "src/carbon-components-svelte/Breadcrumb/BreadcrumbItem.svelte",
       "props": [
         {
           "name": "href",
@@ -351,7 +351,7 @@
     },
     {
       "moduleName": "BreadcrumbSkeleton",
-      "filePath": "src/Breadcrumb/BreadcrumbSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Breadcrumb/BreadcrumbSkeleton.svelte",
       "props": [
         {
           "name": "noTrailingSlash",
@@ -391,7 +391,7 @@
     },
     {
       "moduleName": "Breakpoint",
-      "filePath": "src/Breakpoint/Breakpoint.svelte",
+      "filePath": "src/carbon-components-svelte/Breakpoint/Breakpoint.svelte",
       "props": [
         {
           "name": "size",
@@ -447,7 +447,7 @@
     },
     {
       "moduleName": "Button",
-      "filePath": "src/Button/Button.svelte",
+      "filePath": "src/carbon-components-svelte/Button/Button.svelte",
       "props": [
         {
           "name": "kind",
@@ -662,7 +662,7 @@
     },
     {
       "moduleName": "ButtonSet",
-      "filePath": "src/Button/ButtonSet.svelte",
+      "filePath": "src/carbon-components-svelte/Button/ButtonSet.svelte",
       "props": [
         {
           "name": "stacked",
@@ -685,7 +685,7 @@
     },
     {
       "moduleName": "ButtonSkeleton",
-      "filePath": "src/Button/ButtonSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Button/ButtonSkeleton.svelte",
       "props": [
         {
           "name": "href",
@@ -724,7 +724,7 @@
     },
     {
       "moduleName": "Checkbox",
-      "filePath": "src/Checkbox/Checkbox.svelte",
+      "filePath": "src/carbon-components-svelte/Checkbox/Checkbox.svelte",
       "props": [
         {
           "name": "value",
@@ -928,7 +928,7 @@
     },
     {
       "moduleName": "CheckboxSkeleton",
-      "filePath": "src/Checkbox/CheckboxSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Checkbox/CheckboxSkeleton.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [],
@@ -943,7 +943,7 @@
     },
     {
       "moduleName": "ClickableTile",
-      "filePath": "src/Tile/ClickableTile.svelte",
+      "filePath": "src/carbon-components-svelte/Tile/ClickableTile.svelte",
       "props": [
         {
           "name": "clicked",
@@ -1007,7 +1007,7 @@
     },
     {
       "moduleName": "CodeSnippet",
-      "filePath": "src/CodeSnippet/CodeSnippet.svelte",
+      "filePath": "src/carbon-components-svelte/CodeSnippet/CodeSnippet.svelte",
       "props": [
         {
           "name": "type",
@@ -1263,7 +1263,7 @@
     },
     {
       "moduleName": "CodeSnippetSkeleton",
-      "filePath": "src/CodeSnippet/CodeSnippetSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/CodeSnippet/CodeSnippetSkeleton.svelte",
       "props": [
         {
           "name": "type",
@@ -1291,7 +1291,7 @@
     },
     {
       "moduleName": "Column",
-      "filePath": "src/Grid/Column.svelte",
+      "filePath": "src/carbon-components-svelte/Grid/Column.svelte",
       "props": [
         {
           "name": "as",
@@ -1450,7 +1450,7 @@
     },
     {
       "moduleName": "ComboBox",
-      "filePath": "src/ComboBox/ComboBox.svelte",
+      "filePath": "src/carbon-components-svelte/ComboBox/ComboBox.svelte",
       "props": [
         {
           "name": "items",
@@ -1775,7 +1775,7 @@
     },
     {
       "moduleName": "ComposedModal",
-      "filePath": "src/ComposedModal/ComposedModal.svelte",
+      "filePath": "src/carbon-components-svelte/ComposedModal/ComposedModal.svelte",
       "props": [
         {
           "name": "size",
@@ -1888,7 +1888,7 @@
     },
     {
       "moduleName": "Content",
-      "filePath": "src/UIShell/Content.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/Content.svelte",
       "props": [
         {
           "name": "id",
@@ -1911,7 +1911,7 @@
     },
     {
       "moduleName": "ContentSwitcher",
-      "filePath": "src/ContentSwitcher/ContentSwitcher.svelte",
+      "filePath": "src/carbon-components-svelte/ContentSwitcher/ContentSwitcher.svelte",
       "props": [
         {
           "name": "selectedIndex",
@@ -1951,7 +1951,7 @@
     },
     {
       "moduleName": "ContextMenu",
-      "filePath": "src/ContextMenu/ContextMenu.svelte",
+      "filePath": "src/carbon-components-svelte/ContextMenu/ContextMenu.svelte",
       "props": [
         {
           "name": "target",
@@ -2027,7 +2027,7 @@
     },
     {
       "moduleName": "ContextMenuDivider",
-      "filePath": "src/ContextMenu/ContextMenuDivider.svelte",
+      "filePath": "src/carbon-components-svelte/ContextMenu/ContextMenuDivider.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [],
@@ -2036,7 +2036,7 @@
     },
     {
       "moduleName": "ContextMenuGroup",
-      "filePath": "src/ContextMenu/ContextMenuGroup.svelte",
+      "filePath": "src/carbon-components-svelte/ContextMenu/ContextMenuGroup.svelte",
       "props": [
         {
           "name": "selectedIds",
@@ -2069,7 +2069,7 @@
     },
     {
       "moduleName": "ContextMenuOption",
-      "filePath": "src/ContextMenu/ContextMenuOption.svelte",
+      "filePath": "src/carbon-components-svelte/ContextMenu/ContextMenuOption.svelte",
       "props": [
         {
           "name": "kind",
@@ -2224,7 +2224,7 @@
     },
     {
       "moduleName": "ContextMenuRadioGroup",
-      "filePath": "src/ContextMenu/ContextMenuRadioGroup.svelte",
+      "filePath": "src/carbon-components-svelte/ContextMenu/ContextMenuRadioGroup.svelte",
       "props": [
         {
           "name": "selectedId",
@@ -2258,7 +2258,7 @@
     },
     {
       "moduleName": "CopyButton",
-      "filePath": "src/CopyButton/CopyButton.svelte",
+      "filePath": "src/carbon-components-svelte/CopyButton/CopyButton.svelte",
       "props": [
         {
           "name": "feedback",
@@ -2332,7 +2332,7 @@
     },
     {
       "moduleName": "DataTable",
-      "filePath": "src/DataTable/DataTable.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/DataTable.svelte",
       "props": [
         {
           "name": "headers",
@@ -2725,7 +2725,7 @@
     },
     {
       "moduleName": "DataTableSkeleton",
-      "filePath": "src/DataTable/DataTableSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/DataTableSkeleton.svelte",
       "props": [
         {
           "name": "columns",
@@ -2828,7 +2828,7 @@
     },
     {
       "moduleName": "DatePicker",
-      "filePath": "src/DatePicker/DatePicker.svelte",
+      "filePath": "src/carbon-components-svelte/DatePicker/DatePicker.svelte",
       "props": [
         {
           "name": "datePickerType",
@@ -2993,7 +2993,7 @@
     },
     {
       "moduleName": "DatePickerInput",
-      "filePath": "src/DatePicker/DatePickerInput.svelte",
+      "filePath": "src/carbon-components-svelte/DatePicker/DatePickerInput.svelte",
       "props": [
         {
           "name": "size",
@@ -3207,7 +3207,7 @@
     },
     {
       "moduleName": "DatePickerSkeleton",
-      "filePath": "src/DatePicker/DatePickerSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/DatePicker/DatePickerSkeleton.svelte",
       "props": [
         {
           "name": "range",
@@ -3247,7 +3247,7 @@
     },
     {
       "moduleName": "Dropdown",
-      "filePath": "src/Dropdown/Dropdown.svelte",
+      "filePath": "src/carbon-components-svelte/Dropdown/Dropdown.svelte",
       "props": [
         {
           "name": "items",
@@ -3534,7 +3534,7 @@
     },
     {
       "moduleName": "DropdownSkeleton",
-      "filePath": "src/Dropdown/DropdownSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Dropdown/DropdownSkeleton.svelte",
       "props": [
         {
           "name": "inline",
@@ -3562,7 +3562,7 @@
     },
     {
       "moduleName": "ExpandableTile",
-      "filePath": "src/Tile/ExpandableTile.svelte",
+      "filePath": "src/carbon-components-svelte/Tile/ExpandableTile.svelte",
       "props": [
         {
           "name": "expanded",
@@ -3714,7 +3714,7 @@
     },
     {
       "moduleName": "FileUploader",
-      "filePath": "src/FileUploader/FileUploader.svelte",
+      "filePath": "src/carbon-components-svelte/FileUploader/FileUploader.svelte",
       "props": [
         {
           "name": "status",
@@ -3890,7 +3890,7 @@
     },
     {
       "moduleName": "FileUploaderButton",
-      "filePath": "src/FileUploader/FileUploaderButton.svelte",
+      "filePath": "src/carbon-components-svelte/FileUploader/FileUploaderButton.svelte",
       "props": [
         {
           "name": "accept",
@@ -4060,7 +4060,7 @@
     },
     {
       "moduleName": "FileUploaderDropContainer",
-      "filePath": "src/FileUploader/FileUploaderDropContainer.svelte",
+      "filePath": "src/carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte",
       "props": [
         {
           "name": "accept",
@@ -4226,7 +4226,7 @@
     },
     {
       "moduleName": "FileUploaderItem",
-      "filePath": "src/FileUploader/FileUploaderItem.svelte",
+      "filePath": "src/carbon-components-svelte/FileUploader/FileUploaderItem.svelte",
       "props": [
         {
           "name": "status",
@@ -4338,7 +4338,7 @@
     },
     {
       "moduleName": "FileUploaderSkeleton",
-      "filePath": "src/FileUploader/FileUploaderSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/FileUploader/FileUploaderSkeleton.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [],
@@ -4353,7 +4353,7 @@
     },
     {
       "moduleName": "Filename",
-      "filePath": "src/FileUploader/Filename.svelte",
+      "filePath": "src/carbon-components-svelte/FileUploader/Filename.svelte",
       "props": [
         {
           "name": "status",
@@ -4403,7 +4403,7 @@
     },
     {
       "moduleName": "FluidForm",
-      "filePath": "src/FluidForm/FluidForm.svelte",
+      "filePath": "src/carbon-components-svelte/FluidForm/FluidForm.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -4420,7 +4420,7 @@
     },
     {
       "moduleName": "Form",
-      "filePath": "src/Form/Form.svelte",
+      "filePath": "src/carbon-components-svelte/Form/Form.svelte",
       "props": [
         {
           "name": "ref",
@@ -4450,7 +4450,7 @@
     },
     {
       "moduleName": "FormGroup",
-      "filePath": "src/FormGroup/FormGroup.svelte",
+      "filePath": "src/carbon-components-svelte/FormGroup/FormGroup.svelte",
       "props": [
         {
           "name": "noMargin",
@@ -4538,7 +4538,7 @@
     },
     {
       "moduleName": "FormItem",
-      "filePath": "src/FormItem/FormItem.svelte",
+      "filePath": "src/carbon-components-svelte/FormItem/FormItem.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -4553,7 +4553,7 @@
     },
     {
       "moduleName": "FormLabel",
-      "filePath": "src/FormLabel/FormLabel.svelte",
+      "filePath": "src/carbon-components-svelte/FormLabel/FormLabel.svelte",
       "props": [
         {
           "name": "id",
@@ -4581,7 +4581,7 @@
     },
     {
       "moduleName": "Grid",
-      "filePath": "src/Grid/Grid.svelte",
+      "filePath": "src/carbon-components-svelte/Grid/Grid.svelte",
       "props": [
         {
           "name": "as",
@@ -4694,7 +4694,7 @@
     },
     {
       "moduleName": "Header",
-      "filePath": "src/UIShell/Header.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/Header.svelte",
       "props": [
         {
           "name": "expandedByDefault",
@@ -4841,7 +4841,7 @@
     },
     {
       "moduleName": "HeaderAction",
-      "filePath": "src/UIShell/HeaderAction.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderAction.svelte",
       "props": [
         {
           "name": "isOpen",
@@ -4945,7 +4945,7 @@
     },
     {
       "moduleName": "HeaderActionLink",
-      "filePath": "src/UIShell/HeaderActionLink.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderActionLink.svelte",
       "props": [
         {
           "name": "linkIsActive",
@@ -5009,7 +5009,7 @@
     },
     {
       "moduleName": "HeaderGlobalAction",
-      "filePath": "src/UIShell/HeaderGlobalAction.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderGlobalAction.svelte",
       "props": [
         {
           "name": "isActive",
@@ -5062,7 +5062,7 @@
     },
     {
       "moduleName": "HeaderNav",
-      "filePath": "src/UIShell/HeaderNav.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderNav.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -5072,7 +5072,7 @@
     },
     {
       "moduleName": "HeaderNavItem",
-      "filePath": "src/UIShell/HeaderNavItem.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderNavItem.svelte",
       "props": [
         {
           "name": "href",
@@ -5138,7 +5138,7 @@
     },
     {
       "moduleName": "HeaderNavMenu",
-      "filePath": "src/UIShell/HeaderNavMenu.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderNavMenu.svelte",
       "props": [
         {
           "name": "expanded",
@@ -5205,7 +5205,7 @@
     },
     {
       "moduleName": "HeaderPanelDivider",
-      "filePath": "src/UIShell/HeaderPanelDivider.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderPanelDivider.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -5214,7 +5214,7 @@
     },
     {
       "moduleName": "HeaderPanelLink",
-      "filePath": "src/UIShell/HeaderPanelLink.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderPanelLink.svelte",
       "props": [
         {
           "name": "href",
@@ -5248,7 +5248,7 @@
     },
     {
       "moduleName": "HeaderPanelLinks",
-      "filePath": "src/UIShell/HeaderPanelLinks.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderPanelLinks.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -5257,7 +5257,7 @@
     },
     {
       "moduleName": "HeaderSearch",
-      "filePath": "src/UIShell/HeaderSearch.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderSearch.svelte",
       "props": [
         {
           "name": "value",
@@ -5356,7 +5356,7 @@
     },
     {
       "moduleName": "HeaderUtilities",
-      "filePath": "src/UIShell/HeaderUtilities.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/HeaderUtilities.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -5365,7 +5365,7 @@
     },
     {
       "moduleName": "ImageLoader",
-      "filePath": "src/ImageLoader/ImageLoader.svelte",
+      "filePath": "src/carbon-components-svelte/ImageLoader/ImageLoader.svelte",
       "props": [
         {
           "name": "src",
@@ -5477,7 +5477,7 @@
     },
     {
       "moduleName": "InlineLoading",
-      "filePath": "src/InlineLoading/InlineLoading.svelte",
+      "filePath": "src/carbon-components-svelte/InlineLoading/InlineLoading.svelte",
       "props": [
         {
           "name": "status",
@@ -5540,7 +5540,7 @@
     },
     {
       "moduleName": "InlineNotification",
-      "filePath": "src/Notification/InlineNotification.svelte",
+      "filePath": "src/carbon-components-svelte/Notification/InlineNotification.svelte",
       "props": [
         {
           "name": "kind",
@@ -5684,7 +5684,7 @@
     },
     {
       "moduleName": "Link",
-      "filePath": "src/Link/Link.svelte",
+      "filePath": "src/carbon-components-svelte/Link/Link.svelte",
       "props": [
         {
           "name": "size",
@@ -5789,7 +5789,7 @@
     },
     {
       "moduleName": "ListBox",
-      "filePath": "src/ListBox/ListBox.svelte",
+      "filePath": "src/carbon-components-svelte/ListBox/ListBox.svelte",
       "props": [
         {
           "name": "size",
@@ -5910,7 +5910,7 @@
     },
     {
       "moduleName": "ListBoxField",
-      "filePath": "src/ListBox/ListBoxField.svelte",
+      "filePath": "src/carbon-components-svelte/ListBox/ListBoxField.svelte",
       "props": [
         {
           "name": "disabled",
@@ -6019,7 +6019,7 @@
     },
     {
       "moduleName": "ListBoxMenu",
-      "filePath": "src/ListBox/ListBoxMenu.svelte",
+      "filePath": "src/carbon-components-svelte/ListBox/ListBoxMenu.svelte",
       "props": [
         {
           "name": "id",
@@ -6054,7 +6054,7 @@
     },
     {
       "moduleName": "ListBoxMenuIcon",
-      "filePath": "src/ListBox/ListBoxMenuIcon.svelte",
+      "filePath": "src/carbon-components-svelte/ListBox/ListBoxMenuIcon.svelte",
       "props": [
         {
           "name": "open",
@@ -6107,7 +6107,7 @@
     },
     {
       "moduleName": "ListBoxMenuItem",
-      "filePath": "src/ListBox/ListBoxMenuItem.svelte",
+      "filePath": "src/carbon-components-svelte/ListBox/ListBoxMenuItem.svelte",
       "props": [
         {
           "name": "active",
@@ -6158,7 +6158,7 @@
     },
     {
       "moduleName": "ListBoxSelection",
-      "filePath": "src/ListBox/ListBoxSelection.svelte",
+      "filePath": "src/carbon-components-svelte/ListBox/ListBoxSelection.svelte",
       "props": [
         {
           "name": "selectionCount",
@@ -6234,7 +6234,7 @@
     },
     {
       "moduleName": "ListItem",
-      "filePath": "src/ListItem/ListItem.svelte",
+      "filePath": "src/carbon-components-svelte/ListItem/ListItem.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -6249,7 +6249,7 @@
     },
     {
       "moduleName": "Loading",
-      "filePath": "src/Loading/Loading.svelte",
+      "filePath": "src/carbon-components-svelte/Loading/Loading.svelte",
       "props": [
         {
           "name": "small",
@@ -6320,7 +6320,7 @@
     },
     {
       "moduleName": "LocalStorage",
-      "filePath": "src/LocalStorage/LocalStorage.svelte",
+      "filePath": "src/carbon-components-svelte/LocalStorage/LocalStorage.svelte",
       "props": [
         {
           "name": "key",
@@ -6385,7 +6385,7 @@
     },
     {
       "moduleName": "Modal",
-      "filePath": "src/Modal/Modal.svelte",
+      "filePath": "src/carbon-components-svelte/Modal/Modal.svelte",
       "props": [
         {
           "name": "size",
@@ -6681,7 +6681,7 @@
     },
     {
       "moduleName": "ModalBody",
-      "filePath": "src/ComposedModal/ModalBody.svelte",
+      "filePath": "src/carbon-components-svelte/ComposedModal/ModalBody.svelte",
       "props": [
         {
           "name": "hasForm",
@@ -6716,7 +6716,7 @@
     },
     {
       "moduleName": "ModalFooter",
-      "filePath": "src/ComposedModal/ModalFooter.svelte",
+      "filePath": "src/carbon-components-svelte/ComposedModal/ModalFooter.svelte",
       "props": [
         {
           "name": "primaryButtonText",
@@ -6826,7 +6826,7 @@
     },
     {
       "moduleName": "ModalHeader",
-      "filePath": "src/ComposedModal/ModalHeader.svelte",
+      "filePath": "src/carbon-components-svelte/ComposedModal/ModalHeader.svelte",
       "props": [
         {
           "name": "title",
@@ -6921,7 +6921,7 @@
     },
     {
       "moduleName": "MultiSelect",
-      "filePath": "src/MultiSelect/MultiSelect.svelte",
+      "filePath": "src/carbon-components-svelte/MultiSelect/MultiSelect.svelte",
       "props": [
         {
           "name": "items",
@@ -7387,7 +7387,7 @@
     },
     {
       "moduleName": "NotificationActionButton",
-      "filePath": "src/Notification/NotificationActionButton.svelte",
+      "filePath": "src/carbon-components-svelte/Notification/NotificationActionButton.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -7406,7 +7406,7 @@
     },
     {
       "moduleName": "NotificationButton",
-      "filePath": "src/Notification/NotificationButton.svelte",
+      "filePath": "src/carbon-components-svelte/Notification/NotificationButton.svelte",
       "props": [
         {
           "name": "notificationType",
@@ -7468,7 +7468,7 @@
     },
     {
       "moduleName": "NotificationIcon",
-      "filePath": "src/Notification/NotificationIcon.svelte",
+      "filePath": "src/carbon-components-svelte/Notification/NotificationIcon.svelte",
       "props": [
         {
           "name": "kind",
@@ -7512,7 +7512,7 @@
     },
     {
       "moduleName": "NumberInput",
-      "filePath": "src/NumberInput/NumberInput.svelte",
+      "filePath": "src/carbon-components-svelte/NumberInput/NumberInput.svelte",
       "props": [
         {
           "name": "size",
@@ -7820,7 +7820,7 @@
     },
     {
       "moduleName": "NumberInputSkeleton",
-      "filePath": "src/NumberInput/NumberInputSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/NumberInput/NumberInputSkeleton.svelte",
       "props": [
         {
           "name": "hideLabel",
@@ -7848,7 +7848,7 @@
     },
     {
       "moduleName": "OrderedList",
-      "filePath": "src/OrderedList/OrderedList.svelte",
+      "filePath": "src/carbon-components-svelte/OrderedList/OrderedList.svelte",
       "props": [
         {
           "name": "nested",
@@ -7900,7 +7900,7 @@
     },
     {
       "moduleName": "OutboundLink",
-      "filePath": "src/Link/OutboundLink.svelte",
+      "filePath": "src/carbon-components-svelte/Link/OutboundLink.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -7916,7 +7916,7 @@
     },
     {
       "moduleName": "OverflowMenu",
-      "filePath": "src/OverflowMenu/OverflowMenu.svelte",
+      "filePath": "src/carbon-components-svelte/OverflowMenu/OverflowMenu.svelte",
       "props": [
         {
           "name": "size",
@@ -8086,7 +8086,7 @@
     },
     {
       "moduleName": "OverflowMenuItem",
-      "filePath": "src/OverflowMenu/OverflowMenuItem.svelte",
+      "filePath": "src/carbon-components-svelte/OverflowMenu/OverflowMenuItem.svelte",
       "props": [
         {
           "name": "text",
@@ -8215,7 +8215,7 @@
     },
     {
       "moduleName": "Pagination",
-      "filePath": "src/Pagination/Pagination.svelte",
+      "filePath": "src/carbon-components-svelte/Pagination/Pagination.svelte",
       "props": [
         {
           "name": "page",
@@ -8440,7 +8440,7 @@
     },
     {
       "moduleName": "PaginationNav",
-      "filePath": "src/PaginationNav/PaginationNav.svelte",
+      "filePath": "src/carbon-components-svelte/PaginationNav/PaginationNav.svelte",
       "props": [
         {
           "name": "page",
@@ -8540,7 +8540,7 @@
     },
     {
       "moduleName": "PaginationSkeleton",
-      "filePath": "src/Pagination/PaginationSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Pagination/PaginationSkeleton.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [],
@@ -8555,7 +8555,7 @@
     },
     {
       "moduleName": "PasswordInput",
-      "filePath": "src/TextInput/PasswordInput.svelte",
+      "filePath": "src/carbon-components-svelte/TextInput/PasswordInput.svelte",
       "props": [
         {
           "name": "size",
@@ -8835,7 +8835,7 @@
     },
     {
       "moduleName": "Popover",
-      "filePath": "src/Popover/Popover.svelte",
+      "filePath": "src/carbon-components-svelte/Popover/Popover.svelte",
       "props": [
         {
           "name": "open",
@@ -8936,7 +8936,7 @@
     },
     {
       "moduleName": "ProgressBar",
-      "filePath": "src/ProgressBar/ProgressBar.svelte",
+      "filePath": "src/carbon-components-svelte/ProgressBar/ProgressBar.svelte",
       "props": [
         {
           "name": "value",
@@ -9049,7 +9049,7 @@
     },
     {
       "moduleName": "ProgressIndicator",
-      "filePath": "src/ProgressIndicator/ProgressIndicator.svelte",
+      "filePath": "src/carbon-components-svelte/ProgressIndicator/ProgressIndicator.svelte",
       "props": [
         {
           "name": "currentIndex",
@@ -9114,7 +9114,7 @@
     },
     {
       "moduleName": "ProgressIndicatorSkeleton",
-      "filePath": "src/ProgressIndicator/ProgressIndicatorSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/ProgressIndicator/ProgressIndicatorSkeleton.svelte",
       "props": [
         {
           "name": "vertical",
@@ -9154,7 +9154,7 @@
     },
     {
       "moduleName": "ProgressStep",
-      "filePath": "src/ProgressIndicator/ProgressStep.svelte",
+      "filePath": "src/carbon-components-svelte/ProgressIndicator/ProgressStep.svelte",
       "props": [
         {
           "name": "complete",
@@ -9274,7 +9274,7 @@
     },
     {
       "moduleName": "RadioButton",
-      "filePath": "src/RadioButton/RadioButton.svelte",
+      "filePath": "src/carbon-components-svelte/RadioButton/RadioButton.svelte",
       "props": [
         {
           "name": "value",
@@ -9412,7 +9412,7 @@
     },
     {
       "moduleName": "RadioButtonGroup",
-      "filePath": "src/RadioButtonGroup/RadioButtonGroup.svelte",
+      "filePath": "src/carbon-components-svelte/RadioButtonGroup/RadioButtonGroup.svelte",
       "props": [
         {
           "name": "selected",
@@ -9519,7 +9519,7 @@
     },
     {
       "moduleName": "RadioButtonSkeleton",
-      "filePath": "src/RadioButton/RadioButtonSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/RadioButton/RadioButtonSkeleton.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [],
@@ -9534,7 +9534,7 @@
     },
     {
       "moduleName": "RadioTile",
-      "filePath": "src/Tile/RadioTile.svelte",
+      "filePath": "src/carbon-components-svelte/Tile/RadioTile.svelte",
       "props": [
         {
           "name": "checked",
@@ -9648,7 +9648,7 @@
     },
     {
       "moduleName": "RecursiveList",
-      "filePath": "src/RecursiveList/RecursiveList.svelte",
+      "filePath": "src/carbon-components-svelte/RecursiveList/RecursiveList.svelte",
       "props": [
         {
           "name": "children",
@@ -9689,7 +9689,7 @@
     },
     {
       "moduleName": "Row",
-      "filePath": "src/Grid/Row.svelte",
+      "filePath": "src/carbon-components-svelte/Grid/Row.svelte",
       "props": [
         {
           "name": "as",
@@ -9790,7 +9790,7 @@
     },
     {
       "moduleName": "Search",
-      "filePath": "src/Search/Search.svelte",
+      "filePath": "src/carbon-components-svelte/Search/Search.svelte",
       "props": [
         {
           "name": "value",
@@ -10026,7 +10026,7 @@
     },
     {
       "moduleName": "SearchSkeleton",
-      "filePath": "src/Search/SearchSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Search/SearchSkeleton.svelte",
       "props": [
         {
           "name": "size",
@@ -10054,7 +10054,7 @@
     },
     {
       "moduleName": "Select",
-      "filePath": "src/Select/Select.svelte",
+      "filePath": "src/carbon-components-svelte/Select/Select.svelte",
       "props": [
         {
           "name": "selected",
@@ -10285,7 +10285,7 @@
     },
     {
       "moduleName": "SelectItem",
-      "filePath": "src/Select/SelectItem.svelte",
+      "filePath": "src/carbon-components-svelte/Select/SelectItem.svelte",
       "props": [
         {
           "name": "value",
@@ -10343,7 +10343,7 @@
     },
     {
       "moduleName": "SelectItemGroup",
-      "filePath": "src/Select/SelectItemGroup.svelte",
+      "filePath": "src/carbon-components-svelte/Select/SelectItemGroup.svelte",
       "props": [
         {
           "name": "disabled",
@@ -10378,7 +10378,7 @@
     },
     {
       "moduleName": "SelectSkeleton",
-      "filePath": "src/Select/SelectSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Select/SelectSkeleton.svelte",
       "props": [
         {
           "name": "hideLabel",
@@ -10406,7 +10406,7 @@
     },
     {
       "moduleName": "SelectableTile",
-      "filePath": "src/Tile/SelectableTile.svelte",
+      "filePath": "src/carbon-components-svelte/Tile/SelectableTile.svelte",
       "props": [
         {
           "name": "selected",
@@ -10543,7 +10543,7 @@
     },
     {
       "moduleName": "SideNav",
-      "filePath": "src/UIShell/SideNav.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/SideNav.svelte",
       "props": [
         {
           "name": "fixed",
@@ -10617,7 +10617,7 @@
     },
     {
       "moduleName": "SideNavDivider",
-      "filePath": "src/UIShell/SideNavDivider.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/SideNavDivider.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [],
@@ -10627,7 +10627,7 @@
     },
     {
       "moduleName": "SideNavItems",
-      "filePath": "src/UIShell/SideNavItems.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/SideNavItems.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -10636,7 +10636,7 @@
     },
     {
       "moduleName": "SideNavLink",
-      "filePath": "src/UIShell/SideNavLink.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/SideNavLink.svelte",
       "props": [
         {
           "name": "isSelected",
@@ -10717,7 +10717,7 @@
     },
     {
       "moduleName": "SideNavMenu",
-      "filePath": "src/UIShell/SideNavMenu.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/SideNavMenu.svelte",
       "props": [
         {
           "name": "expanded",
@@ -10782,7 +10782,7 @@
     },
     {
       "moduleName": "SideNavMenuItem",
-      "filePath": "src/UIShell/SideNavMenuItem.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/SideNavMenuItem.svelte",
       "props": [
         {
           "name": "isSelected",
@@ -10846,7 +10846,7 @@
     },
     {
       "moduleName": "SkeletonPlaceholder",
-      "filePath": "src/SkeletonPlaceholder/SkeletonPlaceholder.svelte",
+      "filePath": "src/carbon-components-svelte/SkeletonPlaceholder/SkeletonPlaceholder.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [],
@@ -10861,7 +10861,7 @@
     },
     {
       "moduleName": "SkeletonText",
-      "filePath": "src/SkeletonText/SkeletonText.svelte",
+      "filePath": "src/carbon-components-svelte/SkeletonText/SkeletonText.svelte",
       "props": [
         {
           "name": "lines",
@@ -10925,7 +10925,7 @@
     },
     {
       "moduleName": "SkipToContent",
-      "filePath": "src/UIShell/SkipToContent.svelte",
+      "filePath": "src/carbon-components-svelte/UIShell/SkipToContent.svelte",
       "props": [
         {
           "name": "href",
@@ -10967,7 +10967,7 @@
     },
     {
       "moduleName": "Slider",
-      "filePath": "src/Slider/Slider.svelte",
+      "filePath": "src/carbon-components-svelte/Slider/Slider.svelte",
       "props": [
         {
           "name": "value",
@@ -11207,7 +11207,7 @@
     },
     {
       "moduleName": "SliderSkeleton",
-      "filePath": "src/Slider/SliderSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Slider/SliderSkeleton.svelte",
       "props": [
         {
           "name": "hideLabel",
@@ -11235,7 +11235,7 @@
     },
     {
       "moduleName": "StructuredList",
-      "filePath": "src/StructuredList/StructuredList.svelte",
+      "filePath": "src/carbon-components-svelte/StructuredList/StructuredList.svelte",
       "props": [
         {
           "name": "selected",
@@ -11299,7 +11299,7 @@
     },
     {
       "moduleName": "StructuredListBody",
-      "filePath": "src/StructuredList/StructuredListBody.svelte",
+      "filePath": "src/carbon-components-svelte/StructuredList/StructuredListBody.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -11314,7 +11314,7 @@
     },
     {
       "moduleName": "StructuredListCell",
-      "filePath": "src/StructuredList/StructuredListCell.svelte",
+      "filePath": "src/carbon-components-svelte/StructuredList/StructuredListCell.svelte",
       "props": [
         {
           "name": "head",
@@ -11354,7 +11354,7 @@
     },
     {
       "moduleName": "StructuredListHead",
-      "filePath": "src/StructuredList/StructuredListHead.svelte",
+      "filePath": "src/carbon-components-svelte/StructuredList/StructuredListHead.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -11369,7 +11369,7 @@
     },
     {
       "moduleName": "StructuredListInput",
-      "filePath": "src/StructuredList/StructuredListInput.svelte",
+      "filePath": "src/carbon-components-svelte/StructuredList/StructuredListInput.svelte",
       "props": [
         {
           "name": "checked",
@@ -11452,7 +11452,7 @@
     },
     {
       "moduleName": "StructuredListRow",
-      "filePath": "src/StructuredList/StructuredListRow.svelte",
+      "filePath": "src/carbon-components-svelte/StructuredList/StructuredListRow.svelte",
       "props": [
         {
           "name": "head",
@@ -11505,7 +11505,7 @@
     },
     {
       "moduleName": "StructuredListSkeleton",
-      "filePath": "src/StructuredList/StructuredListSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/StructuredList/StructuredListSkeleton.svelte",
       "props": [
         {
           "name": "rows",
@@ -11533,7 +11533,7 @@
     },
     {
       "moduleName": "Switch",
-      "filePath": "src/ContentSwitcher/Switch.svelte",
+      "filePath": "src/carbon-components-svelte/ContentSwitcher/Switch.svelte",
       "props": [
         {
           "name": "text",
@@ -11617,7 +11617,7 @@
     },
     {
       "moduleName": "Tab",
-      "filePath": "src/Tabs/Tab.svelte",
+      "filePath": "src/carbon-components-svelte/Tabs/Tab.svelte",
       "props": [
         {
           "name": "label",
@@ -11712,7 +11712,7 @@
     },
     {
       "moduleName": "TabContent",
-      "filePath": "src/Tabs/TabContent.svelte",
+      "filePath": "src/carbon-components-svelte/Tabs/TabContent.svelte",
       "props": [
         {
           "name": "id",
@@ -11735,7 +11735,7 @@
     },
     {
       "moduleName": "Table",
-      "filePath": "src/DataTable/Table.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/Table.svelte",
       "props": [
         {
           "name": "size",
@@ -11816,7 +11816,7 @@
     },
     {
       "moduleName": "TableBody",
-      "filePath": "src/DataTable/TableBody.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/TableBody.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -11826,7 +11826,7 @@
     },
     {
       "moduleName": "TableCell",
-      "filePath": "src/DataTable/TableCell.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/TableCell.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -11841,7 +11841,7 @@
     },
     {
       "moduleName": "TableContainer",
-      "filePath": "src/DataTable/TableContainer.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/TableContainer.svelte",
       "props": [
         {
           "name": "title",
@@ -11900,7 +11900,7 @@
     },
     {
       "moduleName": "TableHead",
-      "filePath": "src/DataTable/TableHead.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/TableHead.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -11915,7 +11915,7 @@
     },
     {
       "moduleName": "TableHeader",
-      "filePath": "src/DataTable/TableHeader.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/TableHeader.svelte",
       "props": [
         {
           "name": "sortable",
@@ -12003,7 +12003,7 @@
     },
     {
       "moduleName": "TableRow",
-      "filePath": "src/DataTable/TableRow.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/TableRow.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -12018,7 +12018,7 @@
     },
     {
       "moduleName": "Tabs",
-      "filePath": "src/Tabs/Tabs.svelte",
+      "filePath": "src/carbon-components-svelte/Tabs/Tabs.svelte",
       "props": [
         {
           "name": "selected",
@@ -12096,7 +12096,7 @@
     },
     {
       "moduleName": "TabsSkeleton",
-      "filePath": "src/Tabs/TabsSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Tabs/TabsSkeleton.svelte",
       "props": [
         {
           "name": "count",
@@ -12136,7 +12136,7 @@
     },
     {
       "moduleName": "Tag",
-      "filePath": "src/Tag/Tag.svelte",
+      "filePath": "src/carbon-components-svelte/Tag/Tag.svelte",
       "props": [
         {
           "name": "type",
@@ -12270,7 +12270,7 @@
     },
     {
       "moduleName": "TagSkeleton",
-      "filePath": "src/Tag/TagSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Tag/TagSkeleton.svelte",
       "props": [
         {
           "name": "size",
@@ -12297,7 +12297,7 @@
     },
     {
       "moduleName": "TextArea",
-      "filePath": "src/TextArea/TextArea.svelte",
+      "filePath": "src/carbon-components-svelte/TextArea/TextArea.svelte",
       "props": [
         {
           "name": "value",
@@ -12517,7 +12517,7 @@
     },
     {
       "moduleName": "TextAreaSkeleton",
-      "filePath": "src/TextArea/TextAreaSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/TextArea/TextAreaSkeleton.svelte",
       "props": [
         {
           "name": "hideLabel",
@@ -12545,7 +12545,7 @@
     },
     {
       "moduleName": "TextInput",
-      "filePath": "src/TextInput/TextInput.svelte",
+      "filePath": "src/carbon-components-svelte/TextInput/TextInput.svelte",
       "props": [
         {
           "name": "size",
@@ -12772,16 +12772,6 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "change",
-          "detail": "null | number | string"
-        },
-        {
-          "type": "dispatched",
-          "name": "input",
-          "detail": "null | number | string"
-        },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
@@ -12790,14 +12780,16 @@
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
-        { "type": "forwarded", "name": "paste", "element": "input" }
+        { "type": "forwarded", "name": "paste", "element": "input" },
+        { "type": "dispatched", "name": "input" },
+        { "type": "dispatched", "name": "change" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "TextInputSkeleton",
-      "filePath": "src/TextInput/TextInputSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/TextInput/TextInputSkeleton.svelte",
       "props": [
         {
           "name": "hideLabel",
@@ -12825,7 +12817,7 @@
     },
     {
       "moduleName": "Theme",
-      "filePath": "src/Theme/Theme.svelte",
+      "filePath": "src/carbon-components-svelte/Theme/Theme.svelte",
       "props": [
         {
           "name": "theme",
@@ -12936,7 +12928,7 @@
     },
     {
       "moduleName": "Tile",
-      "filePath": "src/Tile/Tile.svelte",
+      "filePath": "src/carbon-components-svelte/Tile/Tile.svelte",
       "props": [
         {
           "name": "light",
@@ -12964,7 +12956,7 @@
     },
     {
       "moduleName": "TileGroup",
-      "filePath": "src/Tile/TileGroup.svelte",
+      "filePath": "src/carbon-components-svelte/Tile/TileGroup.svelte",
       "props": [
         {
           "name": "selected",
@@ -13010,7 +13002,7 @@
     },
     {
       "moduleName": "TimePicker",
-      "filePath": "src/TimePicker/TimePicker.svelte",
+      "filePath": "src/carbon-components-svelte/TimePicker/TimePicker.svelte",
       "props": [
         {
           "name": "size",
@@ -13207,7 +13199,7 @@
     },
     {
       "moduleName": "TimePickerSelect",
-      "filePath": "src/TimePicker/TimePickerSelect.svelte",
+      "filePath": "src/carbon-components-svelte/TimePicker/TimePickerSelect.svelte",
       "props": [
         {
           "name": "value",
@@ -13314,7 +13306,7 @@
     },
     {
       "moduleName": "ToastNotification",
-      "filePath": "src/Notification/ToastNotification.svelte",
+      "filePath": "src/carbon-components-svelte/Notification/ToastNotification.svelte",
       "props": [
         {
           "name": "kind",
@@ -13487,7 +13479,7 @@
     },
     {
       "moduleName": "Toggle",
-      "filePath": "src/Toggle/Toggle.svelte",
+      "filePath": "src/carbon-components-svelte/Toggle/Toggle.svelte",
       "props": [
         {
           "name": "size",
@@ -13638,7 +13630,7 @@
     },
     {
       "moduleName": "ToggleSkeleton",
-      "filePath": "src/Toggle/ToggleSkeleton.svelte",
+      "filePath": "src/carbon-components-svelte/Toggle/ToggleSkeleton.svelte",
       "props": [
         {
           "name": "size",
@@ -13697,7 +13689,7 @@
     },
     {
       "moduleName": "Toolbar",
-      "filePath": "src/DataTable/Toolbar.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/Toolbar.svelte",
       "props": [
         {
           "name": "size",
@@ -13720,7 +13712,7 @@
     },
     {
       "moduleName": "ToolbarBatchActions",
-      "filePath": "src/DataTable/ToolbarBatchActions.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/ToolbarBatchActions.svelte",
       "props": [
         {
           "name": "formatTotalSelected",
@@ -13762,7 +13754,7 @@
     },
     {
       "moduleName": "ToolbarContent",
-      "filePath": "src/DataTable/ToolbarContent.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/ToolbarContent.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -13771,7 +13763,7 @@
     },
     {
       "moduleName": "ToolbarMenu",
-      "filePath": "src/DataTable/ToolbarMenu.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/ToolbarMenu.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -13785,7 +13777,7 @@
     },
     {
       "moduleName": "ToolbarMenuItem",
-      "filePath": "src/DataTable/ToolbarMenuItem.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/ToolbarMenuItem.svelte",
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
@@ -13806,7 +13798,7 @@
     },
     {
       "moduleName": "ToolbarSearch",
-      "filePath": "src/DataTable/ToolbarSearch.svelte",
+      "filePath": "src/carbon-components-svelte/DataTable/ToolbarSearch.svelte",
       "props": [
         {
           "name": "value",
@@ -13922,7 +13914,7 @@
     },
     {
       "moduleName": "Tooltip",
-      "filePath": "src/Tooltip/Tooltip.svelte",
+      "filePath": "src/carbon-components-svelte/Tooltip/Tooltip.svelte",
       "props": [
         {
           "name": "align",
@@ -14119,7 +14111,7 @@
     },
     {
       "moduleName": "TooltipDefinition",
-      "filePath": "src/TooltipDefinition/TooltipDefinition.svelte",
+      "filePath": "src/carbon-components-svelte/TooltipDefinition/TooltipDefinition.svelte",
       "props": [
         {
           "name": "tooltipText",
@@ -14218,7 +14210,7 @@
     },
     {
       "moduleName": "TooltipFooter",
-      "filePath": "src/Tooltip/TooltipFooter.svelte",
+      "filePath": "src/carbon-components-svelte/Tooltip/TooltipFooter.svelte",
       "props": [
         {
           "name": "selectorPrimaryFocus",
@@ -14240,7 +14232,7 @@
     },
     {
       "moduleName": "TooltipIcon",
-      "filePath": "src/TooltipIcon/TooltipIcon.svelte",
+      "filePath": "src/carbon-components-svelte/TooltipIcon/TooltipIcon.svelte",
       "props": [
         {
           "name": "tooltipText",
@@ -14353,7 +14345,7 @@
     },
     {
       "moduleName": "TreeView",
-      "filePath": "src/TreeView/TreeView.svelte",
+      "filePath": "src/carbon-components-svelte/TreeView/TreeView.svelte",
       "props": [
         {
           "name": "children",
@@ -14531,7 +14523,7 @@
     },
     {
       "moduleName": "Truncate",
-      "filePath": "src/Truncate/Truncate.svelte",
+      "filePath": "src/carbon-components-svelte/Truncate/Truncate.svelte",
       "props": [
         {
           "name": "clamp",
@@ -14553,7 +14545,7 @@
     },
     {
       "moduleName": "UnorderedList",
-      "filePath": "src/UnorderedList/UnorderedList.svelte",
+      "filePath": "src/carbon-components-svelte/UnorderedList/UnorderedList.svelte",
       "props": [
         {
           "name": "nested",
