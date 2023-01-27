@@ -212,7 +212,7 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/DatePicker
-  definition-tooltip::
+  definition-tooltip:
     status: stable
     framework: svelte
     demoLinks:
