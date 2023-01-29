@@ -453,7 +453,7 @@
           "name": "kind",
           "kind": "let",
           "description": "Specify the kind of button",
-          "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"danger\" | \"danger-tertiary\" | \"danger-ghost\"",
+          "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"danger\" | \"danger--tertiary\" | \"danger--ghost\"",
           "value": "\"primary\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -651,7 +651,9 @@
           "type": "forwarded",
           "name": "mouseleave",
           "element": "ButtonSkeleton"
-        }
+        },
+        { "type": "forwarded", "name": "focus", "element": "ButtonSkeleton" },
+        { "type": "forwarded", "name": "blur", "element": "ButtonSkeleton" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "button | a | div" },

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from "../types";
+  import { Button } from "../package";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 
@@ -27,10 +27,6 @@
 />
 
 <Button href="#">Link button</Button>
-
-<Button as let:props>
-  <p {...props}>Custom element</p>
-</Button>
 
 <Button size="field">Primary</Button>
 
