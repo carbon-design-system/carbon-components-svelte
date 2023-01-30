@@ -20,6 +20,6 @@ jobs:
       - name: Install dependencies, build, test, and lint the codebase
         run: |
           yarn
-          yarn build:lib
+          yarn build:package
           yarn test:types
           yarn lint
