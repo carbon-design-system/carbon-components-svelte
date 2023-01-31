@@ -146,7 +146,10 @@
   }
 
   const dispatchSelect = () => {
-    dispatch("select", { selectedId, selectedItem });
+    dispatch("select", {
+      selectedId,
+      selectedItem: items.find((item) => item.id === selectedId),
+    });
   };
 
   const pageClickHandler = ({ target }) => {
@@ -164,7 +167,7 @@
       if (parent) {
         parent.removeEventListener("click", pageClickHandler);
       }
-    }
+    };
   });
 </script>
 
