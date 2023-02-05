@@ -13,9 +13,9 @@
 
 <Button kind="danger">Danger button</Button>
 
-<Button kind="danger-tertiary">Danger tertiary button</Button>
+<Button kind="danger--tertiary">Danger tertiary button</Button>
 
-<Button kind="danger-ghost">Danger ghost button</Button>
+<Button kind="danger--ghost">Danger ghost button</Button>
 
 <Button icon="{Add}">With icon</Button>
 
@@ -27,6 +27,10 @@
 />
 
 <Button href="#">Link button</Button>
+
+<Button as let:props>
+  <p {...props}>Custom element</p>
+</Button>
 
 <Button size="field">Primary</Button>
 
