@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from "../types";
+  import { Button } from "../package";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 
@@ -13,9 +13,9 @@
 
 <Button kind="danger">Danger button</Button>
 
-<Button kind="danger-tertiary">Danger tertiary button</Button>
+<Button kind="danger--tertiary">Danger tertiary button</Button>
 
-<Button kind="danger-ghost">Danger ghost button</Button>
+<Button kind="danger--ghost">Danger ghost button</Button>
 
 <Button icon="{Add}">With icon</Button>
 

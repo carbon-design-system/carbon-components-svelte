@@ -7,7 +7,7 @@
 
   /**
    * Specify the kind of button
-   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost"}
+   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger--tertiary" | "danger--ghost"}
    */
   export let kind = "primary";
 
@@ -79,6 +79,7 @@
 
   import { getContext } from "svelte";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
+  import "@carbon/styles/scss/components/button/_index.scss";
 
   const ctx = getContext("ComposedModal");
 
@@ -95,30 +96,30 @@
       hasIconOnly && kind === "ghost" && !href ? isSelected : undefined,
     ...$$restProps,
     class: [
-      "bx--btn",
-      expressive && "bx--btn--expressive",
+      "cds--btn",
+      expressive && "cds--btn--expressive",
       ((size === "small" && !expressive) ||
         (size === "sm" && !expressive) ||
         (size === "small" && !expressive)) &&
-        "bx--btn--sm",
+        "cds--btn--sm",
       (size === "field" && !expressive) ||
-        (size === "md" && !expressive && "bx--btn--md"),
-      size === "field" && "bx--btn--field",
-      size === "small" && "bx--btn--sm",
-      size === "lg" && "bx--btn--lg",
-      size === "xl" && "bx--btn--xl",
-      kind && `bx--btn--${kind}`,
-      disabled && "bx--btn--disabled",
-      hasIconOnly && "bx--btn--icon-only",
-      hasIconOnly && "bx--tooltip__trigger",
-      hasIconOnly && "bx--tooltip--a11y",
+        (size === "md" && !expressive && "cds--btn--md"),
+      size === "field" && "cds--btn--field",
+      size === "small" && "cds--btn--sm",
+      size === "lg" && "cds--btn--lg",
+      size === "xl" && "cds--btn--xl",
+      kind && `cds--btn--${kind}`,
+      disabled && "cds--btn--disabled",
+      hasIconOnly && "cds--btn--icon-only",
+      hasIconOnly && "cds--tooltip__trigger",
+      hasIconOnly && "cds--tooltip--a11y",
       hasIconOnly &&
         tooltipPosition &&
-        `bx--btn--icon-only--${tooltipPosition}`,
+        `cds--btn--icon-only--${tooltipPosition}`,
       hasIconOnly &&
         tooltipAlignment &&
-        `bx--tooltip--align-${tooltipAlignment}`,
-      hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
+        `cds--tooltip--align-${tooltipAlignment}`,
+      hasIconOnly && isSelected && kind === "ghost" && "cds--btn--selected",
       $$restProps.class,
     ]
       .filter(Boolean)
@@ -137,9 +138,11 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
+    on:focus
+    on:blur
   />
 {:else if as}
-  <slot props="{buttonProps}" />
+  <slot props="{{ role: 'button', ...buttonProps }}" />
 {:else if href && !disabled}
   <!-- svelte-ignore a11y-missing-attribute -->
   <a
@@ -149,14 +152,16 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
+    on:focus
+    on:blur
   >
     {#if hasIconOnly}
-      <span class:bx--assistive-text="{true}">{iconDescription}</span>
+      <span class:cds--assistive-text="{true}">{iconDescription}</span>
     {/if}
     <slot /><svelte:component
       this="{icon}"
       aria-hidden="true"
-      class="bx--btn__icon"
+      class="cds--btn__icon"
       aria-label="{iconDescription}"
     />
   </a>
@@ -168,14 +173,16 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
+    on:focus
+    on:blur
   >
     {#if hasIconOnly}
-      <span class:bx--assistive-text="{true}">{iconDescription}</span>
+      <span class:cds--assistive-text="{true}">{iconDescription}</span>
     {/if}
     <slot /><svelte:component
       this="{icon}"
       aria-hidden="true"
-      class="bx--btn__icon"
+      class="cds--btn__icon"
       style="{hasIconOnly ? 'margin-left: 0' : undefined}"
       aria-label="{iconDescription}"
     />

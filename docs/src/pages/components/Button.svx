@@ -30,7 +30,7 @@
 
 ## Danger tertiary button
 
-<Button kind="danger-tertiary">Danger tertiary button</Button>
+<Button kind="danger--tertiary">Danger tertiary button</Button>
 
 ## Danger tertiary, icon-only button
 
@@ -40,11 +40,11 @@
   </div>
 </InlineNotification>
 
-<Button kind="danger-tertiary"iconDescription="Delete" icon={TrashCan} />
+<Button kind="danger--tertiary"iconDescription="Delete" icon={TrashCan} />
 
 ## Danger ghost button
 
-<Button kind="danger-ghost">Danger ghost button</Button>
+<Button kind="danger--ghost">Danger ghost button</Button>
 
 ## Button with icon
 
