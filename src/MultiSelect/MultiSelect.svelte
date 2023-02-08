@@ -186,6 +186,7 @@
   let initialSorted = false;
   let highlightedIndex = -1;
   let prevChecked = [];
+  let inputFocused = false;
 
   setContext("MultiSelect", {
     declareRef: ({ key, ref }) => {
@@ -316,6 +317,7 @@
     class="bx--multi-select {direction === 'top' &&
       'bx--list-box--up'} {filterable && 'bx--combo-box'}
       {filterable && 'bx--multi-select--filterable'}
+      {filterable && inputFocused && 'bx--multi-select--filterable--input-focused'}
       {invalid && 'bx--multi-select--invalid'}
       {inline && 'bx--multi-select--inline'}
       {checked.length > 0 && 'bx--multi-select--selected'}"
@@ -375,7 +377,6 @@
       }}"
       on:focus="{() => {
         if (filterable) {
-          open = true;
           if (inputRef) inputRef.focus();
         }
       }}"
@@ -417,6 +418,11 @@
           class:bx--text-input="{true}"
           class:bx--text-input--empty="{value === ''}"
           class:bx--text-input--light="{light}"
+          on:input="{() => {
+            if (!open) {
+              open = true;
+            }
+          }}"
           on:keydown
           on:keydown|stopPropagation="{({ key }) => {
             if (key === 'Enter') {
@@ -444,7 +450,13 @@
           }}"
           on:keyup
           on:focus
+          on:focus="{() => {
+            inputFocused = true;
+          }}"
           on:blur
+          on:blur="{() => {
+            inputFocused = false;
+          }}"
           on:paste
           disabled="{disabled}"
           placeholder="{placeholder}"
