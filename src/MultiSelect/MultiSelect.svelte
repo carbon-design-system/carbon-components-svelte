@@ -466,7 +466,6 @@
           />
         {/if}
         <ListBoxMenuIcon
-          style="pointer-events: {open ? 'auto' : 'none'}"
           on:click="{(e) => {
             e.stopPropagation();
             open = !open;
