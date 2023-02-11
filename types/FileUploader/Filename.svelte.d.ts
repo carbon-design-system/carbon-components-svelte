@@ -1,7 +1,10 @@
 /// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
 
-export interface FilenameProps {
+export interface FilenameProps
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]>,
+    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]>,
+    svelte.JSX.SVGAttributes<SVGSVGElement> {
   /**
    * Specify the file name status
    * @default "uploading"

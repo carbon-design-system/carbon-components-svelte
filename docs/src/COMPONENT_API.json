@@ -924,7 +924,7 @@
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "CheckboxSkeleton" }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "CheckboxSkeleton",
@@ -4399,7 +4399,7 @@
         { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "Loading" }
+      "rest_props": { "type": "Element", "name": "div | button | svg" }
     },
     {
       "moduleName": "FluidForm",
@@ -4416,7 +4416,7 @@
         { "type": "forwarded", "name": "submit", "element": "Form" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "Form" }
+      "rest_props": { "type": "Element", "name": "form" }
     },
     {
       "moduleName": "Form",

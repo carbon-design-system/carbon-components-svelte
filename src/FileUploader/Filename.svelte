@@ -1,5 +1,9 @@
 <script>
   /**
+   * @restProps {div | button | svg}
+   */
+
+  /**
    * Specify the file name status
    * @type {"uploading" | "edit" | "complete"}
    */
