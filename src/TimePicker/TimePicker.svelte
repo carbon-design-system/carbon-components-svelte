@@ -49,6 +49,48 @@
 
   /** Obtain a reference to the input HTML element */
   export let ref = null;
+
+  export function timeValidator() {
+    // Check for invalid characters.
+    if (!/^[0-9:]*$/.test(value)) {
+      value = "";
+      return;
+    }
+
+    // Reject input that is too long.
+    // Return empty string here to avoid : insertion.
+    if (value.length > 5) {
+      value = value.slice(0, 2) + ":" + value.slice(2, 4);
+      return;
+    }
+
+    // Regular expression to check if time is in hh:mm format.
+    const timeFormat = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+
+    // Check if time is in hh:mm format.
+    if (!timeFormat.test()) {
+      // Add missing colon if only hours are provided.
+      if (value.length === 2) {
+        value = value + ":00";
+      } else if (value.length === 1) {
+        value = "0" + value + ":00";
+      } else if (value.indexOf(":") === -1) {
+        value = value.slice(0, 2) + ":" + value.slice(2, 4);
+      }
+      // Check if hour is between 0 and 23.
+      const hour = Number(value.slice(0, 2));
+      if (hour < 0 || hour > 23) {
+        value = "";
+        return;
+      }
+      // Check if minute is between 0 and 59.
+      const minute = Number(value.slice(3, 5));
+      if (minute < 0 || minute > 59) {
+        value = "";
+        return;
+      }
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -97,7 +139,7 @@
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
         class:bx--text-input--invalid="{invalid}"
-        on:change
+        on:change="{timeValidator}"
         on:input
         on:keydown
         on:keyup
