@@ -15,7 +15,7 @@
   export let kind = "default";
 
   /**
-   * Specify the status of progress bar
+   * Specify the status
    * @type {"active" | "finished" | "error"}
    */
   export let status = "active";

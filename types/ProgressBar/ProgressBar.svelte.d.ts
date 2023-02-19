@@ -22,6 +22,12 @@ export interface ProgressBarProps
   kind?: "default" | "inline" | "indented";
 
   /**
+   * Specify the status
+   * @default "active"
+   */
+  status?: "active" | "finished" | "error";
+
+  /**
    * Specify the size
    * @default "md"
    */
