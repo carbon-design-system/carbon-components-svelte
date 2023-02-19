@@ -184,7 +184,7 @@ git commit -m "v$(jq -r '.version' package.json)"
 git tag "v$(jq -r '.version' package.json)"
 
 # 4. Push branch and tag, then publish
-git push master [tag]
+git push origin master [tag]
 yarn publish
 
 # 5. Generate release notes on GitHub, and comment on issues and pull requests
