@@ -8974,6 +8974,18 @@
           "reactive": false
         },
         {
+          "name": "status",
+          "kind": "let",
+          "description": "Specify the status",
+          "type": "\"active\" | \"finished\" | \"error\"",
+          "value": "\"active\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "size",
           "kind": "let",
           "description": "Specify the size",

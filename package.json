@@ -28,7 +28,7 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@tsconfig/svelte": "^3.0.0",
     "autoprefixer": "^10.4.8",
-    "carbon-components": "10.56.0",
+    "carbon-components": "10.57.0",
     "carbon-icons-svelte": "^11.2.0",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",

@@ -12,4 +12,5 @@
   labelText="Upload status"
   hideLabel
   helperText="40 MB of 100 MB"
+  status="finished"
 />

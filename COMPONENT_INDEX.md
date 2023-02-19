@@ -2819,6 +2819,7 @@ None.
 | value      | No       | <code>let</code> | No       | <code>number</code>                                      | <code>undefined</code>                           | Specify the current value                     |
 | max        | No       | <code>let</code> | No       | <code>number</code>                                      | <code>100</code>                                 | Specify the maximum value                     |
 | kind       | No       | <code>let</code> | No       | <code>"default" &#124; "inline" &#124; "indented"</code> | <code>"default"</code>                           | Specify the kind of progress bar              |
+| status     | No       | <code>let</code> | No       | <code>"active" &#124; "finished" &#124; "error"</code>   | <code>"active"</code>                            | Specify the status                            |
 | size       | No       | <code>let</code> | No       | <code>"sm" &#124; "md"</code>                            | <code>"md"</code>                                | Specify the size                              |
 | labelText  | No       | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>                                  | Specify the label text                        |
 | hideLabel  | No       | <code>let</code> | No       | <code>boolean</code>                                     | <code>false</code>                               | Set to `true` to visually hide the label text |
