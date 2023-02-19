@@ -48,7 +48,7 @@
 
   let helperId = "ccs-" + Math.random().toString(36);
 
-  $: indeterminate = value === undefined;
+  $: indeterminate = value === undefined && status === "active";
   $: capped = value > max ? max : value < 0 ? 0 : value;
 </script>
 
@@ -89,9 +89,7 @@
   >
     <div
       class:bx--progress-bar__bar="{true}"
-      style="{!indeterminate && status === 'active'
-        ? `transform: scaleX(${capped / max})`
-        : ''}"
+      style:transform="{status === "active" && `scaleX(${capped / max})`}"
     ></div>
   </div>
   {#if helperText}
