@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.73.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.73.0...v0.73.1) (2023-02-19)
+
+
+### Bug Fixes
+
+* **textinput/passwordinput:** apply aria-describedby to hint text ([b435be4](https://github.com/carbon-design-system/carbon-components-svelte/commit/b435be4f1221b30c9afd7a9e1c6867b38eeadeaa)), closes [#1633](https://github.com/carbon-design-system/carbon-components-svelte/issues/1633)
+
 ### [0.73.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.72.3...v0.73.0) (2023-02-19)
 
 ### Features
