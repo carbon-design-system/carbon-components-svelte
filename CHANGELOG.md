@@ -2,38 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [0.72.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.72.2...v0.72.3) (2023-02-11)
+### [0.73.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.72.3...v0.73.0) (2023-02-19)
 
+### Features
+
+- **progress-bar:** add `status` prop ([#1560](https://github.com/carbon-design-system/carbon-components-svelte/issues/1560)) ([7ddbf17](https://github.com/carbon-design-system/carbon-components-svelte/commit/7ddbf17cbb82bd78256037af8028ea20b9c35d5a))
+
+### [0.72.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.72.2...v0.72.3) (2023-02-11)
 
 ### Bug Fixes
 
-* **types:** add missing `$$restProps` for `Checkbox`, `Filename`, `FluidForm` ([#1655](https://github.com/carbon-design-system/carbon-components-svelte/issues/1655)) ([6450e8b](https://github.com/carbon-design-system/carbon-components-svelte/commit/6450e8b0b17e1538043f131d64e2d1fc667c95a8))
+- **types:** add missing `$$restProps` for `Checkbox`, `Filename`, `FluidForm` ([#1655](https://github.com/carbon-design-system/carbon-components-svelte/issues/1655)) ([6450e8b](https://github.com/carbon-design-system/carbon-components-svelte/commit/6450e8b0b17e1538043f131d64e2d1fc667c95a8))
 
 ### [0.72.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.72.1...v0.72.2) (2023-02-05)
 
-
 ### Bug Fixes
 
-* **dropdown:** dispatch correct `selectedItem` in `select` event ([#1646](https://github.com/carbon-design-system/carbon-components-svelte/issues/1646)) ([d897484](https://github.com/carbon-design-system/carbon-components-svelte/commit/d897484abfcc8be351ac87b0f0bb49900f4b4b1d)), closes [#1645](https://github.com/carbon-design-system/carbon-components-svelte/issues/1645)
+- **dropdown:** dispatch correct `selectedItem` in `select` event ([#1646](https://github.com/carbon-design-system/carbon-components-svelte/issues/1646)) ([d897484](https://github.com/carbon-design-system/carbon-components-svelte/commit/d897484abfcc8be351ac87b0f0bb49900f4b4b1d)), closes [#1645](https://github.com/carbon-design-system/carbon-components-svelte/issues/1645)
 
 ### [0.72.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.72.0...v0.72.1) (2023-01-25)
 
-
 ### Bug Fixes
 
-* **dropdown:** fix ssr issue ([#1639](https://github.com/carbon-design-system/carbon-components-svelte/issues/1639)) ([8cb5d53](https://github.com/carbon-design-system/carbon-components-svelte/commit/8cb5d538f7ad10d7c93e10c04f01d2c77b4eba44)), closes [#1638](https://github.com/carbon-design-system/carbon-components-svelte/issues/1638)
+- **dropdown:** fix ssr issue ([#1639](https://github.com/carbon-design-system/carbon-components-svelte/issues/1639)) ([8cb5d53](https://github.com/carbon-design-system/carbon-components-svelte/commit/8cb5d538f7ad10d7c93e10c04f01d2c77b4eba44)), closes [#1638](https://github.com/carbon-design-system/carbon-components-svelte/issues/1638)
 
 ## [0.72.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.71.0...v0.72.0) (2023-01-18)
 
-
 ### ⚠ BREAKING CHANGES
 
-* **tree-view:** remove `expanded` property from `TreeNode` interface (#1631)
+- **tree-view:** remove `expanded` property from `TreeNode` interface (#1631)
 
 ### Bug Fixes
 
-* **dropdown:** close when user clicks outside iframe ([#1596](https://github.com/carbon-design-system/carbon-components-svelte/issues/1596)) ([73aa6e2](https://github.com/carbon-design-system/carbon-components-svelte/commit/73aa6e216aa99df3b0b3186398e6466db523cf88)), closes [#1595](https://github.com/carbon-design-system/carbon-components-svelte/issues/1595)
-* **tree-view:** remove `expanded` property from `TreeNode` interface ([#1631](https://github.com/carbon-design-system/carbon-components-svelte/issues/1631)) ([ec867c4](https://github.com/carbon-design-system/carbon-components-svelte/commit/ec867c46ba7adce02938d6516557d3312591fa5f)), closes [#1630](https://github.com/carbon-design-system/carbon-components-svelte/issues/1630)
+- **dropdown:** close when user clicks outside iframe ([#1596](https://github.com/carbon-design-system/carbon-components-svelte/issues/1596)) ([73aa6e2](https://github.com/carbon-design-system/carbon-components-svelte/commit/73aa6e216aa99df3b0b3186398e6466db523cf88)), closes [#1595](https://github.com/carbon-design-system/carbon-components-svelte/issues/1595)
+- **tree-view:** remove `expanded` property from `TreeNode` interface ([#1631](https://github.com/carbon-design-system/carbon-components-svelte/issues/1631)) ([ec867c4](https://github.com/carbon-design-system/carbon-components-svelte/commit/ec867c46ba7adce02938d6516557d3312591fa5f)), closes [#1630](https://github.com/carbon-design-system/carbon-components-svelte/issues/1630)
 
 ## [0.71.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.71.0) - 2022-12-31
 
