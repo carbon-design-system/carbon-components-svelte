@@ -27,11 +27,15 @@ See [#no-value](#no-value) to allow for an empty value.
 
 <NumberInput value="{1}" helperText="Step of 0.1" step={0.1} label="Clusters" />
 
-## No value
+## No value and error states
 
-Set `allowEmpty` to `true` to allow for no value.
+Set `required` to `false` to allow for no value.
 
 Set `value` to `null` to denote "no value."
+
+Set `invalid` to `true` to force a `error` state for the input.
+
+The input is reactive to `min`, `max` and `required` attributes.
 
 <FileSource src="/framed/NumberInput/NumberInputEmpty" />
 

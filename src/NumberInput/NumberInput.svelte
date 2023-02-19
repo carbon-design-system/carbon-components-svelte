@@ -39,8 +39,8 @@
   /** Set to `true` for the input to be read-only */
   export let readonly = false;
 
-  /** Set to `true` to allow for an empty value */
-  export let allowEmpty = false;
+  /** Set to `false` for the input to not be required */
+  export let required = true;
 
   /** Set to `true` to disable the input */
   export let disabled = false;
@@ -55,7 +55,7 @@
   export let invalid = false;
 
   /** Specify the invalid state text */
-  export let invalidText = "";
+  export let invalidText = "Number is not valid";
 
   /** Set to `true` to indicate an warning state */
   export let warn = false;
@@ -99,7 +99,9 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  let error = false;
+
+  import { createEventDispatcher, tick } from "svelte";
   import Add from "../icons/Add.svelte";
   import Subtract from "../icons/Subtract.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -125,31 +127,20 @@
     dispatch("change", value);
   }
 
+  async function setErrorState() {
+    // We need to wait for the values to be synced before checking the validity.
+    await tick();
+    error = !ref.checkValidity() || invalid;
+  }
+
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: error =
-    invalid ||
-    (!allowEmpty && value == null) ||
-    value > max ||
-    (typeof value === "number" && value < min);
   $: errorId = `error-${id}`;
   $: ariaLabel =
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
-
-  function parse(raw) {
-    return raw != "" ? Number(raw) : null;
-  }
-
-  function onInput({ target }) {
-    value = parse(target.value);
-
-    dispatch("input", value);
-  }
-
-  function onChange({ target }) {
-    dispatch("change", parse(target.value));
-  }
+  $: if (ref) ref.setCustomValidity(invalid ? invalidText : "");
+  $: value, invalid, required, step, min, max, setErrorState();
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -162,7 +153,7 @@
   on:mouseleave
 >
   <div
-    data-invalid="{error || undefined}"
+    data-invalid="{invalid || error ? true : undefined}"
     class:bx--number="{true}"
     class:bx--number--helpertext="{true}"
     class:bx--number--readonly="{readonly}"
@@ -191,30 +182,31 @@
         type="number"
         pattern="[0-9]*"
         aria-describedby="{errorId}"
-        data-invalid="{invalid || undefined}"
-        aria-invalid="{invalid || undefined}"
-        aria-label="{label ? undefined : ariaLabel}"
+        data-invalid="{error ? true : undefined}"
+        aria-invalid="{error ? true : undefined}"
+        aria-label="{label ? ariaLabel : undefined}"
         disabled="{disabled}"
         id="{id}"
         name="{name}"
         max="{max}"
         min="{min}"
         step="{step}"
-        value="{value ?? ''}"
+        bind:value="{value}"
         readonly="{readonly}"
+        required="{required}"
         {...$$restProps}
-        on:change="{onChange}"
-        on:input="{onInput}"
+        on:change
+        on:input
         on:keydown
         on:keyup
         on:focus
         on:blur
         on:paste
       />
-      {#if invalid}
+      {#if error}
         <WarningFilled class="bx--number__invalid" />
       {/if}
-      {#if !invalid && warn}
+      {#if !error && warn}
         <WarningAltFilled
           class="bx--number__invalid bx--number__invalid--warning"
         />
