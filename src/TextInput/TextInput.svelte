@@ -95,6 +95,7 @@
   };
 
   $: isFluid = !!ctx && ctx.isFluid;
+  $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
 </script>
@@ -182,7 +183,13 @@
         data-invalid="{invalid || undefined}"
         aria-invalid="{invalid || undefined}"
         data-warn="{warn || undefined}"
-        aria-describedby="{invalid ? errorId : warn ? warnId : undefined}"
+        aria-describedby="{invalid
+          ? errorId
+          : warn
+          ? warnId
+          : helperText
+          ? helperId
+          : undefined}"
         disabled="{disabled}"
         id="{id}"
         name="{name}"
@@ -219,6 +226,7 @@
     </div>
     {#if !invalid && !warn && !isFluid && !inline && helperText}
       <div
+        id="{helperId}"
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
         class:bx--form__helper-text--inline="{inline}"
