@@ -49,7 +49,16 @@
   let helperId = "ccs-" + Math.random().toString(36);
 
   $: indeterminate = value === undefined && status === "active";
-  $: capped = value > max ? max : value < 0 ? 0 : value;
+  let capped;
+  $: {
+    if (status === "error" || value < 0) {
+      capped = 0;
+    } else if (value > max) {
+      capped = max;
+    } else {
+      capped = value;
+    }
+  }
 </script>
 
 <div
@@ -82,6 +91,7 @@
     role="progressbar"
     id="{id}"
     class:bx--progress-bar__track="{true}"
+    aria-busy="{status === 'active'}"
     aria-valuemin="{indeterminate ? undefined : 0}"
     aria-valuemax="{indeterminate ? undefined : max}"
     aria-valuenow="{indeterminate ? undefined : capped}"
