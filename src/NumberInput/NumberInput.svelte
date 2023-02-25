@@ -128,7 +128,7 @@
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
   $: error =
-    invalid ||
+    (invalid && !readonly) ||
     (!allowEmpty && value == null) ||
     value > max ||
     (typeof value === "number" && value < min);
@@ -191,8 +191,8 @@
         type="number"
         pattern="[0-9]*"
         aria-describedby="{errorId}"
-        data-invalid="{invalid || undefined}"
-        aria-invalid="{invalid || undefined}"
+        data-invalid="{(error) || undefined}"
+        aria-invalid="{(error) || undefined}"
         aria-label="{label ? undefined : ariaLabel}"
         disabled="{disabled}"
         id="{id}"
