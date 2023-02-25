@@ -166,17 +166,18 @@
       class:bx--text-input__field-wrapper="{true}"
       class:bx--text-input__field-wrapper--warning="{!invalid && warn}"
     >
-      {#if invalid}
-        <WarningFilled class="bx--text-input__invalid-icon" />
-      {/if}
-      {#if !invalid && warn}
-        <WarningAltFilled
-          class="bx--text-input__invalid-icon
-            bx--text-input__invalid-icon--warning"
-        />
-      {/if}
       {#if readonly}
         <EditOff class="bx--text-input__readonly-icon" />
+      {:else}
+        {#if invalid}
+          <WarningFilled class="bx--text-input__invalid-icon" />
+        {/if}
+        {#if !invalid && warn}
+          <WarningAltFilled
+            class="bx--text-input__invalid-icon
+            bx--text-input__invalid-icon--warning"
+          />
+        {/if}
       {/if}
       <input
         bind:this="{ref}"
