@@ -128,7 +128,7 @@
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
   $: error =
-    invalid ||
+    (invalid && !readonly) ||
     (!allowEmpty && value == null) ||
     value > max ||
     (typeof value === "number" && value < min);
@@ -191,8 +191,8 @@
         type="number"
         pattern="[0-9]*"
         aria-describedby="{errorId}"
-        data-invalid="{invalid || undefined}"
-        aria-invalid="{invalid || undefined}"
+        data-invalid="{(error) || undefined}"
+        aria-invalid="{(error) || undefined}"
         aria-label="{label ? undefined : ariaLabel}"
         disabled="{disabled}"
         id="{id}"
@@ -211,16 +211,17 @@
         on:blur
         on:paste
       />
-      {#if invalid}
-        <WarningFilled class="bx--number__invalid" />
-      {/if}
-      {#if !invalid && warn}
-        <WarningAltFilled
-          class="bx--number__invalid bx--number__invalid--warning"
-        />
-      {/if}
       {#if readonly}
         <EditOff class="bx--text-input__readonly-icon" />
+      {:else}
+        {#if invalid}
+          <WarningFilled class="bx--number__invalid" />
+        {/if}
+        {#if !invalid && warn}
+          <WarningAltFilled
+            class="bx--number__invalid bx--number__invalid--warning"
+          />
+        {/if}
       {/if}
       {#if !hideSteppers}
         <div class:bx--number__controls="{true}">
