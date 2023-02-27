@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.73.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.73.1...v0.73.2) (2023-02-27)
+
+
+### Bug Fixes
+
+* `readonly` should override `error` behavior in `TextInput`, `NumberInput` ([#1666](https://github.com/carbon-design-system/carbon-components-svelte/issues/1666)) ([6386c33](https://github.com/carbon-design-system/carbon-components-svelte/commit/6386c33f939b5fa310e8eb5a51412c6151de75d2)), closes [/github.com/carbon-design-system/carbon-components-svelte/pull/1666#pullrequestreview-1314558645](https://github.com/carbon-design-system//github.com/carbon-design-system/carbon-components-svelte/pull/1666/issues/pullrequestreview-1314558645)
+
 ### [0.73.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.73.0...v0.73.1) (2023-02-19)
 
 
