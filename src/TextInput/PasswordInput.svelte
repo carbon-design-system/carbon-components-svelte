@@ -248,7 +248,7 @@
         {invalidText}
       </div>
     {/if}
-    {#if !invalid && !warn && !isFluid && !inline}
+    {#if !invalid && !warn && !isFluid && !inline && helperText}
       <div
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
