@@ -202,7 +202,7 @@
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
         class:bx--text-input--invalid="{error}"
-        class:bx--text-input--warn="{warn}"
+        class:bx--text-input--warning="{warn}"
         class:bx--text-input--sm="{size === 'sm'}"
         class:bx--text-input--xl="{size === 'xl'}"
         {...$$restProps}
