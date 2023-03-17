@@ -70,7 +70,6 @@
     class:bx--progress-step-button="{true}"
     class:bx--progress-step-button--unclickable="{current ||
       $preventChangeOnClick}"
-    style="width: 100%; padding-right: 16px;"
     on:click
     on:click="{() => {
       if (!step.complete) return;
@@ -96,7 +95,7 @@
     {:else}
       <CircleDash title="{description}" />
     {/if}
-    <div class:bx--progress-text="{true}" style="width: 100%;">
+    <div class:bx--progress-text="{true}" class="bx--progress-step">
       <slot props="{{ class: 'bx--progress-label' }}">
         <p class:bx--progress-label="{true}">{label}</p>
       </slot>
