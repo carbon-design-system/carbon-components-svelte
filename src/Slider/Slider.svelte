@@ -140,16 +140,18 @@
   on:mouseenter
   on:mouseleave
 >
-  <label
-    for="{id}"
-    id="{labelId}"
-    class:bx--label="{true}"
-    class:bx--label--disabled="{disabled}"
-  >
-    <slot name="labelText">
-      {labelText}
-    </slot>
-  </label>
+  {#if labelText || $$slots.labelText}
+    <label
+      for="{id}"
+      id="{labelId}"
+      class:bx--label="{true}"
+      class:bx--label--disabled="{disabled}"
+    >
+      <slot name="labelText">
+        {labelText}
+      </slot>
+    </label>
+  {/if}
   <div
     class:bx--slider-container="{true}"
     style="{fullWidth ? 'width: 100%' : undefined}"
