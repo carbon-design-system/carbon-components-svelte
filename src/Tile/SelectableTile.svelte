@@ -1,4 +1,9 @@
 <script>
+  /**
+   * @event {string} "select"
+   * @event {string} "deselect"
+   */
+
   /** Set to `true` to select the tile */
   export let selected = false;
 
