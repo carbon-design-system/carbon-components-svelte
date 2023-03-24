@@ -5,10 +5,10 @@
   let code = `import "carbon-components-svelte/css/all.css";`;
 </script>
 
-The `Theme` component can dyanmically update the Carbon theme on the client-side. It can persist the theme locally using [window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
+The `GlobalTheme` component can dyanmically update the Carbon theme on the client-side. It can persist the theme locally using [window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">You must use the "all.css" StyleSheet with the <code>Theme</code> component.</div>
+  <div class="body-short-01">You must use the "all.css" StyleSheet with the <code>GlobalTheme</code> component.</div>
 </InlineNotification>
 
 The `all.css` StyleSheet uses [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) for dynamic theming.
@@ -17,40 +17,40 @@ The `all.css` StyleSheet uses [CSS variables](https://developer.mozilla.org/en-U
 
 ## Default
 
-<FileSource src="/framed/Theme/Theme" />
+<FileSource src="/framed/GlobalTheme/GlobalTheme" />
 
 ## Persist locally
 
 Set `persist` to `true` to persist the theme locally using the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
 
-<FileSource src="/framed/Theme/ThemePersist" />
+<FileSource src="/framed/GlobalTheme/GlobalThemePersist" />
 
 ## Custom theme
 
 Define keys and values in the `tokens` prop that override default Carbon theme tokens. Refer to the [Carbon website](https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme) for guidance on customizing a theme using token values.
 
-<FileSource src="/framed/Theme/ThemeTokens" />
+<FileSource src="/framed/GlobalTheme/GlobalThemeTokens" />
 
 ## Theme toggle
 
 Set `render` to `"toggle"` to render a toggle switch to control the theme.
 
-<FileSource src="/framed/Theme/ThemeToggle" />
+<FileSource src="/framed/GlobalTheme/GlobalThemeToggle" />
 
 ## Theme toggle (custom)
 
 Customize the toggle using the `toggle` prop.
 
-<FileSource src="/framed/Theme/ThemeToggleCustom" />
+<FileSource src="/framed/GlobalTheme/GlobalThemeToggleCustom" />
 
 ## Theme select
 
 Set `render` to `"select"` to render a select dropdown to control the theme.
 
-<FileSource src="/framed/Theme/ThemeSelect" />
+<FileSource src="/framed/GlobalTheme/GlobalThemeSelect" />
 
 ## Theme select (custom)
 
 Customize the select using the `select` prop.
 
-<FileSource src="/framed/Theme/ThemeSelectCustom" />
+<FileSource src="/framed/GlobalTheme/GlobalThemeSelectCustom" />
