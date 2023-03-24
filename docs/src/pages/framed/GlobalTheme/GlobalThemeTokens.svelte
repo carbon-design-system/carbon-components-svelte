@@ -1,8 +1,8 @@
 <script>
-  import { Theme, Button } from "carbon-components-svelte";
+  import { GlobalTheme, Button } from "carbon-components-svelte";
 </script>
 
-<Theme
+<GlobalTheme
   theme="g90"
   tokens="{{
     'interactive-01': '#d02670',

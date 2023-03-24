@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Theme } from "../types";
-  import type { CarbonTheme } from "../types/Theme/Theme.svelte";
+  import { GlobalTheme } from "../types";
+  import type { CarbonTheme } from "../types/GlobalTheme/GlobalTheme.svelte";
 
   let theme: CarbonTheme = "g10";
 </script>
 
-<Theme
+<GlobalTheme
   bind:theme
   persist
   persistKey="carbon-theme"

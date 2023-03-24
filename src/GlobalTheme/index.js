@@ -1,1 +1,1 @@
-export { default as Theme } from "./Theme.svelte";
+export { default as GlobalTheme } from "./GlobalTheme.svelte";

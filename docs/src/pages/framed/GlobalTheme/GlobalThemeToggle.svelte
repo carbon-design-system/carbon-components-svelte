@@ -1,5 +1,5 @@
 <script>
-  import { Theme } from "carbon-components-svelte";
+  import { GlobalTheme } from "carbon-components-svelte";
 </script>
 
-<Theme render="toggle" />
+<GlobalTheme render="toggle" />
