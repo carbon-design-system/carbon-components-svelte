@@ -5122,7 +5122,14 @@
         }
       ],
       "moduleExports": [],
-      "slots": [],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "fallback": "{text}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "a" },
         { "type": "forwarded", "name": "mouseover", "element": "a" },
