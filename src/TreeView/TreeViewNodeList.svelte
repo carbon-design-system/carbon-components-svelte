@@ -72,6 +72,7 @@
     {/if}
   {/each}
 {:else}
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <li
     bind:this="{ref}"
     role="treeitem"

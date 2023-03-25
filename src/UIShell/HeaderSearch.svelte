@@ -134,6 +134,7 @@
   </div>
 
   {#if active && results.length > 0}
+    <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul aria-labelledby="search-label" role="menu" id="search-menu">
       {#each results as result, i}
         <li role="none">

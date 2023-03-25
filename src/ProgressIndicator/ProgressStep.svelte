@@ -52,6 +52,7 @@
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<!-- svelte-ignore a11y-role-supports-aria-props -->
 <li
   aria-disabled="{disabled}"
   id="{id}"
