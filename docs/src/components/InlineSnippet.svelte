@@ -6,7 +6,12 @@
 </script>
 
 <div>
-  <CodeSnippet code="{code}" type="inline" copy="{(text) => copy(text)}" />
+  <CodeSnippet
+    code="{code}"
+    type="inline"
+    copy="{(text) => copy(text)}"
+    class="code-override"
+  />
 </div>
 
 <style>

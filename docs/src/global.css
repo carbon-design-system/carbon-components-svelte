@@ -27,6 +27,13 @@ html[theme="g90"] .code-override {
   line-height: var(--cds-code-02-line-height);
   letter-spacing: var(--cds-code-02-letter-spacing);
   cursor: text;
+  /* This override is needed to get code snippets to wrap properly and not overstretch the layout.
+   * Code snippets are used for specific examples but also for type definitions at the bottom of the page. */
+  white-space: pre-wrap;
+}
+
+.code-override code {
+  word-break: break-all;
 }
 
 .code-override .bx--snippet--multi .bx--snippet-container pre {
