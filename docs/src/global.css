@@ -33,6 +33,11 @@ html[theme="g90"] .code-override {
   overflow-x: auto;
 }
 
+/* Addig this to the layout grid fixes overstretching. */
+.fix-overflow {
+  min-width: 0;
+}
+
 .token.tag,
 .token.operator {
   color: #6ea6ff;
