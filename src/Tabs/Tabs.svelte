@@ -151,6 +151,7 @@
     </a>
     <ChevronDown aria-hidden="true" title="{iconDescription}" />
   </div>
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     bind:this="{refTabList}"
     role="tablist"

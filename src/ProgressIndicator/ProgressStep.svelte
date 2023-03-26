@@ -53,7 +53,6 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
-  aria-disabled="{disabled}"
   id="{id}"
   class:bx--progress-step="{true}"
   class:bx--progress-step--current="{current}"
