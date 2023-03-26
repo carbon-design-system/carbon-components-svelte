@@ -30,7 +30,7 @@
 
 ## Danger tertiary button
 
-<Button kind="danger-tertiary">Danger tertiary button</Button>
+<Button kind="danger--tertiary">Danger tertiary button</Button>
 
 ## Danger tertiary, icon-only button
 
@@ -40,11 +40,11 @@
   </div>
 </InlineNotification>
 
-<Button kind="danger-tertiary"iconDescription="Delete" icon={TrashCan} />
+<Button kind="danger--tertiary"iconDescription="Delete" icon={TrashCan} />
 
 ## Danger ghost button
 
-<Button kind="danger-ghost">Danger ghost button</Button>
+<Button kind="danger--ghost">Danger ghost button</Button>
 
 ## Button with icon
 
@@ -90,35 +90,35 @@ If an `href` value is specified, the component will render an [anchor element](h
 
 ## Field size
 
-<Button size="field">Primary</Button>
-<Button size="field" kind="secondary">Secondary</Button>
-<Button size="field" kind="tertiary">Tertiary</Button>
-<Button size="field" kind="ghost">Ghost</Button>
-<Button size="field" kind="danger">Danger</Button>
+<Button size="md">Primary</Button>
+<Button size="md" kind="secondary">Secondary</Button>
+<Button size="md" kind="tertiary">Tertiary</Button>
+<Button size="md" kind="ghost">Ghost</Button>
+<Button size="md" kind="danger">Danger</Button>
 
 ## Small size
 
-<Button size="small">Primary</Button>
-<Button size="small" kind="secondary">Secondary</Button>
-<Button size="small" kind="tertiary">Tertiary</Button>
-<Button size="small" kind="ghost">Ghost</Button>
-<Button size="small" kind="danger">Danger</Button>
+<Button size="sm">Primary</Button>
+<Button size="sm" kind="secondary">Secondary</Button>
+<Button size="sm" kind="tertiary">Tertiary</Button>
+<Button size="sm" kind="ghost">Ghost</Button>
+<Button size="sm" kind="danger">Danger</Button>
 
 ## Large size
-
-<Button size="lg">Primary</Button>
-<Button size="lg" kind="secondary">Secondary</Button>
-<Button size="lg" kind="tertiary">Tertiary</Button>
-<Button size="lg" kind="ghost">Ghost</Button>
-<Button size="lg" kind="danger">Danger</Button>
-
-## Extra-large size
 
 <Button size="xl">Primary</Button>
 <Button size="xl" kind="secondary">Secondary</Button>
 <Button size="xl" kind="tertiary">Tertiary</Button>
 <Button size="xl" kind="ghost">Ghost</Button>
 <Button size="xl" kind="danger">Danger</Button>
+
+## Extra-large size
+
+<Button size="2xl">Primary</Button>
+<Button size="2xl" kind="secondary">Secondary</Button>
+<Button size="2xl" kind="tertiary">Tertiary</Button>
+<Button size="2xl" kind="ghost">Ghost</Button>
+<Button size="2xl" kind="danger">Danger</Button>
 
 ## Disabled state
 
