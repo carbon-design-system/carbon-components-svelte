@@ -80,10 +80,10 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Extra-large size
+## Large size
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
-size="xl"
+size="lg"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
