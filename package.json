@@ -38,7 +38,7 @@
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
-    "@carbon/styles": "^1.13.0",
+    "@carbon/styles": "^1.25.0",
     "@rollup/plugin-commonjs": "^21.0.3",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@tsconfig/svelte": "^4.0.1",
