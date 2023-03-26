@@ -46,7 +46,7 @@ export interface ComboBoxProps extends RestProps {
    * Set the size of the combobox
    * @default undefined
    */
-  size?: "sm" | "xl";
+  size?: "sm" | "lg";
 
   /**
    * Set to `true` to disable the combobox
