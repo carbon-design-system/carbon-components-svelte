@@ -39,7 +39,7 @@
 
 <DatePicker>
   <DatePickerInput
-    size="xl"
+    size="lg"
     labelText="Date of birth"
     placeholder="mm/dd/yyyy"
   />

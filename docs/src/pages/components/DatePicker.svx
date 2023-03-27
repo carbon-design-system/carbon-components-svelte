@@ -63,10 +63,10 @@ By default, the "simple" date picker does not have a dropdown calendar.
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Extra-large size
+## Large size
 
 <DatePicker>
-  <DatePickerInput size="xl" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="lg" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Small size

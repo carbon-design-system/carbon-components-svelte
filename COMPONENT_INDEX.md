@@ -1082,7 +1082,7 @@ None.
 | Prop name       | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                        |
 | :-------------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | -------------------------------------------------- |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element       |
-| size            | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>             | <code>undefined</code>                           | Set the size of the input                          |
+| size            | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>             | <code>undefined</code>                           | Set the size of the input                          |
 | type            | No       | <code>let</code> | No       | <code>string</code>                       | <code>"text"</code>                              | Specify the input type                             |
 | placeholder     | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the input placeholder text                 |
 | pattern         | No       | <code>let</code> | No       | <code>string</code>                       | <code>"\\d{1,2}\\/\\d{1,2}\\/\\d{4}"</code>      | Specify the Regular Expression for the input value |
