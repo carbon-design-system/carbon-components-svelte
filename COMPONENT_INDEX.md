@@ -1224,8 +1224,6 @@ None.
 | light                 | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to enable the light variant             |
 | tileCollapsedIconText | No       | <code>let</code> | No       | <code>string</code>                        | <code>"Interact to expand Tile"</code>           | Specify the icon text of the collapsed tile           |
 | tileExpandedIconText  | No       | <code>let</code> | No       | <code>string</code>                        | <code>"Interact to collapse Tile"</code>         | Specify the icon text of the expanded tile            |
-| tileExpandedLabel     | No       | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the icon label of the expanded tile           |
-| tileCollapsedLabel    | No       | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the icon label of the collapsed tile          |
 | tabindex              | No       | <code>let</code> | No       | <code>string</code>                        | <code>"0"</code>                                 | Specify the tabindex                                  |
 | id                    | No       | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level div element               |
 

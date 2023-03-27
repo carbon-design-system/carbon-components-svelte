@@ -3643,30 +3643,6 @@
           "reactive": false
         },
         {
-          "name": "tileExpandedLabel",
-          "kind": "let",
-          "description": "Specify the icon label of the expanded tile",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "tileCollapsedLabel",
-          "kind": "let",
-          "description": "Specify the icon label of the collapsed tile",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "tabindex",
           "kind": "let",
           "description": "Specify the tabindex",
