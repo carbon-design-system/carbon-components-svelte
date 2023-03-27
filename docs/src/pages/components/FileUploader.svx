@@ -95,11 +95,11 @@ Use the `errorSubject` and `errorBody` props to customize the error message.
 
 ## Item sizes
 
-The default `FileUploaderItem` size is "default".
+The default `FileUploaderItem` size is "lg".
 
-<FileUploaderItem size="default" name="README.md" status="uploading" />
-<FileUploaderItem size="field" name="README.md" status="uploading" />
-<FileUploaderItem size="small" name="README.md" status="uploading" />
+<FileUploaderItem size="lg" name="README.md" status="uploading" />
+<FileUploaderItem size="md" name="README.md" status="uploading" />
+<FileUploaderItem size="sm" name="README.md" status="uploading" />
 
 ## Drop container
 

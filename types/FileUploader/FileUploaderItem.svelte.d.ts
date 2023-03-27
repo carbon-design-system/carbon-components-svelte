@@ -12,9 +12,9 @@ export interface FileUploaderItemProps extends RestProps {
 
   /**
    * Specify the size of button skeleton
-   * @default "default"
+   * @default "lg"
    */
-  size?: "default" | "field" | "small";
+  size?: "sm" | "md" | "lg";
 
   /**
    * Specify the ARIA label used for the status icons
