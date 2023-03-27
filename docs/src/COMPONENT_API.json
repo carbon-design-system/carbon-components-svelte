@@ -3318,7 +3318,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the dropdown field",
-          "type": "\"sm\" | \"lg\" | \"xl\"",
+          "type": "\"sm\" | \"lg\" ",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
