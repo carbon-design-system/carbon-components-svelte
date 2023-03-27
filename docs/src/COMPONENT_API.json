@@ -1,5 +1,5 @@
 {
-  "total": 165,
+  "total": 164,
   "components": [
     {
       "moduleName": "Accordion",
@@ -13597,8 +13597,8 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the toggle size",
-          "type": "\"default\" | \"sm\"",
-          "value": "\"default\"",
+          "type": "\"md\" | \"sm\"",
+          "value": "\"md\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13704,18 +13704,6 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelA",
-          "default": false,
-          "fallback": "{labelA}",
-          "slot_props": "{}"
-        },
-        {
-          "name": "labelB",
-          "default": false,
-          "fallback": "{labelB}",
-          "slot_props": "{}"
-        },
-        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
@@ -13736,65 +13724,6 @@
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
-      ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
-    },
-    {
-      "moduleName": "ToggleSkeleton",
-      "filePath": "src/Toggle/ToggleSkeleton.svelte",
-      "props": [
-        {
-          "name": "size",
-          "kind": "let",
-          "description": "Specify the toggle size",
-          "type": "\"default\" | \"sm\"",
-          "value": "\"default\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "labelText",
-          "kind": "let",
-          "description": "Specify the label text",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "id",
-          "kind": "let",
-          "description": "Set an id for the input element",
-          "type": "string",
-          "value": "\"ccs-\" + Math.random().toString(36)",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        }
-      ],
-      "moduleExports": [],
-      "slots": [
-        {
-          "name": "labelText",
-          "default": false,
-          "fallback": "{labelText}",
-          "slot_props": "{}"
-        }
-      ],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }

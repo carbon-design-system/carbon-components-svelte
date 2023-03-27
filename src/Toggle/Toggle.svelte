@@ -5,9 +5,9 @@
 
   /**
    * Specify the toggle size
-   * @type {"default" | "sm"}
+   * @type {"md" | "sm"}
    */
-  export let size = "default";
+  export let size = "md";
 
   /** Set to `true` to toggle the checkbox input */
   export let toggled = false;
@@ -41,12 +41,15 @@
   const dispatch = createEventDispatcher();
 
   $: dispatch("toggle", { toggled });
+  $: sideLabel = toggled ? labelB : labelA;
+  $: isSm = size === "sm";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:bx--toggle="{true}"
+  class:bx--toggle--disabled="{disabled}"
   style:user-select="none"
   {...$$restProps}
   on:click
@@ -58,8 +61,7 @@
   <input
     role="switch"
     type="checkbox"
-    class:bx--toggle-input="{true}"
-    class:bx--toggle-input--small="{size === 'sm'}"
+    class:bx--toggle__button="{true}"
     checked="{toggled}"
     on:change="{() => {
       toggled = !toggled;
@@ -81,27 +83,40 @@
   <label
     aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle'}"
     for="{id}"
-    class:bx--toggle-input__label="{true}"
+    class:bx--toggle__label="{true}"
   >
-    <span class:bx--visually-hidden="{hideLabel}">
+    <span
+      class:bx--toggle__label-text="{true}"
+      class:bx--visually-hidden="{hideLabel}"
+    >
       <slot name="labelText">
         {labelText}
       </slot>
     </span>
-    <span
-      class:bx--toggle__switch="{true}"
+    <div
+      class:bx--toggle__appearance="{true}"
+      class:bx--toggle__appearance--sm="{isSm}"
       style:margin-top="{hideLabel ? 0 : undefined}"
     >
-      <span aria-hidden="true" class:bx--toggle__text--off="{true}">
-        <slot name="labelA">
-          {labelA}
-        </slot>
-      </span>
-      <span aria-hidden="true" class:bx--toggle__text--on="{true}">
-        <slot name="labelB">
-          {labelB}
-        </slot>
-      </span>
-    </span>
+      <div
+        aria-hidden="true"
+        class:bx--toggle__switch="{true}"
+        class:bx--toggle__switch--checked="{toggled}"
+      >
+        {#if isSm}
+          <svg
+            class:bx--toggle__check="{true}"
+            width="6px"
+            height="5px"
+            viewBox="0 0 6 5"
+          >
+            <path d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"></path>
+          </svg>
+        {/if}
+      </div>
+      <span class:bx--toggle__text="{true}" aria-hidden="{true}"
+        >{sideLabel}</span
+      >
+    </div>
   </label>
 </div>

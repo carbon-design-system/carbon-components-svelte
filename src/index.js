@@ -122,7 +122,7 @@ export {
   TileGroup,
 } from "./Tile";
 export { TimePicker, TimePickerSelect } from "./TimePicker";
-export { Toggle, ToggleSkeleton } from "./Toggle";
+export { Toggle } from "./Toggle";
 export { Tooltip, TooltipFooter } from "./Tooltip";
 export { TooltipDefinition } from "./TooltipDefinition";
 export { TooltipIcon } from "./TooltipIcon";

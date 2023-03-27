@@ -1,9 +1,9 @@
 ---
-components: ["Toggle", "ToggleSkeleton"]
+components: ["Toggle"]
 ---
 
 <script>
-  import { Toggle, ToggleSkeleton } from "carbon-components-svelte";
+  import { Toggle } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -33,15 +33,6 @@ Set `hideLabel` to `true` to visually hide the label text. It's recommended to s
 
 <Toggle labelText="Push notifications" labelA="No" labelB="Yes" />
 
-## Slottable labels
-
-An alternative to the "labelA" and "labelB" props is to use the corresponding named slots.
-
-<Toggle labelText="Push notifications">
-  <span slot="labelA" style="color: red">No</span>
-  <span slot="labelB" style="color: green">Yes</span>
-</Toggle>
-
 ## Disabled
 
 <Toggle labelText="Push notifications" disabled />
@@ -49,11 +40,3 @@ An alternative to the "labelA" and "labelB" props is to use the corresponding na
 ## Small size
 
 <Toggle size="sm" labelText="Push notifications" />
-
-## Skeleton
-
-<ToggleSkeleton />
-
-## Skeleton (small)
-
-<ToggleSkeleton size="sm" />
