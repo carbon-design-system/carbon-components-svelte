@@ -756,10 +756,10 @@ None.
 
 ### Props
 
-| Prop name     | Required | Kind             | Reactive | Type                          | Default value          | Description                               |
-| :------------ | :------- | :--------------- | :------- | ----------------------------- | ---------------------- | ----------------------------------------- |
-| selectedIndex | No       | <code>let</code> | Yes      | <code>number</code>           | <code>0</code>         | Set the selected index of the switch item |
-| size          | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code> | <code>undefined</code> | Specify the size of the content switcher  |
+| Prop name     | Required | Kind             | Reactive | Type                           | Default value          | Description                               |
+| :------------ | :------- | :--------------- | :------- | ------------------------------ | ---------------------- | ----------------------------------------- |
+| selectedIndex | No       | <code>let</code> | Yes      | <code>number</code>            | <code>0</code>         | Set the selected index of the switch item |
+| size          | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" </code> | <code>undefined</code> | Specify the size of the content switcher  |
 
 ### Slots
 
