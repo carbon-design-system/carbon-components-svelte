@@ -48,7 +48,7 @@ export interface DropdownProps extends RestProps {
    * Specify the size of the dropdown field
    * @default undefined
    */
-  size?: "sm" | "lg" | "xl";
+  size?: "sm" | "lg";
 
   /**
    * Set to `true` to open the dropdown
