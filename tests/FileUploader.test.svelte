@@ -29,7 +29,7 @@
 />
 
 <FileUploader
-  kind="danger-ghost"
+  kind="danger--ghost"
   size="lg"
   bind:this="{fileUploader}"
   multiple
