@@ -41,18 +41,6 @@ export interface ExpandableTileProps extends RestProps {
   tileExpandedIconText?: string;
 
   /**
-   * Specify the icon label of the expanded tile
-   * @default ""
-   */
-  tileExpandedLabel?: string;
-
-  /**
-   * Specify the icon label of the collapsed tile
-   * @default ""
-   */
-  tileCollapsedLabel?: string;
-
-  /**
    * Specify the tabindex
    * @default "0"
    */

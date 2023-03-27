@@ -17,12 +17,6 @@
   /** Specify the icon text of the expanded tile */
   export let tileExpandedIconText = "Interact to collapse Tile";
 
-  /** Specify the icon label of the expanded tile */
-  export let tileExpandedLabel = "";
-
-  /** Specify the icon label of the collapsed tile */
-  export let tileCollapsedLabel = "";
-
   /** Specify the tabindex */
   export let tabindex = "0";
 
@@ -92,7 +86,6 @@
       </span>
     </div>
     <div class:bx--tile__chevron="{true}">
-      <span>{expanded ? tileExpandedLabel : tileCollapsedLabel}</span>
       <ChevronDown />
     </div>
     <div class:bx--tile-content="{true}">
