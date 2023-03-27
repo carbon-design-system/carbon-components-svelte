@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@0.82.7.
+> 164 components exported from carbon-components-svelte@0.82.7.
 
 ## Components
 
@@ -155,7 +155,6 @@
 - [`TimePickerSelect`](#timepickerselect)
 - [`ToastNotification`](#toastnotification)
 - [`Toggle`](#toggle)
-- [`ToggleSkeleton`](#toggleskeleton)
 - [`Toolbar`](#toolbar)
 - [`ToolbarBatchActions`](#toolbarbatchactions)
 - [`ToolbarContent`](#toolbarcontent)
@@ -1224,6 +1223,8 @@ None.
 | light                 | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to enable the light variant             |
 | tileCollapsedIconText | No       | <code>let</code> | No       | <code>string</code>                        | <code>"Interact to expand Tile"</code>           | Specify the icon text of the collapsed tile           |
 | tileExpandedIconText  | No       | <code>let</code> | No       | <code>string</code>                        | <code>"Interact to collapse Tile"</code>         | Specify the icon text of the expanded tile            |
+| tileExpandedLabel     | No       | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the icon label of the expanded tile           |
+| tileCollapsedLabel    | No       | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the icon label of the collapsed tile          |
 | tabindex              | No       | <code>let</code> | No       | <code>string</code>                        | <code>"0"</code>                                 | Specify the tabindex                                  |
 | id                    | No       | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level div element               |
 
@@ -4366,24 +4367,22 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                               | Default value                                    | Description                                     |
-| :-------- | :------- | :--------------- | :------- | ---------------------------------- | ------------------------------------------------ | ----------------------------------------------- |
-| toggled   | No       | <code>let</code> | Yes      | <code>boolean</code>               | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
-| size      | No       | <code>let</code> | No       | <code>"default" &#124; "sm"</code> | <code>"default"</code>                           | Specify the toggle size                         |
-| disabled  | No       | <code>let</code> | No       | <code>boolean</code>               | <code>false</code>                               | Set to `true` to disable checkbox input         |
-| labelA    | No       | <code>let</code> | No       | <code>string</code>                | <code>"Off"</code>                               | Specify the label for the untoggled state       |
-| labelB    | No       | <code>let</code> | No       | <code>string</code>                | <code>"On"</code>                                | Specify the label for the toggled state         |
-| labelText | No       | <code>let</code> | No       | <code>string</code>                | <code>""</code>                                  | Specify the label text                          |
-| hideLabel | No       | <code>let</code> | No       | <code>boolean</code>               | <code>false</code>                               | Set to `true` to visually hide the label text   |
-| id        | No       | <code>let</code> | No       | <code>string</code>                | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
-| name      | No       | <code>let</code> | No       | <code>string</code>                | <code>undefined</code>                           | Specify a name attribute for the checkbox input |
+| Prop name | Required | Kind             | Reactive | Type                          | Default value                                    | Description                                     |
+| :-------- | :------- | :--------------- | :------- | ----------------------------- | ------------------------------------------------ | ----------------------------------------------- |
+| toggled   | No       | <code>let</code> | Yes      | <code>boolean</code>          | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
+| size      | No       | <code>let</code> | No       | <code>"md" &#124; "sm"</code> | <code>"md"</code>                                | Specify the toggle size                         |
+| disabled  | No       | <code>let</code> | No       | <code>boolean</code>          | <code>false</code>                               | Set to `true` to disable checkbox input         |
+| labelA    | No       | <code>let</code> | No       | <code>string</code>           | <code>"Off"</code>                               | Specify the label for the untoggled state       |
+| labelB    | No       | <code>let</code> | No       | <code>string</code>           | <code>"On"</code>                                | Specify the label for the toggled state         |
+| labelText | No       | <code>let</code> | No       | <code>string</code>           | <code>""</code>                                  | Specify the label text                          |
+| hideLabel | No       | <code>let</code> | No       | <code>boolean</code>          | <code>false</code>                               | Set to `true` to visually hide the label text   |
+| id        | No       | <code>let</code> | No       | <code>string</code>           | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
+| name      | No       | <code>let</code> | No       | <code>string</code>           | <code>undefined</code>                           | Specify a name attribute for the checkbox input |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
 | :-------- | :------ | :---- | :----------------------- |
-| labelA    | No      | --    | <code>{labelA}</code>    |
-| labelB    | No      | --    | <code>{labelB}</code>    |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
@@ -4399,31 +4398,6 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 | keyup      | forwarded  | --                                 |
 | focus      | forwarded  | --                                 |
 | blur       | forwarded  | --                                 |
-
-## `ToggleSkeleton`
-
-### Props
-
-| Prop name | Required | Kind             | Reactive | Type                               | Default value                                    | Description                     |
-| :-------- | :------- | :--------------- | :------- | ---------------------------------- | ------------------------------------------------ | ------------------------------- |
-| size      | No       | <code>let</code> | No       | <code>"default" &#124; "sm"</code> | <code>"default"</code>                           | Specify the toggle size         |
-| labelText | No       | <code>let</code> | No       | <code>string</code>                | <code>""</code>                                  | Specify the label text          |
-| id        | No       | <code>let</code> | No       | <code>string</code>                | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element |
-
-### Slots
-
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
-
-### Events
-
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
 
 ## `Toolbar`
 
