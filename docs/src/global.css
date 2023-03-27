@@ -172,16 +172,6 @@ html[theme="g90"] .code-override {
   margin-bottom: var(--cds-layout-01);
 }
 
-.table {
-  position: sticky;
-  max-height: calc(100vh - 3rem);
-  top: 3rem;
-  padding-top: var(--cds-spacing-05);
-  padding-bottom: var(--cds-spacing-05);
-  padding-left: var(--cds-spacing-08);
-  overflow-y: auto;
-}
-
 .code-01 {
   font-size: var(--cds-code-01-font-size);
   font-weight: var(--cds-code-01-font-weight);
