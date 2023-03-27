@@ -8,7 +8,7 @@
 
   /**
    * Specify the size of the content switcher
-   * @type {"sm" | "xl"}
+   * @type {"sm" | "lg" }
    */
   export let size = undefined;
 
@@ -63,7 +63,7 @@
   role="tablist"
   class:bx--content-switcher="{true}"
   class:bx--content-switcher--sm="{size === 'sm'}"
-  class:bx--content-switcher--xl="{size === 'xl'}"
+  class:bx--content-switcher--lg="{size === 'lg' || size === 'xl'}"
   {...$$restProps}
   on:click
   on:mouseover

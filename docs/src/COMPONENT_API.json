@@ -1935,7 +1935,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the content switcher",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\" ",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,

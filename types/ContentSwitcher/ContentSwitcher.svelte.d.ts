@@ -14,7 +14,7 @@ export interface ContentSwitcherProps extends RestProps {
    * Specify the size of the content switcher
    * @default undefined
    */
-  size?: "sm" | "xl";
+  size?: "sm" | "lg";
 
   [key: `data-${string}`]: any;
 }
