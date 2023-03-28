@@ -7,7 +7,7 @@
 
   /**
    * Set the size of the input
-   * @type {"sm" | "xl"}
+   * @type {"sm" | "lg"}
    */
   export let size = undefined;
 
@@ -171,7 +171,7 @@
     class:bx--number--nolabel="{hideLabel}"
     class:bx--number--nosteppers="{hideSteppers}"
     class:bx--number--sm="{size === 'sm'}"
-    class:bx--number--xl="{size === 'xl'}"
+    class:bx--number--lg="{size === 'lg' || size === 'xl'}"
   >
     {#if $$slots.label || label}
       <label
@@ -212,9 +212,7 @@
         on:blur
         on:paste
       />
-      {#if readonly}
-        <EditOff class="bx--text-input__readonly-icon" />
-      {:else}
+      {#if !readonly}
         {#if invalid}
           <WarningFilled class="bx--number__invalid" />
         {/if}
