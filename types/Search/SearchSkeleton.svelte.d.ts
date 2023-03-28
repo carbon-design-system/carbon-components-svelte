@@ -6,9 +6,9 @@ type RestProps = SvelteHTMLElements["div"];
 export interface SearchSkeletonProps extends RestProps {
   /**
    * Specify the size of the search input
-   * @default "xl"
+   * @default "md"
    */
-  size?: "sm" | "lg" | "xl";
+  size?: "sm" | "md" | "lg";
 
   [key: `data-${string}`]: any;
 }

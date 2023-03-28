@@ -1,9 +1,9 @@
 <script>
   /**
    * Specify the size of the search input
-   * @type {"sm" | "lg" | "xl"}
+   * @type {"sm" | "md" | "lg"}
    */
-  export let size = "xl";
+  export let size = "md";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -11,8 +11,8 @@
 <div
   class:bx--skeleton="{true}"
   class:bx--search--sm="{size === 'sm'}"
+  class:bx--search--md="{size === 'md'}"
   class:bx--search--lg="{size === 'lg'}"
-  class:bx--search--xl="{size === 'xl'}"
   {...$$restProps}
   on:click
   on:mouseover

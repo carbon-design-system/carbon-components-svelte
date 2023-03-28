@@ -3102,7 +3102,7 @@ None.
 | ref                  | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                 | <code>null</code>                                | Obtain a reference to the input HTML element                    |
 | expanded             | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>                               | Set to `true to expand the search input                         |
 | value                | No       | <code>let</code> | Yes      | <code>any</code>                                          | <code>""</code>                                  | Specify the value of the search input                           |
-| size                 | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                 | <code>"xl"</code>                                | Specify the size of the search input                            |
+| size                 | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code>                 | <code>"md"</code>                                | Specify the size of the search input                            |
 | searchClass          | No       | <code>let</code> | No       | <code>string</code>                                       | <code>""</code>                                  | Specify the class name passed to the outer div element          |
 | skeleton             | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to display the skeleton state                     |
 | light                | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to enable the light variant                       |
@@ -3147,7 +3147,7 @@ None.
 
 | Prop name | Required | Kind             | Reactive | Type                                      | Default value     | Description                          |
 | :-------- | :------- | :--------------- | :------- | ----------------------------------------- | ----------------- | ------------------------------------ |
-| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code> | Specify the size of the search input |
+| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code> | <code>"md"</code> | Specify the size of the search input |
 
 ### Slots
 
