@@ -38,7 +38,7 @@
 
   /**
    * Set the size of the combobox
-   * @type {"sm" | "lg" | "xl"}
+   * @type {"sm" | "lg"}
    */
   export let size = undefined;
 

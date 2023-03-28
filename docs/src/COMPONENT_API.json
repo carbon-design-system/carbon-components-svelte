@@ -7019,7 +7019,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the combobox",
-          "type": "\"sm\" | \"lg\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,

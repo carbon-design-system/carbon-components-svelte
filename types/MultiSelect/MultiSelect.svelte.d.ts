@@ -52,7 +52,7 @@ export interface MultiSelectProps extends RestProps {
    * Set the size of the combobox
    * @default undefined
    */
-  size?: "sm" | "lg" | "xl";
+  size?: "sm" | "lg";
 
   /**
    * Specify the type of multiselect
