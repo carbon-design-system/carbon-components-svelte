@@ -1,7 +1,7 @@
 <script>
   /**
    * Set the size of the input
-   * @type {"sm" | "xl"}
+   * @type {"sm" | "lg"}
    */
   export let size = undefined;
 
@@ -116,7 +116,7 @@
       class:bx--label--disabled="{disabled}"
       class:bx--label--inline="{inline}"
       class:bx--label--inline--sm="{inline && size === 'sm'}"
-      class:bx--label--inline--xl="{inline && size === 'xl'}"
+      class:bx--label--inline--lg="{inline && (size === 'lg' || size === 'xl')}"
     >
       <slot name="labelText">
         {labelText}
@@ -141,7 +141,7 @@
       class:bx--label--disabled="{disabled}"
       class:bx--label--inline="{inline}"
       class:bx--label--inline--sm="{inline && size === 'sm'}"
-      class:bx--label--inline--xl="{inline && size === 'xl'}"
+      class:bx--label--inline--lg="{inline && (size === 'lg' || size === 'xl')}"
     >
       <slot name="labelText">
         {labelText}
@@ -189,7 +189,7 @@
         class:bx--text-input--invalid="{invalid}"
         class:bx--text-input--warning="{warn}"
         class:bx--text-input--sm="{size === 'sm'}"
-        class:bx--text-input--xl="{size === 'xl'}"
+        class:bx--text-input--lg="{size === 'lg' || size === 'xl'}"
         {...$$restProps}
         on:change
         on:input
