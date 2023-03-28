@@ -104,7 +104,7 @@
 />
 
 <MultiSelect
-  size="xl"
+  size="lg"
   titleText="Contact"
   label="Select contact methods..."
   items="{[
