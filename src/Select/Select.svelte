@@ -11,7 +11,7 @@
 
   /**
    * Set the size of the select input
-   * @type {"sm" | "xl"}
+   * @type {"sm" | "lg"}
    */
   export let size = undefined;
 
@@ -161,7 +161,7 @@
             name="{name}"
             class:bx--select-input="{true}"
             class:bx--select-input--sm="{size === 'sm'}"
-            class:bx--select-input--xl="{size === 'xl'}"
+            class:bx--select-input--lg="{size === 'lg' || size === 'xl'}"
             on:change="{handleChange}"
             on:change
             on:input
@@ -205,7 +205,7 @@
           aria-invalid="{invalid || undefined}"
           class:bx--select-input="{true}"
           class:bx--select-input--sm="{size === 'sm'}"
-          class:bx--select-input--xl="{size === 'xl'}"
+          class:bx--select-input--lg="{size === 'lg' || size === 'xl'}"
           on:change="{handleChange}"
           on:change
           on:input

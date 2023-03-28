@@ -14,7 +14,7 @@ export interface SelectProps extends RestProps {
    * Set the size of the select input
    * @default undefined
    */
-  size?: "sm" | "xl";
+  size?: "sm" | "lg";
 
   /**
    * Set to `true` to use the inline variant

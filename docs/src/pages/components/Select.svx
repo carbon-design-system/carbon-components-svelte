@@ -104,9 +104,9 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Extra-large size
+## Large size
 
-<Select size="xl" labelText="Carbon theme" selected="g10" >
+<Select size="lg" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g80" text="Gray 80" />
