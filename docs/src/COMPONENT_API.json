@@ -7960,7 +7960,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the overflow menu",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
