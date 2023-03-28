@@ -42,7 +42,7 @@ Set `flipped` to `true` for the menu to be positioned to the left of the button.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Extra-large size
+## Large size
 
 <OverflowMenu size="xl">
   <OverflowMenuItem text="Manage credentials" />
