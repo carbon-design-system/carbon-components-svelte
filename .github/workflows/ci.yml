@@ -23,3 +23,13 @@ jobs:
           yarn build:lib
           yarn test:types
           yarn lint
+
+  deploy-docs:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger deploy
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl -X GET "$deploy_url"
