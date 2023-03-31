@@ -40,11 +40,11 @@ The active node can be set through `activeId`.
 
 <FileSource src="/framed/TreeView/TreeViewActive" />
 
-## Compact size
+## Extra-small size
 
-Set `size` to `"compact"` to use the compact variant.
+Set `size` to `"xs"` to use the extra-small variant.
 
-<FileSource src="/framed/TreeView/TreeViewCompact" />
+<FileSource src="/framed/TreeView/TreeViewXs" />
 
 ## With icons
 

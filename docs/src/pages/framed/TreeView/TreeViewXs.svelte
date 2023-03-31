@@ -46,7 +46,7 @@
 </script>
 
 <TreeView
-  size="compact"
+  size="xs"
   labelText="Cloud Products"
   children="{children}"
   bind:activeId

@@ -63,9 +63,9 @@
 
   /**
    * Specify the TreeView size
-   * @type {"default" | "compact"}
+   * @type {"xs" | "sm"}
    */
-  export let size = "default";
+  export let size = "sm";
 
   /** Specify the label text */
   export let labelText = "";
@@ -253,8 +253,8 @@
   role="tree"
   bind:this="{ref}"
   class:bx--tree="{true}"
-  class:bx--tree--default="{size === 'default'}"
-  class:bx--tree--compact="{size === 'compact'}"
+  class:bx--tree--xs="{size === 'xs'}"
+  class:bx--tree--sm="{size === 'sm'}"
   aria-label="{hideLabel ? labelText : undefined}"
   aria-labelledby="{!hideLabel ? labelId : undefined}"
   aria-multiselectable="{selectedIds.length > 1 || undefined}"
