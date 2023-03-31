@@ -1,6 +1,6 @@
 # Component Index
 
-> 164 components exported from carbon-components-svelte@0.80.0.
+> 163 components exported from carbon-components-svelte@0.80.0.
 
 ## Components
 
@@ -166,7 +166,6 @@
 - [`TooltipFooter`](#tooltipfooter)
 - [`TooltipIcon`](#tooltipicon)
 - [`TreeView`](#treeview)
-- [`Truncate`](#truncate)
 - [`UnorderedList`](#unorderedlist)
 
 ---
@@ -4683,24 +4682,6 @@ export interface TreeNode {
 | toggle     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
 | focus      | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
 | keydown    | forwarded  | --                                                            |
-
-## `Truncate`
-
-### Props
-
-| Prop name | Required | Kind             | Reactive | Type                              | Default value      | Description |
-| :-------- | :------- | :--------------- | :------- | --------------------------------- | ------------------ | ----------- |
-| clamp     | No       | <code>let</code> | No       | <code>"end" &#124; "front"</code> | <code>"end"</code> | --          |
-
-### Slots
-
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
-
-### Events
-
-None.
 
 ## `UnorderedList`
 

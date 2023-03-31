@@ -142,8 +142,6 @@ export { default as TooltipFooter } from "./Tooltip/TooltipFooter.svelte";
 export { default as TooltipDefinition } from "./TooltipDefinition/TooltipDefinition.svelte";
 export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon.svelte";
 export { default as TreeView } from "./TreeView/TreeView.svelte";
-export { default as Truncate } from "./Truncate/Truncate.svelte";
-export { default as truncate } from "./Truncate/truncate";
 export { default as Header } from "./UIShell/Header.svelte";
 export { default as HeaderAction } from "./UIShell/HeaderAction.svelte";
 export { default as HeaderActionLink } from "./UIShell/HeaderActionLink.svelte";
