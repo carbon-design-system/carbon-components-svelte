@@ -4044,7 +4044,7 @@ None.
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLTextAreaElement</code> | <code>null</code>                                | Obtain a reference to the textarea HTML element |
 | value       | No       | <code>let</code> | Yes      | <code>string</code>                          | <code>""</code>                                  | Specify the textarea value                      |
 | placeholder | No       | <code>let</code> | No       | <code>string</code>                          | <code>""</code>                                  | Specify the placeholder text                    |
-| cols        | No       | <code>let</code> | No       | <code>number</code>                          | <code>50</code>                                  | Specify the number of cols                      |
+| cols        | No       | <code>let</code> | No       | <code>number</code>                          | <code>undefined</code>                           | Specify the number of cols                      |
 | rows        | No       | <code>let</code> | No       | <code>number</code>                          | <code>4</code>                                   | Specify the number of rows                      |
 | maxCount    | No       | <code>let</code> | No       | <code>number</code>                          | <code>undefined</code>                           | Specify the max character count                 |
 | light       | No       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to enable the light variant       |

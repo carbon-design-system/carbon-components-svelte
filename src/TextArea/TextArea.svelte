@@ -5,8 +5,11 @@
   /** Specify the placeholder text */
   export let placeholder = "";
 
-  /** Specify the number of cols */
-  export let cols = 50;
+  /**
+   * Specify the number of cols
+   * @type {number}
+   * */
+  export let cols = undefined;
 
   /** Specify the number of rows */
   export let rows = 4;
@@ -110,6 +113,7 @@
       class:bx--text-area--light="{light}"
       class:bx--text-area--invalid="{invalid}"
       maxlength="{maxCount ?? undefined}"
+      style="{cols ? '' : 'width: 100%;'}"
       {...$$restProps}
       on:change
       on:input
