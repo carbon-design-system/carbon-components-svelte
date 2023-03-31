@@ -18,7 +18,7 @@
       this="{tileComponent}"
       href="{href}"
       {...$$restProps}
-      style="height: 100%;"
+      style="height: 100%; width: 100%; position: absolute;"
     >
       <div class="card">
         <div>
