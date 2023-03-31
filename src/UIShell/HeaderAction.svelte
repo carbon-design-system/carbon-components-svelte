@@ -70,6 +70,7 @@
   type="button"
   class:bx--header__action="{true}"
   class:bx--header__action--active="{isOpen}"
+  class:bx--btn--icon-only="{!text}"
   class:action-text="{text}"
   {...$$restProps}
   on:click
