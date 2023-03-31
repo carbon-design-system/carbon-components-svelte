@@ -8,7 +8,7 @@ export interface TimePickerProps extends RestProps {
    * Specify the size of the input
    * @default undefined
    */
-  size?: "sm" | "xl";
+  size?: "sm" | "lg";
 
   /**
    * Specify the input value

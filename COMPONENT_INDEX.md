@@ -4256,7 +4256,7 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 | :---------- | :------- | :--------------- | :------- | ----------------------------------------- | --------------------------------------------------- | ----------------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                   | Obtain a reference to the input HTML element          |
 | value       | No       | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>                                     | Specify the input value                               |
-| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>             | <code>undefined</code>                              | Specify the size of the input                         |
+| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>             | <code>undefined</code>                              | Specify the size of the input                         |
 | placeholder | No       | <code>let</code> | No       | <code>string</code>                       | <code>"hh:mm"</code>                                | Specify the input placeholder text                    |
 | pattern     | No       | <code>let</code> | No       | <code>string</code>                       | <code>"(1[012]&#124;[1-9]):[0-5][0-9](\\s)?"</code> | Specify the `pattern` attribute for the input element |
 | maxlength   | No       | <code>let</code> | No       | <code>number</code>                       | <code>5</code>                                      | Specify the `maxlength` input attribute               |

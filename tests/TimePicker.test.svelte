@@ -29,7 +29,7 @@
   </TimePickerSelect>
 </TimePicker>
 
-<TimePicker size="xl" labelText="Cron job" placeholder="hh:mm">
+<TimePicker size="lg" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="PM">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
