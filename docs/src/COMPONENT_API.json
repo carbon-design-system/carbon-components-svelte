@@ -12454,7 +12454,6 @@
           "kind": "let",
           "description": "Specify the number of cols",
           "type": "number",
-          "value": "50",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
