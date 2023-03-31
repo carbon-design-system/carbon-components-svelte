@@ -33,9 +33,9 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   </TimePickerSelect>
 </TimePicker>
 
-## Extra-large size
+## Large size
 
-<TimePicker size="xl" labelText="Cron job" placeholder="hh:mm">
+<TimePicker size="lg" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
