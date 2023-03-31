@@ -63,7 +63,7 @@
 
 <TreeView
   bind:this="{treeview}"
-  size="compact"
+  size="xs"
   labelText="Cloud Products"
   children="{children}"
   bind:activeId

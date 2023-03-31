@@ -14439,11 +14439,10 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the TreeView size",
-          "type": "\"default\" | \"compact\"",
-          "value": "\"default\"",
+          "type": "\"xs\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
-          "isRequired": false,
+          "isRequired": true,
           "constant": false,
           "reactive": false
         },

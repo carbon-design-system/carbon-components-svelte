@@ -41,9 +41,9 @@ export interface TreeViewProps extends RestProps {
 
   /**
    * Specify the TreeView size
-   * @default "default"
+   * @default undefined
    */
-  size?: "default" | "compact";
+  size: "xs";
 
   /**
    * Specify the label text
