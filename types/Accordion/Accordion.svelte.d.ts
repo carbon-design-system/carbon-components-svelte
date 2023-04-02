@@ -12,7 +12,7 @@ export interface AccordionProps extends AccordionSkeletonProps {
    * Specify the size of the accordion
    * @default undefined
    */
-  size?: "sm" | "xl";
+  size?: "sm" | "lg";
 
   /**
    * Set to `true` to disable the accordion

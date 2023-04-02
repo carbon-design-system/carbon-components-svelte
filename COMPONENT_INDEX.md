@@ -177,7 +177,7 @@
 | Prop name | Required | Kind             | Reactive | Type                              | Default value          | Description                                      |
 | :-------- | :------- | :--------------- | :------- | --------------------------------- | ---------------------- | ------------------------------------------------ |
 | align     | No       | <code>let</code> | No       | <code>"start" &#124; "end"</code> | <code>"end"</code>     | Specify alignment of accordion item chevron icon |
-| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>     | <code>undefined</code> | Specify the size of the accordion                |
+| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>     | <code>undefined</code> | Specify the size of the accordion                |
 | disabled  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to disable the accordion           |
 | skeleton  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to display the skeleton state      |
 
