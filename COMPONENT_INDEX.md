@@ -1,6 +1,6 @@
 # Component Index
 
-> 163 components exported from carbon-components-svelte@0.80.0.
+> 164 components exported from carbon-components-svelte@0.80.0.
 
 ## Components
 
@@ -95,6 +95,7 @@
 - [`PaginationSkeleton`](#paginationskeleton)
 - [`PasswordInput`](#passwordinput)
 - [`Popover`](#popover)
+- [`PopoverContent`](#popovercontent)
 - [`ProgressBar`](#progressbar)
 - [`ProgressIndicator`](#progressindicator)
 - [`ProgressIndicatorSkeleton`](#progressindicatorskeleton)
@@ -2797,15 +2798,15 @@ None.
 
 ### Props
 
-| Prop name           | Required | Kind             | Reactive | Type                                                                                                                                                                                                                            | Default value      | Description                                            |
-| :------------------ | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------ |
-| open                | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to display the popover                   |
-| closeOnOutsideClick | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to close the popover on an outside click |
-| caret               | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` render a caret                           |
-| align               | No       | <code>let</code> | No       | <code>"top" &#124; "top-left" &#124; "top-right" &#124; "bottom" &#124; "bottom-left" &#124; "bottom-right" &#124; "left" &#124; "left-bottom" &#124; "left-top" &#124; "right" &#124; "right-bottom" &#124; "right-top"</code> | <code>"top"</code> | Specify the alignment of the caret                     |
-| light               | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to enable the light variant              |
-| highContrast        | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to enable the high contrast variant      |
-| relative            | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to use a relative position               |
+| Prop name           | Required | Kind             | Reactive | Type                                                                                                                                                                                                                            | Default value          | Description                                            |
+| :------------------ | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------ |
+| open                | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code>     | Set to `true` to display the popover                   |
+| closeOnOutsideClick | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code>     | Set to `true` to close the popover on an outside click |
+| isTabTip            | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code>     | Set to `true` to render the tab tip variant            |
+| caret               | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>undefined</code> | Set to `true` render a caret                           |
+| align               | No       | <code>let</code> | No       | <code>"top" &#124; "top-left" &#124; "top-right" &#124; "bottom" &#124; "bottom-left" &#124; "bottom-right" &#124; "left" &#124; "left-bottom" &#124; "left-top" &#124; "right" &#124; "right-bottom" &#124; "right-top"</code> | <code>undefined</code> | Specify the alignment of the caret                     |
+| dropShadow          | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>true</code>      | Set to `false` to omit the drop shadow                 |
+| highContrast        | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code>     | Set to `true` to enable the high contrast variant      |
 
 ### Slots
 
@@ -2818,6 +2819,25 @@ None.
 | Event name    | Type       | Detail                                |
 | :------------ | :--------- | :------------------------------------ |
 | click:outside | dispatched | <code>{ target: HTMLElement; }</code> |
+
+## `PopoverContent`
+
+### Props
+
+| Prop name    | Required | Kind             | Reactive | Type            | Default value     | Description |
+| :----------- | :------- | :--------------- | :------- | --------------- | ----------------- | ----------- |
+| className    | No       | <code>let</code> | No       | --              | <code>null</code> | --          |
+| contentProps | No       | <code>let</code> | No       | <code>{}</code> | <code>{}</code>   | --          |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `ProgressBar`
 

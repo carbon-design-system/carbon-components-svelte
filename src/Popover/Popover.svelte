@@ -9,23 +9,26 @@
   /** Set to `true` to close the popover on an outside click */
   export let closeOnOutsideClick = false;
 
-  /** Set to `true` render a caret */
-  export let caret = false;
+  /** Set to `true` to render the tab tip variant */
+  export let isTabTip = false;
+
+  /**
+   * Set to `true` render a caret
+   * @type {boolean}
+   * */
+  export let caret = isTabTip ? false : true;
 
   /**
    * Specify the alignment of the caret
    * @type {"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"}
    */
-  export let align = "top";
+  export let align = isTabTip ? "bottom-left" : "bottom";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+  /** Set to `false` to omit the drop shadow */
+  export let dropShadow = true;
 
   /** Set to `true` to enable the high contrast variant */
   export let highContrast = false;
-
-  /** Set to `true` to use a relative position */
-  export let relative = false;
 
   import { createEventDispatcher } from "svelte";
 
@@ -44,11 +47,11 @@
   }}"
 />
 
-<div
+<span
   bind:this="{ref}"
-  class:bx--popover="{true}"
+  class:bx--popover-container="{true}"
   class:bx--popover--caret="{caret}"
-  class:bx--popover--light="{light}"
+  class:bx--popover--drop-shadow="{dropShadow}"
   class:bx--popover--high-contrast="{highContrast}"
   class:bx--popover--top="{align === 'top'}"
   class:bx--popover--top-left="{align === 'top-left'}"
@@ -63,11 +66,8 @@
   class:bx--popover--right-bottom="{align === 'right-bottom'}"
   class:bx--popover--right-top="{align === 'right-top'}"
   class:bx--popover--open="{open}"
-  class:bx--popover--relative="{relative}"
-  style:position="{relative ? "relative" : undefined}"
   {...$$restProps}
+  style="{$$restProps.style}"
 >
-  <div class:bx--popover-contents="{true}">
-    <slot />
-  </div>
-</div>
+  <slot />
+</span>

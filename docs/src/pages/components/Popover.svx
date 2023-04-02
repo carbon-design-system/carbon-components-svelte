@@ -1,153 +1,128 @@
+---
+components: ["Popover", "PopoverContent"]
+---
+
 <script>
-  import { Popover } from "carbon-components-svelte";
+  import { Popover, PopoverContent, Button } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
+  import Settings from "carbon-icons-svelte/lib/Settings.svelte";
 </script>
 
 ## Default
 
-By default, the position of the popover component is absolute.
+By default, the alignment of the popover is at the bottom.
 
-<div data-outline>
-    Parent
-    <Popover open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
-</div>
-
-## Relative position
-
-Set `relative` to `true` to use a relative position.
-
-<div data-outline>
-    Parent
-    <Popover relative open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
-</div>
-
-## Close on outside click
-
-Set `closeOnOutsideClick` to set `open` to `false` when clicking outside of the popover.
-
-<div data-outline>
-    Parent
-    <Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
-</div>
+<Popover open>
+    <div data-outline>Parent</div>
+    <PopoverContent className="p-05">Content</PopoverContent>
+</Popover>
 
 ## Popover alignment
 
 Customize the popover alignment using the `align` prop. Valid values include: `"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"`.
 
-The default `align` value is `"top"`.
+The default `align` value is `"bottom"`.
 
-<div data-outline>
-    Parent
-    <Popover open align="top-left">
-        <div style="padding: var(--bx-spacing-05)">top-left</div>
-    </Popover>
-</div>
-<div data-outline>
-    Parent
-    <Popover open align="top-right">
-        <div style="padding: var(--bx-spacing-05)">top-right</div>
-    </Popover>
-</div>
-<div data-outline>
-    Parent
+**At the bottom**
+
+<div style="display: flex; justify-content: space-between;">
     <Popover open align="bottom">
-        <div style="padding: var(--bx-spacing-05)">bottom</div>
+        <div data-outline>Parent</div>
+        <PopoverContent className="p-05">bottom</PopoverContent>
     </Popover>
-</div>
-<div data-outline>
-    Parent
     <Popover open align="bottom-left">
-        <div style="padding: var(--bx-spacing-05)">bottom-left</div>
+        <div data-outline>Parent</div>
+        <PopoverContent className="p-05">bottom-left</PopoverContent>
     </Popover>
-</div>
-<div data-outline>
-    Parent
     <Popover open align="bottom-right">
-        <div style="padding: var(--bx-spacing-05)">bottom-right</div>
+        <div data-outline>Parent</div>
+        <PopoverContent className="p-05">bottom-right</PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
+
+**To the left**
+
+<div style="display: flex; justify-content: space-around; ">
     <Popover open align="left">
-        <div style="padding: var(--bx-spacing-05)">left</div>
+        <div data-outline style="line-height: 2rem">Parent</div><!-- Height of 32px/2rem is assumed by @carbon/styles. Otherwise caret is misaligned. -->
+        <PopoverContent className="p-05">left</PopoverContent>
     </Popover>
-</div>
-<div data-outline>
-    Parent
     <Popover open align="left-bottom">
-        <div style="padding: var(--bx-spacing-05)">left-bottom</div>
+        <div data-outline style="line-height: 2rem">Parent</div><!-- Height of 32px/2rem is assumed by @carbon/styles. Otherwise caret is misaligned. -->
+        <PopoverContent className="p-05">left-bottom</PopoverContent>
+    </Popover>
+    <Popover open align="left-top">
+        <div data-outline style="line-height: 2rem">Parent</div><!-- Height of 32px/2rem is assumed by @carbon/styles. Otherwise caret is misaligned. -->
+        <PopoverContent className="p-05">left-top</PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
-    <Popover open align="left-right">
-        <div style="padding: var(--bx-spacing-05)">left-right</div>
-    </Popover>
-</div>
-<div data-outline>
-    Parent
+
+**To the right**
+
+<div style="display: flex; justify-content: space-around ">
     <Popover open align="right">
-        <div style="padding: var(--bx-spacing-05)">right</div>
+        <div data-outline style="line-height: 2rem">Parent</div><!-- Height of 32px/2rem is assumed by @carbon/styles. Otherwise caret is misaligned. -->
+        <PopoverContent className="p-05">right</PopoverContent>
     </Popover>
-</div>
-<div data-outline>
-    Parent
     <Popover open align="right-bottom">
-        <div style="padding: var(--bx-spacing-05)">right-bottom</div>
+        <div data-outline style="line-height: 2rem">Parent</div><!-- Height of 32px/2rem is assumed by @carbon/styles. Otherwise caret is misaligned. -->
+        <PopoverContent className="p-05">right-bottom</PopoverContent>
     </Popover>
-</div>
-<div data-outline>
-    Parent
     <Popover open align="right-top">
-        <div style="padding: var(--bx-spacing-05)">right-top</div>
+        <div data-outline style="line-height: 2rem">Parent</div><!-- Height of 32px/2rem is assumed by @carbon/styles. Otherwise caret is misaligned. -->
+        <PopoverContent className="p-05">right-top</PopoverContent>
     </Popover>
 </div>
 
-## With caret
+**At the top**
 
-<div data-outline>
-    Parent
-    <Popover caret open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
+<div style="display: flex; justify-content: space-between;">
+    <Popover open align="top-left">
+        <div data-outline>Parent</div>
+        <PopoverContent className="p-05">top-left</PopoverContent>
+    </Popover>
+    <Popover open align="top">
+        <div data-outline>Parent</div>
+        <PopoverContent className="p-05">top</PopoverContent>
+    </Popover>
+    <Popover open align="top-right">
+        <div data-outline>Parent</div>
+        <PopoverContent className="p-05">top-right</PopoverContent>
     </Popover>
 </div>
 
-## Custom caret alignment
 
-By default, the caret is aligned "top".
+## Without caret
 
-Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"` or `"right-top"`.
+<Popover caret={false} open align='right'>
+    <div data-outline>Parent</div>
+    <PopoverContent className="p-05">Content</PopoverContent>
+</Popover>
 
-<div data-outline>
-    Parent
-    <Popover caret align="top-left" open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
-</div>
+## Tab tip variant
 
-## Light variant
-
-<div data-outline>
-    Parent
-    <Popover light open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
-</div>
+<Popover isTabTip open align='bottom-left'>
+    <Button iconOnly kind="ghost" icon={Settings} />
+    <PopoverContent className="p-05">Content</PopoverContent>
+</Popover>
 
 ## High contrast variant
 
-<div data-outline>
-    Parent
-    <Popover highContrast open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
-</div>
+Set `highContrast` to use the high contrast variant.
+
+<Popover highContrast open align='right'>
+    <div data-outline>Parent</div>
+    <PopoverContent className="p-05">Content</PopoverContent>
+</Popover>
+
+## Without drop shadow
+
+Set `dropShadow` to `false` to remove the drop shadow.
+
+<Popover open dropShadow={false} align='right'>
+    <div data-outline>Parent</div>
+    <PopoverContent className="p-05">Content</PopoverContent>
+</Popover>
 
 ## External element
 

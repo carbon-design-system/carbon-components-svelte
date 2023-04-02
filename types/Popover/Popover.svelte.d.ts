@@ -1,7 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type RestProps = SvelteHTMLElements["span"];
 
 export interface PopoverProps extends RestProps {
   /**
@@ -17,14 +17,20 @@ export interface PopoverProps extends RestProps {
   closeOnOutsideClick?: boolean;
 
   /**
-   * Set to `true` render a caret
+   * Set to `true` to render the tab tip variant
    * @default false
+   */
+  isTabTip?: boolean;
+
+  /**
+   * Set to `true` render a caret
+   * @default undefined
    */
   caret?: boolean;
 
   /**
    * Specify the alignment of the caret
-   * @default "top"
+   * @default undefined
    */
   align?:
     | "top"
@@ -41,22 +47,16 @@ export interface PopoverProps extends RestProps {
     | "right-top";
 
   /**
-   * Set to `true` to enable the light variant
-   * @default false
+   * Set to `false` to omit the drop shadow
+   * @default true
    */
-  light?: boolean;
+  dropShadow?: boolean;
 
   /**
    * Set to `true` to enable the high contrast variant
    * @default false
    */
   highContrast?: boolean;
-
-  /**
-   * Set to `true` to use a relative position
-   * @default false
-   */
-  relative?: boolean;
 
   [key: `data-${string}`]: any;
 }

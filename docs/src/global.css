@@ -121,6 +121,10 @@ html[theme="g90"] .code-override {
   margin-bottom: var(--bx-spacing-05);
 }
 
+.p-05 {
+  padding: var(--bx-spacing-05);
+}
+
 .table {
   position: sticky;
   max-height: calc(100vh - 3rem);
