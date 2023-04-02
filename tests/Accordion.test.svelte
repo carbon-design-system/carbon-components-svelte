@@ -110,7 +110,7 @@
   </AccordionItem>
 </Accordion>
 
-<Accordion size="xl">
+<Accordion size="lg">
   <AccordionItem title="Natural Language Classifier">
     <p>
       Natural Language Classifier uses advanced natural language processing and
@@ -214,6 +214,6 @@
 
 <Accordion skeleton open="{false}" />
 
-<Accordion skeleton size="xl" />
+<Accordion skeleton size="lg" />
 
 <Accordion skeleton size="sm" />
