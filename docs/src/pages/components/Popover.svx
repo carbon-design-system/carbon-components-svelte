@@ -1,5 +1,9 @@
+---
+components: ["Popover", "PopoverContent"]
+---
+
 <script>
-  import { Popover } from "carbon-components-svelte";
+  import { Popover, PopoverContent } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -8,9 +12,9 @@
 By default, the position of the popover component is absolute.
 
 <div data-outline>
-    Parent
     <Popover open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
+        Parent
+        <PopoverContent style="padding: var(--bx-spacing-05)">Content</PopoverContent>
     </Popover>
 </div>
 

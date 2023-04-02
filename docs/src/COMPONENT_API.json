@@ -1,5 +1,5 @@
 {
-  "total": 163,
+  "total": 164,
   "components": [
     {
       "moduleName": "Accordion",
@@ -9007,6 +9007,27 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "PopoverContent",
+      "filePath": "src/Popover/PopoverContent.svelte",
+      "props": [
+        {
+          "name": "className",
+          "kind": "let",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "span" }
     },
     {
       "moduleName": "ProgressBar",
