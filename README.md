@@ -20,10 +20,6 @@ The Carbon Svelte portfolio also includes:
 
 ## [Documentation](https://carbon-components-svelte.onrender.com)
 
-The documentation site is deployed to [Render](https://render.com) as a Static Site. See [render.yaml](render.yaml) for details.
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/carbon-design-system/carbon-components-svelte)
-
 Other forms of documentation are auto-generated:
 
 - **[TypeScript definitions](types)**: Component TypeScript definitions
