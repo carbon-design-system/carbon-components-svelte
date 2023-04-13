@@ -188,6 +188,7 @@
   </label>
 {/if}
 
+<!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
 <ul
   {...$$restProps}
   role="tree"

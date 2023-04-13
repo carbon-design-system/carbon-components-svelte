@@ -4,7 +4,7 @@
 ![GitHub](https://img.shields.io/github/license/ibm/carbon-components-svelte?color=262626&style=for-the-badge)
 ![npm downloads to date](https://img.shields.io/npm/dt/carbon-components-svelte?color=262626&style=for-the-badge)
 <a href="https://discord.gg/J7JEUEkTRX">
-  <img src="https://img.shields.io/discord/689212587170201628?color=5865F2&style=for-the-badge" alt="Chat with us on Discord">
+<img src="https://img.shields.io/discord/689212587170201628?color=5865F2&style=for-the-badge" alt="Chat with us on Discord">
 </a>
 
 Carbon Components Svelte is a [Svelte](https://github.com/sveltejs/svelte) component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
@@ -19,10 +19,6 @@ The Carbon Svelte portfolio also includes:
 - **[Carbon Preprocess Svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte)**: Collection of Svelte preprocessors for Carbon
 
 ## [Documentation](https://carbon-components-svelte.onrender.com)
-
-The documentation site is deployed to [Render](https://render.com) as a Static Site. See [render.yaml](render.yaml) for details.
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/carbon-design-system/carbon-components-svelte)
 
 Other forms of documentation are auto-generated:
 

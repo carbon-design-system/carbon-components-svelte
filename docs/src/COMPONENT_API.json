@@ -10551,6 +10551,8 @@
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        { "type": "dispatched", "name": "select", "detail": "string" },
+        { "type": "dispatched", "name": "deselect", "detail": "string" },
         { "type": "forwarded", "name": "click", "element": "label" },
         { "type": "forwarded", "name": "mouseover", "element": "label" },
         { "type": "forwarded", "name": "mouseenter", "element": "label" },

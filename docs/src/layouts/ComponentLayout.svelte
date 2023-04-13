@@ -66,7 +66,7 @@
 </script>
 
 <Content data-components>
-  <Grid>
+  <Grid class="fix-overflow">
     <Row>
       <Column>
         <h1>{component}</h1>

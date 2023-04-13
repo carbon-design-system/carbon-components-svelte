@@ -94,6 +94,7 @@
     {text}
     <ChevronDown class="bx--header__menu-arrow" />
   </a>
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     bind:this="{menuRef}"
     role="menu"

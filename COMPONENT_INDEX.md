@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@0.73.3.
+> 165 components exported from carbon-components-svelte@0.73.5.
 
 ## Components
 
@@ -3274,13 +3274,15 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| select     | dispatched | <code>string</code> |
+| deselect   | dispatched | <code>string</code> |
+| click      | forwarded  | --                  |
+| mouseover  | forwarded  | --                  |
+| mouseenter | forwarded  | --                  |
+| mouseleave | forwarded  | --                  |
+| keydown    | forwarded  | --                  |
 
 ## `SideNav`
 
