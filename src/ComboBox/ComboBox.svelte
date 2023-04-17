@@ -174,7 +174,7 @@
       filteredItems = [];
       if (!selectedItem) {
         selectedId = undefined;
-        value = "";
+        // value = "";
         highlightedIndex = -1;
         highlightedId = undefined;
       } else {
@@ -207,6 +207,18 @@
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
+
+  $: if (items.filter((item) => item.text === value).length > 0) {
+    items.map((item) => {
+      if (item.text === value) {
+        selectedItem = item;
+        selectedId = item.id;
+      }
+    });
+  } else {
+    selectedItem = undefined;
+    selectedId = undefined;
+  }
 </script>
 
 <svelte:window
@@ -275,14 +287,14 @@
         class:bx--text-input--light="{light}"
         class:bx--text-input--empty="{value === ''}"
         on:input="{({ target }) => {
-          if (!open && target.value.length > 0) {
-            open = true;
-          }
-
-          if (!value.length) {
-            clear();
-            open = true;
-          }
+         // if (!open && target.value.length > 0) {
+         //   open = true;
+         // }
+            value = target.value;
+         // if (!value.length) {
+         //   clear();
+         //   open = true;
+         // }
         }}"
         on:keydown
         on:keydown|stopPropagation="{(e) => {
@@ -352,7 +364,7 @@
           class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
         />
       {/if}
-      {#if value}
+      {#if false}
         <ListBoxSelection
           on:clear
           on:clear="{clear}"
@@ -390,6 +402,7 @@
                 return;
               }
               selectedId = item.id;
+              value = item.text;
               open = false;
 
               if (filteredItems[i]) {
