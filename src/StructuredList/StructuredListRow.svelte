@@ -27,6 +27,7 @@
     <slot />
   </label>
 {:else}
+  <!-- svelte-ignore a11y-interactive-supports-focus -->
   <div
     role="row"
     class:bx--structured-list-row="{true}"

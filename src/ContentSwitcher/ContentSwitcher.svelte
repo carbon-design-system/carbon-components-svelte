@@ -58,6 +58,7 @@
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<!-- svelte-ignore a11y-interactive-supports-focus -->
 <div
   role="tablist"
   class:bx--content-switcher="{true}"
