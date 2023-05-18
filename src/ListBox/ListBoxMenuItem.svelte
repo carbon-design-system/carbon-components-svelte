@@ -20,6 +20,7 @@
 
 <div
   role="option"
+  tabindex="-1"
   class:bx--list-box__menu-item="{true}"
   class:bx--list-box__menu-item--active="{active}"
   class:bx--list-box__menu-item--highlighted="{highlighted || active}"

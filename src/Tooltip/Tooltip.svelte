@@ -254,7 +254,7 @@
         on:click|stopPropagation
         on:mousedown|stopPropagation
         class:bx--tooltip__content="{true}"
-        tabIndex="-1"
+        tabindex="-1"
         role="dialog"
       >
         <slot />
