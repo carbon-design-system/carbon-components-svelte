@@ -10,9 +10,13 @@
 
   /** Set to `true` to use static width */
   export let useStaticWidth = false;
+
+  /** Obtain a reference to the Div HTML element */
+  export let ref = null;
 </script>
 
 <div
+  bind:this={ref}
   class:bx--data-table-container="{true}"
   class:bx--data-table-container--static="{useStaticWidth}"
   class:bx--data-table--max-width="{stickyHeader}"

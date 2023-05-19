@@ -126,6 +126,9 @@
   /** Set to `number` to set current page */
   export let page = 0;
 
+  /** Obtain a reference to the trigger body element */
+  export let tRef = null;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ChevronRight from "../icons/ChevronRight.svelte";
@@ -258,7 +261,7 @@
   };
 </script>
 
-<TableContainer useStaticWidth="{useStaticWidth}" {...$$restProps}>
+<TableContainer bind:ref={tRef} useStaticWidth="{useStaticWidth}" {...$$restProps}>
   {#if title || $$slots.title || description || $$slots.description}
     <div class:bx--data-table-header="{true}">
       {#if title || $$slots.title}

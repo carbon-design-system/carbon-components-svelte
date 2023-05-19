@@ -75,6 +75,12 @@ export interface OverflowMenuProps
    * @default null
    */
   menuRef?: null | HTMLUListElement;
+
+  /**
+   * Obtain a reference to the trigger parent element
+   * @default null
+   */
+  parentRef?: null | HTMLElement;
 }
 
 export default class OverflowMenu extends SvelteComponentTyped<
