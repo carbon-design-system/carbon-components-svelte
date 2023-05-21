@@ -8524,7 +8524,7 @@
         {
           "name": "tooltipPosition",
           "kind": "let",
-          "description": "Set the position of the tooltip relative to the icon",
+          "description": "Set the position of the tooltip relative to the pagination buttons.",
           "type": "\"top\" | \"right\" | \"bottom\" | \"left\" | \"outside\" | \"inside\"",
           "value": "\"bottom\"",
           "isFunction": false,

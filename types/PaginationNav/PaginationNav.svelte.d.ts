@@ -40,7 +40,7 @@ export interface PaginationNavProps
   backwardText?: string;
 
   /**
-   * Set the position of the tooltip relative to the icon
+   * Set the position of the tooltip relative to the pagination buttons.
    * @default "bottom"
    */
   tooltipPosition?: "top" | "right" | "bottom" | "left" | "outside" | "inside";
