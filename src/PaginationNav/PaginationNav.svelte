@@ -24,7 +24,7 @@
   export let backwardText = "Previous page";
 
   /**
-   * Set the position of the tooltip relative to the icon
+   * Set the position of the tooltip relative to the pagination buttons.
    * @type {"top" | "right" | "bottom" | "left" | "outside" | "inside"}
    */
   export let tooltipPosition = "bottom";
