@@ -2696,14 +2696,15 @@ None.
 
 ### Props
 
-| Prop name    | Required | Kind             | Reactive | Type                 | Default value                | Description                               |
-| :----------- | :------- | :--------------- | :------- | -------------------- | ---------------------------- | ----------------------------------------- |
-| page         | No       | <code>let</code> | Yes      | <code>number</code>  | <code>1</code>               | Specify the current page index            |
-| total        | No       | <code>let</code> | No       | <code>number</code>  | <code>10</code>              | Specify the total number of pages         |
-| shown        | No       | <code>let</code> | No       | <code>number</code>  | <code>10</code>              | Specify the total number of pages to show |
-| loop         | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>           | Set to `true` to loop the navigation      |
-| forwardText  | No       | <code>let</code> | No       | <code>string</code>  | <code>"Next page"</code>     | Specify the forward button text           |
-| backwardText | No       | <code>let</code> | No       | <code>string</code>  | <code>"Previous page"</code> | Specify the backward button text          |
+| Prop name       | Required | Kind             | Reactive | Type                                                                                             | Default value                | Description                                                         |
+| :-------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------- |
+| page            | No       | <code>let</code> | Yes      | <code>number</code>                                                                              | <code>1</code>               | Specify the current page index                                      |
+| total           | No       | <code>let</code> | No       | <code>number</code>                                                                              | <code>10</code>              | Specify the total number of pages                                   |
+| shown           | No       | <code>let</code> | No       | <code>number</code>                                                                              | <code>10</code>              | Specify the total number of pages to show                           |
+| loop            | No       | <code>let</code> | No       | <code>boolean</code>                                                                             | <code>false</code>           | Set to `true` to loop the navigation                                |
+| forwardText     | No       | <code>let</code> | No       | <code>string</code>                                                                              | <code>"Next page"</code>     | Specify the forward button text                                     |
+| backwardText    | No       | <code>let</code> | No       | <code>string</code>                                                                              | <code>"Previous page"</code> | Specify the backward button text                                    |
+| tooltipPosition | No       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left" &#124; "outside" &#124; "inside"</code> | <code>"bottom"</code>        | Set the position of the tooltip relative to the pagination buttons. |
 
 ### Slots
 
