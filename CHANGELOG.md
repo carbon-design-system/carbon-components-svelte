@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.75.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.74.0...v0.74.1) (2023-05-21)
+
+### Features
+
+- **pagination-nav:** add `tooltipPosition` prop ([#1733](https://github.com/carbon-design-system/carbon-components-svelte/issues/1733)) ([60a796e](https://github.com/carbon-design-system/carbon-components-svelte/commit/60a796ea48b17a4e8829b8782aaddb569534c7c4)), closes [#1656](https://github.com/carbon-design-system/carbon-components-svelte/issues/1656)
+
 ### [0.74.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.73.5...v0.74.0) (2023-05-18)
 
 ### Features
