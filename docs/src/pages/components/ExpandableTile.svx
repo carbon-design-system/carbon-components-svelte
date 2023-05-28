@@ -3,7 +3,29 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-## Default (unexpanded)
+## Default
+
+This component uses a [resize observer](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) to determine the height of the above-the-fold content.
+
+It's unexpanded by default.
+
+<ExpandableTile>
+  <div slot="above">
+    <div>
+      Above the fold content here
+    </div>
+    <br />
+    <br />
+    <div>
+      More above the fold content
+    </div>
+  </div>
+  <div slot="below">Below the fold content here</div>
+</ExpandableTile>
+
+## Custom tile heights
+
+Set a custom height for the tiles on the "above" and "below" slots.
 
 <ExpandableTile>
   <div slot="above" style="height: 10rem">Above the fold content here</div>
@@ -13,22 +35,22 @@
 ## Expanded
 
 <ExpandableTile expanded>
-  <div slot="above" style="height: 10rem">Above the fold content here</div>
-  <div slot="below" style="height: 10rem">Below the fold content here</div>
+  <div slot="above">Above the fold content here</div>
+  <div slot="below">Below the fold content here</div>
 </ExpandableTile>
 
 ## Light variant
 
 <ExpandableTile light>
-  <div slot="above" style="height: 10rem">Above the fold content here</div>
-  <div slot="below" style="height: 10rem">Below the fold content here</div>
+  <div slot="above">Above the fold content here</div>
+  <div slot="below">Below the fold content here</div>
 </ExpandableTile>
 
 ## With icon labels
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
-  <div slot="above" style="height: 10rem">Above the fold content here</div>
-  <div slot="below" style="height: 10rem">Below the fold content here</div>
+  <div slot="above">Above the fold content here</div>
+  <div slot="below">Below the fold content here</div>
 </ExpandableTile>
 
 ## With interactive content
@@ -36,7 +58,7 @@
 For tiles containing interactive content, use `stopPropagation` to prevent the tile from toggling.
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
-  <div slot="above" style="height: 10rem">
+  <div slot="above">
     <a href="/" on:click|preventDefault|stopPropagation={() => console.log("Hello world")}>
       Native element
     </a>
@@ -48,5 +70,5 @@ For tiles containing interactive content, use `stopPropagation` to prevent the t
       Svelte component
     </Button>
   </div>
-  <div slot="below" style="height: 10rem">Below the fold content here</div>
+  <div slot="below">Below the fold content here</div>
 </ExpandableTile>
