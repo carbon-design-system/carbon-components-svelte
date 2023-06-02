@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.75.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.75.0...v0.75.1) (2023-06-02)
+
+
+### Bug Fixes
+
+* **expandable-tile:** set tile height using resize observer ([#1738](https://github.com/carbon-design-system/carbon-components-svelte/issues/1738)) ([a369962](https://github.com/carbon-design-system/carbon-components-svelte/commit/a369962fdf96f95bbdcc2f8f9f84c5d900ec4087))
+
 ### [0.75.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.74.0...v0.74.1) (2023-05-21)
 
 ### Features
