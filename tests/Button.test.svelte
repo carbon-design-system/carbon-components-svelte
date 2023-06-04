@@ -3,7 +3,7 @@
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 
-<Button>Primary button</Button>
+<Button data-test-id="btn">Primary button</Button>
 
 <Button kind="secondary">Secondary button</Button>
 
