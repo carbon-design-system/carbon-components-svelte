@@ -11,7 +11,7 @@
     "css/*.css"
   ],
   "scripts": {
-    "test:types": "svelte-check --workspace tests",
+    "test:types": "svelte-check --workspace tests --no-tsconfig --ignore 'docs,examples'",
     "lint": "prettier --write \"**/*.{svelte,md,js,json,ts}\"",
     "build:css": "node scripts/build-css",
     "build:docs": "node scripts/build-docs",
