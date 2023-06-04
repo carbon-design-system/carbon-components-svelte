@@ -26,6 +26,8 @@ export interface AccordionSkeletonProps
    * @default true
    */
   open?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class AccordionSkeleton extends SvelteComponentTyped<

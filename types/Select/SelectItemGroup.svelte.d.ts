@@ -14,6 +14,8 @@ export interface SelectItemGroupProps
    * @default "Provide label"
    */
   label?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SelectItemGroup extends SvelteComponentTyped<

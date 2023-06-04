@@ -141,6 +141,8 @@ export interface DropdownProps
    * @default null
    */
   ref?: null | HTMLButtonElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Dropdown extends SvelteComponentTyped<

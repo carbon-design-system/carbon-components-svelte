@@ -8,6 +8,8 @@ export interface ToolbarProps
    * @default "default"
    */
   size?: "sm" | "default";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Toolbar extends SvelteComponentTyped<

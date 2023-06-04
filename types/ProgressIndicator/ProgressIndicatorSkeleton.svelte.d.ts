@@ -14,6 +14,8 @@ export interface ProgressIndicatorSkeletonProps
    * @default 4
    */
   count?: number;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ProgressIndicatorSkeleton extends SvelteComponentTyped<

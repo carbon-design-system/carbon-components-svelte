@@ -38,6 +38,8 @@ export interface TableProps
    * @default undefined
    */
   tableStyle?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Table extends SvelteComponentTyped<

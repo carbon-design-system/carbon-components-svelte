@@ -28,6 +28,8 @@ export interface ListBoxSelectionProps
    * @default null
    */
   ref?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ListBoxSelection extends SvelteComponentTyped<

@@ -33,6 +33,8 @@ export interface SwitchProps
    * @default null
    */
   ref?: null | HTMLButtonElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Switch extends SvelteComponentTyped<

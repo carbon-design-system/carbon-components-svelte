@@ -26,6 +26,8 @@ export interface NotificationButtonProps
    * @default "Close icon"
    */
   iconDescription?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class NotificationButton extends SvelteComponentTyped<

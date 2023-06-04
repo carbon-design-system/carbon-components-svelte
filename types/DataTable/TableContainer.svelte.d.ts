@@ -26,6 +26,8 @@ export interface TableContainerProps
    * @default false
    */
   useStaticWidth?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TableContainer extends SvelteComponentTyped<

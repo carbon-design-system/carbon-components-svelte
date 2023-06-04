@@ -26,6 +26,8 @@ export interface InlineLoadingProps
    * @default 1500
    */
   successDelay?: number;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class InlineLoading extends SvelteComponentTyped<

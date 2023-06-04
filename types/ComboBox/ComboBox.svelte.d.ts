@@ -152,6 +152,8 @@ export interface ComboBoxProps
    * @default null
    */
   listRef?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ComboBox extends SvelteComponentTyped<

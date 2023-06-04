@@ -14,6 +14,8 @@ export interface ToolbarBatchActionsProps
    * @default undefined
    */
   active?: undefined | boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ToolbarBatchActions extends SvelteComponentTyped<

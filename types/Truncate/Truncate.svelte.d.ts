@@ -7,6 +7,8 @@ export interface TruncateProps
    * @default "end"
    */
   clamp?: "end" | "front";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Truncate extends SvelteComponentTyped<

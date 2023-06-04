@@ -40,6 +40,8 @@ export interface ListBoxFieldProps
    * @default null
    */
   ref?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ListBoxField extends SvelteComponentTyped<

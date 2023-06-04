@@ -14,6 +14,8 @@ export interface StructuredListCellProps
    * @default false
    */
   noWrap?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class StructuredListCell extends SvelteComponentTyped<

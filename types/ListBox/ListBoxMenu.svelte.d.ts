@@ -14,6 +14,8 @@ export interface ListBoxMenuProps
    * @default null
    */
   ref?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ListBoxMenu extends SvelteComponentTyped<

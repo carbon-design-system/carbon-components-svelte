@@ -32,6 +32,8 @@ export interface TabsProps
    * @default "#"
    */
   triggerHref?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Tabs extends SvelteComponentTyped<

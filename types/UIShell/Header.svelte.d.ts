@@ -77,6 +77,8 @@ export interface HeaderProps
    * @default undefined
    */
   iconClose?: typeof import("svelte").SvelteComponent;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Header extends SvelteComponentTyped<

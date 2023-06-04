@@ -14,6 +14,8 @@ export interface SkipToContentProps
    * @default "0"
    */
   tabindex?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SkipToContent extends SvelteComponentTyped<

@@ -42,6 +42,8 @@ export interface HeaderActionProps
    * @default { duration: 200 }
    */
   transition?: false | import("svelte/transition").SlideParams;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class HeaderAction extends SvelteComponentTyped<

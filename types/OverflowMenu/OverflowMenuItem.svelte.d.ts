@@ -57,6 +57,8 @@ export interface OverflowMenuItemProps
    * @default null
    */
   ref?: null | HTMLAnchorElement | HTMLButtonElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class OverflowMenuItem extends SvelteComponentTyped<

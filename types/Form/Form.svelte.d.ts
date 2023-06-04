@@ -8,6 +8,8 @@ export interface FormProps
    * @default null
    */
   ref?: null | HTMLFormElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Form extends SvelteComponentTyped<

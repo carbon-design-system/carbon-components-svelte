@@ -44,6 +44,8 @@ export interface PaginationNavProps
    * @default "bottom"
    */
   tooltipPosition?: "top" | "right" | "bottom" | "left" | "outside" | "inside";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class PaginationNav extends SvelteComponentTyped<

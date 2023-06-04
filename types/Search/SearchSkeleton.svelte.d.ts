@@ -8,6 +8,8 @@ export interface SearchSkeletonProps
    * @default "xl"
    */
   size?: "sm" | "lg" | "xl";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SearchSkeleton extends SvelteComponentTyped<

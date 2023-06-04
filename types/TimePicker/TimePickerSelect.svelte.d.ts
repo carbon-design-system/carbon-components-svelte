@@ -44,6 +44,8 @@ export interface TimePickerSelectProps
    * @default null
    */
   ref?: null | HTMLSelectElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TimePickerSelect extends SvelteComponentTyped<

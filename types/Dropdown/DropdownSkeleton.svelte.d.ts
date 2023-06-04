@@ -8,6 +8,8 @@ export interface DropdownSkeletonProps
    * @default false
    */
   inline?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class DropdownSkeleton extends SvelteComponentTyped<

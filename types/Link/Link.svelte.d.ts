@@ -46,6 +46,8 @@ export interface LinkProps
    * @default null
    */
   ref?: null | HTMLAnchorElement | HTMLParagraphElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Link extends SvelteComponentTyped<

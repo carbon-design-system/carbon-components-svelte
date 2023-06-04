@@ -32,6 +32,8 @@ export interface SideNavLinkProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SideNavLink extends SvelteComponentTyped<

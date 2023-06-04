@@ -26,6 +26,8 @@ export interface HeaderActionLinkProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class HeaderActionLink extends SvelteComponentTyped<

@@ -48,6 +48,8 @@ export interface DataTableSkeletonProps
    * @default true
    */
   showToolbar?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class DataTableSkeleton extends SvelteComponentTyped<

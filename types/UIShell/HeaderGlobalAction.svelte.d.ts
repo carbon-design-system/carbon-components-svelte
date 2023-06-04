@@ -20,6 +20,8 @@ export interface HeaderGlobalActionProps
    * @default null
    */
   ref?: null | HTMLButtonElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class HeaderGlobalAction extends SvelteComponentTyped<

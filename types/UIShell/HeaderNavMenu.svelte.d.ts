@@ -26,6 +26,8 @@ export interface HeaderNavMenuProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class HeaderNavMenu extends SvelteComponentTyped<
