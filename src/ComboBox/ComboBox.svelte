@@ -224,7 +224,9 @@
       class:bx--label="{true}"
       class:bx--label--disabled="{disabled}"
     >
+    <slot name="titleText">
       {titleText}
+    </slot>
     </label>
   {/if}
   <ListBox

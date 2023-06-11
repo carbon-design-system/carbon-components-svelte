@@ -253,5 +253,5 @@ export default class MultiSelect extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     paste: DocumentAndElementEventHandlersEventMap["paste"];
   },
-  { default: { item: MultiSelectItem; index: number } }
+  { default: { item: MultiSelectItem; index: number }; titleText: {} }
 > {}
