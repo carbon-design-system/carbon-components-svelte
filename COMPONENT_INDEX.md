@@ -684,6 +684,7 @@ export interface ComboBoxItem {
 | Slot name | Default | Props                                               | Fallback                          |
 | :-------- | :------ | :-------------------------------------------------- | :-------------------------------- |
 | --        | Yes     | <code>{ item: ComboBoxItem; index: number } </code> | <code>{itemToString(item)}</code> |
+| titleText | No      | --                                                  | <code>{titleText}</code>          |
 
 ### Events
 
@@ -2389,6 +2390,7 @@ export interface MultiSelectItem {
 | Slot name | Default | Props                                                  | Fallback                          |
 | :-------- | :------ | :----------------------------------------------------- | :-------------------------------- |
 | --        | Yes     | <code>{ item: MultiSelectItem; index: number } </code> | <code>{itemToString(item)}</code> |
+| titleText | No      | --                                                     | <code>{titleText}</code>          |
 
 ### Events
 

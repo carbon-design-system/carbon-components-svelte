@@ -169,7 +169,7 @@ export default class ComboBox extends SvelteComponentTyped<
     clear: WindowEventMap["clear"];
     scroll: WindowEventMap["scroll"];
   },
-  { default: { item: ComboBoxItem; index: number } }
+  { default: { item: ComboBoxItem; index: number }; titleText: {} }
 > {
   /**
    * Clear the combo box programmatically

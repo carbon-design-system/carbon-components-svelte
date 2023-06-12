@@ -1743,6 +1743,12 @@
           "default": true,
           "fallback": "{itemToString(item)}",
           "slot_props": "{ item: ComboBoxItem; index: number }"
+        },
+        {
+          "name": "titleText",
+          "default": false,
+          "fallback": "{titleText}",
+          "slot_props": "{}"
         }
       ],
       "events": [
@@ -7354,6 +7360,12 @@
           "default": true,
           "fallback": "{itemToString(item)}",
           "slot_props": "{ item: MultiSelectItem; index: number }"
+        },
+        {
+          "name": "titleText",
+          "default": false,
+          "fallback": "{titleText}",
+          "slot_props": "{}"
         }
       ],
       "events": [
