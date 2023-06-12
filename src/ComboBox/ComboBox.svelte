@@ -218,7 +218,7 @@
 />
 
 <div class:bx--list-box__wrapper="{true}">
-  {#if titleText}
+  {#if titleText || $$slots.titleText}
     <label
       for="{id}"
       class:bx--label="{true}"

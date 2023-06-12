@@ -293,7 +293,7 @@
   class:bx--list-box__wrapper--inline="{inline}"
   class:bx--multi-select__wrapper--inline--invalid="{inline && invalid}"
 >
-  {#if titleText}
+  {#if titleText || $$slots.titleText}
     <label
       for="{id}"
       class:bx--label="{true}"
