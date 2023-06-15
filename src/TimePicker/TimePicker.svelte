@@ -81,6 +81,7 @@
           </slot>
         </label>
       {/if}
+    <div class="time-picker-inputs-wrapper">
       <input
         bind:this="{ref}"
         bind:value
@@ -105,10 +106,18 @@
         on:blur
         on:paste
       />
-    </div>
     <slot />
+    </div>
+    </div>
   </div>
   {#if invalid}
     <div class:bx--form-requirement="{true}">{invalidText}</div>
   {/if}
 </div>
+
+<style>
+  .time-picker-inputs-wrapper{
+    display: flex;
+    flex-direction: row;
+  }
+</style>
