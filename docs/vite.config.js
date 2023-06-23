@@ -5,6 +5,6 @@ export default defineConfig({
   plugins: [svelte()],
   optimizeDeps: {
     include: ["clipboard-copy", "flatpickr/dist/plugins/rangePlugin"],
-    exclude: ["@sveltech/routify"],
+    exclude: ["@roxi/routify"],
   },
 });

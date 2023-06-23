@@ -14,7 +14,7 @@
     TabContent,
   } from "carbon-components-svelte";
   import Code from "carbon-icons-svelte/lib/Code.svelte";
-  import { page, metatags } from "@sveltech/routify";
+  import { page, metatags } from "@roxi/routify";
   import { onMount } from "svelte";
   import { theme } from "../store";
   import ComponentApi from "../components/ComponentApi.svelte";
