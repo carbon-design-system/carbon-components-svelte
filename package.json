@@ -43,6 +43,9 @@
     "svelte-check": "^3.4.3",
     "typescript": "^5.0.0"
   },
+  "peerDependencies": {
+    "svelte": "^3.20.0 || ^4.0.0"
+  },
   "standard-version": {
     "skip": {
       "commit": true,
