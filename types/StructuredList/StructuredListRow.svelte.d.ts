@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface StructuredListRowProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
@@ -22,7 +22,7 @@ export interface StructuredListRowProps
   tabindex?: string;
 }
 
-export default class StructuredListRow extends SvelteComponentTyped<
+export default class StructuredListRow extends SvelteComponent<
   StructuredListRowProps,
   {
     click: WindowEventMap["click"];

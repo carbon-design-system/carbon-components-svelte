@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ContentProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["main"]> {
@@ -10,7 +10,7 @@ export interface ContentProps
   id?: string;
 }
 
-export default class Content extends SvelteComponentTyped<
+export default class Content extends SvelteComponent<
   ContentProps,
   {},
   { default: {} }

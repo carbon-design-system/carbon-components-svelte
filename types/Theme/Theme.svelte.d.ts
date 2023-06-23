@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
@@ -50,7 +50,7 @@ export interface ThemeProps {
   select?: import("../Select/Select").SelectProps & { themes?: CarbonTheme[] };
 }
 
-export default class Theme extends SvelteComponentTyped<
+export default class Theme extends SvelteComponent<
   ThemeProps,
   { update: CustomEvent<{ theme: CarbonTheme }> },
   { default: { theme: CarbonTheme } }

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 import type { DataTableHeader } from "./DataTable.svelte";
 
 export interface DataTableSkeletonProps
@@ -50,7 +50,7 @@ export interface DataTableSkeletonProps
   showToolbar?: boolean;
 }
 
-export default class DataTableSkeleton extends SvelteComponentTyped<
+export default class DataTableSkeleton extends SvelteComponent<
   DataTableSkeletonProps,
   {
     click: WindowEventMap["click"];

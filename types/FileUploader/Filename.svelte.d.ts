@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface FilenameProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]>,
@@ -24,7 +24,7 @@ export interface FilenameProps
   invalid?: boolean;
 }
 
-export default class Filename extends SvelteComponentTyped<
+export default class Filename extends SvelteComponent<
   FilenameProps,
   { click: WindowEventMap["click"]; keydown: WindowEventMap["keydown"] },
   {}

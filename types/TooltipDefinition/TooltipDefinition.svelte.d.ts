@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TooltipDefinitionProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
@@ -40,7 +40,7 @@ export interface TooltipDefinitionProps
   ref?: null | HTMLButtonElement;
 }
 
-export default class TooltipDefinition extends SvelteComponentTyped<
+export default class TooltipDefinition extends SvelteComponent<
   TooltipDefinitionProps,
   {
     open: CustomEvent<null>;

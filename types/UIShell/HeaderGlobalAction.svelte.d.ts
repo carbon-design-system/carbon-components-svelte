@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface HeaderGlobalActionProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
@@ -22,7 +22,7 @@ export interface HeaderGlobalActionProps
   ref?: null | HTMLButtonElement;
 }
 
-export default class HeaderGlobalAction extends SvelteComponentTyped<
+export default class HeaderGlobalAction extends SvelteComponent<
   HeaderGlobalActionProps,
   { click: WindowEventMap["click"] },
   { default: {} }

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export type ListBoxMenuIconTranslationId = "close" | "open";
 
@@ -18,7 +18,7 @@ export interface ListBoxMenuIconProps
   translateWithId?: (id: ListBoxMenuIconTranslationId) => string;
 }
 
-export default class ListBoxMenuIcon extends SvelteComponentTyped<
+export default class ListBoxMenuIcon extends SvelteComponent<
   ListBoxMenuIconProps,
   { click: WindowEventMap["click"] },
   {}

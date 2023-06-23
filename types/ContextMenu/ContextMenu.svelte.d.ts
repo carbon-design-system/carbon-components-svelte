@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ContextMenuProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
@@ -36,7 +36,7 @@ export interface ContextMenuProps
   ref?: null | HTMLUListElement;
 }
 
-export default class ContextMenu extends SvelteComponentTyped<
+export default class ContextMenu extends SvelteComponent<
   ContextMenuProps,
   {
     open: CustomEvent<HTMLElement>;

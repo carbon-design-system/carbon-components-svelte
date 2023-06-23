@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ProgressBarProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -58,7 +58,7 @@ export interface ProgressBarProps
   id?: string;
 }
 
-export default class ProgressBar extends SvelteComponentTyped<
+export default class ProgressBar extends SvelteComponent<
   ProgressBarProps,
   {},
   { labelText: {} }

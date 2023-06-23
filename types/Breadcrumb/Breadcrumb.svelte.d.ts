@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 import type { BreadcrumbSkeletonProps } from "./BreadcrumbSkeleton.svelte";
 
 export interface BreadcrumbProps extends BreadcrumbSkeletonProps {
@@ -16,7 +16,7 @@ export interface BreadcrumbProps extends BreadcrumbSkeletonProps {
   skeleton?: boolean;
 }
 
-export default class Breadcrumb extends SvelteComponentTyped<
+export default class Breadcrumb extends SvelteComponent<
   BreadcrumbProps,
   {
     click: WindowEventMap["click"];

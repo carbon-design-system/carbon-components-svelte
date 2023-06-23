@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface BreadcrumbSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -16,7 +16,7 @@ export interface BreadcrumbSkeletonProps
   count?: number;
 }
 
-export default class BreadcrumbSkeleton extends SvelteComponentTyped<
+export default class BreadcrumbSkeleton extends SvelteComponent<
   BreadcrumbSkeletonProps,
   {
     click: WindowEventMap["click"];

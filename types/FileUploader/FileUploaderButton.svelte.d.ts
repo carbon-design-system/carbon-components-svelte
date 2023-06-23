@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface FileUploaderButtonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
@@ -76,7 +76,7 @@ export interface FileUploaderButtonProps
   ref?: null | HTMLInputElement;
 }
 
-export default class FileUploaderButton extends SvelteComponentTyped<
+export default class FileUploaderButton extends SvelteComponent<
   FileUploaderButtonProps,
   {
     change: CustomEvent<ReadonlyArray<File>>;

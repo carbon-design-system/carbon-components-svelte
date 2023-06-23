@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface RecursiveListNode {
   text?: string;
@@ -23,7 +23,7 @@ export interface RecursiveListProps
   type?: "unordered" | "ordered" | "ordered-native";
 }
 
-export default class RecursiveList extends SvelteComponentTyped<
+export default class RecursiveList extends SvelteComponent<
   RecursiveListProps,
   {},
   {}

@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 import type { ButtonProps } from "../Button/Button.svelte";
 
 export interface NotificationActionButtonProps extends ButtonProps {}
 
-export default class NotificationActionButton extends SvelteComponentTyped<
+export default class NotificationActionButton extends SvelteComponent<
   NotificationActionButtonProps,
   {
     click: WindowEventMap["click"];

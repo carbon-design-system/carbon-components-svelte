@@ -14,7 +14,7 @@
   /**
    * Specify the icon to render
    * Icon is rendered to the left of the label text
-   * @type {typeof import("svelte").SvelteComponent}
+   * @type {typeof import("svelte").SvelteComponent<any>}
    */
   export let icon = undefined;
 

@@ -1,9 +1,9 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface HeaderPanelLinksProps {}
 
-export default class HeaderPanelLinks extends SvelteComponentTyped<
+export default class HeaderPanelLinks extends SvelteComponent<
   HeaderPanelLinksProps,
   {},
   { default: {} }

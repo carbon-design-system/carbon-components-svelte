@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TabsProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -34,7 +34,7 @@ export interface TabsProps
   triggerHref?: string;
 }
 
-export default class Tabs extends SvelteComponentTyped<
+export default class Tabs extends SvelteComponent<
   TabsProps,
   {
     keypress: WindowEventMap["keypress"];

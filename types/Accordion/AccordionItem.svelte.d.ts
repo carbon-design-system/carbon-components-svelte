@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface AccordionItemProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
@@ -29,7 +29,7 @@ export interface AccordionItemProps
   iconDescription?: string;
 }
 
-export default class AccordionItem extends SvelteComponentTyped<
+export default class AccordionItem extends SvelteComponent<
   AccordionItemProps,
   {
     animationend: WindowEventMap["animationend"];

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ToastNotificationProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -77,7 +77,7 @@ export interface ToastNotificationProps
   fullWidth?: boolean;
 }
 
-export default class ToastNotification extends SvelteComponentTyped<
+export default class ToastNotification extends SvelteComponent<
   ToastNotificationProps,
   {
     close: CustomEvent<{ timeout: boolean }>;

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 
@@ -30,7 +30,7 @@ export interface ListBoxSelectionProps
   ref?: null | HTMLDivElement;
 }
 
-export default class ListBoxSelection extends SvelteComponentTyped<
+export default class ListBoxSelection extends SvelteComponent<
   ListBoxSelectionProps,
   { clear: CustomEvent<any> },
   {}

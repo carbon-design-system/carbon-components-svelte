@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 import type { ButtonSkeletonProps } from "./ButtonSkeleton.svelte";
 
 export interface ButtonProps
@@ -107,7 +107,7 @@ export interface ButtonProps
   ref?: null | HTMLAnchorElement | HTMLButtonElement;
 }
 
-export default class Button extends SvelteComponentTyped<
+export default class Button extends SvelteComponent<
   ButtonProps,
   {
     click: WindowEventMap["click"];

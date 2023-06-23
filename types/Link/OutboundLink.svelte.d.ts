@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 import type { LinkProps } from "./Link.svelte";
 
 export interface OutboundLinkProps extends LinkProps {}
 
-export default class OutboundLink extends SvelteComponentTyped<
+export default class OutboundLink extends SvelteComponent<
   OutboundLinkProps,
   {
     click: WindowEventMap["click"];

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface GridProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -53,7 +53,7 @@ export interface GridProps
   padding?: boolean;
 }
 
-export default class Grid extends SvelteComponentTyped<
+export default class Grid extends SvelteComponent<
   GridProps,
   {},
   { default: { props: { class: string; [key: string]: any } } }

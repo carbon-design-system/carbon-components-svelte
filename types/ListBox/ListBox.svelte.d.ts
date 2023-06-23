@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ListBoxProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -58,7 +58,7 @@ export interface ListBoxProps
   warnText?: string;
 }
 
-export default class ListBox extends SvelteComponentTyped<
+export default class ListBox extends SvelteComponent<
   ListBoxProps,
   { keydown: WindowEventMap["keydown"]; click: WindowEventMap["click"] },
   { default: {} }

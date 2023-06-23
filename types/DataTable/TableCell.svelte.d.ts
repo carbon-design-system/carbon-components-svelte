@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TableCellProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["td"]> {}
 
-export default class TableCell extends SvelteComponentTyped<
+export default class TableCell extends SvelteComponent<
   TableCellProps,
   {
     click: WindowEventMap["click"];

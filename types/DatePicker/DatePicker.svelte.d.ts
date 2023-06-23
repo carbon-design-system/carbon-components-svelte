@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface DatePickerProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -81,7 +81,7 @@ export interface DatePickerProps
   flatpickrProps?: import("flatpickr/dist/types/options").Options;
 }
 
-export default class DatePicker extends SvelteComponentTyped<
+export default class DatePicker extends SvelteComponent<
   DatePickerProps,
   {
     change: CustomEvent<

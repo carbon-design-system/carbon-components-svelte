@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponent } from "svelte";
 
 export interface SearchProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["svg"]> {
@@ -14,4 +14,4 @@ export interface SearchProps
   title?: undefined;
 }
 
-export default class Search extends SvelteComponentTyped<SearchProps, {}, {}> {}
+export default class Search extends SvelteComponent<SearchProps, {}, {}> {}

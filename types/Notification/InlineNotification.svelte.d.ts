@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface InlineNotificationProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -64,7 +64,7 @@ export interface InlineNotificationProps
   closeButtonDescription?: string;
 }
 
-export default class InlineNotification extends SvelteComponentTyped<
+export default class InlineNotification extends SvelteComponent<
   InlineNotificationProps,
   {
     close: CustomEvent<{ timeout: boolean }>;

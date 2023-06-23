@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface AspectRatioProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -19,7 +19,7 @@ export interface AspectRatioProps
     | "1x2";
 }
 
-export default class AspectRatio extends SvelteComponentTyped<
+export default class AspectRatio extends SvelteComponent<
   AspectRatioProps,
   {},
   { default: {} }

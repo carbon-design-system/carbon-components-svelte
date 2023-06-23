@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface SelectableTileProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
@@ -64,7 +64,7 @@ export interface SelectableTileProps
   ref?: null | HTMLInputElement;
 }
 
-export default class SelectableTile extends SvelteComponentTyped<
+export default class SelectableTile extends SvelteComponent<
   SelectableTileProps,
   {
     select: CustomEvent<string>;

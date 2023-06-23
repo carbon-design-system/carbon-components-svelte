@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface FileUploaderItemProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
@@ -52,7 +52,7 @@ export interface FileUploaderItemProps
   name?: string;
 }
 
-export default class FileUploaderItem extends SvelteComponentTyped<
+export default class FileUploaderItem extends SvelteComponent<
   FileUploaderItemProps,
   {
     delete: CustomEvent<string>;

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface PaginationProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -100,7 +100,7 @@ export interface PaginationProps
   id?: string;
 }
 
-export default class Pagination extends SvelteComponentTyped<
+export default class Pagination extends SvelteComponent<
   PaginationProps,
   {
     /** Dispatched after any user interaction */

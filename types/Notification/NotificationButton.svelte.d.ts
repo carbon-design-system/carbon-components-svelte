@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface NotificationButtonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
@@ -28,7 +28,7 @@ export interface NotificationButtonProps
   iconDescription?: string;
 }
 
-export default class NotificationButton extends SvelteComponentTyped<
+export default class NotificationButton extends SvelteComponent<
   NotificationButtonProps,
   {
     click: WindowEventMap["click"];

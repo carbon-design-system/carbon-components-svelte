@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface SelectProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -106,7 +106,7 @@ export interface SelectProps
   required?: boolean;
 }
 
-export default class Select extends SvelteComponentTyped<
+export default class Select extends SvelteComponent<
   SelectProps,
   {
     /** The selected value. */ update: CustomEvent<string | number>;

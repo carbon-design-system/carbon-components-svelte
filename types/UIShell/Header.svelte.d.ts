@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface HeaderProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
@@ -79,7 +79,7 @@ export interface HeaderProps
   iconClose?: typeof import("svelte").SvelteComponent;
 }
 
-export default class Header extends SvelteComponentTyped<
+export default class Header extends SvelteComponent<
   HeaderProps,
   { click: WindowEventMap["click"] },
   { default: {}; platform: {}; ["skip-to-content"]: {} }

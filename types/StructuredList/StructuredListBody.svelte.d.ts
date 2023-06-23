@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface StructuredListBodyProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
-export default class StructuredListBody extends SvelteComponentTyped<
+export default class StructuredListBody extends SvelteComponent<
   StructuredListBodyProps,
   {
     click: WindowEventMap["click"];

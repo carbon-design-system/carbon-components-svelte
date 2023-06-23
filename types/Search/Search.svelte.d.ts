@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface SearchProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
@@ -101,7 +101,7 @@ export interface SearchProps
   ref?: null | HTMLInputElement;
 }
 
-export default class Search extends SvelteComponentTyped<
+export default class Search extends SvelteComponent<
   SearchProps,
   {
     expand: CustomEvent<null>;

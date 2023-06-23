@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface SearchSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -10,7 +10,7 @@ export interface SearchSkeletonProps
   size?: "sm" | "lg" | "xl";
 }
 
-export default class SearchSkeleton extends SvelteComponentTyped<
+export default class SearchSkeleton extends SvelteComponent<
   SearchSkeletonProps,
   {
     click: WindowEventMap["click"];

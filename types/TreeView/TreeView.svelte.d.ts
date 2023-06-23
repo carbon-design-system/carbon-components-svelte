@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export type TreeNodeId = string | number;
 
@@ -57,7 +57,7 @@ export interface TreeViewProps
   hideLabel?: boolean;
 }
 
-export default class TreeView extends SvelteComponentTyped<
+export default class TreeView extends SvelteComponent<
   TreeViewProps,
   {
     select: CustomEvent<TreeNode & { expanded: boolean; leaf: boolean }>;

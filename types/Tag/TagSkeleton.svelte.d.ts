@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TagSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
@@ -9,7 +9,7 @@ export interface TagSkeletonProps
   size?: "sm" | "default";
 }
 
-export default class TagSkeleton extends SvelteComponentTyped<
+export default class TagSkeleton extends SvelteComponent<
   TagSkeletonProps,
   {
     click: WindowEventMap["click"];

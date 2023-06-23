@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface PopoverProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -58,7 +58,7 @@ export interface PopoverProps
   relative?: boolean;
 }
 
-export default class Popover extends SvelteComponentTyped<
+export default class Popover extends SvelteComponent<
   PopoverProps,
   { ["click:outside"]: CustomEvent<{ target: HTMLElement }> },
   { default: {} }

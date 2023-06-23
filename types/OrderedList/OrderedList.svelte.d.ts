@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface OrderedListProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ol"]> {
@@ -22,7 +22,7 @@ export interface OrderedListProps
   expressive?: boolean;
 }
 
-export default class OrderedList extends SvelteComponentTyped<
+export default class OrderedList extends SvelteComponent<
   OrderedListProps,
   {
     click: WindowEventMap["click"];

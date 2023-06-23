@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ModalFooterProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -53,7 +53,7 @@ export interface ModalFooterProps
   danger?: boolean;
 }
 
-export default class ModalFooter extends SvelteComponentTyped<
+export default class ModalFooter extends SvelteComponent<
   ModalFooterProps,
   { ["click:button--secondary"]: CustomEvent<{ text: string }> },
   { default: {} }

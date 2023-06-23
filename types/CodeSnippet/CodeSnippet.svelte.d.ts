@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface CodeSnippetProps {
   /**
@@ -117,7 +117,7 @@ export interface CodeSnippetProps {
   ref?: null | HTMLPreElement;
 }
 
-export default class CodeSnippet extends SvelteComponentTyped<
+export default class CodeSnippet extends SvelteComponent<
   CodeSnippetProps,
   {
     expand: CustomEvent<null>;

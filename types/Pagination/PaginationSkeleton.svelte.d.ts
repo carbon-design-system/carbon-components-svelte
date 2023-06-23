@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface PaginationSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
-export default class PaginationSkeleton extends SvelteComponentTyped<
+export default class PaginationSkeleton extends SvelteComponent<
   PaginationSkeletonProps,
   {
     click: WindowEventMap["click"];

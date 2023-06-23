@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ContextMenuRadioGroupProps {
   /**
@@ -15,7 +15,7 @@ export interface ContextMenuRadioGroupProps {
   labelText?: string;
 }
 
-export default class ContextMenuRadioGroup extends SvelteComponentTyped<
+export default class ContextMenuRadioGroup extends SvelteComponent<
   ContextMenuRadioGroupProps,
   {},
   { default: {} }

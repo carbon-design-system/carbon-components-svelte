@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TileProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -10,7 +10,7 @@ export interface TileProps
   light?: boolean;
 }
 
-export default class Tile extends SvelteComponentTyped<
+export default class Tile extends SvelteComponent<
   TileProps,
   {
     click: WindowEventMap["click"];

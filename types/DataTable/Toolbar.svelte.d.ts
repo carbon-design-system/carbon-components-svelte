@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ToolbarProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["section"]> {
@@ -10,7 +10,7 @@ export interface ToolbarProps
   size?: "sm" | "default";
 }
 
-export default class Toolbar extends SvelteComponentTyped<
+export default class Toolbar extends SvelteComponent<
   ToolbarProps,
   {},
   { default: {} }

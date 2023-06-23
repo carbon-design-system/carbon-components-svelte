@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ToggleProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -58,7 +58,7 @@ export interface ToggleProps
   name?: string;
 }
 
-export default class Toggle extends SvelteComponentTyped<
+export default class Toggle extends SvelteComponent<
   ToggleProps,
   {
     toggle: CustomEvent<{ toggled: boolean }>;

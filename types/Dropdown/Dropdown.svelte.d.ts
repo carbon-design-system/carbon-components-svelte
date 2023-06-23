@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export type DropdownItemId = any;
 
@@ -143,7 +143,7 @@ export interface DropdownProps
   ref?: null | HTMLButtonElement;
 }
 
-export default class Dropdown extends SvelteComponentTyped<
+export default class Dropdown extends SvelteComponent<
   DropdownProps,
   {
     select: CustomEvent<{

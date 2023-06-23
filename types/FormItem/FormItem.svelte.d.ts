@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface FormItemProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
-export default class FormItem extends SvelteComponentTyped<
+export default class FormItem extends SvelteComponent<
   FormItemProps,
   {
     click: WindowEventMap["click"];

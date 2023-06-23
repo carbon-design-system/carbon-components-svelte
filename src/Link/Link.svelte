@@ -19,7 +19,7 @@
   /**
    * Specify the icon to render
    * `inline` must be `false`
-   * @type {typeof import("svelte").SvelteComponent}
+   * @type {typeof import("svelte").SvelteComponent<any>}
    */
   export let icon = undefined;
 

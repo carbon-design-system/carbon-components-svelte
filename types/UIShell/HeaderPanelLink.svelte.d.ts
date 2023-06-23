@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface HeaderPanelLinkProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
@@ -16,7 +16,7 @@ export interface HeaderPanelLinkProps
   ref?: null | HTMLAnchorElement;
 }
 
-export default class HeaderPanelLink extends SvelteComponentTyped<
+export default class HeaderPanelLink extends SvelteComponent<
   HeaderPanelLinkProps,
   { click: WindowEventMap["click"] },
   { default: {} }

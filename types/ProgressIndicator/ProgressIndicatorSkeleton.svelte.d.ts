@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ProgressIndicatorSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
@@ -16,7 +16,7 @@ export interface ProgressIndicatorSkeletonProps
   count?: number;
 }
 
-export default class ProgressIndicatorSkeleton extends SvelteComponentTyped<
+export default class ProgressIndicatorSkeleton extends SvelteComponent<
   ProgressIndicatorSkeletonProps,
   {
     click: WindowEventMap["click"];

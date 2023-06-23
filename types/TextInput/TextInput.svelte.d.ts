@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TextInputProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
@@ -115,7 +115,7 @@ export interface TextInputProps
   readonly?: boolean;
 }
 
-export default class TextInput extends SvelteComponentTyped<
+export default class TextInput extends SvelteComponent<
   TextInputProps,
   {
     change: CustomEvent<null | number | string>;

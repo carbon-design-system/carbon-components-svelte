@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface DatePickerSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -16,7 +16,7 @@ export interface DatePickerSkeletonProps
   id?: string;
 }
 
-export default class DatePickerSkeleton extends SvelteComponentTyped<
+export default class DatePickerSkeleton extends SvelteComponent<
   DatePickerSkeletonProps,
   {
     click: WindowEventMap["click"];

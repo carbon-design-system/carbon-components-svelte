@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface SideNavProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
@@ -40,7 +40,7 @@ export interface SideNavProps
   expansionBreakpoint?: number;
 }
 
-export default class SideNav extends SvelteComponentTyped<
+export default class SideNav extends SvelteComponent<
   SideNavProps,
   {
     open: CustomEvent<null>;

@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface FileUploaderSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
 
-export default class FileUploaderSkeleton extends SvelteComponentTyped<
+export default class FileUploaderSkeleton extends SvelteComponent<
   FileUploaderSkeletonProps,
   {
     click: WindowEventMap["click"];

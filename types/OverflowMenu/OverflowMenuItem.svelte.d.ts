@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface OverflowMenuItemProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
@@ -59,7 +59,7 @@ export interface OverflowMenuItemProps
   ref?: null | HTMLAnchorElement | HTMLButtonElement;
 }
 
-export default class OverflowMenuItem extends SvelteComponentTyped<
+export default class OverflowMenuItem extends SvelteComponent<
   OverflowMenuItemProps,
   { click: WindowEventMap["click"]; keydown: WindowEventMap["keydown"] },
   { default: {} }

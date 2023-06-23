@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export type ComboBoxItemId = any;
 
@@ -154,7 +154,7 @@ export interface ComboBoxProps
   listRef?: null | HTMLDivElement;
 }
 
-export default class ComboBox extends SvelteComponentTyped<
+export default class ComboBox extends SvelteComponent<
   ComboBoxProps,
   {
     select: CustomEvent<{

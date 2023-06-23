@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ContextMenuOptionProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
@@ -69,7 +69,7 @@ export interface ContextMenuOptionProps
   ref?: null | HTMLLIElement;
 }
 
-export default class ContextMenuOption extends SvelteComponentTyped<
+export default class ContextMenuOption extends SvelteComponent<
   ContextMenuOptionProps,
   {
     keydown: WindowEventMap["keydown"];

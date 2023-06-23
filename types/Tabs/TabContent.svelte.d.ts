@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TabContentProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -10,7 +10,7 @@ export interface TabContentProps
   id?: string;
 }
 
-export default class TabContent extends SvelteComponentTyped<
+export default class TabContent extends SvelteComponent<
   TabContentProps,
   {},
   { default: {} }

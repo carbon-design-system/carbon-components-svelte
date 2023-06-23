@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ModalBodyProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -16,7 +16,7 @@ export interface ModalBodyProps
   hasScrollingContent?: boolean;
 }
 
-export default class ModalBody extends SvelteComponentTyped<
+export default class ModalBody extends SvelteComponent<
   ModalBodyProps,
   {},
   { default: {} }

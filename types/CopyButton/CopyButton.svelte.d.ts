@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface CopyButtonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
@@ -34,7 +34,7 @@ export interface CopyButtonProps
   copy?: (text: string) => void;
 }
 
-export default class CopyButton extends SvelteComponentTyped<
+export default class CopyButton extends SvelteComponent<
   CopyButtonProps,
   {
     click: WindowEventMap["click"];

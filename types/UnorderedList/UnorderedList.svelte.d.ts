@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface UnorderedListProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
@@ -16,7 +16,7 @@ export interface UnorderedListProps
   expressive?: boolean;
 }
 
-export default class UnorderedList extends SvelteComponentTyped<
+export default class UnorderedList extends SvelteComponent<
   UnorderedListProps,
   {
     click: WindowEventMap["click"];

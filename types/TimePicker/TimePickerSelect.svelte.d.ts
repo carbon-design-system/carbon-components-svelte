@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TimePickerSelectProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -46,7 +46,7 @@ export interface TimePickerSelectProps
   ref?: null | HTMLSelectElement;
 }
 
-export default class TimePickerSelect extends SvelteComponentTyped<
+export default class TimePickerSelect extends SvelteComponent<
   TimePickerSelectProps,
   {
     click: WindowEventMap["click"];

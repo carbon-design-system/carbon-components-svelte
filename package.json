@@ -32,16 +32,16 @@
     "carbon-icons-svelte": "^11.2.0",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
-    "prettier-plugin-svelte": "^2.7.0",
+    "prettier-plugin-svelte": "^2.10.1",
     "rollup": "^2.78.1",
-    "rollup-plugin-svelte": "^7.1.0",
+    "rollup-plugin-svelte": "^7.1.5",
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
     "sveld": "^0.18.0",
-    "svelte": "^3.58.0",
+    "svelte": "^4.0.0",
     "svelte-check": "^3.4.3",
-    "typescript": "^4.7.4"
+    "typescript": "^5.0.0"
   },
   "standard-version": {
     "skip": {

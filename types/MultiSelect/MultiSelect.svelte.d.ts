@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export type MultiSelectItemId = any;
 
@@ -238,7 +238,7 @@ export interface MultiSelectProps
   highlightedId?: null | MultiSelectItemId;
 }
 
-export default class MultiSelect extends SvelteComponentTyped<
+export default class MultiSelect extends SvelteComponent<
   MultiSelectProps,
   {
     select: CustomEvent<{

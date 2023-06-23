@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface DatePickerInputProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
@@ -100,7 +100,7 @@ export interface DatePickerInputProps
   ref?: null | HTMLInputElement;
 }
 
-export default class DatePickerInput extends SvelteComponentTyped<
+export default class DatePickerInput extends SvelteComponent<
   DatePickerInputProps,
   {
     input: WindowEventMap["input"];

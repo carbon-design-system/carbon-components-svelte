@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface CheckboxProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -88,7 +88,7 @@ export interface CheckboxProps
   ref?: null | HTMLInputElement;
 }
 
-export default class Checkbox extends SvelteComponentTyped<
+export default class Checkbox extends SvelteComponent<
   CheckboxProps,
   {
     check: CustomEvent<boolean>;

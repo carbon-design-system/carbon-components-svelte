@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ImageLoaderProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["img"]> {
@@ -47,7 +47,7 @@ export interface ImageLoaderProps
   fadeIn?: boolean;
 }
 
-export default class ImageLoader extends SvelteComponentTyped<
+export default class ImageLoader extends SvelteComponent<
   ImageLoaderProps,
   { load: CustomEvent<null>; error: CustomEvent<null> },
   { error: {}; loading: {} }

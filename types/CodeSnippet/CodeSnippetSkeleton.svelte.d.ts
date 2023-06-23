@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface CodeSnippetSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -10,7 +10,7 @@ export interface CodeSnippetSkeletonProps
   type?: "single" | "multi";
 }
 
-export default class CodeSnippetSkeleton extends SvelteComponentTyped<
+export default class CodeSnippetSkeleton extends SvelteComponent<
   CodeSnippetSkeletonProps,
   {
     click: WindowEventMap["click"];

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TooltipFooterProps {
   /**
@@ -9,7 +9,7 @@ export interface TooltipFooterProps {
   selectorPrimaryFocus?: string;
 }
 
-export default class TooltipFooter extends SvelteComponentTyped<
+export default class TooltipFooter extends SvelteComponent<
   TooltipFooterProps,
   {},
   { default: {} }

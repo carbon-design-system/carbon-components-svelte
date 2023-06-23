@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface LoadingProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -34,7 +34,7 @@ export interface LoadingProps
   id?: string;
 }
 
-export default class Loading extends SvelteComponentTyped<
+export default class Loading extends SvelteComponent<
   LoadingProps,
   {},
   {}

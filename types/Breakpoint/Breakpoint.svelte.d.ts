@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export type BreakpointSize = "sm" | "md" | "lg" | "xlg" | "max";
 
@@ -19,7 +19,7 @@ export interface BreakpointProps {
   sizes?: Record<BreakpointSize, boolean>;
 }
 
-export default class Breakpoint extends SvelteComponentTyped<
+export default class Breakpoint extends SvelteComponent<
   BreakpointProps,
   {
     change: CustomEvent<{

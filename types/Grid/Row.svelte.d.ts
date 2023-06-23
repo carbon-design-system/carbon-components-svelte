@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface RowProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -47,7 +47,7 @@ export interface RowProps
   padding?: boolean;
 }
 
-export default class Row extends SvelteComponentTyped<
+export default class Row extends SvelteComponent<
   RowProps,
   {},
   { default: { props: { class: string; [key: string]: any } } }

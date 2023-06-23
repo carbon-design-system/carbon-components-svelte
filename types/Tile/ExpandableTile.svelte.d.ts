@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface ExpandableTileProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
@@ -70,7 +70,7 @@ export interface ExpandableTileProps
   ref?: null | HTMLButtonElement;
 }
 
-export default class ExpandableTile extends SvelteComponentTyped<
+export default class ExpandableTile extends SvelteComponent<
   ExpandableTileProps,
   {
     click: WindowEventMap["click"];

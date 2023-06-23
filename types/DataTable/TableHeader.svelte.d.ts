@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TableHeaderProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["th"]> {
@@ -40,7 +40,7 @@ export interface TableHeaderProps
   id?: string;
 }
 
-export default class TableHeader extends SvelteComponentTyped<
+export default class TableHeader extends SvelteComponent<
   TableHeaderProps,
   {
     mouseover: WindowEventMap["mouseover"];

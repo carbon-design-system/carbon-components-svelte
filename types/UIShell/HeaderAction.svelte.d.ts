@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface HeaderActionProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
@@ -44,7 +44,7 @@ export interface HeaderActionProps
   transition?: false | import("svelte/transition").SlideParams;
 }
 
-export default class HeaderAction extends SvelteComponentTyped<
+export default class HeaderAction extends SvelteComponent<
   HeaderActionProps,
   {
     open: CustomEvent<null>;

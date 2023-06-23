@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TextAreaSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -10,7 +10,7 @@ export interface TextAreaSkeletonProps
   hideLabel?: boolean;
 }
 
-export default class TextAreaSkeleton extends SvelteComponentTyped<
+export default class TextAreaSkeleton extends SvelteComponent<
   TextAreaSkeletonProps,
   {
     click: WindowEventMap["click"];

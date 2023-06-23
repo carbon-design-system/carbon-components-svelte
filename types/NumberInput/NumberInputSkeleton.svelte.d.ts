@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface NumberInputSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -10,7 +10,7 @@ export interface NumberInputSkeletonProps
   hideLabel?: boolean;
 }
 
-export default class NumberInputSkeleton extends SvelteComponentTyped<
+export default class NumberInputSkeleton extends SvelteComponent<
   NumberInputSkeletonProps,
   {
     click: WindowEventMap["click"];

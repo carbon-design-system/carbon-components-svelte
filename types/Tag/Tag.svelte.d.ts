@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface TagProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]>,
@@ -70,7 +70,7 @@ export interface TagProps
   id?: string;
 }
 
-export default class Tag extends SvelteComponentTyped<
+export default class Tag extends SvelteComponent<
   TagProps,
   {
     click: WindowEventMap["click"];

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 export interface DropdownSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -10,7 +10,7 @@ export interface DropdownSkeletonProps
   inline?: boolean;
 }
 
-export default class DropdownSkeleton extends SvelteComponentTyped<
+export default class DropdownSkeleton extends SvelteComponent<
   DropdownSkeletonProps,
   {
     click: WindowEventMap["click"];
