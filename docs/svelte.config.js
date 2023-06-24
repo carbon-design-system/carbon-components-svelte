@@ -1,14 +1,14 @@
-const path = require("path");
-const { mdsvex } = require("mdsvex");
-const { parse, walk } = require("svelte/compiler");
-const slug = require("remark-slug");
-const visit = require("unist-util-visit");
-const { format } = require("prettier");
-const pkg = require("../package.json");
-const component_api = require("./src/COMPONENT_API.json");
-const fs = require("fs");
-const Prism = require("prismjs");
-require("prism-svelte");
+import path from "node:path";
+import fs from "node:fs";
+import { mdsvex } from "mdsvex";
+import { parse, walk } from "svelte/compiler";
+import slug from "remark-slug";
+import visit from "unist-util-visit";
+import { format } from "prettier";
+import pkg from "../package.json" assert { type: "json" };
+import component_api from "./src/COMPONENT_API.json" assert { type: "json" };
+import Prism from "prismjs";
+import "prism-svelte";
 
 const component_api_by_name = component_api.components.reduce((a, c) => {
   return {
@@ -139,7 +139,7 @@ function carbonify() {
   };
 }
 
-module.exports = {
+export {
   extensions: [".svelte", ".svx"],
   preprocess: [
     {

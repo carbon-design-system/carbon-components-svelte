@@ -1,5 +1,6 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "run-p dev:*",
     "dev:routify": "cross-env NODE_ENV=development routify run",
