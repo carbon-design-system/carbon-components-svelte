@@ -139,7 +139,7 @@ function carbonify() {
   };
 }
 
-export {
+const config = {
   extensions: [".svelte", ".svx"],
   preprocess: [
     {
@@ -223,3 +223,5 @@ export {
     },
   ],
 };
+
+export { ...config }
