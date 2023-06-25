@@ -1,14 +1,18 @@
 import path from "node:path";
 import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 import { mdsvex } from "mdsvex";
 import { parse, walk } from "svelte/compiler";
 import slug from "remark-slug";
-import visit from "unist-util-visit";
+import { visit } from "unist-util-visit";
 import { format } from "prettier";
 import pkg from "../package.json" assert { type: "json" };
 import component_api from "./src/COMPONENT_API.json" assert { type: "json" };
 import Prism from "prismjs";
 import "prism-svelte";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const component_api_by_name = component_api.components.reduce((a, c) => {
   return {
@@ -142,6 +146,13 @@ function carbonify() {
 const config = {
   extensions: [".svelte", ".svx"],
   preprocess: [
+    mdsvex({
+      smartypants: false,
+      remarkPlugins: [plugin, slug, carbonify],
+      layout: {
+        _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
+      },
+    }),
     {
       markup: ({ filename, content }) => {
         if (/node_modules/.test(filename) || !filename.endsWith(".svelte"))
@@ -154,13 +165,6 @@ const config = {
         };
       },
     },
-    mdsvex({
-      smartypants: false,
-      remarkPlugins: [plugin, slug, carbonify],
-      layout: {
-        _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
-      },
-    }),
     {
       markup({ content, filename }) {
         if (/node_modules/.test(filename)) return null;
@@ -224,4 +228,4 @@ const config = {
   ],
 };
 
-export { ...config }
+export default config;
