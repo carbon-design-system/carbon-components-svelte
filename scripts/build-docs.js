@@ -1,7 +1,7 @@
-const fs = require("fs");
-const glob = require("glob");
-const { sveld } = require("sveld");
-const pkg = require("../package.json");
+import fs from "node:fs";
+import glob from "glob";
+import { sveld } from "sveld";
+import pkg from "../package.json" assert { type: "json" };
 
 sveld({
   glob: true,
