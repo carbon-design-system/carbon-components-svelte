@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface TileGroupProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> {
@@ -20,9 +20,11 @@ export interface TileGroupProps
    * @default ""
    */
   legend?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class TileGroup extends SvelteComponent<
+export default class TileGroup extends SvelteComponentTyped<
   TileGroupProps,
   { select: CustomEvent<any> },
   { default: {} }

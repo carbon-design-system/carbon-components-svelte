@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface PaginationNavProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
@@ -44,9 +44,11 @@ export interface PaginationNavProps
    * @default "bottom"
    */
   tooltipPosition?: "top" | "right" | "bottom" | "left" | "outside" | "inside";
+
+  [key: `data-${string}`]: any;
 }
 
-export default class PaginationNav extends SvelteComponent<
+export default class PaginationNav extends SvelteComponentTyped<
   PaginationNavProps,
   {
     /** fires after every user interaction */

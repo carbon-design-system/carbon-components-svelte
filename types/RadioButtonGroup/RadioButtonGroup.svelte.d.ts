@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface RadioButtonGroupProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -44,9 +44,11 @@ export interface RadioButtonGroupProps
    * @default undefined
    */
   id?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class RadioButtonGroup extends SvelteComponent<
+export default class RadioButtonGroup extends SvelteComponentTyped<
   RadioButtonGroupProps,
   {
     click: WindowEventMap["click"];

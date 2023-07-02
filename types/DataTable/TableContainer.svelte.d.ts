@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface TableContainerProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -26,9 +26,11 @@ export interface TableContainerProps
    * @default false
    */
   useStaticWidth?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class TableContainer extends SvelteComponent<
+export default class TableContainer extends SvelteComponentTyped<
   TableContainerProps,
   {},
   { default: {} }

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export type ColumnSize = boolean | number;
 
@@ -78,9 +78,11 @@ export interface ColumnProps
    * @default undefined
    */
   max?: ColumnBreakpoint;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Column extends SvelteComponent<
+export default class Column extends SvelteComponentTyped<
   ColumnProps,
   {},
   { default: { props: { class: string; [key: string]: any } } }

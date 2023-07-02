@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface SwitchProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
@@ -33,9 +33,11 @@ export interface SwitchProps
    * @default null
    */
   ref?: null | HTMLButtonElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Switch extends SvelteComponent<
+export default class Switch extends SvelteComponentTyped<
   SwitchProps,
   {
     click: WindowEventMap["click"];

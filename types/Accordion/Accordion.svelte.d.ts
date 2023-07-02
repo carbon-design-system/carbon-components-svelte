@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 import type { AccordionSkeletonProps } from "./AccordionSkeleton.svelte";
 
 export interface AccordionProps extends AccordionSkeletonProps {
@@ -28,7 +28,7 @@ export interface AccordionProps extends AccordionSkeletonProps {
   skeleton?: boolean;
 }
 
-export default class Accordion extends SvelteComponent<
+export default class Accordion extends SvelteComponentTyped<
   AccordionProps,
   {
     click: WindowEventMap["click"];

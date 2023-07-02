@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface InlineLoadingProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -26,9 +26,11 @@ export interface InlineLoadingProps
    * @default 1500
    */
   successDelay?: number;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class InlineLoading extends SvelteComponent<
+export default class InlineLoading extends SvelteComponentTyped<
   InlineLoadingProps,
   {
     click: WindowEventMap["click"];

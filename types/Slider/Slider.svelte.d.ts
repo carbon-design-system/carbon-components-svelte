@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface SliderProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -111,9 +111,11 @@ export interface SliderProps
    * @default null
    */
   ref?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Slider extends SvelteComponent<
+export default class Slider extends SvelteComponentTyped<
   SliderProps,
   {
     click: WindowEventMap["click"];

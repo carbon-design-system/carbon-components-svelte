@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface HeaderNavMenuProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
@@ -26,9 +26,11 @@ export interface HeaderNavMenuProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class HeaderNavMenu extends SvelteComponent<
+export default class HeaderNavMenu extends SvelteComponentTyped<
   HeaderNavMenuProps,
   {
     keydown: WindowEventMap["keydown"];

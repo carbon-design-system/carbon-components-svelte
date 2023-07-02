@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface NotificationIconProps {
   /**
@@ -27,7 +27,7 @@ export interface NotificationIconProps {
   iconDescription: undefined;
 }
 
-export default class NotificationIcon extends SvelteComponent<
+export default class NotificationIcon extends SvelteComponentTyped<
   NotificationIconProps,
   {},
   {}

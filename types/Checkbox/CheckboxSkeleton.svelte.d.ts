@@ -1,10 +1,12 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface CheckboxSkeletonProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {}
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+  [key: `data-${string}`]: any;
+}
 
-export default class CheckboxSkeleton extends SvelteComponent<
+export default class CheckboxSkeleton extends SvelteComponentTyped<
   CheckboxSkeletonProps,
   {
     click: WindowEventMap["click"];

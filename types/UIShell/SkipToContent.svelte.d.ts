@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface SkipToContentProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
@@ -14,9 +14,11 @@ export interface SkipToContentProps
    * @default "0"
    */
   tabindex?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class SkipToContent extends SvelteComponent<
+export default class SkipToContent extends SvelteComponentTyped<
   SkipToContentProps,
   { click: WindowEventMap["click"] },
   { default: {} }

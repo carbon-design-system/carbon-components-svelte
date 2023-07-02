@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ContextMenuOptionProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
@@ -26,7 +26,7 @@ export interface ContextMenuOptionProps
    * Icon is rendered to the left of the label text
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the label text
@@ -67,9 +67,11 @@ export interface ContextMenuOptionProps
    * @default null
    */
   ref?: null | HTMLLIElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ContextMenuOption extends SvelteComponent<
+export default class ContextMenuOption extends SvelteComponentTyped<
   ContextMenuOptionProps,
   {
     keydown: WindowEventMap["keydown"];

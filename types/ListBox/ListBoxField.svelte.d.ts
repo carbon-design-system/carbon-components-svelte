@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export type ListBoxFieldTranslationId = "close" | "open";
 
@@ -40,9 +40,11 @@ export interface ListBoxFieldProps
    * @default null
    */
   ref?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ListBoxField extends SvelteComponent<
+export default class ListBoxField extends SvelteComponentTyped<
   ListBoxFieldProps,
   {
     click: WindowEventMap["click"];

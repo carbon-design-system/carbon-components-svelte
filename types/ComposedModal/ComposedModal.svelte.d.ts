@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ComposedModalProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -44,9 +44,11 @@ export interface ComposedModalProps
    * @default null
    */
   ref?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ComposedModal extends SvelteComponent<
+export default class ComposedModal extends SvelteComponentTyped<
   ComposedModalProps,
   {
     transitionend: CustomEvent<{ open: boolean }>;

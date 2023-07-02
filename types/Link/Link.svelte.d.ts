@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface LinkProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]>,
@@ -27,7 +27,7 @@ export interface LinkProps
    * `inline` must be `false`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Set to `true` to disable the checkbox
@@ -46,9 +46,11 @@ export interface LinkProps
    * @default null
    */
   ref?: null | HTMLAnchorElement | HTMLParagraphElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Link extends SvelteComponent<
+export default class Link extends SvelteComponentTyped<
   LinkProps,
   {
     click: WindowEventMap["click"];

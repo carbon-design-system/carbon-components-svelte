@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ClickableTileProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]>,
@@ -27,9 +27,11 @@ export interface ClickableTileProps
    * @default undefined
    */
   href?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ClickableTile extends SvelteComponent<
+export default class ClickableTile extends SvelteComponentTyped<
   ClickableTileProps,
   {
     click: WindowEventMap["click"];

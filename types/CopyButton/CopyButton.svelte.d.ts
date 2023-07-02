@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface CopyButtonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
@@ -32,9 +32,11 @@ export interface CopyButtonProps
    * @default async (text) => { try { await navigator.clipboard.writeText(text); } catch (e) { console.log(e); } }
    */
   copy?: (text: string) => void;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class CopyButton extends SvelteComponent<
+export default class CopyButton extends SvelteComponentTyped<
   CopyButtonProps,
   {
     click: WindowEventMap["click"];

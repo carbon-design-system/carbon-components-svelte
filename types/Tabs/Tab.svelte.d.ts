@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface TabProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
@@ -39,9 +39,11 @@ export interface TabProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Tab extends SvelteComponent<
+export default class Tab extends SvelteComponentTyped<
   TabProps,
   {
     click: WindowEventMap["click"];

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface FileUploaderProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -68,9 +68,11 @@ export interface FileUploaderProps
    * @default ""
    */
   name?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class FileUploader extends SvelteComponent<
+export default class FileUploader extends SvelteComponentTyped<
   FileUploaderProps,
   {
     add: CustomEvent<ReadonlyArray<File>>;

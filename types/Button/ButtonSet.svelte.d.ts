@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ButtonSetProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -8,9 +8,11 @@ export interface ButtonSetProps
    * @default false
    */
   stacked?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ButtonSet extends SvelteComponent<
+export default class ButtonSet extends SvelteComponentTyped<
   ButtonSetProps,
   {},
   { default: {} }

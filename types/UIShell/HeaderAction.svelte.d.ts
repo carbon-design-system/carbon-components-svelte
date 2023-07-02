@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface HeaderActionProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
@@ -14,14 +14,14 @@ export interface HeaderActionProps
    * Defaults to `<Switcher size={20} />`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the icon to render when the action panel is open.
    * Defaults to `<Close size={20} />`
    * @default undefined
    */
-  closeIcon?: typeof import("svelte").SvelteComponent;
+  closeIcon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the text
@@ -42,9 +42,11 @@ export interface HeaderActionProps
    * @default { duration: 200 }
    */
   transition?: false | import("svelte/transition").SlideParams;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class HeaderAction extends SvelteComponent<
+export default class HeaderAction extends SvelteComponentTyped<
   HeaderActionProps,
   {
     open: CustomEvent<null>;

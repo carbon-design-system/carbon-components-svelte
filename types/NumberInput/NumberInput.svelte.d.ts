@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export type NumberInputTranslationId = "increment" | "decrement";
 
@@ -137,9 +137,11 @@ export interface NumberInputProps
    * @default null
    */
   ref?: null | HTMLInputElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class NumberInput extends SvelteComponent<
+export default class NumberInput extends SvelteComponentTyped<
   NumberInputProps,
   {
     change: CustomEvent<null | number>;

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface FormLabelProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
@@ -8,9 +8,11 @@ export interface FormLabelProps
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class FormLabel extends SvelteComponent<
+export default class FormLabel extends SvelteComponentTyped<
   FormLabelProps,
   {
     click: WindowEventMap["click"];

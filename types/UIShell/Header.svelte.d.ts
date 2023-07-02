@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface HeaderProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
@@ -69,17 +69,19 @@ export interface HeaderProps
    * Defaults to `<Menu size={20} />`
    * @default undefined
    */
-  iconMenu?: typeof import("svelte").SvelteComponent;
+  iconMenu?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the icon to render for the opened state.
    * Defaults to `<Close size={20} />`
    * @default undefined
    */
-  iconClose?: typeof import("svelte").SvelteComponent;
+  iconClose?: typeof import("svelte").SvelteComponent<any>;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Header extends SvelteComponent<
+export default class Header extends SvelteComponentTyped<
   HeaderProps,
   { click: WindowEventMap["click"] },
   { default: {}; platform: {}; ["skip-to-content"]: {} }

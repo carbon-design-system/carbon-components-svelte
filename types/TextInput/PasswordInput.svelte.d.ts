@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface PasswordInputProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
@@ -128,9 +128,11 @@ export interface PasswordInputProps
    * @default null
    */
   ref?: null | HTMLInputElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class PasswordInput extends SvelteComponent<
+export default class PasswordInput extends SvelteComponentTyped<
   PasswordInputProps,
   {
     click: WindowEventMap["click"];

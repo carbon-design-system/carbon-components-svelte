@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface SelectItemProps {
   /**
@@ -27,7 +27,7 @@ export interface SelectItemProps {
   disabled?: boolean;
 }
 
-export default class SelectItem extends SvelteComponent<
+export default class SelectItem extends SvelteComponentTyped<
   SelectItemProps,
   {},
   {}

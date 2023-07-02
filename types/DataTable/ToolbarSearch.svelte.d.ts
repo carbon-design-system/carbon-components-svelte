@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ToolbarSearchProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
@@ -61,9 +61,11 @@ export interface ToolbarSearchProps
    * @default null
    */
   ref?: null | HTMLInputElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ToolbarSearch extends SvelteComponent<
+export default class ToolbarSearch extends SvelteComponentTyped<
   ToolbarSearchProps,
   {
     clear: WindowEventMap["clear"];

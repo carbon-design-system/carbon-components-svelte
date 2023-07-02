@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export type DataTableKey = string;
 
@@ -176,9 +176,11 @@ export interface DataTableProps
    * @default 0
    */
   page?: number;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class DataTable extends SvelteComponent<
+export default class DataTable extends SvelteComponentTyped<
   DataTableProps,
   {
     click: CustomEvent<{

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ContentSwitcherProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -14,9 +14,11 @@ export interface ContentSwitcherProps
    * @default undefined
    */
   size?: "sm" | "xl";
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ContentSwitcher extends SvelteComponent<
+export default class ContentSwitcher extends SvelteComponentTyped<
   ContentSwitcherProps,
   {
     change: CustomEvent<number>;

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface HeaderSearchResult {
   href: string;
@@ -38,9 +38,11 @@ export interface HeaderSearchProps
    * @default 0
    */
   selectedResultIndex?: number;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class HeaderSearch extends SvelteComponent<
+export default class HeaderSearch extends SvelteComponentTyped<
   HeaderSearchProps,
   {
     active: CustomEvent<null>;

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface SkeletonTextProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -26,9 +26,11 @@ export interface SkeletonTextProps
    * @default "100%"
    */
   width?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class SkeletonText extends SvelteComponent<
+export default class SkeletonText extends SvelteComponentTyped<
   SkeletonTextProps,
   {
     click: WindowEventMap["click"];

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 import type { ButtonSkeletonProps } from "./ButtonSkeleton.svelte";
 
 export interface ButtonProps
@@ -42,7 +42,7 @@ export interface ButtonProps
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the ARIA label for the button icon
@@ -105,9 +105,11 @@ export interface ButtonProps
    * @default null
    */
   ref?: null | HTMLAnchorElement | HTMLButtonElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Button extends SvelteComponent<
+export default class Button extends SvelteComponentTyped<
   ButtonProps,
   {
     click: WindowEventMap["click"];

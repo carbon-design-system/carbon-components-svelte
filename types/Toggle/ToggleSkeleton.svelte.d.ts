@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ToggleSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -20,9 +20,11 @@ export interface ToggleSkeletonProps
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ToggleSkeleton extends SvelteComponent<
+export default class ToggleSkeleton extends SvelteComponentTyped<
   ToggleSkeletonProps,
   {
     click: WindowEventMap["click"];

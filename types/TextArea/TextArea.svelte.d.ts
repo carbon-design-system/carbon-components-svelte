@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface TextAreaProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["textarea"]> {
@@ -98,9 +98,11 @@ export interface TextAreaProps
    * @default null
    */
   ref?: null | HTMLTextAreaElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class TextArea extends SvelteComponent<
+export default class TextArea extends SvelteComponentTyped<
   TextAreaProps,
   {
     click: WindowEventMap["click"];

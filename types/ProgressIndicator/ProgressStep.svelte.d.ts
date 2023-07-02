@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ProgressStepProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
@@ -50,9 +50,11 @@ export interface ProgressStepProps
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ProgressStep extends SvelteComponent<
+export default class ProgressStep extends SvelteComponentTyped<
   ProgressStepProps,
   {
     click: WindowEventMap["click"];

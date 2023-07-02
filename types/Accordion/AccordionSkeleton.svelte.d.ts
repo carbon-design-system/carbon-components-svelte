@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface AccordionSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
@@ -26,9 +26,11 @@ export interface AccordionSkeletonProps
    * @default true
    */
   open?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class AccordionSkeleton extends SvelteComponent<
+export default class AccordionSkeleton extends SvelteComponentTyped<
   AccordionSkeletonProps,
   {
     click: WindowEventMap["click"];

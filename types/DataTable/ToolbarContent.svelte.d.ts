@@ -1,9 +1,9 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ToolbarContentProps {}
 
-export default class ToolbarContent extends SvelteComponent<
+export default class ToolbarContent extends SvelteComponentTyped<
   ToolbarContentProps,
   {},
   { default: {} }

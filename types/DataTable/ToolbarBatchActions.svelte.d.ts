@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ToolbarBatchActionsProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -14,9 +14,11 @@ export interface ToolbarBatchActionsProps
    * @default undefined
    */
   active?: undefined | boolean;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ToolbarBatchActions extends SvelteComponent<
+export default class ToolbarBatchActions extends SvelteComponentTyped<
   ToolbarBatchActionsProps,
   { cancel: CustomEvent<null> },
   { default: {}; cancel: {} }

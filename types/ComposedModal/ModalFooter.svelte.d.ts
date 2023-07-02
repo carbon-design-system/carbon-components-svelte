@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ModalFooterProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -13,7 +13,7 @@ export interface ModalFooterProps
    * Specify the primary button icon
    * @default undefined
    */
-  primaryButtonIcon?: typeof import("svelte").SvelteComponent;
+  primaryButtonIcon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Set to `true` to disable the primary button
@@ -51,9 +51,11 @@ export interface ModalFooterProps
    * @default false
    */
   danger?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ModalFooter extends SvelteComponent<
+export default class ModalFooter extends SvelteComponentTyped<
   ModalFooterProps,
   { ["click:button--secondary"]: CustomEvent<{ text: string }> },
   { default: {} }

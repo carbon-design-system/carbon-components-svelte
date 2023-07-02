@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ModalProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -85,7 +85,7 @@ export interface ModalProps
    * Specify the primary button icon
    * @default undefined
    */
-  primaryButtonIcon?: typeof import("svelte").SvelteComponent;
+  primaryButtonIcon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Set to `true` for the "submit" and "click:button--primary" events
@@ -130,9 +130,11 @@ export interface ModalProps
    * @default null
    */
   ref?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Modal extends SvelteComponent<
+export default class Modal extends SvelteComponentTyped<
   ModalProps,
   {
     transitionend: CustomEvent<{ open: boolean }>;

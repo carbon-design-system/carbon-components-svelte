@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface FormGroupProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> {
@@ -38,9 +38,11 @@ export interface FormGroupProps
    * @default ""
    */
   legendId?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class FormGroup extends SvelteComponent<
+export default class FormGroup extends SvelteComponentTyped<
   FormGroupProps,
   {
     click: WindowEventMap["click"];

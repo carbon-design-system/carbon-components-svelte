@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface TagProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]>,
@@ -61,16 +61,18 @@ export interface TagProps
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Set an id for the filterable tag
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Tag extends SvelteComponent<
+export default class Tag extends SvelteComponentTyped<
   TagProps,
   {
     click: WindowEventMap["click"];

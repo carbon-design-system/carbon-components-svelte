@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ButtonSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
@@ -14,9 +14,11 @@ export interface ButtonSkeletonProps
    * @default "default"
    */
   size?: "default" | "field" | "small" | "lg" | "xl";
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ButtonSkeleton extends SvelteComponent<
+export default class ButtonSkeleton extends SvelteComponentTyped<
   ButtonSkeletonProps,
   {
     click: WindowEventMap["click"];

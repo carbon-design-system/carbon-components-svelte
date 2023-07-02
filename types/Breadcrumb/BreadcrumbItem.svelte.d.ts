@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface BreadcrumbItemProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
@@ -14,9 +14,11 @@ export interface BreadcrumbItemProps
    * @default false
    */
   isCurrentPage?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class BreadcrumbItem extends SvelteComponent<
+export default class BreadcrumbItem extends SvelteComponentTyped<
   BreadcrumbItemProps,
   {
     click: WindowEventMap["click"];

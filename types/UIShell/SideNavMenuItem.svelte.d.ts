@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface SideNavMenuItemProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
@@ -26,9 +26,11 @@ export interface SideNavMenuItemProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class SideNavMenuItem extends SvelteComponent<
+export default class SideNavMenuItem extends SvelteComponentTyped<
   SideNavMenuItemProps,
   { click: WindowEventMap["click"] },
   { default: {} }

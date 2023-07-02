@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ProgressIndicatorProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
@@ -26,9 +26,11 @@ export interface ProgressIndicatorProps
    * @default false
    */
   preventChangeOnClick?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ProgressIndicator extends SvelteComponent<
+export default class ProgressIndicator extends SvelteComponentTyped<
   ProgressIndicatorProps,
   {
     change: CustomEvent<number>;

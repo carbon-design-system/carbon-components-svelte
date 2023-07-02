@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface TableProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["section"]> {
@@ -38,9 +38,11 @@ export interface TableProps
    * @default undefined
    */
   tableStyle?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Table extends SvelteComponent<
+export default class Table extends SvelteComponentTyped<
   TableProps,
   {},
   { default: {} }

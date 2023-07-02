@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface OverflowMenuProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
@@ -44,7 +44,7 @@ export interface OverflowMenuProps
    * Defaults to `<OverflowMenuVertical />`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the icon class
@@ -75,9 +75,11 @@ export interface OverflowMenuProps
    * @default null
    */
   menuRef?: null | HTMLUListElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class OverflowMenu extends SvelteComponent<
+export default class OverflowMenu extends SvelteComponentTyped<
   OverflowMenuProps,
   {
     close: CustomEvent<null | { index: number; text: string }>;

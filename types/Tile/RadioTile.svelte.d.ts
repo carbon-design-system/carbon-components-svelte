@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface RadioTileProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
@@ -50,9 +50,11 @@ export interface RadioTileProps
    * @default ""
    */
   name?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class RadioTile extends SvelteComponent<
+export default class RadioTile extends SvelteComponentTyped<
   RadioTileProps,
   {
     change: WindowEventMap["change"];

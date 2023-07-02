@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface TooltipProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -32,7 +32,7 @@ export interface TooltipProps
    * Default to `<Information />`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the ARIA label for the tooltip button
@@ -87,9 +87,11 @@ export interface TooltipProps
    * @default null
    */
   refIcon?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class Tooltip extends SvelteComponent<
+export default class Tooltip extends SvelteComponentTyped<
   TooltipProps,
   {
     open: CustomEvent<null>;

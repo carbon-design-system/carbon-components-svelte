@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ModalHeaderProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -44,9 +44,11 @@ export interface ModalHeaderProps
    * @default "Close"
    */
   iconDescription?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ModalHeader extends SvelteComponent<
+export default class ModalHeader extends SvelteComponentTyped<
   ModalHeaderProps,
   { click: WindowEventMap["click"] },
   { default: {} }

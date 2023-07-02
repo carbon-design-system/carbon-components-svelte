@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface ListBoxMenuItemProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -20,9 +20,11 @@ export interface ListBoxMenuItemProps
    * @default false
    */
   disabled?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class ListBoxMenuItem extends SvelteComponent<
+export default class ListBoxMenuItem extends SvelteComponentTyped<
   ListBoxMenuItemProps,
   {
     click: WindowEventMap["click"];

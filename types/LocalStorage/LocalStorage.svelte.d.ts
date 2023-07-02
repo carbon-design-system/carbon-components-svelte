@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface LocalStorageProps {
   /**
@@ -15,7 +15,7 @@ export interface LocalStorageProps {
   value?: any;
 }
 
-export default class LocalStorage extends SvelteComponent<
+export default class LocalStorage extends SvelteComponentTyped<
   LocalStorageProps,
   {
     save: CustomEvent<null>;

@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface SelectItemGroupProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["optgroup"]> {
@@ -14,9 +14,11 @@ export interface SelectItemGroupProps
    * @default "Provide label"
    */
   label?: string;
+
+  [key: `data-${string}`]: any;
 }
 
-export default class SelectItemGroup extends SvelteComponent<
+export default class SelectItemGroup extends SvelteComponentTyped<
   SelectItemGroupProps,
   {},
   { default: {} }

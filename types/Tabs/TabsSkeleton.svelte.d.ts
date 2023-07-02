@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 export interface TabsSkeletonProps
   extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
@@ -14,9 +14,11 @@ export interface TabsSkeletonProps
    * @default "default"
    */
   type?: "default" | "container";
+
+  [key: `data-${string}`]: any;
 }
 
-export default class TabsSkeleton extends SvelteComponent<
+export default class TabsSkeleton extends SvelteComponentTyped<
   TabsSkeletonProps,
   {
     click: WindowEventMap["click"];
