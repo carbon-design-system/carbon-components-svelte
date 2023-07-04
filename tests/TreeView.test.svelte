@@ -52,7 +52,7 @@
   $: if (treeview) {
     treeview.expandAll();
     treeview.expandNodes((node) => {
-      return node.id > 0;
+      return +node.id > 0;
     });
     treeview.collapseAll();
     treeview.collapseNodes((node) => {
