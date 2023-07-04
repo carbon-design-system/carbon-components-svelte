@@ -82,8 +82,8 @@
   {/if}
   {#if loaded}
     <img
+      style:width="100%"
       {...$$restProps}
-      style="width: 100%;{$$restProps.style}"
       src="{src}"
       alt="{alt}"
       transition:fade|local="{{ duration: fadeIn ? fast02 : 0 }}"
@@ -99,8 +99,8 @@
     {/if}
     {#if loaded}
       <img
+        style:width="100%"
         {...$$restProps}
-        style="width: 100%;{$$restProps.style}"
         src="{src}"
         alt="{alt}"
         transition:fade|local="{{ duration: fadeIn ? fast02 : 0 }}"

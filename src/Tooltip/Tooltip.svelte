@@ -200,8 +200,9 @@
 />
 
 <div
+  style:position="relative"
+  style:z-index="{open ? 1 : undefined}"
   {...$$restProps}
-  style="{open ? 'z-index: 1;' : ''}{$$restProps.style}; position: relative;"
 >
   {#if !hideIcon}
     <div bind:this="{ref}" id="{triggerId}" class:bx--tooltip__label="{true}">

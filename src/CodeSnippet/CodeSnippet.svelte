@@ -221,7 +221,9 @@
       tabindex="{type === 'single' && !disabled ? '0' : undefined}"
       aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
       class:bx--snippet-container="{true}"
-      style="width: 100%; min-height: {minHeight}px; max-height: {maxHeight}"
+      style:width="100%"
+      style:min-height="{minHeight}px"
+      style:max-height="{maxHeight}"
     >
       <pre bind:this="{ref}"><code><slot>{code}</slot></code></pre>
     </div>

@@ -164,8 +164,9 @@
   class:bx--menu--open="{open}"
   class:bx--menu--invisible="{open && x === 0 && y === 0}"
   class:bx--menu--root="{level === 1}"
+  style:left="{x}px"
+  style:top="{y}px"
   {...$$restProps}
-  style="left: {x}px; top: {y}px; {$$restProps.style}"
   on:click
   on:click="{({ target }) => {
     const closestOption = target.closest('[tabindex]');
