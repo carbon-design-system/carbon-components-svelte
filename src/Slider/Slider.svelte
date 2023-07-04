@@ -193,21 +193,10 @@
         class:bx--slider__filled-track="{true}"
         style="transform: translate(0, -50%) scaleX({left / 100})"
       ></div>
-      <input
-        type="hidden"
-        class:bx--slider__input="{true}"
-        name="{name}"
-        value="{value}"
-        required="{required}"
-        min="{min}"
-        max="{max}"
-        step="{step}"
-      />
     </div>
     <span class:bx--slider__range-label="{true}">{maxLabel || max}</span>
     <input
       type="{hideTextInput ? 'hidden' : inputType}"
-      style="{hideTextInput ? 'display: none' : undefined}"
       id="input-{id}"
       name="{name}"
       class:bx--text-input="{true}"
