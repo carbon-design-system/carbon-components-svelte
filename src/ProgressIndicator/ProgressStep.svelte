@@ -23,7 +23,7 @@
   /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  import { onMount, getContext } from "svelte";
+  import { getContext } from "svelte";
   import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
   import Warning from "../icons/Warning.svelte";
   import CircleDash from "../icons/CircleDash.svelte";
@@ -35,20 +35,11 @@
     getContext("ProgressIndicator");
 
   $: add({ id, complete, disabled });
-
-  const unsubscribe = stepsById.subscribe((value) => {
-    if (value[id]) {
-      step = value[id];
-      current = step.current;
-      complete = step.complete;
-    }
-  });
-
-  onMount(() => {
-    return () => {
-      unsubscribe();
-    };
-  });
+  $: if ($stepsById[id]) {
+    step = $stepsById[id];
+    current = step.current;
+    complete = step.complete;
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
