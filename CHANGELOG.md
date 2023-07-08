@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.76.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.76.0...v0.76.1) (2023-07-08)
+
+
+### Bug Fixes
+
+* **date-picker:** hide `helperText` if invalid or warning state ([#1759](https://github.com/carbon-design-system/carbon-components-svelte/issues/1759)) ([d5a4a8b](https://github.com/carbon-design-system/carbon-components-svelte/commit/d5a4a8b94a8753545a54f7e43f1773e49a1ff208))
+* **select:** hide `helperText` if invalid or warning state ([#1761](https://github.com/carbon-design-system/carbon-components-svelte/issues/1761)) ([7579c03](https://github.com/carbon-design-system/carbon-components-svelte/commit/7579c032faa3f1b9ad9d42f76da876f38725141e))
+* **slider:** `disabled` Slider should not submit a form ([#1758](https://github.com/carbon-design-system/carbon-components-svelte/issues/1758)) ([ab21c89](https://github.com/carbon-design-system/carbon-components-svelte/commit/ab21c89ab9240f61bd15d8c20bad65b3b469a29c))
+* **types:** allow `data-*` attributes for props forwarded to HTML elements ([#1741](https://github.com/carbon-design-system/carbon-components-svelte/issues/1741)) ([7fdc2ef](https://github.com/carbon-design-system/carbon-components-svelte/commit/7fdc2ef7f072382842cbb6bfc8e12e083aef1a1e))
+
 ### [0.76.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.75.1...v0.75.2) (2023-06-21)
 
 
