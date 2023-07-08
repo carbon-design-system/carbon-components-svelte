@@ -45,6 +45,8 @@ export interface TooltipIconProps
    * @default null
    */
   ref?: null | HTMLButtonElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TooltipIcon extends SvelteComponentTyped<

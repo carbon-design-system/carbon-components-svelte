@@ -38,6 +38,8 @@ export interface SideNavProps
    * @default 1056
    */
   expansionBreakpoint?: number;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SideNav extends SvelteComponentTyped<

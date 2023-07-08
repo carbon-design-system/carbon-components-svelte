@@ -22,6 +22,8 @@ export interface FilenameProps
    * @default false
    */
   invalid?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Filename extends SvelteComponentTyped<

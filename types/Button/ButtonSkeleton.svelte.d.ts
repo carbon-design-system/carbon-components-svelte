@@ -14,6 +14,8 @@ export interface ButtonSkeletonProps
    * @default "default"
    */
   size?: "default" | "field" | "small" | "lg" | "xl";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ButtonSkeleton extends SvelteComponentTyped<

@@ -8,6 +8,8 @@ export interface FormLabelProps
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class FormLabel extends SvelteComponentTyped<

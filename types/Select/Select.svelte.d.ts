@@ -104,6 +104,8 @@ export interface SelectProps
    * @default false
    */
   required?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Select extends SvelteComponentTyped<

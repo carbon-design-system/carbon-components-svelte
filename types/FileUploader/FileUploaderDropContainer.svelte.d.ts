@@ -69,6 +69,8 @@ export interface FileUploaderDropContainerProps
    * @default null
    */
   ref?: null | HTMLInputElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class FileUploaderDropContainer extends SvelteComponentTyped<

@@ -16,6 +16,8 @@ export interface ListBoxMenuIconProps
    * @default (id) => defaultTranslations[id]
    */
   translateWithId?: (id: ListBoxMenuIconTranslationId) => string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ListBoxMenuIcon extends SvelteComponentTyped<

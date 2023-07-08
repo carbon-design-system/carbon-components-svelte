@@ -62,6 +62,8 @@ export interface SelectableTileProps
    * @default null
    */
   ref?: null | HTMLInputElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SelectableTile extends SvelteComponentTyped<

@@ -8,6 +8,8 @@ export interface StructuredListSkeletonProps
    * @default 5
    */
   rows?: number;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class StructuredListSkeleton extends SvelteComponentTyped<

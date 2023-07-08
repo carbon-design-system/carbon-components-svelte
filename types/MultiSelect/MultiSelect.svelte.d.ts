@@ -236,6 +236,8 @@ export interface MultiSelectProps
    * @default null
    */
   highlightedId?: null | MultiSelectItemId;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class MultiSelect extends SvelteComponentTyped<

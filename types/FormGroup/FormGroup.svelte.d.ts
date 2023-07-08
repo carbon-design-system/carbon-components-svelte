@@ -38,6 +38,8 @@ export interface FormGroupProps
    * @default ""
    */
   legendId?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class FormGroup extends SvelteComponentTyped<

@@ -55,6 +55,8 @@ export interface TreeViewProps
    * @default false
    */
   hideLabel?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TreeView extends SvelteComponentTyped<

@@ -67,6 +67,8 @@ export interface ContextMenuOptionProps
    * @default null
    */
   ref?: null | HTMLLIElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ContextMenuOption extends SvelteComponentTyped<

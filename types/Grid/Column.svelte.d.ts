@@ -78,6 +78,8 @@ export interface ColumnProps
    * @default undefined
    */
   max?: ColumnBreakpoint;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Column extends SvelteComponentTyped<

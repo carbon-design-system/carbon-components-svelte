@@ -8,6 +8,8 @@ export interface SliderSkeletonProps
    * @default false
    */
   hideLabel?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SliderSkeleton extends SvelteComponentTyped<

@@ -21,6 +21,8 @@ export interface RecursiveListProps
    * @default "unordered"
    */
   type?: "unordered" | "ordered" | "ordered-native";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class RecursiveList extends SvelteComponentTyped<

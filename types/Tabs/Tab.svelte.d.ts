@@ -39,6 +39,8 @@ export interface TabProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Tab extends SvelteComponentTyped<

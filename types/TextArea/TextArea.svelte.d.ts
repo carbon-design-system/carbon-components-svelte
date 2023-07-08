@@ -98,6 +98,8 @@ export interface TextAreaProps
    * @default null
    */
   ref?: null | HTMLTextAreaElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TextArea extends SvelteComponentTyped<

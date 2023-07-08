@@ -8,6 +8,8 @@ export interface ButtonSetProps
    * @default false
    */
   stacked?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ButtonSet extends SvelteComponentTyped<

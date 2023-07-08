@@ -20,6 +20,8 @@ export interface TileGroupProps
    * @default ""
    */
   legend?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TileGroup extends SvelteComponentTyped<

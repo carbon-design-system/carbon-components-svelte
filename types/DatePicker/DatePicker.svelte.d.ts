@@ -79,6 +79,8 @@ export interface DatePickerProps
    * @default { static: true }
    */
   flatpickrProps?: import("flatpickr/dist/types/options").Options;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class DatePicker extends SvelteComponentTyped<

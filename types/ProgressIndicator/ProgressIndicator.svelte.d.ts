@@ -26,6 +26,8 @@ export interface ProgressIndicatorProps
    * @default false
    */
   preventChangeOnClick?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ProgressIndicator extends SvelteComponentTyped<

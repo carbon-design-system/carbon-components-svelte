@@ -26,6 +26,8 @@ export interface SkeletonTextProps
    * @default "100%"
    */
   width?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SkeletonText extends SvelteComponentTyped<

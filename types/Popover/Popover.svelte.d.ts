@@ -56,6 +56,8 @@ export interface PopoverProps
    * @default false
    */
   relative?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Popover extends SvelteComponentTyped<

@@ -137,6 +137,8 @@ export interface NumberInputProps
    * @default null
    */
   ref?: null | HTMLInputElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class NumberInput extends SvelteComponentTyped<

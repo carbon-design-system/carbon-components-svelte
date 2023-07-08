@@ -8,6 +8,8 @@ export interface CodeSnippetSkeletonProps
    * @default "single"
    */
   type?: "single" | "multi";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class CodeSnippetSkeleton extends SvelteComponentTyped<

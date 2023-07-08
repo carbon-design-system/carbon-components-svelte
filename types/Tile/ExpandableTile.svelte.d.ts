@@ -68,6 +68,8 @@ export interface ExpandableTileProps
    * @default null
    */
   ref?: null | HTMLButtonElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ExpandableTile extends SvelteComponentTyped<

@@ -50,6 +50,8 @@ export interface RadioTileProps
    * @default ""
    */
   name?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class RadioTile extends SvelteComponentTyped<

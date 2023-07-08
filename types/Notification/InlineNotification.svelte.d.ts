@@ -62,6 +62,8 @@ export interface InlineNotificationProps
    * @default "Close notification"
    */
   closeButtonDescription?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class InlineNotification extends SvelteComponentTyped<

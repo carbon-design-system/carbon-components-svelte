@@ -44,6 +44,8 @@ export interface ModalHeaderProps
    * @default "Close"
    */
   iconDescription?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ModalHeader extends SvelteComponentTyped<

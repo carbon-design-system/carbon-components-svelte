@@ -38,6 +38,8 @@ export interface HeaderSearchProps
    * @default 0
    */
   selectedResultIndex?: number;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class HeaderSearch extends SvelteComponentTyped<

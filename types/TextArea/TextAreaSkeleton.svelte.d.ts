@@ -8,6 +8,8 @@ export interface TextAreaSkeletonProps
    * @default false
    */
   hideLabel?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TextAreaSkeleton extends SvelteComponentTyped<

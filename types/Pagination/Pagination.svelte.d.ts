@@ -98,6 +98,8 @@ export interface PaginationProps
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Pagination extends SvelteComponentTyped<

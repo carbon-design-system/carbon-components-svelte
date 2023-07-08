@@ -8,6 +8,8 @@ export interface SelectSkeletonProps
    * @default false
    */
   hideLabel?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SelectSkeleton extends SvelteComponentTyped<
