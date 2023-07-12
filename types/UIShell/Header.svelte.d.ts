@@ -84,5 +84,5 @@ export interface HeaderProps
 export default class Header extends SvelteComponentTyped<
   HeaderProps,
   { click: WindowEventMap["click"] },
-  { default: {}; platform: {}; ["skip-to-content"]: {} }
+  { default: {}; company: {}; platform: {}; ["skip-to-content"]: {} }
 > {}
