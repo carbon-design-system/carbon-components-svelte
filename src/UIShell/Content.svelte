@@ -2,23 +2,34 @@
   /** Specify the id for the main element */
   export let id = "main-content";
 
-  import { isSideNavCollapsed, isSideNavRail } from "./navStore";
-
-  /**
-   * By default, the `SideNav` applies a left margin of `3rem` to `Content`
-   * if it's a sibling component (e.g., .bx--side-nav ~ .bx--content).
-   *
-   * We manually unset the left margin if the `SideNav`
-   * is collapsed and if it's not the `rail` variant.
-   */
-  $: unsetLeftMargin = $isSideNavCollapsed && !$isSideNavRail;
+  import { Grid, Row, Column } from "../Grid";
+  import {
+    shouldRenderHamburgerMenu,
+    isPersistentHamburgerMenu,
+  } from "./navStore";
 </script>
 
-<main
-  id="{id}"
-  class:bx--content="{true}"
-  {...$$restProps}
-  style="{unsetLeftMargin ? 'margin-left: 0;' : ''} {$$restProps.style}"
+<div
+  style="padding: 3em; display: flex; flex-direction: column; align-items: center;"
 >
-  <slot />
-</main>
+  <div style="position: relative; width: 100%; z-index: 0;">
+    <main
+      id="{id}"
+      class:bx--content="{true}"
+      {...$$restProps}
+      style="{`height: 100%; margin: 0px; width: 100%; ${$$restProps.style}`}"
+    >
+      <Grid>
+        <Row>
+          <Column
+            lg="{$shouldRenderHamburgerMenu && !$isPersistentHamburgerMenu
+              ? { span: 13, offset: 3 }
+              : {}}"
+          >
+            <slot />
+          </Column>
+        </Row>
+      </Grid>
+    </main>
+  </div>
+</div>
