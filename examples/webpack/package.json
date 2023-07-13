@@ -2,19 +2,19 @@
   "private": true,
   "scripts": {
     "dev": "webpack serve",
-    "build": "rm -rf public && NODE_ENV=production webpack"
+    "build": "NODE_ENV=production webpack"
   },
   "devDependencies": {
-    "carbon-components-svelte": "^0.70.13",
+    "carbon-components-svelte": "^0.76.1",
     "carbon-preprocess-svelte": "^0.9.1",
-    "css-loader": "^6.7.2",
+    "css-loader": "^6.8.1",
     "esbuild-loader": "^2.20.0",
-    "html-webpack-plugin": "5.5.0",
-    "mini-css-extract-plugin": "^2.7.2",
+    "html-webpack-plugin": "5.5.3",
+    "mini-css-extract-plugin": "^2.7.6",
     "svelte": "^3.54.0",
-    "svelte-loader": "^3.1.4",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1"
+    "svelte-loader": "^3.1.9",
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }

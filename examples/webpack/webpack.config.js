@@ -19,6 +19,7 @@ module.exports = {
     path: path.join(__dirname, "/public"),
     filename: PROD ? "[name].[contenthash].js" : "[name].js",
     chunkFilename: "[name].[id].js",
+    clean: true,
   },
   module: {
     rules: [
