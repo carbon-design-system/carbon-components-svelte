@@ -43,6 +43,12 @@ export interface HeaderActionProps
    */
   transition?: false | import("svelte/transition").SlideParams;
 
+  /**
+   * Set to `true` to prevent the panel from closing when clicking outside
+   * @default false
+   */
+  preventCloseOnClickOutside?: boolean;
+
   [key: `data-${string}`]: any;
 }
 

@@ -1601,14 +1601,15 @@ None.
 
 ### Props
 
-| Prop name  | Required | Kind             | Reactive | Type                                                              | Default value                  | Description                                                                                                   |
-| :--------- | :------- | :--------------- | :------- | ----------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| ref        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                        | <code>null</code>              | Obtain a reference to the button HTML element                                                                 |
-| isOpen     | No       | <code>let</code> | Yes      | <code>boolean</code>                                              | <code>false</code>             | Set to `true` to open the panel                                                                               |
-| icon       | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render when the action panel is closed.<br />Defaults to `&lt;Switcher size={20} /&gt;`   |
-| closeIcon  | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render when the action panel is open.<br />Defaults to `&lt;Close size={20} /&gt;`        |
-| text       | No       | <code>let</code> | No       | <code>string</code>                                               | <code>undefined</code>         | Specify the text<br />Alternatively, use the named slot "text" (e.g., &lt;div slot="text"&gt;...&lt;/div&gt;) |
-| transition | No       | <code>let</code> | No       | <code>false &#124; import("svelte/transition").SlideParams</code> | <code>{ duration: 200 }</code> | Customize the panel transition (i.e., `transition:slide`).<br />Set to `false` to disable the transition      |
+| Prop name                  | Required | Kind             | Reactive | Type                                                              | Default value                  | Description                                                                                                   |
+| :------------------------- | :------- | :--------------- | :------- | ----------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| ref                        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                        | <code>null</code>              | Obtain a reference to the button HTML element                                                                 |
+| isOpen                     | No       | <code>let</code> | Yes      | <code>boolean</code>                                              | <code>false</code>             | Set to `true` to open the panel                                                                               |
+| icon                       | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render when the action panel is closed.<br />Defaults to `&lt;Switcher size={20} /&gt;`   |
+| closeIcon                  | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent</code>              | <code>undefined</code>         | Specify the icon to render when the action panel is open.<br />Defaults to `&lt;Close size={20} /&gt;`        |
+| text                       | No       | <code>let</code> | No       | <code>string</code>                                               | <code>undefined</code>         | Specify the text<br />Alternatively, use the named slot "text" (e.g., &lt;div slot="text"&gt;...&lt;/div&gt;) |
+| transition                 | No       | <code>let</code> | No       | <code>false &#124; import("svelte/transition").SlideParams</code> | <code>{ duration: 200 }</code> | Customize the panel transition (i.e., `transition:slide`).<br />Set to `false` to disable the transition      |
+| preventCloseOnClickOutside | No       | <code>let</code> | No       | <code>boolean</code>                                              | <code>false</code>             | Set to `true` to prevent the panel from closing when clicking outside                                         |
 
 ### Slots
 

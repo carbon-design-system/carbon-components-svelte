@@ -4923,6 +4923,18 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "preventCloseOnClickOutside",
+          "kind": "let",
+          "description": "Set to `true` to prevent the panel from closing when clicking outside",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
