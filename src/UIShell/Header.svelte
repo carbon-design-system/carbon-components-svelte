@@ -103,9 +103,3 @@
   </a>
   <slot />
 </header>
-
-<style>
-  .bx--header__name--prefix {
-    padding-right: 0.2rem;
-  }
-</style>
