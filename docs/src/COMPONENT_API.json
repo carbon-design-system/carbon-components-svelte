@@ -4751,7 +4751,7 @@
         {
           "name": "company",
           "kind": "let",
-          "description": "Specify the company name",
+          "description": "Specify the company name.  \nAlternatively, use the named slot \"company\" (e.g., `<span slot=\"company\">...</span>`)",
           "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
