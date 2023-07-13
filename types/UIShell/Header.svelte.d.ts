@@ -28,15 +28,15 @@ export interface HeaderProps
   href?: string;
 
   /**
-   * Specify the company name
-   * Alternatively, use the named slot "company" (e.g., <span slot="company">...</span>)
+   * Specify the company name.  
+   * Alternatively, use the named slot "company" (e.g., `<span slot="company">...</span>`)
    * @default undefined
    */
   company?: string;
 
   /**
-   * Specify the platform name
-   * Alternatively, use the named slot "platform" (e.g., <span slot="platform">...</span>)
+   * Specify the platform name.  
+   * Alternatively, use the named slot "platform" (e.g., `<span slot="platform">...</span>`)
    * @default ""
    */
   platformName?: string;
@@ -48,13 +48,13 @@ export interface HeaderProps
   persistentHamburgerMenu?: boolean;
 
   /**
-   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden
-   * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
-   * small: 320
-   * medium: 672
-   * large: 1056
-   * x-large: 1312
-   * max: 1584
+   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.  
+   * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:  
+   * small: 320  
+   * medium: 672  
+   * large: 1056  
+   * x-large: 1312  
+   * max: 1584  
    * @default 1056
    */
   expansionBreakpoint?: number;
@@ -66,15 +66,15 @@ export interface HeaderProps
   ref?: null | HTMLAnchorElement;
 
   /**
-   * Specify the icon to render for the closed state.
-   * Defaults to `<Menu size={20} />`
+   * Specify the icon to render for the closed state.  
+   * Defaults to `<Menu size={20} />`  
    * @default undefined
    */
   iconMenu?: typeof import("svelte").SvelteComponent;
 
   /**
-   * Specify the icon to render for the opened state.
-   * Defaults to `<Close size={20} />`
+   * Specify the icon to render for the opened state.  
+   * Defaults to `<Close size={20} />`  
    * @default undefined
    */
   iconClose?: typeof import("svelte").SvelteComponent;
