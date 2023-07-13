@@ -4762,7 +4762,7 @@
         {
           "name": "platformName",
           "kind": "let",
-          "description": "Specify the platform name\nAlternatively, use the named slot \"platform\" (e.g., <span slot=\"platform\">...</span>)",
+          "description": "Specify the platform name.\nAlternatively, use the named slot \"platform\" (e.g., `<span slot=\"platform\">...</span>`)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -4786,7 +4786,7 @@
         {
           "name": "expansionBreakpoint",
           "kind": "let",
-          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\nsmall: 320\nmedium: 672\nlarge: 1056\nx-large: 1312\nmax: 1584",
+          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\n- small: 320\n- medium: 672\n- large: 1056\n- x-large: 1312\n- max: 1584",
           "type": "number",
           "value": "1056",
           "isFunction": false,
@@ -10658,7 +10658,7 @@
         {
           "name": "expansionBreakpoint",
           "kind": "let",
-          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\nsmall: 320\nmedium: 672\nlarge: 1056\nx-large: 1312\nmax: 1584",
+          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\n- small: 320\n- medium: 672\n- large: 1056\n- x-large: 1312\n- max: 1584",
           "type": "number",
           "value": "1056",
           "isFunction": false,

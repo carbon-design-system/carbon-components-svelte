@@ -25,8 +25,8 @@
   export let company = undefined;
 
   /**
-   * Specify the platform name
-   * Alternatively, use the named slot "platform" (e.g., <span slot="platform">...</span>)
+   * Specify the platform name.
+   * Alternatively, use the named slot "platform" (e.g., `<span slot="platform">...</span>`)
    */
   export let platformName = "";
 
@@ -34,13 +34,13 @@
   export let persistentHamburgerMenu = false;
 
   /**
-   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden
+   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.
    * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
-   * small: 320
-   * medium: 672
-   * large: 1056
-   * x-large: 1312
-   * max: 1584
+   * - small: 320
+   * - medium: 672
+   * - large: 1056
+   * - x-large: 1312
+   * - max: 1584
    */
   export let expansionBreakpoint = 1056;
 
