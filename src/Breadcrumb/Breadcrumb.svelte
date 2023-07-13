@@ -21,6 +21,7 @@
     on:mouseleave
   />
 {:else}
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <nav
     aria-label="Breadcrumb"
     {...$$restProps}

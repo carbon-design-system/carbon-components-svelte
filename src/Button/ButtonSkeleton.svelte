@@ -33,6 +33,7 @@
     {""}
   </a>
 {:else}
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class:bx--skeleton="{true}"
     class:bx--btn="{true}"

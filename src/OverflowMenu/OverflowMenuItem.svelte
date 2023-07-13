@@ -63,6 +63,7 @@
 >
   {#if href}
     <!-- svelte-ignore a11y-missing-attribute -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <a
       bind:this="{ref}"
       {...buttonProps}

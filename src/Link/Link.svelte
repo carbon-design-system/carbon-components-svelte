@@ -35,6 +35,7 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if disabled}
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <p
     bind:this="{ref}"
     class:bx--link="{true}"
