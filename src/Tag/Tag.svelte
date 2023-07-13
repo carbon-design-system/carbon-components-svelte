@@ -134,6 +134,7 @@
     </span>
   </button>
 {:else}
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     id="{id}"
     class:bx--tag="{true}"

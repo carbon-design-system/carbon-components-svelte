@@ -238,6 +238,7 @@
 />
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item="{true}"
   {...$$restProps}
@@ -246,6 +247,7 @@
   on:mouseenter
   on:mouseleave
 >
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     bind:this="{datePickerRef}"
     id="{id}"

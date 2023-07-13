@@ -133,6 +133,7 @@
   >
     <div class:bx--tree-node__label="{true}" bind:this="{refLabel}">
       <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <span
         class:bx--tree-parent-node__toggle="{true}"
         disabled="{disabled}"

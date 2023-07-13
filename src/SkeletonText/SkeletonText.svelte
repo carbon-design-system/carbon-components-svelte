@@ -28,6 +28,7 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if paragraph}
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div {...$$restProps} on:click on:mouseover on:mouseenter on:mouseleave>
     {#each rows as { width }}
       <p
@@ -38,6 +39,7 @@
     {/each}
   </div>
 {:else}
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <p
     class:bx--skeleton__text="{true}"
     class:bx--skeleton__heading="{heading}"

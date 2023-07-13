@@ -42,6 +42,7 @@
     on:mouseleave
   />
 {:else}
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <ul
     class:bx--accordion="{true}"
     class:bx--accordion--start="{align === 'start'}"

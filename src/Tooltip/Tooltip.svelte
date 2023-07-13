@@ -206,6 +206,7 @@
   {#if !hideIcon}
     <div bind:this="{ref}" id="{triggerId}" class:bx--tooltip__label="{true}">
       <slot name="triggerText">{triggerText}</slot>
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         bind:this="{refIcon}"
         {...buttonProps}
@@ -220,6 +221,7 @@
       </div>
     </div>
   {:else}
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       bind:this="{ref}"
       {...buttonProps}
@@ -233,6 +235,7 @@
     </div>
   {/if}
   {#if open}
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       bind:this="{refTooltip}"
       id="{tooltipId}"
@@ -250,6 +253,7 @@
     >
       <span class:bx--tooltip__caret="{true}"></span>
       <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <div
         on:click|stopPropagation
         on:mousedown|stopPropagation

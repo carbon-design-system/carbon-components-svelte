@@ -47,6 +47,7 @@
   }}"
 />
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
   class:bx--tooltip--definition="{true}"
   class:bx--tooltip--a11y="{true}"

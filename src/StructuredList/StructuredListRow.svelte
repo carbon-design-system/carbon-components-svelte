@@ -13,6 +13,7 @@
 {#if label}
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
     tabindex="{tabindex}"
     class:bx--structured-list-row="{true}"
