@@ -127,7 +127,7 @@ export { default as TextAreaSkeleton } from "./TextArea/TextAreaSkeleton.svelte"
 export { default as TextInput } from "./TextInput/TextInput.svelte";
 export { default as TextInputSkeleton } from "./TextInput/TextInputSkeleton.svelte";
 export { default as PasswordInput } from "./TextInput/PasswordInput.svelte";
-export { default as Theme } from "./Theme/Theme.svelte";
+export { default as GlobalTheme } from "./GlobalTheme/GlobalTheme.svelte";
 export { default as Tile } from "./Tile/Tile.svelte";
 export { default as ClickableTile } from "./Tile/ClickableTile.svelte";
 export { default as ExpandableTile } from "./Tile/ExpandableTile.svelte";

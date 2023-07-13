@@ -12,7 +12,7 @@
     SideNav,
     SideNavItems,
     SideNavMenuItem,
-    Theme,
+    GlobalTheme,
     Tag,
   } from "carbon-components-svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
@@ -39,7 +39,7 @@
 <!-- routify:options bundle=true -->
 <svelte:window bind:innerWidth />
 
-<Theme persist bind:theme="{$theme}">
+<GlobalTheme persist bind:theme="{$theme}">
   <Header
     aria-label="Navigation"
     href="{$url('/')}"
@@ -129,7 +129,7 @@
     </SideNavItems>
   </SideNav>
   <slot />
-</Theme>
+</GlobalTheme>
 
 <style>
   .platform-name {

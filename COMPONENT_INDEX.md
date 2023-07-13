@@ -50,6 +50,7 @@
 - [`FormGroup`](#formgroup)
 - [`FormItem`](#formitem)
 - [`FormLabel`](#formlabel)
+- [`GlobalTheme`](#globaltheme)
 - [`Grid`](#grid)
 - [`Header`](#header)
 - [`HeaderAction`](#headeraction)
@@ -148,7 +149,6 @@
 - [`TextAreaSkeleton`](#textareaskeleton)
 - [`TextInput`](#textinput)
 - [`TextInputSkeleton`](#textinputskeleton)
-- [`Theme`](#theme)
 - [`Tile`](#tile)
 - [`TileGroup`](#tilegroup)
 - [`TimePicker`](#timepicker)
@@ -1538,6 +1538,38 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `GlobalTheme`
+
+### Types
+
+```ts
+export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
+```
+
+### Props
+
+| Prop name  | Required | Kind             | Reactive | Type                                                                                                           | Default value                                                                                                 | Description                                                                                                                    |
+| :--------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| theme      | No       | <code>let</code> | Yes      | <code>CarbonTheme</code>                                                                                       | <code>"white"</code>                                                                                          | Set the current Carbon theme                                                                                                   |
+| tokens     | No       | <code>let</code> | No       | <code>{ [token: string]: any; }</code>                                                                         | <code>{}</code>                                                                                               | Customize a theme with your own tokens<br />@see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme |
+| persist    | No       | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                                                                                            | Set to `true` to persist the theme using window.localStorage                                                                   |
+| persistKey | No       | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"theme"</code>                                                                                          | Specify the local storage key                                                                                                  |
+| render     | No       | <code>let</code> | No       | <code>"toggle" &#124; "select"</code>                                                                          | <code>undefined</code>                                                                                        | Render a toggle or select dropdown to control the theme                                                                        |
+| toggle     | No       | <code>let</code> | No       | <code>import("../Toggle/Toggle").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }</code> | <code>{ themes: ["white", "g100"], labelA: "", labelB: "", labelText: "Dark mode", hideLabel: false, }</code> | Override the default toggle props                                                                                              |
+| select     | No       | <code>let</code> | No       | <code>import("../Select/Select").SelectProps & { themes?: CarbonTheme[]; }</code>                              | <code>{ themes: themeKeys, labelText: "Themes", hideLabel: false, }</code>                                    | Override the default select props                                                                                              |
+
+### Slots
+
+| Slot name | Default | Props                                 | Fallback |
+| :-------- | :------ | :------------------------------------ | :------- |
+| --        | Yes     | <code>{ theme: CarbonTheme; } </code> | --       |
+
+### Events
+
+| Event name | Type       | Detail                               |
+| :--------- | :--------- | :----------------------------------- |
+| update     | dispatched | <code>{ theme: CarbonTheme; }</code> |
 
 ## `Grid`
 
@@ -4165,38 +4197,6 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
-
-## `Theme`
-
-### Types
-
-```ts
-export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
-```
-
-### Props
-
-| Prop name  | Required | Kind             | Reactive | Type                                                                                                           | Default value                                                                                                 | Description                                                                                                                    |
-| :--------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| theme      | No       | <code>let</code> | Yes      | <code>CarbonTheme</code>                                                                                       | <code>"white"</code>                                                                                          | Set the current Carbon theme                                                                                                   |
-| tokens     | No       | <code>let</code> | No       | <code>{ [token: string]: any; }</code>                                                                         | <code>{}</code>                                                                                               | Customize a theme with your own tokens<br />@see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme |
-| persist    | No       | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                                                                                            | Set to `true` to persist the theme using window.localStorage                                                                   |
-| persistKey | No       | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"theme"</code>                                                                                          | Specify the local storage key                                                                                                  |
-| render     | No       | <code>let</code> | No       | <code>"toggle" &#124; "select"</code>                                                                          | <code>undefined</code>                                                                                        | Render a toggle or select dropdown to control the theme                                                                        |
-| toggle     | No       | <code>let</code> | No       | <code>import("../Toggle/Toggle").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }</code> | <code>{ themes: ["white", "g100"], labelA: "", labelB: "", labelText: "Dark mode", hideLabel: false, }</code> | Override the default toggle props                                                                                              |
-| select     | No       | <code>let</code> | No       | <code>import("../Select/Select").SelectProps & { themes?: CarbonTheme[]; }</code>                              | <code>{ themes: themeKeys, labelText: "Themes", hideLabel: false, }</code>                                    | Override the default select props                                                                                              |
-
-### Slots
-
-| Slot name | Default | Props                                 | Fallback |
-| :-------- | :------ | :------------------------------------ | :------- |
-| --        | Yes     | <code>{ theme: CarbonTheme; } </code> | --       |
-
-### Events
-
-| Event name | Type       | Detail                               |
-| :--------- | :--------- | :----------------------------------- |
-| update     | dispatched | <code>{ theme: CarbonTheme; }</code> |
 
 ## `Tile`
 

@@ -1,8 +1,8 @@
 <script>
-  import { Theme } from "carbon-components-svelte";
+  import { GlobalTheme } from "carbon-components-svelte";
 </script>
 
-<Theme
+<GlobalTheme
   render="select"
   select="{{
     themes: ['white', 'g90', 'g100'],
