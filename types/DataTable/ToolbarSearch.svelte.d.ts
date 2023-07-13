@@ -61,6 +61,8 @@ export interface ToolbarSearchProps
    * @default null
    */
   ref?: null | HTMLInputElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ToolbarSearch extends SvelteComponentTyped<

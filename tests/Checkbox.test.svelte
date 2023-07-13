@@ -2,7 +2,7 @@
   import { Checkbox } from "../types";
 </script>
 
-<Checkbox labelText="Label text" />
+<Checkbox labelText="Label text" style="margin: 1rem" />
 
 <Checkbox labelText="Label text" checked />
 

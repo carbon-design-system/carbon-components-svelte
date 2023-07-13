@@ -14,6 +14,8 @@ export interface ModalBodyProps
    * @default false
    */
   hasScrollingContent?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ModalBody extends SvelteComponentTyped<

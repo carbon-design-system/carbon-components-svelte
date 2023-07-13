@@ -924,7 +924,7 @@
         { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "CheckboxSkeleton" }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "CheckboxSkeleton",
@@ -1743,6 +1743,12 @@
           "default": true,
           "fallback": "{itemToString(item)}",
           "slot_props": "{ item: ComboBoxItem; index: number }"
+        },
+        {
+          "name": "titleText",
+          "default": false,
+          "fallback": "{titleText}",
+          "slot_props": "{}"
         }
       ],
       "events": [
@@ -4399,7 +4405,7 @@
         { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "Loading" }
+      "rest_props": { "type": "Element", "name": "div | button | svg" }
     },
     {
       "moduleName": "FluidForm",
@@ -4416,7 +4422,7 @@
         { "type": "forwarded", "name": "submit", "element": "Form" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "Form" }
+      "rest_props": { "type": "Element", "name": "form" }
     },
     {
       "moduleName": "Form",
@@ -4828,6 +4834,12 @@
       "slots": [
         { "name": "__default__", "default": true, "slot_props": "{}" },
         {
+          "name": "company",
+          "default": false,
+          "fallback": "{company}&nbsp;",
+          "slot_props": "{}"
+        },
+        {
           "name": "platform",
           "default": false,
           "fallback": "{platformName}",
@@ -5134,7 +5146,14 @@
         }
       ],
       "moduleExports": [],
-      "slots": [],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "fallback": "{text}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "a" },
         { "type": "forwarded", "name": "mouseover", "element": "a" },
@@ -7359,6 +7378,12 @@
           "default": true,
           "fallback": "{itemToString(item)}",
           "slot_props": "{ item: MultiSelectItem; index: number }"
+        },
+        {
+          "name": "titleText",
+          "default": false,
+          "fallback": "{titleText}",
+          "slot_props": "{}"
         }
       ],
       "events": [
@@ -8525,6 +8550,18 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "tooltipPosition",
+          "kind": "let",
+          "description": "Set the position of the tooltip relative to the pagination buttons.",
+          "type": "\"top\" | \"right\" | \"bottom\" | \"left\" | \"outside\" | \"inside\"",
+          "value": "\"bottom\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
@@ -8979,6 +9016,18 @@
           "description": "Specify the kind of progress bar",
           "type": "\"default\" | \"inline\" | \"indented\"",
           "value": "\"default\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "status",
+          "kind": "let",
+          "description": "Specify the status",
+          "type": "\"active\" | \"finished\" | \"error\"",
+          "value": "\"active\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10544,6 +10593,8 @@
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        { "type": "dispatched", "name": "select", "detail": "string" },
+        { "type": "dispatched", "name": "deselect", "detail": "string" },
         { "type": "forwarded", "name": "click", "element": "label" },
         { "type": "forwarded", "name": "mouseover", "element": "label" },
         { "type": "forwarded", "name": "mouseenter", "element": "label" },
@@ -14534,9 +14585,9 @@
           "ts": "type TreeNodeId = string | number"
         },
         {
-          "type": "{ id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; children?: TreeNode[]; }",
+          "type": "{ id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; children?: TreeNode[]; }",
           "name": "TreeNode",
-          "ts": "interface TreeNode { id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; expanded?: boolean; children?: TreeNode[]; }"
+          "ts": "interface TreeNode { id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent; disabled?: boolean; children?: TreeNode[]; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "ul" }

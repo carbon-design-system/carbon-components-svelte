@@ -111,6 +111,8 @@ export interface SliderProps
    * @default null
    */
   ref?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Slider extends SvelteComponentTyped<

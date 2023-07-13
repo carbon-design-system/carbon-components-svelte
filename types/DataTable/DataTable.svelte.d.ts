@@ -176,6 +176,8 @@ export interface DataTableProps
    * @default 0
    */
   page?: number;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class DataTable extends SvelteComponentTyped<

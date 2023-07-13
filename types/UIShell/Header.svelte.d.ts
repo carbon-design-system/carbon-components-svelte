@@ -77,10 +77,12 @@ export interface HeaderProps
    * @default undefined
    */
   iconClose?: typeof import("svelte").SvelteComponent;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Header extends SvelteComponentTyped<
   HeaderProps,
   { click: WindowEventMap["click"] },
-  { default: {}; platform: {}; ["skip-to-content"]: {} }
+  { default: {}; company: {}; platform: {}; ["skip-to-content"]: {} }
 > {}

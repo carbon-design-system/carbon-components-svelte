@@ -43,3 +43,9 @@ Use the `forwardText` and `backwardText` props to customize the button text.
   forwardText="Next"
   backwardText="Previous"
 />
+
+## Tooltip Position
+
+Use the `tooltipPosition` prop to change the alignment of the tooltip.
+
+<PaginationNav tooltipPosition="outside" total={3} loop />

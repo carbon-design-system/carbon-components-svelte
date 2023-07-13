@@ -14,6 +14,8 @@ export interface BreadcrumbItemProps
    * @default false
    */
   isCurrentPage?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class BreadcrumbItem extends SvelteComponentTyped<

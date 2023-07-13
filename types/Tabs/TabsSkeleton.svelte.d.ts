@@ -14,6 +14,8 @@ export interface TabsSkeletonProps
    * @default "default"
    */
   type?: "default" | "container";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TabsSkeleton extends SvelteComponentTyped<

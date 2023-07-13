@@ -32,6 +32,8 @@ export interface CopyButtonProps
    * @default async (text) => { try { await navigator.clipboard.writeText(text); } catch (e) { console.log(e); } }
    */
   copy?: (text: string) => void;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class CopyButton extends SvelteComponentTyped<

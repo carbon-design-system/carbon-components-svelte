@@ -120,9 +120,10 @@ If an `href` value is specified, the component will render an [anchor element](h
 <Button size="xl" kind="ghost">Ghost</Button>
 <Button size="xl" kind="danger">Danger</Button>
 
-## Disabled button
+## Disabled state
 
 <Button disabled>Disabled button</Button>
+<Button disabled iconDescription="Tooltip text" icon={Add} />
 
 ## Expressive styles
 

@@ -62,11 +62,15 @@ export interface SelectableTileProps
    * @default null
    */
   ref?: null | HTMLInputElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SelectableTile extends SvelteComponentTyped<
   SelectableTileProps,
   {
+    select: CustomEvent<string>;
+    deselect: CustomEvent<string>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];

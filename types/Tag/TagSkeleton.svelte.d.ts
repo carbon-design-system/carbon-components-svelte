@@ -7,6 +7,8 @@ export interface TagSkeletonProps
    * @default "default"
    */
   size?: "sm" | "default";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TagSkeleton extends SvelteComponentTyped<

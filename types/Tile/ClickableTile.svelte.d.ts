@@ -27,6 +27,8 @@ export interface ClickableTileProps
    * @default undefined
    */
   href?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ClickableTile extends SvelteComponentTyped<

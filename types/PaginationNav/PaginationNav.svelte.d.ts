@@ -38,6 +38,14 @@ export interface PaginationNavProps
    * @default "Previous page"
    */
   backwardText?: string;
+
+  /**
+   * Set the position of the tooltip relative to the pagination buttons.
+   * @default "bottom"
+   */
+  tooltipPosition?: "top" | "right" | "bottom" | "left" | "outside" | "inside";
+
+  [key: `data-${string}`]: any;
 }
 
 export default class PaginationNav extends SvelteComponentTyped<

@@ -26,6 +26,8 @@ export interface SideNavMenuProps
    * @default null
    */
   ref?: null | HTMLButtonElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class SideNavMenu extends SvelteComponentTyped<

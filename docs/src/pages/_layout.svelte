@@ -12,10 +12,11 @@
     SideNav,
     SideNavItems,
     SideNavMenuItem,
+    Theme,
     Tag,
   } from "carbon-components-svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
-  import Theme from "../components/Theme.svelte";
+  import { theme } from "../store";
 
   const deprecated = [];
   const new_components = [];
@@ -38,7 +39,7 @@
 <!-- routify:options bundle=true -->
 <svelte:window bind:innerWidth />
 
-<Theme persist>
+<Theme persist bind:theme="{$theme}">
   <Header
     aria-label="Navigation"
     href="{$url('/')}"

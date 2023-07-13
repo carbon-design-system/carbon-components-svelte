@@ -8,6 +8,8 @@ export interface TileProps
    * @default false
    */
   light?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Tile extends SvelteComponentTyped<

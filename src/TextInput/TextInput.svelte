@@ -95,6 +95,8 @@
   };
 
   $: isFluid = !!ctx && ctx.isFluid;
+  $: error = invalid && !readonly;
+  $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
 </script>
@@ -160,29 +162,36 @@
     class:bx--text-input__field-outer-wrapper--inline="{inline}"
   >
     <div
-      data-invalid="{invalid || undefined}"
+      data-invalid="{error || undefined}"
       data-warn="{warn || undefined}"
       class:bx--text-input__field-wrapper="{true}"
       class:bx--text-input__field-wrapper--warning="{!invalid && warn}"
     >
-      {#if invalid}
-        <WarningFilled class="bx--text-input__invalid-icon" />
-      {/if}
-      {#if !invalid && warn}
-        <WarningAltFilled
-          class="bx--text-input__invalid-icon
-            bx--text-input__invalid-icon--warning"
-        />
-      {/if}
       {#if readonly}
         <EditOff class="bx--text-input__readonly-icon" />
+      {:else}
+        {#if invalid}
+          <WarningFilled class="bx--text-input__invalid-icon" />
+        {/if}
+        {#if !invalid && warn}
+          <WarningAltFilled
+            class="bx--text-input__invalid-icon
+            bx--text-input__invalid-icon--warning"
+          />
+        {/if}
       {/if}
       <input
         bind:this="{ref}"
-        data-invalid="{invalid || undefined}"
-        aria-invalid="{invalid || undefined}"
+        data-invalid="{error || undefined}"
+        aria-invalid="{error || undefined}"
         data-warn="{warn || undefined}"
-        aria-describedby="{invalid ? errorId : warn ? warnId : undefined}"
+        aria-describedby="{error
+          ? errorId
+          : warn
+          ? warnId
+          : helperText
+          ? helperId
+          : undefined}"
         disabled="{disabled}"
         id="{id}"
         name="{name}"
@@ -192,8 +201,8 @@
         readonly="{readonly}"
         class:bx--text-input="{true}"
         class:bx--text-input--light="{light}"
-        class:bx--text-input--invalid="{invalid}"
-        class:bx--text-input--warn="{warn}"
+        class:bx--text-input--invalid="{error}"
+        class:bx--text-input--warning="{warn}"
         class:bx--text-input--sm="{size === 'sm'}"
         class:bx--text-input--xl="{size === 'xl'}"
         {...$$restProps}
@@ -219,6 +228,7 @@
     </div>
     {#if !invalid && !warn && !isFluid && !inline && helperText}
       <div
+        id="{helperId}"
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
         class:bx--form__helper-text--inline="{inline}"

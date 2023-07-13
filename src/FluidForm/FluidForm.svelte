@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @restProps {form}
+   */
+
   import { setContext } from "svelte";
   import Form from "../Form/Form.svelte";
 

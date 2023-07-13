@@ -94,8 +94,10 @@
     {...$$restProps}
     on:click
   >
-    {#if company}
-      <span class:bx--header__name--prefix="{true}">{company}&nbsp;</span>
+    {#if company || $$slots.company}
+      <span class:bx--header__name--prefix="{true}"
+        ><slot name="company">{company}&nbsp;</slot></span
+      >
     {/if}
     <slot name="platform">{platformName}</slot>
   </a>

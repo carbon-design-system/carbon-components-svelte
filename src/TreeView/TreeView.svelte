@@ -1,7 +1,7 @@
 <script>
   /**
    * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: any; icon?: typeof import("svelte").SvelteComponent; disabled?: boolean; expanded?: boolean; children?: TreeNode[]; }} TreeNode
+   * @typedef {{ id: TreeNodeId; text: any; icon?: typeof import("svelte").SvelteComponent; disabled?: boolean; children?: TreeNode[]; }} TreeNode
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} select
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} toggle
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} focus
@@ -188,6 +188,7 @@
   </label>
 {/if}
 
+<!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
 <ul
   {...$$restProps}
   role="tree"

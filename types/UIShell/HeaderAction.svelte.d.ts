@@ -48,6 +48,8 @@ export interface HeaderActionProps
    * @default false
    */
   preventCloseOnClickOutside?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class HeaderAction extends SvelteComponentTyped<

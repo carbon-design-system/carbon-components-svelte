@@ -62,7 +62,7 @@
     <div
       bind:this="{ref}"
       role="button"
-      tabIndex="{disabled ? -1 : 0}"
+      tabindex="{disabled ? -1 : 0}"
       class:bx--tag__close-icon="{true}"
       on:click|preventDefault|stopPropagation="{(e) => {
         if (!disabled) {

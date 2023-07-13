@@ -45,6 +45,8 @@ export interface ImageLoaderProps
    * @default false
    */
   fadeIn?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ImageLoader extends SvelteComponentTyped<

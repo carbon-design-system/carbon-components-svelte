@@ -2,7 +2,7 @@
   import { FluidForm, TextInput, PasswordInput } from "../types";
 </script>
 
-<FluidForm>
+<FluidForm action="" method="get">
   <TextInput labelText="User name" placeholder="Enter user name..." required />
   <PasswordInput
     required

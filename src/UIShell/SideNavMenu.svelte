@@ -48,6 +48,7 @@
       <ChevronDown />
     </div>
   </button>
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     role="menu"
     class:bx--side-nav__menu="{true}"

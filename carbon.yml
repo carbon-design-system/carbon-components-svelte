@@ -212,6 +212,14 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/DatePicker
+  definition-tooltip:
+    status: stable
+    framework: svelte
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://carbon-components-svelte.onrender.com/components/TooltipDefinition
   dropdown:
     status: stable
     framework: svelte
@@ -667,14 +675,6 @@ assets:
         name: Storybook
         action: link
         url: https://carbon-components-svelte.onrender.com/components/Tooltip
-  tooltip-definition:
-    status: stable
-    framework: svelte
-    demoLinks:
-      - type: storybook
-        name: Storybook
-        action: link
-        url: https://carbon-components-svelte.onrender.com/components/TooltipDefinition
   tooltip-icon:
     name: Tootlip icon
     status: stable

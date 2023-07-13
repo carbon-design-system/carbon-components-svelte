@@ -20,6 +20,8 @@ export interface ListBoxMenuItemProps
    * @default false
    */
   disabled?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ListBoxMenuItem extends SvelteComponentTyped<

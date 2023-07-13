@@ -27,6 +27,8 @@ export interface AccordionItemProps
    * @default "Expand/Collapse"
    */
   iconDescription?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class AccordionItem extends SvelteComponentTyped<

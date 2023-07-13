@@ -8,6 +8,8 @@ export interface TextInputSkeletonProps
    * @default false
    */
   hideLabel?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class TextInputSkeleton extends SvelteComponentTyped<

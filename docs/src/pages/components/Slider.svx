@@ -9,17 +9,17 @@ components: ["Slider", "SliderSkeleton"]
 
 ## Default
 
-<Slider />
+<Slider labelText="Instances" value={0} />
 
 ## Full width
 
 Set `fullWidth` to `true` for the slider to span the full width of its containing element.
 
-<Slider fullWidth />
+<Slider labelText="Instances" fullWidth value={0} />
 
 ## Hidden text input
 
-<Slider hideTextInput />
+<Slider labelText="Instances" hideTextInput value={0} />
 
 ## Custom minimum, maximum values
 

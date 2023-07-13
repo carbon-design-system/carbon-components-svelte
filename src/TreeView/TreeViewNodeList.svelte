@@ -6,7 +6,6 @@
 
   /** @type {Array<TreeNode & { children?: TreeNode[] }>} */
   export let children = [];
-  export let expanded = false;
   export let root = false;
 
   /** @type {string | number} */
@@ -73,6 +72,7 @@
     {/if}
   {/each}
 {:else}
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <li
     bind:this="{ref}"
     role="treeitem"

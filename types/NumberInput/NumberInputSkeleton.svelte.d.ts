@@ -8,6 +8,8 @@ export interface NumberInputSkeletonProps
    * @default false
    */
   hideLabel?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class NumberInputSkeleton extends SvelteComponentTyped<

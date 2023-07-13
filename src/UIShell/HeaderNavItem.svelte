@@ -61,6 +61,6 @@
       }
     }}"
   >
-    <span class:bx--text-truncate--end="{true}">{text}</span>
+    <span class:bx--text-truncate--end="{true}"><slot>{text}</slot></span>
   </a>
 </li>

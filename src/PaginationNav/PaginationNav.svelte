@@ -23,6 +23,12 @@
   /** Specify the backward button text */
   export let backwardText = "Previous page";
 
+  /**
+   * Set the position of the tooltip relative to the pagination buttons.
+   * @type {"top" | "right" | "bottom" | "left" | "outside" | "inside"}
+   */
+  export let tooltipPosition = "bottom";
+
   import { createEventDispatcher } from "svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
@@ -76,7 +82,11 @@
       <Button
         kind="ghost"
         tooltipAlignment="center"
-        tooltipPosition="bottom"
+        tooltipPosition="{tooltipPosition === 'inside'
+          ? 'right'
+          : tooltipPosition === 'outside'
+          ? 'left'
+          : tooltipPosition}"
         iconDescription="{backwardText}"
         disabled="{!loop && page === 1}"
         icon="{CaretLeft}"
@@ -147,7 +157,11 @@
       <Button
         kind="ghost"
         tooltipAlignment="center"
-        tooltipPosition="bottom"
+        tooltipPosition="{tooltipPosition === 'inside'
+          ? 'left'
+          : tooltipPosition === 'outside'
+          ? 'right'
+          : tooltipPosition}"
         iconDescription="{forwardText}"
         disabled="{!loop && page === total}"
         icon="{CaretRight}"

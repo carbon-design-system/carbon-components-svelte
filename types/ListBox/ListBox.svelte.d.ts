@@ -56,6 +56,8 @@ export interface ListBoxProps
    * @default ""
    */
   warnText?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ListBox extends SvelteComponentTyped<

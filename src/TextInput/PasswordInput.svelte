@@ -89,6 +89,7 @@
   const ctx = getContext("Form");
 
   $: isFluid = !!ctx && ctx.isFluid;
+  $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
 </script>
@@ -122,6 +123,7 @@
     </label>
     {#if !isFluid && helperText}
       <div
+        id="{helperId}"
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
         class:bx--form__helper-text--inline="{inline}"
@@ -167,7 +169,13 @@
         bind:this="{ref}"
         data-invalid="{invalid || undefined}"
         aria-invalid="{invalid || undefined}"
-        aria-describedby="{invalid ? errorId : warn ? warnId : undefined}"
+        aria-describedby="{invalid
+          ? errorId
+          : warn
+          ? warnId
+          : helperText
+          ? helperId
+          : undefined}"
         id="{id}"
         name="{name}"
         placeholder="{placeholder}"
@@ -240,7 +248,7 @@
         {invalidText}
       </div>
     {/if}
-    {#if !invalid && !warn && !isFluid && !inline}
+    {#if !invalid && !warn && !isFluid && !inline && helperText}
       <div
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"

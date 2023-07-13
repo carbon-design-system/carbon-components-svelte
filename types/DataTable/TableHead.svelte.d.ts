@@ -2,7 +2,9 @@
 import type { SvelteComponentTyped } from "svelte";
 
 export interface TableHeadProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["thead"]> {}
+  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["thead"]> {
+  [key: `data-${string}`]: any;
+}
 
 export default class TableHead extends SvelteComponentTyped<
   TableHeadProps,

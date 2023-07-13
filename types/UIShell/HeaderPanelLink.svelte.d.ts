@@ -14,6 +14,8 @@ export interface HeaderPanelLinkProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class HeaderPanelLink extends SvelteComponentTyped<

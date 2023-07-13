@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@0.71.0.
+> 165 components exported from carbon-components-svelte@0.76.1.
 
 ## Components
 
@@ -684,6 +684,7 @@ export interface ComboBoxItem {
 | Slot name | Default | Props                                               | Fallback                          |
 | :-------- | :------ | :-------------------------------------------------- | :-------------------------------- |
 | --        | Yes     | <code>{ item: ComboBoxItem; index: number } </code> | <code>{itemToString(item)}</code> |
+| titleText | No      | --                                                  | <code>{titleText}</code>          |
 
 ### Events
 
@@ -1583,11 +1584,12 @@ None.
 
 ### Slots
 
-| Slot name       | Default | Props | Fallback                    |
-| :-------------- | :------ | :---- | :-------------------------- |
-| --              | Yes     | --    | --                          |
-| platform        | No      | --    | <code>{platformName}</code> |
-| skip-to-content | No      | --    | --                          |
+| Slot name       | Default | Props | Fallback                     |
+| :-------------- | :------ | :---- | :--------------------------- |
+| --              | Yes     | --    | --                           |
+| company         | No      | --    | <code>{company}&nbsp;</code> |
+| platform        | No      | --    | <code>{platformName}</code>  |
+| skip-to-content | No      | --    | --                           |
 
 ### Events
 
@@ -1698,7 +1700,9 @@ None.
 
 ### Slots
 
-None.
+| Slot name | Default | Props | Fallback            |
+| :-------- | :------ | :---- | :------------------ |
+| --        | Yes     | --    | <code>{text}</code> |
 
 ### Events
 
@@ -2388,6 +2392,7 @@ export interface MultiSelectItem {
 | Slot name | Default | Props                                                  | Fallback                          |
 | :-------- | :------ | :----------------------------------------------------- | :-------------------------------- |
 | --        | Yes     | <code>{ item: MultiSelectItem; index: number } </code> | <code>{itemToString(item)}</code> |
+| titleText | No      | --                                                     | <code>{titleText}</code>          |
 
 ### Events
 
@@ -2695,14 +2700,15 @@ None.
 
 ### Props
 
-| Prop name    | Required | Kind             | Reactive | Type                 | Default value                | Description                               |
-| :----------- | :------- | :--------------- | :------- | -------------------- | ---------------------------- | ----------------------------------------- |
-| page         | No       | <code>let</code> | Yes      | <code>number</code>  | <code>1</code>               | Specify the current page index            |
-| total        | No       | <code>let</code> | No       | <code>number</code>  | <code>10</code>              | Specify the total number of pages         |
-| shown        | No       | <code>let</code> | No       | <code>number</code>  | <code>10</code>              | Specify the total number of pages to show |
-| loop         | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>           | Set to `true` to loop the navigation      |
-| forwardText  | No       | <code>let</code> | No       | <code>string</code>  | <code>"Next page"</code>     | Specify the forward button text           |
-| backwardText | No       | <code>let</code> | No       | <code>string</code>  | <code>"Previous page"</code> | Specify the backward button text          |
+| Prop name       | Required | Kind             | Reactive | Type                                                                                             | Default value                | Description                                                         |
+| :-------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------- |
+| page            | No       | <code>let</code> | Yes      | <code>number</code>                                                                              | <code>1</code>               | Specify the current page index                                      |
+| total           | No       | <code>let</code> | No       | <code>number</code>                                                                              | <code>10</code>              | Specify the total number of pages                                   |
+| shown           | No       | <code>let</code> | No       | <code>number</code>                                                                              | <code>10</code>              | Specify the total number of pages to show                           |
+| loop            | No       | <code>let</code> | No       | <code>boolean</code>                                                                             | <code>false</code>           | Set to `true` to loop the navigation                                |
+| forwardText     | No       | <code>let</code> | No       | <code>string</code>                                                                              | <code>"Next page"</code>     | Specify the forward button text                                     |
+| backwardText    | No       | <code>let</code> | No       | <code>string</code>                                                                              | <code>"Previous page"</code> | Specify the backward button text                                    |
+| tooltipPosition | No       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left" &#124; "outside" &#124; "inside"</code> | <code>"bottom"</code>        | Set the position of the tooltip relative to the pagination buttons. |
 
 ### Slots
 
@@ -2820,6 +2826,7 @@ None.
 | value      | No       | <code>let</code> | No       | <code>number</code>                                      | <code>undefined</code>                           | Specify the current value                     |
 | max        | No       | <code>let</code> | No       | <code>number</code>                                      | <code>100</code>                                 | Specify the maximum value                     |
 | kind       | No       | <code>let</code> | No       | <code>"default" &#124; "inline" &#124; "indented"</code> | <code>"default"</code>                           | Specify the kind of progress bar              |
+| status     | No       | <code>let</code> | No       | <code>"active" &#124; "finished" &#124; "error"</code>   | <code>"active"</code>                            | Specify the status                            |
 | size       | No       | <code>let</code> | No       | <code>"sm" &#124; "md"</code>                            | <code>"md"</code>                                | Specify the size                              |
 | labelText  | No       | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>                                  | Specify the label text                        |
 | hideLabel  | No       | <code>let</code> | No       | <code>boolean</code>                                     | <code>false</code>                               | Set to `true` to visually hide the label text |
@@ -3272,13 +3279,15 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| select     | dispatched | <code>string</code> |
+| deselect   | dispatched | <code>string</code> |
+| click      | forwarded  | --                  |
+| mouseover  | forwarded  | --                  |
+| mouseenter | forwarded  | --                  |
+| mouseleave | forwarded  | --                  |
+| keydown    | forwarded  | --                  |
 
 ## `SideNav`
 
@@ -4662,7 +4671,6 @@ export interface TreeNode {
   text: any;
   icon?: typeof import("svelte").SvelteComponent;
   disabled?: boolean;
-  expanded?: boolean;
   children?: TreeNode[];
 }
 ```

@@ -236,6 +236,8 @@ export interface MultiSelectProps
    * @default null
    */
   highlightedId?: null | MultiSelectItemId;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class MultiSelect extends SvelteComponentTyped<
@@ -253,5 +255,5 @@ export default class MultiSelect extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     paste: DocumentAndElementEventHandlersEventMap["paste"];
   },
-  { default: { item: MultiSelectItem; index: number } }
+  { default: { item: MultiSelectItem; index: number }; titleText: {} }
 > {}

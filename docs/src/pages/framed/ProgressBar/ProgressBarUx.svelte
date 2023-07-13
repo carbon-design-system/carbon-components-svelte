@@ -3,10 +3,14 @@
 
   let max = 328;
   let value = 0;
+  let status = "active";
 
   $: helperText =
     value > 0 ? value.toFixed(0) + "MB of " + max + "MB" : "Press start";
-  $: if (value === max) helperText = "Done";
+  $: if (value === max) {
+    helperText = "Done";
+    status = "finished";
+  }
 </script>
 
 <ProgressBar
@@ -14,6 +18,7 @@
   value="{value}"
   max="{max}"
   helperText="{helperText}"
+  status="{status}"
 />
 
 <ButtonSet style="margin-top: var(--cds-spacing-08)">
@@ -37,7 +42,10 @@
   <Button
     kind="tertiary"
     disabled="{value !== max}"
-    on:click="{() => (value = 0)}"
+    on:click="{() => {
+      value = 0;
+      status = 'active';
+    }}"
   >
     Reset
   </Button>

@@ -51,6 +51,8 @@ export interface GridProps
    * @default false
    */
   padding?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Grid extends SvelteComponentTyped<

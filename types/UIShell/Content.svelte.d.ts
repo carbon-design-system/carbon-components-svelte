@@ -8,6 +8,8 @@ export interface ContentProps
    * @default "main-content"
    */
   id?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Content extends SvelteComponentTyped<

@@ -162,7 +162,7 @@
   {#if !invalid && warn}
     <div class:bx--form-requirement="{true}">{warnText}</div>
   {/if}
-  {#if helperText}
+  {#if !invalid && !warn && helperText}
     <div
       class:bx--form__helper-text="{true}"
       class:bx--form__helper-text--disabled="{disabled}"

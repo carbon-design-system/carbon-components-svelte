@@ -51,6 +51,8 @@ export interface ModalFooterProps
    * @default false
    */
   danger?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ModalFooter extends SvelteComponentTyped<

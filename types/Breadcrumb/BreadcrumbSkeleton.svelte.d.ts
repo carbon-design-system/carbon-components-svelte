@@ -14,6 +14,8 @@ export interface BreadcrumbSkeletonProps
    * @default 3
    */
   count?: number;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class BreadcrumbSkeleton extends SvelteComponentTyped<

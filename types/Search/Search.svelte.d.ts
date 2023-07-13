@@ -99,6 +99,8 @@ export interface SearchProps
    * @default null
    */
   ref?: null | HTMLInputElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Search extends SvelteComponentTyped<

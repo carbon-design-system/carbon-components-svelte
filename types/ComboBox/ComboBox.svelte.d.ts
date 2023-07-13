@@ -152,6 +152,8 @@ export interface ComboBoxProps
    * @default null
    */
   listRef?: null | HTMLDivElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ComboBox extends SvelteComponentTyped<
@@ -169,7 +171,7 @@ export default class ComboBox extends SvelteComponentTyped<
     clear: WindowEventMap["clear"];
     scroll: WindowEventMap["scroll"];
   },
-  { default: { item: ComboBoxItem; index: number } }
+  { default: { item: ComboBoxItem; index: number }; titleText: {} }
 > {
   /**
    * Clear the combo box programmatically

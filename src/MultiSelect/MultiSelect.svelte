@@ -293,14 +293,16 @@
   class:bx--list-box__wrapper--inline="{inline}"
   class:bx--multi-select__wrapper--inline--invalid="{inline && invalid}"
 >
-  {#if titleText}
+  {#if titleText || $$slots.titleText}
     <label
       for="{id}"
       class:bx--label="{true}"
       class:bx--label--disabled="{disabled}"
       class:bx--visually-hidden="{hideLabel}"
     >
+    <slot name="titleText">
       {titleText}
+    </slot>
     </label>
   {/if}
   <ListBox

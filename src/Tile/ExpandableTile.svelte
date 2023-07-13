@@ -32,10 +32,22 @@
   /** Obtain a reference to the top-level element */
   export let ref = null;
 
-  import { afterUpdate } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
 
   let refAbove = null;
+
+  onMount(() => {
+    const resizeObserver = new ResizeObserver(([elem]) => {
+      tileMaxHeight = elem.contentRect.height;
+    });
+
+    resizeObserver.observe(refAbove);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  });
 
   afterUpdate(() => {
     if (tileMaxHeight === 0) {
@@ -62,10 +74,8 @@
   class:bx--tile--expandable="{true}"
   class:bx--tile--is-expanded="{expanded}"
   class:bx--tile--light="{light}"
+  style:max-height="{expanded ? "none" : `${tileMaxHeight + tilePadding}px`}"
   {...$$restProps}
-  style="{expanded
-    ? $$restProps.style
-    : `${$$restProps.style}; max-height: ${tileMaxHeight + tilePadding}px`}"
   on:click
   on:click="{() => {
     expanded = !expanded;

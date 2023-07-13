@@ -12,7 +12,7 @@ The `Theme` component can dyanmically update the Carbon theme on the client-side
 </InlineNotification>
 
 The `all.css` StyleSheet uses [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) for dynamic theming.
-  
+
 <CodeSnippet svx-ignore {code} />
 
 ## Default

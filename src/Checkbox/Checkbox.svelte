@@ -1,5 +1,6 @@
 <script>
   /**
+   * @restProps {div}
    * @event {boolean} check
    */
 

@@ -26,6 +26,8 @@ export interface HeaderNavItemProps
    * @default null
    */
   ref?: null | HTMLAnchorElement;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class HeaderNavItem extends SvelteComponentTyped<
@@ -40,5 +42,5 @@ export default class HeaderNavItem extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  {}
+  { default: {} }
 > {}

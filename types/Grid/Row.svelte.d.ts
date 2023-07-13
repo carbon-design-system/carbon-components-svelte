@@ -45,6 +45,8 @@ export interface RowProps
    * @default false
    */
   padding?: boolean;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class Row extends SvelteComponentTyped<

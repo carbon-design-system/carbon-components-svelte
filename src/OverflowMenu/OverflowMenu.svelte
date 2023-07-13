@@ -242,6 +242,7 @@
     />
   </slot>
   {#if open}
+    <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       bind:this="{menuRef}"
       role="menu"

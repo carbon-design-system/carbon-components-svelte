@@ -22,6 +22,12 @@ export interface ProgressBarProps
   kind?: "default" | "inline" | "indented";
 
   /**
+   * Specify the status
+   * @default "active"
+   */
+  status?: "active" | "finished" | "error";
+
+  /**
    * Specify the size
    * @default "md"
    */
@@ -50,6 +56,8 @@ export interface ProgressBarProps
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;
+
+  [key: `data-${string}`]: any;
 }
 
 export default class ProgressBar extends SvelteComponentTyped<
