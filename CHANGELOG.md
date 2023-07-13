@@ -2,29 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [0.76.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.76.0...v0.76.1) (2023-07-08)
-
-
-### Bug Fixes
-
-* **date-picker:** hide `helperText` if invalid or warning state ([#1759](https://github.com/carbon-design-system/carbon-components-svelte/issues/1759)) ([d5a4a8b](https://github.com/carbon-design-system/carbon-components-svelte/commit/d5a4a8b94a8753545a54f7e43f1773e49a1ff208))
-* **select:** hide `helperText` if invalid or warning state ([#1761](https://github.com/carbon-design-system/carbon-components-svelte/issues/1761)) ([7579c03](https://github.com/carbon-design-system/carbon-components-svelte/commit/7579c032faa3f1b9ad9d42f76da876f38725141e))
-* **slider:** `disabled` Slider should not submit a form ([#1758](https://github.com/carbon-design-system/carbon-components-svelte/issues/1758)) ([ab21c89](https://github.com/carbon-design-system/carbon-components-svelte/commit/ab21c89ab9240f61bd15d8c20bad65b3b469a29c))
-* **types:** allow `data-*` attributes for props forwarded to HTML elements ([#1741](https://github.com/carbon-design-system/carbon-components-svelte/issues/1741)) ([7fdc2ef](https://github.com/carbon-design-system/carbon-components-svelte/commit/7fdc2ef7f072382842cbb6bfc8e12e083aef1a1e))
-
-### [0.76.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.75.1...v0.75.2) (2023-06-21)
-
+## [0.77.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.76.1...v0.77.0) (2023-07-13)
 
 ### Features
 
-* make `titleText` slottable in `MultiSelect`, `ComboBox` ([#1750](https://github.com/carbon-design-system/carbon-components-svelte/issues/1750)) ([0b4f19c](https://github.com/carbon-design-system/carbon-components-svelte/commit/0b4f19c87e8479f0649fa2c5dc84beb4c1a1e302)), closes [#1747](https://github.com/carbon-design-system/carbon-components-svelte/issues/1747)
+- **ui-shell:** add `preventCloseOnClickOutside` to `HeaderAction` ([#1625](https://github.com/carbon-design-system/carbon-components-svelte/issues/1625)) ([ea9b261](https://github.com/carbon-design-system/carbon-components-svelte/commit/ea9b261b60698f9314e0aae4d61025bae215cccf)), closes [#1624](https://github.com/carbon-design-system/carbon-components-svelte/issues/1624)
+- **ui-shell:** make `company` in `Header` slottable ([#1764](https://github.com/carbon-design-system/carbon-components-svelte/issues/1764)) ([9b3f014](https://github.com/carbon-design-system/carbon-components-svelte/commit/9b3f014a0ba43abb5a36be4a6156910b5d7644d7))
 
-### [0.75.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.75.0...v0.75.1) (2023-06-02)
-
+### [0.76.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.76.0...v0.76.1) (2023-07-08)
 
 ### Bug Fixes
 
-* **expandable-tile:** set tile height using resize observer ([#1738](https://github.com/carbon-design-system/carbon-components-svelte/issues/1738)) ([a369962](https://github.com/carbon-design-system/carbon-components-svelte/commit/a369962fdf96f95bbdcc2f8f9f84c5d900ec4087))
+- **date-picker:** hide `helperText` if invalid or warning state ([#1759](https://github.com/carbon-design-system/carbon-components-svelte/issues/1759)) ([d5a4a8b](https://github.com/carbon-design-system/carbon-components-svelte/commit/d5a4a8b94a8753545a54f7e43f1773e49a1ff208))
+- **select:** hide `helperText` if invalid or warning state ([#1761](https://github.com/carbon-design-system/carbon-components-svelte/issues/1761)) ([7579c03](https://github.com/carbon-design-system/carbon-components-svelte/commit/7579c032faa3f1b9ad9d42f76da876f38725141e))
+- **slider:** `disabled` Slider should not submit a form ([#1758](https://github.com/carbon-design-system/carbon-components-svelte/issues/1758)) ([ab21c89](https://github.com/carbon-design-system/carbon-components-svelte/commit/ab21c89ab9240f61bd15d8c20bad65b3b469a29c))
+- **types:** allow `data-*` attributes for props forwarded to HTML elements ([#1741](https://github.com/carbon-design-system/carbon-components-svelte/issues/1741)) ([7fdc2ef](https://github.com/carbon-design-system/carbon-components-svelte/commit/7fdc2ef7f072382842cbb6bfc8e12e083aef1a1e))
+
+### [0.76.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.75.1...v0.75.2) (2023-06-21)
+
+### Features
+
+- make `titleText` slottable in `MultiSelect`, `ComboBox` ([#1750](https://github.com/carbon-design-system/carbon-components-svelte/issues/1750)) ([0b4f19c](https://github.com/carbon-design-system/carbon-components-svelte/commit/0b4f19c87e8479f0649fa2c5dc84beb4c1a1e302)), closes [#1747](https://github.com/carbon-design-system/carbon-components-svelte/issues/1747)
+
+### [0.75.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.75.0...v0.75.1) (2023-06-02)
+
+### Bug Fixes
+
+- **expandable-tile:** set tile height using resize observer ([#1738](https://github.com/carbon-design-system/carbon-components-svelte/issues/1738)) ([a369962](https://github.com/carbon-design-system/carbon-components-svelte/commit/a369962fdf96f95bbdcc2f8f9f84c5d900ec4087))
 
 ### [0.75.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.74.0...v0.74.1) (2023-05-21)
 
