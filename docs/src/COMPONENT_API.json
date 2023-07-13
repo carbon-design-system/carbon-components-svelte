@@ -4834,6 +4834,12 @@
       "slots": [
         { "name": "__default__", "default": true, "slot_props": "{}" },
         {
+          "name": "company",
+          "default": false,
+          "fallback": "{company}&nbsp;",
+          "slot_props": "{}"
+        },
+        {
           "name": "platform",
           "default": false,
           "fallback": "{platformName}",

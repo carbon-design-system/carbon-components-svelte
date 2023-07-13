@@ -1584,11 +1584,12 @@ None.
 
 ### Slots
 
-| Slot name       | Default | Props | Fallback                    |
-| :-------------- | :------ | :---- | :-------------------------- |
-| --              | Yes     | --    | --                          |
-| platform        | No      | --    | <code>{platformName}</code> |
-| skip-to-content | No      | --    | --                          |
+| Slot name       | Default | Props | Fallback                     |
+| :-------------- | :------ | :---- | :--------------------------- |
+| --              | Yes     | --    | --                           |
+| company         | No      | --    | <code>{company}&nbsp;</code> |
+| platform        | No      | --    | <code>{platformName}</code>  |
+| skip-to-content | No      | --    | --                           |
 
 ### Events
 
