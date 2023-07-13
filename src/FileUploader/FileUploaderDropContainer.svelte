@@ -54,6 +54,7 @@
   let over = false;
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--file="{true}"
   {...$$restProps}
@@ -82,6 +83,7 @@
   }}"
 >
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
     for="{id}"
     tabindex="{tabindex}"

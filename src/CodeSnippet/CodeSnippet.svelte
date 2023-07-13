@@ -200,6 +200,7 @@
     </button>
   {/if}
 {:else}
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class:bx--snippet="{true}"
     class:bx--snippet--expand="{expanded}"
