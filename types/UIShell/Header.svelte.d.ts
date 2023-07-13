@@ -28,7 +28,8 @@ export interface HeaderProps
   href?: string;
 
   /**
-   * Specify the company name
+   * Specify the company name.
+   * Alternatively, use the named slot "company" (e.g., `<span slot="company">...</span>`)
    * @default undefined
    */
   company?: string;
