@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.78.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.77.0...v0.78.0) (2023-07-19)
+
+### ⚠ BREAKING CHANGES
+
+- **typescript:** minimum Svelte version for TypeScript users is 3.55
+
+### Features
+
+- **typescript:** support svelte 4 ([#1773](https://github.com/carbon-design-system/carbon-components-svelte/issues/1773)) ([2f026f7](https://github.com/carbon-design-system/carbon-components-svelte/commit/2f026f792ad94f468b890a6d5ab36cc2642dacf2)), closes [#1753](https://github.com/carbon-design-system/carbon-components-svelte/issues/1753)
+
 ## [0.77.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.76.1...v0.77.0) (2023-07-13)
 
 ### Features
