@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface UnorderedListProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
+type RestProps = SvelteHTMLElements["ul"];
+
+export interface UnorderedListProps extends RestProps {
   /**
    * Set to `true` to use the nested variant
    * @default false

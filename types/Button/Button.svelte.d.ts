@@ -1,12 +1,13 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
+
 import type { ButtonSkeletonProps } from "./ButtonSkeleton.svelte";
 
-export interface ButtonProps
-  extends ButtonSkeletonProps,
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]>,
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]>,
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["button"] &
+  SvelteHTMLElements["a"] &
+  SvelteHTMLElements["div"];
+
+export interface ButtonProps extends ButtonSkeletonProps, RestProps {
   /**
    * Specify the kind of button
    * @default "primary"
@@ -42,7 +43,7 @@ export interface ButtonProps
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the ARIA label for the button icon

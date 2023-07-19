@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ProgressBarProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface ProgressBarProps extends RestProps {
   /**
    * Specify the current value
    * @default undefined
@@ -62,6 +63,6 @@ export interface ProgressBarProps
 
 export default class ProgressBar extends SvelteComponentTyped<
   ProgressBarProps,
-  {},
+  Record<string, any>,
   { labelText: {} }
 > {}

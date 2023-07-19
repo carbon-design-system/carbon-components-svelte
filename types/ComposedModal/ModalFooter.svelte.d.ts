@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ModalFooterProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface ModalFooterProps extends RestProps {
   /**
    * Specify the primary button text
    * @default ""
@@ -13,7 +14,7 @@ export interface ModalFooterProps
    * Specify the primary button icon
    * @default undefined
    */
-  primaryButtonIcon?: typeof import("svelte").SvelteComponent;
+  primaryButtonIcon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Set to `true` to disable the primary button

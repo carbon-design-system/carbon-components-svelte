@@ -1,4 +1,3 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
 
 export interface TooltipFooterProps {
@@ -11,6 +10,6 @@ export interface TooltipFooterProps {
 
 export default class TooltipFooter extends SvelteComponentTyped<
   TooltipFooterProps,
-  {},
+  Record<string, any>,
   { default: {} }
 > {}

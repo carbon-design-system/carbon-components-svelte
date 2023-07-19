@@ -1,10 +1,11 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
 export type ListBoxFieldTranslationId = "close" | "open";
 
-export interface ListBoxFieldProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface ListBoxFieldProps extends RestProps {
   /**
    * Set to `true` to disable the list box field
    * @default false

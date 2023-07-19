@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ContextMenuProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
+type RestProps = SvelteHTMLElements["ul"];
+
+export interface ContextMenuProps extends RestProps {
   /**
    * Specify an element or list of elements to trigger the context menu.
    * If no element is specified, the context menu applies to the entire window

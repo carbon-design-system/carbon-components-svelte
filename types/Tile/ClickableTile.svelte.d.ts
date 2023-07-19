@@ -1,9 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ClickableTileProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]>,
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["p"]> {
+type RestProps = SvelteHTMLElements["a"] & SvelteHTMLElements["p"];
+
+export interface ClickableTileProps extends RestProps {
   /**
    * Set to `true` to click the tile
    * @default false

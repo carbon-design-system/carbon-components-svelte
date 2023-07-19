@@ -1,4 +1,3 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
 
 export interface NotificationIconProps {
@@ -29,6 +28,6 @@ export interface NotificationIconProps {
 
 export default class NotificationIcon extends SvelteComponentTyped<
   NotificationIconProps,
-  {},
+  Record<string, any>,
   {}
 > {}

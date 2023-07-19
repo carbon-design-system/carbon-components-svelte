@@ -1,4 +1,3 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
 import type { BreadcrumbSkeletonProps } from "./BreadcrumbSkeleton.svelte";
 

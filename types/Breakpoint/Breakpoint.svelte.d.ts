@@ -1,4 +1,3 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
 
 export type BreakpointSize = "sm" | "md" | "lg" | "xlg" | "max";

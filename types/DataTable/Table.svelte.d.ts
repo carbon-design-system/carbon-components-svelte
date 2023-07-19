@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TableProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["section"]> {
+type RestProps = SvelteHTMLElements["section"];
+
+export interface TableProps extends RestProps {
   /**
    * Set the size of the table
    * @default undefined
@@ -44,6 +45,6 @@ export interface TableProps
 
 export default class Table extends SvelteComponentTyped<
   TableProps,
-  {},
+  Record<string, any>,
   { default: {} }
 > {}

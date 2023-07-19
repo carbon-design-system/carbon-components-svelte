@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface OverflowMenuItemProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+type RestProps = SvelteHTMLElements["li"];
+
+export interface OverflowMenuItemProps extends RestProps {
   /**
    * Specify the item text
    * Alternatively, use the default slot for a custom element

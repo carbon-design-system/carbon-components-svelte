@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ContextMenuOptionProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+type RestProps = SvelteHTMLElements["li"];
+
+export interface ContextMenuOptionProps extends RestProps {
   /**
    * Specify the kind of option
    * @default "default"
@@ -26,7 +27,7 @@ export interface ContextMenuOptionProps
    * Icon is rendered to the left of the label text
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the label text

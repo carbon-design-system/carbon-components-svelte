@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface RowProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface RowProps extends RestProps {
   /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g., <Row let:props><section {...props}>...</section></Row>)
@@ -51,6 +52,6 @@ export interface RowProps
 
 export default class Row extends SvelteComponentTyped<
   RowProps,
-  {},
+  Record<string, any>,
   { default: { props: { class: string; [key: string]: any } } }
 > {}

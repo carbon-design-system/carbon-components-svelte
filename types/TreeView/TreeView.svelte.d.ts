@@ -1,18 +1,19 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
 export type TreeNodeId = string | number;
 
 export interface TreeNode {
   id: TreeNodeId;
   text: any;
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
   disabled?: boolean;
   children?: TreeNode[];
 }
 
-export interface TreeViewProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
+type RestProps = SvelteHTMLElements["ul"];
+
+export interface TreeViewProps extends RestProps {
   /**
    * Provide an array of children nodes to render
    * @default []

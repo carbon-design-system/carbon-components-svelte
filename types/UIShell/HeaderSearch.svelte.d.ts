@@ -1,5 +1,5 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
 export interface HeaderSearchResult {
   href: string;
@@ -7,8 +7,9 @@ export interface HeaderSearchResult {
   description?: string;
 }
 
-export interface HeaderSearchProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
+type RestProps = SvelteHTMLElements["input"];
+
+export interface HeaderSearchProps extends RestProps {
   /**
    * Specify the search input value
    * @default ""

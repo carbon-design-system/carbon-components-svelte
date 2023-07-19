@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface FormGroupProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["fieldset"]> {
+type RestProps = SvelteHTMLElements["fieldset"];
+
+export interface FormGroupProps extends RestProps {
   /**
    * Set to `true` for to remove the bottom margin
    * @default false

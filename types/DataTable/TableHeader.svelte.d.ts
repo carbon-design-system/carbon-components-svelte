@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TableHeaderProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["th"]> {
+type RestProps = SvelteHTMLElements["th"];
+
+export interface TableHeaderProps extends RestProps {
   /**
    * Set to `true` for the sortable variant
    * @default false

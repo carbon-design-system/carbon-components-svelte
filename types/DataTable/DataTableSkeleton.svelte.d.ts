@@ -1,10 +1,11 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
+
 import type { DataTableHeader } from "./DataTable.svelte";
 
-export interface DataTableSkeletonProps
-  extends DataTableHeader,
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface DataTableSkeletonProps extends DataTableHeader, RestProps {
   /**
    * Specify the number of columns
    * Superseded by `headers` if `headers` is a non-empty array

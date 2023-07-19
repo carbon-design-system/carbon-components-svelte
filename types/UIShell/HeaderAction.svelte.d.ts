@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface HeaderActionProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
+type RestProps = SvelteHTMLElements["button"];
+
+export interface HeaderActionProps extends RestProps {
   /**
    * Set to `true` to open the panel
    * @default false
@@ -14,14 +15,14 @@ export interface HeaderActionProps
    * Defaults to `<Switcher size={20} />`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the icon to render when the action panel is open.
    * Defaults to `<Close size={20} />`
    * @default undefined
    */
-  closeIcon?: typeof import("svelte").SvelteComponent;
+  closeIcon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the text

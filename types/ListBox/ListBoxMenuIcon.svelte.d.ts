@@ -1,10 +1,11 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
 export type ListBoxMenuIconTranslationId = "close" | "open";
 
-export interface ListBoxMenuIconProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface ListBoxMenuIconProps extends RestProps {
   /**
    * Set to `true` to open the list box menu icon
    * @default false

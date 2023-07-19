@@ -1,4 +1,3 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
 
 export interface SelectItemProps {
@@ -29,6 +28,6 @@ export interface SelectItemProps {
 
 export default class SelectItem extends SvelteComponentTyped<
   SelectItemProps,
-  {},
+  Record<string, any>,
   {}
 > {}

@@ -1,9 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface LinkProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]>,
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["p"]> {
+type RestProps = SvelteHTMLElements["a"] & SvelteHTMLElements["p"];
+
+export interface LinkProps extends RestProps {
   /**
    * Specify the size of the link
    * @default undefined
@@ -27,7 +27,7 @@ export interface LinkProps
    * `inline` must be `false`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Set to `true` to disable the checkbox

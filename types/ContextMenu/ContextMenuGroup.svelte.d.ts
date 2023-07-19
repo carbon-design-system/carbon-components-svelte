@@ -1,4 +1,3 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
 
 export interface ContextMenuGroupProps {
@@ -16,6 +15,6 @@ export interface ContextMenuGroupProps {
 
 export default class ContextMenuGroup extends SvelteComponentTyped<
   ContextMenuGroupProps,
-  {},
+  Record<string, any>,
   { default: {} }
 > {}

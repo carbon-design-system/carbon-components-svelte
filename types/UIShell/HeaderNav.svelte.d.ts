@@ -1,13 +1,14 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface HeaderNavProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["nav"]> {
+type RestProps = SvelteHTMLElements["nav"];
+
+export interface HeaderNavProps extends RestProps {
   [key: `data-${string}`]: any;
 }
 
 export default class HeaderNav extends SvelteComponentTyped<
   HeaderNavProps,
-  {},
+  Record<string, any>,
   { default: {} }
 > {}
