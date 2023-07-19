@@ -56,7 +56,7 @@
   /**
    * Specify the icon to render.
    * Defaults to `<Search />`
-   * @type {typeof import("svelte").SvelteComponent}
+   * @type {typeof import("svelte").SvelteComponent<any>}
    */
   export let icon = IconSearch;
 

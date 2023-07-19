@@ -50,14 +50,14 @@
   /**
    * Specify the icon to render for the closed state.
    * Defaults to `<Menu size={20} />`
-   * @type {typeof import("svelte").SvelteComponent}
+   * @type {typeof import("svelte").SvelteComponent<any>}
    */
   export let iconMenu = Menu;
 
   /**
    * Specify the icon to render for the opened state.
    * Defaults to `<Close size={20} />`
-   * @type {typeof import("svelte").SvelteComponent}
+   * @type {typeof import("svelte").SvelteComponent<any>}
    */
   export let iconClose = Close;
 

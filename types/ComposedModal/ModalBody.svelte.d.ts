@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ModalBodyProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface ModalBodyProps extends RestProps {
   /**
    * Set to `true` if the modal contains form elements
    * @default false
@@ -20,6 +21,6 @@ export interface ModalBodyProps
 
 export default class ModalBody extends SvelteComponentTyped<
   ModalBodyProps,
-  {},
+  Record<string, any>,
   { default: {} }
 > {}

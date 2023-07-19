@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface AccordionItemProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+type RestProps = SvelteHTMLElements["li"];
+
+export interface AccordionItemProps extends RestProps {
   /**
    * Specify the title of the accordion item heading
    * Alternatively, use the "title" slot (e.g., <div slot="title">...</div>)

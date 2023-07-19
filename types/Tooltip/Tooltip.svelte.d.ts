@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TooltipProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface TooltipProps extends RestProps {
   /**
    * Set the alignment of the tooltip relative to the icon
    * @default "center"
@@ -32,7 +33,7 @@ export interface TooltipProps
    * Default to `<Information />`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the ARIA label for the tooltip button

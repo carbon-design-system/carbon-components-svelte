@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface StructuredListRowProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["label"]> {
+type RestProps = SvelteHTMLElements["label"];
+
+export interface StructuredListRowProps extends RestProps {
   /**
    * Set to `true` to use as a header
    * @default false

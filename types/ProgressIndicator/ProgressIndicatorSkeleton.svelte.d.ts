@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ProgressIndicatorSkeletonProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
+type RestProps = SvelteHTMLElements["ul"];
+
+export interface ProgressIndicatorSkeletonProps extends RestProps {
   /**
    * Set to `true` to use the vertical variant
    * @default false

@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TruncateProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["p"]> {
+type RestProps = SvelteHTMLElements["p"];
+
+export interface TruncateProps extends RestProps {
   /**
    * @default "end"
    */
@@ -13,6 +14,6 @@ export interface TruncateProps
 
 export default class Truncate extends SvelteComponentTyped<
   TruncateProps,
-  {},
+  Record<string, any>,
   { default: {} }
 > {}

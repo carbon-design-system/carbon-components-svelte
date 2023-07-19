@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TableContainerProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface TableContainerProps extends RestProps {
   /**
    * Specify the title of the data table
    * @default ""
@@ -32,6 +33,6 @@ export interface TableContainerProps
 
 export default class TableContainer extends SvelteComponentTyped<
   TableContainerProps,
-  {},
+  Record<string, any>,
   { default: {} }
 > {}

@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TooltipIconProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["button"]> {
+type RestProps = SvelteHTMLElements["button"];
+
+export interface TooltipIconProps extends RestProps {
   /**
    * Specify the tooltip text.
    * Alternatively, use the "tooltipText" slot
@@ -14,7 +15,7 @@ export interface TooltipIconProps
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Set to `true` to disable the tooltip icon

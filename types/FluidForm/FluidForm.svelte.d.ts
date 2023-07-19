@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface FluidFormProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["form"]> {
+type RestProps = SvelteHTMLElements["form"];
+
+export interface FluidFormProps extends RestProps {
   [key: `data-${string}`]: any;
 }
 

@@ -1,5 +1,5 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
 export type ColumnSize = boolean | number;
 
@@ -10,8 +10,9 @@ export interface ColumnSizeDescriptor {
 
 export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 
-export interface ColumnProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface ColumnProps extends RestProps {
   /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g., <Column let:props><article {...props}>...</article></Column>)
@@ -84,6 +85,6 @@ export interface ColumnProps
 
 export default class Column extends SvelteComponentTyped<
   ColumnProps,
-  {},
+  Record<string, any>,
   { default: { props: { class: string; [key: string]: any } } }
 > {}

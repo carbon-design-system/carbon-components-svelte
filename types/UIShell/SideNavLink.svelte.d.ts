@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface SideNavLinkProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+type RestProps = SvelteHTMLElements["a"];
+
+export interface SideNavLinkProps extends RestProps {
   /**
    * Set to `true` to select the current link
    * @default false
@@ -25,7 +26,7 @@ export interface SideNavLinkProps
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Obtain a reference to the HTML anchor element

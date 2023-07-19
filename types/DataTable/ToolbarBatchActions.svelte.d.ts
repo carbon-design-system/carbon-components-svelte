@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ToolbarBatchActionsProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface ToolbarBatchActionsProps extends RestProps {
   /**
    * Override the total items selected text
    * @default (totalSelected) => `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`

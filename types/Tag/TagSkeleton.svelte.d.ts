@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TagSkeletonProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
+type RestProps = SvelteHTMLElements["span"];
+
+export interface TagSkeletonProps extends RestProps {
   /**
    * @default "default"
    */

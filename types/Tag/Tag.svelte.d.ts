@@ -1,9 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TagProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]>,
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["span"]> {
+type RestProps = SvelteHTMLElements["div"] & SvelteHTMLElements["span"];
+
+export interface TagProps extends RestProps {
   /**
    * Specify the type of tag
    * @default undefined
@@ -61,7 +61,7 @@ export interface TagProps
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Set an id for the filterable tag

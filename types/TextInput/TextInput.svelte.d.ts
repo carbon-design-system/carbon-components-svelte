@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TextInputProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
+type RestProps = SvelteHTMLElements["input"];
+
+export interface TextInputProps extends RestProps {
   /**
    * Set the size of the input
    * @default undefined

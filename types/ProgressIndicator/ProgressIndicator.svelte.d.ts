@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ProgressIndicatorProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]> {
+type RestProps = SvelteHTMLElements["ul"];
+
+export interface ProgressIndicatorProps extends RestProps {
   /**
    * Specify the current step index
    * @default 0

@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ImageLoaderProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["img"]> {
+type RestProps = SvelteHTMLElements["img"];
+
+export interface ImageLoaderProps extends RestProps {
   /**
    * Specify the image source
    * @default ""

@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface SideNavMenuItemProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+type RestProps = SvelteHTMLElements["a"];
+
+export interface SideNavMenuItemProps extends RestProps {
   /**
    * Set to `true` to select the item
    * @default false

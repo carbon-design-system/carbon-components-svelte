@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface HeaderActionLinkProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+type RestProps = SvelteHTMLElements["a"];
+
+export interface HeaderActionLinkProps extends RestProps {
   /**
    * Set to `true` to use the active state
    * @default false
@@ -19,7 +20,7 @@ export interface HeaderActionLinkProps
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent;
+  icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Obtain a reference to the HTML anchor element
@@ -32,6 +33,6 @@ export interface HeaderActionLinkProps
 
 export default class HeaderActionLink extends SvelteComponentTyped<
   HeaderActionLinkProps,
-  {},
+  Record<string, any>,
   { icon: {} }
 > {}

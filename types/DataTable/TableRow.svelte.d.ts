@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TableRowProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["tr"]> {
+type RestProps = SvelteHTMLElements["tr"];
+
+export interface TableRowProps extends RestProps {
   [key: `data-${string}`]: any;
 }
 

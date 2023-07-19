@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ButtonSetProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface ButtonSetProps extends RestProps {
   /**
    * Set to `true` to stack the buttons vertically
    * @default false
@@ -14,6 +15,6 @@ export interface ButtonSetProps
 
 export default class ButtonSet extends SvelteComponentTyped<
   ButtonSetProps,
-  {},
+  Record<string, any>,
   { default: {} }
 > {}

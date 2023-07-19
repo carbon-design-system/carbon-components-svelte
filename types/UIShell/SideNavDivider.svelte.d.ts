@@ -1,13 +1,14 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface SideNavDividerProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+type RestProps = SvelteHTMLElements["li"];
+
+export interface SideNavDividerProps extends RestProps {
   [key: `data-${string}`]: any;
 }
 
 export default class SideNavDivider extends SvelteComponentTyped<
   SideNavDividerProps,
-  {},
+  Record<string, any>,
   {}
 > {}

@@ -10,7 +10,7 @@
 
   /**
    * Specify the icon to render
-   * @type {typeof import("svelte").SvelteComponent}
+   * @type {typeof import("svelte").SvelteComponent<any>}
    */
   export let icon = undefined;
 

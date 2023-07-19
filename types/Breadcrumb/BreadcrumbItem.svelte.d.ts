@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface BreadcrumbItemProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["li"]> {
+type RestProps = SvelteHTMLElements["li"];
+
+export interface BreadcrumbItemProps extends RestProps {
   /**
    * Set the `href` to use an anchor link
    * @default undefined

@@ -1,5 +1,5 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
 export type ComboBoxItemId = any;
 
@@ -9,8 +9,9 @@ export interface ComboBoxItem {
   disabled?: boolean;
 }
 
-export interface ComboBoxProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["input"]> {
+type RestProps = SvelteHTMLElements["input"];
+
+export interface ComboBoxProps extends RestProps {
   /**
    * Set the combobox items
    * @default []

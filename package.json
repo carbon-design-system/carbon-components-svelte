@@ -29,7 +29,7 @@
     "@tsconfig/svelte": "^4.0.1",
     "autoprefixer": "^10.4.8",
     "carbon-components": "10.57.0",
-    "carbon-icons-svelte": "^11.2.0",
+    "carbon-icons-svelte": "^12.1.0",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
@@ -39,8 +39,8 @@
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
     "sveld": "^0.18.1",
-    "svelte": "^3.58.0",
-    "svelte-check": "^3.4.3",
+    "svelte": "^4.1.0",
+    "svelte-check": "^3.4.6",
     "typescript": "^4.7.4"
   },
   "standard-version": {

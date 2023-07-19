@@ -1,4 +1,3 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
 
 export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";

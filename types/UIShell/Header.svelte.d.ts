@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface HeaderProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["a"]> {
+type RestProps = SvelteHTMLElements["a"];
+
+export interface HeaderProps extends RestProps {
   /**
    * Set to `false` to hide the side nav by default
    * @default true
@@ -70,14 +71,14 @@ export interface HeaderProps
    * Defaults to `<Menu size={20} />`
    * @default undefined
    */
-  iconMenu?: typeof import("svelte").SvelteComponent;
+  iconMenu?: typeof import("svelte").SvelteComponent<any>;
 
   /**
    * Specify the icon to render for the opened state.
    * Defaults to `<Close size={20} />`
    * @default undefined
    */
-  iconClose?: typeof import("svelte").SvelteComponent;
+  iconClose?: typeof import("svelte").SvelteComponent<any>;
 
   [key: `data-${string}`]: any;
 }

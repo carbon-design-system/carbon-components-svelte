@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TabContentProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface TabContentProps extends RestProps {
   /**
    * Set an id for the top-level element
    * @default "ccs-" + Math.random().toString(36)
@@ -14,6 +15,6 @@ export interface TabContentProps
 
 export default class TabContent extends SvelteComponentTyped<
   TabContentProps,
-  {},
+  Record<string, any>,
   { default: {} }
 > {}

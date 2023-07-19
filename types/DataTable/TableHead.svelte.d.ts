@@ -1,8 +1,9 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface TableHeadProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["thead"]> {
+type RestProps = SvelteHTMLElements["thead"];
+
+export interface TableHeadProps extends RestProps {
   [key: `data-${string}`]: any;
 }
 

@@ -1,5 +1,5 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
 export interface RecursiveListNode {
   text?: string;
@@ -7,9 +7,9 @@ export interface RecursiveListNode {
   html?: string;
 }
 
-export interface RecursiveListProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ul"]>,
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["ol"]> {
+type RestProps = SvelteHTMLElements["ul"] & SvelteHTMLElements["ol"];
+
+export interface RecursiveListProps extends RestProps {
   /**
    * Specify the children to render
    * @default []
@@ -27,6 +27,6 @@ export interface RecursiveListProps
 
 export default class RecursiveList extends SvelteComponentTyped<
   RecursiveListProps,
-  {},
+  Record<string, any>,
   {}
 > {}

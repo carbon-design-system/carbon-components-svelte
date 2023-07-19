@@ -1,5 +1,5 @@
-/// <reference types="svelte" />
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
 export type DataTableKey = string;
 
@@ -40,8 +40,9 @@ export interface DataTableCell {
   display?: (item: Value) => DataTableValue;
 }
 
-export interface DataTableProps
-  extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap["div"]> {
+type RestProps = SvelteHTMLElements["div"];
+
+export interface DataTableProps extends RestProps {
   /**
    * Specify the data table headers
    * @default []
