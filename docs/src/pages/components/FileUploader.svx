@@ -11,9 +11,15 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
 
 By default, the file uploader only accepts one file.
 
-Set `multiple` to `true` for multiple files to be uploaded.
+Set `multiple` to `true` for multiple files to be accepted.
 
 <FileUploaderButton labelText="Add files" />
+
+## Custom button kind
+
+By default, the `primary` button kind is used.
+
+<FileUploaderButton kind="secondary" labelText="Add files" />
 
 ## File uploader
 

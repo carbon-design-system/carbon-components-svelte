@@ -74,6 +74,8 @@
   class:bx--btn--tertiary="{kind === 'tertiary'}"
   class:bx--btn--ghost="{kind === 'ghost'}"
   class:bx--btn--danger="{kind === 'danger'}"
+  class:bx--btn--danger-tertiary="{kind === 'danger-tertiary'}"
+  class:bx--btn--danger-ghost="{kind === 'danger-ghost'}"
   on:keydown
   on:keydown="{({ key }) => {
     if (key === ' ' || key === 'Enter') {
