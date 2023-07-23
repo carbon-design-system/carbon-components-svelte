@@ -2102,10 +2102,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-sveld@^0.18.1:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.18.1.tgz#3357c632732f6bab3fde26dc78ef2d3e706b74e5"
-  integrity sha512-GiVTHdCKbd2abil/oKNeB/tR8wRnvfCElsJ9I04JwVYbdioR6fx4VYb9GKO4X5KXciExyOdgSm551+0MqBCDmA==
+sveld@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.19.0.tgz#81815e54e6d5d2e945cce29f1b6df1d7099858c2"
+  integrity sha512-DXg0/wXdn0a6qukUoRLtHbCgSERw5xklY5FRl7EGn+Qn7/4n3gQtXdX1ZoaWWuQtF4n17P5cz8+Hc+6mUHz2pA==
   dependencies:
     "@rollup/plugin-node-resolve" "^13.2.1"
     acorn "^8.8.0"
@@ -2114,7 +2114,7 @@ sveld@^0.18.1:
     prettier "^2.6.2"
     rollup "^2.70.2"
     rollup-plugin-svelte "^7.1.0"
-    svelte "^3.52.0"
+    svelte "^4.0.5"
     svelte-preprocess "^4.10.6"
     typescript "^4.8.4"
 
@@ -2155,10 +2155,24 @@ svelte-preprocess@^5.0.4:
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
 
-svelte@^3.52.0:
-  version "3.54.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.54.0.tgz#b4bcd865bd9e927f9f7b76563288ef5f4d72867a"
-  integrity sha512-tdrgeJU0hob0ZWAMoKXkhcxXA7dpTg6lZGxUeko5YqvPdJBiyRspGsCwV27kIrbrqPP2WUoSV9ca0gnLlw8YzQ==
+svelte@^4.0.5:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-4.1.1.tgz#468ed0377d3cae542b35df8a22a3ca188d93272a"
+  integrity sha512-Enick5fPFISLoVy0MFK45cG+YlQt6upw8skEK9zzTpJnH1DqEv8xOZwizCGSo3Q6HZ7KrZTM0J18poF7aQg5zw==
+  dependencies:
+    "@ampproject/remapping" "^2.2.1"
+    "@jridgewell/sourcemap-codec" "^1.4.15"
+    "@jridgewell/trace-mapping" "^0.3.18"
+    acorn "^8.9.0"
+    aria-query "^5.3.0"
+    axobject-query "^3.2.1"
+    code-red "^1.0.3"
+    css-tree "^2.3.1"
+    estree-walker "^3.0.3"
+    is-reference "^3.0.1"
+    locate-character "^3.0.0"
+    magic-string "^0.30.0"
+    periscopic "^3.1.0"
 
 svelte@^4.1.0:
   version "4.1.0"
