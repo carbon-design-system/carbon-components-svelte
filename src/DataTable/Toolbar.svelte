@@ -27,8 +27,8 @@
   class:bx--table-toolbar="{true}"
   class:bx--table-toolbar--small="{size === 'sm'}"
   class:bx--table-toolbar--normal="{size === 'default'}"
+  style:z-index="{1}"
   {...$$restProps}
-  style="z-index: 1; {$$restProps.style}"
 >
   <slot />
 </section>

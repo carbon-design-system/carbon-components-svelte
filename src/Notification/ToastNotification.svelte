@@ -89,8 +89,8 @@
     class:bx--toast-notification--success="{kind === 'success'}"
     class:bx--toast-notification--warning="{kind === 'warning'}"
     class:bx--toast-notification--warning-alt="{kind === 'warning-alt'}"
+    style:width="{fullWidth ? "100%" : undefined}"
     {...$$restProps}
-    style="{fullWidth && 'width: 100%;'}{$$restProps.style}"
     on:click
     on:mouseover
     on:mouseenter

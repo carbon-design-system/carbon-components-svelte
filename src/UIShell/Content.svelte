@@ -17,8 +17,8 @@
 <main
   id="{id}"
   class:bx--content="{true}"
+  style:margin-left="{unsetLeftMargin ? 0 : undefined}"
   {...$$restProps}
-  style="{unsetLeftMargin ? 'margin-left: 0;' : ''} {$$restProps.style}"
 >
   <slot />
 </main>

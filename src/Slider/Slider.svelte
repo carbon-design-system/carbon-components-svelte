@@ -157,10 +157,7 @@
       {labelText}
     </slot>
   </label>
-  <div
-    class:bx--slider-container="{true}"
-    style="{fullWidth ? 'width: 100%' : undefined}"
-  >
+  <div class:bx--slider-container="{true}" style:width="{fullWidth && "100%"}">
     <span class:bx--slider__range-label="{true}">{minLabel || min}</span>
     <div
       bind:this="{ref}"
@@ -168,7 +165,7 @@
       tabindex="-1"
       class:bx--slider="{true}"
       class:bx--slider--disabled="{disabled}"
-      style="{fullWidth ? 'max-width: none' : undefined}"
+      style:max-width="{fullWidth ? "none" : undefined}"
       on:mousedown="{startDragging}"
       on:mousedown="{startHolding}"
       on:touchstart="{startHolding}"
@@ -189,7 +186,7 @@
         role="slider"
         tabindex="0"
         class:bx--slider__thumb="{true}"
-        style="left: {left}%"
+        style:left="{left}%"
         aria-valuemax="{max}"
         aria-valuemin="{min}"
         aria-valuenow="{value}"
@@ -199,7 +196,7 @@
       <div bind:this="{trackRef}" class:bx--slider__track="{true}"></div>
       <div
         class:bx--slider__filled-track="{true}"
-        style="transform: translate(0, -50%) scaleX({left / 100})"
+        style:transform="translate(0, -50%) scaleX({left / 100})"
       ></div>
     </div>
     <span class:bx--slider__range-label="{true}">{maxLabel || max}</span>

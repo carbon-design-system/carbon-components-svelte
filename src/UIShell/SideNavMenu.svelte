@@ -52,7 +52,7 @@
   <ul
     role="menu"
     class:bx--side-nav__menu="{true}"
-    style="{expanded && 'max-height: none'}"
+    style:max-height="{expanded ? "none" : undefined}"
   >
     <slot />
   </ul>

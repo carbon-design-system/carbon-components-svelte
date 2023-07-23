@@ -74,8 +74,8 @@
     href="{href}"
     class:bx--header__menu-item="{true}"
     class:bx--header__menu-title="{true}"
+    style:z-index="{1}"
     {...$$restProps}
-    style="{$$restProps.style}; z-index: 1"
     on:keydown
     on:keydown="{(e) => {
       if (e.key === ' ') e.preventDefault();

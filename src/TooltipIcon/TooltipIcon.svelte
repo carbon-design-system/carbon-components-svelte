@@ -57,8 +57,8 @@
   class:bx--tooltip--align-start="{align === 'start'}"
   class:bx--tooltip--align-center="{align === 'center'}"
   class:bx--tooltip--align-end="{align === 'end'}"
+  style:cursor="{disabled ? "not-allowed" : "default"}"
   {...$$restProps}
-  style="cursor: {disabled ? 'not-allowed' : 'default'}; {$$restProps.style}"
   on:click
   on:mouseover
   on:mouseenter

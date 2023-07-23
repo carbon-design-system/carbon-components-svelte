@@ -47,8 +47,8 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item="{true}"
+  style:user-select="none"
   {...$$restProps}
-  style="{$$restProps['style']}; user-select: none"
   on:click
   on:mouseover
   on:mouseenter
@@ -90,7 +90,7 @@
     </span>
     <span
       class:bx--toggle__switch="{true}"
-      style="{hideLabel && 'margin-top: 0'}"
+      style:margin-top="{hideLabel ? 0 : undefined}"
     >
       <span aria-hidden="true" class:bx--toggle__text--off="{true}">
         <slot name="labelA">

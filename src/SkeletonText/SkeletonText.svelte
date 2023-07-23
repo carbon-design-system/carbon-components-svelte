@@ -34,7 +34,7 @@
       <p
         class:bx--skeleton__text="{true}"
         class:bx--skeleton__heading="{heading}"
-        style="width: {width}"
+        style:width="{width}"
       ></p>
     {/each}
   </div>
@@ -43,8 +43,8 @@
   <p
     class:bx--skeleton__text="{true}"
     class:bx--skeleton__heading="{heading}"
+    style:width="{width}"
     {...$$restProps}
-    style="width: {width};{$$restProps.style}"
     on:click
     on:mouseover
     on:mouseenter

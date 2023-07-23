@@ -67,7 +67,7 @@
     id="{id}"
     href="{href}"
     class:bx--tabs__nav-link="{true}"
-    style="{$useAutoWidth ? 'width: auto' : undefined}"
+    style:width="{$useAutoWidth ? "auto" : undefined}"
   >
     <slot>{label}</slot>
   </a>
