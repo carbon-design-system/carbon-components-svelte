@@ -5549,7 +5549,7 @@
         {
           "name": "iconDescription",
           "kind": "let",
-          "description": "Specify the ARIA label for the loading icon",
+          "description": "Specify a description for the loading icon.\nDefaults to the `status` prop for the \"error\" and \"finished\" states",
           "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -6334,21 +6334,9 @@
         {
           "name": "description",
           "kind": "let",
-          "description": "Specify the label description",
+          "description": "Specify the description to describe the loading state",
           "type": "string",
-          "value": "\"Active loading indicator\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "id",
-          "kind": "let",
-          "description": "Set an id for the label element",
-          "type": "string",
-          "value": "\"ccs-\" + Math.random().toString(36)",
+          "value": "\"loading\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,

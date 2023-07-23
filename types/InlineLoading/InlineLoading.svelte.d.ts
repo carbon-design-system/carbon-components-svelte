@@ -17,7 +17,8 @@ export interface InlineLoadingProps extends RestProps {
   description?: string;
 
   /**
-   * Specify the ARIA label for the loading icon
+   * Specify a description for the loading icon.
+   * Defaults to the `status` prop for the "error" and "finished" states
    * @default undefined
    */
   iconDescription?: string;

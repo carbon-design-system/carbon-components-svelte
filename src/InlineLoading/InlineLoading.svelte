@@ -12,7 +12,8 @@
   export let description = undefined;
 
   /**
-   * Specify the ARIA label for the loading icon
+   * Specify a description for the loading icon.
+   * Defaults to the `status` prop for the "error" and "finished" states
    * @type {string}
    */
   export let iconDescription = undefined;
@@ -59,12 +60,12 @@
     {#if status === "error"}
       <ErrorFilled
         class="bx--inline-loading--error"
-        title="{iconDescription}"
+        title="{iconDescription || status}"
       />
     {:else if status === "finished"}
       <CheckmarkFilled
         class="bx--inline-loading__checkmark-container"
-        title="{iconDescription}"
+        title="{iconDescription || status}"
       />
     {:else if status === "inactive" || status === "active"}
       <Loading

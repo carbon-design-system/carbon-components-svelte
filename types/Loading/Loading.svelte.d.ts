@@ -23,16 +23,10 @@ export interface LoadingProps extends RestProps {
   withOverlay?: boolean;
 
   /**
-   * Specify the label description
-   * @default "Active loading indicator"
+   * Specify the description to describe the loading state
+   * @default "loading"
    */
   description?: string;
-
-  /**
-   * Set an id for the label element
-   * @default "ccs-" + Math.random().toString(36)
-   */
-  id?: string;
 
   [key: `data-${string}`]: any;
 }

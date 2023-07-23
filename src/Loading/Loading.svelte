@@ -8,11 +8,8 @@
   /** Set to `false` to disable the overlay */
   export let withOverlay = true;
 
-  /** Specify the label description */
-  export let description = "Active loading indicator";
-
-  /** Set an id for the label element */
-  export let id = "ccs-" + Math.random().toString(36);
+  /** Specify the description to describe the loading state */
+  export let description = "loading";
 
   $: spinnerRadius = small ? "42" : "44";
 </script>
@@ -25,14 +22,11 @@
   >
     <div
       aria-atomic="true"
-      aria-labelledby="{id}"
       aria-live="{active ? 'assertive' : 'off'}"
       class:bx--loading="{true}"
       class:bx--loading--small="{small}"
       class:bx--loading--stop="{!active}"
     >
-      <!-- svelte-ignore a11y-label-has-associated-control -->
-      <label class:bx--visually-hidden="{true}" id="{id}">{description}</label>
       <svg class:bx--loading__svg="{true}" viewBox="0 0 100 100">
         <title>{description}</title>
         {#if small}
@@ -53,15 +47,12 @@
 {:else}
   <div
     aria-atomic="true"
-    aria-labelledby="{id}"
     aria-live="{active ? 'assertive' : 'off'}"
     class:bx--loading="{true}"
     class:bx--loading--small="{small}"
     class:bx--loading--stop="{!active}"
     {...$$restProps}
   >
-    <!-- svelte-ignore a11y-label-has-associated-control -->
-    <label class:bx--visually-hidden="{true}" id="{id}">{description}</label>
     <svg class:bx--loading__svg="{true}" viewBox="0 0 100 100">
       <title>{description}</title>
       {#if small}
