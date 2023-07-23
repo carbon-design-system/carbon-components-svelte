@@ -52,7 +52,7 @@ export interface FileUploaderProps extends RestProps {
    * Specify the kind of file uploader button
    * @default "primary"
    */
-  kind?: "primary" | "secondary" | "tertiary" | "ghost" | "danger";
+  kind?: import("../Button/Button.svelte").ButtonProps["kind"];
 
   /**
    * Specify the button label

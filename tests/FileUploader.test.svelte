@@ -20,6 +20,7 @@
 </script>
 
 <FileUploaderButton
+  kind="tertiary"
   labelText="Add files"
   on:change="{(e) => {
     console.log(e.detail); // File[]
@@ -27,6 +28,7 @@
 />
 
 <FileUploader
+  kind="danger-ghost"
   bind:this="{fileUploader}"
   multiple
   labelTitle="Upload files"
