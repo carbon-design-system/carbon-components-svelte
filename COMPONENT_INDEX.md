@@ -1895,12 +1895,12 @@ None.
 
 ### Props
 
-| Prop name       | Required | Kind             | Reactive | Type                                                                     | Default value          | Description                                                       |
-| :-------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------ | ---------------------- | ----------------------------------------------------------------- |
-| status          | No       | <code>let</code> | No       | <code>"active" &#124; "inactive" &#124; "finished" &#124; "error"</code> | <code>"active"</code>  | Set the loading status                                            |
-| description     | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Set the loading description                                       |
-| iconDescription | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Specify the ARIA label for the loading icon                       |
-| successDelay    | No       | <code>let</code> | No       | <code>number</code>                                                      | <code>1500</code>      | Specify the timeout delay (ms) after `status` is set to "success" |
+| Prop name       | Required | Kind             | Reactive | Type                                                                     | Default value          | Description                                                                                                          |
+| :-------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| status          | No       | <code>let</code> | No       | <code>"active" &#124; "inactive" &#124; "finished" &#124; "error"</code> | <code>"active"</code>  | Set the loading status                                                                                               |
+| description     | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Set the loading description                                                                                          |
+| iconDescription | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Specify a description for the loading icon.<br />Defaults to the `status` prop for the "error" and "finished" states |
+| successDelay    | No       | <code>let</code> | No       | <code>number</code>                                                      | <code>1500</code>      | Specify the timeout delay (ms) after `status` is set to "success"                                                    |
 
 ### Slots
 
@@ -2172,13 +2172,12 @@ None.
 
 ### Props
 
-| Prop name   | Required | Kind             | Reactive | Type                 | Default value                                    | Description                                |
-| :---------- | :------- | :--------------- | :------- | -------------------- | ------------------------------------------------ | ------------------------------------------ |
-| small       | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to use the small variant     |
-| active      | No       | <code>let</code> | No       | <code>boolean</code> | <code>true</code>                                | Set to `false` to disable the active state |
-| withOverlay | No       | <code>let</code> | No       | <code>boolean</code> | <code>true</code>                                | Set to `false` to disable the overlay      |
-| description | No       | <code>let</code> | No       | <code>string</code>  | <code>"Active loading indicator"</code>          | Specify the label description              |
-| id          | No       | <code>let</code> | No       | <code>string</code>  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the label element            |
+| Prop name   | Required | Kind             | Reactive | Type                 | Default value          | Description                                           |
+| :---------- | :------- | :--------------- | :------- | -------------------- | ---------------------- | ----------------------------------------------------- |
+| small       | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to use the small variant                |
+| active      | No       | <code>let</code> | No       | <code>boolean</code> | <code>true</code>      | Set to `false` to disable the active state            |
+| withOverlay | No       | <code>let</code> | No       | <code>boolean</code> | <code>true</code>      | Set to `false` to disable the overlay                 |
+| description | No       | <code>let</code> | No       | <code>string</code>  | <code>"loading"</code> | Specify the description to describe the loading state |
 
 ### Slots
 
