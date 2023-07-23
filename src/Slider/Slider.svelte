@@ -47,8 +47,14 @@
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  /** Specify the label text */
+  /**
+   * Specify the label text.
+   * Alternatively, use the "labelText" slot (e.g., <span slot="labelText">...</span>)
+   */
   export let labelText = "";
+
+  /** Set to `true` to visually hide the label text */
+  export let hideLabel = false;
 
   /** Set a name for the slider element */
   export let name = "";
@@ -140,18 +146,17 @@
   on:mouseenter
   on:mouseleave
 >
-  {#if labelText || $$slots.labelText}
-    <label
-      for="{id}"
-      id="{labelId}"
-      class:bx--label="{true}"
-      class:bx--label--disabled="{disabled}"
-    >
-      <slot name="labelText">
-        {labelText}
-      </slot>
-    </label>
-  {/if}
+  <label
+    for="{id}"
+    id="{labelId}"
+    class:bx--label="{true}"
+    class:bx--label--disabled="{disabled}"
+    class:bx--visually-hidden="{hideLabel}"
+  >
+    <slot name="labelText">
+      {labelText}
+    </slot>
+  </label>
   <div
     class:bx--slider-container="{true}"
     style="{fullWidth ? 'width: 100%' : undefined}"

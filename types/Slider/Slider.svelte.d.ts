@@ -96,10 +96,17 @@ export interface SliderProps extends RestProps {
   invalid?: boolean;
 
   /**
-   * Specify the label text
+   * Specify the label text.
+   * Alternatively, use the "labelText" slot (e.g., <span slot="labelText">...</span>)
    * @default ""
    */
   labelText?: string;
+
+  /**
+   * Set to `true` to visually hide the label text
+   * @default false
+   */
+  hideLabel?: boolean;
 
   /**
    * Set a name for the slider element
