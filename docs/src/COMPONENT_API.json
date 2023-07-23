@@ -91,7 +91,7 @@
         {
           "name": "title",
           "kind": "let",
-          "description": "Specify the title of the accordion item heading\nAlternatively, use the \"title\" slot (e.g., <div slot=\"title\">...</div>)",
+          "description": "Specify the title of the accordion item heading.\nAlternatively, use the \"title\" slot (e.g., `<div slot=\"title\">...</div>`)",
           "type": "string",
           "value": "\"title\"",
           "isFunction": false,
@@ -1024,7 +1024,7 @@
         {
           "name": "code",
           "kind": "let",
-          "description": "Set the code snippet text\nAlternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)\nYou must use the `code` prop to copy the code",
+          "description": "Set the code snippet text.\nAlternatively, use the default slot (e.g., `<CodeSnippet>{code}</CodeSnippet>`).\n\nNOTE: you *must* use the `code` prop for the copy-to-clipboard functionality.",
           "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -1035,7 +1035,7 @@
         {
           "name": "copy",
           "kind": "let",
-          "description": "Override the default copy behavior of using the navigator.clipboard.writeText API to copy text",
+          "description": "By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.\n\nProvide a custom function to override this behavior.",
           "type": "(code: string) => void",
           "value": "async (code) => {     try {       await navigator.clipboard.writeText(code);     } catch (e) {       console.log(e);     }   }",
           "isFunction": true,
@@ -1071,7 +1071,7 @@
         {
           "name": "disabled",
           "kind": "let",
-          "description": "Set to `true` for the disabled variant\nOnly applies to the \"single\", \"multi\" types",
+          "description": "Set to `true` for the disabled variant.\nOnly applies to the \"single\", \"multi\" types",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -1083,7 +1083,7 @@
         {
           "name": "wrapText",
           "kind": "let",
-          "description": "Set to `true` to wrap the text\nNote that `type` must be \"multi\"",
+          "description": "Set to `true` to wrap the text.\n\nNOTE: this prop only works with the `type=\"multi\"` variant",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -1165,7 +1165,7 @@
         {
           "name": "showLessText",
           "kind": "let",
-          "description": "Specify the show less text\n`type` must be \"multi\"",
+          "description": "Specify the show less text.\n\nNOTE: this prop only works with the `type=\"multi\"` variant",
           "type": "string",
           "value": "\"Show less\"",
           "isFunction": false,
@@ -1177,7 +1177,7 @@
         {
           "name": "showMoreText",
           "kind": "let",
-          "description": "Specify the show more text\n`type` must be \"multi\"",
+          "description": "Specify the show more text\n\nNOTE: this prop only works with the `type=\"multi\"` variant",
           "type": "string",
           "value": "\"Show more\"",
           "isFunction": false,
@@ -2127,7 +2127,7 @@
         {
           "name": "labelText",
           "kind": "let",
-          "description": "Specify the label text\nAlternatively, use the \"labelText\" slot (e.g., <span slot=\"labelText\">...</span>)",
+          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot (e.g., `<span slot=\"labelText\">...</span>`)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -2163,7 +2163,7 @@
         {
           "name": "shortcutText",
           "kind": "let",
-          "description": "Specify the shortcut text\nAlternatively, use the \"shortcutText\" slot (e.g., <span slot=\"shortcutText\">...</span>)",
+          "description": "Specify the shortcut text.\nAlternatively, use the \"shortcutText\" slot (e.g., `<span slot=\"shortcutText\">...</span>`)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -4905,7 +4905,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text\nAlternatively, use the named slot \"text\" (e.g., <div slot=\"text\">...</div>)",
+          "description": "Specify the text.\nAlternatively, use the named slot \"text\" (e.g., `<div slot=\"text\">...</div>`)",
           "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -8141,7 +8141,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the item text\nAlternatively, use the default slot for a custom element",
+          "description": "Specify the item text.\nAlternatively, use the default slot",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
@@ -11228,7 +11228,7 @@
         {
           "name": "labelText",
           "kind": "let",
-          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot (e.g., <span slot=\"labelText\">...</span>)",
+          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot (e.g., `<span slot=\"labelText\">...</span>`)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -11626,7 +11626,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the switch text\nAlternatively, use the \"text\" slot  (e.g., <span slot=\"text\">...</span>)",
+          "description": "Specify the switch text.\nAlternatively, use the \"text\" slot  (e.g., `<span slot=\"text\">...</span>`)",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
@@ -11710,7 +11710,7 @@
         {
           "name": "label",
           "kind": "let",
-          "description": "Specify the tab label\nAlternatively, use the default slot (e.g., <Tab><span>Label</span></Tab>)",
+          "description": "Specify the tab label.\nAlternatively, use the default slot (e.g., `<Tab><span>Label</span></Tab>`)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,

@@ -97,7 +97,7 @@ export interface SliderProps extends RestProps {
 
   /**
    * Specify the label text.
-   * Alternatively, use the "labelText" slot (e.g., <span slot="labelText">...</span>)
+   * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
    * @default ""
    */
   labelText?: string;

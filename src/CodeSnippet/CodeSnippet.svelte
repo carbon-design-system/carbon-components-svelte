@@ -12,15 +12,18 @@
   export let type = "single";
 
   /**
-   * Set the code snippet text
-   * Alternatively, use the default slot (e.g., <CodeSnippet>{`code`}</CodeSnippet>)
-   * You must use the `code` prop to copy the code
+   * Set the code snippet text.
+   * Alternatively, use the default slot (e.g., `<CodeSnippet>{code}</CodeSnippet>`).
+   *
+   * NOTE: you *must* use the `code` prop for the copy-to-clipboard functionality.
    * @type {string}
    */
   export let code = undefined;
 
   /**
-   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
+   * By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.
+   *
+   * Provide a custom function to override this behavior.
    * @type {(code: string) => void}
    */
   export let copy = async (code) => {
@@ -38,14 +41,15 @@
   export let hideCopyButton = false;
 
   /**
-   * Set to `true` for the disabled variant
+   * Set to `true` for the disabled variant.
    * Only applies to the "single", "multi" types
    */
   export let disabled = false;
 
   /**
-   * Set to `true` to wrap the text
-   * Note that `type` must be "multi"
+   * Set to `true` to wrap the text.
+   *
+   * NOTE: this prop only works with the `type="multi"` variant
    */
   export let wrapText = false;
 
@@ -74,14 +78,16 @@
   export let feedbackTimeout = 2000;
 
   /**
-   * Specify the show less text
-   * `type` must be "multi"
+   * Specify the show less text.
+   *
+   * NOTE: this prop only works with the `type="multi"` variant
    */
   export let showLessText = "Show less";
 
   /**
    * Specify the show more text
-   * `type` must be "multi"
+   *
+   * NOTE: this prop only works with the `type="multi"` variant
    */
   export let showMoreText = "Show more";
 

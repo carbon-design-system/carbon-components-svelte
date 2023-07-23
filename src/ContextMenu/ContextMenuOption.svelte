@@ -19,8 +19,8 @@
   export let icon = undefined;
 
   /**
-   * Specify the label text
-   * Alternatively, use the "labelText" slot (e.g., <span slot="labelText">...</span>)
+   * Specify the label text.
+   * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
    */
   export let labelText = "";
 
@@ -34,8 +34,8 @@
   export let selectable = false;
 
   /**
-   * Specify the shortcut text
-   * Alternatively, use the "shortcutText" slot (e.g., <span slot="shortcutText">...</span>)
+   * Specify the shortcut text.
+   * Alternatively, use the "shortcutText" slot (e.g., `<span slot="shortcutText">...</span>`)
    */
   export let shortcutText = "";
 
