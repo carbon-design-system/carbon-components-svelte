@@ -51,7 +51,7 @@
 
   /**
    * Specify the kind of file uploader button
-   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger"}
+   * @type {import("../Button/Button.svelte").ButtonProps["kind"]}
    */
   export let kind = "primary";
 
