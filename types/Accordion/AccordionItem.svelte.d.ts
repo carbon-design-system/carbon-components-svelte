@@ -5,8 +5,8 @@ type RestProps = SvelteHTMLElements["li"];
 
 export interface AccordionItemProps extends RestProps {
   /**
-   * Specify the title of the accordion item heading
-   * Alternatively, use the "title" slot (e.g., <div slot="title">...</div>)
+   * Specify the title of the accordion item heading.
+   * Alternatively, use the "title" slot (e.g., `<div slot="title">...</div>`)
    * @default "title"
    */
   title?: string;

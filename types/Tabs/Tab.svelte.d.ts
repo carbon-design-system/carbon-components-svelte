@@ -5,8 +5,8 @@ type RestProps = SvelteHTMLElements["li"];
 
 export interface TabProps extends RestProps {
   /**
-   * Specify the tab label
-   * Alternatively, use the default slot (e.g., <Tab><span>Label</span></Tab>)
+   * Specify the tab label.
+   * Alternatively, use the default slot (e.g., `<Tab><span>Label</span></Tab>`)
    * @default ""
    */
   label?: string;

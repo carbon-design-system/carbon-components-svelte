@@ -25,8 +25,8 @@ export interface HeaderActionProps extends RestProps {
   closeIcon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
-   * Specify the text
-   * Alternatively, use the named slot "text" (e.g., <div slot="text">...</div>)
+   * Specify the text.
+   * Alternatively, use the named slot "text" (e.g., `<div slot="text">...</div>`)
    * @default undefined
    */
   text?: string;

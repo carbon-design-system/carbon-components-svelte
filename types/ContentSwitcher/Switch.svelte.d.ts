@@ -5,8 +5,8 @@ type RestProps = SvelteHTMLElements["button"];
 
 export interface SwitchProps extends RestProps {
   /**
-   * Specify the switch text
-   * Alternatively, use the "text" slot  (e.g., <span slot="text">...</span>)
+   * Specify the switch text.
+   * Alternatively, use the "text" slot  (e.g., `<span slot="text">...</span>`)
    * @default "Provide text"
    */
   text?: string;

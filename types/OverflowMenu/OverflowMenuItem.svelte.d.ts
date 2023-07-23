@@ -5,8 +5,8 @@ type RestProps = SvelteHTMLElements["li"];
 
 export interface OverflowMenuItemProps extends RestProps {
   /**
-   * Specify the item text
-   * Alternatively, use the default slot for a custom element
+   * Specify the item text.
+   * Alternatively, use the default slot
    * @default "Provide text"
    */
   text?: string;

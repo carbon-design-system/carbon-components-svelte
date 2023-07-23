@@ -22,8 +22,8 @@
   export let closeIcon = Close;
 
   /**
-   * Specify the text
-   * Alternatively, use the named slot "text" (e.g., <div slot="text">...</div>)
+   * Specify the text.
+   * Alternatively, use the named slot "text" (e.g., `<div slot="text">...</div>`)
    * @type {string}
    */
   export let text = undefined;

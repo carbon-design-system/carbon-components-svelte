@@ -30,8 +30,8 @@ export interface ContextMenuOptionProps extends RestProps {
   icon?: typeof import("svelte").SvelteComponent<any>;
 
   /**
-   * Specify the label text
-   * Alternatively, use the "labelText" slot (e.g., <span slot="labelText">...</span>)
+   * Specify the label text.
+   * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
    * @default ""
    */
   labelText?: string;
@@ -50,8 +50,8 @@ export interface ContextMenuOptionProps extends RestProps {
   selectable?: boolean;
 
   /**
-   * Specify the shortcut text
-   * Alternatively, use the "shortcutText" slot (e.g., <span slot="shortcutText">...</span>)
+   * Specify the shortcut text.
+   * Alternatively, use the "shortcutText" slot (e.g., `<span slot="shortcutText">...</span>`)
    * @default ""
    */
   shortcutText?: string;

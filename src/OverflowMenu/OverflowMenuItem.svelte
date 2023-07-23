@@ -1,7 +1,7 @@
 <script>
   /**
-   * Specify the item text
-   * Alternatively, use the default slot for a custom element
+   * Specify the item text.
+   * Alternatively, use the default slot
    */
   export let text = "Provide text";
 
