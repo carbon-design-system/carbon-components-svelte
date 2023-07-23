@@ -3795,9 +3795,9 @@
           "reactive": false
         },
         {
-          "name": "labelDescription",
+          "name": "labelTitle",
           "kind": "let",
-          "description": "Specify the label description",
+          "description": "Specify the label title.\nAlternatively, use the named slot \"labelTitle\" (e.g., `<span slot=\"labelTitle\">...</span>`)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -3807,9 +3807,9 @@
           "reactive": false
         },
         {
-          "name": "labelTitle",
+          "name": "labelDescription",
           "kind": "let",
-          "description": "Specify the label title",
+          "description": "Specify the label description.\nAlternatively, use the named slot \"labelDescription\" (e.g., `<span slot=\"labelDescription\">...</span>`)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -3868,7 +3868,20 @@
         }
       ],
       "moduleExports": [],
-      "slots": [],
+      "slots": [
+        {
+          "name": "labelDescription",
+          "default": false,
+          "fallback": "{labelDescription}",
+          "slot_props": "{}"
+        },
+        {
+          "name": "labelTitle",
+          "default": false,
+          "fallback": "{labelTitle}",
+          "slot_props": "{}"
+        }
+      ],
       "events": [
         {
           "type": "dispatched",
