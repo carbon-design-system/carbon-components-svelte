@@ -35,16 +35,18 @@ export interface FileUploaderProps extends RestProps {
   multiple?: boolean;
 
   /**
-   * Specify the label description
-   * @default ""
-   */
-  labelDescription?: string;
-
-  /**
-   * Specify the label title
+   * Specify the label title.
+   * Alternatively, use the named slot "labelTitle" (e.g., `<span slot="labelTitle">...</span>`)
    * @default ""
    */
   labelTitle?: string;
+
+  /**
+   * Specify the label description.
+   * Alternatively, use the named slot "labelDescription" (e.g., `<span slot="labelDescription">...</span>`)
+   * @default ""
+   */
+  labelDescription?: string;
 
   /**
    * Specify the kind of file uploader button
@@ -85,7 +87,7 @@ export default class FileUploader extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     keydown: WindowEventMap["keydown"];
   },
-  {}
+  { labelDescription: {}; labelTitle: {} }
 > {
   /**
    * Programmatically clear the uploaded files

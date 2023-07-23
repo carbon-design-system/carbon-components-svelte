@@ -37,11 +37,17 @@
     files = [];
   };
 
-  /** Specify the label description */
-  export let labelDescription = "";
-
-  /** Specify the label title */
+  /**
+   * Specify the label title.
+   * Alternatively, use the named slot "labelTitle" (e.g., `<span slot="labelTitle">...</span>`)
+   */
   export let labelTitle = "";
+
+  /**
+   * Specify the label description.
+   * Alternatively, use the named slot "labelDescription" (e.g., `<span slot="labelDescription">...</span>`)
+   */
+  export let labelDescription = "";
 
   /**
    * Specify the kind of file uploader button
@@ -103,20 +109,24 @@
   on:mouseenter
   on:mouseleave
 >
-  {#if labelTitle}
+  {#if labelTitle || $$slots.labelTitle}
     <p
       class:bx--file--label="{true}"
       class:bx--label-description--disabled="{disabled}"
     >
-      {labelTitle}
+      <slot name="labelTitle">
+        {labelTitle}
+      </slot>
     </p>
   {/if}
-  {#if labelDescription}
+  {#if labelDescription || $$slots.labelDescription}
     <p
       class:bx--label-description="{true}"
       class:bx--label-description--disabled="{disabled}"
     >
-      {labelDescription}
+      <slot name="labelDescription">
+        {labelDescription}
+      </slot>
     </p>
   {/if}
   <FileUploaderButton
