@@ -103,18 +103,22 @@
   on:mouseenter
   on:mouseleave
 >
-  <p
-    class:bx--file--label="{true}"
-    class:bx--label-description--disabled="{disabled}"
-  >
-    {labelTitle}
-  </p>
-  <p
-    class:bx--label-description="{true}"
-    class:bx--label-description--disabled="{disabled}"
-  >
-    {labelDescription}
-  </p>
+  {#if labelTitle}
+    <p
+      class:bx--file--label="{true}"
+      class:bx--label-description--disabled="{disabled}"
+    >
+      {labelTitle}
+    </p>
+  {/if}
+  {#if labelDescription}
+    <p
+      class:bx--label-description="{true}"
+      class:bx--label-description--disabled="{disabled}"
+    >
+      {labelDescription}
+    </p>
+  {/if}
   <FileUploaderButton
     disabled="{disabled}"
     disableLabelChanges
