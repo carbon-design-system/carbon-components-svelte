@@ -3831,6 +3831,18 @@
           "reactive": false
         },
         {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the size of the file uploader button",
+          "type": "import(\"../Button/Button.svelte\").ButtonProps[\"size\"]",
+          "value": "\"small\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "buttonLabel",
           "kind": "let",
           "description": "Specify the button label",
@@ -3977,6 +3989,18 @@
           "description": "Specify the kind of file uploader button",
           "type": "import(\"../Button/Button.svelte\").ButtonProps[\"kind\"]",
           "value": "\"primary\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the size of the file uploader button",
+          "type": "import(\"../Button/Button.svelte\").ButtonProps[\"size\"]",
+          "value": "\"small\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,

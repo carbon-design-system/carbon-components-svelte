@@ -55,6 +55,12 @@ export interface FileUploaderProps extends RestProps {
   kind?: import("../Button/Button.svelte").ButtonProps["kind"];
 
   /**
+   * Specify the size of the file uploader button
+   * @default "small"
+   */
+  size?: import("../Button/Button.svelte").ButtonProps["size"];
+
+  /**
    * Specify the button label
    * @default ""
    */
