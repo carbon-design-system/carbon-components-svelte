@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.79.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.78.0...v0.79.0) (2023-07-24)
+
+### ⚠ BREAKING CHANGES
+
+- **loading:** remove `id` prop from `Loading` (#1783)
+
+### Features
+
+- **file-uploader-button:** support `danger-tertiary`, `danger-ghost` button variants ([#1784](https://github.com/carbon-design-system/carbon-components-svelte/issues/1784)) ([709322c](https://github.com/carbon-design-system/carbon-components-svelte/commit/709322c2819e3123ade4a13e3fd7d05035154d6b))
+- **file-uploader:** add `size` prop to `FileUploaderButton` ([#1786](https://github.com/carbon-design-system/carbon-components-svelte/issues/1786)) ([51c281d](https://github.com/carbon-design-system/carbon-components-svelte/commit/51c281de4a29b99e61952959a8cbfdba0b49e786))
+- **file-uploader:** make `labelTitle`, `labelDescription` slottable ([#1780](https://github.com/carbon-design-system/carbon-components-svelte/issues/1780)) ([239f1b1](https://github.com/carbon-design-system/carbon-components-svelte/commit/239f1b10e562507f66e3cd318084ed1de30f0c25))
+- **slider:** add `hideLabel` prop ([#1777](https://github.com/carbon-design-system/carbon-components-svelte/issues/1777)) ([baff07e](https://github.com/carbon-design-system/carbon-components-svelte/commit/baff07e012b43e1a24b2e574a57509f711a463f6)), closes [#1682](https://github.com/carbon-design-system/carbon-components-svelte/issues/1682)
+
+### Bug Fixes
+
+- **file-uploader:** do not render empty element if `labelTitle`, `labelDescription` not provided ([#1778](https://github.com/carbon-design-system/carbon-components-svelte/issues/1778)) ([7ef8b73](https://github.com/carbon-design-system/carbon-components-svelte/commit/7ef8b73252709130c8e269b83b2936e1631c96fa)), closes [#1775](https://github.com/carbon-design-system/carbon-components-svelte/issues/1775)
+- **loading:** remove redundant `description` label ([#1783](https://github.com/carbon-design-system/carbon-components-svelte/issues/1783)) ([d6804b4](https://github.com/carbon-design-system/carbon-components-svelte/commit/d6804b44fea0d4fc23574e63e7d4c64fa18e8f42)), closes [#1670](https://github.com/carbon-design-system/carbon-components-svelte/issues/1670)
+- **types:** correctly type `kind` prop in `FileUploader`, `FileUploaderButton` ([#1781](https://github.com/carbon-design-system/carbon-components-svelte/issues/1781)) ([a7443c2](https://github.com/carbon-design-system/carbon-components-svelte/commit/a7443c2dca396f79e06fed695374c0a15bda14ed))
+- **types:** improve formatting of prop comments ([#1779](https://github.com/carbon-design-system/carbon-components-svelte/issues/1779)) ([be76370](https://github.com/carbon-design-system/carbon-components-svelte/commit/be763706ca7ab0182bc0f8171e74043ccbadf461))
+
 ## [0.78.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.77.0...v0.78.0) (2023-07-19)
 
 ### ⚠ BREAKING CHANGES
