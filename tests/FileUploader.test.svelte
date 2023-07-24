@@ -21,6 +21,7 @@
 
 <FileUploaderButton
   kind="tertiary"
+  size="xl"
   labelText="Add files"
   on:change="{(e) => {
     console.log(e.detail); // File[]
@@ -29,6 +30,7 @@
 
 <FileUploader
   kind="danger-ghost"
+  size="lg"
   bind:this="{fileUploader}"
   multiple
   labelTitle="Upload files"

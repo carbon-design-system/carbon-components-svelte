@@ -55,6 +55,12 @@
    */
   export let kind = "primary";
 
+  /**
+   * Specify the size of the file uploader button
+   * @type {import("../Button/Button.svelte").ButtonProps["size"]}
+   */
+  export let size = "small";
+
   /** Specify the button label */
   export let buttonLabel = "";
 
@@ -137,6 +143,7 @@
     name="{name}"
     multiple="{multiple}"
     kind="{kind}"
+    size="{size}"
     on:change
     on:change="{(e) => {
       files = e.detail;

@@ -13,13 +13,22 @@ By default, the file uploader only accepts one file.
 
 Set `multiple` to `true` for multiple files to be accepted.
 
-<FileUploaderButton labelText="Add files" />
+<FileUploaderButton labelText="Add file" />
 
-## Custom button kind
+## Multiple files
 
-By default, the `primary` button kind is used.
+<FileUploaderButton multiple labelText="Add files" />
 
-<FileUploaderButton kind="secondary" labelText="Add files" />
+## Custom button kind, size
+
+By default, the `primary` small button kind is used.
+
+Use the `kind` and `size` props to customize the button.
+
+<FileUploaderButton kind="secondary" size="field" />
+<FileUploaderButton kind="tertiary" size="default" />
+<FileUploaderButton kind="danger" size="lg" />
+<FileUploaderButton kind="danger-tertiary" size="xl" />
 
 ## File uploader
 

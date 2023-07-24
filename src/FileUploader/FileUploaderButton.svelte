@@ -30,6 +30,12 @@
    */
   export let kind = "primary";
 
+  /**
+   * Specify the size of the file uploader button
+   * @type {import("../Button/Button.svelte").ButtonProps["size"]}
+   */
+  export let size = "small";
+
   /** Specify the label text */
   export let labelText = "Add file";
 
@@ -67,7 +73,6 @@
   for="{id}"
   tabindex="{disabled ? '-1' : tabindex}"
   class:bx--btn="{true}"
-  class:bx--btn--sm="{true}"
   class:bx--btn--disabled="{disabled}"
   class:bx--btn--primary="{kind === 'primary'}"
   class:bx--btn--secondary="{kind === 'secondary'}"
@@ -76,6 +81,10 @@
   class:bx--btn--danger="{kind === 'danger'}"
   class:bx--btn--danger-tertiary="{kind === 'danger-tertiary'}"
   class:bx--btn--danger-ghost="{kind === 'danger-ghost'}"
+  class:bx--btn--sm="{size === 'small'}"
+  class:bx--btn--field="{size === 'field'}"
+  class:bx--btn--lg="{size === 'lg'}"
+  class:bx--btn--xl="{size === 'xl'}"
   on:keydown
   on:keydown="{({ key }) => {
     if (key === ' ' || key === 'Enter') {
