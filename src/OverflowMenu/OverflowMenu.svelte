@@ -55,6 +55,9 @@
   /** Obtain a reference to the overflow menu element */
   export let menuRef = null;
 
+  /** Persist the open state when click the items */
+  export let persistentClickItems = true;
+
   import {
     createEventDispatcher,
     getContext,
@@ -202,8 +205,11 @@
   class:bx--overflow-menu--xl="{size === 'xl'}"
   {...$$restProps}
   on:click
-  on:click="{({ target }) => {
-    if (!(menuRef && menuRef.contains(target))) {
+  on:click="{(e) => {
+    if (persistentClickItems) {
+      e.stopPropagation();  // this propagate to window.click to cause close
+    }
+    if (!(menuRef && menuRef.contains(e.target))) {
       open = !open;
       if (!open) dispatch('close');
     }
