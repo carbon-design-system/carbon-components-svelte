@@ -280,7 +280,7 @@
           borderBottom
           borderRight
           title="Carbon Pictograms Svelte"
-          subtitle="900+ pictograms"
+          subtitle="1,000+ pictograms"
           target="_blank"
           href="https://github.com/carbon-design-system/carbon-pictograms-svelte"
         />
