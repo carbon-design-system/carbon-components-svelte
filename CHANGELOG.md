@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.80.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.79.0...v0.80.0) (2023-08-26)
+
+### Features
+
+- **ui-shell:** forward `click` event to `HeaderActionLink` ([#1797](https://github.com/carbon-design-system/carbon-components-svelte/issues/1797)) ([e5675eb](https://github.com/carbon-design-system/carbon-components-svelte/commit/e5675eb203db51de736b24f41694f5b020f9aafc)), closes [#1796](https://github.com/carbon-design-system/carbon-components-svelte/issues/1796)
+
+### Bug Fixes
+
+- **skeleton-text:** fix reactivity in `paragraph` variant ([#1794](https://github.com/carbon-design-system/carbon-components-svelte/issues/1794)) ([bc97ce5](https://github.com/carbon-design-system/carbon-components-svelte/commit/bc97ce5e1b69669d17f3ad13aaeb774b05c09c80)), closes [#1793](https://github.com/carbon-design-system/carbon-components-svelte/issues/1793)
+
 ## [0.79.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.78.0...v0.79.0) (2023-07-24)
 
 ### ⚠ BREAKING CHANGES
