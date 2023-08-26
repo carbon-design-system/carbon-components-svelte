@@ -25,6 +25,7 @@
   href="{href}"
   rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
   {...$$restProps}
+  on:click
 >
   <slot name="icon">
     <svelte:component this="{icon}" size="{20}" />

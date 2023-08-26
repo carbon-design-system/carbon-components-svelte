@@ -5064,7 +5064,7 @@
           "slot_props": "{}"
         }
       ],
-      "events": [],
+      "events": [{ "type": "forwarded", "name": "click", "element": "a" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "a" }
     },

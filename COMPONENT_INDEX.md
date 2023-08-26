@@ -1652,7 +1652,9 @@ None.
 
 ### Events
 
-None.
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| click      | forwarded | --     |
 
 ## `HeaderGlobalAction`
 

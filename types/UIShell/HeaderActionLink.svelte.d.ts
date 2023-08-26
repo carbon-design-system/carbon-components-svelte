@@ -33,6 +33,6 @@ export interface HeaderActionLinkProps extends RestProps {
 
 export default class HeaderActionLink extends SvelteComponentTyped<
   HeaderActionLinkProps,
-  Record<string, any>,
+  { click: WindowEventMap["click"] },
   { icon: {} }
 > {}
