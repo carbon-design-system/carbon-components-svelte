@@ -30,6 +30,7 @@ export interface HeaderProps extends RestProps {
 
   /**
    * Specify the company name.
+   *
    * Alternatively, use the named slot "company" (e.g., `<span slot="company">...</span>`)
    * @default undefined
    */
@@ -37,6 +38,7 @@ export interface HeaderProps extends RestProps {
 
   /**
    * Specify the platform name.
+   *
    * Alternatively, use the named slot "platform" (e.g., `<span slot="platform">...</span>`)
    * @default ""
    */
