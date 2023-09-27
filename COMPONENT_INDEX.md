@@ -927,7 +927,7 @@ export type DataTableValue = any;
 export interface DataTableEmptyHeader {
   key: DataTableKey;
   empty: boolean;
-  display?: (item: Value) => DataTableValue;
+  display?: (item: Value, row: DataTableRow) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
   width?: string;
@@ -937,7 +937,7 @@ export interface DataTableEmptyHeader {
 export interface DataTableNonEmptyHeader {
   key: DataTableKey;
   value: DataTableValue;
-  display?: (item: Value) => DataTableValue;
+  display?: (item: Value, row: DataTableRow) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
   columnMenu?: boolean;
   width?: string;
@@ -956,7 +956,7 @@ export type DataTableRowId = any;
 export interface DataTableCell {
   key: DataTableKey;
   value: DataTableValue;
-  display?: (item: Value) => DataTableValue;
+  display?: (item: Value, row: DataTableRow) => DataTableValue;
 }
 ```
 
@@ -989,14 +989,14 @@ export interface DataTableCell {
 
 ### Slots
 
-| Slot name    | Default | Props                                                                                          | Fallback                                                            |
-| :----------- | :------ | :--------------------------------------------------------------------------------------------- | :------------------------------------------------------------------ |
-| --           | Yes     | --                                                                                             | --                                                                  |
-| cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; rowIndex: number; cellIndex: number; } </code> | <code>{cell.display ? cell.display(cell.value) : cell.value}</code> |
-| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                             | <code>{header.value}</code>                                         |
-| description  | No      | --                                                                                             | <code>{description}</code>                                          |
-| expanded-row | No      | <code>{ row: DataTableRow; } </code>                                                           | --                                                                  |
-| title        | No      | --                                                                                             | <code>{title}</code>                                                |
+| Slot name    | Default | Props                                                                                          | Fallback                                                                 |
+| :----------- | :------ | :--------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------- |
+| --           | Yes     | --                                                                                             | --                                                                       |
+| cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; rowIndex: number; cellIndex: number; } </code> | <code>{cell.display ? cell.display(cell.value, row) : cell.value}</code> |
+| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                             | <code>{header.value}</code>                                              |
+| description  | No      | --                                                                                             | <code>{description}</code>                                               |
+| expanded-row | No      | <code>{ row: DataTableRow; } </code>                                                           | --                                                                       |
+| title        | No      | --                                                                                             | <code>{title}</code>                                                     |
 
 ### Events
 

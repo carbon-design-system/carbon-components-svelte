@@ -2610,7 +2610,7 @@
         {
           "name": "cell",
           "default": false,
-          "fallback": "{cell.display ? cell.display(cell.value) : cell.value}",
+          "fallback": "{cell.display ? cell.display(cell.value, row) : cell.value}",
           "slot_props": "{ row: DataTableRow; cell: DataTableCell; rowIndex: number; cellIndex: number; }"
         },
         {
@@ -2697,14 +2697,14 @@
           "ts": "type DataTableValue = any"
         },
         {
-          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }",
+          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }",
           "name": "DataTableEmptyHeader",
-          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }"
+          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }"
         },
         {
-          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }",
+          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }",
           "name": "DataTableNonEmptyHeader",
-          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }"
+          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => (0 | -1 | 1)); columnMenu?: boolean; width?: string; minWidth?: string; }"
         },
         {
           "type": "DataTableNonEmptyHeader | DataTableEmptyHeader",
@@ -2722,9 +2722,9 @@
           "ts": "type DataTableRowId = any"
         },
         {
-          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; }",
+          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }",
           "name": "DataTableCell",
-          "ts": "interface DataTableCell { key: DataTableKey; value: DataTableValue; display?: (item: Value) => DataTableValue; }"
+          "ts": "interface DataTableCell { key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }"
         }
       ],
       "rest_props": { "type": "Element", "name": "div" }
