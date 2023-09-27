@@ -1,7 +1,7 @@
 # carbon-components-svelte
 
 [![NPM][npm]][npm-url]
-![GitHub](https://img.shields.io/github/license/ibm/carbon-components-svelte?color=262626&style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/carbon-design-system/carbon-components-svelte?color=262626&style=for-the-badge)
 ![npm downloads to date](https://img.shields.io/npm/dt/carbon-components-svelte?color=262626&style=for-the-badge)
 <a href="https://discord.gg/J7JEUEkTRX">
 <img src="https://img.shields.io/discord/689212587170201628?color=5865F2&style=for-the-badge" alt="Chat with us on Discord">
