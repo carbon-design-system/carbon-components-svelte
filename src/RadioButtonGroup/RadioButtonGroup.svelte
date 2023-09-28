@@ -27,6 +27,12 @@
   export let orientation = "horizontal";
 
   /**
+   * Set a name for all radio button input elements within the group
+   * @type {string}
+   */
+  export let name = undefined;
+
+  /**
    * Set an id for the container div element
    * @type {string}
    */
@@ -42,9 +48,11 @@
 
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);
+  const inputName = writable(name);
 
   setContext("RadioButtonGroup", {
     selectedValue,
+    name: inputName,
     add: ({ checked, value }) => {
       if (checked) {
         selectedValue.set(value);
@@ -67,6 +75,8 @@
     selected = value;
     dispatch("change", value);
   });
+
+  $: inputName.set(name);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

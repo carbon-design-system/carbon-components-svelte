@@ -32,13 +32,25 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
 
   const ctx = getContext("RadioButtonGroup");
   const selectedValue = ctx
     ? ctx.selectedValue
     : writable(checked ? value : undefined);
+
+  const unsubName = ctx?.name.subscribe((value) => {
+    // Use `name` if set on the `RadioButtonGroup`
+    if (value) {
+      name = value;
+    }
+  });
+  console.log(ctx)
+
+  onMount(() => {
+    return () => unsubName?.();
+  });
 
   if (ctx) {
     ctx.add({ id, checked, disabled, value });

@@ -9468,7 +9468,7 @@
           "isFunctionDeclaration": false,
           "isRequired": false,
           "constant": false,
-          "reactive": false
+          "reactive": true
         },
         {
           "name": "ref",
@@ -9565,6 +9565,17 @@
           "description": "Specify the orientation of the radio buttons",
           "type": "\"horizontal\" | \"vertical\"",
           "value": "\"horizontal\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "name",
+          "kind": "let",
+          "description": "Set a name for all radio button input elements within the group",
+          "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,

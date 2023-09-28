@@ -41,6 +41,12 @@ export interface RadioButtonGroupProps extends RestProps {
   orientation?: "horizontal" | "vertical";
 
   /**
+   * Set a name for all radio button input elements within the group
+   * @default undefined
+   */
+  name?: string;
+
+  /**
    * Set an id for the container div element
    * @default undefined
    */
