@@ -4788,7 +4788,7 @@
         {
           "name": "company",
           "kind": "let",
-          "description": "Specify the company name.  \nAlternatively, use the named slot \"company\" (e.g., `<span slot=\"company\">...</span>`)",
+          "description": "Specify the company name.\n\nAlternatively, use the named slot \"company\" (e.g., `<span slot=\"company\">...</span>`)",
           "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4799,7 +4799,7 @@
         {
           "name": "platformName",
           "kind": "let",
-          "description": "Specify the platform name.\nAlternatively, use the named slot \"platform\" (e.g., `<span slot=\"platform\">...</span>`)",
+          "description": "Specify the platform name.\n\nAlternatively, use the named slot \"platform\" (e.g., `<span slot=\"platform\">...</span>`)",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -10367,7 +10367,7 @@
         { "type": "forwarded", "name": "blur", "element": "select" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "select" }
     },
     {
       "moduleName": "SelectItem",

@@ -1,7 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type RestProps = SvelteHTMLElements["select"];
 
 export interface SelectProps extends RestProps {
   /**

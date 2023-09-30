@@ -300,9 +300,9 @@
       class:bx--label--disabled="{disabled}"
       class:bx--visually-hidden="{hideLabel}"
     >
-    <slot name="titleText">
-      {titleText}
-    </slot>
+      <slot name="titleText">
+        {titleText}
+      </slot>
     </label>
   {/if}
   <ListBox

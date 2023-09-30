@@ -17,8 +17,9 @@
    */
   export let href = undefined;
 
-   /**
-   * Specify the company name.  
+  /**
+   * Specify the company name.
+   *
    * Alternatively, use the named slot "company" (e.g., `<span slot="company">...</span>`)
    * @type {string}
    */
@@ -26,6 +27,7 @@
 
   /**
    * Specify the platform name.
+   *
    * Alternatively, use the named slot "platform" (e.g., `<span slot="platform">...</span>`)
    */
   export let platformName = "";

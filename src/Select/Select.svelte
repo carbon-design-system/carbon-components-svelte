@@ -124,7 +124,7 @@
   $: selectedValue.set(selected ?? $defaultValue);
 </script>
 
-<div class:bx--form-item="{true}" {...$$restProps}>
+<div class:bx--form-item="{true}">
   <div
     class:bx--select="{true}"
     class:bx--select--inline="{inline}"
@@ -162,6 +162,7 @@
             class:bx--select-input="{true}"
             class:bx--select-input--sm="{size === 'sm'}"
             class:bx--select-input--xl="{size === 'xl'}"
+            {...$$restProps}
             on:change="{handleChange}"
             on:change
             on:input
@@ -206,6 +207,7 @@
           class:bx--select-input="{true}"
           class:bx--select-input--sm="{size === 'sm'}"
           class:bx--select-input--xl="{size === 'xl'}"
+          {...$$restProps}
           on:change="{handleChange}"
           on:change
           on:input
