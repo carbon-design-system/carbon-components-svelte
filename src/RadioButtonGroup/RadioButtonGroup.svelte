@@ -8,11 +8,17 @@
   /** Set to `true` to disable the radio buttons */
   export let disabled = false;
 
-  /** Set to `true` to require the selection of a radio button */
-  export let required = false;
+  /**
+   * Set to `true` to require the selection of a radio button
+   * @type {boolean}
+   */
+  export let required = undefined;
 
-  /** Specify a name attribute for the radio button inputs */
-  export let name = "";
+  /**
+   * Specify a name attribute for the radio button inputs
+   * @type {string}
+   */
+  export let name = undefined;
 
   /** Specify the legend text */
   export let legendText = "";
@@ -44,7 +50,7 @@
     onMount,
     setContext,
   } from "svelte";
-  import { writable } from "svelte/store";
+  import { readonly, writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);
@@ -53,8 +59,8 @@
 
   setContext("RadioButtonGroup", {
     selectedValue,
-    groupName: { subscribe: groupName.subscribe },
-    groupRequired: { subscribe: groupRequired.subscribe },
+    groupName: readonly(groupName),
+    groupRequired: readonly(groupRequired),
     add: ({ checked, value }) => {
       if (checked) {
         selectedValue.set(value);

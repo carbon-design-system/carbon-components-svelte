@@ -18,13 +18,13 @@ export interface RadioButtonGroupProps extends RestProps {
 
   /**
    * Set to `true` to require the selection of a radio button
-   * @default false
+   * @default undefined
    */
   required?: boolean;
 
   /**
    * Specify a name attribute for the radio button inputs
-   * @default ""
+   * @default undefined
    */
   name?: string;
 

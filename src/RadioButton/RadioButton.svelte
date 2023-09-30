@@ -26,21 +26,24 @@
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /** Specify a name attribute for the radio button input */
-  export let name = "";
+  /**
+   * Specify a name attribute for the radio button input
+   * @type {string}
+   */
+  export let name = undefined;
 
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
   import { getContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { readable } from "svelte/store";
 
   const { add, update, selectedValue, groupName, groupRequired } = getContext(
     "RadioButtonGroup"
   ) ?? {
-    groupName: writable(name),
-    groupRequired: writable(required),
-    selectedValue: writable(checked ? value : undefined),
+    groupName: readable(undefined),
+    groupRequired: readable(undefined),
+    selectedValue: readable(checked ? value : undefined),
   };
 
   if (add) {
@@ -59,10 +62,10 @@
     bind:this="{ref}"
     type="radio"
     id="{id}"
-    name="{'name' in $$props ? name : $groupName}"
+    name="{$groupName ?? name}"
     checked="{checked}"
     disabled="{disabled}"
-    required="{'required' in $$props ? required : $groupRequired}"
+    required="{$groupRequired ?? required}"
     value="{value}"
     class:bx--radio-button="{true}"
     on:change
