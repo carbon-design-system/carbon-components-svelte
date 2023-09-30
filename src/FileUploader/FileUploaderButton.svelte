@@ -62,7 +62,7 @@
 
   $: if (ref && files.length === 0) {
     labelText = initialLabelText;
-    ref.value = null;
+    ref.value = "";
   }
 </script>
 
