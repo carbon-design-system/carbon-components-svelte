@@ -1,14 +1,11 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["span"];
-
-export interface TooltipDefinitionProps extends RestProps {
+export interface TooltipDefinitionProps {
   /**
-   * Specify the tooltip text
+   * Specify the term definition.
    * @default ""
    */
-  tooltipText?: string;
+  definition?: string;
 
   /**
    * Set to `true` to open the tooltip
@@ -18,15 +15,21 @@ export interface TooltipDefinitionProps extends RestProps {
 
   /**
    * Set the alignment of the tooltip relative to the icon
-   * @default "center"
+   * @default "bottom-left"
    */
-  align?: "start" | "center" | "end";
-
-  /**
-   * Set the direction of the tooltip relative to the icon
-   * @default "bottom"
-   */
-  direction?: "top" | "bottom";
+  align?:
+    | "top"
+    | "top-left"
+    | "top-right"
+    | "bottom"
+    | "bottom-left"
+    | "bottom-right"
+    | "left"
+    | "left-bottom"
+    | "left-top"
+    | "right"
+    | "right-bottom"
+    | "right-top";
 
   /**
    * Set an id for the tooltip div element
@@ -39,8 +42,6 @@ export interface TooltipDefinitionProps extends RestProps {
    * @default null
    */
   ref?: null | HTMLButtonElement;
-
-  [key: `data-${string}`]: any;
 }
 
 export default class TooltipDefinition extends SvelteComponentTyped<
@@ -54,5 +55,5 @@ export default class TooltipDefinition extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     focus: WindowEventMap["focus"];
   },
-  { default: {}; tooltip: {} }
+  { default: {}; definition: {} }
 > {}

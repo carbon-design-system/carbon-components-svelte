@@ -5,25 +5,25 @@
 
 ## Default
 
-<TooltipDefinition tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
+<TooltipDefinition definition="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk
 </TooltipDefinition>
 
-## Custom tooltip direction and alignment
+## Custom tooltip alignment
 
-Customize the tooltip menu direction and alignment through the `direction` and `align` props.
+Customize the tooltip alignment through the `align` prop.
 
-By default, `direction` is `"bottom"` and `align` is `"center"`.
+By default, `align` is `"bottom-left"`.
 
-<TooltipDefinition direction="top" align="start" tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
+<TooltipDefinition align="top" definition="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk
 </TooltipDefinition>
 
-## Custom tooltip slot
+## Custom definition slot
 
 <TooltipDefinition>
   Armonk
-  <span slot="tooltip" style="color: red">
+  <span slot="definition" style="color: red">
     IBM Corporate Headquarters is based in Armonk, New York.
   </span>
 </TooltipDefinition>

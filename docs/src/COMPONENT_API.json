@@ -14184,9 +14184,9 @@
       "filePath": "src/TooltipDefinition/TooltipDefinition.svelte",
       "props": [
         {
-          "name": "tooltipText",
+          "name": "definition",
           "kind": "let",
-          "description": "Specify the tooltip text",
+          "description": "Specify the term definition.",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -14211,20 +14211,8 @@
           "name": "align",
           "kind": "let",
           "description": "Set the alignment of the tooltip relative to the icon",
-          "type": "\"start\" | \"center\" | \"end\"",
-          "value": "\"center\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "direction",
-          "kind": "let",
-          "description": "Set the direction of the tooltip relative to the icon",
-          "type": "\"top\" | \"bottom\"",
-          "value": "\"bottom\"",
+          "type": "\"top\" | \"top-left\" | \"top-right\" | \"bottom\" | \"bottom-left\" | \"bottom-right\" | \"left\" | \"left-bottom\" | \"left-top\" | \"right\" | \"right-bottom\" | \"right-top\"",
+          "value": "\"bottom-left\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -14260,9 +14248,9 @@
       "slots": [
         { "name": "__default__", "default": true, "slot_props": "{}" },
         {
-          "name": "tooltip",
+          "name": "definition",
           "default": false,
-          "fallback": "{tooltipText}",
+          "fallback": "{definition}",
           "slot_props": "{}"
         }
       ],
@@ -14275,8 +14263,7 @@
         { "type": "forwarded", "name": "mouseleave", "element": "button" },
         { "type": "forwarded", "name": "focus", "element": "button" }
       ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "span" }
+      "typedefs": []
     },
     {
       "moduleName": "TooltipFooter",

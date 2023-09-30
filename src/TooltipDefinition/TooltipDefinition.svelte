@@ -4,8 +4,8 @@
    * @event {null} close
    */
 
-  /** Specify the tooltip text */
-  export let tooltipText = "";
+  /** Specify the term definition. */
+  export let definition = "";
 
   /**
    * Set to `true` to open the tooltip
@@ -14,15 +14,9 @@
 
   /**
    * Set the alignment of the tooltip relative to the icon
-   * @type {"start" | "center" | "end"}
+   * @type {"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"}
    */
-  export let align = "center";
-
-  /**
-   * Set the direction of the tooltip relative to the icon
-   * @type {"top" | "bottom"}
-   */
-  export let direction = "bottom";
+  export let align = "bottom-left";
 
   /** Set an id for the tooltip div element */
   export let id = "ccs-" + Math.random().toString(36);
@@ -31,6 +25,8 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
+  import Popover from "../Popover/Popover.svelte";
+  import PopoverContent from "../Popover/PopoverContent.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -48,27 +44,12 @@
 />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<span
-  class:bx--tooltip--definition="{true}"
-  class:bx--tooltip--a11y="{true}"
-  {...$$restProps}
-  on:mouseenter="{show}"
-  on:mouseleave="{hide}"
->
+<Popover highContrast dropShadow="{false}" bind:open align="{align}">
   <button
     bind:this="{ref}"
     type="button"
     aria-describedby="{id}"
-    class:bx--tooltip--a11y="{true}"
-    class:bx--tooltip__trigger="{true}"
-    class:bx--tooltip__trigger--definition="{true}"
-    class:bx--tooltip--hidden="{!open}"
-    class:bx--tooltip--visible="{open}"
-    class:bx--tooltip--top="{direction === 'top'}"
-    class:bx--tooltip--bottom="{direction === 'bottom'}"
-    class:bx--tooltip--align-start="{align === 'start'}"
-    class:bx--tooltip--align-center="{align === 'center'}"
-    class:bx--tooltip--align-end="{align === 'end'}"
+    class:bx--definition-term="{true}"
     on:click
     on:mouseover
     on:mouseenter
@@ -76,10 +57,12 @@
     on:focus
     on:focus="{show}"
     on:blur="{hide}"
+    on:mouseenter="{show}"
+    on:mouseleave="{hide}"
   >
     <slot />
   </button>
-  <div role="tooltip" id="{id}" class:bx--assistive-text="{true}">
-    <slot name="tooltip">{tooltipText}</slot>
-  </div>
-</span>
+  <PopoverContent className="{'bx--definition-tooltip'}">
+    <slot name="definition">{definition}</slot>
+  </PopoverContent>
+</Popover>
