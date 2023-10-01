@@ -54,7 +54,7 @@ export interface RadioButtonProps extends RestProps {
 
   /**
    * Specify a name attribute for the radio button input
-   * @default ""
+   * @default undefined
    */
   name?: string;
 

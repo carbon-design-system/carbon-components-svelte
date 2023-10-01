@@ -1580,7 +1580,7 @@ None.
 | expandedByDefault       | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>true</code>      | Set to `false` to hide the side nav by default                                                                                                                                                                                                                              |
 | uiShellAriaLabel        | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the ARIA label for the header                                                                                                                                                                                                                                       |
 | href                    | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the `href` attribute                                                                                                                                                                                                                                                |
-| company                 | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the company name. <br />Alternatively, use the named slot "company" (e.g., `&lt;span slot="company"&gt;...&lt;/span&gt;`)                                                                                                                                           |
+| company                 | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the company name.<br /><br />Alternatively, use the named slot "company" (e.g., `&lt;span slot="company"&gt;...&lt;/span&gt;`)                                                                                                                                      |
 | platformName            | No       | <code>let</code> | No       | <code>string</code>                                       | <code>""</code>        | Specify the platform name.<br />Alternatively, use the named slot "platform" (e.g., `&lt;span slot="platform"&gt;...&lt;/span&gt;`)                                                                                                                                         |
 | persistentHamburgerMenu | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to persist the hamburger menu                                                                                                                                                                                                                                 |
 | expansionBreakpoint     | No       | <code>let</code> | No       | <code>number</code>                                       | <code>1056</code>      | The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.<br />1056 represents the "large" breakpoint in pixels from the Carbon Design System:<br />- small: 320<br />- medium: 672<br />- large: 1056<br />- x-large: 1312<br />- max: 1584 |
@@ -2944,7 +2944,7 @@ None.
 | labelText     | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                              |
 | hideLabel     | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to visually hide the label text       |
 | id            | No       | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                     |
-| name          | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify a name attribute for the radio button input |
+| name          | No       | <code>let</code> | No       | <code>string</code>                       | <code>undefined</code>                           | Specify a name attribute for the radio button input |
 
 ### Slots
 
@@ -2962,15 +2962,17 @@ None.
 
 ### Props
 
-| Prop name     | Required | Kind             | Reactive | Type                                        | Default value             | Description                                  |
-| :------------ | :------- | :--------------- | :------- | ------------------------------------------- | ------------------------- | -------------------------------------------- |
-| selected      | No       | <code>let</code> | Yes      | <code>string</code>                         | <code>undefined</code>    | Set the selected radio button value          |
-| disabled      | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to disable the radio buttons   |
-| legendText    | No       | <code>let</code> | No       | <code>string</code>                         | <code>""</code>           | Specify the legend text                      |
-| hideLegend    | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to visually hide the legend    |
-| labelPosition | No       | <code>let</code> | No       | <code>"right" &#124; "left"</code>          | <code>"right"</code>      | Specify the label position                   |
-| orientation   | No       | <code>let</code> | No       | <code>"horizontal" &#124; "vertical"</code> | <code>"horizontal"</code> | Specify the orientation of the radio buttons |
-| id            | No       | <code>let</code> | No       | <code>string</code>                         | <code>undefined</code>    | Set an id for the container div element      |
+| Prop name     | Required | Kind             | Reactive | Type                                        | Default value             | Description                                              |
+| :------------ | :------- | :--------------- | :------- | ------------------------------------------- | ------------------------- | -------------------------------------------------------- |
+| selected      | No       | <code>let</code> | Yes      | <code>string</code>                         | <code>undefined</code>    | Set the selected radio button value                      |
+| disabled      | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to disable the radio buttons               |
+| required      | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>undefined</code>    | Set to `true` to require the selection of a radio button |
+| name          | No       | <code>let</code> | No       | <code>string</code>                         | <code>undefined</code>    | Specify a name attribute for the radio button inputs     |
+| legendText    | No       | <code>let</code> | No       | <code>string</code>                         | <code>""</code>           | Specify the legend text                                  |
+| hideLegend    | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to visually hide the legend                |
+| labelPosition | No       | <code>let</code> | No       | <code>"right" &#124; "left"</code>          | <code>"right"</code>      | Specify the label position                               |
+| orientation   | No       | <code>let</code> | No       | <code>"horizontal" &#124; "vertical"</code> | <code>"horizontal"</code> | Specify the orientation of the radio buttons             |
+| id            | No       | <code>let</code> | No       | <code>string</code>                         | <code>undefined</code>    | Set an id for the container div element                  |
 
 ### Slots
 
