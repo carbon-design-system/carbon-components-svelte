@@ -9,33 +9,9 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
 
 ## Default
 
-<RadioButtonGroup selected="standard">
-  <RadioButton labelText="Free (1 GB)" value="free" />
-  <RadioButton labelText="Standard (10 GB)" value="standard" />
-  <RadioButton labelText="Pro (128 GB)" value="pro" />
-</RadioButtonGroup>
+The `name` prop set on `RadioButtonGroup` is passed to the individual `RadioButton` inputs.
 
-## With legend text
-
-<RadioButtonGroup legendText="Storage tier (disk)" selected="standard">
-  <RadioButton labelText="Free (1 GB)" value="free" />
-  <RadioButton labelText="Standard (10 GB)" value="standard" />
-  <RadioButton labelText="Pro (128 GB)" value="pro" />
-</RadioButtonGroup>
-
-## Legend text slot
-
-Use the named "legendText" slot to customize the legend text.
-
-<RadioButtonGroup selected="standard">
-  <div slot="legendText" style="display: flex">
-    Storage tier (disk)
-    <Tooltip>
-      <p>
-        Storage tiers may vary based on geolocation.
-      </p>
-    </Tooltip>
-  </div>
+<RadioButtonGroup legendText="Storage tier (disk)" name="plan" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
@@ -53,6 +29,24 @@ Use `hideLegend` to visually hide the legend text.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
+## Legend text slot
+
+Use the named "legendText" slot to customize the legend text.
+
+<RadioButtonGroup name="plan" selected="standard">
+  <div slot="legendText" style:display="flex">
+    Storage tier (disk)
+    <Tooltip>
+      <p>
+        Storage tiers may vary based on geolocation.
+      </p>
+    </Tooltip>
+  </div>
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
 ## Reactive example
 
 Use the `selected` prop to bind and update the selected value.
@@ -61,7 +55,7 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Left-aligned label text
 
-<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" selected="standard">
+<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" name="plan" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
@@ -69,7 +63,7 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Disabled buttons
 
-<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" selected="standard">
+<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" name="plan" selected="standard">
   <RadioButton disabled labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton disabled labelText="Pro (128 GB)" value="pro" />
@@ -77,7 +71,7 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Vertical orientation
 
-<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" selected="standard">
+<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" name="plan" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
