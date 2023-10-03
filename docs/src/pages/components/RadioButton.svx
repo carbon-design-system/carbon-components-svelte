@@ -23,7 +23,7 @@ It's recommended that you provide a legend for accessibility.
 
 Use `hideLegend` to visually hide the legend text.
 
-<RadioButtonGroup hideLegend legendText="Storage tier (disk)" selected="standard">
+<RadioButtonGroup hideLegend legendText="Storage tier (disk)" name="plan-legend" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
@@ -33,7 +33,7 @@ Use `hideLegend` to visually hide the legend text.
 
 Use the named "legendText" slot to customize the legend text.
 
-<RadioButtonGroup name="plan" selected="standard">
+<RadioButtonGroup name="plan-legend-slot" selected="standard">
   <div slot="legendText" style:display="flex">
     Storage tier (disk)
     <Tooltip>
@@ -55,7 +55,7 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Left-aligned label text
 
-<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" name="plan" selected="standard">
+<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" name="plan-left-aligned" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
@@ -63,7 +63,7 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Disabled buttons
 
-<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" name="plan" selected="standard">
+<RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" name="plan-disabled" selected="standard">
   <RadioButton disabled labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton disabled labelText="Pro (128 GB)" value="pro" />
@@ -71,7 +71,7 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Vertical orientation
 
-<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" name="plan" selected="standard">
+<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" name="plan-vertical" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
