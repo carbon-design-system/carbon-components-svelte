@@ -3,10 +3,10 @@
 
   const values = ["Lite plan", "Standard plan", "Plus plan"];
 
-  let selected = values[0];
+  let selected = values[1];
 </script>
 
-<TileGroup legend="Service pricing tiers" bind:selected>
+<TileGroup legend="Service pricing tiers" name="plan" bind:selected>
   {#each values as value}
     <RadioTile value="{value}">{value}</RadioTile>
   {/each}
