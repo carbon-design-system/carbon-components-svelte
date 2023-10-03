@@ -3019,11 +3019,12 @@ None.
 | checked         | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to check the tile                          |
 | light           | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to enable the light variant                |
 | disabled        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to disable the tile                        |
+| required        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to mark the field as required              |
 | value           | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the value of the radio input                     |
 | tabindex        | No       | <code>let</code> | No       | <code>string</code>  | <code>"0"</code>                                 | Specify the tabindex                                     |
 | iconDescription | No       | <code>let</code> | No       | <code>string</code>  | <code>"Tile checkmark"</code>                    | Specify the ARIA label for the radio tile checkmark icon |
 | id              | No       | <code>let</code> | No       | <code>string</code>  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                          |
-| name            | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify a name attribute for the input                   |
+| name            | No       | <code>let</code> | No       | <code>string</code>  | <code>undefined</code>                           | Specify a name attribute for the radio tile input        |
 
 ### Slots
 
@@ -4234,11 +4235,13 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                 | Default value          | Description                             |
-| :-------- | :------- | :--------------- | :------- | -------------------- | ---------------------- | --------------------------------------- |
-| selected  | No       | <code>let</code> | Yes      | <code>string</code>  | <code>undefined</code> | Specify the selected tile value         |
-| disabled  | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to disable the tile group |
-| legend    | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>        | Specify the legend text                 |
+| Prop name | Required | Kind             | Reactive | Type                 | Default value          | Description                                              |
+| :-------- | :------- | :--------------- | :------- | -------------------- | ---------------------- | -------------------------------------------------------- |
+| selected  | No       | <code>let</code> | Yes      | <code>string</code>  | <code>undefined</code> | Specify the selected tile value                          |
+| disabled  | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to disable the tile group                  |
+| required  | No       | <code>let</code> | No       | <code>boolean</code> | <code>undefined</code> | Set to `true` to require the selection of a radio button |
+| name      | No       | <code>let</code> | No       | <code>string</code>  | <code>undefined</code> | Specify a name attribute for the radio button inputs     |
+| legend    | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>        | Specify the legend text                                  |
 
 ### Slots
 

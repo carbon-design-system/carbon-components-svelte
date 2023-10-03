@@ -8,6 +8,9 @@
   /** Set to `true` to disable the tile */
   export let disabled = false;
 
+  /** Set to `true` to mark the field as required */
+  export let required = false;
+
   /** Specify the value of the radio input */
   export let value = "";
 
@@ -20,13 +23,23 @@
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  /** Specify a name attribute for the input */
-  export let name = "";
+  /**
+   * Specify a name attribute for the radio tile input
+   * @type {string}
+   */
+  export let name = undefined;
 
   import { getContext } from "svelte";
+  import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
 
-  const { add, update, selectedValue } = getContext("TileGroup");
+  const { add, update, selectedValue, groupName, groupRequired } = getContext(
+    "TileGroup"
+  ) ?? {
+    groupName: readable(undefined),
+    groupRequired: readable(undefined),
+    selectedValue: readable(checked ? value : undefined),
+  };
 
   add({ value, checked });
 
@@ -36,11 +49,12 @@
 <input
   type="radio"
   id="{id}"
-  name="{name}"
+  name="{$groupName ?? name}"
   value="{value}"
   checked="{checked}"
   tabindex="{disabled ? undefined : tabindex}"
   disabled="{disabled}"
+  required="{$groupRequired ?? required}"
   class:bx--tile-input="{true}"
   on:change
   on:change="{() => {

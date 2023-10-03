@@ -23,6 +23,12 @@ export interface RadioTileProps extends RestProps {
   disabled?: boolean;
 
   /**
+   * Set to `true` to mark the field as required
+   * @default false
+   */
+  required?: boolean;
+
+  /**
    * Specify the value of the radio input
    * @default ""
    */
@@ -47,8 +53,8 @@ export interface RadioTileProps extends RestProps {
   id?: string;
 
   /**
-   * Specify a name attribute for the input
-   * @default ""
+   * Specify a name attribute for the radio tile input
+   * @default undefined
    */
   name?: string;
 

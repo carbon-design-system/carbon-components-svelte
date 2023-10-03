@@ -9,14 +9,14 @@ components: ["TileGroup", "RadioTile"]
 
 ## Default
 
-<TileGroup legend="Service pricing tiers">
-  <RadioTile value="0" checked>
+<TileGroup legend="Service pricing tiers" name="plan" selected="standard">
+  <RadioTile value="lite">
     Lite plan
   </RadioTile>
-  <RadioTile value="1">
+  <RadioTile value="standard">
     Standard plan
   </RadioTile>
-  <RadioTile value="2">
+  <RadioTile value="plus">
     Plus plan
   </RadioTile>
 </TileGroup>
@@ -33,28 +33,28 @@ Binding to the `selected` prop is a more concise approach to managing state.
 
 ## Light variant
 
-<TileGroup legend="Service pricing tiers">
-  <RadioTile light value="0" checked>
+<TileGroup legend="Service pricing tiers" name="plan-light" selected="standard">
+  <RadioTile light value="lite">
     Lite plan
   </RadioTile>
-  <RadioTile light value="1">
+  <RadioTile light value="standard">
     Standard plan
   </RadioTile>
-  <RadioTile light value="2">
+  <RadioTile light value="plus">
     Plus plan
   </RadioTile>
 </TileGroup>
 
 ## Disabled state
 
-<TileGroup legend="Service pricing tiers">
-  <RadioTile value="0" checked>
+<TileGroup legend="Service pricing tiers" name="plan-disabled" selected="standard">
+  <RadioTile value="lite" disabled>
     Lite plan
   </RadioTile>
-  <RadioTile value="1" disabled>
+  <RadioTile value="standard">
     Standard plan
   </RadioTile>
-  <RadioTile value="2" disabled>
+  <RadioTile value="plus" disabled>
     Plus plan
   </RadioTile>
 </TileGroup>
