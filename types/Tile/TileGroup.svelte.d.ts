@@ -39,6 +39,6 @@ export interface TileGroupProps extends RestProps {
 
 export default class TileGroup extends SvelteComponentTyped<
   TileGroupProps,
-  { select: CustomEvent<any> },
+  { select: CustomEvent<string> },
   { default: {} }
 > {}

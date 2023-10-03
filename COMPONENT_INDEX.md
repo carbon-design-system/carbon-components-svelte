@@ -2983,13 +2983,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| change     | dispatched | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| change     | dispatched | <code>string</code> |
+| click      | forwarded  | --                  |
+| mouseover  | forwarded  | --                  |
+| mouseenter | forwarded  | --                  |
+| mouseleave | forwarded  | --                  |
 
 ## `RadioButtonSkeleton`
 
@@ -4251,9 +4251,9 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| select     | dispatched | --     |
+| Event name | Type       | Detail              |
+| :--------- | :--------- | :------------------ |
+| select     | dispatched | <code>string</code> |
 
 ## `TimePicker`
 
