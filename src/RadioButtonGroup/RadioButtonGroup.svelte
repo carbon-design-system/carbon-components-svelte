@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {string} change
+   */
+
+  /**
    * Set the selected radio button value
    * @type {string}
    */

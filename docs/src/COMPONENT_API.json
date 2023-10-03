@@ -9615,11 +9615,11 @@
         }
       ],
       "events": [
+        { "type": "dispatched", "name": "change", "detail": "string" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "change" }
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -13158,7 +13158,9 @@
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [{ "type": "dispatched", "name": "select" }],
+      "events": [
+        { "type": "dispatched", "name": "select", "detail": "string" }
+      ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "fieldset" }
     },

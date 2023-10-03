@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {string} select
+   */
+
+  /**
    * Specify the selected tile value
    * @type {string}
    */

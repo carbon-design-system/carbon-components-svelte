@@ -64,11 +64,11 @@ export interface RadioButtonGroupProps extends RestProps {
 export default class RadioButtonGroup extends SvelteComponentTyped<
   RadioButtonGroupProps,
   {
+    change: CustomEvent<string>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    change: CustomEvent<any>;
   },
   { default: {}; legendText: {} }
 > {}
