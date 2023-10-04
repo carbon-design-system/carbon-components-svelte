@@ -1,5 +1,5 @@
 {
-  "total": 165,
+  "total": 166,
   "components": [
     {
       "moduleName": "Accordion",
@@ -4788,7 +4788,7 @@
         {
           "name": "company",
           "kind": "let",
-          "description": "Specify the company name.\n\nAlternatively, use the named slot \"company\" (e.g., `<span slot=\"company\">...</span>`)",
+          "description": "Specify the company name.\nAlternatively, use the named slot \"company\" (e.g., `<span slot=\"company\">...</span>`)",
           "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -5430,6 +5430,60 @@
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
+    },
+    {
+      "moduleName": "HelperText",
+      "filePath": "src/HelperText/HelperText.svelte",
+      "props": [
+        {
+          "name": "helperText",
+          "kind": "let",
+          "description": "Specify the helper text as parameter",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` for the disabled variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "inline",
+          "kind": "let",
+          "description": "Set to `true` to use inline variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "fallback": "{helperText}",
+          "slot_props": "{}"
+        }
+      ],
+      "events": [],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ImageLoader",

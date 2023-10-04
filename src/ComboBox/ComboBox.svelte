@@ -117,6 +117,7 @@
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
+  import HelperText from "../HelperText/HelperText.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -415,11 +416,8 @@
     {/if}
   </ListBox>
   {#if !invalid && helperText && !warn}
-    <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}"
-    >
+    <HelperText disabled="{disabled}">
       {helperText}
-    </div>
+    </HelperText>
   {/if}
 </div>

@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@0.80.0.
+> 166 components exported from carbon-components-svelte@0.80.0.
 
 ## Components
 
@@ -63,6 +63,7 @@
 - [`HeaderPanelLinks`](#headerpanellinks)
 - [`HeaderSearch`](#headersearch)
 - [`HeaderUtilities`](#headerutilities)
+- [`HelperText`](#helpertext)
 - [`ImageLoader`](#imageloader)
 - [`InlineLoading`](#inlineloading)
 - [`InlineNotification`](#inlinenotification)
@@ -1580,7 +1581,7 @@ None.
 | expandedByDefault       | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>true</code>      | Set to `false` to hide the side nav by default                                                                                                                                                                                                                              |
 | uiShellAriaLabel        | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the ARIA label for the header                                                                                                                                                                                                                                       |
 | href                    | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the `href` attribute                                                                                                                                                                                                                                                |
-| company                 | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the company name.<br /><br />Alternatively, use the named slot "company" (e.g., `&lt;span slot="company"&gt;...&lt;/span&gt;`)                                                                                                                                      |
+| company                 | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the company name.<br />Alternatively, use the named slot "company" (e.g., `&lt;span slot="company"&gt;...&lt;/span&gt;`)                                                                                                                                            |
 | platformName            | No       | <code>let</code> | No       | <code>string</code>                                       | <code>""</code>        | Specify the platform name.<br />Alternatively, use the named slot "platform" (e.g., `&lt;span slot="platform"&gt;...&lt;/span&gt;`)                                                                                                                                         |
 | persistentHamburgerMenu | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to persist the hamburger menu                                                                                                                                                                                                                                 |
 | expansionBreakpoint     | No       | <code>let</code> | No       | <code>number</code>                                       | <code>1056</code>      | The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.<br />1056 represents the "large" breakpoint in pixels from the Carbon Design System:<br />- small: 320<br />- medium: 672<br />- large: 1056<br />- x-large: 1312<br />- max: 1584 |
@@ -1861,6 +1862,26 @@ None.
 | Slot name | Default | Props | Fallback |
 | :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
+
+### Events
+
+None.
+
+## `HelperText`
+
+### Props
+
+| Prop name  | Required | Kind             | Reactive | Type                 | Default value      | Description                            |
+| :--------- | :------- | :--------------- | :------- | -------------------- | ------------------ | -------------------------------------- |
+| helperText | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the helper text as parameter   |
+| disabled   | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for the disabled variant |
+| inline     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use inline variant    |
+
+### Slots
+
+| Slot name | Default | Props | Fallback                  |
+| :-------- | :------ | :---- | :------------------------ |
+| --        | Yes     | --    | <code>{helperText}</code> |
 
 ### Events
 

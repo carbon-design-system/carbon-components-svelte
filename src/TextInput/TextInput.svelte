@@ -74,6 +74,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import EditOff from "../icons/EditOff.svelte";
+  import HelperText from "../HelperText/HelperText.svelte";
 
   const ctx = getContext("Form");
   const dispatch = createEventDispatcher();
@@ -133,13 +134,9 @@
         </label>
       {/if}
       {#if !isFluid && helperText}
-        <div
-          class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}"
-          class:bx--form__helper-text--inline="{inline}"
+        <HelperText disabled="{disabled}" inline="{inline}"
+          >{helperText}</HelperText
         >
-          {helperText}
-        </div>
       {/if}
     </div>
   {/if}
@@ -228,14 +225,9 @@
       {/if}
     </div>
     {#if !invalid && !warn && !isFluid && !inline && helperText}
-      <div
-        id="{helperId}"
-        class:bx--form__helper-text="{true}"
-        class:bx--form__helper-text--disabled="{disabled}"
-        class:bx--form__helper-text--inline="{inline}"
+      <HelperText disabled="{disabled}" inline="{inline}"
+        >{helperText}</HelperText
       >
-        {helperText}
-      </div>
     {/if}
     {#if !isFluid && invalid}
       <div class:bx--form-requirement="{true}" id="{errorId}">

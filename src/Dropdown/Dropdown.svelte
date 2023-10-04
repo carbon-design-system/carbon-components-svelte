@@ -107,6 +107,7 @@
     ListBoxMenuIcon,
     ListBoxMenuItem,
   } from "../ListBox";
+  import HelperText from "../HelperText/HelperText.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -197,10 +198,10 @@
     size="{size}"
     name="{name}"
     aria-label="{$$props['aria-label']}"
-    class="bx--dropdown 
-      {direction === 'top' && 'bx--list-box--up'} 
-      {invalid && 'bx--dropdown--invalid'} 
-      {!invalid && warn && 'bx--dropdown--warning'} 
+    class="bx--dropdown
+      {direction === 'top' && 'bx--list-box--up'}
+      {invalid && 'bx--dropdown--invalid'}
+      {!invalid && warn && 'bx--dropdown--warning'}
       {open && 'bx--dropdown--open'}
       {size === 'sm' && 'bx--dropdown--sm'}
       {size === 'xl' && 'bx--dropdown--xl'}
@@ -327,11 +328,8 @@
     {/if}
   </ListBox>
   {#if !inline && !invalid && !warn && helperText}
-    <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}"
-    >
+    <HelperText disabled="{disabled}">
       {helperText}
-    </div>
+    </HelperText>
   {/if}
 </div>

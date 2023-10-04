@@ -56,6 +56,7 @@ export { FormGroup } from "./FormGroup";
 export { FormItem } from "./FormItem";
 export { FormLabel } from "./FormLabel";
 export { Grid, Row, Column } from "./Grid";
+export { HelperText } from "./HelperText";
 export { ImageLoader } from "./ImageLoader";
 export { InlineLoading } from "./InlineLoading";
 export { Link, OutboundLink } from "./Link";

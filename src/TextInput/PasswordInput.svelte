@@ -85,6 +85,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import View from "../icons/View.svelte";
   import ViewOff from "../icons/ViewOff.svelte";
+  import HelperText from "../HelperText/HelperText.svelte";
 
   const ctx = getContext("Form");
 
@@ -123,14 +124,9 @@
       </slot>
     </label>
     {#if !isFluid && helperText}
-      <div
-        id="{helperId}"
-        class:bx--form__helper-text="{true}"
-        class:bx--form__helper-text--disabled="{disabled}"
-        class:bx--form__helper-text--inline="{inline}"
+      <HelperText id="{helperId}" disabled="{disabled}" inline="{inline}"
+        >{helperText}</HelperText
       >
-        {helperText}
-      </div>
     {/if}
   {/if}
   {#if !inline && (labelText || $$slots.labelText)}
@@ -250,13 +246,9 @@
       </div>
     {/if}
     {#if !invalid && !warn && !isFluid && !inline && helperText}
-      <div
-        class:bx--form__helper-text="{true}"
-        class:bx--form__helper-text--disabled="{disabled}"
-        class:bx--form__helper-text--inline="{inline}"
-      >
+      <HelperText disabled="{disabled}" inline="{inline}">
         {helperText}
-      </div>
+      </HelperText>
     {/if}
     {#if !isFluid && !invalid && warn}
       <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>

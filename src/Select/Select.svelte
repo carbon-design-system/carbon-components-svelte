@@ -68,6 +68,7 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import HelperText from "../HelperText/HelperText.svelte";
 
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);
@@ -182,12 +183,9 @@
         {/if}
       </div>
       {#if !invalid && !warn && helperText}
-        <div
-          class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}"
-        >
+        <HelperText disabled="{disabled}">
           {helperText}
-        </div>
+        </HelperText>
       {/if}
     {/if}
     {#if !inline}
@@ -225,12 +223,9 @@
         {/if}
       </div>
       {#if !invalid && helperText}
-        <div
-          class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}"
-        >
+        <HelperText disabled="{disabled}">
           {helperText}
-        </div>
+        </HelperText>
       {/if}
       {#if invalid}
         <div id="{errorId}" class:bx--form-requirement="{true}">

@@ -105,6 +105,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import EditOff from "../icons/EditOff.svelte";
+  import HelperText from "../HelperText/HelperText.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
@@ -260,12 +261,9 @@
       {/if}
     </div>
     {#if !error && !warn && helperText}
-      <div
-        class:bx--form__helper-text="{true}"
-        class:bx--form__helper-text--disabled="{disabled}"
-      >
+      <HelperText disabled="{disabled}">
         {helperText}
-      </div>
+      </HelperText>
     {/if}
     {#if error}
       <div id="{errorId}" class:bx--form-requirement="{true}">

@@ -57,6 +57,7 @@
   import Calendar from "../icons/Calendar.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import HelperText from "../HelperText/HelperText.svelte";
 
   const {
     range,
@@ -163,11 +164,8 @@
     <div class:bx--form-requirement="{true}">{warnText}</div>
   {/if}
   {#if !invalid && !warn && helperText}
-    <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}"
-    >
+    <HelperText disabled="{disabled}">
       {helperText}
-    </div>
+    </HelperText>
   {/if}
 </div>
