@@ -2824,10 +2824,11 @@ None.
 
 ### Props
 
-| Prop name    | Required | Kind             | Reactive | Type            | Default value     | Description |
-| :----------- | :------- | :--------------- | :------- | --------------- | ----------------- | ----------- |
-| className    | No       | <code>let</code> | No       | --              | <code>null</code> | --          |
-| contentProps | No       | <code>let</code> | No       | <code>{}</code> | <code>{}</code>   | --          |
+| Prop name    | Required | Kind             | Reactive | Type                                     | Default value     | Description                                            |
+| :----------- | :------- | :--------------- | :------- | ---------------------------------------- | ----------------- | ------------------------------------------------------ |
+| ref          | No       | <code>let</code> | Yes      | <code>null &#124; HTMLSpanElement</code> | <code>null</code> | Obtain a reference to the popover content HTML element |
+| className    | No       | <code>let</code> | No       | --                                       | <code>null</code> | --                                                     |
+| contentProps | No       | <code>let</code> | No       | <code>{}</code>                          | <code>{}</code>   | --                                                     |
 
 ### Slots
 
@@ -4541,22 +4542,20 @@ None.
 
 ### Props
 
-| Prop name       | Required | Kind             | Reactive | Type                                                            | Default value                                    | Description                                                                                |
-| :-------------- | :------- | :--------------- | :------- | --------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| refIcon         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the icon HTML element                                                |
-| refTooltip      | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the tooltip HTML element                                             |
-| ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the trigger text HTML element                                        |
-| open            | No       | <code>let</code> | Yes      | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to open the tooltip                                                          |
-| align           | No       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon                                      |
-| direction       | No       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the button                                    |
-| hideIcon        | No       | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to hide the tooltip icon                                                     |
-| icon            | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code>       | <code>undefined</code>                           | Specify the icon to render for the tooltip button.<br />Default to `&lt;Information /&gt;` |
-| iconDescription | No       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the ARIA label for the tooltip button                                              |
-| iconName        | No       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the icon name attribute                                                            |
-| tabindex        | No       | <code>let</code> | No       | <code>string</code>                                             | <code>"0"</code>                                 | Set the button tabindex                                                                    |
-| tooltipId       | No       | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the tooltip                                                                  |
-| triggerId       | No       | <code>let</code> | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the tooltip button                                                           |
-| triggerText     | No       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Set the tooltip button text                                                                |
+| Prop name       | Required | Kind             | Reactive | Type                                                                                                                                                                                                                            | Default value                                    | Description                                                                                |
+| :-------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| refIcon         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                                                                                                                                         | <code>null</code>                                | Obtain a reference to the icon HTML element                                                |
+| refTooltip      | No       | <code>let</code> | Yes      | --                                                                                                                                                                                                                              | <code>null</code>                                | Obtain a reference to the tooltip HTML element                                             |
+| ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                                                                                                                                         | <code>null</code>                                | Obtain a reference to the trigger text HTML element                                        |
+| open            | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code>                               | Set to `true` to open the tooltip                                                          |
+| align           | No       | <code>let</code> | No       | <code>"top" &#124; "top-left" &#124; "top-right" &#124; "bottom" &#124; "bottom-left" &#124; "bottom-right" &#124; "left" &#124; "left-bottom" &#124; "left-top" &#124; "right" &#124; "right-bottom" &#124; "right-top"</code> | <code>"bottom"</code>                            | Set the alignment of the tooltip relative to the icon                                      |
+| icon            | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code>                                                                                                                                                                       | <code>undefined</code>                           | Specify the icon to render for the tooltip button.<br />Default to `&lt;Information /&gt;` |
+| iconDescription | No       | <code>let</code> | No       | <code>string</code>                                                                                                                                                                                                             | <code>""</code>                                  | Specify the ARIA label for the tooltip button                                              |
+| iconName        | No       | <code>let</code> | No       | <code>string</code>                                                                                                                                                                                                             | <code>""</code>                                  | Specify the icon name attribute                                                            |
+| tabindex        | No       | <code>let</code> | No       | <code>string</code>                                                                                                                                                                                                             | <code>"0"</code>                                 | Set the button tabindex                                                                    |
+| tooltipId       | No       | <code>let</code> | No       | <code>string</code>                                                                                                                                                                                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the tooltip                                                                  |
+| triggerId       | No       | <code>let</code> | No       | <code>string</code>                                                                                                                                                                                                             | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the tooltip button                                                           |
+| triggerText     | No       | <code>let</code> | No       | <code>string</code>                                                                                                                                                                                                             | <code>""</code>                                  | Set the tooltip button text<br />This is deprecated. Use default slot instead              |
 
 ### Slots
 
@@ -4572,8 +4571,6 @@ None.
 | :--------- | :--------- | :---------------- |
 | open       | dispatched | <code>null</code> |
 | close      | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
-| mousedown  | forwarded  | --                |
 
 ## `TooltipDefinition`
 

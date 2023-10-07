@@ -6,31 +6,23 @@
 </script>
 
 <Tooltip bind:open on:open on:close>
-  <p>Resources are provisioned based on your account's organization.</p>
+  Resources are provisioned based on your account's organization.
 </Tooltip>
 
-<Tooltip triggerText="Resource list">
-  <p>Resources are provisioned based on your account's organization.</p>
+<Tooltip>
+  Resources are provisioned based on your account's organization.
 </Tooltip>
 
-<Tooltip triggerText="Top" direction="top">
-  <p>Top</p>
-</Tooltip>
+<Tooltip triggerText="Top" align="top">Top</Tooltip>
 
-<Tooltip triggerText="Right" direction="right">
-  <p>Right</p>
-</Tooltip>
+<Tooltip triggerText="Right" align="right">Right</Tooltip>
 
-<Tooltip triggerText="Bottom" direction="bottom">
-  <p>Bottom</p>
-</Tooltip>
+<Tooltip triggerText="Bottom" align="bottom">Bottom</Tooltip>
 
-<Tooltip triggerText="Left" direction="left">
-  <p>Left</p>
-</Tooltip>
+<Tooltip triggerText="Left" align="left">Left</Tooltip>
 
-<Tooltip triggerText="Resource list">
-  <p>Resources are provisioned based on your account's organization.</p>
+<Tooltip>
+  Resources are provisioned based on your account's organization.
   <div class="bx--tooltip__footer">
     <Link href="/">Learn more</Link>
     <Button size="sm">Manage</Button>
@@ -41,14 +33,14 @@
 
 <Button size="sm">Manage</Button>
 
-<Tooltip triggerText="Resource list" icon="{Catalog}">
-  <p>Resources are provisioned based on your account's organization.</p>
+<Tooltip icon="{Catalog}">
+  Resources are provisioned based on your account's organization.
 </Tooltip>
 
-<Tooltip triggerText="Resource list">
+<Tooltip>
   <div
     slot="icon"
     style="width: 1rem; height: 1rem; outline: 1px solid red;"
   ></div>
-  <p>Resources are provisioned based on your account's organization.</p>
+  Resources are provisioned based on your account's organization.
 </Tooltip>

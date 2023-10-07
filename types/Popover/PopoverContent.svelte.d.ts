@@ -14,6 +14,12 @@ export interface PopoverContentProps extends RestProps {
    */
   contentProps?: {};
 
+  /**
+   * Obtain a reference to the popover content HTML element
+   * @default null
+   */
+  ref?: null | HTMLSpanElement;
+
   [key: `data-${string}`]: any;
 }
 

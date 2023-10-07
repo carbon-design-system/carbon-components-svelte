@@ -13,69 +13,46 @@ components: ["Tooltip", "TooltipFooter"]
 By default, the tooltip is triggered by an information icon.
 
 <Tooltip>
-  <p>
-    Resources are provisioned based on your account's organization.
-  </p>
+  Resources are provisioned based on your account's organization.
 </Tooltip>
 
 ## With trigger text
 
+This is deprecated in Carbon v11.
+
 <Tooltip triggerText="Resource list">
-  <p>
-    Resources are provisioned based on your account's organization.
-  </p>
+  Resources are provisioned based on your account's organization.
 </Tooltip>
 
 ## Reactive example
 
 <FileSource src="/framed/Tooltip/TooltipReactive" />
 
-## Directions
-
-<Tooltip triggerText="Top" direction="top"><p>Top</p></Tooltip>
-<Tooltip triggerText="Right" direction="right"><p>Right</p></Tooltip>
-<Tooltip triggerText="Bottom" direction="bottom"><p>Bottom</p></Tooltip>
-<Tooltip triggerText="Left" direction="left"><p>Left</p></Tooltip>
-
 ## Alignment
 
-<Tooltip triggerText="Start" align="start"><p>Start</p></Tooltip>
-<Tooltip triggerText="End" align="end"><p>End</p></Tooltip>
-<Tooltip triggerText="Center" align="center"><p>Center</p></Tooltip>
+<Tooltip triggerText="Left" align="left">Left</Tooltip>
+<Tooltip triggerText="Right" align="right">Right</Tooltip>
+<Tooltip triggerText="Top" align="top">Top</Tooltip>
 
 ## Interactive
 
 <Tooltip triggerText="Resource list">
-  <p>
-    Resources are provisioned based on your account's organization.
-  </p>
+  Resources are provisioned based on your account's organization.
   <TooltipFooter selectorPrimaryFocus="#d">
     <Link href="/">Learn more</Link>
     <Button id="d" size="small">Manage</Button>
-</TooltipFooter>
+  </TooltipFooter>
 </Tooltip>
 
 ## Custom icon (component)
 
 <Tooltip triggerText="Resource list" icon={Catalog}>
-  <p>
-    Resources are provisioned based on your account's organization.
-  </p>
+  Resources are provisioned based on your account's organization.
 </Tooltip>
 
 ## Custom icon (slot)
 
 <Tooltip triggerText="Resource list">
   <div slot="icon" style="width: 1rem; height: 1rem; outline: 1px solid red;"></div>
-  <p>
-    Resources are provisioned based on your account's organization.
-  </p>
-</Tooltip>
-
-## Hidden icon
-
-<Tooltip hideIcon triggerText="Resource list">
-  <p>
-    Resources are provisioned based on your account's organization.
-  </p>
+  Resources are provisioned based on your account's organization.
 </Tooltip>

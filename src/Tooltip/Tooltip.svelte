@@ -6,27 +6,15 @@
 
   /**
    * Set the alignment of the tooltip relative to the icon
-   * @type {"start" | "center" | "end"}
+   * @type {"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"}
    */
-  export let align = "center";
-
-  /**
-   * Set the direction of the tooltip relative to the button
-   * @type {"top" | "right" | "bottom" | "left"}
-   */
-  export let direction = "bottom";
+  export let align = "bottom";
 
   /**
    * Set to `true` to open the tooltip
    * @type {boolean}
    */
   export let open = false;
-
-  /**
-   * Set to `true` to hide the tooltip icon
-   * @type {boolean}
-   */
-  export let hideIcon = false;
 
   /**
    * Specify the icon to render for the tooltip button.
@@ -56,7 +44,10 @@
    */
   export let triggerId = "ccs-" + Math.random().toString(36);
 
-  /** Set the tooltip button text */
+  /**
+   * Set the tooltip button text
+   * This is deprecated. Use default slot instead
+   */
   export let triggerText = "";
 
   /** Obtain a reference to the trigger text HTML element */
@@ -71,6 +62,8 @@
   import { createEventDispatcher, afterUpdate, setContext } from "svelte";
   import { writable } from "svelte/store";
   import Information from "../icons/Information.svelte";
+  import Popover from "../Popover/Popover.svelte";
+  import PopoverContent from "../Popover/PopoverContent.svelte";
 
   const dispatch = createEventDispatcher();
   const tooltipOpen = writable(open);
@@ -121,44 +114,6 @@
         iconWidth = icon.width;
         iconHeight = icon.height;
       }
-
-      let offsetX = 0;
-      let offsetY = 0;
-
-      switch (direction) {
-        case "bottom":
-          if (hideIcon) {
-            offsetX = -1 * (tooltip.width / 2 - button.width / 2);
-          } else {
-            offsetX = -1 * (tooltip.width / 2 - button.width + iconWidth / 2);
-          }
-          offsetY = iconHeight / 2;
-          break;
-        case "right":
-          offsetX = button.width + 6;
-          offsetY = -1 * (tooltip.height / 2 + iconWidth / 2 - 3);
-          break;
-        case "left":
-          if (hideIcon) {
-            offsetX = -1 * (tooltip.width + 6 + 1);
-          } else {
-            offsetX = -1 * (tooltip.width - button.width + iconWidth + 8);
-          }
-          offsetY = -1 * (tooltip.height / 2 + button.height) - 2;
-          break;
-        case "top":
-          if (hideIcon) {
-            offsetX = -1 * (tooltip.width / 2 - button.width / 2);
-          } else {
-            offsetX =
-              -1 * (tooltip.width / 2 - button.width + iconWidth / 2 + 1);
-          }
-          offsetY = -1 * (tooltip.height + button.height + iconWidth / 2 - 1);
-          break;
-      }
-
-      refTooltip.style.left = offsetX + "px";
-      refTooltip.style.marginTop = offsetY + "px";
     }
   });
 
@@ -167,14 +122,11 @@
   $: buttonProps = {
     role: "button",
     "aria-haspopup": "true",
-    id: hideIcon ? triggerId : undefined,
-    class: hideIcon ? "bx--tooltip__label" : "bx--tooltip__trigger",
     "aria-expanded": open,
     "aria-describedby": open ? tooltipId : undefined,
     "aria-labelledby": triggerText ? triggerId : undefined,
     "aria-label": triggerText ? undefined : iconDescription,
     tabindex,
-    style: hideIcon ? $$restProps.style : undefined,
   };
 </script>
 
@@ -204,9 +156,10 @@
   style:z-index="{open ? 1 : undefined}"
   {...$$restProps}
 >
-  {#if !hideIcon}
-    <div bind:this="{ref}" id="{triggerId}" class:bx--tooltip__label="{true}">
-      <slot name="triggerText">{triggerText}</slot>
+  <div bind:this="{ref}" id="{triggerId}">
+    <!-- todo: remove this. it’s only kept for legacy. -->
+    <slot name="triggerText">{triggerText}</slot>
+    <Popover bind:open highContrast align="{align}">
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         bind:this="{refIcon}"
@@ -220,50 +173,12 @@
           <svelte:component this="{icon}" name="{iconName}" />
         </slot>
       </div>
-    </div>
-  {:else}
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      bind:this="{ref}"
-      {...buttonProps}
-      aria-describedby="{tooltipId}"
-      on:mousedown="{onMousedown}"
-      on:focus="{onFocus}"
-      on:blur="{onBlur}"
-      on:keydown="{onKeydown}"
-    >
-      <slot name="triggerText">{triggerText}</slot>
-    </div>
-  {/if}
-  {#if open}
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      bind:this="{refTooltip}"
-      id="{tooltipId}"
-      data-floating-menu-direction="{direction}"
-      class:bx--tooltip="{true}"
-      class:bx--tooltip--shown="{open}"
-      class:bx--tooltip--top="{direction === 'top'}"
-      class:bx--tooltip--right="{direction === 'right'}"
-      class:bx--tooltip--bottom="{direction === 'bottom'}"
-      class:bx--tooltip--left="{direction === 'left'}"
-      class:bx--tooltip--align-center="{align === 'center'}"
-      class:bx--tooltip--align-start="{align === 'start'}"
-      class:bx--tooltip--align-end="{align === 'end'}"
-      on:keydown="{onKeydown}"
-    >
-      <span class:bx--tooltip__caret="{true}"></span>
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-      <div
-        on:click|stopPropagation
-        on:mousedown|stopPropagation
-        class:bx--tooltip__content="{true}"
-        tabindex="-1"
-        role="dialog"
+      <PopoverContent
+        className="{'bx--tooltip-content'}"
+        bind:ref="{refTooltip}"
       >
         <slot />
-      </div>
-    </div>
-  {/if}
+      </PopoverContent>
+    </Popover>
+  </div>
 </div>

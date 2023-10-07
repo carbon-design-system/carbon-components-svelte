@@ -6,27 +6,27 @@ type RestProps = SvelteHTMLElements["div"];
 export interface TooltipProps extends RestProps {
   /**
    * Set the alignment of the tooltip relative to the icon
-   * @default "center"
-   */
-  align?: "start" | "center" | "end";
-
-  /**
-   * Set the direction of the tooltip relative to the button
    * @default "bottom"
    */
-  direction?: "top" | "right" | "bottom" | "left";
+  align?:
+    | "top"
+    | "top-left"
+    | "top-right"
+    | "bottom"
+    | "bottom-left"
+    | "bottom-right"
+    | "left"
+    | "left-bottom"
+    | "left-top"
+    | "right"
+    | "right-bottom"
+    | "right-top";
 
   /**
    * Set to `true` to open the tooltip
    * @default false
    */
   open?: boolean;
-
-  /**
-   * Set to `true` to hide the tooltip icon
-   * @default false
-   */
-  hideIcon?: boolean;
 
   /**
    * Specify the icon to render for the tooltip button.
@@ -67,6 +67,7 @@ export interface TooltipProps extends RestProps {
 
   /**
    * Set the tooltip button text
+   * This is deprecated. Use default slot instead
    * @default ""
    */
   triggerText?: string;
@@ -81,7 +82,7 @@ export interface TooltipProps extends RestProps {
    * Obtain a reference to the tooltip HTML element
    * @default null
    */
-  refTooltip?: null | HTMLDivElement;
+  refTooltip?: undefined;
 
   /**
    * Obtain a reference to the icon HTML element
@@ -94,11 +95,6 @@ export interface TooltipProps extends RestProps {
 
 export default class Tooltip extends SvelteComponentTyped<
   TooltipProps,
-  {
-    open: CustomEvent<null>;
-    close: CustomEvent<null>;
-    click: WindowEventMap["click"];
-    mousedown: WindowEventMap["mousedown"];
-  },
+  { open: CustomEvent<null>; close: CustomEvent<null> },
   { default: {}; icon: {}; triggerText: {} }
 > {}

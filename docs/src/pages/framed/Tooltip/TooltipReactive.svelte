@@ -4,8 +4,8 @@
   let open = true;
 </script>
 
-<Tooltip bind:open triggerText="Resource list" align="start">
-  <p>Resources are provisioned based on your account's organization.</p>
+<Tooltip bind:open align="bottom-left">
+  Resources are provisioned based on your account's organization.
 </Tooltip>
 
 <div style="margin-top: var(--bx-spacing-12);">
