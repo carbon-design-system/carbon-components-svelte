@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.81.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.80.0...v0.81.0) (2023-10-13)
+
+### Features
+
+- **data-table:** pass `row` to `display` function ([#1810](https://github.com/carbon-design-system/carbon-components-svelte/issues/1810)) ([9456eaa](https://github.com/carbon-design-system/carbon-components-svelte/commit/9456eaab3ce5259d8f6dcaa7b3db9058d3555aa6))
+- **deps-dev:** upgrade `carbon-components` to 10.58 ([#1828](https://github.com/carbon-design-system/carbon-components-svelte/issues/1828)) ([519bd86](https://github.com/carbon-design-system/carbon-components-svelte/commit/519bd8616a4fe16af4befb6a1159e62f42d9651c))
+
+### Bug Fixes
+
+- **file-uploader-button:** clear value by setting to `""` instead of `null` ([#1812](https://github.com/carbon-design-system/carbon-components-svelte/issues/1812)) ([108eb52](https://github.com/carbon-design-system/carbon-components-svelte/commit/108eb5286c46bd17a54ccbda31ee95f16a16763e))
+- **radio-button-group:** add `name` and `required` props ([#1037](https://github.com/carbon-design-system/carbon-components-svelte/issues/1037)) ([24e2a88](https://github.com/carbon-design-system/carbon-components-svelte/commit/24e2a8874f5d0c39f88761c3f118ba71aab27c1d)), closes [#1036](https://github.com/carbon-design-system/carbon-components-svelte/issues/1036)
+- **radio-button-group:** strongly type dispatched change/select events ([#1819](https://github.com/carbon-design-system/carbon-components-svelte/issues/1819)) ([06d81dd](https://github.com/carbon-design-system/carbon-components-svelte/commit/06d81ddbff8a6170d34ca1e94a41c16d318ec7ca))
+- **tile-group:** add `name` and `required` props ([#1818](https://github.com/carbon-design-system/carbon-components-svelte/issues/1818)) ([836b360](https://github.com/carbon-design-system/carbon-components-svelte/commit/836b360b9b7402cb3cd44489fd5f14b8c901f9f2))
+
 ### [0.80.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.79.0...v0.80.0) (2023-08-26)
 
 ### Features
