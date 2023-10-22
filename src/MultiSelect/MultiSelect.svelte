@@ -393,6 +393,7 @@
           selectionCount="{checked.length}"
           on:clear
           on:clear="{() => {
+            selectedIds = [];
             sortedItems = sortedItems.map((item) => ({
               ...item,
               checked: false,
