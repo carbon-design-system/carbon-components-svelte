@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.81.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.81.0...v0.81.1) (2023-10-23)
+
+### Bug Fixes
+
+- **multi-select:** reset `selectedIds` when clearing selection ([#1832](https://github.com/carbon-design-system/carbon-components-svelte/issues/1832)) ([e3ab471](https://github.com/carbon-design-system/carbon-components-svelte/commit/e3ab471018b9ac94ff9de2284284dc61ba69c881)), closes [#1831](https://github.com/carbon-design-system/carbon-components-svelte/issues/1831)
+
 ### [0.81.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.80.0...v0.81.0) (2023-10-13)
 
 ### Features
