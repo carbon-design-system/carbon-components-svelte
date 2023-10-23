@@ -160,3 +160,11 @@ Set `expressive` to `true` to use Carbon's expressive typesetting.
 <Button skeleton />
 <Button skeleton size="field" />
 <Button skeleton size="small" />
+
+## Programmatic focus
+
+Bind to the `ref` prop to access a reference to the underlying button element.
+
+You can use this reference to programmatically focus the button.
+
+<FileSource src="/framed/Button/ProgrammaticFocus" />
