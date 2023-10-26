@@ -38,20 +38,6 @@ export interface MultiSelectProps extends RestProps {
   };
 
   /**
-   * Set to `true` to only render selected options as hidden inputs for form submission.
-   * @default false
-   */
-  selectedOnly?: boolean;
-
-  /**
-   * Combine selected items as comma-separated values when submitted in a form.
-   * If set to `true`, the default separator is a comma `,`.
-   * Pass in a string to override the separator.
-   * @default false
-   */
-  combineValues?: false | true | string;
-
-  /**
    * Set the selected ids
    * @default []
    */
