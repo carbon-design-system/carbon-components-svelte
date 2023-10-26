@@ -11,7 +11,13 @@
 
 ## Default
 
-By default, items will be ordered alphabetically based on the `item.text` value. To prevent this, see [#no-alphabetical-ordering](#no-alphabetical-ordering).
+By default, items will be ordered alphabetically based on the `item.text` value.
+To prevent this, see [#no-alphabetical-ordering](#no-alphabetical-ordering).
+
+Hidden inputs will be rendered based on user selection, such as `<input type="hidden"
+name="0" value="true" />` to mirror checkbox values and to allow MultiSelect to
+be submittable within forms. These hidden inputs can be customized with
+the `combineValues` or `itemToInput` props.
 
 <MultiSelect titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -72,6 +78,56 @@ Use the `itemToString` prop to format the display of individual items.
     {id: "2", text: "Fax"}]}"
     sortItem="{() => {}}"
   />
+
+## Format checkbox values
+
+Use the `itemToInput` prop to customize the user-selectable checkbox values.
+This will also override the underlying hidden inputs used for form submission.
+
+For example: 
+
+```js
+(item) => ({name: `Contact_${item.id}`], value: item.id})
+
+
+```
+
+The above function sets the `name` attribute to
+`Contact_0` (respective to each item's `id`) for every hidden input that
+renders, along with each respective item's `id` set to the `value` attribute.
+
+When using with the `selectedOnly` prop, you can override every hidden input to
+use the same `name` attribute. This may be useful if you
+wish to use `formData.getAll('contact')` in your server-side form handler.
+
+<MultiSelect
+  itemToInput={(item) => ({name: 'contact', value: item.id})}
+  selectedOnly
+  titleText="Contact"
+  label="Select contact methods..."
+  items="{[
+    {id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}
+  ]}"
+/>
+
+## Combine values into a single input
+
+With the `combineValues` prop, all selected items' values will render as a
+comma-separated string within a single hidden input. A custom delimiter can
+alternatively be passed in.
+
+<MultiSelect
+  combineValues
+  titleText="Contact"
+  label="Select contact methods..."
+  items="{[
+    {id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}
+  ]}"
+/>
 
 ## Top direction
 

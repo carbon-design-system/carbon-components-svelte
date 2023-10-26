@@ -22,10 +22,25 @@
   export let itemToString = (item) => item.text || item.id;
 
   /**
-   * Override the item name, title, labelText passed to the checkbox input
-   * @type {(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; }}
+   * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
+   * @type {(item: MultiSelectItem) => { name?: string; labelText?: any; title?:
+   * string; value?: string }}
    */
   export let itemToInput = (item) => {};
+
+  /**
+   * Set to `true` to only render selected options as hidden inputs for form submission.
+   * @type {boolean}
+   */
+  export let selectedOnly = false
+
+  /**
+   * Combine selected items as comma-separated values when submitted in a form.
+   * If set to `true`, the default separator is a comma `,`.
+   * Pass in a string to override the separator.
+   * @type {false | true | string}
+   */
+  export let combineValues = false
 
   /**
    * Set the selected ids
@@ -533,6 +548,16 @@
           </ListBoxMenuItem>
         {/each}
       </ListBoxMenu>
+    {:else}
+      {#if combineValues}
+        {@const items = checked.map(el => el.id).join(typeof combineValues ===
+    'string' ? combineValues : ',')}
+        <input type="hidden" name={titleText} value="{items}">
+      {:else}
+        {#each selectedOnly ? checked : sortedItems as item (item.id)}
+          <input type="hidden" name="{item.id}" value={item.checked} {...itemToInput(item)} />
+        {/each}
+      {/if}
     {/if}
   </ListBox>
   {#if !inline && !invalid && !warn && helperText}

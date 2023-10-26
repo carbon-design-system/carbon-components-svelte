@@ -27,14 +27,29 @@ export interface MultiSelectProps extends RestProps {
   itemToString?: (item: MultiSelectItem) => any;
 
   /**
-   * Override the item name, title, labelText passed to the checkbox input
+   * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
    * @default (item) => {}
    */
   itemToInput?: (item: MultiSelectItem) => {
     name?: string;
     labelText?: any;
     title?: string;
+    value?: string;
   };
+
+  /**
+   * Set to `true` to only render selected options as hidden inputs for form submission.
+   * @default false
+   */
+  selectedOnly?: boolean;
+
+  /**
+   * Combine selected items as comma-separated values when submitted in a form.
+   * If set to `true`, the default separator is a comma `,`.
+   * Pass in a string to override the separator.
+   * @default false
+   */
+  combineValues?: false | true | string;
 
   /**
    * Set the selected ids
