@@ -7006,8 +7006,8 @@
         {
           "name": "itemToInput",
           "kind": "let",
-          "description": "Override the item name, title, labelText passed to the checkbox input",
-          "type": "(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; }",
+          "description": "Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.",
+          "type": "(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }",
           "value": "(item) => {}",
           "isFunction": true,
           "isFunctionDeclaration": false,

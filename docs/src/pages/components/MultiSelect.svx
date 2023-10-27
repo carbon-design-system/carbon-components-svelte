@@ -11,7 +11,12 @@
 
 ## Default
 
-By default, items will be ordered alphabetically based on the `item.text` value. To prevent this, see [#no-alphabetical-ordering](#no-alphabetical-ordering).
+By default, items will be ordered alphabetically based on the `item.text` value.
+To prevent this, see [#no-alphabetical-ordering](#no-alphabetical-ordering).
+
+MultiSelect provides interactivity for a list of checkbox inputs. Those
+checkboxes will remain rendered in the DOM and are submittable within forms.
+Checkbox attributes can be adjusted via the `itemToInput` prop.
 
 <MultiSelect titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -72,6 +77,34 @@ Use the `itemToString` prop to format the display of individual items.
     {id: "2", text: "Fax"}]}"
     sortItem="{() => {}}"
   />
+
+## Format checkbox values
+
+Use the `itemToInput` prop to customize the user-selectable checkbox values.
+This will also override the underlying hidden inputs used for form submission.
+
+For example: 
+
+```js
+(item) => ({name: `Contact_${item.id}`], value: item.id})
+
+
+```
+
+The above function sets the `name` attribute to
+`Contact_0` (respective to each item's `id`) for every hidden input that
+renders, along with each respective item's `id` set to the `value` attribute.
+
+<MultiSelect
+  itemToInput={(item) => ({name: 'contact', value: item.id})}
+  titleText="Contact"
+  label="Select contact methods..."
+  items="{[
+    {id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}
+  ]}"
+/>
 
 ## Top direction
 

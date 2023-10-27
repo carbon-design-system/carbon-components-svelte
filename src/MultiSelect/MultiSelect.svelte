@@ -22,8 +22,8 @@
   export let itemToString = (item) => item.text || item.id;
 
   /**
-   * Override the item name, title, labelText passed to the checkbox input
-   * @type {(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; }}
+   * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
+   * @type {(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }}
    */
   export let itemToInput = (item) => {};
 
@@ -483,7 +483,7 @@
         <ListBoxMenuIcon open="{open}" translateWithId="{translateWithId}" />
       {/if}
     </ListBoxField>
-    {#if open}
+    <div style:display="{open ? "block" : "none"}">
       <ListBoxMenu
         aria-label="{ariaLabel}"
         id="{id}"
@@ -533,7 +533,7 @@
           </ListBoxMenuItem>
         {/each}
       </ListBoxMenu>
-    {/if}
+    </div>
   </ListBox>
   {#if !inline && !invalid && !warn && helperText}
     <div

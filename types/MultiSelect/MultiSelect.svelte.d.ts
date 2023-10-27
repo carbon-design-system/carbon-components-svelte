@@ -27,13 +27,14 @@ export interface MultiSelectProps extends RestProps {
   itemToString?: (item: MultiSelectItem) => any;
 
   /**
-   * Override the item name, title, labelText passed to the checkbox input
+   * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
    * @default (item) => {}
    */
   itemToInput?: (item: MultiSelectItem) => {
     name?: string;
     labelText?: any;
     title?: string;
+    value?: string;
   };
 
   /**
