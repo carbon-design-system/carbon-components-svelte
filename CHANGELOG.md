@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.81.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.81.1...v0.81.2) (2023-10-27)
+
+
+### Bug Fixes
+
+* **multi-select:** render checkboxes for form data ([#1835](https://github.com/carbon-design-system/carbon-components-svelte/issues/1835)) ([7ba52df](https://github.com/carbon-design-system/carbon-components-svelte/commit/7ba52df3a1ee89b06377a0b4888cce27cc89196f)), closes [#1742](https://github.com/carbon-design-system/carbon-components-svelte/issues/1742)
+
 ### [0.81.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.81.0...v0.81.1) (2023-10-23)
 
 ### Bug Fixes
