@@ -1,5 +1,3 @@
-name: CI
-
 on:
   pull_request:
   push:
@@ -9,8 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
+      - uses: actions/checkout@v4
       - uses: actions/cache@v3
         id: yarn-cache
         with:
@@ -24,12 +21,9 @@ jobs:
           yarn test:types
           yarn lint
 
-  deploy-docs:
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    steps:
       - name: Trigger deploy
+        if: github.ref == 'refs/heads/master'
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
-          curl -X GET "$deploy_url"
+          curl "$deploy_url"
