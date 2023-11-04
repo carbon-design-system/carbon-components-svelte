@@ -1602,9 +1602,9 @@ Svelte version >=3.48.0 is required.
 
 **Documentation**
 
-- add DataTable example ["Sortable with nested object values"](https://carbon-components-svelte.onrender.com/components/DataTable#sortable-with-nested-object-values)
-- add ClickableTile example ["Disabled state"](https://carbon-components-svelte.onrender.com/components/ClickableTile#disabled-state)
-- add Link example ["Link with icon"](https://carbon-components-svelte.onrender.com/components/Link#link-with-icon)
+- add DataTable example ["Sortable with nested object values"](https://svelte.carbondesignsystem.com/components/DataTable#sortable-with-nested-object-values)
+- add ClickableTile example ["Disabled state"](https://svelte.carbondesignsystem.com/components/ClickableTile#disabled-state)
+- add Link example ["Link with icon"](https://svelte.carbondesignsystem.com/components/Link#link-with-icon)
 
 **Housekeeping**
 
@@ -1950,9 +1950,9 @@ Svelte version >=3.48.0 is required.
 
 **Documentation**
 
-- add ["Padded columns"](https://carbon-components-svelte.onrender.com/components/Grid#padded-columns) example to Grid docs
-- demo different transitions in ["Header with app switcher"](https://carbon-components-svelte.onrender.com/components/UIShell#header-with-app-switcher) example in UI Shell
-- describe use case for [using native styles in OrderedList](https://carbon-components-svelte.onrender.com/components/OrderedList#native-list-styles)
+- add ["Padded columns"](https://svelte.carbondesignsystem.com/components/Grid#padded-columns) example to Grid docs
+- demo different transitions in ["Header with app switcher"](https://svelte.carbondesignsystem.com/components/UIShell#header-with-app-switcher) example in UI Shell
+- describe use case for [using native styles in OrderedList](https://svelte.carbondesignsystem.com/components/OrderedList#native-list-styles)
 
 **Housekeeping**
 
@@ -1978,8 +1978,8 @@ Svelte version >=3.48.0 is required.
 
 **Documentation**
 
-- Add example ["Skeleton with object headers"](https://carbon-components-svelte.onrender.com/components/DataTable#skeleton-with-object-headers) to the DataTable docs
-- Add example ["Header with global search"](https://carbon-components-svelte.onrender.com/components/UIShell#header-with-global-search) to the UI Shell docs
+- Add example ["Skeleton with object headers"](https://svelte.carbondesignsystem.com/components/DataTable#skeleton-with-object-headers) to the DataTable docs
+- Add example ["Header with global search"](https://svelte.carbondesignsystem.com/components/UIShell#header-with-global-search) to the UI Shell docs
 - deprecate HeaderActionSearch in favor of HeaderSearch
 
 ## [0.23.2](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.23.2) - 2020-11-25
@@ -1998,17 +1998,17 @@ Svelte version >=3.48.0 is required.
 
 **Documentation**
 
-- Add [programmatic RadioButton example](https://carbon-components-svelte.onrender.com/components/RadioButton#programmatic-usage)
-- Add [multiple ComboBox example](https://carbon-components-svelte.onrender.com/components/ComboBox#multiple-combo-boxes)
-- Add [multiple Dropdown example](https://carbon-components-svelte.onrender.com/components/Dropdown#multiple-dropdowns)
-- Add [multiple MultiSelect example](https://carbon-components-svelte.onrender.com/components/MultiSelect#multiple-multi-select-dropdowns)
-- Add [ExpandableAccordion recipe](https://carbon-components-svelte.onrender.com/recipes/ExpandableAccordion#expandable-accordion)
+- Add [programmatic RadioButton example](https://svelte.carbondesignsystem.com/components/RadioButton#programmatic-usage)
+- Add [multiple ComboBox example](https://svelte.carbondesignsystem.com/components/ComboBox#multiple-combo-boxes)
+- Add [multiple Dropdown example](https://svelte.carbondesignsystem.com/components/Dropdown#multiple-dropdowns)
+- Add [multiple MultiSelect example](https://svelte.carbondesignsystem.com/components/MultiSelect#multiple-multi-select-dropdowns)
+- Add [ExpandableAccordion recipe](https://svelte.carbondesignsystem.com/recipes/ExpandableAccordion#expandable-accordion)
 
 ## [0.23.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.23.0) - 2020-11-20
 
 **Features**
 
-- Persist UI Shell Header hamburger menu if `persistentHamburgerMenu` is `true` ([PR #396](https://github.com/carbon-design-system/carbon-components-svelte/pull/396), [issue #374](https://github.com/carbon-design-system/carbon-components-svelte/issues/374), [rendered example](https://carbon-components-svelte.onrender.com/framed/UIShell/PersistedHamburgerMenu))
+- Persist UI Shell Header hamburger menu if `persistentHamburgerMenu` is `true` ([PR #396](https://github.com/carbon-design-system/carbon-components-svelte/pull/396), [issue #374](https://github.com/carbon-design-system/carbon-components-svelte/issues/374), [rendered example](https://svelte.carbondesignsystem.com/framed/UIShell/PersistedHamburgerMenu))
 - Disable auto focus in ComposedModal if `selectorPrimaryFocus` is `null` ([PR #393](https://github.com/carbon-design-system/carbon-components-svelte/pull/393))
 - Use small size Toggle variant if `size` is `"sm"`; deprecate ToggleSmall which will be removed in the next major release ([PR #401](https://github.com/carbon-design-system/carbon-components-svelte/pull/401))
 
@@ -2026,9 +2026,9 @@ Svelte version >=3.48.0 is required.
 - Update auto-generated Component API documentation with output from [sveld](https://github.com/carbon-design-system/sveld)
 - Label reactive component props and list them first
 - Replace back ticks in Component API prop descriptions with a `code` tag ([PR #392](https://github.com/carbon-design-system/carbon-components-svelte/pull/392), [issue #390](https://github.com/carbon-design-system/carbon-components-svelte/issues/390))
-- Simplify date sort method in ["Sortable with custom display and sort methods"](https://carbon-components-svelte.onrender.com/components/DataTable#sortable-with-custom-display-and-sort-methods) DataTable example ([PR #382](https://github.com/carbon-design-system/carbon-components-svelte/pull/382))
-- Add [programmatic ProgressIndicator](https://carbon-components-svelte.onrender.com/components/ProgressIndicator#programmatic-usage) example
-- Add [vertical ProgressIndicatorSkeleton](https://carbon-components-svelte.onrender.com/components/ProgressIndicator#skeleton-vertical) example
+- Simplify date sort method in ["Sortable with custom display and sort methods"](https://svelte.carbondesignsystem.com/components/DataTable#sortable-with-custom-display-and-sort-methods) DataTable example ([PR #382](https://github.com/carbon-design-system/carbon-components-svelte/pull/382))
+- Add [programmatic ProgressIndicator](https://svelte.carbondesignsystem.com/components/ProgressIndicator#programmatic-usage) example
+- Add [vertical ProgressIndicatorSkeleton](https://svelte.carbondesignsystem.com/components/ProgressIndicator#skeleton-vertical) example
 - Add deprecation warning to the ToggleSmall component
 
 **Housekeeping**
@@ -2086,7 +2086,7 @@ Svelte version >=3.48.0 is required.
 
 **Documentation**
 
-- DataTable: add example ["Empty column with overflow menu"](https://carbon-components-svelte.onrender.com/components/DataTable#empty-column-with-overflow-menu)
+- DataTable: add example ["Empty column with overflow menu"](https://svelte.carbondesignsystem.com/components/DataTable#empty-column-with-overflow-menu)
 - hand off current theme for examples opened in a new tab
 - add field size examples for `Dropdown`, `MultiSelect`, `Select`
 
@@ -2112,13 +2112,13 @@ Svelte version >=3.48.0 is required.
 **Documentation**
 
 - new DataTable examples:
-  - [With custom display and sort methods](https://carbon-components-svelte.onrender.com/components/DataTable#with-custom-display-and-sort-methods)
-  - [With toolbar](https://carbon-components-svelte.onrender.com/components/DataTable#with-toolbar)
-  - [With toolbar (small size)](https://carbon-components-svelte.onrender.com/components/DataTable#with-toolbar-small-size)
-  - [Selectable](https://carbon-components-svelte.onrender.com/components/DataTable#selectable)
-  - [Initial selected rows](https://carbon-components-svelte.onrender.com/components/DataTable#initial-selected-rows)
-  - [Selectable with batch actions](https://carbon-components-svelte.onrender.com/components/DataTable#selectable-with-batch-actions)
-  - [Selectable (radio)](https://carbon-components-svelte.onrender.com/components/DataTable#selectable-radio)
+  - [With custom display and sort methods](https://svelte.carbondesignsystem.com/components/DataTable#with-custom-display-and-sort-methods)
+  - [With toolbar](https://svelte.carbondesignsystem.com/components/DataTable#with-toolbar)
+  - [With toolbar (small size)](https://svelte.carbondesignsystem.com/components/DataTable#with-toolbar-small-size)
+  - [Selectable](https://svelte.carbondesignsystem.com/components/DataTable#selectable)
+  - [Initial selected rows](https://svelte.carbondesignsystem.com/components/DataTable#initial-selected-rows)
+  - [Selectable with batch actions](https://svelte.carbondesignsystem.com/components/DataTable#selectable-with-batch-actions)
+  - [Selectable (radio)](https://svelte.carbondesignsystem.com/components/DataTable#selectable-radio)
 - fix(docgen): list both default and named slots in `COMPONENT_INDEX.md`
 
 ## [0.19.0](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.19.0) - 2020-10-23
@@ -2250,7 +2250,7 @@ Svelte version >=3.48.0 is required.
 
 **Documentation**
 
-- Redesign component [documentation website](https://carbon-components-svelte.onrender.com/)
+- Redesign component [documentation website](https://svelte.carbondesignsystem.com/)
 - Update development workflow in `CONTRIBUTING.md`
 - Typo fixes in `README.md` ([PR #324](https://github.com/carbon-design-system/carbon-components-svelte/pull/324), [PR #325](https://github.com/carbon-design-system/carbon-components-svelte/pull/325))
 
