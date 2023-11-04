@@ -3,7 +3,7 @@ library:
   id: carbon-components-svelte
   name: Carbon Svelte
   description: Build user interfaces with Carbon's core components.
-  externalDocsUrl: https://carbon-components-svelte.onrender.com
+  externalDocsUrl: https://svelte.carbondesignsystem.com
   inherits: carbon-styles
   navData:
   - title: Get started
@@ -52,7 +52,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Accordion
+        url: https://svelte.carbondesignsystem.com/components/Accordion
   aspect-ratio:
     status: stable
     framework: svelte
@@ -60,7 +60,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/AspectRatio
+        url: https://svelte.carbondesignsystem.com/components/AspectRatio
   breadcrumb:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/breadcrumb/usage
@@ -69,7 +69,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Breadcrumb
+        url: https://svelte.carbondesignsystem.com/components/Breadcrumb
   breakpoint:
     name: Breakpoint
     status: stable
@@ -81,7 +81,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Breakpoint
+        url: https://svelte.carbondesignsystem.com/components/Breakpoint
     tags:
       - shell
   button:
@@ -92,7 +92,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Button
+        url: https://svelte.carbondesignsystem.com/components/Button
   button-set:
     name: Button set
     description: Buttons in a button set are juxtaposed by default.
@@ -105,7 +105,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ButtonSet
+        url: https://svelte.carbondesignsystem.com/components/ButtonSet
     tags:
       - input-control
   checkbox:
@@ -116,7 +116,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Checkbox
+        url: https://svelte.carbondesignsystem.com/components/Checkbox
   clickable-tile:
     name: Clickable tile
     status: stable
@@ -128,7 +128,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ClickableTile
+        url: https://svelte.carbondesignsystem.com/components/ClickableTile
     tags:
       - contextual-navigation
   code-snippet:
@@ -139,7 +139,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/CodeSnippet
+        url: https://svelte.carbondesignsystem.com/components/CodeSnippet
   combo-box:
     status: stable
     framework: svelte
@@ -147,7 +147,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ComboBox
+        url: https://svelte.carbondesignsystem.com/components/ComboBox
   composed-modal:
     name: Composed modal
     status: stable
@@ -159,7 +159,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ComposedModal
+        url: https://svelte.carbondesignsystem.com/components/ComposedModal
     tags:
       - input-control
   content-switcher:
@@ -170,7 +170,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ContentSwitcher
+        url: https://svelte.carbondesignsystem.com/components/ContentSwitcher
   context-menu:
     name: Context menu
     status: stable
@@ -182,7 +182,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ContextMenu
+        url: https://svelte.carbondesignsystem.com/components/ContextMenu
     tags:
       - input-control
       - contextual-navigation
@@ -193,7 +193,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/CopyButton
+        url: https://svelte.carbondesignsystem.com/components/CopyButton
   data-table:
     status: stable
     framework: svelte
@@ -202,7 +202,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/DataTable
+        url: https://svelte.carbondesignsystem.com/components/DataTable
   date-picker:
     status: stable
     framework: svelte
@@ -211,7 +211,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/DatePicker
+        url: https://svelte.carbondesignsystem.com/components/DatePicker
   definition-tooltip:
     status: stable
     framework: svelte
@@ -219,7 +219,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/TooltipDefinition
+        url: https://svelte.carbondesignsystem.com/components/TooltipDefinition
   dropdown:
     status: stable
     framework: svelte
@@ -228,7 +228,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Dropdown
+        url: https://svelte.carbondesignsystem.com/components/Dropdown
   expandable-tile:
     name: Expandable tile
     status: stable
@@ -240,7 +240,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ExpandableTile
+        url: https://svelte.carbondesignsystem.com/components/ExpandableTile
     tags:
       - data-display
       - content-element
@@ -252,7 +252,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/FileUploader
+        url: https://svelte.carbondesignsystem.com/components/FileUploader
   fluid-form:
     name: Fluid form
     status: stable
@@ -264,7 +264,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/FluidForm
+        url: https://svelte.carbondesignsystem.com/components/FluidForm
     tags:
       - form
   form:
@@ -275,7 +275,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Form
+        url: https://svelte.carbondesignsystem.com/components/Form
   grid:
     status: stable
     framework: svelte
@@ -283,7 +283,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Grid
+        url: https://svelte.carbondesignsystem.com/components/Grid
   image-loader:
     name: Image loader
     status: stable
@@ -295,7 +295,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ImageLoader
+        url: https://svelte.carbondesignsystem.com/components/ImageLoader
     tags:
       - shell
       - media
@@ -308,7 +308,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/InlineLoading
+        url: https://svelte.carbondesignsystem.com/components/InlineLoading
   inline-notification:
     name: Inline notification
     status: stable
@@ -320,7 +320,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/InlineNotification
+        url: https://svelte.carbondesignsystem.com/components/InlineNotification
     tags:
       - system-feedback
   link:
@@ -331,7 +331,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Link
+        url: https://svelte.carbondesignsystem.com/components/Link
   loading:
     status: stable
     framework: svelte
@@ -340,7 +340,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Loading
+        url: https://svelte.carbondesignsystem.com/components/Loading
   local-storage:
     name: Local storage
     status: stable
@@ -352,7 +352,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/LocalStorage
+        url: https://svelte.carbondesignsystem.com/components/LocalStorage
     tags:
       - input-control
   modal:
@@ -363,7 +363,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Modal
+        url: https://svelte.carbondesignsystem.com/components/Modal
   multiselect:
     status: stable
     framework: svelte
@@ -372,7 +372,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/MultiSelect
+        url: https://svelte.carbondesignsystem.com/components/MultiSelect
   number-input:
     status: stable
     framework: svelte
@@ -381,7 +381,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/NumberInput
+        url: https://svelte.carbondesignsystem.com/components/NumberInput
   ordered-list:
     name: Ordered list
     status: stable
@@ -393,7 +393,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/OrderedList
+        url: https://svelte.carbondesignsystem.com/components/OrderedList
     tags:
       - data-display
   overflow-menu:
@@ -407,7 +407,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/OverflowMenu
+        url: https://svelte.carbondesignsystem.com/components/OverflowMenu
     tags:
       - input-control
   pagination:
@@ -418,7 +418,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Pagination
+        url: https://svelte.carbondesignsystem.com/components/Pagination
   pagination-nav:
     status: stable
     framework: svelte
@@ -426,7 +426,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/PaginationNav
+        url: https://svelte.carbondesignsystem.com/components/PaginationNav
   password-input:
     name: Password input
     status: stable
@@ -438,7 +438,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/PasswordInput
+        url: https://svelte.carbondesignsystem.com/components/PasswordInput
     tags:
       - form
       - contextual-navigation
@@ -449,7 +449,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Popover
+        url: https://svelte.carbondesignsystem.com/components/Popover
   progress-bar:
     status: stable
     framework: svelte
@@ -458,7 +458,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ProgressBar
+        url: https://svelte.carbondesignsystem.com/components/ProgressBar
   progress-indicator:
     status: stable
     framework: svelte
@@ -467,7 +467,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ProgressIndicator
+        url: https://svelte.carbondesignsystem.com/components/ProgressIndicator
   radio-button:
     status: stable
     framework: svelte
@@ -476,7 +476,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/RadioButton
+        url: https://svelte.carbondesignsystem.com/components/RadioButton
   radio-tile:
     name: Radio tile
     status: stable
@@ -488,7 +488,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/RadioTile
+        url: https://svelte.carbondesignsystem.com/components/RadioTile
     tags:
       - input-control
   recursive-list:
@@ -502,7 +502,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/RecursiveList
+        url: https://svelte.carbondesignsystem.com/components/RecursiveList
     tags:
       - data-display
   search:
@@ -513,7 +513,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Search
+        url: https://svelte.carbondesignsystem.com/components/Search
   select:
     status: stable
     framework: svelte
@@ -522,7 +522,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Select
+        url: https://svelte.carbondesignsystem.com/components/Select
   selectable-tile:
     name: Selectable tile
     status: stable
@@ -534,7 +534,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/SelectableTile
+        url: https://svelte.carbondesignsystem.com/components/SelectableTile
     tags:
       - input-control
   skeleton-placeholder:
@@ -548,7 +548,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/SkeletonPlaceholder
+        url: https://svelte.carbondesignsystem.com/components/SkeletonPlaceholder
     tags:
       - system-feedback
   skeleton-text:
@@ -562,7 +562,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/SkeletonText
+        url: https://svelte.carbondesignsystem.com/components/SkeletonText
     tags:
       - shell
   slider:
@@ -573,7 +573,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Slider
+        url: https://svelte.carbondesignsystem.com/components/Slider
   structured-list:
     status: stable
     framework: svelte
@@ -582,7 +582,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/StructuredList
+        url: https://svelte.carbondesignsystem.com/components/StructuredList
   tabs:
     status: stable
     framework: svelte
@@ -591,7 +591,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Tabs
+        url: https://svelte.carbondesignsystem.com/components/Tabs
   tag:
     status: stable
     framework: svelte
@@ -600,7 +600,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Tag
+        url: https://svelte.carbondesignsystem.com/components/Tag
   text-area:
     status: stable
     framework: svelte
@@ -608,7 +608,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/TextArea
+        url: https://svelte.carbondesignsystem.com/components/TextArea
   text-input:
     status: stable
     framework: svelte
@@ -617,7 +617,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/TextInput
+        url: https://svelte.carbondesignsystem.com/components/TextInput
   theme:
     status: stable
     framework: svelte
@@ -625,7 +625,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Theme
+        url: https://svelte.carbondesignsystem.com/components/Theme
   tile:
     status: stable
     framework: svelte
@@ -634,7 +634,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Tile
+        url: https://svelte.carbondesignsystem.com/components/Tile
   time-picker:
     status: stable
     framework: svelte
@@ -642,7 +642,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/TimePicker
+        url: https://svelte.carbondesignsystem.com/components/TimePicker
   toast-notification:
     name: Toast notification
     status: stable
@@ -654,7 +654,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/ToastNotification
+        url: https://svelte.carbondesignsystem.com/components/ToastNotification
     tags:
       - input-control
   toggle:
@@ -665,7 +665,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Toggle
+        url: https://svelte.carbondesignsystem.com/components/Toggle
   tooltip:
     status: stable
     framework: svelte
@@ -674,7 +674,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Tooltip
+        url: https://svelte.carbondesignsystem.com/components/Tooltip
   tooltip-icon:
     name: Tootlip icon
     status: stable
@@ -686,7 +686,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/TooltipIcon
+        url: https://svelte.carbondesignsystem.com/components/TooltipIcon
     tags:
       - content-element
   tree-view:
@@ -696,7 +696,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/TreeView
+        url: https://svelte.carbondesignsystem.com/components/TreeView
   truncate:
     name: Truncate
     status: stable
@@ -708,7 +708,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/Truncate
+        url: https://svelte.carbondesignsystem.com/components/Truncate
     tags:
       - data-display
   ui-shell-header:
@@ -719,7 +719,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/UIShell
+        url: https://svelte.carbondesignsystem.com/components/UIShell
   unordered-list:
     name: Unordered list
     status: stable
@@ -731,7 +731,7 @@ assets:
       - type: storybook
         name: Storybook
         action: link
-        url: https://carbon-components-svelte.onrender.com/components/UnorderedList
+        url: https://svelte.carbondesignsystem.com/components/UnorderedList
     tags:
       - data-display
       

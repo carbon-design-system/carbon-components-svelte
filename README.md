@@ -18,7 +18,7 @@ The Carbon Svelte portfolio also includes:
 - **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 20+ charts, powered by d3
 - **[Carbon Preprocess Svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte)**: Collection of Svelte preprocessors for Carbon
 
-## [Documentation](https://carbon-components-svelte.onrender.com)
+## [Documentation](https://svelte.carbondesignsystem.com)
 
 Other forms of documentation are auto-generated:
 
@@ -155,7 +155,7 @@ Programmatically switch between each of the five Carbon themes by setting the "t
 
 ### Importing components
 
-Import components from `carbon-components-svelte` in the `script` tag of your Svelte file. Visit the [documentation site](https://carbon-components-svelte.onrender.com) for examples.
+Import components from `carbon-components-svelte` in the `script` tag of your Svelte file. Visit the [documentation site](https://svelte.carbondesignsystem.com) for examples.
 
 ```html
 <!-- App.svelte -->
