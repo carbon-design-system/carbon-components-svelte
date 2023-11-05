@@ -8,7 +8,7 @@
 </script>
 
 <Select labelText="Carbon theme" selected="g10">
-  <SelectItem value="white" text="White" />
+  <SelectItem value="white" text="White" class="" style="" />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />

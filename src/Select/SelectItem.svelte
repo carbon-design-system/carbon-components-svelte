@@ -14,6 +14,20 @@
   /** Set to `true` to disable the option */
   export let disabled = false;
 
+  let className = undefined;
+
+  /**
+   * Specify the class of the `option` element
+   * @type {string}
+   */
+  export { className as class };
+
+  /**
+   * Specify the style of the `option` element
+   * @type {string}
+   */
+  export let style = undefined;
+
   import { getContext, onMount } from "svelte";
 
   const id = "ccs-" + Math.random().toString(36);
@@ -38,8 +52,8 @@
   hidden="{hidden}"
   selected="{selected}"
   class:bx--select-option="{true}"
-  class="{$$restProps.class}"
-  style="{$$restProps.style}"
+  class="{className}"
+  style="{style}"
 >
   {text || value}
 </option>

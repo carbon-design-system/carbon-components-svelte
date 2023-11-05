@@ -10452,6 +10452,28 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "class",
+          "kind": "let",
+          "description": "Specify the class of the `option` element",
+          "type": "string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "style",
+          "kind": "let",
+          "description": "Specify the style of the `option` element",
+          "type": "string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
