@@ -46,7 +46,7 @@ components: ["Form", "FormGroup"]
     </RadioButtonGroup>
   </FormGroup>
   <FormGroup>
-  <Select id="select-1" labelText="Select menu" value="placeholder-item">
+  <Select id="select-1" labelText="Select menu">
     <SelectItem
       disabled
       hidden
