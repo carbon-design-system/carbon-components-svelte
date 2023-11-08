@@ -1,0 +1,20 @@
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+        # Currently, only npm supports publishing packages with provenance
+        # https://docs.npmjs.com/generating-provenance-statements
+        run: |
+          npm install
+          npm run build:docs & npm run build:lib
+          npm publish --provenance --access public
