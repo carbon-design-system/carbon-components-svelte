@@ -24,6 +24,18 @@ export interface SelectItemProps {
    * @default false
    */
   disabled?: boolean;
+
+  /**
+   * Specify the class of the `option` element
+   * @default undefined
+   */
+  class?: string;
+
+  /**
+   * Specify the style of the `option` element
+   * @default undefined
+   */
+  style?: string;
 }
 
 export default class SelectItem extends SvelteComponentTyped<
