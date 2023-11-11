@@ -2,6 +2,7 @@
   /**
    * @typedef {string | number} TreeNodeId
    * @typedef {{ id: TreeNodeId; text: any; icon?: typeof import("svelte").SvelteComponent<any>; disabled?: boolean; children?: TreeNode[]; }} TreeNode
+   * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} select
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} toggle
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} focus
@@ -202,5 +203,9 @@
   on:keydown
   on:keydown|stopPropagation="{handleKeyDown}"
 >
-  <TreeViewNodeList root children="{children}" />
+  <TreeViewNodeList root children="{children}" let:node>
+    <slot node="{node}">
+      {node.text}
+    </slot>
+  </TreeViewNodeList>
 </ul>

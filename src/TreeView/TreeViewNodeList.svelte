@@ -2,6 +2,7 @@
   /**
    * @typedef {string | number} TreeNodeId
    * @typedef {{ id: TreeNodeId; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode
+   * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
    */
 
   /** @type {Array<TreeNode & { children?: TreeNode[] }>} */
@@ -66,12 +67,17 @@
 {#if root}
   {#each children as child (child.id)}
     {#if Array.isArray(child.children)}
-      <svelte:self {...child} />
+      <svelte:self {...child} let:node>
+        <slot node="{node}" />
+      </svelte:self>
     {:else}
-      <TreeViewNode leaf {...child} />
+      <TreeViewNode leaf {...child} let:node>
+        <slot node="{node}" />
+      </TreeViewNode>
     {/if}
   {/each}
 {:else}
+  {@const selected = $selectedNodeIds.includes(id)}
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <li
     bind:this="{ref}"
@@ -79,12 +85,12 @@
     id="{id}"
     tabindex="{disabled ? undefined : -1}"
     aria-current="{id === $activeNodeId || undefined}"
-    aria-selected="{disabled ? undefined : $selectedNodeIds.includes(id)}"
+    aria-selected="{disabled ? undefined : selected}"
     aria-disabled="{disabled}"
     class:bx--tree-node="{true}"
     class:bx--tree-parent-node="{true}"
     class:bx--tree-node--active="{id === $activeNodeId}"
-    class:bx--tree-node--selected="{$selectedNodeIds.includes(id)}"
+    class:bx--tree-node--selected="{selected}"
     class:bx--tree-node--disabled="{disabled}"
     class:bx--tree-node--with-icon="{icon}"
     aria-expanded="{expanded}"
@@ -151,16 +157,20 @@
       </span>
       <span class:bx--tree-node__label__details="{true}">
         <svelte:component this="{icon}" class="bx--tree-node__icon" />
-        {text}
+        <slot node="{{ ...node, selected, disabled }}" />
       </span>
     </div>
     {#if expanded}
       <ul role="group" class:bx--tree-node__children="{true}">
         {#each children as child (child.id)}
           {#if Array.isArray(child.children)}
-            <svelte:self {...child} />
+            <svelte:self {...child} let:node>
+              <slot node="{node}" />
+            </svelte:self>
           {:else}
-            <TreeViewNode leaf {...child} />
+            <TreeViewNode leaf {...child} let:node>
+              <slot node="{node}">{node.text}</slot>
+            </TreeViewNode>
           {/if}
         {/each}
       </ul>
