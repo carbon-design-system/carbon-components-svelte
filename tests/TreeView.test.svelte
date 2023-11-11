@@ -72,4 +72,12 @@
   on:select="{({ detail }) => console.log('select', detail)}"
   on:toggle="{({ detail }) => console.log('toggle', detail)}"
   on:focus="{({ detail }) => console.log('focus', detail)}"
-/>
+  let:node
+>
+  {node.id}
+  {node.disabled}
+  {node.expanded}
+  {node.leaf}
+  {node.selected}
+  {node.text}
+</TreeView>

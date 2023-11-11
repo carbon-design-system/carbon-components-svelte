@@ -14669,6 +14669,12 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": "__default__",
+          "default": true,
+          "fallback": "{node.text}",
+          "slot_props": "{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }"
+        },
+        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
