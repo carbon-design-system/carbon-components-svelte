@@ -1,3 +1,31 @@
+<script context="module">
+  /**
+   * Depth-first search to find a node by id; returns an array
+   * of nodes from the initial node to the matching leaf.
+   * @param {TreeNode} node
+   * @param {TreeNodeId} id
+   * @returns {null | TreeNode[]}
+   */
+  function findNodeById(node, id) {
+    if (node === null) return null;
+    if (node.id === id) return [node];
+    if (!Array.isArray(node.children)) {
+      return null;
+    }
+
+    for (const child of node.children) {
+      const nodes = findNodeById(child, id);
+
+      if (Array.isArray(nodes)) {
+        nodes.unshift(node);
+        return nodes;
+      }
+    }
+
+    return null;
+  }
+</script>
+
 <script>
   /**
    * @typedef {string | number} TreeNodeId
@@ -87,7 +115,37 @@
       .map((node) => node.id);
   }
 
-  import { createEventDispatcher, setContext, onMount } from "svelte";
+  /**
+   * Programmatically show a node by `id`.
+   * The matching node will be expanded, selected, and focused
+   * @type {(id: TreeNodeId) => void}
+   */
+  export function showNode(id) {
+    for (const child of children) {
+      const nodes = findNodeById(child, id);
+
+      if (nodes) {
+        const ids = nodes.map((node) => node.id);
+        const nodeIds = new Set(ids);
+
+        expandNodes((node) => nodeIds.has(node.id));
+
+        const lastId = ids[ids.length - 1];
+
+        activeId = lastId;
+        selectedIds = [lastId];
+
+        tick().then(() => {
+          ref?.querySelector(`[id="${lastId}"]`)?.focus();
+        });
+
+        // Break out of the loop if the node is found.
+        break;
+      }
+    }
+  }
+
+  import { createEventDispatcher, setContext, onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
 
