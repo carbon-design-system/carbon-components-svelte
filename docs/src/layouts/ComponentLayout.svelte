@@ -65,6 +65,13 @@
   )}`;
 </script>
 
+<svelte:head>
+  <link
+    rel="canonical"
+    href="https://svelte.carbondesignsystem.com/components/{component}"
+  />
+</svelte:head>
+
 <Content data-components>
   <Grid class="fix-overflow">
     <Row>
