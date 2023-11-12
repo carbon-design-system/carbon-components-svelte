@@ -1,5 +1,5 @@
 <script>
-  import { InlineNotification } from "carbon-components-svelte";
+  import { InlineNotification, UnorderedList, ListItem } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -16,6 +16,23 @@ A parent node contains `children` while a leaf node does not.
 </InlineNotification>
 
 <FileSource src="/framed/TreeView/TreeView" />
+
+## Slottable node
+
+By default, each item renders the value of `node.text`. Use the data from `let:node` directive to override the default slot.
+
+The destructured `let:node` contains the following properties:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem><strong>id</strong>: the node id</ListItem>
+  <ListItem><strong>text</strong>: the node text</ListItem>
+  <ListItem><strong>expanded</strong>: true if the node is expanded</ListItem>
+  <ListItem><strong>leaf</strong>: true if the node does not have children</ListItem>
+  <ListItem><strong>disabled</strong>: true if the node is disabled</ListItem>
+  <ListItem><strong>selected</strong>: true if the node is selected</ListItem>
+</UnorderedList>
+
+<FileSource src="/framed/TreeView/TreeViewSlot" />
 
 ## Initial active node
 
