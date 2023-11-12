@@ -93,3 +93,11 @@ Use the `TreeView.collapseNodes` method to collapse a subset of nodes.
 If no argument is provided, all nodes will be collapsed.
 
 <FileSource src="/framed/TreeView/TreeViewCollapseNodes" />
+
+## Show a specific node
+
+Use the `TreeView.showNode` method to show a specific node.
+
+If a matching node is found, it will be expanded, selected, and focused.
+
+<FileSource src="/framed/TreeView/TreeViewShowNode" />

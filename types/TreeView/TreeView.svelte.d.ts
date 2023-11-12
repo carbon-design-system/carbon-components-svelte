@@ -103,4 +103,10 @@ export default class TreeView extends SvelteComponentTyped<
    * Collapses all nodes if no argument is provided
    */
   collapseNodes: (filterId?: (node: TreeNode) => boolean) => void;
+
+  /**
+   * Programmatically show a node by `id`.
+   * The matching node will be expanded, selected, and focused
+   */
+  showNode: (id: TreeNodeId) => void;
 }

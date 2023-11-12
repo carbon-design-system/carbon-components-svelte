@@ -58,6 +58,7 @@
     treeview.collapseNodes((node) => {
       return node.disabled;
     });
+    treeview.showNode(1);
   }
 </script>
 
