@@ -59,6 +59,10 @@
 </svelte:head>`;
 </script>
 
+<svelte:head>
+  <link rel="canonical" href="https://svelte.carbondesignsystem.com/" />
+</svelte:head>
+
 <Content>
   <Grid>
     <Row>
