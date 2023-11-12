@@ -165,27 +165,44 @@ The following items only apply to project maintainers.
 
 ### Release
 
+This library is published to NPM with [provenance](https://docs.npmjs.com/generating-provenance-statements) via a [GitHub workflow](https://github.com/carbon-design-system/carbon-components-svelte/blob/master/.github/workflows/release.yml).
+
+The workflow is automatically triggered when pushing a tag that begins with `v` (e.g., `v0.81.1`).
+
+However, maintainers must perform a few things in preparation for a release.
+
 Locally, while on `master` and the branch is clean, run `yarn release`. This command will:
 
-- Build library and docs
-- Bump package.json version
-- Add notes to Changelog
+- Bump the semantic version in `package.json`
+- Generate notes in `CHANGELOG.md`
+- Run `yarn build:docs` to update the generated documentation
 
 This command will not create a commit nor tag. Afterwards, perform the following manually:
 
 ```sh
-# 1. Stage prepared files for a commit
-git add .
+# 1. Commit the changes using the new version as the commit message.
+git commit -am "v0.81.1"
 
-# 2. Commit based on the current version, either manually or with jq
-git commit -m "v$(jq -r '.version' package.json)"
+# 2. Create a tag.
+git tag v0.81.1
 
-# 3. Create a tag based on the current version, either manually or with `jq`:
-git tag "v$(jq -r '.version' package.json)"
+# 3. Push the tag to the remote.
+# This will trigger the `release.yml` workflow to publish a new package to NPM (with provenance).
+git push origin v0.81.1
+```
 
-# 4. Push branch and tag, then publish
-git push origin master [tag]
-yarn publish
+If all goes as expected, the [`release.yml` workflow](https://github.com/carbon-design-system/carbon-components-svelte/actions/workflows/release.yml) should trigger a new run and publish the new version to NPM.
 
-# 5. Generate release notes on GitHub, and comment on issues and pull requests
+### Post-release checklist
+
+After confirming that the new release is published to NPM, perform the following:
+
+1. Create a [new release](https://github.com/carbon-design-system/carbon-components-svelte/releases/new) on GitHub. Click "Generate release notes" to automatically list changes by commit with the relevant Pull Request and author metadata. You may manually remove notes that are not relevant to the release (e.g., CI changes).
+
+2. Publish the release as the latest release.
+
+3. As good practice, visit the Pull Request and/or issue for each commit and manually confirm that it's been released. This is helpful for future readers to understand what version includes the new feature or fix.
+
+```md
+Released in [v0.81.1](https://github.com/carbon-design-system/carbon-components-svelte/releases/tag/v0.81.1).
 ```

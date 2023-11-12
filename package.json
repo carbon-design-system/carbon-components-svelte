@@ -17,8 +17,7 @@
     "build:docs": "node scripts/build-docs",
     "build:lib": "rollup -c",
     "format": "prettier --write \"./**/*.{svelte,js,md}\"",
-    "prepack": "yarn build:docs & yarn build:lib",
-    "release": "standard-version && yarn prepack"
+    "release": "standard-version && yarn build:docs"
   },
   "dependencies": {
     "flatpickr": "4.6.9"
