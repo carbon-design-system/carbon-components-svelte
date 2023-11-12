@@ -68,7 +68,19 @@ export default class TreeView extends SvelteComponentTyped<
     focus: CustomEvent<TreeNode & { expanded: boolean; leaf: boolean }>;
     keydown: WindowEventMap["keydown"];
   },
-  { labelText: {} }
+  {
+    default: {
+      node: {
+        id: TreeNodeId;
+        text: string;
+        expanded: boolean;
+        leaf: boolean;
+        disabled: boolean;
+        selected: boolean;
+      };
+    };
+    labelText: {};
+  }
 > {
   /**
    * Programmatically expand all nodes

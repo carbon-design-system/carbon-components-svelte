@@ -4707,9 +4707,10 @@ export interface TreeNode {
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                                                                                                                             | Fallback                 |
+| :-------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------- | :----------------------- |
+| --        | Yes     | <code>{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } } </code> | <code>{node.text}</code> |
+| labelText | No      | --                                                                                                                                | <code>{labelText}</code> |
 
 ### Events
 

@@ -34,6 +34,7 @@
 <script>
   /**
    * @typedef {string | number} TreeNodeId
+   * @slot {{ node: { id: TreeNodeId; text: string; expanded: false, leaf: boolean; disabled: boolean; selected: boolean; } }}
    */
 
   export let leaf = false;
@@ -68,7 +69,16 @@
     prevActiveId = $activeNodeId;
   });
 
-  $: node = { id, text, expanded: false, leaf };
+  $: selected = $selectedNodeIds.includes(id);
+  $: node = {
+    id,
+    text,
+    // A node cannot be expanded.
+    expanded: false,
+    leaf,
+    disabled,
+    selected,
+  };
   $: if (refLabel) {
     refLabel.style.marginLeft = `-${offset()}rem`;
     refLabel.style.paddingLeft = `${offset()}rem`;
@@ -82,12 +92,12 @@
   id="{id}"
   tabindex="{disabled ? undefined : -1}"
   aria-current="{id === $activeNodeId || undefined}"
-  aria-selected="{disabled ? undefined : $selectedNodeIds.includes(id)}"
+  aria-selected="{disabled ? undefined : selected}"
   aria-disabled="{disabled}"
   class:bx--tree-node="{true}"
   class:bx--tree-leaf-node="{true}"
   class:bx--tree-node--active="{id === $activeNodeId}"
-  class:bx--tree-node--selected="{$selectedNodeIds.includes(id)}"
+  class:bx--tree-node--selected="{selected}"
   class:bx--tree-node--disabled="{disabled}"
   class:bx--tree-node--with-icon="{icon}"
   on:click|stopPropagation="{() => {
@@ -116,6 +126,8 @@
 >
   <div bind:this="{refLabel}" class:bx--tree-node__label="{true}">
     <svelte:component this="{icon}" class="bx--tree-node__icon" />
-    {text}
+    <slot node="{node}">
+      {text}
+    </slot>
   </div>
 </li>
