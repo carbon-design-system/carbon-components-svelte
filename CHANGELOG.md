@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.82.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.81.3...v0.82.0) (2023-11-13)
+
+### Features
+
+- **tree-view:** add `showNode` accessor ([#1844](https://github.com/carbon-design-system/carbon-components-svelte/issues/1844)) ([1ad4e3d](https://github.com/carbon-design-system/carbon-components-svelte/commit/1ad4e3d3856e07fb1808f34b8c48dfc6a8a5e7d8)), closes [#1377](https://github.com/carbon-design-system/carbon-components-svelte/issues/1377)
+- **tree-view:** make `node` slottable ([#1843](https://github.com/carbon-design-system/carbon-components-svelte/issues/1843)) ([6a55fef](https://github.com/carbon-design-system/carbon-components-svelte/commit/6a55fef62e095114a1782d1079501e9e940cca94)), closes [#1660](https://github.com/carbon-design-system/carbon-components-svelte/issues/1660)
+
 ### [0.81.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.81.2...v0.81.3) (2023-11-08)
 
 ### Bug Fixes
