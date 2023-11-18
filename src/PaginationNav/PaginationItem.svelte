@@ -8,6 +8,7 @@
 
 <li class:bx--pagination-nav__list-item="{true}">
   <button
+    type="button"
     data-page="{page}"
     aria-current="{active ? 'page' : undefined}"
     class:bx--pagination-nav__page="{true}"
