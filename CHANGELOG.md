@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.82.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.0...v0.82.1) (2023-11-18)
+
+### Bug Fixes
+
+- **pagination-nav:** set `button type="button"` to prevent form submission ([#1846](https://github.com/carbon-design-system/carbon-components-svelte/issues/1846)) ([bed073c](https://github.com/carbon-design-system/carbon-components-svelte/commit/bed073c2f707392d3fe7d75fbf4550e723b93605))
+
 ### [0.82.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.81.3...v0.82.0) (2023-11-13)
 
 ### Features
