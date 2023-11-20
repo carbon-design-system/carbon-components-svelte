@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.82.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.1...v0.82.2) (2023-11-20)
+
+### Bug Fixes
+
+- **header-search:** "Escape" should clear search query ([#1851](https://github.com/carbon-design-system/carbon-components-svelte/issues/1851)) ([6da4572](https://github.com/carbon-design-system/carbon-components-svelte/commit/6da4572c2672e02a6463ee8374fd341868512034))
+- **header-search:** vertically center button icons ([#1850](https://github.com/carbon-design-system/carbon-components-svelte/issues/1850)) ([d68dc18](https://github.com/carbon-design-system/carbon-components-svelte/commit/d68dc182668dc0b56481d4646d672591cd7fc3e3))
+
 ### [0.82.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.0...v0.82.1) (2023-11-18)
 
 ### Bug Fixes
