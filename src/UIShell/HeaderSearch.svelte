@@ -226,6 +226,9 @@
   }
 
   button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 3rem;
     height: 100%;
     padding: 0;
