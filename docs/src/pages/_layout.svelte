@@ -1,5 +1,11 @@
 <script>
-  import { isActive, url, layout, beforeUrlChange } from "@sveltech/routify";
+  import {
+    isActive,
+    url,
+    layout,
+    beforeUrlChange,
+    goto,
+  } from "@sveltech/routify";
   import {
     Header,
     HeaderUtilities,
@@ -8,6 +14,7 @@
     HeaderPanelLinks,
     HeaderPanelLink,
     HeaderPanelDivider,
+    HeaderSearch,
     SkipToContent,
     SideNav,
     SideNavItems,
@@ -15,11 +22,29 @@
     Theme,
     Tag,
   } from "carbon-components-svelte";
+  import MiniSearch from "minisearch";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import { theme } from "../store";
+  import SEARCH_INDEX from "../SEARCH_INDEX.json";
+
+  const miniSearch = new MiniSearch({
+    fields: ["text", "description"],
+    storeFields: ["text", "description", "href"],
+    searchOptions: {
+      prefix: true,
+      boost: { description: 2 },
+      fuzzy: 0.1,
+    },
+  });
+
+  miniSearch.addAll(SEARCH_INDEX);
 
   const deprecated = [];
   const new_components = [];
+
+  let value = "";
+  let active = false;
+  $: results = miniSearch.search(value).slice(0, 10);
 
   let isOpen = false;
   let isSideNavOpen = true;
@@ -50,13 +75,21 @@
       <SkipToContent />
     </svelte:fragment>
 
-    <span slot="platform" class="platform-name">
+    <span slot="platform" class="platform-name" class:hidden="{active}">
       Carbon Components Svelte &nbsp;<code class="code-01"
         >v{process.env.VERSION || ""}</code
       >
     </span>
-
     <HeaderUtilities>
+      <HeaderSearch
+        bind:value
+        bind:active
+        placeholder="Search"
+        results="{results}"
+        on:select="{(e) => {
+          $goto(e.detail.selectedResult.href);
+        }}"
+      />
       <HeaderActionLink
         icon="{LogoGithub}"
         href="https://github.com/carbon-design-system/carbon-components-svelte"
@@ -132,6 +165,13 @@
 </Theme>
 
 <style>
+  /** Hide logo to make space for search bar on narrower screens. */
+  @media (max-width: 1056px) {
+    .platform-name.hidden {
+      display: none;
+    }
+  }
+
   .platform-name {
     display: flex;
     align-items: baseline;
