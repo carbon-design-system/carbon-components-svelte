@@ -114,6 +114,12 @@
               selectedResultIndex -= 1;
             }
             break;
+          case 'Escape':
+            // Reset the search query but keep the search bar active.
+            // Do not dispatch "clear" event as that should fire only on the "x" button.
+            value = '';
+            selectedResultIndex = 0;
+            break;
         }
       }}"
       on:paste
