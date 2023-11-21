@@ -116,8 +116,9 @@
             break;
           case 'Escape':
             if (value === '') {
-              // If the search bar is empty, close it.
+              // If the search bar is empty, deactivate and blur the input.
               active = false;
+              ref?.blur();
             }
 
             // Reset the search query but keep the search bar active.
