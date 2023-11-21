@@ -1,3 +1,8 @@
+<script context="module">
+  // Pressing these keys will focus the search bar.
+  const FOCUS_KEYS = new Set(["/", "Metak"]);
+</script>
+
 <script>
   import {
     isActive,
@@ -42,6 +47,7 @@
   const deprecated = [];
   const new_components = [];
 
+  let keys = "";
   let value = "";
   let active = false;
   $: results = miniSearch.search(value).slice(0, 10);
@@ -63,6 +69,29 @@
 
 <!-- routify:options bundle=true -->
 <svelte:window bind:innerWidth />
+
+<svelte:body
+  on:keydown="{(e) => {
+    keys += e.key;
+  }}"
+  on:keyup="{(e) => {
+    if (active) return;
+
+    if (FOCUS_KEYS.has(keys)) {
+      if (
+        document.activeElement instanceof HTMLInputElement ||
+        document.activeElement instanceof HTMLTextAreaElement
+      ) {
+        // Exit early if an inputtable element is already focused.
+        return;
+      }
+
+      e.preventDefault();
+      active = true;
+    }
+
+    keys = '';
+  }}" />
 
 <Theme persist bind:theme="{$theme}">
   <Header
