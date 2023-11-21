@@ -115,6 +115,11 @@
             }
             break;
           case 'Escape':
+            if (value === '') {
+              // If the search bar is empty, close it.
+              active = false;
+            }
+
             // Reset the search query but keep the search bar active.
             // Do not dispatch "clear" event as that should fire only on the "x" button.
             value = '';
