@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.82.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.3...v0.82.4) (2023-11-21)
+
+### Bug Fixes
+
+- **header-search:** blur input when deactivating ([#1855](https://github.com/carbon-design-system/carbon-components-svelte/issues/1855)) ([192f6a7](https://github.com/carbon-design-system/carbon-components-svelte/commit/192f6a775c2a7da25e7fc4893efdc5a80b83928c))
+
 ### [0.82.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.2...v0.82.3) (2023-11-21)
 
 ### Bug Fixes
