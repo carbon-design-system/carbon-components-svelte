@@ -46,6 +46,7 @@
   }
 
   $: if (active && ref) ref.focus();
+  $: if (!active && ref) ref.blur();
   $: dispatch(active ? "active" : "inactive");
   $: selectedResult = results[selectedResultIndex];
   $: selectedId = selectedResult
@@ -116,9 +117,8 @@
             break;
           case 'Escape':
             if (value === '') {
-              // If the search bar is empty, deactivate and blur the input.
+              // If the search bar is empty, deactivate the input.
               active = false;
-              ref?.blur();
             }
 
             // Reset the search query but keep the search bar active.
