@@ -4,6 +4,11 @@
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "svelte": "./src/index.js",
+  "exports": {
+    ".": {
+      "svelte": "./src/index.js"
+    }
+  },
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
   "types": "./types/index.d.ts",
