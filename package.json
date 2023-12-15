@@ -7,7 +7,9 @@
   "exports": {
     ".": {
       "svelte": "./src/index.js"
-    }
+    },
+    "./css/*": "./css/*",
+    "./src/*": "./src/*"
   },
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
