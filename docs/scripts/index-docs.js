@@ -1,7 +1,9 @@
 // @ts-check
-const fs = require("fs");
-const path = require("path");
-const { slug } = require("github-slugger");
+import fs from "fs";
+import path from "path";
+import githubSlugger from "github-slugger";
+
+const { slug } = githubSlugger;
 
 const COMPONENTS_PATH = "./src/pages/components";
 const SEARCH_INDEX_PATH = "./src/SEARCH_INDEX.json";
