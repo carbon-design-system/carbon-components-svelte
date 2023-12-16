@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.82.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.4...v0.82.5) (2023-12-16)
+
+### Bug Fixes
+
+- **header-search:** blur input when `active` is false ([#1857](https://github.com/carbon-design-system/carbon-components-svelte/issues/1857)) ([6c9cf9e](https://github.com/carbon-design-system/carbon-components-svelte/commit/6c9cf9e043b3c963a257a28fa8dd29c8acd4b2ce))
+- **package.json:** add `exports` field to package.json to address Vite development warnings ([#1864](https://github.com/carbon-design-system/carbon-components-svelte/issues/1864)) ([7bef3fa](https://github.com/carbon-design-system/carbon-components-svelte/commit/7bef3fae6250607337306e95440b8a472638476f))
+
 ### [0.82.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.3...v0.82.4) (2023-11-21)
 
 ### Bug Fixes
