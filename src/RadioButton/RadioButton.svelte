@@ -1,5 +1,8 @@
 <script>
-  /** Specify the value of the radio button */
+  /**
+   * Specify the value of the radio button
+   * @type {string | number}
+   */
   export let value = "";
 
   /** Set to `true` to check the radio button */

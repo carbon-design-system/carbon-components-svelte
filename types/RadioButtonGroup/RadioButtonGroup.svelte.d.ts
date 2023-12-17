@@ -8,7 +8,7 @@ export interface RadioButtonGroupProps extends RestProps {
    * Set the selected radio button value
    * @default undefined
    */
-  selected?: string;
+  selected?: string | number;
 
   /**
    * Set to `true` to disable the radio buttons
@@ -64,7 +64,7 @@ export interface RadioButtonGroupProps extends RestProps {
 export default class RadioButtonGroup extends SvelteComponentTyped<
   RadioButtonGroupProps,
   {
-    change: CustomEvent<string>;
+    change: CustomEvent<string | number>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
