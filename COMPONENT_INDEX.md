@@ -2937,7 +2937,7 @@ None.
 | :------------ | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | --------------------------------------------------- |
 | ref           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element        |
 | checked       | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the radio button             |
-| value         | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the value of the radio button               |
+| value         | No       | <code>let</code> | No       | <code>string &#124; number</code>         | <code>""</code>                                  | Specify the value of the radio button               |
 | disabled      | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the radio button           |
 | required      | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to mark the field as required         |
 | labelPosition | No       | <code>let</code> | No       | <code>"right" &#124; "left"</code>        | <code>"right"</code>                             | Specify the label position                          |
@@ -2964,7 +2964,7 @@ None.
 
 | Prop name     | Required | Kind             | Reactive | Type                                        | Default value             | Description                                              |
 | :------------ | :------- | :--------------- | :------- | ------------------------------------------- | ------------------------- | -------------------------------------------------------- |
-| selected      | No       | <code>let</code> | Yes      | <code>string</code>                         | <code>undefined</code>    | Set the selected radio button value                      |
+| selected      | No       | <code>let</code> | Yes      | <code>string &#124; number</code>           | <code>undefined</code>    | Set the selected radio button value                      |
 | disabled      | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to disable the radio buttons               |
 | required      | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>undefined</code>    | Set to `true` to require the selection of a radio button |
 | name          | No       | <code>let</code> | No       | <code>string</code>                         | <code>undefined</code>    | Specify a name attribute for the radio button inputs     |
@@ -2983,13 +2983,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>string</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail                            |
+| :--------- | :--------- | :-------------------------------- |
+| change     | dispatched | <code>string &#124; number</code> |
+| click      | forwarded  | --                                |
+| mouseover  | forwarded  | --                                |
+| mouseenter | forwarded  | --                                |
+| mouseleave | forwarded  | --                                |
 
 ## `RadioButtonSkeleton`
 

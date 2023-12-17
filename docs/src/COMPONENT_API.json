@@ -9366,7 +9366,7 @@
           "name": "value",
           "kind": "let",
           "description": "Specify the value of the radio button",
-          "type": "string",
+          "type": "string | number",
           "value": "\"\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -9503,7 +9503,7 @@
           "name": "selected",
           "kind": "let",
           "description": "Set the selected radio button value",
-          "type": "string",
+          "type": "string | number",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9615,7 +9615,7 @@
         }
       ],
       "events": [
-        { "type": "dispatched", "name": "change", "detail": "string" },
+        { "type": "dispatched", "name": "change", "detail": "string | number" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },

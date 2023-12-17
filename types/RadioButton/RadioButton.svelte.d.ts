@@ -8,7 +8,7 @@ export interface RadioButtonProps extends RestProps {
    * Specify the value of the radio button
    * @default ""
    */
-  value?: string;
+  value?: string | number;
 
   /**
    * Set to `true` to check the radio button

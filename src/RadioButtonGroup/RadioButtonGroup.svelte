@@ -1,11 +1,11 @@
 <script>
   /**
-   * @event {string} change
+   * @event {string | number} change
    */
 
   /**
    * Set the selected radio button value
-   * @type {string}
+   * @type {string | number}
    */
   export let selected = undefined;
 
