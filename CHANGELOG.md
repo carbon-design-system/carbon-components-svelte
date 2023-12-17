@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.82.6](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.5...v0.82.6) (2023-12-17)
+
+### Bug Fixes
+
+- **package:** include types in exports map ([#1865](https://github.com/carbon-design-system/carbon-components-svelte/issues/1865)) ([053beee](https://github.com/carbon-design-system/carbon-components-svelte/commit/053beeef7cbb1031f09798ffc360f8c87d17e3e1)), closes [#1863](https://github.com/carbon-design-system/carbon-components-svelte/issues/1863)
+
 ### [0.82.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.4...v0.82.5) (2023-12-16)
 
 ### Bug Fixes
