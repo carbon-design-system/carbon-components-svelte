@@ -23,8 +23,8 @@
 
   ctx.add({ id, text, selected });
 
-  const unsubscribe = ctx.currentId.subscribe(($) => {
-    selected = $ === id;
+  const unsubscribe = ctx.currentId.subscribe((currentIdVal) => {
+    selected = currentIdVal === id;
   });
 
   afterUpdate(() => {
