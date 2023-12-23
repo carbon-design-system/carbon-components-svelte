@@ -2,7 +2,7 @@
   "redirects": [
     {
       "source": "/:path*",
-      "destination": "https://carbon-components-svelte.onrender.com/:path*",
+      "destination": "https://svelte.carbondesignsystem.com/:path*",
       "permanent": true
     }
   ]
