@@ -80,7 +80,14 @@
     }
   }}" />
 
-<Theme persist bind:theme="{$theme}">
+<Theme
+  persist
+  bind:theme="{$theme}"
+  on:update="{(e) => {
+    const theme = e.detail.theme;
+    document.documentElement.style.setProperty("color-scheme", ["white", "g10"].includes(theme) ? "light" : "dark");
+  }}"
+>
   <Header
     aria-label="Navigation"
     href="{$url('/')}"
