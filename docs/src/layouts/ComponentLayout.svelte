@@ -34,10 +34,11 @@
   $: multiple = api_components.length > 1;
 
   onMount(() => {
-    const currentTheme = window.location.search.split("?theme=")[1];
+    const searchParams = new URLSearchParams(window.location.search);
+    const current_theme = searchParams.get("theme");
 
-    if (["white", "g10", "g80", "g90", "g100"].includes(currentTheme)) {
-      theme.set(currentTheme);
+    if (["white", "g10", "g80", "g90", "g100"].includes(current_theme)) {
+      theme.set(current_theme);
     }
   });
 
