@@ -4893,7 +4893,7 @@
       "filePath": "src/UIShell/HeaderAction.svelte",
       "props": [
         {
-          "name": "isOpen",
+          "name": "open",
           "kind": "let",
           "description": "Set to `true` to open the panel",
           "type": "boolean",
@@ -10723,7 +10723,7 @@
           "reactive": false
         },
         {
-          "name": "isOpen",
+          "name": "open",
           "kind": "let",
           "description": "Set to `true` to toggle the expanded state",
           "type": "boolean",

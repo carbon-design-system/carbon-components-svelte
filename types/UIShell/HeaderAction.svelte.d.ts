@@ -8,7 +8,7 @@ export interface HeaderActionProps extends RestProps {
    * Set to `true` to open the panel
    * @default false
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Specify the icon to render when the action panel is closed.

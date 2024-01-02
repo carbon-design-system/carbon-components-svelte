@@ -46,7 +46,7 @@
   let active = false;
   $: results = miniSearch.search(value).slice(0, 10);
 
-  let isOpen = false;
+  let open = false;
   let isSideNavOpen = true;
   let innerWidth = 2048;
 
@@ -118,7 +118,7 @@
         href="https://github.com/carbon-design-system/carbon-components-svelte"
         target="_blank"
       />
-      <HeaderAction transition="{false}" bind:isOpen>
+      <HeaderAction transition="{false}" bind:open>
         <HeaderPanelLinks>
           <HeaderPanelDivider>Carbon Svelte portfolio</HeaderPanelDivider>
           <HeaderPanelLink
@@ -153,7 +153,7 @@
     </HeaderUtilities>
   </Header>
 
-  <SideNav bind:isOpen="{isSideNavOpen}">
+  <SideNav bind:open="{isSideNavOpen}">
     <SideNavItems>
       {#each components.children.filter((child) => !deprecated.includes(child.title)) as child (child.path)}
         <SideNavMenuItem
