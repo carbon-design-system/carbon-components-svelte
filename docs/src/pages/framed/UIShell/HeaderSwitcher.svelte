@@ -22,7 +22,7 @@
   import { expoIn } from "svelte/easing";
 
   let isSideNavOpen = false;
-  let isOpen = false;
+  let open = false;
   let selected = "0";
   let transitions = {
     "0": {
@@ -45,7 +45,7 @@
     <SkipToContent />
   </svelte:fragment>
   <HeaderUtilities>
-    <HeaderAction bind:isOpen transition="{transitions[selected].value}">
+    <HeaderAction bind:open transition="{transitions[selected].value}">
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
@@ -60,7 +60,7 @@
   </HeaderUtilities>
 </Header>
 
-<SideNav bind:isOpen="{isSideNavOpen}">
+<SideNav bind:open="{isSideNavOpen}">
   <SideNavItems>
     <SideNavLink text="Link 1" />
     <SideNavLink text="Link 2" />
