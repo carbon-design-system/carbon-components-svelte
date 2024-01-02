@@ -6,7 +6,7 @@
   export let ariaLabel = undefined;
 
   /** Set to `true` to toggle the open state */
-  export let isOpen = false;
+  export let open = false;
 
   /**
    * Specify the icon to render for the closed state.
@@ -39,7 +39,7 @@
   class:bx--header__menu-toggle="{true}"
   {...$$restProps}
   on:click
-  on:click="{() => (isOpen = !isOpen)}"
+  on:click="{() => (open = !open)}"
 >
-  <svelte:component this="{isOpen ? iconClose : iconMenu}" size="{20}" />
+  <svelte:component this="{open ? iconClose : iconMenu}" size="{20}" />
 </button>

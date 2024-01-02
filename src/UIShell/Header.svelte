@@ -84,7 +84,7 @@
   <slot name="skip-to-content" />
   {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
     <HamburgerMenu
-      bind:isOpen="{isSideNavOpen}"
+      bind:open="{isSideNavOpen}"
       iconClose="{iconClose}"
       iconMenu="{iconMenu}"
     />
