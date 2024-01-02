@@ -134,6 +134,7 @@
     {...$$restProps}
     style="{hasIconOnly && 'width: 3rem;'}"
     on:click
+    on:focus
     on:mouseover
     on:mouseenter
     on:mouseleave
@@ -147,6 +148,7 @@
     bind:this="{ref}"
     {...buttonProps}
     on:click
+    on:focus
     on:mouseover
     on:mouseenter
     on:mouseleave
@@ -166,6 +168,7 @@
     bind:this="{ref}"
     {...buttonProps}
     on:click
+    on:focus
     on:mouseover
     on:mouseenter
     on:mouseleave

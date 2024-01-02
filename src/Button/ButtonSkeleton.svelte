@@ -26,6 +26,7 @@
     class:bx--btn--xl="{size === 'xl'}"
     {...$$restProps}
     on:click
+    on:focus
     on:mouseover
     on:mouseenter
     on:mouseleave
@@ -43,6 +44,7 @@
     class:bx--btn--xl="{size === 'xl'}"
     {...$$restProps}
     on:click
+    on:focus
     on:mouseover
     on:mouseenter
     on:mouseleave
