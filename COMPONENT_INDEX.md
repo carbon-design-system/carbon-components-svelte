@@ -2967,7 +2967,7 @@ None.
 | selected      | No       | <code>let</code> | Yes      | <code>string &#124; number</code>           | <code>undefined</code>    | Set the selected radio button value                      |
 | disabled      | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to disable the radio buttons               |
 | required      | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>undefined</code>    | Set to `true` to require the selection of a radio button |
-| name          | No       | <code>let</code> | No       | <code>string</code>                         | <code>undefined</code>    | Specify a name attribute for the radio button inputs     |
+| name          | Yes      | <code>let</code> | No       | <code>string</code>                         | <code>undefined</code>    | Specify a name attribute for the radio button inputs     |
 | legendText    | No       | <code>let</code> | No       | <code>string</code>                         | <code>""</code>           | Specify the legend text                                  |
 | hideLegend    | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to visually hide the legend                |
 | labelPosition | No       | <code>let</code> | No       | <code>"right" &#124; "left"</code>          | <code>"right"</code>      | Specify the label position                               |

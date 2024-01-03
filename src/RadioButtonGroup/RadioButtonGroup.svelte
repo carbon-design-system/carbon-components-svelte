@@ -22,7 +22,7 @@
    * Specify a name attribute for the radio button inputs
    * @type {string}
    */
-  export let name = undefined;
+  export let name;
 
   /** Specify the legend text */
   export let legendText = "";
