@@ -20,7 +20,7 @@
     <Checkbox id="checkbox-2" labelText="Checkbox Label" disabled />
   </FormGroup>
   <FormGroup legendText="Radio buttons">
-    <RadioButtonGroup selected="default-selected">
+    <RadioButtonGroup selected="default-selected" name="radio-group">
       <RadioButton
         id="radio-1"
         value="standard"

@@ -4,6 +4,7 @@
 
 <RadioButtonGroup
   legendText="Storage tier (disk)"
+  name="group-1"
   selected="standard"
   on:change="{(e) => {
     console.log(e.detail); // string
@@ -16,6 +17,7 @@
 
 <RadioButtonGroup
   legendText="Storage tier (disk)"
+  name="group-2"
   labelPosition="left"
   selected="standard"
 >
@@ -24,7 +26,11 @@
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)">
+<RadioButtonGroup
+  orientation="vertical"
+  legendText="Storage tier (disk)"
+  name="group-3"
+>
   <RadioButtonSkeleton />
   <RadioButtonSkeleton />
   <RadioButtonSkeleton />

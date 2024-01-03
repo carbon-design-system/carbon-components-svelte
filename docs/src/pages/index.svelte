@@ -128,6 +128,7 @@
         <RadioButtonGroup
           style="margin-top: var(--cds-spacing-08)"
           legendText="Carbon themes"
+          name="theme"
           bind:selected="{$theme}"
         >
           {#each ["white", "g10", "g80", "g90", "g100"] as value}
