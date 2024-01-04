@@ -14647,6 +14647,28 @@
       "rest_props": { "type": "Element", "name": "ul" }
     },
     {
+      "moduleName": "Truncate",
+      "filePath": "src/Truncate/Truncate.svelte",
+      "props": [
+        {
+          "name": "clamp",
+          "kind": "let",
+          "type": "\"end\" | \"front\"",
+          "value": "\"end\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "p" }
+    },
+    {
       "moduleName": "UnorderedList",
       "filePath": "src/UnorderedList/UnorderedList.svelte",
       "props": [
