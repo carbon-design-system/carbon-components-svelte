@@ -66,9 +66,9 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <ul
-  class:bx--progress="{true}"
-  class:bx--progress--vertical="{vertical}"
-  class:bx--progress--space-equal="{spaceEqually && !vertical}"
+  class:cds--progress="{true}"
+  class:cds--progress--vertical="{vertical}"
+  class:cds--progress--space-equal="{spaceEqually && !vertical}"
   {...$$restProps}
   on:click
   on:mouseover

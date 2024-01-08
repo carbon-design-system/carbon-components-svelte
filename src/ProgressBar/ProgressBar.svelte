@@ -62,20 +62,20 @@
 </script>
 
 <div
-  class:bx--progress-bar="{true}"
-  class:bx--progress-bar--indeterminate="{indeterminate}"
-  class:bx--progress-bar--big="{size === 'md'}"
-  class:bx--progress-bar--small="{size === 'sm'}"
-  class:bx--progress-bar--inline="{kind === 'inline'}"
-  class:bx--progress-bar--indented="{kind === 'indented'}"
-  class:bx--progress-bar--error="{status === 'error'}"
-  class:bx--progress-bar--finished="{status === 'finished'}"
+  class:cds--progress-bar="{true}"
+  class:cds--progress-bar--indeterminate="{indeterminate}"
+  class:cds--progress-bar--big="{size === 'md'}"
+  class:cds--progress-bar--small="{size === 'sm'}"
+  class:cds--progress-bar--inline="{kind === 'inline'}"
+  class:cds--progress-bar--indented="{kind === 'indented'}"
+  class:cds--progress-bar--error="{status === 'error'}"
+  class:cds--progress-bar--finished="{status === 'finished'}"
   {...$$restProps}
 >
   <label
     for="{id}"
-    class:bx--progress-bar__label="{true}"
-    class:bx--visually-hidden="{hideLabel}"
+    class:cds--progress-bar__label="{true}"
+    class:cds--visually-hidden="{hideLabel}"
   >
     <slot name="labelText">
       {labelText}
@@ -83,14 +83,14 @@
     {#if status === "error" || status === "finished"}
       <svelte:component
         this="{statusIcons[status]}"
-        class="bx--progress-bar__status-icon"
+        class="cds--progress-bar__status-icon"
       />
     {/if}
   </label>
   <div
     role="progressbar"
     id="{id}"
-    class:bx--progress-bar__track="{true}"
+    class:cds--progress-bar__track="{true}"
     aria-busy="{status === 'active'}"
     aria-valuemin="{indeterminate ? undefined : 0}"
     aria-valuemax="{indeterminate ? undefined : max}"
@@ -98,12 +98,12 @@
     aria-describedby="{helperText ? helperId : null}"
   >
     <div
-      class:bx--progress-bar__bar="{true}"
+      class:cds--progress-bar__bar="{true}"
       style:transform="{status === "active" && `scaleX(${capped / max})`}"
     ></div>
   </div>
   {#if helperText}
-    <div id="{helperId}" class:bx--progress-bar__helper-text="{true}">
+    <div id="{helperId}" class:cds--progress-bar__helper-text="{true}">
       {helperText}
     </div>
   {/if}

@@ -25,8 +25,8 @@
    * @returns {null | HTMLElement}
    */
   function findParentTreeNode(node) {
-    if (node.classList.contains("bx--tree-parent-node")) return node;
-    if (node.classList.contains("bx--tree")) return null;
+    if (node.classList.contains("cds--tree-parent-node")) return node;
+    if (node.classList.contains("cds--tree")) return null;
     return findParentTreeNode(node.parentNode);
   }
 </script>
@@ -94,12 +94,12 @@
   aria-current="{id === $activeNodeId || undefined}"
   aria-selected="{disabled ? undefined : selected}"
   aria-disabled="{disabled}"
-  class:bx--tree-node="{true}"
-  class:bx--tree-leaf-node="{true}"
-  class:bx--tree-node--active="{id === $activeNodeId}"
-  class:bx--tree-node--selected="{selected}"
-  class:bx--tree-node--disabled="{disabled}"
-  class:bx--tree-node--with-icon="{icon}"
+  class:cds--tree-node="{true}"
+  class:cds--tree-leaf-node="{true}"
+  class:cds--tree-node--active="{id === $activeNodeId}"
+  class:cds--tree-node--selected="{selected}"
+  class:cds--tree-node--disabled="{disabled}"
+  class:cds--tree-node--with-icon="{icon}"
   on:click|stopPropagation="{() => {
     if (disabled) return;
     clickNode(node);
@@ -124,8 +124,8 @@
     focusNode(node);
   }}"
 >
-  <div bind:this="{refLabel}" class:bx--tree-node__label="{true}">
-    <svelte:component this="{icon}" class="bx--tree-node__icon" />
+  <div bind:this="{refLabel}" class:cds--tree-node__label="{true}">
+    <svelte:component this="{icon}" class="cds--tree-node__icon" />
     <slot node="{node}">
       {text}
     </slot>

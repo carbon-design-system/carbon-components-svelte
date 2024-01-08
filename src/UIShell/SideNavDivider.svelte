@@ -1,1 +1,5 @@
-<li role="separator" class:bx--side-nav__divider="{true}" {...$$restProps}></li>
+<li
+  role="separator"
+  class:cds--side-nav__divider="{true}"
+  {...$$restProps}
+></li>

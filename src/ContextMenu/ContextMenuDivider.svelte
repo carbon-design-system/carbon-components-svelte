@@ -1,1 +1,1 @@
-<li role="separator" class:bx--menu-divider="{true}"></li>
+<li role="separator" class:cds--menu-divider="{true}"></li>

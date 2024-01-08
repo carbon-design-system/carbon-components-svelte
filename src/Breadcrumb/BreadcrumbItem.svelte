@@ -1,6 +1,6 @@
 <script>
   /**
-   * @slot {{props?: { ["aria-current"]?: string; class: "bx--link"; }}}
+   * @slot {{props?: { ["aria-current"]?: string; class: "cds--link"; }}}
    */
 
   /**
@@ -22,8 +22,8 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <li
-  class:bx--breadcrumb-item="{true}"
-  class:bx--breadcrumb-item--current="{isCurrentPage &&
+  class:cds--breadcrumb-item="{true}"
+  class:cds--breadcrumb-item--current="{isCurrentPage &&
     $$restProps['aria-current'] !== 'page'}"
   {...$$restProps}
   on:click
@@ -39,7 +39,7 @@
     <slot
       props="{{
         'aria-current': $$restProps['aria-current'],
-        class: 'bx--link',
+        class: 'cds--link',
       }}"
     />
   {/if}

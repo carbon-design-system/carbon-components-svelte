@@ -98,11 +98,11 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
-  class:bx--text-input-wrapper="{true}"
-  class:bx--password-input-wrapper="{!isFluid}"
-  class:bx--text-input-wrapper--light="{light}"
-  class:bx--text-input-wrapper--inline="{inline}"
+  class:cds--form-item="{true}"
+  class:cds--text-input-wrapper="{true}"
+  class:cds--password-input-wrapper="{!isFluid}"
+  class:cds--text-input-wrapper--light="{light}"
+  class:cds--text-input-wrapper--inline="{inline}"
   on:click
   on:mouseover
   on:mouseenter
@@ -111,12 +111,13 @@
   {#if inline}
     <label
       for="{id}"
-      class:bx--label="{true}"
-      class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}"
-      class:bx--label--inline="{inline}"
-      class:bx--label--inline--sm="{inline && size === 'sm'}"
-      class:bx--label--inline--lg="{inline && (size === 'lg' || size === 'xl')}"
+      class:cds--label="{true}"
+      class:cds--visually-hidden="{hideLabel}"
+      class:cds--label--disabled="{disabled}"
+      class:cds--label--inline="{inline}"
+      class:cds--label--inline--sm="{inline && size === 'sm'}"
+      class:cds--label--inline--lg="{inline &&
+        (size === 'lg' || size === 'xl')}"
     >
       <slot name="labelText">
         {labelText}
@@ -125,9 +126,9 @@
     {#if !isFluid && helperText}
       <div
         id="{helperId}"
-        class:bx--form__helper-text="{true}"
-        class:bx--form__helper-text--disabled="{disabled}"
-        class:bx--form__helper-text--inline="{inline}"
+        class:cds--form__helper-text="{true}"
+        class:cds--form__helper-text--disabled="{disabled}"
+        class:cds--form__helper-text--inline="{inline}"
       >
         {helperText}
       </div>
@@ -136,12 +137,13 @@
   {#if !inline && (labelText || $$slots.labelText)}
     <label
       for="{id}"
-      class:bx--label="{true}"
-      class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}"
-      class:bx--label--inline="{inline}"
-      class:bx--label--inline--sm="{inline && size === 'sm'}"
-      class:bx--label--inline--lg="{inline && (size === 'lg' || size === 'xl')}"
+      class:cds--label="{true}"
+      class:cds--visually-hidden="{hideLabel}"
+      class:cds--label--disabled="{disabled}"
+      class:cds--label--inline="{inline}"
+      class:cds--label--inline--sm="{inline && size === 'sm'}"
+      class:cds--label--inline--lg="{inline &&
+        (size === 'lg' || size === 'xl')}"
     >
       <slot name="labelText">
         {labelText}
@@ -149,21 +151,21 @@
     </label>
   {/if}
   <div
-    class:bx--text-input__field-outer-wrapper="{true}"
-    class:bx--text-input__field-outer-wrapper--inline="{inline}"
+    class:cds--text-input__field-outer-wrapper="{true}"
+    class:cds--text-input__field-outer-wrapper--inline="{inline}"
   >
     <div
-      class:bx--text-input__field-wrapper="{true}"
-      class:bx--text-input__field-wrapper--warning="{warn}"
+      class:cds--text-input__field-wrapper="{true}"
+      class:cds--text-input__field-wrapper--warning="{warn}"
       data-invalid="{invalid || undefined}"
     >
       {#if invalid}
-        <WarningFilled class="bx--text-input__invalid-icon" />
+        <WarningFilled class="cds--text-input__invalid-icon" />
       {/if}
       {#if !invalid && warn}
         <WarningAltFilled
-          class="bx--text-input__invalid-icon
-            bx--text-input__invalid-icon--warning"
+          class="cds--text-input__invalid-icon
+            cds--text-input__invalid-icon--warning"
         />
       {/if}
       <input
@@ -183,13 +185,13 @@
         type="{type}"
         value="{value ?? ''}"
         disabled="{disabled}"
-        class:bx--text-input="{true}"
-        class:bx--password-input="{true}"
-        class:bx--text-input--light="{light}"
-        class:bx--text-input--invalid="{invalid}"
-        class:bx--text-input--warning="{warn}"
-        class:bx--text-input--sm="{size === 'sm'}"
-        class:bx--text-input--lg="{size === 'lg' || size === 'xl'}"
+        class:cds--text-input="{true}"
+        class:cds--password-input="{true}"
+        class:cds--text-input--light="{light}"
+        class:cds--text-input--invalid="{invalid}"
+        class:cds--text-input--warning="{warn}"
+        class:cds--text-input--sm="{size === 'sm'}"
+        class:cds--text-input--lg="{size === 'lg' || size === 'xl'}"
         {...$$restProps}
         on:change
         on:input
@@ -203,8 +205,8 @@
         on:paste
       />
       {#if isFluid && invalid}
-        <hr class="bx--text-input__divider" />
-        <div class="bx--form-requirement" id="{errorId}">
+        <hr class="cds--text-input__divider" />
+        <div class="cds--form-requirement" id="{errorId}">
           {invalidText}
         </div>
       {/if}
@@ -212,54 +214,54 @@
         <button
           type="button"
           disabled="{disabled}"
-          class:bx--text-input--password__visibility__toggle="{true}"
-          class:bx--btn="{true}"
-          class:bx--btn--icon-only="{true}"
-          class:bx--btn--disabled="{disabled}"
-          class:bx--tooltip__trigger="{true}"
-          class:bx--tooltip--a11y="{true}"
-          class:bx--tooltip--top="{tooltipPosition === 'top'}"
-          class:bx--tooltip--right="{tooltipPosition === 'right'}"
-          class:bx--tooltip--bottom="{tooltipPosition === 'bottom'}"
-          class:bx--tooltip--left="{tooltipPosition === 'left'}"
-          class:bx--tooltip--align-start="{tooltipAlignment === 'start'}"
-          class:bx--tooltip--align-center="{tooltipAlignment === 'center'}"
-          class:bx--tooltip--align-end="{tooltipAlignment === 'end'}"
+          class:cds--text-input--password__visibility__toggle="{true}"
+          class:cds--btn="{true}"
+          class:cds--btn--icon-only="{true}"
+          class:cds--btn--disabled="{disabled}"
+          class:cds--tooltip__trigger="{true}"
+          class:cds--tooltip--a11y="{true}"
+          class:cds--tooltip--top="{tooltipPosition === 'top'}"
+          class:cds--tooltip--right="{tooltipPosition === 'right'}"
+          class:cds--tooltip--bottom="{tooltipPosition === 'bottom'}"
+          class:cds--tooltip--left="{tooltipPosition === 'left'}"
+          class:cds--tooltip--align-start="{tooltipAlignment === 'start'}"
+          class:cds--tooltip--align-center="{tooltipAlignment === 'center'}"
+          class:cds--tooltip--align-end="{tooltipAlignment === 'end'}"
           on:click="{() => {
             type = type === 'password' ? 'text' : 'password';
           }}"
         >
           {#if !disabled}
-            <span class:bx--assistive-text="{true}">
+            <span class:cds--assistive-text="{true}">
               {#if type === "text"}
                 {hidePasswordLabel}
               {:else}{showPasswordLabel}{/if}
             </span>
           {/if}
           {#if type === "text"}
-            <ViewOff class="bx--icon-visibility-off" />
+            <ViewOff class="cds--icon-visibility-off" />
           {:else}
-            <View class="bx--icon-visibility-on" />
+            <View class="cds--icon-visibility-on" />
           {/if}
         </button>
       {/if}
     </div>
     {#if !isFluid && invalid}
-      <div class:bx--form-requirement="{true}" id="{errorId}">
+      <div class:cds--form-requirement="{true}" id="{errorId}">
         {invalidText}
       </div>
     {/if}
     {#if !invalid && !warn && !isFluid && !inline && helperText}
       <div
-        class:bx--form__helper-text="{true}"
-        class:bx--form__helper-text--disabled="{disabled}"
-        class:bx--form__helper-text--inline="{inline}"
+        class:cds--form__helper-text="{true}"
+        class:cds--form__helper-text--disabled="{disabled}"
+        class:cds--form__helper-text--inline="{inline}"
       >
         {helperText}
       </div>
     {/if}
     {#if !isFluid && !invalid && warn}
-      <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
+      <div class:cds--form-requirement="{true}" id="{warnId}">{warnText}</div>
     {/if}
   </div>
 </div>

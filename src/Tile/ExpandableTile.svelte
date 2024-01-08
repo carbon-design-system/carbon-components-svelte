@@ -70,10 +70,10 @@
   aria-expanded="{expanded}"
   tabindex="{tabindex}"
   title="{expanded ? tileExpandedIconText : tileCollapsedIconText}"
-  class:bx--tile="{true}"
-  class:bx--tile--expandable="{true}"
-  class:bx--tile--is-expanded="{expanded}"
-  class:bx--tile--light="{light}"
+  class:cds--tile="{true}"
+  class:cds--tile--expandable="{true}"
+  class:cds--tile--is-expanded="{expanded}"
+  class:cds--tile--light="{light}"
   style:max-height="{expanded ? "none" : `${tileMaxHeight + tilePadding}px`}"
   {...$$restProps}
   on:click
@@ -86,17 +86,17 @@
   on:mouseleave
 >
   <div>
-    <div bind:this="{refAbove}" class:bx--tile-content="{true}">
-      <span class:bx--tile-content__above-the-fold="{true}">
+    <div bind:this="{refAbove}" class:cds--tile-content="{true}">
+      <span class:cds--tile-content__above-the-fold="{true}">
         <slot name="above" />
       </span>
     </div>
-    <div class:bx--tile__chevron="{true}">
+    <div class:cds--tile__chevron="{true}">
       <span>{expanded ? tileExpandedLabel : tileCollapsedLabel}</span>
       <ChevronDown />
     </div>
-    <div class:bx--tile-content="{true}">
-      <span class:bx--tile-content__below-the-fold="{true}">
+    <div class:cds--tile-content="{true}">
+      <span class:cds--tile-content__below-the-fold="{true}">
         <slot name="below" />
       </span>
     </div>

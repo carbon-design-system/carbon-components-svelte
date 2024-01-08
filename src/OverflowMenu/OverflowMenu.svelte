@@ -168,7 +168,7 @@
     focusedId.set($items[$currentIndex].id);
   }
   $: styles = `<style>
-    #${id} .bx--overflow-menu-options.bx--overflow-menu-options:after {
+    #${id} .cds--overflow-menu-options.cds--overflow-menu-options:after {
       width: ${buttonWidth ? buttonWidth + "px" : "2rem"};
     }
   <\/style>`;
@@ -195,11 +195,11 @@
   aria-expanded="{open}"
   aria-label="{ariaLabel}"
   id="{id}"
-  class:bx--overflow-menu="{true}"
-  class:bx--overflow-menu--open="{open}"
-  class:bx--overflow-menu--light="{light}"
-  class:bx--overflow-menu--sm="{size === 'sm'}"
-  class:bx--overflow-menu--lg="{size === 'lg'}"
+  class:cds--overflow-menu="{true}"
+  class:cds--overflow-menu--open="{open}"
+  class:cds--overflow-menu--light="{light}"
+  class:cds--overflow-menu--sm="{size === 'sm'}"
+  class:cds--overflow-menu--lg="{size === 'lg'}"
   {...$$restProps}
   on:click
   on:click="{({ target }) => {
@@ -238,7 +238,7 @@
       this="{icon}"
       aria-label="{iconDescription}"
       title="{iconDescription}"
-      class="bx--overflow-menu__icon {iconClass}"
+      class="cds--overflow-menu__icon {iconClass}"
     />
   </slot>
   {#if open}
@@ -249,13 +249,13 @@
       tabindex="-1"
       aria-label="{ariaLabel}"
       data-floating-menu-direction="{direction}"
-      class:bx--overflow-menu-options="{true}"
-      class:bx--overflow-menu--flip="{flipped}"
-      class:bx--overflow-menu-options--open="{open}"
-      class:bx--overflow-menu-options--light="{light}"
-      class:bx--overflow-menu-options--sm="{size === 'sm'}"
-      class:bx--overflow-menu-options--lg="{size === 'lg'}"
-      class:bx--breadcrumb-menu-options="{!!ctxBreadcrumbItem}"
+      class:cds--overflow-menu-options="{true}"
+      class:cds--overflow-menu--flip="{flipped}"
+      class:cds--overflow-menu-options--open="{open}"
+      class:cds--overflow-menu-options--light="{light}"
+      class:cds--overflow-menu-options--sm="{size === 'sm'}"
+      class:cds--overflow-menu-options--lg="{size === 'lg'}"
+      class:cds--breadcrumb-menu-options="{!!ctxBreadcrumbItem}"
       class="{menuOptionsClass}"
     >
       <slot />

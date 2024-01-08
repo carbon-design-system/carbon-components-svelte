@@ -57,8 +57,8 @@
 </script>
 
 <div
-  class:bx--radio-button-wrapper="{true}"
-  class:bx--radio-button-wrapper--label-left="{labelPosition === 'left'}"
+  class:cds--radio-button-wrapper="{true}"
+  class:cds--radio-button-wrapper--label-left="{labelPosition === 'left'}"
   {...$$restProps}
 >
   <input
@@ -70,7 +70,7 @@
     disabled="{disabled}"
     required="{$groupRequired ?? required}"
     value="{value}"
-    class:bx--radio-button="{true}"
+    class:cds--radio-button="{true}"
     on:change
     on:change="{() => {
       if (update) {
@@ -78,10 +78,10 @@
       }
     }}"
   />
-  <label class:bx--radio-button__label="{true}" for="{id}">
-    <span class:bx--radio-button__appearance="{true}"></span>
+  <label class:cds--radio-button__label="{true}" for="{id}">
+    <span class:cds--radio-button__appearance="{true}"></span>
     {#if labelText || $$slots.labelText}
-      <span class:bx--visually-hidden="{hideLabel}">
+      <span class:cds--visually-hidden="{hideLabel}">
         <slot name="labelText">
           {labelText}
         </slot>

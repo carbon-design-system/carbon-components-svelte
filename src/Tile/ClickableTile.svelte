@@ -22,8 +22,8 @@
 <Link
   {...$$restProps}
   disabled="{disabled}"
-  class="bx--tile bx--tile--clickable {clicked &&
-    'bx--tile--is-clicked'} {light && 'bx--tile--light'} {$$restProps.class}"
+  class="cds--tile cds--tile--clickable {clicked &&
+    'cds--tile--is-clicked'} {light && 'cds--tile--light'} {$$restProps.class}"
   href="{href}"
   on:click
   on:click="{() => {

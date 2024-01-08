@@ -55,31 +55,31 @@
   <div
     aria-label="{title}"
     id="{id}"
-    class:bx--tag="{true}"
-    class:bx--tag--disabled="{disabled}"
-    class:bx--tag--filter="{filter}"
-    class:bx--tag--sm="{size === 'sm'}"
-    class:bx--tag--red="{type === 'red'}"
-    class:bx--tag--magenta="{type === 'magenta'}"
-    class:bx--tag--purple="{type === 'purple'}"
-    class:bx--tag--blue="{type === 'blue'}"
-    class:bx--tag--cyan="{type === 'cyan'}"
-    class:bx--tag--teal="{type === 'teal'}"
-    class:bx--tag--green="{type === 'green'}"
-    class:bx--tag--gray="{type === 'gray'}"
-    class:bx--tag--cool-gray="{type === 'cool-gray'}"
-    class:bx--tag--warm-gray="{type === 'warm-gray'}"
-    class:bx--tag--high-contrast="{type === 'high-contrast'}"
-    class:bx--tag--outline="{type === 'outline'}"
+    class:cds--tag="{true}"
+    class:cds--tag--disabled="{disabled}"
+    class:cds--tag--filter="{filter}"
+    class:cds--tag--sm="{size === 'sm'}"
+    class:cds--tag--red="{type === 'red'}"
+    class:cds--tag--magenta="{type === 'magenta'}"
+    class:cds--tag--purple="{type === 'purple'}"
+    class:cds--tag--blue="{type === 'blue'}"
+    class:cds--tag--cyan="{type === 'cyan'}"
+    class:cds--tag--teal="{type === 'teal'}"
+    class:cds--tag--green="{type === 'green'}"
+    class:cds--tag--gray="{type === 'gray'}"
+    class:cds--tag--cool-gray="{type === 'cool-gray'}"
+    class:cds--tag--warm-gray="{type === 'warm-gray'}"
+    class:cds--tag--high-contrast="{type === 'high-contrast'}"
+    class:cds--tag--outline="{type === 'outline'}"
     {...$$restProps}
   >
-    <slot props="{{ class: 'bx--tag__label' }}">
-      <span class:bx--tag__label="{true}">{type}</span>
+    <slot props="{{ class: 'cds--tag__label' }}">
+      <span class:cds--tag__label="{true}">{type}</span>
     </slot>
     <button
       type="button"
       aria-labelledby="{id}"
-      class:bx--tag__close-icon="{true}"
+      class:cds--tag__close-icon="{true}"
       disabled="{disabled}"
       title="{title}"
       on:click|stopPropagation
@@ -100,22 +100,22 @@
     disabled="{disabled}"
     aria-disabled="{disabled}"
     tabindex="{disabled ? '-1' : undefined}"
-    class:bx--tag="{true}"
-    class:bx--tag--interactive="{true}"
-    class:bx--tag--disabled="{disabled}"
-    class:bx--tag--sm="{size === 'sm'}"
-    class:bx--tag--red="{type === 'red'}"
-    class:bx--tag--magenta="{type === 'magenta'}"
-    class:bx--tag--purple="{type === 'purple'}"
-    class:bx--tag--blue="{type === 'blue'}"
-    class:bx--tag--cyan="{type === 'cyan'}"
-    class:bx--tag--teal="{type === 'teal'}"
-    class:bx--tag--green="{type === 'green'}"
-    class:bx--tag--gray="{type === 'gray'}"
-    class:bx--tag--cool-gray="{type === 'cool-gray'}"
-    class:bx--tag--warm-gray="{type === 'warm-gray'}"
-    class:bx--tag--high-contrast="{type === 'high-contrast'}"
-    class:bx--tag--outline="{type === 'outline'}"
+    class:cds--tag="{true}"
+    class:cds--tag--interactive="{true}"
+    class:cds--tag--disabled="{disabled}"
+    class:cds--tag--sm="{size === 'sm'}"
+    class:cds--tag--red="{type === 'red'}"
+    class:cds--tag--magenta="{type === 'magenta'}"
+    class:cds--tag--purple="{type === 'purple'}"
+    class:cds--tag--blue="{type === 'blue'}"
+    class:cds--tag--cyan="{type === 'cyan'}"
+    class:cds--tag--teal="{type === 'teal'}"
+    class:cds--tag--green="{type === 'green'}"
+    class:cds--tag--gray="{type === 'gray'}"
+    class:cds--tag--cool-gray="{type === 'cool-gray'}"
+    class:cds--tag--warm-gray="{type === 'warm-gray'}"
+    class:cds--tag--high-contrast="{type === 'high-contrast'}"
+    class:cds--tag--outline="{type === 'outline'}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -123,7 +123,7 @@
     on:mouseleave
   >
     {#if $$slots.icon || icon}
-      <div class:bx--tag__custom-icon="{true}">
+      <div class:cds--tag__custom-icon="{true}">
         <slot name="icon">
           <svelte:component this="{icon}" />
         </slot>
@@ -137,21 +137,21 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     id="{id}"
-    class:bx--tag="{true}"
-    class:bx--tag--disabled="{disabled}"
-    class:bx--tag--sm="{size === 'sm'}"
-    class:bx--tag--red="{type === 'red'}"
-    class:bx--tag--magenta="{type === 'magenta'}"
-    class:bx--tag--purple="{type === 'purple'}"
-    class:bx--tag--blue="{type === 'blue'}"
-    class:bx--tag--cyan="{type === 'cyan'}"
-    class:bx--tag--teal="{type === 'teal'}"
-    class:bx--tag--green="{type === 'green'}"
-    class:bx--tag--gray="{type === 'gray'}"
-    class:bx--tag--cool-gray="{type === 'cool-gray'}"
-    class:bx--tag--warm-gray="{type === 'warm-gray'}"
-    class:bx--tag--high-contrast="{type === 'high-contrast'}"
-    class:bx--tag--outline="{type === 'outline'}"
+    class:cds--tag="{true}"
+    class:cds--tag--disabled="{disabled}"
+    class:cds--tag--sm="{size === 'sm'}"
+    class:cds--tag--red="{type === 'red'}"
+    class:cds--tag--magenta="{type === 'magenta'}"
+    class:cds--tag--purple="{type === 'purple'}"
+    class:cds--tag--blue="{type === 'blue'}"
+    class:cds--tag--cyan="{type === 'cyan'}"
+    class:cds--tag--teal="{type === 'teal'}"
+    class:cds--tag--green="{type === 'green'}"
+    class:cds--tag--gray="{type === 'gray'}"
+    class:cds--tag--cool-gray="{type === 'cool-gray'}"
+    class:cds--tag--warm-gray="{type === 'warm-gray'}"
+    class:cds--tag--high-contrast="{type === 'high-contrast'}"
+    class:cds--tag--outline="{type === 'outline'}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -159,7 +159,7 @@
     on:mouseleave
   >
     {#if $$slots.icon || icon}
-      <div class:bx--tag__custom-icon="{true}">
+      <div class:cds--tag__custom-icon="{true}">
         <slot name="icon">
           <svelte:component this="{icon}" />
         </slot>

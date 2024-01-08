@@ -198,7 +198,7 @@
 
   onMount(() => {
     const firstFocusableNode = ref.querySelector(
-      "li.bx--tree-node:not(.bx--tree-node--disabled)"
+      "li.cds--tree-node:not(.cds--tree-node--disabled)"
     );
 
     if (firstFocusableNode != null) {
@@ -231,9 +231,9 @@
   $: if (ref) {
     treeWalker = document.createTreeWalker(ref, NodeFilter.SHOW_ELEMENT, {
       acceptNode: (node) => {
-        if (node.classList.contains("bx--tree-node--disabled"))
+        if (node.classList.contains("cds--tree-node--disabled"))
           return NodeFilter.FILTER_REJECT;
-        if (node.matches("li.bx--tree-node")) return NodeFilter.FILTER_ACCEPT;
+        if (node.matches("li.cds--tree-node")) return NodeFilter.FILTER_ACCEPT;
         return NodeFilter.FILTER_SKIP;
       },
     });
@@ -242,7 +242,7 @@
 
 {#if !hideLabel}
   <!-- svelte-ignore a11y-label-has-associated-control -->
-  <label id="{labelId}" class:bx--label="{true}">
+  <label id="{labelId}" class:cds--label="{true}">
     <slot name="labelText">{labelText}</slot>
   </label>
 {/if}
@@ -252,9 +252,9 @@
   {...$$restProps}
   role="tree"
   bind:this="{ref}"
-  class:bx--tree="{true}"
-  class:bx--tree--xs="{size === 'xs'}"
-  class:bx--tree--sm="{size === 'sm'}"
+  class:cds--tree="{true}"
+  class:cds--tree--xs="{size === 'xs'}"
+  class:cds--tree--sm="{size === 'sm'}"
   aria-label="{hideLabel ? labelText : undefined}"
   aria-labelledby="{!hideLabel ? labelId : undefined}"
   aria-multiselectable="{selectedIds.length > 1 || undefined}"

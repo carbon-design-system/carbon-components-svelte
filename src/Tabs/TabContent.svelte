@@ -19,7 +19,7 @@
   aria-hidden="{!selected}"
   hidden="{selected ? undefined : ''}"
   id="{id}"
-  class:bx--tab-content="{true}"
+  class:cds--tab-content="{true}"
   {...$$restProps}
 >
   <slot />

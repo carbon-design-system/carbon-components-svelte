@@ -37,7 +37,7 @@
   name="{name}"
   title="{title}"
   value="{value}"
-  class:bx--structured-list-input="{true}"
+  class:cds--structured-list-input="{true}"
   {...$$restProps}
   on:change="{() => {
     update(value);

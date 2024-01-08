@@ -15,9 +15,9 @@
 <button
   type="button"
   bind:this="{ref}"
-  class:bx--header__action="{true}"
-  class:bx--header__action--active="{isActive}"
-  class:bx--btn--icon-only="{true}"
+  class:cds--header__action="{true}"
+  class:cds--header__action--active="{isActive}"
+  class:cds--btn--icon-only="{true}"
   {...$$restProps}
   on:click
 >

@@ -5,7 +5,7 @@
     </span>
   </li>
 {/if}
-<hr class:bx--switcher__item--divider="{true}" />
+<hr class:cds--switcher__item--divider="{true}" />
 
 <style>
   /**

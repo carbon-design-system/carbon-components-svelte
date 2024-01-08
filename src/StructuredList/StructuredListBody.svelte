@@ -2,7 +2,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
   role="rowgroup"
-  class:bx--structured-list-tbody="{true}"
+  class:cds--structured-list-tbody="{true}"
   {...$$restProps}
   on:click
   on:mouseover

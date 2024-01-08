@@ -25,17 +25,17 @@
 </script>
 
 {#if stickyHeader}
-  <section class:bx--data-table_inner-container="{true}" {...$$restProps}>
+  <section class:cds--data-table_inner-container="{true}" {...$$restProps}>
     <table
-      class:bx--data-table="{true}"
-      class:bx--data-table--compact="{size === 'compact'}"
-      class:bx--data-table--short="{size === 'short'}"
-      class:bx--data-table--tall="{size === 'tall'}"
-      class:bx--data-table--md="{size === 'medium'}"
-      class:bx--data-table--sort="{sortable}"
-      class:bx--data-table--zebra="{zebra}"
-      class:bx--data-table--static="{useStaticWidth}"
-      class:bx--data-table--sticky-header="{stickyHeader}"
+      class:cds--data-table="{true}"
+      class:cds--data-table--compact="{size === 'compact'}"
+      class:cds--data-table--short="{size === 'short'}"
+      class:cds--data-table--tall="{size === 'tall'}"
+      class:cds--data-table--md="{size === 'medium'}"
+      class:cds--data-table--sort="{sortable}"
+      class:cds--data-table--zebra="{zebra}"
+      class:cds--data-table--static="{useStaticWidth}"
+      class:cds--data-table--sticky-header="{stickyHeader}"
       style="{tableStyle}"
     >
       <slot />
@@ -43,15 +43,15 @@
   </section>
 {:else}
   <table
-    class:bx--data-table="{true}"
-    class:bx--data-table--compact="{size === 'compact'}"
-    class:bx--data-table--short="{size === 'short'}"
-    class:bx--data-table--tall="{size === 'tall'}"
-    class:bx--data-table--md="{size === 'medium'}"
-    class:bx--data-table--sort="{sortable}"
-    class:bx--data-table--zebra="{zebra}"
-    class:bx--data-table--static="{useStaticWidth}"
-    class:bx--data-table--sticky-header="{stickyHeader}"
+    class:cds--data-table="{true}"
+    class:cds--data-table--compact="{size === 'compact'}"
+    class:cds--data-table--short="{size === 'short'}"
+    class:cds--data-table--tall="{size === 'tall'}"
+    class:cds--data-table--md="{size === 'medium'}"
+    class:cds--data-table--sort="{sortable}"
+    class:cds--data-table--zebra="{zebra}"
+    class:cds--data-table--static="{useStaticWidth}"
+    class:cds--data-table--sticky-header="{stickyHeader}"
     {...$$restProps}
     style="{tableStyle}"
   >

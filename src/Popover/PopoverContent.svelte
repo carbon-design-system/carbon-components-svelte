@@ -2,9 +2,9 @@
   export let className = null;
 </script>
 
-<span class:bx--popover="{true}" {...$$restProps}>
-  <span class:bx--popover-content="{true}" class="{className}">
+<span class:cds--popover="{true}" {...$$restProps}>
+  <span class:cds--popover-content="{true}" class="{className}">
     <slot />
   </span>
-  <span class:bx--popover-caret="{true}"></span>
+  <span class:cds--popover-caret="{true}"></span>
 </span>

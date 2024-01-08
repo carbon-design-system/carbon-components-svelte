@@ -12,18 +12,21 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--tabs="{true}"
-  class:bx--skeleton="{true}"
-  class:bx--tabs--contained="{type === 'container'}"
+  class:cds--tabs="{true}"
+  class:cds--skeleton="{true}"
+  class:cds--tabs--contained="{type === 'container'}"
   {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
 >
-  <div class:bx--tab--list="{true}">
+  <div class:cds--tab--list="{true}">
     {#each Array.from({ length: count }, (_, i) => i) as item}
-      <span class:bx--tabs__nav-item="{true}" class:bx--tabs__nav-link="{true}">
+      <span
+        class:cds--tabs__nav-item="{true}"
+        class:cds--tabs__nav-link="{true}"
+      >
         <span></span>
       </span>
     {/each}

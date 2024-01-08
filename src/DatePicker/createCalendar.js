@@ -11,19 +11,19 @@ function updateClasses(instance) {
     selectedDates,
   } = instance;
 
-  calendarContainer.classList.add("bx--date-picker__calendar");
+  calendarContainer.classList.add("cds--date-picker__calendar");
   calendarContainer
     .querySelector(".flatpickr-month")
-    .classList.add("bx--date-picker__month");
+    .classList.add("cds--date-picker__month");
 
-  weekdayContainer.classList.add("bx--date-picker__weekdays");
+  weekdayContainer.classList.add("cds--date-picker__weekdays");
   weekdayContainer.querySelectorAll(".flatpickr-weekday").forEach((node) => {
-    node.classList.add("bx--date-picker__weekday");
+    node.classList.add("cds--date-picker__weekday");
   });
 
-  daysContainer.classList.add("bx--date-picker__days");
+  daysContainer.classList.add("cds--date-picker__days");
   days.querySelectorAll(".flatpickr-day").forEach((node) => {
-    node.classList.add("bx--date-picker__day");
+    node.classList.add("cds--date-picker__day");
     if (node.classList.contains("today") && selectedDates.length > 0) {
       node.classList.add("no-border");
     } else if (node.classList.contains("today") && selectedDates.length === 0) {

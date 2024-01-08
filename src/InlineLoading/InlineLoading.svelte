@@ -48,7 +48,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--inline-loading="{true}"
+  class:cds--inline-loading="{true}"
   aria-live="assertive"
   {...$$restProps}
   on:click
@@ -56,15 +56,15 @@
   on:mouseenter
   on:mouseleave
 >
-  <div class:bx--inline-loading__animation="{true}">
+  <div class:cds--inline-loading__animation="{true}">
     {#if status === "error"}
       <ErrorFilled
-        class="bx--inline-loading--error"
+        class="cds--inline-loading--error"
         title="{iconDescription || status}"
       />
     {:else if status === "finished"}
       <CheckmarkFilled
-        class="bx--inline-loading__checkmark-container"
+        class="cds--inline-loading__checkmark-container"
         title="{iconDescription || status}"
       />
     {:else if status === "inactive" || status === "active"}
@@ -77,6 +77,6 @@
     {/if}
   </div>
   {#if description}
-    <div class:bx--inline-loading__text="{true}">{description}</div>
+    <div class:cds--inline-loading__text="{true}">{description}</div>
   {/if}
 </div>

@@ -139,7 +139,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:cds--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -149,22 +149,22 @@
   <label
     for="{id}"
     id="{labelId}"
-    class:bx--label="{true}"
-    class:bx--label--disabled="{disabled}"
-    class:bx--visually-hidden="{hideLabel}"
+    class:cds--label="{true}"
+    class:cds--label--disabled="{disabled}"
+    class:cds--visually-hidden="{hideLabel}"
   >
     <slot name="labelText">
       {labelText}
     </slot>
   </label>
-  <div class:bx--slider-container="{true}" style:width="{fullWidth && "100%"}">
-    <span class:bx--slider__range-label="{true}">{minLabel || min}</span>
+  <div class:cds--slider-container="{true}" style:width="{fullWidth && "100%"}">
+    <span class:cds--slider__range-label="{true}">{minLabel || min}</span>
     <div
       bind:this="{ref}"
       role="presentation"
       tabindex="-1"
-      class:bx--slider="{true}"
-      class:bx--slider--disabled="{disabled}"
+      class:cds--slider="{true}"
+      class:cds--slider--disabled="{disabled}"
       style:max-width="{fullWidth ? "none" : undefined}"
       on:mousedown="{startDragging}"
       on:mousedown="{startHolding}"
@@ -185,7 +185,7 @@
       <div
         role="slider"
         tabindex="0"
-        class:bx--slider__thumb="{true}"
+        class:cds--slider__thumb="{true}"
         style:left="{left}%"
         aria-valuemax="{max}"
         aria-valuemin="{min}"
@@ -193,21 +193,21 @@
         aria-labelledby="{labelId}"
         id="{id}"
       ></div>
-      <div bind:this="{trackRef}" class:bx--slider__track="{true}"></div>
+      <div bind:this="{trackRef}" class:cds--slider__track="{true}"></div>
       <div
-        class:bx--slider__filled-track="{true}"
+        class:cds--slider__filled-track="{true}"
         style:transform="translate(0, -50%) scaleX({left / 100})"
       ></div>
     </div>
-    <span class:bx--slider__range-label="{true}">{maxLabel || max}</span>
+    <span class:cds--slider__range-label="{true}">{maxLabel || max}</span>
     <input
       type="{hideTextInput ? 'hidden' : inputType}"
       id="input-{id}"
       name="{name}"
-      class:bx--text-input="{true}"
-      class:bx--slider-text-input="{true}"
-      class:bx--text-input--light="{light}"
-      class:bx--text-input--invalid="{invalid}"
+      class:cds--text-input="{true}"
+      class:cds--slider-text-input="{true}"
+      class:cds--text-input--light="{light}"
+      class:cds--text-input--invalid="{invalid}"
       value="{value}"
       aria-labelledby="{$$props['aria-label'] ? undefined : labelId}"
       aria-label="{$$props['aria-label'] || 'Slider number input'}"

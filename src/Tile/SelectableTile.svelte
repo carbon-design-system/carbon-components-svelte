@@ -49,7 +49,7 @@
   bind:this="{ref}"
   type="checkbox"
   tabindex="-1"
-  class:bx--tile-input="{true}"
+  class:cds--tile-input="{true}"
   checked="{selected}"
   id="{id}"
   value="{value}"
@@ -63,11 +63,11 @@
 <label
   for="{id}"
   tabindex="{disabled ? undefined : tabindex}"
-  class:bx--tile="{true}"
-  class:bx--tile--selectable="{true}"
-  class:bx--tile--is-selected="{selected}"
-  class:bx--tile--light="{light}"
-  class:bx--tile--disabled="{disabled}"
+  class:cds--tile="{true}"
+  class:cds--tile--selectable="{true}"
+  class:cds--tile--is-selected="{selected}"
+  class:cds--tile--light="{light}"
+  class:cds--tile--disabled="{disabled}"
   {...$$restProps}
   on:click
   on:click|preventDefault="{() => {
@@ -86,10 +86,10 @@
     }
   }}"
 >
-  <span class:bx--tile__checkmark="{true}">
+  <span class:cds--tile__checkmark="{true}">
     <CheckmarkFilled aria-label="{iconDescription}" title="{iconDescription}" />
   </span>
-  <span class:bx--tile-content="{true}">
+  <span class:cds--tile-content="{true}">
     <slot />
   </span>
 </label>

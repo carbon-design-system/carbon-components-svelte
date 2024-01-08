@@ -144,14 +144,14 @@
 {:else if type === "inline"}
   {#if hideCopyButton}
     <span
-      class:bx--snippet="{true}"
-      class:bx--snippet--expand="{expanded}"
-      class:bx--snippet--light="{light}"
-      class:bx--snippet--no-copy="{hideCopyButton}"
-      class:bx--snippet--wraptext="{wrapText}"
-      class:bx--snippet--single="{type === 'single'}"
-      class:bx--snippet--inline="{type === 'inline'}"
-      class:bx--snippet--multi="{type === 'multi'}"
+      class:cds--snippet="{true}"
+      class:cds--snippet--expand="{expanded}"
+      class:cds--snippet--light="{light}"
+      class:cds--snippet--no-copy="{hideCopyButton}"
+      class:cds--snippet--wraptext="{wrapText}"
+      class:cds--snippet--single="{type === 'single'}"
+      class:cds--snippet--inline="{type === 'inline'}"
+      class:cds--snippet--multi="{type === 'multi'}"
       {...$$restProps}
     >
       <code id="{id}">
@@ -162,16 +162,16 @@
     <button
       type="button"
       aria-live="polite"
-      class:bx--copy="{true}"
-      class:bx--btn--copy="{true}"
-      class:bx--copy-btn--animating="{animation}"
-      class:bx--copy-btn--fade-in="{animation === 'fade-in'}"
-      class:bx--copy-btn--fade-out="{animation === 'fade-out'}"
-      class:bx--snippet="{true}"
-      class:bx--snippet--inline="{type === 'inline'}"
-      class:bx--snippet--expand="{expanded}"
-      class:bx--snippet--light="{light}"
-      class:bx--snippet--wraptext="{wrapText}"
+      class:cds--copy="{true}"
+      class:cds--btn--copy="{true}"
+      class:cds--copy-btn--animating="{animation}"
+      class:cds--copy-btn--fade-in="{animation === 'fade-in'}"
+      class:cds--copy-btn--fade-out="{animation === 'fade-out'}"
+      class:cds--snippet="{true}"
+      class:cds--snippet--inline="{type === 'inline'}"
+      class:cds--snippet--expand="{expanded}"
+      class:cds--snippet--light="{light}"
+      class:cds--snippet--wraptext="{wrapText}"
       aria-label="{copyLabel}"
       {...$$restProps}
       on:click
@@ -198,8 +198,8 @@
       </code>
       <span
         aria-hidden="true"
-        class:bx--assistive-text="{true}"
-        class:bx--copy-btn__feedback="{true}"
+        class:cds--assistive-text="{true}"
+        class:cds--copy-btn__feedback="{true}"
       >
         {feedback}
       </span>
@@ -208,15 +208,15 @@
 {:else}
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
-    class:bx--snippet="{true}"
-    class:bx--snippet--expand="{expanded}"
-    class:bx--snippet--light="{light}"
-    class:bx--snippet--no-copy="{hideCopyButton}"
-    class:bx--snippet--wraptext="{wrapText}"
-    class:bx--snippet--single="{type === 'single'}"
-    class:bx--snippet--inline="{type === 'inline'}"
-    class:bx--snippet--multi="{type === 'multi'}"
-    class:bx--snippet--disabled="{type !== 'inline' && disabled}"
+    class:cds--snippet="{true}"
+    class:cds--snippet--expand="{expanded}"
+    class:cds--snippet--light="{light}"
+    class:cds--snippet--no-copy="{hideCopyButton}"
+    class:cds--snippet--wraptext="{wrapText}"
+    class:cds--snippet--single="{type === 'single'}"
+    class:cds--snippet--inline="{type === 'inline'}"
+    class:cds--snippet--multi="{type === 'multi'}"
+    class:cds--snippet--disabled="{type !== 'inline' && disabled}"
     {...$$restProps}
     on:mouseover
     on:mouseenter
@@ -227,7 +227,7 @@
       role="{type === 'single' ? 'textbox' : undefined}"
       tabindex="{type === 'single' && !disabled ? '0' : undefined}"
       aria-label="{$$restProps['aria-label'] || copyLabel || 'code-snippet'}"
-      class:bx--snippet-container="{true}"
+      class:cds--snippet-container="{true}"
       style:width="100%"
       style:min-height="{minHeight}px"
       style:max-height="{maxHeight}"
@@ -251,15 +251,15 @@
       <Button
         kind="ghost"
         size="small"
-        class="bx--snippet-btn--expand"
+        class="cds--snippet-btn--expand"
         disabled="{disabled}"
         on:click="{() => {
           expanded = !expanded;
         }}"
       >
-        <span class:bx--snippet-btn--text="{true}">{expandText}</span>
+        <span class:cds--snippet-btn--text="{true}">{expandText}</span>
         <ChevronDown
-          class="bx--icon-chevron--down bx--snippet__icon"
+          class="cds--icon-chevron--down cds--snippet__icon"
           aria-label="{expandText}"
         />
       </Button>

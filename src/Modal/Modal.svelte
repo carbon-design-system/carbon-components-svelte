@@ -125,9 +125,9 @@
     }
   });
 
-  $: modalLabelId = `bx--modal-header__label--modal-${id}`;
-  $: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
-  $: modalBodyId = `bx--modal-body--${id}`;
+  $: modalLabelId = `cds--modal-header__label--modal-${id}`;
+  $: modalHeadingId = `cds--modal-header__heading--modal-${id}`;
+  $: modalBodyId = `cds--modal-body--${id}`;
   $: ariaLabel =
     modalLabel || $$props["aria-label"] || modalAriaLabel || modalHeading;
 </script>
@@ -137,10 +137,10 @@
   bind:this="{ref}"
   role="presentation"
   id="{id}"
-  class:bx--modal="{true}"
-  class:bx--modal-tall="{!passiveModal}"
+  class:cds--modal="{true}"
+  class:cds--modal-tall="{!passiveModal}"
   class:is-visible="{open}"
-  class:bx--modal--danger="{danger}"
+  class:cds--modal--danger="{danger}"
   {...$$restProps}
   on:keydown
   on:keydown="{(e) => {
@@ -199,34 +199,38 @@
     aria-describedby="{alert && !passiveModal ? modalBodyId : undefined}"
     aria-modal="true"
     aria-label="{ariaLabel}"
-    class:bx--modal-container="{true}"
-    class:bx--modal-container--xs="{size === 'xs'}"
-    class:bx--modal-container--sm="{size === 'sm'}"
-    class:bx--modal-container--lg="{size === 'lg'}"
+    class:cds--modal-container="{true}"
+    class:cds--modal-container--xs="{size === 'xs'}"
+    class:cds--modal-container--sm="{size === 'sm'}"
+    class:cds--modal-container--lg="{size === 'lg'}"
     on:click="{() => {
       didClickInnerModal = true;
     }}"
   >
-    <div class:bx--modal-header="{true}">
+    <div class:cds--modal-header="{true}">
       {#if passiveModal}
         <button
           bind:this="{buttonRef}"
           type="button"
           aria-label="{iconDescription}"
-          class:bx--modal-close="{true}"
+          class:cds--modal-close="{true}"
           on:click="{() => {
             open = false;
           }}"
         >
-          <Close size="{20}" class="bx--modal-close__icon" aria-hidden="true" />
+          <Close
+            size="{20}"
+            class="cds--modal-close__icon"
+            aria-hidden="true"
+          />
         </button>
       {/if}
       {#if modalLabel}
-        <h2 id="{modalLabelId}" class:bx--modal-header__label="{true}">
+        <h2 id="{modalLabelId}" class:cds--modal-header__label="{true}">
           <slot name="label">{modalLabel}</slot>
         </h2>
       {/if}
-      <h3 id="{modalHeadingId}" class:bx--modal-header__heading="{true}">
+      <h3 id="{modalHeadingId}" class:cds--modal-header__heading="{true}">
         <slot name="heading">{modalHeading}</slot>
       </h3>
       {#if !passiveModal}
@@ -234,21 +238,25 @@
           bind:this="{buttonRef}"
           type="button"
           aria-label="{iconDescription}"
-          class:bx--modal-close="{true}"
+          class:cds--modal-close="{true}"
           on:click="{() => {
             open = false;
           }}"
         >
-          <Close size="{20}" class="bx--modal-close__icon" aria-hidden="true" />
+          <Close
+            size="{20}"
+            class="cds--modal-close__icon"
+            aria-hidden="true"
+          />
         </button>
       {/if}
     </div>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       id="{modalBodyId}"
-      class:bx--modal-content="{true}"
-      class:bx--modal-content--with-form="{hasForm}"
-      class:bx--modal-scroll-content="{hasScrollingContent}"
+      class:cds--modal-content="{true}"
+      class:cds--modal-content--with-form="{hasForm}"
+      class:cds--modal-scroll-content="{hasScrollingContent}"
       tabindex="{hasScrollingContent ? '0' : undefined}"
       role="{hasScrollingContent ? 'region' : undefined}"
       aria-label="{hasScrollingContent ? ariaLabel : undefined}"
@@ -257,12 +265,12 @@
       <slot />
     </div>
     {#if hasScrollingContent}
-      <div class:bx--modal-content--overflow-indicator="{true}"></div>
+      <div class:cds--modal-content--overflow-indicator="{true}"></div>
     {/if}
     {#if !passiveModal}
       <div
-        class:bx--modal-footer="{true}"
-        class:bx--modal-footer--three-button="{secondaryButtons.length === 2}"
+        class:cds--modal-footer="{true}"
+        class:cds--modal-footer--three-button="{secondaryButtons.length === 2}"
       >
         {#if secondaryButtons.length > 0}
           {#each secondaryButtons as button}

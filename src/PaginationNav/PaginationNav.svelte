@@ -76,9 +76,13 @@
     .slice(startOffset + front, (back + 1) * -1);
 </script>
 
-<nav aria-label="pagination" class:bx--pagination-nav="{true}" {...$$restProps}>
-  <ul class:bx--pagination-nav__list="{true}">
-    <li class:bx--pagination-nav__list-item="{true}">
+<nav
+  aria-label="pagination"
+  class:cds--pagination-nav="{true}"
+  {...$$restProps}
+>
+  <ul class:cds--pagination-nav__list="{true}">
+    <li class:cds--pagination-nav__list-item="{true}">
       <Button
         kind="ghost"
         tooltipAlignment="center"
@@ -153,7 +157,7 @@
         {page === total ? "Active, Page" : "Page"}
       </PaginationItem>
     {/if}
-    <li class:bx--pagination-nav__list-item="{true}">
+    <li class:cds--pagination-nav__list-item="{true}">
       <Button
         kind="ghost"
         tooltipAlignment="center"
@@ -180,7 +184,7 @@
   <div
     aria-live="polite"
     aria-atomic="true"
-    class:bx--pagination-nav__accessibility-label="{true}"
+    class:cds--pagination-nav__accessibility-label="{true}"
   >
     Page
     {page + 1}

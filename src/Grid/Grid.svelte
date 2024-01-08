@@ -35,14 +35,14 @@
     ...$$restProps,
     class: [
       $$restProps.class,
-      "bx--grid",
-      condensed && "bx--grid--condensed",
-      narrow && "bx--grid--narrow",
-      fullWidth && "bx--grid--full-width",
-      noGutter && "bx--no-gutter",
-      noGutterLeft && "bx--no-gutter--left",
-      noGutterRight && "bx--no-gutter--right",
-      padding && "bx--row-padding",
+      "cds--grid",
+      condensed && "cds--grid--condensed",
+      narrow && "cds--grid--narrow",
+      fullWidth && "cds--grid--full-width",
+      noGutter && "cds--no-gutter",
+      noGutterLeft && "cds--no-gutter--left",
+      noGutterRight && "cds--no-gutter--right",
+      padding && "cds--row-padding",
     ]
       .filter(Boolean)
       .join(" "),

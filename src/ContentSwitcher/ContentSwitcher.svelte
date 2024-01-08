@@ -61,9 +61,9 @@
 <!-- svelte-ignore a11y-interactive-supports-focus -->
 <div
   role="tablist"
-  class:bx--content-switcher="{true}"
-  class:bx--content-switcher--sm="{size === 'sm'}"
-  class:bx--content-switcher--lg="{size === 'lg' || size === 'xl'}"
+  class:cds--content-switcher="{true}"
+  class:cds--content-switcher--sm="{size === 'sm'}"
+  class:cds--content-switcher--lg="{size === 'lg' || size === 'xl'}"
   {...$$restProps}
   on:click
   on:mouseover

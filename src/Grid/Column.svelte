@@ -72,20 +72,20 @@
       const name = breakpoints[i];
 
       if (breakpoint === true) {
-        return `bx--col-${name}`;
+        return `cds--col-${name}`;
       } else if (typeof breakpoint === "number") {
-        return `bx--col-${name}-${breakpoint}`;
+        return `cds--col-${name}-${breakpoint}`;
       } else if (typeof breakpoint === "object") {
         let bp = [];
 
         if (typeof breakpoint.span === "number") {
-          bp = [...bp, `bx--col-${name}-${breakpoint.span}`];
+          bp = [...bp, `cds--col-${name}-${breakpoint.span}`];
         } else if (breakpoint.span === true) {
-          bp = [...bp, `bx--col-${name}`];
+          bp = [...bp, `cds--col-${name}`];
         }
 
         if (typeof breakpoint.offset === "number") {
-          bp = [...bp, `bx--offset-${name}-${breakpoint.offset}`];
+          bp = [...bp, `cds--offset-${name}-${breakpoint.offset}`];
         }
 
         return bp.join(" ");
@@ -98,12 +98,12 @@
     class: [
       $$restProps.class,
       columnClass,
-      !columnClass && "bx--col",
-      noGutter && "bx--no-gutter",
-      noGutterLeft && "bx--no-gutter--left",
-      noGutterRight && "bx--no-gutter--right",
-      aspectRatio && `bx--aspect-ratio bx--aspect-ratio--${aspectRatio}`,
-      padding && "bx--col-padding",
+      !columnClass && "cds--col",
+      noGutter && "cds--no-gutter",
+      noGutterLeft && "cds--no-gutter--left",
+      noGutterRight && "cds--no-gutter--right",
+      aspectRatio && `cds--aspect-ratio cds--aspect-ratio--${aspectRatio}`,
+      padding && "cds--col-padding",
     ]
       .filter(Boolean)
       .join(" "),

@@ -31,8 +31,8 @@
     on:mouseleave
   >
     <ol
-      class:bx--breadcrumb="{true}"
-      class:bx--breadcrumb--no-trailing-slash="{noTrailingSlash}"
+      class:cds--breadcrumb="{true}"
+      class:cds--breadcrumb--no-trailing-slash="{noTrailingSlash}"
     >
       <slot />
     </ol>

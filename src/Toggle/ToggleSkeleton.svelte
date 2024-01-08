@@ -15,7 +15,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:cds--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -25,27 +25,27 @@
   <input
     type="checkbox"
     id="{id}"
-    class:bx--toggle="{true}"
-    class:bx--toggle--small="{size === 'sm'}"
-    class:bx--skeleton="{true}"
+    class:cds--toggle="{true}"
+    class:cds--toggle--small="{size === 'sm'}"
+    class:cds--skeleton="{true}"
   />
   <label
     aria-label="{labelText
       ? undefined
       : $$props['aria-label'] || 'Toggle is loading'}"
     for="{id}"
-    class:bx--toggle__label="{true}"
-    class:bx--skeleton="{true}"
+    class:cds--toggle__label="{true}"
+    class:cds--skeleton="{true}"
   >
     {#if labelText || $$slots.labelText}
-      <span class:bx--toggle__label-text="{true}">
+      <span class:cds--toggle__label-text="{true}">
         <slot name="labelText">
           {labelText}
         </slot>
       </span>
     {/if}
-    <span class:bx--toggle__text--left="{true}"></span>
-    <span class:bx--toggle__appearance="{true}"></span>
-    <span class:bx--toggle__text--right="{true}"></span>
+    <span class:cds--toggle__text--left="{true}"></span>
+    <span class:cds--toggle__appearance="{true}"></span>
+    <span class:cds--toggle__text--right="{true}"></span>
   </label>
 </div>

@@ -16,8 +16,8 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
     tabindex="{tabindex}"
-    class:bx--structured-list-row="{true}"
-    class:bx--structured-list-row--header-row="{head}"
+    class:cds--structured-list-row="{true}"
+    class:cds--structured-list-row--header-row="{head}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -31,8 +31,8 @@
   <!-- svelte-ignore a11y-interactive-supports-focus -->
   <div
     role="row"
-    class:bx--structured-list-row="{true}"
-    class:bx--structured-list-row--header-row="{head}"
+    class:cds--structured-list-row="{true}"
+    class:cds--structured-list-row--header-row="{head}"
     {...$$restProps}
     on:click
     on:mouseover

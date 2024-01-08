@@ -43,35 +43,35 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
-  class:bx--skeleton="{true}"
-  class:bx--data-table-container="{true}"
+  class:cds--skeleton="{true}"
+  class:cds--data-table-container="{true}"
   {...$$restProps}
 >
   {#if showHeader}
-    <div class:bx--data-table-header="{true}">
-      <div class:bx--data-table-header__title="{true}"></div>
-      <div class:bx--data-table-header__description="{true}"></div>
+    <div class:cds--data-table-header="{true}">
+      <div class:cds--data-table-header__title="{true}"></div>
+      <div class:cds--data-table-header__description="{true}"></div>
     </div>
   {/if}
   {#if showToolbar}
-    <section aria-label="data table toolbar" class:bx--table-toolbar="{true}">
-      <div class:bx--toolbar-content="{true}">
+    <section aria-label="data table toolbar" class:cds--table-toolbar="{true}">
+      <div class:cds--toolbar-content="{true}">
         <span
-          class:bx--skeleton="{true}"
-          class:bx--btn="{true}"
-          class:bx--btn--sm="{true}"></span>
+          class:cds--skeleton="{true}"
+          class:cds--btn="{true}"
+          class:cds--btn--sm="{true}"></span>
       </div>
     </section>
   {/if}
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <table
-    class:bx--skeleton="{true}"
-    class:bx--data-table="{true}"
-    class:bx--data-table--compact="{size === 'compact'}"
-    class:bx--data-table--short="{size === 'short'}"
-    class:bx--data-table--tall="{size === 'tall'}"
-    class:bx--data-table--zebra="{zebra}"
+    class:cds--skeleton="{true}"
+    class:cds--data-table="{true}"
+    class:cds--data-table--compact="{size === 'compact'}"
+    class:cds--data-table--short="{size === 'short'}"
+    class:cds--data-table--tall="{size === 'tall'}"
+    class:cds--data-table--zebra="{zebra}"
     on:click
     on:mouseover
     on:mouseenter

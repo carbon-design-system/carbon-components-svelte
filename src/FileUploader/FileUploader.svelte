@@ -108,7 +108,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:cds--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -117,8 +117,8 @@
 >
   {#if labelTitle || $$slots.labelTitle}
     <p
-      class:bx--file--label="{true}"
-      class:bx--label-description--disabled="{disabled}"
+      class:cds--file--label="{true}"
+      class:cds--label-description--disabled="{disabled}"
     >
       <slot name="labelTitle">
         {labelTitle}
@@ -127,8 +127,8 @@
   {/if}
   {#if labelDescription || $$slots.labelDescription}
     <p
-      class:bx--label-description="{true}"
-      class:bx--label-description--disabled="{disabled}"
+      class:cds--label-description="{true}"
+      class:cds--label-description--disabled="{disabled}"
     >
       <slot name="labelDescription">
         {labelDescription}
@@ -149,11 +149,11 @@
       files = e.detail;
     }}"
   />
-  <div class:bx--file-container="{true}">
+  <div class:cds--file-container="{true}">
     {#each files as { name }, i}
-      <span class:bx--file__selected-file="{true}">
-        <p class:bx--file-filename="{true}">{name}</p>
-        <span class:bx--file__state-container="{true}">
+      <span class:cds--file__selected-file="{true}">
+        <p class:cds--file-filename="{true}">{name}</p>
+        <span class:cds--file__state-container="{true}">
           <Filename
             iconDescription="{iconDescription}"
             status="{status}"

@@ -124,21 +124,21 @@
   $: selectedValue.set(selected ?? $defaultValue);
 </script>
 
-<div class:bx--form-item="{true}" {...$$restProps}>
+<div class:cds--form-item="{true}" {...$$restProps}>
   <div
-    class:bx--select="{true}"
-    class:bx--select--inline="{inline}"
-    class:bx--select--light="{light}"
-    class:bx--select--invalid="{invalid}"
-    class:bx--select--disabled="{disabled}"
-    class:bx--select--warning="{warn}"
+    class:cds--select="{true}"
+    class:cds--select--inline="{inline}"
+    class:cds--select--light="{light}"
+    class:cds--select--invalid="{invalid}"
+    class:cds--select--disabled="{disabled}"
+    class:cds--select--warning="{warn}"
   >
     {#if !noLabel}
       <label
         for="{id}"
-        class:bx--label="{true}"
-        class:bx--visually-hidden="{hideLabel}"
-        class:bx--label--disabled="{disabled}"
+        class:cds--label="{true}"
+        class:cds--visually-hidden="{hideLabel}"
+        class:cds--label--disabled="{disabled}"
       >
         <slot name="labelText">
           {labelText}
@@ -146,9 +146,9 @@
       </label>
     {/if}
     {#if inline}
-      <div class:bx--select-input--inline__wrapper="{true}">
+      <div class:cds--select-input--inline__wrapper="{true}">
         <div
-          class:bx--select-input__wrapper="{true}"
+          class:cds--select-input__wrapper="{true}"
           data-invalid="{invalid || undefined}"
         >
           <select
@@ -159,9 +159,9 @@
             required="{required || undefined}"
             id="{id}"
             name="{name}"
-            class:bx--select-input="{true}"
-            class:bx--select-input--sm="{size === 'sm'}"
-            class:bx--select-input--lg="{size === 'lg' || size === 'xl'}"
+            class:cds--select-input="{true}"
+            class:cds--select-input--sm="{size === 'sm'}"
+            class:cds--select-input--lg="{size === 'lg' || size === 'xl'}"
             on:change="{handleChange}"
             on:change
             on:input
@@ -170,21 +170,21 @@
           >
             <slot />
           </select>
-          <ChevronDown class="bx--select__arrow" />
+          <ChevronDown class="cds--select__arrow" />
           {#if invalid}
-            <WarningFilled class="bx--select__invalid-icon" />
+            <WarningFilled class="cds--select__invalid-icon" />
           {/if}
         </div>
         {#if invalid}
-          <div class:bx--form-requirement="{true}" id="{errorId}">
+          <div class:cds--form-requirement="{true}" id="{errorId}">
             {invalidText}
           </div>
         {/if}
       </div>
       {#if !invalid && !warn && helperText}
         <div
-          class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}"
+          class:cds--form__helper-text="{true}"
+          class:cds--form__helper-text--disabled="{disabled}"
         >
           {helperText}
         </div>
@@ -192,7 +192,7 @@
     {/if}
     {#if !inline}
       <div
-        class:bx--select-input__wrapper="{true}"
+        class:cds--select-input__wrapper="{true}"
         data-invalid="{invalid || undefined}"
       >
         <select
@@ -203,9 +203,9 @@
           disabled="{disabled || undefined}"
           required="{required || undefined}"
           aria-invalid="{invalid || undefined}"
-          class:bx--select-input="{true}"
-          class:bx--select-input--sm="{size === 'sm'}"
-          class:bx--select-input--lg="{size === 'lg' || size === 'xl'}"
+          class:cds--select-input="{true}"
+          class:cds--select-input--sm="{size === 'sm'}"
+          class:cds--select-input--lg="{size === 'lg' || size === 'xl'}"
           on:change="{handleChange}"
           on:change
           on:input
@@ -214,31 +214,31 @@
         >
           <slot />
         </select>
-        <ChevronDown class="bx--select__arrow" />
+        <ChevronDown class="cds--select__arrow" />
         {#if invalid}
-          <WarningFilled class="bx--select__invalid-icon" />
+          <WarningFilled class="cds--select__invalid-icon" />
         {/if}
         {#if !invalid && warn}
           <WarningAltFilled
-            class="bx--select__invalid-icon bx--select__invalid-icon--warning"
+            class="cds--select__invalid-icon cds--select__invalid-icon--warning"
           />
         {/if}
       </div>
       {#if !invalid && helperText}
         <div
-          class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}"
+          class:cds--form__helper-text="{true}"
+          class:cds--form__helper-text--disabled="{disabled}"
         >
           {helperText}
         </div>
       {/if}
       {#if invalid}
-        <div id="{errorId}" class:bx--form-requirement="{true}">
+        <div id="{errorId}" class:cds--form-requirement="{true}">
           {invalidText}
         </div>
       {/if}
       {#if !invalid && warn}
-        <div id="{errorId}" class:bx--form-requirement="{true}">
+        <div id="{errorId}" class:cds--form-requirement="{true}">
           {warnText}
         </div>
       {/if}

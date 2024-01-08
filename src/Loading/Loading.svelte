@@ -16,28 +16,28 @@
 
 {#if withOverlay}
   <div
-    class:bx--loading-overlay="{true}"
-    class:bx--loading-overlay--stop="{!active}"
+    class:cds--loading-overlay="{true}"
+    class:cds--loading-overlay--stop="{!active}"
     {...$$restProps}
   >
     <div
       aria-atomic="true"
       aria-live="{active ? 'assertive' : 'off'}"
-      class:bx--loading="{true}"
-      class:bx--loading--small="{small}"
-      class:bx--loading--stop="{!active}"
+      class:cds--loading="{true}"
+      class:cds--loading--small="{small}"
+      class:cds--loading--stop="{!active}"
     >
-      <svg class:bx--loading__svg="{true}" viewBox="0 0 100 100">
+      <svg class:cds--loading__svg="{true}" viewBox="0 0 100 100">
         <title>{description}</title>
         {#if small}
           <circle
-            class:bx--loading__background="{true}"
+            class:cds--loading__background="{true}"
             cx="50%"
             cy="50%"
             r="{spinnerRadius}"></circle>
         {/if}
         <circle
-          class:bx--loading__stroke="{true}"
+          class:cds--loading__stroke="{true}"
           cx="50%"
           cy="50%"
           r="{spinnerRadius}"></circle>
@@ -48,22 +48,22 @@
   <div
     aria-atomic="true"
     aria-live="{active ? 'assertive' : 'off'}"
-    class:bx--loading="{true}"
-    class:bx--loading--small="{small}"
-    class:bx--loading--stop="{!active}"
+    class:cds--loading="{true}"
+    class:cds--loading--small="{small}"
+    class:cds--loading--stop="{!active}"
     {...$$restProps}
   >
-    <svg class:bx--loading__svg="{true}" viewBox="0 0 100 100">
+    <svg class:cds--loading__svg="{true}" viewBox="0 0 100 100">
       <title>{description}</title>
       {#if small}
         <circle
-          class:bx--loading__background="{true}"
+          class:cds--loading__background="{true}"
           cx="50%"
           cy="50%"
           r="{spinnerRadius}"></circle>
       {/if}
       <circle
-        class:bx--loading__stroke="{true}"
+        class:cds--loading__stroke="{true}"
         cx="50%"
         cy="50%"
         r="{spinnerRadius}"></circle>

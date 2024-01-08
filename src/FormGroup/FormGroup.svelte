@@ -22,8 +22,8 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <fieldset
   data-invalid="{invalid || undefined}"
-  class:bx--fieldset="{true}"
-  class:bx--fieldset--no-margin="{noMargin}"
+  class:cds--fieldset="{true}"
+  class:cds--fieldset--no-margin="{noMargin}"
   aria-labelledby="{$$restProps['aria-labelledby'] || legendId}"
   {...$$restProps}
   on:click
@@ -33,12 +33,12 @@
 >
   {#if legendText}
     <legend
-      class:bx--label="{true}"
+      class:cds--label="{true}"
       id="{legendId || $$restProps['aria-labelledby']}">{legendText}</legend
     >
   {/if}
   <slot />
   {#if message}
-    <div class:bx--form__requirement="{true}">{messageText}</div>
+    <div class:cds--form__requirement="{true}">{messageText}</div>
   {/if}
 </fieldset>

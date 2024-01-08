@@ -55,7 +55,7 @@
   tabindex="{disabled ? undefined : tabindex}"
   disabled="{disabled}"
   required="{$groupRequired ?? required}"
-  class:bx--tile-input="{true}"
+  class:cds--tile-input="{true}"
   on:change
   on:change="{() => {
     if (disabled) return;
@@ -74,21 +74,21 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <label
   for="{id}"
-  class:bx--tile="{true}"
-  class:bx--tile--selectable="{true}"
-  class:bx--tile--is-selected="{checked}"
-  class:bx--tile--light="{light}"
-  class:bx--tile--disabled="{disabled}"
+  class:cds--tile="{true}"
+  class:cds--tile--selectable="{true}"
+  class:cds--tile--is-selected="{checked}"
+  class:cds--tile--light="{light}"
+  class:cds--tile--disabled="{disabled}"
   {...$$restProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
 >
-  <span class:bx--tile__checkmark="{true}">
+  <span class:cds--tile__checkmark="{true}">
     <CheckmarkFilled aria-label="{iconDescription}" title="{iconDescription}" />
   </span>
-  <span class:bx--tile-content="{true}">
+  <span class:cds--tile-content="{true}">
     <slot />
   </span>
 </label>

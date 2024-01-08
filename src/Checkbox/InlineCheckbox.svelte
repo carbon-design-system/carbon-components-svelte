@@ -18,11 +18,11 @@
   export let ref = null;
 </script>
 
-<div class:bx--checkbox--inline="{true}">
+<div class:cds--checkbox--inline="{true}">
   <input
     bind:this="{ref}"
     type="checkbox"
-    class:bx--checkbox="{true}"
+    class:cds--checkbox="{true}"
     checked="{indeterminate ? false : checked}"
     indeterminate="{indeterminate}"
     id="{id}"
@@ -34,5 +34,5 @@
     for="{id}"
     title="{title}"
     aria-label="{$$props['aria-label']}"
-    class:bx--checkbox-label="{true}"></label>
+    class:cds--checkbox-label="{true}"></label>
 </div>

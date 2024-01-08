@@ -87,12 +87,12 @@
     aria-current="{id === $activeNodeId || undefined}"
     aria-selected="{disabled ? undefined : selected}"
     aria-disabled="{disabled}"
-    class:bx--tree-node="{true}"
-    class:bx--tree-parent-node="{true}"
-    class:bx--tree-node--active="{id === $activeNodeId}"
-    class:bx--tree-node--selected="{selected}"
-    class:bx--tree-node--disabled="{disabled}"
-    class:bx--tree-node--with-icon="{icon}"
+    class:cds--tree-node="{true}"
+    class:cds--tree-parent-node="{true}"
+    class:cds--tree-node--active="{id === $activeNodeId}"
+    class:cds--tree-node--selected="{selected}"
+    class:cds--tree-node--disabled="{disabled}"
+    class:cds--tree-node--with-icon="{icon}"
     aria-expanded="{expanded}"
     on:click|stopPropagation="{() => {
       if (disabled) return;
@@ -137,11 +137,11 @@
       focusNode(node);
     }}"
   >
-    <div class:bx--tree-node__label="{true}" bind:this="{refLabel}">
+    <div class:cds--tree-node__label="{true}" bind:this="{refLabel}">
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <span
-        class:bx--tree-parent-node__toggle="{true}"
+        class:cds--tree-parent-node__toggle="{true}"
         disabled="{disabled}"
         on:click="{() => {
           if (disabled) return;
@@ -151,17 +151,17 @@
         }}"
       >
         <CaretDown
-          class="bx--tree-parent-node__toggle-icon {expanded &&
-            'bx--tree-parent-node__toggle-icon--expanded'}"
+          class="cds--tree-parent-node__toggle-icon {expanded &&
+            'cds--tree-parent-node__toggle-icon--expanded'}"
         />
       </span>
-      <span class:bx--tree-node__label__details="{true}">
-        <svelte:component this="{icon}" class="bx--tree-node__icon" />
+      <span class:cds--tree-node__label__details="{true}">
+        <svelte:component this="{icon}" class="cds--tree-node__icon" />
         <slot node="{{ ...node, selected, disabled }}" />
       </span>
     </div>
     {#if expanded}
-      <ul role="group" class:bx--tree-node__children="{true}">
+      <ul role="group" class:cds--tree-node__children="{true}">
         {#each children as child (child.id)}
           {#if Array.isArray(child.children)}
             <svelte:self {...child} let:node>

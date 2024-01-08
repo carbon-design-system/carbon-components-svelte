@@ -32,5 +32,5 @@ export const trackModal = (openStore) =>
 
 modalsOpen.subscribe((openCount) => {
   if (typeof document !== "undefined")
-    document.body.classList.toggle("bx--body--with-modal-open", openCount > 0);
+    document.body.classList.toggle("cds--body--with-modal-open", openCount > 0);
 });

@@ -54,11 +54,11 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
   id="{id}"
-  class:bx--progress-step="{true}"
-  class:bx--progress-step--current="{current}"
-  class:bx--progress-step--complete="{complete}"
-  class:bx--progress-step--incomplete="{!complete && !current}"
-  class:bx--progress-step--disabled="{disabled}"
+  class:cds--progress-step="{true}"
+  class:cds--progress-step--current="{current}"
+  class:cds--progress-step--complete="{complete}"
+  class:cds--progress-step--incomplete="{!complete && !current}"
+  class:cds--progress-step--disabled="{disabled}"
   {...$$restProps}
 >
   <button
@@ -66,8 +66,8 @@
     disabled="{disabled}"
     aria-disabled="{disabled}"
     tabindex="{!current && !disabled ? '0' : '-1'}"
-    class:bx--progress-step-button="{true}"
-    class:bx--progress-step-button--unclickable="{current ||
+    class:cds--progress-step-button="{true}"
+    class:cds--progress-step-button--unclickable="{current ||
       $preventChangeOnClick}"
     on:click
     on:click="{() => {
@@ -86,7 +86,7 @@
     }}"
   >
     {#if invalid}
-      <Warning class="bx--progress__warning" title="{description}" />
+      <Warning class="cds--progress__warning" title="{description}" />
     {:else if current}
       <Incomplete title="{description}" />
     {:else if complete}
@@ -94,14 +94,14 @@
     {:else}
       <CircleDash title="{description}" />
     {/if}
-    <div class:bx--progress-text="{true}">
-      <slot props="{{ class: 'bx--progress-label' }}">
-        <p class:bx--progress-label="{true}">{label}</p>
+    <div class:cds--progress-text="{true}">
+      <slot props="{{ class: 'cds--progress-label' }}">
+        <p class:cds--progress-label="{true}">{label}</p>
       </slot>
       {#if secondaryLabel}
-        <p class:bx--progress-optional="{true}">{secondaryLabel}</p>
+        <p class:cds--progress-optional="{true}">{secondaryLabel}</p>
       {/if}
     </div>
-    <span class:bx--progress-line="{true}"></span>
+    <span class:cds--progress-line="{true}"></span>
   </button>
 </li>

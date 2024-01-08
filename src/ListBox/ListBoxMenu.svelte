@@ -10,7 +10,7 @@
   bind:this="{ref}"
   role="listbox"
   id="menu-{id}"
-  class:bx--list-box__menu="{true}"
+  class:cds--list-box__menu="{true}"
   {...$$restProps}
   on:scroll
 >

@@ -43,11 +43,11 @@
 <button
   type="button"
   aria-live="polite"
-  class:bx--copy-btn="{true}"
-  class:bx--copy="{true}"
-  class:bx--copy-btn--animating="{animation}"
-  class:bx--copy-btn--fade-in="{animation === 'fade-in'}"
-  class:bx--copy-btn--fade-out="{animation === 'fade-out'}"
+  class:cds--copy-btn="{true}"
+  class:cds--copy="{true}"
+  class:cds--copy-btn--animating="{animation}"
+  class:cds--copy-btn--fade-in="{animation === 'fade-in'}"
+  class:cds--copy-btn--fade-out="{animation === 'fade-out'}"
   aria-label="{iconDescription}"
   title="{iconDescription}"
   {...$$restProps}
@@ -71,11 +71,11 @@
     }
   }}"
 >
-  <Copy class="bx--snippet__icon" />
+  <Copy class="cds--snippet__icon" />
   <span
     aria-hidden="true"
-    class:bx--assistive-text="{true}"
-    class:bx--copy-btn__feedback="{true}"
+    class:cds--assistive-text="{true}"
+    class:cds--copy-btn__feedback="{true}"
   >
     {feedback}
   </span>

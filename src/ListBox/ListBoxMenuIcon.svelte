@@ -29,8 +29,8 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--list-box__menu-icon="{true}"
-  class:bx--list-box__menu-icon--open="{open}"
+  class:cds--list-box__menu-icon="{true}"
+  class:cds--list-box__menu-icon--open="{open}"
   {...$$restProps}
   on:click|preventDefault
 >

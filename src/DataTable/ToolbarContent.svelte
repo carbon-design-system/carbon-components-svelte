@@ -1,3 +1,3 @@
-<div class:bx--toolbar-content="{true}">
+<div class:cds--toolbar-content="{true}">
   <slot />
 </div>

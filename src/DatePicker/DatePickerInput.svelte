@@ -79,15 +79,15 @@
 </script>
 
 <div
-  class:bx--date-picker-container="{true}"
-  class:bx--date-picker--nolabel="{!labelText}"
+  class:cds--date-picker-container="{true}"
+  class:cds--date-picker--nolabel="{!labelText}"
 >
   {#if labelText || $$slots.labelText}
     <label
       for="{id}"
-      class:bx--label="{true}"
-      class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}"
+      class:cds--label="{true}"
+      class:cds--visually-hidden="{hideLabel}"
+      class:cds--label--disabled="{disabled}"
     >
       <slot name="labelText">
         {labelText}
@@ -95,9 +95,9 @@
     </label>
   {/if}
   <div
-    class:bx--date-picker-input__wrapper="{true}"
-    class:bx--date-picker-input__wrapper--invalid="{invalid}"
-    class:bx--date-picker-input__wrapper--warn="{warn}"
+    class:cds--date-picker-input__wrapper="{true}"
+    class:cds--date-picker-input__wrapper--invalid="{invalid}"
+    class:cds--date-picker-input__wrapper--warn="{warn}"
   >
     <input
       bind:this="{ref}"
@@ -114,10 +114,10 @@
           ? $inputValueFrom
           : $inputValueTo
         : $inputValue}"
-      class:bx--date-picker__input="{true}"
-      class:bx--date-picker__input--invalid="{invalid}"
-      class:bx--date-picker__input--sm="{size === 'sm'}"
-      class:bx--date-picker__input--lg="{size === 'lg' || size === 'xl'}"
+      class:cds--date-picker__input="{true}"
+      class:cds--date-picker__input--invalid="{invalid}"
+      class:cds--date-picker__input--sm="{size === 'sm'}"
+      class:cds--date-picker__input--lg="{size === 'lg' || size === 'xl'}"
       on:input
       on:input="{({ target }) => {
         updateValue({ type: 'input', value: target.value });
@@ -140,32 +140,32 @@
     />
     {#if invalid}
       <WarningFilled
-        class="bx--date-picker__icon bx--date-picker__icon--invalid"
+        class="cds--date-picker__icon cds--date-picker__icon--invalid"
       />
     {/if}
     {#if !invalid && warn}
       <WarningAltFilled
-        class="bx--date-picker__icon bx--date-picker__icon--warn"
+        class="cds--date-picker__icon cds--date-picker__icon--warn"
       />
     {/if}
     {#if $hasCalendar && !invalid && !warn}
       <Calendar
-        class="bx--date-picker__icon"
+        class="cds--date-picker__icon"
         aria-label="{iconDescription}"
         on:click="{openCalendar}"
       />
     {/if}
   </div>
   {#if invalid}
-    <div class:bx--form-requirement="{true}">{invalidText}</div>
+    <div class:cds--form-requirement="{true}">{invalidText}</div>
   {/if}
   {#if !invalid && warn}
-    <div class:bx--form-requirement="{true}">{warnText}</div>
+    <div class:cds--form-requirement="{true}">{warnText}</div>
   {/if}
   {#if !invalid && !warn && helperText}
     <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}"
+      class:cds--form__helper-text="{true}"
+      class:cds--form__helper-text--disabled="{disabled}"
     >
       {helperText}
     </div>

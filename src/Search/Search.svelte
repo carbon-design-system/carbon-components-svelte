@@ -92,28 +92,28 @@
   <div
     role="search"
     aria-labelledby="{id}-search"
-    class:bx--search="{true}"
-    class:bx--search--light="{light}"
-    class:bx--search--disabled="{disabled}"
-    class:bx--search--sm="{size === 'sm'}"
-    class:bx--search--md="{size === 'md'}"
-    class:bx--search--lg="{size === 'lg'}"
-    class:bx--search--expandable="{expandable}"
-    class:bx--search--expanded="{expanded}"
+    class:cds--search="{true}"
+    class:cds--search--light="{light}"
+    class:cds--search--disabled="{disabled}"
+    class:cds--search--sm="{size === 'sm'}"
+    class:cds--search--md="{size === 'md'}"
+    class:cds--search--lg="{size === 'lg'}"
+    class:cds--search--expandable="{expandable}"
+    class:cds--search--expanded="{expanded}"
     class="{searchClass}"
   >
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       bind:this="{searchRef}"
-      class:bx--search-magnifier="{true}"
+      class:cds--search-magnifier="{true}"
       on:click="{() => {
         if (expandable) expanded = true;
       }}"
     >
-      <svelte:component this="{icon}" class="bx--search-magnifier-icon" />
+      <svelte:component this="{icon}" class="cds--search-magnifier-icon" />
     </div>
-    <label id="{id}-search" for="{id}" class:bx--label="{true}">
+    <label id="{id}-search" for="{id}" class:cds--label="{true}">
       <slot name="labelText">
         {labelText}
       </slot>
@@ -124,7 +124,7 @@
       bind:value
       type="text"
       role="searchbox"
-      class:bx--search-input="{true}"
+      class:cds--search-input="{true}"
       autofocus="{autofocus === true ? true : undefined}"
       autocomplete="{autocomplete}"
       disabled="{disabled}"
@@ -157,8 +157,8 @@
       type="button"
       aria-label="{closeButtonLabelText}"
       disabled="{disabled}"
-      class:bx--search-close="{true}"
-      class:bx--search-close--hidden="{value === ''}"
+      class:cds--search-close="{true}"
+      class:cds--search-close--hidden="{value === ''}"
       on:click
       on:click="{() => {
         value = '';

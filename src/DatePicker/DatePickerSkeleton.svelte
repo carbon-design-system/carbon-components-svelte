@@ -9,7 +9,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:cds--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -17,18 +17,18 @@
   on:mouseleave
 >
   <div
-    class:bx--date-picker="{true}"
-    class:bx--skeleton="{true}"
-    class:bx--date-picker--range="{true}"
-    class:bx--date-picker--short="{!range}"
-    class:bx--date-picker--simple="{!range}"
+    class:cds--date-picker="{true}"
+    class:cds--skeleton="{true}"
+    class:cds--date-picker--range="{true}"
+    class:cds--date-picker--short="{!range}"
+    class:cds--date-picker--simple="{!range}"
   >
     {#each Array.from({ length: range ? 2 : 1 }, (_, i) => i) as input, i (input)}
-      <div class:bx--date-picker-container="{true}">
-        <label for="{id}" class:bx--label="{true}"></label>
+      <div class:cds--date-picker-container="{true}">
+        <label for="{id}" class:cds--label="{true}"></label>
         <div
-          class:bx--date-picker__input="{true}"
-          class:bx--skeleton="{true}"
+          class:cds--date-picker__input="{true}"
+          class:cds--skeleton="{true}"
         ></div>
       </div>
     {/each}

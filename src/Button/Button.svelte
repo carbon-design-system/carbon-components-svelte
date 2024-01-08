@@ -95,29 +95,29 @@
       hasIconOnly && kind === "ghost" && !href ? isSelected : undefined,
     ...$$restProps,
     class: [
-      "bx--btn",
-      expressive && "bx--btn--expressive",
+      "cds--btn",
+      expressive && "cds--btn--expressive",
       ((size === "small" && !expressive) ||
         (size === "sm" && !expressive) ||
         (size === "small" && !expressive)) &&
-        "bx--btn--sm",
+        "cds--btn--sm",
       ((size === "field" && !expressive) || (size === "md" && !expressive)) &&
-        "bx--btn--md",
-      size === "small" && "bx--btn--sm",
-      size === "xl" && "bx--btn--xl",
-      size === "2xl" && "bx--btn--2xl",
-      kind && `bx--btn--${kind}`,
-      disabled && "bx--btn--disabled",
-      hasIconOnly && "bx--btn--icon-only",
-      hasIconOnly && "bx--tooltip__trigger",
-      hasIconOnly && "bx--tooltip--a11y",
+        "cds--btn--md",
+      size === "small" && "cds--btn--sm",
+      size === "xl" && "cds--btn--xl",
+      size === "2xl" && "cds--btn--2xl",
+      kind && `cds--btn--${kind}`,
+      disabled && "cds--btn--disabled",
+      hasIconOnly && "cds--btn--icon-only",
+      hasIconOnly && "cds--tooltip__trigger",
+      hasIconOnly && "cds--tooltip--a11y",
       hasIconOnly &&
         tooltipPosition &&
-        `bx--btn--icon-only--${tooltipPosition}`,
+        `cds--btn--icon-only--${tooltipPosition}`,
       hasIconOnly &&
         tooltipAlignment &&
-        `bx--tooltip--align-${tooltipAlignment}`,
-      hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
+        `cds--tooltip--align-${tooltipAlignment}`,
+      hasIconOnly && isSelected && kind === "ghost" && "cds--btn--selected",
       $$restProps.class,
     ]
       .filter(Boolean)
@@ -151,12 +151,12 @@
     on:mouseleave
   >
     {#if hasIconOnly}
-      <span class:bx--assistive-text="{true}">{iconDescription}</span>
+      <span class:cds--assistive-text="{true}">{iconDescription}</span>
     {/if}
     <slot /><svelte:component
       this="{icon}"
       aria-hidden="true"
-      class="bx--btn__icon"
+      class="cds--btn__icon"
       aria-label="{iconDescription}"
     />
   </a>
@@ -170,12 +170,12 @@
     on:mouseleave
   >
     {#if hasIconOnly}
-      <span class:bx--assistive-text="{true}">{iconDescription}</span>
+      <span class:cds--assistive-text="{true}">{iconDescription}</span>
     {/if}
     <slot /><svelte:component
       this="{icon}"
       aria-hidden="true"
-      class="bx--btn__icon"
+      class="cds--btn__icon"
       style="{hasIconOnly ? 'margin-left: 0' : undefined}"
       aria-label="{iconDescription}"
     />

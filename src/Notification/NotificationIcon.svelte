@@ -36,6 +36,6 @@
   size="{20}"
   title="{iconDescription}"
   class="{notificationType === 'toast' &&
-    'bx--toast-notification__icon'} {notificationType === 'inline' &&
-    'bx--inline-notification__icon'}"
+    'cds--toast-notification__icon'} {notificationType === 'inline' &&
+    'cds--inline-notification__icon'}"
 />

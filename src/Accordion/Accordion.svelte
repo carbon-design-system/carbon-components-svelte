@@ -44,11 +44,11 @@
 {:else}
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <ul
-    class:bx--accordion="{true}"
-    class:bx--accordion--start="{align === 'start'}"
-    class:bx--accordion--end="{align === 'end'}"
-    class:bx--accordion--sm="{size === 'sm'}"
-    class:bx--accordion--lg="{size === 'lg' || size === 'xl'}"
+    class:cds--accordion="{true}"
+    class:cds--accordion--start="{align === 'start'}"
+    class:cds--accordion--end="{align === 'end'}"
+    class:cds--accordion--sm="{size === 'sm'}"
+    class:cds--accordion--lg="{size === 'lg' || size === 'xl'}"
     {...$$restProps}
     on:click
     on:mouseover

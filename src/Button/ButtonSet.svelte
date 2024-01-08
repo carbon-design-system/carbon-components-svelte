@@ -4,8 +4,8 @@
 </script>
 
 <div
-  class:bx--btn-set="{true}"
-  class:bx--btn-set--stacked="{stacked}"
+  class:cds--btn-set="{true}"
+  class:cds--btn-set--stacked="{stacked}"
   {...$$restProps}
 >
   <slot />

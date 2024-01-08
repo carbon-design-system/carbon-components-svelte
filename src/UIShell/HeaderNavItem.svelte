@@ -44,7 +44,7 @@
     tabindex="0"
     href="{href}"
     rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
-    class:bx--header__menu-item="{true}"
+    class:cds--header__menu-item="{true}"
     aria-current="{isSelected ? 'page' : undefined}"
     {...$$restProps}
     on:click
@@ -61,6 +61,6 @@
       }
     }}"
   >
-    <span class:bx--text-truncate--end="{true}"><slot>{text}</slot></span>
+    <span class:cds--text-truncate--end="{true}"><slot>{text}</slot></span>
   </a>
 </li>
