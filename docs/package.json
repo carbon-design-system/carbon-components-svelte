@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "yarn build:index-docs && run-p dev:*",
+    "dev": "npm run build:index-docs && run-p dev:*",
     "dev:routify": "cross-env NODE_ENV=development routify run",
     "dev:svite": "vite dev",
     "build": "run-s build:*",
