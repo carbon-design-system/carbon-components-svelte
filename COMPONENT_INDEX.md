@@ -444,10 +444,10 @@ None.
 | :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | focus      | forwarded | --     |
+| blur       | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
-| blur       | forwarded | --     |
 
 ## `Checkbox`
 

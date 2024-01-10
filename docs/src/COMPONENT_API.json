@@ -718,10 +718,10 @@
       "events": [
         { "type": "forwarded", "name": "click", "element": "a" },
         { "type": "forwarded", "name": "focus", "element": "a" },
+        { "type": "forwarded", "name": "blur", "element": "a" },
         { "type": "forwarded", "name": "mouseover", "element": "a" },
         { "type": "forwarded", "name": "mouseenter", "element": "a" },
-        { "type": "forwarded", "name": "mouseleave", "element": "a" },
-        { "type": "forwarded", "name": "blur", "element": "div" }
+        { "type": "forwarded", "name": "mouseleave", "element": "a" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "a" }
