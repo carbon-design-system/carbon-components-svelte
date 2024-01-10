@@ -1,0 +1,22 @@
+// Use g10 theme
+@use '@carbon/styles/scss/config' with (
+  $use-akamai-cdn: true
+);
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/themes" as *;
+@use "@carbon/styles/scss/fonts";
+@use "@carbon/styles/scss/utilities" as *;
+
+:root {
+  @include theme($g90);
+}
+
+@import "@carbon/styles/scss/reset";
+@import "@carbon/styles/scss/components";
+
+.cds--text-truncate-end {
+  @include text-truncate-end;
+}
+.cds--text-truncate-front {
+  @include text-truncate-front;
+}
