@@ -115,6 +115,7 @@ export default class Button extends SvelteComponentTyped<
   {
     click: WindowEventMap["click"];
     focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];

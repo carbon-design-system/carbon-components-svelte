@@ -135,6 +135,7 @@
     style="{hasIconOnly && 'width: 3rem;'}"
     on:click
     on:focus
+    on:blur
     on:mouseover
     on:mouseenter
     on:mouseleave
@@ -149,6 +150,7 @@
     {...buttonProps}
     on:click
     on:focus
+    on:blur
     on:mouseover
     on:mouseenter
     on:mouseleave
@@ -169,6 +171,7 @@
     {...buttonProps}
     on:click
     on:focus
+    on:blur
     on:mouseover
     on:mouseenter
     on:mouseleave

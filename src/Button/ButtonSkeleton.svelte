@@ -27,6 +27,7 @@
     {...$$restProps}
     on:click
     on:focus
+    on:blur
     on:mouseover
     on:mouseenter
     on:mouseleave
@@ -45,6 +46,7 @@
     {...$$restProps}
     on:click
     on:focus
+    on:blur
     on:mouseover
     on:mouseenter
     on:mouseleave
