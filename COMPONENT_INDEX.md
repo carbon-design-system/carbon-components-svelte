@@ -401,6 +401,8 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
 | click      | forwarded | --     |
+| focus      | forwarded | --     |
+| blur       | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
@@ -441,9 +443,11 @@ None.
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
 | click      | forwarded | --     |
+| focus      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+| blur       | forwarded | --     |
 
 ## `Checkbox`
 

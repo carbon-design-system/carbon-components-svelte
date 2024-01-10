@@ -23,9 +23,11 @@ export default class ButtonSkeleton extends SvelteComponentTyped<
   ButtonSkeletonProps,
   {
     click: WindowEventMap["click"];
+    focus: WindowEventMap["focus"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
+    blur: WindowEventMap["blur"];
   },
   {}
 > {}
