@@ -134,7 +134,7 @@ function plugin() {
 function carbonify() {
   return (tree) => {
     visit(tree, "link", (node) => {
-      node.data = { hProperties: { class: "bx--link" } };
+      node.data = { hProperties: { class: "cds--link" } };
     });
   };
 }
@@ -188,31 +188,31 @@ export default {
           code: content.replace(
             "</Layout_MDSVEX_DEFAULT>",
             `<div slot="aside">
-                <ul class="bx--list--unordered">
+                <ul class="cds--list--unordered">
                     ${toc
                       .map(
                         (item) =>
-                          `<li class="bx--list__item"><a class="bx--link" href="\#${item.id}">${item.text}</a></li>`
+                          `<li class="cds--list__item"><a class="cds--link" href="\#${item.id}">${item.text}</a></li>`
                       )
                       .join("")}
                   <h5>Component API</h5>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#props">Props</a>
+                  <li class="cds--list__item">
+                    <a class="cds--link" href="#props">Props</a>
                   </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#typedefs">Typedefs</a>
+                  <li class="cds--list__item">
+                    <a class="cds--link" href="#typedefs">Typedefs</a>
                   </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#slots">Slots</a>
+                  <li class="cds--list__item">
+                    <a class="cds--link" href="#slots">Slots</a>
                   </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#forwarded-events">Forwarded events</a>
+                  <li class="cds--list__item">
+                    <a class="cds--link" href="#forwarded-events">Forwarded events</a>
                   </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#dispatched-events">Dispatched events</a>
+                  <li class="cds--list__item">
+                    <a class="cds--link" href="#dispatched-events">Dispatched events</a>
                   </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#rest-props">restProps</a>
+                  <li class="cds--list__item">
+                    <a class="cds--link" href="#rest-props">restProps</a>
                   </li>
                 </ul>
               </div>

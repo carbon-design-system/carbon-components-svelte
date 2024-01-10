@@ -8,9 +8,9 @@
 </script>
 
 <Toggle
-  bind:toggled
+  bind:toggled="{toggled}"
   size="sm"
   labelText="Trigger snippet overflow"
-  style="margin-bottom: var(--bx-spacing-05)"
+  style="margin-bottom: var(--cds-spacing-05)"
 />
 <CodeSnippet type="multi" code="{code}" />

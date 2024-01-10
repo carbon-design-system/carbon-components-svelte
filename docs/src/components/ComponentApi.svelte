@@ -39,7 +39,7 @@
   );
 </script>
 
-<p style="margin-bottom: var(--bx-spacing-06)">
+<p style="margin-bottom: var(--cds-spacing-06)">
   Source code:
   <OutboundLink size="lg" inline href="{source}">
     {component.filePath}
@@ -68,7 +68,7 @@
               <InlineSnippet code="{prop.name}" />
               {#if prop.reactive}
                 <div
-                  style="white-space: nowrap; margin-top: var(--bx-spacing-03); margin-bottom: var(--bx-spacing-{prop.isRequired
+                  style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-{prop.isRequired
                     ? '01'
                     : '03'})"
                 >
@@ -134,7 +134,7 @@
 
 {#if component.typedefs.length > 0}
   <CodeSnippet
-    style="margin-top: var(--bx-spacing-08)"
+    style="margin-top: var(--cds-spacing-08)"
     class="my-layout-01-03"
     type="multi"
     code="{component.typedefs.map((t) => t.ts).join(';\n\n')};"
@@ -216,14 +216,14 @@
 
 <style>
   .description {
-    margin-bottom: var(--bx-spacing-04);
+    margin-bottom: var(--cds-spacing-04);
   }
 
   .cell {
     position: relative;
     z-index: 9;
     min-height: 1.25rem;
-    margin-bottom: var(--bx-spacing-02);
+    margin-bottom: var(--cds-spacing-02);
   }
 
   .overflow {
@@ -231,20 +231,20 @@
   }
 
   :global(.my-layout-01-03) {
-    margin-top: var(--bx-spacing-05);
-    margin-bottom: var(--bx-spacing-07);
+    margin-top: var(--cds-spacing-05);
+    margin-bottom: var(--cds-spacing-07);
   }
 
-  :global(.overflow .bx--structured-list) {
-    margin-top: var(--bx-spacing-05);
-    margin-bottom: var(--bx-spacing-09);
+  :global(.overflow .cds--structured-list) {
+    margin-top: var(--cds-spacing-05);
+    margin-bottom: var(--cds-spacing-09);
   }
 
   code {
     word-break: break-word;
   }
 
-  :global(.cell .bx--snippet--inline code, .bx--snippet--single pre) {
+  :global(.cell .cds--snippet--inline code, .cds--snippet--single pre) {
     white-space: pre-wrap !important;
   }
 </style>

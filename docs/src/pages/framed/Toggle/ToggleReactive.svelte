@@ -4,7 +4,7 @@
   let toggled = true;
 </script>
 
-<Toggle labelText="Push notifications" bind:toggled />
+<Toggle labelText="Push notifications" bind:toggled="{toggled}" />
 
 <div>
   <Button size="small" on:click="{() => (toggled = !toggled)}">
@@ -17,6 +17,6 @@
 
 <style>
   div {
-    margin-top: var(--bx-spacing-05);
+    margin-top: var(--cds-spacing-05);
   }
 </style>

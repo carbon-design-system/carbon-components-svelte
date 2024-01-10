@@ -92,45 +92,45 @@
         </p>
       </Column>
     </Row>
-    <Row style="margin-bottom: var(--bx-spacing-06)">
+    <Row style="margin-bottom: var(--cds-spacing-06)">
       <Column max="{10}" xlg="{10}">
-        <h2 style="margin-top: var(--bx-spacing-06)">Installation</h2>
+        <h2 style="margin-top: var(--cds-spacing-06)">Installation</h2>
       </Column>
     </Row>
-    <Row style="margin-bottom: var(--bx-spacing-06)">
+    <Row style="margin-bottom: var(--cds-spacing-06)">
       <Column noGutter>
         <Tabs>
-          <Tab label="Yarn" />
           <Tab label="NPM" />
           <Tab label="pnpm" />
+          <Tab label="Yarn" />
           <div slot="content" style="margin: 1rem -1rem">
-            <TabContent>
-              <CodeSnippet code="{installYarn}" />
-            </TabContent>
             <TabContent>
               <CodeSnippet code="{installNpm}" />
             </TabContent>
             <TabContent>
               <CodeSnippet code="{installPnpm}" />
             </TabContent>
+            <TabContent>
+              <CodeSnippet code="{installYarn}" />
+            </TabContent>
           </div>
         </Tabs>
       </Column>
     </Row>
-    <Row style="margin-bottom: var(--bx-spacing-09)">
+    <Row style="margin-bottom: var(--cds-spacing-09)">
       <Column>
         <h2>Styling</h2>
         <p>
           Before importing components, you will need to first apply Carbon
-          component styles. The Carbon Design System supports five themes (2
-          light, 3 dark).
+          component styles. The Carbon Design System supports four themes (2
+          light, 2 dark).
         </p>
         <RadioButtonGroup
-          style="margin-top: var(--bx-spacing-08)"
+          style="margin-top: var(--cds-spacing-08)"
           legendText="Carbon themes"
           bind:selected="{$theme}"
         >
-          {#each ["white", "g10", "g80", "g90", "g100"] as value}
+          {#each ["white", "g10", "g90", "g100"] as value}
             <RadioButton labelText="{themes[value]}" value="{value}" />
           {/each}
         </RadioButtonGroup>
@@ -216,7 +216,7 @@
       </Column>
     </Row>
 
-    <Row style="margin-bottom: var(--bx-spacing-06)">
+    <Row style="margin-bottom: var(--cds-spacing-06)">
       <Column>
         <h2>Dynamic theming</h2>
         <p>Use the "all.css" StyleSheet for dynamic, client-side theming.</p>
@@ -248,7 +248,7 @@
       </Column>
     </Row>
 
-    <Row style="margin-bottom: var(--bx-spacing-06)">
+    <Row style="margin-bottom: var(--cds-spacing-06)">
       <Column>
         <h2>Portfolio</h2>
         <p>
@@ -314,6 +314,6 @@
 
 <style>
   p {
-    margin-bottom: var(--bx-spacing-05);
+    margin-bottom: var(--cds-spacing-05);
   }
 </style>

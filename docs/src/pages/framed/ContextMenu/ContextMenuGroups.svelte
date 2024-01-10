@@ -14,7 +14,7 @@
 <ContextMenu>
   <ContextMenuOption indented labelText="Open" />
   <ContextMenuDivider />
-  <ContextMenuRadioGroup bind:selectedId labelText="Radio group">
+  <ContextMenuRadioGroup bind:selectedId="{selectedId}" labelText="Radio group">
     <ContextMenuOption id="0" labelText="Set as foreground" />
     <ContextMenuOption id="1" labelText="Set as background" />
   </ContextMenuRadioGroup>
@@ -29,11 +29,11 @@
 <style>
   div {
     position: absolute;
-    width: calc(100% - var(--bx-spacing-05));
-    height: calc(100% - var(--bx-spacing-06));
+    width: calc(100% - var(--cds-spacing-05));
+    height: calc(100% - var(--cds-spacing-06));
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--bx-text-02);
+    color: var(--cds-text-02);
   }
 </style>

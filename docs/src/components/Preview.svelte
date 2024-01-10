@@ -16,7 +16,9 @@
 <div class="preview">
   {#if framed}
     <div class="framed-header">
-      <div style="margin-left: var(--bx-spacing-05); color: var(--bx-text-02)">
+      <div
+        style="margin-left: var(--cds-spacing-05); color: var(--cds-text-02)"
+      >
         Content loaded in an iframe
       </div>
       <Button
@@ -31,7 +33,7 @@
       </Button>
     </div>
   {/if}
-  <div class="preview-viewer" class:framed>
+  <div class="preview-viewer" class:framed="{framed}">
     {#if framed}
       <iframe title="{src.split('/').pop()}" src="{themedSrcUrl}"></iframe>
     {:else}
@@ -47,7 +49,7 @@
 
 <style>
   .preview {
-    margin-bottom: var(--bx-spacing-09);
+    margin-bottom: var(--cds-spacing-09);
     margin-left: -1rem;
     margin-right: -1rem;
     max-width: 66rem;
@@ -58,14 +60,14 @@
   }
 
   .preview-viewer {
-    border: 1px solid var(--bx-ui-03);
+    border: 1px solid var(--cds-ui-03);
     border-bottom: 0;
     position: relative;
     z-index: 9999;
   }
 
   .preview-viewer:not(.framed) {
-    padding: var(--bx-spacing-06) var(--bx-spacing-05);
+    padding: var(--cds-spacing-06) var(--cds-spacing-05);
   }
 
   .preview-viewer.framed {

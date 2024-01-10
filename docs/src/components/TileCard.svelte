@@ -12,7 +12,11 @@
   $: tileComponent = href ? ClickableTile : Tile;
 </script>
 
-<div class="card-wrapper" class:borderRight class:borderBottom>
+<div
+  class="card-wrapper"
+  class:borderRight="{borderRight}"
+  class:borderBottom="{borderBottom}"
+>
   <AspectRatio>
     <svelte:component
       this="{tileComponent}"
@@ -31,9 +35,9 @@
           <svelte:component
             this="{LogoGithub}"
             size="{32}"
-            style="fill: var(--bx-icon-01)"
+            style="fill: var(--cds-icon-01)"
           />
-          <Launch size="{20}" style="fill: var(--bx-icon-01)" />
+          <Launch size="{20}" style="fill: var(--cds-icon-01)" />
         </div>
       </div>
     </svelte:component>
@@ -47,11 +51,11 @@
   }
 
   .borderRight {
-    border-right: 1px solid var(--bx-ui-03);
+    border-right: 1px solid var(--cds-ui-03);
   }
 
   .borderBottom {
-    border-bottom: 1px solid var(--bx-ui-03);
+    border-bottom: 1px solid var(--cds-ui-03);
   }
 
   .card {
@@ -68,19 +72,19 @@
   }
 
   .title {
-    margin-top: calc(-1 * var(--bx-spacing-02));
-    margin-bottom: var(--bx-spacing-01);
+    margin-top: calc(-1 * var(--cds-spacing-02));
+    margin-bottom: var(--cds-spacing-01);
   }
 
   .subtitle {
-    color: var(--bx-text-02);
+    color: var(--cds-text-02);
   }
 
   @media (max-width: 671px) {
     .card-wrapper,
     .borderRight {
       border-right: 0;
-      border-bottom: 1px solid var(--bx-ui-03);
+      border-bottom: 1px solid var(--cds-ui-03);
     }
   }
 </style>

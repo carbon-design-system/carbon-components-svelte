@@ -1,0 +1,34 @@
+// Use all Carbon themes
+@use '@carbon/styles/scss/config' with (
+  $use-akamai-cdn: true
+);
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/themes" as *;
+@use "@carbon/styles/scss/fonts";
+@use "@carbon/styles/scss/utilities" as *;
+
+:root {
+  @include theme($white);
+}
+
+[data-carbon-theme='g10'] {
+  @include theme($g10);
+}
+
+[data-carbon-theme='g90'] {
+  @include theme($g90);
+}
+
+[data-carbon-theme='g100'] {
+  @include theme($g100);
+}
+
+@import "@carbon/styles/scss/reset";
+@import "@carbon/styles/scss/components";
+
+.cds--text-truncate-end {
+  @include text-truncate-end;
+}
+.cds--text-truncate-front {
+  @include text-truncate-front;
+}

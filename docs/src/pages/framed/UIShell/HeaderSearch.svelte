@@ -71,10 +71,10 @@
   </svelte:fragment>
   <HeaderUtilities>
     <HeaderSearch
-      bind:ref
-      bind:active
-      bind:value
-      bind:selectedResultIndex
+      bind:ref="{ref}"
+      bind:active="{active}"
+      bind:value="{value}"
+      bind:selectedResultIndex="{selectedResultIndex}"
       placeholder="Search services"
       results="{results}"
       on:active="{() => {
@@ -116,7 +116,7 @@
         </p>
         <div style="overflow-x: scroll;">
           {#each events as { type, ...rest }}
-            <div style="display: block; margin-bottom: var(--bx-spacing-05)">
+            <div style="display: block; margin-bottom: var(--cds-spacing-05)">
               <div><strong>on:{type}</strong></div>
               {#if Object.keys(rest).length > 0}
                 <pre>{JSON.stringify(rest, null, 2)}</pre>
