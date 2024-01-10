@@ -15,7 +15,7 @@
     // NOTE: we *do not* want to persist the theme as this can
     // conflict with how the iframe is displayed in the docs.
     // Instead, we want the theme to be overridden in the standalone page.
-    if (["white", "g10", "g80", "g90", "g100"].includes(current_theme)) {
+    if (["white", "g10", "g90", "g100"].includes(current_theme)) {
       document.documentElement.setAttribute("theme", current_theme);
       document.documentElement.style.setProperty(
         "color-scheme",

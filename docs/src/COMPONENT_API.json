@@ -13074,9 +13074,9 @@
       ],
       "typedefs": [
         {
-          "type": "\"white\" | \"g10\" | \"g80\" | \"g90\" | \"g100\"",
+          "type": "\"white\" | \"g10\" | \"g90\" | \"g100\"",
           "name": "CarbonTheme",
-          "ts": "type CarbonTheme = \"white\" | \"g10\" | \"g80\" | \"g90\" | \"g100\""
+          "ts": "type CarbonTheme = \"white\" | \"g10\" | \"g90\" | \"g100\""
         }
       ]
     },

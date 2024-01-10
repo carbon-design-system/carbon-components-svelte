@@ -37,7 +37,7 @@
     const searchParams = new URLSearchParams(window.location.search);
     const current_theme = searchParams.get("theme");
 
-    if (["white", "g10", "g80", "g90", "g100"].includes(current_theme)) {
+    if (["white", "g10", "g90", "g100"].includes(current_theme)) {
       theme.set(current_theme);
     }
   });
@@ -87,7 +87,6 @@
           >
             <SelectItem value="white" text="White" />
             <SelectItem value="g10" text="Gray 10" />
-            <SelectItem value="g80" text="Gray 80" />
             <SelectItem value="g90" text="Gray 90" />
             <SelectItem value="g100" text="Gray 100" />
           </Select>

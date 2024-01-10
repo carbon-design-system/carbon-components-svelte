@@ -14,7 +14,6 @@ If the `selected` prop is not set, the value of the first `SelectItem` will be u
 <Select labelText="Carbon theme" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" />
   <SelectItem value="g10" />
-  <SelectItem value="g80" />
   <SelectItem value="g90" />
   <SelectItem value="g100" />
 </Select>
@@ -26,7 +25,6 @@ Use the `text` prop on `SelectItem` to customize the display value.
 <Select labelText="Carbon theme" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -38,7 +36,6 @@ Use the `selected` prop to specify an initial value.
 <Select labelText="Carbon theme" selected="g10" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -51,10 +48,9 @@ The `selected` prop is reactive and supports two-way binding.
 
 ## Helper text
 
-<Select helperText="Carbon offers 4 themes (2 light, 3 dark)" labelText="Carbon theme" selected="g10" >
+<Select helperText="Carbon offers 4 themes (2 light, 2 dark)" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -64,7 +60,6 @@ The `selected` prop is reactive and supports two-way binding.
 <Select hideLabel labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -78,7 +73,6 @@ The `selected` prop is reactive and supports two-way binding.
     <SelectItem value="g10" text="Gray 10" />
   </SelectItemGroup>
   <SelectItemGroup label="Dark theme">
-    <SelectItem value="g80" text="Gray 80" />
     <SelectItem value="g90" text="Gray 90" />
     <SelectItem value="g100" text="Gray 100" />
   </SelectItemGroup>
@@ -89,7 +83,6 @@ The `selected` prop is reactive and supports two-way binding.
 <Select light labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -99,7 +92,6 @@ The `selected` prop is reactive and supports two-way binding.
 <Select inline labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -109,7 +101,6 @@ The `selected` prop is reactive and supports two-way binding.
 <Select size="lg" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -119,7 +110,6 @@ The `selected` prop is reactive and supports two-way binding.
 <Select size="sm" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -129,7 +119,6 @@ The `selected` prop is reactive and supports two-way binding.
 <Select invalid invalidText="Theme must be a dark variant" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -139,7 +128,6 @@ The `selected` prop is reactive and supports two-way binding.
 <Select warn warnText="The selected theme will not be persisted" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
@@ -149,7 +137,6 @@ The `selected` prop is reactive and supports two-way binding.
 <Select disabled labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>

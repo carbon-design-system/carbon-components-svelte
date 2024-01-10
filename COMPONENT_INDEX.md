@@ -304,9 +304,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                                                                     | Fallback |
-| :-------- | :------ | :------------------------------------------------------------------------ | :------- |
-| --        | Yes     | <code>{props?: { ["aria-current"]?: string; class: "bx--link"; }} </code> | --       |
+| Slot name | Default | Props                                                                      | Fallback |
+| :-------- | :------ | :------------------------------------------------------------------------- | :------- |
+| --        | Yes     | <code>{props?: { ["aria-current"]?: string; class: "cds--link"; }} </code> | --       |
 
 ### Events
 
@@ -2621,10 +2621,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                                                                                                                   |
-| :-------- | :------ | :---- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| --        | Yes     | --    | --                                                                                                                                                                                         |
-| menu      | No      | --    | <code>&lt;svelte:component<br /> this="{icon}"<br /> aria-label="{iconDescription}"<br /> title="{iconDescription}"<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
+| Slot name | Default | Props | Fallback                                                                                                                                                                                    |
+| :-------- | :------ | :---- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| --        | Yes     | --    | --                                                                                                                                                                                          |
+| menu      | No      | --    | <code>&lt;svelte:component<br /> this="{icon}"<br /> aria-label="{iconDescription}"<br /> title="{iconDescription}"<br /> class="cds--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
 
 ### Events
 
@@ -2655,9 +2655,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                                            |
-| :-------- | :------ | :---- | :------------------------------------------------------------------------------------------------------------------ |
-| --        | Yes     | --    | <code>&lt;div class:bx--overflow-menu-options\_\_option-content="{true}"&gt;<br /> {text}<br /> &lt;/div&gt;</code> |
+| Slot name | Default | Props | Fallback                                                                                                             |
+| :-------- | :------ | :---- | :------------------------------------------------------------------------------------------------------------------- |
+| --        | Yes     | --    | <code>&lt;div class:cds--overflow-menu-options\_\_option-content="{true}"&gt;<br /> {text}<br /> &lt;/div&gt;</code> |
 
 ### Events
 
@@ -2933,9 +2933,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                                                    | Fallback                                                                  |
-| :-------- | :------ | :------------------------------------------------------- | :------------------------------------------------------------------------ |
-| --        | Yes     | <code>{ props: { class: 'bx--progress-label' } } </code> | <code>&lt;p class:bx--progress-label="{true}"&gt;{label}&lt;/p&gt;</code> |
+| Slot name | Default | Props                                                     | Fallback                                                                   |
+| :-------- | :------ | :-------------------------------------------------------- | :------------------------------------------------------------------------- |
+| --        | Yes     | <code>{ props: { class: 'cds--progress-label' } } </code> | <code>&lt;p class:cds--progress-label="{true}"&gt;{label}&lt;/p&gt;</code> |
 
 ### Events
 
@@ -4022,10 +4022,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                                                  | Fallback                                              |
-| :-------- | :------ | :----------------------------------------------------- | :---------------------------------------------------- |
-| --        | Yes     | <code>{ props: { class: 'bx--tag\_\_label' } } </code> | --                                                    |
-| icon      | No      | --                                                     | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
+| Slot name | Default | Props                                                   | Fallback                                              |
+| :-------- | :------ | :------------------------------------------------------ | :---------------------------------------------------- |
+| --        | Yes     | <code>{ props: { class: 'cds--tag\_\_label' } } </code> | --                                                    |
+| icon      | No      | --                                                      | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 
@@ -4197,7 +4197,7 @@ None.
 ### Types
 
 ```ts
-export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
+export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ```
 
 ### Props
