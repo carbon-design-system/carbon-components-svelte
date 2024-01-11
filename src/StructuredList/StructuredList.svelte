@@ -35,10 +35,10 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
   role="table"
-  class:cds--structured-list="{true}"
-  class:cds--structured-list--selection="{selection}"
-  class:cds--structured-list--condensed="{condensed}"
-  class:cds--structured-list--flush="{flush}"
+  class:bx--structured-list="{true}"
+  class:bx--structured-list--selection="{selection}"
+  class:bx--structured-list--condensed="{condensed}"
+  class:bx--structured-list--flush="{flush}"
   {...$$restProps}
   on:click
   on:mouseover

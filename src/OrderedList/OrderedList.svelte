@@ -12,10 +12,10 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <ol
-  class:cds--list--ordered="{!native}"
-  class:cds--list--ordered--native="{native}"
-  class:cds--list--nested="{nested}"
-  class:cds--list--expressive="{expressive}"
+  class:bx--list--ordered="{!native}"
+  class:bx--list--ordered--native="{native}"
+  class:bx--list--nested="{nested}"
+  class:bx--list--expressive="{expressive}"
   {...$$restProps}
   on:click
   on:mouseover

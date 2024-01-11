@@ -80,7 +80,7 @@
 
 <svelte:window bind:innerWidth="{winWidth}" />
 
-<header aria-label="{ariaLabel}" class:cds--header="{true}">
+<header aria-label="{ariaLabel}" class:bx--header="{true}">
   <slot name="skip-to-content" />
   {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
     <HamburgerMenu
@@ -91,13 +91,13 @@
   {/if}
   <a
     href="{href}"
-    class:cds--header__name="{true}"
+    class:bx--header__name="{true}"
     bind:this="{ref}"
     {...$$restProps}
     on:click
   >
     {#if company || $$slots.company}
-      <span class:cds--header__name--prefix="{true}"
+      <span class:bx--header__name--prefix="{true}"
         ><slot name="company">{company}&nbsp;</slot></span
       >
     {/if}

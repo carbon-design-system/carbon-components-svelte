@@ -8,7 +8,7 @@
   kind="ghost"
   size="small"
   {...$$restProps}
-  class="cds--inline-notification__action-button {$$restProps.class}"
+  class="bx--inline-notification__action-button {$$restProps.class}"
   on:click
   on:mouseover
   on:mouseenter

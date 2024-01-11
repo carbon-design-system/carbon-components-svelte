@@ -82,8 +82,8 @@
 {:else}
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
-    class:cds--form-item="{true}"
-    class:cds--checkbox-wrapper="{true}"
+    class:bx--form-item="{true}"
+    class:bx--checkbox-wrapper="{true}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -101,7 +101,7 @@
       name="{name}"
       required="{required}"
       readonly="{readonly}"
-      class:cds--checkbox="{true}"
+      class:bx--checkbox="{true}"
       on:change="{() => {
         if (useGroup) {
           group = group.includes(value)
@@ -114,11 +114,11 @@
       on:change
       on:blur
     />
-    <label for="{id}" title="{title}" class:cds--checkbox-label="{true}">
+    <label for="{id}" title="{title}" class:bx--checkbox-label="{true}">
       <span
         bind:this="{refLabel}"
-        class:cds--checkbox-label-text="{true}"
-        class:cds--visually-hidden="{hideLabel}"
+        class:bx--checkbox-label-text="{true}"
+        class:bx--visually-hidden="{hideLabel}"
       >
         <slot name="labelText">
           {labelText}

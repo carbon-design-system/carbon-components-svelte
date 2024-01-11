@@ -84,11 +84,11 @@
 
   $: expanded = !!value.length;
   $: classes = [
-    expanded && "cds--toolbar-search-container-active",
+    expanded && "bx--toolbar-search-container-active",
     persistent
-      ? "cds--toolbar-search-container-persistent"
-      : "cds--toolbar-search-container-expandable",
-    disabled && "cds--toolbar-search-container-disabled",
+      ? "bx--toolbar-search-container-persistent"
+      : "bx--toolbar-search-container-expandable",
+    disabled && "bx--toolbar-search-container-disabled",
   ]
     .filter(Boolean)
     .join(" ");

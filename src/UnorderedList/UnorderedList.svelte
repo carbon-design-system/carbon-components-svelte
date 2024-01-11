@@ -9,9 +9,9 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <ul
-  class:cds--list--unordered="{true}"
-  class:cds--list--nested="{nested}"
-  class:cds--list--expressive="{expressive}"
+  class:bx--list--unordered="{true}"
+  class:bx--list--nested="{nested}"
+  class:bx--list--expressive="{expressive}"
   {...$$restProps}
   on:click
   on:mouseover

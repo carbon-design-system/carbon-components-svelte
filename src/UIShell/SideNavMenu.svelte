@@ -20,12 +20,12 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
 </script>
 
-<li class:cds--side-nav__item="{true}" class:cds--side-nav__item--icon="{icon}">
+<li class:bx--side-nav__item="{true}" class:bx--side-nav__item--icon="{icon}">
   <button
     type="button"
     bind:this="{ref}"
     aria-expanded="{expanded}"
-    class:cds--side-nav__submenu="{true}"
+    class:bx--side-nav__submenu="{true}"
     {...$$restProps}
     on:click
     on:click="{() => {
@@ -33,17 +33,17 @@
     }}"
   >
     {#if $$slots.icon || icon}
-      <div class:cds--side-nav__icon="{true}">
+      <div class:bx--side-nav__icon="{true}">
         <slot name="icon">
           <svelte:component this="{icon}" />
         </slot>
       </div>
     {/if}
-    <span class:cds--side-nav__submenu-title="{true}">{text}</span>
+    <span class:bx--side-nav__submenu-title="{true}">{text}</span>
     <div
-      class:cds--side-nav__icon="{true}"
-      class:cds--side-nav__icon--small="{true}"
-      class:cds--side-nav__submenu-chevron="{true}"
+      class:bx--side-nav__icon="{true}"
+      class:bx--side-nav__icon--small="{true}"
+      class:bx--side-nav__submenu-chevron="{true}"
     >
       <ChevronDown />
     </div>
@@ -51,7 +51,7 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     role="menu"
-    class:cds--side-nav__menu="{true}"
+    class:bx--side-nav__menu="{true}"
     style:max-height="{expanded ? "none" : undefined}"
   >
     <slot />

@@ -32,13 +32,13 @@
     ...$$restProps,
     class: [
       $$restProps.class,
-      "cds--row",
-      condensed && "cds--row--condensed",
-      narrow && "cds--row--narrow",
-      noGutter && "cds--no-gutter",
-      noGutterLeft && "cds--no-gutter--left",
-      noGutterRight && "cds--no-gutter--right",
-      padding && "cds--row-padding",
+      "bx--row",
+      condensed && "bx--row--condensed",
+      narrow && "bx--row--narrow",
+      noGutter && "bx--no-gutter",
+      noGutterLeft && "bx--no-gutter--left",
+      noGutterRight && "bx--no-gutter--right",
+      padding && "bx--row-padding",
     ]
       .filter(Boolean)
       .join(" "),

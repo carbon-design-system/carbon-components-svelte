@@ -38,10 +38,10 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <p
     bind:this="{ref}"
-    class:cds--link="{true}"
-    class:cds--link--disabled="{disabled}"
-    class:cds--link--inline="{inline}"
-    class:cds--link--visited="{visited}"
+    class:bx--link="{true}"
+    class:bx--link--disabled="{disabled}"
+    class:bx--link--inline="{inline}"
+    class:bx--link--visited="{visited}"
     {...$$restProps}
     on:click
     on:mouseover
@@ -50,7 +50,7 @@
   >
     <slot />
     {#if !inline && ($$slots.icon || icon)}
-      <div class:cds--link__icon="{true}">
+      <div class:bx--link__icon="{true}">
         <slot name="icon">
           <svelte:component this="{icon}" />
         </slot>
@@ -60,12 +60,12 @@
 {:else}
   <a
     bind:this="{ref}"
-    class:cds--link="{true}"
-    class:cds--link--disabled="{disabled}"
-    class:cds--link--inline="{inline}"
-    class:cds--link--visited="{visited}"
-    class:cds--link--sm="{size === 'sm'}"
-    class:cds--link--lg="{size === 'lg'}"
+    class:bx--link="{true}"
+    class:bx--link--disabled="{disabled}"
+    class:bx--link--inline="{inline}"
+    class:bx--link--visited="{visited}"
+    class:bx--link--sm="{size === 'sm'}"
+    class:bx--link--lg="{size === 'lg'}"
     rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
     href="{href}"
     {...$$restProps}
@@ -76,7 +76,7 @@
   >
     <slot />
     {#if !inline && ($$slots.icon || icon)}
-      <div class:cds--link__icon="{true}">
+      <div class:bx--link__icon="{true}">
         <slot name="icon">
           <svelte:component this="{icon}" />
         </slot>

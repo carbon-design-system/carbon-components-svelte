@@ -11,7 +11,7 @@
 
 <Form
   {...$$restProps}
-  class="cds--form--fluid {$$restProps.class}"
+  class="bx--form--fluid {$$restProps.class}"
   on:click
   on:keydown
   on:mouseover

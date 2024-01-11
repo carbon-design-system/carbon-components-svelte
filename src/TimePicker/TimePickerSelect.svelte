@@ -41,8 +41,8 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:cds--select="{true}"
-  class:cds--time-picker__select="{true}"
+  class:bx--select="{true}"
+  class:bx--time-picker__select="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -52,8 +52,8 @@
   {#if labelText || $$slots.labelText}
     <label
       for="{id}"
-      class:cds--label="{true}"
-      class:cds--visually-hidden="{true}"
+      class:bx--label="{true}"
+      class:bx--visually-hidden="{true}"
     >
       <slot name="labelText">
         {labelText}
@@ -67,7 +67,7 @@
     name="{name}"
     disabled="{disabled}"
     value="{value}"
-    class:cds--select-input="{true}"
+    class:bx--select-input="{true}"
     on:change="{({ target }) => {
       selectedValue.set(target.value);
     }}"
@@ -77,6 +77,6 @@
   <ChevronDown
     aria-label="{iconDescription}"
     title="{iconDescription}"
-    class="cds--select__arrow"
+    class="bx--select__arrow"
   />
 </div>

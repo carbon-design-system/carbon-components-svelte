@@ -45,7 +45,7 @@
   $: buttonProps = {
     role: "menuitem",
     tabindex: "-1",
-    class: "cds--overflow-menu-options__btn",
+    class: "bx--overflow-menu-options__btn",
     disabled: href ? undefined : disabled,
     href: href ? href : undefined,
     title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
@@ -55,10 +55,10 @@
 <li
   role="none"
   id="{id}"
-  class:cds--overflow-menu-options__option="{true}"
-  class:cds--overflow-menu--divider="{hasDivider}"
-  class:cds--overflow-menu-options__option--danger="{danger}"
-  class:cds--overflow-menu-options__option--disabled="{disabled}"
+  class:bx--overflow-menu-options__option="{true}"
+  class:bx--overflow-menu--divider="{hasDivider}"
+  class:bx--overflow-menu-options__option--danger="{danger}"
+  class:bx--overflow-menu-options__option--disabled="{disabled}"
   {...$$restProps}
 >
   {#if href}
@@ -81,7 +81,7 @@
       }}"
     >
       <slot>
-        <div class:cds--overflow-menu-options__option-content="{true}">
+        <div class:bx--overflow-menu-options__option-content="{true}">
           {text}
         </div>
       </slot>
@@ -104,7 +104,7 @@
       }}"
     >
       <slot>
-        <div class:cds--overflow-menu-options__option-content="{true}">
+        <div class:bx--overflow-menu-options__option-content="{true}">
           {text}
         </div>
       </slot>

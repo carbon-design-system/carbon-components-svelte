@@ -9,7 +9,7 @@
   <Checkbox bind:group="{group}" labelText="{value}" value="{value}" />
 {/each}
 
-<div style="margin: var(--cds-spacing-05) 0">
+<div style="margin: var(--bx-spacing-05) 0">
   <Button on:click="{() => (group = ['Banana'])}">Set to ["Banana"]</Button>
 </div>
 

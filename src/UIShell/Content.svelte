@@ -6,7 +6,7 @@
 
   /**
    * By default, the `SideNav` applies a left margin of `3rem` to `Content`
-   * if it's a sibling component (e.g., .cds--side-nav ~ .cds--content).
+   * if it's a sibling component (e.g., .bx--side-nav ~ .bx--content).
    *
    * We manually unset the left margin if the `SideNav`
    * is collapsed and if it's not the `rail` variant.
@@ -16,7 +16,7 @@
 
 <main
   id="{id}"
-  class:cds--content="{true}"
+  class:bx--content="{true}"
   style:margin-left="{unsetLeftMargin ? 0 : undefined}"
   {...$$restProps}
 >

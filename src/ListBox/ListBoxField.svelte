@@ -55,7 +55,7 @@
     ? translateWithId('close')
     : translateWithId('open')}"
   tabindex="{disabled ? '-1' : tabindex}"
-  class:cds--list-box__field="{true}"
+  class:bx--list-box__field="{true}"
   {...$$restProps}
   on:click
   on:mouseover

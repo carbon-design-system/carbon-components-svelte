@@ -56,7 +56,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:cds--file="{true}"
+  class:bx--file="{true}"
   {...$$restProps}
   on:dragover
   on:dragover|preventDefault|stopPropagation="{({ dataTransfer }) => {
@@ -87,8 +87,8 @@
   <label
     for="{id}"
     tabindex="{tabindex}"
-    class:cds--file-browse-btn="{true}"
-    class:cds--file-browse-btn--disabled="{disabled}"
+    class:bx--file-browse-btn="{true}"
+    class:bx--file-browse-btn--disabled="{disabled}"
     on:keydown
     on:keydown="{({ key }) => {
       if (key === ' ' || key === 'Enter') {
@@ -98,8 +98,8 @@
   >
     <div
       role="{role}"
-      class:cds--file__drop-container="{true}"
-      class:cds--file__drop-container--drag-over="{over}"
+      class:bx--file__drop-container="{true}"
+      class:bx--file__drop-container--drag-over="{over}"
     >
       <slot name="labelText">
         {labelText}
@@ -115,7 +115,7 @@
     accept="{accept}"
     name="{name}"
     multiple="{multiple}"
-    class:cds--file-input="{true}"
+    class:bx--file-input="{true}"
     on:change="{({ target }) => {
       files = validateFiles([...target.files]);
       dispatch('add', files);

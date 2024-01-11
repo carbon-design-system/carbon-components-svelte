@@ -51,19 +51,19 @@
 
 {#if selectionCount !== undefined}
   <div
-    class:cds--tag="{true}"
-    class:cds--tag--filter="{true}"
-    class:cds--tag--high-contrast="{true}"
-    class:cds--tag--disabled="{disabled}"
+    class:bx--tag="{true}"
+    class:bx--tag--filter="{true}"
+    class:bx--tag--high-contrast="{true}"
+    class:bx--tag--disabled="{disabled}"
   >
-    <span class:cds--tag__label="{true}" title="{selectionCount}">
+    <span class:bx--tag__label="{true}" title="{selectionCount}">
       {selectionCount}
     </span>
     <div
       bind:this="{ref}"
       role="button"
       tabindex="{disabled ? -1 : 0}"
-      class:cds--tag__close-icon="{true}"
+      class:bx--tag__close-icon="{true}"
       on:click|preventDefault|stopPropagation="{(e) => {
         if (!disabled) {
           dispatch('clear', e);
@@ -88,9 +88,9 @@
     aria-label="{description}"
     title="{description}"
     tabindex="{disabled ? '-1' : '0'}"
-    class:cds--list-box__selection="{true}"
-    class:cds--tag--filter="{selectionCount}"
-    class:cds--list-box__selection--multi="{selectionCount}"
+    class:bx--list-box__selection="{true}"
+    class:bx--tag--filter="{selectionCount}"
+    class:bx--list-box__selection--multi="{selectionCount}"
     {...$$restProps}
     on:click|preventDefault|stopPropagation="{(e) => {
       if (!disabled) {

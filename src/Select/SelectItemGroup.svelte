@@ -9,7 +9,7 @@
 <optgroup
   label="{label}"
   disabled="{disabled}"
-  class:cds--select-optgroup="{true}"
+  class:bx--select-optgroup="{true}"
   {...$$restProps}
 >
   <slot />

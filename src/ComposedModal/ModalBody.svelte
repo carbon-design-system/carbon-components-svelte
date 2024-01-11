@@ -10,13 +10,13 @@
 <div
   tabindex="{hasScrollingContent ? '0' : undefined}"
   role="{hasScrollingContent ? 'region' : undefined}"
-  class:cds--modal-content="{true}"
-  class:cds--modal-content--with-form="{hasForm}"
-  class:cds--modal-scroll-content="{hasScrollingContent}"
+  class:bx--modal-content="{true}"
+  class:bx--modal-content--with-form="{hasForm}"
+  class:bx--modal-scroll-content="{hasScrollingContent}"
   {...$$restProps}
 >
   <slot />
 </div>
 {#if hasScrollingContent}
-  <div class:cds--modal-content--overflow-indicator="{true}"></div>
+  <div class:bx--modal-content--overflow-indicator="{true}"></div>
 {/if}

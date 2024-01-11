@@ -337,7 +337,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{props?: { [\"aria-current\"]?: string; class: \"cds--link\"; }}"
+          "slot_props": "{props?: { [\"aria-current\"]?: string; class: \"bx--link\"; }}"
         }
       ],
       "events": [
@@ -8127,7 +8127,7 @@
         {
           "name": "menu",
           "default": false,
-          "fallback": "<svelte:component\n      this=\"{icon}\"\n      aria-label=\"{iconDescription}\"\n      title=\"{iconDescription}\"\n      class=\"cds--overflow-menu__icon {iconClass}\"\n    />",
+          "fallback": "<svelte:component\n      this=\"{icon}\"\n      aria-label=\"{iconDescription}\"\n      title=\"{iconDescription}\"\n      class=\"bx--overflow-menu__icon {iconClass}\"\n    />",
           "slot_props": "{}"
         }
       ],
@@ -8264,7 +8264,7 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "<div class:cds--overflow-menu-options__option-content=\"{true}\">\n          {text}\n        </div>",
+          "fallback": "<div class:bx--overflow-menu-options__option-content=\"{true}\">\n          {text}\n        </div>",
           "slot_props": "{}"
         }
       ],
@@ -9365,8 +9365,8 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "<p class:cds--progress-label=\"{true}\">{label}</p>",
-          "slot_props": "{ props: { class: 'cds--progress-label' } }"
+          "fallback": "<p class:bx--progress-label=\"{true}\">{label}</p>",
+          "slot_props": "{ props: { class: 'bx--progress-label' } }"
         }
       ],
       "events": [
@@ -12396,7 +12396,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props: { class: 'cds--tag__label' } }"
+          "slot_props": "{ props: { class: 'bx--tag__label' } }"
         },
         {
           "name": "icon",

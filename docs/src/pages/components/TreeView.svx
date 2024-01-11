@@ -23,7 +23,7 @@ By default, each item renders the value of `node.text`. Use the data from `let:n
 
 The destructured `let:node` contains the following properties:
 
-<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+<UnorderedList svx-ignore style="margin-bottom: var(--bx-spacing-08)">
   <ListItem><strong>id</strong>: the node id</ListItem>
   <ListItem><strong>text</strong>: the node text</ListItem>
   <ListItem><strong>expanded</strong>: true if the node is expanded</ListItem>

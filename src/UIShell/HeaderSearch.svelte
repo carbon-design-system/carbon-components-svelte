@@ -68,7 +68,7 @@
       aria-label="Search"
       aria-expanded="{active}"
       tabindex="{active ? '-1' : '0'}"
-      class:cds--header__action="{true}"
+      class:bx--header__action="{true}"
       class:disabled="{active}"
       on:click="{() => {
         active = true;
@@ -134,7 +134,7 @@
       type="button"
       aria-label="Clear search"
       tabindex="{active ? '0' : '-1'}"
-      class:cds--header__action="{true}"
+      class:bx--header__action="{true}"
       class:hidden="{!active}"
       on:click="{() => {
         reset();

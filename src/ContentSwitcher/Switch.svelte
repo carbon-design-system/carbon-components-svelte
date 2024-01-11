@@ -47,8 +47,8 @@
   aria-selected="{selected}"
   disabled="{disabled}"
   id="{id}"
-  class:cds--content-switcher-btn="{true}"
-  class:cds--content-switcher--selected="{selected}"
+  class:bx--content-switcher-btn="{true}"
+  class:bx--content-switcher--selected="{selected}"
   {...$$restProps}
   on:click
   on:click|preventDefault="{() => {
@@ -66,7 +66,7 @@
     }
   }}"
 >
-  <span class:cds--content-switcher__label="{true}">
+  <span class:bx--content-switcher__label="{true}">
     <slot>{text}</slot>
   </span>
 </button>

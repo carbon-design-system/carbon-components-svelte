@@ -18,15 +18,15 @@
   export let ref = null;
 </script>
 
-<li class:cds--side-nav__menu-item="{true}">
+<li class:bx--side-nav__menu-item="{true}">
   <a
     bind:this="{ref}"
     aria-current="{isSelected ? 'page' : undefined}"
     href="{href}"
-    class:cds--side-nav__link="{true}"
+    class:bx--side-nav__link="{true}"
     {...$$restProps}
     on:click
   >
-    <span class:cds--side-nav__link-text="{true}"><slot>{text}</slot></span>
+    <span class:bx--side-nav__link-text="{true}"><slot>{text}</slot></span>
   </a>
 </li>

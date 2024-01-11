@@ -6,9 +6,9 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
-  class:cds--tag="{true}"
-  class:cds--tag--sm="{size === 'sm'}"
-  class:cds--skeleton="{true}"
+  class:bx--tag="{true}"
+  class:bx--tag--sm="{size === 'sm'}"
+  class:bx--skeleton="{true}"
   {...$$restProps}
   on:click
   on:mouseover

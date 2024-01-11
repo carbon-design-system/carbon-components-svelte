@@ -72,32 +72,32 @@
   <div
     role="{role}"
     kind="{kind}"
-    class:cds--inline-notification="{true}"
-    class:cds--inline-notification--low-contrast="{lowContrast}"
-    class:cds--inline-notification--hide-close-button="{hideCloseButton}"
-    class:cds--inline-notification--error="{kind === 'error'}"
-    class:cds--inline-notification--info="{kind === 'info'}"
-    class:cds--inline-notification--info-square="{kind === 'info-square'}"
-    class:cds--inline-notification--success="{kind === 'success'}"
-    class:cds--inline-notification--warning="{kind === 'warning'}"
-    class:cds--inline-notification--warning-alt="{kind === 'warning-alt'}"
+    class:bx--inline-notification="{true}"
+    class:bx--inline-notification--low-contrast="{lowContrast}"
+    class:bx--inline-notification--hide-close-button="{hideCloseButton}"
+    class:bx--inline-notification--error="{kind === 'error'}"
+    class:bx--inline-notification--info="{kind === 'info'}"
+    class:bx--inline-notification--info-square="{kind === 'info-square'}"
+    class:bx--inline-notification--success="{kind === 'success'}"
+    class:bx--inline-notification--warning="{kind === 'warning'}"
+    class:bx--inline-notification--warning-alt="{kind === 'warning-alt'}"
     {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
   >
-    <div class:cds--inline-notification__details="{true}">
+    <div class:bx--inline-notification__details="{true}">
       <NotificationIcon
         notificationType="inline"
         kind="{kind}"
         iconDescription="{statusIconDescription}"
       />
-      <div class:cds--inline-notification__text-wrapper="{true}">
-        <p class:cds--inline-notification__title="{true}">
+      <div class:bx--inline-notification__text-wrapper="{true}">
+        <p class:bx--inline-notification__title="{true}">
           <slot name="title">{title}</slot>
         </p>
-        <div class:cds--inline-notification__subtitle="{true}">
+        <div class:bx--inline-notification__subtitle="{true}">
           <slot name="subtitle">{subtitle}</slot>
         </div>
         <slot />

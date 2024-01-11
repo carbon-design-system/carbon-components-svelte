@@ -48,8 +48,8 @@
 </script>
 
 <div
-  class:cds--modal-footer="{true}"
-  class:cds--modal-footer--three-button="{secondaryButtons.length === 2}"
+  class:bx--modal-footer="{true}"
+  class:bx--modal-footer--three-button="{secondaryButtons.length === 2}"
   {...$$restProps}
 >
   {#if secondaryButtons.length > 0}

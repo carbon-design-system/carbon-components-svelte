@@ -23,11 +23,11 @@
 </MultiSelect>
 
 <style>
-  :global(.cds--list-box__menu-item, .cds--list-box__menu-item__option) {
+  :global(.bx--list-box__menu-item, .bx--list-box__menu-item__option) {
     height: auto;
   }
 
-  :global(.cds--checkbox-label-text) {
+  :global(.bx--checkbox-label-text) {
     display: block;
   }
 </style>

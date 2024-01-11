@@ -333,7 +333,7 @@ Specify a `width` or `minWidth` property in the `headers` object to customize th
 A [table-layout: fixed](https://developer.mozilla.org/en-US/docs/Web/CSS/table-layout#values) rule will be applied to the `table` element when using custom widths.
 
 <InlineNotification svx-ignore lowContrast kind="warning" title="Note:" hideCloseButton>
-  <div class="body-short-01">Custom column widths do not work with a <a class="cds--link" href="#sticky-header">sticky header</a>.</div>
+  <div class="body-short-01">Custom column widths do not work with a <a class="bx--link" href="#sticky-header">sticky header</a>.</div>
 </InlineNotification>
 
 <FileSource src="/framed/DataTable/DataTableHeaderWidth" />

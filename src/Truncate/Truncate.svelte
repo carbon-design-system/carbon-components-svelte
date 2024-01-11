@@ -4,8 +4,8 @@
 </script>
 
 <p
-  class:cds--text-truncate-end="{clamp === 'end'}"
-  class:cds--text-truncate-front="{clamp === 'front'}"
+  class:bx--text-truncate-end="{clamp === 'end'}"
+  class:bx--text-truncate-front="{clamp === 'front'}"
   {...$$restProps}
 >
   <slot />

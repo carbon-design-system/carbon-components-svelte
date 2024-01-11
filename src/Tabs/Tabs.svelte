@@ -110,11 +110,11 @@
 
 <div
   role="navigation"
-  class:cds--tabs="{true}"
-  class:cds--tabs--contained="{contained}"
+  class:bx--tabs="{true}"
+  class:bx--tabs--contained="{contained}"
   {...$$restProps}
 >
-  <div bind:this="{refTabList}" role="tablist" class:cds--tab--list="{true}">
+  <div bind:this="{refTabList}" role="tablist" class:bx--tab--list="{true}">
     <slot />
   </div>
 </div>

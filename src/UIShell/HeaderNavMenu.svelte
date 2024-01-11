@@ -49,8 +49,8 @@
 
 <li
   role="none"
-  class:cds--header__submenu="{true}"
-  class:cds--header__submenu--current="{isCurrentSubmenu}"
+  class:bx--header__submenu="{true}"
+  class:bx--header__submenu--current="{isCurrentSubmenu}"
   on:click="{(e) => {
     if (!menuRef.contains(e.target)) {
       e.preventDefault();
@@ -72,8 +72,8 @@
     aria-expanded="{expanded}"
     aria-label="{text}"
     href="{href}"
-    class:cds--header__menu-item="{true}"
-    class:cds--header__menu-title="{true}"
+    class:bx--header__menu-item="{true}"
+    class:bx--header__menu-title="{true}"
     style:z-index="{1}"
     {...$$restProps}
     on:keydown
@@ -92,14 +92,14 @@
     on:blur
   >
     {text}
-    <ChevronDown class="cds--header__menu-arrow" />
+    <ChevronDown class="bx--header__menu-arrow" />
   </a>
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     bind:this="{menuRef}"
     role="menu"
     aria-label="{text}"
-    class:cds--header__menu="{true}"
+    class:bx--header__menu="{true}"
   >
     <slot />
   </ul>

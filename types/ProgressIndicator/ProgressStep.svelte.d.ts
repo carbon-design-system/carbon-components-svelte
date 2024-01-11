@@ -64,5 +64,5 @@ export default class ProgressStep extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     keydown: WindowEventMap["keydown"];
   },
-  { default: { props: { class: "cds--progress-label" } } }
+  { default: { props: { class: "bx--progress-label" } } }
 > {}

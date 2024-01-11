@@ -31,14 +31,14 @@
   :global(body.framed) {
     min-height: 100vh;
     width: 100%;
-    padding: var(--cds-spacing-06) var(--cds-spacing-05);
+    padding: var(--bx-spacing-06) var(--bx-spacing-05);
   }
 
-  :global(.framed :not(.cds--content) [class^="cds--col"]) {
-    outline: 1px solid var(--cds-interactive-04);
+  :global(.framed :not(.bx--content) [class^="bx--col"]) {
+    outline: 1px solid var(--bx-interactive-04);
   }
 
-  :global(.framed .cds--content [class^="cds--col"]) {
+  :global(.framed .bx--content [class^="bx--col"]) {
     outline: 0;
   }
 </style>

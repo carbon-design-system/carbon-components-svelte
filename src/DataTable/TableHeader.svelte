@@ -43,24 +43,24 @@
   >
     <button
       type="button"
-      class:cds--table-sort="{true}"
-      class:cds--table-sort--active="{active}"
-      class:cds--table-sort--ascending="{active &&
+      class:bx--table-sort="{true}"
+      class:bx--table-sort--active="{active}"
+      class:bx--table-sort--ascending="{active &&
         sortDirection === 'descending'}"
       on:click
     >
-      <div class:cds--table-header-label="{true}">
+      <div class:bx--table-header-label="{true}">
         <slot />
       </div>
       <ArrowUp
         size="{20}"
         aria-label="{ariaLabel}"
-        class="cds--table-sort__icon"
+        class="bx--table-sort__icon"
       />
       <ArrowsVertical
         size="{20}"
         aria-label="{ariaLabel}"
-        class="cds--table-sort__icon-unsorted"
+        class="bx--table-sort__icon-unsorted"
       />
     </button>
   </th>
@@ -74,7 +74,7 @@
     on:mouseenter
     on:mouseleave
   >
-    <div class:cds--table-header-label="{true}">
+    <div class:bx--table-header-label="{true}">
       <slot />
     </div>
   </th>

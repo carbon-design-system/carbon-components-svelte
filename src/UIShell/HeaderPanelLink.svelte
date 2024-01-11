@@ -9,12 +9,12 @@
   export let ref = null;
 </script>
 
-<li class:cds--switcher__item="{true}">
+<li class:bx--switcher__item="{true}">
   <a
     bind:this="{ref}"
     href="{href}"
     rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
-    class:cds--switcher__item-link="{true}"
+    class:bx--switcher__item-link="{true}"
     {...$$restProps}
     on:click
   >

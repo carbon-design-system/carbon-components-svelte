@@ -260,14 +260,14 @@
 
 <TableContainer useStaticWidth="{useStaticWidth}" {...$$restProps}>
   {#if title || $$slots.title || description || $$slots.description}
-    <div class:cds--data-table-header="{true}">
+    <div class:bx--data-table-header="{true}">
       {#if title || $$slots.title}
-        <h4 class:cds--data-table-header__title="{true}">
+        <h4 class:bx--data-table-header__title="{true}">
           <slot name="title">{title}</slot>
         </h4>
       {/if}
       {#if description || $$slots.description}
-        <p class:cds--data-table-header__description="{true}">
+        <p class:bx--data-table-header__description="{true}">
           <slot name="description">{description}</slot>
         </p>
       {/if}
@@ -287,13 +287,13 @@
         {#if expandable}
           <th
             scope="col"
-            class:cds--table-expand="{true}"
+            class:bx--table-expand="{true}"
             data-previous-value="{expanded ? 'collapsed' : undefined}"
           >
             {#if batchExpansion}
               <button
                 type="button"
-                class:cds--table-expand__button="{true}"
+                class:bx--table-expand__button="{true}"
                 on:click="{() => {
                   expanded = !expanded;
                   expandedRowIds = expanded ? expandableRowIds : [];
@@ -301,7 +301,7 @@
                   dispatch('click:header--expand', { expanded });
                 }}"
               >
-                <ChevronRight class="cds--table-expand__svg" />
+                <ChevronRight class="bx--table-expand__svg" />
               </button>
             {/if}
           </th>
@@ -310,7 +310,7 @@
           <th scope="col"></th>
         {/if}
         {#if batchSelection && !radio}
-          <th scope="col" class:cds--table-column-checkbox="{true}">
+          <th scope="col" class:bx--table-column-checkbox="{true}">
             <InlineCheckbox
               bind:ref="{refSelectAll}"
               aria-label="Select all rows"
@@ -375,19 +375,18 @@
           data-row="{row.id}"
           data-parent-row="{expandable ? true : undefined}"
           class="{selectedRowIds.includes(row.id)
-            ? 'cds--data-table--selected'
-            : ''} {expandedRows[row.id]
-            ? 'cds--expandable-row'
-            : ''} {expandable ? 'cds--parent-row' : ''} {expandable &&
-          parentRowId === row.id
-            ? 'cds--expandable-row--hover'
+            ? 'bx--data-table--selected'
+            : ''} {expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable
+            ? 'bx--parent-row'
+            : ''} {expandable && parentRowId === row.id
+            ? 'bx--expandable-row--hover'
             : ''}"
           on:click="{({ target }) => {
             // forgo "click", "click:row" events if target
             // resembles an overflow menu, a checkbox, or radio button
             if (
               [...target.classList].some((name) =>
-                /^cds--(overflow-menu|checkbox|radio-button)/.test(name)
+                /^bx--(overflow-menu|checkbox|radio-button)/.test(name)
               )
             ) {
               return;
@@ -404,7 +403,7 @@
         >
           {#if expandable}
             <TableCell
-              class="cds--table-expand"
+              class="bx--table-expand"
               headers="expand"
               data-previous-value="{!nonExpandableRowIds.includes(row.id) &&
               expandedRows[row.id]
@@ -414,7 +413,7 @@
               {#if !nonExpandableRowIds.includes(row.id)}
                 <button
                   type="button"
-                  class:cds--table-expand__button="{true}"
+                  class:bx--table-expand__button="{true}"
                   aria-label="{expandedRows[row.id]
                     ? 'Collapse current row'
                     : 'Expand current row'}"
@@ -431,15 +430,15 @@
                     });
                   }}"
                 >
-                  <ChevronRight class="cds--table-expand__svg" />
+                  <ChevronRight class="bx--table-expand__svg" />
                 </button>
               {/if}
             </TableCell>
           {/if}
           {#if selectable}
             <td
-              class:cds--table-column-checkbox="{true}"
-              class:cds--table-column-radio="{radio}"
+              class:bx--table-column-checkbox="{true}"
+              class:bx--table-column-radio="{radio}"
             >
               {#if !nonSelectableRowIds.includes(row.id)}
                 {#if radio}
@@ -473,7 +472,7 @@
           {/if}
           {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
             {#if headers[j].empty}
-              <td class:cds--table-column-menu="{headers[j].columnMenu}">
+              <td class:bx--table-column-menu="{headers[j].columnMenu}">
                 <slot
                   name="cell"
                   row="{row}"
@@ -508,7 +507,7 @@
         {#if expandable}
           <tr
             data-child-row
-            class:cds--expandable-row="{true}"
+            class:bx--expandable-row="{true}"
             on:mouseenter="{() => {
               if (nonExpandableRowIds.includes(row.id)) return;
               parentRowId = row.id;
@@ -522,7 +521,7 @@
               <TableCell
                 colspan="{selectable ? headers.length + 2 : headers.length + 1}"
               >
-                <div class:cds--child-row-inner-container="{true}">
+                <div class:bx--child-row-inner-container="{true}">
                   <slot name="expanded-row" row="{row}" />
                 </div>
               </TableCell>

@@ -100,9 +100,9 @@
 <div
   bind:this="{ref}"
   role="presentation"
-  class:cds--modal="{true}"
+  class:bx--modal="{true}"
   class:is-visible="{open}"
-  class:cds--modal--danger="{danger}"
+  class:bx--modal--danger="{danger}"
   {...$$restProps}
   on:keydown
   on:keydown="{(e) => {
@@ -157,10 +157,10 @@
     role="dialog"
     aria-modal="true"
     aria-label="{$$props['aria-label'] || $label || undefined}"
-    class:cds--modal-container="{true}"
-    class:cds--modal-container--xs="{size === 'xs'}"
-    class:cds--modal-container--sm="{size === 'sm'}"
-    class:cds--modal-container--lg="{size === 'lg'}"
+    class:bx--modal-container="{true}"
+    class:bx--modal-container--xs="{size === 'xs'}"
+    class:bx--modal-container--sm="{size === 'sm'}"
+    class:bx--modal-container--lg="{size === 'lg'}"
     class="{containerClass}"
     on:click="{() => {
       didClickInnerModal = true;

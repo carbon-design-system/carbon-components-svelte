@@ -36,11 +36,11 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
-  class:cds--accordion__item="{true}"
-  class:cds--accordion__item--active="{open}"
-  class:cds--accordion__item--disabled="{disabled}"
-  class:cds--accordion__item--expanding="{animation === 'expanding'}"
-  class:cds--accordion__item--collapsing="{animation === 'collapsing'}"
+  class:bx--accordion__item="{true}"
+  class:bx--accordion__item--active="{open}"
+  class:bx--accordion__item--disabled="{disabled}"
+  class:bx--accordion__item--expanding="{animation === 'expanding'}"
+  class:bx--accordion__item--collapsing="{animation === 'collapsing'}"
   {...$$restProps}
   on:animationend
   on:animationend="{() => {
@@ -49,7 +49,7 @@
 >
   <button
     type="button"
-    class:cds--accordion__heading="{true}"
+    class:bx--accordion__heading="{true}"
     title="{iconDescription}"
     aria-expanded="{open}"
     disabled="{disabled}"
@@ -68,15 +68,12 @@
       }
     }}"
   >
-    <ChevronRight
-      class="cds--accordion__arrow"
-      aria-label="{iconDescription}"
-    />
-    <div class:cds--accordion__title="{true}">
+    <ChevronRight class="bx--accordion__arrow" aria-label="{iconDescription}" />
+    <div class:bx--accordion__title="{true}">
       <slot name="title">{title}</slot>
     </div>
   </button>
-  <div class:cds--accordion__content="{true}">
+  <div class:bx--accordion__content="{true}">
     <slot />
   </div>
 </li>

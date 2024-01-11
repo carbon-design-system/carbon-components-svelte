@@ -170,7 +170,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
         />
         <StructuredListCell>
           <CheckmarkFilled
-            class="cds--structured-list-svg"
+            class="bx--structured-list-svg"
             aria-label="select an option"
             title="select an option"
           />

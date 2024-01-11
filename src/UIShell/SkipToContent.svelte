@@ -9,7 +9,7 @@
 <a
   href="{href}"
   tabindex="{tabindex}"
-  class:cds--skip-to-content="{true}"
+  class:bx--skip-to-content="{true}"
   {...$$restProps}
   on:click
 >

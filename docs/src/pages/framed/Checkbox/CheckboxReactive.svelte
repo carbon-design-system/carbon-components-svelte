@@ -6,7 +6,7 @@
 
 <Checkbox labelText="Label text" bind:checked="{checked}" />
 
-<div style="margin: var(--cds-spacing-05) 0">
+<div style="margin: var(--bx-spacing-05) 0">
   <Button on:click="{() => (checked = !checked)}">Toggle</Button>
 </div>
 

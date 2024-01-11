@@ -72,19 +72,19 @@
   aria-disabled="{disabled}"
   for="{id}"
   tabindex="{disabled ? '-1' : tabindex}"
-  class:cds--btn="{true}"
-  class:cds--btn--disabled="{disabled}"
-  class:cds--btn--primary="{kind === 'primary'}"
-  class:cds--btn--secondary="{kind === 'secondary'}"
-  class:cds--btn--tertiary="{kind === 'tertiary'}"
-  class:cds--btn--ghost="{kind === 'ghost'}"
-  class:cds--btn--danger="{kind === 'danger'}"
-  class:cds--btn--danger-tertiary="{kind === 'danger-tertiary'}"
-  class:cds--btn--danger-ghost="{kind === 'danger-ghost'}"
-  class:cds--btn--sm="{size === 'small'}"
-  class:cds--btn--field="{size === 'field'}"
-  class:cds--btn--lg="{size === 'lg'}"
-  class:cds--btn--xl="{size === 'xl'}"
+  class:bx--btn="{true}"
+  class:bx--btn--disabled="{disabled}"
+  class:bx--btn--primary="{kind === 'primary'}"
+  class:bx--btn--secondary="{kind === 'secondary'}"
+  class:bx--btn--tertiary="{kind === 'tertiary'}"
+  class:bx--btn--ghost="{kind === 'ghost'}"
+  class:bx--btn--danger="{kind === 'danger'}"
+  class:bx--btn--danger-tertiary="{kind === 'danger-tertiary'}"
+  class:bx--btn--danger-ghost="{kind === 'danger-ghost'}"
+  class:bx--btn--sm="{size === 'small'}"
+  class:bx--btn--field="{size === 'field'}"
+  class:bx--btn--lg="{size === 'lg'}"
+  class:bx--btn--xl="{size === 'xl'}"
   on:keydown
   on:keydown="{({ key }) => {
     if (key === ' ' || key === 'Enter') {
@@ -107,7 +107,7 @@
   id="{id}"
   multiple="{multiple}"
   name="{name}"
-  class:cds--visually-hidden="{true}"
+  class:bx--visually-hidden="{true}"
   {...$$restProps}
   on:change|stopPropagation="{({ target }) => {
     files = [...target.files];

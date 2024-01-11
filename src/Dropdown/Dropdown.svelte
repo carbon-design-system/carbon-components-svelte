@@ -174,19 +174,19 @@
 <svelte:window on:click="{pageClickHandler}" />
 
 <div
-  class:cds--dropdown__wrapper="{true}"
-  class:cds--list-box__wrapper="{true}"
-  class:cds--dropdown__wrapper--inline="{inline}"
-  class:cds--list-box__wrapper--inline="{inline}"
-  class:cds--dropdown__wrapper--inline--invalid="{inline && invalid}"
+  class:bx--dropdown__wrapper="{true}"
+  class:bx--list-box__wrapper="{true}"
+  class:bx--dropdown__wrapper--inline="{inline}"
+  class:bx--list-box__wrapper--inline="{inline}"
+  class:bx--dropdown__wrapper--inline--invalid="{inline && invalid}"
   {...$$restProps}
 >
   {#if titleText}
     <label
       for="{id}"
-      class:cds--label="{true}"
-      class:cds--label--disabled="{disabled}"
-      class:cds--visually-hidden="{hideLabel}"
+      class:bx--label="{true}"
+      class:bx--label--disabled="{disabled}"
+      class:bx--visually-hidden="{hideLabel}"
     >
       {titleText}
     </label>
@@ -197,16 +197,16 @@
     size="{size}"
     name="{name}"
     aria-label="{$$props['aria-label']}"
-    class="cds--dropdown
-      {direction === 'top' && 'cds--list-box--up'}
-      {invalid && 'cds--dropdown--invalid'}
-      {!invalid && warn && 'cds--dropdown--warning'}
-      {open && 'cds--dropdown--open'}
-      {size === 'sm' && 'cds--dropdown--sm'}
-      {(size === 'lg' || size === 'xl') && 'cds--dropdown--lg'}
-      {inline && 'cds--dropdown--inline'}
-      {disabled && 'cds--dropdown--disabled'}
-      {light && 'cds--dropdown--light'}"
+    class="bx--dropdown
+      {direction === 'top' && 'bx--list-box--up'}
+      {invalid && 'bx--dropdown--invalid'}
+      {!invalid && warn && 'bx--dropdown--warning'}
+      {open && 'bx--dropdown--open'}
+      {size === 'sm' && 'bx--dropdown--sm'}
+      {(size === 'lg' || size === 'xl') && 'bx--dropdown--lg'}
+      {inline && 'bx--dropdown--inline'}
+      {disabled && 'bx--dropdown--disabled'}
+      {light && 'bx--dropdown--light'}"
     on:click="{({ target }) => {
       if (disabled) return;
       open = ref.contains(target) ? !open : false;
@@ -220,17 +220,17 @@
     warnText="{warnText}"
   >
     {#if invalid}
-      <WarningFilled class="cds--list-box__invalid-icon" />
+      <WarningFilled class="bx--list-box__invalid-icon" />
     {/if}
     {#if !invalid && warn}
       <WarningAltFilled
-        class="cds--list-box__invalid-icon cds--list-box__invalid-icon--warning"
+        class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
     {/if}
     <button
       bind:this="{ref}"
       type="button"
-      class:cds--list-box__field="{true}"
+      class:bx--list-box__field="{true}"
       tabindex="0"
       aria-expanded="{open}"
       on:keydown="{(e) => {
@@ -283,7 +283,7 @@
       translateWithId="{translateWithId}"
       id="{id}"
     >
-      <span class:cds--list-box__label="{true}">
+      <span class:bx--list-box__label="{true}">
         {#if selectedItem}{itemToString(selectedItem)}{:else}{label}{/if}
       </span>
       <ListBoxMenuIcon
@@ -328,8 +328,8 @@
   </ListBox>
   {#if !inline && !invalid && !warn && helperText}
     <div
-      class:cds--form__helper-text="{true}"
-      class:cds--form__helper-text--disabled="{disabled}"
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}"
     >
       {helperText}
     </div>

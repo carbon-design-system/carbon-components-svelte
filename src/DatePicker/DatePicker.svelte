@@ -240,7 +240,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:cds--form-item="{true}"
+  class:bx--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -251,13 +251,13 @@
   <div
     bind:this="{datePickerRef}"
     id="{id}"
-    class:cds--date-picker="{true}"
-    class:cds--date-picker--short="{short}"
-    class:cds--date-picker--light="{light}"
-    class:cds--date-picker--simple="{datePickerType === 'simple'}"
-    class:cds--date-picker--single="{datePickerType === 'single'}"
-    class:cds--date-picker--range="{datePickerType === 'range'}"
-    class:cds--date-picker--nolabel="{datePickerType === 'range' &&
+    class:bx--date-picker="{true}"
+    class:bx--date-picker--short="{short}"
+    class:bx--date-picker--light="{light}"
+    class:bx--date-picker--simple="{datePickerType === 'simple'}"
+    class:bx--date-picker--single="{datePickerType === 'single'}"
+    class:bx--date-picker--range="{datePickerType === 'range'}"
+    class:bx--date-picker--nolabel="{datePickerType === 'range' &&
       $labelTextEmpty}"
     on:keydown="{(e) => {
       if (calendar?.isOpen && e.key === 'Escape') {

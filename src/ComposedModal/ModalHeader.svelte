@@ -28,11 +28,11 @@
   $: updateLabel(label);
 </script>
 
-<div class:cds--modal-header="{true}" {...$$restProps}>
+<div class:bx--modal-header="{true}" {...$$restProps}>
   {#if label}
     <h2
-      class:cds--modal-header__label="{true}"
-      class:cds--type-delta="{true}"
+      class:bx--modal-header__label="{true}"
+      class:bx--type-delta="{true}"
       class="{labelClass}"
     >
       {label}
@@ -40,8 +40,8 @@
   {/if}
   {#if title}
     <h3
-      class:cds--modal-header__heading="{true}"
-      class:cds--type-beta="{true}"
+      class:bx--modal-header__heading="{true}"
+      class:bx--type-beta="{true}"
       class="{titleClass}"
     >
       {title}
@@ -51,14 +51,14 @@
   <button
     type="button"
     aria-label="{iconDescription}"
-    class:cds--modal-close="{true}"
+    class:bx--modal-close="{true}"
     class="{closeClass}"
     on:click
     on:click="{closeModal}"
   >
     <Close
       size="{20}"
-      class="cds--modal-close__icon {closeIconClass}"
+      class="bx--modal-close__icon {closeIconClass}"
       aria-hidden="true"
     />
   </button>

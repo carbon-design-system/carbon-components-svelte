@@ -55,27 +55,27 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:cds--form-item="{true}"
+  class:bx--form-item="{true}"
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
 >
   <div
-    class:cds--time-picker="{true}"
-    class:cds--time-picker--light="{light}"
-    class:cds--time-picker--invalid="{invalid}"
-    class:cds--time-picker--sm="{size === 'sm'}"
-    class:cds--time-picker--lg="{size === 'lg' || size === 'xl'}"
-    class:cds--select--light="{light}"
+    class:bx--time-picker="{true}"
+    class:bx--time-picker--light="{light}"
+    class:bx--time-picker--invalid="{invalid}"
+    class:bx--time-picker--sm="{size === 'sm'}"
+    class:bx--time-picker--lg="{size === 'lg' || size === 'xl'}"
+    class:bx--select--light="{light}"
   >
-    <div class:cds--time-picker__input="{true}">
+    <div class:bx--time-picker__input="{true}">
       {#if labelText || $$slots.labelText}
         <label
           for="{id}"
-          class:cds--label="{true}"
-          class:cds--visually-hidden="{hideLabel}"
-          class:cds--label--disabled="{disabled}"
+          class:bx--label="{true}"
+          class:bx--visually-hidden="{hideLabel}"
+          class:bx--label--disabled="{disabled}"
         >
           <slot name="labelText">
             {labelText}
@@ -94,10 +94,10 @@
         name="{name}"
         disabled="{disabled}"
         {...$$restProps}
-        class:cds--time-picker__input-field="{true}"
-        class:cds--text-input="{true}"
-        class:cds--text-input--light="{light}"
-        class:cds--text-input--invalid="{invalid}"
+        class:bx--time-picker__input-field="{true}"
+        class:bx--text-input="{true}"
+        class:bx--text-input--light="{light}"
+        class:bx--text-input--invalid="{invalid}"
         on:change
         on:input
         on:keydown
@@ -110,6 +110,6 @@
     <slot />
   </div>
   {#if invalid}
-    <div class:cds--form-requirement="{true}">{invalidText}</div>
+    <div class:bx--form-requirement="{true}">{invalidText}</div>
   {/if}
 </div>

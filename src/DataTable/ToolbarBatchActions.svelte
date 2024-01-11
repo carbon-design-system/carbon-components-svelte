@@ -76,19 +76,19 @@
 
 {#if !overflowVisible}
   <div
-    class:cds--batch-actions="{true}"
-    class:cds--batch-actions--active="{showActions}"
+    class:bx--batch-actions="{true}"
+    class:bx--batch-actions--active="{showActions}"
     {...$$restProps}
   >
-    <div class:cds--batch-summary="{true}">
-      <p class:cds--batch-summary__para="{true}">
+    <div class:bx--batch-summary="{true}">
+      <p class:bx--batch-summary__para="{true}">
         <span> {formatTotalSelected(batchSelectedIds.length)} </span>
       </p>
     </div>
-    <div class:cds--action-list="{true}">
+    <div class:bx--action-list="{true}">
       <slot />
       <Button
-        class="cds--batch-summary__cancel"
+        class="bx--batch-summary__cancel"
         tabindex="{showActions ? '0' : '-1'}"
         on:click="{cancel}"
       >

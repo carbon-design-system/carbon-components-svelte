@@ -217,12 +217,12 @@
   }}"
 />
 
-<div class:cds--list-box__wrapper="{true}">
+<div class:bx--list-box__wrapper="{true}">
   {#if titleText || $$slots.titleText}
     <label
       for="{id}"
-      class:cds--label="{true}"
-      class:cds--label--disabled="{disabled}"
+      class:bx--label="{true}"
+      class:bx--label--disabled="{disabled}"
     >
       <slot name="titleText">
         {titleText}
@@ -230,8 +230,8 @@
     </label>
   {/if}
   <ListBox
-    class="cds--combo-box {direction === 'top' &&
-      'cds--list-box--up'} {!invalid && warn && 'cds--combo-box--warning'}"
+    class="bx--combo-box {direction === 'top' &&
+      'bx--list-box--up'} {!invalid && warn && 'bx--combo-box--warning'}"
     id="{comboId}"
     aria-label="{ariaLabel}"
     disabled="{disabled}"
@@ -273,9 +273,9 @@
         id="{id}"
         name="{name}"
         {...$$restProps}
-        class:cds--text-input="{true}"
-        class:cds--text-input--light="{light}"
-        class:cds--text-input--empty="{value === ''}"
+        class:bx--text-input="{true}"
+        class:bx--text-input--light="{light}"
+        class:bx--text-input--empty="{value === ''}"
         on:input="{({ target }) => {
           if (!open && target.value.length > 0) {
             open = true;
@@ -347,11 +347,11 @@
         on:paste
       />
       {#if invalid}
-        <WarningFilled class="cds--list-box__invalid-icon" />
+        <WarningFilled class="bx--list-box__invalid-icon" />
       {/if}
       {#if !invalid && warn}
         <WarningAltFilled
-          class="cds--list-box__invalid-icon cds--list-box__invalid-icon--warning"
+          class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
         />
       {/if}
       {#if value}
@@ -407,7 +407,7 @@
               {itemToString(item)}
             </slot>
             {#if selectedItem && selectedItem.id === item.id}
-              <Checkmark class="cds--list-box__menu-item__selected-icon" />
+              <Checkmark class="bx--list-box__menu-item__selected-icon" />
             {/if}
           </ListBoxMenuItem>
         {/each}
@@ -416,8 +416,8 @@
   </ListBox>
   {#if !invalid && helperText && !warn}
     <div
-      class:cds--form__helper-text="{true}"
-      class:cds--form__helper-text--disabled="{disabled}"
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}"
     >
       {helperText}
     </div>

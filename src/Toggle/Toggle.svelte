@@ -48,10 +48,10 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:cds--form-item="{true}"
+  class:bx--form-item="{true}"
   style:user-select="none"
-  class:cds--toggle="{true}"
-  class:cds--toggle--disabled="{disabled}"
+  class:bx--toggle="{true}"
+  class:bx--toggle--disabled="{disabled}"
   {...$$restProps}
   on:click
   on:mouseover
@@ -62,7 +62,7 @@
   <input
     role="switch"
     type="checkbox"
-    class:cds--toggle__button="{true}"
+    class:bx--toggle__button="{true}"
     checked="{toggled}"
     on:change="{() => {
       toggled = !toggled;
@@ -84,29 +84,29 @@
   <label
     aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle'}"
     for="{id}"
-    class:cds--toggle__label="{true}"
+    class:bx--toggle__label="{true}"
   >
     <span
-      class:cds--toggle__label-text="{true}"
-      class:cds--visually-hidden="{hideLabel}"
+      class:bx--toggle__label-text="{true}"
+      class:bx--visually-hidden="{hideLabel}"
     >
       <slot name="labelText">
         {labelText}
       </slot>
     </span>
     <div
-      class:cds--toggle__appearance="{true}"
-      class:cds--toggle__appearance--sm="{isSm}"
+      class:bx--toggle__appearance="{true}"
+      class:bx--toggle__appearance--sm="{isSm}"
       style="{hideLabel && 'margin-top: 0'}"
     >
       <div
         aria-hidden="true"
-        class:cds--toggle__switch="{true}"
-        class:cds--toggle__switch--checked="{toggled}"
+        class:bx--toggle__switch="{true}"
+        class:bx--toggle__switch--checked="{toggled}"
       >
         {#if isSm}
           <svg
-            class:cds--toggle__check="{true}"
+            class:bx--toggle__check="{true}"
             width="6px"
             height="5px"
             viewBox="0 0 6 5"
@@ -115,7 +115,7 @@
           </svg>
         {/if}
       </div>
-      <span class:cds--toggle__text="{true}" aria-hidden="{true}"
+      <span class:bx--toggle__text="{true}" aria-hidden="{true}"
         >{sideLabel}</span
       >
     </div>

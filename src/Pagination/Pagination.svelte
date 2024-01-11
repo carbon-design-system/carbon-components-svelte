@@ -94,19 +94,19 @@
   $: forwardButtonDisabled = disabled || page === totalPages;
 </script>
 
-<div id="{id}" class:cds--pagination="{true}" {...$$restProps}>
-  <div class:cds--pagination__left="{true}">
+<div id="{id}" class:bx--pagination="{true}" {...$$restProps}>
+  <div class:bx--pagination__left="{true}">
     {#if !pageSizeInputDisabled}
       <label
-        id="cds--pagination-select-{id}-count-label"
-        for="cds--pagination-select-{id}"
-        class:cds--pagination__text="{true}"
+        id="bx--pagination-select-{id}-count-label"
+        for="bx--pagination-select-{id}"
+        class:bx--pagination__text="{true}"
       >
         {itemsPerPageText}
       </label>
       <Select
-        id="cds--pagination-select-{id}"
-        class="cds--select__item-count"
+        id="bx--pagination-select-{id}"
+        class="bx--select__item-count"
         hideLabel
         noLabel
         inline
@@ -120,7 +120,7 @@
         {/each}
       </Select>
     {/if}
-    <span class:cds--pagination__text="{!pageSizeInputDisabled}">
+    <span class:bx--pagination__text="{!pageSizeInputDisabled}">
       {#if pagesUnknown}
         {itemText(pageSize * (page - 1) + 1, page * pageSize)}
       {:else}
@@ -132,11 +132,11 @@
       {/if}
     </span>
   </div>
-  <div class:cds--pagination__right="{true}">
+  <div class:bx--pagination__right="{true}">
     {#if !pageInputDisabled}
       <Select
-        id="cds--pagination-select-{id + 2}"
-        class="cds--select__page-number"
+        id="bx--pagination-select-{id + 2}"
+        class="bx--select__page-number"
         labelText="Page number, of {totalPages} pages"
         inline
         hideLabel
@@ -149,7 +149,7 @@
           <SelectItem value="{size + 1}" text="{(size + 1).toString()}" />
         {/each}
       </Select>
-      <span class:cds--pagination__text="{true}">
+      <span class:bx--pagination__text="{true}">
         {#if pagesUnknown}
           {pageText(page)}
         {:else}{pageRangeText(page, totalPages)}{/if}
@@ -162,8 +162,8 @@
       icon="{CaretLeft}"
       iconDescription="{backwardText}"
       disabled="{backButtonDisabled}"
-      class="cds--pagination__button cds--pagination__button--backward {backButtonDisabled
-        ? 'cds--pagination__button--no-index'
+      class="bx--pagination__button bx--pagination__button--backward {backButtonDisabled
+        ? 'bx--pagination__button--no-index'
         : ''}"
       on:click="{() => {
         page--;
@@ -178,8 +178,8 @@
       icon="{CaretRight}"
       iconDescription="{forwardText}"
       disabled="{forwardButtonDisabled}"
-      class="cds--pagination__button cds--pagination__button--forward {forwardButtonDisabled
-        ? 'cds--pagination__button--no-index'
+      class="bx--pagination__button bx--pagination__button--forward {forwardButtonDisabled
+        ? 'bx--pagination__button--no-index'
         : ''}"
       on:click="{() => {
         page++;

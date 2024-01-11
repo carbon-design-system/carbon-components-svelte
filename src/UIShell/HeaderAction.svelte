@@ -68,9 +68,9 @@
 <button
   bind:this="{ref}"
   type="button"
-  class:cds--header__action="{true}"
-  class:cds--header__action--active="{isOpen}"
-  class:cds--btn--icon-only="{!text}"
+  class:bx--header__action="{true}"
+  class:bx--header__action--active="{isOpen}"
+  class:bx--btn--icon-only="{!text}"
   class:action-text="{text}"
   {...$$restProps}
   on:click
@@ -95,8 +95,8 @@
 {#if isOpen}
   <div
     bind:this="{refPanel}"
-    class:cds--header-panel="{true}"
-    class:cds--header-panel--expanded="{true}"
+    class:bx--header-panel="{true}"
+    class:bx--header-panel--expanded="{true}"
     transition:slide|local="{{
       ...transition,
       duration: transition === false ? 0 : transition.duration,

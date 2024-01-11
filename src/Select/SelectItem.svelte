@@ -51,7 +51,7 @@
   disabled="{disabled}"
   hidden="{hidden}"
   selected="{selected}"
-  class:cds--select-option="{true}"
+  class:bx--select-option="{true}"
   class="{className}"
   style="{style}"
 >

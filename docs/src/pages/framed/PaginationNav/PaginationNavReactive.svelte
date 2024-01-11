@@ -6,7 +6,7 @@
 
 <PaginationNav bind:page="{page}" />
 
-<div style="margin: var(--cds-spacing-05) 0">
+<div style="margin: var(--bx-spacing-05) 0">
   <Button on:click="{() => (page = 1)}" disabled="{page === 0}">
     Set page to 1
   </Button>

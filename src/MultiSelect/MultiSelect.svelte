@@ -287,18 +287,18 @@
 
 <div
   bind:this="{multiSelectRef}"
-  class:cds--multi-select__wrapper="{true}"
-  class:cds--list-box__wrapper="{true}"
-  class:cds--multi-select__wrapper--inline="{inline}"
-  class:cds--list-box__wrapper--inline="{inline}"
-  class:cds--multi-select__wrapper--inline--invalid="{inline && invalid}"
+  class:bx--multi-select__wrapper="{true}"
+  class:bx--list-box__wrapper="{true}"
+  class:bx--multi-select__wrapper--inline="{inline}"
+  class:bx--list-box__wrapper--inline="{inline}"
+  class:bx--multi-select__wrapper--inline--invalid="{inline && invalid}"
 >
   {#if titleText || $$slots.titleText}
     <label
       for="{id}"
-      class:cds--label="{true}"
-      class:cds--label--disabled="{disabled}"
-      class:cds--visually-hidden="{hideLabel}"
+      class:bx--label="{true}"
+      class:bx--label--disabled="{disabled}"
+      class:bx--visually-hidden="{hideLabel}"
     >
       <slot name="titleText">
         {titleText}
@@ -315,19 +315,19 @@
     size="{size}"
     warn="{warn}"
     warnText="{warnText}"
-    class="cds--multi-select {direction === 'top' &&
-      'cds--list-box--up'} {filterable && 'cds--combo-box'}
-      {filterable && 'cds--multi-select--filterable'}
-      {invalid && 'cds--multi-select--invalid'}
-      {inline && 'cds--multi-select--inline'}
-      {checked.length > 0 && 'cds--multi-select--selected'}"
+    class="bx--multi-select {direction === 'top' &&
+      'bx--list-box--up'} {filterable && 'bx--combo-box'}
+      {filterable && 'bx--multi-select--filterable'}
+      {invalid && 'bx--multi-select--invalid'}
+      {inline && 'bx--multi-select--inline'}
+      {checked.length > 0 && 'bx--multi-select--selected'}"
   >
     {#if invalid}
-      <WarningFilled class="cds--list-box__invalid-icon" />
+      <WarningFilled class="bx--list-box__invalid-icon" />
     {/if}
     {#if !invalid && warn}
       <WarningAltFilled
-        class="cds--list-box__invalid-icon cds--list-box__invalid-icon--warning"
+        class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
     {/if}
     <ListBoxField
@@ -417,9 +417,9 @@
           aria-activedescendant="{highlightedId}"
           aria-disabled="{disabled}"
           aria-controls="{menuId}"
-          class:cds--text-input="{true}"
-          class:cds--text-input--empty="{value === ''}"
-          class:cds--text-input--light="{light}"
+          class:bx--text-input="{true}"
+          class:bx--text-input--empty="{value === ''}"
+          class:bx--text-input--light="{light}"
           on:keydown
           on:keydown|stopPropagation="{({ key }) => {
             if (key === 'Enter') {
@@ -455,7 +455,7 @@
           name="{name}"
         />
         {#if invalid}
-          <WarningFilled class="cds--list-box__invalid-icon" />
+          <WarningFilled class="bx--list-box__invalid-icon" />
         {/if}
         {#if value}
           <ListBoxSelection
@@ -479,7 +479,7 @@
         />
       {/if}
       {#if !filterable}
-        <span class:cds--list-box__label="{true}">{label}</span>
+        <span class:bx--list-box__label="{true}">{label}</span>
         <ListBoxMenuIcon open="{open}" translateWithId="{translateWithId}" />
       {/if}
     </ListBoxField>
@@ -537,8 +537,8 @@
   </ListBox>
   {#if !inline && !invalid && !warn && helperText}
     <div
-      class:cds--form__helper-text="{true}"
-      class:cds--form__helper-text--disabled="{disabled}"
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}"
     >
       {helperText}
     </div>

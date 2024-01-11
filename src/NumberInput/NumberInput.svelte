@@ -156,7 +156,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:cds--form-item="{true}"
+  class:bx--form-item="{true}"
   on:click
   on:mouseover
   on:mouseenter
@@ -164,28 +164,28 @@
 >
   <div
     data-invalid="{error || undefined}"
-    class:cds--number="{true}"
-    class:cds--number--helpertext="{true}"
-    class:cds--number--readonly="{readonly}"
-    class:cds--number--light="{light}"
-    class:cds--number--nolabel="{hideLabel}"
-    class:cds--number--nosteppers="{hideSteppers}"
-    class:cds--number--sm="{size === 'sm'}"
-    class:cds--number--lg="{size === 'lg' || size === 'xl'}"
+    class:bx--number="{true}"
+    class:bx--number--helpertext="{true}"
+    class:bx--number--readonly="{readonly}"
+    class:bx--number--light="{light}"
+    class:bx--number--nolabel="{hideLabel}"
+    class:bx--number--nosteppers="{hideSteppers}"
+    class:bx--number--sm="{size === 'sm'}"
+    class:bx--number--lg="{size === 'lg' || size === 'xl'}"
   >
     {#if $$slots.label || label}
       <label
         for="{id}"
-        class:cds--label="{true}"
-        class:cds--label--disabled="{disabled}"
-        class:cds--visually-hidden="{hideLabel}"
+        class:bx--label="{true}"
+        class:bx--label--disabled="{disabled}"
+        class:bx--visually-hidden="{hideLabel}"
       >
         <slot name="label">{label}</slot>
       </label>
     {/if}
     <div
-      class:cds--number__input-wrapper="{true}"
-      class:cds--number__input-wrapper--warning="{!invalid && warn}"
+      class:bx--number__input-wrapper="{true}"
+      class:bx--number__input-wrapper--warning="{!invalid && warn}"
     >
       <input
         bind:this="{ref}"
@@ -214,22 +214,22 @@
       />
       {#if !readonly}
         {#if invalid}
-          <WarningFilled class="cds--number__invalid" />
+          <WarningFilled class="bx--number__invalid" />
         {/if}
         {#if !invalid && warn}
           <WarningAltFilled
-            class="cds--number__invalid cds--number__invalid--warning"
+            class="bx--number__invalid bx--number__invalid--warning"
           />
         {/if}
       {/if}
       {#if !hideSteppers}
-        <div class:cds--number__controls="{true}">
+        <div class:bx--number__controls="{true}">
           <button
             type="button"
             tabindex="-1"
             title="{decrementLabel || iconDescription}"
             aria-label="{decrementLabel || iconDescription}"
-            class:cds--number__control-btn="{true}"
+            class:bx--number__control-btn="{true}"
             class:down-icon="{true}"
             on:click="{() => {
               updateValue(false);
@@ -238,13 +238,13 @@
           >
             <Subtract class="down-icon" />
           </button>
-          <div class:cds--number__rule-divider="{true}"></div>
+          <div class:bx--number__rule-divider="{true}"></div>
           <button
             type="button"
             tabindex="-1"
             title="{incrementLabel || iconDescription}"
             aria-label="{incrementLabel || iconDescription}"
-            class:cds--number__control-btn="{true}"
+            class:bx--number__control-btn="{true}"
             class:up-icon="{true}"
             on:click="{() => {
               updateValue(true);
@@ -253,25 +253,25 @@
           >
             <Add class="up-icon" />
           </button>
-          <div class:cds--number__rule-divider="{true}"></div>
+          <div class:bx--number__rule-divider="{true}"></div>
         </div>
       {/if}
     </div>
     {#if !error && !warn && helperText}
       <div
-        class:cds--form__helper-text="{true}"
-        class:cds--form__helper-text--disabled="{disabled}"
+        class:bx--form__helper-text="{true}"
+        class:bx--form__helper-text--disabled="{disabled}"
       >
         {helperText}
       </div>
     {/if}
     {#if error}
-      <div id="{errorId}" class:cds--form-requirement="{true}">
+      <div id="{errorId}" class:bx--form-requirement="{true}">
         {invalidText}
       </div>
     {/if}
     {#if !error && warn}
-      <div id="{errorId}" class:cds--form-requirement="{true}">{warnText}</div>
+      <div id="{errorId}" class:bx--form-requirement="{true}">{warnText}</div>
     {/if}
   </div>
 </div>

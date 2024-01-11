@@ -1,6 +1,7 @@
 // Use g10 theme
 @use '@carbon/styles/scss/config' with (
-  $use-akamai-cdn: true
+  $use-akamai-cdn: true,
+  $prefix: 'bx'
 );
 @use "@carbon/styles/scss/theme" as *;
 @use "@carbon/styles/scss/themes" as *;
@@ -14,9 +15,9 @@
 @import "@carbon/styles/scss/reset";
 @import "@carbon/styles/scss/components";
 
-.cds--text-truncate-end {
+.bx--text-truncate-end {
   @include text-truncate-end;
 }
-.cds--text-truncate-front {
+.bx--text-truncate-front {
   @include text-truncate-front;
 }

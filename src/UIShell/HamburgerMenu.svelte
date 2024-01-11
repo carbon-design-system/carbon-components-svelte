@@ -34,9 +34,9 @@
   type="button"
   title="{ariaLabel}"
   aria-label="{ariaLabel}"
-  class:cds--header__action="{true}"
-  class:cds--header__menu-trigger="{true}"
-  class:cds--header__menu-toggle="{true}"
+  class:bx--header__action="{true}"
+  class:bx--header__menu-trigger="{true}"
+  class:bx--header__menu-toggle="{true}"
   {...$$restProps}
   on:click
   on:click="{() => (isOpen = !isOpen)}"

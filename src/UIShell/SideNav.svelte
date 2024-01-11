@@ -62,22 +62,22 @@
       dispatch('click:overlay');
       isOpen = false;
     }}"
-    class:cds--side-nav__overlay="{true}"
-    class:cds--side-nav__overlay-active="{isOpen}"
+    class:bx--side-nav__overlay="{true}"
+    class:bx--side-nav__overlay-active="{isOpen}"
     style:z-index="{isOpen ? 6000 : undefined}"
   ></div>
 {/if}
 <nav
   aria-hidden="{!isOpen}"
   aria-label="{ariaLabel}"
-  class:cds--side-nav__navigation="{true}"
-  class:cds--side-nav="{true}"
-  class:cds--side-nav--ux="{true}"
-  class:cds--side-nav--expanded="{rail && winWidth >= expansionBreakpoint
+  class:bx--side-nav__navigation="{true}"
+  class:bx--side-nav="{true}"
+  class:bx--side-nav--ux="{true}"
+  class:bx--side-nav--expanded="{rail && winWidth >= expansionBreakpoint
     ? false
     : isOpen}"
-  class:cds--side-nav--collapsed="{!isOpen && !rail}"
-  class:cds--side-nav--rail="{rail}"
+  class:bx--side-nav--collapsed="{!isOpen && !rail}"
+  class:bx--side-nav--rail="{rail}"
   {...$$restProps}
 >
   <slot />

@@ -69,33 +69,33 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  class:cds--form-item="{true}"
+  class:bx--form-item="{true}"
 >
   {#if (labelText || $$slots.labelText) && !hideLabel}
-    <div class:cds--text-area__label-wrapper="{true}">
+    <div class:bx--text-area__label-wrapper="{true}">
       <label
         for="{id}"
-        class:cds--label="{true}"
-        class:cds--visually-hidden="{hideLabel}"
-        class:cds--label--disabled="{disabled}"
+        class:bx--label="{true}"
+        class:bx--visually-hidden="{hideLabel}"
+        class:bx--label--disabled="{disabled}"
       >
         <slot name="labelText">
           {labelText}
         </slot>
       </label>
       {#if maxCount}
-        <div class:cds--label="{true}" class:cds--label--disabled="{disabled}">
+        <div class:bx--label="{true}" class:bx--label--disabled="{disabled}">
           {value.length}/{maxCount}
         </div>
       {/if}
     </div>
   {/if}
   <div
-    class:cds--text-area__wrapper="{true}"
+    class:bx--text-area__wrapper="{true}"
     data-invalid="{invalid || undefined}"
   >
     {#if invalid}
-      <WarningFilled class="cds--text-area__invalid-icon" />
+      <WarningFilled class="bx--text-area__invalid-icon" />
     {/if}
     <textarea
       bind:this="{ref}"
@@ -109,9 +109,9 @@
       rows="{rows}"
       placeholder="{placeholder}"
       readonly="{readonly}"
-      class:cds--text-area="{true}"
-      class:cds--text-area--light="{light}"
-      class:cds--text-area--invalid="{invalid}"
+      class:bx--text-area="{true}"
+      class:bx--text-area--light="{light}"
+      class:bx--text-area--invalid="{invalid}"
       maxlength="{maxCount ?? undefined}"
       style="{cols ? '' : 'width: 100%;'}"
       {...$$restProps}
@@ -125,13 +125,13 @@
   </div>
   {#if !invalid && helperText}
     <div
-      class:cds--form__helper-text="{true}"
-      class:cds--form__helper-text--disabled="{disabled}"
+      class:bx--form__helper-text="{true}"
+      class:bx--form__helper-text--disabled="{disabled}"
     >
       {helperText}
     </div>
   {/if}
   {#if invalid}
-    <div id="{errorId}" class:cds--form-requirement="{true}">{invalidText}</div>
+    <div id="{errorId}" class:bx--form-requirement="{true}">{invalidText}</div>
   {/if}
 </div>

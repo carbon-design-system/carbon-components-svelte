@@ -24,9 +24,9 @@
 <section
   bind:this="{ref}"
   aria-label="data table toolbar"
-  class:cds--table-toolbar="{true}"
-  class:cds--table-toolbar--small="{size === 'sm'}"
-  class:cds--table-toolbar--normal="{size === 'default'}"
+  class:bx--table-toolbar="{true}"
+  class:bx--table-toolbar--small="{size === 'sm'}"
+  class:bx--table-toolbar--normal="{size === 'default'}"
   style:z-index="{1}"
   {...$$restProps}
 >

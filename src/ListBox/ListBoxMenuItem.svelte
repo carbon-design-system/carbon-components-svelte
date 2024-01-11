@@ -21,9 +21,9 @@
 <div
   role="option"
   tabindex="-1"
-  class:cds--list-box__menu-item="{true}"
-  class:cds--list-box__menu-item--active="{active}"
-  class:cds--list-box__menu-item--highlighted="{highlighted || active}"
+  class:bx--list-box__menu-item="{true}"
+  class:bx--list-box__menu-item--active="{active}"
+  class:bx--list-box__menu-item--highlighted="{highlighted || active}"
   aria-selected="{active}"
   disabled="{disabled ? true : undefined}"
   {...$$restProps}
@@ -34,7 +34,7 @@
   <div
     bind:this="{ref}"
     title="{title}"
-    class:cds--list-box__menu-item__option="{true}"
+    class:bx--list-box__menu-item__option="{true}"
   >
     <slot />
   </div>

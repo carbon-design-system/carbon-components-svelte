@@ -63,6 +63,6 @@
 
 <style>
   div {
-    margin-top: var(--cds-spacing-05);
+    margin-top: var(--bx-spacing-05);
   }
 </style>

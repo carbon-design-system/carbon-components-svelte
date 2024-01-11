@@ -4,7 +4,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-This utility component wraps the `.cds--text-truncate-*` Sass mixins from [@carbon/styles](https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/utilities/_text-truncate.scss) for single-line text truncation.
+This utility component wraps the `.bx--text-truncate-*` Sass mixins from [@carbon/styles](https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/utilities/_text-truncate.scss) for single-line text truncation.
 
 ## Default
 

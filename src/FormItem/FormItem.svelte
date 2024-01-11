@@ -1,7 +1,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:cds--form-item="{true}"
+  class:bx--form-item="{true}"
   {...$$restProps}
   on:click
   on:mouseover

@@ -9,9 +9,9 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
   role="{head ? 'columnheader' : 'cell'}"
-  class:cds--structured-list-th="{head}"
-  class:cds--structured-list-td="{!head}"
-  class:cds--structured-list-content--nowrap="{noWrap}"
+  class:bx--structured-list-th="{head}"
+  class:bx--structured-list-td="{!head}"
+  class:bx--structured-list-content--nowrap="{noWrap}"
   {...$$restProps}
   on:click
   on:mouseover

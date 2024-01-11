@@ -49,8 +49,8 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
-  class:cds--tooltip--definition="{true}"
-  class:cds--tooltip--a11y="{true}"
+  class:bx--tooltip--definition="{true}"
+  class:bx--tooltip--a11y="{true}"
   {...$$restProps}
   on:mouseenter="{show}"
   on:mouseleave="{hide}"
@@ -59,16 +59,16 @@
     bind:this="{ref}"
     type="button"
     aria-describedby="{id}"
-    class:cds--tooltip--a11y="{true}"
-    class:cds--tooltip__trigger="{true}"
-    class:cds--tooltip__trigger--definition="{true}"
-    class:cds--tooltip--hidden="{!open}"
-    class:cds--tooltip--visible="{open}"
-    class:cds--tooltip--top="{direction === 'top'}"
-    class:cds--tooltip--bottom="{direction === 'bottom'}"
-    class:cds--tooltip--align-start="{align === 'start'}"
-    class:cds--tooltip--align-center="{align === 'center'}"
-    class:cds--tooltip--align-end="{align === 'end'}"
+    class:bx--tooltip--a11y="{true}"
+    class:bx--tooltip__trigger="{true}"
+    class:bx--tooltip__trigger--definition="{true}"
+    class:bx--tooltip--hidden="{!open}"
+    class:bx--tooltip--visible="{open}"
+    class:bx--tooltip--top="{direction === 'top'}"
+    class:bx--tooltip--bottom="{direction === 'bottom'}"
+    class:bx--tooltip--align-start="{align === 'start'}"
+    class:bx--tooltip--align-center="{align === 'center'}"
+    class:bx--tooltip--align-end="{align === 'end'}"
     on:click
     on:mouseover
     on:mouseenter
@@ -79,7 +79,7 @@
   >
     <slot />
   </button>
-  <div role="tooltip" id="{id}" class:cds--assistive-text="{true}">
+  <div role="tooltip" id="{id}" class:bx--assistive-text="{true}">
     <slot name="tooltip">{tooltipText}</slot>
   </div>
 </span>

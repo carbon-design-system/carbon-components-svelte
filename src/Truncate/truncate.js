@@ -7,7 +7,7 @@
  * <h1 use:truncate={{ clamp: "front" }}>...</h1>
  */
 export function truncate(node, options = {}) {
-  const prefix = "cds--text-truncate-";
+  const prefix = "bx--text-truncate-";
 
   function toggleClass(front = false) {
     const classes = [...node.classList]

@@ -32,11 +32,11 @@
 
 {#if status === "edit"}
   {#if invalid}
-    <WarningFilled class="cds--file-invalid" />
+    <WarningFilled class="bx--file-invalid" />
   {/if}
   <button
     aria-label="{iconDescription}"
-    class:cds--file-close="{true}"
+    class:bx--file-close="{true}"
     type="button"
     tabindex="0"
     {...$$restProps}
@@ -51,7 +51,7 @@
   <CheckmarkFilled
     aria-label="{iconDescription}"
     title="{iconDescription}"
-    class="cds--file-complete"
+    class="bx--file-complete"
     {...$$restProps}
   />
 {/if}

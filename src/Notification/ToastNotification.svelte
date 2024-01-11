@@ -81,14 +81,14 @@
   <div
     role="{role}"
     kind="{kind}"
-    class:cds--toast-notification="{true}"
-    class:cds--toast-notification--low-contrast="{lowContrast}"
-    class:cds--toast-notification--error="{kind === 'error'}"
-    class:cds--toast-notification--info="{kind === 'info'}"
-    class:cds--toast-notification--info-square="{kind === 'info-square'}"
-    class:cds--toast-notification--success="{kind === 'success'}"
-    class:cds--toast-notification--warning="{kind === 'warning'}"
-    class:cds--toast-notification--warning-alt="{kind === 'warning-alt'}"
+    class:bx--toast-notification="{true}"
+    class:bx--toast-notification--low-contrast="{lowContrast}"
+    class:bx--toast-notification--error="{kind === 'error'}"
+    class:bx--toast-notification--info="{kind === 'info'}"
+    class:bx--toast-notification--info-square="{kind === 'info-square'}"
+    class:bx--toast-notification--success="{kind === 'success'}"
+    class:bx--toast-notification--warning="{kind === 'warning'}"
+    class:bx--toast-notification--warning-alt="{kind === 'warning-alt'}"
     style:width="{fullWidth ? "100%" : undefined}"
     {...$$restProps}
     on:click
@@ -97,14 +97,14 @@
     on:mouseleave
   >
     <NotificationIcon kind="{kind}" iconDescription="{statusIconDescription}" />
-    <div class:cds--toast-notification__details="{true}">
-      <h3 class:cds--toast-notification__title="{true}">
+    <div class:bx--toast-notification__details="{true}">
+      <h3 class:bx--toast-notification__title="{true}">
         <slot name="title">{title}</slot>
       </h3>
-      <div class:cds--toast-notification__subtitle="{true}">
+      <div class:bx--toast-notification__subtitle="{true}">
         <slot name="subtitle">{subtitle}</slot>
       </div>
-      <div class:cds--toast-notification__caption="{true}">
+      <div class:bx--toast-notification__caption="{true}">
         <slot name="caption">{caption}</slot>
       </div>
       <slot />

@@ -20,9 +20,9 @@
 
 <a
   bind:this="{ref}"
-  class:cds--header__action="{true}"
-  class:cds--header__action--active="{linkIsActive}"
-  class:cds--btn--icon-only="{true}"
+  class:bx--header__action="{true}"
+  class:bx--header__action--active="{linkIsActive}"
+  class:bx--btn--icon-only="{true}"
   href="{href}"
   rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
   {...$$restProps}
@@ -34,7 +34,7 @@
 </a>
 
 <style>
-  .cds--header__action {
+  .bx--header__action {
     color: var(--bx-text-primary);
   }
 </style>

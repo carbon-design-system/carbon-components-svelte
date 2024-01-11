@@ -37,14 +37,14 @@
   role="listbox"
   tabindex="-1"
   data-invalid="{invalid || undefined}"
-  class:cds--list-box="{true}"
-  class:cds--list-box--sm="{size === 'sm'}"
-  class:cds--list-box--lg="{size === 'lg' || size === 'xl'}"
-  class:cds--list-box--inline="{type === 'inline'}"
-  class:cds--list-box--disabled="{disabled}"
-  class:cds--list-box--expanded="{open}"
-  class:cds--list-box--light="{light}"
-  class:cds--list-box--warning="{!invalid && warn}"
+  class:bx--list-box="{true}"
+  class:bx--list-box--sm="{size === 'sm'}"
+  class:bx--list-box--lg="{size === 'lg' || size === 'xl'}"
+  class:bx--list-box--inline="{type === 'inline'}"
+  class:bx--list-box--disabled="{disabled}"
+  class:bx--list-box--expanded="{open}"
+  class:bx--list-box--light="{light}"
+  class:bx--list-box--warning="{!invalid && warn}"
   {...$$restProps}
   on:keydown
   on:keydown="{(e) => {
@@ -57,8 +57,8 @@
   <slot />
 </div>
 {#if invalid}
-  <div class:cds--form-requirement="{true}">{invalidText}</div>
+  <div class:bx--form-requirement="{true}">{invalidText}</div>
 {/if}
 {#if !invalid && warn}
-  <div class:cds--form-requirement="{true}">{warnText}</div>
+  <div class:bx--form-requirement="{true}">{warnText}</div>
 {/if}
