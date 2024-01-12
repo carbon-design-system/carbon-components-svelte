@@ -20,7 +20,7 @@
   {/each}
 </RadioButtonGroup>
 
-<div style="margin: var(--cds-layout-03) 0">
+<div style="margin: var(--bx-layout-03) 0">
   {#each plans as value (value)}
     <Button
       size="small"

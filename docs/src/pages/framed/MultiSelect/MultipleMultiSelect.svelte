@@ -39,6 +39,6 @@
 
 <style>
   div {
-    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
+    margin: var(--bx-spacing-05) 0 var(--bx-spacing-07);
   }
 </style>

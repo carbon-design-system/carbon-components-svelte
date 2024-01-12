@@ -21,7 +21,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the accordion",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -453,7 +453,7 @@
           "name": "kind",
           "kind": "let",
           "description": "Specify the kind of button",
-          "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"danger\" | \"danger-tertiary\" | \"danger-ghost\"",
+          "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"danger\" | \"danger--tertiary\" | \"danger--ghost\"",
           "value": "\"primary\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -465,8 +465,8 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of button",
-          "type": "\"default\" | \"field\" | \"small\" | \"lg\" | \"xl\"",
-          "value": "\"default\"",
+          "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\"",
+          "value": "\"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1519,7 +1519,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the combobox",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\" ",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1939,7 +1939,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the content switcher",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\" ",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -3009,7 +3009,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the input",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -3322,7 +3322,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the dropdown field",
-          "type": "\"sm\" | \"lg\" | \"xl\"",
+          "type": "\"sm\" | \"lg\" ",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -4291,8 +4291,8 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of button skeleton",
-          "type": "\"default\" | \"field\" | \"small\"",
-          "value": "\"default\"",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "value": "\"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5867,7 +5867,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the list box",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\" ",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7047,7 +7047,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the combobox",
-          "type": "\"sm\" | \"lg\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7584,7 +7584,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the input",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7988,7 +7988,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the overflow menu",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8639,7 +8639,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the input",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9011,6 +9011,27 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "PopoverContent",
+      "filePath": "src/Popover/PopoverContent.svelte",
+      "props": [
+        {
+          "name": "className",
+          "kind": "let",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": [],
+      "rest_props": { "type": "Element", "name": "span" }
     },
     {
       "moduleName": "ProgressBar",
@@ -9930,8 +9951,8 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the search input",
-          "type": "\"sm\" | \"lg\" | \"xl\"",
-          "value": "\"xl\"",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "value": "\"md\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10154,8 +10175,8 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the search input",
-          "type": "\"sm\" | \"lg\" | \"xl\"",
-          "value": "\"xl\"",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "value": "\"md\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10193,7 +10214,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the select input",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11860,13 +11881,13 @@
         }
       ],
       "events": [
-        { "type": "forwarded", "name": "click", "element": "li" },
-        { "type": "forwarded", "name": "mouseover", "element": "li" },
-        { "type": "forwarded", "name": "mouseenter", "element": "li" },
-        { "type": "forwarded", "name": "mouseleave", "element": "li" }
+        { "type": "forwarded", "name": "click", "element": "a" },
+        { "type": "forwarded", "name": "mouseover", "element": "a" },
+        { "type": "forwarded", "name": "mouseenter", "element": "a" },
+        { "type": "forwarded", "name": "mouseleave", "element": "a" }
       ],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "li" }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "TabContent",
@@ -12191,11 +12212,11 @@
           "reactive": true
         },
         {
-          "name": "type",
+          "name": "contained",
           "kind": "let",
-          "description": "Specify the type of tabs",
-          "type": "\"default\" | \"container\"",
-          "value": "\"default\"",
+          "description": "Set to `true` for tabs to be contained",
+          "type": "boolean",
+          "value": "false",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12213,30 +12234,6 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
-        },
-        {
-          "name": "iconDescription",
-          "kind": "let",
-          "description": "Specify the ARIA label for the chevron icon",
-          "type": "string",
-          "value": "\"Show menu options\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "triggerHref",
-          "kind": "let",
-          "description": "Specify the tab trigger href attribute",
-          "type": "string",
-          "value": "\"#\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
         }
       ],
       "moduleExports": [],
@@ -12244,11 +12241,7 @@
         { "name": "__default__", "default": true, "slot_props": "{}" },
         { "name": "content", "default": false, "slot_props": "{}" }
       ],
-      "events": [
-        { "type": "forwarded", "name": "keypress", "element": "div" },
-        { "type": "forwarded", "name": "click", "element": "a" },
-        { "type": "dispatched", "name": "change" }
-      ],
+      "events": [{ "type": "dispatched", "name": "change" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
@@ -12486,7 +12479,6 @@
           "kind": "let",
           "description": "Specify the number of cols",
           "type": "number",
-          "value": "50",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12709,7 +12701,7 @@
           "name": "size",
           "kind": "let",
           "description": "Set the size of the input",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13086,9 +13078,9 @@
       ],
       "typedefs": [
         {
-          "type": "\"white\" | \"g10\" | \"g80\" | \"g90\" | \"g100\"",
+          "type": "\"white\" | \"g10\" | \"g90\" | \"g100\"",
           "name": "CarbonTheme",
-          "ts": "type CarbonTheme = \"white\" | \"g10\" | \"g80\" | \"g90\" | \"g100\""
+          "ts": "type CarbonTheme = \"white\" | \"g10\" | \"g90\" | \"g100\""
         }
       ]
     },
@@ -13198,7 +13190,7 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the size of the input",
-          "type": "\"sm\" | \"xl\"",
+          "type": "\"sm\" | \"lg\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13675,8 +13667,8 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the toggle size",
-          "type": "\"default\" | \"sm\"",
-          "value": "\"default\"",
+          "type": "\"md\" | \"sm\"",
+          "value": "\"md\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13782,18 +13774,6 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelA",
-          "default": false,
-          "fallback": "{labelA}",
-          "slot_props": "{}"
-        },
-        {
-          "name": "labelB",
-          "default": false,
-          "fallback": "{labelB}",
-          "slot_props": "{}"
-        },
-        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
@@ -13814,65 +13794,6 @@
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" }
-      ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
-    },
-    {
-      "moduleName": "ToggleSkeleton",
-      "filePath": "src/Toggle/ToggleSkeleton.svelte",
-      "props": [
-        {
-          "name": "size",
-          "kind": "let",
-          "description": "Specify the toggle size",
-          "type": "\"default\" | \"sm\"",
-          "value": "\"default\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "labelText",
-          "kind": "let",
-          "description": "Specify the label text",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "id",
-          "kind": "let",
-          "description": "Set an id for the input element",
-          "type": "string",
-          "value": "\"ccs-\" + Math.random().toString(36)",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        }
-      ],
-      "moduleExports": [],
-      "slots": [
-        {
-          "name": "labelText",
-          "default": false,
-          "fallback": "{labelText}",
-          "slot_props": "{}"
-        }
-      ],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -14589,8 +14510,8 @@
           "name": "size",
           "kind": "let",
           "description": "Specify the TreeView size",
-          "type": "\"default\" | \"compact\"",
-          "value": "\"default\"",
+          "type": "\"xs\" | \"sm\"",
+          "value": "\"sm\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,

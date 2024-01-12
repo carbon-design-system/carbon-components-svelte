@@ -29,7 +29,7 @@
 />
 
 <FileUploader
-  kind="danger-ghost"
+  kind="danger--ghost"
   size="lg"
   bind:this="{fileUploader}"
   multiple
@@ -38,7 +38,7 @@
   labelDescription="Only JPEG files are accepted."
   accept="{['.jpg', '.jpeg']}"
   status="complete"
-  bind:files
+  bind:files="{files}"
   on:add="{(e) => {
     console.log(e.detail); // File[]
   }}"

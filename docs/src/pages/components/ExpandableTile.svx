@@ -58,7 +58,7 @@ Set a custom height for the tiles on the "above" and "below" slots.
 For tiles containing interactive content, use `stopPropagation` to prevent the tile from toggling.
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
-  <div slot="above">
+  <div slot="above" height="10rem">
     <a href="/" on:click|preventDefault|stopPropagation={() => console.log("Hello world")}>
       Native element
     </a>

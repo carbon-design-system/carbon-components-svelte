@@ -88,9 +88,9 @@ This example demonstrates how a list of items can be programmatically expanded a
 
 <FileSource src="/framed/Accordion/ExpandableAccordion" />
 
-## Extra-large size
+## Large size
 
-<Accordion size="xl">
+<Accordion size="lg">
   <AccordionItem title="Natural Language Classifier">
    <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
    </p>

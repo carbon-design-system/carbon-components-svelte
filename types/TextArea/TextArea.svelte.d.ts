@@ -18,7 +18,7 @@ export interface TextAreaProps extends RestProps {
 
   /**
    * Specify the number of cols
-   * @default 50
+   * @default undefined
    */
   cols?: number;
 

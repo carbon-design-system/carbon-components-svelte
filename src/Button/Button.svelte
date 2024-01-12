@@ -7,15 +7,15 @@
 
   /**
    * Specify the kind of button
-   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost"}
+   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger--tertiary" | "danger--ghost"}
    */
   export let kind = "primary";
 
   /**
    * Specify the size of button
-   * @type {"default" | "field" | "small" | "lg" | "xl"}
+   * @type {"sm" | "md" | "lg" | "xl" | "2xl"}
    */
-  export let size = "default";
+  export let size = "lg";
 
   /** Set to `true` to use Carbon's expressive typesetting */
   export let expressive = false;
@@ -101,12 +101,11 @@
         (size === "sm" && !expressive) ||
         (size === "small" && !expressive)) &&
         "bx--btn--sm",
-      (size === "field" && !expressive) ||
-        (size === "md" && !expressive && "bx--btn--md"),
-      size === "field" && "bx--btn--field",
+      ((size === "field" && !expressive) || (size === "md" && !expressive)) &&
+        "bx--btn--md",
       size === "small" && "bx--btn--sm",
-      size === "lg" && "bx--btn--lg",
       size === "xl" && "bx--btn--xl",
+      size === "2xl" && "bx--btn--2xl",
       kind && `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",

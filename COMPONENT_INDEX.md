@@ -95,6 +95,7 @@
 - [`PaginationSkeleton`](#paginationskeleton)
 - [`PasswordInput`](#passwordinput)
 - [`Popover`](#popover)
+- [`PopoverContent`](#popovercontent)
 - [`ProgressBar`](#progressbar)
 - [`ProgressIndicator`](#progressindicator)
 - [`ProgressIndicatorSkeleton`](#progressindicatorskeleton)
@@ -155,7 +156,6 @@
 - [`TimePickerSelect`](#timepickerselect)
 - [`ToastNotification`](#toastnotification)
 - [`Toggle`](#toggle)
-- [`ToggleSkeleton`](#toggleskeleton)
 - [`Toolbar`](#toolbar)
 - [`ToolbarBatchActions`](#toolbarbatchactions)
 - [`ToolbarContent`](#toolbarcontent)
@@ -179,7 +179,7 @@
 | Prop name | Required | Kind             | Reactive | Type                              | Default value          | Description                                      |
 | :-------- | :------- | :--------------- | :------- | --------------------------------- | ---------------------- | ------------------------------------------------ |
 | align     | No       | <code>let</code> | No       | <code>"start" &#124; "end"</code> | <code>"end"</code>     | Specify alignment of accordion item chevron icon |
-| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>     | <code>undefined</code> | Specify the size of the accordion                |
+| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>     | <code>undefined</code> | Specify the size of the accordion                |
 | disabled  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to disable the accordion           |
 | skeleton  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to display the skeleton state      |
 
@@ -372,23 +372,23 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 
 ### Props
 
-| Prop name        | Required | Kind             | Reactive | Type                                                                                                                                      | Default value          | Description                                                                                                                                                                                   |
-| :--------------- | :------- | :--------------- | :------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ref              | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code>                                                                       | <code>null</code>      | Obtain a reference to the HTML element                                                                                                                                                        |
-| kind             | No       | <code>let</code> | No       | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger" &#124; "danger-tertiary" &#124; "danger-ghost"</code> | <code>"primary"</code> | Specify the kind of button                                                                                                                                                                    |
-| size             | No       | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small" &#124; "lg" &#124; "xl"</code>                                                              | <code>"default"</code> | Specify the size of button                                                                                                                                                                    |
-| expressive       | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to use Carbon's expressive typesetting                                                                                                                                          |
-| isSelected       | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to enable the selected state for an icon-only, ghost button                                                                                                                     |
-| icon             | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code>                                                                                 | <code>undefined</code> | Specify the icon to render                                                                                                                                                                    |
-| iconDescription  | No       | <code>let</code> | No       | <code>string</code>                                                                                                                       | <code>undefined</code> | Specify the ARIA label for the button icon                                                                                                                                                    |
-| tooltipAlignment | No       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                                                                                         | <code>"center"</code>  | Set the alignment of the tooltip relative to the icon.<br />Only applies to icon-only buttons                                                                                                 |
-| tooltipPosition  | No       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                                                                           | <code>"bottom"</code>  | Set the position of the tooltip relative to the icon                                                                                                                                          |
-| as               | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to render a custom HTML element<br />Props are destructured as `props` in the default slot (e.g., &lt;Button let:props&gt;&lt;div {...props}&gt;...&lt;/div&gt;&lt;/Button&gt;) |
-| skeleton         | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to display the skeleton state                                                                                                                                                   |
-| disabled         | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to disable the button                                                                                                                                                           |
-| href             | No       | <code>let</code> | No       | <code>string</code>                                                                                                                       | <code>undefined</code> | Set the `href` to use an anchor link                                                                                                                                                          |
-| tabindex         | No       | <code>let</code> | No       | <code>string</code>                                                                                                                       | <code>"0"</code>       | Specify the tabindex                                                                                                                                                                          |
-| type             | No       | <code>let</code> | No       | <code>string</code>                                                                                                                       | <code>"button"</code>  | Specify the `type` attribute for the button element                                                                                                                                           |
+| Prop name        | Required | Kind             | Reactive | Type                                                                                                                                        | Default value          | Description                                                                                                                                                                                   |
+| :--------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ref              | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code>                                                                         | <code>null</code>      | Obtain a reference to the HTML element                                                                                                                                                        |
+| kind             | No       | <code>let</code> | No       | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger" &#124; "danger--tertiary" &#124; "danger--ghost"</code> | <code>"primary"</code> | Specify the kind of button                                                                                                                                                                    |
+| size             | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg" &#124; "xl" &#124; "2xl"</code>                                                                          | <code>"lg"</code>      | Specify the size of button                                                                                                                                                                    |
+| expressive       | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                        | <code>false</code>     | Set to `true` to use Carbon's expressive typesetting                                                                                                                                          |
+| isSelected       | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                        | <code>false</code>     | Set to `true` to enable the selected state for an icon-only, ghost button                                                                                                                     |
+| icon             | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code>                                                                                   | <code>undefined</code> | Specify the icon to render                                                                                                                                                                    |
+| iconDescription  | No       | <code>let</code> | No       | <code>string</code>                                                                                                                         | <code>undefined</code> | Specify the ARIA label for the button icon                                                                                                                                                    |
+| tooltipAlignment | No       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                                                                                           | <code>"center"</code>  | Set the alignment of the tooltip relative to the icon.<br />Only applies to icon-only buttons                                                                                                 |
+| tooltipPosition  | No       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                                                                             | <code>"bottom"</code>  | Set the position of the tooltip relative to the icon                                                                                                                                          |
+| as               | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                        | <code>false</code>     | Set to `true` to render a custom HTML element<br />Props are destructured as `props` in the default slot (e.g., &lt;Button let:props&gt;&lt;div {...props}&gt;...&lt;/div&gt;&lt;/Button&gt;) |
+| skeleton         | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                        | <code>false</code>     | Set to `true` to display the skeleton state                                                                                                                                                   |
+| disabled         | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                        | <code>false</code>     | Set to `true` to disable the button                                                                                                                                                           |
+| href             | No       | <code>let</code> | No       | <code>string</code>                                                                                                                         | <code>undefined</code> | Set the `href` to use an anchor link                                                                                                                                                          |
+| tabindex         | No       | <code>let</code> | No       | <code>string</code>                                                                                                                         | <code>"0"</code>       | Specify the tabindex                                                                                                                                                                          |
+| type             | No       | <code>let</code> | No       | <code>string</code>                                                                                                                         | <code>"button"</code>  | Specify the `type` attribute for the button element                                                                                                                                           |
 
 ### Slots
 
@@ -666,7 +666,7 @@ export interface ComboBoxItem {
 | items                    | No       | <code>let</code>      | No       | <code>ReadonlyArray<ComboBoxItem></code>                                                              | <code>[]</code>                                                                                                                                                                                                         | Set the combobox items                                                                                                                                      |
 | itemToString             | No       | <code>let</code>      | No       | <code>(item: ComboBoxItem) => string</code>                                                           | <code>(item) => item.text &#124;&#124; item.id</code>                                                                                                                                                                   | Override the display of a combobox item                                                                                                                     |
 | direction                | No       | <code>let</code>      | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                                                                                                                                                                                                   | Specify the direction of the combobox dropdown menu                                                                                                         |
-| size                     | No       | <code>let</code>      | No       | <code>"sm" &#124; "xl"</code>                                                                         | <code>undefined</code>                                                                                                                                                                                                  | Set the size of the combobox                                                                                                                                |
+| size                     | No       | <code>let</code>      | No       | <code>"sm" &#124; "lg" </code>                                                                        | <code>undefined</code>                                                                                                                                                                                                  | Set the size of the combobox                                                                                                                                |
 | disabled                 | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to disable the combobox                                                                                                                       |
 | titleText                | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                                                                                                                                                                                         | Specify the title text of the combobox                                                                                                                      |
 | placeholder              | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                                                                                                                                                                                         | Specify the placeholder text                                                                                                                                |
@@ -760,10 +760,10 @@ None.
 
 ### Props
 
-| Prop name     | Required | Kind             | Reactive | Type                          | Default value          | Description                               |
-| :------------ | :------- | :--------------- | :------- | ----------------------------- | ---------------------- | ----------------------------------------- |
-| selectedIndex | No       | <code>let</code> | Yes      | <code>number</code>           | <code>0</code>         | Set the selected index of the switch item |
-| size          | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code> | <code>undefined</code> | Specify the size of the content switcher  |
+| Prop name     | Required | Kind             | Reactive | Type                           | Default value          | Description                               |
+| :------------ | :------- | :--------------- | :------- | ------------------------------ | ---------------------- | ----------------------------------------- |
+| selectedIndex | No       | <code>let</code> | Yes      | <code>number</code>            | <code>0</code>         | Set the selected index of the switch item |
+| size          | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" </code> | <code>undefined</code> | Specify the size of the content switcher  |
 
 ### Slots
 
@@ -1086,7 +1086,7 @@ None.
 | Prop name       | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                        |
 | :-------------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | -------------------------------------------------- |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element       |
-| size            | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>             | <code>undefined</code>                           | Set the size of the input                          |
+| size            | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>             | <code>undefined</code>                           | Set the size of the input                          |
 | type            | No       | <code>let</code> | No       | <code>string</code>                       | <code>"text"</code>                              | Specify the input type                             |
 | placeholder     | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the input placeholder text                 |
 | pattern         | No       | <code>let</code> | No       | <code>string</code>                       | <code>"\\d{1,2}\\/\\d{1,2}\\/\\d{4}"</code>      | Specify the Regular Expression for the input value |
@@ -1167,7 +1167,7 @@ export interface DropdownItem {
 | itemToString    | No       | <code>let</code> | No       | <code>(item: DropdownItem) => string</code>                                                           | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a dropdown item                                                                                      |
 | type            | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                                | <code>"default"</code>                                | Specify the type of dropdown                                                                                                 |
 | direction       | No       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                                 | Specify the direction of the dropdown menu                                                                                   |
-| size            | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                             | <code>undefined</code>                                | Specify the size of the dropdown field                                                                                       |
+| size            | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" </code>                                                                        | <code>undefined</code>                                | Specify the size of the dropdown field                                                                                       |
 | light           | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to enable the light variant                                                                                    |
 | disabled        | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to disable the dropdown                                                                                        |
 | titleText       | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>""</code>                                       | Specify the title text                                                                                                       |
@@ -1367,7 +1367,7 @@ None.
 | Prop name       | Required | Kind             | Reactive | Type                                                     | Default value                                    | Description                                      |
 | :-------------- | :------- | :--------------- | :------- | -------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------ |
 | status          | No       | <code>let</code> | No       | <code>"uploading" &#124; "edit" &#124; "complete"</code> | <code>"uploading"</code>                         | Specify the file uploader status                 |
-| size            | No       | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small"</code>     | <code>"default"</code>                           | Specify the size of button skeleton              |
+| size            | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code>                | <code>"lg"</code>                                | Specify the size of button skeleton              |
 | iconDescription | No       | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>                                  | Specify the ARIA label used for the status icons |
 | invalid         | No       | <code>let</code> | No       | <code>boolean</code>                                     | <code>false</code>                               | Set to `true` to indicate an invalid state       |
 | errorSubject    | No       | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>                                  | Specify the error subject text                   |
@@ -1995,7 +1995,7 @@ None.
 
 | Prop name   | Required | Kind             | Reactive | Type                                   | Default value          | Description                                |
 | :---------- | :------- | :--------------- | :------- | -------------------------------------- | ---------------------- | ------------------------------------------ |
-| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>          | <code>undefined</code> | Set the size of the list box               |
+| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" </code>         | <code>undefined</code> | Set the size of the list box               |
 | type        | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code> | <code>"default"</code> | Set the type of the list box               |
 | open        | No       | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>     | Set to `true` to open the list box         |
 | light       | No       | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>     | Set to `true` to enable the light variant  |
@@ -2372,7 +2372,7 @@ export interface MultiSelectItem {
 | items                    | No       | <code>let</code> | Yes      | <code>ReadonlyArray<MultiSelectItem></code>                                                                | <code>[]</code>                                                                            | Set the multiselect items                                                                                                                                             |
 | itemToString             | No       | <code>let</code> | No       | <code>(item: MultiSelectItem) => any</code>                                                                | <code>(item) => item.text &#124;&#124; item.id</code>                                      | Override the display of a multiselect item                                                                                                                            |
 | itemToInput              | No       | <code>let</code> | No       | <code>(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }</code> | <code>(item) => {}</code>                                                                  | Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.                                         |
-| size                     | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                                  | <code>undefined</code>                                                                     | Set the size of the combobox                                                                                                                                          |
+| size                     | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>                                                                              | <code>undefined</code>                                                                     | Set the size of the combobox                                                                                                                                          |
 | type                     | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                                     | <code>"default"</code>                                                                     | Specify the type of multiselect                                                                                                                                       |
 | direction                | No       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                                         | <code>"bottom"</code>                                                                      | Specify the direction of the multiselect dropdown menu                                                                                                                |
 | selectionFeedback        | No       | <code>let</code> | No       | <code>"top" &#124; "fixed" &#124; "top-after-reopen"</code>                                                | <code>"top-after-reopen"</code>                                                            | Specify the selection feedback after selecting items                                                                                                                  |
@@ -2493,7 +2493,7 @@ export type NumberInputTranslationId = "increment" | "decrement";
 | :-------------- | :------- | :----------------- | :------- | --------------------------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------- |
 | ref             | No       | <code>let</code>   | Yes      | <code>null &#124; HTMLInputElement</code>                       | <code>null</code>                                                | Obtain a reference to the input HTML element                  |
 | value           | No       | <code>let</code>   | Yes      | <code>null &#124; number</code>                                 | <code>null</code>                                                | Specify the input value.<br />Use `null` to denote "no value" |
-| size            | No       | <code>let</code>   | No       | <code>"sm" &#124; "xl"</code>                                   | <code>undefined</code>                                           | Set the size of the input                                     |
+| size            | No       | <code>let</code>   | No       | <code>"sm" &#124; "lg"</code>                                   | <code>undefined</code>                                           | Set the size of the input                                     |
 | step            | No       | <code>let</code>   | No       | <code>number</code>                                             | <code>1</code>                                                   | Specify the step increment                                    |
 | max             | No       | <code>let</code>   | No       | <code>number</code>                                             | <code>undefined</code>                                           | Specify the maximum value                                     |
 | min             | No       | <code>let</code>   | No       | <code>number</code>                                             | <code>undefined</code>                                           | Specify the minimum value                                     |
@@ -2614,7 +2614,7 @@ None.
 | buttonRef        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                | <code>null</code>                                | Obtain a reference to the trigger button element                              |
 | icon             | No       | <code>let</code> | Yes      | <code>typeof import("svelte").SvelteComponent<any></code> | <code>undefined</code>                           | Specify the icon to render.<br />Defaults to `&lt;OverflowMenuVertical /&gt;` |
 | open             | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to open the menu                                                |
-| size             | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                             | <code>undefined</code>                           | Specify the size of the overflow menu                                         |
+| size             | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>                             | <code>undefined</code>                           | Specify the size of the overflow menu                                         |
 | direction        | No       | <code>let</code> | No       | <code>"top" &#124; "bottom"</code>                        | <code>"bottom"</code>                            | Specify the direction of the overflow menu relative to the button             |
 | light            | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to enable the light variant                                     |
 | flipped          | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to flip the menu relative to the button                         |
@@ -2760,7 +2760,7 @@ None.
 | ref               | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                       | <code>null</code>                                | Obtain a reference to the input HTML element          |
 | type              | No       | <code>let</code> | Yes      | <code>"text" &#124; "password"</code>                           | <code>"password"</code>                          | Set to `"text"` to toggle the password visibility     |
 | value             | No       | <code>let</code> | Yes      | <code>number &#124; string</code>                               | <code>""</code>                                  | Specify the input value                               |
-| size              | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                                   | <code>undefined</code>                           | Set the size of the input                             |
+| size              | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>                                   | <code>undefined</code>                           | Set the size of the input                             |
 | placeholder       | No       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the placeholder text                          |
 | hidePasswordLabel | No       | <code>let</code> | No       | <code>string</code>                                             | <code>"Hide password"</code>                     | Specify the hide password label text                  |
 | showPasswordLabel | No       | <code>let</code> | No       | <code>string</code>                                             | <code>"Show password"</code>                     | Specify the show password label text                  |
@@ -2826,6 +2826,24 @@ None.
 | Event name    | Type       | Detail                                |
 | :------------ | :--------- | :------------------------------------ |
 | click:outside | dispatched | <code>{ target: HTMLElement; }</code> |
+
+## `PopoverContent`
+
+### Props
+
+| Prop name | Required | Kind             | Reactive | Type | Default value     | Description |
+| :-------- | :------- | :--------------- | :------- | ---- | ----------------- | ----------- |
+| className | No       | <code>let</code> | No       | --   | <code>null</code> | --          |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `ProgressBar`
 
@@ -3107,7 +3125,7 @@ None.
 | ref                  | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                 | <code>null</code>                                | Obtain a reference to the input HTML element                    |
 | expanded             | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>                               | Set to `true to expand the search input                         |
 | value                | No       | <code>let</code> | Yes      | <code>any</code>                                          | <code>""</code>                                  | Specify the value of the search input                           |
-| size                 | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                 | <code>"xl"</code>                                | Specify the size of the search input                            |
+| size                 | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code>                 | <code>"md"</code>                                | Specify the size of the search input                            |
 | searchClass          | No       | <code>let</code> | No       | <code>string</code>                                       | <code>""</code>                                  | Specify the class name passed to the outer div element          |
 | skeleton             | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to display the skeleton state                     |
 | light                | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to enable the light variant                       |
@@ -3152,7 +3170,7 @@ None.
 
 | Prop name | Required | Kind             | Reactive | Type                                      | Default value     | Description                          |
 | :-------- | :------- | :--------------- | :------- | ----------------------------------------- | ----------------- | ------------------------------------ |
-| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code> | Specify the size of the search input |
+| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code> | <code>"md"</code> | Specify the size of the search input |
 
 ### Slots
 
@@ -3175,7 +3193,7 @@ None.
 | :---------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ----------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLSelectElement</code> | <code>null</code>                                | Obtain a reference to the select HTML element   |
 | selected    | No       | <code>let</code> | Yes      | <code>string &#124; number</code>          | <code>undefined</code>                           | Specify the selected item value                 |
-| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>              | <code>undefined</code>                           | Set the size of the select input                |
+| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>              | <code>undefined</code>                           | Set the size of the select input                |
 | inline      | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to use the inline variant         |
 | light       | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to enable the light variant       |
 | disabled    | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to disable the select element     |
@@ -3949,13 +3967,11 @@ None.
 
 ### Props
 
-| Prop name       | Required | Kind             | Reactive | Type                                      | Default value                    | Description                                  |
-| :-------------- | :------- | :--------------- | :------- | ----------------------------------------- | -------------------------------- | -------------------------------------------- |
-| selected        | No       | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>                   | Specify the selected tab index               |
-| type            | No       | <code>let</code> | No       | <code>"default" &#124; "container"</code> | <code>"default"</code>           | Specify the type of tabs                     |
-| autoWidth       | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>               | Set to `true` for tabs to have an auto-width |
-| iconDescription | No       | <code>let</code> | No       | <code>string</code>                       | <code>"Show menu options"</code> | Specify the ARIA label for the chevron icon  |
-| triggerHref     | No       | <code>let</code> | No       | <code>string</code>                       | <code>"#"</code>                 | Specify the tab trigger href attribute       |
+| Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                                  |
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | -------------------------------------------- |
+| selected  | No       | <code>let</code> | Yes      | <code>number</code>  | <code>0</code>     | Specify the selected tab index               |
+| contained | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for tabs to be contained       |
+| autoWidth | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for tabs to have an auto-width |
 
 ### Slots
 
@@ -3968,8 +3984,6 @@ None.
 
 | Event name | Type       | Detail |
 | :--------- | :--------- | :----- |
-| keypress   | forwarded  | --     |
-| click      | forwarded  | --     |
 | change     | dispatched | --     |
 
 ## `TabsSkeleton`
@@ -4057,7 +4071,7 @@ None.
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLTextAreaElement</code> | <code>null</code>                                | Obtain a reference to the textarea HTML element |
 | value       | No       | <code>let</code> | Yes      | <code>string</code>                          | <code>""</code>                                  | Specify the textarea value                      |
 | placeholder | No       | <code>let</code> | No       | <code>string</code>                          | <code>""</code>                                  | Specify the placeholder text                    |
-| cols        | No       | <code>let</code> | No       | <code>number</code>                          | <code>50</code>                                  | Specify the number of cols                      |
+| cols        | No       | <code>let</code> | No       | <code>number</code>                          | <code>undefined</code>                           | Specify the number of cols                      |
 | rows        | No       | <code>let</code> | No       | <code>number</code>                          | <code>4</code>                                   | Specify the number of rows                      |
 | maxCount    | No       | <code>let</code> | No       | <code>number</code>                          | <code>undefined</code>                           | Specify the max character count                 |
 | light       | No       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to enable the light variant       |
@@ -4122,7 +4136,7 @@ None.
 | :---------- | :------- | :--------------- | :------- | --------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>     | <code>null</code>                                | Obtain a reference to the input HTML element                                                                    |
 | value       | No       | <code>let</code> | Yes      | <code>null &#124; number &#124; string</code> | <code>""</code>                                  | Specify the input value.<br /><br />`value` will be set to `null` if type="number"<br />and the value is empty. |
-| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>                 | <code>undefined</code>                           | Set the size of the input                                                                                       |
+| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>                 | <code>undefined</code>                           | Set the size of the input                                                                                       |
 | placeholder | No       | <code>let</code> | No       | <code>string</code>                           | <code>""</code>                                  | Specify the placeholder text                                                                                    |
 | light       | No       | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to enable the light variant                                                                       |
 | disabled    | No       | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to disable the input                                                                              |
@@ -4187,7 +4201,7 @@ None.
 ### Types
 
 ```ts
-export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
+export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ```
 
 ### Props
@@ -4269,7 +4283,7 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 | :---------- | :------- | :--------------- | :------- | ----------------------------------------- | --------------------------------------------------- | ----------------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                   | Obtain a reference to the input HTML element          |
 | value       | No       | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>                                     | Specify the input value                               |
-| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>             | <code>undefined</code>                              | Specify the size of the input                         |
+| size        | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>             | <code>undefined</code>                              | Specify the size of the input                         |
 | placeholder | No       | <code>let</code> | No       | <code>string</code>                       | <code>"hh:mm"</code>                                | Specify the input placeholder text                    |
 | pattern     | No       | <code>let</code> | No       | <code>string</code>                       | <code>"(1[012]&#124;[1-9]):[0-5][0-9](\\s)?"</code> | Specify the `pattern` attribute for the input element |
 | maxlength   | No       | <code>let</code> | No       | <code>number</code>                       | <code>5</code>                                      | Specify the `maxlength` input attribute               |
@@ -4376,24 +4390,22 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                               | Default value                                    | Description                                     |
-| :-------- | :------- | :--------------- | :------- | ---------------------------------- | ------------------------------------------------ | ----------------------------------------------- |
-| toggled   | No       | <code>let</code> | Yes      | <code>boolean</code>               | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
-| size      | No       | <code>let</code> | No       | <code>"default" &#124; "sm"</code> | <code>"default"</code>                           | Specify the toggle size                         |
-| disabled  | No       | <code>let</code> | No       | <code>boolean</code>               | <code>false</code>                               | Set to `true` to disable checkbox input         |
-| labelA    | No       | <code>let</code> | No       | <code>string</code>                | <code>"Off"</code>                               | Specify the label for the untoggled state       |
-| labelB    | No       | <code>let</code> | No       | <code>string</code>                | <code>"On"</code>                                | Specify the label for the toggled state         |
-| labelText | No       | <code>let</code> | No       | <code>string</code>                | <code>""</code>                                  | Specify the label text                          |
-| hideLabel | No       | <code>let</code> | No       | <code>boolean</code>               | <code>false</code>                               | Set to `true` to visually hide the label text   |
-| id        | No       | <code>let</code> | No       | <code>string</code>                | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
-| name      | No       | <code>let</code> | No       | <code>string</code>                | <code>undefined</code>                           | Specify a name attribute for the checkbox input |
+| Prop name | Required | Kind             | Reactive | Type                          | Default value                                    | Description                                     |
+| :-------- | :------- | :--------------- | :------- | ----------------------------- | ------------------------------------------------ | ----------------------------------------------- |
+| toggled   | No       | <code>let</code> | Yes      | <code>boolean</code>          | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
+| size      | No       | <code>let</code> | No       | <code>"md" &#124; "sm"</code> | <code>"md"</code>                                | Specify the toggle size                         |
+| disabled  | No       | <code>let</code> | No       | <code>boolean</code>          | <code>false</code>                               | Set to `true` to disable checkbox input         |
+| labelA    | No       | <code>let</code> | No       | <code>string</code>           | <code>"Off"</code>                               | Specify the label for the untoggled state       |
+| labelB    | No       | <code>let</code> | No       | <code>string</code>           | <code>"On"</code>                                | Specify the label for the toggled state         |
+| labelText | No       | <code>let</code> | No       | <code>string</code>           | <code>""</code>                                  | Specify the label text                          |
+| hideLabel | No       | <code>let</code> | No       | <code>boolean</code>          | <code>false</code>                               | Set to `true` to visually hide the label text   |
+| id        | No       | <code>let</code> | No       | <code>string</code>           | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
+| name      | No       | <code>let</code> | No       | <code>string</code>           | <code>undefined</code>                           | Specify a name attribute for the checkbox input |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
 | :-------- | :------ | :---- | :----------------------- |
-| labelA    | No      | --    | <code>{labelA}</code>    |
-| labelB    | No      | --    | <code>{labelB}</code>    |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
@@ -4409,31 +4421,6 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 | keyup      | forwarded  | --                                 |
 | focus      | forwarded  | --                                 |
 | blur       | forwarded  | --                                 |
-
-## `ToggleSkeleton`
-
-### Props
-
-| Prop name | Required | Kind             | Reactive | Type                               | Default value                                    | Description                     |
-| :-------- | :------- | :--------------- | :------- | ---------------------------------- | ------------------------------------------------ | ------------------------------- |
-| size      | No       | <code>let</code> | No       | <code>"default" &#124; "sm"</code> | <code>"default"</code>                           | Specify the toggle size         |
-| labelText | No       | <code>let</code> | No       | <code>string</code>                | <code>""</code>                                  | Specify the label text          |
-| id        | No       | <code>let</code> | No       | <code>string</code>                | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element |
-
-### Slots
-
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
-
-### Events
-
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
 
 ## `Toolbar`
 
@@ -4701,7 +4688,7 @@ export interface TreeNode {
 | selectedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                        | <code>[]</code>                                                                                                                                                                                                                                                                                                                                                                                                                                     | Set the node ids to be selected                                                                      |
 | activeId      | No       | <code>let</code>      | Yes      | <code>TreeNodeId</code>                                       | <code>""</code>                                                                                                                                                                                                                                                                                                                                                                                                                                     | Set the current active node id<br />Only one node can be active                                      |
 | children      | No       | <code>let</code>      | No       | <code>Array<TreeNode></code>                                  | <code>[]</code>                                                                                                                                                                                                                                                                                                                                                                                                                                     | Provide an array of children nodes to render                                                         |
-| size          | No       | <code>let</code>      | No       | <code>"default" &#124; "compact"</code>                       | <code>"default"</code>                                                                                                                                                                                                                                                                                                                                                                                                                              | Specify the TreeView size                                                                            |
+| size          | No       | <code>let</code>      | No       | <code>"xs" &#124; "sm"</code>                                 | <code>"sm"</code>                                                                                                                                                                                                                                                                                                                                                                                                                                   | Specify the TreeView size                                                                            |
 | labelText     | No       | <code>let</code>      | No       | <code>string</code>                                           | <code>""</code>                                                                                                                                                                                                                                                                                                                                                                                                                                     | Specify the label text                                                                               |
 | hideLabel     | No       | <code>let</code>      | No       | <code>boolean</code>                                          | <code>false</code>                                                                                                                                                                                                                                                                                                                                                                                                                                  | Set to `true` to visually hide the label text                                                        |
 | expandAll     | No       | <code>function</code> | No       | <code>() => void</code>                                       | <code>() => { expandedIds = [...nodeIds]; }</code>                                                                                                                                                                                                                                                                                                                                                                                                  | Programmatically expand all nodes                                                                    |

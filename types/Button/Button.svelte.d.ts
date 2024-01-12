@@ -18,14 +18,14 @@ export interface ButtonProps extends ButtonSkeletonProps, RestProps {
     | "tertiary"
     | "ghost"
     | "danger"
-    | "danger-tertiary"
-    | "danger-ghost";
+    | "danger--tertiary"
+    | "danger--ghost";
 
   /**
    * Specify the size of button
-   * @default "default"
+   * @default "lg"
    */
-  size?: "default" | "field" | "small" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl";
 
   /**
    * Set to `true` to use Carbon's expressive typesetting

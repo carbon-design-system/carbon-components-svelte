@@ -43,9 +43,9 @@ components: ["ContentSwitcher", "Switch"]
   </Switch>
 </ContentSwitcher>
 
-## Extra-large size
+## Large size
 
-<ContentSwitcher size="xl">
+<ContentSwitcher size="lg">
   <Switch text="All" />
   <Switch text="Archived" />
 </ContentSwitcher>

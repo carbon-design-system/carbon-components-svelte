@@ -17,6 +17,7 @@
   bind:this="{ref}"
   class:bx--header__action="{true}"
   class:bx--header__action--active="{isActive}"
+  class:bx--btn--icon-only="{true}"
   {...$$restProps}
   on:click
 >

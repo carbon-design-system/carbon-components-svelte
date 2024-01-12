@@ -4,7 +4,7 @@
   let selectedIndex = 1;
 </script>
 
-<ContentSwitcher bind:selectedIndex>
+<ContentSwitcher bind:selectedIndex="{selectedIndex}">
   <Switch text="Latest news" />
   <Switch text="Trending" />
   <Switch text="Recommended" />
@@ -24,6 +24,6 @@
 
 <style>
   div {
-    margin-top: var(--cds-spacing-05);
+    margin-top: var(--bx-spacing-05);
   }
 </style>

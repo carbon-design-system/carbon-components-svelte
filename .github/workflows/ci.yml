@@ -9,17 +9,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v3
-        id: yarn-cache
+        id: npm-cache
         with:
           path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies, build, test, and lint the codebase
         run: |
-          yarn
-          yarn build:lib
-          yarn test:types
-          yarn lint
+          npm i
+          npm run build:lib
+          npm run test:types
+          npm run lint
 
       - name: Trigger deploy
         if: github.ref == 'refs/heads/master'

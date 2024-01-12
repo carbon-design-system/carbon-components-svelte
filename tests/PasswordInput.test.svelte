@@ -16,7 +16,7 @@
 
 <PasswordInput light labelText="Password" placeholder="Enter password..." />
 
-<PasswordInput size="xl" labelText="Password" placeholder="Enter password..." />
+<PasswordInput size="lg" labelText="Password" placeholder="Enter password..." />
 
 <PasswordInput size="sm" labelText="Password" placeholder="Enter password..." />
 

@@ -11,9 +11,9 @@
 
   /**
    * Specify the size of button skeleton
-   * @type {"default" | "field" | "small"}
+   * @type {"sm" | "md" | "lg"}
    */
-  export let size = "default";
+  export let size = "lg";
 
   /** Specify the ARIA label used for the status icons */
   export let iconDescription = "";
@@ -45,8 +45,8 @@
   id="{id}"
   class:bx--file__selected-file="{true}"
   class:bx--file__selected-file--invalid="{invalid}"
-  class:bx--file__selected-file--md="{size === 'field'}"
-  class:bx--file__selected-file--sm="{size === 'small'}"
+  class:bx--file__selected-file--md="{size === 'md' || size === 'field'}"
+  class:bx--file__selected-file--sm="{size === 'sm' || size === 'small'}"
   {...$$restProps}
   on:mouseover
   on:mouseenter

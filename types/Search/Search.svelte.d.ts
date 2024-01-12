@@ -12,9 +12,9 @@ export interface SearchProps extends RestProps {
 
   /**
    * Specify the size of the search input
-   * @default "xl"
+   * @default "md"
    */
-  size?: "sm" | "lg" | "xl";
+  size?: "sm" | "md" | "lg";
 
   /**
    * Specify the class name passed to the outer div element

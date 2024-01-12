@@ -31,9 +31,9 @@ components: ["TextInput", "TextInputSkeleton"]
 
 <TextInput readonly labelText="User name" value="IBM" />
 
-## Extra-large size
+## Large size
 
-<TextInput size="xl" labelText="User name" placeholder="Enter user name..." />
+<TextInput size="lg" labelText="User name" placeholder="Enter user name..." />
 
 ## Small size
 

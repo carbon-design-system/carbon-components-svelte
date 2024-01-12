@@ -8,7 +8,7 @@ export interface ListBoxProps extends RestProps {
    * Set the size of the list box
    * @default undefined
    */
-  size?: "sm" | "xl";
+  size?: "sm" | "lg";
 
   /**
    * Set the type of the list box

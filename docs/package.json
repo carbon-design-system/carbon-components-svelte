@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "yarn build:index-docs && run-p dev:*",
+    "dev": "npm run build:index-docs && run-p dev:*",
     "dev:routify": "cross-env NODE_ENV=development routify run",
     "dev:svite": "vite dev",
     "build": "run-s build:*",
@@ -10,13 +10,14 @@
     "build:svite": "vite build"
   },
   "devDependencies": {
+    "@ibm/plex": "^6.1.1",
     "@sveltech/routify": "^1.9.10",
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "carbon-components-svelte": "../",
     "carbon-icons-svelte": "^12.4.1",
     "clipboard-copy": "^4.0.1",
     "cross-env": "^7.0.3",
-    "mdsvex": "^0.10.6",
+    "mdsvex": "^0.11.0",
     "minisearch": "^6.2.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",

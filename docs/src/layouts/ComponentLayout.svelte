@@ -37,7 +37,7 @@
     const searchParams = new URLSearchParams(window.location.search);
     const current_theme = searchParams.get("theme");
 
-    if (["white", "g10", "g80", "g90", "g100"].includes(current_theme)) {
+    if (["white", "g10", "g90", "g100"].includes(current_theme)) {
       theme.set(current_theme);
     }
   });
@@ -87,7 +87,6 @@
           >
             <SelectItem value="white" text="White" />
             <SelectItem value="g10" text="Gray 10" />
-            <SelectItem value="g80" text="Gray 80" />
             <SelectItem value="g90" text="Gray 90" />
             <SelectItem value="g100" text="Gray 100" />
           </Select>
@@ -150,7 +149,7 @@
             {#each api_components as component (component.moduleName)}
               <Tab label="{component.moduleName}" />
             {/each}
-            <div slot="content" style="padding-top: var(--cds-spacing-06)">
+            <div slot="content" style="padding-top: var(--bx-spacing-06)">
               {#each api_components as component (component.moduleName)}
                 <TabContent>
                   <ComponentApi component="{component}" />
@@ -177,13 +176,13 @@
   .bar {
     display: flex;
     justify-content: space-between;
-    margin-bottom: var(--cds-layout-02);
-    border-bottom: 1px solid var(--cds-ui-03);
+    margin-bottom: var(--bx-spacing-06);
+    border-bottom: 1px solid var(--bx-ui-03);
   }
 
   :global(.toc h5) {
-    margin-top: var(--cds-spacing-06);
-    margin-bottom: var(--cds-spacing-03);
+    margin-top: var(--bx-spacing-06);
+    margin-bottom: var(--bx-spacing-03);
   }
 
   .toc.mobile {
@@ -193,7 +192,7 @@
   @media (max-width: 1056px) {
     .toc.mobile {
       display: block;
-      margin-bottom: var(--cds-spacing-09);
+      margin-bottom: var(--bx-spacing-09);
     }
   }
 </style>

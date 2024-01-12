@@ -22,6 +22,7 @@
   bind:this="{ref}"
   class:bx--header__action="{true}"
   class:bx--header__action--active="{linkIsActive}"
+  class:bx--btn--icon-only="{true}"
   href="{href}"
   rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
   {...$$restProps}
@@ -34,10 +35,6 @@
 
 <style>
   .bx--header__action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /** Hot fix to align icon with `HeaderAction` */
-    padding-bottom: 2px;
+    color: var(--bx-text-primary);
   }
 </style>

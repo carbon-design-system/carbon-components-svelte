@@ -4,15 +4,14 @@
   let selected = "g10";
 </script>
 
-<Select labelText="Carbon theme" bind:selected>
+<Select labelText="Carbon theme" bind:selected="{selected}">
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-<div style="margin: var(--cds-layout-01) 0">
+<div style="margin: var(--bx-spacing-05) 0">
   Selected: <strong>{selected}</strong>
 </div>
 
