@@ -23,7 +23,7 @@ By default, each item renders the value of `node.text`. Use the data from `let:n
 
 The destructured `let:node` contains the following properties:
 
-<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+<UnorderedList svx-ignore style="margin-bottom: var(--bx-spacing-08)">
   <ListItem><strong>id</strong>: the node id</ListItem>
   <ListItem><strong>text</strong>: the node text</ListItem>
   <ListItem><strong>expanded</strong>: true if the node is expanded</ListItem>
@@ -40,11 +40,11 @@ The active node can be set through `activeId`.
 
 <FileSource src="/framed/TreeView/TreeViewActive" />
 
-## Compact size
+## Extra-small size
 
-Set `size` to `"compact"` to use the compact variant.
+Set `size` to `"xs"` to use the extra-small variant.
 
-<FileSource src="/framed/TreeView/TreeViewCompact" />
+<FileSource src="/framed/TreeView/TreeViewXs" />
 
 ## With icons
 

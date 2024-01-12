@@ -4,7 +4,7 @@
   let selected = 0;
 </script>
 
-<Tabs bind:selected>
+<Tabs bind:selected="{selected}">
   <Tab label="Tab label 1" />
   <Tab label="Tab label 2" />
   <Tab label="Tab label 3" />
@@ -15,7 +15,7 @@
   </svelte:fragment>
 </Tabs>
 
-<div style="margin: var(--cds-layout-01) 0">
+<div style="margin: var(--bx-spacing-05) 0">
   <Button on:click="{() => (selected = 1)}">Set index to 1</Button>
 </div>
 

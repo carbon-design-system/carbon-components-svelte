@@ -67,10 +67,10 @@
   </svelte:fragment>
   <HeaderUtilities>
     <HeaderSearch
-      bind:ref
-      bind:active
-      bind:value
-      bind:selectedResultIndex
+      bind:ref="{ref}"
+      bind:active="{active}"
+      bind:value="{value}"
+      bind:selectedResultIndex="{selectedResultIndex}"
       placeholder="Search services"
       results="{results}"
       on:active="{() => {

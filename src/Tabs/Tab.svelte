@@ -30,12 +30,19 @@
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<li
-  tabindex="-1"
-  role="presentation"
+<a
+  bind:this="{ref}"
+  tabindex="{disabled ? '-1' : tabindex}"
+  role="tab"
   class:bx--tabs__nav-item="{true}"
+  class:bx--tabs__nav-link="{true}"
   class:bx--tabs__nav-item--disabled="{disabled}"
   class:bx--tabs__nav-item--selected="{selected}"
+  aria-selected="{selected}"
+  aria-disabled="{disabled}"
+  id="{id}"
+  href="{href}"
+  style="{$useAutoWidth ? 'width: auto' : undefined}"
   {...$$restProps}
   on:click|preventDefault
   on:click|preventDefault="{() => {
@@ -58,17 +65,5 @@
     }
   }}"
 >
-  <a
-    bind:this="{ref}"
-    role="tab"
-    tabindex="{disabled ? '-1' : tabindex}"
-    aria-selected="{selected}"
-    aria-disabled="{disabled}"
-    id="{id}"
-    href="{href}"
-    class:bx--tabs__nav-link="{true}"
-    style:width="{$useAutoWidth ? "auto" : undefined}"
-  >
-    <slot>{label}</slot>
-  </a>
-</li>
+  <slot>{label}</slot>
+</a>

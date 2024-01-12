@@ -11,6 +11,6 @@
 
 <style>
   div {
-    margin-bottom: var(--cds-spacing-03);
+    margin-bottom: var(--bx-spacing-03);
   }
 </style>

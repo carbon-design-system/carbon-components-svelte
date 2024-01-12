@@ -55,7 +55,7 @@
 <ComboBox
   titleText="Contact"
   placeholder="Select contact method"
-  size="xl"
+  size="lg"
   items="{items}"
 />
 

@@ -1,7 +1,7 @@
 <script>
   /**
    * Set the size of the input
-   * @type {"sm" | "xl"}
+   * @type {"sm" | "lg"}
    */
   export let size = undefined;
 
@@ -117,7 +117,7 @@
       class:bx--date-picker__input="{true}"
       class:bx--date-picker__input--invalid="{invalid}"
       class:bx--date-picker__input--sm="{size === 'sm'}"
-      class:bx--date-picker__input--xl="{size === 'xl'}"
+      class:bx--date-picker__input--lg="{size === 'lg' || size === 'xl'}"
       on:input
       on:input="{({ target }) => {
         updateValue({ type: 'input', value: target.value });

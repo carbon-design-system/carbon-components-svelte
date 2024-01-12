@@ -44,15 +44,15 @@
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
+    "@carbon/styles": "^1.47.0",
     "@rollup/plugin-commonjs": "^21.0.3",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@tsconfig/svelte": "^4.0.1",
     "autoprefixer": "^10.4.8",
-    "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^12.1.0",
     "postcss": "^8.4.16",
-    "prettier": "^2.7.1",
-    "prettier-plugin-svelte": "^2.7.0",
+    "prettier": "^2.8.8",
+    "prettier-plugin-svelte": "^2.10.1",
     "rollup": "^2.78.1",
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",

@@ -8,7 +8,7 @@
 
 The [Carbon Design System grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints:
 
-<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+<UnorderedList svx-ignore style="margin-bottom: var(--bx-spacing-08)">
   <ListItem><strong>Small</strong>: less than 672px</ListItem>
   <ListItem><strong>Medium</strong>: 672 - 1056px</ListItem>
   <ListItem><strong>Large</strong>: 1056 - 1312px</ListItem>

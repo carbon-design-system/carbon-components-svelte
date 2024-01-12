@@ -10,7 +10,7 @@ export interface NumberInputProps extends RestProps {
    * Set the size of the input
    * @default undefined
    */
-  size?: "sm" | "xl";
+  size?: "sm" | "lg";
 
   /**
    * Specify the input value.

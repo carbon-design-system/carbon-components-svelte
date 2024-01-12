@@ -8,7 +8,7 @@ export interface OverflowMenuProps extends RestProps {
    * Specify the size of the overflow menu
    * @default undefined
    */
-  size?: "sm" | "xl";
+  size?: "sm" | "lg";
 
   /**
    * Specify the direction of the overflow menu relative to the button

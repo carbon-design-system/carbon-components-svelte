@@ -40,7 +40,7 @@
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-<Select size="xl" labelText="Carbon theme" selected="g10">
+<Select size="lg" labelText="Carbon theme" selected="g10">
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g90" text="Gray 90" />

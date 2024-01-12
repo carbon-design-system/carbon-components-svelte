@@ -22,6 +22,7 @@
   bind:this="{ref}"
   class:bx--header__action="{true}"
   class:bx--header__action--active="{linkIsActive}"
+  class:bx--btn--icon-only="{true}"
   href="{href}"
   rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
   {...$$restProps}

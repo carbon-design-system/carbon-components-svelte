@@ -6,9 +6,9 @@ type RestProps = SvelteHTMLElements["div"];
 export interface ToggleProps extends RestProps {
   /**
    * Specify the toggle size
-   * @default "default"
+   * @default "md"
    */
-  size?: "default" | "sm";
+  size?: "md" | "sm";
 
   /**
    * Set to `true` to toggle the checkbox input
@@ -74,5 +74,5 @@ export default class Toggle extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  { labelA: {}; labelB: {}; labelText: {} }
+  { labelText: {} }
 > {}

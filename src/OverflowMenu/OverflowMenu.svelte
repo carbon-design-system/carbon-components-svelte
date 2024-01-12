@@ -5,7 +5,7 @@
 
   /**
    * Specify the size of the overflow menu
-   * @type {"sm" | "xl"}
+   * @type {"sm" | "lg"}
    */
   export let size = undefined;
 
@@ -200,7 +200,7 @@
   class:bx--overflow-menu--open="{open}"
   class:bx--overflow-menu--light="{light}"
   class:bx--overflow-menu--sm="{size === 'sm'}"
-  class:bx--overflow-menu--xl="{size === 'xl'}"
+  class:bx--overflow-menu--lg="{size === 'lg'}"
   {...$$restProps}
   on:click
   on:click="{({ target }) => {
@@ -255,7 +255,7 @@
       class:bx--overflow-menu-options--open="{open}"
       class:bx--overflow-menu-options--light="{light}"
       class:bx--overflow-menu-options--sm="{size === 'sm'}"
-      class:bx--overflow-menu-options--xl="{size === 'xl'}"
+      class:bx--overflow-menu-options--lg="{size === 'lg'}"
       class:bx--breadcrumb-menu-options="{!!ctxBreadcrumbItem}"
       class="{menuOptionsClass}"
     >

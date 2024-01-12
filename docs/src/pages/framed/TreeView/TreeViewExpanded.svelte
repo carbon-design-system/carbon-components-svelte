@@ -49,9 +49,9 @@
 <TreeView
   labelText="Cloud Products"
   children="{children}"
-  bind:activeId
-  bind:selectedIds
-  bind:expandedIds
+  bind:activeId="{activeId}"
+  bind:selectedIds="{selectedIds}"
+  bind:expandedIds="{expandedIds}"
   on:select="{({ detail }) => console.log('select', detail)}"
   on:toggle="{({ detail }) => console.log('toggle', detail)}"
   on:focus="{({ detail }) => console.log('focus', detail)}"
@@ -63,6 +63,6 @@
 
 <style>
   div {
-    margin-top: var(--cds-spacing-05);
+    margin-top: var(--bx-spacing-05);
   }
 </style>

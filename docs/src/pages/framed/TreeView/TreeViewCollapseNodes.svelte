@@ -59,13 +59,13 @@
 
 <TreeView
   bind:this="{treeview}"
-  bind:expandedIds
+  bind:expandedIds="{expandedIds}"
   labelText="Cloud Products"
   children="{children}"
 />
 
 <style>
   div {
-    margin-bottom: var(--cds-spacing-05);
+    margin-bottom: var(--bx-spacing-05);
   }
 </style>

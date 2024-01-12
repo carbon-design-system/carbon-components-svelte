@@ -6,7 +6,11 @@
   let selected = values[1];
 </script>
 
-<TileGroup legend="Service pricing tiers" name="plan" bind:selected>
+<TileGroup
+  legend="Service pricing tiers"
+  name="plan"
+  bind:selected="{selected}"
+>
   {#each values as value}
     <RadioTile value="{value}">{value}</RadioTile>
   {/each}
@@ -26,6 +30,6 @@
 
 <style>
   div {
-    margin: var(--cds-spacing-05) 0;
+    margin: var(--bx-spacing-05) 0;
   }
 </style>

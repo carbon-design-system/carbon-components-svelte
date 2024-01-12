@@ -9,7 +9,7 @@
 
   /**
    * Specify the size of the accordion
-   * @type {"sm" | "xl"}
+   * @type {"sm" | "lg"}
    */
   export let size = undefined;
 
@@ -48,7 +48,7 @@
     class:bx--accordion--start="{align === 'start'}"
     class:bx--accordion--end="{align === 'end'}"
     class:bx--accordion--sm="{size === 'sm'}"
-    class:bx--accordion--xl="{size === 'xl'}"
+    class:bx--accordion--lg="{size === 'lg' || size === 'xl'}"
     {...$$restProps}
     on:click
     on:mouseover

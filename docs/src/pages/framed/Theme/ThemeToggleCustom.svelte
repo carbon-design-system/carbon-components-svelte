@@ -5,7 +5,7 @@
 <Theme
   render="toggle"
   toggle="{{
-    themes: ['g10', 'g80'],
+    themes: ['g10', 'g90'],
     labelA: 'Enable dark mode',
     labelB: 'Enable dark mode',
     hideLabel: true,

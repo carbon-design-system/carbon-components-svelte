@@ -26,7 +26,7 @@
 
 <TextInput inline labelText="User name" placeholder="Enter user name..." />
 
-<TextInput size="xl" labelText="User name" placeholder="Enter user name..." />
+<TextInput size="lg" labelText="User name" placeholder="Enter user name..." />
 
 <TextInput size="sm" labelText="User name" placeholder="Enter user name..." />
 

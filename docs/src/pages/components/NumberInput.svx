@@ -51,9 +51,9 @@ Set `value` to `null` to denote "no value."
 
 <NumberInput readonly label="Clusters" value={0} />
 
-## Extra-large size
+## Large size
 
-<NumberInput size="xl" label="Clusters" value={0} />
+<NumberInput size="lg" label="Clusters" value={0} />
 
 ## Small size
 

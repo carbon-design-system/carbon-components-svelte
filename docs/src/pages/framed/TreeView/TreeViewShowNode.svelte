@@ -28,7 +28,7 @@
   ];
 </script>
 
-<ButtonSet style="margin-bottom: var(--cds-spacing-05)">
+<ButtonSet style="margin-bottom: var(--bx-spacing-05)">
   {#each [nodeSpark, nodeBlockchain] as { id, text }}
     <Button
       on:click="{() => {

@@ -45,11 +45,10 @@ pnpm i -D carbon-components-svelte
 
 ### Styling
 
-Before importing components, you will need to first apply Carbon component styles. The Carbon Design System supports five themes (2 light, 3 dark).
+Before importing components, you will need to first apply Carbon component styles. The Carbon Design System supports four themes (2 light, 2 dark).
 
 - **white.css**: Default Carbon theme (light)
 - **g10.css**: Gray 10 theme (light)
-- **g80.css**: Gray 80 theme (dark)
 - **g90.css**: Gray 90 theme (dark)
 - **g100.css**: Gray 100 theme (dark)
 - **all.css**: All themes (White, Gray 10, Gray 90, Gray 100) using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
@@ -60,7 +59,6 @@ The compiled CSS is generated from the following `.scss` files:
 
 - [css/white.scss](css/white.scss)
 - [css/g10.scss](css/g10.scss)
-- [css/g80.scss](css/g80.scss)
 - [css/g90.scss](css/g90.scss)
 - [css/g100.scss](css/g100.scss)
 - [css/all.scss](css/all.scss)
@@ -73,9 +71,6 @@ import "carbon-components-svelte/css/white.css";
 
 // Gray 10 theme
 import "carbon-components-svelte/css/g10.css";
-
-// Gray 80 theme
-import "carbon-components-svelte/css/g80.css";
 
 // Gray 90 theme
 import "carbon-components-svelte/css/g90.css";
@@ -147,7 +142,7 @@ Programmatically switch between each of the five Carbon themes by setting the "t
 
 ```html
 <script>
-  let theme = "white"; // "white" | "g10" | "g80" | "g90" | "g100"
+  let theme = "white"; // "white" | "g10" | "g90" | "g100"
 
   $: document.documentElement.setAttribute("theme", theme);
 </script>

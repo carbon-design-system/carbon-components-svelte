@@ -19,7 +19,5 @@
   class:bx--aspect-ratio--1x2="{ratio === '1x2'}"
   {...$$restProps}
 >
-  <div class:bx--aspect-ratio--object="{true}">
-    <slot />
-  </div>
+  <slot />
 </div>

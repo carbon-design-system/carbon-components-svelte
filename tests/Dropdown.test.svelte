@@ -82,7 +82,7 @@
 />
 
 <Dropdown
-  size="xl"
+  size="lg"
   titleText="Contact"
   selectedId="0"
   items="{[

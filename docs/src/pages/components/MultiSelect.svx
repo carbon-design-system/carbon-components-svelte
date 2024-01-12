@@ -37,7 +37,7 @@ To prevent alphabetical item ordering, pass an empty function to the `sortItem` 
 <MultiSelect titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}" 
+    {id: "2", text: "Fax"}]}"
     sortItem="{() => {}}"
   />
 
@@ -58,7 +58,7 @@ To select (or bind) items, pass an array of item ids to `selectedIds`.
 <MultiSelect selectedIds="{["0", "1"]}" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}" 
+    {id: "2", text: "Fax"}]}"
   />
 
 ## Multiple multi-select dropdowns
@@ -140,9 +140,9 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
     {id: "2", text: "Fax"}]}"
   />
 
-## Extra-large size
+## Large size
 
-<MultiSelect size="xl" titleText="Contact" label="Select contact methods..."
+<MultiSelect size="lg" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"

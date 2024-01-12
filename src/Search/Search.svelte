@@ -13,9 +13,9 @@
 
   /**
    * Specify the size of the search input
-   * @type {"sm" | "lg" | "xl"}
+   * @type {"sm" | "md" | "lg"}
    */
-  export let size = "xl";
+  export let size = "md";
 
   /** Specify the class name passed to the outer div element */
   export let searchClass = "";
@@ -97,8 +97,8 @@
     class:bx--search--light="{light}"
     class:bx--search--disabled="{disabled}"
     class:bx--search--sm="{size === 'sm'}"
+    class:bx--search--md="{size === 'md'}"
     class:bx--search--lg="{size === 'lg'}"
-    class:bx--search--xl="{size === 'xl'}"
     class:bx--search--expandable="{expandable}"
     class:bx--search--expanded="{expanded}"
     class="{searchClass}"
@@ -167,7 +167,7 @@
         dispatch('clear');
       }}"
     >
-      <svelte:component this="{Close}" size="{size === 'xl' ? 20 : 16}" />
+      <Close />
     </button>
   </div>
 {/if}

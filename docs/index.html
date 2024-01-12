@@ -9,7 +9,7 @@
       try {
         const theme = localStorage.getItem("theme");
 
-        if (["white", "g10", "g80", "g90", "g100"].includes(theme)) {
+        if (["white", "g10", "g90", "g100"].includes(theme)) {
           document.documentElement.setAttribute("theme", theme);
           document.documentElement.style.setProperty("color-scheme", ["white", "g10"].includes(theme) ? "light" : "dark");
         }

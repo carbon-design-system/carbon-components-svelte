@@ -34,7 +34,7 @@
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-<OverflowMenu size="xl">
+<OverflowMenu size="lg">
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem
     href="https://cloud.ibm.com/docs/api-gateway/"

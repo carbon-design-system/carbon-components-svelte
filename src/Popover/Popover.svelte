@@ -46,7 +46,7 @@
 
 <div
   bind:this="{ref}"
-  class:bx--popover="{true}"
+  class:bx--popover-container="{true}"
   class:bx--popover--caret="{caret}"
   class:bx--popover--light="{light}"
   class:bx--popover--high-contrast="{highContrast}"
@@ -67,7 +67,5 @@
   style:position="{relative ? "relative" : undefined}"
   {...$$restProps}
 >
-  <div class:bx--popover-contents="{true}">
-    <slot />
-  </div>
+  <slot />
 </div>
