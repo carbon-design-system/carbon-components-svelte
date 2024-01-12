@@ -33,6 +33,4 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          npm install --force
-          npm run build:docs & npm run build:lib
           npm publish --provenance --access public --tag next
