@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-next.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.8...v1.0.0-next.0) (2024-01-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* initial pre-release - Carbon v11 styles (#1881)
+
+### Features
+
+* initial pre-release - Carbon v11 styles ([#1881](https://github.com/carbon-design-system/carbon-components-svelte/issues/1881)) ([b807a34](https://github.com/carbon-design-system/carbon-components-svelte/commit/b807a3437deee96d74839960344d8e40a1bc9164)), closes [#1872](https://github.com/carbon-design-system/carbon-components-svelte/issues/1872)
+
 ### [0.82.8](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.7...v0.82.8) (2024-01-10)
 
 ### Bug Fixes
