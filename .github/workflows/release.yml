@@ -15,13 +15,22 @@ jobs:
         with:
           node-version: "18.x"
           registry-url: "https://registry.npmjs.org"
-      - name: Publish package
+      - name: Build
+        run: |
+          npm install --force
+          npm run build:docs & npm run build:lib
+      - name: Publish package (stable)
+        if: ${{ ! contains(github.ref, '-next') }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
         # Currently, only npm supports publishing packages with provenance
         # https://docs.npmjs.com/generating-provenance-statements
         run: |
-          npm install --force
-          npm run build:docs & npm run build:lib
           npm publish --provenance --access public
+      - name: Publish package (next)
+        if: ${{ contains(github.ref, '-next') }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          npm publish --provenance --access public --tag next
