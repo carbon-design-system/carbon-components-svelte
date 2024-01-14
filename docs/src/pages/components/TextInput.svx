@@ -9,35 +9,35 @@ components: ["TextInput", "TextInputSkeleton"]
 
 ## Default
 
-<TextInput labelText="User name" placeholder="Enter user name..." />
+<TextInput labelText="Username" placeholder="Enter username..." />
 
 ## With helper text
 
-<TextInput labelText="User name" helperText="Your user name is associated with your email" placeholder="Enter user name..." />
+<TextInput labelText="Username" helperText="Your username is associated with your email" placeholder="Enter username..." />
 
 ## Hidden label
 
-<TextInput hideLabel labelText="User name" placeholder="Enter user name..." />
+<TextInput hideLabel labelText="Username" placeholder="Enter username..." />
 
 ## Light variant
 
-<TextInput light labelText="User name" placeholder="Enter user name..." />
+<TextInput light labelText="Username" placeholder="Enter username..." />
 
 ## Inline variant
 
-<TextInput inline labelText="User name" placeholder="Enter user name..." />
+<TextInput inline labelText="Username" placeholder="Enter username..." />
 
 ## Read-only variant
 
-<TextInput readonly labelText="User name" value="IBM" />
+<TextInput readonly labelText="Username" value="IBM" />
 
 ## Large size
 
-<TextInput size="lg" labelText="User name" placeholder="Enter user name..." />
+<TextInput size="lg" labelText="Username" placeholder="Enter username..." />
 
 ## Small size
 
-<TextInput size="sm" labelText="User name" placeholder="Enter user name..." />
+<TextInput size="sm" labelText="Username" placeholder="Enter username..." />
 
 ## Character Counter
 
@@ -45,15 +45,15 @@ components: ["TextInput", "TextInputSkeleton"]
 
 ## Invalid state
 
-<TextInput invalid invalidText="User name is already taken. Please try another." labelText="User name" placeholder="Enter user name..." />
+<TextInput invalid invalidText="Username is already taken. Please try another." labelText="Username" placeholder="Enter username..." />
 
 ## Warning state
 
-<TextInput warn warnText="Your user name is different from your log in ID." labelText="User name" placeholder="Enter user name..." />
+<TextInput warn warnText="Your username is different from your log in ID." labelText="Username" placeholder="Enter username..." />
 
 ## Disabled state
 
-<TextInput disabled labelText="User name" placeholder="Enter user name..." />
+<TextInput disabled labelText="Username" placeholder="Enter username..." />
 
 ## Skeleton
 

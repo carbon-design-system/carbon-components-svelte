@@ -1,20 +1,17 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["input"];
+export interface TextInputProps {
+  /**
+   * Set to "char" to enable display the character counter or "word" to display the word count.
+   * @default undefined
+   */
+  counter?: undefined;
 
-export interface TextInputProps extends RestProps {
   /**
    * Set to `true` to disable the input
    * @default false
    */
   disabled?: boolean;
-
-  /**
-   * Set to "char" to enable display the character counter or "word" to display the word count.
-   * @default undefined
-   */
-  counter?: "char" | "word";
 
   /**
    * Specify the helper text
@@ -129,14 +126,22 @@ export interface TextInputProps extends RestProps {
    */
   warnText?: string;
 
-  [key: `data-${string}`]: any;
+  /**
+   * Set HTML attributes on the `label` element
+   * @default {}
+   */
+  labelAttributes?: Record<string, string>;
+
+  /**
+   * Set HTML attributes on the `input` element
+   * @default {}
+   */
+  inputAttributes?: Record<string, string>;
 }
 
 export default class TextInput extends SvelteComponentTyped<
   TextInputProps,
   {
-    change: CustomEvent<null | number | string>;
-    input: CustomEvent<null | number | string>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
@@ -146,6 +151,8 @@ export default class TextInput extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
     paste: DocumentAndElementEventHandlersEventMap["paste"];
+    input: CustomEvent<any>;
+    change: CustomEvent<any>;
   },
-  { labelText: {} }
+  { helperText: {}; labelText: {} }
 > {}

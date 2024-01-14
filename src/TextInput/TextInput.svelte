@@ -4,14 +4,14 @@
    * @event {null | number | string} input
    */
 
-  /** Set to `true` to disable the input */
-  export let disabled = false;
-
   /**
    * Set to "char" to enable display the character counter or "word" to display the word count.
    * @type {"char" | "word"}
    */
   export let counter = undefined;
+
+  /** Set to `true` to disable the input */
+  export let disabled = false;
 
   /** Specify the helper text */
   export let helperText = "";
@@ -86,10 +86,21 @@
   /** Specify the warning state text */
   export let warnText = "";
 
+  /**
+   * Set HTML attributes on the `label` element
+   * @type {Record<string, string>}
+   */
+  export let labelAttributes = {};
+
+  /**
+   * Set HTML attributes on the `input` element
+   * @type {Record<string, string>}
+   */
+  export let inputAttributes = {};
+
   import { createEventDispatcher, getContext } from "svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import EditOff from "../icons/EditOff.svelte";
 
   const ctx = getContext("Form");
   const dispatch = createEventDispatcher();
@@ -154,6 +165,7 @@
           class:bx--label--inline--sm="{size === 'sm'}"
           class:bx--label--inline--md="{size === 'md'}"
           class:bx--label--inline--lg="{size === 'lg' || size === 'xl'}"
+          {...labelAttributes}
         >
           <slot name="labelText">
             {labelText}
@@ -193,6 +205,7 @@
         class:bx--label--inline-md="{inline && size === 'md'}"
         class:bx--label--inline-lg="{inline &&
           (size === 'lg' || size === 'xl')}"
+        {...labelAttributes}
       >
         <slot name="labelText">
           {labelText}
@@ -266,7 +279,7 @@
         class:bx--layout--size-sm="{size === 'sm'}"
         class:bx--layout--size-md="{size === 'md'}"
         class:bx--layout--size-lg="{size === 'lg' || size === 'xl'}"
-        {...$$restProps}
+        {...inputAttributes}
         on:change="{onChange}"
         on:input="{onInput}"
         on:keydown
