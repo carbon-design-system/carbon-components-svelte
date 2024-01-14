@@ -128,7 +128,7 @@
     if (counter === "char") {
       count = value.length;
     } else if (counter === "word") {
-      count = value.split(/\b/).length - 1;
+      count = value.split(/\b\w+\b/).length - 1;
     }
   };
 
