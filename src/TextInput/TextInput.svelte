@@ -168,13 +168,15 @@
           </div>
         {/if}
       {/if}
-      {#if !isFluid && helperText}
+      {#if !isFluid && (helperText || $$slots.helperText)}
         <div
           class:bx--form__helper-text="{true}"
           class:bx--form__helper-text--disabled="{disabled}"
           class:bx--form__helper-text--inline="{inline}"
         >
-          {helperText}
+          <slot name="helperText">
+            {helperText}
+          </slot>
         </div>
       {/if}
     </div>
@@ -285,14 +287,16 @@
         <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
       {/if}
     </div>
-    {#if !invalid && !warn && !isFluid && !inline && helperText}
+    {#if !invalid && !warn && !isFluid && !inline && (helperText || $$slots.helperText)}
       <div
         id="{helperId}"
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
         class:bx--form__helper-text--inline="{inline}"
       >
-        {helperText}
+        <slot name="helperText">
+          {helperText}
+        </slot>
       </div>
     {/if}
     {#if !isFluid && invalid}
