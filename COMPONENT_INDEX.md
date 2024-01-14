@@ -4251,27 +4251,29 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                        |
-| :--------- | :--------- | :-------------------------------------------- |
-| change     | dispatched | <code>null &#124; number &#124; string</code> |
-| input      | dispatched | <code>null &#124; number &#124; string</code> |
-| click      | forwarded  | --                                            |
-| mouseover  | forwarded  | --                                            |
-| mouseenter | forwarded  | --                                            |
-| mouseleave | forwarded  | --                                            |
-| keydown    | forwarded  | --                                            |
-| keyup      | forwarded  | --                                            |
-| focus      | forwarded  | --                                            |
-| blur       | forwarded  | --                                            |
-| paste      | forwarded  | --                                            |
+| Event name   | Type       | Detail                                        |
+| :----------- | :--------- | :-------------------------------------------- |
+| change       | dispatched | <code>null &#124; number &#124; string</code> |
+| input        | dispatched | <code>null &#124; number &#124; string</code> |
+| click        | forwarded  | --                                            |
+| pointerup    | forwarded  | --                                            |
+| pointerover  | forwarded  | --                                            |
+| pointerenter | forwarded  | --                                            |
+| pointerleave | forwarded  | --                                            |
+| keydown      | forwarded  | --                                            |
+| keyup        | forwarded  | --                                            |
+| focus        | forwarded  | --                                            |
+| blur         | forwarded  | --                                            |
+| paste        | forwarded  | --                                            |
 
 ## `TextInputSkeleton`
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                          |
-| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ------------------------------------ |
-| hideLabel | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to hide the label text |
+| Prop name     | Required | Kind             | Reactive | Type                                | Default value      | Description                                                |
+| :------------ | :------- | :--------------- | :------- | ----------------------------------- | ------------------ | ---------------------------------------------------------- |
+| hideLabel     | No       | <code>let</code> | No       | <code>boolean</code>                | <code>false</code> | Set to `true` to hide the label text                       |
+| divAttributes | No       | <code>let</code> | No       | <code>Record<string, string></code> | <code>{}</code>    | Specify the div HTML attributes for the skeleton container |
 
 ### Slots
 
@@ -4279,12 +4281,13 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name   | Type      | Detail |
+| :----------- | :-------- | :----- |
+| click        | forwarded | --     |
+| pointerup    | forwarded | --     |
+| pointerover  | forwarded | --     |
+| pointerenter | forwarded | --     |
+| pointerleave | forwarded | --     |
 
 ## `Theme`
 

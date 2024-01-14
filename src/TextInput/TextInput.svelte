@@ -149,9 +149,10 @@
   class:bx--text-input-wrapper--light="{light}"
   class:bx--text-input-wrapper--readonly="{readonly}"
   on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
+  on:pointerup
+  on:pointerover
+  on:pointerenter
+  on:pointerleave
 >
   {#if inline}
     <div class:bx--text-input__label-helper-wrapper="{true}">

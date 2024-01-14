@@ -145,9 +145,10 @@ export default class TextInput extends SvelteComponentTyped<
     change: CustomEvent<null | number | string>;
     input: CustomEvent<null | number | string>;
     click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
+    pointerup: WindowEventMap["pointerup"];
+    pointerover: WindowEventMap["pointerover"];
+    pointerenter: WindowEventMap["pointerenter"];
+    pointerleave: WindowEventMap["pointerleave"];
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];

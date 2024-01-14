@@ -12997,9 +12997,10 @@
           "detail": "null | number | string"
         },
         { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "pointerup", "element": "div" },
+        { "type": "forwarded", "name": "pointerover", "element": "div" },
+        { "type": "forwarded", "name": "pointerenter", "element": "div" },
+        { "type": "forwarded", "name": "pointerleave", "element": "div" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
@@ -13023,18 +13024,30 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "divAttributes",
+          "kind": "let",
+          "description": "Specify the div HTML attributes for the skeleton container",
+          "type": "Record<string, string>",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
       "slots": [],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
+        { "type": "forwarded", "name": "pointerup", "element": "div" },
+        { "type": "forwarded", "name": "pointerover", "element": "div" },
+        { "type": "forwarded", "name": "pointerenter", "element": "div" },
+        { "type": "forwarded", "name": "pointerleave", "element": "div" }
       ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "typedefs": []
     },
     {
       "moduleName": "Theme",
