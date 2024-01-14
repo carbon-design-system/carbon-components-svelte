@@ -200,7 +200,7 @@
         <div
           class:bx--label="{true}"
           class:bx--text-input__label-counter="{true}"
-          class:fluid-form-fix="{isFluid}"
+          class:fluid-form-fix__label-counter="{isFluid}"
         >
           {count}/{maxCount}
         </div>
@@ -219,7 +219,14 @@
     >
       {#if !readonly}
         {#if invalid}
-          <WarningFilled class="bx--text-input__invalid-icon" />
+          {#if isFluid && invalidText.length === 0}
+            <WarningFilled
+              class="bx--text-input__invalid-icon"
+              style="inset-block-start: 3rem;"
+            />
+          {:else}
+            <WarningFilled class="bx--text-input__invalid-icon" />
+          {/if}
         {/if}
         {#if !invalid && warn}
           <WarningAltFilled
@@ -300,7 +307,7 @@
 </div>
 
 <style>
-  .fluid-form-fix {
+  .fluid-form-fix__label-counter {
     right: 0;
     inset-inline-start: unset;
     padding-right: 1rem;
