@@ -5,7 +5,7 @@ export interface TextInputProps {
    * Set to "char" to enable display the character counter or "word" to display the word count.
    * @default undefined
    */
-  counter?: undefined;
+  counter?: "char" | "word";
 
   /**
    * Set to `true` to disable the input
@@ -142,6 +142,8 @@ export interface TextInputProps {
 export default class TextInput extends SvelteComponentTyped<
   TextInputProps,
   {
+    change: CustomEvent<null | number | string>;
+    input: CustomEvent<null | number | string>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
@@ -151,8 +153,6 @@ export default class TextInput extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
     paste: DocumentAndElementEventHandlersEventMap["paste"];
-    input: CustomEvent<any>;
-    change: CustomEvent<any>;
   },
-  { helperText: {}; labelText: {} }
+  { helperText: {}; invalidText: {}; labelText: {}; warnText: {} }
 > {}

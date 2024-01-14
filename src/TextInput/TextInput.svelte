@@ -293,11 +293,15 @@
       {/if}
       {#if isFluid && !inline && invalid}
         <div class:bx--form-requirement="{true}" id="{errorId}">
-          {invalidText}
+          <slot name="invalidText">
+            {invalidText}
+          </slot>
         </div>
       {/if}
       {#if isFluid && !inline && warn}
-        <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
+        <div class:bx--form-requirement="{true}" id="{warnId}">
+          <slot name="warnText">{warnText}</slot>
+        </div>
       {/if}
     </div>
     {#if !invalid && !warn && !isFluid && !inline && (helperText || $$slots.helperText)}
@@ -314,11 +318,15 @@
     {/if}
     {#if !isFluid && invalid}
       <div class:bx--form-requirement="{true}" id="{errorId}">
-        {invalidText}
+        <slot name="invalidText">
+          {invalidText}
+        </slot>
       </div>
     {/if}
     {#if !isFluid && !invalid && warn}
-      <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
+      <div class:bx--form-requirement="{true}" id="{warnId}">
+        <slot name="warnText">{warnText}</slot>
+      </div>
     {/if}
   </div>
 </div>

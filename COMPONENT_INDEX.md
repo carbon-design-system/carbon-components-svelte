@@ -4219,7 +4219,7 @@ None.
 | :-------------- | :------- | :--------------- | :------- | --------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | value           | No       | <code>let</code> | Yes      | <code>null &#124; number &#124; string</code> | <code>""</code>                                  | Specify the input value<br />`value` will be set to `null` if `type = "number"` and the value is empty                                                                                                                                                                                                                                |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>     | <code>null</code>                                | Obtain a reference to the input HTML element                                                                                                                                                                                                                                                                                          |
-| counter         | No       | <code>let</code> | No       | --                                            | <code>undefined</code>                           | Set to "char" to enable display the character counter or "word" to display the word count.                                                                                                                                                                                                                                            |
+| counter         | No       | <code>let</code> | No       | <code>"char" &#124; "word"</code>             | <code>undefined</code>                           | Set to "char" to enable display the character counter or "word" to display the word count.                                                                                                                                                                                                                                            |
 | disabled        | No       | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to disable the input                                                                                                                                                                                                                                                                                                    |
 | helperText      | No       | <code>let</code> | No       | <code>string</code>                           | <code>""</code>                                  | Specify the helper text                                                                                                                                                                                                                                                                                                               |
 | hideLabel       | No       | <code>let</code> | No       | <code>boolean</code>                          | <code>false</code>                               | Set to `true` to visually hide the label text                                                                                                                                                                                                                                                                                         |
@@ -4242,26 +4242,28 @@ None.
 
 ### Slots
 
-| Slot name  | Default | Props | Fallback                  |
-| :--------- | :------ | :---- | :------------------------ |
-| helperText | No      | --    | <code>{helperText}</code> |
-| labelText  | No      | --    | <code>{labelText}</code>  |
+| Slot name   | Default | Props | Fallback                   |
+| :---------- | :------ | :---- | :------------------------- |
+| helperText  | No      | --    | <code>{helperText}</code>  |
+| invalidText | No      | --    | <code>{invalidText}</code> |
+| labelText   | No      | --    | <code>{labelText}</code>   |
+| warnText    | No      | --    | <code>{warnText}</code>    |
 
 ### Events
 
-| Event name | Type       | Detail |
-| :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
-| keydown    | forwarded  | --     |
-| keyup      | forwarded  | --     |
-| focus      | forwarded  | --     |
-| blur       | forwarded  | --     |
-| paste      | forwarded  | --     |
-| input      | dispatched | --     |
-| change     | dispatched | --     |
+| Event name | Type       | Detail                                        |
+| :--------- | :--------- | :-------------------------------------------- |
+| change     | dispatched | <code>null &#124; number &#124; string</code> |
+| input      | dispatched | <code>null &#124; number &#124; string</code> |
+| click      | forwarded  | --                                            |
+| mouseover  | forwarded  | --                                            |
+| mouseenter | forwarded  | --                                            |
+| mouseleave | forwarded  | --                                            |
+| keydown    | forwarded  | --                                            |
+| keyup      | forwarded  | --                                            |
+| focus      | forwarded  | --                                            |
+| blur       | forwarded  | --                                            |
+| paste      | forwarded  | --                                            |
 
 ## `TextInputSkeleton`
 

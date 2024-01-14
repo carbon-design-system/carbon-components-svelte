@@ -12701,6 +12701,7 @@
           "name": "counter",
           "kind": "let",
           "description": "Set to \"char\" to enable display the character counter or \"word\" to display the word count.",
+          "type": "\"char\" | \"word\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12966,13 +12967,35 @@
           "slot_props": "{}"
         },
         {
+          "name": "invalidText",
+          "default": false,
+          "fallback": "{invalidText}",
+          "slot_props": "{}"
+        },
+        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "{}"
+        },
+        {
+          "name": "warnText",
+          "default": false,
+          "fallback": "{warnText}",
+          "slot_props": "{}"
         }
       ],
       "events": [
+        {
+          "type": "dispatched",
+          "name": "change",
+          "detail": "null | number | string"
+        },
+        {
+          "type": "dispatched",
+          "name": "input",
+          "detail": "null | number | string"
+        },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
@@ -12981,9 +13004,7 @@
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
-        { "type": "forwarded", "name": "paste", "element": "input" },
-        { "type": "dispatched", "name": "input" },
-        { "type": "dispatched", "name": "change" }
+        { "type": "forwarded", "name": "paste", "element": "input" }
       ],
       "typedefs": []
     },
