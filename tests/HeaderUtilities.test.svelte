@@ -30,7 +30,7 @@
     <SkipToContent />
   </div>
   <HeaderUtilities>
-    <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust}" />
+    <HeaderGlobalAction iconDescription="Settings" icon="{SettingsAdjust}" />
     <HeaderAction
       bind:isOpen
       on:open
