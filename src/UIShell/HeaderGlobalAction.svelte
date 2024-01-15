@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @extends {"../Button/Button.svelte"} ButtonProps
+   */
+
   /** Set to `true` to use the active variant */
   export let isActive = false;
 
@@ -10,17 +14,18 @@
 
   /** Obtain a reference to the HTML button element */
   export let ref = null;
+
+  import Button from "../Button/Button.svelte";
+
+  $: buttonClass = [
+    "bx--header__action",
+    isActive && " bx--header__action--active",
+    $$restProps.class,
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
-<button
-  type="button"
-  bind:this="{ref}"
-  class:bx--header__action="{true}"
-  class:bx--header__action--active="{isActive}"
-  {...$$restProps}
-  on:click
->
-  <slot>
-    <svelte:component this="{icon}" size="{20}" />
-  </slot>
-</button>
+<Button bind:this="{ref}" class="{buttonClass}" {...$$restProps} on:click>
+  <svelte:component this="{icon}" slot="icon" size="{20}" />
+</Button>
