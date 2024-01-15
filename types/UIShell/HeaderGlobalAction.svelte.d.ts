@@ -18,13 +18,11 @@ export interface HeaderGlobalActionProps extends ButtonProps {
    * Obtain a reference to the HTML button element
    * @default null
    */
-  ref?: null | HTMLButtonElement;
-
-  [key: `data-${string}`]: any;
+  ref?: undefined;
 }
 
 export default class HeaderGlobalAction extends SvelteComponentTyped<
   HeaderGlobalActionProps,
   { click: WindowEventMap["click"] },
-  { default: {} }
+  {}
 > {}

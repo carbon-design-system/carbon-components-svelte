@@ -379,7 +379,7 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 | size             | No       | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small" &#124; "lg" &#124; "xl"</code>                                                              | <code>"default"</code> | Specify the size of button                                                                                                                                                                    |
 | expressive       | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to use Carbon's expressive typesetting                                                                                                                                          |
 | isSelected       | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                      | <code>false</code>     | Set to `true` to enable the selected state for an icon-only, ghost button                                                                                                                     |
-| icon             | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code>                                                                                 | <code>undefined</code> | Specify the icon to render                                                                                                                                                                    |
+| icon             | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code>                                                                                 | <code>undefined</code> | Specify the icon to render<br />Alternatively, use the named slot "icon" (e.g., `&lt;Icon slot="icon" size="{20}" /&gt;`)                                                                     |
 | iconDescription  | No       | <code>let</code> | No       | <code>string</code>                                                                                                                       | <code>undefined</code> | Specify the ARIA label for the button icon                                                                                                                                                    |
 | tooltipAlignment | No       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                                                                                         | <code>"center"</code>  | Set the alignment of the tooltip relative to the icon.<br />Only applies to icon-only buttons                                                                                                 |
 | tooltipPosition  | No       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>                                                                           | <code>"bottom"</code>  | Set the position of the tooltip relative to the icon                                                                                                                                          |
@@ -395,6 +395,7 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 | Slot name | Default | Props                                                                                                                                           | Fallback |
 | :-------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------- | :------- |
 | --        | Yes     | <code>{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } } </code> | --       |
+| icon      | No      | --                                                                                                                                              | --       |
 
 ### Events
 
@@ -1666,15 +1667,13 @@ None.
 
 | Prop name | Required | Kind             | Reactive | Type                                                      | Default value          | Description                                   |
 | :-------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ---------------------- | --------------------------------------------- |
-| ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                | <code>null</code>      | Obtain a reference to the HTML button element |
+| ref       | No       | <code>let</code> | Yes      | --                                                        | <code>null</code>      | Obtain a reference to the HTML button element |
 | isActive  | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to use the active variant       |
 | icon      | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code> | <code>undefined</code> | Specify the icon to render                    |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                          |
-| :-------- | :------ | :---- | :---------------------------------------------------------------- |
-| --        | Yes     | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code> |
+None.
 
 ### Events
 
