@@ -27,6 +27,8 @@
 
   /**
    * Specify the icon to render
+   * Alternatively, use the named slot "icon" (e.g., `<Icon slot="icon" size="{20}" />`)
+   *
    * @type {typeof import("svelte").SvelteComponent<any>}
    */
   export let icon = undefined;
@@ -85,7 +87,12 @@
   $: if (ctx && ref) {
     ctx.declareRef(ref);
   }
-  $: hasIconOnly = icon && !$$slots.default;
+  $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
+  $: iconProps = {
+    "aria-hidden": "true",
+    class: "bx--btn__icon",
+    "aria-label": iconDescription,
+  };
   $: buttonProps = {
     type: href && !disabled ? undefined : type,
     tabindex,
@@ -158,12 +165,12 @@
     {#if hasIconOnly}
       <span class:bx--assistive-text="{true}">{iconDescription}</span>
     {/if}
-    <slot /><svelte:component
-      this="{icon}"
-      aria-hidden="true"
-      class="bx--btn__icon"
-      aria-label="{iconDescription}"
-    />
+    <slot />
+    {#if $$slots.icon}
+      <svelte:component this="{icon}" {...iconProps} />
+    {:else if icon}
+      <slot name="icon" {...iconProps} />
+    {/if}
   </a>
 {:else}
   <button
@@ -179,12 +186,19 @@
     {#if hasIconOnly}
       <span class:bx--assistive-text="{true}">{iconDescription}</span>
     {/if}
-    <slot /><svelte:component
-      this="{icon}"
-      aria-hidden="true"
-      class="bx--btn__icon"
-      style="{hasIconOnly ? 'margin-left: 0' : undefined}"
-      aria-label="{iconDescription}"
-    />
+    <slot />
+    {#if $$slots.icon}
+      <slot
+        name="icon"
+        style="{hasIconOnly ? 'margin-left: 0' : undefined}"
+        {...iconProps}
+      />
+    {:else if icon}
+      <svelte:component
+        this="{icon}"
+        style="{hasIconOnly ? 'margin-left: 0' : undefined}"
+        {...iconProps}
+      />
+    {/if}
   </button>
 {/if}
