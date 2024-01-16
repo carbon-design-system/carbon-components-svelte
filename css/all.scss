@@ -1,7 +1,9 @@
+$prefix: 'bx';
+
 // Use all Carbon themes
 @use '@carbon/styles/scss/config' with (
   $use-akamai-cdn: true,
-  $prefix: 'bx'
+  $prefix: $prefix
 );
 @use "@carbon/styles" as styles;
 @use "@carbon/styles/scss/utilities" as *;
@@ -22,9 +24,9 @@
   @include styles.theme(styles.$g100);
 }
 
-.bx--text-truncate-end {
+.#{$prefix}--text-truncate-end {
   @include text-truncate-end;
 }
-.bx--text-truncate-front {
+.#{$prefix}--text-truncate-front {
   @include text-truncate-front;
 }
