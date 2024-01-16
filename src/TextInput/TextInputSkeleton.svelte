@@ -4,7 +4,7 @@
 
   /**
    * Specify the div HTML attributes for the skeleton container
-   * @type {Record<string, string>}
+   * @type {import('svelte/elements').HTMLDivAttributes}
    */
   export let divAttributes = {};
 </script>

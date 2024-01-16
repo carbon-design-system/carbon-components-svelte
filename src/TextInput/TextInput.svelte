@@ -1,38 +1,21 @@
 <script>
   /**
-   * @event {null | number | string} change
-   * @event {null | number | string} input
+   * Specify the input value
+   * `value` will be set to `null` if `typeof value === "number"` and `value` is empty
+   * @type {null | number | string}
    */
+  export let value = "";
 
+  /** Obtain a reference to the input HTML element */
+  export let ref = null;
   /**
-   * Set to "char" to enable display the character counter or "word" to display the word count.
-   * @type {"char" | "word"}
+   * Set the size of the input
+   * @type {"sm" | "md" | "lg"}
    */
-  export let counter = undefined;
+  export let size = "md";
 
-  /** Set to `true` to disable the input */
-  export let disabled = false;
-
-  /** Specify the helper text */
-  export let helperText = "";
-
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
-
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
-
-  /** Set to `true` to use the inline variant */
-  export let inline = false;
-
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
-
-  /** Specify the invalid state text */
-  export let invalidText = "";
-
-  /** Specify the label text */
-  export let labelText = "";
+  /** Specify the placeholder text */
+  export let placeholder = "";
 
   /**
    * Set to `true` to enable the light variant
@@ -42,6 +25,21 @@
    */
   export let light = false;
 
+  /** Set to `true` to disable the input */
+  export let disabled = false;
+
+  /** Specify the label text */
+  export let labelText = "";
+
+  /** Set to `true` to visually hide the label text */
+  export let hideLabel = false;
+
+  /** Specify the helper text */
+  export let helperText = "";
+
+  /** Set to `true` to enable display the character counter. Requires `maxCount` to be set. */
+  export let counter = false;
+
   /**
    * Specify the maximum number of characters/words allowed
    * This is needed in order for `counter` to display
@@ -49,42 +47,35 @@
    */
   export let maxCount = undefined;
 
-  /**
-   * Specify a name attribute for the input
-   * @type {string}
-   */
-  export let name = undefined;
+  /** Set to `true` to indicate an invalid state */
+  export let invalid = false;
 
-  /** Specify the placeholder text */
-  export let placeholder = "";
-
-  /** Set to `true` to use the read-only variant */
-  export let readonly = false;
-
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
-
-  /** Set to `true` to mark the field as required */
-  export let required = false;
-
-  /**
-   * Set the size of the input
-   * @type {"sm" | "md" | "lg"}
-   */
-  export let size = 'md';
-
-  /**
-   * Specify the input value
-   * `value` will be set to `null` if `type = "number"` and the value is empty
-   * @type {null | number | string}
-   */
-  export let value = "";
+  /** Specify the invalid state text */
+  export let invalidText = "";
 
   /** Set to `true` to indicate an warning state */
   export let warn = false;
 
   /** Specify the warning state text */
   export let warnText = "";
+
+  /** Set an id for the input element */
+  export let id = "ccs-" + Math.random().toString(36);
+
+  /**
+   * Specify a name attribute for the input
+   * @type {string}
+   */
+  export let name = undefined;
+
+  /** Set to `true` to use the inline variant */
+  export let inline = false;
+
+  /** Set to `true` to mark the field as required */
+  export let required = false;
+
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
 
   /**
    * Set HTML attributes on the `label` element
@@ -98,40 +89,14 @@
    */
   export let inputAttributes = {};
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { getContext } from "svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
 
   const ctx = getContext("Form");
-  const dispatch = createEventDispatcher();
-  let count = 0;
 
-  function parse(raw) {
-    if ($$restProps.type !== "number") return raw;
-    return raw != "" ? Number(raw) : null;
-  }
-
-  /** @type {(e: Event) => void} */
-  const onInput = (e) => {
-    value = parse(e.target.value);
-    if (maxCount && value.length > maxCount) value = value.slice(0, maxCount);
-    if (counter && maxCount) updateCount();
-    dispatch("input", value);
-  };
-
-  /** @type {(e: Event) => void} */
-  const onChange = (e) => {
-    dispatch("change", parse(e.target.value));
-  };
-
-  const updateCount = () => {
-    if (counter === "char") {
-      count = value.length;
-    } else if (counter === "word") {
-      count = value.split(/\b\w+\b/).length - 1;
-    }
-  };
-
+  $: if (maxCount && value.length > maxCount) value = value.slice(0, maxCount);
+  $: count = value.length;
   $: isFluid = !!ctx && ctx.isFluid;
   $: error = invalid && !readonly;
   $: helperId = `helper-${id}`;
@@ -165,7 +130,7 @@
           class:bx--label--inline="{inline}"
           class:bx--label--inline--sm="{size === 'sm'}"
           class:bx--label--inline--md="{size === 'md'}"
-          class:bx--label--inline--lg="{size === 'lg' || size === 'xl'}"
+          class:bx--label--inline--lg="{size === 'lg'}"
           {...labelAttributes}
         >
           <slot name="labelText">
@@ -204,8 +169,7 @@
         class:bx--label--inline="{inline}"
         class:bx--label--inline-sm="{inline && size === 'sm'}"
         class:bx--label--inline-md="{inline && size === 'md'}"
-        class:bx--label--inline-lg="{inline &&
-          (size === 'lg' || size === 'xl')}"
+        class:bx--label--inline-lg="{inline && size === 'lg'}"
         {...labelAttributes}
       >
         <slot name="labelText">
@@ -276,13 +240,13 @@
         class:bx--text-input--warning="{warn}"
         class:bx--text-input--sm="{size === 'sm'}"
         class:bx--text-input--md="{size === 'md'}"
-        class:bx--text-input--lg="{size === 'lg' || size === 'xl'}"
+        class:bx--text-input--lg="{size === 'lg'}"
         class:bx--layout--size-sm="{size === 'sm'}"
         class:bx--layout--size-md="{size === 'md'}"
-        class:bx--layout--size-lg="{size === 'lg' || size === 'xl'}"
+        class:bx--layout--size-lg="{size === 'lg'}"
         {...inputAttributes}
-        on:change="{onChange}"
-        on:input="{onInput}"
+        on:change
+        on:input
         on:keydown
         on:keyup
         on:focus

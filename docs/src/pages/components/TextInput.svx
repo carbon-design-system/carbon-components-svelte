@@ -41,7 +41,7 @@ components: ["TextInput", "TextInputSkeleton"]
 
 ## Character Counter
 
-<TextInput labelText="Username" placeholder="Enter username..." maxCount={32} counter="char" />
+<TextInput labelText="Username" placeholder="Enter username..." maxCount={32} counter />
 
 ## Invalid state
 
