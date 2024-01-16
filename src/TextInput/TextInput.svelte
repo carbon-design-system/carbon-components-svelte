@@ -71,7 +71,7 @@
    * Set the size of the input
    * @type {"sm" | "md" | "lg"}
    */
-  export let size = undefined;
+  export let size = 'md';
 
   /**
    * Specify the input value
