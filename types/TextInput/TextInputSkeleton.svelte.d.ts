@@ -11,7 +11,7 @@ export interface TextInputSkeletonProps {
    * Specify the div HTML attributes for the skeleton container
    * @default {}
    */
-  divAttributes?: Record<string, string>;
+  divAttributes?: import("svelte/elements").HTMLDivAttributes;
 }
 
 export default class TextInputSkeleton extends SvelteComponentTyped<
