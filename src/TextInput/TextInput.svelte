@@ -94,7 +94,7 @@
 
   /**
    * Set HTML attributes on the `input` element
-   * @type {Record<string, string>}
+   * @type {import('svelte/elements').HTMLInputAttributes}
    */
   export let inputAttributes = {};
 
