@@ -88,7 +88,7 @@
 
   /**
    * Set HTML attributes on the `label` element
-   * @type {Record<string, string>}
+   * @type {import('svelte/elements').HTMLLabelAttributes}
    */
   export let labelAttributes = {};
 
