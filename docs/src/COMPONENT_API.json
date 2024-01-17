@@ -409,7 +409,7 @@
           "kind": "let",
           "description": "Carbon grid sizes as an object",
           "type": "Record<BreakpointSize, boolean>",
-          "value": "{     sm: false,     md: false,     lg: false,     xlg: false,     max: false,   }",
+          "value": "{\r     sm: false,\r     md: false,\r     lg: false,\r     xlg: false,\r     max: false,\r   }",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1041,7 +1041,7 @@
           "kind": "let",
           "description": "By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.\n\nProvide a custom function to override this behavior.",
           "type": "(code: string) => void",
-          "value": "async (code) => {     try {       await navigator.clipboard.writeText(code);     } catch (e) {       console.log(e);     }   }",
+          "value": "async (code) => {\r     try {\r       await navigator.clipboard.writeText(code);\r     } catch (e) {\r       console.log(e);\r     }\r   }",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1732,7 +1732,7 @@
           "kind": "function",
           "description": "Clear the combo box programmatically",
           "type": "(options?: { focus?: boolean; }) => void",
-          "value": "() => {     prevSelectedId = null;     highlightedIndex = -1;     highlightedId = undefined;     selectedId = undefined;     selectedItem = undefined;     open = false;     value = \"\";     if (options?.focus !== false) ref?.focus();   }",
+          "value": "() => {\r     prevSelectedId = null;\r     highlightedIndex = -1;\r     highlightedId = undefined;\r     selectedId = undefined;\r     selectedItem = undefined;\r     open = false;\r     value = \"\";\r     if (options?.focus !== false) ref?.focus();\r   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -2322,7 +2322,7 @@
           "kind": "let",
           "description": "Override the default copy behavior of using the navigator.clipboard.writeText API to copy text",
           "type": "(text: string) => void",
-          "value": "async (text) => {     try {       await navigator.clipboard.writeText(text);     } catch (e) {       console.log(e);     }   }",
+          "value": "async (text) => {\r     try {\r       await navigator.clipboard.writeText(text);\r     } catch (e) {\r       console.log(e);\r     }\r   }",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -3791,7 +3791,7 @@
           "kind": "const",
           "description": "Programmatically clear the uploaded files",
           "type": "() => void",
-          "value": "() => {     files = [];   }",
+          "value": "() => {\r     files = [];\r   }",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5397,7 +5397,7 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "{result.text}\n              {#if result.description}<span>– {result.description}</span>{/if}",
+          "fallback": "{result.text}\r\n              {#if result.description}<span>– {result.description}</span>{/if}",
           "slot_props": "{ result: HeaderSearchResult; index: number }"
         }
       ],
@@ -5527,7 +5527,7 @@
           "kind": "const",
           "description": "Method invoked to load the image provided a `src` value",
           "type": "(url?: string) => void",
-          "value": "(url) => {     if (image != null) image = null;     loaded = false;     error = false;     image = new Image();     image.src = url || src;     image.onload = () => (loaded = true);     image.onerror = () => (error = true);   }",
+          "value": "(url) => {\r     if (image != null) image = null;\r     loaded = false;\r     error = false;\r     image = new Image();\r     image.src = url || src;\r     image.onload = () => (loaded = true);\r     image.onerror = () => (error = true);\r   }",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6259,8 +6259,8 @@
           "name": "translationIds",
           "kind": "const",
           "description": "Default translation ids",
-          "type": "{     clearAll: \"clearAll\",     clearSelection: \"clearSelection\",   }",
-          "value": "{     clearAll: \"clearAll\",     clearSelection: \"clearSelection\",   }",
+          "type": "{\r     clearAll: \"clearAll\",\r     clearSelection: \"clearSelection\",\r   }",
+          "value": "{\r     clearAll: \"clearAll\",\r     clearSelection: \"clearSelection\",\r   }",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6411,7 +6411,7 @@
           "kind": "function",
           "description": "Remove the persisted key value from the browser's local storage",
           "type": "() => void",
-          "value": "() => {     localStorage.removeItem(key);   }",
+          "value": "() => {\r     localStorage.removeItem(key);\r   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -6423,7 +6423,7 @@
           "kind": "function",
           "description": "Clear all key values from the browser's local storage",
           "type": "() => void",
-          "value": "() => {     localStorage.clear();   }",
+          "value": "() => {\r     localStorage.clear();\r   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -7119,7 +7119,7 @@
           "kind": "let",
           "description": "Override the filtering logic\nThe default filtering is an exact string comparison",
           "type": "(item: MultiSelectItem, value: string) => string",
-          "value": "(item, value) =>     item.text.toLowerCase().includes(value.trim().toLowerCase())",
+          "value": "(item, value) =>\r     item.text.toLowerCase().includes(value.trim().toLowerCase())",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7179,7 +7179,7 @@
           "kind": "let",
           "description": "Override the sorting logic\nThe default sorting compare the item text value",
           "type": "((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)",
-          "value": "(a, b) =>     a.text.localeCompare(b.text, locale, { numeric: true })",
+          "value": "(a, b) =>\r     a.text.localeCompare(b.text, locale, { numeric: true })",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7810,7 +7810,7 @@
           "kind": "const",
           "description": "Default translation ids",
           "type": "{ increment: \"increment\"; decrement: \"decrement\" }",
-          "value": "{     increment: \"increment\",     decrement: \"decrement\",   }",
+          "value": "{\r     increment: \"increment\",\r     decrement: \"decrement\",\r   }",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8131,7 +8131,7 @@
         {
           "name": "menu",
           "default": false,
-          "fallback": "<svelte:component\n      this=\"{icon}\"\n      aria-label=\"{iconDescription}\"\n      title=\"{iconDescription}\"\n      class=\"bx--overflow-menu__icon {iconClass}\"\n    />",
+          "fallback": "<svelte:component\r\n      this=\"{icon}\"\r\n      aria-label=\"{iconDescription}\"\r\n      title=\"{iconDescription}\"\r\n      class=\"bx--overflow-menu__icon {iconClass}\"\r\n    />",
           "slot_props": "{}"
         }
       ],
@@ -8268,7 +8268,7 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "<div class:bx--overflow-menu-options__option-content=\"{true}\">\n          {text}\n        </div>",
+          "fallback": "<div class:bx--overflow-menu-options__option-content=\"{true}\">\r\n          {text}\r\n        </div>",
           "slot_props": "{}"
         }
       ],
@@ -8360,7 +8360,7 @@
           "kind": "let",
           "description": "Override the item text",
           "type": "(min: number, max: number) => string",
-          "value": "(min, max) =>     `${min}–${max} item${max === 1 ? \"\" : \"s\"}`",
+          "value": "(min, max) =>\r     `${min}–${max} item${max === 1 ? \"\" : \"s\"}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8372,7 +8372,7 @@
           "kind": "let",
           "description": "Override the item range text",
           "type": "(min: number, max: number, total: number) => string",
-          "value": "(min, max, total) =>     `${min}–${max} of ${total} item${max === 1 ? \"\" : \"s\"}`",
+          "value": "(min, max, total) =>\r     `${min}–${max} of ${total} item${max === 1 ? \"\" : \"s\"}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8456,7 +8456,7 @@
           "kind": "let",
           "description": "Override the page range text",
           "type": "(current: number, total: number) => string",
-          "value": "(current, total) =>     `of ${total} page${total === 1 ? \"\" : \"s\"}`",
+          "value": "(current, total) =>\r     `of ${total} page${total === 1 ? \"\" : \"s\"}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12698,20 +12698,9 @@
       "filePath": "src/TextInput/TextInput.svelte",
       "props": [
         {
-          "name": "size",
-          "kind": "let",
-          "description": "Set the size of the input",
-          "type": "\"sm\" | \"lg\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "value",
           "kind": "let",
-          "description": "Specify the input value.\n\n`value` will be set to `null` if type=\"number\"\nand the value is empty.",
+          "description": "Specify the input value\n`value` will be set to `null` if `typeof value === \"number\"` and `value` is empty",
           "type": "null | number | string",
           "value": "\"\"",
           "isFunction": false,
@@ -12719,6 +12708,30 @@
           "isRequired": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "ref",
+          "kind": "let",
+          "description": "Obtain a reference to the input HTML element",
+          "type": "null | HTMLInputElement",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "size",
+          "kind": "let",
+          "description": "Set the size of the input",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "value": "\"md\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         },
         {
           "name": "placeholder",
@@ -12735,7 +12748,7 @@
         {
           "name": "light",
           "kind": "let",
-          "description": "Set to `true` to enable the light variant",
+          "description": "Set to `true` to enable the light variant\nFor use on $ui-01 backgrounds only. Don't use this to make tile background color same as container background color\nThe light prop for `TextInput` has been deprecated in favor of the new `Layer` Layer component. It will be removed in the next major release\n@deprecated ",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -12750,41 +12763,6 @@
           "description": "Set to `true` to disable the input",
           "type": "boolean",
           "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "helperText",
-          "kind": "let",
-          "description": "Specify the helper text",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "id",
-          "kind": "let",
-          "description": "Set an id for the input element",
-          "type": "string",
-          "value": "\"ccs-\" + Math.random().toString(36)",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "name",
-          "kind": "let",
-          "description": "Specify a name attribute for the input",
-          "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12809,6 +12787,41 @@
           "description": "Set to `true` to visually hide the label text",
           "type": "boolean",
           "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "helperText",
+          "kind": "let",
+          "description": "Specify the helper text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "counter",
+          "kind": "let",
+          "description": "Set to `true` to enable display the character counter. Requires `maxCount` to be set.",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "maxCount",
+          "kind": "let",
+          "description": "Specify the maximum number of characters/words allowed\nThis is needed in order for `counter` to display",
+          "type": "number",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12864,23 +12877,22 @@
           "reactive": false
         },
         {
-          "name": "ref",
+          "name": "id",
           "kind": "let",
-          "description": "Obtain a reference to the input HTML element",
-          "type": "null | HTMLInputElement",
-          "value": "null",
+          "description": "Set an id for the input element",
+          "type": "string",
+          "value": "\"ccs-\" + Math.random().toString(36)",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
           "constant": false,
-          "reactive": true
+          "reactive": false
         },
         {
-          "name": "required",
+          "name": "name",
           "kind": "let",
-          "description": "Set to `true` to mark the field as required",
-          "type": "boolean",
-          "value": "false",
+          "description": "Specify a name attribute for the input",
+          "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12900,6 +12912,18 @@
           "reactive": false
         },
         {
+          "name": "required",
+          "kind": "let",
+          "description": "Set to `true` to mark the field as required",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "readonly",
           "kind": "let",
           "description": "Set to `true` to use the read-only variant",
@@ -12910,40 +12934,74 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "labelAttributes",
+          "kind": "let",
+          "description": "Set HTML attributes on the `label` element",
+          "type": "import('svelte/elements').HTMLLabelAttributes",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "inputAttributes",
+          "kind": "let",
+          "description": "Set HTML attributes on the `input` element",
+          "type": "import('svelte/elements').HTMLInputAttributes",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
       "slots": [
         {
+          "name": "helperText",
+          "default": false,
+          "fallback": "{helperText}",
+          "slot_props": "{}"
+        },
+        {
+          "name": "invalidText",
+          "default": false,
+          "fallback": "{invalidText}",
+          "slot_props": "{}"
+        },
+        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "{}"
+        },
+        {
+          "name": "warnText",
+          "default": false,
+          "fallback": "{warnText}",
+          "slot_props": "{}"
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "change",
-          "detail": "null | number | string"
-        },
-        {
-          "type": "dispatched",
-          "name": "input",
-          "detail": "null | number | string"
-        },
         { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "pointerup", "element": "div" },
+        { "type": "forwarded", "name": "pointerover", "element": "div" },
+        { "type": "forwarded", "name": "pointerenter", "element": "div" },
+        { "type": "forwarded", "name": "pointerleave", "element": "div" },
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "paste", "element": "input" }
       ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "input" }
+      "typedefs": []
     },
     {
       "moduleName": "TextInputSkeleton",
@@ -12960,18 +13018,30 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "divAttributes",
+          "kind": "let",
+          "description": "Specify the div HTML attributes for the skeleton container",
+          "type": "import('svelte/elements').HTMLDivAttributes",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
       "slots": [],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
+        { "type": "forwarded", "name": "pointerup", "element": "div" },
+        { "type": "forwarded", "name": "pointerover", "element": "div" },
+        { "type": "forwarded", "name": "pointerenter", "element": "div" },
+        { "type": "forwarded", "name": "pointerleave", "element": "div" }
       ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "typedefs": []
     },
     {
       "moduleName": "Theme",
@@ -13041,7 +13111,7 @@
           "kind": "let",
           "description": "Override the default toggle props",
           "type": "import(\"../Toggle/Toggle\").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }",
-          "value": "{     themes: [\"white\", \"g100\"],     labelA: \"\",     labelB: \"\",     labelText: \"Dark mode\",     hideLabel: false,   }",
+          "value": "{\r     themes: [\"white\", \"g100\"],\r     labelA: \"\",\r     labelB: \"\",\r     labelText: \"Dark mode\",\r     hideLabel: false,\r   }",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13053,7 +13123,7 @@
           "kind": "let",
           "description": "Override the default select props",
           "type": "import(\"../Select/Select\").SelectProps & { themes?: CarbonTheme[]; }",
-          "value": "{     themes: themeKeys,     labelText: \"Themes\",     hideLabel: false,   }",
+          "value": "{\r     themes: themeKeys,\r     labelText: \"Themes\",\r     hideLabel: false,\r   }",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13830,7 +13900,7 @@
           "kind": "let",
           "description": "Override the total items selected text",
           "type": "(totalSelected: number) => string",
-          "value": "(totalSelected) =>     `${totalSelected} item${totalSelected === 1 ? \"\" : \"s\"} selected`",
+          "value": "(totalSelected) =>\r     `${totalSelected} item${totalSelected === 1 ? \"\" : \"s\"} selected`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -14547,7 +14617,7 @@
           "kind": "function",
           "description": "Programmatically expand all nodes",
           "type": "() => void",
-          "value": "() => {     expandedIds = [...nodeIds];   }",
+          "value": "() => {\r     expandedIds = [...nodeIds];\r   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -14559,7 +14629,7 @@
           "kind": "function",
           "description": "Programmatically collapse all nodes",
           "type": "() => void",
-          "value": "() => {     expandedIds = [];   }",
+          "value": "() => {\r     expandedIds = [];\r   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -14571,7 +14641,7 @@
           "kind": "function",
           "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {     expandedIds = nodes       .filter(         (node) =>           filterNode(node) ||           node.children?.some((child) => filterNode(child) && child.children)       )       .map((node) => node.id);   }",
+          "value": "() => {\r     expandedIds = nodes\r       .filter(\r         (node) =>\r           filterNode(node) ||\r           node.children?.some((child) => filterNode(child) && child.children)\r       )\r       .map((node) => node.id);\r   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -14583,7 +14653,7 @@
           "kind": "function",
           "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {     expandedIds = nodes       .filter((node) => expandedIds.includes(node.id) && !filterNode(node))       .map((node) => node.id);   }",
+          "value": "() => {\r     expandedIds = nodes\r       .filter((node) => expandedIds.includes(node.id) && !filterNode(node))\r       .map((node) => node.id);\r   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -14595,7 +14665,7 @@
           "kind": "function",
           "description": "Programmatically show a node by `id`.\nThe matching node will be expanded, selected, and focused",
           "type": "(id: TreeNodeId) => void",
-          "value": "() => {     for (const child of children) {       const nodes = findNodeById(child, id);        if (nodes) {         const ids = nodes.map((node) => node.id);         const nodeIds = new Set(ids);          expandNodes((node) => nodeIds.has(node.id));          const lastId = ids[ids.length - 1];          activeId = lastId;         selectedIds = [lastId];          tick().then(() => {           ref?.querySelector(`[id=\"${lastId}\"]`)?.focus();         });          // Break out of the loop if the node is found.         break;       }     }   }",
+          "value": "() => {\r     for (const child of children) {\r       const nodes = findNodeById(child, id);\r \r       if (nodes) {\r         const ids = nodes.map((node) => node.id);\r         const nodeIds = new Set(ids);\r \r         expandNodes((node) => nodeIds.has(node.id));\r \r         const lastId = ids[ids.length - 1];\r \r         activeId = lastId;\r         selectedIds = [lastId];\r \r         tick().then(() => {\r           ref?.querySelector(`[id=\"${lastId}\"]`)?.focus();\r         });\r \r         // Break out of the loop if the node is found.\r         break;\r       }\r     }\r   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,

@@ -1,25 +1,27 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
-
-export interface TextInputSkeletonProps extends RestProps {
+export interface TextInputSkeletonProps {
   /**
    * Set to `true` to hide the label text
    * @default false
    */
   hideLabel?: boolean;
 
-  [key: `data-${string}`]: any;
+  /**
+   * Specify the div HTML attributes for the skeleton container
+   * @default {}
+   */
+  divAttributes?: import("svelte/elements").HTMLDivAttributes;
 }
 
 export default class TextInputSkeleton extends SvelteComponentTyped<
   TextInputSkeletonProps,
   {
     click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
+    pointerup: WindowEventMap["pointerup"];
+    pointerover: WindowEventMap["pointerover"];
+    pointerenter: WindowEventMap["pointerenter"];
+    pointerleave: WindowEventMap["pointerleave"];
   },
   {}
 > {}
