@@ -1,9 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
+import type { ButtonProps } from "../Button/Button.svelte";
 
-type RestProps = SvelteHTMLElements["button"];
-
-export interface HeaderGlobalActionProps extends RestProps {
+export interface HeaderGlobalActionProps extends ButtonProps {
   /**
    * Set to `true` to use the active variant
    * @default false
