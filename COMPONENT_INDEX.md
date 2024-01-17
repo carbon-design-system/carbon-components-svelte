@@ -1667,7 +1667,7 @@ None.
 
 | Prop name | Required | Kind             | Reactive | Type                                                      | Default value          | Description                                   |
 | :-------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ---------------------- | --------------------------------------------- |
-| ref       | No       | <code>let</code> | Yes      | --                                                        | <code>null</code>      | Obtain a reference to the HTML button element |
+| ref       | No       | <code>let</code> | Yes      | <code>HTMLButtonElement</code>                            | <code>null</code>      | Obtain a reference to the HTML button element |
 | isActive  | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to use the active variant       |
 | icon      | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code> | <code>undefined</code> | Specify the icon to render                    |
 

@@ -5104,6 +5104,7 @@
           "name": "ref",
           "kind": "let",
           "description": "Obtain a reference to the HTML button element",
+          "type": "HTMLButtonElement",
           "value": "null",
           "isFunction": false,
           "isFunctionDeclaration": false,

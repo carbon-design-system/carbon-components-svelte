@@ -12,7 +12,9 @@
    */
   export let icon = undefined;
 
-  /** Obtain a reference to the HTML button element */
+  /** Obtain a reference to the HTML button element
+   * @type {HTMLButtonElement}
+   */
   export let ref = null;
 
   import Button from "../Button/Button.svelte";
