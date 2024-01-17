@@ -171,7 +171,15 @@ The workflow is automatically triggered when pushing a tag that begins with `v` 
 
 However, maintainers must perform a few things in preparation for a release.
 
-Locally, while on `master` and the branch is clean, run `npm run release`. This command will:
+<!-- Instructions for next/* releases -->
+
+While performing a prerelease:
+
+1. manually bump `package.json`'s `version` key to your target version.
+2. ensure the `--first-release` flag is passed to the `standard-version` command.
+3. Run `npm run release` then continue below.
+
+For regular releases, while on `master` and the branch is clean, run `npm run release`. This command will:
 
 - Bump the semantic version in `package.json`
 - Generate notes in `CHANGELOG.md`

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-next.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v1.0.0-next.0...v1.0.0-next.1) (2024-01-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* TextInput v11 Styles (#1889)
+
+### Features
+
+* TextInput v11 Styles ([#1889](https://github.com/carbon-design-system/carbon-components-svelte/issues/1889)) ([c436dbd](https://github.com/carbon-design-system/carbon-components-svelte/commit/c436dbd76177f7553ba4206601f5ef2e416da594)), closes [#1667](https://github.com/carbon-design-system/carbon-components-svelte/issues/1667) [#1633](https://github.com/carbon-design-system/carbon-components-svelte/issues/1633) [#1621](https://github.com/carbon-design-system/carbon-components-svelte/issues/1621) [#1621](https://github.com/carbon-design-system/carbon-components-svelte/issues/1621) [#1888](https://github.com/carbon-design-system/carbon-components-svelte/issues/1888)
+
 ## [1.0.0-next.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.8...v1.0.0-next.0) (2024-01-12)
 
 
