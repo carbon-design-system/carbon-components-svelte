@@ -5,19 +5,26 @@
 </script>
 
 <TextInput
-  type="number"
   labelText="User name"
   placeholder="Enter user name..."
-  bind:value
-  on:input="{(e) => console.log(e.detail)}"
-  on:change="{(e) => (value = e.detail)}"
+  bind:value="{value}"
+  on:input="{(e) => console.log(e)}"
+  on:change="{(e) => (value = e)}"
   on:paste="{(e) => console.log(e)}"
+  inputAttributes="{{ type: 'number' }}"
 />
 
 <TextInput
   labelText="User name"
   helperText="Your user name is associated with your email"
   placeholder="Enter user name..."
+/>
+
+<TextInput
+  labelText="Username"
+  placeholder="Enter username..."
+  maxCount="{32}"
+  counter
 />
 
 <TextInput hideLabel labelText="User name" placeholder="Enter user name..." />
