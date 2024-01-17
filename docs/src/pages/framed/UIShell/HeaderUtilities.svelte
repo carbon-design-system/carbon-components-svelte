@@ -31,7 +31,7 @@
     <SkipToContent />
   </svelte:fragment>
   <HeaderUtilities>
-    <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust}" />
+    <HeaderGlobalAction iconDescription="Settings" icon="{SettingsAdjust}" />
     <HeaderAction
       bind:isOpen="{isOpen1}"
       icon="{UserAvatarFilledAlt}"
