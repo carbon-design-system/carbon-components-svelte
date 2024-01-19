@@ -134,11 +134,11 @@ Use `buttonAttributes` to pass any additional attributes.
 
 ## Skeleton
 
-<!-- <Button size="xl" skeleton />
-<Button size="lg" skeleton />
-<Button skeleton />
-<Button skeleton size="field" />
-<Button skeleton size="small" /> -->
+<Button skeleton size="2xl" />
+<Button skeleton size="xl" />
+<Button skeleton size="lg" />
+<Button skeleton size="md" />
+<Button skeleton size="sm" />
 
 ## Programmatic focus
 

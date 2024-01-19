@@ -15,7 +15,7 @@
    * Specify the size of button
    * @type {"sm" | "md" | "lg" | "xl" | "2xl"}
    */
-  export let size = "default";
+  export let size = "lg";
 
   /** Set to `true` to use Carbon's expressive typesetting */
   export let expressive = false;
@@ -97,10 +97,6 @@
     class: [
       "bx--btn",
       expressive && "bx--btn--expressive",
-      ((size === "small" && !expressive) ||
-        (size === "sm" && !expressive) ||
-        (size === "small" && !expressive)) &&
-        "bx--btn--sm",
       `bx--layout--size-${size}`,
       `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",

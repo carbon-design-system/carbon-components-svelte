@@ -23,7 +23,7 @@ export interface ButtonProps extends ButtonSkeletonProps, RestProps {
 
   /**
    * Specify the size of button
-   * @default "default"
+   * @default "lg"
    */
   size?: "sm" | "md" | "lg" | "xl" | "2xl";
 
