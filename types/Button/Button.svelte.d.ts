@@ -1,6 +1,13 @@
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface ButtonProps {
+import type { ButtonSkeletonProps } from "./ButtonSkeleton.svelte";
+
+type RestProps = SvelteHTMLElements["button"] &
+  SvelteHTMLElements["a"] &
+  SvelteHTMLElements["div"];
+
+export interface ButtonProps extends ButtonSkeletonProps, RestProps {
   /**
    * Specify the kind of button
    * @default "primary"
@@ -16,9 +23,9 @@ export interface ButtonProps {
 
   /**
    * Specify the size of button
-   * @default "lg"
+   * @default "default"
    */
-  size?: "sm" | "md" | "lg" | "xl" | "2xl";
+  size?: "default" | "field" | "small" | "lg" | "xl";
 
   /**
    * Set to `true` to use Carbon's expressive typesetting
@@ -30,7 +37,7 @@ export interface ButtonProps {
    * Set to `true` to enable the selected state for an icon-only, ghost button
    * @default false
    */
-  selected?: boolean;
+  isSelected?: boolean;
 
   /**
    * Specify the icon to render
@@ -58,11 +65,17 @@ export interface ButtonProps {
   tooltipPosition?: "top" | "right" | "bottom" | "left";
 
   /**
-   * Specify an element name to render as the button.
-   * Be sure to provide
-   * @default undefined
+   * Set to `true` to render a custom HTML element
+   * Props are destructured as `props` in the default slot (e.g., <Button let:props><div {...props}>...</div></Button>)
+   * @default false
    */
-  as?: keyof import("svelte/elements").SvelteHTMLElements;
+  as?: boolean;
+
+  /**
+   * Set to `true` to display the skeleton state
+   * @default false
+   */
+  skeleton?: boolean;
 
   /**
    * Set to `true` to disable the button
@@ -92,16 +105,9 @@ export interface ButtonProps {
    * Obtain a reference to the HTML element
    * @default null
    */
-  ref?: null | HTMLElement;
+  ref?: null | HTMLAnchorElement | HTMLButtonElement;
 
-  /**
-   * Button, anchor, or div attributes
-   * @default {}
-   */
-  buttonAttributes?:
-    | import("svelte/elements").HTMLAnchorAttributes
-    | import("svelte/elements").HTMLButtonAttributes
-    | import("svelte/elements").HTMLAttributes;
+  [key: `data-${string}`]: any;
 }
 
 export default class Button extends SvelteComponentTyped<
@@ -110,9 +116,21 @@ export default class Button extends SvelteComponentTyped<
     click: WindowEventMap["click"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
-    pointerover: WindowEventMap["pointerover"];
-    pointerenter: WindowEventMap["pointerenter"];
-    pointerleave: WindowEventMap["pointerleave"];
+    mouseover: WindowEventMap["mouseover"];
+    mouseenter: WindowEventMap["mouseenter"];
+    mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {} }
+  {
+    default: {
+      props: {
+        role: "button";
+        type?: string;
+        tabindex: any;
+        disabled: boolean;
+        href?: string;
+        class: string;
+        [key: string]: any;
+      };
+    };
+  }
 > {}
