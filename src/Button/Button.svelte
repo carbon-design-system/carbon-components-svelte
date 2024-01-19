@@ -13,7 +13,7 @@
 
   /**
    * Specify the size of button
-   * @type {"default" | "field" | "small" | "lg" | "xl"}
+   * @type {"sm" | "md" | "lg" | "xl" | "2xl"}
    */
   export let size = "default";
 
