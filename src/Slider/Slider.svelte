@@ -1,6 +1,7 @@
 <script>
   /**
    * @event {number} change
+   * @event {number} input
    */
 
   /** Specify the value of the slider */
@@ -109,6 +110,7 @@
     }
 
     value = nextValue;
+    dispatch("input", value);
   }
 
   $: labelId = `label-${id}`;

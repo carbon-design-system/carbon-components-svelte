@@ -14,6 +14,9 @@
   on:change="{(e) => {
     console.log(e.detail); // number
   }}"
+  on:input="{(e) => {
+    console.log(e.detail); // number
+  }}"
 />
 
 <Slider
