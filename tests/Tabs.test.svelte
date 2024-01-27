@@ -2,7 +2,11 @@
   import { Tabs, Tab, TabContent, TabsSkeleton } from "../types";
 </script>
 
-<Tabs>
+<Tabs
+  on:change="{(e) => {
+    console.log(e.detail); // number
+  }}"
+>
   <Tab label="Tab label 1" />
   <Tab label="Tab label 2" />
   <Tab label="Tab label 3" />
