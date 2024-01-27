@@ -126,11 +126,11 @@ export interface SliderProps extends RestProps {
 export default class Slider extends SvelteComponentTyped<
   SliderProps,
   {
+    change: CustomEvent<number>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
-    change: CustomEvent<any>;
   },
   { labelText: {} }
 > {}

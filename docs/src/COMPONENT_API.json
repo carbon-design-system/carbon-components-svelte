@@ -6294,7 +6294,13 @@
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [{ "type": "dispatched", "name": "clear" }],
+      "events": [
+        {
+          "type": "dispatched",
+          "name": "clear",
+          "detail": "KeyboardEvent | MouseEvent"
+        }
+      ],
       "typedefs": [
         {
           "type": "\"clearAll\" | \"clearSelection\"",
@@ -11354,11 +11360,11 @@
         }
       ],
       "events": [
+        { "type": "dispatched", "name": "change", "detail": "number" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "change" }
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -11446,11 +11452,11 @@
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
+        { "type": "dispatched", "name": "change", "detail": "string" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "change" }
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
@@ -12245,9 +12251,9 @@
         { "name": "content", "default": false, "slot_props": "{}" }
       ],
       "events": [
+        { "type": "dispatched", "name": "change", "detail": "number" },
         { "type": "forwarded", "name": "keypress", "element": "div" },
-        { "type": "forwarded", "name": "click", "element": "a" },
-        { "type": "dispatched", "name": "change" }
+        { "type": "forwarded", "name": "click", "element": "a" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
