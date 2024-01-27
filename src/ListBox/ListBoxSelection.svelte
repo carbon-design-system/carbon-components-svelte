@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {KeyboardEvent | MouseEvent} clear
+   */
+
+  /**
    * @typedef {"clearAll" | "clearSelection"} ListBoxSelectionTranslationId
    */
 
