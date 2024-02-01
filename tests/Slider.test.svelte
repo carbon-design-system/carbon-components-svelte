@@ -11,6 +11,9 @@
   maxLabel="990 MB"
   value="{100}"
   fullWidth
+  on:change="{(e) => {
+    console.log(e.detail); // number
+  }}"
 />
 
 <Slider

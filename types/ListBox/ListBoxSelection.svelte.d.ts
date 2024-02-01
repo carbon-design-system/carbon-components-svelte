@@ -35,7 +35,7 @@ export interface ListBoxSelectionProps extends RestProps {
 
 export default class ListBoxSelection extends SvelteComponentTyped<
   ListBoxSelectionProps,
-  { clear: CustomEvent<any> },
+  { clear: CustomEvent<KeyboardEvent | MouseEvent> },
   {}
 > {
   /**

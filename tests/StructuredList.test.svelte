@@ -11,7 +11,13 @@
   import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
 </script>
 
-<StructuredList>
+<StructuredList
+  selection
+  selected="row-1-value"
+  on:change="{(e) => {
+    console.log(e.detail); // string
+  }}"
+>
   <StructuredListHead>
     <StructuredListRow head>
       <StructuredListCell head>Column A</StructuredListCell>

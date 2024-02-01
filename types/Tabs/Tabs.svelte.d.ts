@@ -40,9 +40,9 @@ export interface TabsProps extends RestProps {
 export default class Tabs extends SvelteComponentTyped<
   TabsProps,
   {
+    change: CustomEvent<number>;
     keypress: WindowEventMap["keypress"];
     click: WindowEventMap["click"];
-    change: CustomEvent<any>;
   },
   { default: {}; content: {} }
 > {}

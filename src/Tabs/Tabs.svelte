@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @event {number} change
+   */
+
   /** Specify the selected tab index */
   export let selected = 0;
 

@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @event {number} change
+   */
+
   /** Specify the value of the slider */
   export let value = 0;
 
