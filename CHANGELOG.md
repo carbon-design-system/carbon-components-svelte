@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.82.9](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.8...v0.82.9) (2024-02-07)
+
+### Bug Fixes
+
+- **context-menu:** prevent `on:contextmenu` default behavior only when opening menu ([#1911](https://github.com/carbon-design-system/carbon-components-svelte/issues/1911)) ([4ad522c](https://github.com/carbon-design-system/carbon-components-svelte/commit/4ad522c197d4a389a6187a499e9e54d5d8b3994a)), closes [#1909](https://github.com/carbon-design-system/carbon-components-svelte/issues/1909)
+- **types:** improve `e.detail` type for dispatched events ([#1907](https://github.com/carbon-design-system/carbon-components-svelte/issues/1907)) ([6590457](https://github.com/carbon-design-system/carbon-components-svelte/commit/65904575743ba06344fb75e14685e42494c13cde))
+
 ### [0.82.8](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.7...v0.82.8) (2024-01-10)
 
 ### Bug Fixes
