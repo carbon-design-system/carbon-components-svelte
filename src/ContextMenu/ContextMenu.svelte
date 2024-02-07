@@ -59,6 +59,7 @@
 
   /** @type {(e: MouseEvent) => void} */
   function openMenu(e) {
+    e.preventDefault();
     const { height, width } = ref.getBoundingClientRect();
 
     if (open || x === 0) {
@@ -138,7 +139,7 @@
 </script>
 
 <svelte:window
-  on:contextmenu|preventDefault="{(e) => {
+  on:contextmenu="{(e) => {
     if (target != null) return;
     if (level > 1) return;
     if (!ref) return;
