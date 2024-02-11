@@ -127,6 +127,7 @@ export default class Slider extends SvelteComponentTyped<
   SliderProps,
   {
     change: CustomEvent<number>;
+    input: CustomEvent<number>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];

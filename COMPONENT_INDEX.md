@@ -3533,6 +3533,7 @@ None.
 | Event name | Type       | Detail              |
 | :--------- | :--------- | :------------------ |
 | change     | dispatched | <code>number</code> |
+| input      | dispatched | <code>number</code> |
 | click      | forwarded  | --                  |
 | mouseover  | forwarded  | --                  |
 | mouseenter | forwarded  | --                  |

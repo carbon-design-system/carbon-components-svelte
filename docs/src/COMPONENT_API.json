@@ -11361,6 +11361,7 @@
       ],
       "events": [
         { "type": "dispatched", "name": "change", "detail": "number" },
+        { "type": "dispatched", "name": "input", "detail": "number" },
         { "type": "forwarded", "name": "click", "element": "div" },
         { "type": "forwarded", "name": "mouseover", "element": "div" },
         { "type": "forwarded", "name": "mouseenter", "element": "div" },
