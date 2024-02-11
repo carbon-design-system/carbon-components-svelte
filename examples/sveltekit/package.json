@@ -7,12 +7,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@sveltejs/kit": "2.0.0",
-    "@sveltejs/vite-plugin-svelte": "^3.0.1",
-    "carbon-components-svelte": "^0.82.5",
-    "carbon-pictograms-svelte": "^12.9.1",
+    "@sveltejs/kit": "2.5.0",
+    "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "carbon-components-svelte": "^0.82.9",
+    "carbon-pictograms-svelte": "^12.10.0",
     "carbon-preprocess-svelte": "^0.10.0",
-    "svelte": "^4.2.8",
-    "vite": "^5.0.10"
+    "svelte": "^4.2.10",
+    "vite": "^5.1.1"
   }
 }
