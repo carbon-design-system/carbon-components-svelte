@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.82.10](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.9...v0.82.10) (2024-02-12)
+
+### Bug Fixes
+
+- **slider:** dispatch `on:input` event ([#1906](https://github.com/carbon-design-system/carbon-components-svelte/issues/1906)) ([90dbd15](https://github.com/carbon-design-system/carbon-components-svelte/commit/90dbd1562b04df3cf4de28874b6e790ddca1db81)), closes [#1643](https://github.com/carbon-design-system/carbon-components-svelte/issues/1643)
+
 ### [0.82.9](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.8...v0.82.9) (2024-02-07)
 
 ### Bug Fixes
