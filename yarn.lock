@@ -62,6 +62,11 @@
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
+"@ibm/telemetry-js@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@ibm/telemetry-js/-/telemetry-js-1.2.1.tgz#0b12801a683af23bcd2b90d1b83f332b3cca7f0e"
+  integrity sha512-ZNuqoclscha2RC089RBPkiGzv8g+mQfBOnHDJZEGBFrvsXg0B9lfRGFBSLzCuTR5nFDqVFYb6XqMRu36EiHIDA==
+
 "@jridgewell/gen-mapping@^0.3.0":
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.2.tgz#c1aedc61e853f2bb9f5dfe6d4442d3b565b253b9"
