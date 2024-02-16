@@ -128,7 +128,8 @@
     }
 
     if (open) {
-      const { width, height } = buttonRef.getBoundingClientRect();
+      const width = buttonRef.offsetWidth;
+      const height = buttonRef.offsetHeight;
 
       buttonWidth = width;
 
