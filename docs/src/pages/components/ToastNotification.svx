@@ -14,6 +14,14 @@ See also: [InlineNotification](InlineNotification)
 
 <ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 
+## Autoclose
+
+By default, `ToastNotification` does not automatically close.
+
+Specify the `timeout` prop to automatically close the notification after a specified duration (in milliseconds).
+
+<FileSource src="/framed/ToastNotification/ToastNotificationTimeout" />
+
 ## Prevent default close behavior
 
 `ToastNotification` is a controlled component. Prevent the default close behavior using the `e.preventDefault()` method in the dispatched `on:close` event.
