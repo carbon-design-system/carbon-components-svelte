@@ -84,6 +84,12 @@ Set `hideCopyButton` to `true` to hide the copy button.
 
 <CodeSnippet type="multi" {code} hideCopyButton />
 
+## Hidden show more button
+
+Only multi-line code snippets have a "Show more" button by default. Set `showMoreLess` to `false` to hide it.
+
+<CodeSnippet type="multi" {code} showMoreLess={false} />
+
 ## Disabled
 
 The `disabled` prop applies only to the `"single"` and `"multi"` code snippet types.
