@@ -90,6 +90,10 @@ Only multi-line code snippets have a "Show more" button by default. Set `showMor
 
 <CodeSnippet type="multi" {code} showMoreLess={false} />
 
+## Hidden copy, show more buttons
+
+<CodeSnippet type="multi" {code} hideCopyButton showMoreLess={false} />
+
 ## Disabled
 
 The `disabled` prop applies only to the `"single"` and `"multi"` code snippet types.
