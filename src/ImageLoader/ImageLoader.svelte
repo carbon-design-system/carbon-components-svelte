@@ -80,23 +80,7 @@
   {#if loading}
     <slot name="loading" />
   {/if}
-  {#if loaded}
-    <img
-      style:width="100%"
-      {...$$restProps}
-      src="{src}"
-      alt="{alt}"
-      transition:fade|local="{{ duration: fadeIn ? fast02 : 0 }}"
-    />
-  {/if}
-  {#if error}
-    <slot name="error" />
-  {/if}
-{:else}
-  <AspectRatio ratio="{ratio}">
-    {#if loading}
-      <slot name="loading" />
-    {/if}
+  {#key src}
     {#if loaded}
       <img
         style:width="100%"
@@ -106,6 +90,26 @@
         transition:fade|local="{{ duration: fadeIn ? fast02 : 0 }}"
       />
     {/if}
+  {/key}
+  {#if error}
+    <slot name="error" />
+  {/if}
+{:else}
+  <AspectRatio ratio="{ratio}">
+    {#if loading}
+      <slot name="loading" />
+    {/if}
+    {#key src}
+      {#if loaded}
+        <img
+          style:width="100%"
+          {...$$restProps}
+          src="{src}"
+          alt="{alt}"
+          transition:fade|local="{{ duration: fadeIn ? fast02 : 0 }}"
+        />
+      {/if}
+    {/key}
     {#if error}
       <slot name="error" />
     {/if}
