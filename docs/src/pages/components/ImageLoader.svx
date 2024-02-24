@@ -44,3 +44,9 @@ Set `fadeIn` to `true` to fade in the image if successfully loaded.
 In this example, a component reference is obtained to programmatically trigger the `loadImage` method.
 
 <FileSource src="/framed/ImageLoader/ProgrammaticImageLoader" />
+
+## Dynamic image source
+
+The same `ImageLoader` instance can be used to load different images.
+
+<FileSource src="/framed/ImageLoader/DynamicImageLoader" />
