@@ -1193,9 +1193,9 @@
         {
           "name": "showMoreLess",
           "kind": "let",
-          "description": "Set to `true` to enable the show more/less button",
+          "description": "Set to `false` to hide the show more/less button\n\nNOTE: this prop only works with the `type=\"multi\"` variant",
           "type": "boolean",
-          "value": "false",
+          "value": "true",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
