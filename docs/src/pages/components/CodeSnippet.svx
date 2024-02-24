@@ -94,6 +94,12 @@ Only multi-line code snippets have a "Show more" button by default. Set `showMor
 
 <CodeSnippet type="multi" {code} hideCopyButton showMoreLess={false} />
 
+## Custom show more/less text
+
+Use the `showMoreText` and `showLessText` props to override the default "Show more" and "Show less" button text.
+
+<CodeSnippet type="multi" {code} showMoreText="Expand" showLessText="Collapse" />
+
 ## Disabled
 
 The `disabled` prop applies only to the `"single"` and `"multi"` code snippet types.
