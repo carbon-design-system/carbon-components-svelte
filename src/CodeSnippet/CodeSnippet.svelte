@@ -91,8 +91,12 @@
    */
   export let showMoreText = "Show more";
 
-  /** Set to `true` to enable the show more/less button */
-  export let showMoreLess = false;
+  /**
+   * Set to `false` to hide the show more/less button
+   *
+   * NOTE: this prop only works with the `type="multi"` variant
+   */
+  export let showMoreLess = true;
 
   /** Set an id for the code element */
   export let id = "ccs-" + Math.random().toString(36);
@@ -120,10 +124,18 @@
   $: expandText = expanded ? showLessText : showMoreText;
   $: minHeight = expanded ? 16 * 15 : 48;
   $: maxHeight = expanded ? "none" : 16 * 15 + "px";
+
+  // Show more/less only applies to multi-line code snippets
+  $: if (type !== "multi") showMoreLess = false;
+
   $: if (type === "multi" && ref) {
-    if (code === undefined) setShowMoreLess();
-    if (code) tick().then(setShowMoreLess);
+    if (showMoreLess) {
+      // Only compute the show more/less button if the consumer has not opted out
+      if (code === undefined) setShowMoreLess();
+      if (code) tick().then(setShowMoreLess);
+    }
   }
+
   $: if (type === "multi") dispatch(expanded ? "expand" : "collapse");
 
   onMount(() => {

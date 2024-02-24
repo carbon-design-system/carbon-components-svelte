@@ -104,8 +104,10 @@ export interface CodeSnippetProps {
   showMoreText?: string;
 
   /**
-   * Set to `true` to enable the show more/less button
-   * @default false
+   * Set to `false` to hide the show more/less button
+   *
+   * NOTE: this prop only works with the `type="multi"` variant
+   * @default true
    */
   showMoreLess?: boolean;
 
