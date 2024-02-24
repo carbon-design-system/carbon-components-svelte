@@ -167,9 +167,17 @@
     {/if}
     <slot />
     {#if $$slots.icon}
-      <svelte:component this="{icon}" {...iconProps} />
+      <slot
+        name="icon"
+        style="{hasIconOnly ? 'margin-left: 0' : undefined}"
+        {...iconProps}
+      />
     {:else if icon}
-      <slot name="icon" {...iconProps} />
+      <svelte:component
+        this="{icon}"
+        style="{hasIconOnly ? 'margin-left: 0' : undefined}"
+        {...iconProps}
+      />
     {/if}
   </a>
 {:else}
