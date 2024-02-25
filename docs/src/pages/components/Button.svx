@@ -88,6 +88,10 @@ If an `href` value is specified, the component will render an [anchor element](h
 
 ## Custom element
 
+By default, the `Button` will render either a `button` or `a` element.
+
+If you need to render a different element, set `as` to `true` and spread `let:props` to the element.
+
 <Button as let:props>
   <p {...props}>Custom element</p>
 </Button>
