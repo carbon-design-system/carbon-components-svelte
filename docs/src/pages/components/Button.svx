@@ -82,6 +82,10 @@ If an `href` value is specified, the component will render an [anchor element](h
 
 <Button href="#">Link button</Button>
 
+## Link button with icon
+
+<Button href="#" icon={Add}>Link button with icon</Button>
+
 ## Custom element
 
 <Button as let:props>
