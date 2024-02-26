@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.82.11](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.10...v0.82.11) (2024-02-26)
+
+### Bug Fixes
+
+- **code-snippet:** `showMoreLess={false}` should hide button ([4085536](https://github.com/carbon-design-system/carbon-components-svelte/commit/40855361891c2388c2b775803bcac937fbd6c1d6)), closes [#1536](https://github.com/carbon-design-system/carbon-components-svelte/issues/1536)
+- **image-loader:** updated `src` should update the image ([0f318aa](https://github.com/carbon-design-system/carbon-components-svelte/commit/0f318aac7732c2b94ec0729d54416611fbd0d493)), closes [#1677](https://github.com/carbon-design-system/carbon-components-svelte/issues/1677)
+- **overflow-menu:** use `offsetWidth`, `offsetHeight` to compute menu dimensions ([#1913](https://github.com/carbon-design-system/carbon-components-svelte/issues/1913)) ([2404244](https://github.com/carbon-design-system/carbon-components-svelte/commit/24042442213ca9daa0cf663aabf37b3544e9c364))
+- **toast-notification:** fire `on:clear` from timeout correctly ([9aabe3c](https://github.com/carbon-design-system/carbon-components-svelte/commit/9aabe3cbbb05712b71f5cad7c571b170c1f3a439)), closes [#1914](https://github.com/carbon-design-system/carbon-components-svelte/issues/1914)
+
 ### [0.82.10](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.9...v0.82.10) (2024-02-12)
 
 ### Bug Fixes
