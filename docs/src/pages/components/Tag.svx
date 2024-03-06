@@ -1,5 +1,5 @@
 <script>
-  import { Tag } from "carbon-components-svelte";
+  import { Tag, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
@@ -57,6 +57,14 @@ The filterable and interactive tag variants have a disabled state.
 
 <Tag filter disabled>Machine learning</Tag>
 <Tag interactive disabled>Machine learning</Tag>
+
+## Tooltip in a tag
+
+<Tag>
+  <TooltipDefinition tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
+    Armonk
+  </TooltipDefinition>
+</Tag>
 
 ## Skeleton
 
