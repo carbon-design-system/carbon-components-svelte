@@ -17,24 +17,18 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  import { afterUpdate, getContext, onMount } from "svelte";
+  import { afterUpdate, getContext } from "svelte";
 
-  const ctx = getContext("ContentSwitcher");
+  const { add, update, change, currentId } = getContext("ContentSwitcher");
 
-  ctx.add({ id, text, selected });
+  add({ id, text, selected });
 
-  const unsubscribe = ctx.currentId.subscribe(($) => {
-    selected = $ === id;
-  });
+  $: selected = $currentId === id;
 
   afterUpdate(() => {
     if (selected) {
       ref.focus();
     }
-  });
-
-  onMount(() => {
-    return () => unsubscribe();
   });
 </script>
 
@@ -52,7 +46,7 @@
   {...$$restProps}
   on:click
   on:click|preventDefault="{() => {
-    ctx.update(id);
+    update(id);
   }}"
   on:mouseover
   on:mouseenter
@@ -60,9 +54,9 @@
   on:keydown
   on:keydown="{({ key }) => {
     if (key === 'ArrowRight') {
-      ctx.change(1);
+      change(1);
     } else if (key === 'ArrowLeft') {
-      ctx.change(-1);
+      change(-1);
     }
   }}"
 >

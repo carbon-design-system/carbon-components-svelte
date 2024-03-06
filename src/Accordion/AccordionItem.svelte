@@ -14,24 +14,13 @@
   /** Specify the ARIA label for the accordion item chevron icon */
   export let iconDescription = "Expand/Collapse";
 
-  import { onMount, getContext } from "svelte";
+  import { getContext } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
-
-  let initialDisabled = disabled;
-
-  const ctx = getContext("Accordion");
-  const unsubscribe = ctx.disableItems.subscribe((value) => {
-    if (!value && initialDisabled) return;
-    disabled = value;
-  });
 
   let animation = undefined;
 
-  onMount(() => {
-    return () => {
-      unsubscribe();
-    };
-  });
+  const { disableItems } = getContext("Accordion");
+  $: disabled = $disableItems;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
