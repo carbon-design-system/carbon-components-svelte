@@ -79,6 +79,7 @@
   $: dispatch(expanded ? "expand" : "collapse");
 </script>
 
+<!-- svelte-ignore a11y-autofocus -->
 {#if skeleton}
   <SearchSkeleton
     size="{size}"
