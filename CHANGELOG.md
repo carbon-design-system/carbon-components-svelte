@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.83.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.11...v0.83.0) (2024-03-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **link:** do not render `p` for disabled link
+
+### Bug Fixes
+
+* avoid using reserved `$` for Svelte 5 compat ([a0d5028](https://github.com/carbon-design-system/carbon-components-svelte/commit/a0d5028540e1bcbb3b37bf488c11ea94f97b5fa7))
+* **link:** do not render `p` for disabled link ([8bffc17](https://github.com/carbon-design-system/carbon-components-svelte/commit/8bffc17d650144ed0d5b778766f79c33334f0275)), closes [#1924](https://github.com/carbon-design-system/carbon-components-svelte/issues/1924)
+* **search:** hoist ignore `a11y autofocus` comment ([6152b78](https://github.com/carbon-design-system/carbon-components-svelte/commit/6152b784c1e6b19ff242524e6b0c8c98b0107788))
+
 ### [0.82.11](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.10...v0.82.11) (2024-02-26)
 
 ### Bug Fixes
