@@ -1963,15 +1963,15 @@ None.
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                                                                   | Default value          | Description                                              |
-| :-------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------- | ---------------------- | -------------------------------------------------------- |
-| ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLParagraphElement</code> | <code>null</code>      | Obtain a reference to the top-level HTML element         |
-| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>                                          | <code>undefined</code> | Specify the size of the link                             |
-| href      | No       | <code>let</code> | No       | <code>string</code>                                                    | <code>undefined</code> | Specify the href value                                   |
-| inline    | No       | <code>let</code> | No       | <code>boolean</code>                                                   | <code>false</code>     | Set to `true` to use the inline variant                  |
-| icon      | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code>              | <code>undefined</code> | Specify the icon to render<br />`inline` must be `false` |
-| disabled  | No       | <code>let</code> | No       | <code>boolean</code>                                                   | <code>false</code>     | Set to `true` to disable the checkbox                    |
-| visited   | No       | <code>let</code> | No       | <code>boolean</code>                                                   | <code>false</code>     | Set to `true` to allow visited styles                    |
+| Prop name | Required | Kind             | Reactive | Type                                                      | Default value          | Description                                              |
+| :-------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ---------------------- | -------------------------------------------------------- |
+| ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code>                | <code>null</code>      | Obtain a reference to the top-level HTML element         |
+| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>                             | <code>undefined</code> | Specify the size of the link                             |
+| href      | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the href value                                   |
+| inline    | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to use the inline variant                  |
+| icon      | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code> | <code>undefined</code> | Specify the icon to render<br />`inline` must be `false` |
+| disabled  | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to disable the checkbox                    |
+| visited   | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to allow visited styles                    |
 
 ### Slots
 
