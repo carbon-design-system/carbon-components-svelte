@@ -1,7 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["a"] & SvelteHTMLElements["p"];
+type RestProps = SvelteHTMLElements["a"];
 
 export interface LinkProps extends RestProps {
   /**
@@ -45,7 +45,7 @@ export interface LinkProps extends RestProps {
    * Obtain a reference to the top-level HTML element
    * @default null
    */
-  ref?: null | HTMLAnchorElement | HTMLParagraphElement;
+  ref?: null | HTMLAnchorElement;
 
   [key: `data-${string}`]: any;
 }

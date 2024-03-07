@@ -1,6 +1,4 @@
 <script>
-  /** @restProps {a | p} */
-
   /**
    * Specify the size of the link
    * @type {"sm" | "lg"}
@@ -34,10 +32,15 @@
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<!-- svelte-ignore a11y-missing-attribute -->
+<!-- svelte-ignore a11y-no-redundant-roles -->
+<!-- svelte-ignore a11y-interactive-supports-focus -->
 {#if disabled}
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <p
+  <a
     bind:this="{ref}"
+    role="link"
+    aria-disabled="true"
     class:bx--link="{true}"
     class:bx--link--disabled="{disabled}"
     class:bx--link--inline="{inline}"
@@ -56,7 +59,7 @@
         </slot>
       </div>
     {/if}
-  </p>
+  </a>
 {:else}
   <a
     bind:this="{ref}"
