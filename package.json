@@ -14,6 +14,10 @@
       "types": "./types/*.svelte.d.ts",
       "import": "./src/*.svelte"
     },
+    "./src/*.js": {
+      "types": "./types/*.d.ts",
+      "import": "./src/*.js"
+    },
     "./src/*": {
       "types": "./types/*.d.ts",
       "import": "./src/*.js"
