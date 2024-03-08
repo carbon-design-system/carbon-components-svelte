@@ -38,7 +38,7 @@
   </HeaderNav>
 </Header>
 
-<SideNav bind:isOpen="{isSideNavOpen}" rail>
+<SideNav bind:open="{isSideNavOpen}" rail>
   <SideNavItems>
     <SideNavLink icon="{Fade}" text="Link 1" href="/" isSelected />
     <SideNavLink icon="{Fade}" text="Link 2" href="/" />

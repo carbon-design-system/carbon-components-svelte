@@ -5,7 +5,7 @@
    */
 
   /** Set to `true` to open the panel */
-  export let isOpen = false;
+  export let open = false;
 
   /**
    * Specify the icon to render when the action panel is closed.
@@ -54,12 +54,12 @@
 <svelte:window
   on:click="{({ target }) => {
     if (
-      isOpen &&
+      open &&
       !ref.contains(target) &&
       !refPanel.contains(target) &&
       !preventCloseOnClickOutside
     ) {
-      isOpen = false;
+      open = false;
       dispatch('close');
     }
   }}"
@@ -69,16 +69,16 @@
   bind:this="{ref}"
   type="button"
   class:bx--header__action="{true}"
-  class:bx--header__action--active="{isOpen}"
+  class:bx--header__action--active="{open}"
   class:action-text="{text}"
   {...$$restProps}
   on:click
   on:click|stopPropagation="{() => {
-    isOpen = !isOpen;
-    dispatch(isOpen ? 'open' : 'close');
+    open = !open;
+    dispatch(open ? 'open' : 'close');
   }}"
 >
-  {#if isOpen}
+  {#if open}
     <slot name="closeIcon">
       <svelte:component this="{closeIcon}" size="{20}" />
     </slot>
@@ -91,7 +91,7 @@
     {#if text}<span>{text}</span>{/if}
   </slot>
 </button>
-{#if isOpen}
+{#if open}
   <div
     bind:this="{refPanel}"
     class:bx--header-panel="{true}"

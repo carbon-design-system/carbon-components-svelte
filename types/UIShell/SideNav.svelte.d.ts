@@ -26,7 +26,7 @@ export interface SideNavProps extends RestProps {
    * Set to `true` to toggle the expanded state
    * @default false
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.

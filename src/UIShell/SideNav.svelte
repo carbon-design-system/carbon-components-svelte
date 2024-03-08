@@ -18,7 +18,7 @@
   export let ariaLabel = undefined;
 
   /** Set to `true` to toggle the expanded state */
-  export let isOpen = false;
+  export let open = false;
 
   /**
    * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.
@@ -42,8 +42,8 @@
 
   let winWidth = undefined;
 
-  $: dispatch(isOpen ? "open" : "close");
-  $: $isSideNavCollapsed = !isOpen;
+  $: dispatch(open ? "open" : "close");
+  $: $isSideNavCollapsed = !open;
   $: $isSideNavRail = rail;
 
   onMount(() => {
@@ -60,23 +60,23 @@
   <div
     on:click="{() => {
       dispatch('click:overlay');
-      isOpen = false;
+      open = false;
     }}"
     class:bx--side-nav__overlay="{true}"
-    class:bx--side-nav__overlay-active="{isOpen}"
-    style:z-index="{isOpen ? 6000 : undefined}"
+    class:bx--side-nav__overlay-active="{open}"
+    style:z-index="{open ? 6000 : undefined}"
   ></div>
 {/if}
 <nav
-  aria-hidden="{!isOpen}"
+  aria-hidden="{!open}"
   aria-label="{ariaLabel}"
   class:bx--side-nav__navigation="{true}"
   class:bx--side-nav="{true}"
   class:bx--side-nav--ux="{true}"
   class:bx--side-nav--expanded="{rail && winWidth >= expansionBreakpoint
     ? false
-    : isOpen}"
-  class:bx--side-nav--collapsed="{!isOpen && !rail}"
+    : open}"
+  class:bx--side-nav--collapsed="{!open && !rail}"
   class:bx--side-nav--rail="{rail}"
   {...$$restProps}
 >

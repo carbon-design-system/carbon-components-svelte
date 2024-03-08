@@ -33,7 +33,7 @@
   <HeaderUtilities>
     <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust}" />
     <HeaderAction
-      bind:isOpen="{isOpen1}"
+      bind:open="{isOpen1}"
       icon="{UserAvatarFilledAlt}"
       closeIcon="{UserAvatarFilledAlt}"
     >
@@ -50,7 +50,7 @@
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
       </HeaderPanelLinks>
     </HeaderAction>
-    <HeaderAction bind:isOpen="{isOpen2}">
+    <HeaderAction bind:open="{isOpen2}">
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
@@ -65,7 +65,7 @@
   </HeaderUtilities>
 </Header>
 
-<SideNav bind:isOpen="{isSideNavOpen}">
+<SideNav bind:open="{isSideNavOpen}">
   <SideNavItems>
     <SideNavLink text="Link 1" />
     <SideNavLink text="Link 2" />
