@@ -500,7 +500,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render\nAlternatively, use the named slot \"icon\" (e.g., `<Icon slot=\"icon\" size=\"{20}\" />`)",
           "type": "typeof import(\"svelte\").SvelteComponent<any>",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -633,7 +633,8 @@
           "name": "__default__",
           "default": true,
           "slot_props": "{ props: { role: \"button\"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }"
-        }
+        },
+        { "name": "icon", "default": false, "slot_props": "{}" }
       ],
       "events": [
         { "type": "forwarded", "name": "click", "element": "ButtonSkeleton" },
@@ -5103,7 +5104,7 @@
           "name": "ref",
           "kind": "let",
           "description": "Obtain a reference to the HTML button element",
-          "type": "null | HTMLButtonElement",
+          "type": "HTMLButtonElement",
           "value": "null",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -5113,17 +5114,14 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "fallback": "<svelte:component this=\"{icon}\" size=\"{20}\" />",
-          "slot_props": "{}"
-        }
-      ],
-      "events": [{ "type": "forwarded", "name": "click", "element": "button" }],
+      "slots": [],
+      "events": [{ "type": "forwarded", "name": "click", "element": "Button" }],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "button" }
+      "rest_props": { "type": "InlineComponent", "name": "Button" },
+      "extends": {
+        "interface": "ButtonProps",
+        "import": "\"../Button/Button.svelte\""
+      }
     },
     {
       "moduleName": "HeaderNav",

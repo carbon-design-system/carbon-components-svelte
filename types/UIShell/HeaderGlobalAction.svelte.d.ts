@@ -1,9 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
+import type { ButtonProps } from "../Button/Button.svelte";
 
-type RestProps = SvelteHTMLElements["button"];
-
-export interface HeaderGlobalActionProps extends RestProps {
+export interface HeaderGlobalActionProps extends ButtonProps {
   /**
    * Set to `true` to use the active variant
    * @default false
@@ -20,13 +18,11 @@ export interface HeaderGlobalActionProps extends RestProps {
    * Obtain a reference to the HTML button element
    * @default null
    */
-  ref?: null | HTMLButtonElement;
-
-  [key: `data-${string}`]: any;
+  ref?: HTMLButtonElement;
 }
 
 export default class HeaderGlobalAction extends SvelteComponentTyped<
   HeaderGlobalActionProps,
   { click: WindowEventMap["click"] },
-  { default: {} }
+  {}
 > {}

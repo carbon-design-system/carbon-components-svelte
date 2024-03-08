@@ -2,11 +2,7 @@
   import {
     Header,
     HeaderUtilities,
-    HeaderAction,
     HeaderGlobalAction,
-    HeaderPanelLinks,
-    HeaderPanelDivider,
-    HeaderPanelLink,
     SideNav,
     SideNavItems,
     SideNavMenu,
@@ -18,12 +14,11 @@
     Row,
     Column,
   } from "carbon-components-svelte";
+  import Logout from "carbon-icons-svelte/lib/Logout.svelte";
   import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
   import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
 
   let isSideNavOpen = false;
-  let isOpen1 = false;
-  let isOpen2 = false;
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
@@ -31,37 +26,20 @@
     <SkipToContent />
   </svelte:fragment>
   <HeaderUtilities>
-    <HeaderGlobalAction aria-label="Settings" icon="{SettingsAdjust}" />
-    <HeaderAction
-      bind:isOpen="{isOpen1}"
+    <HeaderGlobalAction
+      iconDescription="Settings"
+      tooltipAlignment="start"
+      icon="{SettingsAdjust}"
+    />
+    <HeaderGlobalAction
+      iconDescription="Profile"
       icon="{UserAvatarFilledAlt}"
-      closeIcon="{UserAvatarFilledAlt}"
-    >
-      <HeaderPanelLinks>
-        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 4</HeaderPanelLink>
-        <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
-        <HeaderPanelDivider>Switcher subject 3</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-      </HeaderPanelLinks>
-    </HeaderAction>
-    <HeaderAction bind:isOpen="{isOpen2}">
-      <HeaderPanelLinks>
-        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 4</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 5</HeaderPanelLink>
-      </HeaderPanelLinks>
-    </HeaderAction>
+    />
+    <HeaderGlobalAction
+      iconDescription="Log out"
+      tooltipAlignment="end"
+      icon="{Logout}"
+    />
   </HeaderUtilities>
 </Header>
 

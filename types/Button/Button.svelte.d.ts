@@ -41,6 +41,7 @@ export interface ButtonProps extends ButtonSkeletonProps, RestProps {
 
   /**
    * Specify the icon to render
+   * Alternatively, use the named slot "icon" (e.g., `<Icon slot="icon" size="{20}" />`)
    * @default undefined
    */
   icon?: typeof import("svelte").SvelteComponent<any>;
@@ -132,5 +133,6 @@ export default class Button extends SvelteComponentTyped<
         [key: string]: any;
       };
     };
+    icon: {};
   }
 > {}
