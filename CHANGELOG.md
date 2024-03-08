@@ -2,18 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [0.83.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.11...v0.83.0) (2024-03-07)
+### [0.84.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.83.0...v0.84.0) (2024-03-08)
 
+### Features
 
-### ⚠ BREAKING CHANGES
-
-* **link:** do not render `p` for disabled link
+- **ui-shell:** support button tooltip in `HeaderGlobalAction` ([#1894](https://github.com/carbon-design-system/carbon-components-svelte/issues/1894)) ([d8bc651](https://github.com/carbon-design-system/carbon-components-svelte/commit/d8bc65163eabacfee348d6248e90f683ac488aef)), closes [#1893](https://github.com/carbon-design-system/carbon-components-svelte/issues/1893)
 
 ### Bug Fixes
 
-* avoid using reserved `$` for Svelte 5 compat ([a0d5028](https://github.com/carbon-design-system/carbon-components-svelte/commit/a0d5028540e1bcbb3b37bf488c11ea94f97b5fa7))
-* **link:** do not render `p` for disabled link ([8bffc17](https://github.com/carbon-design-system/carbon-components-svelte/commit/8bffc17d650144ed0d5b778766f79c33334f0275)), closes [#1924](https://github.com/carbon-design-system/carbon-components-svelte/issues/1924)
-* **search:** hoist ignore `a11y autofocus` comment ([6152b78](https://github.com/carbon-design-system/carbon-components-svelte/commit/6152b784c1e6b19ff242524e6b0c8c98b0107788))
+- **exports:** resolve imports with explicit \*.js extension ([#1927](https://github.com/carbon-design-system/carbon-components-svelte/issues/1927)) ([0405ede](https://github.com/carbon-design-system/carbon-components-svelte/commit/0405edee7d1696a157acab941488f8d3a750187f)), closes [#1925](https://github.com/carbon-design-system/carbon-components-svelte/issues/1925)
+
+## [0.83.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.11...v0.83.0) (2024-03-07)
+
+### ⚠ BREAKING CHANGES
+
+- **link:** do not render `p` for disabled link
+
+### Bug Fixes
+
+- avoid using reserved `$` for Svelte 5 compat ([a0d5028](https://github.com/carbon-design-system/carbon-components-svelte/commit/a0d5028540e1bcbb3b37bf488c11ea94f97b5fa7))
+- **link:** do not render `p` for disabled link ([8bffc17](https://github.com/carbon-design-system/carbon-components-svelte/commit/8bffc17d650144ed0d5b778766f79c33334f0275)), closes [#1924](https://github.com/carbon-design-system/carbon-components-svelte/issues/1924)
+- **search:** hoist ignore `a11y autofocus` comment ([6152b78](https://github.com/carbon-design-system/carbon-components-svelte/commit/6152b784c1e6b19ff242524e6b0c8c98b0107788))
 
 ### [0.82.11](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.82.10...v0.82.11) (2024-02-26)
 
