@@ -64,6 +64,7 @@ export { default as Row } from "./Grid/Row.svelte";
 export { default as Column } from "./Grid/Column.svelte";
 export { default as ImageLoader } from "./ImageLoader/ImageLoader.svelte";
 export { default as InlineLoading } from "./InlineLoading/InlineLoading.svelte";
+export { default as Layer } from "./Layer/Layer.svelte";
 export { default as Link } from "./Link/Link.svelte";
 export { default as OutboundLink } from "./Link/OutboundLink.svelte";
 export { default as ListBox } from "./ListBox/ListBox.svelte";
