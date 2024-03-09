@@ -11,19 +11,13 @@ export interface LayerProps {
    * Specify the HTML element to render. If none is specified, a `div` is rendered.
    * @default "div"
    */
-  as?: typeof import("svelte").SvelteComponent;
+  as?: string;
 
   /**
    * Specify the Layer HTML element props
    * @default {}
    */
   layerProps?: import("svelte/elements").HTMLElementAttributes;
-
-  /**
-   * Set an id for the Layer component
-   * @default "ccs-" + Math.random().toString(36)
-   */
-  id?: string;
 }
 
 export default class Layer extends SvelteComponentTyped<
