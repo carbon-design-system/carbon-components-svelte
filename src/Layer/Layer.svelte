@@ -7,10 +7,7 @@
    */
   export let level = undefined;
 
-  /**
-   * Specify the HTML element to render. If none is specified, a `div` is rendered.
-   * @type {typeof import("svelte").SvelteComponent}
-   */
+  /** Specify the HTML element to render. If none is specified, a `div` is rendered. */
   export let as = "div";
 
   /**
@@ -18,9 +15,6 @@
    * @type {import('svelte/elements').HTMLElementAttributes}
    */
   export let layerProps = {};
-
-  /** Set an id for the Layer component */
-  export let id = "ccs-" + Math.random().toString(36);
 
   let ref = null;
 
@@ -37,7 +31,6 @@
   class:bx--layer-one="{level === 0}"
   class:bx--layer-two="{level === 1}"
   class:bx--layer-three="{level === 2}"
-  id="{id}"
   bind:this="{ref}"
   {...layerProps}
 >
