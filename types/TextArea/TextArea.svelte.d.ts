@@ -5,7 +5,7 @@ type RestProps = SvelteHTMLElements["textarea"];
 
 export interface TextAreaProps extends RestProps {
   /**
-   * Specify the textarea value.
+   * Specify the textarea value
    * @default ""
    */
   value?: string;
