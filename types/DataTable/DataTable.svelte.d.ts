@@ -9,7 +9,7 @@ export interface DataTableEmptyHeader {
   key: DataTableKey;
   empty: boolean;
   display?: (item: Value, row: DataTableRow) => DataTableValue;
-  sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
+  sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
   minWidth?: string;
@@ -19,7 +19,7 @@ export interface DataTableNonEmptyHeader {
   key: DataTableKey;
   value: DataTableValue;
   display?: (item: Value, row: DataTableRow) => DataTableValue;
-  sort?: false | ((a: DataTableValue, b: DataTableValue) => 0 | -1 | 1);
+  sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
   minWidth?: string;
