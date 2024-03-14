@@ -29,6 +29,8 @@
     {...$$restProps}
     aria-checked="{indeterminate ? undefined : checked}"
     on:change
+    on:focus
+    on:blur
   />
   <label
     for="{id}"
