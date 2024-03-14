@@ -48,7 +48,7 @@
   onMount(() => {
     const item = localStorage.getItem(key);
 
-    if (item != null) {
+    if (item !== null) {
       try {
         value = JSON.parse(item);
       } catch (e) {

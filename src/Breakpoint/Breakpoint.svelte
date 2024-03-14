@@ -39,7 +39,7 @@
     xlg: size == "xlg",
     max: size == "max",
   };
-  $: if (size != undefined)
+  $: if (size !== undefined)
     dispatch("change", { size, breakpointValue: breakpoints[size] });
 </script>
 

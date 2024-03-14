@@ -46,7 +46,7 @@
    * @type {(url?: string) => void}
    */
   export const loadImage = (url) => {
-    if (image != null) image = null;
+    if (image !== null) image = null;
     loaded = false;
     error = false;
     image = new Image();

@@ -201,7 +201,7 @@
       "li.bx--tree-node:not(.bx--tree-node--disabled)"
     );
 
-    if (firstFocusableNode != null) {
+    if (firstFocusableNode !== null) {
       firstFocusableNode.tabIndex = "0";
     }
   });
