@@ -488,6 +488,7 @@ None.
 | mouseleave | forwarded  | --                   |
 | change     | forwarded  | --                   |
 | blur       | forwarded  | --                   |
+| focus      | forwarded  | --                   |
 
 ## `CheckboxSkeleton`
 
