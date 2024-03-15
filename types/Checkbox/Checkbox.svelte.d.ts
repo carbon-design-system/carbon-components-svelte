@@ -100,8 +100,8 @@ export default class Checkbox extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     change: WindowEventMap["change"];
-    blur: WindowEventMap["blur"];
     focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
   },
   { labelText: {} }
 > {}

@@ -926,8 +926,8 @@
           "element": "CheckboxSkeleton"
         },
         { "type": "forwarded", "name": "change", "element": "input" },
-        { "type": "forwarded", "name": "blur", "element": "input" },
-        { "type": "forwarded", "name": "focus", "element": "input" }
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
