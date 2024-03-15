@@ -112,8 +112,8 @@
         }
       }}"
       on:change
-      on:blur
       on:focus
+      on:blur
     />
     <label for="{id}" title="{title}" class:bx--checkbox-label="{true}">
       <span
