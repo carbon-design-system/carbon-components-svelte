@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.84.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.84.0...v0.84.1) (2024-03-16)
+
+### Bug Fixes
+
+- **checkbox:** forward `on:focus`, `on:blur` to `Checkbox` and `InlineCheckbox` ([#1937](https://github.com/carbon-design-system/carbon-components-svelte/issues/1937)) ([6364b23](https://github.com/carbon-design-system/carbon-components-svelte/commit/6364b23030cc0761aa6a0561a1673e89dde47868))
+- **data-table:** loosen `sort` return type to be a `number` ([#1935](https://github.com/carbon-design-system/carbon-components-svelte/issues/1935)) ([9132bf8](https://github.com/carbon-design-system/carbon-components-svelte/commit/9132bf8e5a2d6ba70d17a0b4fcdea29d0785492c)), closes [#1934](https://github.com/carbon-design-system/carbon-components-svelte/issues/1934)
+
 ### [0.84.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.83.0...v0.84.0) (2024-03-08)
 
 ### Features
