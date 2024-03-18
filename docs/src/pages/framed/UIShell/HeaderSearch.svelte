@@ -2,11 +2,7 @@
   import {
     Header,
     HeaderUtilities,
-    HeaderAction,
     HeaderSearch,
-    HeaderPanelLinks,
-    HeaderPanelDivider,
-    HeaderPanelLink,
     SkipToContent,
     Content,
     Grid,
@@ -114,9 +110,9 @@
           Click the button and search for something. Dispatched events are
           logged below:
         </p>
-        <div style="overflow-x: scroll;">
+        <div style:overflow-x="auto">
           {#each events as { type, ...rest }}
-            <div style="display: block; margin-bottom: var(--cds-layout-01)">
+            <div style:margin-bottom="var(--cds-layout-01)">
               <div><strong>on:{type}</strong></div>
               {#if Object.keys(rest).length > 0}
                 <pre>{JSON.stringify(rest, null, 2)}</pre>
