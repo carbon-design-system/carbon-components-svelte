@@ -1,8 +1,6 @@
 <script>
   /**
    * Specify the textarea value.
-   *
-   * and the value is empty.
    * @type {null | string}
    */
   export let value = "";

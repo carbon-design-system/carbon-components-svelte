@@ -12467,8 +12467,8 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the textarea value",
-          "type": "string",
+          "description": "Specify the textarea value.",
+          "type": "null | string",
           "value": "\"\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
