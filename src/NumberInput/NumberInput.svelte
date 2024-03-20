@@ -18,6 +18,8 @@
    */
   export let value = null;
 
+  let previousValue = null;
+
   /** Specify the step increment */
   export let step = 1;
 
@@ -99,12 +101,12 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
-  import Add from "../icons/Add.svelte";
-  import Subtract from "../icons/Subtract.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import EditOff from "../icons/EditOff.svelte";
+  import { createEventDispatcher, tick } from "svelte";
+  import Add from "carbon-components-svelte/src/icons/Add.svelte";
+  import Subtract from "carbon-components-svelte/src/icons/Subtract.svelte";
+  import WarningFilled from "carbon-components-svelte/src/icons/WarningFilled.svelte";
+  import WarningAltFilled from "carbon-components-svelte/src/icons/WarningAltFilled.svelte";
+  import EditOff from "carbon-components-svelte/src/icons/EditOff.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
@@ -119,6 +121,8 @@
     } else {
       ref.stepDown();
     }
+
+    previousValue = ref.value;
     value = +ref.value;
 
     dispatch("input", value);
@@ -137,14 +141,65 @@
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
 
+  //$: value && !!changeCaretPosition;
+
   function parse(raw) {
     return raw != "" ? Number(raw) : null;
   }
 
-  function onInput({ target }) {
+  function updatePreviousValue() {
+    previousValue = parse(value);
+  }
+
+  async function onInput({ target, inputType, data }) {
+    const possibleNewValue = parse(target.value);
     value = parse(target.value);
 
+    const isIntegerTransition =
+      !data &&
+      !Number.isInteger(previousValue) &&
+      Number.isInteger(possibleNewValue);
+
+    if (isIntegerTransition && value < previousValue) {
+      await setSelectionAfterTick(target.value.length);
+    } else if (isIntegerTransition && previousValue && value > previousValue) {
+      let parts = previousValue.toString().split(".");
+
+      if (inputType === "deleteContentForward" && parts[1]) {
+        parts[1] = parts[1].substring(1);
+      } else if (inputType === "deleteContentBackward") {
+        parts[0] = parts[0].slice(0, -1);
+      }
+
+      const chars =
+        parts[0].length + (inputType === "deleteContentBackward" ? 1 : 0);
+      value = parse(parts.join("."));
+      await setSelectionAfterTick(chars);
+    } else if (
+      !isIntegerTransition &&
+      previousValue &&
+      value === previousValue &&
+      inputType === "deleteContentForward"
+    ) {
+      value = parse(0);
+      await setSelectionAfterTick(0);
+    } else {
+      value = possibleNewValue;
+    }
+
     dispatch("input", value);
+  }
+
+  function setSelection(position) {
+    ref.focus();
+    ref.type = "text";
+    ref.setSelectionRange(position, position);
+    ref.type = "number";
+  }
+
+  async function setSelectionAfterTick(position) {
+    await tick();
+    setSelection(position);
   }
 
   function onChange({ target }) {
@@ -201,6 +256,7 @@
         max="{max}"
         min="{min}"
         step="{step}"
+        on:input="{updatePreviousValue}"
         value="{value ?? ''}"
         readonly="{readonly}"
         {...$$restProps}
