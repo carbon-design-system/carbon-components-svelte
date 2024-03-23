@@ -33,7 +33,7 @@
 </a>
 
 <style>
-  .bx--header__action {
+  :global(.bx--header__action) {
     display: flex;
     align-items: center;
     justify-content: center;

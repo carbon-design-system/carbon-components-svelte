@@ -1,8 +1,6 @@
 {#if $$slots.default}
-  <li>
-    <span>
-      <slot />
-    </span>
+  <li class:bx--header-panel-divider={true}>
+    <slot />
   </li>
 {/if}
 <hr class:bx--switcher__item--divider="{true}" />
@@ -14,11 +12,8 @@
     * from https://carbondesignsystem.com/ as a reference.
     */
 
-  li {
+  :global(.bx--header-panel-divider) {
     margin: 2rem 1rem 0;
-    color: #525252;
-  }
-  span {
     font-size: 0.75rem;
     line-height: 1.3;
     letter-spacing: 0.02rem;
