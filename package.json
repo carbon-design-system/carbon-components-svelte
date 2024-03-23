@@ -47,7 +47,7 @@
     "@carbon/styles": "^1.47.0",
     "@rollup/plugin-commonjs": "^21.0.3",
     "@rollup/plugin-node-resolve": "^13.3.0",
-    "@tsconfig/svelte": "^4.0.1",
+    "@tsconfig/svelte": "^5.0.2",
     "autoprefixer": "^10.4.8",
     "carbon-icons-svelte": "^12.1.0",
     "postcss": "^8.4.16",
@@ -61,7 +61,7 @@
     "sveld": "^0.19.1",
     "svelte": "^4.2.10",
     "svelte-check": "^3.6.4",
-    "typescript": "^4.7.4"
+    "typescript": "^5.4.3"
   },
   "standard-version": {
     "skip": {
