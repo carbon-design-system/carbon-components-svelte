@@ -172,9 +172,12 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 
 **Refer to [COMPONENT_INDEX.md](COMPONENT_INDEX.md) for component API documentation.**
 
-## Preprocessors
+## Preprocessors & Plugins
 
 [carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte) is a collection of Svelte preprocessors for Carbon.
+
+> [!NOTE]
+> Using `carbon-preprocess-svelte` is optional and not a prerequisite for this library.
 
 ```sh
 # Yarn
@@ -189,7 +192,7 @@ pnpm i -D carbon-preprocess-svelte
 
 ### `optimizeImports`
 
-`optimizeImports` is a script preprocessor that rewrites base imports from Carbon components/icons/pictograms packages to their source Svelte code paths. This can greatly speed up compile times during development while preserving typeahead and autocompletion hinting offered by integrated development environments (IDE) like VSCode.
+`optimizeImports` is a Svelte preprocessor that rewrites barrel imports from Carbon components/icons/pictograms packages to their source Svelte code paths. This can significantly speed up development and production build compile times while preserving typeahead and autocompletion offered by integrated development environments (IDE) like VS Code.
 
 The preprocessor optimizes imports from the following packages:
 
@@ -201,14 +204,18 @@ The preprocessor optimizes imports from the following packages:
 
 ```diff
 - import { Button } from "carbon-components-svelte";
-- import { Add16 } from "carbon-icons-svelte";
-- import { Airplane } from "carbon-pictograms-svelte";
 + import Button from "carbon-components-svelte/src/Button/Button.svelte";
-+ import Add16 from "carbon-icons-svelte/lib/Add16.svelte";
+
+- import { Add } from "carbon-icons-svelte";
++ import Add from "carbon-icons-svelte/lib/Add.svelte";
+
+- import { Airplane } from "carbon-pictograms-svelte";
 + import Airplane from "carbon-pictograms-svelte/lib/Airplane.svelte";
 ```
 
 #### Usage
+
+See [examples](examples) for full configurations.
 
 ```js
 // svelte.config.js
@@ -219,19 +226,57 @@ export default {
 };
 ```
 
-`svelte-preprocess` should be invoked before any preprocessor from `carbon-preprocess-svelte`.
+Any other preprocessors that transpile code in the `script` block should be invoked before `optimizeImports`.
+
+For example, `vitePreprocess` should precede `optimizeImports`.
 
 ```diff
 // svelte.config.js
-+ import sveltePreprocess from "svelte-preprocess";
++ import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import { optimizeImports } from "carbon-preprocess-svelte";
 
 export default {
   preprocess: [
-+   sveltePreprocess(),
++   vitePreprocess(),
     optimizeImports()
   ],
 };
+```
+
+### `optimizeCss`
+
+`optimizeCss` is a Vite plugin that removes unused Carbon styles at build time. The plugin is compatible with Rollup ([Vite](https://vitejs.dev/guide/api-plugin) extends the Rollup plugin API).
+
+`carbon-components-svelte@0.85.0` or greater is required.
+
+```diff
+$ vite build
+
+Optimized index-CU4gbKFa.css
+- Before: 606.26 kB
++ After:   53.22 kB (-91.22%)
+
+dist/index.html                  0.34 kB │ gzip:  0.24 kB
+dist/assets/index-CU4gbKFa.css  53.22 kB │ gzip:  6.91 kB
+dist/assets/index-Ceijs3eO.js   53.65 kB │ gzip: 15.88 kB
+```
+
+> [!NOTE]
+> This is a plugin and not a Svelte preprocessor. It should be added to the list of `vite.plugins`. For Vite set-ups, this plugin is only run when building the app. For Rollup and Webpack, you should conditionally apply the plugin to only execute when building for production.
+
+#### Usage
+
+See [examples](examples) for full configurations.
+
+```js
+// vite.config.js
+import { sveltekit } from "@sveltejs/kit/vite";
+import { optimizeCss } from "carbon-preprocess-svelte";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [sveltekit(), optimizeCss()],
+});
 ```
 
 ## Examples
