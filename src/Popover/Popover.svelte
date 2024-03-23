@@ -3,6 +3,9 @@
    * @event {{ target: HTMLElement; }} click:outside
    */
 
+  /** Set an id for the content `span` component */
+  export let id = "ccs-" + Math.random().toString(36);
+
   /** Set to `true` to display the popover */
   export let open = false;
 
@@ -21,11 +24,17 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
+  /** Specify whether a drop shadow should be rendered on the popover */
+  export let dropShadow = false;
+
   /** Set to `true` to enable the high contrast variant */
   export let highContrast = false;
 
-  /** Set to `true` to use a relative position */
-  export let relative = false;
+  /**
+   * Specify the container `div` props
+   * @type {import('svelte/elements').HTMLDivAttributes}
+   */
+  export let containerProps = {};
 
   import { createEventDispatcher } from "svelte";
 
@@ -44,10 +53,12 @@
   }}"
 />
 
-<div
+<span
   bind:this="{ref}"
+  id="{id}"
   class:bx--popover-container="{true}"
   class:bx--popover--caret="{caret}"
+  class:bx--popover--drop-shadow="{dropShadow}"
   class:bx--popover--light="{light}"
   class:bx--popover--high-contrast="{highContrast}"
   class:bx--popover--top="{align === 'top'}"
@@ -63,9 +74,7 @@
   class:bx--popover--right-bottom="{align === 'right-bottom'}"
   class:bx--popover--right-top="{align === 'right-top'}"
   class:bx--popover--open="{open}"
-  class:bx--popover--relative="{relative}"
-  style:position="{relative ? "relative" : undefined}"
-  {...$$restProps}
+  {...containerProps}
 >
   <slot />
-</div>
+</span>
