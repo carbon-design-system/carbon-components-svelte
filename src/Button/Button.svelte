@@ -97,16 +97,8 @@
     class: [
       "bx--btn",
       expressive && "bx--btn--expressive",
-      ((size === "small" && !expressive) ||
-        (size === "sm" && !expressive) ||
-        (size === "small" && !expressive)) &&
-        "bx--btn--sm",
-      ((size === "field" && !expressive) || (size === "md" && !expressive)) &&
-        "bx--btn--md",
-      size === "small" && "bx--btn--sm",
-      size === "xl" && "bx--btn--xl",
-      size === "2xl" && "bx--btn--2xl",
-      kind && `bx--btn--${kind}`,
+      `bx--layout--size-${size}`,
+      `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
       hasIconOnly && "bx--tooltip__trigger",
