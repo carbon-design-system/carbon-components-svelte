@@ -1,5 +1,5 @@
 {#if $$slots.default}
-  <li class:bx--header-panel-divider={true}>
+  <li class:bx--header-panel-divider="{true}">
     <slot />
   </li>
 {/if}
