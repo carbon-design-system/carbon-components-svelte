@@ -4998,7 +4998,7 @@
         {
           "name": "text",
           "default": false,
-          "fallback": "{#if text}<span>{text}</span>{/if}",
+          "fallback": "{#if text}<span class:bx--header__action-text=\"{true}\">{text}</span>{/if}",
           "slot_props": "{}"
         }
       ],
@@ -5396,7 +5396,7 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "{result.text}\n              {#if result.description}<span>– {result.description}</span>{/if}",
+          "fallback": "{result.text}\n              {#if result.description}<span\n                  class:bx--header-search-menu-description=\"{true}\"\n                  >– {result.description}</span\n                >{/if}",
           "slot_props": "{ result: HeaderSearchResult; index: number }"
         }
       ],

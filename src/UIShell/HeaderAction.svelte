@@ -70,7 +70,7 @@
   type="button"
   class:bx--header__action="{true}"
   class:bx--header__action--active="{isOpen}"
-  class:action-text="{text}"
+  class:bx--header__action--text="{text}"
   {...$$restProps}
   on:click
   on:click|stopPropagation="{() => {
@@ -88,7 +88,7 @@
     </slot>
   {/if}
   <slot name="text">
-    {#if text}<span>{text}</span>{/if}
+    {#if text}<span class:bx--header__action-text="{true}">{text}</span>{/if}
   </slot>
 </button>
 {#if isOpen}
@@ -106,7 +106,7 @@
 {/if}
 
 <style>
-  .action-text {
+  :global(.bx--header__action--text) {
     display: inline-flex;
     align-items: center;
     width: auto;
@@ -123,7 +123,7 @@
     color: #f4f4f4;
   }
 
-  .action-text > span {
+  :global(.bx--header__action-text) {
     margin-left: 0.75rem;
   }
 </style>

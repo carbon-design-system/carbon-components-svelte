@@ -60,16 +60,30 @@
   }}"
 />
 
-<div bind:this="{refSearch}" role="search" class:active>
-  <label for="search-input" id="search-label">Search</label>
-  <div aria-owns="search-menu" aria-haspopup="menu">
+<div
+  bind:this="{refSearch}"
+  class:bx--header__search="{true}"
+  role="search"
+  class:bx--header__search--active="{active}"
+>
+  <label
+    class:bx--header__search-label="{true}"
+    for="search-input"
+    id="search-label">Search</label
+  >
+  <div
+    class:bx--header__search-menu="{true}"
+    aria-owns="search-menu"
+    aria-haspopup="menu"
+  >
     <button
       type="button"
       aria-label="Search"
       aria-expanded="{active}"
       tabindex="{active ? '-1' : '0'}"
+      class:bx--header-search-button="{true}"
       class:bx--header__action="{true}"
-      class:disabled="{active}"
+      class:bx--header-search-button--disabled="{active}"
       on:click="{() => {
         active = true;
       }}"
@@ -82,7 +96,8 @@
       autocomplete="off"
       placeholder="Search..."
       tabindex="{active ? '0' : '-1'}"
-      class:active
+      class:bx--header__search-input="{true}"
+      class:bx--header__search--active="{active}"
       {...$$restProps}
       id="search-input"
       aria-autocomplete="list"
@@ -135,7 +150,8 @@
       aria-label="Clear search"
       tabindex="{active ? '0' : '-1'}"
       class:bx--header__action="{true}"
-      class:hidden="{!active}"
+      class:bx--header-search-button="{true}"
+      class:bx--header-search-button--hidden="{!active}"
       on:click="{() => {
         reset();
         dispatch('clear');
@@ -147,7 +163,12 @@
 
   {#if active && results.length > 0}
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-    <ul aria-labelledby="search-label" role="menu" id="search-menu">
+    <ul
+      aria-labelledby="search-label"
+      role="menu"
+      id="search-menu"
+      class:bx--header-search-menu="{true}"
+    >
       {#each results as result, i}
         <li role="none">
           <a
@@ -155,7 +176,9 @@
             id="search-menuitem-{i}"
             role="menuitem"
             href="{result.href}"
-            class:selected="{selectedId === `search-menuitem-${i}`}"
+            class:bx--header-search-menu-item="{true}"
+            class:bx--header-search-menu-item--selected="{selectedId ===
+              `search-menuitem-${i}`}"
             on:click|preventDefault="{async () => {
               selectedResultIndex = i;
               await tick();
@@ -164,7 +187,10 @@
           >
             <slot result="{result}" index="{i}">
               {result.text}
-              {#if result.description}<span>– {result.description}</span>{/if}
+              {#if result.description}<span
+                  class:bx--header-search-menu-description="{true}"
+                  >– {result.description}</span
+                >{/if}
             </slot>
           </a>
         </li>
@@ -174,7 +200,7 @@
 </div>
 
 <style>
-  label {
+  :global(.bx--header__search-label) {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -187,7 +213,7 @@
     clip: rect(0, 0, 0, 0);
   }
 
-  [role="search"] {
+  :global(.bx--header__search) {
     position: relative;
     display: flex;
     max-width: 28rem;
@@ -200,23 +226,23 @@
       background 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 
-  [role="search"]:not(.active) {
+  :global(.bx--header__search:not(.bx--header__search--active)) {
     max-width: 3rem;
     background-color: #161616;
   }
 
-  [role="search"].active {
+  :global(.bx--header__search.bx--header__search--active) {
     outline: 2px solid #fff;
     outline-offset: -2px;
   }
 
-  [aria-haspopup="menu"] {
+  :global(.bx--header__search-menu) {
     display: flex;
     flex-grow: 1;
     border-bottom: 1px solid #393939;
   }
 
-  input {
+  :global(.bx--header__search-input) {
     width: 100%;
     height: 3rem;
     padding: 0;
@@ -232,12 +258,12 @@
     transition: opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 
-  input:not(.active) {
+  :global(.bx--header__search-input:not(.bx--header__search--active)) {
     opacity: 0;
     pointer-events: none;
   }
 
-  button {
+  :global(.bx--header-search-button) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -250,21 +276,21 @@
       opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 
-  .disabled {
+  :global(.bx--header-search-button--disabled) {
     border: none;
     pointer-events: none;
   }
 
-  [aria-label="Clear search"]:hover {
+  :global(.bx--header-search-button:hover) {
     background-color: #4c4c4c;
   }
 
-  .hidden {
+  :global(.bx--header-search-button--hidden) {
     opacity: 0;
     display: none;
   }
 
-  ul {
+  :global(.bx--header-search-menu) {
     position: absolute;
     z-index: 10000;
     padding: 1rem 0;
@@ -277,7 +303,7 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
   }
 
-  [role="menuitem"] {
+  :global(.bx--header-search-menu-item) {
     padding: 6px 1rem;
     cursor: pointer;
     font-size: 0.875rem;
@@ -293,13 +319,13 @@
     color: #c6c6c6;
   }
 
-  .selected,
-  [role="menuitem"]:hover {
+  :global(.bx--header-search-menu-item--selected),
+  :global(.bx--header-search-menu-item:hover) {
     background-color: #353535;
     color: #f4f4f4;
   }
 
-  [role="menuitem"] span {
+  :global(.bx--header-search-menu-description) {
     font-size: 0.75rem;
     font-weight: 400;
     line-height: 1.34;

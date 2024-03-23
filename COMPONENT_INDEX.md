@@ -1624,12 +1624,12 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                               |
-| :-------- | :------ | :---- | :--------------------------------------------------------------------- |
-| --        | Yes     | --    | --                                                                     |
-| closeIcon | No      | --    | <code>&lt;svelte:component this="{closeIcon}" size="{20}" /&gt;</code> |
-| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code>      |
-| text      | No      | --    | <code>{#if text}&lt;span&gt;{text}&lt;/span&gt;{/if}</code>            |
+| Slot name | Default | Props | Fallback                                                                                             |
+| :-------- | :------ | :---- | :--------------------------------------------------------------------------------------------------- |
+| --        | Yes     | --    | --                                                                                                   |
+| closeIcon | No      | --    | <code>&lt;svelte:component this="{closeIcon}" size="{20}" /&gt;</code>                               |
+| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code>                                    |
+| text      | No      | --    | <code>{#if text}&lt;span class:bx--header\_\_action-text="{true}"&gt;{text}&lt;/span&gt;{/if}</code> |
 
 ### Events
 
@@ -1835,9 +1835,9 @@ export interface HeaderSearchResult {
 
 ### Slots
 
-| Slot name | Default | Props                                                       | Fallback                                                                                                      |
-| :-------- | :------ | :---------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
-| --        | Yes     | <code>{ result: HeaderSearchResult; index: number } </code> | <code>{result.text}<br /> {#if result.description}&lt;span&gt;– {result.description}&lt;/span&gt;{/if}</code> |
+| Slot name | Default | Props                                                       | Fallback                                                                                                                                                                            |
+| :-------- | :------ | :---------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --        | Yes     | <code>{ result: HeaderSearchResult; index: number } </code> | <code>{result.text}<br /> {#if result.description}&lt;span<br /> class:bx--header-search-menu-description="{true}"<br /> &gt;– {result.description}&lt;/span<br /> &gt;{/if}</code> |
 
 ### Events
 
