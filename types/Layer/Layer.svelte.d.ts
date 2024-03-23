@@ -2,13 +2,13 @@ import type { SvelteComponentTyped } from "svelte";
 
 export interface LayerProps {
   /**
-   * Specify the layer level and override any existing levels based on hierarchy.
+   * Specify the layer level to override any existing levels based on hierarchy.
    * @default undefined
    */
   level?: 0 | 1 | 2;
 
   /**
-   * Specify the HTML element to render. If none is specified, a `div` is rendered.
+   * Specify the HTML element to render.
    * @default "div"
    */
   as?: string;
