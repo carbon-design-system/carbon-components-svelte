@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@1.0.0-next.1.
+> 166 components exported from carbon-components-svelte@1.0.0-next.1.
 
 ## Components
 
@@ -66,6 +66,7 @@
 - [`ImageLoader`](#imageloader)
 - [`InlineLoading`](#inlineloading)
 - [`InlineNotification`](#inlinenotification)
+- [`Layer`](#layer)
 - [`Link`](#link)
 - [`ListBox`](#listbox)
 - [`ListBoxField`](#listboxfield)
@@ -1958,6 +1959,26 @@ None.
 | mouseover  | forwarded  | --                                |
 | mouseenter | forwarded  | --                                |
 | mouseleave | forwarded  | --                                |
+
+## `Layer`
+
+### Props
+
+| Prop name  | Required | Kind             | Reactive | Type                                                         | Default value          | Description                                                                 |
+| :--------- | :------- | :--------------- | :------- | ------------------------------------------------------------ | ---------------------- | --------------------------------------------------------------------------- |
+| level      | No       | <code>let</code> | Yes      | <code>0 &#124; 1 &#124; 2 </code>                            | <code>undefined</code> | Specify the layer level to override any existing levels based on hierarchy. |
+| as         | No       | <code>let</code> | No       | <code>string</code>                                          | <code>"div"</code>     | Specify the HTML element to render.                                         |
+| layerProps | No       | <code>let</code> | No       | <code>import('svelte/elements').HTMLElementAttributes</code> | <code>{}</code>        | Specify the Layer HTML element props                                        |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `Link`
 

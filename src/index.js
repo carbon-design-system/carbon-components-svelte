@@ -58,6 +58,7 @@ export { FormLabel } from "./FormLabel";
 export { Grid, Row, Column } from "./Grid";
 export { ImageLoader } from "./ImageLoader";
 export { InlineLoading } from "./InlineLoading";
+export { Layer } from "./Layer";
 export { Link, OutboundLink } from "./Link";
 export {
   ListBox,
