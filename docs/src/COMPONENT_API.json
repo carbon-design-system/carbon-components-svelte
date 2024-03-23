@@ -1,5 +1,5 @@
 {
-  "total": 165,
+  "total": 166,
   "components": [
     {
       "moduleName": "Accordion",
@@ -5753,6 +5753,51 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "Layer",
+      "filePath": "src/Layer/Layer.svelte",
+      "props": [
+        {
+          "name": "level",
+          "kind": "let",
+          "description": "Specify the layer level to override any existing levels based on hierarchy.",
+          "type": "0 | 1 | 2 ",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "as",
+          "kind": "let",
+          "description": "Specify the HTML element to render.",
+          "type": "string",
+          "value": "\"div\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "layerProps",
+          "kind": "let",
+          "description": "Specify the Layer HTML element props",
+          "type": "import('svelte/elements').HTMLElementAttributes",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "Link",

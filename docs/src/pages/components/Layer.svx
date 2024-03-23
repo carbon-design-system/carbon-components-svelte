@@ -1,0 +1,16 @@
+<script>
+  import { Layer } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+## Default
+
+<Layer>
+  <p>First layer</p>
+  <Layer>
+    <p>Second layer</p>
+    <Layer>
+      <p>Third layer</p>
+    </Layer>
+  </Layer>
+</Layer>
