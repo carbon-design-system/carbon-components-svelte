@@ -1,50 +1,51 @@
 <script>
   /**
-   * @event {null | number | string} change
-   * @event {null | number | string} input
-   */
-
-  /**
-   * Set the size of the input
-   * @type {"sm" | "lg"}
-   */
-  export let size = undefined;
-
-  /**
-   * Specify the input value.
-   *
-   * `value` will be set to `null` if type="number"
-   * and the value is empty.
+   * Specify the input value
+   * `value` will be set to `null` if `typeof value === "number"` and `value` is empty
    * @type {null | number | string}
    */
   export let value = "";
 
+  /** Obtain a reference to the input HTML element */
+  export let ref = null;
+  /**
+   * Set the size of the input
+   * @type {"sm" | "md" | "lg"}
+   */
+  export let size = "md";
+
   /** Specify the placeholder text */
   export let placeholder = "";
 
-  /** Set to `true` to enable the light variant */
+  /**
+   * Set to `true` to enable the light variant
+   * For use on $ui-01 backgrounds only. Don't use this to make tile background color same as container background color
+   * The light prop for `TextInput` has been deprecated in favor of the new `Layer` Layer component. It will be removed in the next major release
+   * @deprecated
+   */
   export let light = false;
 
   /** Set to `true` to disable the input */
   export let disabled = false;
-
-  /** Specify the helper text */
-  export let helperText = "";
-
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
-
-  /**
-   * Specify a name attribute for the input
-   * @type {string}
-   */
-  export let name = undefined;
 
   /** Specify the label text */
   export let labelText = "";
 
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
+
+  /** Specify the helper text */
+  export let helperText = "";
+
+  /** Set to `true` to enable display the character counter. Requires `maxCount` to be set. */
+  export let counter = false;
+
+  /**
+   * Specify the maximum number of characters/words allowed
+   * This is needed in order for `counter` to display
+   * @type {number}
+   */
+  export let maxCount = undefined;
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
@@ -58,42 +59,44 @@
   /** Specify the warning state text */
   export let warnText = "";
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
+  /** Set an id for the input element */
+  export let id = "ccs-" + Math.random().toString(36);
 
-  /** Set to `true` to mark the field as required */
-  export let required = false;
+  /**
+   * Specify a name attribute for the input
+   * @type {string}
+   */
+  export let name = undefined;
 
   /** Set to `true` to use the inline variant */
   export let inline = false;
 
+  /** Set to `true` to mark the field as required */
+  export let required = false;
+
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
-  import { createEventDispatcher, getContext } from "svelte";
+  /**
+   * Set HTML attributes on the `label` element
+   * @type {import('svelte/elements').HTMLLabelAttributes}
+   */
+  export let labelAttributes = {};
+
+  /**
+   * Set HTML attributes on the `input` element
+   * @type {import('svelte/elements').HTMLInputAttributes}
+   */
+  export let inputAttributes = {};
+
+  import { getContext } from "svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import EditOff from "../icons/EditOff.svelte";
 
   const ctx = getContext("Form");
-  const dispatch = createEventDispatcher();
 
-  function parse(raw) {
-    if ($$restProps.type !== "number") return raw;
-    return raw != "" ? Number(raw) : null;
-  }
-
-  /** @type {(e: Event) => void} */
-  const onInput = (e) => {
-    value = parse(e.target.value);
-    dispatch("input", value);
-  };
-
-  /** @type {(e: Event) => void} */
-  const onChange = (e) => {
-    dispatch("change", parse(e.target.value));
-  };
-
+  $: if (maxCount && value.length > maxCount) value = value.slice(0, maxCount);
+  $: count = value.length;
   $: isFluid = !!ctx && ctx.isFluid;
   $: error = invalid && !readonly;
   $: helperId = `helper-${id}`;
@@ -111,9 +114,10 @@
   class:bx--text-input-wrapper--light="{light}"
   class:bx--text-input-wrapper--readonly="{readonly}"
   on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
+  on:pointerup
+  on:pointerover
+  on:pointerenter
+  on:pointerleave
 >
   {#if inline}
     <div class:bx--text-input__label-helper-wrapper="{true}">
@@ -125,38 +129,63 @@
           class:bx--label--disabled="{disabled}"
           class:bx--label--inline="{inline}"
           class:bx--label--inline--sm="{size === 'sm'}"
-          class:bx--label--inline--lg="{size === 'lg' || size === 'xl'}"
+          class:bx--label--inline--md="{size === 'md'}"
+          class:bx--label--inline--lg="{size === 'lg'}"
+          {...labelAttributes}
         >
           <slot name="labelText">
             {labelText}
           </slot>
         </label>
+        {#if maxCount && counter}
+          <div
+            class:bx--label="{true}"
+            class:bx--text-input__label-counter="{true}"
+          >
+            {count}/{maxCount}
+          </div>
+        {/if}
       {/if}
-      {#if !isFluid && helperText}
+      {#if !isFluid && (helperText || $$slots.helperText)}
         <div
           class:bx--form__helper-text="{true}"
           class:bx--form__helper-text--disabled="{disabled}"
           class:bx--form__helper-text--inline="{inline}"
         >
-          {helperText}
+          <slot name="helperText">
+            {helperText}
+          </slot>
         </div>
       {/if}
     </div>
   {/if}
   {#if !inline && (labelText || $$slots.labelText)}
-    <label
-      for="{id}"
-      class:bx--label="{true}"
-      class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}"
-      class:bx--label--inline="{inline}"
-      class:bx--label--inline-sm="{inline && size === 'sm'}"
-      class:bx--label--inline-xl="{inline && size === 'xl'}"
-    >
-      <slot name="labelText">
-        {labelText}
-      </slot>
-    </label>
+    <div class:bx--text-input__label-wrapper="{true}">
+      <label
+        for="{id}"
+        class:bx--label="{true}"
+        class:bx--visually-hidden="{hideLabel}"
+        class:bx--label--disabled="{disabled}"
+        class:bx--label--inline="{inline}"
+        class:bx--label--inline-sm="{inline && size === 'sm'}"
+        class:bx--label--inline-md="{inline && size === 'md'}"
+        class:bx--label--inline-lg="{inline && size === 'lg'}"
+        {...labelAttributes}
+      >
+        <slot name="labelText">
+          {labelText}
+        </slot>
+      </label>
+      {#if maxCount && counter}
+        <div
+          class:bx--label="{true}"
+          class:bx--text-input__label-counter="{true}"
+          class:fluid-form-fix__label-counter="{isFluid}"
+        >
+          {count}/{maxCount}
+        </div>
+      {/if}
+    </div>
   {/if}
   <div
     class:bx--text-input__field-outer-wrapper="{true}"
@@ -170,7 +199,14 @@
     >
       {#if !readonly}
         {#if invalid}
-          <WarningFilled class="bx--text-input__invalid-icon" />
+          {#if isFluid && invalidText.length === 0}
+            <WarningFilled
+              class="bx--text-input__invalid-icon"
+              style="inset-block-start: 3rem;"
+            />
+          {:else}
+            <WarningFilled class="bx--text-input__invalid-icon" />
+          {/if}
         {/if}
         {#if !invalid && warn}
           <WarningAltFilled
@@ -195,7 +231,7 @@
         id="{id}"
         name="{name}"
         placeholder="{placeholder}"
-        bind:value
+        bind:value="{value}"
         required="{required}"
         readonly="{readonly}"
         class:bx--text-input="{true}"
@@ -203,10 +239,14 @@
         class:bx--text-input--invalid="{error}"
         class:bx--text-input--warning="{warn}"
         class:bx--text-input--sm="{size === 'sm'}"
-        class:bx--text-input--lg="{size === 'lg' || size === 'xl'}"
-        {...$$restProps}
-        on:change="{onChange}"
-        on:input="{onInput}"
+        class:bx--text-input--md="{size === 'md'}"
+        class:bx--text-input--lg="{size === 'lg'}"
+        class:bx--layout--size-sm="{size === 'sm'}"
+        class:bx--layout--size-md="{size === 'md'}"
+        class:bx--layout--size-lg="{size === 'lg'}"
+        {...inputAttributes}
+        on:change
+        on:input
         on:keydown
         on:keyup
         on:focus
@@ -218,30 +258,48 @@
       {/if}
       {#if isFluid && !inline && invalid}
         <div class:bx--form-requirement="{true}" id="{errorId}">
-          {invalidText}
+          <slot name="invalidText">
+            {invalidText}
+          </slot>
         </div>
       {/if}
       {#if isFluid && !inline && warn}
-        <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
+        <div class:bx--form-requirement="{true}" id="{warnId}">
+          <slot name="warnText">{warnText}</slot>
+        </div>
       {/if}
     </div>
-    {#if !invalid && !warn && !isFluid && !inline && helperText}
+    {#if !invalid && !warn && !isFluid && !inline && (helperText || $$slots.helperText)}
       <div
         id="{helperId}"
         class:bx--form__helper-text="{true}"
         class:bx--form__helper-text--disabled="{disabled}"
         class:bx--form__helper-text--inline="{inline}"
       >
-        {helperText}
+        <slot name="helperText">
+          {helperText}
+        </slot>
       </div>
     {/if}
     {#if !isFluid && invalid}
       <div class:bx--form-requirement="{true}" id="{errorId}">
-        {invalidText}
+        <slot name="invalidText">
+          {invalidText}
+        </slot>
       </div>
     {/if}
     {#if !isFluid && !invalid && warn}
-      <div class:bx--form-requirement="{true}" id="{warnId}">{warnText}</div>
+      <div class:bx--form-requirement="{true}" id="{warnId}">
+        <slot name="warnText">{warnText}</slot>
+      </div>
     {/if}
   </div>
 </div>
+
+<style>
+  .fluid-form-fix__label-counter {
+    right: 0;
+    inset-inline-start: unset;
+    padding-right: 1rem;
+  }
+</style>

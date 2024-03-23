@@ -12743,20 +12743,9 @@
       "filePath": "src/TextInput/TextInput.svelte",
       "props": [
         {
-          "name": "size",
-          "kind": "let",
-          "description": "Set the size of the input",
-          "type": "\"sm\" | \"lg\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "value",
           "kind": "let",
-          "description": "Specify the input value.\n\n`value` will be set to `null` if type=\"number\"\nand the value is empty.",
+          "description": "Specify the input value\n`value` will be set to `null` if `typeof value === \"number\"` and `value` is empty",
           "type": "null | number | string",
           "value": "\"\"",
           "isFunction": false,
@@ -12764,6 +12753,30 @@
           "isRequired": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "ref",
+          "kind": "let",
+          "description": "Obtain a reference to the input HTML element",
+          "type": "null | HTMLInputElement",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "size",
+          "kind": "let",
+          "description": "Set the size of the input",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "value": "\"md\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         },
         {
           "name": "placeholder",
@@ -12780,7 +12793,7 @@
         {
           "name": "light",
           "kind": "let",
-          "description": "Set to `true` to enable the light variant",
+          "description": "Set to `true` to enable the light variant\nFor use on $ui-01 backgrounds only. Don't use this to make tile background color same as container background color\nThe light prop for `TextInput` has been deprecated in favor of the new `Layer` Layer component. It will be removed in the next major release\n@deprecated ",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -12795,41 +12808,6 @@
           "description": "Set to `true` to disable the input",
           "type": "boolean",
           "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "helperText",
-          "kind": "let",
-          "description": "Specify the helper text",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "id",
-          "kind": "let",
-          "description": "Set an id for the input element",
-          "type": "string",
-          "value": "\"ccs-\" + Math.random().toString(36)",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "name",
-          "kind": "let",
-          "description": "Specify a name attribute for the input",
-          "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12854,6 +12832,41 @@
           "description": "Set to `true` to visually hide the label text",
           "type": "boolean",
           "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "helperText",
+          "kind": "let",
+          "description": "Specify the helper text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "counter",
+          "kind": "let",
+          "description": "Set to `true` to enable display the character counter. Requires `maxCount` to be set.",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "maxCount",
+          "kind": "let",
+          "description": "Specify the maximum number of characters/words allowed\nThis is needed in order for `counter` to display",
+          "type": "number",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12909,23 +12922,22 @@
           "reactive": false
         },
         {
-          "name": "ref",
+          "name": "id",
           "kind": "let",
-          "description": "Obtain a reference to the input HTML element",
-          "type": "null | HTMLInputElement",
-          "value": "null",
+          "description": "Set an id for the input element",
+          "type": "string",
+          "value": "\"ccs-\" + Math.random().toString(36)",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
           "constant": false,
-          "reactive": true
+          "reactive": false
         },
         {
-          "name": "required",
+          "name": "name",
           "kind": "let",
-          "description": "Set to `true` to mark the field as required",
-          "type": "boolean",
-          "value": "false",
+          "description": "Specify a name attribute for the input",
+          "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12945,6 +12957,18 @@
           "reactive": false
         },
         {
+          "name": "required",
+          "kind": "let",
+          "description": "Set to `true` to mark the field as required",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "readonly",
           "kind": "let",
           "description": "Set to `true` to use the read-only variant",
@@ -12955,40 +12979,74 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "labelAttributes",
+          "kind": "let",
+          "description": "Set HTML attributes on the `label` element",
+          "type": "import('svelte/elements').HTMLLabelAttributes",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "inputAttributes",
+          "kind": "let",
+          "description": "Set HTML attributes on the `input` element",
+          "type": "import('svelte/elements').HTMLInputAttributes",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
       "slots": [
         {
+          "name": "helperText",
+          "default": false,
+          "fallback": "{helperText}",
+          "slot_props": "{}"
+        },
+        {
+          "name": "invalidText",
+          "default": false,
+          "fallback": "{invalidText}",
+          "slot_props": "{}"
+        },
+        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "{}"
+        },
+        {
+          "name": "warnText",
+          "default": false,
+          "fallback": "{warnText}",
+          "slot_props": "{}"
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "change",
-          "detail": "null | number | string"
-        },
-        {
-          "type": "dispatched",
-          "name": "input",
-          "detail": "null | number | string"
-        },
         { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "pointerup", "element": "div" },
+        { "type": "forwarded", "name": "pointerover", "element": "div" },
+        { "type": "forwarded", "name": "pointerenter", "element": "div" },
+        { "type": "forwarded", "name": "pointerleave", "element": "div" },
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "paste", "element": "input" }
       ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "input" }
+      "typedefs": []
     },
     {
       "moduleName": "TextInputSkeleton",
@@ -13005,18 +13063,30 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "divAttributes",
+          "kind": "let",
+          "description": "Specify the div HTML attributes for the skeleton container",
+          "type": "import('svelte/elements').HTMLDivAttributes",
+          "value": "{}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
       "slots": [],
       "events": [
         { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
+        { "type": "forwarded", "name": "pointerup", "element": "div" },
+        { "type": "forwarded", "name": "pointerover", "element": "div" },
+        { "type": "forwarded", "name": "pointerenter", "element": "div" },
+        { "type": "forwarded", "name": "pointerleave", "element": "div" }
       ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "typedefs": []
     },
     {
       "moduleName": "Theme",

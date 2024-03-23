@@ -1,23 +1,24 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["input"];
-
-export interface TextInputProps extends RestProps {
+export interface TextInputProps {
   /**
-   * Set the size of the input
-   * @default undefined
-   */
-  size?: "sm" | "lg";
-
-  /**
-   * Specify the input value.
-   *
-   * `value` will be set to `null` if type="number"
-   * and the value is empty.
+   * Specify the input value
+   * `value` will be set to `null` if `typeof value === "number"` and `value` is empty
    * @default ""
    */
   value?: null | number | string;
+
+  /**
+   * Obtain a reference to the input HTML element
+   * @default null
+   */
+  ref?: null | HTMLInputElement;
+
+  /**
+   * Set the size of the input
+   * @default "md"
+   */
+  size?: "sm" | "md" | "lg";
 
   /**
    * Specify the placeholder text
@@ -27,6 +28,9 @@ export interface TextInputProps extends RestProps {
 
   /**
    * Set to `true` to enable the light variant
+   * For use on $ui-01 backgrounds only. Don't use this to make tile background color same as container background color
+   * The light prop for `TextInput` has been deprecated in favor of the new `Layer` Layer component. It will be removed in the next major release
+   * @deprecated
    * @default false
    */
   light?: boolean;
@@ -36,24 +40,6 @@ export interface TextInputProps extends RestProps {
    * @default false
    */
   disabled?: boolean;
-
-  /**
-   * Specify the helper text
-   * @default ""
-   */
-  helperText?: string;
-
-  /**
-   * Set an id for the input element
-   * @default "ccs-" + Math.random().toString(36)
-   */
-  id?: string;
-
-  /**
-   * Specify a name attribute for the input
-   * @default undefined
-   */
-  name?: string;
 
   /**
    * Specify the label text
@@ -66,6 +52,25 @@ export interface TextInputProps extends RestProps {
    * @default false
    */
   hideLabel?: boolean;
+
+  /**
+   * Specify the helper text
+   * @default ""
+   */
+  helperText?: string;
+
+  /**
+   * Set to `true` to enable display the character counter. Requires `maxCount` to be set.
+   * @default false
+   */
+  counter?: boolean;
+
+  /**
+   * Specify the maximum number of characters/words allowed
+   * This is needed in order for `counter` to display
+   * @default undefined
+   */
+  maxCount?: number;
 
   /**
    * Set to `true` to indicate an invalid state
@@ -92,16 +97,16 @@ export interface TextInputProps extends RestProps {
   warnText?: string;
 
   /**
-   * Obtain a reference to the input HTML element
-   * @default null
+   * Set an id for the input element
+   * @default "ccs-" + Math.random().toString(36)
    */
-  ref?: null | HTMLInputElement;
+  id?: string;
 
   /**
-   * Set to `true` to mark the field as required
-   * @default false
+   * Specify a name attribute for the input
+   * @default undefined
    */
-  required?: boolean;
+  name?: string;
 
   /**
    * Set to `true` to use the inline variant
@@ -110,28 +115,45 @@ export interface TextInputProps extends RestProps {
   inline?: boolean;
 
   /**
+   * Set to `true` to mark the field as required
+   * @default false
+   */
+  required?: boolean;
+
+  /**
    * Set to `true` to use the read-only variant
    * @default false
    */
   readonly?: boolean;
 
-  [key: `data-${string}`]: any;
+  /**
+   * Set HTML attributes on the `label` element
+   * @default {}
+   */
+  labelAttributes?: import("svelte/elements").HTMLLabelAttributes;
+
+  /**
+   * Set HTML attributes on the `input` element
+   * @default {}
+   */
+  inputAttributes?: import("svelte/elements").HTMLInputAttributes;
 }
 
 export default class TextInput extends SvelteComponentTyped<
   TextInputProps,
   {
-    change: CustomEvent<null | number | string>;
-    input: CustomEvent<null | number | string>;
     click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
+    pointerup: WindowEventMap["pointerup"];
+    pointerover: WindowEventMap["pointerover"];
+    pointerenter: WindowEventMap["pointerenter"];
+    pointerleave: WindowEventMap["pointerleave"];
+    change: WindowEventMap["change"];
+    input: WindowEventMap["input"];
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
     paste: DocumentAndElementEventHandlersEventMap["paste"];
   },
-  { labelText: {} }
+  { helperText: {}; invalidText: {}; labelText: {}; warnText: {} }
 > {}
