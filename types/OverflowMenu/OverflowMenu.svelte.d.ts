@@ -35,6 +35,12 @@ export interface OverflowMenuProps extends RestProps {
   flipped?: boolean;
 
   /**
+   * Set to `true` to keep menu open after clicking the items
+   * @default false
+   */
+  persistentClickItems?: boolean;
+
+  /**
    * Specify the menu options class
    * @default undefined
    */
