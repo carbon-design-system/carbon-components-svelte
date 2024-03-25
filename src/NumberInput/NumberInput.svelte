@@ -138,7 +138,7 @@
     "Numeric input field with increment and decrement buttons";
 
   function parse(raw) {
-    return raw != "" ? Number(raw) : null;
+    return raw !== "" ? Number(raw) : null;
   }
 
   function onInput({ target }) {

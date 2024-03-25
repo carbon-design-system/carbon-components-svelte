@@ -11,7 +11,7 @@
 
     let parentNode = node.parentNode;
 
-    while (parentNode != null && parentNode.getAttribute("role") !== "tree") {
+    while (parentNode !== null && parentNode.getAttribute("role") !== "tree") {
       parentNode = parentNode.parentNode;
       if (parentNode.tagName === "LI") depth++;
     }

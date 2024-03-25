@@ -84,7 +84,7 @@
     openDetail = e.target;
   }
 
-  $: if (target != null) {
+  $: if (target !== null) {
     if (Array.isArray(target)) {
       target.forEach((node) => node?.addEventListener("contextmenu", openMenu));
     } else {
@@ -94,7 +94,7 @@
 
   onMount(() => {
     return () => {
-      if (target != null) {
+      if (target !== null) {
         if (Array.isArray(target)) {
           target.forEach((node) =>
             node?.removeEventListener("contextmenu", openMenu)
@@ -140,7 +140,7 @@
 
 <svelte:window
   on:contextmenu="{(e) => {
-    if (target != null) return;
+    if (target !== null) return;
     if (level > 1) return;
     if (!ref) return;
     openMenu(e);

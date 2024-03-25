@@ -207,7 +207,7 @@
   $: $tableRows = rows;
   $: sortedRows = [...$tableRows];
   $: ascending = sortDirection === "ascending";
-  $: sorting = sortable && sortKey != null;
+  $: sorting = sortable && sortKey !== null;
   $: sortingHeader = headers.find((header) => header.key === sortKey);
   $: if (sorting) {
     if (sortDirection === "none") {
