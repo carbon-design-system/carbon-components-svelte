@@ -34,6 +34,19 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+## Arbitrary Values
+
+Set `allowArbitraryValues` to `true` to allow the user to type in whatever value they want, even if it's not present in `items`.
+`selectedId` will be set to `undefined` when the value is arbitrary.
+
+<ComboBox allowArbitraryValues titleText="Contact" placeholder="Select contact method"
+selectedId="1"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
 ## Reactive example
 
 <FileSource src="/framed/ComboBox/ReactiveComboBox" />
