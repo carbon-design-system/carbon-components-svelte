@@ -141,8 +141,6 @@
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
 
-  //$: value && !!changeCaretPosition;
-
   function parse(raw) {
     return raw != "" ? Number(raw) : null;
   }
