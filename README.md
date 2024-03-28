@@ -176,8 +176,8 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 
 [carbon-preprocess-svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte) is a collection of Svelte preprocessors for Carbon.
 
-> [!NOTE]
-> Using `carbon-preprocess-svelte` is optional and not a prerequisite for this library.
+> [!INFO]
+> Using `carbon-preprocess-svelte` is optional and not a prerequisite to using this library. It's designed for better developer experience in addition to CSS build performance.
 
 ```sh
 # Yarn

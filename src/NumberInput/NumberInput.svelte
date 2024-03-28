@@ -18,6 +18,8 @@
    */
   export let value = null;
 
+  let previousValue = null;
+
   /** Specify the step increment */
   export let step = 1;
 
@@ -99,6 +101,7 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
+  import { tick } from "svelte";
   import { createEventDispatcher } from "svelte";
   import Add from "../icons/Add.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -114,11 +117,14 @@
   const dispatch = createEventDispatcher();
 
   function updateValue(isIncrementing) {
+    previousValue = ref.value;
+
     if (isIncrementing) {
       ref.stepUp();
     } else {
       ref.stepDown();
     }
+
     value = +ref.value;
 
     dispatch("input", value);
@@ -141,10 +147,56 @@
     return raw != "" ? Number(raw) : null;
   }
 
-  function onInput({ target }) {
+  async function onInput({ target, inputType, data }) {
+    previousValue = parse(value);
+    const possibleNewValue = parse(target.value);
     value = parse(target.value);
 
+    const isIntegerTransition =
+      !data &&
+      !Number.isInteger(previousValue) &&
+      Number.isInteger(possibleNewValue);
+
+    if (isIntegerTransition && value < previousValue) {
+      await setSelectionAfterTick(target.value.length);
+    } else if (isIntegerTransition && previousValue && value > previousValue) {
+      let parts = previousValue.toString().split(".");
+
+      if (inputType === "deleteContentForward" && parts[1]) {
+        parts[1] = parts[1].substring(1);
+      } else if (inputType === "deleteContentBackward") {
+        parts[0] = parts[0].slice(0, -1);
+      }
+
+      const chars =
+        parts[0].length + (inputType === "deleteContentBackward" ? 1 : 0);
+      value = parse(parts.join("."));
+      await setSelectionAfterTick(chars);
+    } else if (
+      !isIntegerTransition &&
+      previousValue &&
+      value === previousValue &&
+      inputType === "deleteContentForward"
+    ) {
+      value = parse(0);
+      await setSelectionAfterTick(0);
+    } else {
+      value = possibleNewValue;
+    }
+
     dispatch("input", value);
+  }
+
+  function setSelection(position) {
+    ref.focus();
+    ref.type = "text";
+    ref.setSelectionRange(position, position);
+    ref.type = "number";
+  }
+
+  async function setSelectionAfterTick(position) {
+    await tick();
+    setSelection(position);
   }
 
   function onChange({ target }) {
