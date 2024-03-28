@@ -117,13 +117,14 @@
   const dispatch = createEventDispatcher();
 
   function updateValue(isIncrementing) {
+    previousValue = ref.value;
+
     if (isIncrementing) {
       ref.stepUp();
     } else {
       ref.stepDown();
     }
 
-    previousValue = ref.value;
     value = +ref.value;
 
     dispatch("input", value);
@@ -141,6 +142,10 @@
   $: ariaLabel =
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
+  $: {
+    console.log("previousValue / value", previousValue, value);
+    console.log();
+  }
 
   function parse(raw) {
     return raw != "" ? Number(raw) : null;
