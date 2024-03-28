@@ -142,10 +142,6 @@
   $: ariaLabel =
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
-  $: {
-    console.log("previousValue / value", previousValue, value);
-    console.log();
-  }
 
   function parse(raw) {
     return raw != "" ? Number(raw) : null;
