@@ -101,12 +101,12 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, tick } from "svelte";
-  import Add from "carbon-components-svelte/src/icons/Add.svelte";
-  import Subtract from "carbon-components-svelte/src/icons/Subtract.svelte";
-  import WarningFilled from "carbon-components-svelte/src/icons/WarningFilled.svelte";
-  import WarningAltFilled from "carbon-components-svelte/src/icons/WarningAltFilled.svelte";
-  import EditOff from "carbon-components-svelte/src/icons/EditOff.svelte";
+  import { createEventDispatcher } from "svelte";
+  import Add from "../icons/Add.svelte";
+  import Subtract from "../icons/Subtract.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import EditOff from "../icons/EditOff.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
