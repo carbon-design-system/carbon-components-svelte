@@ -101,6 +101,7 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
+  import { tick } from "svelte";
   import { createEventDispatcher } from "svelte";
   import Add from "../icons/Add.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -145,11 +146,8 @@
     return raw != "" ? Number(raw) : null;
   }
 
-  function updatePreviousValue() {
-    previousValue = parse(value);
-  }
-
   async function onInput({ target, inputType, data }) {
+    previousValue = parse(value);
     const possibleNewValue = parse(target.value);
     value = parse(target.value);
 
@@ -254,7 +252,6 @@
         max="{max}"
         min="{min}"
         step="{step}"
-        on:input="{updatePreviousValue}"
         value="{value ?? ''}"
         readonly="{readonly}"
         {...$$restProps}
