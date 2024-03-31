@@ -100,12 +100,12 @@
       ((size === "small" && !expressive) ||
         (size === "sm" && !expressive) ||
         (size === "small" && !expressive)) &&
-        "bx--btn--sm",
+        "bx--btn--sm bx--layout--size-sm",
       ((size === "field" && !expressive) || (size === "md" && !expressive)) &&
-        "bx--btn--md",
-      size === "small" && "bx--btn--sm",
-      size === "xl" && "bx--btn--xl",
-      size === "2xl" && "bx--btn--2xl",
+        "bx--btn--md bx--layout--size-md",
+      size === "small" && "bx--btn--sm bx--layout--size-sm",
+      size === "xl" && "bx--btn--xl bx--layout--size-xl",
+      size === "2xl" && "bx--btn--2xl bx--layout--size-2xl",
       kind && `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
