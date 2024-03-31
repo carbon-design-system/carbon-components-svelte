@@ -3,6 +3,8 @@ html[theme="g90"] .code-override {
 }
 
 .code-override .bx--snippet {
+  /** Docs code snippet is always dark mode */
+  color-scheme: dark;
   max-width: none;
 }
 
