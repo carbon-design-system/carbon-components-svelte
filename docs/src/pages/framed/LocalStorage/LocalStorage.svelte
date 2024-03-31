@@ -4,7 +4,7 @@
   let toggled = false;
   let events = [];
 
-  $: document.documentElement.setAttribute("theme", toggled ? "g100" : "white");
+  $: document.documentElement.setAttribute("data-carbon-theme", toggled ? "g100" : "white");
 </script>
 
 <LocalStorage

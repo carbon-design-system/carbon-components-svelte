@@ -4,7 +4,7 @@
   let storage;
   let toggled = false;
 
-  $: document.documentElement.setAttribute("theme", toggled ? "g100" : "white");
+  $: document.documentElement.setAttribute("data-carbon-theme", toggled ? "g100" : "white");
 </script>
 
 <LocalStorage bind:this="{storage}" bind:value="{toggled}" />

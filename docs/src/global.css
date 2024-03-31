@@ -1,4 +1,4 @@
-html[theme="g90"] .code-override {
+html[data-carbon-theme="g90"] .code-override {
   border: 1px solid var(--bx-border-subtle-01);
 }
 

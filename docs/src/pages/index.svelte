@@ -36,7 +36,7 @@
   const cssThemeToggle = `<script>
   let theme = "${$theme}"; // "white" | "g10" | "g90" | "g100"
 
-  $: document.documentElement.setAttribute("theme", theme);
+  $: document.documentElement.setAttribute("data-carbon-theme", theme);
 <\/script>
 `;
 

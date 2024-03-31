@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" theme="white">
+<html lang="en" data-carbon-theme="white">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
@@ -10,7 +10,7 @@
         const theme = localStorage.getItem("theme");
 
         if (["white", "g10", "g90", "g100"].includes(theme)) {
-          document.documentElement.setAttribute("theme", theme);
+          document.documentElement.setAttribute("data-carbon-theme", theme);
           document.documentElement.style.setProperty("color-scheme", ["white", "g10"].includes(theme) ? "light" : "dark");
         }
       } catch (e) {}

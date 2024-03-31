@@ -16,7 +16,7 @@
     // conflict with how the iframe is displayed in the docs.
     // Instead, we want the theme to be overridden in the standalone page.
     if (["white", "g10", "g90", "g100"].includes(current_theme)) {
-      document.documentElement.setAttribute("theme", current_theme);
+      document.documentElement.setAttribute("data-carbon-theme", current_theme);
       document.documentElement.style.setProperty(
         "color-scheme",
         ["white", "g10"].includes(current_theme) ? "light" : "dark"
