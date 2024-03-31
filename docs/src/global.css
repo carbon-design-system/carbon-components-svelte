@@ -3,6 +3,7 @@ html[theme="g90"] .code-override {
 }
 
 .code-override .bx--snippet {
+  color-scheme: dark;
   max-width: none;
 }
 
