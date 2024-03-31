@@ -7,9 +7,9 @@
 
   /**
    * Specify the size of button skeleton
-   * @type {"default" | "field" | "small" | "lg" | "xl"}
+   * @type {"sm" | "md" | "lg" | "xl" | "2xl"}
    */
-  export let size = "default";
+  export let size = "lg";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -20,10 +20,11 @@
     role="button"
     class:bx--skeleton="{true}"
     class:bx--btn="{true}"
-    class:bx--btn--field="{size === 'field'}"
-    class:bx--btn--sm="{size === 'small'}"
-    class:bx--btn--lg="{size === 'lg'}"
-    class:bx--btn--xl="{size === 'xl'}"
+    class:bx--layout--size-sm="{size === 'sm'}"
+    class:bx--layout--size-md="{size === 'md'}"
+    class:bx--layout--size-lg="{size === 'lg'}"
+    class:bx--layout--size-xl="{size === 'xl'}"
+    class:bx--layout--size-2xl="{size === '2xl'}"
     {...$$restProps}
     on:click
     on:focus
@@ -39,10 +40,11 @@
   <div
     class:bx--skeleton="{true}"
     class:bx--btn="{true}"
-    class:bx--btn--field="{size === 'field'}"
-    class:bx--btn--sm="{size === 'small'}"
-    class:bx--btn--lg="{size === 'lg'}"
-    class:bx--btn--xl="{size === 'xl'}"
+    class:bx--layout--size-sm="{size === 'sm'}"
+    class:bx--layout--size-md="{size === 'md'}"
+    class:bx--layout--size-lg="{size === 'lg'}"
+    class:bx--layout--size-xl="{size === 'xl'}"
+    class:bx--layout--size-2xl="{size === '2xl'}"
     {...$$restProps}
     on:click
     on:focus

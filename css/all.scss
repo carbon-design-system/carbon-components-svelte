@@ -1,35 +1,32 @@
+$prefix: 'bx';
+
 // Use all Carbon themes
 @use '@carbon/styles/scss/config' with (
   $use-akamai-cdn: true,
-  $prefix: 'bx'
+  $prefix: $prefix
 );
-@use "@carbon/styles/scss/theme" as *;
-@use "@carbon/styles/scss/themes" as *;
-@use "@carbon/styles/scss/fonts";
+@use "@carbon/styles" as styles;
 @use "@carbon/styles/scss/utilities" as *;
 
 :root {
-  @include theme($white);
+  @include styles.theme(styles.$white);
 }
 
 [data-carbon-theme='g10'] {
-  @include theme($g10);
+  @include styles.theme(styles.$g10);
 }
 
 [data-carbon-theme='g90'] {
-  @include theme($g90);
+  @include styles.theme(styles.$g90);
 }
 
 [data-carbon-theme='g100'] {
-  @include theme($g100);
+  @include styles.theme(styles.$g100);
 }
 
-@import "@carbon/styles/scss/reset";
-@import "@carbon/styles/scss/components";
-
-.bx--text-truncate-end {
+.#{$prefix}--text-truncate-end {
   @include text-truncate-end;
 }
-.bx--text-truncate-front {
+.#{$prefix}--text-truncate-front {
   @include text-truncate-front;
 }

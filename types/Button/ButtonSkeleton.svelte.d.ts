@@ -12,9 +12,9 @@ export interface ButtonSkeletonProps extends RestProps {
 
   /**
    * Specify the size of button skeleton
-   * @default "default"
+   * @default "lg"
    */
-  size?: "default" | "field" | "small" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl";
 
   [key: `data-${string}`]: any;
 }

@@ -430,10 +430,10 @@ None.
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                                                                         | Default value          | Description                          |
-| :-------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------------- | ---------------------- | ------------------------------------ |
-| href      | No       | <code>let</code> | No       | <code>string</code>                                                          | <code>undefined</code> | Set the `href` to use an anchor link |
-| size      | No       | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small" &#124; "lg" &#124; "xl"</code> | <code>"default"</code> | Specify the size of button skeleton  |
+| Prop name | Required | Kind             | Reactive | Type                                                               | Default value          | Description                          |
+| :-------- | :------- | :--------------- | :------- | ------------------------------------------------------------------ | ---------------------- | ------------------------------------ |
+| href      | No       | <code>let</code> | No       | <code>string</code>                                                | <code>undefined</code> | Set the `href` to use an anchor link |
+| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg" &#124; "xl" &#124; "2xl"</code> | <code>"lg"</code>      | Specify the size of button skeleton  |
 
 ### Slots
 

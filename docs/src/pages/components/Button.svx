@@ -36,7 +36,7 @@
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    You must provide an <strong>iconDescription</strong> for the button tooltip.
+    You must provide an <strong>iconDescription</strong> for screen readers.
   </div>
 </InlineNotification>
 
@@ -54,7 +54,7 @@
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    You must provide an <strong>iconDescription</strong> for the button tooltip.
+    You must provide an <strong>iconDescription</strong> for screen readers.
   </div>
 </InlineNotification>
 
@@ -84,41 +84,20 @@ If an `href` value is specified, the component will render an [anchor element](h
 
 ## Custom element
 
-<Button as let:props>
-  <p {...props}>Custom element</p>
+<Button as="div">
+  Custom element
 </Button>
 
-## Field size
+## Sizes
 
-<Button size="md">Primary</Button>
-<Button size="md" kind="secondary">Secondary</Button>
-<Button size="md" kind="tertiary">Tertiary</Button>
-<Button size="md" kind="ghost">Ghost</Button>
-<Button size="md" kind="danger">Danger</Button>
+Button is available in small, medium, large, extra-large, and double-extra-large.
+Use `md` (default) when used with form fields.
 
-## Small size
-
-<Button size="sm">Primary</Button>
-<Button size="sm" kind="secondary">Secondary</Button>
-<Button size="sm" kind="tertiary">Tertiary</Button>
-<Button size="sm" kind="ghost">Ghost</Button>
-<Button size="sm" kind="danger">Danger</Button>
-
-## Large size
-
-<Button size="xl">Primary</Button>
-<Button size="xl" kind="secondary">Secondary</Button>
-<Button size="xl" kind="tertiary">Tertiary</Button>
-<Button size="xl" kind="ghost">Ghost</Button>
-<Button size="xl" kind="danger">Danger</Button>
-
-## Extra-large size
-
-<Button size="2xl">Primary</Button>
-<Button size="2xl" kind="secondary">Secondary</Button>
-<Button size="2xl" kind="tertiary">Tertiary</Button>
-<Button size="2xl" kind="ghost">Ghost</Button>
-<Button size="2xl" kind="danger">Danger</Button>
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+<Button size="xl">Extra Large</Button>
+<Button size="2xl">Double extra Large</Button>
 
 ## Disabled state
 
@@ -128,12 +107,6 @@ If an `href` value is specified, the component will render an [anchor element](h
 ## Expressive styles
 
 Set `expressive` to `true` to use Carbon's expressive typesetting.
-
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    Expressive styles only work with the default, "lg", and "xl" button sizes.
-  </div>
-</InlineNotification>
 
 <Button expressive size="xl">Primary</Button>
 <Button expressive size="xl" kind="secondary">Secondary</Button>
@@ -153,13 +126,19 @@ Set `expressive` to `true` to use Carbon's expressive typesetting.
 <Button expressive kind="ghost">Ghost</Button>
 <Button expressive kind="danger">Danger</Button>
 
+## Additional attributes
+
+Use `buttonAttributes` to pass any additional attributes.
+
+<Button buttonAttributes={{class: 'ready'}}>Ready</Button>
+
 ## Skeleton
 
-<Button size="xl" skeleton />
-<Button size="lg" skeleton />
-<Button skeleton />
-<Button skeleton size="field" />
-<Button skeleton size="small" />
+<Button skeleton size="2xl" />
+<Button skeleton size="xl" />
+<Button skeleton size="lg" />
+<Button skeleton size="md" />
+<Button skeleton size="sm" />
 
 ## Programmatic focus
 
