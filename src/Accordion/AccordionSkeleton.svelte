@@ -1,40 +1,44 @@
 <script>
-  /** Specify the number of accordion items to render */
+  // @ts-check
+
+  /** Specify the number of accordion items. */
   export let count = 4;
 
   /**
-   * Specify alignment of accordion item chevron icon
+   * Specify the alignment of the accordion item chevron icon.
    * @type {"start" | "end"}
    */
   export let align = "end";
 
   /**
-   * Specify the size of the accordion
-   * @type {"sm" | "xl"}
+   * Set to `true` to flush the accordion content text.
+   *
+   * **Note**: does not work with `align="start"`.
    */
-  export let size = undefined;
+  export let flush = false;
 
-  /** Set to `false` to close the first accordion item */
-  export let open = true;
+  /**
+   * Specify the size of the accordion.
+   * @type {"sm" | "md" | "lg"}
+   */
+  export let size = "md";
+
+  /** Set to `true` to expand the first accordion item */
+  export let open = false;
 
   import ChevronRight from "../icons/ChevronRight.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <ul
   class:bx--skeleton="{true}"
   class:bx--accordion="{true}"
   class:bx--accordion--start="{align === 'start'}"
   class:bx--accordion--end="{align === 'end'}"
-  class:bx--accordion--sm="{size === 'sm'}"
-  class:bx--accordion--xl="{size === 'xl'}"
-  {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
+  class:bx--accordion--flush="{flush && align !== 'start'}"
+  class:bx--layout--size-sm="{size === 'sm'}"
+  class:bx--layout--size-md="{size === 'md'}"
+  class:bx--layout--size-lg="{size === 'lg'}"
 >
   {#if open}
     <li
@@ -52,7 +56,7 @@
       </div>
     </li>
   {/if}
-  {#each Array.from({ length: open ? count - 1 : count }, (_, i) => i) as item (item)}
+  {#each Array.from({ length: open ? count - 1 : count }) as item}
     <li class:bx--accordion__item="{true}">
       <span class:bx--accordion__heading="{true}">
         <ChevronRight class="bx--accordion__arrow" />

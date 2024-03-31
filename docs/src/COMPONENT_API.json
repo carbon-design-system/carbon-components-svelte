@@ -8,7 +8,7 @@
         {
           "name": "align",
           "kind": "let",
-          "description": "Specify alignment of accordion item chevron icon",
+          "description": "Specify the alignment of the accordion item chevron icon.",
           "type": "\"start\" | \"end\"",
           "value": "\"end\"",
           "isFunction": false,
@@ -18,20 +18,9 @@
           "reactive": false
         },
         {
-          "name": "size",
+          "name": "flush",
           "kind": "let",
-          "description": "Specify the size of the accordion",
-          "type": "\"sm\" | \"lg\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "disabled",
-          "kind": "let",
-          "description": "Set to `true` to disable the accordion",
+          "description": "Set to `true` to flush the accordion content text.\n\n**Note**: does not work with `align=\"start\"`.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -41,9 +30,21 @@
           "reactive": false
         },
         {
-          "name": "skeleton",
+          "name": "size",
           "kind": "let",
-          "description": "Set to `true` to display the skeleton state",
+          "description": "Specify the size of the accordion.",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "value": "\"md\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable all accordion items.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -55,34 +56,8 @@
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "AccordionSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "AccordionSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "AccordionSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "AccordionSkeleton"
-        }
-      ],
-      "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "AccordionSkeleton" },
-      "extends": {
-        "interface": "AccordionSkeletonProps",
-        "import": "\"./AccordionSkeleton.svelte\""
-      }
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "AccordionItem",
@@ -91,7 +66,7 @@
         {
           "name": "title",
           "kind": "let",
-          "description": "Specify the title of the accordion item heading.\nAlternatively, use the \"title\" slot (e.g., `<div slot=\"title\">...</div>`)",
+          "description": "Specify the title of the accordion item heading.\nUse the \"title\" slot for custom elements.\n@example <svelte:fragment slot=\"title\">...</svelte:fragment>",
           "type": "string",
           "value": "\"title\"",
           "isFunction": false,
@@ -103,7 +78,7 @@
         {
           "name": "open",
           "kind": "let",
-          "description": "Set to `true` to open the first accordion item",
+          "description": "Set to `true` to open the first accordion item.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -115,7 +90,7 @@
         {
           "name": "disabled",
           "kind": "let",
-          "description": "Set to `true` to disable the accordion item",
+          "description": "Set to `true` to disable the accordion item.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -127,7 +102,7 @@
         {
           "name": "iconDescription",
           "kind": "let",
-          "description": "Specify the ARIA label for the accordion item chevron icon",
+          "description": "Specify the ARIA label for the accordion item chevron icon.",
           "type": "string",
           "value": "\"Expand/Collapse\"",
           "isFunction": false,
@@ -155,8 +130,7 @@
         { "type": "forwarded", "name": "mouseleave", "element": "button" },
         { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "li" }
+      "typedefs": []
     },
     {
       "moduleName": "AccordionSkeleton",
@@ -165,7 +139,7 @@
         {
           "name": "count",
           "kind": "let",
-          "description": "Specify the number of accordion items to render",
+          "description": "Specify the number of accordion items.",
           "type": "number",
           "value": "4",
           "isFunction": false,
@@ -177,7 +151,7 @@
         {
           "name": "align",
           "kind": "let",
-          "description": "Specify alignment of accordion item chevron icon",
+          "description": "Specify the alignment of the accordion item chevron icon.",
           "type": "\"start\" | \"end\"",
           "value": "\"end\"",
           "isFunction": false,
@@ -187,10 +161,23 @@
           "reactive": false
         },
         {
+          "name": "flush",
+          "kind": "let",
+          "description": "Set to `true` to flush the accordion content text.\n\n**Note**: does not work with `align=\"start\"`.",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the accordion",
-          "type": "\"sm\" | \"xl\"",
+          "description": "Specify the size of the accordion.",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "value": "\"md\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -200,9 +187,9 @@
         {
           "name": "open",
           "kind": "let",
-          "description": "Set to `false` to close the first accordion item",
+          "description": "Set to `true` to expand the first accordion item",
           "type": "boolean",
-          "value": "true",
+          "value": "false",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -212,14 +199,8 @@
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "ul" },
-        { "type": "forwarded", "name": "mouseover", "element": "ul" },
-        { "type": "forwarded", "name": "mouseenter", "element": "ul" },
-        { "type": "forwarded", "name": "mouseleave", "element": "ul" }
-      ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "ul" }
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "AspectRatio",
