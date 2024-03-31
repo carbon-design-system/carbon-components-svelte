@@ -58,7 +58,7 @@
   }
 
   .preview-viewer {
-    border: 1px solid var(--bx-ui-03);
+    border: 1px solid var(--bx-border-subtle-01);
     border-bottom: 0;
     position: relative;
     z-index: 9999;

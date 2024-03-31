@@ -51,11 +51,11 @@
   }
 
   .borderRight {
-    border-right: 1px solid var(--bx-ui-03);
+    border-right: 1px solid var(--bx-border-subtle-01);
   }
 
   .borderBottom {
-    border-bottom: 1px solid var(--bx-ui-03);
+    border-bottom: 1px solid var(--bx-border-subtle-01);
   }
 
   .card {
@@ -84,7 +84,7 @@
     .card-wrapper,
     .borderRight {
       border-right: 0;
-      border-bottom: 1px solid var(--bx-ui-03);
+      border-bottom: 1px solid var(--bx-border-subtle-01);
     }
   }
 </style>

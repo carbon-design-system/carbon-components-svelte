@@ -177,7 +177,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--bx-spacing-06);
-    border-bottom: 1px solid var(--bx-ui-03);
+    border-bottom: 1px solid var(--bx-border-subtle-01);
   }
 
   :global(.toc h5) {
