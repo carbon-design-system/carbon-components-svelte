@@ -1,11 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
-
-export interface AspectRatioProps extends RestProps {
+export interface AspectRatioProps {
   /**
-   * Specify the aspect ratio
+   * Specify the ratio to be used by the aspect ratio container.
+   * This will determine what aspect ratio your content will be displayed in.
    * @default "2x1"
    */
   ratio?:

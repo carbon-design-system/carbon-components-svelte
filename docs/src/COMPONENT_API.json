@@ -228,7 +228,7 @@
         {
           "name": "ratio",
           "kind": "let",
-          "description": "Specify the aspect ratio",
+          "description": "Specify the ratio to be used by the aspect ratio container.\nThis will determine what aspect ratio your content will be displayed in.",
           "type": "\"2x1\" | \"2x3\" | \"16x9\" | \"4x3\" | \"1x1\" | \"3x4\" | \"3x2\" | \"9x16\" | \"1x2\"",
           "value": "\"2x1\"",
           "isFunction": false,
