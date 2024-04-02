@@ -24,4 +24,5 @@ export default class AspectRatio extends SvelteComponentTyped<
   AspectRatioProps,
   Record<string, any>,
   { default: {} }
-> {}
+> {
+}
