@@ -54,13 +54,7 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
         {
           "type": "forwarded",
@@ -84,10 +78,7 @@
         }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "InlineComponent",
-        "name": "AccordionSkeleton"
-      },
+      "rest_props": { "type": "InlineComponent", "name": "AccordionSkeleton" },
       "extends": {
         "interface": "AccordionSkeletonProps",
         "import": "\"./AccordionSkeleton.svelte\""
@@ -148,11 +139,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "title",
           "default": false,
@@ -161,42 +148,15 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "animationend",
-          "element": "li"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "button"
-        }
+        { "type": "forwarded", "name": "animationend", "element": "li" },
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "mouseover", "element": "button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "button" },
+        { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "li"
-      }
+      "rest_props": { "type": "Element", "name": "li" }
     },
     {
       "moduleName": "AccordionSkeleton",
@@ -253,32 +213,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "ul"
-        }
+        { "type": "forwarded", "name": "click", "element": "ul" },
+        { "type": "forwarded", "name": "mouseover", "element": "ul" },
+        { "type": "forwarded", "name": "mouseenter", "element": "ul" },
+        { "type": "forwarded", "name": "mouseleave", "element": "ul" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "ul"
-      }
+      "rest_props": { "type": "Element", "name": "ul" }
     },
     {
       "moduleName": "AspectRatio",
@@ -287,7 +228,7 @@
         {
           "name": "ratio",
           "kind": "let",
-          "description": "Specify the ratio to be used by the aspect ratio container.\nThis will determine what aspect ratio your content will be displayed in.",
+          "description": "Specify the aspect ratio",
           "type": "\"2x1\" | \"2x3\" | \"16x9\" | \"4x3\" | \"1x1\" | \"3x4\" | \"3x2\" | \"9x16\" | \"1x2\"",
           "value": "\"2x1\"",
           "isFunction": false,
@@ -298,19 +239,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Breadcrumb",
@@ -342,13 +274,7 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
         {
           "type": "forwarded",
@@ -372,10 +298,7 @@
         }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "InlineComponent",
-        "name": "BreadcrumbSkeleton"
-      },
+      "rest_props": { "type": "InlineComponent", "name": "BreadcrumbSkeleton" },
       "extends": {
         "interface": "BreadcrumbSkeletonProps",
         "import": "\"./BreadcrumbSkeleton.svelte\""
@@ -418,32 +341,13 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "li"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "li"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "li"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "li"
-        }
+        { "type": "forwarded", "name": "click", "element": "li" },
+        { "type": "forwarded", "name": "mouseover", "element": "li" },
+        { "type": "forwarded", "name": "mouseenter", "element": "li" },
+        { "type": "forwarded", "name": "mouseleave", "element": "li" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "li"
-      }
+      "rest_props": { "type": "Element", "name": "li" }
     },
     {
       "moduleName": "BreadcrumbSkeleton",
@@ -477,32 +381,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Breakpoint",
@@ -751,21 +636,9 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "ButtonSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "ButtonSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "ButtonSkeleton"
-        },
+        { "type": "forwarded", "name": "click", "element": "ButtonSkeleton" },
+        { "type": "forwarded", "name": "focus", "element": "ButtonSkeleton" },
+        { "type": "forwarded", "name": "blur", "element": "ButtonSkeleton" },
         {
           "type": "forwarded",
           "name": "mouseover",
@@ -783,10 +656,7 @@
         }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button | a | div"
-      },
+      "rest_props": { "type": "Element", "name": "button | a | div" },
       "extends": {
         "interface": "ButtonSkeletonProps",
         "import": "\"./ButtonSkeleton.svelte\""
@@ -810,19 +680,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ButtonSkeleton",
@@ -855,42 +716,15 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "a"
-        }
+        { "type": "forwarded", "name": "click", "element": "a" },
+        { "type": "forwarded", "name": "focus", "element": "a" },
+        { "type": "forwarded", "name": "blur", "element": "a" },
+        { "type": "forwarded", "name": "mouseover", "element": "a" },
+        { "type": "forwarded", "name": "mouseenter", "element": "a" },
+        { "type": "forwarded", "name": "mouseleave", "element": "a" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "Checkbox",
@@ -1073,16 +907,8 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "check",
-          "detail": "boolean"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "CheckboxSkeleton"
-        },
+        { "type": "dispatched", "name": "check", "detail": "boolean" },
+        { "type": "forwarded", "name": "click", "element": "CheckboxSkeleton" },
         {
           "type": "forwarded",
           "name": "mouseover",
@@ -1098,22 +924,11 @@
           "name": "mouseleave",
           "element": "CheckboxSkeleton"
         },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "CheckboxSkeleton",
@@ -1122,32 +937,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ClickableTile",
@@ -1202,45 +998,16 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "Link"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "Link"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "Link"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "Link"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "Link"
-        }
+        { "type": "forwarded", "name": "click", "element": "Link" },
+        { "type": "forwarded", "name": "keydown", "element": "Link" },
+        { "type": "forwarded", "name": "mouseover", "element": "Link" },
+        { "type": "forwarded", "name": "mouseenter", "element": "Link" },
+        { "type": "forwarded", "name": "mouseleave", "element": "Link" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a | p"
-      }
+      "rest_props": { "type": "Element", "name": "a | p" }
     },
     {
       "moduleName": "CodeSnippet",
@@ -1470,21 +1237,9 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "expand",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "collapse",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "copy",
-          "detail": "null"
-        },
+        { "type": "dispatched", "name": "expand", "detail": "null" },
+        { "type": "dispatched", "name": "collapse", "detail": "null" },
+        { "type": "dispatched", "name": "copy", "detail": "null" },
         {
           "type": "forwarded",
           "name": "click",
@@ -1505,17 +1260,10 @@
           "name": "mouseleave",
           "element": "CodeSnippetSkeleton"
         },
-        {
-          "type": "forwarded",
-          "name": "animationend",
-          "element": "CopyButton"
-        }
+        { "type": "forwarded", "name": "animationend", "element": "CopyButton" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "InlineComponent",
-        "name": "CodeSnippetSkeleton"
-      }
+      "rest_props": { "type": "InlineComponent", "name": "CodeSnippetSkeleton" }
     },
     {
       "moduleName": "CodeSnippetSkeleton",
@@ -1537,32 +1285,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Column",
@@ -1721,10 +1450,7 @@
           "ts": "type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor"
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ComboBox",
@@ -2035,41 +1761,13 @@
           "name": "select",
           "detail": "{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }"
         },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "clear",
-          "element": "ListBoxSelection"
-        },
-        {
-          "type": "forwarded",
-          "name": "scroll",
-          "element": "ListBoxMenu"
-        }
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "paste", "element": "input" },
+        { "type": "forwarded", "name": "clear", "element": "ListBoxSelection" },
+        { "type": "forwarded", "name": "scroll", "element": "ListBoxMenu" }
       ],
       "typedefs": [
         {
@@ -2083,10 +1781,7 @@
           "ts": "interface ComboBoxItem { id: ComboBoxItemId; text: string; disabled?: boolean; }"
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "ComposedModal",
@@ -2177,70 +1872,29 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
         {
           "type": "dispatched",
           "name": "transitionend",
           "detail": "{ open: boolean; }"
         },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "dispatched",
-          "name": "submit",
-          "detail": "null"
-        },
+        { "type": "forwarded", "name": "keydown", "element": "div" },
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "dispatched", "name": "submit", "detail": "null" },
         {
           "type": "dispatched",
           "name": "click:button--primary",
           "detail": "null"
         },
-        {
-          "type": "dispatched",
-          "name": "close",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "open",
-          "detail": "null"
-        }
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "dispatched", "name": "open", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Content",
@@ -2260,19 +1914,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "main"
-      }
+      "rest_props": { "type": "Element", "name": "main" }
     },
     {
       "moduleName": "ContentSwitcher",
@@ -2303,45 +1948,16 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "change",
-          "detail": "number"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "dispatched", "name": "change", "detail": "number" },
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ContextMenu",
@@ -2409,40 +2025,15 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "open",
-          "detail": "HTMLElement"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "ul"
-        },
-        {
-          "type": "dispatched",
-          "name": "close",
-          "detail": "null"
-        }
+        { "type": "dispatched", "name": "open", "detail": "HTMLElement" },
+        { "type": "forwarded", "name": "click", "element": "ul" },
+        { "type": "forwarded", "name": "keydown", "element": "ul" },
+        { "type": "dispatched", "name": "close", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "ul"
-      }
+      "rest_props": { "type": "Element", "name": "ul" }
     },
     {
       "moduleName": "ContextMenuDivider",
@@ -2482,13 +2073,7 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
     },
@@ -2618,11 +2203,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "icon",
           "default": false,
@@ -2643,32 +2224,13 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "li"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "li"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "li"
-        },
-        {
-          "type": "dispatched",
-          "name": "click",
-          "detail": "null"
-        }
+        { "type": "forwarded", "name": "keydown", "element": "li" },
+        { "type": "forwarded", "name": "mouseenter", "element": "li" },
+        { "type": "forwarded", "name": "mouseleave", "element": "li" },
+        { "type": "dispatched", "name": "click", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "li"
-      }
+      "rest_props": { "type": "Element", "name": "li" }
     },
     {
       "moduleName": "ContextMenuRadioGroup",
@@ -2700,13 +2262,7 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
     },
@@ -2777,27 +2333,12 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "animationend",
-          "element": "button"
-        },
-        {
-          "type": "dispatched",
-          "name": "copy",
-          "detail": "null"
-        }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "animationend", "element": "button" },
+        { "type": "dispatched", "name": "copy", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button"
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "DataTable",
@@ -3069,11 +2610,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "cell",
           "default": false,
@@ -3125,11 +2662,7 @@
           "name": "click:header--select",
           "detail": "{ indeterminate: boolean; selected: boolean; }"
         },
-        {
-          "type": "dispatched",
-          "name": "click:row",
-          "detail": "DataTableRow"
-        },
+        { "type": "dispatched", "name": "click:row", "detail": "DataTableRow" },
         {
           "type": "dispatched",
           "name": "mouseenter:row",
@@ -3198,10 +2731,7 @@
           "ts": "interface DataTableCell { key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }"
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "DataTableSkeleton",
@@ -3294,32 +2824,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "table"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "table"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "table"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "table"
-        }
+        { "type": "forwarded", "name": "click", "element": "table" },
+        { "type": "forwarded", "name": "mouseover", "element": "table" },
+        { "type": "forwarded", "name": "mouseenter", "element": "table" },
+        { "type": "forwarded", "name": "mouseleave", "element": "table" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      },
+      "rest_props": { "type": "Element", "name": "div" },
       "extends": {
         "interface": "DataTableHeader",
         "import": "\"./DataTable.svelte\""
@@ -3475,45 +2986,20 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
         {
           "type": "dispatched",
           "name": "change",
           "detail": "string | { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string | { from: string; to: string; } }"
         },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "DatePickerInput",
@@ -3720,37 +3206,14 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "input",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "input", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "paste", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "DatePickerSkeleton",
@@ -3784,32 +3247,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Dropdown",
@@ -4096,10 +3540,7 @@
           "ts": "interface DropdownItem { id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }"
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "DropdownSkeleton",
@@ -4121,32 +3562,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ExpandableTile",
@@ -4287,49 +3709,18 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "above",
-          "default": false,
-          "slot_props": "{}"
-        },
-        {
-          "name": "below",
-          "default": false,
-          "slot_props": "{}"
-        }
+        { "name": "above", "default": false, "slot_props": "{}" },
+        { "name": "below", "default": false, "slot_props": "{}" }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "keypress",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "button"
-        }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "keypress", "element": "button" },
+        { "type": "forwarded", "name": "mouseover", "element": "button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button"
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "FileUploader",
@@ -4523,37 +3914,14 @@
           "name": "change",
           "detail": "ReadonlyArray<File>"
         },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "Filename"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "keydown", "element": "Filename" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "FileUploaderButton",
@@ -4731,22 +4099,11 @@
           "name": "change",
           "detail": "ReadonlyArray<File>"
         },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "keydown", "element": "label" },
+        { "type": "forwarded", "name": "click", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "FileUploaderDropContainer",
@@ -4905,37 +4262,14 @@
           "name": "change",
           "detail": "ReadonlyArray<File>"
         },
-        {
-          "type": "forwarded",
-          "name": "dragover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "dragleave",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "drop",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "dragover", "element": "div" },
+        { "type": "forwarded", "name": "dragleave", "element": "div" },
+        { "type": "forwarded", "name": "drop", "element": "div" },
+        { "type": "forwarded", "name": "keydown", "element": "label" },
+        { "type": "forwarded", "name": "click", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "FileUploaderItem",
@@ -5041,32 +4375,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "delete",
-          "detail": "string"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "span"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "span"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "span"
-        }
+        { "type": "dispatched", "name": "delete", "detail": "string" },
+        { "type": "forwarded", "name": "mouseover", "element": "span" },
+        { "type": "forwarded", "name": "mouseenter", "element": "span" },
+        { "type": "forwarded", "name": "mouseleave", "element": "span" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "span"
-      }
+      "rest_props": { "type": "Element", "name": "span" }
     },
     {
       "moduleName": "FileUploaderSkeleton",
@@ -5075,32 +4390,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Filename",
@@ -5146,72 +4442,28 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "button"
-        }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div | button | svg"
-      }
+      "rest_props": { "type": "Element", "name": "div | button | svg" }
     },
     {
       "moduleName": "FluidForm",
       "filePath": "src/FluidForm/FluidForm.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "Form"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "Form"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "Form"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "Form"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "Form"
-        },
-        {
-          "type": "forwarded",
-          "name": "submit",
-          "element": "Form"
-        }
+        { "type": "forwarded", "name": "click", "element": "Form" },
+        { "type": "forwarded", "name": "keydown", "element": "Form" },
+        { "type": "forwarded", "name": "mouseover", "element": "Form" },
+        { "type": "forwarded", "name": "mouseenter", "element": "Form" },
+        { "type": "forwarded", "name": "mouseleave", "element": "Form" },
+        { "type": "forwarded", "name": "submit", "element": "Form" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "form"
-      }
+      "rest_props": { "type": "Element", "name": "form" }
     },
     {
       "moduleName": "Form",
@@ -5231,50 +4483,17 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "form"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "form"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "form"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "form"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "form"
-        },
-        {
-          "type": "forwarded",
-          "name": "submit",
-          "element": "form"
-        }
+        { "type": "forwarded", "name": "click", "element": "form" },
+        { "type": "forwarded", "name": "keydown", "element": "form" },
+        { "type": "forwarded", "name": "mouseover", "element": "form" },
+        { "type": "forwarded", "name": "mouseenter", "element": "form" },
+        { "type": "forwarded", "name": "mouseleave", "element": "form" },
+        { "type": "forwarded", "name": "submit", "element": "form" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "form"
-      }
+      "rest_props": { "type": "Element", "name": "form" }
     },
     {
       "moduleName": "FormGroup",
@@ -5354,80 +4573,30 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "fieldset"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "fieldset"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "fieldset"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "fieldset"
-        }
+        { "type": "forwarded", "name": "click", "element": "fieldset" },
+        { "type": "forwarded", "name": "mouseover", "element": "fieldset" },
+        { "type": "forwarded", "name": "mouseenter", "element": "fieldset" },
+        { "type": "forwarded", "name": "mouseleave", "element": "fieldset" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "fieldset"
-      }
+      "rest_props": { "type": "Element", "name": "fieldset" }
     },
     {
       "moduleName": "FormItem",
       "filePath": "src/FormItem/FormItem.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "FormLabel",
@@ -5447,40 +4616,15 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "label"
-        }
+        { "type": "forwarded", "name": "click", "element": "label" },
+        { "type": "forwarded", "name": "mouseover", "element": "label" },
+        { "type": "forwarded", "name": "mouseenter", "element": "label" },
+        { "type": "forwarded", "name": "mouseleave", "element": "label" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "label"
-      }
+      "rest_props": { "type": "Element", "name": "label" }
     },
     {
       "moduleName": "Grid",
@@ -5593,10 +4737,7 @@
       ],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Header",
@@ -5732,11 +4873,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "company",
           "default": false,
@@ -5749,24 +4886,11 @@
           "fallback": "{platformName}",
           "slot_props": "{}"
         },
-        {
-          "name": "skip-to-content",
-          "default": false,
-          "slot_props": "{}"
-        }
+        { "name": "skip-to-content", "default": false, "slot_props": "{}" }
       ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        }
-      ],
+      "events": [{ "type": "forwarded", "name": "click", "element": "a" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "HeaderAction",
@@ -5856,11 +4980,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "closeIcon",
           "default": false,
@@ -5881,27 +5001,12 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "open",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "close",
-          "detail": "null"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        }
+        { "type": "dispatched", "name": "open", "detail": "null" },
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "forwarded", "name": "click", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button"
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "HeaderActionLink",
@@ -5963,18 +5068,9 @@
           "slot_props": "{}"
         }
       ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        }
-      ],
+      "events": [{ "type": "forwarded", "name": "click", "element": "a" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "HeaderGlobalAction",
@@ -6025,37 +5121,19 @@
           "slot_props": "{}"
         }
       ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        }
-      ],
+      "events": [{ "type": "forwarded", "name": "click", "element": "button" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button"
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "HeaderNav",
       "filePath": "src/UIShell/HeaderNav.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "nav"
-      }
+      "rest_props": { "type": "Element", "name": "nav" }
     },
     {
       "moduleName": "HeaderNavItem",
@@ -6118,52 +5196,17 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "a"
-        }
+        { "type": "forwarded", "name": "click", "element": "a" },
+        { "type": "forwarded", "name": "mouseover", "element": "a" },
+        { "type": "forwarded", "name": "mouseenter", "element": "a" },
+        { "type": "forwarded", "name": "mouseleave", "element": "a" },
+        { "type": "forwarded", "name": "keyup", "element": "a" },
+        { "type": "forwarded", "name": "keydown", "element": "a" },
+        { "type": "forwarded", "name": "focus", "element": "a" },
+        { "type": "forwarded", "name": "blur", "element": "a" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "HeaderNavMenu",
@@ -6218,73 +5261,26 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "a"
-        }
+        { "type": "forwarded", "name": "keydown", "element": "a" },
+        { "type": "forwarded", "name": "click", "element": "a" },
+        { "type": "forwarded", "name": "mouseover", "element": "a" },
+        { "type": "forwarded", "name": "mouseenter", "element": "a" },
+        { "type": "forwarded", "name": "mouseleave", "element": "a" },
+        { "type": "forwarded", "name": "keyup", "element": "a" },
+        { "type": "forwarded", "name": "focus", "element": "a" },
+        { "type": "forwarded", "name": "blur", "element": "a" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "HeaderPanelDivider",
       "filePath": "src/UIShell/HeaderPanelDivider.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
     },
@@ -6317,38 +5313,17 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [{ "type": "forwarded", "name": "click", "element": "a" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "HeaderPanelLinks",
       "filePath": "src/UIShell/HeaderPanelLinks.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
     },
@@ -6427,56 +5402,20 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "active",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "inactive",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "clear",
-          "detail": "null"
-        },
+        { "type": "dispatched", "name": "active", "detail": "null" },
+        { "type": "dispatched", "name": "inactive", "detail": "null" },
+        { "type": "dispatched", "name": "clear", "detail": "null" },
         {
           "type": "dispatched",
           "name": "select",
           "detail": "{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }"
         },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "input",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "input", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "paste", "element": "input" }
       ],
       "typedefs": [
         {
@@ -6485,23 +5424,14 @@
           "ts": "interface HeaderSearchResult { href: string; text: string; description?: string; }"
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "HeaderUtilities",
       "filePath": "src/UIShell/HeaderUtilities.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
     },
@@ -6607,34 +5537,15 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "error",
-          "default": false,
-          "slot_props": "{}"
-        },
-        {
-          "name": "loading",
-          "default": false,
-          "slot_props": "{}"
-        }
+        { "name": "error", "default": false, "slot_props": "{}" },
+        { "name": "loading", "default": false, "slot_props": "{}" }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "load",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "error",
-          "detail": "null"
-        }
+        { "type": "dispatched", "name": "load", "detail": "null" },
+        { "type": "dispatched", "name": "error", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "img"
-      }
+      "rest_props": { "type": "Element", "name": "img" }
     },
     {
       "moduleName": "InlineLoading",
@@ -6690,37 +5601,14 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "dispatched",
-          "name": "success",
-          "detail": "null"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "dispatched", "name": "success", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "InlineNotification",
@@ -6837,16 +5725,8 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
-          "name": "actions",
-          "default": false,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        { "name": "actions", "default": false, "slot_props": "{}" },
         {
           "name": "subtitle",
           "default": false,
@@ -6866,32 +5746,13 @@
           "name": "close",
           "detail": "{ timeout: boolean }"
         },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Layer",
@@ -6934,13 +5795,7 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
     },
@@ -7032,11 +5887,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "icon",
           "default": false,
@@ -7045,32 +5896,13 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "p"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "p"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "p"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "p"
-        }
+        { "type": "forwarded", "name": "click", "element": "p" },
+        { "type": "forwarded", "name": "mouseover", "element": "p" },
+        { "type": "forwarded", "name": "mouseenter", "element": "p" },
+        { "type": "forwarded", "name": "mouseleave", "element": "p" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a | p"
-      }
+      "rest_props": { "type": "Element", "name": "a | p" }
     },
     {
       "moduleName": "ListBox",
@@ -7185,30 +6017,13 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "keydown", "element": "div" },
+        { "type": "forwarded", "name": "click", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ListBoxField",
@@ -7300,49 +6115,15 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "keydown", "element": "div" },
+        { "type": "forwarded", "name": "focus", "element": "div" },
+        { "type": "forwarded", "name": "blur", "element": "div" }
       ],
       "typedefs": [
         {
@@ -7351,10 +6132,7 @@
           "ts": "type ListBoxFieldTranslationId = \"close\" | \"open\""
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ListBoxMenu",
@@ -7386,25 +6164,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "scroll",
-          "element": "div"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [{ "type": "forwarded", "name": "scroll", "element": "div" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ListBoxMenuIcon",
@@ -7449,13 +6212,7 @@
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        }
-      ],
+      "events": [{ "type": "forwarded", "name": "click", "element": "div" }],
       "typedefs": [
         {
           "type": "\"close\" | \"open\"",
@@ -7463,10 +6220,7 @@
           "ts": "type ListBoxMenuIconTranslationId = \"close\" | \"open\""
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ListBoxMenuItem",
@@ -7510,35 +6264,14 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ListBoxSelection",
@@ -7606,12 +6339,7 @@
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [
-        {
-          "type": "dispatched",
-          "name": "clear"
-        }
-      ],
+      "events": [{ "type": "dispatched", "name": "clear" }],
       "typedefs": [
         {
           "type": "\"clearAll\" | \"clearSelection\"",
@@ -7619,50 +6347,22 @@
           "ts": "type ListBoxSelectionTranslationId = \"clearAll\" | \"clearSelection\""
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ListItem",
       "filePath": "src/ListItem/ListItem.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "li"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "li"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "li"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "li"
-        }
+        { "type": "forwarded", "name": "click", "element": "li" },
+        { "type": "forwarded", "name": "mouseover", "element": "li" },
+        { "type": "forwarded", "name": "mouseenter", "element": "li" },
+        { "type": "forwarded", "name": "mouseleave", "element": "li" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "li"
-      }
+      "rest_props": { "type": "Element", "name": "li" }
     },
     {
       "moduleName": "Loading",
@@ -7721,10 +6421,7 @@
       "slots": [],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "LocalStorage",
@@ -7782,11 +6479,7 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "save",
-          "detail": "null"
-        },
+        { "type": "dispatched", "name": "save", "detail": "null" },
         {
           "type": "dispatched",
           "name": "update",
@@ -8049,11 +6742,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "heading",
           "default": false,
@@ -8078,57 +6767,22 @@
           "name": "click:button--secondary",
           "detail": "{ text: string; }"
         },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "dispatched",
-          "name": "submit",
-          "detail": "null"
-        },
+        { "type": "forwarded", "name": "keydown", "element": "div" },
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "dispatched", "name": "submit", "detail": "null" },
         {
           "type": "dispatched",
           "name": "click:button--primary",
           "detail": "null"
         },
-        {
-          "type": "dispatched",
-          "name": "close",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "open",
-          "detail": "null"
-        }
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "dispatched", "name": "open", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ModalBody",
@@ -8160,19 +6814,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ModalFooter",
@@ -8273,13 +6918,7 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
         {
           "type": "dispatched",
@@ -8288,10 +6927,7 @@
         }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ModalHeader",
@@ -8383,25 +7019,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [{ "type": "forwarded", "name": "click", "element": "button" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "MultiSelect",
@@ -8845,36 +7466,16 @@
           "name": "select",
           "detail": "{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }"
         },
-        {
-          "type": "dispatched",
-          "name": "clear",
-          "detail": "null"
-        },
+        { "type": "dispatched", "name": "clear", "detail": "null" },
         {
           "type": "dispatched",
           "name": "blur",
           "detail": "FocusEvent | CustomEvent<FocusEvent>"
         },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "paste", "element": "input" }
       ],
       "typedefs": [
         {
@@ -8893,50 +7494,22 @@
           "ts": "interface MultiSelectItem { id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }"
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "NotificationActionButton",
       "filePath": "src/Notification/NotificationActionButton.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "Button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "Button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "Button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "Button"
-        }
+        { "type": "forwarded", "name": "click", "element": "Button" },
+        { "type": "forwarded", "name": "mouseover", "element": "Button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "Button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "Button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "InlineComponent",
-        "name": "Button"
-      },
+      "rest_props": { "type": "InlineComponent", "name": "Button" },
       "extends": {
         "interface": "ButtonProps",
         "import": "\"../Button/Button.svelte\""
@@ -8996,32 +7569,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "button"
-        }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "mouseover", "element": "button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button"
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "NotificationIcon",
@@ -9354,61 +7908,17 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "change",
-          "detail": "null | number"
-        },
-        {
-          "type": "dispatched",
-          "name": "input",
-          "detail": "null | number"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "input"
-        }
+        { "type": "dispatched", "name": "change", "detail": "null | number" },
+        { "type": "dispatched", "name": "input", "detail": "null | number" },
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "paste", "element": "input" }
       ],
       "typedefs": [
         {
@@ -9417,10 +7927,7 @@
           "ts": "type NumberInputTranslationId = \"increment\" | \"decrement\""
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "NumberInputSkeleton",
@@ -9442,32 +7949,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "OrderedList",
@@ -9511,84 +7999,31 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "ol"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "ol"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "ol"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "ol"
-        }
+        { "type": "forwarded", "name": "click", "element": "ol" },
+        { "type": "forwarded", "name": "mouseover", "element": "ol" },
+        { "type": "forwarded", "name": "mouseenter", "element": "ol" },
+        { "type": "forwarded", "name": "mouseleave", "element": "ol" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "ol"
-      }
+      "rest_props": { "type": "Element", "name": "ol" }
     },
     {
       "moduleName": "OutboundLink",
       "filePath": "src/Link/OutboundLink.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "Link"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "Link"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "Link"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "Link"
-        }
+        { "type": "forwarded", "name": "click", "element": "Link" },
+        { "type": "forwarded", "name": "mouseover", "element": "Link" },
+        { "type": "forwarded", "name": "mouseenter", "element": "Link" },
+        { "type": "forwarded", "name": "mouseleave", "element": "Link" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "InlineComponent",
-        "name": "Link"
-      },
-      "extends": {
-        "interface": "LinkProps",
-        "import": "\"./Link.svelte\""
-      }
+      "rest_props": { "type": "InlineComponent", "name": "Link" },
+      "extends": { "interface": "LinkProps", "import": "\"./Link.svelte\"" }
     },
     {
       "moduleName": "OverflowMenu",
@@ -9737,11 +8172,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "menu",
           "default": false,
@@ -9755,37 +8186,14 @@
           "name": "close",
           "detail": "null | { index: number; text: string; }"
         },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "button"
-        }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "mouseover", "element": "button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "button" },
+        { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button"
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "OverflowMenuItem",
@@ -9910,22 +8318,11 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "a"
-        }
+        { "type": "forwarded", "name": "click", "element": "a" },
+        { "type": "forwarded", "name": "keydown", "element": "a" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "li"
-      }
+      "rest_props": { "type": "Element", "name": "li" }
     },
     {
       "moduleName": "Pagination",
@@ -10150,10 +8547,7 @@
         }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "PaginationNav",
@@ -10265,10 +8659,7 @@
         }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "nav"
-      }
+      "rest_props": { "type": "Element", "name": "nav" }
     },
     {
       "moduleName": "PaginationSkeleton",
@@ -10277,32 +8668,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "PasswordInput",
@@ -10569,67 +8941,20 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "input",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "input", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "paste", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "Popover",
@@ -10721,13 +9046,7 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
         {
           "type": "dispatched",
@@ -10736,10 +9055,7 @@
         }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "PopoverContent",
@@ -10757,19 +9073,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "span"
-      }
+      "rest_props": { "type": "Element", "name": "span" }
     },
     {
       "moduleName": "ProgressBar",
@@ -10894,10 +9201,7 @@
       ],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ProgressIndicator",
@@ -10953,45 +9257,16 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "change",
-          "detail": "number"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "ul"
-        }
+        { "type": "dispatched", "name": "change", "detail": "number" },
+        { "type": "forwarded", "name": "click", "element": "ul" },
+        { "type": "forwarded", "name": "mouseover", "element": "ul" },
+        { "type": "forwarded", "name": "mouseenter", "element": "ul" },
+        { "type": "forwarded", "name": "mouseleave", "element": "ul" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "ul"
-      }
+      "rest_props": { "type": "Element", "name": "ul" }
     },
     {
       "moduleName": "ProgressIndicatorSkeleton",
@@ -11025,32 +9300,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "ul"
-        }
+        { "type": "forwarded", "name": "click", "element": "ul" },
+        { "type": "forwarded", "name": "mouseover", "element": "ul" },
+        { "type": "forwarded", "name": "mouseenter", "element": "ul" },
+        { "type": "forwarded", "name": "mouseleave", "element": "ul" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "ul"
-      }
+      "rest_props": { "type": "Element", "name": "ul" }
     },
     {
       "moduleName": "ProgressStep",
@@ -11163,37 +9419,14 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "button"
-        }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "mouseover", "element": "button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "button" },
+        { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "li"
-      }
+      "rest_props": { "type": "Element", "name": "li" }
     },
     {
       "moduleName": "RadioButton",
@@ -11328,18 +9561,9 @@
           "slot_props": "{}"
         }
       ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "input"
-        }
-      ],
+      "events": [{ "type": "forwarded", "name": "change", "element": "input" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "RadioButtonGroup",
@@ -11452,11 +9676,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "legendText",
           "default": false,
@@ -11465,37 +9685,14 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "change",
-          "detail": "string | number"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "dispatched", "name": "change", "detail": "string | number" },
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "RadioButtonSkeleton",
@@ -11504,32 +9701,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "RadioTile",
@@ -11644,50 +9822,17 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "label"
-        }
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "click", "element": "label" },
+        { "type": "forwarded", "name": "mouseover", "element": "label" },
+        { "type": "forwarded", "name": "mouseenter", "element": "label" },
+        { "type": "forwarded", "name": "mouseleave", "element": "label" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "label"
-      }
+      "rest_props": { "type": "Element", "name": "label" }
     },
     {
       "moduleName": "RecursiveList",
@@ -11728,10 +9873,7 @@
           "ts": "interface RecursiveListNode { text?: string; href?: string; html?: string; }"
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "ul | ol"
-      }
+      "rest_props": { "type": "Element", "name": "ul | ol" }
     },
     {
       "moduleName": "Row",
@@ -11832,10 +9974,7 @@
       ],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Search",
@@ -12043,21 +10182,9 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "expand",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "collapse",
-          "detail": "null"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "SearchSkeleton"
-        },
+        { "type": "dispatched", "name": "expand", "detail": "null" },
+        { "type": "dispatched", "name": "collapse", "detail": "null" },
+        { "type": "forwarded", "name": "click", "element": "SearchSkeleton" },
         {
           "type": "forwarded",
           "name": "mouseover",
@@ -12073,52 +10200,17 @@
           "name": "mouseleave",
           "element": "SearchSkeleton"
         },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "input",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "input"
-        },
-        {
-          "type": "dispatched",
-          "name": "clear",
-          "detail": "null"
-        }
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "input", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "paste", "element": "input" },
+        { "type": "dispatched", "name": "clear", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "SearchSkeleton",
@@ -12140,32 +10232,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Select",
@@ -12375,11 +10448,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "labelText",
           "default": false,
@@ -12394,32 +10463,13 @@
           "detail": "string | number",
           "description": "The selected value."
         },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "select"
-        },
-        {
-          "type": "forwarded",
-          "name": "input",
-          "element": "select"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "select"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "select"
-        }
+        { "type": "forwarded", "name": "change", "element": "select" },
+        { "type": "forwarded", "name": "input", "element": "select" },
+        { "type": "forwarded", "name": "focus", "element": "select" },
+        { "type": "forwarded", "name": "blur", "element": "select" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "SelectItem",
@@ -12531,19 +10581,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "optgroup"
-      }
+      "rest_props": { "type": "Element", "name": "optgroup" }
     },
     {
       "moduleName": "SelectSkeleton",
@@ -12565,32 +10606,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "SelectableTile",
@@ -12718,55 +10740,18 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "select",
-          "detail": "string"
-        },
-        {
-          "type": "dispatched",
-          "name": "deselect",
-          "detail": "string"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "label"
-        }
+        { "type": "dispatched", "name": "select", "detail": "string" },
+        { "type": "dispatched", "name": "deselect", "detail": "string" },
+        { "type": "forwarded", "name": "click", "element": "label" },
+        { "type": "forwarded", "name": "mouseover", "element": "label" },
+        { "type": "forwarded", "name": "mouseenter", "element": "label" },
+        { "type": "forwarded", "name": "mouseleave", "element": "label" },
+        { "type": "forwarded", "name": "keydown", "element": "label" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "label"
-      }
+      "rest_props": { "type": "Element", "name": "label" }
     },
     {
       "moduleName": "SideNav",
@@ -12833,35 +10818,14 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "open",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "close",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "click:overlay",
-          "detail": "null"
-        }
+        { "type": "dispatched", "name": "open", "detail": "null" },
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "dispatched", "name": "click:overlay", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "nav"
-      }
+      "rest_props": { "type": "Element", "name": "nav" }
     },
     {
       "moduleName": "SideNavDivider",
@@ -12871,23 +10835,14 @@
       "slots": [],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "li"
-      }
+      "rest_props": { "type": "Element", "name": "li" }
     },
     {
       "moduleName": "SideNavItems",
       "filePath": "src/UIShell/SideNavItems.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
     },
@@ -12968,18 +10923,9 @@
           "slot_props": "{}"
         }
       ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        }
-      ],
+      "events": [{ "type": "forwarded", "name": "click", "element": "a" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "SideNavMenu",
@@ -13034,11 +10980,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "icon",
           "default": false,
@@ -13046,18 +10988,9 @@
           "slot_props": "{}"
         }
       ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        }
-      ],
+      "events": [{ "type": "forwarded", "name": "click", "element": "button" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button"
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "SideNavMenuItem",
@@ -13119,18 +11052,9 @@
           "slot_props": "{}"
         }
       ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        }
-      ],
+      "events": [{ "type": "forwarded", "name": "click", "element": "a" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "SkeletonPlaceholder",
@@ -13139,32 +11063,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "SkeletonText",
@@ -13222,32 +11127,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "SkipToContent",
@@ -13287,18 +11173,9 @@
           "slot_props": "{}"
         }
       ],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        }
-      ],
+      "events": [{ "type": "forwarded", "name": "click", "element": "a" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "Slider",
@@ -13543,36 +11420,14 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "dispatched",
-          "name": "change"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "dispatched", "name": "change" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "SliderSkeleton",
@@ -13594,32 +11449,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "StructuredList",
@@ -13674,84 +11510,31 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "dispatched",
-          "name": "change"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "dispatched", "name": "change" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "StructuredListBody",
       "filePath": "src/StructuredList/StructuredListBody.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "StructuredListCell",
@@ -13783,80 +11566,30 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "StructuredListHead",
       "filePath": "src/StructuredList/StructuredListHead.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "StructuredListInput",
@@ -13939,10 +11672,7 @@
       "slots": [],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "StructuredListRow",
@@ -13986,45 +11716,16 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "label"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "label"
-        }
+        { "type": "forwarded", "name": "click", "element": "label" },
+        { "type": "forwarded", "name": "mouseover", "element": "label" },
+        { "type": "forwarded", "name": "mouseenter", "element": "label" },
+        { "type": "forwarded", "name": "mouseleave", "element": "label" },
+        { "type": "forwarded", "name": "keydown", "element": "label" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "label"
-      }
+      "rest_props": { "type": "Element", "name": "label" }
     },
     {
       "moduleName": "StructuredListSkeleton",
@@ -14046,32 +11747,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Switch",
@@ -14148,37 +11830,14 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "button"
-        }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "mouseover", "element": "button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "button" },
+        { "type": "forwarded", "name": "keydown", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button"
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "Tab",
@@ -14267,32 +11926,13 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "a"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "a"
-        }
+        { "type": "forwarded", "name": "click", "element": "a" },
+        { "type": "forwarded", "name": "mouseover", "element": "a" },
+        { "type": "forwarded", "name": "mouseenter", "element": "a" },
+        { "type": "forwarded", "name": "mouseleave", "element": "a" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "a"
-      }
+      "rest_props": { "type": "Element", "name": "a" }
     },
     {
       "moduleName": "TabContent",
@@ -14312,19 +11952,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Table",
@@ -14402,78 +12033,35 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "section"
-      }
+      "rest_props": { "type": "Element", "name": "section" }
     },
     {
       "moduleName": "TableBody",
       "filePath": "src/DataTable/TableBody.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "tbody"
-      }
+      "rest_props": { "type": "Element", "name": "tbody" }
     },
     {
       "moduleName": "TableCell",
       "filePath": "src/DataTable/TableCell.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "td"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "td"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "td"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "td"
-        }
+        { "type": "forwarded", "name": "click", "element": "td" },
+        { "type": "forwarded", "name": "mouseover", "element": "td" },
+        { "type": "forwarded", "name": "mouseenter", "element": "td" },
+        { "type": "forwarded", "name": "mouseleave", "element": "td" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "td"
-      }
+      "rest_props": { "type": "Element", "name": "td" }
     },
     {
       "moduleName": "TableContainer",
@@ -14529,59 +12117,25 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "TableHead",
       "filePath": "src/DataTable/TableHead.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "thead"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "thead"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "thead"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "thead"
-        }
+        { "type": "forwarded", "name": "click", "element": "thead" },
+        { "type": "forwarded", "name": "mouseover", "element": "thead" },
+        { "type": "forwarded", "name": "mouseenter", "element": "thead" },
+        { "type": "forwarded", "name": "mouseleave", "element": "thead" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "thead"
-      }
+      "rest_props": { "type": "Element", "name": "thead" }
     },
     {
       "moduleName": "TableHeader",
@@ -14661,80 +12215,30 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "th"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "th"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "th"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        }
+        { "type": "forwarded", "name": "mouseover", "element": "th" },
+        { "type": "forwarded", "name": "mouseenter", "element": "th" },
+        { "type": "forwarded", "name": "mouseleave", "element": "th" },
+        { "type": "forwarded", "name": "click", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "th"
-      }
+      "rest_props": { "type": "Element", "name": "th" }
     },
     {
       "moduleName": "TableRow",
       "filePath": "src/DataTable/TableRow.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "tr"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "tr"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "tr"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "tr"
-        }
+        { "type": "forwarded", "name": "click", "element": "tr" },
+        { "type": "forwarded", "name": "mouseover", "element": "tr" },
+        { "type": "forwarded", "name": "mouseenter", "element": "tr" },
+        { "type": "forwarded", "name": "mouseleave", "element": "tr" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "tr"
-      }
+      "rest_props": { "type": "Element", "name": "tr" }
     },
     {
       "moduleName": "Tabs",
@@ -14779,28 +12283,12 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
-          "name": "content",
-          "default": false,
-          "slot_props": "{}"
-        }
+        { "name": "__default__", "default": true, "slot_props": "{}" },
+        { "name": "content", "default": false, "slot_props": "{}" }
       ],
-      "events": [
-        {
-          "type": "dispatched",
-          "name": "change"
-        }
-      ],
+      "events": [{ "type": "dispatched", "name": "change" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "TabsSkeleton",
@@ -14834,32 +12322,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Tag",
@@ -14986,37 +12455,14 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "TagSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "TagSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "TagSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "TagSkeleton"
-        },
-        {
-          "type": "dispatched",
-          "name": "close",
-          "detail": "null"
-        }
+        { "type": "forwarded", "name": "click", "element": "TagSkeleton" },
+        { "type": "forwarded", "name": "mouseover", "element": "TagSkeleton" },
+        { "type": "forwarded", "name": "mouseenter", "element": "TagSkeleton" },
+        { "type": "forwarded", "name": "mouseleave", "element": "TagSkeleton" },
+        { "type": "dispatched", "name": "close", "detail": "null" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div | span"
-      }
+      "rest_props": { "type": "Element", "name": "div | span" }
     },
     {
       "moduleName": "TagSkeleton",
@@ -15037,32 +12483,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "span"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "span"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "span"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "span"
-        }
+        { "type": "forwarded", "name": "click", "element": "span" },
+        { "type": "forwarded", "name": "mouseover", "element": "span" },
+        { "type": "forwarded", "name": "mouseenter", "element": "span" },
+        { "type": "forwarded", "name": "mouseleave", "element": "span" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "span"
-      }
+      "rest_props": { "type": "Element", "name": "span" }
     },
     {
       "moduleName": "TextArea",
@@ -15268,67 +12695,20 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "textarea"
-        },
-        {
-          "type": "forwarded",
-          "name": "input",
-          "element": "textarea"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "textarea"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "textarea"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "textarea"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "textarea"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "textarea"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "change", "element": "textarea" },
+        { "type": "forwarded", "name": "input", "element": "textarea" },
+        { "type": "forwarded", "name": "keydown", "element": "textarea" },
+        { "type": "forwarded", "name": "keyup", "element": "textarea" },
+        { "type": "forwarded", "name": "focus", "element": "textarea" },
+        { "type": "forwarded", "name": "blur", "element": "textarea" },
+        { "type": "forwarded", "name": "paste", "element": "textarea" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "textarea"
-      }
+      "rest_props": { "type": "Element", "name": "textarea" }
     },
     {
       "moduleName": "TextAreaSkeleton",
@@ -15350,32 +12730,13 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "TextInput",
@@ -15672,66 +13033,18 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "pointerup",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "pointerover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "pointerenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "pointerleave",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "input",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "pointerup", "element": "div" },
+        { "type": "forwarded", "name": "pointerover", "element": "div" },
+        { "type": "forwarded", "name": "pointerenter", "element": "div" },
+        { "type": "forwarded", "name": "pointerleave", "element": "div" },
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "input", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "paste", "element": "input" }
       ],
       "typedefs": []
     },
@@ -15767,31 +13080,11 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "pointerup",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "pointerover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "pointerenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "pointerleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "pointerup", "element": "div" },
+        { "type": "forwarded", "name": "pointerover", "element": "div" },
+        { "type": "forwarded", "name": "pointerenter", "element": "div" },
+        { "type": "forwarded", "name": "pointerleave", "element": "div" }
       ],
       "typedefs": []
     },
@@ -15924,40 +13217,15 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "TileGroup",
@@ -16022,25 +13290,12 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "select",
-          "detail": "string"
-        }
+        { "type": "dispatched", "name": "select", "detail": "string" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "fieldset"
-      }
+      "rest_props": { "type": "Element", "name": "fieldset" }
     },
     {
       "moduleName": "TimePicker",
@@ -16215,11 +13470,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "labelText",
           "default": false,
@@ -16228,67 +13479,20 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "input",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "input", "element": "input" },
+        { "type": "forwarded", "name": "keydown", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" },
+        { "type": "forwarded", "name": "paste", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "TimePickerSelect",
@@ -16380,11 +13584,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "labelText",
           "default": false,
@@ -16393,32 +13593,13 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ToastNotification",
@@ -16559,11 +13740,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "caption",
           "default": false,
@@ -16589,32 +13766,13 @@
           "name": "close",
           "detail": "{ timeout: boolean }"
         },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Toggle",
@@ -16743,52 +13901,17 @@
           "name": "toggle",
           "detail": "{ toggled: boolean; }"
         },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "input"
-        }
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mouseover", "element": "div" },
+        { "type": "forwarded", "name": "mouseenter", "element": "div" },
+        { "type": "forwarded", "name": "mouseleave", "element": "div" },
+        { "type": "forwarded", "name": "change", "element": "input" },
+        { "type": "forwarded", "name": "keyup", "element": "input" },
+        { "type": "forwarded", "name": "focus", "element": "input" },
+        { "type": "forwarded", "name": "blur", "element": "input" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "Toolbar",
@@ -16808,19 +13931,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "section"
-      }
+      "rest_props": { "type": "Element", "name": "section" }
     },
     {
       "moduleName": "ToolbarBatchActions",
@@ -16852,11 +13966,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "cancel",
           "default": false,
@@ -16864,31 +13974,16 @@
           "slot_props": "{}"
         }
       ],
-      "events": [
-        {
-          "type": "dispatched",
-          "name": "cancel",
-          "detail": "null"
-        }
-      ],
+      "events": [{ "type": "dispatched", "name": "cancel", "detail": "null" }],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "ToolbarContent",
       "filePath": "src/DataTable/ToolbarContent.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
     },
@@ -16897,19 +13992,10 @@
       "filePath": "src/DataTable/ToolbarMenu.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "InlineComponent",
-        "name": "OverflowMenu"
-      },
+      "rest_props": { "type": "InlineComponent", "name": "OverflowMenu" },
       "extends": {
         "interface": "OverflowMenuProps",
         "import": "\"../OverflowMenu/OverflowMenu.svelte\""
@@ -16920,19 +14006,9 @@
       "filePath": "src/DataTable/ToolbarMenuItem.svelte",
       "props": [],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "OverflowMenuItem"
-        },
+        { "type": "forwarded", "name": "click", "element": "OverflowMenuItem" },
         {
           "type": "forwarded",
           "name": "keydown",
@@ -16940,10 +14016,7 @@
         }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "InlineComponent",
-        "name": "OverflowMenuItem"
-      },
+      "rest_props": { "type": "InlineComponent", "name": "OverflowMenuItem" },
       "extends": {
         "interface": "OverflowMenuItemProps",
         "import": "\"../OverflowMenu/OverflowMenuItem.svelte\""
@@ -17053,52 +14126,17 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "clear",
-          "element": "Search"
-        },
-        {
-          "type": "forwarded",
-          "name": "change",
-          "element": "Search"
-        },
-        {
-          "type": "forwarded",
-          "name": "input",
-          "element": "Search"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "Search"
-        },
-        {
-          "type": "forwarded",
-          "name": "blur",
-          "element": "Search"
-        },
-        {
-          "type": "forwarded",
-          "name": "keyup",
-          "element": "Search"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "Search"
-        },
-        {
-          "type": "forwarded",
-          "name": "paste",
-          "element": "Search"
-        }
+        { "type": "forwarded", "name": "clear", "element": "Search" },
+        { "type": "forwarded", "name": "change", "element": "Search" },
+        { "type": "forwarded", "name": "input", "element": "Search" },
+        { "type": "forwarded", "name": "focus", "element": "Search" },
+        { "type": "forwarded", "name": "blur", "element": "Search" },
+        { "type": "forwarded", "name": "keyup", "element": "Search" },
+        { "type": "forwarded", "name": "keydown", "element": "Search" },
+        { "type": "forwarded", "name": "paste", "element": "Search" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "input"
-      }
+      "rest_props": { "type": "Element", "name": "input" }
     },
     {
       "moduleName": "Tooltip",
@@ -17274,11 +14312,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "icon",
           "default": false,
@@ -17293,32 +14327,13 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "open",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "close",
-          "detail": "null"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mousedown",
-          "element": "div"
-        }
+        { "type": "dispatched", "name": "open", "detail": "null" },
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "forwarded", "name": "click", "element": "div" },
+        { "type": "forwarded", "name": "mousedown", "element": "div" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      }
+      "rest_props": { "type": "Element", "name": "div" }
     },
     {
       "moduleName": "TooltipDefinition",
@@ -17399,11 +14414,7 @@
       ],
       "moduleExports": [],
       "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
+        { "name": "__default__", "default": true, "slot_props": "{}" },
         {
           "name": "tooltip",
           "default": false,
@@ -17412,47 +14423,16 @@
         }
       ],
       "events": [
-        {
-          "type": "dispatched",
-          "name": "open",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "close",
-          "detail": "null"
-        },
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "button"
-        }
+        { "type": "dispatched", "name": "open", "detail": "null" },
+        { "type": "dispatched", "name": "close", "detail": "null" },
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "mouseover", "element": "button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "button" },
+        { "type": "forwarded", "name": "focus", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "span"
-      }
+      "rest_props": { "type": "Element", "name": "span" }
     },
     {
       "moduleName": "TooltipFooter",
@@ -17472,13 +14452,7 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": []
     },
@@ -17586,37 +14560,14 @@
         }
       ],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "focus",
-          "element": "button"
-        }
+        { "type": "forwarded", "name": "click", "element": "button" },
+        { "type": "forwarded", "name": "mouseover", "element": "button" },
+        { "type": "forwarded", "name": "mouseenter", "element": "button" },
+        { "type": "forwarded", "name": "mouseleave", "element": "button" },
+        { "type": "forwarded", "name": "focus", "element": "button" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "button"
-      }
+      "rest_props": { "type": "Element", "name": "button" }
     },
     {
       "moduleName": "TreeView",
@@ -17798,11 +14749,7 @@
           "name": "focus",
           "detail": "TreeNode & { expanded: boolean; leaf: boolean; }"
         },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "ul"
-        }
+        { "type": "forwarded", "name": "keydown", "element": "ul" }
       ],
       "typedefs": [
         {
@@ -17816,10 +14763,7 @@
           "ts": "interface TreeNode { id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent<any>; disabled?: boolean; children?: TreeNode[]; }"
         }
       ],
-      "rest_props": {
-        "type": "Element",
-        "name": "ul"
-      }
+      "rest_props": { "type": "Element", "name": "ul" }
     },
     {
       "moduleName": "Truncate",
@@ -17838,19 +14782,10 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "p"
-      }
+      "rest_props": { "type": "Element", "name": "p" }
     },
     {
       "moduleName": "UnorderedList",
@@ -17882,40 +14817,15 @@
         }
       ],
       "moduleExports": [],
-      "slots": [
-        {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        }
-      ],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "ul"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "ul"
-        }
+        { "type": "forwarded", "name": "click", "element": "ul" },
+        { "type": "forwarded", "name": "mouseover", "element": "ul" },
+        { "type": "forwarded", "name": "mouseenter", "element": "ul" },
+        { "type": "forwarded", "name": "mouseleave", "element": "ul" }
       ],
       "typedefs": [],
-      "rest_props": {
-        "type": "Element",
-        "name": "ul"
-      }
+      "rest_props": { "type": "Element", "name": "ul" }
     }
   ]
 }

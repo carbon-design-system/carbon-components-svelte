@@ -178,7 +178,7 @@
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                              | Default value          | Description                                      |
-|:----------|:---------|:-----------------|:---------|-----------------------------------|------------------------|--------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | --------------------------------- | ---------------------- | ------------------------------------------------ |
 | align     | No       | <code>let</code> | No       | <code>"start" &#124; "end"</code> | <code>"end"</code>     | Specify alignment of accordion item chevron icon |
 | size      | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>     | <code>undefined</code> | Specify the size of the accordion                |
 | disabled  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to disable the accordion           |
@@ -187,13 +187,13 @@
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -204,7 +204,7 @@
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                 | Default value                  | Description                                                                                                                                 |
-|:----------------|:---------|:-----------------|:---------|----------------------|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | -------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | disabled        | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to disable the accordion item                                                                                                 |
 | open            | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to open the first accordion item                                                                                              |
 | title           | No       | <code>let</code> | No       | <code>string</code>  | <code>"title"</code>           | Specify the title of the accordion item heading.<br />Alternatively, use the "title" slot (e.g., `&lt;div slot="title"&gt;...&lt;/div&gt;`) |
@@ -213,14 +213,14 @@
 ### Slots
 
 | Slot name | Default | Props | Fallback             |
-|:----------|:--------|:------|:---------------------|
+| :-------- | :------ | :---- | :------------------- |
 | --        | Yes     | --    | --                   |
 | title     | No      | --    | <code>{title}</code> |
 
 ### Events
 
 | Event name   | Type      | Detail |
-|:-------------|:----------|:-------|
+| :----------- | :-------- | :----- |
 | animationend | forwarded | --     |
 | click        | forwarded | --     |
 | mouseover    | forwarded | --     |
@@ -233,7 +233,7 @@
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                              | Default value          | Description                                      |
-|:----------|:---------|:-----------------|:---------|-----------------------------------|------------------------|--------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | --------------------------------- | ---------------------- | ------------------------------------------------ |
 | count     | No       | <code>let</code> | No       | <code>number</code>               | <code>4</code>         | Specify the number of accordion items to render  |
 | align     | No       | <code>let</code> | No       | <code>"start" &#124; "end"</code> | <code>"end"</code>     | Specify alignment of accordion item chevron icon |
 | size      | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>     | <code>undefined</code> | Specify the size of the accordion                |
@@ -246,7 +246,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -256,14 +256,14 @@ None.
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                                                                                                                         | Default value      | Description                                                                                                                               |
-|:----------|:---------|:-----------------|:---------|------------------------------------------------------------------------------------------------------------------------------|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
-| ratio     | No       | <code>let</code> | No       | <code>"2x1" &#124; "2x3" &#124; "16x9" &#124; "4x3" &#124; "1x1" &#124; "3x4" &#124; "3x2" &#124; "9x16" &#124; "1x2"</code> | <code>"2x1"</code> | Specify the ratio to be used by the aspect ratio container.<br />This will determine what aspect ratio your content will be displayed in. |
+| Prop name | Required | Kind             | Reactive | Type                                                                                                                         | Default value      | Description              |
+| :-------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------------ |
+| ratio     | No       | <code>let</code> | No       | <code>"2x1" &#124; "2x3" &#124; "16x9" &#124; "4x3" &#124; "1x1" &#124; "3x4" &#124; "3x2" &#124; "9x16" &#124; "1x2"</code> | <code>"2x1"</code> | Specify the aspect ratio |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -275,20 +275,20 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                 | Default value      | Description                                         |
-|:----------------|:---------|:-----------------|:---------|----------------------|--------------------|-----------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------------------------- |
 | noTrailingSlash | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to hide the breadcrumb trailing slash |
 | skeleton        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to display skeleton state             |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -299,20 +299,20 @@ None.
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                 | Default value          | Description                                                      |
-|:--------------|:---------|:-----------------|:---------|----------------------|------------------------|------------------------------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | -------------------- | ---------------------- | ---------------------------------------------------------------- |
 | href          | No       | <code>let</code> | No       | <code>string</code>  | <code>undefined</code> | Set the `href` to use an anchor link                             |
 | isCurrentPage | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` if the breadcrumb item represents the current page |
 
 ### Slots
 
 | Slot name | Default | Props                                                                     | Fallback |
-|:----------|:--------|:--------------------------------------------------------------------------|:---------|
+| :-------- | :------ | :------------------------------------------------------------------------ | :------- |
 | --        | Yes     | <code>{props?: { ["aria-current"]?: string; class: "bx--link"; }} </code> | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -323,7 +323,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                 | Default value      | Description                                         |
-|:----------------|:---------|:-----------------|:---------|----------------------|--------------------|-----------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------------------------- |
 | noTrailingSlash | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to hide the breadcrumb trailing slash |
 | count           | No       | <code>let</code> | No       | <code>number</code>  | <code>3</code>     | Specify the number of breadcrumb items to render    |
 
@@ -334,7 +334,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -353,20 +353,20 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                         | Default value                                                             | Description                                       |
-|:----------|:---------|:-----------------|:---------|----------------------------------------------|---------------------------------------------------------------------------|---------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------- |
 | sizes     | No       | <code>let</code> | Yes      | <code>Record<BreakpointSize, boolean></code> | <code>{ sm: false, md: false, lg: false, xlg: false, max: false, }</code> | Carbon grid sizes as an object                    |
 | size      | No       | <code>let</code> | Yes      | <code>BreakpointSize</code>                  | <code>undefined</code>                                                    | Determine the current Carbon grid breakpoint size |
 
 ### Slots
 
 | Slot name | Default | Props                                                                           | Fallback |
-|:----------|:--------|:--------------------------------------------------------------------------------|:---------|
+| :-------- | :------ | :------------------------------------------------------------------------------ | :------- |
 | --        | Yes     | <code>{ size: BreakpointSize; sizes: Record<BreakpointSize, boolean>; } </code> | --       |
 
 ### Events
 
 | Event name | Type       | Detail                                                                   |
-|:-----------|:-----------|:-------------------------------------------------------------------------|
+| :--------- | :--------- | :----------------------------------------------------------------------- |
 | change     | dispatched | <code>{ size: BreakpointSize; breakpointValue: BreakpointValue; }</code> |
 
 ## `Button`
@@ -374,7 +374,7 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 ### Props
 
 | Prop name        | Required | Kind             | Reactive | Type                                                                                                                                        | Default value          | Description                                                                                                                                                                                   |
-|:-----------------|:---------|:-----------------|:---------|---------------------------------------------------------------------------------------------------------------------------------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ref              | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code>                                                                         | <code>null</code>      | Obtain a reference to the HTML element                                                                                                                                                        |
 | kind             | No       | <code>let</code> | No       | <code>"primary" &#124; "secondary" &#124; "tertiary" &#124; "ghost" &#124; "danger" &#124; "danger--tertiary" &#124; "danger--ghost"</code> | <code>"primary"</code> | Specify the kind of button                                                                                                                                                                    |
 | size             | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg" &#124; "xl" &#124; "2xl"</code>                                                                          | <code>"lg"</code>      | Specify the size of button                                                                                                                                                                    |
@@ -394,13 +394,13 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 ### Slots
 
 | Slot name | Default | Props                                                                                                                                           | Fallback |
-|:----------|:--------|:------------------------------------------------------------------------------------------------------------------------------------------------|:---------|
+| :-------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------- | :------- |
 | --        | Yes     | <code>{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } } </code> | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
@@ -413,13 +413,13 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                                   |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|-----------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------------------- |
 | stacked   | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to stack the buttons vertically |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -431,7 +431,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                                                         | Default value          | Description                          |
-|:----------|:---------|:-----------------|:---------|------------------------------------------------------------------------------|------------------------|--------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------------- | ---------------------- | ------------------------------------ |
 | href      | No       | <code>let</code> | No       | <code>string</code>                                                          | <code>undefined</code> | Set the `href` to use an anchor link |
 | size      | No       | <code>let</code> | No       | <code>"default" &#124; "field" &#124; "small" &#124; "lg" &#124; "xl"</code> | <code>"default"</code> | Specify the size of button skeleton  |
 
@@ -442,7 +442,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | focus      | forwarded | --     |
 | blur       | forwarded | --     |
@@ -455,7 +455,7 @@ None.
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                       |
-|:--------------|:---------|:-----------------|:---------|-------------------------------------------|--------------------------------------------------|---------------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | ------------------------------------------------- |
 | ref           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element      |
 | title         | No       | <code>let</code> | Yes      | <code>string</code>                       | <code>undefined</code>                           | Specify the title attribute for the label element |
 | group         | No       | <code>let</code> | Yes      | <code>ReadonlyArray<any></code>           | <code>undefined</code>                           | Specify the bound group                           |
@@ -474,13 +474,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail               |
-|:-----------|:-----------|:---------------------|
+| :--------- | :--------- | :------------------- |
 | check      | dispatched | <code>boolean</code> |
 | click      | forwarded  | --                   |
 | mouseover  | forwarded  | --                   |
@@ -502,7 +502,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -513,7 +513,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value          | Description                               |
-|:----------|:---------|:-----------------|:---------|----------------------|------------------------|-------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ---------------------- | ----------------------------------------- |
 | clicked   | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>     | Set to `true` to click the tile           |
 | light     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to enable the light variant |
 | disabled  | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to disable the tile         |
@@ -522,13 +522,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | keydown    | forwarded | --     |
 | mouseover  | forwarded | --     |
@@ -540,7 +540,7 @@ None.
 ### Props
 
 | Prop name             | Required | Kind             | Reactive | Type                                                 | Default value                                                                                                     | Description                                                                                                                                                                                                           |
-|:----------------------|:---------|:-----------------|:---------|------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :-------------------- | :------- | :--------------- | :------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ref                   | No       | <code>let</code> | Yes      | <code>null &#124; HTMLPreElement</code>              | <code>null</code>                                                                                                 | Obtain a reference to the pre HTML element                                                                                                                                                                            |
 | showMoreLess          | No       | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                                                                                                | Set to `true` to enable the show more/less button                                                                                                                                                                     |
 | expanded              | No       | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                                                                                                | Set to `true` to expand a multi-line code snippet (type="multi")                                                                                                                                                      |
@@ -563,13 +563,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback            |
-|:----------|:--------|:------|:--------------------|
+| :-------- | :------ | :---- | :------------------ |
 | --        | Yes     | --    | <code>{code}</code> |
 
 ### Events
 
 | Event name   | Type       | Detail            |
-|:-------------|:-----------|:------------------|
+| :----------- | :--------- | :---------------- |
 | expand       | dispatched | <code>null</code> |
 | collapse     | dispatched | <code>null</code> |
 | copy         | dispatched | <code>null</code> |
@@ -584,7 +584,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                 | Default value         | Description                  |
-|:----------|:---------|:-----------------|:---------|--------------------------------------|-----------------------|------------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------------------------ | --------------------- | ---------------------------- |
 | type      | No       | <code>let</code> | No       | <code>"single" &#124; "multi"</code> | <code>"single"</code> | Set the type of code snippet |
 
 ### Slots
@@ -594,7 +594,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -618,7 +618,7 @@ export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                                                                                               | Default value          | Description                                                                                                                                                                                           |
-|:--------------|:---------|:-----------------|:---------|----------------------------------------------------------------------------------------------------|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | as            | No       | <code>let</code> | No       | <code>boolean</code>                                                                               | <code>false</code>     | Set to `true` to render a custom HTML element<br />Props are destructured as `props` in the default slot (e.g., &lt;Column let:props&gt;&lt;article {...props}&gt;...&lt;/article&gt;&lt;/Column&gt;) |
 | noGutter      | No       | <code>let</code> | No       | <code>boolean</code>                                                                               | <code>false</code>     | Set to `true` to remove the gutter                                                                                                                                                                    |
 | noGutterLeft  | No       | <code>let</code> | No       | <code>boolean</code>                                                                               | <code>false</code>     | Set to `true` to remove the left gutter                                                                                                                                                               |
@@ -634,7 +634,7 @@ export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 ### Slots
 
 | Slot name | Default | Props                                                         | Fallback |
-|:----------|:--------|:--------------------------------------------------------------|:---------|
+| :-------- | :------ | :------------------------------------------------------------ | :------- |
 | --        | Yes     | <code>{props: { class: string; [key: string]: any; }} </code> | --       |
 
 ### Events
@@ -658,7 +658,7 @@ export interface ComboBoxItem {
 ### Props
 
 | Prop name                | Required | Kind                  | Reactive | Type                                                                                                  | Default value                                                                                                                                                                                                           | Description                                                                                                                                                 |
-|:-------------------------|:---------|:----------------------|:---------|-------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :----------------------- | :------- | :-------------------- | :------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | listRef                  | No       | <code>let</code>      | Yes      | <code>null &#124; HTMLDivElement</code>                                                               | <code>null</code>                                                                                                                                                                                                       | Obtain a reference to the list HTML element                                                                                                                 |
 | ref                      | No       | <code>let</code>      | Yes      | <code>null &#124; HTMLInputElement</code>                                                             | <code>null</code>                                                                                                                                                                                                       | Obtain a reference to the input HTML element                                                                                                                |
 | open                     | No       | <code>let</code>      | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to open the combobox menu dropdown                                                                                                            |
@@ -687,14 +687,14 @@ export interface ComboBoxItem {
 ### Slots
 
 | Slot name | Default | Props                                               | Fallback                          |
-|:----------|:--------|:----------------------------------------------------|:----------------------------------|
+| :-------- | :------ | :-------------------------------------------------- | :-------------------------------- |
 | --        | Yes     | <code>{ item: ComboBoxItem; index: number } </code> | <code>{itemToString(item)}</code> |
 | titleText | No      | --                                                  | <code>{titleText}</code>          |
 
 ### Events
 
 | Event name | Type       | Detail                                                                  |
-|:-----------|:-----------|:------------------------------------------------------------------------|
+| :--------- | :--------- | :---------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }</code> |
 | keydown    | forwarded  | --                                                                      |
 | keyup      | forwarded  | --                                                                      |
@@ -709,7 +709,7 @@ export interface ComboBoxItem {
 ### Props
 
 | Prop name                  | Required | Kind             | Reactive | Type                                      | Default value                             | Description                                                           |
-|:---------------------------|:---------|:-----------------|:---------|-------------------------------------------|-------------------------------------------|-----------------------------------------------------------------------|
+| :------------------------- | :------- | :--------------- | :------- | ----------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------- |
 | ref                        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>   | <code>null</code>                         | Obtain a reference to the top-level HTML element                      |
 | open                       | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                        | Set to `true` to open the modal                                       |
 | size                       | No       | <code>let</code> | No       | <code>"xs" &#124; "sm" &#124; "lg"</code> | <code>undefined</code>                    | Set the size of the composed modal                                    |
@@ -721,13 +721,13 @@ export interface ComboBoxItem {
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name            | Type       | Detail                          |
-|:----------------------|:-----------|:--------------------------------|
+| :-------------------- | :--------- | :------------------------------ |
 | transitionend         | dispatched | <code>{ open: boolean; }</code> |
 | keydown               | forwarded  | --                              |
 | click                 | forwarded  | --                              |
@@ -744,13 +744,13 @@ export interface ComboBoxItem {
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                | Default value               | Description                         |
-|:----------|:---------|:-----------------|:---------|---------------------|-----------------------------|-------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------- | --------------------------- | ----------------------------------- |
 | id        | No       | <code>let</code> | No       | <code>string</code> | <code>"main-content"</code> | Specify the id for the main element |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -762,20 +762,20 @@ None.
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                           | Default value          | Description                               |
-|:--------------|:---------|:-----------------|:---------|--------------------------------|------------------------|-------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | ------------------------------ | ---------------------- | ----------------------------------------- |
 | selectedIndex | No       | <code>let</code> | Yes      | <code>number</code>            | <code>0</code>         | Set the selected index of the switch item |
 | size          | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" </code> | <code>undefined</code> | Specify the size of the content switcher  |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type       | Detail              |
-|:-----------|:-----------|:--------------------|
+| :--------- | :--------- | :------------------ |
 | change     | dispatched | <code>number</code> |
 | click      | forwarded  | --                  |
 | mouseover  | forwarded  | --                  |
@@ -787,7 +787,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                                            | Default value      | Description                                                                                                                                        |
-|:----------|:---------|:-----------------|:---------|-----------------------------------------------------------------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | --------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>                       | <code>null</code>  | Obtain a reference to the unordered list HTML element                                                                                              |
 | y         | No       | <code>let</code> | Yes      | <code>number</code>                                             | <code>0</code>     | Specify the vertical offset of the menu position                                                                                                   |
 | x         | No       | <code>let</code> | Yes      | <code>number</code>                                             | <code>0</code>     | Specify the horizontal offset of the menu position                                                                                                 |
@@ -797,13 +797,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type       | Detail                   |
-|:-----------|:-----------|:-------------------------|
+| :--------- | :--------- | :----------------------- |
 | open       | dispatched | <code>HTMLElement</code> |
 | click      | forwarded  | --                       |
 | keydown    | forwarded  | --                       |
@@ -828,14 +828,14 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                               | Default value   | Description            |
-|:------------|:---------|:-----------------|:---------|------------------------------------|-----------------|------------------------|
+| :---------- | :------- | :--------------- | :------- | ---------------------------------- | --------------- | ---------------------- |
 | selectedIds | No       | <code>let</code> | Yes      | <code>ReadonlyArray<string></code> | <code>[]</code> | --                     |
 | labelText   | No       | <code>let</code> | No       | <code>string</code>                | <code>""</code> | Specify the label text |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -847,7 +847,7 @@ None.
 ### Props
 
 | Prop name    | Required | Kind             | Reactive | Type                                                      | Default value                                    | Description                                                                                                                           |
-|:-------------|:---------|:-----------------|:---------|-----------------------------------------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| :----------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | ref          | No       | <code>let</code> | Yes      | <code>null &#124; HTMLLIElement</code>                    | <code>null</code>                                | Obtain a reference to the list item HTML element                                                                                      |
 | selectable   | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to enable the selectable variant<br />Automatically set to `true` if `selected` is `true`                               |
 | selected     | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to use the selected variant                                                                                             |
@@ -862,7 +862,7 @@ None.
 ### Slots
 
 | Slot name    | Default | Props | Fallback                                              |
-|:-------------|:--------|:------|:------------------------------------------------------|
+| :----------- | :------ | :---- | :---------------------------------------------------- |
 | --           | Yes     | --    | --                                                    |
 | icon         | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 | labelText    | No      | --    | <code>{labelText}</code>                              |
@@ -871,7 +871,7 @@ None.
 ### Events
 
 | Event name | Type       | Detail            |
-|:-----------|:-----------|:------------------|
+| :--------- | :--------- | :---------------- |
 | keydown    | forwarded  | --                |
 | mouseenter | forwarded  | --                |
 | mouseleave | forwarded  | --                |
@@ -882,14 +882,14 @@ None.
 ### Props
 
 | Prop name  | Required | Kind             | Reactive | Type                | Default value   | Description                     |
-|:-----------|:---------|:-----------------|:---------|---------------------|-----------------|---------------------------------|
+| :--------- | :------- | :--------------- | :------- | ------------------- | --------------- | ------------------------------- |
 | selectedId | No       | <code>let</code> | Yes      | <code>string</code> | <code>""</code> | Set the selected radio group id |
 | labelText  | No       | <code>let</code> | No       | <code>string</code> | <code>""</code> | Specify the label text          |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -901,7 +901,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                | Default value                                                                                                     | Description                                                                                    |
-|:----------------|:---------|:-----------------|:---------|-------------------------------------|-------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | feedback        | No       | <code>let</code> | No       | <code>string</code>                 | <code>"Copied!"</code>                                                                                            | Set the feedback text shown after clicking the button                                          |
 | feedbackTimeout | No       | <code>let</code> | No       | <code>number</code>                 | <code>2000</code>                                                                                                 | Set the timeout duration (ms) to display feedback text                                         |
 | iconDescription | No       | <code>let</code> | No       | <code>string</code>                 | <code>"Copy to clipboard"</code>                                                                                  | Set the title and ARIA label for the copy button                                               |
@@ -915,7 +915,7 @@ None.
 ### Events
 
 | Event name   | Type       | Detail            |
-|:-------------|:-----------|:------------------|
+| :----------- | :--------- | :---------------- |
 | click        | forwarded  | --                |
 | animationend | forwarded  | --                |
 | copy         | dispatched | <code>null</code> |
@@ -953,7 +953,6 @@ export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;
 
 export interface DataTableRow {
   id: any;
-
   [key: string]: DataTableValue;
 }
 
@@ -969,7 +968,7 @@ export interface DataTableCell {
 ### Props
 
 | Prop name           | Required | Kind             | Reactive | Type                                                                | Default value          | Description                                                                                                         |
-|:--------------------|:---------|:-----------------|:---------|---------------------------------------------------------------------|------------------------|---------------------------------------------------------------------------------------------------------------------|
+| :------------------ | :------- | :--------------- | :------- | ------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | selectedRowIds      | No       | <code>let</code> | Yes      | <code>ReadonlyArray<DataTableRowId></code>                          | <code>[]</code>        | Specify the row ids to be selected                                                                                  |
 | selectable          | No       | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the selectable variant<br />Automatically set to `true` if `radio` or `batchSelection` are `true` |
 | expandedRowIds      | No       | <code>let</code> | Yes      | <code>ReadonlyArray<DataTableRowId></code>                          | <code>[]</code>        | Specify the row ids to be expanded                                                                                  |
@@ -996,7 +995,7 @@ export interface DataTableCell {
 ### Slots
 
 | Slot name    | Default | Props                                                                                          | Fallback                                                                 |
-|:-------------|:--------|:-----------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
+| :----------- | :------ | :--------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------- |
 | --           | Yes     | --                                                                                             | --                                                                       |
 | cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; rowIndex: number; cellIndex: number; } </code> | <code>{cell.display ? cell.display(cell.value, row) : cell.value}</code> |
 | cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                             | <code>{header.value}</code>                                              |
@@ -1007,7 +1006,7 @@ export interface DataTableCell {
 ### Events
 
 | Event name           | Type       | Detail                                                                                                  |
-|:---------------------|:-----------|:--------------------------------------------------------------------------------------------------------|
+| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------ |
 | click                | dispatched | <code>{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }</code>                    |
 | click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                     |
 | click:header         | dispatched | <code>{ header: DataTableHeader; sortDirection?: "ascending" &#124; "descending" &#124; "none" }</code> |
@@ -1024,7 +1023,7 @@ export interface DataTableCell {
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                                               | Default value          | Description                                                                                  |
-|:------------|:---------|:-----------------|:---------|--------------------------------------------------------------------|------------------------|----------------------------------------------------------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | ------------------------------------------------------------------ | ---------------------- | -------------------------------------------------------------------------------------------- |
 | columns     | No       | <code>let</code> | No       | <code>number</code>                                                | <code>5</code>         | Specify the number of columns<br />Superseded by `headers` if `headers` is a non-empty array |
 | rows        | No       | <code>let</code> | No       | <code>number</code>                                                | <code>5</code>         | Specify the number of rows                                                                   |
 | size        | No       | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "tall"</code>                | <code>undefined</code> | Set the size of the data table                                                               |
@@ -1040,7 +1039,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -1051,7 +1050,7 @@ None.
 ### Props
 
 | Prop name      | Required | Kind             | Reactive | Type                                                                                                             | Default value                                    | Description                                                                                       |
-|:---------------|:---------|:-----------------|:---------|------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| :------------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | valueTo        | No       | <code>let</code> | Yes      | <code>string</code>                                                                                              | <code>""</code>                                  | Specify the date picker end date value (to)<br />Only works with the "range" date picker type     |
 | valueFrom      | No       | <code>let</code> | Yes      | <code>string</code>                                                                                              | <code>""</code>                                  | Specify the date picker start date value (from)<br />Only works with the "range" date picker type |
 | value          | No       | <code>let</code> | Yes      | <code>number &#124; string</code>                                                                                | <code>""</code>                                  | Specify the date picker input value                                                               |
@@ -1068,13 +1067,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type       | Detail                                                                                                                              |
-|:-----------|:-----------|:------------------------------------------------------------------------------------------------------------------------------------|
+| :--------- | :--------- | :---------------------------------------------------------------------------------------------------------------------------------- |
 | change     | dispatched | <code>string &#124; { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string &#124; { from: string; to: string; } }</code> |
 | click      | forwarded  | --                                                                                                                                  |
 | mouseover  | forwarded  | --                                                                                                                                  |
@@ -1086,7 +1085,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                        |
-|:----------------|:---------|:-----------------|:---------|-------------------------------------------|--------------------------------------------------|----------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | -------------------------------------------------- |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element       |
 | size            | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>             | <code>undefined</code>                           | Set the size of the input                          |
 | type            | No       | <code>let</code> | No       | <code>string</code>                       | <code>"text"</code>                              | Specify the input type                             |
@@ -1107,13 +1106,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | input      | forwarded | --     |
 | keydown    | forwarded | --     |
 | keyup      | forwarded | --     |
@@ -1125,7 +1124,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value                                    | Description                               |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------------------------------------|-------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------------------------------------ | ----------------------------------------- |
 | range     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to use the range variant    |
 | id        | No       | <code>let</code> | No       | <code>string</code>  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id to be used by the label element |
 
@@ -1136,7 +1135,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -1161,7 +1160,7 @@ export interface DropdownItem {
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                                                                                  | Default value                                         | Description                                                                                                                  |
-|:----------------|:---------|:-----------------|:---------|-------------------------------------------------------------------------------------------------------|-------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                                                            | <code>null</code>                                     | Obtain a reference to the button HTML element                                                                                |
 | open            | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to open the dropdown                                                                                           |
 | selectedId      | Yes      | <code>let</code> | Yes      | <code>DropdownItemId</code>                                                                           | <code>undefined</code>                                | Specify the selected item id                                                                                                 |
@@ -1187,13 +1186,13 @@ export interface DropdownItem {
 ### Slots
 
 | Slot name | Default | Props                                                | Fallback                          |
-|:----------|:--------|:-----------------------------------------------------|:----------------------------------|
+| :-------- | :------ | :--------------------------------------------------- | :-------------------------------- |
 | --        | Yes     | <code>{ item: DropdownItem; index: number; } </code> | <code>{itemToString(item)}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                                                                  |
-|:-----------|:-----------|:------------------------------------------------------------------------|
+| :--------- | :--------- | :---------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedId: DropdownItemId, selectedItem: DropdownItem }</code> |
 
 ## `DropdownSkeleton`
@@ -1201,7 +1200,7 @@ export interface DropdownItem {
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                             |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|-----------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------------- |
 | inline    | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the inline variant |
 
 ### Slots
@@ -1211,7 +1210,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -1222,7 +1221,7 @@ None.
 ### Props
 
 | Prop name             | Required | Kind             | Reactive | Type                                       | Default value                                    | Description                                           |
-|:----------------------|:---------|:-----------------|:---------|--------------------------------------------|--------------------------------------------------|-------------------------------------------------------|
+| :-------------------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ----------------------------------------------------- |
 | ref                   | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the top-level element           |
 | tilePadding           | No       | <code>let</code> | Yes      | <code>number</code>                        | <code>0</code>                                   | Specify the padding of the tile (number of pixels)    |
 | tileMaxHeight         | No       | <code>let</code> | Yes      | <code>number</code>                        | <code>0</code>                                   | Specify the max height of the tile (number of pixels) |
@@ -1238,14 +1237,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | above     | No      | --    | --       |
 | below     | No      | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | keypress   | forwarded | --     |
 | mouseover  | forwarded | --     |
@@ -1257,7 +1256,7 @@ None.
 ### Props
 
 | Prop name        | Required | Kind               | Reactive | Type                                                               | Default value                           | Description                                                                                                                                             |
-|:-----------------|:---------|:-------------------|:---------|--------------------------------------------------------------------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------------- | :------- | :----------------- | :------- | ------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | files            | No       | <code>let</code>   | Yes      | <code>ReadonlyArray<File></code>                                   | <code>[]</code>                         | Obtain a reference to the uploaded files                                                                                                                |
 | status           | No       | <code>let</code>   | No       | <code>"uploading" &#124; "edit" &#124; "complete"</code>           | <code>"uploading"</code>                | Specify the file uploader status                                                                                                                        |
 | disabled         | No       | <code>let</code>   | No       | <code>boolean</code>                                               | <code>false</code>                      | Set to `true` to disable the file uploader                                                                                                              |
@@ -1275,14 +1274,14 @@ None.
 ### Slots
 
 | Slot name        | Default | Props | Fallback                        |
-|:-----------------|:--------|:------|:--------------------------------|
+| :--------------- | :------ | :---- | :------------------------------ |
 | labelDescription | No      | --    | <code>{labelDescription}</code> |
 | labelTitle       | No      | --    | <code>{labelTitle}</code>       |
 
 ### Events
 
 | Event name | Type       | Detail                           |
-|:-----------|:-----------|:---------------------------------|
+| :--------- | :--------- | :------------------------------- |
 | add        | dispatched | <code>ReadonlyArray<File></code> |
 | remove     | dispatched | <code>ReadonlyArray<File></code> |
 | change     | dispatched | <code>ReadonlyArray<File></code> |
@@ -1297,7 +1296,7 @@ None.
 ### Props
 
 | Prop name           | Required | Kind             | Reactive | Type                                                               | Default value                                    | Description                                  |
-|:--------------------|:---------|:-----------------|:---------|--------------------------------------------------------------------|--------------------------------------------------|----------------------------------------------|
+| :------------------ | :------- | :--------------- | :------- | ------------------------------------------------------------------ | ------------------------------------------------ | -------------------------------------------- |
 | ref                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                          | <code>null</code>                                | Obtain a reference to the input HTML element |
 | labelText           | No       | <code>let</code> | Yes      | <code>string</code>                                                | <code>"Add file"</code>                          | Specify the label text                       |
 | files               | No       | <code>let</code> | Yes      | <code>ReadonlyArray<File></code>                                   | <code>[]</code>                                  | Obtain a reference to the uploaded files     |
@@ -1315,13 +1314,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                           |
-|:-----------|:-----------|:---------------------------------|
+| :--------- | :--------- | :------------------------------- |
 | change     | dispatched | <code>ReadonlyArray<File></code> |
 | keydown    | forwarded  | --                               |
 | click      | forwarded  | --                               |
@@ -1331,7 +1330,7 @@ None.
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                                                             | Default value                                    | Description                                                                                          |
-|:--------------|:---------|:-----------------|:---------|------------------------------------------------------------------|--------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | ---------------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
 | ref           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                        | <code>null</code>                                | Obtain a reference to the input HTML element                                                         |
 | files         | No       | <code>let</code> | Yes      | <code>ReadonlyArray<File></code>                                 | <code>[]</code>                                  | Obtain a reference to the uploaded files                                                             |
 | accept        | No       | <code>let</code> | No       | <code>ReadonlyArray<string></code>                               | <code>[]</code>                                  | Specify the accepted file types                                                                      |
@@ -1347,13 +1346,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                           |
-|:-----------|:-----------|:---------------------------------|
+| :--------- | :--------- | :------------------------------- |
 | add        | dispatched | <code>ReadonlyArray<File></code> |
 | change     | dispatched | <code>ReadonlyArray<File></code> |
 | dragover   | forwarded  | --                               |
@@ -1367,7 +1366,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                                     | Default value                                    | Description                                      |
-|:----------------|:---------|:-----------------|:---------|----------------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | -------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------ |
 | status          | No       | <code>let</code> | No       | <code>"uploading" &#124; "edit" &#124; "complete"</code> | <code>"uploading"</code>                         | Specify the file uploader status                 |
 | size            | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code>                | <code>"lg"</code>                                | Specify the size of button skeleton              |
 | iconDescription | No       | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>                                  | Specify the ARIA label used for the status icons |
@@ -1384,7 +1383,7 @@ None.
 ### Events
 
 | Event name | Type       | Detail              |
-|:-----------|:-----------|:--------------------|
+| :--------- | :--------- | :------------------ |
 | delete     | dispatched | <code>string</code> |
 | mouseover  | forwarded  | --                  |
 | mouseenter | forwarded  | --                  |
@@ -1403,7 +1402,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -1414,7 +1413,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                                     | Default value            | Description                                      |
-|:----------------|:---------|:-----------------|:---------|----------------------------------------------------------|--------------------------|--------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | -------------------------------------------------------- | ------------------------ | ------------------------------------------------ |
 | status          | No       | <code>let</code> | No       | <code>"uploading" &#124; "edit" &#124; "complete"</code> | <code>"uploading"</code> | Specify the file name status                     |
 | iconDescription | No       | <code>let</code> | No       | <code>string</code>                                      | <code>""</code>          | Specify the ARIA label used for the status icons |
 | invalid         | No       | <code>let</code> | No       | <code>boolean</code>                                     | <code>false</code>       | Set to `true` to indicate an invalid state       |
@@ -1426,7 +1425,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | keydown    | forwarded | --     |
 
@@ -1439,13 +1438,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | keydown    | forwarded | --     |
 | mouseover  | forwarded | --     |
@@ -1458,19 +1457,19 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                     | Default value     | Description                            |
-|:----------|:---------|:-----------------|:---------|------------------------------------------|-------------------|----------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ---------------------------------------- | ----------------- | -------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLFormElement</code> | <code>null</code> | Obtain a reference to the form element |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | keydown    | forwarded | --     |
 | mouseover  | forwarded | --     |
@@ -1483,7 +1482,7 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                 | Default value      | Description                                   |
-|:------------|:---------|:-----------------|:---------|----------------------|--------------------|-----------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------------------- |
 | noMargin    | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for to remove the bottom margin |
 | invalid     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to indicate an invalid state    |
 | message     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a form requirement    |
@@ -1494,13 +1493,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -1515,13 +1514,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -1532,19 +1531,19 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                | Default value                                    | Description                               |
-|:----------|:---------|:-----------------|:---------|---------------------|--------------------------------------------------|-------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------- | ------------------------------------------------ | ----------------------------------------- |
 | id        | No       | <code>let</code> | No       | <code>string</code> | <code>"ccs-" + Math.random().toString(36)</code> | Set an id to be used by the label element |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -1555,7 +1554,7 @@ None.
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                 | Default value      | Description                                                                                                                                                                                     |
-|:--------------|:---------|:-----------------|:---------|----------------------|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | -------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | as            | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a custom HTML element<br />Props are destructured as `props` in the default slot (e.g., &lt;Grid let:props&gt;&lt;header {...props}&gt;...&lt;/header&gt;&lt;/Grid&gt;) |
 | condensed     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the condensed variant                                                                                                                                                      |
 | narrow        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the narrow variant                                                                                                                                                         |
@@ -1568,7 +1567,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props                                                           | Fallback |
-|:----------|:--------|:----------------------------------------------------------------|:---------|
+| :-------- | :------ | :-------------------------------------------------------------- | :------- |
 | --        | Yes     | <code>{ props: { class: string; [key: string]: any; } } </code> | --       |
 
 ### Events
@@ -1580,7 +1579,7 @@ None.
 ### Props
 
 | Prop name               | Required | Kind             | Reactive | Type                                                      | Default value          | Description                                                                                                                                                                                                                                                                 |
-|:------------------------|:---------|:-----------------|:---------|-----------------------------------------------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :---------------------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ref                     | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code>                | <code>null</code>      | Obtain a reference to the HTML anchor element                                                                                                                                                                                                                               |
 | isSideNavOpen           | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to open the side nav                                                                                                                                                                                                                                          |
 | expandedByDefault       | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>true</code>      | Set to `false` to hide the side nav by default                                                                                                                                                                                                                              |
@@ -1596,7 +1595,7 @@ None.
 ### Slots
 
 | Slot name       | Default | Props | Fallback                     |
-|:----------------|:--------|:------|:-----------------------------|
+| :-------------- | :------ | :---- | :--------------------------- |
 | --              | Yes     | --    | --                           |
 | company         | No      | --    | <code>{company}&nbsp;</code> |
 | platform        | No      | --    | <code>{platformName}</code>  |
@@ -1605,7 +1604,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `HeaderAction`
@@ -1613,7 +1612,7 @@ None.
 ### Props
 
 | Prop name                  | Required | Kind             | Reactive | Type                                                              | Default value                  | Description                                                                                                      |
-|:---------------------------|:---------|:-----------------|:---------|-------------------------------------------------------------------|--------------------------------|------------------------------------------------------------------------------------------------------------------|
+| :------------------------- | :------- | :--------------- | :------- | ----------------------------------------------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | ref                        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                        | <code>null</code>              | Obtain a reference to the button HTML element                                                                    |
 | isOpen                     | No       | <code>let</code> | Yes      | <code>boolean</code>                                              | <code>false</code>             | Set to `true` to open the panel                                                                                  |
 | icon                       | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code>         | <code>undefined</code>         | Specify the icon to render when the action panel is closed.<br />Defaults to `&lt;Switcher size={20} /&gt;`      |
@@ -1625,7 +1624,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                                                               |
-|:----------|:--------|:------|:-----------------------------------------------------------------------|
+| :-------- | :------ | :---- | :--------------------------------------------------------------------- |
 | --        | Yes     | --    | --                                                                     |
 | closeIcon | No      | --    | <code>&lt;svelte:component this="{closeIcon}" size="{20}" /&gt;</code> |
 | icon      | No      | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code>      |
@@ -1634,7 +1633,7 @@ None.
 ### Events
 
 | Event name | Type       | Detail            |
-|:-----------|:-----------|:------------------|
+| :--------- | :--------- | :---------------- |
 | open       | dispatched | <code>null</code> |
 | close      | dispatched | <code>null</code> |
 | click      | forwarded  | --                |
@@ -1644,7 +1643,7 @@ None.
 ### Props
 
 | Prop name    | Required | Kind             | Reactive | Type                                                      | Default value          | Description                                   |
-|:-------------|:---------|:-----------------|:---------|-----------------------------------------------------------|------------------------|-----------------------------------------------|
+| :----------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ---------------------- | --------------------------------------------- |
 | ref          | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code>                | <code>null</code>      | Obtain a reference to the HTML anchor element |
 | linkIsActive | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to use the active state         |
 | href         | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the `href` attribute                  |
@@ -1653,13 +1652,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                                                          |
-|:----------|:--------|:------|:------------------------------------------------------------------|
+| :-------- | :------ | :---- | :---------------------------------------------------------------- |
 | icon      | No      | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `HeaderGlobalAction`
@@ -1667,7 +1666,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                                      | Default value          | Description                                   |
-|:----------|:---------|:-----------------|:---------|-----------------------------------------------------------|------------------------|-----------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ---------------------- | --------------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                | <code>null</code>      | Obtain a reference to the HTML button element |
 | isActive  | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to use the active variant       |
 | icon      | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code> | <code>undefined</code> | Specify the icon to render                    |
@@ -1675,13 +1674,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                                                          |
-|:----------|:--------|:------|:------------------------------------------------------------------|
+| :-------- | :------ | :---- | :---------------------------------------------------------------- |
 | --        | Yes     | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `HeaderNav`
@@ -1693,7 +1692,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -1705,7 +1704,7 @@ None.
 ### Props
 
 | Prop name  | Required | Kind             | Reactive | Type                                       | Default value          | Description                                   |
-|:-----------|:---------|:-----------------|:---------|--------------------------------------------|------------------------|-----------------------------------------------|
+| :--------- | :------- | :--------------- | :------- | ------------------------------------------ | ---------------------- | --------------------------------------------- |
 | ref        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>      | Obtain a reference to the HTML anchor element |
 | href       | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code> | Specify the `href` attribute                  |
 | text       | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code> | Specify the text                              |
@@ -1714,13 +1713,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback            |
-|:----------|:--------|:------|:--------------------|
+| :-------- | :------ | :---- | :------------------ |
 | --        | Yes     | --    | <code>{text}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -1735,7 +1734,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                       | Default value          | Description                                   |
-|:----------|:---------|:-----------------|:---------|--------------------------------------------|------------------------|-----------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------------------------------ | ---------------------- | --------------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>      | Obtain a reference to the HTML anchor element |
 | expanded  | No       | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>     | Set to `true` to toggle the expanded state    |
 | href      | No       | <code>let</code> | No       | <code>string</code>                        | <code>"/"</code>       | Specify the `href` attribute                  |
@@ -1744,13 +1743,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | keydown    | forwarded | --     |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
@@ -1769,7 +1768,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -1781,20 +1780,20 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                       | Default value          | Description                                   |
-|:----------|:---------|:-----------------|:---------|--------------------------------------------|------------------------|-----------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------------------------------ | ---------------------- | --------------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>      | Obtain a reference to the HTML anchor element |
 | href      | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code> | Specify the `href` attribute                  |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `HeaderPanelLinks`
@@ -1806,7 +1805,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -1828,7 +1827,7 @@ export interface HeaderSearchResult {
 ### Props
 
 | Prop name           | Required | Kind             | Reactive | Type                                           | Default value      | Description                                        |
-|:--------------------|:---------|:-----------------|:---------|------------------------------------------------|--------------------|----------------------------------------------------|
+| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | ------------------ | -------------------------------------------------- |
 | selectedResultIndex | No       | <code>let</code> | Yes      | <code>number</code>                            | <code>0</code>     | Specify the selected result index                  |
 | ref                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>      | <code>null</code>  | Obtain a reference to the input HTML element       |
 | active              | No       | <code>let</code> | Yes      | <code>boolean</code>                           | <code>false</code> | Set to `true` to activate and focus the search bar |
@@ -1838,13 +1837,13 @@ export interface HeaderSearchResult {
 ### Slots
 
 | Slot name | Default | Props                                                       | Fallback                                                                                                      |
-|:----------|:--------|:------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------|
+| :-------- | :------ | :---------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
 | --        | Yes     | <code>{ result: HeaderSearchResult; index: number } </code> | <code>{result.text}<br /> {#if result.description}&lt;span&gt;– {result.description}&lt;/span&gt;{/if}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                                                                                          |
-|:-----------|:-----------|:------------------------------------------------------------------------------------------------|
+| :--------- | :--------- | :---------------------------------------------------------------------------------------------- |
 | active     | dispatched | <code>null</code>                                                                               |
 | inactive   | dispatched | <code>null</code>                                                                               |
 | clear      | dispatched | <code>null</code>                                                                               |
@@ -1865,7 +1864,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -1877,7 +1876,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind               | Reactive | Type                                                                                                            | Default value                                                                                                                                                                                                                | Description                                                                                                                 |
-|:----------|:---------|:-------------------|:---------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| :-------- | :------- | :----------------- | :------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | error     | No       | <code>let</code>   | Yes      | <code>boolean</code>                                                                                            | <code>false</code>                                                                                                                                                                                                           | Set to `true` if an error occurs when loading the image                                                                     |
 | loaded    | No       | <code>let</code>   | Yes      | <code>boolean</code>                                                                                            | <code>false</code>                                                                                                                                                                                                           | Set to `true` when the image is loaded                                                                                      |
 | loading   | No       | <code>let</code>   | Yes      | <code>boolean</code>                                                                                            | <code>false</code>                                                                                                                                                                                                           | Set to `true` when `loaded` is `true` and `error` is false                                                                  |
@@ -1890,14 +1889,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | error     | No      | --    | --       |
 | loading   | No      | --    | --       |
 
 ### Events
 
 | Event name | Type       | Detail            |
-|:-----------|:-----------|:------------------|
+| :--------- | :--------- | :---------------- |
 | load       | dispatched | <code>null</code> |
 | error      | dispatched | <code>null</code> |
 
@@ -1906,7 +1905,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                                                     | Default value          | Description                                                                                                          |
-|:----------------|:---------|:-----------------|:---------|--------------------------------------------------------------------------|------------------------|----------------------------------------------------------------------------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | status          | No       | <code>let</code> | No       | <code>"active" &#124; "inactive" &#124; "finished" &#124; "error"</code> | <code>"active"</code>  | Set the loading status                                                                                               |
 | description     | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Set the loading description                                                                                          |
 | iconDescription | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Specify a description for the loading icon.<br />Defaults to the `status` prop for the "error" and "finished" states |
@@ -1919,7 +1918,7 @@ None.
 ### Events
 
 | Event name | Type       | Detail            |
-|:-----------|:-----------|:------------------|
+| :--------- | :--------- | :---------------- |
 | click      | forwarded  | --                |
 | mouseover  | forwarded  | --                |
 | mouseenter | forwarded  | --                |
@@ -1931,7 +1930,7 @@ None.
 ### Props
 
 | Prop name              | Required | Kind             | Reactive | Type                                                                                                           | Default value                     | Description                                                             |
-|:-----------------------|:---------|:-----------------|:---------|----------------------------------------------------------------------------------------------------------------|-----------------------------------|-------------------------------------------------------------------------|
+| :--------------------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------- | --------------------------------- | ----------------------------------------------------------------------- |
 | kind                   | No       | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code>              | Specify the kind of notification                                        |
 | lowContrast            | No       | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                | Set to `true` to use the low contrast variant                           |
 | timeout                | No       | <code>let</code> | No       | <code>number</code>                                                                                            | <code>0</code>                    | Set the timeout duration (ms) to hide the notification after opening it |
@@ -1945,7 +1944,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                |
-|:----------|:--------|:------|:------------------------|
+| :-------- | :------ | :---- | :---------------------- |
 | --        | Yes     | --    | --                      |
 | actions   | No      | --    | --                      |
 | subtitle  | No      | --    | <code>{subtitle}</code> |
@@ -1954,7 +1953,7 @@ None.
 ### Events
 
 | Event name | Type       | Detail                            |
-|:-----------|:-----------|:----------------------------------|
+| :--------- | :--------- | :-------------------------------- |
 | close      | dispatched | <code>{ timeout: boolean }</code> |
 | click      | forwarded  | --                                |
 | mouseover  | forwarded  | --                                |
@@ -1966,7 +1965,7 @@ None.
 ### Props
 
 | Prop name  | Required | Kind             | Reactive | Type                                                         | Default value          | Description                                                                 |
-|:-----------|:---------|:-----------------|:---------|--------------------------------------------------------------|------------------------|-----------------------------------------------------------------------------|
+| :--------- | :------- | :--------------- | :------- | ------------------------------------------------------------ | ---------------------- | --------------------------------------------------------------------------- |
 | level      | No       | <code>let</code> | Yes      | <code>0 &#124; 1 &#124; 2 </code>                            | <code>undefined</code> | Specify the layer level to override any existing levels based on hierarchy. |
 | as         | No       | <code>let</code> | No       | <code>string</code>                                          | <code>"div"</code>     | Specify the HTML element to render.                                         |
 | layerProps | No       | <code>let</code> | No       | <code>import('svelte/elements').HTMLElementAttributes</code> | <code>{}</code>        | Specify the Layer HTML element props                                        |
@@ -1974,7 +1973,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -1986,7 +1985,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                                                   | Default value          | Description                                              |
-|:----------|:---------|:-----------------|:---------|------------------------------------------------------------------------|------------------------|----------------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------- | ---------------------- | -------------------------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLParagraphElement</code> | <code>null</code>      | Obtain a reference to the top-level HTML element         |
 | size      | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>                                          | <code>undefined</code> | Specify the size of the link                             |
 | href      | No       | <code>let</code> | No       | <code>string</code>                                                    | <code>undefined</code> | Specify the href value                                   |
@@ -1998,14 +1997,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                                              |
-|:----------|:--------|:------|:------------------------------------------------------|
+| :-------- | :------ | :---- | :---------------------------------------------------- |
 | --        | Yes     | --    | --                                                    |
 | icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2016,7 +2015,7 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                   | Default value          | Description                                |
-|:------------|:---------|:-----------------|:---------|----------------------------------------|------------------------|--------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | -------------------------------------- | ---------------------- | ------------------------------------------ |
 | size        | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" </code>         | <code>undefined</code> | Set the size of the list box               |
 | type        | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code> | <code>"default"</code> | Set the type of the list box               |
 | open        | No       | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>     | Set to `true` to open the list box         |
@@ -2030,13 +2029,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | keydown    | forwarded | --     |
 | click      | forwarded | --     |
 
@@ -2051,7 +2050,7 @@ export type ListBoxFieldTranslationId = "close" | "open";
 ### Props
 
 | Prop name       | Required | Kind               | Reactive | Type                                                   | Default value                                    | Description                                      |
-|:----------------|:---------|:-------------------|:---------|--------------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
+| :-------------- | :------- | :----------------- | :------- | ------------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ |
 | ref             | No       | <code>let</code>   | Yes      | <code>null &#124; HTMLDivElement</code>                | <code>null</code>                                | Obtain a reference to the top-level HTML element |
 | disabled        | No       | <code>let</code>   | No       | <code>boolean</code>                                   | <code>false</code>                               | Set to `true` to disable the list box field      |
 | role            | No       | <code>let</code>   | No       | <code>string</code>                                    | <code>"combobox"</code>                          | Specify the role attribute                       |
@@ -2063,13 +2062,13 @@ export type ListBoxFieldTranslationId = "close" | "open";
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2083,20 +2082,20 @@ export type ListBoxFieldTranslationId = "close" | "open";
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                    | Default value                                    | Description                            |
-|:----------|:---------|:-----------------|:---------|-----------------------------------------|--------------------------------------------------|----------------------------------------|
+| :-------- | :------- | :--------------- | :------- | --------------------------------------- | ------------------------------------------------ | -------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code> | <code>null</code>                                | Obtain a reference to the HTML element |
 | id        | No       | <code>let</code> | No       | <code>string</code>                     | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element    |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | scroll     | forwarded | --     |
 
 ## `ListBoxMenuIcon`
@@ -2110,7 +2109,7 @@ export type ListBoxMenuIconTranslationId = "close" | "open";
 ### Props
 
 | Prop name       | Required | Kind               | Reactive | Type                                                      | Default value                                 | Description                                  |
-|:----------------|:---------|:-------------------|:---------|-----------------------------------------------------------|-----------------------------------------------|----------------------------------------------|
+| :-------------- | :------- | :----------------- | :------- | --------------------------------------------------------- | --------------------------------------------- | -------------------------------------------- |
 | open            | No       | <code>let</code>   | No       | <code>boolean</code>                                      | <code>false</code>                            | Set to `true` to open the list box menu icon |
 | translationIds  | No       | <code>const</code> | No       | <code>{ close: "close", open: "open" }</code>             | <code>{ close: "close", open: "open" }</code> | Default translation ids                      |
 | translateWithId | No       | <code>let</code>   | No       | <code>(id: ListBoxMenuIconTranslationId) => string</code> | <code>(id) => defaultTranslations[id]</code>  | Override the default translation ids         |
@@ -2122,7 +2121,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `ListBoxMenuItem`
@@ -2130,7 +2129,7 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                 | Default value      | Description                                   |
-|:------------|:---------|:-----------------|:---------|----------------------|--------------------|-----------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------------------- |
 | active      | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the active state      |
 | highlighted | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the highlighted state |
 | disabled    | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to disable the menu item        |
@@ -2138,13 +2137,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
@@ -2160,7 +2159,7 @@ export type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 ### Props
 
 | Prop name       | Required | Kind               | Reactive | Type                                                                     | Default value                                                            | Description                                      |
-|:----------------|:---------|:-------------------|:---------|--------------------------------------------------------------------------|--------------------------------------------------------------------------|--------------------------------------------------|
+| :-------------- | :------- | :----------------- | :------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------ |
 | ref             | No       | <code>let</code>   | Yes      | <code>null &#124; HTMLDivElement</code>                                  | <code>null</code>                                                        | Obtain a reference to the top-level HTML element |
 | selectionCount  | No       | <code>let</code>   | No       | <code>number</code>                                                      | <code>undefined</code>                                                   | Specify the number of selected items             |
 | disabled        | No       | <code>let</code>   | No       | <code>boolean</code>                                                     | <code>false</code>                                                       | Set to `true` to disable the list box selection  |
@@ -2174,7 +2173,7 @@ None.
 ### Events
 
 | Event name | Type       | Detail |
-|:-----------|:-----------|:-------|
+| :--------- | :--------- | :----- |
 | clear      | dispatched | --     |
 
 ## `ListItem`
@@ -2186,13 +2185,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2203,7 +2202,7 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                 | Default value          | Description                                           |
-|:------------|:---------|:-----------------|:---------|----------------------|------------------------|-------------------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | -------------------- | ---------------------- | ----------------------------------------------------- |
 | small       | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to use the small variant                |
 | active      | No       | <code>let</code> | No       | <code>boolean</code> | <code>true</code>      | Set to `false` to disable the active state            |
 | withOverlay | No       | <code>let</code> | No       | <code>boolean</code> | <code>true</code>      | Set to `false` to disable the overlay                 |
@@ -2222,7 +2221,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind                  | Reactive | Type                    | Default value                                        | Description                                                     |
-|:----------|:---------|:----------------------|:---------|-------------------------|------------------------------------------------------|-----------------------------------------------------------------|
+| :-------- | :------- | :-------------------- | :------- | ----------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
 | value     | No       | <code>let</code>      | Yes      | <code>any</code>        | <code>""</code>                                      | Provide a value to persist                                      |
 | key       | No       | <code>let</code>      | No       | <code>string</code>     | <code>"local-storage-key"</code>                     | Specify the local storage key                                   |
 | clearItem | No       | <code>function</code> | No       | <code>() => void</code> | <code>() => { localStorage.removeItem(key); }</code> | Remove the persisted key value from the browser's local storage |
@@ -2235,7 +2234,7 @@ None.
 ### Events
 
 | Event name | Type       | Detail                                       |
-|:-----------|:-----------|:---------------------------------------------|
+| :--------- | :--------- | :------------------------------------------- |
 | save       | dispatched | <code>null</code>                            |
 | update     | dispatched | <code>{ prevValue: any; value: any; }</code> |
 
@@ -2244,7 +2243,7 @@ None.
 ### Props
 
 | Prop name                  | Required | Kind             | Reactive | Type                                                      | Default value                                    | Description                                                                                                   |
-|:---------------------------|:---------|:-----------------|:---------|-----------------------------------------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| :------------------------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | ref                        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                   | <code>null</code>                                | Obtain a reference to the top-level HTML element                                                              |
 | open                       | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to open the modal                                                                               |
 | size                       | No       | <code>let</code> | No       | <code>"xs" &#124; "sm" &#124; "lg"</code>                 | <code>undefined</code>                           | Set the size of the modal                                                                                     |
@@ -2270,7 +2269,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                    |
-|:----------|:--------|:------|:----------------------------|
+| :-------- | :------ | :---- | :-------------------------- |
 | --        | Yes     | --    | --                          |
 | heading   | No      | --    | <code>{modalHeading}</code> |
 | label     | No      | --    | <code>{modalLabel}</code>   |
@@ -2278,7 +2277,7 @@ None.
 ### Events
 
 | Event name              | Type       | Detail                          |
-|:------------------------|:-----------|:--------------------------------|
+| :---------------------- | :--------- | :------------------------------ |
 | transitionend           | dispatched | <code>{ open: boolean; }</code> |
 | click:button--secondary | dispatched | <code>{ text: string; }</code>  |
 | keydown                 | forwarded  | --                              |
@@ -2296,14 +2295,14 @@ None.
 ### Props
 
 | Prop name           | Required | Kind             | Reactive | Type                 | Default value      | Description                                           |
-|:--------------------|:---------|:-----------------|:---------|----------------------|--------------------|-------------------------------------------------------|
+| :------------------ | :------- | :--------------- | :------- | -------------------- | ------------------ | ----------------------------------------------------- |
 | hasForm             | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` if the modal contains form elements     |
 | hasScrollingContent | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` if the modal contains scrolling content |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -2315,7 +2314,7 @@ None.
 ### Props
 
 | Prop name             | Required | Kind             | Reactive | Type                                                      | Default value          | Description                                                                                             |
-|:----------------------|:---------|:-----------------|:---------|-----------------------------------------------------------|------------------------|---------------------------------------------------------------------------------------------------------|
+| :-------------------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------- |
 | primaryButtonText     | No       | <code>let</code> | No       | <code>string</code>                                       | <code>""</code>        | Specify the primary button text                                                                         |
 | primaryButtonIcon     | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code> | <code>undefined</code> | Specify the primary button icon                                                                         |
 | primaryButtonDisabled | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to disable the primary button                                                             |
@@ -2328,13 +2327,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name              | Type       | Detail                         |
-|:------------------------|:-----------|:-------------------------------|
+| :---------------------- | :--------- | :----------------------------- |
 | click:button--secondary | dispatched | <code>{ text: string; }</code> |
 
 ## `ModalHeader`
@@ -2342,7 +2341,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                | Default value        | Description                               |
-|:----------------|:---------|:-----------------|:---------|---------------------|----------------------|-------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ------------------- | -------------------- | ----------------------------------------- |
 | title           | No       | <code>let</code> | No       | <code>string</code> | <code>""</code>      | Specify the modal title                   |
 | label           | No       | <code>let</code> | No       | <code>string</code> | <code>""</code>      | Specify the modal label                   |
 | labelClass      | No       | <code>let</code> | No       | <code>string</code> | <code>""</code>      | Specify the label class                   |
@@ -2354,13 +2353,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `MultiSelect`
@@ -2382,7 +2381,7 @@ export interface MultiSelectItem {
 ### Props
 
 | Prop name                | Required | Kind             | Reactive | Type                                                                                                       | Default value                                                                              | Description                                                                                                                                                           |
-|:-------------------------|:---------|:-----------------|:---------|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :----------------------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | highlightedId            | No       | <code>let</code> | Yes      | <code>null &#124; MultiSelectItemId</code>                                                                 | <code>null</code>                                                                          | Id of the highlighted ListBoxMenuItem                                                                                                                                 |
 | selectionRef             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                    | <code>null</code>                                                                          | Obtain a reference to the selection element                                                                                                                           |
 | fieldRef                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                    | <code>null</code>                                                                          | Obtain a reference to the field box element                                                                                                                           |
@@ -2422,14 +2421,14 @@ export interface MultiSelectItem {
 ### Slots
 
 | Slot name | Default | Props                                                  | Fallback                          |
-|:----------|:--------|:-------------------------------------------------------|:----------------------------------|
+| :-------- | :------ | :----------------------------------------------------- | :-------------------------------- |
 | --        | Yes     | <code>{ item: MultiSelectItem; index: number } </code> | <code>{itemToString(item)}</code> |
 | titleText | No      | --                                                     | <code>{titleText}</code>          |
 
 ### Events
 
 | Event name | Type       | Detail                                                                                                         |
-|:-----------|:-----------|:---------------------------------------------------------------------------------------------------------------|
+| :--------- | :--------- | :------------------------------------------------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
 | clear      | dispatched | <code>null</code>                                                                                              |
 | blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         |
@@ -2447,13 +2446,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2464,7 +2463,7 @@ None.
 ### Props
 
 | Prop name        | Required | Kind             | Reactive | Type                                                      | Default value             | Description                         |
-|:-----------------|:---------|:-----------------|:---------|-----------------------------------------------------------|---------------------------|-------------------------------------|
+| :--------------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ------------------------- | ----------------------------------- |
 | notificationType | No       | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                      | <code>"toast"</code>      | Set the type of notification        |
 | icon             | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code> | <code>undefined</code>    | Specify the icon to render          |
 | title            | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code>    | Specify the title of the icon       |
@@ -2477,7 +2476,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2488,7 +2487,7 @@ None.
 ### Props
 
 | Prop name        | Required | Kind             | Reactive | Type                                                                                                           | Default value          | Description                           |
-|:-----------------|:---------|:-----------------|:---------|----------------------------------------------------------------------------------------------------------------|------------------------|---------------------------------------|
+| :--------------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------- | ---------------------- | ------------------------------------- |
 | kind             | No       | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code>   | Specify the kind of notification icon |
 | notificationType | No       | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                                                                           | <code>"toast"</code>   | Set the type of notification          |
 | iconDescription  | Yes      | <code>let</code> | No       | --                                                                                                             | <code>undefined</code> | Specify the ARIA label for the icon   |
@@ -2512,7 +2511,7 @@ export type NumberInputTranslationId = "increment" | "decrement";
 ### Props
 
 | Prop name       | Required | Kind               | Reactive | Type                                                            | Default value                                                    | Description                                                   |
-|:----------------|:---------|:-------------------|:---------|-----------------------------------------------------------------|------------------------------------------------------------------|---------------------------------------------------------------|
+| :-------------- | :------- | :----------------- | :------- | --------------------------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------- |
 | ref             | No       | <code>let</code>   | Yes      | <code>null &#124; HTMLInputElement</code>                       | <code>null</code>                                                | Obtain a reference to the input HTML element                  |
 | value           | No       | <code>let</code>   | Yes      | <code>null &#124; number</code>                                 | <code>null</code>                                                | Specify the input value.<br />Use `null` to denote "no value" |
 | size            | No       | <code>let</code>   | No       | <code>"sm" &#124; "lg"</code>                                   | <code>undefined</code>                                           | Set the size of the input                                     |
@@ -2540,13 +2539,13 @@ export type NumberInputTranslationId = "increment" | "decrement";
 ### Slots
 
 | Slot name | Default | Props | Fallback             |
-|:----------|:--------|:------|:---------------------|
+| :-------- | :------ | :---- | :------------------- |
 | label     | No      | --    | <code>{label}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                          |
-|:-----------|:-----------|:--------------------------------|
+| :--------- | :--------- | :------------------------------ |
 | change     | dispatched | <code>null &#124; number</code> |
 | input      | dispatched | <code>null &#124; number</code> |
 | click      | forwarded  | --                              |
@@ -2564,7 +2563,7 @@ export type NumberInputTranslationId = "increment" | "decrement";
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                          |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|--------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ------------------------------------ |
 | hideLabel | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to hide the label text |
 
 ### Slots
@@ -2574,7 +2573,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2585,7 +2584,7 @@ None.
 ### Props
 
 | Prop name  | Required | Kind             | Reactive | Type                 | Default value      | Description                                          |
-|:-----------|:---------|:-----------------|:---------|----------------------|--------------------|------------------------------------------------------|
+| :--------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ---------------------------------------------------- |
 | nested     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant              |
 | native     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use native list styles              |
 | expressive | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use Carbon's expressive typesetting |
@@ -2593,13 +2592,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2614,13 +2613,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2631,7 +2630,7 @@ None.
 ### Props
 
 | Prop name        | Required | Kind             | Reactive | Type                                                      | Default value                                    | Description                                                                   |
-|:-----------------|:---------|:-----------------|:---------|-----------------------------------------------------------|--------------------------------------------------|-------------------------------------------------------------------------------|
+| :--------------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
 | menuRef          | No       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>                 | <code>null</code>                                | Obtain a reference to the overflow menu element                               |
 | buttonRef        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                | <code>null</code>                                | Obtain a reference to the trigger button element                              |
 | icon             | No       | <code>let</code> | Yes      | <code>typeof import("svelte").SvelteComponent<any></code> | <code>undefined</code>                           | Specify the icon to render.<br />Defaults to `&lt;OverflowMenuVertical /&gt;` |
@@ -2648,14 +2647,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                                                                                                                                                                                   |
-|:----------|:--------|:------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :-------- | :------ | :---- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | --        | Yes     | --    | --                                                                                                                                                                                         |
 | menu      | No      | --    | <code>&lt;svelte:component<br /> this="{icon}"<br /> aria-label="{iconDescription}"<br /> title="{iconDescription}"<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
 
 ### Events
 
 | Event name | Type       | Detail                                                    |
-|:-----------|:-----------|:----------------------------------------------------------|
+| :--------- | :--------- | :-------------------------------------------------------- |
 | close      | dispatched | <code>null &#124; { index: number; text: string; }</code> |
 | click      | forwarded  | --                                                        |
 | mouseover  | forwarded  | --                                                        |
@@ -2668,7 +2667,7 @@ None.
 ### Props
 
 | Prop name    | Required | Kind             | Reactive | Type                                                                | Default value                                    | Description                                                       |
-|:-------------|:---------|:-----------------|:---------|---------------------------------------------------------------------|--------------------------------------------------|-------------------------------------------------------------------|
+| :----------- | :------- | :--------------- | :------- | ------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
 | ref          | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the HTML element                            |
 | primaryFocus | No       | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code>                               | Set to `true` if the item should be focused when opening the menu |
 | text         | No       | <code>let</code> | No       | <code>string</code>                                                 | <code>"Provide text"</code>                      | Specify the item text.<br />Alternatively, use the default slot   |
@@ -2682,13 +2681,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                                                                                                            |
-|:----------|:--------|:------|:--------------------------------------------------------------------------------------------------------------------|
+| :-------- | :------ | :---- | :------------------------------------------------------------------------------------------------------------------ |
 | --        | Yes     | --    | <code>&lt;div class:bx--overflow-menu-options\_\_option-content="{true}"&gt;<br /> {text}<br /> &lt;/div&gt;</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | keydown    | forwarded | --     |
 
@@ -2697,7 +2696,7 @@ None.
 ### Props
 
 | Prop name             | Required | Kind             | Reactive | Type                                                             | Default value                                                                               | Description                                      |
-|:----------------------|:---------|:-----------------|:---------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------|--------------------------------------------------|
+| :-------------------- | :------- | :--------------- | :------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------ |
 | pageSize              | No       | <code>let</code> | Yes      | <code>number</code>                                              | <code>10</code>                                                                             | Specify the number of items to display in a page |
 | page                  | No       | <code>let</code> | Yes      | <code>number</code>                                              | <code>1</code>                                                                              | Specify the current page index                   |
 | totalItems            | No       | <code>let</code> | No       | <code>number</code>                                              | <code>0</code>                                                                              | Specify the total number of items                |
@@ -2722,7 +2721,7 @@ None.
 ### Events
 
 | Event name             | Type       | Detail                                            |
-|:-----------------------|:-----------|:--------------------------------------------------|
+| :--------------------- | :--------- | :------------------------------------------------ |
 | change                 | dispatched | <code>{ page?: number; pageSize?: number }</code> |
 | click:button--previous | dispatched | <code>{ page: number; }</code>                    |
 | click:button--next     | dispatched | <code>{ page: number; }</code>                    |
@@ -2733,7 +2732,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                                                                             | Default value                | Description                                                         |
-|:----------------|:---------|:-----------------|:---------|--------------------------------------------------------------------------------------------------|------------------------------|---------------------------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------- |
 | page            | No       | <code>let</code> | Yes      | <code>number</code>                                                                              | <code>1</code>               | Specify the current page index                                      |
 | total           | No       | <code>let</code> | No       | <code>number</code>                                                                              | <code>10</code>              | Specify the total number of pages                                   |
 | shown           | No       | <code>let</code> | No       | <code>number</code>                                                                              | <code>10</code>              | Specify the total number of pages to show                           |
@@ -2749,7 +2748,7 @@ None.
 ### Events
 
 | Event name             | Type       | Detail                         |
-|:-----------------------|:-----------|:-------------------------------|
+| :--------------------- | :--------- | :----------------------------- |
 | change                 | dispatched | <code>{ page: number; }</code> |
 | click:button--previous | dispatched | <code>{ page: number; }</code> |
 | click:button--next     | dispatched | <code>{ page: number; }</code> |
@@ -2767,7 +2766,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2778,7 +2777,7 @@ None.
 ### Props
 
 | Prop name         | Required | Kind             | Reactive | Type                                                            | Default value                                    | Description                                           |
-|:------------------|:---------|:-----------------|:---------|-----------------------------------------------------------------|--------------------------------------------------|-------------------------------------------------------|
+| :---------------- | :------- | :--------------- | :------- | --------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------- |
 | ref               | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                       | <code>null</code>                                | Obtain a reference to the input HTML element          |
 | type              | No       | <code>let</code> | Yes      | <code>"text" &#124; "password"</code>                           | <code>"password"</code>                          | Set to `"text"` to toggle the password visibility     |
 | value             | No       | <code>let</code> | Yes      | <code>number &#124; string</code>                               | <code>""</code>                                  | Specify the input value                               |
@@ -2804,13 +2803,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2828,7 +2827,7 @@ None.
 ### Props
 
 | Prop name           | Required | Kind             | Reactive | Type                                                                                                                                                                                                                            | Default value      | Description                                            |
-|:--------------------|:---------|:-----------------|:---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|--------------------------------------------------------|
+| :------------------ | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------ |
 | open                | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to display the popover                   |
 | closeOnOutsideClick | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` to close the popover on an outside click |
 | caret               | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                            | <code>false</code> | Set to `true` render a caret                           |
@@ -2840,13 +2839,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name    | Type       | Detail                                |
-|:--------------|:-----------|:--------------------------------------|
+| :------------ | :--------- | :------------------------------------ |
 | click:outside | dispatched | <code>{ target: HTMLElement; }</code> |
 
 ## `PopoverContent`
@@ -2854,13 +2853,13 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type | Default value     | Description |
-|:----------|:---------|:-----------------|:---------|------|-------------------|-------------|
+| :-------- | :------- | :--------------- | :------- | ---- | ----------------- | ----------- |
 | className | No       | <code>let</code> | No       | --   | <code>null</code> | --          |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -2872,7 +2871,7 @@ None.
 ### Props
 
 | Prop name  | Required | Kind             | Reactive | Type                                                     | Default value                                    | Description                                   |
-|:-----------|:---------|:-----------------|:---------|----------------------------------------------------------|--------------------------------------------------|-----------------------------------------------|
+| :--------- | :------- | :--------------- | :------- | -------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------- |
 | value      | No       | <code>let</code> | No       | <code>number</code>                                      | <code>undefined</code>                           | Specify the current value                     |
 | max        | No       | <code>let</code> | No       | <code>number</code>                                      | <code>100</code>                                 | Specify the maximum value                     |
 | kind       | No       | <code>let</code> | No       | <code>"default" &#124; "inline" &#124; "indented"</code> | <code>"default"</code>                           | Specify the kind of progress bar              |
@@ -2886,7 +2885,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
@@ -2898,7 +2897,7 @@ None.
 ### Props
 
 | Prop name            | Required | Kind             | Reactive | Type                 | Default value      | Description                                                                                    |
-|:---------------------|:---------|:-----------------|:---------|----------------------|--------------------|------------------------------------------------------------------------------------------------|
+| :------------------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ---------------------------------------------------------------------------------------------- |
 | currentIndex         | No       | <code>let</code> | Yes      | <code>number</code>  | <code>0</code>     | Specify the current step index                                                                 |
 | vertical             | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the vertical variant                                                      |
 | spaceEqually         | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to specify whether the progress steps should be split equally in size in the div |
@@ -2907,13 +2906,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type       | Detail              |
-|:-----------|:-----------|:--------------------|
+| :--------- | :--------- | :------------------ |
 | change     | dispatched | <code>number</code> |
 | click      | forwarded  | --                  |
 | mouseover  | forwarded  | --                  |
@@ -2925,7 +2924,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                               |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|-------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ----------------------------------------- |
 | vertical  | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the vertical variant |
 | count     | No       | <code>let</code> | No       | <code>number</code>  | <code>4</code>     | Specify the number of steps to render     |
 
@@ -2936,7 +2935,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2947,7 +2946,7 @@ None.
 ### Props
 
 | Prop name      | Required | Kind             | Reactive | Type                 | Default value                                    | Description                                |
-|:---------------|:---------|:-----------------|:---------|----------------------|--------------------------------------------------|--------------------------------------------|
+| :------------- | :------- | :--------------- | :------- | -------------------- | ------------------------------------------------ | ------------------------------------------ |
 | current        | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to use the current variant   |
 | complete       | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` for the complete variant     |
 | disabled       | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to disable the progress step |
@@ -2960,13 +2959,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props                                                    | Fallback                                                                  |
-|:----------|:--------|:---------------------------------------------------------|:--------------------------------------------------------------------------|
+| :-------- | :------ | :------------------------------------------------------- | :------------------------------------------------------------------------ |
 | --        | Yes     | <code>{ props: { class: 'bx--progress-label' } } </code> | <code>&lt;p class:bx--progress-label="{true}"&gt;{label}&lt;/p&gt;</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -2978,7 +2977,7 @@ None.
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                         |
-|:--------------|:---------|:-----------------|:---------|-------------------------------------------|--------------------------------------------------|-----------------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | --------------------------------------------------- |
 | ref           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element        |
 | checked       | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the radio button             |
 | value         | No       | <code>let</code> | No       | <code>string &#124; number</code>         | <code>""</code>                                  | Specify the value of the radio button               |
@@ -2993,13 +2992,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | change     | forwarded | --     |
 
 ## `RadioButtonGroup`
@@ -3007,7 +3006,7 @@ None.
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                                        | Default value             | Description                                              |
-|:--------------|:---------|:-----------------|:---------|---------------------------------------------|---------------------------|----------------------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | ------------------------------------------- | ------------------------- | -------------------------------------------------------- |
 | selected      | No       | <code>let</code> | Yes      | <code>string &#124; number</code>           | <code>undefined</code>    | Set the selected radio button value                      |
 | disabled      | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to disable the radio buttons               |
 | required      | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>undefined</code>    | Set to `true` to require the selection of a radio button |
@@ -3021,14 +3020,14 @@ None.
 ### Slots
 
 | Slot name  | Default | Props | Fallback                  |
-|:-----------|:--------|:------|:--------------------------|
+| :--------- | :------ | :---- | :------------------------ |
 | --         | Yes     | --    | --                        |
 | legendText | No      | --    | <code>{legendText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                            |
-|:-----------|:-----------|:----------------------------------|
+| :--------- | :--------- | :-------------------------------- |
 | change     | dispatched | <code>string &#124; number</code> |
 | click      | forwarded  | --                                |
 | mouseover  | forwarded  | --                                |
@@ -3048,7 +3047,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3059,7 +3058,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                 | Default value                                    | Description                                              |
-|:----------------|:---------|:-----------------|:---------|----------------------|--------------------------------------------------|----------------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | -------------------- | ------------------------------------------------ | -------------------------------------------------------- |
 | checked         | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to check the tile                          |
 | light           | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to enable the light variant                |
 | disabled        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to disable the tile                        |
@@ -3073,13 +3072,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | change     | forwarded | --     |
 | keydown    | forwarded | --     |
 | click      | forwarded | --     |
@@ -3102,7 +3101,7 @@ export interface RecursiveListNode {
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                                                        | Default value            | Description                        |
-|:----------|:---------|:-----------------|:---------|-----------------------------------------------------------------------------|--------------------------|------------------------------------|
+| :-------- | :------- | :--------------- | :------- | --------------------------------------------------------------------------- | ------------------------ | ---------------------------------- |
 | children  | No       | <code>let</code> | No       | <code>Array<RecursiveListNode & { children?: RecursiveListNode[]; }></code> | <code>[]</code>          | Specify the children to render     |
 | type      | No       | <code>let</code> | No       | <code>"unordered" &#124; "ordered" &#124; "ordered-native"</code>           | <code>"unordered"</code> | Specify the type of list to render |
 
@@ -3119,7 +3118,7 @@ None.
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                 | Default value      | Description                                                                                                                                                                                     |
-|:--------------|:---------|:-----------------|:---------|----------------------|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | -------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | as            | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a custom HTML element<br />Props are destructured as `props` in the default slot (e.g., &lt;Row let:props&gt;&lt;section {...props}&gt;...&lt;/section&gt;&lt;/Row&gt;) |
 | condensed     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the condensed variant                                                                                                                                                      |
 | narrow        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the narrow variant                                                                                                                                                         |
@@ -3131,7 +3130,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props                                                           | Fallback |
-|:----------|:--------|:----------------------------------------------------------------|:---------|
+| :-------- | :------ | :-------------------------------------------------------------- | :------- |
 | --        | Yes     | <code>{ props: { class: string; [key: string]: any; } } </code> | --       |
 
 ### Events
@@ -3143,7 +3142,7 @@ None.
 ### Props
 
 | Prop name            | Required | Kind             | Reactive | Type                                                      | Default value                                    | Description                                                     |
-|:---------------------|:---------|:-----------------|:---------|-----------------------------------------------------------|--------------------------------------------------|-----------------------------------------------------------------|
+| :------------------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------- |
 | ref                  | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                 | <code>null</code>                                | Obtain a reference to the input HTML element                    |
 | expanded             | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>                               | Set to `true to expand the search input                         |
 | value                | No       | <code>let</code> | Yes      | <code>any</code>                                          | <code>""</code>                                  | Specify the value of the search input                           |
@@ -3164,13 +3163,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail            |
-|:-----------|:-----------|:------------------|
+| :--------- | :--------- | :---------------- |
 | expand     | dispatched | <code>null</code> |
 | collapse   | dispatched | <code>null</code> |
 | click      | forwarded  | --                |
@@ -3191,7 +3190,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                      | Default value     | Description                          |
-|:----------|:---------|:-----------------|:---------|-------------------------------------------|-------------------|--------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ----------------------------------------- | ----------------- | ------------------------------------ |
 | size      | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code> | <code>"md"</code> | Specify the size of the search input |
 
 ### Slots
@@ -3201,7 +3200,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3212,7 +3211,7 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                       | Default value                                    | Description                                     |
-|:------------|:---------|:-----------------|:---------|--------------------------------------------|--------------------------------------------------|-------------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ----------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLSelectElement</code> | <code>null</code>                                | Obtain a reference to the select HTML element   |
 | selected    | No       | <code>let</code> | Yes      | <code>string &#124; number</code>          | <code>undefined</code>                           | Specify the selected item value                 |
 | size        | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>              | <code>undefined</code>                           | Set the size of the select input                |
@@ -3234,14 +3233,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | --        | Yes     | --    | --                       |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                            |
-|:-----------|:-----------|:----------------------------------|
+| :--------- | :--------- | :-------------------------------- |
 | update     | dispatched | <code>string &#124; number</code> |
 | change     | forwarded  | --                                |
 | input      | forwarded  | --                                |
@@ -3253,7 +3252,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                              | Default value          | Description                               |
-|:----------|:---------|:-----------------|:---------|-----------------------------------|------------------------|-------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | --------------------------------- | ---------------------- | ----------------------------------------- |
 | value     | No       | <code>let</code> | No       | <code>string &#124; number</code> | <code>""</code>        | Specify the option value                  |
 | text      | No       | <code>let</code> | No       | <code>string</code>               | <code>""</code>        | Specify the option text                   |
 | hidden    | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to hide the option          |
@@ -3274,14 +3273,14 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value                | Description                                         |
-|:----------|:---------|:-----------------|:---------|----------------------|------------------------------|-----------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ---------------------------- | --------------------------------------------------- |
 | disabled  | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>           | Set to `true` to disable the optgroup element       |
 | label     | No       | <code>let</code> | No       | <code>string</code>  | <code>"Provide label"</code> | Specify the label attribute of the optgroup element |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -3293,7 +3292,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                          |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|--------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ------------------------------------ |
 | hideLabel | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to hide the label text |
 
 ### Slots
@@ -3303,7 +3302,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3314,7 +3313,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                                   |
-|:----------------|:---------|:-----------------|:---------|-------------------------------------------|--------------------------------------------------|---------------------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------- |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element                  |
 | selected        | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to select the tile                              |
 | light           | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                     |
@@ -3329,13 +3328,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type       | Detail              |
-|:-----------|:-----------|:--------------------|
+| :--------- | :--------- | :------------------ |
 | select     | dispatched | <code>string</code> |
 | deselect   | dispatched | <code>string</code> |
 | click      | forwarded  | --                  |
@@ -3349,7 +3348,7 @@ None.
 ### Props
 
 | Prop name           | Required | Kind             | Reactive | Type                 | Default value          | Description                                                                                                                                                                                                                                                                 |
-|:--------------------|:---------|:-----------------|:---------|----------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :------------------ | :------- | :--------------- | :------- | -------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | isOpen              | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>     | Set to `true` to toggle the expanded state                                                                                                                                                                                                                                  |
 | fixed               | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to use the fixed variant                                                                                                                                                                                                                                      |
 | rail                | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to use the rail variant                                                                                                                                                                                                                                       |
@@ -3359,13 +3358,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name    | Type       | Detail            |
-|:--------------|:-----------|:------------------|
+| :------------ | :--------- | :---------------- |
 | open          | dispatched | <code>null</code> |
 | close         | dispatched | <code>null</code> |
 | click:overlay | dispatched | <code>null</code> |
@@ -3393,7 +3392,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -3405,7 +3404,7 @@ None.
 ### Props
 
 | Prop name  | Required | Kind             | Reactive | Type                                                      | Default value          | Description                                   |
-|:-----------|:---------|:-----------------|:---------|-----------------------------------------------------------|------------------------|-----------------------------------------------|
+| :--------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ---------------------- | --------------------------------------------- |
 | ref        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code>                | <code>null</code>      | Obtain a reference to the HTML anchor element |
 | isSelected | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to select the current link      |
 | href       | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the `href` attribute                  |
@@ -3415,14 +3414,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                                              |
-|:----------|:--------|:------|:------------------------------------------------------|
+| :-------- | :------ | :---- | :---------------------------------------------------- |
 | --        | Yes     | --    | <code>{text}</code>                                   |
 | icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `SideNavMenu`
@@ -3430,7 +3429,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                                      | Default value          | Description                                   |
-|:----------|:---------|:-----------------|:---------|-----------------------------------------------------------|------------------------|-----------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ---------------------- | --------------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                | <code>null</code>      | Obtain a reference to the HTML button element |
 | expanded  | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>     | Set to `true` to toggle the expanded state    |
 | text      | No       | <code>let</code> | No       | <code>string</code>                                       | <code>undefined</code> | Specify the text                              |
@@ -3439,14 +3438,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                                              |
-|:----------|:--------|:------|:------------------------------------------------------|
+| :-------- | :------ | :---- | :---------------------------------------------------- |
 | --        | Yes     | --    | --                                                    |
 | icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `SideNavMenuItem`
@@ -3454,7 +3453,7 @@ None.
 ### Props
 
 | Prop name  | Required | Kind             | Reactive | Type                                       | Default value          | Description                                   |
-|:-----------|:---------|:-----------------|:---------|--------------------------------------------|------------------------|-----------------------------------------------|
+| :--------- | :------- | :--------------- | :------- | ------------------------------------------ | ---------------------- | --------------------------------------------- |
 | ref        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>      | Obtain a reference to the HTML anchor element |
 | isSelected | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>     | Set to `true` to select the item              |
 | href       | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code> | Specify the `href` attribute                  |
@@ -3463,13 +3462,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback            |
-|:----------|:--------|:------|:--------------------|
+| :-------- | :------ | :---- | :------------------ |
 | --        | Yes     | --    | <code>{text}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `SkeletonPlaceholder`
@@ -3485,7 +3484,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3496,7 +3495,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value       | Description                                     |
-|:----------|:---------|:-----------------|:---------|----------------------|---------------------|-------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------- | ----------------------------------------------- |
 | lines     | No       | <code>let</code> | No       | <code>number</code>  | <code>3</code>      | Specify the number of lines to render           |
 | heading   | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>  | Set to `true` to use the heading size variant   |
 | paragraph | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>  | Set to `true` to use the paragraph size variant |
@@ -3509,7 +3508,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3520,20 +3519,20 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                | Default value                | Description                  |
-|:----------|:---------|:-----------------|:---------|---------------------|------------------------------|------------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------- | ---------------------------- | ---------------------------- |
 | href      | No       | <code>let</code> | No       | <code>string</code> | <code>"#main-content"</code> | Specify the `href` attribute |
 | tabindex  | No       | <code>let</code> | No       | <code>string</code> | <code>"0"</code>             | Specify the tabindex         |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback                          |
-|:----------|:--------|:------|:----------------------------------|
+| :-------- | :------ | :---- | :-------------------------------- |
 | --        | Yes     | --    | <code>Skip to main content</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 
 ## `Slider`
@@ -3541,7 +3540,7 @@ None.
 ### Props
 
 | Prop name      | Required | Kind             | Reactive | Type                                    | Default value                                    | Description                                                                                                                  |
-|:---------------|:---------|:-----------------|:---------|-----------------------------------------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| :------------- | :------- | :--------------- | :------- | --------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
 | ref            | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code> | <code>null</code>                                | Obtain a reference to the HTML element                                                                                       |
 | value          | No       | <code>let</code> | Yes      | <code>number</code>                     | <code>0</code>                                   | Specify the value of the slider                                                                                              |
 | max            | No       | <code>let</code> | No       | <code>number</code>                     | <code>100</code>                                 | Set the maximum slider value                                                                                                 |
@@ -3565,13 +3564,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail |
-|:-----------|:-----------|:-------|
+| :--------- | :--------- | :----- |
 | click      | forwarded  | --     |
 | mouseover  | forwarded  | --     |
 | mouseenter | forwarded  | --     |
@@ -3583,7 +3582,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                          |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|--------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ------------------------------------ |
 | hideLabel | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to hide the label text |
 
 ### Slots
@@ -3593,7 +3592,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3604,7 +3603,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value          | Description                                    |
-|:----------|:---------|:-----------------|:---------|----------------------|------------------------|------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ---------------------- | ---------------------------------------------- |
 | selected  | No       | <code>let</code> | Yes      | <code>string</code>  | <code>undefined</code> | Specify the selected structured list row value |
 | condensed | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to use the condensed variant     |
 | flush     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to flush the list                |
@@ -3613,13 +3612,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type       | Detail |
-|:-----------|:-----------|:-------|
+| :--------- | :--------- | :----- |
 | click      | forwarded  | --     |
 | mouseover  | forwarded  | --     |
 | mouseenter | forwarded  | --     |
@@ -3635,13 +3634,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3652,20 +3651,20 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                       |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|-----------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------- |
 | head      | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use as a header  |
 | noWrap    | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to prevent wrapping |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3680,13 +3679,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3697,7 +3696,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                  |
-|:----------|:---------|:-----------------|:---------|-------------------------------------------|--------------------------------------------------|----------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | -------------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element |
 | checked   | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the input             |
 | title     | No       | <code>let</code> | No       | <code>string</code>                       | <code>"title"</code>                             | Specify the title of the input               |
@@ -3718,7 +3717,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                          |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|--------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ------------------------------------ |
 | head      | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use as a header     |
 | label     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a label slot |
 | tabindex  | No       | <code>let</code> | No       | <code>string</code>  | <code>"0"</code>   | Specify the tabindex                 |
@@ -3726,13 +3725,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3744,7 +3743,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                | Default value  | Description                |
-|:----------|:---------|:-----------------|:---------|---------------------|----------------|----------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------- | -------------- | -------------------------- |
 | rows      | No       | <code>let</code> | No       | <code>number</code> | <code>5</code> | Specify the number of rows |
 
 ### Slots
@@ -3754,7 +3753,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3765,7 +3764,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                       | Default value                                    | Description                                                                                                         |
-|:----------|:---------|:-----------------|:---------|--------------------------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the button HTML element                                                                       |
 | selected  | No       | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>                               | Set to `true` for the switch to be selected                                                                         |
 | text      | No       | <code>let</code> | No       | <code>string</code>                        | <code>"Provide text"</code>                      | Specify the switch text.<br />Alternatively, use the "text" slot (e.g., `&lt;span slot="text"&gt;...&lt;/span&gt;`) |
@@ -3775,13 +3774,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback            |
-|:----------|:--------|:------|:--------------------|
+| :-------- | :------ | :---- | :------------------ |
 | --        | Yes     | --    | <code>{text}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3793,7 +3792,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                       | Default value                                    | Description                                                                                                                     |
-|:----------|:---------|:-----------------|:---------|--------------------------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLAnchorElement</code> | <code>null</code>                                | Obtain a reference to the anchor HTML element                                                                                   |
 | label     | No       | <code>let</code> | No       | <code>string</code>                        | <code>""</code>                                  | Specify the tab label.<br />Alternatively, use the default slot (e.g., `&lt;Tab&gt;&lt;span&gt;Label&lt;/span&gt;&lt;/Tab&gt;`) |
 | href      | No       | <code>let</code> | No       | <code>string</code>                        | <code>"#"</code>                                 | Specify the href attribute                                                                                                      |
@@ -3804,13 +3803,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback             |
-|:----------|:--------|:------|:---------------------|
+| :-------- | :------ | :---- | :------------------- |
 | --        | Yes     | --    | <code>{label}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3821,13 +3820,13 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                | Default value                                    | Description                         |
-|:----------|:---------|:-----------------|:---------|---------------------|--------------------------------------------------|-------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ------------------- | ------------------------------------------------ | ----------------------------------- |
 | id        | No       | <code>let</code> | No       | <code>string</code> | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -3839,7 +3838,7 @@ None.
 ### Props
 
 | Prop name      | Required | Kind             | Reactive | Type                                                                | Default value          | Description                                    |
-|:---------------|:---------|:-----------------|:---------|---------------------------------------------------------------------|------------------------|------------------------------------------------|
+| :------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------- | ---------------------- | ---------------------------------------------- |
 | size           | No       | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | <code>undefined</code> | Set the size of the table                      |
 | zebra          | No       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use zebra styles              |
 | useStaticWidth | No       | <code>let</code> | No       | <code>boolean</code>                                                | <code>false</code>     | Set to `true` to use static width              |
@@ -3850,7 +3849,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -3866,7 +3865,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -3882,13 +3881,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3899,7 +3898,7 @@ None.
 ### Props
 
 | Prop name      | Required | Kind             | Reactive | Type                 | Default value      | Description                               |
-|:---------------|:---------|:-----------------|:---------|----------------------|--------------------|-------------------------------------------|
+| :------------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ----------------------------------------- |
 | title          | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the title of the data table       |
 | description    | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>    | Specify the description of the data table |
 | stickyHeader   | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable a sticky header   |
@@ -3908,7 +3907,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -3924,13 +3923,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3941,7 +3940,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                                       | Default value                                    | Description                            |
-|:----------------|:---------|:-----------------|:---------|------------------------------------------------------------|--------------------------------------------------|----------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ---------------------------------------------------------- | ------------------------------------------------ | -------------------------------------- |
 | sortable        | No       | <code>let</code> | No       | <code>boolean</code>                                       | <code>false</code>                               | Set to `true` for the sortable variant |
 | sortDirection   | No       | <code>let</code> | No       | <code>"none" &#124; "ascending" &#124; "descending"</code> | <code>"none"</code>                              | Specify the sort direction             |
 | active          | No       | <code>let</code> | No       | <code>boolean</code>                                       | <code>false</code>                               | Set to `true` if the column sorting    |
@@ -3952,13 +3951,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
@@ -3973,13 +3972,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -3990,7 +3989,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                                  |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|----------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | -------------------------------------------- |
 | selected  | No       | <code>let</code> | Yes      | <code>number</code>  | <code>0</code>     | Specify the selected tab index               |
 | contained | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for tabs to be contained       |
 | autoWidth | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` for tabs to have an auto-width |
@@ -3998,14 +3997,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 | content   | No      | --    | --       |
 
 ### Events
 
 | Event name | Type       | Detail |
-|:-----------|:-----------|:-------|
+| :--------- | :--------- | :----- |
 | change     | dispatched | --     |
 
 ## `TabsSkeleton`
@@ -4013,7 +4012,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                                      | Default value          | Description                          |
-|:----------|:---------|:-----------------|:---------|-------------------------------------------|------------------------|--------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ----------------------------------------- | ---------------------- | ------------------------------------ |
 | count     | No       | <code>let</code> | No       | <code>number</code>                       | <code>4</code>         | Specify the number of tabs to render |
 | type      | No       | <code>let</code> | No       | <code>"default" &#124; "container"</code> | <code>"default"</code> | Specify the type of tabs             |
 
@@ -4024,7 +4023,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -4035,7 +4034,7 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                                                                                                                                                                                     | Default value                                    | Description                                                   |
-|:------------|:---------|:-----------------|:---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|---------------------------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------- |
 | type        | No       | <code>let</code> | No       | <code>"red" &#124; "magenta" &#124; "purple" &#124; "blue" &#124; "cyan" &#124; "teal" &#124; "green" &#124; "gray" &#124; "cool-gray" &#124; "warm-gray" &#124; "high-contrast" &#124; "outline"</code> | <code>undefined</code>                           | Specify the type of tag                                       |
 | size        | No       | <code>let</code> | No       | <code>"sm" &#124; "default"</code>                                                                                                                                                                       | <code>"default"</code>                           | --                                                            |
 | filter      | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                     | <code>false</code>                               | Set to `true` to use filterable variant                       |
@@ -4049,14 +4048,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props                                                  | Fallback                                              |
-|:----------|:--------|:-------------------------------------------------------|:------------------------------------------------------|
+| :-------- | :------ | :----------------------------------------------------- | :---------------------------------------------------- |
 | --        | Yes     | <code>{ props: { class: 'bx--tag\_\_label' } } </code> | --                                                    |
 | icon      | No      | --                                                     | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 
 ### Events
 
 | Event name | Type       | Detail            |
-|:-----------|:-----------|:------------------|
+| :--------- | :--------- | :---------------- |
 | click      | forwarded  | --                |
 | mouseover  | forwarded  | --                |
 | mouseenter | forwarded  | --                |
@@ -4068,7 +4067,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                               | Default value          | Description |
-|:----------|:---------|:-----------------|:---------|------------------------------------|------------------------|-------------|
+| :-------- | :------- | :--------------- | :------- | ---------------------------------- | ---------------------- | ----------- |
 | size      | No       | <code>let</code> | No       | <code>"sm" &#124; "default"</code> | <code>"default"</code> | --          |
 
 ### Slots
@@ -4078,7 +4077,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -4089,7 +4088,7 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                         | Default value                                    | Description                                     |
-|:------------|:---------|:-----------------|:---------|----------------------------------------------|--------------------------------------------------|-------------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | -------------------------------------------- | ------------------------------------------------ | ----------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLTextAreaElement</code> | <code>null</code>                                | Obtain a reference to the textarea HTML element |
 | value       | No       | <code>let</code> | Yes      | <code>string</code>                          | <code>""</code>                                  | Specify the textarea value                      |
 | placeholder | No       | <code>let</code> | No       | <code>string</code>                          | <code>""</code>                                  | Specify the placeholder text                    |
@@ -4110,13 +4109,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -4134,7 +4133,7 @@ None.
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                                   |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|-----------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------------------- |
 | hideLabel | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to visually hide the label text |
 
 ### Slots
@@ -4144,7 +4143,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -4155,7 +4154,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                                       | Default value                                    | Description                                                                                                                                                                                                                                                                                                                           |
-|:----------------|:---------|:-----------------|:---------|------------------------------------------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ---------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                  | <code>null</code>                                | Obtain a reference to the input HTML element                                                                                                                                                                                                                                                                                          |
 | value           | No       | <code>let</code> | Yes      | <code>null &#124; number &#124; string</code>              | <code>""</code>                                  | Specify the input value<br />`value` will be set to `null` if `typeof value === "number"` and `value` is empty                                                                                                                                                                                                                        |
 | size            | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code>                  | <code>"md"</code>                                | Set the size of the input                                                                                                                                                                                                                                                                                                             |
@@ -4182,7 +4181,7 @@ None.
 ### Slots
 
 | Slot name   | Default | Props | Fallback                   |
-|:------------|:--------|:------|:---------------------------|
+| :---------- | :------ | :---- | :------------------------- |
 | helperText  | No      | --    | <code>{helperText}</code>  |
 | invalidText | No      | --    | <code>{invalidText}</code> |
 | labelText   | No      | --    | <code>{labelText}</code>   |
@@ -4191,7 +4190,7 @@ None.
 ### Events
 
 | Event name   | Type      | Detail |
-|:-------------|:----------|:-------|
+| :----------- | :-------- | :----- |
 | click        | forwarded | --     |
 | pointerup    | forwarded | --     |
 | pointerover  | forwarded | --     |
@@ -4210,7 +4209,7 @@ None.
 ### Props
 
 | Prop name     | Required | Kind             | Reactive | Type                                                     | Default value      | Description                                                |
-|:--------------|:---------|:-----------------|:---------|----------------------------------------------------------|--------------------|------------------------------------------------------------|
+| :------------ | :------- | :--------------- | :------- | -------------------------------------------------------- | ------------------ | ---------------------------------------------------------- |
 | hideLabel     | No       | <code>let</code> | No       | <code>boolean</code>                                     | <code>false</code> | Set to `true` to hide the label text                       |
 | divAttributes | No       | <code>let</code> | No       | <code>import('svelte/elements').HTMLDivAttributes</code> | <code>{}</code>    | Specify the div HTML attributes for the skeleton container |
 
@@ -4221,7 +4220,7 @@ None.
 ### Events
 
 | Event name   | Type      | Detail |
-|:-------------|:----------|:-------|
+| :----------- | :-------- | :----- |
 | click        | forwarded | --     |
 | pointerup    | forwarded | --     |
 | pointerover  | forwarded | --     |
@@ -4239,7 +4238,7 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Props
 
 | Prop name  | Required | Kind             | Reactive | Type                                                                                                           | Default value                                                                                                 | Description                                                                                                                    |
-|:-----------|:---------|:-----------------|:---------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| :--------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | theme      | No       | <code>let</code> | Yes      | <code>CarbonTheme</code>                                                                                       | <code>"white"</code>                                                                                          | Set the current Carbon theme                                                                                                   |
 | tokens     | No       | <code>let</code> | No       | <code>{ [token: string]: any; }</code>                                                                         | <code>{}</code>                                                                                               | Customize a theme with your own tokens<br />@see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme |
 | persist    | No       | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                                                                                            | Set to `true` to persist the theme using window.localStorage                                                                   |
@@ -4251,13 +4250,13 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Slots
 
 | Slot name | Default | Props                                 | Fallback |
-|:----------|:--------|:--------------------------------------|:---------|
+| :-------- | :------ | :------------------------------------ | :------- |
 | --        | Yes     | <code>{ theme: CarbonTheme; } </code> | --       |
 
 ### Events
 
 | Event name | Type       | Detail                               |
-|:-----------|:-----------|:-------------------------------------|
+| :--------- | :--------- | :----------------------------------- |
 | update     | dispatched | <code>{ theme: CarbonTheme; }</code> |
 
 ## `Tile`
@@ -4265,19 +4264,19 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                               |
-|:----------|:---------|:-----------------|:---------|----------------------|--------------------|-------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ----------------------------------------- |
 | light     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to enable the light variant |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -4288,7 +4287,7 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value          | Description                                              |
-|:----------|:---------|:-----------------|:---------|----------------------|------------------------|----------------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | -------------------- | ---------------------- | -------------------------------------------------------- |
 | selected  | No       | <code>let</code> | Yes      | <code>string</code>  | <code>undefined</code> | Specify the selected tile value                          |
 | disabled  | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to disable the tile group                  |
 | required  | No       | <code>let</code> | No       | <code>boolean</code> | <code>undefined</code> | Set to `true` to require the selection of a radio button |
@@ -4298,13 +4297,13 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type       | Detail              |
-|:-----------|:-----------|:--------------------|
+| :--------- | :--------- | :------------------ |
 | select     | dispatched | <code>string</code> |
 
 ## `TimePicker`
@@ -4312,7 +4311,7 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                      | Default value                                       | Description                                           |
-|:------------|:---------|:-----------------|:---------|-------------------------------------------|-----------------------------------------------------|-------------------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | ----------------------------------------- | --------------------------------------------------- | ----------------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                   | Obtain a reference to the input HTML element          |
 | value       | No       | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>                                     | Specify the input value                               |
 | size        | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>             | <code>undefined</code>                              | Specify the size of the input                         |
@@ -4331,14 +4330,14 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | --        | Yes     | --    | --                       |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -4356,7 +4355,7 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                       | Default value                                    | Description                                     |
-|:----------------|:---------|:-----------------|:---------|--------------------------------------------|--------------------------------------------------|-------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ----------------------------------------------- |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLSelectElement</code> | <code>null</code>                                | Obtain a reference to the select HTML element   |
 | value           | No       | <code>let</code> | Yes      | <code>number &#124; string</code>          | <code>""</code>                                  | Specify the select value                        |
 | disabled        | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to disable the select             |
@@ -4368,14 +4367,14 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | --        | Yes     | --    | --                       |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -4386,7 +4385,7 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Props
 
 | Prop name              | Required | Kind             | Reactive | Type                                                                                                           | Default value                     | Description                                                                               |
-|:-----------------------|:---------|:-----------------|:---------|----------------------------------------------------------------------------------------------------------------|-----------------------------------|-------------------------------------------------------------------------------------------|
+| :--------------------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------- |
 | kind                   | No       | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code>              | Specify the kind of notification                                                          |
 | lowContrast            | No       | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                | Set to `true` to use the low contrast variant                                             |
 | timeout                | No       | <code>let</code> | No       | <code>number</code>                                                                                            | <code>0</code>                    | Set the timeout duration (ms) to hide the notification after opening it                   |
@@ -4402,7 +4401,7 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Slots
 
 | Slot name | Default | Props | Fallback                |
-|:----------|:--------|:------|:------------------------|
+| :-------- | :------ | :---- | :---------------------- |
 | --        | Yes     | --    | --                      |
 | caption   | No      | --    | <code>{caption}</code>  |
 | subtitle  | No      | --    | <code>{subtitle}</code> |
@@ -4411,7 +4410,7 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Events
 
 | Event name | Type       | Detail                            |
-|:-----------|:-----------|:----------------------------------|
+| :--------- | :--------- | :-------------------------------- |
 | close      | dispatched | <code>{ timeout: boolean }</code> |
 | click      | forwarded  | --                                |
 | mouseover  | forwarded  | --                                |
@@ -4423,7 +4422,7 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                          | Default value                                    | Description                                     |
-|:----------|:---------|:-----------------|:---------|-------------------------------|--------------------------------------------------|-------------------------------------------------|
+| :-------- | :------- | :--------------- | :------- | ----------------------------- | ------------------------------------------------ | ----------------------------------------------- |
 | toggled   | No       | <code>let</code> | Yes      | <code>boolean</code>          | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
 | size      | No       | <code>let</code> | No       | <code>"md" &#124; "sm"</code> | <code>"md"</code>                                | Specify the toggle size                         |
 | disabled  | No       | <code>let</code> | No       | <code>boolean</code>          | <code>false</code>                               | Set to `true` to disable checkbox input         |
@@ -4437,13 +4436,13 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Slots
 
 | Slot name | Default | Props | Fallback                 |
-|:----------|:--------|:------|:-------------------------|
+| :-------- | :------ | :---- | :----------------------- |
 | labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                             |
-|:-----------|:-----------|:-----------------------------------|
+| :--------- | :--------- | :--------------------------------- |
 | toggle     | dispatched | <code>{ toggled: boolean; }</code> |
 | click      | forwarded  | --                                 |
 | mouseover  | forwarded  | --                                 |
@@ -4459,13 +4458,13 @@ export type CarbonTheme = "white" | "g10" | "g90" | "g100";
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                               | Default value          | Description              |
-|:----------|:---------|:-----------------|:---------|------------------------------------|------------------------|--------------------------|
+| :-------- | :------- | :--------------- | :------- | ---------------------------------- | ---------------------- | ------------------------ |
 | size      | No       | <code>let</code> | No       | <code>"sm" &#124; "default"</code> | <code>"default"</code> | Specify the toolbar size |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -4477,21 +4476,21 @@ None.
 ### Props
 
 | Prop name           | Required | Kind             | Reactive | Type                                           | Default value                                                                                       | Description                               |
-|:--------------------|:---------|:-----------------|:---------|------------------------------------------------|-----------------------------------------------------------------------------------------------------|-------------------------------------------|
+| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------- |
 | active              | No       | <code>let</code> | Yes      | <code>undefined &#124; boolean</code>          | <code>undefined</code>                                                                              | Use a boolean to show or hide the toolbar |
 | formatTotalSelected | No       | <code>let</code> | No       | <code>(totalSelected: number) => string</code> | <code>(totalSelected) => \`${totalSelected} item${totalSelected === 1 ? "" : "s"} selected\`</code> | Override the total items selected text    |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback            |
-|:----------|:--------|:------|:--------------------|
+| :-------- | :------ | :---- | :------------------ |
 | --        | Yes     | --    | --                  |
 | cancel    | No      | --    | <code>Cancel</code> |
 
 ### Events
 
 | Event name | Type       | Detail            |
-|:-----------|:-----------|:------------------|
+| :--------- | :--------- | :---------------- |
 | cancel     | dispatched | <code>null</code> |
 
 ## `ToolbarContent`
@@ -4503,7 +4502,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -4519,7 +4518,7 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -4535,13 +4534,13 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | keydown    | forwarded | --     |
 
@@ -4550,7 +4549,7 @@ None.
 ### Props
 
 | Prop name        | Required | Kind             | Reactive | Type                                                                                                                   | Default value      | Description                                                                                                                                                                                                                                                                                                                                     |
-|:-----------------|:---------|:-----------------|:---------|------------------------------------------------------------------------------------------------------------------------|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ref              | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                                              | <code>null</code>  | Obtain a reference to the input HTML element                                                                                                                                                                                                                                                                                                    |
 | filteredRowIds   | No       | <code>let</code> | Yes      | <code>ReadonlyArray<import("./DataTable.svelte").DataTableRowId></code>                                                | <code>[]</code>    | The filtered row ids                                                                                                                                                                                                                                                                                                                            |
 | expanded         | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                                   | <code>false</code> | Set to `true` to expand the search bar                                                                                                                                                                                                                                                                                                          |
@@ -4567,7 +4566,7 @@ None.
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | clear      | forwarded | --     |
 | change     | forwarded | --     |
 | input      | forwarded | --     |
@@ -4582,7 +4581,7 @@ None.
 ### Props
 
 | Prop name       | Required | Kind             | Reactive | Type                                                            | Default value                                    | Description                                                                                |
-|:----------------|:---------|:-----------------|:---------|-----------------------------------------------------------------|--------------------------------------------------|--------------------------------------------------------------------------------------------|
+| :-------------- | :------- | :--------------- | :------- | --------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
 | refIcon         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the icon HTML element                                                |
 | refTooltip      | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the tooltip HTML element                                             |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                         | <code>null</code>                                | Obtain a reference to the trigger text HTML element                                        |
@@ -4601,7 +4600,7 @@ None.
 ### Slots
 
 | Slot name   | Default | Props | Fallback                                                                |
-|:------------|:--------|:------|:------------------------------------------------------------------------|
+| :---------- | :------ | :---- | :---------------------------------------------------------------------- |
 | --          | Yes     | --    | --                                                                      |
 | icon        | No      | --    | <code>&lt;svelte:component this="{icon}" name="{iconName}" /&gt;</code> |
 | triggerText | No      | --    | <code>{triggerText}</code>                                              |
@@ -4609,7 +4608,7 @@ None.
 ### Events
 
 | Event name | Type       | Detail            |
-|:-----------|:-----------|:------------------|
+| :--------- | :--------- | :---------------- |
 | open       | dispatched | <code>null</code> |
 | close      | dispatched | <code>null</code> |
 | click      | forwarded  | --                |
@@ -4620,7 +4619,7 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                              | Default value                                    | Description                                           |
-|:------------|:---------|:-----------------|:---------|---------------------------------------------------|--------------------------------------------------|-------------------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | ------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>        | <code>null</code>                                | Obtain a reference to the button HTML element         |
 | open        | No       | <code>let</code> | Yes      | <code>boolean</code>                              | <code>false</code>                               | Set to `true` to open the tooltip                     |
 | tooltipText | No       | <code>let</code> | No       | <code>string</code>                               | <code>""</code>                                  | Specify the tooltip text                              |
@@ -4631,14 +4630,14 @@ None.
 ### Slots
 
 | Slot name | Default | Props | Fallback                   |
-|:----------|:--------|:------|:---------------------------|
+| :-------- | :------ | :---- | :------------------------- |
 | --        | Yes     | --    | --                         |
 | tooltip   | No      | --    | <code>{tooltipText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail            |
-|:-----------|:-----------|:------------------|
+| :--------- | :--------- | :---------------- |
 | open       | dispatched | <code>null</code> |
 | close      | dispatched | <code>null</code> |
 | click      | forwarded  | --                |
@@ -4652,13 +4651,13 @@ None.
 ### Props
 
 | Prop name            | Required | Kind             | Reactive | Type                | Default value                                  | Description                                                                 |
-|:---------------------|:---------|:-----------------|:---------|---------------------|------------------------------------------------|-----------------------------------------------------------------------------|
+| :------------------- | :------- | :--------------- | :------- | ------------------- | ---------------------------------------------- | --------------------------------------------------------------------------- |
 | selectorPrimaryFocus | No       | <code>let</code> | No       | <code>string</code> | <code>"a[href], button:not([disabled])"</code> | Specify a selector to be focused inside the footer when opening the tooltip |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -4670,7 +4669,7 @@ None.
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                                            | Default value                                    | Description                                                              |
-|:------------|:---------|:-----------------|:---------|-----------------------------------------------------------------|--------------------------------------------------|--------------------------------------------------------------------------|
+| :---------- | :------- | :--------------- | :------- | --------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------ |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                      | <code>null</code>                                | Obtain a reference to the button HTML element                            |
 | tooltipText | No       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the tooltip text.<br />Alternatively, use the "tooltipText" slot |
 | icon        | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code>       | <code>undefined</code>                           | Specify the icon to render                                               |
@@ -4682,14 +4681,14 @@ None.
 ### Slots
 
 | Slot name   | Default | Props | Fallback                                              |
-|:------------|:--------|:------|:------------------------------------------------------|
+| :---------- | :------ | :---- | :---------------------------------------------------- |
 | --          | Yes     | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
 | tooltipText | No      | --    | <code>{tooltipText}</code>                            |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
@@ -4715,7 +4714,7 @@ export interface TreeNode {
 ### Props
 
 | Prop name     | Required | Kind                  | Reactive | Type                                                          | Default value                                                                                                                                                                                                                                                                                                                                                                                                                                       | Description                                                                                          |
-|:--------------|:---------|:----------------------|:---------|---------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| :------------ | :------- | :-------------------- | :------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | expandedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                        | <code>[]</code>                                                                                                                                                                                                                                                                                                                                                                                                                                     | Set the node ids to be expanded                                                                      |
 | selectedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                        | <code>[]</code>                                                                                                                                                                                                                                                                                                                                                                                                                                     | Set the node ids to be selected                                                                      |
 | activeId      | No       | <code>let</code>      | Yes      | <code>TreeNodeId</code>                                       | <code>""</code>                                                                                                                                                                                                                                                                                                                                                                                                                                     | Set the current active node id<br />Only one node can be active                                      |
@@ -4732,14 +4731,14 @@ export interface TreeNode {
 ### Slots
 
 | Slot name | Default | Props                                                                                                                             | Fallback                 |
-|:----------|:--------|:----------------------------------------------------------------------------------------------------------------------------------|:-------------------------|
+| :-------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------- | :----------------------- |
 | --        | Yes     | <code>{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } } </code> | <code>{node.text}</code> |
 | labelText | No      | --                                                                                                                                | <code>{labelText}</code> |
 
 ### Events
 
 | Event name | Type       | Detail                                                        |
-|:-----------|:-----------|:--------------------------------------------------------------|
+| :--------- | :--------- | :------------------------------------------------------------ |
 | select     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
 | toggle     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
 | focus      | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
@@ -4750,13 +4749,13 @@ export interface TreeNode {
 ### Props
 
 | Prop name | Required | Kind             | Reactive | Type                              | Default value      | Description |
-|:----------|:---------|:-----------------|:---------|-----------------------------------|--------------------|-------------|
+| :-------- | :------- | :--------------- | :------- | --------------------------------- | ------------------ | ----------- |
 | clamp     | No       | <code>let</code> | No       | <code>"end" &#124; "front"</code> | <code>"end"</code> | --          |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
@@ -4768,20 +4767,20 @@ None.
 ### Props
 
 | Prop name  | Required | Kind             | Reactive | Type                 | Default value      | Description                                          |
-|:-----------|:---------|:-----------------|:---------|----------------------|--------------------|------------------------------------------------------|
+| :--------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ---------------------------------------------------- |
 | nested     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant              |
 | expressive | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use Carbon's expressive typesetting |
 
 ### Slots
 
 | Slot name | Default | Props | Fallback |
-|:----------|:--------|:------|:---------|
+| :-------- | :------ | :---- | :------- |
 | --        | Yes     | --    | --       |
 
 ### Events
 
 | Event name | Type      | Detail |
-|:-----------|:----------|:-------|
+| :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
