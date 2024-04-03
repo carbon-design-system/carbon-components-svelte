@@ -13,6 +13,6 @@
     "carbon-pictograms-svelte": "^12.10.0",
     "carbon-preprocess-svelte": "^0.11.0",
     "svelte": "^4.2.12",
-    "vite": "^5.2.4"
+    "vite": "^5.2.6"
   }
 }
