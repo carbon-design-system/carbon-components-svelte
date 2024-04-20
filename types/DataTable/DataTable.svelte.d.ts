@@ -1,33 +1,31 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export type DataTableKey = string;
+export type DataTableKey<Row = DataTableRow> = Exclude<keyof Row, "id">;
 
 export type DataTableValue = any;
 
-export interface DataTableEmptyHeader<Row extends DataTableRow = DataTableRow> {
-  key: keyof Row;
+export interface DataTableEmptyHeader<Row = DataTableRow> {
+  key: DataTableKey<Row>;
   empty: boolean;
-  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
+  display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
   minWidth?: string;
 }
 
-export interface DataTableNonEmptyHeader<
-  Row extends DataTableRow = DataTableRow
-> {
-  key: keyof Row;
+export interface DataTableNonEmptyHeader<Row = DataTableRow> {
+  key: DataTableKey<Row>;
   value: DataTableValue;
-  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
+  display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
   minWidth?: string;
 }
 
-export type DataTableHeader<Row extends DataTableRow = DataTableRow> =
+export type DataTableHeader<Row = DataTableRow> =
   | DataTableNonEmptyHeader<Row>
   | DataTableEmptyHeader<Row>;
 
@@ -38,15 +36,15 @@ export interface DataTableRow {
 
 export type DataTableRowId = any;
 
-export interface DataTableCell<Row extends DataTableRow = DataTableRow> {
-  key: keyof Row;
+export interface DataTableCell<Row = DataTableRow> {
+  key: DataTableKey<Row>;
   value: DataTableValue;
   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
 }
 
 type $RestProps = SvelteHTMLElements["div"];
 
-type $Props = {
+type $Props<Row> = {
   /**
    * Specify the data table headers
    * @default []
@@ -94,7 +92,7 @@ type $Props = {
    * Specify the header key to sort by
    * @default null
    */
-  sortKey?: DataTableKey;
+  sortKey?: DataTableKey<Row>;
 
   /**
    * Specify the sort direction
@@ -185,7 +183,8 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type DataTableProps = Omit<$RestProps, keyof $Props> & $Props;
+export type DataTableProps<Row> = Omit<$RestProps, keyof $Props<Row>> &
+  $Props<Row>;
 
 export default class DataTable<
   Row extends DataTableRow = DataTableRow
@@ -209,21 +208,15 @@ export default class DataTable<
     ["click:row"]: CustomEvent<Row>;
     ["mouseenter:row"]: CustomEvent<Row>;
     ["mouseleave:row"]: CustomEvent<Row>;
-    ["click:row--expand"]: CustomEvent<{
-      expanded: boolean;
-      row: Row;
-    }>;
-    ["click:row--select"]: CustomEvent<{
-      selected: boolean;
-      row: Row;
-    }>;
-    ["click:cell"]: CustomEvent<DataTableCell>;
+    ["click:row--expand"]: CustomEvent<{ expanded: boolean; row: Row }>;
+    ["click:row--select"]: CustomEvent<{ selected: boolean; row: Row }>;
+    ["click:cell"]: CustomEvent<DataTableCell<Row>>;
   },
   {
     default: {};
     cell: {
-      row: DataTableRow;
-      cell: DataTableCell;
+      row: Row;
+      cell: DataTableCell<Row>;
       rowIndex: number;
       cellIndex: number;
     };
