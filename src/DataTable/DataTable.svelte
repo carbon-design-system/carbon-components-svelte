@@ -1,39 +1,41 @@
 <script>
   /**
-   * @typedef {string} DataTableKey
+   * @generics {Row extends DataTableRow = DataTableRow} Row
+   * @template {DataTableRow} Row
+   * @typedef {Exclude<keyof Row, "id">} DataTableKey<Row=DataTableRow>
    * @typedef {any} DataTableValue
-   * @typedef {{ key: DataTableKey; empty: boolean; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableEmptyHeader
-   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableNonEmptyHeader
-   * @typedef {DataTableNonEmptyHeader | DataTableEmptyHeader} DataTableHeader
+   * @typedef {{ key: DataTableKey<Row>; empty: boolean; display?: (item: Value, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableEmptyHeader<Row=DataTableRow>
+   * @typedef {{ key: DataTableKey<Row>; value: DataTableValue; display?: (item: Value, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableNonEmptyHeader<Row=DataTableRow>
+   * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
    * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
    * @typedef {any} DataTableRowId
-   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }} DataTableCell
-   * @slot {{ row: DataTableRow; }} expanded-row
+   * @typedef {{ key: DataTableKey<Row>; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }} DataTableCell<Row=DataTableRow>
+   * @slot {{ row: Row; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
-   * @slot {{ row: DataTableRow; cell: DataTableCell; rowIndex: number; cellIndex: number; }} cell
-   * @event {{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }} click
+   * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; }} cell
+   * @event {{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }} click
    * @event {{ expanded: boolean; }} click:header--expand
-   * @event {{ header: DataTableHeader; sortDirection?: "ascending" | "descending" | "none" }} click:header
+   * @event {{ header: DataTableHeader<Row>; sortDirection?: "ascending" | "descending" | "none" }} click:header
    * @event {{ indeterminate: boolean; selected: boolean; }} click:header--select
-   * @event {DataTableRow} click:row
-   * @event {DataTableRow} mouseenter:row
-   * @event {DataTableRow} mouseleave:row
-   * @event {{ expanded: boolean; row: DataTableRow; }} click:row--expand
-   * @event {{ selected: boolean; row: DataTableRow; }} click:row--select
-   * @event {DataTableCell} click:cell
+   * @event {Row} click:row
+   * @event {Row} mouseenter:row
+   * @event {Row} mouseleave:row
+   * @event {{ expanded: boolean; row: Row; }} click:row--expand
+   * @event {{ selected: boolean; row: Row; }} click:row--select
+   * @event {DataTableCell<Row>} click:cell
    * @restProps {div}
    */
 
   /**
    * Specify the data table headers
-   * @type {ReadonlyArray<DataTableHeader>}
+   * @type {ReadonlyArray<DataTableHeader<Row>>}
    */
   export let headers = [];
 
   /**
    * Specify the rows the data table should render
    * keys defined in `headers` are used for the row ids
-   * @type {ReadonlyArray<DataTableRow>}
+   * @type {ReadonlyArray<Row>}
    */
   export let rows = [];
 
@@ -57,7 +59,7 @@
 
   /**
    * Specify the header key to sort by
-   * @type {DataTableKey}
+   * @type {DataTableKey<Row>}
    */
   export let sortKey = null;
 
