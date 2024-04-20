@@ -2125,10 +2125,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-sveld@^0.19.1:
-  version "0.19.1"
-  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.19.1.tgz#3f1d714769ac951b721a575734d37fb8b926bf0e"
-  integrity sha512-ec4fRABGafRNASMdvyztLLlkjLBvBdlI7p3egd9HtIai1ThPwdu7eNn044ywKtzjtjRy0JIvaucHCfGt1YyP8Q==
+sveld@^0.20.0:
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/sveld/-/sveld-0.20.0.tgz#b2c503b712a232b1a140a3bc252c83350ffb5176"
+  integrity sha512-PQRs0evdOjsFzjHuPu8B/flqbJX2osN2D0++6nl77jhwriQazaEF0pkQAMwPRaSn/kMivvUdWkkPKi1NmHLosg==
   dependencies:
     "@rollup/plugin-node-resolve" "^13.2.1"
     acorn "^8.8.0"
