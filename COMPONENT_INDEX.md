@@ -926,31 +926,33 @@ None.
 ### Types
 
 ```ts
-export type DataTableKey = string;
+export type DataTableKey<Row = DataTableRow> = Exclude<keyof Row, "id">;
 
 export type DataTableValue = any;
 
-export interface DataTableEmptyHeader {
-  key: DataTableKey;
+export interface DataTableEmptyHeader<Row = DataTableRow> {
+  key: DataTableKey<Row>;
   empty: boolean;
-  display?: (item: Value, row: DataTableRow) => DataTableValue;
+  display?: (item: Value, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
   minWidth?: string;
 }
 
-export interface DataTableNonEmptyHeader {
-  key: DataTableKey;
+export interface DataTableNonEmptyHeader<Row = DataTableRow> {
+  key: DataTableKey<Row>;
   value: DataTableValue;
-  display?: (item: Value, row: DataTableRow) => DataTableValue;
+  display?: (item: Value, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
   minWidth?: string;
 }
 
-export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;
+export type DataTableHeader<Row = DataTableRow> =
+  | DataTableNonEmptyHeader<Row>
+  | DataTableEmptyHeader<Row>;
 
 export interface DataTableRow {
   id: any;
@@ -959,8 +961,8 @@ export interface DataTableRow {
 
 export type DataTableRowId = any;
 
-export interface DataTableCell {
-  key: DataTableKey;
+export interface DataTableCell<Row = DataTableRow> {
+  key: DataTableKey<Row>;
   value: DataTableValue;
   display?: (item: Value, row: DataTableRow) => DataTableValue;
 }
@@ -975,9 +977,9 @@ export interface DataTableCell {
 | expandedRowIds      | No       | <code>let</code> | Yes      | <code>ReadonlyArray<DataTableRowId></code>                          | <code>[]</code>        | Specify the row ids to be expanded                                                                                  |
 | expandable          | No       | <code>let</code> | Yes      | <code>boolean</code>                                                | <code>false</code>     | Set to `true` for the expandable variant<br />Automatically set to `true` if `batchExpansion` is `true`             |
 | sortDirection       | No       | <code>let</code> | Yes      | <code>"none" &#124; "ascending" &#124; "descending"</code>          | <code>"none"</code>    | Specify the sort direction                                                                                          |
-| sortKey             | No       | <code>let</code> | Yes      | <code>DataTableKey</code>                                           | <code>null</code>      | Specify the header key to sort by                                                                                   |
-| headers             | No       | <code>let</code> | No       | <code>ReadonlyArray<DataTableHeader></code>                         | <code>[]</code>        | Specify the data table headers                                                                                      |
-| rows                | No       | <code>let</code> | No       | <code>ReadonlyArray<DataTableRow></code>                            | <code>[]</code>        | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
+| sortKey             | No       | <code>let</code> | Yes      | <code>DataTableKey<Row></code>                                      | <code>null</code>      | Specify the header key to sort by                                                                                   |
+| headers             | No       | <code>let</code> | No       | <code>ReadonlyArray<DataTableHeader<Row>></code>                    | <code>[]</code>        | Specify the data table headers                                                                                      |
+| rows                | No       | <code>let</code> | No       | <code>ReadonlyArray<Row></code>                                     | <code>[]</code>        | Specify the rows the data table should render<br />keys defined in `headers` are used for the row ids               |
 | size                | No       | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code> | <code>undefined</code> | Set the size of the data table                                                                                      |
 | title               | No       | <code>let</code> | No       | <code>string</code>                                                 | <code>""</code>        | Specify the title of the data table                                                                                 |
 | description         | No       | <code>let</code> | No       | <code>string</code>                                                 | <code>""</code>        | Specify the description of the data table                                                                           |
@@ -995,29 +997,29 @@ export interface DataTableCell {
 
 ### Slots
 
-| Slot name    | Default | Props                                                                                          | Fallback                                                                 |
-| :----------- | :------ | :--------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------- |
-| --           | Yes     | --                                                                                             | --                                                                       |
-| cell         | No      | <code>{ row: DataTableRow; cell: DataTableCell; rowIndex: number; cellIndex: number; } </code> | <code>{cell.display ? cell.display(cell.value, row) : cell.value}</code> |
-| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                             | <code>{header.value}</code>                                              |
-| description  | No      | --                                                                                             | <code>{description}</code>                                               |
-| expanded-row | No      | <code>{ row: DataTableRow; } </code>                                                           | --                                                                       |
-| title        | No      | --                                                                                             | <code>{title}</code>                                                     |
+| Slot name    | Default | Props                                                                                      | Fallback                                                                 |
+| :----------- | :------ | :----------------------------------------------------------------------------------------- | :----------------------------------------------------------------------- |
+| --           | Yes     | --                                                                                         | --                                                                       |
+| cell         | No      | <code>{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; } </code> | <code>{cell.display ? cell.display(cell.value, row) : cell.value}</code> |
+| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                         | <code>{header.value}</code>                                              |
+| description  | No      | --                                                                                         | <code>{description}</code>                                               |
+| expanded-row | No      | <code>{ row: Row; } </code>                                                                | --                                                                       |
+| title        | No      | --                                                                                         | <code>{title}</code>                                                     |
 
 ### Events
 
-| Event name           | Type       | Detail                                                                                                  |
-| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------ |
-| click                | dispatched | <code>{ header?: DataTableHeader; row?: DataTableRow; cell?: DataTableCell; }</code>                    |
-| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                     |
-| click:header         | dispatched | <code>{ header: DataTableHeader; sortDirection?: "ascending" &#124; "descending" &#124; "none" }</code> |
-| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                             |
-| click:row            | dispatched | <code>DataTableRow</code>                                                                               |
-| mouseenter:row       | dispatched | <code>DataTableRow</code>                                                                               |
-| mouseleave:row       | dispatched | <code>DataTableRow</code>                                                                               |
-| click:row--expand    | dispatched | <code>{ expanded: boolean; row: DataTableRow; }</code>                                                  |
-| click:row--select    | dispatched | <code>{ selected: boolean; row: DataTableRow; }</code>                                                  |
-| click:cell           | dispatched | <code>DataTableCell</code>                                                                              |
+| Event name           | Type       | Detail                                                                                                       |
+| :------------------- | :--------- | :----------------------------------------------------------------------------------------------------------- |
+| click                | dispatched | <code>{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }</code>                        |
+| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                          |
+| click:header         | dispatched | <code>{ header: DataTableHeader<Row>; sortDirection?: "ascending" &#124; "descending" &#124; "none" }</code> |
+| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                                  |
+| click:row            | dispatched | <code>Row</code>                                                                                             |
+| mouseenter:row       | dispatched | <code>Row</code>                                                                                             |
+| mouseleave:row       | dispatched | <code>Row</code>                                                                                             |
+| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                |
+| click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                |
+| click:cell           | dispatched | <code>DataTableCell<Row></code>                                                                              |
 
 ## `DataTableSkeleton`
 
