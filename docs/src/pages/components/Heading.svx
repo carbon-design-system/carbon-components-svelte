@@ -1,0 +1,72 @@
+---
+components: ["Heading", "Section"]
+---
+
+<script>
+  import { Heading, Section } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+The `Heading` component automatically adjusts the level of the heading based on the nesting level of the `Section` component.
+
+## Default
+
+For example, the top-level `Heading` inside a `Section` will be rendered as a semantic `h1` element.
+
+<Section>
+  <Heading>Heading 1</Heading>
+</Section>
+
+## Nested sections
+
+Section headings are capped at `h6`.
+
+<Section>
+  <Heading>Heading 1</Heading>
+  <Section>
+    <Heading>Heading 2</Heading>
+    <Section>
+      <Heading>Heading 3</Heading>
+      <Section>
+        <Heading>Heading 4</Heading>
+        <Section>
+          <Heading>Heading 5</Heading>
+          <Section>
+            <Heading>Heading 6</Heading>
+            <Section>
+              <Heading>Capped at Heading 6</Heading>
+            </Section>
+          </Section>
+        </Section>
+      </Section>
+    </Section>
+  </Section>
+  <Section>
+    <Heading>Heading 2</Heading>
+  </Section>
+</Section>
+
+
+## Custom level
+
+To specify a custom start level, use the `level` prop.
+
+<Section level={5}>
+  <Heading>Starts at Heading 5</Heading>
+  <Section>
+    <Heading>Heading 6</Heading>
+    <Section>
+      <Heading>Capped at Heading 6</Heading>
+    </Section>
+  </Section>
+</Section>
+
+## Custom section element
+
+The `Section` component renders a `section` by default.
+
+Use the `tag` prop to render a different element.
+ 
+<Section tag="div">
+  <Heading>Heading 1</Heading>
+</Section>

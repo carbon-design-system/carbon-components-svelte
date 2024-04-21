@@ -1,6 +1,6 @@
 # Component Index
 
-> 166 components exported from carbon-components-svelte@1.0.0-next.1.
+> 168 components exported from carbon-components-svelte@1.0.0-next.1.
 
 ## Components
 
@@ -63,6 +63,7 @@
 - [`HeaderPanelLinks`](#headerpanellinks)
 - [`HeaderSearch`](#headersearch)
 - [`HeaderUtilities`](#headerutilities)
+- [`Heading`](#heading)
 - [`ImageLoader`](#imageloader)
 - [`InlineLoading`](#inlineloading)
 - [`InlineNotification`](#inlinenotification)
@@ -109,6 +110,7 @@
 - [`Row`](#row)
 - [`Search`](#search)
 - [`SearchSkeleton`](#searchskeleton)
+- [`Section`](#section)
 - [`Select`](#select)
 - [`SelectItem`](#selectitem)
 - [`SelectItemGroup`](#selectitemgroup)
@@ -1852,6 +1854,28 @@ None.
 
 None.
 
+## `Heading`
+
+### Types
+
+```ts
+export type SectionLevel = 1 | 2 | 3 | 4 | 5 | 6;
+```
+
+### Props
+
+None.
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
+
 ## `ImageLoader`
 
 ### Props
@@ -3176,6 +3200,31 @@ None.
 | mouseover  | forwarded | --     |
 | mouseenter | forwarded | --     |
 | mouseleave | forwarded | --     |
+
+## `Section`
+
+### Types
+
+```ts
+export type SectionLevel = 1 | 2 | 3 | 4 | 5 | 6;
+```
+
+### Props
+
+| Prop name | Required | Kind             | Reactive | Type                                     | Default value          | Description                                    |
+| :-------- | :------- | :--------------- | :------- | ---------------------------------------- | ---------------------- | ---------------------------------------------- |
+| level     | No       | <code>let</code> | No       | <code>SectionLevel</code>                | <code>1</code>         | Specify the level the section should start at. |
+| tag       | No       | <code>let</code> | No       | <code>keyof HTMLElementTagNameMap</code> | <code>"section"</code> | Specify the tag name                           |
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `Select`
 
