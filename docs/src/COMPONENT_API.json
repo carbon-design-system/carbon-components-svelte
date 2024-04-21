@@ -358,7 +358,7 @@
         {
           "name": "sizes",
           "kind": "let",
-          "description": "Carbon grid sizes as an object",
+          "description": "Bind to all Carbon grid breakpoints.",
           "type": "Record<BreakpointSize, boolean>",
           "value": "{     sm: false,     md: false,     lg: false,     xlg: false,     max: false,   }",
           "isFunction": false,

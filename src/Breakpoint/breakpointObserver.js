@@ -75,8 +75,9 @@ export function breakpointObserver() {
 }
 
 function checkSizeValid(size) {
-  if (size in breakpoints == false)
+  if (size in breakpoints == false) {
     throw new Error(`"${size}" is not a valid breakpoint size.`);
+  }
 }
 
 export default breakpointObserver;

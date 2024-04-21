@@ -1,4 +1,6 @@
 <script>
+  // @ts-check
+
   /**
    * @typedef {"sm" | "md" | "lg" | "xlg" | "max"} BreakpointSize
    * @typedef {320 | 672 | 1056 | 1312 | 1584} BreakpointValue
@@ -13,7 +15,7 @@
   export let size = undefined;
 
   /**
-   * Carbon grid sizes as an object
+   * Bind to all Carbon grid breakpoints.
    * @type {Record<BreakpointSize, boolean>}
    */
   export let sizes = {
@@ -28,6 +30,7 @@
   import { breakpointObserver } from "./breakpointObserver";
   import { breakpoints } from "./breakpoints";
 
+  /** @type {import("svelte").EventDispatcher<{ change: { size: BreakpointSize; breakpointValue: BreakpointValue; } }>} */
   const dispatch = createEventDispatcher();
   const observer = breakpointObserver();
 
@@ -39,8 +42,9 @@
     xlg: size == "xlg",
     max: size == "max",
   };
-  $: if (size != undefined)
+  $: if (size != undefined) {
     dispatch("change", { size, breakpointValue: breakpoints[size] });
+  }
 </script>
 
 <slot size="{size}" sizes="{sizes}" />

@@ -335,7 +335,7 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 
 | Prop name | Required | Kind             | Reactive | Type                                         | Default value                                                             | Description                                       |
 | :-------- | :------- | :--------------- | :------- | -------------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------- |
-| sizes     | No       | <code>let</code> | Yes      | <code>Record<BreakpointSize, boolean></code> | <code>{ sm: false, md: false, lg: false, xlg: false, max: false, }</code> | Carbon grid sizes as an object                    |
+| sizes     | No       | <code>let</code> | Yes      | <code>Record<BreakpointSize, boolean></code> | <code>{ sm: false, md: false, lg: false, xlg: false, max: false, }</code> | Bind to all Carbon grid breakpoints.              |
 | size      | No       | <code>let</code> | Yes      | <code>BreakpointSize</code>                  | <code>undefined</code>                                                    | Determine the current Carbon grid breakpoint size |
 
 ### Slots
