@@ -12,7 +12,7 @@ export interface BreakpointProps {
   size?: BreakpointSize;
 
   /**
-   * Carbon grid sizes as an object
+   * Bind to all Carbon grid breakpoints.
    * @default { sm: false, md: false, lg: false, xlg: false, max: false, }
    */
   sizes?: Record<BreakpointSize, boolean>;

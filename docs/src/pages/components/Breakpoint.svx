@@ -6,7 +6,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The [Carbon Design System grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints:
+The [Carbon Design System grid implementation](https://carbondesignsystem.com/elements/2x-grid/overview/#breakpoints) defines five responsive breakpoints:
 
 <UnorderedList svx-ignore style="margin-bottom: var(--bx-spacing-08)">
   <ListItem><strong>Small</strong>: less than 672px</ListItem>
