@@ -269,7 +269,6 @@ None.
 | Prop name       | Required | Kind             | Reactive | Type                 | Default value      | Description                                         |
 | :-------------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------------------------- |
 | noTrailingSlash | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to hide the breadcrumb trailing slash |
-| skeleton        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to display skeleton state             |
 
 ### Slots
 
@@ -279,27 +278,22 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `BreadcrumbItem`
 
 ### Props
 
-| Prop name     | Required | Kind             | Reactive | Type                 | Default value          | Description                                                      |
-| :------------ | :------- | :--------------- | :------- | -------------------- | ---------------------- | ---------------------------------------------------------------- |
-| href          | No       | <code>let</code> | No       | <code>string</code>  | <code>undefined</code> | Set the `href` to use an anchor link                             |
-| isCurrentPage | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` if the breadcrumb item represents the current page |
+| Prop name     | Required | Kind             | Reactive | Type                 | Default value          | Description                                                                               |
+| :------------ | :------- | :--------------- | :------- | -------------------- | ---------------------- | ----------------------------------------------------------------------------------------- |
+| href          | No       | <code>let</code> | No       | <code>string</code>  | <code>undefined</code> | Set the `href` to use an anchor link.<br />The `Link` component is used if `href` is set. |
+| isCurrentPage | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` if the breadcrumb item represents the current page                          |
 
 ### Slots
 
-| Slot name | Default | Props                                                                     | Fallback |
-| :-------- | :------ | :------------------------------------------------------------------------ | :------- |
-| --        | Yes     | <code>{props?: { ["aria-current"]?: string; class: "bx--link"; }} </code> | --       |
+| Slot name | Default | Props                                                                                 | Fallback |
+| :-------- | :------ | :------------------------------------------------------------------------------------ | :------- |
+| --        | Yes     | <code>{props?: Pick<AriaAttributes, "aria-current"> & { class: "bx--link"; }} </code> | --       |
 
 ### Events
 
@@ -325,12 +319,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `Breakpoint`
 

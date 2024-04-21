@@ -5,7 +5,8 @@ type RestProps = SvelteHTMLElements["li"];
 
 export interface BreadcrumbItemProps extends RestProps {
   /**
-   * Set the `href` to use an anchor link
+   * Set the `href` to use an anchor link.
+   * The `Link` component is used if `href` is set.
    * @default undefined
    */
   href?: string;
@@ -27,5 +28,9 @@ export default class BreadcrumbItem extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: { props?: { ["aria-current"]?: string; class: "bx--link" } } }
+  {
+    default: {
+      props?: Pick<AriaAttributes, "aria-current"> & { class: "bx--link" };
+    };
+  }
 > {}

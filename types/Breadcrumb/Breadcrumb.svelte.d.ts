@@ -1,27 +1,20 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { BreadcrumbSkeletonProps } from "./BreadcrumbSkeleton.svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface BreadcrumbProps extends BreadcrumbSkeletonProps {
+type RestProps = SvelteHTMLElements["nav"];
+
+export interface BreadcrumbProps extends RestProps {
   /**
    * Set to `true` to hide the breadcrumb trailing slash
    * @default false
    */
   noTrailingSlash?: boolean;
 
-  /**
-   * Set to `true` to display skeleton state
-   * @default false
-   */
-  skeleton?: boolean;
+  [key: `data-${string}`]: any;
 }
 
 export default class Breadcrumb extends SvelteComponentTyped<
   BreadcrumbProps,
-  {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
-  },
+  Record<string, any>,
   { default: {} }
 > {}

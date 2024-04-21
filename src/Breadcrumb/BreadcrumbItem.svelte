@@ -1,10 +1,13 @@
 <script>
+  // @ts-check
+
   /**
-   * @slot {{props?: { ["aria-current"]?: string; class: "bx--link"; }}}
+   * @slot {{props?: Pick<AriaAttributes, "aria-current"> & { class: "bx--link"; }}}
    */
 
   /**
-   * Set the `href` to use an anchor link
+   * Set the `href` to use an anchor link.
+   * The `Link` component is used if `href` is set.
    * @type {string}
    */
   export let href = undefined;
@@ -17,28 +20,32 @@
   import { setContext } from "svelte";
 
   setContext("BreadcrumbItem", {});
+
+  $: ariaCurrent = $$props["aria-current"];
+  $: current = isCurrentPage && ariaCurrent !== "page";
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <li
   class:bx--breadcrumb-item="{true}"
-  class:bx--breadcrumb-item--current="{isCurrentPage &&
-    $$restProps['aria-current'] !== 'page'}"
+  class:bx--breadcrumb-item--current="{current}"
   {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
+  aria-current={undefined}
 >
   {#if href}
-    <Link href="{href}" aria-current="{$$restProps['aria-current']}">
+    <Link
+      href="{href}"
+      aria-current="{ariaCurrent}"
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseleave
+    >
       <slot />
     </Link>
   {:else}
     <slot
       props="{{
-        'aria-current': $$restProps['aria-current'],
+        'aria-current': ariaCurrent,
         class: 'bx--link',
       }}"
     />

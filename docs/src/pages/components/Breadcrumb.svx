@@ -1,11 +1,12 @@
 ---
-components: ["Breadcrumb", "BreadcrumbItem"]
+components: ["Breadcrumb", "BreadcrumbItem", "BreadcrumbSkeleton"]
 ---
 
 <script>
   import {
     Breadcrumb,
     BreadcrumbItem,
+    BreadcrumbSkeleton,
     OverflowMenu,
     OverflowMenuItem
   } from "carbon-components-svelte";
@@ -27,10 +28,23 @@ components: ["Breadcrumb", "BreadcrumbItem"]
   <BreadcrumbItem href="/profile" isCurrentPage>Profile</BreadcrumbItem>
 </Breadcrumb>
 
-## Overflow menu
+## Custom breadcrumb item
+
+By default, if `href` is provided, the breadcrumb item will render a [Link](/components/Link).
+
+Use a slot to render a custom component. Link attributes can be spread via `let:props`.
 
 <Breadcrumb>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem isCurrentPage let:props>
+    <a href="/profile" {...props}>Profile</a>
+  </BreadcrumbItem>
+</Breadcrumb>
+
+## Overflow menu
+
+<Breadcrumb>
+  <BreadcrumbItem href="/" aria-current='page'>Home</BreadcrumbItem>
   <BreadcrumbItem href="/api">API documentation</BreadcrumbItem>
   <BreadcrumbItem>
     <OverflowMenu>
@@ -47,4 +61,14 @@ components: ["Breadcrumb", "BreadcrumbItem"]
 
 ## Skeleton
 
-<Breadcrumb noTrailingSlash skeleton count={3} />
+<BreadcrumbSkeleton />
+
+## Skeleton (custom number of items)
+
+By default, the number of skeleton items is 3.
+
+<BreadcrumbSkeleton count={5} />
+
+## Skeelton (no trailing slash)
+
+<BreadcrumbSkeleton noTrailingSlash />
