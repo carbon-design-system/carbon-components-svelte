@@ -5,19 +5,19 @@ type RestProps = SvelteHTMLElements["ol"];
 
 export interface OrderedListProps extends RestProps {
   /**
-   * Set to `true` to use the nested variant
-   * @default false
-   */
-  nested?: boolean;
-
-  /**
    * Set to `true` to use native list styles
    * @default false
    */
   native?: boolean;
 
   /**
-   * Set to `true` to use Carbon's expressive typesetting
+   * Set to `true` to use the nested variant
+   * @default false
+   */
+  nested?: boolean;
+
+  /**
+   * Set to `true` to use expressive type styles
    * @default false
    */
   expressive?: boolean;
@@ -27,11 +27,6 @@ export interface OrderedListProps extends RestProps {
 
 export default class OrderedList extends SvelteComponentTyped<
   OrderedListProps,
-  {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
-  },
+  Record<string, any>,
   { default: {} }
 > {}

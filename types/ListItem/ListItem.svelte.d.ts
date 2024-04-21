@@ -9,11 +9,6 @@ export interface ListItemProps extends RestProps {
 
 export default class ListItem extends SvelteComponentTyped<
   ListItemProps,
-  {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
-  },
+  Record<string, any>,
   { default: {} }
 > {}
