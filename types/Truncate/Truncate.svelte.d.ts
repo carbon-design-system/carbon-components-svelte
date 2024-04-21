@@ -1,13 +1,20 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["p"];
+type RestProps = SvelteHTMLElements["svelte:element"];
 
 export interface TruncateProps extends RestProps {
   /**
+   * Specify the truncation direction
    * @default "end"
    */
   clamp?: "end" | "front";
+
+  /**
+   * Specify the tag name
+   * @default "p"
+   */
+  tag?: keyof HTMLElementTagNameMap;
 
   [key: `data-${string}`]: any;
 }

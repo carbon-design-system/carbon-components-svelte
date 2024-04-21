@@ -1,23 +1,10 @@
 <script lang="ts">
-  import { Truncate } from "../types";
-  import { truncate } from "../types";
+  import { Truncate, truncate } from "../types";
 </script>
 
-<Truncate>
-  Carbon Components Svelte is a Svelte component library that implements the
-  Carbon Design System, an open source design system by IBM.
+<Truncate tag="div" clamp="front" aria-label="">
+  Carbon Components Svelte is a Svelte component library.
 </Truncate>
 
-<Truncate clamp="front">
-  Carbon Components Svelte is a Svelte component library that implements the
-  Carbon Design System, an open source design system by IBM.
-</Truncate>
-
-<h4 use:truncate>
-  Carbon Components Svelte is a Svelte component library that implements the
-  Carbon Design System, an open source design system by IBM.
-</h4>
-<h4 use:truncate="{{ clamp: 'front' }}">
-  Carbon Components Svelte is a Svelte component library that implements the
-  Carbon Design System, an open source design system by IBM.
-</h4>
+<div use:truncate></div>
+<div use:truncate="{{ clamp: 'front' }}"></div>
