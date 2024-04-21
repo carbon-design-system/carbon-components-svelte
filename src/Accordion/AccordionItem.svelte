@@ -1,47 +1,44 @@
 <script>
+  // @ts-check
+
   /**
    * Specify the title of the accordion item heading.
-   * Alternatively, use the "title" slot (e.g., `<div slot="title">...</div>`)
+   * Use the "title" slot for custom elements.
+   * @example <svelte:fragment slot="title">...</svelte:fragment>
    */
   export let title = "title";
 
-  /** Set to `true` to open the first accordion item */
+  /** Set to `true` to open the first accordion item. */
   export let open = false;
 
-  /** Set to `true` to disable the accordion item */
+  /** Set to `true` to disable the accordion item. */
   export let disabled = false;
 
-  /** Specify the ARIA label for the accordion item chevron icon */
+  /** Specify the ARIA label for the accordion item chevron icon. */
   export let iconDescription = "Expand/Collapse";
 
-  import { onMount, getContext } from "svelte";
+  import { getContext } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
 
-  let initialDisabled = disabled;
+  // Internal id for controls
+  const id = "ccs-" + Math.random().toString(36);
 
-  const ctx = getContext("Accordion");
-  const unsubscribe = ctx.disableItems.subscribe((value) => {
-    if (!value && initialDisabled) return;
-    disabled = value;
-  });
+  /** @type {{ disableItems: import("svelte/store").Writable<boolean>; }} */
+  const { disableItems } = getContext("Accordion") ?? {};
 
+  $: disabled = disableItems ? $disableItems === true : disabled;
+
+  /** @type {undefined | "expanding" | "collapsing"} */
   let animation = undefined;
-
-  onMount(() => {
-    return () => {
-      unsubscribe();
-    };
-  });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
   class:bx--accordion__item="{true}"
-  class:bx--accordion__item--active="{open}"
+  class:bx--accordion__item--active="{open && !disabled}"
   class:bx--accordion__item--disabled="{disabled}"
   class:bx--accordion__item--expanding="{animation === 'expanding'}"
   class:bx--accordion__item--collapsing="{animation === 'collapsing'}"
-  {...$$restProps}
   on:animationend
   on:animationend="{() => {
     animation = undefined;
@@ -51,6 +48,7 @@
     type="button"
     class:bx--accordion__heading="{true}"
     title="{iconDescription}"
+    aria-controls="{id}"
     aria-expanded="{open}"
     disabled="{disabled}"
     on:click
@@ -73,7 +71,9 @@
       <slot name="title">{title}</slot>
     </div>
   </button>
-  <div class:bx--accordion__content="{true}">
-    <slot />
+  <div class:bx--accordion__wrapper="{true}">
+    <div id="{id}" class:bx--accordion__content="{true}">
+      <slot />
+    </div>
   </div>
 </li>

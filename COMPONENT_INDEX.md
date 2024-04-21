@@ -177,12 +177,12 @@
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                              | Default value          | Description                                      |
-| :-------- | :------- | :--------------- | :------- | --------------------------------- | ---------------------- | ------------------------------------------------ |
-| align     | No       | <code>let</code> | No       | <code>"start" &#124; "end"</code> | <code>"end"</code>     | Specify alignment of accordion item chevron icon |
-| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "lg"</code>     | <code>undefined</code> | Specify the size of the accordion                |
-| disabled  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to disable the accordion           |
-| skeleton  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to display the skeleton state      |
+| Prop name | Required | Kind             | Reactive | Type                                      | Default value      | Description                                                                                                 |
+| :-------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| align     | No       | <code>let</code> | No       | <code>"start" &#124; "end"</code>         | <code>"end"</code> | Specify the alignment of the accordion item chevron icon.                                                   |
+| flush     | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to flush the accordion content text.<br /><br />**Note**: does not work with `align="start"`. |
+| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code> | <code>"md"</code>  | Specify the size of the accordion.                                                                          |
+| disabled  | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to disable all accordion items.                                                               |
 
 ### Slots
 
@@ -192,23 +192,18 @@
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `AccordionItem`
 
 ### Props
 
-| Prop name       | Required | Kind             | Reactive | Type                 | Default value                  | Description                                                                                                                                 |
-| :-------------- | :------- | :--------------- | :------- | -------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| disabled        | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to disable the accordion item                                                                                                 |
-| open            | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to open the first accordion item                                                                                              |
-| title           | No       | <code>let</code> | No       | <code>string</code>  | <code>"title"</code>           | Specify the title of the accordion item heading.<br />Alternatively, use the "title" slot (e.g., `&lt;div slot="title"&gt;...&lt;/div&gt;`) |
-| iconDescription | No       | <code>let</code> | No       | <code>string</code>  | <code>"Expand/Collapse"</code> | Specify the ARIA label for the accordion item chevron icon                                                                                  |
+| Prop name       | Required | Kind             | Reactive | Type                 | Default value                  | Description                                                                                                                                                                   |
+| :-------------- | :------- | :--------------- | :------- | -------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| disabled        | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to disable the accordion item.                                                                                                                                  |
+| open            | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>             | Set to `true` to open the first accordion item.                                                                                                                               |
+| title           | No       | <code>let</code> | No       | <code>string</code>  | <code>"title"</code>           | Specify the title of the accordion item heading.<br />Use the "title" slot for custom elements.<br />@example &lt;svelte:fragment slot="title"&gt;...&lt;/svelte:fragment&gt; |
+| iconDescription | No       | <code>let</code> | No       | <code>string</code>  | <code>"Expand/Collapse"</code> | Specify the ARIA label for the accordion item chevron icon.                                                                                                                   |
 
 ### Slots
 
@@ -232,12 +227,13 @@
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                              | Default value          | Description                                      |
-| :-------- | :------- | :--------------- | :------- | --------------------------------- | ---------------------- | ------------------------------------------------ |
-| count     | No       | <code>let</code> | No       | <code>number</code>               | <code>4</code>         | Specify the number of accordion items to render  |
-| align     | No       | <code>let</code> | No       | <code>"start" &#124; "end"</code> | <code>"end"</code>     | Specify alignment of accordion item chevron icon |
-| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>     | <code>undefined</code> | Specify the size of the accordion                |
-| open      | No       | <code>let</code> | No       | <code>boolean</code>              | <code>true</code>      | Set to `false` to close the first accordion item |
+| Prop name | Required | Kind             | Reactive | Type                                      | Default value      | Description                                                                                                 |
+| :-------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| count     | No       | <code>let</code> | No       | <code>number</code>                       | <code>4</code>     | Specify the number of accordion items.                                                                      |
+| align     | No       | <code>let</code> | No       | <code>"start" &#124; "end"</code>         | <code>"end"</code> | Specify the alignment of the accordion item chevron icon.                                                   |
+| flush     | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to flush the accordion content text.<br /><br />**Note**: does not work with `align="start"`. |
+| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code> | <code>"md"</code>  | Specify the size of the accordion.                                                                          |
+| open      | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code> | Set to `true` to expand the first accordion item                                                            |
 
 ### Slots
 
@@ -245,12 +241,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `AspectRatio`
 

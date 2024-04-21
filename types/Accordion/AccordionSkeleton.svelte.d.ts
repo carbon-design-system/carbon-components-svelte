@@ -1,43 +1,41 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["ul"];
-
-export interface AccordionSkeletonProps extends RestProps {
+export interface AccordionSkeletonProps {
   /**
-   * Specify the number of accordion items to render
+   * Specify the number of accordion items.
    * @default 4
    */
   count?: number;
 
   /**
-   * Specify alignment of accordion item chevron icon
+   * Specify the alignment of the accordion item chevron icon.
    * @default "end"
    */
   align?: "start" | "end";
 
   /**
-   * Specify the size of the accordion
-   * @default undefined
+   * Set to `true` to flush the accordion content text.
+   *
+   * **Note**: does not work with `align="start"`.
+   * @default false
    */
-  size?: "sm" | "xl";
+  flush?: boolean;
 
   /**
-   * Set to `false` to close the first accordion item
-   * @default true
+   * Specify the size of the accordion.
+   * @default "md"
+   */
+  size?: "sm" | "md" | "lg";
+
+  /**
+   * Set to `true` to expand the first accordion item
+   * @default false
    */
   open?: boolean;
-
-  [key: `data-${string}`]: any;
 }
 
 export default class AccordionSkeleton extends SvelteComponentTyped<
   AccordionSkeletonProps,
-  {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
-  },
+  Record<string, any>,
   {}
 > {}

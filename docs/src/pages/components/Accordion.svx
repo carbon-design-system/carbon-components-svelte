@@ -6,11 +6,14 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   import {
     Accordion,
     AccordionItem,
+    AccordionSkeleton
   } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
 ## Default
+
+By default, the accordion is medium-sized with the chevron right-aligned.
 
 <Accordion>
   <AccordionItem title="Natural Language Classifier">
@@ -25,7 +28,60 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   </AccordionItem>
 </Accordion>
 
+## Large size
+
+Set the `size` prop to `lg` to increase the size of the accordion.
+
+<Accordion size="lg">
+  <AccordionItem title="Natural Language Classifier">
+   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+   </p>
+  </AccordionItem>
+  <AccordionItem title="Natural Language Understanding">
+    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  </AccordionItem>
+  <AccordionItem title="Language Translator">
+    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  </AccordionItem>
+</Accordion>
+
+## Small size
+
+Set the `size` prop to `sm` to decrease the size of the accordion.
+
+<Accordion size="sm">
+  <AccordionItem title="Natural Language Classifier">
+   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+   </p>
+  </AccordionItem>
+  <AccordionItem title="Natural Language Understanding">
+    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  </AccordionItem>
+  <AccordionItem title="Language Translator">
+    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  </AccordionItem>
+</Accordion>
+
+## Flush text
+
+Set the `flush` prop to `true` to flush align accordion content text. Note that this prop cannot be used with `align="start"`.
+
+<Accordion flush>
+  <AccordionItem title="Natural Language Classifier">
+   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+   </p>
+  </AccordionItem>
+  <AccordionItem title="Natural Language Understanding">
+    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  </AccordionItem>
+  <AccordionItem title="Language Translator">
+    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  </AccordionItem>
+</Accordion>
+
 ## Left-aligned chevron
+
+By default, the chevron is right-aligned. Set `align="start"` to left-align the chevron.
 
 <Accordion align="start">
   <AccordionItem title="Natural Language Classifier">
@@ -42,10 +98,10 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
 
 ## Custom title slot
 
-<Accordion>
+<Accordion size="lg">
   <AccordionItem>
     <svelte:fragment slot="title">
-      <h5>Natural Language Classifier</h5>
+      <h6>Natural Language Classifier</h6>
       <div>AI / Machine Learning</div>
     </svelte:fragment>
    <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
@@ -53,14 +109,14 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   </AccordionItem>
   <AccordionItem>
   <svelte:fragment slot="title">
-      <h5>Natural Language Understanding</h5>
+      <h6>Natural Language Understanding</h6>
       <div>AI / Machine Learning</div>
     </svelte:fragment>
     <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
   </AccordionItem>
   <AccordionItem>
   <svelte:fragment slot="title">
-      <h5>Language Translator</h5>
+      <h6>Language Translator</h6>
       <div>AI / Machine Learning</div>
     </svelte:fragment>
     <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
@@ -88,37 +144,11 @@ This example demonstrates how a list of items can be programmatically expanded a
 
 <FileSource src="/framed/Accordion/ExpandableAccordion" />
 
-## Large size
-
-<Accordion size="lg">
-  <AccordionItem title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
-   </p>
-  </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
-  </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
-  </AccordionItem>
-</Accordion>
-
-## Small size
-
-<Accordion size="sm">
-  <AccordionItem title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
-   </p>
-  </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
-  </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
-  </AccordionItem>
-</Accordion>
-
 ## Disabled
+
+Set the `disabled` prop to `true` to disable all accordion items.
+
+Dynamically disabling the accordion will collapse any expanded items.
 
 <Accordion disabled>
   <AccordionItem title="Natural Language Classifier">
@@ -135,6 +165,8 @@ This example demonstrates how a list of items can be programmatically expanded a
 
 ## Disabled (item)
 
+To disable individual accordion items, set the `disabled` prop to `true` on the `AccordionItem`.
+
 <Accordion>
   <AccordionItem disabled title="Natural Language Classifier">
    <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
@@ -150,25 +182,34 @@ This example demonstrates how a list of items can be programmatically expanded a
 
 ## Skeleton
 
-<Accordion skeleton />
+<AccordionSkeleton />
 
 ## Skeleton (left-aligned chevron)
 
-<Accordion skeleton align="start" />
+<AccordionSkeleton align="start" />
 
 ## Skeleton (custom count)
 
-<Accordion skeleton count={3} />
+By default, the skeleton accordion has 4 items. Specify a custom count using the `count` prop.
 
-## Skeleton (closed)
+<AccordionSkeleton count={3} />
 
-<Accordion skeleton open={false} />
+## Skeleton (open)
 
-## Skeleton (extra-large)
+Set `open` to `true` to expand the first accordion item.
 
-<Accordion skeleton size="xl" />
+<AccordionSkeleton open />
+
+## Skeleton (flush text)
+
+Set the `flush` prop to `true` to flush align accordion content text. Note that this prop cannot be used with `align="start"`.
+
+<AccordionSkeleton open flush />
+
+## Skeleton (large)
+
+<AccordionSkeleton size="lg" />
 
 ## Skeleton (small)
 
-<Accordion skeleton size="sm" />
-
+<AccordionSkeleton size="sm" />
