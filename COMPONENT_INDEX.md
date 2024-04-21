@@ -3071,10 +3071,10 @@ export interface RecursiveListNode {
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                                                                        | Default value            | Description                        |
-| :-------- | :------- | :--------------- | :------- | --------------------------------------------------------------------------- | ------------------------ | ---------------------------------- |
-| children  | No       | <code>let</code> | No       | <code>Array<RecursiveListNode & { children?: RecursiveListNode[]; }></code> | <code>[]</code>          | Specify the children to render     |
-| type      | No       | <code>let</code> | No       | <code>"unordered" &#124; "ordered" &#124; "ordered-native"</code>           | <code>"unordered"</code> | Specify the type of list to render |
+| Prop name | Required | Kind             | Reactive | Type                                                                                             | Default value            | Description                        |
+| :-------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------ | ------------------------ | ---------------------------------- |
+| children  | No       | <code>let</code> | No       | <code>ReadonlyArray<RecursiveListNode & { children?: ReadonlyArray<RecursiveListNode>; }></code> | <code>[]</code>          | Specify the children to render     |
+| type      | No       | <code>let</code> | No       | <code>"unordered" &#124; "ordered" &#124; "ordered-native"</code>                                | <code>"unordered"</code> | Specify the type of list to render |
 
 ### Slots
 

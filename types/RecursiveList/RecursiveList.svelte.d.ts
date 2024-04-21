@@ -14,7 +14,9 @@ export interface RecursiveListProps extends RestProps {
    * Specify the children to render
    * @default []
    */
-  children?: Array<RecursiveListNode & { children?: RecursiveListNode[] }>;
+  children?: ReadonlyArray<
+    RecursiveListNode & { children?: ReadonlyArray<RecursiveListNode> }
+  >;
 
   /**
    * Specify the type of list to render

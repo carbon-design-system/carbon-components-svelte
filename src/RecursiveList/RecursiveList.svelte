@@ -6,7 +6,7 @@
 
   /**
    * Specify the children to render
-   * @type {Array<RecursiveListNode & { children?: RecursiveListNode[]; }>}
+   * @type {ReadonlyArray<RecursiveListNode & { children?: ReadonlyArray<RecursiveListNode>; }>}
    */
   export let children = [];
 
