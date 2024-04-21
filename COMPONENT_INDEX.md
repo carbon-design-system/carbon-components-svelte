@@ -250,6 +250,7 @@ None.
 | Prop name | Required | Kind             | Reactive | Type                                                                                                                         | Default value      | Description              |
 | :-------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------------ |
 | ratio     | No       | <code>let</code> | No       | <code>"2x1" &#124; "2x3" &#124; "16x9" &#124; "4x3" &#124; "1x1" &#124; "3x4" &#124; "3x2" &#124; "9x16" &#124; "1x2"</code> | <code>"2x1"</code> | Specify the aspect ratio |
+| tag       | No       | <code>let</code> | No       | <code>keyof HTMLElementTagNameMap</code>                                                                                     | <code>"div"</code> | Specify the tag name     |
 
 ### Slots
 

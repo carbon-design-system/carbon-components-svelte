@@ -217,13 +217,25 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "tag",
+          "kind": "let",
+          "description": "Specify the tag name",
+          "type": "keyof HTMLElementTagNameMap",
+          "value": "\"div\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "rest_props": { "type": "Element", "name": "svelte:element" }
     },
     {
       "moduleName": "Breadcrumb",
