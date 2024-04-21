@@ -11,7 +11,7 @@ export interface UnorderedListProps extends RestProps {
   nested?: boolean;
 
   /**
-   * Set to `true` to use Carbon's expressive typesetting
+   * Set to `true` to use expressive type styles
    * @default false
    */
   expressive?: boolean;
@@ -21,11 +21,6 @@ export interface UnorderedListProps extends RestProps {
 
 export default class UnorderedList extends SvelteComponentTyped<
   UnorderedListProps,
-  {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
-  },
+  Record<string, any>,
   { default: {} }
 > {}

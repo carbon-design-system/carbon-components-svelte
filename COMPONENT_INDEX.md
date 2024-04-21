@@ -2171,12 +2171,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `Loading`
 
@@ -2564,11 +2559,11 @@ None.
 
 ### Props
 
-| Prop name  | Required | Kind             | Reactive | Type                 | Default value      | Description                                          |
-| :--------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ---------------------------------------------------- |
-| nested     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant              |
-| native     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use native list styles              |
-| expressive | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use Carbon's expressive typesetting |
+| Prop name  | Required | Kind             | Reactive | Type                 | Default value      | Description                                 |
+| :--------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ------------------------------------------- |
+| native     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use native list styles     |
+| nested     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant     |
+| expressive | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use expressive type styles |
 
 ### Slots
 
@@ -2578,12 +2573,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `OutboundLink`
 
@@ -4748,10 +4738,10 @@ None.
 
 ### Props
 
-| Prop name  | Required | Kind             | Reactive | Type                 | Default value      | Description                                          |
-| :--------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ---------------------------------------------------- |
-| nested     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant              |
-| expressive | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use Carbon's expressive typesetting |
+| Prop name  | Required | Kind             | Reactive | Type                 | Default value      | Description                                 |
+| :--------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ------------------------------------------- |
+| nested     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use the nested variant     |
+| expressive | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use expressive type styles |
 
 ### Slots
 
@@ -4761,9 +4751,4 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.

@@ -6306,12 +6306,7 @@
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "li" },
-        { "type": "forwarded", "name": "mouseover", "element": "li" },
-        { "type": "forwarded", "name": "mouseenter", "element": "li" },
-        { "type": "forwarded", "name": "mouseleave", "element": "li" }
-      ],
+      "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "li" }
     },
@@ -7913,18 +7908,6 @@
       "filePath": "src/OrderedList/OrderedList.svelte",
       "props": [
         {
-          "name": "nested",
-          "kind": "let",
-          "description": "Set to `true` to use the nested variant",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "native",
           "kind": "let",
           "description": "Set to `true` to use native list styles",
@@ -7937,9 +7920,21 @@
           "reactive": false
         },
         {
+          "name": "nested",
+          "kind": "let",
+          "description": "Set to `true` to use the nested variant",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "expressive",
           "kind": "let",
-          "description": "Set to `true` to use Carbon's expressive typesetting",
+          "description": "Set to `true` to use expressive type styles",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -7951,12 +7946,7 @@
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "ol" },
-        { "type": "forwarded", "name": "mouseover", "element": "ol" },
-        { "type": "forwarded", "name": "mouseenter", "element": "ol" },
-        { "type": "forwarded", "name": "mouseleave", "element": "ol" }
-      ],
+      "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "ol" }
     },
@@ -14770,7 +14760,7 @@
         {
           "name": "expressive",
           "kind": "let",
-          "description": "Set to `true` to use Carbon's expressive typesetting",
+          "description": "Set to `true` to use expressive type styles",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -14782,12 +14772,7 @@
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "ul" },
-        { "type": "forwarded", "name": "mouseover", "element": "ul" },
-        { "type": "forwarded", "name": "mouseenter", "element": "ul" },
-        { "type": "forwarded", "name": "mouseleave", "element": "ul" }
-      ],
+      "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "ul" }
     }
