@@ -14723,8 +14723,21 @@
         {
           "name": "clamp",
           "kind": "let",
+          "description": "Specify the truncation direction",
           "type": "\"end\" | \"front\"",
           "value": "\"end\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "tag",
+          "kind": "let",
+          "description": "Specify the tag name",
+          "type": "keyof HTMLElementTagNameMap",
+          "value": "\"p\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -14736,7 +14749,7 @@
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
       "events": [],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "p" }
+      "rest_props": { "type": "Element", "name": "svelte:element" }
     },
     {
       "moduleName": "UnorderedList",

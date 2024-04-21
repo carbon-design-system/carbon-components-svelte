@@ -4729,9 +4729,10 @@ export interface TreeNode {
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                              | Default value      | Description |
-| :-------- | :------- | :--------------- | :------- | --------------------------------- | ------------------ | ----------- |
-| clamp     | No       | <code>let</code> | No       | <code>"end" &#124; "front"</code> | <code>"end"</code> | --          |
+| Prop name | Required | Kind             | Reactive | Type                                     | Default value      | Description                      |
+| :-------- | :------- | :--------------- | :------- | ---------------------------------------- | ------------------ | -------------------------------- |
+| clamp     | No       | <code>let</code> | No       | <code>"end" &#124; "front"</code>        | <code>"end"</code> | Specify the truncation direction |
+| tag       | No       | <code>let</code> | No       | <code>keyof HTMLElementTagNameMap</code> | <code>"p"</code>   | Specify the tag name             |
 
 ### Slots
 

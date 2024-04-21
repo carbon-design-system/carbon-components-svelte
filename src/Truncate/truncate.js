@@ -1,7 +1,9 @@
+// @ts-check
+
 /**
  * Svelte action that applies single-line text truncation to an element
  * @typedef {{ clamp?: "end" | "front" }} TruncateOptions
- * @type {(node: HTMLElement, options?: TruncateOptions) => { update: (options?: TruncateOptions) => void; }}
+ * @type {import ("svelte/action").Action<HTMLElement, TruncateOptions>}
  * @example
  * <h1 use:truncate>...</h1>
  * <h1 use:truncate={{ clamp: "front" }}>...</h1>

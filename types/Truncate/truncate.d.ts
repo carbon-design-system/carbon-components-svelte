@@ -1,12 +1,9 @@
+import type { Action } from "svelte/action";
+
 interface TruncateOptions {
   clamp?: "end" | "front";
 }
 
-export function TruncateAction(
-  node: HTMLElement,
-  options?: TruncateOptions
-): {
-  update: (options?: TruncateOptions) => void;
-};
+export declare const truncate: Action<HTMLElement, TruncateOptions>;
 
-export default TruncateAction;
+export default truncate;

@@ -1,12 +1,24 @@
 <script>
-  /** @type {"end" | "front"}*/
+  // @ts-check
+  
+  /**
+   * Specify the truncation direction
+   * @type {"end" | "front"}
+   */
   export let clamp = "end";
+
+  /**
+   * Specify the tag name
+   * @type {keyof HTMLElementTagNameMap}
+   */
+  export let tag = "p";
 </script>
 
-<p
+<svelte:element
+  this="{tag}"
   class:bx--text-truncate-end="{clamp === 'end'}"
   class:bx--text-truncate-front="{clamp === 'front'}"
   {...$$restProps}
 >
   <slot />
-</p>
+</svelte:element>
