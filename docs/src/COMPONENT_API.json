@@ -1,5 +1,5 @@
 {
-  "total": 166,
+  "total": 168,
   "components": [
     {
       "moduleName": "Accordion",
@@ -5387,6 +5387,21 @@
       "typedefs": []
     },
     {
+      "moduleName": "Heading",
+      "filePath": "src/Heading/Heading.svelte",
+      "props": [],
+      "moduleExports": [],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": [
+        {
+          "type": "1 | 2 | 3 | 4 | 5 | 6",
+          "name": "SectionLevel",
+          "ts": "type SectionLevel = 1 | 2 | 3 | 4 | 5 | 6"
+        }
+      ]
+    },
+    {
       "moduleName": "ImageLoader",
       "filePath": "src/ImageLoader/ImageLoader.svelte",
       "props": [
@@ -10180,6 +10195,46 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "Section",
+      "filePath": "src/Heading/Section.svelte",
+      "props": [
+        {
+          "name": "level",
+          "kind": "let",
+          "description": "Specify the level the section should start at.",
+          "type": "SectionLevel",
+          "value": "1",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "tag",
+          "kind": "let",
+          "description": "Specify the tag name",
+          "type": "keyof HTMLElementTagNameMap",
+          "value": "\"section\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": [
+        {
+          "type": "1 | 2 | 3 | 4 | 5 | 6",
+          "name": "SectionLevel",
+          "ts": "type SectionLevel = 1 | 2 | 3 | 4 | 5 | 6"
+        }
+      ]
     },
     {
       "moduleName": "Select",
