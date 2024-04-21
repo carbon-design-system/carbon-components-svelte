@@ -140,9 +140,11 @@ By default, the chevron is right-aligned. Set `align="start"` to left-align the 
 
 ## Programmatic example
 
-This example demonstrates how a list of items can be programmatically expanded and collapsed.
+This example demonstrates how all items can be programmatically expanded, collapsed, or disabled.
 
-<FileSource src="/framed/Accordion/ExpandableAccordion" />
+Disabled accordion items cannot be expanded.
+
+<FileSource src="/framed/Accordion/ProgrammaticAccordion" />
 
 ## Disabled
 

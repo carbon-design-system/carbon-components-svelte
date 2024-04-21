@@ -1,5 +1,7 @@
 <script>
-  import { Accordion, AccordionItem, Button } from "carbon-components-svelte";
+  import { Accordion, AccordionItem, Button, ButtonSet } from "carbon-components-svelte";
+
+  let disabled = false;
 
   const items = [
     {
@@ -22,12 +24,17 @@
   let open = false;
 </script>
 
-<Button kind="ghost" size="field" on:click="{() => (open = !open)}">
-  {open ? "Collapse" : "Expand"}
-  all
-</Button>
+<ButtonSet>
+  <Button size="field" disabled="{disabled}" on:click="{() => (open = !open)}">
+    {open ? "Collapse" : "Expand"}
+    all
+  </Button>
+  <Button kind="ghost" size="field" on:click="{() => (disabled = !disabled)}">
+    {disabled ? "Enable" : "Disable"} all
+  </Button>
+</ButtonSet>
 
-<Accordion>
+<Accordion disabled="{disabled}">
   {#each items as item}
     <AccordionItem title="{item.title}" open="{open}">
       <p>{item.description}</p>
