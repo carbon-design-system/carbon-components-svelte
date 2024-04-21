@@ -4,29 +4,14 @@
   const children = [
     {
       text: "Item 1",
-      children: [
-        {
-          text: "Item 1a",
-          children: [{ html: "<h5>HTML content</h5>" }],
-        },
-      ],
+      children: [{ text: "Item 1a", children: [] }],
     },
     {
       text: "Item 2",
-      children: [
-        {
-          href: "https://svelte.dev/",
-        },
-        {
-          href: "https://svelte.dev/",
-          text: "Link with custom text",
-        },
-      ],
+      children: [{ href: "https://svelte.dev/" }],
     },
-    {
-      text: "Item 3",
-    },
-  ];
+    { text: "Item 3" },
+  ] as const;
 </script>
 
 <RecursiveList type="ordered" children="{children}" />

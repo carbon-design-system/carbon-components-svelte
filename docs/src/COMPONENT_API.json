@@ -9798,7 +9798,7 @@
           "name": "children",
           "kind": "let",
           "description": "Specify the children to render",
-          "type": "Array<RecursiveListNode & { children?: RecursiveListNode[]; }>",
+          "type": "ReadonlyArray<RecursiveListNode & { children?: ReadonlyArray<RecursiveListNode>; }>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
