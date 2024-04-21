@@ -23,7 +23,7 @@
   // Internal id for controls
   const id = "ccs-" + Math.random().toString(36);
 
-  /** @type {{ disableItems: import("svelte/store").Writable<boolean>; }} */
+  /** @type {{ disableItems?: import("svelte/store").Writable<boolean>; }} */
   const { disableItems } = getContext("Accordion") ?? {};
 
   $: disabled = disableItems ? $disableItems === true : disabled;
