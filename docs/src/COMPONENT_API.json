@@ -252,50 +252,13 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
-        },
-        {
-          "name": "skeleton",
-          "kind": "let",
-          "description": "Set to `true` to display skeleton state",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
         }
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "BreadcrumbSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "BreadcrumbSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "BreadcrumbSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "BreadcrumbSkeleton"
-        }
-      ],
+      "events": [],
       "typedefs": [],
-      "rest_props": { "type": "InlineComponent", "name": "BreadcrumbSkeleton" },
-      "extends": {
-        "interface": "BreadcrumbSkeletonProps",
-        "import": "\"./BreadcrumbSkeleton.svelte\""
-      }
+      "rest_props": { "type": "Element", "name": "nav" }
     },
     {
       "moduleName": "BreadcrumbItem",
@@ -304,7 +267,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Set the `href` to use an anchor link",
+          "description": "Set the `href` to use an anchor link.\nThe `Link` component is used if `href` is set.",
           "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -330,14 +293,14 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{props?: { [\"aria-current\"]?: string; class: \"bx--link\"; }}"
+          "slot_props": "{props?: Pick<AriaAttributes, \"aria-current\"> & { class: \"bx--link\"; }}"
         }
       ],
       "events": [
-        { "type": "forwarded", "name": "click", "element": "li" },
-        { "type": "forwarded", "name": "mouseover", "element": "li" },
-        { "type": "forwarded", "name": "mouseenter", "element": "li" },
-        { "type": "forwarded", "name": "mouseleave", "element": "li" }
+        { "type": "forwarded", "name": "click", "element": "Link" },
+        { "type": "forwarded", "name": "mouseover", "element": "Link" },
+        { "type": "forwarded", "name": "mouseenter", "element": "Link" },
+        { "type": "forwarded", "name": "mouseleave", "element": "Link" }
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "li" }
@@ -373,12 +336,7 @@
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
-      ],
+      "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },

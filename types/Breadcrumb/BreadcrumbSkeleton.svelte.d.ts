@@ -21,11 +21,6 @@ export interface BreadcrumbSkeletonProps extends RestProps {
 
 export default class BreadcrumbSkeleton extends SvelteComponentTyped<
   BreadcrumbSkeletonProps,
-  {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
-  },
+  Record<string, any>,
   {}
 > {}
