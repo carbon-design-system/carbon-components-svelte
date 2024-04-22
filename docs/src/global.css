@@ -149,6 +149,7 @@ html[data-carbon-theme="g90"] .code-override {
 }
 
 .preview-viewer > .bx--aspect-ratio,
+.preview-viewer > .bx--stack > *,
 .preview-viewer [data-outline] {
   outline: 1px solid var(--bx-interactive);
 }

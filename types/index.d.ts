@@ -113,6 +113,7 @@ export { default as SkeletonPlaceholder } from "./SkeletonPlaceholder/SkeletonPl
 export { default as SkeletonText } from "./SkeletonText/SkeletonText.svelte";
 export { default as Slider } from "./Slider/Slider.svelte";
 export { default as SliderSkeleton } from "./Slider/SliderSkeleton.svelte";
+export { default as Stack } from "./Stack/Stack.svelte";
 export { default as StructuredList } from "./StructuredList/StructuredList.svelte";
 export { default as StructuredListSkeleton } from "./StructuredList/StructuredListSkeleton.svelte";
 export { default as StructuredListBody } from "./StructuredList/StructuredListBody.svelte";
