@@ -145,7 +145,7 @@ By default, the `Stack` component has a vertical orientation and a gap scale of 
 
 By default, the `Stack` component uses a `div` element. You can specify a different element using the `as` prop.
 
-<Stack as="ul" gap={3}>
+<Stack tag="ul" gap={3}>
   <li>Item 1</li>
   <li>Item 2</li>
   <li>Item 3</li>
@@ -269,7 +269,7 @@ Set the `orientation` prop to `horizontal` to create a horizontal stack.
 
 By default, the `Stack` component uses a `div` element. You can specify a different element using the `as` prop.
 
-<Stack orientation="horizontal" as="ul" gap={3}>
+<Stack orientation="horizontal" tag="ul" gap={3}>
   <li>Item 1</li>
   <li>Item 2</li>
   <li>Item 3</li>
