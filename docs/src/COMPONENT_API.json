@@ -1,5 +1,5 @@
 {
-  "total": 168,
+  "total": 169,
   "components": [
     {
       "moduleName": "Accordion",
@@ -11452,6 +11452,59 @@
       ],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
+    },
+    {
+      "moduleName": "Stack",
+      "filePath": "src/Stack/Stack.svelte",
+      "props": [
+        {
+          "name": "gap",
+          "kind": "let",
+          "description": "Specify the gap between items in the stack.\nThe scale maps to Carbon layout values.\nAlternatively, specify a custom value (e.g., \"200px\").",
+          "type": "StackScale | string",
+          "value": "1",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "orientation",
+          "kind": "let",
+          "description": "Specify the orientation of the stack.",
+          "type": "\"vertical\" | \"horizontal\"",
+          "value": "\"vertical\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "tag",
+          "kind": "let",
+          "description": "Specify the tag name",
+          "type": "keyof HTMLElementTagNameMap",
+          "value": "\"div\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
+      "events": [],
+      "typedefs": [
+        {
+          "type": "1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13",
+          "name": "StackScale",
+          "ts": "type StackScale = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13"
+        }
+      ],
+      "rest_props": { "type": "Element", "name": "svelte:element" }
     },
     {
       "moduleName": "StructuredList",

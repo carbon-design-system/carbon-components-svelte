@@ -101,6 +101,7 @@ export { Select, SelectSkeleton, SelectItem, SelectItemGroup } from "./Select";
 export { SkeletonPlaceholder } from "./SkeletonPlaceholder";
 export { SkeletonText } from "./SkeletonText";
 export { Slider, SliderSkeleton } from "./Slider";
+export { Stack } from "./Stack";
 export {
   StructuredList,
   StructuredListSkeleton,
