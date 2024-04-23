@@ -1,19 +1,11 @@
 <script>
+  // @ts-check
+  
   /** Specify the number of rows */
-  export let rows = 5;
+  export let count = 5;
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-  class:bx--skeleton="{true}"
-  class:bx--structured-list="{true}"
-  {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
->
+<div class:bx--skeleton="{true}" class:bx--structured-list="{true}">
   <div class:bx--structured-list-thead="{true}">
     <div
       class:bx--structured-list-row="{true}"
@@ -25,7 +17,7 @@
     </div>
   </div>
   <div class:bx--structured-list-tbody="{true}">
-    {#each Array.from({ length: rows }, (_, i) => i) as row, i (row)}
+    {#each Array.from({ length: count }) as row}
       <div class:bx--structured-list-row="{true}">
         <div class:bx--structured-list-td="{true}"></div>
         <div class:bx--structured-list-td="{true}"></div>

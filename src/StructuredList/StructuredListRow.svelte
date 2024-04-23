@@ -1,44 +1,31 @@
 <script>
-  /** Set to `true` to use as a header */
-  export let head = false;
+  // @ts-check
 
-  /** Set to `true` to render a label slot */
-  export let label = false;
+  /**
+   * Specify the tag name
+   * @type {keyof HTMLElementTagNameMap}
+   */
+  export let tag = "div";
 
-  /** Specify the tabindex */
-  export let tabindex = "0";
+  /**
+   * Set to `true` to use the selected state
+   * @type {boolean}
+   */
+  export let selected = false;
+
+  import { getContext } from "svelte";
+
+  /** @type {undefined | import("svelte/store").Writable<{}>} */
+  const head = getContext("StructuredListHead");
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-{#if label}
-  <!-- svelte-ignore a11y-label-has-associated-control -->
-  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <label
-    tabindex="{tabindex}"
-    class:bx--structured-list-row="{true}"
-    class:bx--structured-list-row--header-row="{head}"
-    {...$$restProps}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-    on:keydown
-  >
-    <slot />
-  </label>
-{:else}
-  <!-- svelte-ignore a11y-interactive-supports-focus -->
-  <div
-    role="row"
-    class:bx--structured-list-row="{true}"
-    class:bx--structured-list-row--header-row="{head}"
-    {...$$restProps}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-  >
-    <slot />
-  </div>
-{/if}
+<svelte:element
+  this="{tag}"
+  class:bx--structured-list-row="{true}"
+  class:bx--structured-list-row--header-row="{head}"
+  class:bx--structured-list-row--selected="{selected}"
+  {...$$restProps}
+  role="row"
+>
+  <slot />
+</svelte:element>

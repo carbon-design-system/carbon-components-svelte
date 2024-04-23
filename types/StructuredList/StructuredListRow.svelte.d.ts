@@ -1,38 +1,26 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["label"];
+type RestProps = SvelteHTMLElements["svelte:element"];
 
 export interface StructuredListRowProps extends RestProps {
   /**
-   * Set to `true` to use as a header
-   * @default false
+   * Specify the tag name
+   * @default "div"
    */
-  head?: boolean;
+  tag?: keyof HTMLElementTagNameMap;
 
   /**
-   * Set to `true` to render a label slot
+   * Set to `true` to use the selected state
    * @default false
    */
-  label?: boolean;
-
-  /**
-   * Specify the tabindex
-   * @default "0"
-   */
-  tabindex?: string;
+  selected?: boolean;
 
   [key: `data-${string}`]: any;
 }
 
 export default class StructuredListRow extends SvelteComponentTyped<
   StructuredListRowProps,
-  {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
-    keydown: WindowEventMap["keydown"];
-  },
+  Record<string, any>,
   { default: {} }
 > {}
