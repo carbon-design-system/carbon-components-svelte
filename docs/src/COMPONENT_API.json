@@ -11560,13 +11560,7 @@
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "change" }
-      ],
+      "events": [{ "type": "dispatched", "name": "change" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
@@ -11576,12 +11570,7 @@
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
-      ],
+      "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
@@ -11589,18 +11578,6 @@
       "moduleName": "StructuredListCell",
       "filePath": "src/StructuredList/StructuredListCell.svelte",
       "props": [
-        {
-          "name": "head",
-          "kind": "let",
-          "description": "Set to `true` to use as a header",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
         {
           "name": "noWrap",
           "kind": "let",
@@ -11616,12 +11593,7 @@
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
-      ],
+      "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
@@ -11631,12 +11603,7 @@
       "props": [],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
-      ],
+      "events": [],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },
@@ -11715,11 +11682,34 @@
           "isRequired": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "icon",
+          "kind": "let",
+          "description": "Specify the icon to render",
+          "type": "typeof import(\"svelte\").SvelteComponent<any>",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "iconDescription",
+          "kind": "let",
+          "description": "Specify the ARIA label for the accordion item chevron icon.",
+          "type": "string",
+          "value": "\"Select an option\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [],
+      "events": [{ "type": "forwarded", "name": "change", "element": "input" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "input" }
     },
@@ -11728,11 +11718,11 @@
       "filePath": "src/StructuredList/StructuredListRow.svelte",
       "props": [
         {
-          "name": "head",
+          "name": "tag",
           "kind": "let",
-          "description": "Set to `true` to use as a header",
-          "type": "boolean",
-          "value": "false",
+          "description": "Specify the tag name",
+          "type": "keyof HTMLElementTagNameMap",
+          "value": "\"div\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11740,23 +11730,11 @@
           "reactive": false
         },
         {
-          "name": "label",
+          "name": "selected",
           "kind": "let",
-          "description": "Set to `true` to render a label slot",
+          "description": "Set to `true` to use the selected state",
           "type": "boolean",
           "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "tabindex",
-          "kind": "let",
-          "description": "Specify the tabindex",
-          "type": "string",
-          "value": "\"0\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11766,22 +11744,16 @@
       ],
       "moduleExports": [],
       "slots": [{ "name": "__default__", "default": true, "slot_props": "{}" }],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "label" },
-        { "type": "forwarded", "name": "mouseover", "element": "label" },
-        { "type": "forwarded", "name": "mouseenter", "element": "label" },
-        { "type": "forwarded", "name": "mouseleave", "element": "label" },
-        { "type": "forwarded", "name": "keydown", "element": "label" }
-      ],
+      "events": [],
       "typedefs": [],
-      "rest_props": { "type": "Element", "name": "label" }
+      "rest_props": { "type": "Element", "name": "svelte:element" }
     },
     {
       "moduleName": "StructuredListSkeleton",
       "filePath": "src/StructuredList/StructuredListSkeleton.svelte",
       "props": [
         {
-          "name": "rows",
+          "name": "count",
           "kind": "let",
           "description": "Specify the number of rows",
           "type": "number",
@@ -11795,14 +11767,8 @@
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
-      ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "Switch",

@@ -9,11 +9,6 @@ export interface StructuredListBodyProps extends RestProps {
 
 export default class StructuredListBody extends SvelteComponentTyped<
   StructuredListBodyProps,
-  {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
-  },
+  Record<string, any>,
   { default: {} }
 > {}

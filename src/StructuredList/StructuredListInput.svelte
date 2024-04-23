@@ -1,4 +1,6 @@
 <script>
+  // @ts-check
+
   /** Set to `true` to check the input */
   export let checked = false;
 
@@ -17,9 +19,19 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  /**
+   * Specify the icon to render
+   * @type {typeof import("svelte").SvelteComponent<any>}
+   */
+  export let icon = CheckmarkFilled;
 
-  const { selectedValue, update } = getContext("StructuredListWrapper");
+  /** Specify the ARIA label for the accordion item chevron icon. */
+  export let iconDescription = "Select an option";
+
+  import { getContext } from "svelte";
+  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+
+  const { selectedValue, update } = getContext("StructuredList");
 
   if (checked) {
     update(value);
@@ -31,15 +43,24 @@
 <input
   bind:this="{ref}"
   type="radio"
-  tabindex="-1"
+  tabindex="{-1}"
   checked="{checked}"
   id="{id}"
   name="{name}"
   title="{title}"
   value="{value}"
   class:bx--structured-list-input="{true}"
+  class:bx--visually-hidden="{true}"
   {...$$restProps}
+  on:change
   on:change="{() => {
     update(value);
   }}"
 />
+<div role="{'cell'}" class:bx--structured-list-td="{true}">
+  <svelte:component
+    this="{icon}"
+    class="bx--structured-list-svg"
+    aria-label="{iconDescription}"
+  />
+</div>

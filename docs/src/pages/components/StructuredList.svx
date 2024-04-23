@@ -12,10 +12,10 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
 
 <StructuredList>
   <StructuredListHead>
-    <StructuredListRow head>
-      <StructuredListCell head>Column A</StructuredListCell>
-      <StructuredListCell head>Column B</StructuredListCell>
-      <StructuredListCell head>Column C</StructuredListCell>
+    <StructuredListRow>
+      <StructuredListCell>Column A</StructuredListCell>
+      <StructuredListCell>Column B</StructuredListCell>
+      <StructuredListCell>Column C</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
@@ -24,9 +24,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
       <StructuredListCell>Row 1</StructuredListCell>
       <StructuredListCell>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        magna, finibus id tortor sed, aliquet bibendum augue.
       </StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
@@ -34,9 +32,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
       <StructuredListCell>Row 2</StructuredListCell>
       <StructuredListCell>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        magna, finibus id tortor sed, aliquet bibendum augue.
       </StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
@@ -44,9 +40,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
       <StructuredListCell>Row 3</StructuredListCell>
       <StructuredListCell>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        magna, finibus id tortor sed, aliquet bibendum augue.
       </StructuredListCell>
     </StructuredListRow>
   </StructuredListBody>
@@ -56,10 +50,10 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
 
 <StructuredList condensed>
   <StructuredListHead>
-    <StructuredListRow head>
-      <StructuredListCell head>Column A</StructuredListCell>
-      <StructuredListCell head>Column B</StructuredListCell>
-      <StructuredListCell head>Column C</StructuredListCell>
+    <StructuredListRow>
+      <StructuredListCell>Column A</StructuredListCell>
+      <StructuredListCell>Column B</StructuredListCell>
+      <StructuredListCell>Column C</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
@@ -68,9 +62,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
       <StructuredListCell>Row 1</StructuredListCell>
       <StructuredListCell>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        magna, finibus id tortor sed, aliquet bibendum augue.
       </StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
@@ -78,9 +70,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
       <StructuredListCell>Row 2</StructuredListCell>
       <StructuredListCell>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        magna, finibus id tortor sed, aliquet bibendum augue.
       </StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
@@ -88,9 +78,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
       <StructuredListCell>Row 3</StructuredListCell>
       <StructuredListCell>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        magna, finibus id tortor sed, aliquet bibendum augue.
       </StructuredListCell>
     </StructuredListRow>
   </StructuredListBody>
@@ -100,10 +88,10 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
 
 <StructuredList flush>
   <StructuredListHead>
-    <StructuredListRow head>
-      <StructuredListCell head>Column A</StructuredListCell>
-      <StructuredListCell head>Column B</StructuredListCell>
-      <StructuredListCell head>Column C</StructuredListCell>
+    <StructuredListRow>
+      <StructuredListCell>Column A</StructuredListCell>
+      <StructuredListCell>Column B</StructuredListCell>
+      <StructuredListCell>Column C</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
@@ -112,9 +100,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
       <StructuredListCell>Row 1</StructuredListCell>
       <StructuredListCell>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        magna, finibus id tortor sed, aliquet bibendum augue.
       </StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
@@ -122,9 +108,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
       <StructuredListCell>Row 2</StructuredListCell>
       <StructuredListCell>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        magna, finibus id tortor sed, aliquet bibendum augue.
       </StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
@@ -132,9 +116,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
       <StructuredListCell>Row 3</StructuredListCell>
       <StructuredListCell>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        magna, finibus id tortor sed, aliquet bibendum augue.
       </StructuredListCell>
     </StructuredListRow>
   </StructuredListBody>
@@ -142,44 +124,14 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
 
 ## Selectable rows
 
-<StructuredList selection selected="row-1-value">
-  <StructuredListHead>
-    <StructuredListRow head>
-      <StructuredListCell head>ColumnA</StructuredListCell>
-      <StructuredListCell head>ColumnB</StructuredListCell>
-      <StructuredListCell head>ColumnC</StructuredListCell>
-      <StructuredListCell head>{''}</StructuredListCell>
-    </StructuredListRow>
-  </StructuredListHead>
-  <StructuredListBody>
-    {#each [1, 2, 3] as item}
-      <StructuredListRow label for="row-{item}">
-        <StructuredListCell>Row {item}</StructuredListCell>
-        <StructuredListCell>Row {item}</StructuredListCell>
-        <StructuredListCell>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-          magna, finibus id tortor sed, aliquet bibendum augue. Aenean
-          posuere sem vel euismod dignissim. Nulla ut cursus dolor.
-          Pellentesque vulputate nisl a porttitor interdum.
-        </StructuredListCell>
-        <StructuredListInput
-          id="row-{item}"
-          value="row-{item}-value"
-          title="row-{item}-title"
-          name="row-{item}-name"
-        />
-        <StructuredListCell>
-          <CheckmarkFilled
-            class="bx--structured-list-svg"
-            aria-label="select an option"
-            title="select an option"
-          />
-        </StructuredListCell>
-      </StructuredListRow>
-    {/each}
-  </StructuredListBody>
-</StructuredList>
+<FileSource src="/framed/StructuredList/ProgrammaticStructuredList" />
 
 ## Skeleton
 
-<StructuredListSkeleton rows={3} />
+<StructuredListSkeleton />
+
+## Skeleton (custom count)
+
+By default, the skeleton will render 5 rows. You can customize the number of rows by passing a `count` prop.
+
+<StructuredListSkeleton count={3} />

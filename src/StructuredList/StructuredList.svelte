@@ -1,4 +1,6 @@
 <script>
+  // @ts-check
+
   /**
    * Specify the selected structured list row value
    * @type {string}
@@ -17,10 +19,11 @@
   import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
 
+  /** @type {import("svelte").EventDispatcher<{ change: string; }>} */
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);
 
-  setContext("StructuredListWrapper", {
+  setContext("StructuredList", {
     selectedValue,
     update: (value) => {
       selectedValue.set(value);
@@ -31,8 +34,6 @@
   $: dispatch("change", $selectedValue);
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
   role="table"
   class:bx--structured-list="{true}"
@@ -40,10 +41,6 @@
   class:bx--structured-list--condensed="{condensed}"
   class:bx--structured-list--flush="{flush}"
   {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
 >
   <slot />
 </div>

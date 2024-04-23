@@ -40,11 +40,23 @@ export interface StructuredListInputProps extends RestProps {
    */
   ref?: null | HTMLInputElement;
 
+  /**
+   * Specify the icon to render
+   * @default undefined
+   */
+  icon?: typeof import("svelte").SvelteComponent<any>;
+
+  /**
+   * Specify the ARIA label for the accordion item chevron icon.
+   * @default "Select an option"
+   */
+  iconDescription?: string;
+
   [key: `data-${string}`]: any;
 }
 
 export default class StructuredListInput extends SvelteComponentTyped<
   StructuredListInputProps,
-  Record<string, any>,
+  { change: WindowEventMap["change"] },
   {}
 > {}

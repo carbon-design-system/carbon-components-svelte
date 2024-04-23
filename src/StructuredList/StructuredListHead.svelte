@@ -1,13 +1,10 @@
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<div
-  role="rowgroup"
-  class:bx--structured-list-thead="{true}"
-  {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
->
+<script>
+  // @ts-check
+  import { setContext } from "svelte";
+
+  setContext("StructuredListHead", {});
+</script>
+
+<div {...$$restProps} role="rowgroup" class:bx--structured-list-thead="{true}">
   <slot />
 </div>

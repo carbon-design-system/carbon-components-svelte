@@ -1,22 +1,21 @@
 <script>
-  /** Set to `true` to use as a header */
-  export let head = false;
+  // @ts-check
 
   /** Set to `true` to prevent wrapping */
   export let noWrap = false;
+
+  import { getContext } from "svelte";
+
+  /** @type {undefined | import("svelte/store").Writable<{}>} */
+  const head = getContext("StructuredListHead");
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
-  role="{head ? 'columnheader' : 'cell'}"
   class:bx--structured-list-th="{head}"
   class:bx--structured-list-td="{!head}"
   class:bx--structured-list-content--nowrap="{noWrap}"
   {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
+  role="{head ? 'columnheader' : 'cell'}"
 >
   <slot />
 </div>

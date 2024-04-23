@@ -3666,10 +3666,6 @@ None.
 
 | Event name | Type       | Detail |
 | :--------- | :--------- | :----- |
-| click      | forwarded  | --     |
-| mouseover  | forwarded  | --     |
-| mouseenter | forwarded  | --     |
-| mouseleave | forwarded  | --     |
 | change     | dispatched | --     |
 
 ## `StructuredListBody`
@@ -3686,12 +3682,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `StructuredListCell`
 
@@ -3699,7 +3690,6 @@ None.
 
 | Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                       |
 | :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | --------------------------------- |
-| head      | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use as a header  |
 | noWrap    | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to prevent wrapping |
 
 ### Slots
@@ -3710,12 +3700,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `StructuredListHead`
 
@@ -3731,25 +3716,22 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `StructuredListInput`
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                  |
-| :-------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | -------------------------------------------- |
-| ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element |
-| checked   | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to check the input             |
-| title     | No       | <code>let</code> | No       | <code>string</code>                       | <code>"title"</code>                             | Specify the title of the input               |
-| value     | No       | <code>let</code> | No       | <code>string</code>                       | <code>"value"</code>                             | Specify the value of the input               |
-| id        | No       | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element              |
-| name      | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify a name attribute for the input       |
+| Prop name       | Required | Kind             | Reactive | Type                                                      | Default value                                    | Description                                                 |
+| :-------------- | :------- | :--------------- | :------- | --------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------- |
+| ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                 | <code>null</code>                                | Obtain a reference to the input HTML element                |
+| checked         | No       | <code>let</code> | Yes      | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to check the input                            |
+| title           | No       | <code>let</code> | No       | <code>string</code>                                       | <code>"title"</code>                             | Specify the title of the input                              |
+| value           | No       | <code>let</code> | No       | <code>string</code>                                       | <code>"value"</code>                             | Specify the value of the input                              |
+| id              | No       | <code>let</code> | No       | <code>string</code>                                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                             |
+| name            | No       | <code>let</code> | No       | <code>string</code>                                       | <code>""</code>                                  | Specify a name attribute for the input                      |
+| icon            | No       | <code>let</code> | No       | <code>typeof import("svelte").SvelteComponent<any></code> | <code>undefined</code>                           | Specify the icon to render                                  |
+| iconDescription | No       | <code>let</code> | No       | <code>string</code>                                       | <code>"Select an option"</code>                  | Specify the ARIA label for the accordion item chevron icon. |
 
 ### Slots
 
@@ -3757,17 +3739,18 @@ None.
 
 ### Events
 
-None.
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| change     | forwarded | --     |
 
 ## `StructuredListRow`
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                          |
-| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ------------------------------------ |
-| head      | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to use as a header     |
-| label     | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to render a label slot |
-| tabindex  | No       | <code>let</code> | No       | <code>string</code>  | <code>"0"</code>   | Specify the tabindex                 |
+| Prop name | Required | Kind             | Reactive | Type                                     | Default value      | Description                             |
+| :-------- | :------- | :--------------- | :------- | ---------------------------------------- | ------------------ | --------------------------------------- |
+| tag       | No       | <code>let</code> | No       | <code>keyof HTMLElementTagNameMap</code> | <code>"div"</code> | Specify the tag name                    |
+| selected  | No       | <code>let</code> | No       | <code>boolean</code>                     | <code>false</code> | Set to `true` to use the selected state |
 
 ### Slots
 
@@ -3777,13 +3760,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
+None.
 
 ## `StructuredListSkeleton`
 
@@ -3791,7 +3768,7 @@ None.
 
 | Prop name | Required | Kind             | Reactive | Type                | Default value  | Description                |
 | :-------- | :------- | :--------------- | :------- | ------------------- | -------------- | -------------------------- |
-| rows      | No       | <code>let</code> | No       | <code>number</code> | <code>5</code> | Specify the number of rows |
+| count     | No       | <code>let</code> | No       | <code>number</code> | <code>5</code> | Specify the number of rows |
 
 ### Slots
 
@@ -3799,12 +3776,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `Switch`
 
