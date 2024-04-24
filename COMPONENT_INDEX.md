@@ -1910,12 +1910,12 @@ None.
 
 ### Props
 
-| Prop name       | Required | Kind             | Reactive | Type                                                                     | Default value          | Description                                                                                                          |
-| :-------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| status          | No       | <code>let</code> | No       | <code>"active" &#124; "inactive" &#124; "finished" &#124; "error"</code> | <code>"active"</code>  | Set the loading status                                                                                               |
-| description     | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Set the loading description                                                                                          |
-| iconDescription | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Specify a description for the loading icon.<br />Defaults to the `status` prop for the "error" and "finished" states |
-| successDelay    | No       | <code>let</code> | No       | <code>number</code>                                                      | <code>1500</code>      | Specify the timeout delay (ms) after `status` is set to "success"                                                    |
+| Prop name       | Required | Kind             | Reactive | Type                                                                     | Default value          | Description                                                                                                                          |
+| :-------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------ | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| status          | No       | <code>let</code> | No       | <code>"active" &#124; "inactive" &#124; "finished" &#124; "error"</code> | <code>"active"</code>  | Set the loading status                                                                                                               |
+| description     | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Set the loading description                                                                                                          |
+| iconDescription | No       | <code>let</code> | No       | <code>string</code>                                                      | <code>undefined</code> | Specify a description for the loading icon.<br />Defaults to the `status` value for the<br /> "error" and "finished" states.         |
+| successDelay    | No       | <code>let</code> | No       | <code>number</code>                                                      | <code>1500</code>      | Specify the timeout delay (ms) after `status` is set to "finished".<br />The `on:success` event will be dispatched after this delay. |
 
 ### Slots
 
@@ -1925,10 +1925,6 @@ None.
 
 | Event name | Type       | Detail            |
 | :--------- | :--------- | :---------------- |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
 | success    | dispatched | <code>null</code> |
 
 ## `InlineNotification`

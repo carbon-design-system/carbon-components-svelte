@@ -1,4 +1,6 @@
 <script>
+  // @ts-check
+  
   /** Set to `true` to use the small variant */
   export let small = false;
 

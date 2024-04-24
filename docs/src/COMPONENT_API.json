@@ -5543,7 +5543,7 @@
         {
           "name": "iconDescription",
           "kind": "let",
-          "description": "Specify a description for the loading icon.\nDefaults to the `status` prop for the \"error\" and \"finished\" states",
+          "description": "Specify a description for the loading icon.\nDefaults to the `status` value for the\n \"error\" and \"finished\" states.",
           "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -5554,7 +5554,7 @@
         {
           "name": "successDelay",
           "kind": "let",
-          "description": "Specify the timeout delay (ms) after `status` is set to \"success\"",
+          "description": "Specify the timeout delay (ms) after `status` is set to \"finished\".\nThe `on:success` event will be dispatched after this delay.",
           "type": "number",
           "value": "1500",
           "isFunction": false,
@@ -5566,13 +5566,7 @@
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
-        { "type": "dispatched", "name": "success", "detail": "null" }
-      ],
+      "events": [{ "type": "dispatched", "name": "success", "detail": "null" }],
       "typedefs": [],
       "rest_props": { "type": "Element", "name": "div" }
     },

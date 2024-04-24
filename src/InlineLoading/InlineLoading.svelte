@@ -1,4 +1,6 @@
 <script>
+  // @ts-check
+
   /**
    * Set the loading status
    * @type {"active" | "inactive" | "finished" | "error"}
@@ -13,21 +15,27 @@
 
   /**
    * Specify a description for the loading icon.
-   * Defaults to the `status` prop for the "error" and "finished" states
+   * Defaults to the `status` value for the
+   *  "error" and "finished" states.
    * @type {string}
    */
   export let iconDescription = undefined;
 
-  /** Specify the timeout delay (ms) after `status` is set to "success" */
+  /**
+   * Specify the timeout delay (ms) after `status` is set to "finished".
+   * The `on:success` event will be dispatched after this delay.
+  */
   export let successDelay = 1500;
 
-  import { createEventDispatcher, afterUpdate, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import Loading from "../Loading/Loading.svelte";
 
+  /** @type {import("svelte").EventDispatcher<{ success: null }>} */
   const dispatch = createEventDispatcher();
 
+  /** @type {NodeJS.Timeout} */
   let timeout = undefined;
 
   onMount(() => {
@@ -36,26 +44,16 @@
     };
   });
 
-  afterUpdate(() => {
-    if (status === "finished") {
-      timeout = setTimeout(() => {
-        dispatch("success");
-      }, successDelay);
-    }
-  });
+  $: if (status === "finished") {
+    if (timeout) clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      dispatch("success");
+    }, successDelay);
+  }
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-  class:bx--inline-loading="{true}"
-  aria-live="assertive"
-  {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
->
+<div class:bx--inline-loading="{true}" aria-live="assertive" {...$$restProps}>
   <div class:bx--inline-loading__animation="{true}">
     {#if status === "error"}
       <ErrorFilled

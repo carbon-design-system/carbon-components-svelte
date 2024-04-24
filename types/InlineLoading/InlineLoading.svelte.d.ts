@@ -18,13 +18,15 @@ export interface InlineLoadingProps extends RestProps {
 
   /**
    * Specify a description for the loading icon.
-   * Defaults to the `status` prop for the "error" and "finished" states
+   * Defaults to the `status` value for the
+   *  "error" and "finished" states.
    * @default undefined
    */
   iconDescription?: string;
 
   /**
-   * Specify the timeout delay (ms) after `status` is set to "success"
+   * Specify the timeout delay (ms) after `status` is set to "finished".
+   * The `on:success` event will be dispatched after this delay.
    * @default 1500
    */
   successDelay?: number;
@@ -34,12 +36,6 @@ export interface InlineLoadingProps extends RestProps {
 
 export default class InlineLoading extends SvelteComponentTyped<
   InlineLoadingProps,
-  {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
-    success: CustomEvent<null>;
-  },
+  { success: CustomEvent<null> },
   {}
 > {}
