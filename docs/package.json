@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@sveltech/routify": "^1.9.10",
-    "@sveltejs/vite-plugin-svelte": "^3.0.1",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0-next.3",
     "carbon-components-svelte": "../",
     "carbon-icons-svelte": "^12.4.1",
     "clipboard-copy": "^4.0.1",
@@ -24,7 +24,7 @@
     "prism-svelte": "^0.4.7",
     "prismjs": "^1.28.0",
     "remark-slug": "^6.0.0",
-    "svelte": "^4.2.8",
+    "svelte": "^5.0.0-next.115",
     "vite": "^5.0.10"
   },
   "routify": {
