@@ -1,7 +1,8 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export type DataTableKey<Row = DataTableRow> = Exclude<keyof Row, "id">;
+export type DataTableKey<Row = DataTableRow> =
+  import("./DataTableTypes.d.ts").PropertyPath<Row>;
 
 export type DataTableValue = any;
 
@@ -37,7 +38,7 @@ export interface DataTableRow {
 export type DataTableRowId = any;
 
 export interface DataTableCell<Row = DataTableRow> {
-  key: DataTableKey<Row>;
+  key: DataTableKey<Row> | (string & {});
   value: DataTableValue;
   display?: (item: Value, row: DataTableRow) => DataTableValue;
 }

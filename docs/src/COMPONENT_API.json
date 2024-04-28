@@ -2712,9 +2712,9 @@
       ],
       "typedefs": [
         {
-          "type": "Exclude<keyof Row, \"id\">",
+          "type": "import('./DataTableTypes.d.ts').PropertyPath<Row>",
           "name": "DataTableKey<Row=DataTableRow>",
-          "ts": "type DataTableKey<Row=DataTableRow> = Exclude<keyof Row, \"id\">"
+          "ts": "type DataTableKey<Row=DataTableRow> = import('./DataTableTypes.d.ts').PropertyPath<Row>"
         },
         {
           "type": "any",
@@ -2722,14 +2722,14 @@
           "ts": "type DataTableValue = any"
         },
         {
-          "type": "{ key: DataTableKey<Row>; empty: boolean; display?: (item: Value, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }",
+          "type": "{\n   key: DataTableKey<Row>;\n   empty: boolean;\n   display?: (item: Value, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
           "name": "DataTableEmptyHeader<Row=DataTableRow>",
-          "ts": "interface DataTableEmptyHeader<Row=DataTableRow> { key: DataTableKey<Row>; empty: boolean; display?: (item: Value, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }"
+          "ts": "interface DataTableEmptyHeader<Row=DataTableRow> {\n   key: DataTableKey<Row>;\n   empty: boolean;\n   display?: (item: Value, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}"
         },
         {
-          "type": "{ key: DataTableKey<Row>; value: DataTableValue; display?: (item: Value, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }",
+          "type": "{\n   key: DataTableKey<Row>;\n   value: DataTableValue;\n   display?: (item: Value, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
           "name": "DataTableNonEmptyHeader<Row=DataTableRow>",
-          "ts": "interface DataTableNonEmptyHeader<Row=DataTableRow> { key: DataTableKey<Row>; value: DataTableValue; display?: (item: Value, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }"
+          "ts": "interface DataTableNonEmptyHeader<Row=DataTableRow> {\n   key: DataTableKey<Row>;\n   value: DataTableValue;\n   display?: (item: Value, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}"
         },
         {
           "type": "DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>",
@@ -2747,9 +2747,9 @@
           "ts": "type DataTableRowId = any"
         },
         {
-          "type": "{ key: DataTableKey<Row>; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }",
+          "type": "{\n   key: DataTableKey<Row> | (string & {});\n   value: DataTableValue;\n   display?: (item: Value, row: DataTableRow) => DataTableValue;\n}",
           "name": "DataTableCell<Row=DataTableRow>",
-          "ts": "interface DataTableCell<Row=DataTableRow> { key: DataTableKey<Row>; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }"
+          "ts": "interface DataTableCell<Row=DataTableRow> {\n   key: DataTableKey<Row> | (string & {});\n   value: DataTableValue;\n   display?: (item: Value, row: DataTableRow) => DataTableValue;\n}"
         }
       ],
       "generics": ["Row", "Row extends DataTableRow = DataTableRow"],

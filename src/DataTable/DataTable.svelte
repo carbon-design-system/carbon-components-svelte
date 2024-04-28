@@ -2,14 +2,34 @@
   /**
    * @generics {Row extends DataTableRow = DataTableRow} Row
    * @template {DataTableRow} Row
-   * @typedef {Exclude<keyof Row, "id">} DataTableKey<Row=DataTableRow>
+   * @typedef {import('./DataTableTypes.d.ts').PropertyPath<Row>} DataTableKey<Row=DataTableRow>
    * @typedef {any} DataTableValue
-   * @typedef {{ key: DataTableKey<Row>; empty: boolean; display?: (item: Value, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableEmptyHeader<Row=DataTableRow>
-   * @typedef {{ key: DataTableKey<Row>; value: DataTableValue; display?: (item: Value, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableNonEmptyHeader<Row=DataTableRow>
+   * @typedef {{
+   *    key: DataTableKey<Row>;
+   *    empty: boolean;
+   *    display?: (item: Value, row: Row) => DataTableValue;
+   *    sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
+   *    columnMenu?: boolean;
+   *    width?: string;
+   *    minWidth?: string;
+   * }} DataTableEmptyHeader<Row=DataTableRow>
+   * @typedef {{
+   *    key: DataTableKey<Row>;
+   *    value: DataTableValue;
+   *    display?: (item: Value, row: Row) => DataTableValue;
+   *    sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
+   *    columnMenu?: boolean;
+   *    width?: string;
+   *    minWidth?: string;
+   * }} DataTableNonEmptyHeader<Row=DataTableRow>
    * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
    * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
    * @typedef {any} DataTableRowId
-   * @typedef {{ key: DataTableKey<Row>; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }} DataTableCell<Row=DataTableRow>
+   * @typedef {{
+   *    key: DataTableKey<Row> | (string & {});
+   *    value: DataTableValue;
+   *    display?: (item: Value, row: DataTableRow) => DataTableValue;
+   * }} DataTableCell<Row=DataTableRow>
    * @slot {{ row: Row; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; }} cell
