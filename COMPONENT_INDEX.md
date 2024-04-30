@@ -4219,10 +4219,9 @@ None.
 
 ### Props
 
-| Prop name     | Required | Kind             | Reactive | Type                                                     | Default value      | Description                                                |
-| :------------ | :------- | :--------------- | :------- | -------------------------------------------------------- | ------------------ | ---------------------------------------------------------- |
-| hideLabel     | No       | <code>let</code> | No       | <code>boolean</code>                                     | <code>false</code> | Set to `true` to hide the label text                       |
-| divAttributes | No       | <code>let</code> | No       | <code>import('svelte/elements').HTMLDivAttributes</code> | <code>{}</code>    | Specify the div HTML attributes for the skeleton container |
+| Prop name | Required | Kind             | Reactive | Type                 | Default value      | Description                          |
+| :-------- | :------- | :--------------- | :------- | -------------------- | ------------------ | ------------------------------------ |
+| hideLabel | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code> | Set to `true` to hide the label text |
 
 ### Slots
 
@@ -4230,13 +4229,7 @@ None.
 
 ### Events
 
-| Event name   | Type      | Detail |
-| :----------- | :-------- | :----- |
-| click        | forwarded | --     |
-| pointerup    | forwarded | --     |
-| pointerover  | forwarded | --     |
-| pointerenter | forwarded | --     |
-| pointerleave | forwarded | --     |
+None.
 
 ## `Theme`
 

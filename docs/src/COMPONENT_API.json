@@ -13110,29 +13110,11 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
-        },
-        {
-          "name": "divAttributes",
-          "kind": "let",
-          "description": "Specify the div HTML attributes for the skeleton container",
-          "type": "import('svelte/elements').HTMLDivAttributes",
-          "value": "{}",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
         }
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "pointerup", "element": "div" },
-        { "type": "forwarded", "name": "pointerover", "element": "div" },
-        { "type": "forwarded", "name": "pointerenter", "element": "div" },
-        { "type": "forwarded", "name": "pointerleave", "element": "div" }
-      ],
+      "events": [],
       "typedefs": []
     },
     {
