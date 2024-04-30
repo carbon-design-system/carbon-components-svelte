@@ -11,13 +11,19 @@ components: ["TextArea", "TextAreaSkeleton"]
 
 <TextArea labelText="App description" placeholder="Enter a description..." />
 
-## Maximum character count
+## Counter (character)
 
-Specify the max character count using the `maxCount` prop. A character counter will be displayed to the right of the label.
+Specify a number using the `maxCount` prop to show a character counter. The default mode is `"charcacter"`.
 
-You can always use the native `maxlength` attribute if you'd prefer that a counter not be shown.
+The `maxlength` attribute is set to `maxCount` in this mode. You can override this by specifying `maxlength={undefined}`.
 
 <TextArea labelText="App description" placeholder="Enter a description..." maxCount={100} />
+
+## Counter (word)
+
+Specify `counterMode="word"` for the counter to count words instead of characters.
+
+<TextArea labelText="App description" placeholder="Enter a description..." maxCount={100} counterMode="word" />
 
 ## With helper text
 
@@ -31,13 +37,31 @@ You can always use the native `maxlength` attribute if you'd prefer that a count
 
 <TextArea light labelText="App description" placeholder="Enter a description..." />
 
+## Read-only variant
+
+<TextArea readonly labelText="App description" placeholder="Enter a description..." />
+
 ## Custom rows
 
+Specify `rows` to adjust the height of the textarea.
+
+By default, `rows` is set to `4`.
+
 <TextArea rows={10} labelText="App description" placeholder="Enter a description..." />
+
+## Custom cols
+
+If `cols` is a number, the `textarea` will not be resizeable.
+
+<TextArea cols={50} labelText="App description" placeholder="Enter a description..." />
 
 ## Invalid state
 
 <TextArea invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
+
+## Warning state
+
+<TextArea warn warnText="The app description requires additional approval." labelText="App description" placeholder="Enter a description..." />
 
 ## Disabled state
 

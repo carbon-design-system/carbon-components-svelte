@@ -1,4 +1,6 @@
 <script>
+  // @ts-check
+
   /** Specify the textarea value */
   export let value = "";
 
@@ -19,6 +21,12 @@
    * @type {number}
    */
   export let maxCount = undefined;
+
+  /**
+   * Specify the counter mode
+   * @type {"character" | "word"}
+   */
+  export let counterMode = "character";
 
   /** Set to `true` to enable the light variant */
   export let light = false;
@@ -44,6 +52,12 @@
   /** Specify the text for the invalid state */
   export let invalidText = "";
 
+  /** Set to `true` to indicate an warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Set an id for the textarea element */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -57,22 +71,26 @@
   export let ref = null;
 
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
 
+  /** @type {(value: string) => number}*/
+  function getTextCount(value) {
+    if (counterMode === "character") {
+      return value.length;
+    } else {
+      return value.match(/\w+/g)?.length || 0;
+    }
+  }
+
+  $: error = invalid && !readonly;
   $: errorId = `error-${id}`;
+  $: helperId = `helper-${id}`;
+  $: warnId = `warn-${id}`;
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
-  class:bx--form-item="{true}"
->
-  {#if (labelText || $$slots.labelText) && !hideLabel}
-    <div class:bx--text-area__label-wrapper="{true}">
+<div class:bx--form-item="{true}">
+  <div class:bx--text-area__label-wrapper="{true}">
+    {#if (labelText || $$slots.labelText) && !hideLabel}
       <label
         for="{id}"
         class:bx--label="{true}"
@@ -83,25 +101,37 @@
           {labelText}
         </slot>
       </label>
-      {#if maxCount}
-        <div class:bx--label="{true}" class:bx--label--disabled="{disabled}">
-          {value.length}/{maxCount}
-        </div>
-      {/if}
-    </div>
-  {/if}
+    {/if}
+    {#if maxCount}
+      <div class:bx--label="{true}" class:bx--label--disabled="{disabled}">
+        {getTextCount(value)}/{maxCount}
+      </div>
+    {/if}
+  </div>
   <div
     class:bx--text-area__wrapper="{true}"
+    class:bx--text-area__wrapper--readonly="{readonly}"
+    class:bx--text-area__wrapper--warn="{warn}"
     data-invalid="{invalid || undefined}"
   >
     {#if invalid}
       <WarningFilled class="bx--text-area__invalid-icon" />
+    {:else if warn}
+      <WarningAltFilled
+        class="bx--text-area__invalid-icon bx--text-area__invalid-icon--warning"
+      />
     {/if}
     <textarea
       bind:this="{ref}"
-      bind:value
+      bind:value="{value}"
       aria-invalid="{invalid || undefined}"
-      aria-describedby="{invalid ? errorId : undefined}"
+      aria-describedby="{error
+        ? errorId
+        : warn
+        ? warnId
+        : helperText
+        ? helperId
+        : undefined}"
       disabled="{disabled}"
       id="{id}"
       name="{name}"
@@ -112,8 +142,12 @@
       class:bx--text-area="{true}"
       class:bx--text-area--light="{light}"
       class:bx--text-area--invalid="{invalid}"
-      maxlength="{maxCount ?? undefined}"
-      style="{cols ? '' : 'width: 100%;'}"
+      class:bx--text-area--warn="{warn}"
+      maxlength="{typeof maxCount === 'number' && counterMode === 'character'
+        ? maxCount
+        : undefined}"
+      style:width="{cols ? undefined : "100%"}"
+      style:resize="{cols ? "none" : undefined}"
       {...$$restProps}
       on:change
       on:input
@@ -125,13 +159,25 @@
   </div>
   {#if !invalid && helperText}
     <div
+      id="{helperId}"
       class:bx--form__helper-text="{true}"
       class:bx--form__helper-text--disabled="{disabled}"
     >
       {helperText}
     </div>
   {/if}
-  {#if invalid}
-    <div id="{errorId}" class:bx--form-requirement="{true}">{invalidText}</div>
+  {#if !readonly}
+    {#if invalid}
+      <div id="{errorId}" class:bx--form-requirement="{true}">
+        <slot name="invalidText">
+          {invalidText}
+        </slot>
+      </div>
+    {/if}
+    {#if !invalid && warn}
+      <div class:bx--form-requirement="{true}" id="{warnId}">
+        <slot name="warnText">{warnText}</slot>
+      </div>
+    {/if}
   {/if}
 </div>

@@ -35,6 +35,12 @@ export interface TextAreaProps extends RestProps {
   maxCount?: number;
 
   /**
+   * Specify the counter mode
+   * @default "character"
+   */
+  counterMode?: "character" | "word";
+
+  /**
    * Set to `true` to enable the light variant
    * @default false
    */
@@ -83,6 +89,18 @@ export interface TextAreaProps extends RestProps {
   invalidText?: string;
 
   /**
+   * Set to `true` to indicate an warning state
+   * @default false
+   */
+  warn?: boolean;
+
+  /**
+   * Specify the warning state text
+   * @default ""
+   */
+  warnText?: string;
+
+  /**
    * Set an id for the textarea element
    * @default "ccs-" + Math.random().toString(36)
    */
@@ -106,10 +124,6 @@ export interface TextAreaProps extends RestProps {
 export default class TextArea extends SvelteComponentTyped<
   TextAreaProps,
   {
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
     change: WindowEventMap["change"];
     input: WindowEventMap["input"];
     keydown: WindowEventMap["keydown"];
@@ -118,5 +132,5 @@ export default class TextArea extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
     paste: DocumentAndElementEventHandlersEventMap["paste"];
   },
-  { labelText: {} }
+  { invalidText: {}; labelText: {}; warnText: {} }
 > {}

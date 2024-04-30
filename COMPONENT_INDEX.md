@@ -4110,6 +4110,7 @@ None.
 | cols        | No       | <code>let</code> | No       | <code>number</code>                          | <code>undefined</code>                           | Specify the number of cols                      |
 | rows        | No       | <code>let</code> | No       | <code>number</code>                          | <code>4</code>                                   | Specify the number of rows                      |
 | maxCount    | No       | <code>let</code> | No       | <code>number</code>                          | <code>undefined</code>                           | Specify the max character count                 |
+| counterMode | No       | <code>let</code> | No       | <code>"character" &#124; "word"</code>       | <code>"character"</code>                         | Specify the counter mode                        |
 | light       | No       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to enable the light variant       |
 | disabled    | No       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to disable the input              |
 | readonly    | No       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to use the read-only variant      |
@@ -4118,23 +4119,23 @@ None.
 | hideLabel   | No       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to visually hide the label text   |
 | invalid     | No       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to indicate an invalid state      |
 | invalidText | No       | <code>let</code> | No       | <code>string</code>                          | <code>""</code>                                  | Specify the text for the invalid state          |
+| warn        | No       | <code>let</code> | No       | <code>boolean</code>                         | <code>false</code>                               | Set to `true` to indicate an warning state      |
+| warnText    | No       | <code>let</code> | No       | <code>string</code>                          | <code>""</code>                                  | Specify the warning state text                  |
 | id          | No       | <code>let</code> | No       | <code>string</code>                          | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the textarea element              |
 | name        | No       | <code>let</code> | No       | <code>string</code>                          | <code>undefined</code>                           | Specify a name attribute for the input          |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name   | Default | Props | Fallback                   |
+| :---------- | :------ | :---- | :------------------------- |
+| invalidText | No      | --    | <code>{invalidText}</code> |
+| labelText   | No      | --    | <code>{labelText}</code>   |
+| warnText    | No      | --    | <code>{warnText}</code>    |
 
 ### Events
 
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
 | change     | forwarded | --     |
 | input      | forwarded | --     |
 | keydown    | forwarded | --     |
@@ -4157,12 +4158,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `TextInput`
 

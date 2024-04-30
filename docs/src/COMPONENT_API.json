@@ -12563,6 +12563,18 @@
           "reactive": false
         },
         {
+          "name": "counterMode",
+          "kind": "let",
+          "description": "Specify the counter mode",
+          "type": "\"character\" | \"word\"",
+          "value": "\"character\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "light",
           "kind": "let",
           "description": "Set to `true` to enable the light variant",
@@ -12659,6 +12671,30 @@
           "reactive": false
         },
         {
+          "name": "warn",
+          "kind": "let",
+          "description": "Set to `true` to indicate an warning state",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "warnText",
+          "kind": "let",
+          "description": "Specify the warning state text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "id",
           "kind": "let",
           "description": "Set an id for the textarea element",
@@ -12697,17 +12733,25 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": "invalidText",
+          "default": false,
+          "fallback": "{invalidText}",
+          "slot_props": "{}"
+        },
+        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "{}"
+        },
+        {
+          "name": "warnText",
+          "default": false,
+          "fallback": "{warnText}",
+          "slot_props": "{}"
         }
       ],
       "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" },
         { "type": "forwarded", "name": "change", "element": "textarea" },
         { "type": "forwarded", "name": "input", "element": "textarea" },
         { "type": "forwarded", "name": "keydown", "element": "textarea" },
@@ -12738,14 +12782,8 @@
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
-      ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "TextInput",
