@@ -9,48 +9,12 @@
   ] as const;
 
   const rows = [
-    {
-      id: "a",
-      name: "Load Balancer 3",
-      port: 3000,
-      rule: "Round robin",
-      overflow: null,
-    },
-    {
-      id: "b",
-      name: "Load Balancer 1",
-      port: 443,
-      rule: "Round robin",
-      overflow: null,
-    },
-    {
-      id: "c",
-      name: "Load Balancer 2",
-      port: 80,
-      rule: "DNS delegation",
-      overflow: null,
-    },
-    {
-      id: "d",
-      name: "Load Balancer 6",
-      port: 3000,
-      rule: "Round robin",
-      overflow: null,
-    },
-    {
-      id: "e",
-      name: "Load Balancer 4",
-      port: 443,
-      rule: "Round robin",
-      overflow: null,
-    },
-    {
-      id: "f",
-      name: "Load Balancer 5",
-      port: 80,
-      rule: "DNS delegation",
-      overflow: null,
-    },
+    { id: "a", name: "Load Balancer 3", port: 3000, rule: "Round robin" },
+    { id: "b", name: "Load Balancer 1", port: 443, rule: "Round robin" },
+    { id: "c", name: "Load Balancer 2", port: 80, rule: "DNS delegation" },
+    { id: "d", name: "Load Balancer 6", port: 3000, rule: "Round robin" },
+    { id: "e", name: "Load Balancer 4", port: 443, rule: "Round robin" },
+    { id: "f", name: "Load Balancer 5", port: 80, rule: "DNS delegation" },
   ];
 </script>
 
