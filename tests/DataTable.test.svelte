@@ -10,16 +10,15 @@
     Button,
     Link,
   } from "carbon-components-svelte";
-  import type { DataTableHeader } from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import type { ComponentProps } from "svelte";
 
-  const headers: DataTableHeader[] = [
+  const headers = [
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol", width: "400px", minWidth: "40%" },
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule", sort: false },
-  ];
+  ] as const;
   const rows = [
     {
       id: "a",
@@ -312,6 +311,7 @@
       key: 'port',
       value: 'Port',
       display: (value, row) => {
+        console.log(row.port);
         return value + ' €';
       },
       sort: (a, b) => {
@@ -340,7 +340,7 @@
   }}"
   on:click="{(e) => {
     e.detail.cell;
-    e.detail.row.name;
+    e.detail.row?.name;
   }}"
   on:click:row--expand="{(e) => {
     const detail = e.detail;
