@@ -7,7 +7,7 @@ export type DataTableKey<Row = DataTableRow> =
 export type DataTableValue = any;
 
 export interface DataTableEmptyHeader<Row = DataTableRow> {
-  key: DataTableKey<Row>;
+  key: DataTableKey<Row> | string;
   empty: boolean;
   display?: (item: Value, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);

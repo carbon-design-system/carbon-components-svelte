@@ -2726,9 +2726,9 @@
           "ts": "type DataTableValue = any"
         },
         {
-          "type": "{\n   key: DataTableKey<Row>;\n   empty: boolean;\n   display?: (item: Value, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
+          "type": "{\n   key: DataTableKey<Row> | string;\n   empty: boolean;\n   display?: (item: Value, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
           "name": "DataTableEmptyHeader<Row=DataTableRow>",
-          "ts": "interface DataTableEmptyHeader<Row=DataTableRow> {\n   key: DataTableKey<Row>;\n   empty: boolean;\n   display?: (item: Value, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}"
+          "ts": "interface DataTableEmptyHeader<Row=DataTableRow> {\n   key: DataTableKey<Row> | string;\n   empty: boolean;\n   display?: (item: Value, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}"
         },
         {
           "type": "{\n   key: DataTableKey<Row>;\n   value: DataTableValue;\n   display?: (item: Value, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
