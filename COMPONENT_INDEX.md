@@ -926,14 +926,15 @@ None.
 ### Types
 
 ```ts
-export type DataTableKey<Row = DataTableRow> = Exclude<keyof Row, "id">;
+export type DataTableKey<Row = DataTableRow> =
+  import("./DataTableTypes.d.ts").PropertyPath<Row>;
 
 export type DataTableValue = any;
 
 export interface DataTableEmptyHeader<Row = DataTableRow> {
   key: DataTableKey<Row>;
   empty: boolean;
-  display?: (item: DataTableValue, row: Row) => DataTableValue;
+  display?: (item: Value, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
@@ -943,7 +944,7 @@ export interface DataTableEmptyHeader<Row = DataTableRow> {
 export interface DataTableNonEmptyHeader<Row = DataTableRow> {
   key: DataTableKey<Row>;
   value: DataTableValue;
-  display?: (item: DataTableValue, row: Row) => DataTableValue;
+  display?: (item: Value, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
@@ -962,9 +963,9 @@ export interface DataTableRow {
 export type DataTableRowId = any;
 
 export interface DataTableCell<Row = DataTableRow> {
-  key: DataTableKey<Row>;
+  key: DataTableKey<Row> | (string & {});
   value: DataTableValue;
-  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
+  display?: (item: Value, row: DataTableRow) => DataTableValue;
 }
 ```
 
