@@ -5,7 +5,7 @@
    * @typedef {import('./DataTableTypes.d.ts').PropertyPath<Row>} DataTableKey<Row=DataTableRow>
    * @typedef {any} DataTableValue
    * @typedef {{
-   *    key: DataTableKey<Row> | string;
+   *    key: DataTableKey<Row> | (string & {});
    *    empty: boolean;
    *    display?: (item: Value, row: Row) => DataTableValue;
    *    sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
