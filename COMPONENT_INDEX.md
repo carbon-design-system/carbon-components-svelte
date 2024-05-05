@@ -3140,7 +3140,6 @@ None.
 | value                | No       | <code>let</code> | Yes      | <code>any</code>                                          | <code>""</code>                                  | Specify the value of the search input                           |
 | size                 | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg"</code>                 | <code>"md"</code>                                | Specify the size of the search input                            |
 | searchClass          | No       | <code>let</code> | No       | <code>string</code>                                       | <code>""</code>                                  | Specify the class name passed to the outer div element          |
-| skeleton             | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to display the skeleton state                     |
 | light                | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to enable the light variant                       |
 | disabled             | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to disable the search input                       |
 | expandable           | No       | <code>let</code> | No       | <code>boolean</code>                                      | <code>false</code>                               | Set to `true` to enable the expandable variant                  |
@@ -3164,10 +3163,6 @@ None.
 | :--------- | :--------- | :---------------- |
 | expand     | dispatched | <code>null</code> |
 | collapse   | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
 | change     | forwarded  | --                |
 | input      | forwarded  | --                |
 | focus      | forwarded  | --                |
@@ -3175,6 +3170,7 @@ None.
 | keydown    | forwarded  | --                |
 | keyup      | forwarded  | --                |
 | paste      | forwarded  | --                |
+| click      | forwarded  | --                |
 | clear      | dispatched | <code>null</code> |
 
 ## `SearchSkeleton`
@@ -3191,12 +3187,7 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+None.
 
 ## `Section`
 

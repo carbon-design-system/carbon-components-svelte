@@ -23,12 +23,6 @@ export interface SearchProps extends RestProps {
   searchClass?: string;
 
   /**
-   * Set to `true` to display the skeleton state
-   * @default false
-   */
-  skeleton?: boolean;
-
-  /**
    * Set to `true` to enable the light variant
    * @default false
    */
@@ -109,10 +103,6 @@ export default class Search extends SvelteComponentTyped<
   {
     expand: CustomEvent<null>;
     collapse: CustomEvent<null>;
-    click: WindowEventMap["click"];
-    mouseover: WindowEventMap["mouseover"];
-    mouseenter: WindowEventMap["mouseenter"];
-    mouseleave: WindowEventMap["mouseleave"];
     change: WindowEventMap["change"];
     input: WindowEventMap["input"];
     focus: WindowEventMap["focus"];
@@ -120,6 +110,7 @@ export default class Search extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     paste: DocumentAndElementEventHandlersEventMap["paste"];
+    click: WindowEventMap["click"];
     clear: CustomEvent<null>;
   },
   { labelText: {} }

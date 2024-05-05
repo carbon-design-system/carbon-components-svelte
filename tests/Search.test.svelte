@@ -1,21 +1,20 @@
 <script lang="ts">
-  import { Search } from "../types";
+  import { Search, SearchSkeleton } from "../types";
 </script>
 
-<Search on:paste />
+<Search
+  spellcheck="false"
+  expandable
+  disabled
+  light
+  size="sm"
+  placeholder="Search catalog..."
+  value="Cloud functions"
+  on:input
+  on:paste
+  on:clear
+  on:expand
+  on:collapse
+/>
 
-<Search placeholder="Search catalog..." value="Cloud functions" />
-
-<Search light name="search" />
-
-<Search size="lg" />
-
-<Search size="sm" />
-
-<Search disabled />
-
-<Search skeleton />
-
-<Search size="lg" skeleton />
-
-<Search size="sm" skeleton />
+<SearchSkeleton size="lg" />
