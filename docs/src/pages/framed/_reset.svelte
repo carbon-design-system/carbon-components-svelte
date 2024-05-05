@@ -35,7 +35,7 @@
   }
 
   :global(.framed :not(.bx--content) [class^="bx--col"]) {
-    outline: 1px solid var(--bx-interactive-04);
+    outline: 1px solid var(--bx-interactive);
   }
 
   :global(.framed .bx--content [class^="bx--col"]) {
