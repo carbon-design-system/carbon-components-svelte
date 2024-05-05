@@ -1,4 +1,6 @@
 <script>
+  // @ts-check
+
   /**
    * @event {null} expand
    * @event {null} collapse
@@ -19,9 +21,6 @@
 
   /** Specify the class name passed to the outer div element */
   export let searchClass = "";
-
-  /** Set to `true` to display the skeleton state  */
-  export let skeleton = false;
 
   /** Set to `true` to enable the light variant */
   export let light = false;
@@ -69,104 +68,88 @@
   import { createEventDispatcher } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
-  import SearchSkeleton from "./SearchSkeleton.svelte";
 
+  /** @type {import("svelte").EventDispatcher<{ clear: null; expand: null; collapse: null; }>} */
   const dispatch = createEventDispatcher();
 
-  let searchRef = null;
-
+  $: expandSearch = expandable
+    ? () => {
+        expanded = true;
+      }
+    : undefined;
   $: if (expanded && ref) ref.focus();
   $: dispatch(expanded ? "expand" : "collapse");
 </script>
 
-{#if skeleton}
-  <SearchSkeleton
-    size="{size}"
-    {...$$restProps}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-  />
-{:else}
-  <div
-    role="search"
-    aria-labelledby="{id}-search"
-    class:bx--search="{true}"
-    class:bx--search--light="{light}"
-    class:bx--search--disabled="{disabled}"
-    class:bx--search--sm="{size === 'sm'}"
-    class:bx--search--md="{size === 'md'}"
-    class:bx--search--lg="{size === 'lg'}"
-    class:bx--search--expandable="{expandable}"
-    class:bx--search--expanded="{expanded}"
-    class="{searchClass}"
-  >
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      bind:this="{searchRef}"
-      class:bx--search-magnifier="{true}"
-      on:click="{() => {
-        if (expandable) expanded = true;
-      }}"
-    >
-      <svelte:component this="{icon}" class="bx--search-magnifier-icon" />
-    </div>
-    <label id="{id}-search" for="{id}" class:bx--label="{true}">
-      <slot name="labelText">
-        {labelText}
-      </slot>
-    </label>
-    <!-- svelte-ignore a11y-autofocus -->
-    <input
-      bind:this="{ref}"
-      bind:value
-      type="text"
-      role="searchbox"
-      class:bx--search-input="{true}"
-      autofocus="{autofocus === true ? true : undefined}"
-      autocomplete="{autocomplete}"
-      disabled="{disabled}"
-      id="{id}"
-      placeholder="{placeholder}"
-      {...$$restProps}
-      on:change
-      on:input
-      on:focus
-      on:focus="{() => {
-        if (expandable) expanded = true;
-      }}"
-      on:blur
-      on:blur="{() => {
-        if (expanded && value.trim().length === 0) {
-          expanded = false;
-        }
-      }}"
-      on:keydown
-      on:keydown="{({ key }) => {
-        if (key === 'Escape') {
-          value = '';
-          dispatch('clear');
-        }
-      }}"
-      on:keyup
-      on:paste
-    />
-    <button
-      type="button"
-      aria-label="{closeButtonLabelText}"
-      disabled="{disabled}"
-      class:bx--search-close="{true}"
-      class:bx--search-close--hidden="{value === ''}"
-      on:click
-      on:click="{() => {
-        value = '';
-        ref.focus();
-        dispatch('clear');
-      }}"
-    >
-      <Close />
-    </button>
+<div
+  role="search"
+  aria-labelledby="{id}-search"
+  class:bx--search="{true}"
+  class:bx--search--light="{light}"
+  class:bx--search--disabled="{disabled}"
+  class:bx--search--sm="{size === 'sm'}"
+  class:bx--search--md="{size === 'md'}"
+  class:bx--search--lg="{size === 'lg'}"
+  class:bx--search--expandable="{expandable}"
+  class:bx--search--expanded="{expanded}"
+  class="{searchClass}"
+>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div class:bx--search-magnifier="{true}" on:click="{expandSearch}">
+    <svelte:component this="{icon}" class="bx--search-magnifier-icon" />
   </div>
-{/if}
+  <label id="{id}-search" for="{id}" class:bx--label="{true}">
+    <slot name="labelText">
+      {labelText}
+    </slot>
+  </label>
+  <!-- svelte-ignore a11y-autofocus -->
+  <input
+    bind:this="{ref}"
+    bind:value="{value}"
+    type="text"
+    role="searchbox"
+    class:bx--search-input="{true}"
+    autofocus="{autofocus === true ? true : undefined}"
+    autocomplete="{autocomplete}"
+    disabled="{disabled}"
+    id="{id}"
+    placeholder="{placeholder}"
+    {...$$restProps}
+    on:change
+    on:input
+    on:focus
+    on:focus="{expandSearch}"
+    on:blur
+    on:blur="{() => {
+      if (expanded && value.trim().length === 0) {
+        expanded = false;
+      }
+    }}"
+    on:keydown
+    on:keydown="{({ key }) => {
+      if (key === 'Escape') {
+        value = '';
+        dispatch('clear');
+      }
+    }}"
+    on:keyup
+    on:paste
+  />
+  <button
+    type="button"
+    aria-label="{closeButtonLabelText}"
+    disabled="{disabled}"
+    class:bx--search-close="{true}"
+    class:bx--search-close--hidden="{value === ''}"
+    on:click
+    on:click="{() => {
+      value = '';
+      ref.focus();
+      dispatch('clear');
+    }}"
+  >
+    <Close />
+  </button>
+</div>

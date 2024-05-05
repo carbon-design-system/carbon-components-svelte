@@ -9967,18 +9967,6 @@
           "reactive": false
         },
         {
-          "name": "skeleton",
-          "kind": "let",
-          "description": "Set to `true` to display the skeleton state",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "light",
           "kind": "let",
           "description": "Set to `true` to enable the light variant",
@@ -10134,22 +10122,6 @@
       "events": [
         { "type": "dispatched", "name": "expand", "detail": "null" },
         { "type": "dispatched", "name": "collapse", "detail": "null" },
-        { "type": "forwarded", "name": "click", "element": "SearchSkeleton" },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "SearchSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "SearchSkeleton"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "SearchSkeleton"
-        },
         { "type": "forwarded", "name": "change", "element": "input" },
         { "type": "forwarded", "name": "input", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
@@ -10157,6 +10129,7 @@
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "paste", "element": "input" },
+        { "type": "forwarded", "name": "click", "element": "button" },
         { "type": "dispatched", "name": "clear", "detail": "null" }
       ],
       "typedefs": [],
@@ -10181,14 +10154,8 @@
       ],
       "moduleExports": [],
       "slots": [],
-      "events": [
-        { "type": "forwarded", "name": "click", "element": "div" },
-        { "type": "forwarded", "name": "mouseover", "element": "div" },
-        { "type": "forwarded", "name": "mouseenter", "element": "div" },
-        { "type": "forwarded", "name": "mouseleave", "element": "div" }
-      ],
-      "typedefs": [],
-      "rest_props": { "type": "Element", "name": "div" }
+      "events": [],
+      "typedefs": []
     },
     {
       "moduleName": "Section",
