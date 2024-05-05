@@ -53,7 +53,7 @@
   let:node
 >
   <span
-    style:color="{node.selected ? "var(--bx-interactive-04)" : "inherit"}"
+    style:color="{node.selected ? "var(--bx-interactive)" : "inherit"}"
     style:text-decoration="{node.disabled ? "inherit" : "underline"}"
   >
     {node.text} (id: {node.id})
