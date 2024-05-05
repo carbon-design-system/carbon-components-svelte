@@ -1,5 +1,6 @@
 // Use all Carbon themes
 @use '@carbon/styles/scss/config' with (
+  $use-flexbox-grid: true,
   $use-akamai-cdn: true,
   $prefix: 'bx'
 );
@@ -26,6 +27,7 @@
 
 @import "@carbon/styles/scss/reset";
 @import "@carbon/styles/scss/components";
+@import "@carbon/styles/scss/grid/flexbox";
 
 .bx--text-truncate-end {
   @include text-truncate-end;
