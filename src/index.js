@@ -22,6 +22,7 @@ export {
   ModalBody,
   ModalFooter,
 } from "./ComposedModal";
+export { ContainedList, ContainedListItem } from "./ContainedList";
 export { CodeSnippet, CodeSnippetSkeleton } from "./CodeSnippet";
 export {
   DataTable,
