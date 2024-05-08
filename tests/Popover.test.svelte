@@ -5,16 +5,15 @@
 </script>
 
 <Popover
-  bind:open
+  bind:open="{open}"
   closeOnOutsideClick
   align="right"
   caret
-  relative
   light
   highContrast
   on:click:outside="{() => {
     console.log('on:click:outside');
   }}"
 >
-  <PopoverContent style="padding: var(--bx-spacing-05)">Content</PopoverContent>
+  <PopoverContent>Content</PopoverContent>
 </Popover>

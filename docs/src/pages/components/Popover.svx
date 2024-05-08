@@ -3,7 +3,8 @@ components: ["Popover", "PopoverContent"]
 ---
 
 <script>
-  import { Popover, PopoverContent } from "carbon-components-svelte";
+  import { Button, Popover, PopoverContent } from "carbon-components-svelte";
+  import FavoriteFilled from "carbon-icons-svelte/lib/FavoriteFilled.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -11,34 +12,29 @@ components: ["Popover", "PopoverContent"]
 
 By default, the position of the popover component is absolute.
 
-<div data-outline>
-    <Popover open>
-        Parent
-        <PopoverContent style="padding: var(--bx-spacing-05)">Content</PopoverContent>
-    </Popover>
-</div>
-
-## Relative position
-
-Set `relative` to `true` to use a relative position.
-
-<div data-outline>
-    Parent
-    <Popover relative open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
-</div>
+<Popover open>
+    <div data-outline>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+    </div>
+    <PopoverContent>
+        <h6>Available storage</h6>
+        <p>This server has 150 GB of block storage remaining.</p>
+    </PopoverContent>
+</Popover>
 
 ## Close on outside click
 
 Set `closeOnOutsideClick` to set `open` to `false` when clicking outside of the popover.
 
-<div data-outline>
-    Parent
-    <Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
-</div>
+<Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
+    <div data-outline>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+    </div>
+    <PopoverContent>
+        <h6>Available storage</h6>
+        <p>This server has 150 GB of block storage remaining.</p>
+    </PopoverContent>
+</Popover>
 
 ## Popover alignment
 
@@ -46,80 +42,98 @@ Customize the popover alignment using the `align` prop. Valid values include: `"
 
 The default `align` value is `"top"`.
 
-<div data-outline>
-    Parent
-    <Popover open align="top-left">
-        <div style="padding: var(--bx-spacing-05)">top-left</div>
-    </Popover>
+<Popover open align="top-left">
+    <div data-outline>
+    <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
 </div>
-<div data-outline>
-    Parent
+<PopoverContent>
+    <p>Top-left alignment</p>
+</PopoverContent>
+</Popover>
+
+<div data-outline style="width:100%;padding:2em;display:flex;align-items:center;flex-direction:column;">
     <Popover open align="top-right">
-        <div style="padding: var(--bx-spacing-05)">top-right</div>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+        <PopoverContent>
+            <p>Top-right alignment</p>
+        </PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
+<div data-outline style="width:100%;padding:2em;display:flex;align-items:center;flex-direction:column;">
     <Popover open align="bottom">
-        <div style="padding: var(--bx-spacing-05)">bottom</div>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+        <PopoverContent>
+            <p>Bottom alignment</p>
+        </PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
+<div data-outline style="width:100%;padding:2em;display:flex;align-items:center;flex-direction:column;">
     <Popover open align="bottom-left">
-        <div style="padding: var(--bx-spacing-05)">bottom-left</div>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+        <PopoverContent>
+            <p>Bottom-left alignment</p>
+        </PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
-    <Popover open align="bottom-right">
-        <div style="padding: var(--bx-spacing-05)">bottom-right</div>
-    </Popover>
-</div>
-<div data-outline>
-    Parent
+<div data-outline style="width:100%;padding:2em;display:flex;align-items:center;flex-direction:column;">
     <Popover open align="left">
-        <div style="padding: var(--bx-spacing-05)">left</div>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+        <PopoverContent>
+            <p>Left alignment</p>
+        </PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
+<div data-outline style="width:100%;padding:2em;display:flex;align-items:center;flex-direction:column;">
     <Popover open align="left-bottom">
-        <div style="padding: var(--bx-spacing-05)">left-bottom</div>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+        <PopoverContent>
+            <p>Left-bottom alignment</p>
+        </PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
-    <Popover open align="left-right">
-        <div style="padding: var(--bx-spacing-05)">left-right</div>
+<div data-outline style="width:100%;padding:2em;display:flex;align-items:center;flex-direction:column;">
+    <Popover open align="left-top">
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+        <PopoverContent>
+            <p>Left-top alignment</p>
+        </PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
+<div data-outline style="width:100%;padding:2em;display:flex;align-items:center;flex-direction:column;">
     <Popover open align="right">
-        <div style="padding: var(--bx-spacing-05)">right</div>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+        <PopoverContent>
+            <p>Right alignment</p>
+        </PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
+<div data-outline style="width:100%;padding:2em;display:flex;align-items:center;flex-direction:column;">
     <Popover open align="right-bottom">
-        <div style="padding: var(--bx-spacing-05)">right-bottom</div>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+        <PopoverContent>
+            <p>Right-bottom alignment</p>
+        </PopoverContent>
     </Popover>
 </div>
-<div data-outline>
-    Parent
+<div data-outline style="width:100%;padding:2em;display:flex;align-items:center;flex-direction:column;">
     <Popover open align="right-top">
-        <div style="padding: var(--bx-spacing-05)">right-top</div>
+        <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+        <PopoverContent>
+            <p>Right-top alignment</p>
+        </PopoverContent>
     </Popover>
 </div>
 
 ## With caret
 
-<div data-outline>
-    Parent
-    <Popover caret open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
+<div data-outline style="width:100%;padding:4em 0 1em 0;display:flex;align-items:center;flex-direction:column;">
+<Popover caret open>
+    <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+    <PopoverContent>
+        <h6>Available storage</h6>
+        <p>This server has 150 GB of block storage remaining.</p>
+    </PopoverContent>
+</Popover>
 </div>
 
 ## Custom caret alignment
@@ -128,29 +142,50 @@ By default, the caret is aligned "top".
 
 Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"` or `"right-top"`.
 
-<div data-outline>
-    Parent
-    <Popover caret align="top-left" open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
+<div data-outline style="width:100%;padding:1em 0 1em 0;display:flex;align-items:center;flex-direction:column;">
+<Popover caret align="right-top" open>
+    <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+    <PopoverContent>
+        <h6>Available storage</h6>
+        <p>This server has 150 GB of block storage remaining.</p>
+    </PopoverContent>
+</Popover>
 </div>
 
 ## Light variant
 
-<div data-outline>
-    Parent
-    <Popover light open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
+<div data-outline style="width:100%;padding:4em 0 1em 0;display:flex;align-items:center;flex-direction:column;">
+<Popover light open>
+    <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+    <PopoverContent>
+        <h6>Available storage</h6>
+        <p>This server has 150 GB of block storage remaining.</p>
+    </PopoverContent>
+</Popover>
 </div>
 
 ## High contrast variant
 
-<div data-outline>
-    Parent
-    <Popover highContrast open>
-        <div style="padding: var(--bx-spacing-05)">Content</div>
-    </Popover>
+<div data-outline style="width:100%;padding:4em 0 1em 0;display:flex;align-items:center;flex-direction:column;">
+<Popover highContrast open>
+    <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+    <PopoverContent>
+        <h6>Available storage</h6>
+        <p>This server has 150 GB of block storage remaining.</p>
+    </PopoverContent>
+</Popover>
+</div>
+
+## Drop shadow
+
+<div data-outline style="width:100%;padding:4em 0 1em 0;display:flex;align-items:center;flex-direction:column;">
+<Popover dropShadow open>
+    <Button kind="tertiary" iconDescription="Popover example" icon={FavoriteFilled} />
+    <PopoverContent>
+        <h6>Available storage</h6>
+        <p>This server has 150 GB of block storage remaining.</p>
+    </PopoverContent>
+</Popover>
 </div>
 
 ## External element
