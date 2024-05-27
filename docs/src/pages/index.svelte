@@ -272,7 +272,7 @@
         <TileCard
           borderBottom
           title="Carbon Icons Svelte"
-          subtitle="2,200+ icons"
+          subtitle="2,300+ icons"
           target="_blank"
           href="https://github.com/carbon-design-system/carbon-icons-svelte"
         />
