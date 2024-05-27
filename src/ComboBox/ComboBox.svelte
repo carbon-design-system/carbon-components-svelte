@@ -28,6 +28,12 @@
   export let value = "";
 
   /**
+   * Allow values that aren't in `items`.
+   * @type {boolean}
+   */
+  export let allowArbitraryValues = false
+
+  /**
    * Specify the direction of the combobox dropdown menu
    * @type {"bottom" | "top"}
    */
@@ -107,7 +113,7 @@
    */
   export let listRef = null;
 
-  import { createEventDispatcher, afterUpdate, tick } from "svelte";
+  import { createEventDispatcher, afterUpdate, tick, onMount } from "svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -165,6 +171,12 @@
     if (options?.focus !== false) ref?.focus();
   }
 
+  onMount(() => {
+    if (selectedItem) {
+      value = itemToString(selectedItem)
+    }
+  })
+
   afterUpdate(() => {
     if (open) {
       ref.focus();
@@ -172,14 +184,16 @@
     } else {
       highlightedIndex = -1;
       filteredItems = [];
-      if (!selectedItem) {
-        selectedId = undefined;
-        value = "";
-        highlightedIndex = -1;
-        highlightedId = undefined;
-      } else {
-        // programmatically set value
-        value = itemToString(selectedItem);
+      if (!allowArbitraryValues) {
+        if (!selectedItem) {
+          selectedId = undefined;
+          value = "";
+          highlightedIndex = -1;
+          highlightedId = undefined;
+        } else {
+          // programmatically set value
+          value = itemToString(selectedItem);
+        }
       }
     }
   });
@@ -200,6 +214,39 @@
   } else {
     prevSelectedId = selectedId;
     selectedItem = undefined;
+  }
+
+  function searchForMatchingValue() {
+    // searching typed value in text list with lowercase
+    let matchedItem =
+      filteredItems.find(
+        (e) =>
+          e.text.toLowerCase() === value?.toLowerCase() && !e.disabled
+      );
+
+    if (!allowArbitraryValues) {
+      // typed value has matched or fallback to first enabled item
+      matchedItem = matchedItem ?? filteredItems.find((e) => !e.disabled);
+      if (matchedItem) setMatchedItem(matchedItem)
+    } else {
+      // When allowing arbitrary values, we still want to select a value if the user types in one that exists.
+      // But if it doesn't exist, we don't try to fallback to another value.
+      if (matchedItem) {
+        setMatchedItem(matchedItem)
+      } else {
+        open = false;
+        selectedItem = undefined;
+        selectedId = undefined;
+      }
+    }
+  }
+
+  /** @param item {ComboBoxItem}*/
+  function setMatchedItem(item) {
+    open = false;
+    selectedItem = item;
+    value = itemToString(selectedItem);
+    selectedId = selectedItem.id;
   }
 
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
@@ -305,19 +352,7 @@
                 selectedId = filteredItems[highlightedIndex].id;
               }
             } else {
-              // searching typed value in text list with lowercase
-              const matchedItem =
-                filteredItems.find(
-                  (e) =>
-                    e.text.toLowerCase() === value?.toLowerCase() && !e.disabled
-                ) ?? filteredItems.find((e) => !e.disabled);
-              if (matchedItem) {
-                // typed value has matched or fallback to first enabled item
-                open = false;
-                selectedItem = matchedItem;
-                value = itemToString(selectedItem);
-                selectedId = selectedItem.id;
-              }
+              searchForMatchingValue()
             }
             highlightedIndex = -1;
           } else if (key === 'Tab') {
