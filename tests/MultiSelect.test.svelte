@@ -127,6 +127,9 @@
 
 <MultiSelect
   filterable
+  filterItem="{(item, query) => {
+    return item.text.toLowerCase().includes(query.toLowerCase());
+  }}"
   titleText="Contact"
   placeholder="Filter contact methods..."
   items="{[

@@ -90,7 +90,7 @@ export interface MultiSelectProps extends RestProps {
    * The default filtering is an exact string comparison
    * @default (item, value) => item.text.toLowerCase().includes(value.trim().toLowerCase())
    */
-  filterItem?: (item: MultiSelectItem, value: string) => string;
+  filterItem?: (item: MultiSelectItem, value: string) => boolean;
 
   /**
    * Set to `true` to open the dropdown

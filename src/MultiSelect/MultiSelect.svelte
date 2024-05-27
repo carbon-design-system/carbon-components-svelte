@@ -69,7 +69,7 @@
   /**
    * Override the filtering logic
    * The default filtering is an exact string comparison
-   * @type {(item: MultiSelectItem, value: string) => string}
+   * @type {(item: MultiSelectItem, value: string) => boolean}
    */
   export let filterItem = (item, value) =>
     item.text.toLowerCase().includes(value.trim().toLowerCase());
