@@ -5,8 +5,8 @@ export type DataTableKey = string;
 
 export type DataTableValue = any;
 
-export interface DataTableEmptyHeader {
-  key: DataTableKey;
+export interface DataTableEmptyHeader<Row extends DataTableRow = DataTableRow> {
+  key: keyof Row;
   empty: boolean;
   display?: (item: Value, row: DataTableRow) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
@@ -15,8 +15,10 @@ export interface DataTableEmptyHeader {
   minWidth?: string;
 }
 
-export interface DataTableNonEmptyHeader {
-  key: DataTableKey;
+export interface DataTableNonEmptyHeader<
+  Row extends DataTableRow = DataTableRow
+> {
+  key: keyof Row;
   value: DataTableValue;
   display?: (item: Value, row: DataTableRow) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
@@ -25,7 +27,9 @@ export interface DataTableNonEmptyHeader {
   minWidth?: string;
 }
 
-export type DataTableHeader = DataTableNonEmptyHeader | DataTableEmptyHeader;
+export type DataTableHeader<Row extends DataTableRow = DataTableRow> =
+  | DataTableNonEmptyHeader<Row>
+  | DataTableEmptyHeader<Row>;
 
 export interface DataTableRow {
   id: any;
@@ -34,8 +38,8 @@ export interface DataTableRow {
 
 export type DataTableRowId = any;
 
-export interface DataTableCell {
-  key: DataTableKey;
+export interface DataTableCell<Row extends DataTableRow = DataTableRow> {
+  key: keyof Row;
   value: DataTableValue;
   display?: (item: Value, row: DataTableRow) => DataTableValue;
 }
@@ -47,14 +51,14 @@ export interface DataTableProps extends RestProps {
    * Specify the data table headers
    * @default []
    */
-  headers?: ReadonlyArray<DataTableHeader>;
+  headers?: ReadonlyArray<DataTableHeader<Row>>;
 
   /**
    * Specify the rows the data table should render
    * keys defined in `headers` are used for the row ids
    * @default []
    */
-  rows?: ReadonlyArray<DataTableRow>;
+  rows?: ReadonlyArray<Row>;
 
   /**
    * Set the size of the data table
@@ -181,33 +185,35 @@ export interface DataTableProps extends RestProps {
   [key: `data-${string}`]: any;
 }
 
-export default class DataTable extends SvelteComponentTyped<
-  DataTableProps,
+export default class DataTable<
+  Row extends DataTableRow = DataTableRow
+> extends SvelteComponentTyped<
+  DataTableProps<Row>,
   {
     click: CustomEvent<{
-      header?: DataTableHeader;
-      row?: DataTableRow;
-      cell?: DataTableCell;
+      header?: DataTableHeader<Row>;
+      row?: Row;
+      cell?: DataTableCell<Row>;
     }>;
     ["click:header--expand"]: CustomEvent<{ expanded: boolean }>;
     ["click:header"]: CustomEvent<{
-      header: DataTableHeader;
+      header: DataTableHeader<Row>;
       sortDirection?: "ascending" | "descending" | "none";
     }>;
     ["click:header--select"]: CustomEvent<{
       indeterminate: boolean;
       selected: boolean;
     }>;
-    ["click:row"]: CustomEvent<DataTableRow>;
-    ["mouseenter:row"]: CustomEvent<DataTableRow>;
-    ["mouseleave:row"]: CustomEvent<DataTableRow>;
+    ["click:row"]: CustomEvent<Row>;
+    ["mouseenter:row"]: CustomEvent<Row>;
+    ["mouseleave:row"]: CustomEvent<Row>;
     ["click:row--expand"]: CustomEvent<{
       expanded: boolean;
-      row: DataTableRow;
+      row: Row;
     }>;
     ["click:row--select"]: CustomEvent<{
       selected: boolean;
-      row: DataTableRow;
+      row: Row;
     }>;
     ["click:cell"]: CustomEvent<DataTableCell>;
   },
@@ -221,7 +227,7 @@ export default class DataTable extends SvelteComponentTyped<
     };
     ["cell-header"]: { header: DataTableNonEmptyHeader };
     description: {};
-    ["expanded-row"]: { row: DataTableRow };
+    ["expanded-row"]: { row: Row };
     title: {};
   }
 > {}
