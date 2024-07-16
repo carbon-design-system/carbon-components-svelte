@@ -312,6 +312,10 @@
   </Grid>
 </Content>
 
+<footer>
+  <dds-footer-container disable-locale-button="true" size="micro" />
+</footer>
+
 <style>
   p {
     margin-bottom: var(--cds-spacing-05);
