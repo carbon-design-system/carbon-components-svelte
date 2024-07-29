@@ -140,7 +140,7 @@
       }}"
       on:blur
       on:blur="{() => {
-        if (expanded && value.trim().length === 0) {
+        if (expanded && (value === '' || value == null)) {
           expanded = false;
         }
       }}"
@@ -159,7 +159,7 @@
       aria-label="{closeButtonLabelText}"
       disabled="{disabled}"
       class:bx--search-close="{true}"
-      class:bx--search-close--hidden="{value === ''}"
+      class:bx--search-close--hidden="{value === '' || value == null}"
       on:click
       on:click="{() => {
         value = '';
