@@ -35,11 +35,6 @@ html[theme="g90"] .code-override {
   overflow-x: auto;
 }
 
-/* Override to accommodate mandatory footer */
-.bx--header~.bx--side-nav {
-  height: calc(100% - 100px);
-}
-
 /* Addig this to the layout grid fixes overstretching. */
 .fix-overflow {
   min-width: 0;

@@ -313,10 +313,17 @@
 </Content>
 
 <footer>
-  <dds-footer-container disable-locale-button="true" size="micro" />
+  <dds-footer-container disable-locale-button="true" size="micro"
+  ></dds-footer-container>
 </footer>
 
 <style>
+  @media (min-width: 1056px) {
+    footer {
+      margin-left: 256px;
+    }
+  }
+
   p {
     margin-bottom: var(--cds-spacing-05);
   }
