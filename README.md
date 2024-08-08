@@ -87,37 +87,6 @@ import "carbon-components-svelte/css/g100.css";
 import "carbon-components-svelte/css/all.css";
 ```
 
-#### CDN
-
-An alternative to loading styles is to link an external StyleSheet from a Content Delivery Network (CDN) like [unpkg.com](https://unpkg.com/).
-
-This is best suited for rapid prototyping.
-
-##### HTML
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/carbon-components-svelte/css/white.css"
-    />
-  </head>
-</html>
-```
-
-##### `svelte:head`
-
-```html
-<svelte:head>
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/carbon-components-svelte/css/white.css"
-  />
-</svelte:head>
-```
-
 ### SCSS
 
 The most performant method to load styles is to import SCSS directly from carbon-components. Although it requires more set up, you can reduce the size of the bundle CSS by importing individual component styles instead of a pre-compiled CSS StyleSheet.
