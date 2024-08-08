@@ -42,21 +42,6 @@
 `;
 
   $: cssImport = `import "carbon-components-svelte/css/${$theme}.css";`;
-  $: cssCdn = `<!DOCTYPE html>
-<html>
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/carbon-components-svelte/css/${$theme}.css"
-    />
-  </head>
-</html>`;
-  $: cssCdnSvelteHead = `<svelte:head>
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/carbon-components-svelte/css/${$theme}.css"
-  />
-</svelte:head>`;
 </script>
 
 <svelte:head>
@@ -138,10 +123,9 @@
     </Row>
 
     <Row>
-      <Column max="{10}" xlg="{10}" noGutter>
+      <Column max="{8}" xlg="{8}" noGutter>
         <Tabs>
           <Tab label="CSS StyleSheet" />
-          <Tab label="CDN" />
           <Tab label="SCSS" />
           <svelte:fragment slot="content">
             <TabContent>
@@ -160,32 +144,6 @@
                 <Column>
                   <p>
                     <CodeSnippet type="single" code="{cssImport}" />
-                  </p>
-                </Column>
-              </Row>
-            </TabContent>
-            <TabContent>
-              <p>
-                An alternative to loading styles is to link an external
-                StyleSheet from a Content Delivery Network (CDN) like
-                <OutboundLink inline size="lg" href="https://unpkg.com/">
-                  unpkg.com
-                </OutboundLink>.
-              </p>
-              <p>This is best suited for rapid prototyping.</p>
-              <h5>HTML</h5>
-              <Row padding noGutter>
-                <Column>
-                  <p>
-                    <CodeSnippet type="multi" code="{cssCdn}" />
-                  </p>
-                </Column>
-              </Row>
-              <h5>svelte:head</h5>
-              <Row padding noGutter>
-                <Column>
-                  <p>
-                    <CodeSnippet type="multi" code="{cssCdnSvelteHead}" />
                   </p>
                 </Column>
               </Row>
