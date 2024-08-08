@@ -11,9 +11,9 @@
   },
   "devDependencies": {
     "@sveltech/routify": "^1.9.10",
-    "@sveltejs/vite-plugin-svelte": "^3.0.1",
+    "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "carbon-components-svelte": "../",
-    "carbon-icons-svelte": "^12.4.1",
+    "carbon-icons-svelte": "^12.10.0",
     "clipboard-copy": "^4.0.1",
     "cross-env": "^7.0.3",
     "mdsvex": "^0.10.6",
@@ -22,10 +22,10 @@
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
     "prism-svelte": "^0.4.7",
-    "prismjs": "^1.28.0",
+    "prismjs": "^1.29.0",
     "remark-slug": "^6.0.0",
-    "svelte": "^4.2.8",
-    "vite": "^5.0.10"
+    "svelte": "^4.2.18",
+    "vite": "^5.4.0"
   },
   "routify": {
     "routifyDir": ".routify",
