@@ -1,7 +1,10 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
-const { optimizeImports } = require("carbon-preprocess-svelte");
+const {
+  optimizeImports,
+  OptimizeCssPlugin,
+} = require("carbon-preprocess-svelte");
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 const PROD = NODE_ENV === "production";
@@ -48,6 +51,7 @@ module.exports = {
   },
   mode: NODE_ENV,
   plugins: [
+    PROD && new OptimizeCssPlugin(),
     new MiniCssExtractPlugin({
       filename: PROD ? "[name].[chunkhash].css" : "[name].css",
     }),
