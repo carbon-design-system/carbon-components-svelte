@@ -6,13 +6,13 @@
   },
   "devDependencies": {
     "carbon-components-svelte": "^0.85.0",
-    "carbon-preprocess-svelte": "^0.11.3",
-    "css-loader": "^7.1.1",
+    "carbon-preprocess-svelte": "^0.11.5",
+    "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.0",
     "mini-css-extract-plugin": "^2.9.0",
-    "svelte": "^4.2.15",
-    "svelte-loader": "^3.2.0",
-    "webpack": "^5.91.0",
+    "svelte": "^4.2.18",
+    "svelte-loader": "^3.2.3",
+    "webpack": "^5.93.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
   }
