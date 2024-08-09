@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.85.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.0...v0.85.1) (2024-08-09)
+
+### Bug Fixes
+
+- **multi-select:** fix `filterItem` return type ([#1972](https://github.com/carbon-design-system/carbon-components-svelte/issues/1972)) ([6140c3c](https://github.com/carbon-design-system/carbon-components-svelte/commit/6140c3c5a91a879889be33080e1aa8b9183982d4))
+- **search:** collapse expandable search if value is falsy ([#1987](https://github.com/carbon-design-system/carbon-components-svelte/issues/1987)) ([216d5a3](https://github.com/carbon-design-system/carbon-components-svelte/commit/216d5a39b14ddad600159c1159b6a2d38095cfaf)), closes [#1981](https://github.com/carbon-design-system/carbon-components-svelte/issues/1981)
+- **text-area:** type `value` prop as nullable ([#1933](https://github.com/carbon-design-system/carbon-components-svelte/issues/1933)) ([47860ce](https://github.com/carbon-design-system/carbon-components-svelte/commit/47860ce1d7cc5f3b0363ab619dcfd74b3276eda7))
+
 ## [0.85.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.84.1...v0.85.0) (2024-03-23)
 
 ### ⚠ BREAKING CHANGES
