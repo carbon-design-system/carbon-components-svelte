@@ -1,5 +1,8 @@
 <script>
-  /** Specify the textarea value */
+  /**
+   * Specify the textarea value.
+   * @type {null | string}
+   */
   export let value = "";
 
   /** Specify the placeholder text */
