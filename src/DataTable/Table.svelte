@@ -37,6 +37,7 @@
       class:bx--data-table--zebra="{zebra}"
       class:bx--data-table--static="{useStaticWidth}"
       class:bx--data-table--sticky-header="{stickyHeader}"
+      class:bx--data-table--visible-overflow-menu="{true}"
       style="{tableStyle}"
     >
       <slot />
@@ -54,6 +55,7 @@
     class:bx--data-table--zebra="{zebra}"
     class:bx--data-table--static="{useStaticWidth}"
     class:bx--data-table--sticky-header="{stickyHeader}"
+    class:bx--data-table--visible-overflow-menu="{true}"
     {...$$restProps}
     style="{tableStyle}"
   >
