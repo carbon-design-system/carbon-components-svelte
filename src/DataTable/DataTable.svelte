@@ -307,7 +307,7 @@
           </th>
         {/if}
         {#if selectable && !batchSelection}
-          <th scope="col"></th>
+          <th scope="col" class:bx--table-column-checkbox="{true}"></th>
         {/if}
         {#if batchSelection && !radio}
           <th scope="col" class:bx--table-column-checkbox="{true}">
