@@ -39,9 +39,9 @@
 
   /**
    * Set the size of the data table
-   * @type {"compact" | "short" | "medium" | "tall"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
-  export let size = undefined;
+  export let size = "lg";
 
   /** Specify the title of the data table */
   export let title = "";

@@ -99,6 +99,7 @@
   disabled="{disabled}"
   {...$$restProps}
   searchClass="{classes} {$$restProps.class}"
+  size="lg"
   bind:ref
   bind:value
   on:clear

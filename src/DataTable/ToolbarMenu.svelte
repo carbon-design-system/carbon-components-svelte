@@ -17,7 +17,7 @@
   bind:menuRef
   icon="{Settings}"
   {...$$restProps}
-  class="bx--toolbar-action bx--overflow-menu {$$restProps.class}"
+  class="bx--toolbar-action bx--overflow-menu bx--btn bx--btn--primary {$$restProps.class}"
   flipped
 >
   <slot />

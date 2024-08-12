@@ -432,7 +432,7 @@ A maximum height will applied to the datatable to force a scrollbar.
 
 ## With toolbar (small size)
 
-<DataTable size="short" title="Load balancers" description="Your organization's active load balancers."
+<DataTable size="sm" title="Load balancers" description="Your organization's active load balancers."
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
@@ -570,9 +570,64 @@ Note that in-memory filtering is not optimal for large data sets, where you migh
   ]}"
 />
 
-## Tall rows
+## Extra large rows
 
-<DataTable size="tall"
+<DataTable size="xl"
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+/>
+
+## Large rows (default)
+
+<DataTable size="lg"
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
@@ -627,7 +682,7 @@ Note that in-memory filtering is not optimal for large data sets, where you migh
 
 ## Medium rows
 
-<DataTable size="medium"
+<DataTable size="md"
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
@@ -680,9 +735,9 @@ Note that in-memory filtering is not optimal for large data sets, where you migh
   ]}"
 />
 
-## Short rows
+## Small rows
 
-<DataTable size="short"
+<DataTable size="sm"
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
@@ -735,9 +790,9 @@ Note that in-memory filtering is not optimal for large data sets, where you migh
   ]}"
 />
 
-## Compact rows
+## Extra small rows
 
-<DataTable size="compact"
+<DataTable size="xs"
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
@@ -1138,9 +1193,9 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
 
 <FileSource src="/framed/DataTable/DataTableExpandableZebra" />
 
-## Expandable (compact size)
+## Expandable (extra small size)
 
-<DataTable size="compact" expandable
+<DataTable size="xs" expandable
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
@@ -1197,9 +1252,9 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
   </svelte:fragment>
 </DataTable>
 
-## Expandable (short size)
+## Expandable (small size)
 
-<DataTable size="short" expandable
+<DataTable size="sm" expandable
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
@@ -1256,9 +1311,9 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
   </svelte:fragment>
 </DataTable>
 
-## Expandable (tall size)
+## Expandable (extra tall size)
 
-<DataTable size="tall" expandable
+<DataTable size="xl" expandable
   headers="{[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
@@ -1406,14 +1461,22 @@ Pass an object with `"empty"` set to `true` to render an empty table header colu
 
 <DataTableSkeleton showHeader={false} showToolbar={false} />
 
-## Skeleton (tall size)
+## Skeleton (extra large size)
 
-<DataTableSkeleton showHeader={false} showToolbar={false} size="tall" />
+<DataTableSkeleton showHeader={false} showToolbar={false} size="xl" />
 
-## Skeleton (short size)
+## Skeleton (large size)
 
-<DataTableSkeleton showHeader={false} showToolbar={false} size="short" />
+<DataTableSkeleton showHeader={false} showToolbar={false} size="lg" />
 
-## Skeleton (compact size)
+## Skeleton (medium size)
 
-<DataTableSkeleton showHeader={false} showToolbar={false} size="compact" />
+<DataTableSkeleton showHeader={false} showToolbar={false} size="md" />
+
+## Skeleton (small size)
+
+<DataTableSkeleton showHeader={false} showToolbar={false} size="sm" />
+
+## Skeleton (extra small size)
+
+<DataTableSkeleton showHeader={false} showToolbar={false} size="xs" />

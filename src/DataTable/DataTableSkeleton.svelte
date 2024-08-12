@@ -12,9 +12,9 @@
 
   /**
    * Set the size of the data table
-   * @type {"compact" | "short" | "tall"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
-  export let size = undefined;
+  export let size = "lg";
 
   /** Set to `true` to apply zebra styles to the datatable rows */
   export let zebra = false;
@@ -68,9 +68,11 @@
   <table
     class:bx--skeleton="{true}"
     class:bx--data-table="{true}"
-    class:bx--data-table--compact="{size === 'compact'}"
-    class:bx--data-table--short="{size === 'short'}"
-    class:bx--data-table--tall="{size === 'tall'}"
+    class:bx--data-table--xs="{size === 'xs'}"
+    class:bx--data-table--sm="{size === 'sm'}"
+    class:bx--data-table--md="{size === 'md'}"
+    class:bx--data-table--lg="{size === 'lg'}"
+    class:bx--data-table--xl="{size === 'xl'}"
     class:bx--data-table--zebra="{zebra}"
     on:click
     on:mouseover
