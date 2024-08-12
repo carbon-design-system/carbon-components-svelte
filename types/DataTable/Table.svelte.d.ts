@@ -6,9 +6,9 @@ type RestProps = SvelteHTMLElements["section"];
 export interface TableProps extends RestProps {
   /**
    * Set the size of the table
-   * @default undefined
+   * @default "lg"
    */
-  size?: "compact" | "short" | "medium" | "tall";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
 
   /**
    * Set to `true` to use zebra styles

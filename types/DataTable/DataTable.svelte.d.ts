@@ -58,9 +58,9 @@ export interface DataTableProps extends RestProps {
 
   /**
    * Set the size of the data table
-   * @default undefined
+   * @default "lg"
    */
-  size?: "compact" | "short" | "medium" | "tall";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
 
   /**
    * Specify the title of the data table

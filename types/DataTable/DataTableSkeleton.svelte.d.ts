@@ -21,9 +21,9 @@ export interface DataTableSkeletonProps extends DataTableHeader, RestProps {
 
   /**
    * Set the size of the data table
-   * @default undefined
+   * @default "lg"
    */
-  size?: "compact" | "short" | "tall";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
 
   /**
    * Set to `true` to apply zebra styles to the datatable rows

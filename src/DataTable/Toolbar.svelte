@@ -25,8 +25,7 @@
   bind:this="{ref}"
   aria-label="data table toolbar"
   class:bx--table-toolbar="{true}"
-  class:bx--table-toolbar--small="{size === 'sm'}"
-  class:bx--table-toolbar--normal="{size === 'default'}"
+  class:bx--table-toolbar--sm="{size === 'sm'}"
   style:z-index="{1}"
   {...$$restProps}
 >

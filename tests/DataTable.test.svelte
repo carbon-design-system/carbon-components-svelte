@@ -137,7 +137,7 @@
 </DataTable>
 
 <DataTable
-  size="short"
+  size="sm"
   title="Load balancers"
   description="Your organization's active load balancers."
   headers="{headers}"
@@ -160,11 +160,13 @@
 
 <DataTable zebra headers="{headers}" rows="{rows}" />
 
-<DataTable size="tall" headers="{headers}" rows="{rows}" />
+<DataTable size="xl" headers="{headers}" rows="{rows}" />
 
-<DataTable size="short" headers="{headers}" rows="{rows}" />
+<DataTable size="md" headers="{headers}" rows="{rows}" />
 
-<DataTable size="compact" headers="{headers}" rows="{rows}" />
+<DataTable size="sm" headers="{headers}" rows="{rows}" />
+
+<DataTable size="xs" headers="{headers}" rows="{rows}" />
 
 <DataTable sortable headers="{headers}" rows="{rows}" />
 
@@ -279,8 +281,10 @@
 
 <DataTableSkeleton showHeader="{false}" showToolbar="{false}" />
 
-<DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="tall" />
+<DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="xl" />
 
-<DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="short" />
+<DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="md" />
 
-<DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="compact" />
+<DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="sm" />
+
+<DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="xs" />
