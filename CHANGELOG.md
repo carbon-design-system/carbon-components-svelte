@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.85.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.1...v0.85.2) (2024-08-14)
+
+### Bug Fixes
+
+- **header-action:** allow vertical scroll when expanded ([#1992](https://github.com/carbon-design-system/carbon-components-svelte/issues/1992)) ([61eceb0](https://github.com/carbon-design-system/carbon-components-svelte/commit/61eceb0caac20d92ce58c23d26908530a7e32dbe))
+
 ### [0.85.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.0...v0.85.1) (2024-08-09)
 
 ### Bug Fixes
