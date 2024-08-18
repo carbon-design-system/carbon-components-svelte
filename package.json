@@ -92,8 +92,7 @@
     "css",
     "telemetry.yml"
   ],
-  "contributors": [
-    "Josef Aidt (https://github.com/josefaidt)",
+  "maintainers": [
     "Eric Liu (https://github.com/metonym)",
     "Enrico Sacchetti (https://github.com/theetrain)"
   ]
