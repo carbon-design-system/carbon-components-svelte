@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "yarn build:index-docs && run-p dev:*",
+    "dev": "npm run build:index-docs && run-p dev:*",
     "dev:routify": "cross-env NODE_ENV=development routify run",
     "dev:svite": "vite dev",
     "build": "run-s build:*",
@@ -16,7 +16,7 @@
     "carbon-icons-svelte": "^12.10.0",
     "clipboard-copy": "^4.0.1",
     "cross-env": "^7.0.3",
-    "mdsvex": "^0.10.6",
+    "mdsvex": "^0.12.3",
     "minisearch": "^6.2.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
