@@ -37,7 +37,7 @@
     "build:lib": "rollup -c",
     "format": "prettier --write \"./**/*.{svelte,js,md}\"",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
-    "release": "standard-version && yarn build:docs"
+    "release": "standard-version && npm run build:docs"
   },
   "dependencies": {
     "@ibm/telemetry-js": "^1.5.0",
@@ -46,7 +46,6 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.3",
     "@rollup/plugin-node-resolve": "^13.3.0",
-    "@tsconfig/svelte": "^4.0.1",
     "autoprefixer": "^10.4.8",
     "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^12.1.0",
