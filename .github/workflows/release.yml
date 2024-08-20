@@ -19,8 +19,8 @@ jobs:
       - name: Install dependencies
         run: npm install
           
-      - name: Build docs and library
-        run: npm run build:docs & npm run build:lib
+      - name: Build docs
+        run: npm run build:docs
 
       - name: Prune package.json
         run: node scripts/build-package.js
