@@ -17,7 +17,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - name: Build
         run: |
-          npm install --force
+          npm install
           npm run build:docs & npm run build:lib
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}

@@ -2,23 +2,10 @@
 
 Before submitting a pull request (PR), consider [filing an issue](https://github.com/carbon-design-system/carbon-components-svelte/issues) to gain clarity and direction.
 
-- [Prerequisites](#prerequisites)
-- [Project set-up](#project-set-up)
-  - [Install](#install)
-- [Documentation set-up](#documentation-set-up)
-- [Development workflow](#development-workflow)
-  - [Component Format](#component-format)
-  - [Editing a component](#editing-a-component)
-  - [Creating a component](#creating-a-component)
-  - [Run `yarn build:docs`](#run-yarn-builddocs)
-- [Submit a Pull Request](#submit-a-pull-request)
-  - [Sync Your Fork](#sync-your-fork)
-  - [Submit a PR](#submit-a-pr)
-
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/en/download/package-manager/) (version >=12)
-- [Yarn](https://classic.yarnpkg.com/en/docs/install)
+- [Node.js](https://nodejs.org/en/download/package-manager/) (version >=20)
+- [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm#using-a-node-installer-to-install-nodejs-and-npm)
 
 ## Project set-up
 
@@ -39,35 +26,28 @@ git remote -v
 
 ### Install
 
-Install the project dependencies:
+Install the project dependencies.
 
 ```sh
-# carbon-components-svelte/
-yarn install
+npm install
 ```
 
 ## Documentation set-up
 
 Component documentation is located in the `docs` folder. The website is built using svite, routify, and MDsveX. You will need to create a symbolic project link in order to see live changes reflected when developing locally.
 
-First, create a symbolic link at the root of the project folder:
+First, create a symbolic link at the root of the project:
 
 ```sh
-# carbon-components-svelte/
-yarn link
+npm link
 ```
 
-Go into the `docs` folder:
+Then, go into `docs` and link the package.
 
 ```sh
 cd docs
-```
-
-Link `"carbon-components-svelte"`:
-
-```sh
-yarn link "carbon-components-svelte"
-yarn install
+npm link "carbon-components-svelte"
+npm install
 ```
 
 If linked correctly, any change to a component in the `src` folder should be reflected in the `docs` site.
@@ -87,10 +67,10 @@ Preview changes to components from the `src` folder in the documentation website
 In the `docs` folder, run:
 
 ```sh
-yarn dev
+npm run dev
 ```
 
-The site should be served at `http://localhost:3000/` (or the next available port).
+The site should be served at http://localhost:5173/ (or the next available port).
 
 ### Component Format
 
@@ -134,13 +114,12 @@ export {
 } from "./ComposedModal";
 ```
 
-### Run `yarn build:docs`
+### Run `npm run build:docs`
 
 Run the following command to re-generate TypeScript definitions and documentation.
 
 ```sh
-# carbon-components-svelte/
-yarn build:docs
+npm run build:docs
 ```
 
 ## Submit a Pull Request
@@ -171,11 +150,11 @@ The workflow is automatically triggered when pushing a tag that begins with `v` 
 
 However, maintainers must perform a few things in preparation for a release.
 
-Locally, while on `master` and the branch is clean, run `yarn release`. This command will:
+Locally, while on `master` and the branch is clean, run `npm run release`. This command will:
 
 - Bump the semantic version in `package.json`
 - Generate notes in `CHANGELOG.md`
-- Run `yarn build:docs` to update the generated documentation
+- Run `npm run build:docs` to update the generated documentation
 
 This command will not create a commit nor tag. Afterwards, perform the following manually:
 
