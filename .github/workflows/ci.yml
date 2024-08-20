@@ -17,7 +17,6 @@ jobs:
       - name: Install dependencies, build, test, and lint the codebase
         run: |
           npm install
-          npm run build:lib
           npm run test:types
           npm run lint
 

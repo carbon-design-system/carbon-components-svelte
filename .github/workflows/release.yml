@@ -18,7 +18,7 @@ jobs:
       - name: Build
         run: |
           npm install
-          npm run build:docs & npm run build:lib
+          npm run build:docs
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}
         env:
