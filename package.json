@@ -37,7 +37,7 @@
     "build:lib": "rollup -c",
     "format": "prettier --write \"./**/*.{svelte,js,md}\"",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
-    "release": "standard-version && yarn build:docs"
+    "release": "standard-version && npm run build:docs"
   },
   "dependencies": {
     "@ibm/telemetry-js": "^1.5.0",
