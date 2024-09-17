@@ -3,7 +3,9 @@
   "version": "0.85.2",
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
+  "type": "module",
   "svelte": "./src/index.js",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
@@ -23,9 +25,6 @@
       "import": "./src/*.js"
     }
   },
-  "main": "./lib/index.js",
-  "module": "./lib/index.mjs",
-  "types": "./types/index.d.ts",
   "sideEffects": [
     "css/*.css"
   ],
@@ -34,7 +33,6 @@
     "lint": "prettier --write \"**/*.{svelte,md,js,json,ts}\"",
     "build:css": "node scripts/build-css",
     "build:docs": "node scripts/build-docs",
-    "build:lib": "rollup -c",
     "format": "prettier --write \"./**/*.{svelte,js,md}\"",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
     "release": "standard-version && npm run build:docs"
@@ -44,17 +42,12 @@
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^21.0.3",
-    "@rollup/plugin-node-resolve": "^13.3.0",
     "autoprefixer": "^10.4.8",
     "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^12.1.0",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
-    "rollup": "^2.78.1",
-    "rollup-plugin-svelte": "^7.1.0",
-    "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
     "sveld": "^0.20.2",
@@ -85,7 +78,6 @@
     "carbon design system"
   ],
   "files": [
-    "lib",
     "src",
     "types",
     "css",

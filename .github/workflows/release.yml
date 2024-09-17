@@ -15,10 +15,13 @@ jobs:
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
-      - name: Build
-        run: |
-          npm install
-          npm run build:docs & npm run build:lib
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build docs
+        run: npm run build:docs
+      
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}
         env:
@@ -28,6 +31,7 @@ jobs:
         # https://docs.npmjs.com/generating-provenance-statements
         run: |
           npm publish --provenance --access public
+      
       - name: Publish package (next)
         if: ${{ contains(github.ref, '-next') }}
         env:
