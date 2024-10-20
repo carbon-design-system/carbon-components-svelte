@@ -5,16 +5,16 @@
   const nodeBlockchain = { id: 8, text: "IBM Blockchain Platform" };
 
   let treeview = null;
-  let children = [
+  let nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,
       text: "Analytics",
-      children: [
+      nodes: [
         {
           id: 2,
           text: "IBM Analytics Engine",
-          children: [nodeSpark, { id: 4, text: "Hadoop" }],
+          nodes: [nodeSpark, { id: 4, text: "Hadoop" }],
         },
         { id: 5, text: "IBM Cloud SQL Query" },
         { id: 6, text: "IBM Db2 Warehouse on Cloud" },
@@ -23,7 +23,7 @@
     {
       id: 7,
       text: "Blockchain",
-      children: [{ id: 8, text: "IBM Blockchain Platform" }],
+      nodes: [{ id: 8, text: "IBM Blockchain Platform" }],
     },
   ];
 </script>
@@ -45,5 +45,5 @@
 <TreeView
   bind:this="{treeview}"
   labelText="Cloud Products"
-  children="{children}"
+  nodes="{nodes}"
 />
