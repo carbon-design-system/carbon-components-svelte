@@ -3,18 +3,18 @@
 
   let treeview = null;
   let expandedIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 14];
-  let children = [
+  let nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,
       text: "Analytics",
       disabled: true,
-      children: [
+      nodes: [
         {
           id: 2,
           text: "IBM Analytics Engine",
           disabled: true,
-          children: [
+          nodes: [
             { id: 3, text: "Apache Spark", disabled: true },
             { id: 4, text: "Hadoop", disabled: true },
           ],
@@ -26,12 +26,12 @@
     {
       id: 7,
       text: "Blockchain",
-      children: [{ id: 8, text: "IBM Blockchain Platform" }],
+      nodes: [{ id: 8, text: "IBM Blockchain Platform" }],
     },
     {
       id: 9,
       text: "Databases",
-      children: [
+      nodes: [
         { id: 10, text: "IBM Cloud Databases for Elasticsearch" },
         { id: 11, text: "IBM Cloud Databases for Enterprise DB" },
         { id: 12, text: "IBM Cloud Databases for MongoDB" },
@@ -42,7 +42,7 @@
       id: 14,
       text: "Integration",
       disabled: true,
-      children: [{ id: 15, text: "IBM API Connect", disabled: true }],
+      nodes: [{ id: 15, text: "IBM API Connect", disabled: true }],
     },
   ];
 </script>
@@ -61,7 +61,7 @@
   bind:this="{treeview}"
   bind:expandedIds
   labelText="Cloud Products"
-  children="{children}"
+  nodes="{nodes}"
 />
 
 <style>
