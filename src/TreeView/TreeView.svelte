@@ -9,11 +9,11 @@
   function findNodeById(node, id) {
     if (node === null) return null;
     if (node.id === id) return [node];
-    if (!Array.isArray(node.children)) {
+    if (!Array.isArray(node.nodes)) {
       return null;
     }
 
-    for (const child of node.children) {
+    for (const child of node.nodes) {
       const nodes = findNodeById(child, id);
 
       if (Array.isArray(nodes)) {
@@ -29,7 +29,7 @@
 <script>
   /**
    * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: any; icon?: typeof import("svelte").SvelteComponent<any>; disabled?: boolean; children?: TreeNode[]; }} TreeNode
+   * @typedef {{ id: TreeNodeId; text: any; icon?: typeof import("svelte").SvelteComponent<any>; disabled?: boolean; nodes?: TreeNode[]; }} TreeNode
    * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} select
    * @event {TreeNode & { expanded: boolean; leaf: boolean; }} toggle
@@ -37,10 +37,10 @@
    */
 
   /**
-   * Provide an array of children nodes to render
+   * Provide an array of nodes to render
    * @type {Array<TreeNode>}
    */
-  export let children = [];
+  export let nodes = [];
 
   /**
    * Set the current active node id
@@ -99,7 +99,7 @@
       .filter(
         (node) =>
           filterNode(node) ||
-          node.children?.some((child) => filterNode(child) && child.children)
+          node.nodes?.some((child) => filterNode(child) && child.nodes)
       )
       .map((node) => node.id);
   }
@@ -121,7 +121,7 @@
    * @type {(id: TreeNodeId) => void}
    */
   export function showNode(id) {
-    for (const child of children) {
+    for (const child of nodes) {
       const nodes = findNodeById(child, id);
 
       if (nodes) {
@@ -207,23 +207,23 @@
   });
 
   /**
-   * @param {Array<TreeNode & { children?: TreeNode[] }>} children
+   * @param {Array<TreeNode & { nodes?: TreeNode[] }>} nodes
    */
-  function traverse(children) {
-    let nodes = [];
+  function traverse(nodes) {
+    let _nodes = [];
 
-    children.forEach((node) => {
-      nodes.push(node);
+    nodes.forEach((node) => {
+      _nodes.push(node);
 
-      if (Array.isArray(node.children)) {
-        nodes = [...nodes, ...traverse(node.children)];
+      if (Array.isArray(node.nodes)) {
+        _nodes = [...nodes, ...traverse(node.nodes)];
       }
     });
 
-    return nodes;
+    return _nodes;
   }
 
-  $: nodes = traverse(children);
+  $: nodes = traverse(nodes);
   $: nodeIds = nodes.map((node) => node.id);
   $: activeNodeId.set(activeId);
   $: selectedNodeIds.set(selectedIds);
@@ -261,7 +261,7 @@
   on:keydown
   on:keydown|stopPropagation="{handleKeyDown}"
 >
-  <TreeViewNodeList root children="{children}" let:node>
+  <TreeViewNodeList root nodes="{nodes}" let:node>
     <slot node="{node}">
       {node.text}
     </slot>

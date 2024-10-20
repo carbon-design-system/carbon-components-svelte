@@ -8,17 +8,17 @@ export interface TreeNode {
   text: any;
   icon?: typeof import("svelte").SvelteComponent<any>;
   disabled?: boolean;
-  children?: TreeNode[];
+  nodes?: TreeNode[];
 }
 
 type $RestProps = SvelteHTMLElements["ul"];
 
 type $Props = {
   /**
-   * Provide an array of children nodes to render
+   * Provide an array of nodes to render
    * @default []
    */
-  children?: Array<TreeNode>;
+  nodes?: Array<TreeNode>;
 
   /**
    * Set the current active node id
