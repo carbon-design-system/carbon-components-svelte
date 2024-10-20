@@ -8,18 +8,18 @@
 
   let activeId = 1;
   let selectedIds = [];
-  let children = [
+  let nodes = [
     { id: 0, text: "AI / Machine learning", icon: WatsonMachineLearning },
     {
       id: 1,
       text: "Analytics",
       icon: Analytics,
-      children: [
+      nodes: [
         {
           id: 2,
           text: "IBM Analytics Engine",
           icon: Analytics,
-          children: [
+          nodes: [
             { id: 3, text: "Apache Spark", icon: Analytics },
             { id: 4, text: "Hadoop", icon: Analytics },
           ],
@@ -32,13 +32,13 @@
       id: 7,
       text: "Blockchain",
       icon: Blockchain,
-      children: [{ id: 8, text: "IBM Blockchain Platform", icon: Blockchain }],
+      nodes: [{ id: 8, text: "IBM Blockchain Platform", icon: Blockchain }],
     },
     {
       id: 9,
       text: "Databases",
       icon: DataBase,
-      children: [
+      nodes: [
         {
           id: 10,
           text: "IBM Cloud Databases for Elasticsearch",
@@ -62,7 +62,7 @@
       text: "Integration",
       icon: SignalStrength,
       disabled: true,
-      children: [
+      nodes: [
         {
           id: 15,
           text: "IBM API Connect",
@@ -76,7 +76,7 @@
 
 <TreeView
   labelText="Cloud Products"
-  children="{children}"
+  nodes="{nodes}"
   bind:activeId
   bind:selectedIds
   on:select="{({ detail }) => console.log('select', detail)}"
