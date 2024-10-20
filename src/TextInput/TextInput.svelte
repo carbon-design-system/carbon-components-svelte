@@ -94,6 +94,7 @@
     dispatch("change", parse(e.target.value));
   };
 
+  // svelte-ignore reactive_declaration_non_reactive_property
   $: isFluid = !!ctx && ctx.isFluid;
   $: error = invalid && !readonly;
   $: helperId = `helper-${id}`;

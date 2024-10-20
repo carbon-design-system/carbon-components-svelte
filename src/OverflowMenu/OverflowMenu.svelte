@@ -192,7 +192,7 @@
 <button
   bind:this="{buttonRef}"
   type="button"
-  aria-haspopup
+  aria-haspopup="true"
   aria-expanded="{open}"
   aria-label="{ariaLabel}"
   id="{id}"
