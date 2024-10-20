@@ -88,6 +88,7 @@
 
   const ctx = getContext("Form");
 
+  // svelte-ignore reactive_declaration_non_reactive_property
   $: isFluid = !!ctx && ctx.isFluid;
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
