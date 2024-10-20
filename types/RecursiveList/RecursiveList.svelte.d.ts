@@ -11,10 +11,10 @@ type $RestProps = SvelteHTMLElements["ul"] & SvelteHTMLElements["ol"];
 
 type $Props = {
   /**
-   * Specify the children to render
+   * Specify the nodes to render
    * @default []
    */
-  children?: Array<RecursiveListNode & { children?: RecursiveListNode[] }>;
+  nodes?: Array<RecursiveListNode & { nodes?: RecursiveListNode[] }>;
 
   /**
    * Specify the type of list to render

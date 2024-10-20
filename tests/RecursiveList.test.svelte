@@ -1,19 +1,19 @@
 <script lang="ts">
   import { RecursiveList } from "carbon-components-svelte";
 
-  const children = [
+  const nodes = [
     {
       text: "Item 1",
-      children: [
+      nodes: [
         {
           text: "Item 1a",
-          children: [{ html: "<h5>HTML content</h5>" }],
+          nodes: [{ html: "<h5>HTML content</h5>" }],
         },
       ],
     },
     {
       text: "Item 2",
-      children: [
+      nodes: [
         {
           href: "https://svelte.dev/",
         },
@@ -29,4 +29,4 @@
   ];
 </script>
 
-<RecursiveList type="ordered" children="{children}" />
+<RecursiveList type="ordered" nodes="{nodes}" />
