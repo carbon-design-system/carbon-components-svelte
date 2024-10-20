@@ -9881,10 +9881,10 @@
       "filePath": "src/RecursiveList/RecursiveList.svelte",
       "props": [
         {
-          "name": "children",
+          "name": "nodes",
           "kind": "let",
-          "description": "Specify the children to render",
-          "type": "Array<RecursiveListNode & { children?: RecursiveListNode[]; }>",
+          "description": "Specify the nodes to render",
+          "type": "Array<RecursiveListNode & { nodes?: RecursiveListNode[]; }>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
