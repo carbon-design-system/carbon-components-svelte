@@ -14710,16 +14710,16 @@
       "filePath": "src/TreeView/TreeView.svelte",
       "props": [
         {
-          "name": "children",
+          "name": "nodes",
           "kind": "let",
-          "description": "Provide an array of children nodes to render",
+          "description": "Provide an array of nodes to render",
           "type": "Array<TreeNode>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
           "constant": false,
-          "reactive": false
+          "reactive": true
         },
         {
           "name": "activeId",
@@ -14822,7 +14822,7 @@
           "kind": "function",
           "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {     expandedIds = nodes       .filter(         (node) =>           filterNode(node) ||           node.children?.some((child) => filterNode(child) && child.children)       )       .map((node) => node.id);   }",
+          "value": "() => {     expandedIds = nodes       .filter(         (node) =>           filterNode(node) ||           node.nodes?.some((child) => filterNode(child) && child.nodes)       )       .map((node) => node.id);   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -14846,7 +14846,7 @@
           "kind": "function",
           "description": "Programmatically show a node by `id`.\nThe matching node will be expanded, selected, and focused",
           "type": "(id: TreeNodeId) => void",
-          "value": "() => {     for (const child of children) {       const nodes = findNodeById(child, id);       if (nodes) {         const ids = nodes.map((node) => node.id);         const nodeIds = new Set(ids);         expandNodes((node) => nodeIds.has(node.id));         const lastId = ids[ids.length - 1];         activeId = lastId;         selectedIds = [lastId];         tick().then(() => {           ref?.querySelector(`[id=\"${lastId}\"]`)?.focus();         });         // Break out of the loop if the node is found.         break;       }     }   }",
+          "value": "() => {     for (const child of nodes) {       const nodes = findNodeById(child, id);       if (nodes) {         const ids = nodes.map((node) => node.id);         const nodeIds = new Set(ids);         expandNodes((node) => nodeIds.has(node.id));         const lastId = ids[ids.length - 1];         activeId = lastId;         selectedIds = [lastId];         tick().then(() => {           ref?.querySelector(`[id=\"${lastId}\"]`)?.focus();         });         // Break out of the loop if the node is found.         break;       }     }   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -14894,9 +14894,9 @@
           "ts": "type TreeNodeId = string | number"
         },
         {
-          "type": "{ id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent<any>; disabled?: boolean; children?: TreeNode[]; }",
+          "type": "{ id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent<any>; disabled?: boolean; nodes?: TreeNode[]; }",
           "name": "TreeNode",
-          "ts": "interface TreeNode { id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent<any>; disabled?: boolean; children?: TreeNode[]; }"
+          "ts": "interface TreeNode { id: TreeNodeId; text: any; icon?: typeof import(\"svelte\").SvelteComponent<any>; disabled?: boolean; nodes?: TreeNode[]; }"
         }
       ],
       "generics": null,
