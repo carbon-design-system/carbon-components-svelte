@@ -6,7 +6,7 @@
 
   let treeview: TreeView;
   let activeId: TreeNodeId = "";
-  let selectedIds = [];
+  let selectedIds: ComponentProps<TreeView>["selectedIds"] = [];
   let expandedIds = [1];
   let children: ComponentProps<TreeView>["children"] = [
     { id: 0, text: "AI / Machine learning", icon: Analytics },
@@ -56,7 +56,7 @@
     });
     treeview.collapseAll();
     treeview.collapseNodes((node) => {
-      return node.disabled;
+      return node.disabled ?? false;
     });
     treeview.showNode(1);
   }
