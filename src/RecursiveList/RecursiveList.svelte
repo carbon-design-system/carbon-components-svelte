@@ -5,10 +5,10 @@
    */
 
   /**
-   * Specify the children to render
-   * @type {Array<RecursiveListNode & { children?: RecursiveListNode[]; }>}
+   * Specify the nodes to render
+   * @type {Array<RecursiveListNode & { nodes?: RecursiveListNode[]; }>}
    */
-  export let children = [];
+  export let nodes = [];
 
   /**
    * Specify the type of list to render
@@ -26,8 +26,8 @@
   native="{type === 'ordered-native'}"
   {...$$restProps}
 >
-  {#each children as child}
-    {#if Array.isArray(child.children)}
+  {#each nodes as child}
+    {#if Array.isArray(child.nodes)}
       <RecursiveListItem {...child}>
         <svelte:self {...child} type="{type}" nested />
       </RecursiveListItem>
