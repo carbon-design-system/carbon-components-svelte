@@ -17,9 +17,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build the codebase
-        run: npm run build:lib
-
       - name: Test types
         run: npm run test:types
 
