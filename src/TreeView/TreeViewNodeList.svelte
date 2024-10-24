@@ -5,8 +5,8 @@
    * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
    */
 
-  /** @type {Array<TreeNode & { children?: TreeNode[] }>} */
-  export let children = [];
+  /** @type {Array<TreeNode & { nodes?: TreeNode[] }>} */
+  export let nodes = [];
   export let root = false;
 
   /** @type {string | number} */
@@ -55,7 +55,7 @@
     prevActiveId = $activeNodeId;
   });
 
-  $: parent = Array.isArray(children);
+  $: parent = Array.isArray(nodes);
   $: node = { id, text, expanded, leaf: !parent };
   $: if (refLabel) {
     refLabel.style.marginLeft = `-${offset()}rem`;
@@ -65,8 +65,8 @@
 </script>
 
 {#if root}
-  {#each children as child (child.id)}
-    {#if Array.isArray(child.children)}
+  {#each nodes as child (child.id)}
+    {#if Array.isArray(child.nodes)}
       <svelte:self {...child} let:node>
         <slot node="{node}" />
       </svelte:self>
@@ -162,8 +162,8 @@
     </div>
     {#if expanded}
       <ul role="group" class:bx--tree-node__children="{true}">
-        {#each children as child (child.id)}
-          {#if Array.isArray(child.children)}
+        {#each nodes as child (child.id)}
+          {#if Array.isArray(child.nodes)}
             <svelte:self {...child} let:node>
               <slot node="{node}" />
             </svelte:self>
