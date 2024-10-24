@@ -79,7 +79,7 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Skeleton
 
-<RadioButtonGroup legendText="Storage tier (disk)">
+<RadioButtonGroup legendText="Storage tier (disk)" name="skeleton">
   <RadioButtonSkeleton />
   <RadioButtonSkeleton />
   <RadioButtonSkeleton />
@@ -87,7 +87,7 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Skeleton (vertical)
 
-<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)">
+<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" name="skeleton-vertical">
   <RadioButtonSkeleton />
   <RadioButtonSkeleton />
   <RadioButtonSkeleton />

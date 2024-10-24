@@ -54,6 +54,22 @@
   }
 
   $: checked = $selectedValue === value;
+
+  function onChange() {
+    if (update) {
+      update(value);
+    } else {
+      checked = ref.checked;
+
+      if (name != null && name != "") {
+        Array.from(document.getElementsByName(name))
+          .filter((element) => element !== ref)
+          .forEach((element) =>
+            element.dispatchEvent(new CustomEvent("carbon:checked-change"))
+          );
+      }
+    }
+  }
 </script>
 
 <div
@@ -72,10 +88,9 @@
     value="{value}"
     class:bx--radio-button="{true}"
     on:change
-    on:change="{() => {
-      if (update) {
-        update(value);
-      }
+    on:change="{onChange}"
+    on:carbon:checked-change="{(e) => {
+      checked = e.currentTarget.checked;
     }}"
   />
   <label class:bx--radio-button__label="{true}" for="{id}">
