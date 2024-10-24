@@ -94,7 +94,7 @@
     dispatch("change", parse(e.target.value));
   };
 
-  $: isFluid = !!ctx && ctx.isFluid;
+  const isFluid = !!ctx && ctx.isFluid;
   $: error = invalid && !readonly;
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;

@@ -40,6 +40,7 @@
     max: size == "max",
   };
   $: if (size != undefined)
+    // svelte-ignore reactive_declaration_non_reactive_property
     dispatch("change", { size, breakpointValue: breakpoints[size] });
 </script>
 

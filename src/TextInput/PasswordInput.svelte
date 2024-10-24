@@ -88,7 +88,7 @@
 
   const ctx = getContext("Form");
 
-  $: isFluid = !!ctx && ctx.isFluid;
+  const isFluid = !!ctx && ctx.isFluid;
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
