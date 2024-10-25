@@ -30,6 +30,7 @@
     "css/*.css"
   ],
   "scripts": {
+    "test:src-types": "tsc types/**/*.ts --noEmit",
     "test:types": "svelte-check --workspace tests --no-tsconfig --ignore 'docs,examples'",
     "lint": "prettier --write \"**/*.{svelte,md,js,json,ts}\"",
     "build:css": "node scripts/build-css",
