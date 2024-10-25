@@ -38,7 +38,7 @@ export interface ThemeProps {
    * Override the default toggle props
    * @default { themes: ["white", "g100"], labelA: "", labelB: "", labelText: "Dark mode", hideLabel: false, }
    */
-  toggle?: import("../Toggle/Toggle").ToggleProps & {
+  toggle?: import("../Toggle/Toggle.svelte").ToggleProps & {
     themes?: [labelA: CarbonTheme, labelB: CarbonTheme];
   };
 
@@ -46,7 +46,9 @@ export interface ThemeProps {
    * Override the default select props
    * @default { themes: themeKeys, labelText: "Themes", hideLabel: false, }
    */
-  select?: import("../Select/Select").SelectProps & { themes?: CarbonTheme[] };
+  select?: import("../Select/Select.svelte").SelectProps & {
+    themes?: CarbonTheme[];
+  };
 }
 
 export default class Theme extends SvelteComponentTyped<

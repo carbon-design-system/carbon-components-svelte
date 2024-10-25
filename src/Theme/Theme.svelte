@@ -37,7 +37,7 @@
 
   /**
    * Override the default toggle props
-   * @type {import("../Toggle/Toggle").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }}
+   * @type {import("../Toggle/Toggle.svelte").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }}
    */
   export let toggle = {
     themes: ["white", "g100"],
@@ -61,7 +61,7 @@
 
   /**
    * Override the default select props
-   * @type {import("../Select/Select").SelectProps & { themes?: CarbonTheme[]; }}
+   * @type {import("../Select/Select.svelte").SelectProps & { themes?: CarbonTheme[]; }}
    */
   export let select = {
     themes: themeKeys,
