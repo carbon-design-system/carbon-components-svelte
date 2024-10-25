@@ -3,6 +3,7 @@
    * @typedef {any} ComboBoxItemId
    * @typedef {{ id: ComboBoxItemId; text: string; disabled?: boolean; }} ComboBoxItem
    * @event {{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }} select
+   * @event {KeyboardEvent | MouseEvent} clear
    * @slot {{ item: ComboBoxItem; index: number }}
    */
 

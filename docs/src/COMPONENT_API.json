@@ -1780,12 +1780,16 @@
           "name": "select",
           "detail": "{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }"
         },
+        {
+          "type": "dispatched",
+          "name": "clear",
+          "detail": "KeyboardEvent | MouseEvent"
+        },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "paste", "element": "input" },
-        { "type": "forwarded", "name": "clear", "element": "ListBoxSelection" },
         { "type": "forwarded", "name": "scroll", "element": "ListBoxMenu" }
       ],
       "typedefs": [
