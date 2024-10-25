@@ -4548,16 +4548,16 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| clear      | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| keyup      | forwarded | --     |
-| keydown    | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| clear      | dispatched | <code>null</code> |
+| change     | forwarded  | --                |
+| input      | forwarded  | --                |
+| focus      | forwarded  | --                |
+| blur       | forwarded  | --                |
+| keyup      | forwarded  | --                |
+| keydown    | forwarded  | --                |
+| paste      | forwarded  | --                |
 
 ## `Tooltip`
 

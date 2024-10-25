@@ -1,5 +1,8 @@
 <script>
-  /** @restProps {input} */
+  /**
+   * @restProps {input}
+   * @event {null} clear
+   */
 
   /**
    * Specify the value of the search input
