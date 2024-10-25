@@ -3,9 +3,9 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 export type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface ListBoxSelectionProps extends RestProps {
+type $Props = {
   /**
    * Specify the number of selected items
    * @default undefined
@@ -31,7 +31,9 @@ export interface ListBoxSelectionProps extends RestProps {
   ref?: null | HTMLDivElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ListBoxSelectionProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ListBoxSelection extends SvelteComponentTyped<
   ListBoxSelectionProps,

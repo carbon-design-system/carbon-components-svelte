@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface TimePickerSelectProps extends RestProps {
+type $Props = {
   /**
    * Specify the select value
    * @default ""
@@ -47,7 +47,9 @@ export interface TimePickerSelectProps extends RestProps {
   ref?: null | HTMLSelectElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type TimePickerSelectProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class TimePickerSelect extends SvelteComponentTyped<
   TimePickerSelectProps,

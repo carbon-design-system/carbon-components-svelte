@@ -1,6 +1,6 @@
 import type { SvelteComponentTyped } from "svelte";
 
-export interface LocalStorageProps {
+export type LocalStorageProps = {
   /**
    * Specify the local storage key
    * @default "local-storage-key"
@@ -12,7 +12,7 @@ export interface LocalStorageProps {
    * @default ""
    */
   value?: any;
-}
+};
 
 export default class LocalStorage extends SvelteComponentTyped<
   LocalStorageProps,

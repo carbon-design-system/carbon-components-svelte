@@ -1,16 +1,18 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["span"];
+type $RestProps = SvelteHTMLElements["span"];
 
-export interface TagSkeletonProps extends RestProps {
+type $Props = {
   /**
    * @default "default"
    */
   size?: "sm" | "default";
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type TagSkeletonProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class TagSkeleton extends SvelteComponentTyped<
   TagSkeletonProps,

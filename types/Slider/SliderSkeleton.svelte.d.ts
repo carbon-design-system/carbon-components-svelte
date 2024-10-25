@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface SliderSkeletonProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` to hide the label text
    * @default false
@@ -11,7 +11,9 @@ export interface SliderSkeletonProps extends RestProps {
   hideLabel?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type SliderSkeletonProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class SliderSkeleton extends SvelteComponentTyped<
   SliderSkeletonProps,

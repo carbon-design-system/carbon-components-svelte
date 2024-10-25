@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface PopoverProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` to display the popover
    * @default false
@@ -59,7 +59,9 @@ export interface PopoverProps extends RestProps {
   relative?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type PopoverProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Popover extends SvelteComponentTyped<
   PopoverProps,

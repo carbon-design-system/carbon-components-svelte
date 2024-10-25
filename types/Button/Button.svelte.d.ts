@@ -3,11 +3,11 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 import type { ButtonSkeletonProps } from "./ButtonSkeleton.svelte";
 
-type RestProps = SvelteHTMLElements["button"] &
+type $RestProps = SvelteHTMLElements["button"] &
   SvelteHTMLElements["a"] &
   SvelteHTMLElements["div"];
 
-export interface ButtonProps extends ButtonSkeletonProps, RestProps {
+type $Props = {
   /**
    * Specify the kind of button
    * @default "primary"
@@ -109,7 +109,9 @@ export interface ButtonProps extends ButtonSkeletonProps, RestProps {
   ref?: null | HTMLAnchorElement | HTMLButtonElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ButtonProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Button extends SvelteComponentTyped<
   ButtonProps,

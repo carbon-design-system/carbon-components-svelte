@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface InlineLoadingProps extends RestProps {
+type $Props = {
   /**
    * Set the loading status
    * @default "active"
@@ -30,7 +30,9 @@ export interface InlineLoadingProps extends RestProps {
   successDelay?: number;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type InlineLoadingProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class InlineLoading extends SvelteComponentTyped<
   InlineLoadingProps,

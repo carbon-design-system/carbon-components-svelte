@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["a"];
+type $RestProps = SvelteHTMLElements["a"];
 
-export interface SkipToContentProps extends RestProps {
+type $Props = {
   /**
    * Specify the `href` attribute
    * @default "#main-content"
@@ -17,7 +17,9 @@ export interface SkipToContentProps extends RestProps {
   tabindex?: string;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type SkipToContentProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class SkipToContent extends SvelteComponentTyped<
   SkipToContentProps,

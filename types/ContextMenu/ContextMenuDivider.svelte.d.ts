@@ -1,6 +1,6 @@
 import type { SvelteComponentTyped } from "svelte";
 
-export interface ContextMenuDividerProps {}
+export type ContextMenuDividerProps = {};
 
 export default class ContextMenuDivider extends SvelteComponentTyped<
   ContextMenuDividerProps,

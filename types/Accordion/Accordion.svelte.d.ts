@@ -1,7 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { AccordionSkeletonProps } from "./AccordionSkeleton.svelte";
 
-export interface AccordionProps extends AccordionSkeletonProps {
+export type AccordionProps = AccordionSkeletonProps & {
   /**
    * Specify alignment of accordion item chevron icon
    * @default "end"
@@ -25,7 +25,7 @@ export interface AccordionProps extends AccordionSkeletonProps {
    * @default false
    */
   skeleton?: boolean;
-}
+};
 
 export default class Accordion extends SvelteComponentTyped<
   AccordionProps,

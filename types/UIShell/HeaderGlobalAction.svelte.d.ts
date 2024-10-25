@@ -1,7 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { ButtonProps } from "../Button/Button.svelte";
 
-export interface HeaderGlobalActionProps extends ButtonProps {
+export type HeaderGlobalActionProps = ButtonProps & {
   /**
    * Set to `true` to use the active variant
    * @default false
@@ -19,7 +19,7 @@ export interface HeaderGlobalActionProps extends ButtonProps {
    * @default null
    */
   ref?: HTMLButtonElement;
-}
+};
 
 export default class HeaderGlobalAction extends SvelteComponentTyped<
   HeaderGlobalActionProps,

@@ -1,6 +1,6 @@
 import type { SvelteComponentTyped } from "svelte";
 
-export interface ContextMenuGroupProps {
+export type ContextMenuGroupProps = {
   /**
    * @default []
    */
@@ -11,7 +11,7 @@ export interface ContextMenuGroupProps {
    * @default ""
    */
   labelText?: string;
-}
+};
 
 export default class ContextMenuGroup extends SvelteComponentTyped<
   ContextMenuGroupProps,

@@ -1,11 +1,13 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface CheckboxSkeletonProps extends RestProps {
+type $Props = {
   [key: `data-${string}`]: any;
-}
+};
+
+export type CheckboxSkeletonProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class CheckboxSkeleton extends SvelteComponentTyped<
   CheckboxSkeletonProps,

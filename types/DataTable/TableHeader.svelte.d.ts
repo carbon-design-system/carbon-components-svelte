@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["th"];
+type $RestProps = SvelteHTMLElements["th"];
 
-export interface TableHeaderProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` for the sortable variant
    * @default false
@@ -41,7 +41,9 @@ export interface TableHeaderProps extends RestProps {
   id?: string;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type TableHeaderProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class TableHeader extends SvelteComponentTyped<
   TableHeaderProps,

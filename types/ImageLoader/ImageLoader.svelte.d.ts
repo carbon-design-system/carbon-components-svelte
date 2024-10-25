@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["img"];
+type $RestProps = SvelteHTMLElements["img"];
 
-export interface ImageLoaderProps extends RestProps {
+type $Props = {
   /**
    * Specify the image source
    * @default ""
@@ -48,7 +48,9 @@ export interface ImageLoaderProps extends RestProps {
   fadeIn?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ImageLoaderProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ImageLoader extends SvelteComponentTyped<
   ImageLoaderProps,

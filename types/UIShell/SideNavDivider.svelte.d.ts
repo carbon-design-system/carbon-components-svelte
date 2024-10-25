@@ -1,11 +1,13 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["li"];
+type $RestProps = SvelteHTMLElements["li"];
 
-export interface SideNavDividerProps extends RestProps {
+type $Props = {
   [key: `data-${string}`]: any;
-}
+};
+
+export type SideNavDividerProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class SideNavDivider extends SvelteComponentTyped<
   SideNavDividerProps,

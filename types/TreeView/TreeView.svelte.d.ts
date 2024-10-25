@@ -11,9 +11,9 @@ export interface TreeNode {
   children?: TreeNode[];
 }
 
-type RestProps = SvelteHTMLElements["ul"];
+type $RestProps = SvelteHTMLElements["ul"];
 
-export interface TreeViewProps extends RestProps {
+type $Props = {
   /**
    * Provide an array of children nodes to render
    * @default []
@@ -58,7 +58,9 @@ export interface TreeViewProps extends RestProps {
   hideLabel?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type TreeViewProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class TreeView extends SvelteComponentTyped<
   TreeViewProps,

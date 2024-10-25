@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["a"];
+type $RestProps = SvelteHTMLElements["a"];
 
-export interface HeaderProps extends RestProps {
+type $Props = {
   /**
    * Set to `false` to hide the side nav by default
    * @default true
@@ -82,7 +82,9 @@ export interface HeaderProps extends RestProps {
   iconClose?: typeof import("svelte").SvelteComponent<any>;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type HeaderProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Header extends SvelteComponentTyped<
   HeaderProps,

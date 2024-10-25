@@ -40,9 +40,9 @@ export interface DataTableCell {
   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
 }
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface DataTableProps extends RestProps {
+type $Props = {
   /**
    * Specify the data table headers
    * @default []
@@ -179,7 +179,9 @@ export interface DataTableProps extends RestProps {
   page?: number;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type DataTableProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class DataTable extends SvelteComponentTyped<
   DataTableProps,

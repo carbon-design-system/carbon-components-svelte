@@ -1,11 +1,13 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface RadioButtonSkeletonProps extends RestProps {
+type $Props = {
   [key: `data-${string}`]: any;
-}
+};
+
+export type RadioButtonSkeletonProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class RadioButtonSkeleton extends SvelteComponentTyped<
   RadioButtonSkeletonProps,

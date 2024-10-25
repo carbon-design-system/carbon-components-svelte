@@ -3,9 +3,9 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 export type NumberInputTranslationId = "increment" | "decrement";
 
-type RestProps = SvelteHTMLElements["input"];
+type $RestProps = SvelteHTMLElements["input"];
 
-export interface NumberInputProps extends RestProps {
+type $Props = {
   /**
    * Set the size of the input
    * @default undefined
@@ -140,7 +140,9 @@ export interface NumberInputProps extends RestProps {
   ref?: null | HTMLInputElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type NumberInputProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class NumberInput extends SvelteComponentTyped<
   NumberInputProps,

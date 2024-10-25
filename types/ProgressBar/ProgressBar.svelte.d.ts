@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface ProgressBarProps extends RestProps {
+type $Props = {
   /**
    * Specify the current value
    * @default undefined
@@ -59,7 +59,9 @@ export interface ProgressBarProps extends RestProps {
   id?: string;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ProgressBarProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ProgressBar extends SvelteComponentTyped<
   ProgressBarProps,

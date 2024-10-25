@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["input"];
+type $RestProps = SvelteHTMLElements["input"];
 
-export interface TextInputProps extends RestProps {
+type $Props = {
   /**
    * Set the size of the input
    * @default undefined
@@ -116,7 +116,9 @@ export interface TextInputProps extends RestProps {
   readonly?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type TextInputProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class TextInput extends SvelteComponentTyped<
   TextInputProps,
