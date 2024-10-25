@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.85.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.2...v0.85.3) (2024-10-25)
+
+### Bug Fixes
+
+- address Svelte 5 warnings ([#2011](https://github.com/carbon-design-system/carbon-components-svelte/issues/2011)) ([43fccac](https://github.com/carbon-design-system/carbon-components-svelte/commit/43fccac1c6273d9aa83b8c26a5f8cecec667db59))
+
 ### [0.85.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.1...v0.85.2) (2024-08-14)
 
 ### Bug Fixes
