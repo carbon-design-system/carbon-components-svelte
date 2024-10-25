@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["a"] & SvelteHTMLElements["p"];
+type $RestProps = SvelteHTMLElements["a"] & SvelteHTMLElements["p"];
 
-export interface ClickableTileProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` to click the tile
    * @default false
@@ -29,7 +29,9 @@ export interface ClickableTileProps extends RestProps {
   href?: string;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ClickableTileProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ClickableTile extends SvelteComponentTyped<
   ClickableTileProps,

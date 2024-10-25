@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["li"];
+type $RestProps = SvelteHTMLElements["li"];
 
-export interface AccordionItemProps extends RestProps {
+type $Props = {
   /**
    * Specify the title of the accordion item heading.
    * Alternatively, use the "title" slot (e.g., `<div slot="title">...</div>`)
@@ -30,7 +30,9 @@ export interface AccordionItemProps extends RestProps {
   iconDescription?: string;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type AccordionItemProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class AccordionItem extends SvelteComponentTyped<
   AccordionItemProps,

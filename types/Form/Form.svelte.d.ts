@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["form"];
+type $RestProps = SvelteHTMLElements["form"];
 
-export interface FormProps extends RestProps {
+type $Props = {
   /**
    * Obtain a reference to the form element
    * @default null
@@ -11,7 +11,9 @@ export interface FormProps extends RestProps {
   ref?: null | HTMLFormElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type FormProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Form extends SvelteComponentTyped<
   FormProps,

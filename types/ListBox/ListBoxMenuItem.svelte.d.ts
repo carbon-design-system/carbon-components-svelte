@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface ListBoxMenuItemProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` to enable the active state
    * @default false
@@ -23,7 +23,9 @@ export interface ListBoxMenuItemProps extends RestProps {
   disabled?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ListBoxMenuItemProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ListBoxMenuItem extends SvelteComponentTyped<
   ListBoxMenuItemProps,

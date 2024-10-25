@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface CheckboxProps extends RestProps {
+type $Props = {
   /**
    * Specify the value of the checkbox
    * @default ""
@@ -89,7 +89,9 @@ export interface CheckboxProps extends RestProps {
   ref?: null | HTMLInputElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type CheckboxProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Checkbox extends SvelteComponentTyped<
   CheckboxProps,

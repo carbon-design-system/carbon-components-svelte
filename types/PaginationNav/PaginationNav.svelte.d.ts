@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["nav"];
+type $RestProps = SvelteHTMLElements["nav"];
 
-export interface PaginationNavProps extends RestProps {
+type $Props = {
   /**
    * Specify the current page index
    * @default 1
@@ -47,7 +47,9 @@ export interface PaginationNavProps extends RestProps {
   tooltipPosition?: "top" | "right" | "bottom" | "left" | "outside" | "inside";
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type PaginationNavProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class PaginationNav extends SvelteComponentTyped<
   PaginationNavProps,

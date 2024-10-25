@@ -4,7 +4,7 @@ export type BreakpointSize = "sm" | "md" | "lg" | "xlg" | "max";
 
 export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 
-export interface BreakpointProps {
+export type BreakpointProps = {
   /**
    * Determine the current Carbon grid breakpoint size
    * @default undefined
@@ -16,7 +16,7 @@ export interface BreakpointProps {
    * @default { sm: false, md: false, lg: false, xlg: false, max: false, }
    */
   sizes?: Record<BreakpointSize, boolean>;
-}
+};
 
 export default class Breakpoint extends SvelteComponentTyped<
   BreakpointProps,

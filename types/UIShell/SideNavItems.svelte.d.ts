@@ -1,6 +1,6 @@
 import type { SvelteComponentTyped } from "svelte";
 
-export interface SideNavItemsProps {}
+export type SideNavItemsProps = {};
 
 export default class SideNavItems extends SvelteComponentTyped<
   SideNavItemsProps,

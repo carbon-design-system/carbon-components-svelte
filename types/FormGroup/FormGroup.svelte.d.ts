@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["fieldset"];
+type $RestProps = SvelteHTMLElements["fieldset"];
 
-export interface FormGroupProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` for to remove the bottom margin
    * @default false
@@ -41,7 +41,9 @@ export interface FormGroupProps extends RestProps {
   legendId?: string;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type FormGroupProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class FormGroup extends SvelteComponentTyped<
   FormGroupProps,

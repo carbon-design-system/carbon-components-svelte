@@ -1,7 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { BreadcrumbSkeletonProps } from "./BreadcrumbSkeleton.svelte";
 
-export interface BreadcrumbProps extends BreadcrumbSkeletonProps {
+export type BreadcrumbProps = BreadcrumbSkeletonProps & {
   /**
    * Set to `true` to hide the breadcrumb trailing slash
    * @default false
@@ -13,7 +13,7 @@ export interface BreadcrumbProps extends BreadcrumbSkeletonProps {
    * @default false
    */
   skeleton?: boolean;
-}
+};
 
 export default class Breadcrumb extends SvelteComponentTyped<
   BreadcrumbProps,

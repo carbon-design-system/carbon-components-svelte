@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["li"];
+type $RestProps = SvelteHTMLElements["li"];
 
-export interface TabProps extends RestProps {
+type $Props = {
   /**
    * Specify the tab label.
    * Alternatively, use the default slot (e.g., `<Tab><span>Label</span></Tab>`)
@@ -42,7 +42,9 @@ export interface TabProps extends RestProps {
   ref?: null | HTMLAnchorElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type TabProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Tab extends SvelteComponentTyped<
   TabProps,

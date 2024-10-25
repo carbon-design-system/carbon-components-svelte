@@ -1,6 +1,6 @@
 import type { SvelteComponentTyped } from "svelte";
 
-export interface HeaderPanelDividerProps {}
+export type HeaderPanelDividerProps = {};
 
 export default class HeaderPanelDivider extends SvelteComponentTyped<
   HeaderPanelDividerProps,

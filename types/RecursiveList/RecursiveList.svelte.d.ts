@@ -7,9 +7,9 @@ export interface RecursiveListNode {
   html?: string;
 }
 
-type RestProps = SvelteHTMLElements["ul"] & SvelteHTMLElements["ol"];
+type $RestProps = SvelteHTMLElements["ul"] & SvelteHTMLElements["ol"];
 
-export interface RecursiveListProps extends RestProps {
+type $Props = {
   /**
    * Specify the children to render
    * @default []
@@ -23,7 +23,9 @@ export interface RecursiveListProps extends RestProps {
   type?: "unordered" | "ordered" | "ordered-native";
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type RecursiveListProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class RecursiveList extends SvelteComponentTyped<
   RecursiveListProps,

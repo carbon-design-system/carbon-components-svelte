@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface TableContainerProps extends RestProps {
+type $Props = {
   /**
    * Specify the title of the data table
    * @default ""
@@ -29,7 +29,9 @@ export interface TableContainerProps extends RestProps {
   useStaticWidth?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type TableContainerProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class TableContainer extends SvelteComponentTyped<
   TableContainerProps,

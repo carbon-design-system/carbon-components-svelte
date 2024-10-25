@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface ListBoxProps extends RestProps {
+type $Props = {
   /**
    * Set the size of the list box
    * @default undefined
@@ -59,7 +59,9 @@ export interface ListBoxProps extends RestProps {
   warnText?: string;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ListBoxProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ListBox extends SvelteComponentTyped<
   ListBoxProps,

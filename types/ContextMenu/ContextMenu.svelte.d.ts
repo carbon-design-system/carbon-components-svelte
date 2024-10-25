@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["ul"];
+type $RestProps = SvelteHTMLElements["ul"];
 
-export interface ContextMenuProps extends RestProps {
+type $Props = {
   /**
    * Specify an element or list of elements to trigger the context menu.
    * If no element is specified, the context menu applies to the entire window
@@ -37,7 +37,9 @@ export interface ContextMenuProps extends RestProps {
   ref?: null | HTMLUListElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ContextMenuProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ContextMenu extends SvelteComponentTyped<
   ContextMenuProps,

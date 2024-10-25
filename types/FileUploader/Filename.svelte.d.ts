@@ -1,11 +1,11 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"] &
+type $RestProps = SvelteHTMLElements["div"] &
   SvelteHTMLElements["button"] &
   SvelteHTMLElements["svg"];
 
-export interface FilenameProps extends RestProps {
+type $Props = {
   /**
    * Specify the file name status
    * @default "uploading"
@@ -25,7 +25,9 @@ export interface FilenameProps extends RestProps {
   invalid?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type FilenameProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Filename extends SvelteComponentTyped<
   FilenameProps,

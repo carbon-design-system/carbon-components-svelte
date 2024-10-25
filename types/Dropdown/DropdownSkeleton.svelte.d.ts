@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface DropdownSkeletonProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` to use the inline variant
    * @default false
@@ -11,7 +11,9 @@ export interface DropdownSkeletonProps extends RestProps {
   inline?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type DropdownSkeletonProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class DropdownSkeleton extends SvelteComponentTyped<
   DropdownSkeletonProps,

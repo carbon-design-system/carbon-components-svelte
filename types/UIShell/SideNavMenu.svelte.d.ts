@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["button"];
+type $RestProps = SvelteHTMLElements["button"];
 
-export interface SideNavMenuProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` to toggle the expanded state
    * @default false
@@ -29,7 +29,9 @@ export interface SideNavMenuProps extends RestProps {
   ref?: null | HTMLButtonElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type SideNavMenuProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class SideNavMenu extends SvelteComponentTyped<
   SideNavMenuProps,
