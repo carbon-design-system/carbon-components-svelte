@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface SearchSkeletonProps extends RestProps {
+type $Props = {
   /**
    * Specify the size of the search input
    * @default "xl"
@@ -11,7 +11,9 @@ export interface SearchSkeletonProps extends RestProps {
   size?: "sm" | "lg" | "xl";
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type SearchSkeletonProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class SearchSkeleton extends SvelteComponentTyped<
   SearchSkeletonProps,

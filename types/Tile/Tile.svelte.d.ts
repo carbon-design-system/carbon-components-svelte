@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface TileProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` to enable the light variant
    * @default false
@@ -11,7 +11,9 @@ export interface TileProps extends RestProps {
   light?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type TileProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Tile extends SvelteComponentTyped<
   TileProps,

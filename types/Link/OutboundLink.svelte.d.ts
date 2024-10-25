@@ -1,7 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { LinkProps } from "./Link.svelte";
 
-export interface OutboundLinkProps extends LinkProps {}
+export type OutboundLinkProps = LinkProps & {};
 
 export default class OutboundLink extends SvelteComponentTyped<
   OutboundLinkProps,

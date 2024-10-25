@@ -1,6 +1,6 @@
 import type { SvelteComponentTyped } from "svelte";
 
-export interface ContextMenuRadioGroupProps {
+export type ContextMenuRadioGroupProps = {
   /**
    * Set the selected radio group id
    * @default ""
@@ -12,7 +12,7 @@ export interface ContextMenuRadioGroupProps {
    * @default ""
    */
   labelText?: string;
-}
+};
 
 export default class ContextMenuRadioGroup extends SvelteComponentTyped<
   ContextMenuRadioGroupProps,

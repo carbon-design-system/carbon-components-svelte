@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["a"];
+type $RestProps = SvelteHTMLElements["a"];
 
-export interface LinkProps extends RestProps {
+type $Props = {
   /**
    * Specify the size of the link
    * @default undefined
@@ -48,7 +48,9 @@ export interface LinkProps extends RestProps {
   ref?: null | HTMLAnchorElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type LinkProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Link extends SvelteComponentTyped<
   LinkProps,

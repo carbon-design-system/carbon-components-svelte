@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["a"];
+type $RestProps = SvelteHTMLElements["a"];
 
-export interface HeaderNavItemProps extends RestProps {
+type $Props = {
   /**
    * Specify the `href` attribute
    * @default undefined
@@ -29,7 +29,9 @@ export interface HeaderNavItemProps extends RestProps {
   ref?: null | HTMLAnchorElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type HeaderNavItemProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class HeaderNavItem extends SvelteComponentTyped<
   HeaderNavItemProps,

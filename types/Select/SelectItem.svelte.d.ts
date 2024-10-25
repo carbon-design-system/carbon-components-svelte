@@ -1,6 +1,6 @@
 import type { SvelteComponentTyped } from "svelte";
 
-export interface SelectItemProps {
+export type SelectItemProps = {
   /**
    * Specify the option value
    * @default ""
@@ -36,7 +36,7 @@ export interface SelectItemProps {
    * @default undefined
    */
   style?: string;
-}
+};
 
 export default class SelectItem extends SvelteComponentTyped<
   SelectItemProps,

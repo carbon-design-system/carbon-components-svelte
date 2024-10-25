@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface LoadingProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` to use the small variant
    * @default false
@@ -29,7 +29,9 @@ export interface LoadingProps extends RestProps {
   description?: string;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type LoadingProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Loading extends SvelteComponentTyped<
   LoadingProps,

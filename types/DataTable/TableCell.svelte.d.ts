@@ -1,11 +1,13 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["td"];
+type $RestProps = SvelteHTMLElements["td"];
 
-export interface TableCellProps extends RestProps {
+type $Props = {
   [key: `data-${string}`]: any;
-}
+};
+
+export type TableCellProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class TableCell extends SvelteComponentTyped<
   TableCellProps,

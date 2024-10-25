@@ -11,9 +11,9 @@ export interface DropdownItem {
   disabled?: boolean;
 }
 
-type RestProps = SvelteHTMLElements["div"];
+type $RestProps = SvelteHTMLElements["div"];
 
-export interface DropdownProps extends RestProps {
+type $Props = {
   /**
    * Set the dropdown items
    * @default []
@@ -144,7 +144,9 @@ export interface DropdownProps extends RestProps {
   ref?: null | HTMLButtonElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type DropdownProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Dropdown extends SvelteComponentTyped<
   DropdownProps,

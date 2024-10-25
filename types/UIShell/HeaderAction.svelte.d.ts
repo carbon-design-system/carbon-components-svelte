@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["button"];
+type $RestProps = SvelteHTMLElements["button"];
 
-export interface HeaderActionProps extends RestProps {
+type $Props = {
   /**
    * Set to `true` to open the panel
    * @default false
@@ -51,7 +51,9 @@ export interface HeaderActionProps extends RestProps {
   preventCloseOnClickOutside?: boolean;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type HeaderActionProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class HeaderAction extends SvelteComponentTyped<
   HeaderActionProps,

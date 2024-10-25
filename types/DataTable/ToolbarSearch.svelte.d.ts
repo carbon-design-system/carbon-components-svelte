@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["input"];
+type $RestProps = SvelteHTMLElements["input"];
 
-export interface ToolbarSearchProps extends RestProps {
+type $Props = {
   /**
    * Specify the value of the search input
    * @default ""
@@ -64,7 +64,9 @@ export interface ToolbarSearchProps extends RestProps {
   ref?: null | HTMLInputElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ToolbarSearchProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ToolbarSearch extends SvelteComponentTyped<
   ToolbarSearchProps,

@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["textarea"];
+type $RestProps = SvelteHTMLElements["textarea"];
 
-export interface TextAreaProps extends RestProps {
+type $Props = {
   /**
    * Specify the textarea value.
    * @default ""
@@ -101,7 +101,9 @@ export interface TextAreaProps extends RestProps {
   ref?: null | HTMLTextAreaElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type TextAreaProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class TextArea extends SvelteComponentTyped<
   TextAreaProps,

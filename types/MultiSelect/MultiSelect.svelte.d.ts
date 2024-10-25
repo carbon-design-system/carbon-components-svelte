@@ -11,9 +11,9 @@ export interface MultiSelectItem {
   disabled?: boolean;
 }
 
-type RestProps = SvelteHTMLElements["input"];
+type $RestProps = SvelteHTMLElements["input"];
 
-export interface MultiSelectProps extends RestProps {
+type $Props = {
   /**
    * Set the multiselect items
    * @default []
@@ -240,7 +240,9 @@ export interface MultiSelectProps extends RestProps {
   highlightedId?: null | MultiSelectItemId;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type MultiSelectProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class MultiSelect extends SvelteComponentTyped<
   MultiSelectProps,

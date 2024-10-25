@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-type RestProps = SvelteHTMLElements["li"];
+type $RestProps = SvelteHTMLElements["li"];
 
-export interface ContextMenuOptionProps extends RestProps {
+type $Props = {
   /**
    * Specify the kind of option
    * @default "default"
@@ -70,7 +70,9 @@ export interface ContextMenuOptionProps extends RestProps {
   ref?: null | HTMLLIElement;
 
   [key: `data-${string}`]: any;
-}
+};
+
+export type ContextMenuOptionProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ContextMenuOption extends SvelteComponentTyped<
   ContextMenuOptionProps,
