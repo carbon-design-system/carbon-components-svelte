@@ -2,12 +2,12 @@
   /**
    * @typedef {string} DataTableKey
    * @typedef {any} DataTableValue
-   * @typedef {{ key: DataTableKey; empty: boolean; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableEmptyHeader
-   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableNonEmptyHeader
+   * @typedef {{ key: DataTableKey; empty: boolean; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableEmptyHeader
+   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }} DataTableNonEmptyHeader
    * @typedef {DataTableNonEmptyHeader | DataTableEmptyHeader} DataTableHeader
    * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
    * @typedef {any} DataTableRowId
-   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }} DataTableCell
+   * @typedef {{ key: DataTableKey; value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; }} DataTableCell
    * @slot {{ row: DataTableRow; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
    * @slot {{ row: DataTableRow; cell: DataTableCell; rowIndex: number; cellIndex: number; }} cell

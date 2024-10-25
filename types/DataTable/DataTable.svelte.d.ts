@@ -8,7 +8,7 @@ export type DataTableValue = any;
 export interface DataTableEmptyHeader {
   key: DataTableKey;
   empty: boolean;
-  display?: (item: Value, row: DataTableRow) => DataTableValue;
+  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
@@ -18,7 +18,7 @@ export interface DataTableEmptyHeader {
 export interface DataTableNonEmptyHeader {
   key: DataTableKey;
   value: DataTableValue;
-  display?: (item: Value, row: DataTableRow) => DataTableValue;
+  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
@@ -37,7 +37,7 @@ export type DataTableRowId = any;
 export interface DataTableCell {
   key: DataTableKey;
   value: DataTableValue;
-  display?: (item: Value, row: DataTableRow) => DataTableValue;
+  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
 }
 
 type RestProps = SvelteHTMLElements["div"];
