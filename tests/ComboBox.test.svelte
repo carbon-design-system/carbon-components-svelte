@@ -23,6 +23,9 @@
   on:select="{(e) => {
     console.log(e.detail.selectedId);
   }}"
+  on:clear="{(e) => {
+    console.log(e.detail);
+  }}"
   translateWithId="{(id) => {
     console.log(id); // "open" | "close"
     return id;

@@ -697,12 +697,12 @@ export interface ComboBoxItem {
 | Event name | Type       | Detail                                                                  |
 | :--------- | :--------- | :---------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }</code> |
+| clear      | dispatched | <code>KeyboardEvent &#124; MouseEvent</code>                            |
 | keydown    | forwarded  | --                                                                      |
 | keyup      | forwarded  | --                                                                      |
 | focus      | forwarded  | --                                                                      |
 | blur       | forwarded  | --                                                                      |
 | paste      | forwarded  | --                                                                      |
-| clear      | forwarded  | --                                                                      |
 | scroll     | forwarded  | --                                                                      |
 
 ## `ComposedModal`
