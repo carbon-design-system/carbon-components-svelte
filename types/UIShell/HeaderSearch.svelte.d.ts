@@ -59,7 +59,7 @@ export default class HeaderSearch extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
     keydown: WindowEventMap["keydown"];
-    paste: DocumentAndElementEventHandlersEventMap["paste"];
+    paste: WindowEventMap["paste"];
   },
   { default: { result: HeaderSearchResult; index: number } }
 > {}

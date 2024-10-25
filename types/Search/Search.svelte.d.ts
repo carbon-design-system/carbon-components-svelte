@@ -119,7 +119,7 @@ export default class Search extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
-    paste: DocumentAndElementEventHandlersEventMap["paste"];
+    paste: WindowEventMap["paste"];
     clear: CustomEvent<null>;
   },
   { labelText: {} }

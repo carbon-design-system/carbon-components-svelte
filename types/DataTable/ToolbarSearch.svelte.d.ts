@@ -76,7 +76,7 @@ export default class ToolbarSearch extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
     keyup: WindowEventMap["keyup"];
     keydown: WindowEventMap["keydown"];
-    paste: DocumentAndElementEventHandlersEventMap["paste"];
+    paste: WindowEventMap["paste"];
   },
   {}
 > {}
