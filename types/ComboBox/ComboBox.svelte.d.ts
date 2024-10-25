@@ -169,7 +169,7 @@ export default class ComboBox extends SvelteComponentTyped<
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
-    paste: DocumentAndElementEventHandlersEventMap["paste"];
+    paste: WindowEventMap["paste"];
     scroll: WindowEventMap["scroll"];
   },
   { default: { item: ComboBoxItem; index: number }; titleText: {} }
