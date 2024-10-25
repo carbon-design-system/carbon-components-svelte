@@ -20,6 +20,9 @@ jobs:
       - name: Build the codebase
         run: npm run build:lib
 
+      - name: Test generated source types
+        run: npm run test:src-types
+
       - name: Test types
         run: npm run test:types
 
