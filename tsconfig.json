@@ -4,7 +4,7 @@
       "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
       "ignoreDeprecations": "5.0",
-      "importsNotUsedAsValues": "error",
+      "verbatimModuleSyntax": true,
       "isolatedModules": true,
       "target": "ESNext",
       "module": "ESNext",
