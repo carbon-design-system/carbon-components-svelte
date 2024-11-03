@@ -12,6 +12,10 @@
       "noUnusedLocals": true,
       "noUnusedParameters": true,
       "strict": true,
+      "paths": {
+        "carbon-components-svelte": ["./types"],
+        "carbon-components-svelte/*": ["./types/*"]
+      }
     },
     "include": ["src", "tests"]
   }
