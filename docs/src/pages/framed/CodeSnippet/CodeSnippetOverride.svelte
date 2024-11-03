@@ -4,6 +4,6 @@
 </script>
 
 <CodeSnippet
-  code="yarn add -D carbon-components-svelte"
+  code="yarn add carbon-components-svelte"
   copy="{(text) => copy(text)}"
 />

@@ -21,9 +21,9 @@
   metatags.description =
     "The Svelte implementation of the Carbon Design System featuring UI components, icons, pictograms, and charts.";
 
-  const installYarn = "yarn add -D carbon-components-svelte";
-  const installNpm = "npm i -D carbon-components-svelte";
-  const installPnpm = "pnpm i -D carbon-components-svelte";
+  const installYarn = "yarn add carbon-components-svelte";
+  const installNpm = "npm i carbon-components-svelte";
+  const installPnpm = "pnpm i carbon-components-svelte";
   const themes = {
     white: "White",
     g10: "Gray 10",
