@@ -21,9 +21,9 @@
   metatags.description =
     "The Svelte implementation of the Carbon Design System featuring UI components, icons, pictograms, and charts.";
 
-  const installYarn = "yarn add carbon-components-svelte";
   const installNpm = "npm i carbon-components-svelte";
   const installPnpm = "pnpm i carbon-components-svelte";
+  const installYarn = "yarn add carbon-components-svelte";
   const themes = {
     white: "White",
     g10: "Gray 10",
@@ -85,18 +85,18 @@
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column noGutter>
         <Tabs>
-          <Tab label="Yarn" />
           <Tab label="NPM" />
           <Tab label="pnpm" />
+          <Tab label="Yarn" />
           <div slot="content" style="margin: 1rem -1rem">
-            <TabContent>
-              <CodeSnippet code="{installYarn}" />
-            </TabContent>
             <TabContent>
               <CodeSnippet code="{installNpm}" />
             </TabContent>
             <TabContent>
               <CodeSnippet code="{installPnpm}" />
+            </TabContent>
+            <TabContent>
+              <CodeSnippet code="{installYarn}" />
             </TabContent>
           </div>
         </Tabs>
