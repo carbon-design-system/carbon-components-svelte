@@ -24,6 +24,7 @@
   const installNpm = "npm i carbon-components-svelte";
   const installPnpm = "pnpm i carbon-components-svelte";
   const installYarn = "yarn add carbon-components-svelte";
+  const installBun = "bun add carbon-components-svelte";
   const themes = {
     white: "White",
     g10: "Gray 10",
@@ -88,6 +89,7 @@
           <Tab label="NPM" />
           <Tab label="pnpm" />
           <Tab label="Yarn" />
+          <Tab label="Bun" />
           <div slot="content" style="margin: 1rem -1rem">
             <TabContent>
               <CodeSnippet code="{installNpm}" />
@@ -97,6 +99,9 @@
             </TabContent>
             <TabContent>
               <CodeSnippet code="{installYarn}" />
+            </TabContent>
+            <TabContent>
+              <CodeSnippet code="{installBun}" />
             </TabContent>
           </div>
         </Tabs>
