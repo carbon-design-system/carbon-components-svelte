@@ -85,7 +85,7 @@
     </Row>
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column noGutter>
-        <Tabs>
+        <Tabs autoWidth>
           <Tab label="NPM" />
           <Tab label="pnpm" />
           <Tab label="Yarn" />
@@ -129,7 +129,7 @@
 
     <Row>
       <Column max="{8}" xlg="{8}" noGutter>
-        <Tabs>
+        <Tabs autoWidth>
           <Tab label="CSS StyleSheet" />
           <Tab label="SCSS" />
           <svelte:fragment slot="content">
