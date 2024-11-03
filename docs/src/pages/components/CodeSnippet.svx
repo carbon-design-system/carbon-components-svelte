@@ -36,7 +36,7 @@ You can override the default copy functionality with your own implementation. Se
 
 ## Default (single-line)
 
-<CodeSnippet code="yarn add -D carbon-components-svelte" />
+<CodeSnippet code="yarn add carbon-components-svelte" />
 
 ## Overriding copy functionality
 
@@ -50,7 +50,7 @@ In this example, we use the open source module [clipboard-copy](https://github.c
 
 To prevent text from being copied entirely, pass a no-op function to the `copy` prop.
 
-<CodeSnippet code="yarn add -D carbon-components-svelte" copy={() => {}} />
+<CodeSnippet code="yarn add carbon-components-svelte" copy={() => {}} />
 
 ## Inline
 
@@ -104,7 +104,7 @@ Use the `showMoreText` and `showLessText` props to override the default "Show mo
 
 The `disabled` prop applies only to the `"single"` and `"multi"` code snippet types.
 
-<CodeSnippet disabled code="yarn add -D carbon-components-svelte" />
+<CodeSnippet disabled code="yarn add carbon-components-svelte" />
 <br />
 <CodeSnippet disabled type="multi" code="{comment}" />
 

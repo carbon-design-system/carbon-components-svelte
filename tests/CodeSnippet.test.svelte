@@ -17,5 +17,5 @@
   on:expand
   on:collapse
 >
-  yarn add -D carbon-components-svelte
+  yarn add carbon-components-svelte
 </CodeSnippet>

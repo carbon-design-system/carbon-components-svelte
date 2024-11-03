@@ -32,13 +32,13 @@ Install `carbon-components-svelte` as a development dependency.
 
 ```sh
 # Yarn
-yarn add -D carbon-components-svelte
+yarn add carbon-components-svelte
 
 # npm
-npm i -D carbon-components-svelte
+npm i carbon-components-svelte
 
 # pnpm
-pnpm i -D carbon-components-svelte
+pnpm i carbon-components-svelte
 ```
 
 ## Usage
