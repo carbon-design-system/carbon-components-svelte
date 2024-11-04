@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@0.85.2.
+> 165 components exported from carbon-components-svelte@0.85.3.
 
 ## Components
 
@@ -697,12 +697,12 @@ export interface ComboBoxItem {
 | Event name | Type       | Detail                                                                  |
 | :--------- | :--------- | :---------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }</code> |
+| clear      | dispatched | <code>KeyboardEvent &#124; MouseEvent</code>                            |
 | keydown    | forwarded  | --                                                                      |
 | keyup      | forwarded  | --                                                                      |
 | focus      | forwarded  | --                                                                      |
 | blur       | forwarded  | --                                                                      |
 | paste      | forwarded  | --                                                                      |
-| clear      | forwarded  | --                                                                      |
 | scroll     | forwarded  | --                                                                      |
 
 ## `ComposedModal`
@@ -933,7 +933,7 @@ export type DataTableValue = any;
 export interface DataTableEmptyHeader {
   key: DataTableKey;
   empty: boolean;
-  display?: (item: Value, row: DataTableRow) => DataTableValue;
+  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
@@ -943,7 +943,7 @@ export interface DataTableEmptyHeader {
 export interface DataTableNonEmptyHeader {
   key: DataTableKey;
   value: DataTableValue;
-  display?: (item: Value, row: DataTableRow) => DataTableValue;
+  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
   columnMenu?: boolean;
   width?: string;
@@ -962,7 +962,7 @@ export type DataTableRowId = any;
 export interface DataTableCell {
   key: DataTableKey;
   value: DataTableValue;
-  display?: (item: Value, row: DataTableRow) => DataTableValue;
+  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
 }
 ```
 
@@ -4193,15 +4193,15 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Props
 
-| Prop name  | Required | Kind             | Reactive | Type                                                                                                           | Default value                                                                                                 | Description                                                                                                                    |
-| :--------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| theme      | No       | <code>let</code> | Yes      | <code>CarbonTheme</code>                                                                                       | <code>"white"</code>                                                                                          | Set the current Carbon theme                                                                                                   |
-| tokens     | No       | <code>let</code> | No       | <code>{ [token: string]: any; }</code>                                                                         | <code>{}</code>                                                                                               | Customize a theme with your own tokens<br />@see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme |
-| persist    | No       | <code>let</code> | No       | <code>boolean</code>                                                                                           | <code>false</code>                                                                                            | Set to `true` to persist the theme using window.localStorage                                                                   |
-| persistKey | No       | <code>let</code> | No       | <code>string</code>                                                                                            | <code>"theme"</code>                                                                                          | Specify the local storage key                                                                                                  |
-| render     | No       | <code>let</code> | No       | <code>"toggle" &#124; "select"</code>                                                                          | <code>undefined</code>                                                                                        | Render a toggle or select dropdown to control the theme                                                                        |
-| toggle     | No       | <code>let</code> | No       | <code>import("../Toggle/Toggle").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }</code> | <code>{ themes: ["white", "g100"], labelA: "", labelB: "", labelText: "Dark mode", hideLabel: false, }</code> | Override the default toggle props                                                                                              |
-| select     | No       | <code>let</code> | No       | <code>import("../Select/Select").SelectProps & { themes?: CarbonTheme[]; }</code>                              | <code>{ themes: themeKeys, labelText: "Themes", hideLabel: false, }</code>                                    | Override the default select props                                                                                              |
+| Prop name  | Required | Kind             | Reactive | Type                                                                                                                  | Default value                                                                                                 | Description                                                                                                                    |
+| :--------- | :------- | :--------------- | :------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| theme      | No       | <code>let</code> | Yes      | <code>CarbonTheme</code>                                                                                              | <code>"white"</code>                                                                                          | Set the current Carbon theme                                                                                                   |
+| tokens     | No       | <code>let</code> | No       | <code>{ [token: string]: any; }</code>                                                                                | <code>{}</code>                                                                                               | Customize a theme with your own tokens<br />@see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme |
+| persist    | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                  | <code>false</code>                                                                                            | Set to `true` to persist the theme using window.localStorage                                                                   |
+| persistKey | No       | <code>let</code> | No       | <code>string</code>                                                                                                   | <code>"theme"</code>                                                                                          | Specify the local storage key                                                                                                  |
+| render     | No       | <code>let</code> | No       | <code>"toggle" &#124; "select"</code>                                                                                 | <code>undefined</code>                                                                                        | Render a toggle or select dropdown to control the theme                                                                        |
+| toggle     | No       | <code>let</code> | No       | <code>import("../Toggle/Toggle.svelte").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }</code> | <code>{ themes: ["white", "g100"], labelA: "", labelB: "", labelText: "Dark mode", hideLabel: false, }</code> | Override the default toggle props                                                                                              |
+| select     | No       | <code>let</code> | No       | <code>import("../Select/Select.svelte").SelectProps & { themes?: CarbonTheme[]; }</code>                              | <code>{ themes: themeKeys, labelText: "Themes", hideLabel: false, }</code>                                    | Override the default select props                                                                                              |
 
 ### Slots
 
@@ -4548,16 +4548,16 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| clear      | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| keyup      | forwarded | --     |
-| keydown    | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type       | Detail            |
+| :--------- | :--------- | :---------------- |
+| clear      | dispatched | <code>null</code> |
+| change     | forwarded  | --                |
+| input      | forwarded  | --                |
+| focus      | forwarded  | --                |
+| blur       | forwarded  | --                |
+| keyup      | forwarded  | --                |
+| keydown    | forwarded  | --                |
+| paste      | forwarded  | --                |
 
 ## `Tooltip`
 

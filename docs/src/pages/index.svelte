@@ -21,9 +21,10 @@
   metatags.description =
     "The Svelte implementation of the Carbon Design System featuring UI components, icons, pictograms, and charts.";
 
-  const installYarn = "yarn add -D carbon-components-svelte";
-  const installNpm = "npm i -D carbon-components-svelte";
-  const installPnpm = "pnpm i -D carbon-components-svelte";
+  const installNpm = "npm i carbon-components-svelte";
+  const installPnpm = "pnpm i carbon-components-svelte";
+  const installYarn = "yarn add carbon-components-svelte";
+  const installBun = "bun add carbon-components-svelte";
   const themes = {
     white: "White",
     g10: "Gray 10",
@@ -84,19 +85,23 @@
     </Row>
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column noGutter>
-        <Tabs>
-          <Tab label="Yarn" />
+        <Tabs autoWidth>
           <Tab label="NPM" />
           <Tab label="pnpm" />
+          <Tab label="Yarn" />
+          <Tab label="Bun" />
           <div slot="content" style="margin: 1rem -1rem">
-            <TabContent>
-              <CodeSnippet code="{installYarn}" />
-            </TabContent>
             <TabContent>
               <CodeSnippet code="{installNpm}" />
             </TabContent>
             <TabContent>
               <CodeSnippet code="{installPnpm}" />
+            </TabContent>
+            <TabContent>
+              <CodeSnippet code="{installYarn}" />
+            </TabContent>
+            <TabContent>
+              <CodeSnippet code="{installBun}" />
             </TabContent>
           </div>
         </Tabs>
@@ -124,7 +129,7 @@
 
     <Row>
       <Column max="{8}" xlg="{8}" noGutter>
-        <Tabs>
+        <Tabs autoWidth>
           <Tab label="CSS StyleSheet" />
           <Tab label="SCSS" />
           <svelte:fragment slot="content">
@@ -230,7 +235,7 @@
         <TileCard
           borderBottom
           title="Carbon Icons Svelte"
-          subtitle="2,300+ icons"
+          subtitle="2,400+ icons"
           target="_blank"
           href="https://github.com/carbon-design-system/carbon-icons-svelte"
         />

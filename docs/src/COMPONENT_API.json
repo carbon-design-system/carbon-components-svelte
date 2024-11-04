@@ -1780,12 +1780,16 @@
           "name": "select",
           "detail": "{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }"
         },
+        {
+          "type": "dispatched",
+          "name": "clear",
+          "detail": "KeyboardEvent | MouseEvent"
+        },
         { "type": "forwarded", "name": "keydown", "element": "input" },
         { "type": "forwarded", "name": "keyup", "element": "input" },
         { "type": "forwarded", "name": "focus", "element": "input" },
         { "type": "forwarded", "name": "blur", "element": "input" },
         { "type": "forwarded", "name": "paste", "element": "input" },
-        { "type": "forwarded", "name": "clear", "element": "ListBoxSelection" },
         { "type": "forwarded", "name": "scroll", "element": "ListBoxMenu" }
       ],
       "typedefs": [
@@ -2730,14 +2734,14 @@
           "ts": "type DataTableValue = any"
         },
         {
-          "type": "{ key: DataTableKey; empty: boolean; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }",
+          "type": "{ key: DataTableKey; empty: boolean; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }",
           "name": "DataTableEmptyHeader",
-          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }"
+          "ts": "interface DataTableEmptyHeader { key: DataTableKey; empty: boolean; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }"
         },
         {
-          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }",
+          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }",
           "name": "DataTableNonEmptyHeader",
-          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }"
+          "ts": "interface DataTableNonEmptyHeader { key: DataTableKey; value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); columnMenu?: boolean; width?: string; minWidth?: string; }"
         },
         {
           "type": "DataTableNonEmptyHeader | DataTableEmptyHeader",
@@ -2755,9 +2759,9 @@
           "ts": "type DataTableRowId = any"
         },
         {
-          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }",
+          "type": "{ key: DataTableKey; value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; }",
           "name": "DataTableCell",
-          "ts": "interface DataTableCell { key: DataTableKey; value: DataTableValue; display?: (item: Value, row: DataTableRow) => DataTableValue; }"
+          "ts": "interface DataTableCell { key: DataTableKey; value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; }"
         }
       ],
       "generics": null,
@@ -13198,7 +13202,7 @@
           "name": "toggle",
           "kind": "let",
           "description": "Override the default toggle props",
-          "type": "import(\"../Toggle/Toggle\").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }",
+          "type": "import(\"../Toggle/Toggle.svelte\").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }",
           "value": "{     themes: [\"white\", \"g100\"],     labelA: \"\",     labelB: \"\",     labelText: \"Dark mode\",     hideLabel: false,   }",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -13210,7 +13214,7 @@
           "name": "select",
           "kind": "let",
           "description": "Override the default select props",
-          "type": "import(\"../Select/Select\").SelectProps & { themes?: CarbonTheme[]; }",
+          "type": "import(\"../Select/Select.svelte\").SelectProps & { themes?: CarbonTheme[]; }",
           "value": "{     themes: themeKeys,     labelText: \"Themes\",     hideLabel: false,   }",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -14253,7 +14257,7 @@
       "moduleExports": [],
       "slots": [],
       "events": [
-        { "type": "forwarded", "name": "clear", "element": "Search" },
+        { "type": "dispatched", "name": "clear", "detail": "null" },
         { "type": "forwarded", "name": "change", "element": "Search" },
         { "type": "forwarded", "name": "input", "element": "Search" },
         { "type": "forwarded", "name": "focus", "element": "Search" },

@@ -116,7 +116,7 @@ export default class TextArea extends SvelteComponentTyped<
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
-    paste: DocumentAndElementEventHandlersEventMap["paste"];
+    paste: WindowEventMap["paste"];
   },
   { labelText: {} }
 > {}
