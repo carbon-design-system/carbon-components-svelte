@@ -74,7 +74,12 @@
       // Exit early if an inputtable element is already focused.
       return;
     }
-    if ((e.metaKey && e.key === 'k') || e.key === '/') {
+
+    const isCommandOrControl = e.metaKey || e.ctrlKey;
+    const isCmdK = isCommandOrControl && e.key.toLowerCase() === 'k';
+    const isSlash = e.key === '/';
+
+    if (isCmdK || isSlash) {
       e.preventDefault();
       active = true;
     }
