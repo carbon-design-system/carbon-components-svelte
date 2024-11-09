@@ -168,7 +168,7 @@
    */
   export let highlightedId = null;
 
-  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
+  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
@@ -183,7 +183,6 @@
 
   const dispatch = createEventDispatcher();
 
-  let initialSorted = false;
   let highlightedIndex = -1;
   let prevChecked = [];
 
@@ -227,18 +226,8 @@
     highlightedIndex = index;
   }
 
-  function sort() {
-    return [
-      ...(checked.length > 1 ? checked.sort(sortItem) : checked),
-      ...unchecked.sort(sortItem),
-    ];
-  }
-
   afterUpdate(() => {
     if (checked.length !== prevChecked.length) {
-      if (selectionFeedback === "top") {
-        items = sort();
-      }
       prevChecked = checked;
       selectedIds = checked.map(({ id }) => id);
       dispatch("select", {
@@ -247,29 +236,46 @@
         unselected: unchecked,
       });
     }
-  });
 
-  $: if (!open) {
-    if (!initialSorted || selectionFeedback !== "fixed") {
-      tick().then(() => {
-        items = sort();
-        initialSorted = true;
-      });
+    if (!open) {
+      highlightedIndex = -1;
+      value = "";
     }
-
-    highlightedIndex = -1;
-    value = "";
-  }
+  });
 
   $: menuId = `menu-${id}`;
   $: inline = type === "inline";
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
-  $: checked = items.filter(({ checked }) => checked);
-  $: unchecked = items.filter(({ checked }) => !checked);
-  $: filteredItems = items.filter((item) => filterItem(item, value));
+  $: sortedItems = (() => {
+    if (selectionFeedback === "top" && selectedIds.length > 0) {
+      const checkedItems = items
+        .filter((item) => selectedIds.includes(item.id))
+        .map((item) => ({ ...item, checked: true }));
+      const uncheckedItems = items
+        .filter((item) => !selectedIds.includes(item.id))
+        .map((item) => ({ ...item, checked: false }));
+
+      return [
+        ...(checkedItems.length > 1
+          ? checkedItems.sort(sortItem)
+          : checkedItems),
+        ...uncheckedItems.sort(sortItem),
+      ];
+    }
+
+    return items
+      .map((item) => ({
+        ...item,
+        checked: selectedIds.includes(item.id),
+      }))
+      .sort(sortItem);
+  })();
+  $: checked = sortedItems.filter(({ checked }) => checked);
+  $: unchecked = sortedItems.filter(({ checked }) => !checked);
+  $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
   $: highlightedId =
     highlightedIndex > -1
-      ? (filterable ? filteredItems : items)[highlightedIndex]?.id ?? null
+      ? (filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ?? null
       : null;
 </script>
 
@@ -362,7 +368,7 @@
           change(-1);
         } else if (key === 'Enter') {
           if (highlightedIndex > -1) {
-            items = items.map((item, i) => {
+            sortedItems = sortedItems.map((item, i) => {
               if (i !== highlightedIndex) return item;
               return { ...item, checked: !item.checked };
             });
@@ -390,7 +396,7 @@
           on:clear
           on:clear="{() => {
             selectedIds = [];
-            items = items.map((item) => ({
+            sortedItems = sortedItems.map((item) => ({
               ...item,
               checked: false,
             }));
@@ -420,10 +426,10 @@
           on:keydown|stopPropagation="{({ key }) => {
             if (key === 'Enter') {
               if (highlightedId) {
-                const filteredItemIndex = items.findIndex(
+                const filteredItemIndex = sortedItems.findIndex(
                   (item) => item.id === highlightedId
                 );
-                items = items.map((item, i) => {
+                sortedItems = sortedItems.map((item, i) => {
                   if (i !== filteredItemIndex) return item;
                   return { ...item, checked: !item.checked };
                 });
@@ -485,7 +491,7 @@
         id="{id}"
         aria-multiselectable="true"
       >
-        {#each filterable ? filteredItems : items as item, i (item.id)}
+        {#each filterable ? filteredItems : sortedItems as item, i (item.id)}
           <ListBoxMenuItem
             id="{item.id}"
             role="option"
@@ -499,11 +505,9 @@
                 e.stopPropagation();
                 return;
               }
-
-              items = items.map((_) =>
+              sortedItems = sortedItems.map((_) =>
                 _.id === item.id ? { ..._, checked: !_.checked } : _
               );
-
               fieldRef.focus();
             }}"
             on:mouseenter="{() => {
