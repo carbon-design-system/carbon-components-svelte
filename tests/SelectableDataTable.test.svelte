@@ -1,6 +1,6 @@
 <script lang="ts">
   import { DataTable } from "carbon-components-svelte";
-
+  import type { ComponentProps } from "svelte";
   const headers = [
     { key: "name", value: "Name" },
     { key: "port", value: "Port" },
@@ -16,7 +16,7 @@
     { id: "f", name: "Load Balancer 5", port: 80, rule: "DNS delegation" },
   ];
 
-  let selectedRowIds = [];
+  let selectedRowIds: ComponentProps<DataTable>["selectedRowIds"] = [];
 
   $: console.log("selectedRowIds", selectedRowIds);
 </script>

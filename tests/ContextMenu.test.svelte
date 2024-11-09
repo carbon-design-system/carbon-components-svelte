@@ -8,10 +8,11 @@
   } from "carbon-components-svelte";
   import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
   import Cut from "carbon-icons-svelte/lib/Cut.svelte";
+  import type { ComponentProps } from "svelte";
 
   let ref: HTMLElement;
   let selectedId = "0";
-  let selectedIds = [];
+  let selectedIds: ComponentProps<ContextMenuGroup>["selectedIds"] = [];
 
   $: console.log("selectedId", selectedId);
 </script>
@@ -29,7 +30,10 @@
   <ContextMenuOption indented labelText="Cut" shortcutText="⌘X" icon="{Cut}" />
   <ContextMenuDivider />
   <ContextMenuOption indented labelText="Export as">
-    <ContextMenuGroup labelText="Export options" bind:selectedIds>
+    <ContextMenuGroup
+      labelText="Export options"
+      bind:selectedIds="{selectedIds}"
+    >
       <ContextMenuOption id="pdf" labelText="PDF" />
       <ContextMenuOption id="txt" labelText="TXT" />
       <ContextMenuOption id="mp3" labelText="MP3" />
@@ -48,7 +52,7 @@
 <ContextMenu target="{[null, ref]}" on:open on:close>
   <ContextMenuOption indented labelText="Open" />
   <ContextMenuDivider />
-  <ContextMenuRadioGroup bind:selectedId labelText="Radio group">
+  <ContextMenuRadioGroup bind:selectedId="{selectedId}" labelText="Radio group">
     <ContextMenuOption id="0" labelText="Set as foreground" />
     <ContextMenuOption id="1" labelText="Set as background" />
   </ContextMenuRadioGroup>

@@ -18,11 +18,12 @@
     Row,
     Column,
   } from "carbon-components-svelte";
+    import type { ComponentProps } from "svelte";
 
   let isSideNavOpen = false;
   let isOpen = false;
 
-  let ref = null;
+  let ref: ComponentProps<HeaderSearch>["ref"] = null;
   let active = false;
   let value = "";
   let selectedResultIndex = 1;

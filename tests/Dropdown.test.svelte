@@ -2,11 +2,11 @@
   import { Dropdown, DropdownSkeleton } from "carbon-components-svelte";
   import type { DropdownProps } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 
-  let items: DropdownProps["items"] = [
+  let items = [
     { id: 0, text: "Slack" },
     { id: "1", text: "Email" },
     { id: "2", text: "Fax" },
-  ] as const;
+  ] satisfies NonNullable<DropdownProps["items"]>;
 
   let itemsWithoutConst = [...items];
 
@@ -14,10 +14,8 @@
 
   export const fieldId: FieldId = "bar";
 
-  // @ts-expect-error
   $: items[0] = { id: "0", text: "Slack" };
   $: {
-    // @ts-expect-error
     items[0] = { id: "0", text: "Slack" };
   }
   $: {

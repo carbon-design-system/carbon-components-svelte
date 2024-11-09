@@ -3,7 +3,7 @@
 
   let storage: LocalStorage;
   let toggled = false;
-  let events = [];
+  let events: { event: string; detail?: any }[] = [];
 
   $: if (storage) storage.clearItem();
   $: if (storage) storage.clearAll();
