@@ -26,7 +26,7 @@
 </TooltipIcon>
 
 <TooltipIcon>
-  <span slot="text" style="color: red"
+  <span slot="tooltipText" style="color: red"
     >Carbon is an open source design system by IBM.</span
   >
   <Carbon />

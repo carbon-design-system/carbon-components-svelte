@@ -1,7 +1,8 @@
 <script lang="ts">
   import { TextInput, TextInputSkeleton } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
-  let value = null;
+  let value: ComponentProps<TextInput>["value"] = null;
 </script>
 
 <TextInput

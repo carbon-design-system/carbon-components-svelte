@@ -8,16 +8,18 @@
     active: "Submitting...",
     finished: "Success",
     inactive: "Cancelling...",
-  };
+    dormant: "Submit",
+  } as const satisfies Record<State, string>;
 
   const stateMap = {
     active: "finished",
     inactive: "dormant",
     finished: "dormant",
-  };
+    dormant: "inactive",
+  } as const satisfies Record<State, State>;
 
-  let timeout = undefined;
-  let state: State = "dormant";
+  let timeout: NodeJS.Timeout | undefined = undefined;
+  let state: State= "dormant";
 
   function reset(incomingState?: State) {
     if (typeof timeout === "number") {

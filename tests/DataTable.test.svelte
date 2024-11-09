@@ -12,6 +12,7 @@
   } from "carbon-components-svelte";
   import type { DataTableHeader } from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
+  import type { ComponentProps } from "svelte";
 
   const headers: DataTableHeader[] = [
     { key: "name", value: "Name" },
@@ -69,7 +70,7 @@
     return 0;
   }
 
-  let filteredRowIds = [];
+  let filteredRowIds: ComponentProps<ToolbarSearch>["filteredRowIds"] = [];
 </script>
 
 <DataTable
@@ -119,7 +120,7 @@
   <Toolbar>
     <ToolbarContent>
       <ToolbarSearch
-        bind:filteredRowIds
+        bind:filteredRowIds="{filteredRowIds}"
         shouldFilterRows="{(row, value) => {
           return row.name.includes(value);
         }}"
