@@ -24,15 +24,30 @@ Checkbox attributes can be adjusted via the `itemToInput` prop.
     {id: "2", text: "Fax"}]}"
   />
 
+## Format item display text
+
+Use the `itemToString` prop to format the display of individual items without modifying the underlying value.
+
+<MultiSelect itemToString={item => {
+  return item.text + ' (' + item.id +')'
+}} titleText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+    sortItem="{() => {}}"
+  />
+
 ## Custom slot
 
-Override the default slot to customize the display of each item. Access the item and index through the `let:` directive.
+For even more customization, use the default slot.
+
+Access the `item` and `index` values through the `let:` directive.
 
 <FileSource src="/framed/MultiSelect/MultiSelectSlot" />
 
 ## No alphabetical ordering
 
-To prevent alphabetical item ordering, pass an empty function to the `sortItem` prop.
+To prevent alphabetical item ordering, pass a noop function to the `sortItem` prop.
 
 <MultiSelect titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -42,6 +57,8 @@ To prevent alphabetical item ordering, pass an empty function to the `sortItem` 
   />
 
 ## Filterable
+
+Set `filterable` to `true` to enable filtering.
 
 `$$restProps` are spread to the underlying input element.
 
@@ -64,19 +81,6 @@ To select (or bind) items, pass an array of item ids to `selectedIds`.
 ## Multiple multi-select dropdowns
 
 <FileSource src="/framed/MultiSelect/MultipleMultiSelect" />
-
-## Format item display text
-
-Use the `itemToString` prop to format the display of individual items.
-
-<MultiSelect itemToString={item => {
-  return item.text + ' (' + item.id +')'
-}} titleText="Contact" label="Select contact methods..."
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}"
-    sortItem="{() => {}}"
-  />
 
 ## Format checkbox values
 
@@ -117,6 +121,10 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
   />
 
 ## Hidden label
+
+Set `hideLabel` to `true` to visually hide the label.
+
+Note that you should still specify a `label` for accessibility.
 
 <MultiSelect titleText="Contact" label="Select contact methods..." hideLabel
     items="{[{id: "0", text: "Slack"},
