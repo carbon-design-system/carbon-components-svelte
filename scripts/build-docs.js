@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require("node:fs");
 const glob = require("glob");
 const { sveld } = require("sveld");
 const pkg = require("../package.json");

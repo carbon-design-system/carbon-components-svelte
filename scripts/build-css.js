@@ -1,8 +1,8 @@
-const fs = require("fs");
+const fs = require("node:fs");
+const path = require("node:path");
 const sass = require("sass");
 const autoprefixer = require("autoprefixer");
 const postcss = require("postcss");
-const path = require("path");
 
 (async () => {
   const scss = fs
