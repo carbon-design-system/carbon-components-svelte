@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tag } from "../types";
+  import { Tag } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 

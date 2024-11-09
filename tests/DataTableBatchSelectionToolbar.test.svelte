@@ -8,7 +8,7 @@
     ToolbarMenuItem,
     ToolbarBatchActions,
     Button,
-  } from "../types";
+  } from "carbon-components-svelte";
   import Save from "carbon-icons-svelte/lib/Save.svelte";
 
   const headers = [

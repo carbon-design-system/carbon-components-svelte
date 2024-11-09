@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { OrderedList, ListItem, Link } from "../types";
+  import { OrderedList, ListItem, Link } from "carbon-components-svelte";
 </script>
 
 <OrderedList>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { OverflowMenu, OverflowMenuItem } from "../types";
+  import { OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 

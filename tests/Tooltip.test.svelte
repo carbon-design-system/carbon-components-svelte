@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tooltip, Link, Button } from "../types";
+  import { Tooltip, Link, Button } from "carbon-components-svelte";
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
 
   let open = true;

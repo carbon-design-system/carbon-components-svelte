@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TextInput, TextInputSkeleton } from "../types";
+  import { TextInput, TextInputSkeleton } from "carbon-components-svelte";
 
   let value = null;
 </script>

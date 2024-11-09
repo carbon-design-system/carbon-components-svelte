@@ -5,8 +5,8 @@
     FileUploaderDropContainer,
     FileUploaderItem,
     FileUploaderSkeleton,
-  } from "../types";
-  import type { FileUploaderProps } from "../types/FileUploader/FileUploader.svelte";
+  } from "carbon-components-svelte";
+  import type { FileUploaderProps } from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 
   let fileUploader: FileUploader;
   let files: FileUploaderProps["files"] = [];

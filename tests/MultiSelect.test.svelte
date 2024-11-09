@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { MultiSelect } from "../types";
-  import type { MultiSelectProps } from "../types/MultiSelect/MultiSelect.svelte";
+  import { MultiSelect } from "carbon-components-svelte";
+  import type { MultiSelectProps } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 
   let selectedIds: MultiSelectProps["selectedIds"] = [0];
 

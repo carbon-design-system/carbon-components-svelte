@@ -5,7 +5,7 @@
     ModalBody,
     ModalFooter,
     Checkbox,
-  } from "../types";
+  } from "carbon-components-svelte";
 
   let checked = false;
 </script>

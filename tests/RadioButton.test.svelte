@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RadioButton, RadioButtonSkeleton, RadioButtonGroup } from "../types";
+  import { RadioButton, RadioButtonSkeleton, RadioButtonGroup } from "carbon-components-svelte";
 </script>
 
 <RadioButtonGroup

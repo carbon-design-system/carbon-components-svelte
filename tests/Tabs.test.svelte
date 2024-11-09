@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tabs, Tab, TabContent, TabsSkeleton } from "../types";
+  import { Tabs, Tab, TabContent, TabsSkeleton } from "carbon-components-svelte";
 </script>
 
 <Tabs

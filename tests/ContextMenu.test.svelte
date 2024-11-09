@@ -5,7 +5,7 @@
     ContextMenuOption,
     ContextMenuRadioGroup,
     ContextMenuGroup,
-  } from "../types";
+  } from "carbon-components-svelte";
   import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
   import Cut from "carbon-icons-svelte/lib/Cut.svelte";
 

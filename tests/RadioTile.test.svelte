@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TileGroup, RadioTile } from "../types";
+  import { TileGroup, RadioTile } from "carbon-components-svelte";
 </script>
 
 <TileGroup

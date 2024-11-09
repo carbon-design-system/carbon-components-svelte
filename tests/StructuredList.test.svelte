@@ -7,7 +7,7 @@
     StructuredListCell,
     StructuredListRow,
     StructuredListInput,
-  } from "../types";
+  } from "carbon-components-svelte";
   import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
 </script>
 

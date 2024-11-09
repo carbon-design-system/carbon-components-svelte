@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PasswordInput } from "../types";
+  import { PasswordInput } from "carbon-components-svelte";
 </script>
 
 <PasswordInput labelText="Password" placeholder="Enter password..." />

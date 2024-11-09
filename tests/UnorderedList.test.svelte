@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { UnorderedList, ListItem, Link } from "../types";
+  import { UnorderedList, ListItem, Link } from "carbon-components-svelte";
 </script>
 
 <UnorderedList>

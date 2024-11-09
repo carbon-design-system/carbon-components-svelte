@@ -3,7 +3,7 @@
     ProgressIndicator,
     ProgressStep,
     ProgressIndicatorSkeleton,
-  } from "../types";
+  } from "carbon-components-svelte";
 </script>
 
 <ProgressIndicator currentIndex="{2}">

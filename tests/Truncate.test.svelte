@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { Truncate } from "../types";
-  import { truncate } from "../types";
+  import { Truncate, truncate } from "carbon-components-svelte";
 </script>
 
 <Truncate>

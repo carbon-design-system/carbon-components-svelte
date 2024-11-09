@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TextArea, TextAreaSkeleton } from "../types";
+  import { TextArea, TextAreaSkeleton } from "carbon-components-svelte";
 </script>
 
 <TextArea

@@ -14,7 +14,7 @@
     Grid,
     Row,
     Column,
-  } from "../types";
+  } from "carbon-components-svelte";
 
   let isSideNavOpen = false;
 </script>

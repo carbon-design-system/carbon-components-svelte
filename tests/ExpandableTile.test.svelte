@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ExpandableTile } from "../types";
+  import { ExpandableTile } from "carbon-components-svelte";
 </script>
 
 <ExpandableTile>

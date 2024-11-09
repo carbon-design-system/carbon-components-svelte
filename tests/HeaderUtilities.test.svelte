@@ -17,7 +17,7 @@
     Grid,
     Row,
     Column,
-  } from "../types";
+  } from "carbon-components-svelte";
   import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
   import { quintOut } from "svelte/easing";
 

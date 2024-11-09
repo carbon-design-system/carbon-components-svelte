@@ -7,7 +7,7 @@
     { href: "/reports/2019", text: "2019" },
   ];
 
-  import { Row, Column, Breadcrumb, BreadcrumbItem } from "../types";
+  import { Row, Column, Breadcrumb, BreadcrumbItem } from "carbon-components-svelte";
 </script>
 
 <Row>

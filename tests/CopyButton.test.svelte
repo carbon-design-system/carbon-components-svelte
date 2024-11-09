@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CopyButton } from "../types";
+  import { CopyButton } from "carbon-components-svelte";
 </script>
 
 <CopyButton

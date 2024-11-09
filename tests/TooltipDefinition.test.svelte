@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TooltipDefinition } from "../types";
+  import { TooltipDefinition } from "carbon-components-svelte";
 
   let open = false;
 </script>

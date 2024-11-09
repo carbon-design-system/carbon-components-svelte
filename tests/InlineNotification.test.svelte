@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { InlineNotification, NotificationActionButton } from "../types";
+  import { InlineNotification, NotificationActionButton } from "carbon-components-svelte";
 </script>
 
 <InlineNotification on:close />

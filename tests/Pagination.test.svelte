@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Pagination, PaginationSkeleton } from "../types";
+  import { Pagination, PaginationSkeleton } from "carbon-components-svelte";
 </script>
 
 <Pagination

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Theme } from "../types";
-  import type { CarbonTheme } from "../types/Theme/Theme.svelte";
+  import { Theme } from "carbon-components-svelte";
+  import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";
 
   let theme: CarbonTheme = "g10";
 </script>

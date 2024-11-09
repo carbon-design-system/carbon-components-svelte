@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ToastNotification } from "../types";
+  import { ToastNotification } from "carbon-components-svelte";
 </script>
 
 <ToastNotification fullWidth />

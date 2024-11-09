@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CodeSnippet } from "../types";
+  import { CodeSnippet } from "carbon-components-svelte";
 </script>
 
 <CodeSnippet

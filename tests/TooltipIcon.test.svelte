@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TooltipIcon } from "../types";
+  import { TooltipIcon } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
   import Filter from "carbon-icons-svelte/lib/Filter.svelte";
   import FilterReset from "carbon-icons-svelte/lib/FilterReset.svelte";
