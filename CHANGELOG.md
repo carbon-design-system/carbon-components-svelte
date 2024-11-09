@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.85.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.3...v0.85.4) (2024-11-09)
+
+### Bug Fixes
+
+- **combo-box:** fix types for `on:clear` ([#2020](https://github.com/carbon-design-system/carbon-components-svelte/issues/2020)) ([0831e87](https://github.com/carbon-design-system/carbon-components-svelte/commit/0831e871358fe012e9907699f1423b7e36dba0da))
+- **data-table:** fix `DataTableValue` type reference in `DataTable` ([#2023](https://github.com/carbon-design-system/carbon-components-svelte/issues/2023)) ([44daa77](https://github.com/carbon-design-system/carbon-components-svelte/commit/44daa775d5e4dc9aef66eae0e661f14fb5b41354))
+- **theme:** `Theme` correctly imports `toggle`, `select` props ([#2019](https://github.com/carbon-design-system/carbon-components-svelte/issues/2019)) ([49b5def](https://github.com/carbon-design-system/carbon-components-svelte/commit/49b5def8153f5eec523d56e2a2c6d4cc3a36dcb5)), closes [#2018](https://github.com/carbon-design-system/carbon-components-svelte/issues/2018)
+- **toolbar-search:** fix types for `on:clear` ([#2022](https://github.com/carbon-design-system/carbon-components-svelte/issues/2022)) ([58e6021](https://github.com/carbon-design-system/carbon-components-svelte/commit/58e6021b08f311a5bb3cc7c7f181443cc633c8e4))
+- **types:** delete extraneous `icons/Search.svelte.d.ts` ([#2025](https://github.com/carbon-design-system/carbon-components-svelte/issues/2025)) ([951d686](https://github.com/carbon-design-system/carbon-components-svelte/commit/951d6860423fc05df9f46e29fb19916b89c48466))
+- **types:** fix types for `on:paste` event ([3167e44](https://github.com/carbon-design-system/carbon-components-svelte/commit/3167e449fdaf19abb4cdf1e2bf3f5bec24865f89))
+
 ### [0.85.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.2...v0.85.3) (2024-10-25)
 
 ### Bug Fixes
