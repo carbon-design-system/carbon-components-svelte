@@ -4,7 +4,7 @@ on:
       - "v*"
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -15,19 +15,23 @@ jobs:
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
-      - name: Build
-        run: |
-          npm install
-          npm run build:docs & npm run build:lib
+      
+      - name: Install dependencies
+        run: npm install
+          
+      - name: Build docs and library
+        run: npm run build:docs & npm run build:lib
+
+      - name: Prune package.json
+        run: node scripts/build-package.js
+
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-
-        # Currently, only npm supports publishing packages with provenance
-        # https://docs.npmjs.com/generating-provenance-statements
         run: |
           npm publish --provenance --access public
+      
       - name: Publish package (next)
         if: ${{ contains(github.ref, '-next') }}
         env:
