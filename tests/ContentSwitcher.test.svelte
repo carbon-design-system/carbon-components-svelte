@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ContentSwitcher, Switch } from "../types";
+  import { ContentSwitcher, Switch } from "carbon-components-svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { LocalStorage } from "../types";
+  import { LocalStorage } from "carbon-components-svelte";
 
   let storage: LocalStorage;
   let toggled = false;

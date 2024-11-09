@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Modal } from "../types";
+  import { Modal } from "carbon-components-svelte";
 </script>
 
 <Modal

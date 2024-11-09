@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonText } from "../types";
+  import { SkeletonText } from "carbon-components-svelte";
 </script>
 
 <SkeletonText />

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, ButtonSet, InlineLoading } from "../types";
+  import { Button, ButtonSet, InlineLoading } from "carbon-components-svelte";
   import { onDestroy } from "svelte";
 
   type State = "dormant" | "active" | "finished" | "inactive";

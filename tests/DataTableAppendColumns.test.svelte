@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DataTable, OverflowMenu, OverflowMenuItem } from "../types";
+  import { DataTable, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
 
   const headers = [
     { key: "name", value: "Name" },

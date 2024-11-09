@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ClickableTile } from "../types";
+  import { ClickableTile } from "carbon-components-svelte";
 </script>
 
 <ClickableTile href="https://www.carbondesignsystem.com/">

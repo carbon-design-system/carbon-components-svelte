@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TimePicker, TimePickerSelect, SelectItem } from "../types";
+  import { TimePicker, TimePickerSelect, SelectItem } from "carbon-components-svelte";
 </script>
 
 <TimePicker

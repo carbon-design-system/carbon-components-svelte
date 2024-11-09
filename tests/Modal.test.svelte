@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, Modal } from "../types";
+  import { Button, Modal } from "carbon-components-svelte";
 
   let open = false;
 </script>

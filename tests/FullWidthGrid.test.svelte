@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Grid, Row, Column } from "../types";
+  import { Grid, Row, Column } from "carbon-components-svelte";
 </script>
 
 <Grid fullWidth>

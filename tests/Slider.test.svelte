@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Slider, SliderSkeleton } from "../types";
+  import { Slider, SliderSkeleton } from "carbon-components-svelte";
 </script>
 
 <Slider />

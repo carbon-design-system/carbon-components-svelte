@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PaginationNav } from "../types";
+  import { PaginationNav } from "carbon-components-svelte";
 </script>
 
 <PaginationNav />

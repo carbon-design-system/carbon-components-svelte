@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Loading } from "../types";
+  import { Loading } from "carbon-components-svelte";
 </script>
 
 <Loading withOverlay="{false}" />

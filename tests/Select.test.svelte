@@ -4,7 +4,7 @@
     SelectItem,
     SelectItemGroup,
     SelectSkeleton,
-  } from "../types";
+  } from "carbon-components-svelte";
 </script>
 
 <Select labelText="Carbon theme" selected="g10">

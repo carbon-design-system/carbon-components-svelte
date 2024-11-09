@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Checkbox } from "../types";
+  import { Checkbox } from "carbon-components-svelte";
 </script>
 
 <Checkbox labelText="Label text" style="margin: 1rem" />

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Toggle, ToggleSkeleton } from "../types";
+  import { Toggle, ToggleSkeleton } from "carbon-components-svelte";
 </script>
 
 <Toggle labelText="Push notifications" hideLabel />

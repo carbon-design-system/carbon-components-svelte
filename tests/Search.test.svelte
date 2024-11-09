@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Search } from "../types";
+  import { Search } from "carbon-components-svelte";
 </script>
 
 <Search on:paste />

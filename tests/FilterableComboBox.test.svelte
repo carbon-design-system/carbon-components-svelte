@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ComboBox } from "../types";
+  import { ComboBox } from "carbon-components-svelte";
 
   function shouldFilterItem(item: { text: string }, value?: any) {
     if (!value) return true;

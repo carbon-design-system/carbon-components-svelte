@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { InlineLoading } from "../types";
+  import { InlineLoading } from "carbon-components-svelte";
 </script>
 
 <InlineLoading />

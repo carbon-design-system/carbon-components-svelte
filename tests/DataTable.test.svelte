@@ -9,8 +9,8 @@
     ToolbarMenuItem,
     Button,
     Link,
-  } from "../types";
-  import type { DataTableHeader } from "../types/DataTable/DataTable.svelte";
+  } from "carbon-components-svelte";
+  import type { DataTableHeader } from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 
   const headers: DataTableHeader[] = [

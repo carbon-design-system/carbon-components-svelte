@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Popover } from "../types";
+  import { Popover } from "carbon-components-svelte";
 
   let open = false;
 </script>

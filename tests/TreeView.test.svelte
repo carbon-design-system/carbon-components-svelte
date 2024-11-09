@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ComponentProps } from "svelte";
-  import { TreeView } from "../types";
-  import type { TreeNodeId } from "../types/TreeView/TreeView.svelte";
+  import { TreeView } from "carbon-components-svelte";
+  import type { TreeNodeId } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 
   let treeview: TreeView;

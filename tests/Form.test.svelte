@@ -8,7 +8,7 @@
     Select,
     SelectItem,
     Button,
-  } from "../types";
+  } from "carbon-components-svelte";
 
   let ref: HTMLFormElement;
 </script>

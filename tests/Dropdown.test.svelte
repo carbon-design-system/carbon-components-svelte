@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Dropdown, DropdownSkeleton } from "../types";
-  import type { DropdownProps } from "../types/Dropdown/Dropdown.svelte";
+  import { Dropdown, DropdownSkeleton } from "carbon-components-svelte";
+  import type { DropdownProps } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 
   let items: DropdownProps["items"] = [
     { id: 0, text: "Slack" },

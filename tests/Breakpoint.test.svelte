@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Breakpoint, breakpointObserver, breakpoints } from "../types";
-  import type { BreakpointProps } from "../types/Breakpoint/Breakpoint.svelte";
+  import { Breakpoint, breakpointObserver, breakpoints } from "carbon-components-svelte";
+  import type { BreakpointProps } from "carbon-components-svelte/Breakpoint/Breakpoint.svelte";
 
   let size: BreakpointProps["size"];
 

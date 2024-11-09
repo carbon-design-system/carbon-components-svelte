@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ProgressBar } from "../types";
+  import { ProgressBar } from "carbon-components-svelte";
 </script>
 
 <ProgressBar helperText="Loading..." />

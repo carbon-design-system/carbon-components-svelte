@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { NumberInput, NumberInputSkeleton } from "../types";
-  import type { NumberInputProps } from "../types/NumberInput/NumberInput.svelte";
+  import { NumberInput, NumberInputSkeleton } from "carbon-components-svelte";
+  import type { NumberInputProps } from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 
   let value: NumberInputProps["value"] = null;
 </script>

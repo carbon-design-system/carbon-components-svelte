@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RecursiveList } from "../types";
+  import { RecursiveList } from "carbon-components-svelte";
 
   const children = [
     {

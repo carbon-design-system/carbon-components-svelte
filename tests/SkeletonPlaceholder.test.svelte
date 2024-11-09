@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonPlaceholder } from "../types";
+  import { SkeletonPlaceholder } from "carbon-components-svelte";
 </script>
 
 <SkeletonPlaceholder />
