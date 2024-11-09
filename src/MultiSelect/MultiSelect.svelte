@@ -183,7 +183,6 @@
 
   const dispatch = createEventDispatcher();
 
-  let initialSorted = false;
   let highlightedIndex = -1;
   let prevChecked = [];
 
@@ -227,18 +226,8 @@
     highlightedIndex = index;
   }
 
-  function sort() {
-    return [
-      ...(checked.length > 1 ? checked.sort(sortItem) : checked),
-      ...unchecked.sort(sortItem),
-    ];
-  }
-
   afterUpdate(() => {
     if (checked.length !== prevChecked.length) {
-      if (selectionFeedback === "top") {
-        sortedItems = sort();
-      }
       prevChecked = checked;
       selectedIds = checked.map(({ id }) => id);
       dispatch("select", {
@@ -249,25 +238,36 @@
     }
 
     if (!open) {
-      if (!initialSorted || selectionFeedback !== "fixed") {
-        sortedItems = sort();
-        initialSorted = true;
-      }
-
       highlightedIndex = -1;
       value = "";
     }
-
-    items = sortedItems;
   });
 
   $: menuId = `menu-${id}`;
   $: inline = type === "inline";
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
-  $: sortedItems = items.map((item) => ({
-    ...item,
-    checked: selectedIds.includes(item.id),
-  }));
+  $: sortedItems = (() => {
+    if (selectionFeedback === "top" && selectedIds.length > 0) {
+      const checkedItems = items
+        .filter((item) => selectedIds.includes(item.id))
+        .map((item) => ({ ...item, checked: true }));
+      const uncheckedItems = items
+        .filter((item) => !selectedIds.includes(item.id))
+        .map((item) => ({ ...item, checked: false }));
+
+      return [
+        ...(checkedItems.length > 1
+          ? checkedItems.sort(sortItem)
+          : checkedItems),
+        ...uncheckedItems.sort(sortItem),
+      ];
+    }
+
+    return items.map((item) => ({
+      ...item,
+      checked: selectedIds.includes(item.id),
+    }));
+  })();
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
   $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
