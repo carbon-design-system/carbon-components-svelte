@@ -1,26 +1,25 @@
-const fs = require("node:fs");
-const path = require("node:path");
+// @ts-check
+import fs from "node:fs";
+import path from "node:path";
+import pkg from "../package.json" assert { type: "json" };
 
-const packagePath = path.join(process.cwd(), "package.json");
-const package = JSON.parse(fs.readFileSync(packagePath, "utf8"));
-
+/** @type {Array<keyof typeof pkg>} */
 const keys_to_remove = ["prettier", "standard-version", "devDependencies"];
-const scripts_to_keep = ["postinstall"];
 
 for (const key of keys_to_remove) {
-  delete package[key];
+  delete pkg[key];
 }
 
-if (package.scripts) {
-  const preserved_scripts = {};
+/** @type {Set<keyof typeof pkg.scripts>} */
+const scripts_to_keep = new Set(["postinstall"]);
 
-  for (const script of scripts_to_keep) {
-    if (package.scripts[script]) {
-      preserved_scripts[script] = package.scripts[script];
-    }
+for (const script in pkg.scripts) {
+  // @ts-ignore
+  if (!scripts_to_keep.has(script)) {
+    delete pkg.scripts[script];
   }
-  
-  package.scripts = preserved_scripts;
 }
 
-fs.writeFileSync(packagePath, JSON.stringify(package, null, 2) + "\n");
+// Write the updated package.json file.
+const pkgPath = path.join(process.cwd(), "package.json");
+fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
