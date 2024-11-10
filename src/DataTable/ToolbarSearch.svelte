@@ -49,32 +49,10 @@
   import { tick, getContext } from "svelte";
   import Search from "../Search/Search.svelte";
 
-  const { tableRows } = getContext("DataTable") ?? {};
+  const ctx = getContext("DataTable") ?? {};
 
-  $: originalRows = tableRows ? [...$tableRows] : [];
   $: if (shouldFilterRows) {
-    let rows = originalRows;
-
-    if (value.trim().length > 0) {
-      if (shouldFilterRows === true) {
-        rows = rows.filter((row) => {
-          return Object.entries(row)
-            .filter(([key]) => key !== "id")
-            .some(([key, _value]) => {
-              if (typeof _value === "string" || typeof _value === "number") {
-                return (_value + "")
-                  ?.toLowerCase()
-                  .includes(value.trim().toLowerCase());
-              }
-            });
-        });
-      } else if (typeof shouldFilterRows === "function") {
-        rows = rows.filter((row) => shouldFilterRows(row, value) ?? false);
-      }
-    }
-
-    tableRows.set(rows);
-    filteredRowIds = rows.map((row) => row.id);
+    filteredRowIds = ctx?.filterRows(value, shouldFilterRows);
   }
 
   async function expandSearch() {

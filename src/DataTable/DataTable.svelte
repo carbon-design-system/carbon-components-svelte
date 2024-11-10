@@ -147,6 +147,10 @@
   const dispatch = createEventDispatcher();
   const batchSelectedIds = writable(false);
   const tableRows = writable(rows);
+
+  // Store a copy of the original rows for filter restoration.
+  $: originalRows = [...rows];
+
   $: thKeys = headers.reduce((a, c) => ({ ...a, [c.key]: c.key }), {});
   const resolvePath = (object, path) => {
     if (path in object) return object[path];
@@ -163,6 +167,36 @@
       selectAll = false;
       selectedRowIds = [];
       if (refSelectAll) refSelectAll.checked = false;
+    },
+    filterRows: (searchValue, customFilter) => {
+      const value = searchValue.trim().toLowerCase();
+
+      if (value.length === 0) {
+        // Reset to original rows.
+        tableRows.set(originalRows);
+        return originalRows.map((row) => row.id);
+      }
+
+      let filteredRows = [];
+
+      if (typeof customFilter === "function") {
+        // Apply custom filter if provided.
+        filteredRows = originalRows.filter((row) => customFilter(row, value));
+      } else {
+        // Default filter checks all non-id fields for a basic, case-insensitive match (non-fuzzy).
+        filteredRows = originalRows.filter((row) => {
+          return Object.entries(row)
+            .filter(([key]) => key !== "id")
+            .some(([key, _value]) => {
+              if (typeof _value === "string" || typeof _value === "number") {
+                return (_value + "")?.toLowerCase().includes(value);
+              }
+            });
+        });
+      }
+
+      tableRows.set(filteredRows);
+      return filteredRows.map((row) => row.id);
     },
   });
 
