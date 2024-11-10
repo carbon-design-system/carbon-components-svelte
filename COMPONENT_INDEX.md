@@ -458,10 +458,10 @@ None.
 | :------------ | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | ------------------------------------------------- |
 | ref           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element      |
 | title         | No       | <code>let</code> | Yes      | <code>string</code>                       | <code>undefined</code>                           | Specify the title attribute for the label element |
+| indeterminate | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is indeterminate     |
 | group         | No       | <code>let</code> | Yes      | <code>ReadonlyArray<any></code>           | <code>undefined</code>                           | Specify the bound group                           |
 | checked       | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is checked           |
 | value         | No       | <code>let</code> | No       | <code>any</code>                          | <code>""</code>                                  | Specify the value of the checkbox                 |
-| indeterminate | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Specify whether the checkbox is indeterminate     |
 | skeleton      | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state       |
 | required      | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to mark the field as required       |
 | readonly      | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` for the checkbox to be read-only    |
