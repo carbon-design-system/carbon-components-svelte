@@ -97,7 +97,7 @@
       checked="{checked}"
       disabled="{disabled}"
       id="{id}"
-      indeterminate="{indeterminate}"
+      bind:indeterminate
       name="{name}"
       required="{required}"
       readonly="{readonly}"

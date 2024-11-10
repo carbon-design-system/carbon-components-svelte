@@ -787,7 +787,7 @@
           "isFunctionDeclaration": false,
           "isRequired": false,
           "constant": false,
-          "reactive": false
+          "reactive": true
         },
         {
           "name": "skeleton",
