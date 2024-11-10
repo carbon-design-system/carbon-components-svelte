@@ -1,5 +1,5 @@
 const fs = require("node:fs");
-const glob = require("glob");
+const { globSync }= require("tinyglobby");
 const { sveld } = require("sveld");
 const pkg = require("../package.json");
 
@@ -21,7 +21,7 @@ sveld({
   },
 });
 
-glob.sync("./src/**/*.d.ts").forEach((file) => {
+globSync("./src/**/*.d.ts").forEach((file) => {
   console.log("Copying", file, " to types/");
   fs.copyFileSync(file, file.replace(/src/, "types"));
 });
