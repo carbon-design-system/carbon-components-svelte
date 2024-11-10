@@ -7,7 +7,7 @@
    * @typedef {{
    *    key: DataTableKey<Row> | (string & {});
    *    empty: boolean;
-   *    display?: (item: Value, row: Row) => DataTableValue;
+   *    display?: (item: DataTableValue, row: Row) => DataTableValue;
    *    sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
    *    columnMenu?: boolean;
    *    width?: string;
@@ -16,7 +16,7 @@
    * @typedef {{
    *    key: DataTableKey<Row>;
    *    value: DataTableValue;
-   *    display?: (item: Value, row: Row) => DataTableValue;
+   *    display?: (item: DataTableValue, row: Row) => DataTableValue;
    *    sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
    *    columnMenu?: boolean;
    *    width?: string;
@@ -28,7 +28,7 @@
    * @typedef {{
    *    key: DataTableKey<Row> | (string & {});
    *    value: DataTableValue;
-   *    display?: (item: Value, row: DataTableRow) => DataTableValue;
+   *    display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
    * }} DataTableCell<Row=DataTableRow>
    * @slot {{ row: Row; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
