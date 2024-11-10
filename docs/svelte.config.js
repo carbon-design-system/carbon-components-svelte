@@ -1,9 +1,10 @@
 import path from "node:path";
 import { mdsvex } from "mdsvex";
-import { parse, walk } from "svelte/compiler";
+import { parse } from "svelte/compiler";
+import { walk } from 'estree-walker'
 import slug from "remark-slug";
 import visit from "unist-util-visit";
-import { format } from "prettier";
+import synchronizedPrettier from "@prettier/sync";
 import pkg from "../package.json" assert { type: "json" };
 import component_api from "./src/COMPONENT_API.json" assert { type: "json" };
 import fs from "node:fs";
@@ -81,8 +82,9 @@ function plugin() {
       !node.value.match(/svx-ignore/g)
     ) {
       const scriptBlock = createImports(node.value);
-      const formattedCode = format(scriptBlock + node.value, {
+      const formattedCode = synchronizedPrettier.format(scriptBlock + node.value, {
         parser: "svelte",
+        plugins: ["prettier-plugin-svelte"],
         svelteSortOrder: "scripts-markup-styles-options",
       });
       const highlightedCode = Prism.highlight(
@@ -113,8 +115,9 @@ function plugin() {
         path.join("src/pages", `${src}.svelte`),
         "utf-8",
       );
-      const formattedCode = format(sourceCode, {
+      const formattedCode = synchronizedPrettier.format(sourceCode, {
         parser: "svelte",
+        plugins: ["prettier-plugin-svelte"],
       });
       const highlightedCode = Prism.highlight(
         formattedCode,
