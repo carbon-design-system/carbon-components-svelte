@@ -42,7 +42,7 @@ type $Props = {
     | boolean
     | ((
         row: import("./DataTable.svelte").DataTableRow,
-        value: number | string
+        value: number | string,
       ) => boolean);
 
   /**

@@ -131,7 +131,7 @@ type $Props = {
    * @default undefined
    */
   translateWithId?: (
-    id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId
+    id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId,
   ) => string;
 
   /**
@@ -140,7 +140,7 @@ type $Props = {
    * @default undefined
    */
   translateWithIdSelection?: (
-    id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId
+    id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId,
   ) => string;
 
   /**
