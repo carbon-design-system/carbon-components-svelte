@@ -1,7 +1,8 @@
-const fs = require("node:fs");
-const { globSync }= require("tinyglobby");
-const { sveld } = require("sveld");
-const pkg = require("../package.json");
+// @ts-check
+import fs from "node:fs";
+import { globSync } from "tinyglobby";
+import { sveld } from "sveld";
+import pkg from "../package.json" assert { type: "json" };
 
 sveld({
   glob: true,
