@@ -5,12 +5,11 @@
   import Settings from "../icons/Settings.svelte";
   import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
 
-  const ctx = getContext("Toolbar");
+  const ctx = getContext("Toolbar") ?? {};
 
   let menuRef = null;
 
-  $: ctx.setOverflowVisible(menuRef != null);
-  $: if (menuRef) menuRef.style.top = "100%";
+  $: ctx.setOverflowVisible?.(menuRef != null);
 </script>
 
 <OverflowMenu
