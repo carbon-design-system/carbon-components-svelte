@@ -24,7 +24,7 @@
     type="checkbox"
     class:bx--checkbox="{true}"
     checked="{indeterminate ? false : checked}"
-    indeterminate="{indeterminate}"
+    bind:indeterminate
     id="{id}"
     {...$$restProps}
     aria-checked="{indeterminate ? undefined : checked}"
