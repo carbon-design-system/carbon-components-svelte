@@ -111,13 +111,13 @@
   </script>
   <script
     type="module"
-    async
+    defer
     src="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/footer.min.js"
   ></script>
   <script
     src="//1.www.s81c.com/common/stats/ibm-common.js"
     type="text/javascript"
-    async
+    defer
   ></script>
 </svelte:head>
 
