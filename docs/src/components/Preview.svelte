@@ -52,7 +52,7 @@
     margin-bottom: var(--cds-layout-04);
     margin-left: -1rem;
     margin-right: -1rem;
-    max-width: 66rem;
+    max-width: 80rem;
   }
 
   .code-override {
@@ -72,6 +72,12 @@
 
   .preview-viewer.framed {
     min-height: 20rem;
+  }
+
+  @media (min-width: 1920px) {
+    .preview-viewer.framed {
+      min-height: 32rem;
+    }
   }
 
   .framed-header {
