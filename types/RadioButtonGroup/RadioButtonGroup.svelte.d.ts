@@ -26,7 +26,7 @@ type $Props = {
    * Specify a name attribute for the radio button inputs
    * @default undefined
    */
-  name?: string;
+  name: string;
 
   /**
    * Specify the legend text
