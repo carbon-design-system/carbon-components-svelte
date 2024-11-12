@@ -48,8 +48,8 @@
     "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^12.1.0",
     "postcss": "^8.4.16",
-    "prettier": "^2.7.1",
-    "prettier-plugin-svelte": "^2.7.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-svelte": "^3.2.8",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
     "sveld": "^0.22.0",
@@ -65,7 +65,9 @@
     }
   },
   "prettier": {
-    "svelteStrictMode": true
+    "plugins": [
+      "prettier-plugin-svelte"
+    ]
   },
   "repository": {
     "type": "git",
