@@ -28,21 +28,21 @@
   $: updateLabel(label);
 </script>
 
-<div class:bx--modal-header="{true}" {...$$restProps}>
+<div class:bx--modal-header={true} {...$$restProps}>
   {#if label}
     <h2
-      class:bx--modal-header__label="{true}"
-      class:bx--type-delta="{true}"
-      class="{labelClass}"
+      class:bx--modal-header__label={true}
+      class:bx--type-delta={true}
+      class={labelClass}
     >
       {label}
     </h2>
   {/if}
   {#if title}
     <h3
-      class:bx--modal-header__heading="{true}"
-      class:bx--type-beta="{true}"
-      class="{titleClass}"
+      class:bx--modal-header__heading={true}
+      class:bx--type-beta={true}
+      class={titleClass}
     >
       {title}
     </h3>
@@ -50,14 +50,14 @@
   <slot />
   <button
     type="button"
-    aria-label="{iconDescription}"
-    class:bx--modal-close="{true}"
-    class="{closeClass}"
+    aria-label={iconDescription}
+    class:bx--modal-close={true}
+    class={closeClass}
     on:click
-    on:click="{closeModal}"
+    on:click={closeModal}
   >
     <Close
-      size="{20}"
+      size={20}
       class="bx--modal-close__icon {closeIconClass}"
       aria-hidden="true"
     />

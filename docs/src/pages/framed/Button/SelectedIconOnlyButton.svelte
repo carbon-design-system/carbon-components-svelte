@@ -8,23 +8,23 @@
 </script>
 
 <Button
-  isSelected="{index === 0}"
+  isSelected={index === 0}
   kind="ghost"
   iconDescription="Bold"
-  icon="{TextBold}"
-  on:click="{() => (index = 0)}"
+  icon={TextBold}
+  on:click={() => (index = 0)}
 />
 <Button
-  isSelected="{index === 1}"
+  isSelected={index === 1}
   kind="ghost"
   iconDescription="Italicize"
-  icon="{TextItalic}"
-  on:click="{() => (index = 1)}"
+  icon={TextItalic}
+  on:click={() => (index = 1)}
 />
 <Button
-  isSelected="{index === 2}"
+  isSelected={index === 2}
   kind="ghost"
   iconDescription="Underline"
-  icon="{TextUnderline}"
-  on:click="{() => (index = 2)}"
+  icon={TextUnderline}
+  on:click={() => (index = 2)}
 />

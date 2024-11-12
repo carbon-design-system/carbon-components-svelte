@@ -22,27 +22,27 @@
 </script>
 
 <DataTable
-  headers="{[
-    { key: 'name', value: 'Name' },
-    { key: 'protocol', value: 'Protocol' },
-    { key: 'port', value: 'Port' },
-    { key: 'rule', value: 'Rule' },
-  ]}"
-  rows="{rows}"
-  pageSize="{pageSize}"
-  page="{page}"
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" },
+  ]}
+  {rows}
+  {pageSize}
+  {page}
 >
   <Toolbar>
     <ToolbarContent>
       <ToolbarSearch
         persistent
         value="round"
-        shouldFilterRows="{(row, value) => {
+        shouldFilterRows={(row, value) => {
           return (
             /(6|8)$/.test(row.name) &&
             row.rule.toLowerCase().includes(value.toLowerCase())
           );
-        }}"
+        }}
         bind:filteredRowIds
       />
     </ToolbarContent>
@@ -52,6 +52,6 @@
 <Pagination
   bind:pageSize
   bind:page
-  totalItems="{filteredRowIds.length}"
+  totalItems={filteredRowIds.length}
   pageSizeInputDisabled
 />

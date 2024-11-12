@@ -36,44 +36,44 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
-  class:bx--accordion__item="{true}"
-  class:bx--accordion__item--active="{open}"
-  class:bx--accordion__item--disabled="{disabled}"
-  class:bx--accordion__item--expanding="{animation === 'expanding'}"
-  class:bx--accordion__item--collapsing="{animation === 'collapsing'}"
+  class:bx--accordion__item={true}
+  class:bx--accordion__item--active={open}
+  class:bx--accordion__item--disabled={disabled}
+  class:bx--accordion__item--expanding={animation === "expanding"}
+  class:bx--accordion__item--collapsing={animation === "collapsing"}
   {...$$restProps}
   on:animationend
-  on:animationend="{() => {
+  on:animationend={() => {
     animation = undefined;
-  }}"
+  }}
 >
   <button
     type="button"
-    class:bx--accordion__heading="{true}"
-    title="{iconDescription}"
-    aria-expanded="{open}"
-    disabled="{disabled}"
+    class:bx--accordion__heading={true}
+    title={iconDescription}
+    aria-expanded={open}
+    {disabled}
     on:click
-    on:click="{() => {
+    on:click={() => {
       open = !open;
-      animation = open ? 'expanding' : 'collapsing';
-    }}"
+      animation = open ? "expanding" : "collapsing";
+    }}
     on:mouseover
     on:mouseenter
     on:mouseleave
     on:keydown
-    on:keydown="{({ key }) => {
-      if (open && key === 'Escape') {
+    on:keydown={({ key }) => {
+      if (open && key === "Escape") {
         open = false;
       }
-    }}"
+    }}
   >
-    <ChevronRight class="bx--accordion__arrow" aria-label="{iconDescription}" />
-    <div class:bx--accordion__title="{true}">
+    <ChevronRight class="bx--accordion__arrow" aria-label={iconDescription} />
+    <div class:bx--accordion__title={true}>
       <slot name="title">{title}</slot>
     </div>
   </button>
-  <div class:bx--accordion__content="{true}">
+  <div class:bx--accordion__content={true}>
     <slot />
   </div>
 </li>

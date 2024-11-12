@@ -134,20 +134,20 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
-  bind:this="{ref}"
+  bind:this={ref}
   role="presentation"
-  id="{id}"
-  class:bx--modal="{true}"
-  class:bx--modal-tall="{!passiveModal}"
-  class:is-visible="{open}"
-  class:bx--modal--danger="{danger}"
+  {id}
+  class:bx--modal={true}
+  class:bx--modal-tall={!passiveModal}
+  class:is-visible={open}
+  class:bx--modal--danger={danger}
   {...$$restProps}
   on:keydown
-  on:keydown="{(e) => {
+  on:keydown={(e) => {
     if (open) {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         open = false;
-      } else if (e.key === 'Tab') {
+      } else if (e.key === "Tab") {
         // trap focus
 
         // taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
@@ -170,107 +170,107 @@
         e.preventDefault();
       } else if (
         shouldSubmitOnEnter &&
-        e.key === 'Enter' &&
+        e.key === "Enter" &&
         !primaryButtonDisabled
       ) {
-        dispatch('submit');
-        dispatch('click:button--primary');
+        dispatch("submit");
+        dispatch("click:button--primary");
       }
     }
-  }}"
+  }}
   on:click
-  on:click="{() => {
+  on:click={() => {
     if (!didClickInnerModal && !preventCloseOnClickOutside) open = false;
     didClickInnerModal = false;
-  }}"
+  }}
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:transitionend="{(e) => {
-    if (e.propertyName === 'transform') {
-      dispatch('transitionend', { open });
+  on:transitionend={(e) => {
+    if (e.propertyName === "transform") {
+      dispatch("transitionend", { open });
     }
-  }}"
+  }}
 >
   <div
-    bind:this="{innerModal}"
+    bind:this={innerModal}
     tabindex="-1"
-    role="{alert ? (passiveModal ? 'alert' : 'alertdialog') : 'dialog'}"
-    aria-describedby="{alert && !passiveModal ? modalBodyId : undefined}"
+    role={alert ? (passiveModal ? "alert" : "alertdialog") : "dialog"}
+    aria-describedby={alert && !passiveModal ? modalBodyId : undefined}
     aria-modal="true"
-    aria-label="{ariaLabel}"
-    class:bx--modal-container="{true}"
-    class:bx--modal-container--xs="{size === 'xs'}"
-    class:bx--modal-container--sm="{size === 'sm'}"
-    class:bx--modal-container--lg="{size === 'lg'}"
-    on:click="{() => {
+    aria-label={ariaLabel}
+    class:bx--modal-container={true}
+    class:bx--modal-container--xs={size === "xs"}
+    class:bx--modal-container--sm={size === "sm"}
+    class:bx--modal-container--lg={size === "lg"}
+    on:click={() => {
       didClickInnerModal = true;
-    }}"
+    }}
   >
-    <div class:bx--modal-header="{true}">
+    <div class:bx--modal-header={true}>
       {#if passiveModal}
         <button
-          bind:this="{buttonRef}"
+          bind:this={buttonRef}
           type="button"
-          aria-label="{iconDescription}"
-          class:bx--modal-close="{true}"
-          on:click="{() => {
+          aria-label={iconDescription}
+          class:bx--modal-close={true}
+          on:click={() => {
             open = false;
-          }}"
+          }}
         >
-          <Close size="{20}" class="bx--modal-close__icon" aria-hidden="true" />
+          <Close size={20} class="bx--modal-close__icon" aria-hidden="true" />
         </button>
       {/if}
       {#if modalLabel}
-        <h2 id="{modalLabelId}" class:bx--modal-header__label="{true}">
+        <h2 id={modalLabelId} class:bx--modal-header__label={true}>
           <slot name="label">{modalLabel}</slot>
         </h2>
       {/if}
-      <h3 id="{modalHeadingId}" class:bx--modal-header__heading="{true}">
+      <h3 id={modalHeadingId} class:bx--modal-header__heading={true}>
         <slot name="heading">{modalHeading}</slot>
       </h3>
       {#if !passiveModal}
         <button
-          bind:this="{buttonRef}"
+          bind:this={buttonRef}
           type="button"
-          aria-label="{iconDescription}"
-          class:bx--modal-close="{true}"
-          on:click="{() => {
+          aria-label={iconDescription}
+          class:bx--modal-close={true}
+          on:click={() => {
             open = false;
-          }}"
+          }}
         >
-          <Close size="{20}" class="bx--modal-close__icon" aria-hidden="true" />
+          <Close size={20} class="bx--modal-close__icon" aria-hidden="true" />
         </button>
       {/if}
     </div>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
-      id="{modalBodyId}"
-      class:bx--modal-content="{true}"
-      class:bx--modal-content--with-form="{hasForm}"
-      class:bx--modal-scroll-content="{hasScrollingContent}"
-      tabindex="{hasScrollingContent ? '0' : undefined}"
-      role="{hasScrollingContent ? 'region' : undefined}"
-      aria-label="{hasScrollingContent ? ariaLabel : undefined}"
-      aria-labelledby="{modalLabel ? modalLabelId : modalHeadingId}"
+      id={modalBodyId}
+      class:bx--modal-content={true}
+      class:bx--modal-content--with-form={hasForm}
+      class:bx--modal-scroll-content={hasScrollingContent}
+      tabindex={hasScrollingContent ? "0" : undefined}
+      role={hasScrollingContent ? "region" : undefined}
+      aria-label={hasScrollingContent ? ariaLabel : undefined}
+      aria-labelledby={modalLabel ? modalLabelId : modalHeadingId}
     >
       <slot />
     </div>
     {#if hasScrollingContent}
-      <div class:bx--modal-content--overflow-indicator="{true}"></div>
+      <div class:bx--modal-content--overflow-indicator={true}></div>
     {/if}
     {#if !passiveModal}
       <div
-        class:bx--modal-footer="{true}"
-        class:bx--modal-footer--three-button="{secondaryButtons.length === 2}"
+        class:bx--modal-footer={true}
+        class:bx--modal-footer--three-button={secondaryButtons.length === 2}
       >
         {#if secondaryButtons.length > 0}
           {#each secondaryButtons as button}
             <Button
               kind="secondary"
-              on:click="{() => {
-                dispatch('click:button--secondary', { text: button.text });
-              }}"
+              on:click={() => {
+                dispatch("click:button--secondary", { text: button.text });
+              }}
             >
               {button.text}
             </Button>
@@ -278,23 +278,23 @@
         {:else if secondaryButtonText}
           <Button
             kind="secondary"
-            on:click="{() => {
-              dispatch('click:button--secondary', {
+            on:click={() => {
+              dispatch("click:button--secondary", {
                 text: secondaryButtonText,
               });
-            }}"
+            }}
           >
             {secondaryButtonText}
           </Button>
         {/if}
         <Button
-          kind="{danger ? 'danger' : 'primary'}"
-          disabled="{primaryButtonDisabled}"
-          icon="{primaryButtonIcon}"
-          on:click="{() => {
-            dispatch('submit');
-            dispatch('click:button--primary');
-          }}"
+          kind={danger ? "danger" : "primary"}
+          disabled={primaryButtonDisabled}
+          icon={primaryButtonIcon}
+          on:click={() => {
+            dispatch("submit");
+            dispatch("click:button--primary");
+          }}
         >
           {primaryButtonText}
         </Button>

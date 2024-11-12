@@ -7,4 +7,4 @@
   $: code = Array.from({ length }, (_, i) => i + 1).join("\n");
 </script>
 
-<CodeSnippet type="multi" code="{code}" />
+<CodeSnippet type="multi" {code} />

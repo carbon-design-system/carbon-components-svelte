@@ -14,9 +14,9 @@
 <StructuredList
   selection
   selected="row-1-value"
-  on:change="{(e) => {
+  on:change={(e) => {
     console.log(e.detail); // string
-  }}"
+  }}
 >
   <StructuredListHead>
     <StructuredListRow head>
@@ -97,4 +97,4 @@
   </StructuredListBody>
 </StructuredList>
 
-<StructuredListSkeleton rows="{3}" />
+<StructuredListSkeleton rows={3} />

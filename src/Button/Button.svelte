@@ -136,10 +136,10 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <ButtonSkeleton
-    href="{href}"
-    size="{size}"
+    {href}
+    {size}
     {...$$restProps}
-    style="{hasIconOnly && 'width: 3rem;'}"
+    style={hasIconOnly && "width: 3rem;"}
     on:click
     on:focus
     on:blur
@@ -148,12 +148,12 @@
     on:mouseleave
   />
 {:else if as}
-  <slot props="{buttonProps}" />
+  <slot props={buttonProps} />
 {:else if href && !disabled}
   <!-- svelte-ignore a11y-missing-attribute -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <a
-    bind:this="{ref}"
+    bind:this={ref}
     {...buttonProps}
     on:click
     on:focus
@@ -163,26 +163,26 @@
     on:mouseleave
   >
     {#if hasIconOnly}
-      <span class:bx--assistive-text="{true}">{iconDescription}</span>
+      <span class:bx--assistive-text={true}>{iconDescription}</span>
     {/if}
     <slot />
     {#if $$slots.icon}
       <slot
         name="icon"
-        style="{hasIconOnly ? 'margin-left: 0' : undefined}"
+        style={hasIconOnly ? "margin-left: 0" : undefined}
         {...iconProps}
       />
     {:else if icon}
       <svelte:component
-        this="{icon}"
-        style="{hasIconOnly ? 'margin-left: 0' : undefined}"
+        this={icon}
+        style={hasIconOnly ? "margin-left: 0" : undefined}
         {...iconProps}
       />
     {/if}
   </a>
 {:else}
   <button
-    bind:this="{ref}"
+    bind:this={ref}
     {...buttonProps}
     on:click
     on:focus
@@ -192,19 +192,19 @@
     on:mouseleave
   >
     {#if hasIconOnly}
-      <span class:bx--assistive-text="{true}">{iconDescription}</span>
+      <span class:bx--assistive-text={true}>{iconDescription}</span>
     {/if}
     <slot />
     {#if $$slots.icon}
       <slot
         name="icon"
-        style="{hasIconOnly ? 'margin-left: 0' : undefined}"
+        style={hasIconOnly ? "margin-left: 0" : undefined}
         {...iconProps}
       />
     {:else if icon}
       <svelte:component
-        this="{icon}"
-        style="{hasIconOnly ? 'margin-left: 0' : undefined}"
+        this={icon}
+        style={hasIconOnly ? "margin-left: 0" : undefined}
         {...iconProps}
       />
     {/if}

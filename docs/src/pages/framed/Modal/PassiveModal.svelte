@@ -4,7 +4,7 @@
   let open = false;
 </script>
 
-<Button kind="tertiary" on:click="{() => (open = true)}">Learn more</Button>
+<Button kind="tertiary" on:click={() => (open = true)}>Learn more</Button>
 
 <Modal passiveModal bind:open modalHeading="IBM Cloudant" on:open on:close>
   <p>

@@ -22,12 +22,12 @@
 </script>
 
 <section
-  bind:this="{ref}"
+  bind:this={ref}
   aria-label="data table toolbar"
-  class:bx--table-toolbar="{true}"
-  class:bx--table-toolbar--small="{size === 'sm'}"
-  class:bx--table-toolbar--normal="{size === 'default'}"
-  style:z-index="{1}"
+  class:bx--table-toolbar={true}
+  class:bx--table-toolbar--small={size === "sm"}
+  class:bx--table-toolbar--normal={size === "default"}
+  style:z-index={1}
   {...$$restProps}
 >
   <slot />

@@ -12,7 +12,7 @@ sveld({
       if (type === "h1")
         document.append(
           "quote",
-          `${components.size} components exported from ${pkg.name}@${pkg.version}.`
+          `${components.size} components exported from ${pkg.name}@${pkg.version}.`,
         );
     },
   },

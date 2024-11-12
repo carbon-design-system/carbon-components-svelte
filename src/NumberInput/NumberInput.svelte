@@ -156,56 +156,56 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:bx--form-item={true}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
 >
   <div
-    data-invalid="{error || undefined}"
-    class:bx--number="{true}"
-    class:bx--number--helpertext="{true}"
-    class:bx--number--readonly="{readonly}"
-    class:bx--number--light="{light}"
-    class:bx--number--nolabel="{hideLabel}"
-    class:bx--number--nosteppers="{hideSteppers}"
-    class:bx--number--sm="{size === 'sm'}"
-    class:bx--number--xl="{size === 'xl'}"
+    data-invalid={error || undefined}
+    class:bx--number={true}
+    class:bx--number--helpertext={true}
+    class:bx--number--readonly={readonly}
+    class:bx--number--light={light}
+    class:bx--number--nolabel={hideLabel}
+    class:bx--number--nosteppers={hideSteppers}
+    class:bx--number--sm={size === "sm"}
+    class:bx--number--xl={size === "xl"}
   >
     {#if $$slots.label || label}
       <label
-        for="{id}"
-        class:bx--label="{true}"
-        class:bx--label--disabled="{disabled}"
-        class:bx--visually-hidden="{hideLabel}"
+        for={id}
+        class:bx--label={true}
+        class:bx--label--disabled={disabled}
+        class:bx--visually-hidden={hideLabel}
       >
         <slot name="label">{label}</slot>
       </label>
     {/if}
     <div
-      class:bx--number__input-wrapper="{true}"
-      class:bx--number__input-wrapper--warning="{!invalid && warn}"
+      class:bx--number__input-wrapper={true}
+      class:bx--number__input-wrapper--warning={!invalid && warn}
     >
       <input
-        bind:this="{ref}"
+        bind:this={ref}
         type="number"
         pattern="[0-9]*"
-        aria-describedby="{errorId}"
-        data-invalid="{error || undefined}"
-        aria-invalid="{error || undefined}"
-        aria-label="{label ? undefined : ariaLabel}"
-        disabled="{disabled}"
-        id="{id}"
-        name="{name}"
-        max="{max}"
-        min="{min}"
-        step="{step}"
-        value="{value ?? ''}"
-        readonly="{readonly}"
+        aria-describedby={errorId}
+        data-invalid={error || undefined}
+        aria-invalid={error || undefined}
+        aria-label={label ? undefined : ariaLabel}
+        {disabled}
+        {id}
+        {name}
+        {max}
+        {min}
+        {step}
+        value={value ?? ""}
+        {readonly}
         {...$$restProps}
-        on:change="{onChange}"
-        on:input="{onInput}"
+        on:change={onChange}
+        on:input={onInput}
         on:keydown
         on:keyup
         on:focus
@@ -225,55 +225,55 @@
         {/if}
       {/if}
       {#if !hideSteppers}
-        <div class:bx--number__controls="{true}">
+        <div class:bx--number__controls={true}>
           <button
             type="button"
             tabindex="-1"
-            title="{decrementLabel || iconDescription}"
-            aria-label="{decrementLabel || iconDescription}"
-            class:bx--number__control-btn="{true}"
-            class:down-icon="{true}"
-            on:click="{() => {
+            title={decrementLabel || iconDescription}
+            aria-label={decrementLabel || iconDescription}
+            class:bx--number__control-btn={true}
+            class:down-icon={true}
+            on:click={() => {
               updateValue(false);
-            }}"
-            disabled="{disabled}"
+            }}
+            {disabled}
           >
             <Subtract class="down-icon" />
           </button>
-          <div class:bx--number__rule-divider="{true}"></div>
+          <div class:bx--number__rule-divider={true}></div>
           <button
             type="button"
             tabindex="-1"
-            title="{incrementLabel || iconDescription}"
-            aria-label="{incrementLabel || iconDescription}"
-            class:bx--number__control-btn="{true}"
-            class:up-icon="{true}"
-            on:click="{() => {
+            title={incrementLabel || iconDescription}
+            aria-label={incrementLabel || iconDescription}
+            class:bx--number__control-btn={true}
+            class:up-icon={true}
+            on:click={() => {
               updateValue(true);
-            }}"
-            disabled="{disabled}"
+            }}
+            {disabled}
           >
             <Add class="up-icon" />
           </button>
-          <div class:bx--number__rule-divider="{true}"></div>
+          <div class:bx--number__rule-divider={true}></div>
         </div>
       {/if}
     </div>
     {#if !error && !warn && helperText}
       <div
-        class:bx--form__helper-text="{true}"
-        class:bx--form__helper-text--disabled="{disabled}"
+        class:bx--form__helper-text={true}
+        class:bx--form__helper-text--disabled={disabled}
       >
         {helperText}
       </div>
     {/if}
     {#if error}
-      <div id="{errorId}" class:bx--form-requirement="{true}">
+      <div id={errorId} class:bx--form-requirement={true}>
         {invalidText}
       </div>
     {/if}
     {#if !error && warn}
-      <div id="{errorId}" class:bx--form-requirement="{true}">{warnText}</div>
+      <div id={errorId} class:bx--form-requirement={true}>{warnText}</div>
     {/if}
   </div>
 </div>

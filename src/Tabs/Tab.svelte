@@ -33,41 +33,41 @@
 <li
   tabindex="-1"
   role="presentation"
-  class:bx--tabs__nav-item="{true}"
-  class:bx--tabs__nav-item--disabled="{disabled}"
-  class:bx--tabs__nav-item--selected="{selected}"
+  class:bx--tabs__nav-item={true}
+  class:bx--tabs__nav-item--disabled={disabled}
+  class:bx--tabs__nav-item--selected={selected}
   {...$$restProps}
   on:click|preventDefault
-  on:click|preventDefault="{() => {
+  on:click|preventDefault={() => {
     if (!disabled) {
       update(id);
     }
-  }}"
+  }}
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:keydown="{({ key }) => {
+  on:keydown={({ key }) => {
     if (!disabled) {
-      if (key === 'ArrowRight') {
+      if (key === "ArrowRight") {
         change(1);
-      } else if (key === 'ArrowLeft') {
+      } else if (key === "ArrowLeft") {
         change(-1);
-      } else if (key === ' ' || key === 'Enter') {
+      } else if (key === " " || key === "Enter") {
         update(id);
       }
     }
-  }}"
+  }}
 >
   <a
-    bind:this="{ref}"
+    bind:this={ref}
     role="tab"
-    tabindex="{disabled ? '-1' : tabindex}"
-    aria-selected="{selected}"
-    aria-disabled="{disabled}"
-    id="{id}"
-    href="{href}"
-    class:bx--tabs__nav-link="{true}"
-    style:width="{$useAutoWidth ? "auto" : undefined}"
+    tabindex={disabled ? "-1" : tabindex}
+    aria-selected={selected}
+    aria-disabled={disabled}
+    {id}
+    {href}
+    class:bx--tabs__nav-link={true}
+    style:width={$useAutoWidth ? "auto" : undefined}
   >
     <slot>{label}</slot>
   </a>

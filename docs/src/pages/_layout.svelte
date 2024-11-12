@@ -52,7 +52,7 @@
 
   $: isMobile = innerWidth < 1056;
   $: components = $layout.children.filter(
-    (child) => child.title === "components"
+    (child) => child.title === "components",
   )[0];
 
   $beforeUrlChange(() => {
@@ -65,7 +65,7 @@
 <svelte:window bind:innerWidth />
 
 <svelte:body
-  on:keydown="{(e) => {
+  on:keydown={(e) => {
     if (active) return;
     if (
       document.activeElement instanceof HTMLInputElement ||
@@ -76,14 +76,15 @@
     }
 
     const isCommandOrControl = e.metaKey || e.ctrlKey;
-    const isCmdK = isCommandOrControl && e.key.toLowerCase() === 'k';
-    const isSlash = e.key === '/';
+    const isCmdK = isCommandOrControl && e.key.toLowerCase() === "k";
+    const isSlash = e.key === "/";
 
     if (isCmdK || isSlash) {
       e.preventDefault();
       active = true;
     }
-  }}" />
+  }}
+/>
 
 <svelte:head>
   <!-- Tealium/GA Set up -->
@@ -123,26 +124,26 @@
 
 <Theme
   persist
-  bind:theme="{$theme}"
-  on:update="{(e) => {
+  bind:theme={$theme}
+  on:update={(e) => {
     const theme = e.detail.theme;
     document.documentElement.style.setProperty(
-      'color-scheme',
-      ['white', 'g10'].includes(theme) ? 'light' : 'dark'
+      "color-scheme",
+      ["white", "g10"].includes(theme) ? "light" : "dark",
     );
-  }}"
+  }}
 >
   <Header
     aria-label="Navigation"
-    href="{$url('/')}"
-    expandedByDefault="{true}"
+    href={$url("/")}
+    expandedByDefault={true}
     bind:isSideNavOpen
   >
     <svelte:fragment slot="skip-to-content">
       <SkipToContent />
     </svelte:fragment>
 
-    <span slot="platform" class="platform-name" class:hidden="{active}">
+    <span slot="platform" class="platform-name" class:hidden={active}>
       Carbon Components Svelte &nbsp;<code class="code-01"
         >v{process.env.VERSION || ""}</code
       >
@@ -152,17 +153,17 @@
         bind:value
         bind:active
         placeholder="Search"
-        results="{results}"
-        on:select="{(e) => {
+        {results}
+        on:select={(e) => {
           $goto(e.detail.selectedResult.href);
-        }}"
+        }}
       />
       <HeaderActionLink
-        icon="{LogoGithub}"
+        icon={LogoGithub}
         href="https://github.com/carbon-design-system/carbon-components-svelte"
         target="_blank"
       />
-      <HeaderAction transition="{false}" bind:isOpen>
+      <HeaderAction transition={false} bind:isOpen>
         <HeaderPanelLinks>
           <HeaderPanelDivider>Carbon Svelte portfolio</HeaderPanelDivider>
           <HeaderPanelLink
@@ -197,13 +198,13 @@
     </HeaderUtilities>
   </Header>
 
-  <SideNav bind:isOpen="{isSideNavOpen}">
+  <SideNav bind:isOpen={isSideNavOpen}>
     <SideNavItems>
       {#each components.children.filter((child) => !deprecated.includes(child.title)) as child (child.path)}
         <SideNavMenuItem
-          text="{child.title}"
-          href="{$url(child.path)}"
-          isSelected="{$isActive($url(child.path))}"
+          text={child.title}
+          href={$url(child.path)}
+          isSelected={$isActive($url(child.path))}
         >
           {child.title}
           {#if deprecated.includes(child.title)}

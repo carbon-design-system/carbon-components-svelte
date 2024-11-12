@@ -1,3 +1,3 @@
-<ul class:bx--side-nav__items="{true}">
+<ul class:bx--side-nav__items={true}>
   <slot />
 </ul>

@@ -82,7 +82,7 @@
 <!-- svelte-ignore a11y-autofocus -->
 {#if skeleton}
   <SearchSkeleton
-    size="{size}"
+    {size}
     {...$$restProps}
     on:click
     on:mouseover
@@ -93,81 +93,81 @@
   <div
     role="search"
     aria-labelledby="{id}-search"
-    class:bx--search="{true}"
-    class:bx--search--light="{light}"
-    class:bx--search--disabled="{disabled}"
-    class:bx--search--sm="{size === 'sm'}"
-    class:bx--search--lg="{size === 'lg'}"
-    class:bx--search--xl="{size === 'xl'}"
-    class:bx--search--expandable="{expandable}"
-    class:bx--search--expanded="{expanded}"
-    class="{searchClass}"
+    class:bx--search={true}
+    class:bx--search--light={light}
+    class:bx--search--disabled={disabled}
+    class:bx--search--sm={size === "sm"}
+    class:bx--search--lg={size === "lg"}
+    class:bx--search--xl={size === "xl"}
+    class:bx--search--expandable={expandable}
+    class:bx--search--expanded={expanded}
+    class={searchClass}
   >
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
-      bind:this="{searchRef}"
-      class:bx--search-magnifier="{true}"
-      on:click="{() => {
+      bind:this={searchRef}
+      class:bx--search-magnifier={true}
+      on:click={() => {
         if (expandable) expanded = true;
-      }}"
+      }}
     >
-      <svelte:component this="{icon}" class="bx--search-magnifier-icon" />
+      <svelte:component this={icon} class="bx--search-magnifier-icon" />
     </div>
-    <label id="{id}-search" for="{id}" class:bx--label="{true}">
+    <label id="{id}-search" for={id} class:bx--label={true}>
       <slot name="labelText">
         {labelText}
       </slot>
     </label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
-      bind:this="{ref}"
+      bind:this={ref}
       bind:value
       type="text"
       role="searchbox"
-      class:bx--search-input="{true}"
-      autofocus="{autofocus === true ? true : undefined}"
-      autocomplete="{autocomplete}"
-      disabled="{disabled}"
-      id="{id}"
-      placeholder="{placeholder}"
+      class:bx--search-input={true}
+      autofocus={autofocus === true ? true : undefined}
+      {autocomplete}
+      {disabled}
+      {id}
+      {placeholder}
       {...$$restProps}
       on:change
       on:input
       on:focus
-      on:focus="{() => {
+      on:focus={() => {
         if (expandable) expanded = true;
-      }}"
+      }}
       on:blur
-      on:blur="{() => {
-        if (expanded && (value === '' || value == null)) {
+      on:blur={() => {
+        if (expanded && (value === "" || value == null)) {
           expanded = false;
         }
-      }}"
+      }}
       on:keydown
-      on:keydown="{({ key }) => {
-        if (key === 'Escape') {
-          value = '';
-          dispatch('clear');
+      on:keydown={({ key }) => {
+        if (key === "Escape") {
+          value = "";
+          dispatch("clear");
         }
-      }}"
+      }}
       on:keyup
       on:paste
     />
     <button
       type="button"
-      aria-label="{closeButtonLabelText}"
-      disabled="{disabled}"
-      class:bx--search-close="{true}"
-      class:bx--search-close--hidden="{value === '' || value == null}"
+      aria-label={closeButtonLabelText}
+      {disabled}
+      class:bx--search-close={true}
+      class:bx--search-close--hidden={value === "" || value == null}
       on:click
-      on:click="{() => {
-        value = '';
+      on:click={() => {
+        value = "";
         ref.focus();
-        dispatch('clear');
-      }}"
+        dispatch("clear");
+      }}
     >
-      <svelte:component this="{Close}" size="{size === 'xl' ? 20 : 16}" />
+      <svelte:component this={Close} size={size === "xl" ? 20 : 16} />
     </button>
   </div>
 {/if}

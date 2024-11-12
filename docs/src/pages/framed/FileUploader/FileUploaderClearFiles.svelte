@@ -6,7 +6,7 @@
 </script>
 
 <FileUploader
-  bind:this="{fileUploader}"
+  bind:this={fileUploader}
   multiple
   labelTitle="Upload files"
   buttonLabel="Add files"
@@ -18,15 +18,11 @@
 
 <Button
   kind="tertiary"
-  disabled="{!files.length}"
-  on:click="{fileUploader.clearFiles}"
+  disabled={!files.length}
+  on:click={fileUploader.clearFiles}
 >
   Clear (programmatic)
 </Button>
-<Button
-  kind="tertiary"
-  disabled="{!files.length}"
-  on:click="{() => (files = [])}"
->
+<Button kind="tertiary" disabled={!files.length} on:click={() => (files = [])}>
   Clear (two-way binding)
 </Button>

@@ -6,6 +6,6 @@
   text="text"
   on:click
   on:copy
-  copy="{(text) => text}"
+  copy={(text) => text}
   feedback="Copied to clipboard"
 />

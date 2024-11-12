@@ -28,7 +28,7 @@
 </script>
 
 <li role="none">
-  <ul role="group" aria-label="{labelText}">
+  <ul role="group" aria-label={labelText}>
     <slot />
   </ul>
 </li>

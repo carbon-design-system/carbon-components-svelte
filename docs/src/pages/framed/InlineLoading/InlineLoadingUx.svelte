@@ -37,14 +37,14 @@
 <ButtonSet>
   <Button
     kind="ghost"
-    disabled="{state === 'dormant' || state === 'finished'}"
-    on:click="{() => (state = 'inactive')}"
+    disabled={state === "dormant" || state === "finished"}
+    on:click={() => (state = "inactive")}
   >
     Cancel
   </Button>
   {#if state !== "dormant"}
-    <InlineLoading status="{state}" description="{descriptionMap[state]}" />
+    <InlineLoading status={state} description={descriptionMap[state]} />
   {:else}
-    <Button on:click="{() => (state = 'active')}">Submit</Button>
+    <Button on:click={() => (state = "active")}>Submit</Button>
   {/if}
 </ButtonSet>

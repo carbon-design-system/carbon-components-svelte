@@ -10,6 +10,6 @@
 
 <SkeletonText paragraph />
 
-<SkeletonText paragraph lines="{8}" />
+<SkeletonText paragraph lines={8} />
 
 <SkeletonText paragraph width="50%" />

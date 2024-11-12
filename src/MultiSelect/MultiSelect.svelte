@@ -275,32 +275,33 @@
   $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
   $: highlightedId =
     highlightedIndex > -1
-      ? (filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ?? null
+      ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
+        null)
       : null;
 </script>
 
 <svelte:window
-  on:click="{({ target }) => {
+  on:click={({ target }) => {
     if (open && multiSelectRef && !multiSelectRef.contains(target)) {
       open = false;
     }
-  }}"
+  }}
 />
 
 <div
-  bind:this="{multiSelectRef}"
-  class:bx--multi-select__wrapper="{true}"
-  class:bx--list-box__wrapper="{true}"
-  class:bx--multi-select__wrapper--inline="{inline}"
-  class:bx--list-box__wrapper--inline="{inline}"
-  class:bx--multi-select__wrapper--inline--invalid="{inline && invalid}"
+  bind:this={multiSelectRef}
+  class:bx--multi-select__wrapper={true}
+  class:bx--list-box__wrapper={true}
+  class:bx--multi-select__wrapper--inline={inline}
+  class:bx--list-box__wrapper--inline={inline}
+  class:bx--multi-select__wrapper--inline--invalid={inline && invalid}
 >
   {#if titleText || $$slots.titleText}
     <label
-      for="{id}"
-      class:bx--label="{true}"
-      class:bx--label--disabled="{disabled}"
-      class:bx--visually-hidden="{hideLabel}"
+      for={id}
+      class:bx--label={true}
+      class:bx--label--disabled={disabled}
+      class:bx--visually-hidden={hideLabel}
     >
       <slot name="titleText">
         {titleText}
@@ -308,15 +309,15 @@
     </label>
   {/if}
   <ListBox
-    role="{undefined}"
-    disabled="{disabled}"
-    invalid="{invalid}"
-    invalidText="{invalidText}"
-    open="{open}"
-    light="{light}"
-    size="{size}"
-    warn="{warn}"
-    warnText="{warnText}"
+    role={undefined}
+    {disabled}
+    {invalid}
+    {invalidText}
+    {open}
+    {light}
+    {size}
+    {warn}
+    {warnText}
     class="bx--multi-select {direction === 'top' &&
       'bx--list-box--up'} {filterable && 'bx--combo-box'}
       {filterable && 'bx--multi-select--filterable'}
@@ -335,8 +336,8 @@
     <ListBoxField
       role="button"
       tabindex="0"
-      aria-expanded="{open}"
-      on:click="{() => {
+      aria-expanded={open}
+      on:click={() => {
         if (disabled) return;
         if (filterable) {
           open = true;
@@ -344,191 +345,187 @@
         } else {
           open = !open;
         }
-      }}"
-      on:keydown="{(e) => {
+      }}
+      on:keydown={(e) => {
         if (filterable) {
           return;
         }
         const key = e.key;
-        if ([' ', 'ArrowUp', 'ArrowDown'].includes(key)) {
+        if ([" ", "ArrowUp", "ArrowDown"].includes(key)) {
           e.preventDefault();
         }
-        if (key === ' ') {
+        if (key === " ") {
           open = !open;
-        } else if (key === 'Tab') {
+        } else if (key === "Tab") {
           if (selectionRef && checked.length > 0) {
             selectionRef.focus();
           } else {
             open = false;
             fieldRef.blur();
           }
-        } else if (key === 'ArrowDown') {
+        } else if (key === "ArrowDown") {
           change(1);
-        } else if (key === 'ArrowUp') {
+        } else if (key === "ArrowUp") {
           change(-1);
-        } else if (key === 'Enter') {
+        } else if (key === "Enter") {
           if (highlightedIndex > -1) {
             sortedItems = sortedItems.map((item, i) => {
               if (i !== highlightedIndex) return item;
               return { ...item, checked: !item.checked };
             });
           }
-        } else if (key === 'Escape') {
+        } else if (key === "Escape") {
           open = false;
         }
-      }}"
-      on:focus="{() => {
+      }}
+      on:focus={() => {
         if (filterable) {
           open = true;
           if (inputRef) inputRef.focus();
         }
-      }}"
-      on:blur="{(e) => {
-        if (!filterable) dispatch('blur', e);
-      }}"
-      id="{id}"
-      disabled="{disabled}"
-      translateWithId="{translateWithId}"
+      }}
+      on:blur={(e) => {
+        if (!filterable) dispatch("blur", e);
+      }}
+      {id}
+      {disabled}
+      {translateWithId}
     >
       {#if checked.length > 0}
         <ListBoxSelection
-          selectionCount="{checked.length}"
+          selectionCount={checked.length}
           on:clear
-          on:clear="{() => {
+          on:clear={() => {
             selectedIds = [];
             sortedItems = sortedItems.map((item) => ({
               ...item,
               checked: false,
             }));
             if (fieldRef) fieldRef.blur();
-          }}"
-          translateWithId="{translateWithIdSelection}"
-          disabled="{disabled}"
+          }}
+          translateWithId={translateWithIdSelection}
+          {disabled}
         />
       {/if}
       {#if filterable}
         <input
-          bind:this="{inputRef}"
+          bind:this={inputRef}
           bind:value
           {...$$restProps}
           role="combobox"
           tabindex="0"
           autocomplete="off"
           aria-autocomplete="list"
-          aria-expanded="{open}"
-          aria-activedescendant="{highlightedId}"
-          aria-disabled="{disabled}"
-          aria-controls="{menuId}"
-          class:bx--text-input="{true}"
-          class:bx--text-input--empty="{value === ''}"
-          class:bx--text-input--light="{light}"
+          aria-expanded={open}
+          aria-activedescendant={highlightedId}
+          aria-disabled={disabled}
+          aria-controls={menuId}
+          class:bx--text-input={true}
+          class:bx--text-input--empty={value === ""}
+          class:bx--text-input--light={light}
           on:keydown
-          on:keydown|stopPropagation="{({ key }) => {
-            if (key === 'Enter') {
+          on:keydown|stopPropagation={({ key }) => {
+            if (key === "Enter") {
               if (highlightedId) {
                 const filteredItemIndex = sortedItems.findIndex(
-                  (item) => item.id === highlightedId
+                  (item) => item.id === highlightedId,
                 );
                 sortedItems = sortedItems.map((item, i) => {
                   if (i !== filteredItemIndex) return item;
                   return { ...item, checked: !item.checked };
                 });
               }
-            } else if (key === 'Tab') {
+            } else if (key === "Tab") {
               open = false;
               inputRef.blur();
-            } else if (key === 'ArrowDown') {
+            } else if (key === "ArrowDown") {
               change(1);
-            } else if (key === 'ArrowUp') {
+            } else if (key === "ArrowUp") {
               change(-1);
-            } else if (key === 'Escape') {
+            } else if (key === "Escape") {
               open = false;
-            } else if (key === ' ') {
+            } else if (key === " ") {
               if (!open) open = true;
             }
-          }}"
+          }}
           on:keyup
           on:focus
           on:blur
           on:paste
-          disabled="{disabled}"
-          placeholder="{placeholder}"
-          id="{id}"
-          name="{name}"
+          {disabled}
+          {placeholder}
+          {id}
+          {name}
         />
         {#if invalid}
           <WarningFilled class="bx--list-box__invalid-icon" />
         {/if}
         {#if value}
           <ListBoxSelection
-            on:clear="{() => {
-              value = '';
+            on:clear={() => {
+              value = "";
               open = false;
-            }}"
-            translateWithId="{translateWithIdSelection}"
-            disabled="{disabled}"
-            open="{open}"
+            }}
+            translateWithId={translateWithIdSelection}
+            {disabled}
+            {open}
           />
         {/if}
         <ListBoxMenuIcon
           style="pointer-events: {open ? 'auto' : 'none'}"
-          on:click="{(e) => {
+          on:click={(e) => {
             e.stopPropagation();
             open = !open;
-          }}"
-          translateWithId="{translateWithId}"
-          open="{open}"
+          }}
+          {translateWithId}
+          {open}
         />
       {/if}
       {#if !filterable}
-        <span class:bx--list-box__label="{true}">{label}</span>
-        <ListBoxMenuIcon open="{open}" translateWithId="{translateWithId}" />
+        <span class:bx--list-box__label={true}>{label}</span>
+        <ListBoxMenuIcon {open} {translateWithId} />
       {/if}
     </ListBoxField>
-    <div style:display="{open ? "block" : "none"}">
-      <ListBoxMenu
-        aria-label="{ariaLabel}"
-        id="{id}"
-        aria-multiselectable="true"
-      >
+    <div style:display={open ? "block" : "none"}>
+      <ListBoxMenu aria-label={ariaLabel} {id} aria-multiselectable="true">
         {#each filterable ? filteredItems : sortedItems as item, i (item.id)}
           <ListBoxMenuItem
-            id="{item.id}"
+            id={item.id}
             role="option"
             aria-labelledby="checkbox-{item.id}"
-            aria-selected="{item.checked}"
-            active="{item.checked}"
-            highlighted="{highlightedIndex === i}"
-            disabled="{item.disabled}"
-            on:click="{(e) => {
+            aria-selected={item.checked}
+            active={item.checked}
+            highlighted={highlightedIndex === i}
+            disabled={item.disabled}
+            on:click={(e) => {
               if (item.disabled) {
                 e.stopPropagation();
                 return;
               }
               sortedItems = sortedItems.map((_) =>
-                _.id === item.id ? { ..._, checked: !_.checked } : _
+                _.id === item.id ? { ..._, checked: !_.checked } : _,
               );
               fieldRef.focus();
-            }}"
-            on:mouseenter="{() => {
+            }}
+            on:mouseenter={() => {
               if (item.disabled) return;
               highlightedIndex = i;
-            }}"
+            }}
           >
             <Checkbox
-              name="{item.id}"
-              title="{useTitleInItem ? itemToString(item) : undefined}"
+              name={item.id}
+              title={useTitleInItem ? itemToString(item) : undefined}
               {...itemToInput(item)}
               readonly
               tabindex="-1"
               id="checkbox-{item.id}"
-              checked="{item.checked}"
-              disabled="{item.disabled}"
-              on:blur="{() => {
+              checked={item.checked}
+              disabled={item.disabled}
+              on:blur={() => {
                 if (i === filteredItems.length - 1) open = false;
-              }}"
+              }}
             >
-              <slot slot="labelText" item="{item}" index="{i}">
+              <slot slot="labelText" {item} index={i}>
                 {itemToString(item)}
               </slot>
             </Checkbox>
@@ -539,8 +536,8 @@
   </ListBox>
   {#if !inline && !invalid && !warn && helperText}
     <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}"
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
     >
       {helperText}
     </div>

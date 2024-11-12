@@ -35,39 +35,39 @@
 </script>
 
 <svelte:window
-  on:click="{(e) => {
+  on:click={(e) => {
     if (!open) return;
     if (!ref.contains(e.target)) {
-      dispatch('click:outside', { target: e.target });
+      dispatch("click:outside", { target: e.target });
       if (closeOnOutsideClick) open = false;
     }
-  }}"
+  }}
 />
 
 <div
-  bind:this="{ref}"
-  class:bx--popover="{true}"
-  class:bx--popover--caret="{caret}"
-  class:bx--popover--light="{light}"
-  class:bx--popover--high-contrast="{highContrast}"
-  class:bx--popover--top="{align === 'top'}"
-  class:bx--popover--top-left="{align === 'top-left'}"
-  class:bx--popover--top-right="{align === 'top-right'}"
-  class:bx--popover--bottom="{align === 'bottom'}"
-  class:bx--popover--bottom-left="{align === 'bottom-left'}"
-  class:bx--popover--bottom-right="{align === 'bottom-right'}"
-  class:bx--popover--left="{align === 'left'}"
-  class:bx--popover--left-bottom="{align === 'left-bottom'}"
-  class:bx--popover--left-top="{align === 'left-top'}"
-  class:bx--popover--right="{align === 'right'}"
-  class:bx--popover--right-bottom="{align === 'right-bottom'}"
-  class:bx--popover--right-top="{align === 'right-top'}"
-  class:bx--popover--open="{open}"
-  class:bx--popover--relative="{relative}"
-  style:position="{relative ? "relative" : undefined}"
+  bind:this={ref}
+  class:bx--popover={true}
+  class:bx--popover--caret={caret}
+  class:bx--popover--light={light}
+  class:bx--popover--high-contrast={highContrast}
+  class:bx--popover--top={align === "top"}
+  class:bx--popover--top-left={align === "top-left"}
+  class:bx--popover--top-right={align === "top-right"}
+  class:bx--popover--bottom={align === "bottom"}
+  class:bx--popover--bottom-left={align === "bottom-left"}
+  class:bx--popover--bottom-right={align === "bottom-right"}
+  class:bx--popover--left={align === "left"}
+  class:bx--popover--left-bottom={align === "left-bottom"}
+  class:bx--popover--left-top={align === "left-top"}
+  class:bx--popover--right={align === "right"}
+  class:bx--popover--right-bottom={align === "right-bottom"}
+  class:bx--popover--right-top={align === "right-top"}
+  class:bx--popover--open={open}
+  class:bx--popover--relative={relative}
+  style:position={relative ? "relative" : undefined}
   {...$$restProps}
 >
-  <div class:bx--popover-contents="{true}">
+  <div class:bx--popover-contents={true}>
     <slot />
   </div>
 </div>

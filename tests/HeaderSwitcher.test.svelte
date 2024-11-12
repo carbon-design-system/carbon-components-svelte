@@ -27,7 +27,7 @@
     <SkipToContent />
   </div>
   <HeaderUtilities>
-    <HeaderAction bind:isOpen transition="{false}">
+    <HeaderAction bind:isOpen transition={false}>
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
@@ -42,7 +42,7 @@
   </HeaderUtilities>
 </Header>
 
-<SideNav bind:isOpen="{isSideNavOpen}">
+<SideNav bind:isOpen={isSideNavOpen}>
   <SideNavItems>
     <SideNavLink text="Link 1" />
     <SideNavLink text="Link 2" />

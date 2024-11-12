@@ -31,7 +31,7 @@
 
 <Tag filter on:click on:close>Filterable</Tag>
 
-<Tag icon="{Add}">Custom icon</Tag>
+<Tag icon={Add}>Custom icon</Tag>
 
 <Tag interactive>Text</Tag>
 

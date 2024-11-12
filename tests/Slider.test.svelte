@@ -6,36 +6,36 @@
 
 <Slider
   labelText="Runtime memory (MB)"
-  min="{10}"
-  max="{990}"
+  min={10}
+  max={990}
   maxLabel="990 MB"
-  value="{100}"
+  value={100}
   fullWidth
-  on:change="{(e) => {
+  on:change={(e) => {
     console.log(e.detail); // number
-  }}"
-  on:input="{(e) => {
+  }}
+  on:input={(e) => {
     console.log(e.detail); // number
-  }}"
+  }}
 />
 
 <Slider
   labelText="Runtime memory (MB)"
-  min="{10}"
-  max="{990}"
+  min={10}
+  max={990}
   maxLabel="990 MB"
-  value="{100}"
-  step="{10}"
+  value={100}
+  step={10}
 />
 
 <Slider
   light
   labelText="Runtime memory (MB)"
-  min="{10}"
-  max="{990}"
+  min={10}
+  max={990}
   maxLabel="990 MB"
-  value="{100}"
-  step="{10}"
+  value={100}
+  step={10}
 />
 
 <SliderSkeleton />

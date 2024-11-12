@@ -64,7 +64,7 @@ function createImports(source) {
         ? icon_imports
             .map(
               (icon) =>
-                `import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`
+                `import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
             )
             .join("\n")
         : ""
@@ -88,7 +88,7 @@ function plugin() {
       const highlightedCode = Prism.highlight(
         formattedCode,
         Prism.languages.svelte,
-        "svelte"
+        "svelte",
       );
 
       node.value = `<Preview codeRaw="{\`${formattedCode}\`}" code="{\`${highlightedCode}\`}">${node.value}</Preview>`;
@@ -111,7 +111,7 @@ function plugin() {
 
       const sourceCode = fs.readFileSync(
         path.join("src/pages", `${src}.svelte`),
-        "utf-8"
+        "utf-8",
       );
       const formattedCode = format(sourceCode, {
         parser: "svelte",
@@ -119,7 +119,7 @@ function plugin() {
       const highlightedCode = Prism.highlight(
         formattedCode,
         Prism.languages.svelte,
-        "svelte"
+        "svelte",
       );
 
       node.value = `<Preview framed src="${src}" codeRaw="{\`${formattedCode}\`}" code="{\`${highlightedCode}\`}" />`;
@@ -149,7 +149,7 @@ export default {
         return {
           code: content.replace(
             /process.env.VERSION/g,
-            JSON.stringify(pkg.version)
+            JSON.stringify(pkg.version),
           ),
         };
       },
@@ -173,7 +173,7 @@ export default {
             if (node.type === "Element") {
               if (node.name === "h2") {
                 const id = node.attributes.find(
-                  (attribute) => attribute.name === "id"
+                  (attribute) => attribute.name === "id",
                 );
                 toc.push({
                   id: id.value[0].raw,
@@ -192,7 +192,7 @@ export default {
                     ${toc
                       .map(
                         (item) =>
-                          `<li class="bx--list__item"><a class="bx--link" href="\#${item.id}">${item.text}</a></li>`
+                          `<li class="bx--list__item"><a class="bx--link" href="\#${item.id}">${item.text}</a></li>`,
                       )
                       .join("")}
                   <h5>Component API</h5>
@@ -216,7 +216,7 @@ export default {
                   </li>
                 </ul>
               </div>
-            </Layout_MDSVEX_DEFAULT>`
+            </Layout_MDSVEX_DEFAULT>`,
           ),
         };
       },

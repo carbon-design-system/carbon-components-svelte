@@ -87,46 +87,46 @@
 
 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
 <li
-  bind:this="{ref}"
+  bind:this={ref}
   role="treeitem"
-  id="{id}"
-  tabindex="{disabled ? undefined : -1}"
-  aria-current="{id === $activeNodeId || undefined}"
-  aria-selected="{disabled ? undefined : selected}"
-  aria-disabled="{disabled}"
-  class:bx--tree-node="{true}"
-  class:bx--tree-leaf-node="{true}"
-  class:bx--tree-node--active="{id === $activeNodeId}"
-  class:bx--tree-node--selected="{selected}"
-  class:bx--tree-node--disabled="{disabled}"
-  class:bx--tree-node--with-icon="{icon}"
-  on:click|stopPropagation="{() => {
+  {id}
+  tabindex={disabled ? undefined : -1}
+  aria-current={id === $activeNodeId || undefined}
+  aria-selected={disabled ? undefined : selected}
+  aria-disabled={disabled}
+  class:bx--tree-node={true}
+  class:bx--tree-leaf-node={true}
+  class:bx--tree-node--active={id === $activeNodeId}
+  class:bx--tree-node--selected={selected}
+  class:bx--tree-node--disabled={disabled}
+  class:bx--tree-node--with-icon={icon}
+  on:click|stopPropagation={() => {
     if (disabled) return;
     clickNode(node);
-  }}"
-  on:keydown="{(e) => {
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'Enter') {
+  }}
+  on:keydown={(e) => {
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "Enter") {
       e.stopPropagation();
     }
 
-    if (e.key === 'ArrowLeft') {
+    if (e.key === "ArrowLeft") {
       const parentNode = findParentTreeNode(ref.parentNode);
       if (parentNode) parentNode.focus();
     }
 
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       if (disabled) return;
       clickNode(node);
     }
-  }}"
-  on:focus="{() => {
+  }}
+  on:focus={() => {
     focusNode(node);
-  }}"
+  }}
 >
-  <div bind:this="{refLabel}" class:bx--tree-node__label="{true}">
-    <svelte:component this="{icon}" class="bx--tree-node__icon" />
-    <slot node="{node}">
+  <div bind:this={refLabel} class:bx--tree-node__label={true}>
+    <svelte:component this={icon} class="bx--tree-node__icon" />
+    <slot {node}>
       {text}
     </slot>
   </div>

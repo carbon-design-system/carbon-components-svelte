@@ -9,7 +9,7 @@
 </Tooltip>
 
 <div style="margin-top: var(--cds-spacing-12);">
-  <Button size="small" on:click="{() => (open = !open)}">
+  <Button size="small" on:click={() => (open = !open)}>
     {open ? "Close tooltip" : "Open tooltip"}
   </Button>
 </div>

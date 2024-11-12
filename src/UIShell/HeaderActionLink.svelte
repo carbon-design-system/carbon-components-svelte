@@ -19,16 +19,16 @@
 </script>
 
 <a
-  bind:this="{ref}"
-  class:bx--header__action="{true}"
-  class:bx--header__action--active="{linkIsActive}"
-  href="{href}"
-  rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
+  bind:this={ref}
+  class:bx--header__action={true}
+  class:bx--header__action--active={linkIsActive}
+  {href}
+  rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
   {...$$restProps}
   on:click
 >
   <slot name="icon">
-    <svelte:component this="{icon}" size="{20}" />
+    <svelte:component this={icon} size={20} />
   </slot>
 </a>
 

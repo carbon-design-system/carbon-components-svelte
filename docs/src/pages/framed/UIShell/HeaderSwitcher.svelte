@@ -45,7 +45,7 @@
     <SkipToContent />
   </svelte:fragment>
   <HeaderUtilities>
-    <HeaderAction bind:isOpen transition="{transitions[selected].value}">
+    <HeaderAction bind:isOpen transition={transitions[selected].value}>
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
@@ -60,7 +60,7 @@
   </HeaderUtilities>
 </Header>
 
-<SideNav bind:isOpen="{isSideNavOpen}">
+<SideNav bind:isOpen={isSideNavOpen}>
   <SideNavItems>
     <SideNavLink text="Link 1" />
     <SideNavLink text="Link 2" />
@@ -84,7 +84,7 @@
         </p>
         <TileGroup legend="App switcher transitions" bind:selected>
           {#each Object.keys(transitions) as key}
-            <RadioTile value="{key}">{transitions[key].text}</RadioTile>
+            <RadioTile value={key}>{transitions[key].text}</RadioTile>
           {/each}
         </TileGroup>
       </Column>

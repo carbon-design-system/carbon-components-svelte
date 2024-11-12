@@ -42,7 +42,7 @@
   import { readable } from "svelte/store";
 
   const { add, update, selectedValue, groupName, groupRequired } = getContext(
-    "RadioButtonGroup"
+    "RadioButtonGroup",
   ) ?? {
     groupName: readable(undefined),
     groupRequired: readable(undefined),
@@ -57,31 +57,31 @@
 </script>
 
 <div
-  class:bx--radio-button-wrapper="{true}"
-  class:bx--radio-button-wrapper--label-left="{labelPosition === 'left'}"
+  class:bx--radio-button-wrapper={true}
+  class:bx--radio-button-wrapper--label-left={labelPosition === "left"}
   {...$$restProps}
 >
   <input
-    bind:this="{ref}"
+    bind:this={ref}
     type="radio"
-    id="{id}"
-    name="{$groupName ?? name}"
-    checked="{checked}"
-    disabled="{disabled}"
-    required="{$groupRequired ?? required}"
-    value="{value}"
-    class:bx--radio-button="{true}"
+    {id}
+    name={$groupName ?? name}
+    {checked}
+    {disabled}
+    required={$groupRequired ?? required}
+    {value}
+    class:bx--radio-button={true}
     on:change
-    on:change="{() => {
+    on:change={() => {
       if (update) {
         update(value);
       }
-    }}"
+    }}
   />
-  <label class:bx--radio-button__label="{true}" for="{id}">
-    <span class:bx--radio-button__appearance="{true}"></span>
+  <label class:bx--radio-button__label={true} for={id}>
+    <span class:bx--radio-button__appearance={true}></span>
     {#if labelText || $$slots.labelText}
-      <span class:bx--visually-hidden="{hideLabel}">
+      <span class:bx--visually-hidden={hideLabel}>
         <slot name="labelText">
           {labelText}
         </slot>

@@ -210,9 +210,9 @@
 
 <Accordion skeleton align="start" />
 
-<Accordion skeleton count="{3}" />
+<Accordion skeleton count={3} />
 
-<Accordion skeleton open="{false}" />
+<Accordion skeleton open={false} />
 
 <Accordion skeleton size="xl" />
 

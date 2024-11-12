@@ -76,21 +76,21 @@
 
 {#if !overflowVisible}
   <div
-    class:bx--batch-actions="{true}"
-    class:bx--batch-actions--active="{showActions}"
+    class:bx--batch-actions={true}
+    class:bx--batch-actions--active={showActions}
     {...$$restProps}
   >
-    <div class:bx--batch-summary="{true}">
-      <p class:bx--batch-summary__para="{true}">
+    <div class:bx--batch-summary={true}>
+      <p class:bx--batch-summary__para={true}>
         <span> {formatTotalSelected(batchSelectedIds.length)} </span>
       </p>
     </div>
-    <div class:bx--action-list="{true}">
+    <div class:bx--action-list={true}>
       <slot />
       <Button
         class="bx--batch-summary__cancel"
-        tabindex="{showActions ? '0' : '-1'}"
-        on:click="{cancel}"
+        tabindex={showActions ? "0" : "-1"}
+        on:click={cancel}
       >
         <slot name="cancel">Cancel</slot>
       </Button>

@@ -24,28 +24,28 @@
   export let ref = null;
 </script>
 
-<li class:bx--side-nav__item="{true}">
+<li class:bx--side-nav__item={true}>
   <a
-    bind:this="{ref}"
-    aria-current="{isSelected ? 'page' : undefined}"
-    href="{href}"
-    rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
-    class:bx--side-nav__link="{true}"
-    class:bx--side-nav__link--current="{isSelected}"
+    bind:this={ref}
+    aria-current={isSelected ? "page" : undefined}
+    {href}
+    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    class:bx--side-nav__link={true}
+    class:bx--side-nav__link--current={isSelected}
     {...$$restProps}
     on:click
   >
     {#if $$slots.icon || icon}
       <div
-        class:bx--side-nav__icon="{true}"
-        class:bx--side-nav__icon--small="{true}"
+        class:bx--side-nav__icon={true}
+        class:bx--side-nav__icon--small={true}
       >
         <slot name="icon">
-          <svelte:component this="{icon}" />
+          <svelte:component this={icon} />
         </slot>
       </div>
     {/if}
-    <span class:bx--side-nav__link-text="{true}">
+    <span class:bx--side-nav__link-text={true}>
       <slot>
         {text}
       </slot>

@@ -13,10 +13,10 @@
 <RadioButtonGroup
   legendText="Storage tier (disk)"
   name="plan"
-  bind:selected="{plan}"
+  bind:selected={plan}
 >
   {#each plans as value (value)}
-    <RadioButton labelText="{value}" value="{value}" />
+    <RadioButton labelText={value} {value} />
   {/each}
 </RadioButtonGroup>
 
@@ -25,8 +25,8 @@
     <Button
       size="small"
       kind="secondary"
-      disabled="{plan === value}"
-      on:click="{() => (plan = value)}"
+      disabled={plan === value}
+      on:click={() => (plan = value)}
     >
       Select "{value}"
     </Button>

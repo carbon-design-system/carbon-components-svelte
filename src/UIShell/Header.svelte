@@ -78,26 +78,22 @@
     : "" + (uiShellAriaLabel || $$props["aria-label"] || platformName);
 </script>
 
-<svelte:window bind:innerWidth="{winWidth}" />
+<svelte:window bind:innerWidth={winWidth} />
 
-<header aria-label="{ariaLabel}" class:bx--header="{true}">
+<header aria-label={ariaLabel} class:bx--header={true}>
   <slot name="skip-to-content" />
   {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
-    <HamburgerMenu
-      bind:isOpen="{isSideNavOpen}"
-      iconClose="{iconClose}"
-      iconMenu="{iconMenu}"
-    />
+    <HamburgerMenu bind:isOpen={isSideNavOpen} {iconClose} {iconMenu} />
   {/if}
   <a
-    href="{href}"
-    class:bx--header__name="{true}"
-    bind:this="{ref}"
+    {href}
+    class:bx--header__name={true}
+    bind:this={ref}
     {...$$restProps}
     on:click
   >
     {#if company || $$slots.company}
-      <span class:bx--header__name--prefix="{true}"
+      <span class:bx--header__name--prefix={true}
         ><slot name="company">{company}&nbsp;</slot></span
       >
     {/if}

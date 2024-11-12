@@ -19,7 +19,7 @@
       document.documentElement.setAttribute("theme", current_theme);
       document.documentElement.style.setProperty(
         "color-scheme",
-        ["white", "g10"].includes(current_theme) ? "light" : "dark"
+        ["white", "g10"].includes(current_theme) ? "light" : "dark",
       );
     }
   }

@@ -23,10 +23,10 @@
 
 {#if status === "uploading"}
   <Loading
-    description="{iconDescription}"
+    description={iconDescription}
     {...$$restProps}
     small
-    withOverlay="{false}"
+    withOverlay={false}
   />
 {/if}
 
@@ -35,8 +35,8 @@
     <WarningFilled class="bx--file-invalid" />
   {/if}
   <button
-    aria-label="{iconDescription}"
-    class:bx--file-close="{true}"
+    aria-label={iconDescription}
+    class:bx--file-close={true}
     type="button"
     tabindex="0"
     {...$$restProps}
@@ -49,8 +49,8 @@
 
 {#if status === "complete"}
   <CheckmarkFilled
-    aria-label="{iconDescription}"
-    title="{iconDescription}"
+    aria-label={iconDescription}
+    title={iconDescription}
     class="bx--file-complete"
     {...$$restProps}
   />

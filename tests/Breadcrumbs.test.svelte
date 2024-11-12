@@ -7,17 +7,19 @@
     { href: "/reports/2019", text: "2019" },
   ];
 
-  import { Row, Column, Breadcrumb, BreadcrumbItem } from "carbon-components-svelte";
+  import {
+    Row,
+    Column,
+    Breadcrumb,
+    BreadcrumbItem,
+  } from "carbon-components-svelte";
 </script>
 
 <Row>
   <Column>
     <Breadcrumb>
       {#each items as item, i}
-        <BreadcrumbItem
-          href="{item.href}"
-          isCurrentPage="{i === items.length - 1}"
-        >
+        <BreadcrumbItem href={item.href} isCurrentPage={i === items.length - 1}>
           {item.text}
         </BreadcrumbItem>
       {/each}

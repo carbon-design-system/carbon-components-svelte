@@ -10,9 +10,9 @@
   labelText="User name"
   placeholder="Enter user name..."
   bind:value
-  on:input="{(e) => console.log(e.detail)}"
-  on:change="{(e) => (value = e.detail)}"
-  on:paste="{(e) => console.log(e)}"
+  on:input={(e) => console.log(e.detail)}
+  on:change={(e) => (value = e.detail)}
+  on:paste={(e) => console.log(e)}
 />
 
 <TextInput

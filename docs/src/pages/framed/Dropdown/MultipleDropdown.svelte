@@ -19,18 +19,18 @@
 
 <Dropdown
   titleText="Primary contact"
-  bind:selectedId="{dropdown1_selectedId}"
-  items="{items}"
+  bind:selectedId={dropdown1_selectedId}
+  {items}
 />
 
 <div>Primary: {primary}</div>
 
 <Dropdown
-  invalid="{dropdown1_selectedId === dropdown2_selectedId}"
+  invalid={dropdown1_selectedId === dropdown2_selectedId}
   invalidText="Secondary contact method must be different from the primary contact"
   titleText="Secondary contact"
-  bind:selectedId="{dropdown2_selectedId}"
-  items="{items}"
+  bind:selectedId={dropdown2_selectedId}
+  {items}
 />
 
 <div>Secondary: {secondary}</div>

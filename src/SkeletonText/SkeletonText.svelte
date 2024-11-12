@@ -29,18 +29,18 @@
       return widthPx ? rand : `calc(${width} - ${rand})`;
     }) as width}
       <p
-        class:bx--skeleton__text="{true}"
-        class:bx--skeleton__heading="{heading}"
-        style:width="{width}"
+        class:bx--skeleton__text={true}
+        class:bx--skeleton__heading={heading}
+        style:width
       ></p>
     {/each}
   </div>
 {:else}
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <p
-    class:bx--skeleton__text="{true}"
-    class:bx--skeleton__heading="{heading}"
-    style:width="{width}"
+    class:bx--skeleton__text={true}
+    class:bx--skeleton__heading={heading}
+    style:width
     {...$$restProps}
     on:click
     on:mouseover

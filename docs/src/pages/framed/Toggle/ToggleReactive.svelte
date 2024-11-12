@@ -7,7 +7,7 @@
 <Toggle labelText="Push notifications" bind:toggled />
 
 <div>
-  <Button size="small" on:click="{() => (toggled = !toggled)}">
+  <Button size="small" on:click={() => (toggled = !toggled)}>
     Toggle
     {toggled ? "off" : "on"}
   </Button>

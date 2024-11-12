@@ -15,25 +15,25 @@
 </script>
 
 <ComboBox
-  bind:this="{ref}"
+  bind:this={ref}
   direction="top"
   titleText="Contact"
   placeholder="Select contact method"
-  items="{items}"
-  on:select="{(e) => {
+  {items}
+  on:select={(e) => {
     console.log(e.detail.selectedId);
-  }}"
-  on:clear="{(e) => {
+  }}
+  on:clear={(e) => {
     console.log(e.detail);
-  }}"
-  translateWithId="{(id) => {
+  }}
+  translateWithId={(id) => {
     console.log(id); // "open" | "close"
     return id;
-  }}"
-  translateWithIdSelection="{(id) => {
+  }}
+  translateWithIdSelection={(id) => {
     console.log(id); // "clearSelection"
     return id;
-  }}"
+  }}
   let:item
   let:index
 >
@@ -45,33 +45,33 @@
   titleText="Contact"
   placeholder="Select contact method"
   selectedId="1"
-  items="{items}"
+  {items}
 />
 
 <ComboBox
   light
   titleText="Contact"
   placeholder="Select contact method"
-  items="{items}"
+  {items}
 />
 
 <ComboBox
   titleText="Contact"
   placeholder="Select contact method"
   size="xl"
-  items="{items}"
+  {items}
 />
 
 <ComboBox
   titleText="Contact"
   placeholder="Select contact method"
   size="sm"
-  items="{items}"
+  {items}
 />
 
 <ComboBox
   disabled
   titleText="Contact"
   placeholder="Select contact method"
-  items="{items}"
+  {items}
 />

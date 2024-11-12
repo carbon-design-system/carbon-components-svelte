@@ -69,50 +69,47 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  class:bx--form-item="{true}"
+  class:bx--form-item={true}
 >
   {#if (labelText || $$slots.labelText) && !hideLabel}
-    <div class:bx--text-area__label-wrapper="{true}">
+    <div class:bx--text-area__label-wrapper={true}>
       <label
-        for="{id}"
-        class:bx--label="{true}"
-        class:bx--visually-hidden="{hideLabel}"
-        class:bx--label--disabled="{disabled}"
+        for={id}
+        class:bx--label={true}
+        class:bx--visually-hidden={hideLabel}
+        class:bx--label--disabled={disabled}
       >
         <slot name="labelText">
           {labelText}
         </slot>
       </label>
       {#if maxCount}
-        <div class:bx--label="{true}" class:bx--label--disabled="{disabled}">
+        <div class:bx--label={true} class:bx--label--disabled={disabled}>
           {value.length}/{maxCount}
         </div>
       {/if}
     </div>
   {/if}
-  <div
-    class:bx--text-area__wrapper="{true}"
-    data-invalid="{invalid || undefined}"
-  >
+  <div class:bx--text-area__wrapper={true} data-invalid={invalid || undefined}>
     {#if invalid}
       <WarningFilled class="bx--text-area__invalid-icon" />
     {/if}
     <textarea
-      bind:this="{ref}"
+      bind:this={ref}
       bind:value
-      aria-invalid="{invalid || undefined}"
-      aria-describedby="{invalid ? errorId : undefined}"
-      disabled="{disabled}"
-      id="{id}"
-      name="{name}"
-      cols="{cols}"
-      rows="{rows}"
-      placeholder="{placeholder}"
-      readonly="{readonly}"
-      class:bx--text-area="{true}"
-      class:bx--text-area--light="{light}"
-      class:bx--text-area--invalid="{invalid}"
-      maxlength="{maxCount ?? undefined}"
+      aria-invalid={invalid || undefined}
+      aria-describedby={invalid ? errorId : undefined}
+      {disabled}
+      {id}
+      {name}
+      {cols}
+      {rows}
+      {placeholder}
+      {readonly}
+      class:bx--text-area={true}
+      class:bx--text-area--light={light}
+      class:bx--text-area--invalid={invalid}
+      maxlength={maxCount ?? undefined}
       {...$$restProps}
       on:change
       on:input
@@ -120,17 +117,18 @@
       on:keyup
       on:focus
       on:blur
-      on:paste></textarea>
+      on:paste
+    ></textarea>
   </div>
   {#if !invalid && helperText}
     <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}"
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
     >
       {helperText}
     </div>
   {/if}
   {#if invalid}
-    <div id="{errorId}" class:bx--form-requirement="{true}">{invalidText}</div>
+    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
 </div>

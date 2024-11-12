@@ -30,16 +30,16 @@
 </script>
 
 <button
-  bind:this="{ref}"
+  bind:this={ref}
   type="button"
-  title="{ariaLabel}"
-  aria-label="{ariaLabel}"
-  class:bx--header__action="{true}"
-  class:bx--header__menu-trigger="{true}"
-  class:bx--header__menu-toggle="{true}"
+  title={ariaLabel}
+  aria-label={ariaLabel}
+  class:bx--header__action={true}
+  class:bx--header__menu-trigger={true}
+  class:bx--header__menu-toggle={true}
   {...$$restProps}
   on:click
-  on:click="{() => (isOpen = !isOpen)}"
+  on:click={() => (isOpen = !isOpen)}
 >
-  <svelte:component this="{isOpen ? iconClose : iconMenu}" size="{20}" />
+  <svelte:component this={isOpen ? iconClose : iconMenu} size={20} />
 </button>

@@ -13,4 +13,4 @@
   labelText="Trigger snippet overflow"
   style="margin-bottom: var(--cds-spacing-05)"
 />
-<CodeSnippet type="multi" code="{code}" />
+<CodeSnippet type="multi" {code} />

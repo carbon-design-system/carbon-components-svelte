@@ -7,9 +7,9 @@
 <Toggle
   labelText="Push notifications"
   toggled
-  on:toggle="{(e) => {
+  on:toggle={(e) => {
     console.log(e.detail.toggled);
-  }}"
+  }}
 />
 
 <Toggle labelText="Push notifications" labelA="No" labelB="Yes" />

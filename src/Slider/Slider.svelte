@@ -135,17 +135,17 @@
 </script>
 
 <svelte:window
-  on:mousemove="{move}"
-  on:touchmove="{move}"
-  on:mouseup="{stopHolding}"
-  on:touchend="{stopHolding}"
-  on:touchcancel="{stopHolding}"
+  on:mousemove={move}
+  on:touchmove={move}
+  on:mouseup={stopHolding}
+  on:touchend={stopHolding}
+  on:touchcancel={stopHolding}
 />
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:bx--form-item={true}
   {...$$restProps}
   on:click
   on:mouseover
@@ -153,29 +153,29 @@
   on:mouseleave
 >
   <label
-    for="{id}"
-    id="{labelId}"
-    class:bx--label="{true}"
-    class:bx--label--disabled="{disabled}"
-    class:bx--visually-hidden="{hideLabel}"
+    for={id}
+    id={labelId}
+    class:bx--label={true}
+    class:bx--label--disabled={disabled}
+    class:bx--visually-hidden={hideLabel}
   >
     <slot name="labelText">
       {labelText}
     </slot>
   </label>
-  <div class:bx--slider-container="{true}" style:width="{fullWidth && "100%"}">
-    <span class:bx--slider__range-label="{true}">{minLabel || min}</span>
+  <div class:bx--slider-container={true} style:width={fullWidth && "100%"}>
+    <span class:bx--slider__range-label={true}>{minLabel || min}</span>
     <div
-      bind:this="{ref}"
+      bind:this={ref}
       role="presentation"
       tabindex="-1"
-      class:bx--slider="{true}"
-      class:bx--slider--disabled="{disabled}"
-      style:max-width="{fullWidth ? "none" : undefined}"
-      on:mousedown="{startDragging}"
-      on:mousedown="{startHolding}"
-      on:touchstart="{startHolding}"
-      on:keydown="{({ shiftKey, key }) => {
+      class:bx--slider={true}
+      class:bx--slider--disabled={disabled}
+      style:max-width={fullWidth ? "none" : undefined}
+      on:mousedown={startDragging}
+      on:mousedown={startHolding}
+      on:touchstart={startHolding}
+      on:keydown={({ shiftKey, key }) => {
         const keys = {
           ArrowDown: -1,
           ArrowLeft: -1,
@@ -186,47 +186,47 @@
           value +=
             step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
         }
-      }}"
+      }}
     >
       <div
         role="slider"
         tabindex="0"
-        class:bx--slider__thumb="{true}"
+        class:bx--slider__thumb={true}
         style:left="{left}%"
-        aria-valuemax="{max}"
-        aria-valuemin="{min}"
-        aria-valuenow="{value}"
-        aria-labelledby="{labelId}"
-        id="{id}"
+        aria-valuemax={max}
+        aria-valuemin={min}
+        aria-valuenow={value}
+        aria-labelledby={labelId}
+        {id}
       ></div>
-      <div bind:this="{trackRef}" class:bx--slider__track="{true}"></div>
+      <div bind:this={trackRef} class:bx--slider__track={true}></div>
       <div
-        class:bx--slider__filled-track="{true}"
+        class:bx--slider__filled-track={true}
         style:transform="translate(0, -50%) scaleX({left / 100})"
       ></div>
     </div>
-    <span class:bx--slider__range-label="{true}">{maxLabel || max}</span>
+    <span class:bx--slider__range-label={true}>{maxLabel || max}</span>
     <input
-      type="{hideTextInput ? 'hidden' : inputType}"
+      type={hideTextInput ? "hidden" : inputType}
       id="input-{id}"
-      name="{name}"
-      class:bx--text-input="{true}"
-      class:bx--slider-text-input="{true}"
-      class:bx--text-input--light="{light}"
-      class:bx--text-input--invalid="{invalid}"
-      value="{value}"
-      aria-labelledby="{$$props['aria-label'] ? undefined : labelId}"
-      aria-label="{$$props['aria-label'] || 'Slider number input'}"
-      disabled="{disabled}"
-      required="{required}"
-      min="{min}"
-      max="{max}"
-      step="{step}"
-      on:change="{({ target }) => {
+      {name}
+      class:bx--text-input={true}
+      class:bx--slider-text-input={true}
+      class:bx--text-input--light={light}
+      class:bx--text-input--invalid={invalid}
+      {value}
+      aria-labelledby={$$props["aria-label"] ? undefined : labelId}
+      aria-label={$$props["aria-label"] || "Slider number input"}
+      {disabled}
+      {required}
+      {min}
+      {max}
+      {step}
+      on:change={({ target }) => {
         value = Number(target.value);
-      }}"
-      data-invalid="{invalid || null}"
-      aria-invalid="{invalid || null}"
+      }}
+      data-invalid={invalid || null}
+      aria-invalid={invalid || null}
     />
   </div>
 </div>

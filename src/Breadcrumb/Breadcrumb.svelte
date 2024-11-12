@@ -13,7 +13,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <BreadcrumbSkeleton
-    noTrailingSlash="{noTrailingSlash}"
+    {noTrailingSlash}
     {...$$restProps}
     on:click
     on:mouseover
@@ -31,8 +31,8 @@
     on:mouseleave
   >
     <ol
-      class:bx--breadcrumb="{true}"
-      class:bx--breadcrumb--no-trailing-slash="{noTrailingSlash}"
+      class:bx--breadcrumb={true}
+      class:bx--breadcrumb--no-trailing-slash={noTrailingSlash}
     >
       <slot />
     </ol>

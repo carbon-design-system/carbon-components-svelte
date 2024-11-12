@@ -5,7 +5,7 @@
   let events = [];
 </script>
 
-<Breakpoint bind:size on:change="{(e) => (events = [...events, e.detail])}" />
+<Breakpoint bind:size on:change={(e) => (events = [...events, e.detail])} />
 
 <p>Resize the width of your browser.</p>
 <h6>Breakpoint size</h6>

@@ -4,7 +4,7 @@ interface TruncateOptions {
 
 export function TruncateAction(
   node: HTMLElement,
-  options?: TruncateOptions
+  options?: TruncateOptions,
 ): {
   update: (options?: TruncateOptions) => void;
 };

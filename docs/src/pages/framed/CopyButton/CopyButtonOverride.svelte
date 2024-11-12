@@ -3,4 +3,4 @@
   import { CopyButton } from "carbon-components-svelte";
 </script>
 
-<CopyButton text="Carbon svelte" copy="{(text) => copy(text)}" />
+<CopyButton text="Carbon svelte" copy={(text) => copy(text)} />

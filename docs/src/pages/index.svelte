@@ -79,7 +79,7 @@
       </Column>
     </Row>
     <Row style="margin-bottom: var(--cds-layout-02)">
-      <Column max="{10}" xlg="{10}">
+      <Column max={10} xlg={10}>
         <h2 style="margin-top: var(--cds-layout-02)">Installation</h2>
       </Column>
     </Row>
@@ -92,16 +92,16 @@
           <Tab label="Bun" />
           <div slot="content" style="margin: 1rem -1rem">
             <TabContent>
-              <CodeSnippet code="{installNpm}" />
+              <CodeSnippet code={installNpm} />
             </TabContent>
             <TabContent>
-              <CodeSnippet code="{installPnpm}" />
+              <CodeSnippet code={installPnpm} />
             </TabContent>
             <TabContent>
-              <CodeSnippet code="{installYarn}" />
+              <CodeSnippet code={installYarn} />
             </TabContent>
             <TabContent>
-              <CodeSnippet code="{installBun}" />
+              <CodeSnippet code={installBun} />
             </TabContent>
           </div>
         </Tabs>
@@ -118,17 +118,17 @@
         <RadioButtonGroup
           style="margin-top: var(--cds-spacing-08)"
           legendText="Carbon themes"
-          bind:selected="{$theme}"
+          bind:selected={$theme}
         >
           {#each ["white", "g10", "g80", "g90", "g100"] as value}
-            <RadioButton labelText="{themes[value]}" value="{value}" />
+            <RadioButton labelText={themes[value]} {value} />
           {/each}
         </RadioButtonGroup>
       </Column>
     </Row>
 
     <Row>
-      <Column max="{8}" xlg="{8}" noGutter>
+      <Column max={8} xlg={8} noGutter>
         <Tabs autoWidth>
           <Tab label="CSS StyleSheet" />
           <Tab label="SCSS" />
@@ -148,7 +148,7 @@
               <Row padding noGutter>
                 <Column>
                   <p>
-                    <CodeSnippet type="single" code="{cssImport}" />
+                    <CodeSnippet type="single" code={cssImport} />
                   </p>
                 </Column>
               </Row>
@@ -186,7 +186,7 @@
         <Row padding noGutter>
           <Column>
             <p>
-              <CodeSnippet type="single" code="{cssImportAll}" />
+              <CodeSnippet type="single" code={cssImportAll} />
             </p>
           </Column>
         </Row>
@@ -197,7 +197,7 @@
         <Row padding noGutter>
           <Column>
             <p>
-              <CodeSnippet type="multi" code="{cssThemeToggle}" />
+              <CodeSnippet type="multi" code={cssThemeToggle} />
             </p>
           </Column>
         </Row>
@@ -221,7 +221,7 @@
       </Column>
     </Row>
     <Row noGutter>
-      <Column xlg="{5}" lg="{8}" md="{4}">
+      <Column xlg={5} lg={8} md={4}>
         <TileCard
           borderRight
           borderBottom
@@ -231,7 +231,7 @@
           href="https://github.com/carbon-design-system/carbon-components-svelte"
         />
       </Column>
-      <Column xlg="{5}" lg="{8}" md="{4}">
+      <Column xlg={5} lg={8} md={4}>
         <TileCard
           borderBottom
           title="Carbon Icons Svelte"
@@ -242,7 +242,7 @@
       </Column>
     </Row>
     <Row noGutter>
-      <Column xlg="{5}" lg="{8}" md="{4}">
+      <Column xlg={5} lg={8} md={4}>
         <TileCard
           borderBottom
           borderRight
@@ -252,7 +252,7 @@
           href="https://github.com/carbon-design-system/carbon-pictograms-svelte"
         />
       </Column>
-      <Column xlg="{5}" lg="{8}" md="{4}">
+      <Column xlg={5} lg={8} md={4}>
         <TileCard
           borderBottom
           title="Carbon Charts Svelte"
@@ -263,7 +263,7 @@
       </Column>
     </Row>
     <Row noGutter>
-      <Column xlg="{5}" lg="{8}" md="{4}">
+      <Column xlg={5} lg={8} md={4}>
         <TileCard
           title="Carbon Preprocess Svelte"
           subtitle="Collection of Carbon Svelte preprocessors"

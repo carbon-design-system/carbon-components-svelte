@@ -29,4 +29,4 @@
   ];
 </script>
 
-<RecursiveList type="ordered-native" nodes="{nodes}" />
+<RecursiveList type="ordered-native" {nodes} />

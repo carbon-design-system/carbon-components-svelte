@@ -4,7 +4,7 @@
   let open = false;
 </script>
 
-<Button on:click="{() => (open = true)}">Create database</Button>
+<Button on:click={() => (open = true)}>Create database</Button>
 
 <Modal
   bind:open
@@ -12,7 +12,7 @@
   primaryButtonText="Confirm"
   secondaryButtonText="Cancel"
   selectorPrimaryFocus="#db-name"
-  on:click:button--secondary="{() => (open = false)}"
+  on:click:button--secondary={() => (open = false)}
   on:open
   on:close
   on:submit

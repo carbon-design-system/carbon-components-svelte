@@ -8,9 +8,9 @@
   hideCloseButton
   kind="warning"
   title="Upcoming scheduled maintenance"
-  on:close="{(e) => {
+  on:close={(e) => {
     console.log(e.detail.timeout);
-  }}"
+  }}
 />
 
 <ToastNotification kind="error" />

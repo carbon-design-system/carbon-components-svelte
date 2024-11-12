@@ -36,29 +36,29 @@
 <div
   role="listbox"
   tabindex="-1"
-  data-invalid="{invalid || undefined}"
-  class:bx--list-box="{true}"
-  class:bx--list-box--sm="{size === 'sm'}"
-  class:bx--list-box--xl="{size === 'xl'}"
-  class:bx--list-box--inline="{type === 'inline'}"
-  class:bx--list-box--disabled="{disabled}"
-  class:bx--list-box--expanded="{open}"
-  class:bx--list-box--light="{light}"
-  class:bx--list-box--warning="{!invalid && warn}"
+  data-invalid={invalid || undefined}
+  class:bx--list-box={true}
+  class:bx--list-box--sm={size === "sm"}
+  class:bx--list-box--xl={size === "xl"}
+  class:bx--list-box--inline={type === "inline"}
+  class:bx--list-box--disabled={disabled}
+  class:bx--list-box--expanded={open}
+  class:bx--list-box--light={light}
+  class:bx--list-box--warning={!invalid && warn}
   {...$$restProps}
   on:keydown
-  on:keydown="{(e) => {
-    if (e.key === 'Escape') {
+  on:keydown={(e) => {
+    if (e.key === "Escape") {
       e.stopPropagation();
     }
-  }}"
+  }}
   on:click|preventDefault
 >
   <slot />
 </div>
 {#if invalid}
-  <div class:bx--form-requirement="{true}">{invalidText}</div>
+  <div class:bx--form-requirement={true}>{invalidText}</div>
 {/if}
 {#if !invalid && warn}
-  <div class:bx--form-requirement="{true}">{warnText}</div>
+  <div class:bx--form-requirement={true}>{warnText}</div>
 {/if}

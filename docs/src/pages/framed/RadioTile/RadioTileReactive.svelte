@@ -8,7 +8,7 @@
 
 <TileGroup legend="Service pricing tiers" name="plan" bind:selected>
   {#each values as value}
-    <RadioTile value="{value}">{value}</RadioTile>
+    <RadioTile {value}>{value}</RadioTile>
   {/each}
 </TileGroup>
 
@@ -18,8 +18,8 @@
 
 <Button
   size="small"
-  disabled="{selected === values[1]}"
-  on:click="{() => (selected = values[1])}"
+  disabled={selected === values[1]}
+  on:click={() => (selected = values[1])}
 >
   Set to "{values[1]}"
 </Button>

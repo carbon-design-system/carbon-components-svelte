@@ -29,10 +29,10 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--list-box__menu-icon="{true}"
-  class:bx--list-box__menu-icon--open="{open}"
+  class:bx--list-box__menu-icon={true}
+  class:bx--list-box__menu-icon--open={open}
   {...$$restProps}
   on:click|preventDefault
 >
-  <ChevronDown aria-label="{description}" title="{description}" />
+  <ChevronDown aria-label={description} title={description} />
 </div>

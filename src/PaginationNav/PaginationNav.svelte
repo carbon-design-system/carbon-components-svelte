@@ -76,111 +76,111 @@
     .slice(startOffset + front, (back + 1) * -1);
 </script>
 
-<nav aria-label="pagination" class:bx--pagination-nav="{true}" {...$$restProps}>
-  <ul class:bx--pagination-nav__list="{true}">
-    <li class:bx--pagination-nav__list-item="{true}">
+<nav aria-label="pagination" class:bx--pagination-nav={true} {...$$restProps}>
+  <ul class:bx--pagination-nav__list={true}>
+    <li class:bx--pagination-nav__list-item={true}>
       <Button
         kind="ghost"
         tooltipAlignment="center"
-        tooltipPosition="{tooltipPosition === 'inside'
-          ? 'right'
-          : tooltipPosition === 'outside'
-          ? 'left'
-          : tooltipPosition}"
-        iconDescription="{backwardText}"
-        disabled="{!loop && page === 1}"
-        icon="{CaretLeft}"
-        on:click="{() => {
+        tooltipPosition={tooltipPosition === "inside"
+          ? "right"
+          : tooltipPosition === "outside"
+            ? "left"
+            : tooltipPosition}
+        iconDescription={backwardText}
+        disabled={!loop && page === 1}
+        icon={CaretLeft}
+        on:click={() => {
           if (page <= 1) {
             if (loop) page = total;
           } else {
             page--;
           }
-          dispatch('click:button--previous', { page });
-          dispatch('change', { page });
-        }}"
+          dispatch("click:button--previous", { page });
+          dispatch("change", { page });
+        }}
       />
     </li>
     {#if fit > MIN || (fit <= MIN && page <= 1)}
       <PaginationItem
-        page="{1}"
-        active="{page === 1}"
-        on:click="{() => {
+        page={1}
+        active={page === 1}
+        on:click={() => {
           page = 1;
-          dispatch('change', { page });
-        }}"
+          dispatch("change", { page });
+        }}
       >
         {page === 1 ? "Active, Page" : "Page"}
       </PaginationItem>
     {/if}
     <PaginationOverflow
-      fromIndex="{startOffset}"
-      count="{front}"
-      on:select="{({ detail }) => {
+      fromIndex={startOffset}
+      count={front}
+      on:select={({ detail }) => {
         page = detail.index;
-        dispatch('change', { page });
-      }}"
+        dispatch("change", { page });
+      }}
     />
     {#each items as item}
       <PaginationItem
-        page="{item + 1}"
-        active="{page === item + 1}"
-        on:click="{() => {
+        page={item + 1}
+        active={page === item + 1}
+        on:click={() => {
           page = item + 1;
-          dispatch('change', { page });
-        }}"
+          dispatch("change", { page });
+        }}
       >
         {page === item ? "Active, Page" : "Page"}
       </PaginationItem>
     {/each}
     <PaginationOverflow
-      fromIndex="{total - back - 1}"
-      count="{back}"
-      on:select="{({ detail }) => {
+      fromIndex={total - back - 1}
+      count={back}
+      on:select={({ detail }) => {
         page = detail.index;
-        dispatch('change', { page });
-      }}"
+        dispatch("change", { page });
+      }}
     />
     {#if total > 1}
       <PaginationItem
-        page="{total}"
-        active="{page === total}"
-        on:click="{() => {
+        page={total}
+        active={page === total}
+        on:click={() => {
           page = total;
-          dispatch('change', { page });
-        }}"
+          dispatch("change", { page });
+        }}
       >
         {page === total ? "Active, Page" : "Page"}
       </PaginationItem>
     {/if}
-    <li class:bx--pagination-nav__list-item="{true}">
+    <li class:bx--pagination-nav__list-item={true}>
       <Button
         kind="ghost"
         tooltipAlignment="center"
-        tooltipPosition="{tooltipPosition === 'inside'
-          ? 'left'
-          : tooltipPosition === 'outside'
-          ? 'right'
-          : tooltipPosition}"
-        iconDescription="{forwardText}"
-        disabled="{!loop && page === total}"
-        icon="{CaretRight}"
-        on:click="{() => {
+        tooltipPosition={tooltipPosition === "inside"
+          ? "left"
+          : tooltipPosition === "outside"
+            ? "right"
+            : tooltipPosition}
+        iconDescription={forwardText}
+        disabled={!loop && page === total}
+        icon={CaretRight}
+        on:click={() => {
           if (page >= total) {
             if (loop) page = 1;
           } else {
             page++;
           }
-          dispatch('click:button--next', { page });
-          dispatch('change', { page });
-        }}"
+          dispatch("click:button--next", { page });
+          dispatch("change", { page });
+        }}
       />
     </li>
   </ul>
   <div
     aria-live="polite"
     aria-atomic="true"
-    class:bx--pagination-nav__accessibility-label="{true}"
+    class:bx--pagination-nav__accessibility-label={true}
   >
     Page
     {page + 1}

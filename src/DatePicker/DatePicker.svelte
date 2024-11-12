@@ -80,7 +80,7 @@
   const inputIds = derived(inputs, (_) => _.map(({ id }) => id));
   const labelTextEmpty = derived(
     inputs,
-    (_) => _.filter(({ labelText }) => !!labelText).length === 0
+    (_) => _.filter(({ labelText }) => !!labelText).length === 0,
   );
   const inputValue = writable(value);
   const inputValueFrom = writable(valueFrom);
@@ -183,7 +183,7 @@
     calendar?.calendarContainer?.setAttribute("role", "application");
     calendar?.calendarContainer?.setAttribute(
       "aria-label",
-      "calendar-container"
+      "calendar-container",
     );
   }
 
@@ -230,17 +230,17 @@
 </script>
 
 <svelte:window
-  on:click="{({ target }) => {
+  on:click={({ target }) => {
     if (!calendar || !calendar.isOpen) return;
     if (datePickerRef && datePickerRef.contains(target)) return;
     if (!calendar.calendarContainer.contains(target)) calendar.close();
-  }}"
+  }}
 />
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:bx--form-item={true}
   {...$$restProps}
   on:click
   on:mouseover
@@ -249,22 +249,22 @@
 >
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
-    bind:this="{datePickerRef}"
-    id="{id}"
-    class:bx--date-picker="{true}"
-    class:bx--date-picker--short="{short}"
-    class:bx--date-picker--light="{light}"
-    class:bx--date-picker--simple="{datePickerType === 'simple'}"
-    class:bx--date-picker--single="{datePickerType === 'single'}"
-    class:bx--date-picker--range="{datePickerType === 'range'}"
-    class:bx--date-picker--nolabel="{datePickerType === 'range' &&
-      $labelTextEmpty}"
-    on:keydown="{(e) => {
-      if (calendar?.isOpen && e.key === 'Escape') {
+    bind:this={datePickerRef}
+    {id}
+    class:bx--date-picker={true}
+    class:bx--date-picker--short={short}
+    class:bx--date-picker--light={light}
+    class:bx--date-picker--simple={datePickerType === "simple"}
+    class:bx--date-picker--single={datePickerType === "single"}
+    class:bx--date-picker--range={datePickerType === "range"}
+    class:bx--date-picker--nolabel={datePickerType === "range" &&
+      $labelTextEmpty}
+    on:keydown={(e) => {
+      if (calendar?.isOpen && e.key === "Escape") {
         e.stopPropagation();
         calendar.close();
       }
-    }}"
+    }}
   >
     <slot />
   </div>

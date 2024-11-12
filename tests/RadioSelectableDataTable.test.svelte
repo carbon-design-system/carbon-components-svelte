@@ -21,4 +21,4 @@
   $: console.log("selectedRowIds", selectedRowIds);
 </script>
 
-<DataTable radio bind:selectedRowIds headers="{headers}" rows="{rows}" />
+<DataTable radio bind:selectedRowIds {headers} {rows} />

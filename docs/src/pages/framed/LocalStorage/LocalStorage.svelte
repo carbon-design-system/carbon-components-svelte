@@ -9,13 +9,13 @@
 
 <LocalStorage
   key="dark-mode"
-  bind:value="{toggled}"
-  on:save="{() => {
-    events = [...events, { event: 'on:save' }];
-  }}"
-  on:update="{({ detail }) => {
-    events = [...events, { event: 'on:update', detail }];
-  }}"
+  bind:value={toggled}
+  on:save={() => {
+    events = [...events, { event: "on:save" }];
+  }}
+  on:update={({ detail }) => {
+    events = [...events, { event: "on:update", detail }];
+  }}
 />
 
 <Toggle size="sm" labelText="Dark mode" bind:toggled />

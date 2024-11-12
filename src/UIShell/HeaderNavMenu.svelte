@@ -40,49 +40,49 @@
 </script>
 
 <svelte:window
-  on:click="{({ target }) => {
+  on:click={({ target }) => {
     if (!ref.contains(target)) {
       expanded = false;
     }
-  }}"
+  }}
 />
 
 <li
   role="none"
-  class:bx--header__submenu="{true}"
-  class:bx--header__submenu--current="{isCurrentSubmenu}"
-  on:click="{(e) => {
+  class:bx--header__submenu={true}
+  class:bx--header__submenu--current={isCurrentSubmenu}
+  on:click={(e) => {
     if (!menuRef.contains(e.target)) {
       e.preventDefault();
     }
     expanded = !expanded;
-  }}"
-  on:keydown="{(e) => {
-    if (e.key === 'Enter') {
+  }}
+  on:keydown={(e) => {
+    if (e.key === "Enter") {
       e.stopPropagation();
       expanded = !expanded;
     }
-  }}"
+  }}
 >
   <a
-    bind:this="{ref}"
+    bind:this={ref}
     role="menuitem"
     tabindex="0"
     aria-haspopup="menu"
-    aria-expanded="{expanded}"
-    aria-label="{text}"
-    href="{href}"
-    class:bx--header__menu-item="{true}"
-    class:bx--header__menu-title="{true}"
-    style:z-index="{1}"
+    aria-expanded={expanded}
+    aria-label={text}
+    {href}
+    class:bx--header__menu-item={true}
+    class:bx--header__menu-title={true}
+    style:z-index={1}
     {...$$restProps}
     on:keydown
-    on:keydown="{(e) => {
-      if (e.key === ' ') e.preventDefault();
-      if (e.key === 'Enter' || e.key === ' ') {
+    on:keydown={(e) => {
+      if (e.key === " ") e.preventDefault();
+      if (e.key === "Enter" || e.key === " ") {
         expanded = !expanded;
       }
-    }}"
+    }}
     on:click|preventDefault
     on:mouseover
     on:mouseenter
@@ -96,10 +96,10 @@
   </a>
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
-    bind:this="{menuRef}"
+    bind:this={menuRef}
     role="menu"
-    aria-label="{text}"
-    class:bx--header__menu="{true}"
+    aria-label={text}
+    class:bx--header__menu={true}
   >
     <slot />
   </ul>

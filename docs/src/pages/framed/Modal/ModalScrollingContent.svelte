@@ -4,7 +4,7 @@
   let open = false;
 </script>
 
-<Button on:click="{() => (open = true)}">Create database</Button>
+<Button on:click={() => (open = true)}>Create database</Button>
 
 <Modal bind:open passiveModal modalHeading="About Cloudant" hasScrollingContent>
   <p>

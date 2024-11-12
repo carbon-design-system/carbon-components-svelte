@@ -180,84 +180,84 @@
 </svelte:head>
 
 <svelte:window
-  on:click="{({ target }) => {
+  on:click={({ target }) => {
     if (buttonRef && buttonRef.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
       open = false;
     }
-  }}"
+  }}
 />
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
-  bind:this="{buttonRef}"
+  bind:this={buttonRef}
   type="button"
   aria-haspopup="true"
-  aria-expanded="{open}"
-  aria-label="{ariaLabel}"
-  id="{id}"
-  class:bx--overflow-menu="{true}"
-  class:bx--overflow-menu--open="{open}"
-  class:bx--overflow-menu--light="{light}"
-  class:bx--overflow-menu--sm="{size === 'sm'}"
-  class:bx--overflow-menu--xl="{size === 'xl'}"
+  aria-expanded={open}
+  aria-label={ariaLabel}
+  {id}
+  class:bx--overflow-menu={true}
+  class:bx--overflow-menu--open={open}
+  class:bx--overflow-menu--light={light}
+  class:bx--overflow-menu--sm={size === "sm"}
+  class:bx--overflow-menu--xl={size === "xl"}
   {...$$restProps}
   on:click
-  on:click="{({ target }) => {
+  on:click={({ target }) => {
     if (!(menuRef && menuRef.contains(target))) {
       open = !open;
-      if (!open) dispatch('close');
+      if (!open) dispatch("close");
     }
-  }}"
+  }}
   on:mouseover
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown="{(e) => {
+  on:keydown={(e) => {
     if (open) {
-      if (['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(e.key)) {
+      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
         e.preventDefault();
-      } else if (e.key === 'Escape') {
+      } else if (e.key === "Escape") {
         e.stopPropagation();
-        dispatch('close');
+        dispatch("close");
         open = false;
         buttonRef.focus();
       }
     }
-  }}"
-  on:focusout="{(e) => {
+  }}
+  on:focusout={(e) => {
     if (open) {
       if (!buttonRef.contains(e.relatedTarget)) {
-        dispatch('close');
+        dispatch("close");
         open = false;
       }
     }
-  }}"
+  }}
 >
   <slot name="menu">
     <svelte:component
-      this="{icon}"
-      aria-label="{iconDescription}"
-      title="{iconDescription}"
+      this={icon}
+      aria-label={iconDescription}
+      title={iconDescription}
       class="bx--overflow-menu__icon {iconClass}"
     />
   </slot>
   {#if open}
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
-      bind:this="{menuRef}"
+      bind:this={menuRef}
       role="menu"
       tabindex="-1"
-      aria-label="{ariaLabel}"
-      data-floating-menu-direction="{direction}"
-      class:bx--overflow-menu-options="{true}"
-      class:bx--overflow-menu--flip="{flipped}"
-      class:bx--overflow-menu-options--open="{open}"
-      class:bx--overflow-menu-options--light="{light}"
-      class:bx--overflow-menu-options--sm="{size === 'sm'}"
-      class:bx--overflow-menu-options--xl="{size === 'xl'}"
-      class:bx--breadcrumb-menu-options="{!!ctxBreadcrumbItem}"
-      class="{menuOptionsClass}"
+      aria-label={ariaLabel}
+      data-floating-menu-direction={direction}
+      class:bx--overflow-menu-options={true}
+      class:bx--overflow-menu--flip={flipped}
+      class:bx--overflow-menu-options--open={open}
+      class:bx--overflow-menu-options--light={light}
+      class:bx--overflow-menu-options--sm={size === "sm"}
+      class:bx--overflow-menu-options--xl={size === "xl"}
+      class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
+      class={menuOptionsClass}
     >
       <slot />
     </ul>

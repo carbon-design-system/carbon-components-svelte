@@ -13,13 +13,13 @@
 
 <Button
   kind="ghost"
-  on:click="{() => {
+  on:click={() => {
     index = index === 0 ? 1 : 0;
-  }}"
+  }}
 >
   Toggle image
 </Button>
 
 <div style:margin-top="1rem" style:width="100%" style:max-width="120px">
-  <ImageLoader ratio="1x1" fadeIn src="{src}" alt="{src}" />
+  <ImageLoader ratio="1x1" fadeIn {src} alt={src} />
 </div>

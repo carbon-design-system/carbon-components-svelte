@@ -72,19 +72,19 @@
       bind:value
       bind:selectedResultIndex
       placeholder="Search services"
-      results="{results}"
-      on:active="{() => {
-        events = [...events, { type: 'active' }];
-      }}"
-      on:inactive="{() => {
-        events = [...events, { type: 'inactive' }];
-      }}"
-      on:clear="{() => {
-        events = [...events, { type: 'clear' }];
-      }}"
-      on:select="{(e) => {
-        events = [...events, { type: 'select', ...e.detail }];
-      }}"
+      {results}
+      on:active={() => {
+        events = [...events, { type: "active" }];
+      }}
+      on:inactive={() => {
+        events = [...events, { type: "inactive" }];
+      }}
+      on:clear={() => {
+        events = [...events, { type: "clear" }];
+      }}
+      on:select={(e) => {
+        events = [...events, { type: "select", ...e.detail }];
+      }}
     />
   </HeaderUtilities>
 </Header>
@@ -95,9 +95,9 @@
       <Column>
         <h1>HeaderSearch</h1>
         <Button
-          on:click="{() => {
+          on:click={() => {
             active = true;
-          }}"
+          }}
         >
           Activate the search bar
         </Button>

@@ -17,23 +17,20 @@
   $: console.log("selectedId", selectedId);
 </script>
 
-<div bind:this="{ref}"></div>
+<div bind:this={ref}></div>
 
-<ContextMenu target="{null}" open on:open="{(e) => console.log(e.detail)}">
+<ContextMenu target={null} open on:open={(e) => console.log(e.detail)}>
   <ContextMenuOption
     kind="danger"
     indented
     labelText="Copy"
     shortcutText="⌘C"
-    icon="{CopyFile}"
+    icon={CopyFile}
   />
-  <ContextMenuOption indented labelText="Cut" shortcutText="⌘X" icon="{Cut}" />
+  <ContextMenuOption indented labelText="Cut" shortcutText="⌘X" icon={Cut} />
   <ContextMenuDivider />
   <ContextMenuOption indented labelText="Export as">
-    <ContextMenuGroup
-      labelText="Export options"
-      bind:selectedIds="{selectedIds}"
-    >
+    <ContextMenuGroup labelText="Export options" bind:selectedIds>
       <ContextMenuOption id="pdf" labelText="PDF" />
       <ContextMenuOption id="txt" labelText="TXT" />
       <ContextMenuOption id="mp3" labelText="MP3" />
@@ -49,10 +46,10 @@
   </ContextMenuGroup>
 </ContextMenu>
 
-<ContextMenu target="{[null, ref]}" on:open on:close>
+<ContextMenu target={[null, ref]} on:open on:close>
   <ContextMenuOption indented labelText="Open" />
   <ContextMenuDivider />
-  <ContextMenuRadioGroup bind:selectedId="{selectedId}" labelText="Radio group">
+  <ContextMenuRadioGroup bind:selectedId labelText="Radio group">
     <ContextMenuOption id="0" labelText="Set as foreground" />
     <ContextMenuOption id="1" labelText="Set as background" />
   </ContextMenuRadioGroup>

@@ -10,16 +10,16 @@
   <h5>"Show more" will not render</h5>
   <br />
 {/if}
-<div class:hidden="{!toggled}">
-  <CodeSnippet type="multi" code="{code}" />
+<div class:hidden={!toggled}>
+  <CodeSnippet type="multi" {code} />
 </div>
 
 {#if toggled}
   <br /><br />
   <h5>"Show more" will render</h5>
   <br />
-  <div class:hidden="{!toggled}">
-    <CodeSnippet type="multi" code="{code}" />
+  <div class:hidden={!toggled}>
+    <CodeSnippet type="multi" {code} />
   </div>
 {/if}
 

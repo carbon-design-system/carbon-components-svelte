@@ -11,15 +11,15 @@
 
 <Button
   kind="ghost"
-  disabled="{!imageLoader || error}"
-  on:click="{() => imageLoader.loadImage(srcError)}"
+  disabled={!imageLoader || error}
+  on:click={() => imageLoader.loadImage(srcError)}
 >
   Simulate error
 </Button>
 
-<ImageLoader bind:this="{imageLoader}" bind:error fadeIn src="{src}">
+<ImageLoader bind:this={imageLoader} bind:error fadeIn {src}>
   <svelte:fragment slot="error">
-    <Button kind="ghost" on:click="{() => imageLoader.loadImage(src)}">
+    <Button kind="ghost" on:click={() => imageLoader.loadImage(src)}>
       Error. Try again
     </Button>
   </svelte:fragment>

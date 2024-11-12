@@ -5,4 +5,4 @@
   import { CodeSnippet } from "carbon-components-svelte";
 </script>
 
-<CodeSnippet on:click="{() => copy(code)}">{code}</CodeSnippet>
+<CodeSnippet on:click={() => copy(code)}>{code}</CodeSnippet>

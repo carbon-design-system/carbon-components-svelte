@@ -49,19 +49,19 @@
 
 <div>
   <Button
-    on:click="{() => {
+    on:click={() => {
       treeview?.collapseNodes((node) => node.disabled);
-    }}"
+    }}
   >
     Collapse disabled nodes
   </Button>
 </div>
 
 <TreeView
-  bind:this="{treeview}"
+  bind:this={treeview}
   bind:expandedIds
   labelText="Cloud Products"
-  nodes="{nodes}"
+  {nodes}
 />
 
 <style>

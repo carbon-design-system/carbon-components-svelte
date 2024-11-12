@@ -24,11 +24,11 @@
 <ComboBox
   titleText="Contact"
   placeholder="Select contact method"
-  items="{[
-    { id: '0', key: 'Slack' },
-    { id: '1', key: 'Email' },
-    { id: '2', key: 'Fax' },
-  ]}"
-  shouldFilterItem="{shouldFilterItem}"
-  itemToString="{itemToString}"
+  items={[
+    { id: "0", key: "Slack" },
+    { id: "1", key: "Email" },
+    { id: "2", key: "Fax" },
+  ]}
+  {shouldFilterItem}
+  {itemToString}
 />

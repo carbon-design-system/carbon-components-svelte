@@ -4,8 +4,8 @@
 </script>
 
 <p
-  class:bx--text-truncate--end="{clamp === 'end'}"
-  class:bx--text-truncate--front="{clamp === 'front'}"
+  class:bx--text-truncate--end={clamp === "end"}
+  class:bx--text-truncate--front={clamp === "front"}
   {...$$restProps}
 >
   <slot />

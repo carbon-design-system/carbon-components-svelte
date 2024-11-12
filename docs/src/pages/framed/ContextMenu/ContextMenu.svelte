@@ -18,9 +18,9 @@
     indented
     labelText="Copy"
     shortcutText="⌘C"
-    icon="{CopyFile}"
+    icon={CopyFile}
   />
-  <ContextMenuOption indented labelText="Cut" shortcutText="⌘X" icon="{Cut}" />
+  <ContextMenuOption indented labelText="Cut" shortcutText="⌘X" icon={Cut} />
   <ContextMenuDivider />
   <ContextMenuOption indented labelText="Export as">
     <ContextMenuGroup labelText="Export options" bind:selectedIds>
