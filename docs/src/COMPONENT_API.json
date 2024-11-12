@@ -2237,7 +2237,7 @@
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" />",
+          "fallback": "<svelte:component this={icon} />",
           "slot_props": "{}"
         },
         {
@@ -5030,19 +5030,19 @@
         {
           "name": "closeIcon",
           "default": false,
-          "fallback": "<svelte:component this=\"{closeIcon}\" size=\"{20}\" />",
+          "fallback": "<svelte:component this={closeIcon} size={20} />",
           "slot_props": "{}"
         },
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" size=\"{20}\" />",
+          "fallback": "<svelte:component this={icon} size={20} />",
           "slot_props": "{}"
         },
         {
           "name": "text",
           "default": false,
-          "fallback": "{#if text}<span class:bx--header__action-text=\"{true}\">{text}</span>{/if}",
+          "fallback": "{#if text}<span class:bx--header__action-text={true}>{text}</span>{/if}",
           "slot_props": "{}"
         }
       ],
@@ -5111,7 +5111,7 @@
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" size=\"{20}\" />",
+          "fallback": "<svelte:component this={icon} size={20} />",
           "slot_props": "{}"
         }
       ],
@@ -5449,7 +5449,7 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "{result.text}\n              {#if result.description}<span\n                  class:bx--header-search-menu-description=\"{true}\"\n                  >– {result.description}</span\n                >{/if}",
+          "fallback": "{result.text}\n              {#if result.description}<span\n                  class:bx--header-search-menu-description={true}\n                  >– {result.description}</span\n                >{/if}",
           "slot_props": "{ result: HeaderSearchResult; index: number }"
         }
       ],
@@ -5903,7 +5903,7 @@
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" />",
+          "fallback": "<svelte:component this={icon} />",
           "slot_props": "{}"
         }
       ],
@@ -8216,7 +8216,7 @@
         {
           "name": "menu",
           "default": false,
-          "fallback": "<svelte:component\n      this=\"{icon}\"\n      aria-label=\"{iconDescription}\"\n      title=\"{iconDescription}\"\n      class=\"bx--overflow-menu__icon {iconClass}\"\n    />",
+          "fallback": "<svelte:component\n      this={icon}\n      aria-label={iconDescription}\n      title={iconDescription}\n      class=\"bx--overflow-menu__icon {iconClass}\"\n    />",
           "slot_props": "{}"
         }
       ],
@@ -8354,7 +8354,7 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "<div class:bx--overflow-menu-options__option-content=\"{true}\">\n          {text}\n        </div>",
+          "fallback": "<div class:bx--overflow-menu-options__option-content={true}>\n          {text}\n        </div>",
           "slot_props": "{}"
         }
       ],
@@ -9443,8 +9443,8 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "<p class:bx--progress-label=\"{true}\">{label}</p>",
-          "slot_props": "{ props: { class: 'bx--progress-label' } }"
+          "fallback": "<p class:bx--progress-label={true}>{label}</p>",
+          "slot_props": "{ props: { class: \"bx--progress-label\" } }"
         }
       ],
       "events": [
@@ -10965,7 +10965,7 @@
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" />",
+          "fallback": "<svelte:component this={icon} />",
           "slot_props": "{}"
         }
       ],
@@ -11031,7 +11031,7 @@
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" />",
+          "fallback": "<svelte:component this={icon} />",
           "slot_props": "{}"
         }
       ],
@@ -12547,12 +12547,12 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props: { class: 'bx--tag__label' } }"
+          "slot_props": "{ props: { class: \"bx--tag__label\" } }"
         },
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" />",
+          "fallback": "<svelte:component this={icon} />",
           "slot_props": "{}"
         }
       ],
@@ -14440,7 +14440,7 @@
         {
           "name": "icon",
           "default": false,
-          "fallback": "<svelte:component this=\"{icon}\" name=\"{iconName}\" />",
+          "fallback": "<svelte:component this={icon} name={iconName} />",
           "slot_props": "{}"
         },
         {
@@ -14676,7 +14676,7 @@
         {
           "name": "__default__",
           "default": true,
-          "fallback": "<svelte:component this=\"{icon}\" />",
+          "fallback": "<svelte:component this={icon} />",
           "slot_props": "{}"
         },
         {
@@ -14814,7 +14814,7 @@
           "kind": "function",
           "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {     expandedIds = nodes       .filter(         (node) =>           filterNode(node) ||           node.nodes?.some((child) => filterNode(child) && child.nodes)       )       .map((node) => node.id);   }",
+          "value": "() => {     expandedIds = nodes       .filter(         (node) =>           filterNode(node) ||           node.nodes?.some((child) => filterNode(child) && child.nodes),       )       .map((node) => node.id);   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,

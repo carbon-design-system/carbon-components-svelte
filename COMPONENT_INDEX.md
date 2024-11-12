@@ -862,12 +862,12 @@ None.
 
 ### Slots
 
-| Slot name    | Default | Props | Fallback                                              |
-| :----------- | :------ | :---- | :---------------------------------------------------- |
-| --           | Yes     | --    | --                                                    |
-| icon         | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
-| labelText    | No      | --    | <code>{labelText}</code>                              |
-| shortcutText | No      | --    | <code>{shortcutText}</code>                           |
+| Slot name    | Default | Props | Fallback                                            |
+| :----------- | :------ | :---- | :-------------------------------------------------- |
+| --           | Yes     | --    | --                                                  |
+| icon         | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| labelText    | No      | --    | <code>{labelText}</code>                            |
+| shortcutText | No      | --    | <code>{shortcutText}</code>                         |
 
 ### Events
 
@@ -1627,12 +1627,12 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                             |
-| :-------- | :------ | :---- | :--------------------------------------------------------------------------------------------------- |
-| --        | Yes     | --    | --                                                                                                   |
-| closeIcon | No      | --    | <code>&lt;svelte:component this="{closeIcon}" size="{20}" /&gt;</code>                               |
-| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code>                                    |
-| text      | No      | --    | <code>{#if text}&lt;span class:bx--header\_\_action-text="{true}"&gt;{text}&lt;/span&gt;{/if}</code> |
+| Slot name | Default | Props | Fallback                                                                                           |
+| :-------- | :------ | :---- | :------------------------------------------------------------------------------------------------- |
+| --        | Yes     | --    | --                                                                                                 |
+| closeIcon | No      | --    | <code>&lt;svelte:component this={closeIcon} size={20} /&gt;</code>                                 |
+| icon      | No      | --    | <code>&lt;svelte:component this={icon} size={20} /&gt;</code>                                      |
+| text      | No      | --    | <code>{#if text}&lt;span class:bx--header\_\_action-text={true}&gt;{text}&lt;/span&gt;{/if}</code> |
 
 ### Events
 
@@ -1655,9 +1655,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                          |
-| :-------- | :------ | :---- | :---------------------------------------------------------------- |
-| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" size="{20}" /&gt;</code> |
+| Slot name | Default | Props | Fallback                                                      |
+| :-------- | :------ | :---- | :------------------------------------------------------------ |
+| icon      | No      | --    | <code>&lt;svelte:component this={icon} size={20} /&gt;</code> |
 
 ### Events
 
@@ -1838,9 +1838,9 @@ export interface HeaderSearchResult {
 
 ### Slots
 
-| Slot name | Default | Props                                                       | Fallback                                                                                                                                                                            |
-| :-------- | :------ | :---------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| --        | Yes     | <code>{ result: HeaderSearchResult; index: number } </code> | <code>{result.text}<br /> {#if result.description}&lt;span<br /> class:bx--header-search-menu-description="{true}"<br /> &gt;– {result.description}&lt;/span<br /> &gt;{/if}</code> |
+| Slot name | Default | Props                                                       | Fallback                                                                                                                                                                          |
+| :-------- | :------ | :---------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --        | Yes     | <code>{ result: HeaderSearchResult; index: number } </code> | <code>{result.text}<br /> {#if result.description}&lt;span<br /> class:bx--header-search-menu-description={true}<br /> &gt;– {result.description}&lt;/span<br /> &gt;{/if}</code> |
 
 ### Events
 
@@ -1978,10 +1978,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                              |
-| :-------- | :------ | :---- | :---------------------------------------------------- |
-| --        | Yes     | --    | --                                                    |
-| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
+| Slot name | Default | Props | Fallback                                            |
+| :-------- | :------ | :---- | :-------------------------------------------------- |
+| --        | Yes     | --    | --                                                  |
+| icon      | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
@@ -2628,10 +2628,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                                                                                                                   |
-| :-------- | :------ | :---- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| --        | Yes     | --    | --                                                                                                                                                                                         |
-| menu      | No      | --    | <code>&lt;svelte:component<br /> this="{icon}"<br /> aria-label="{iconDescription}"<br /> title="{iconDescription}"<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
+| Slot name | Default | Props | Fallback                                                                                                                                                                             |
+| :-------- | :------ | :---- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --        | Yes     | --    | --                                                                                                                                                                                   |
+| menu      | No      | --    | <code>&lt;svelte:component<br /> this={icon}<br /> aria-label={iconDescription}<br /> title={iconDescription}<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
 
 ### Events
 
@@ -2662,9 +2662,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                                            |
-| :-------- | :------ | :---- | :------------------------------------------------------------------------------------------------------------------ |
-| --        | Yes     | --    | <code>&lt;div class:bx--overflow-menu-options\_\_option-content="{true}"&gt;<br /> {text}<br /> &lt;/div&gt;</code> |
+| Slot name | Default | Props | Fallback                                                                                                          |
+| :-------- | :------ | :---- | :---------------------------------------------------------------------------------------------------------------- |
+| --        | Yes     | --    | <code>&lt;div class:bx--overflow-menu-options\_\_option-content={true}&gt;<br /> {text}<br /> &lt;/div&gt;</code> |
 
 ### Events
 
@@ -2922,9 +2922,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                                                    | Fallback                                                                  |
-| :-------- | :------ | :------------------------------------------------------- | :------------------------------------------------------------------------ |
-| --        | Yes     | <code>{ props: { class: 'bx--progress-label' } } </code> | <code>&lt;p class:bx--progress-label="{true}"&gt;{label}&lt;/p&gt;</code> |
+| Slot name | Default | Props                                                    | Fallback                                                                |
+| :-------- | :------ | :------------------------------------------------------- | :---------------------------------------------------------------------- |
+| --        | Yes     | <code>{ props: { class: "bx--progress-label" } } </code> | <code>&lt;p class:bx--progress-label={true}&gt;{label}&lt;/p&gt;</code> |
 
 ### Events
 
@@ -3377,10 +3377,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                              |
-| :-------- | :------ | :---- | :---------------------------------------------------- |
-| --        | Yes     | --    | <code>{text}</code>                                   |
-| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
+| Slot name | Default | Props | Fallback                                            |
+| :-------- | :------ | :---- | :-------------------------------------------------- |
+| --        | Yes     | --    | <code>{text}</code>                                 |
+| icon      | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
@@ -3401,10 +3401,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                              |
-| :-------- | :------ | :---- | :---------------------------------------------------- |
-| --        | Yes     | --    | --                                                    |
-| icon      | No      | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
+| Slot name | Default | Props | Fallback                                            |
+| :-------- | :------ | :---- | :-------------------------------------------------- |
+| --        | Yes     | --    | --                                                  |
+| icon      | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
@@ -4016,10 +4016,10 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                                                  | Fallback                                              |
-| :-------- | :------ | :----------------------------------------------------- | :---------------------------------------------------- |
-| --        | Yes     | <code>{ props: { class: 'bx--tag\_\_label' } } </code> | --                                                    |
-| icon      | No      | --                                                     | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
+| Slot name | Default | Props                                                  | Fallback                                            |
+| :-------- | :------ | :----------------------------------------------------- | :-------------------------------------------------- |
+| --        | Yes     | <code>{ props: { class: "bx--tag\_\_label" } } </code> | --                                                  |
+| icon      | No      | --                                                     | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
@@ -4585,11 +4585,11 @@ None.
 
 ### Slots
 
-| Slot name   | Default | Props | Fallback                                                                |
-| :---------- | :------ | :---- | :---------------------------------------------------------------------- |
-| --          | Yes     | --    | --                                                                      |
-| icon        | No      | --    | <code>&lt;svelte:component this="{icon}" name="{iconName}" /&gt;</code> |
-| triggerText | No      | --    | <code>{triggerText}</code>                                              |
+| Slot name   | Default | Props | Fallback                                                            |
+| :---------- | :------ | :---- | :------------------------------------------------------------------ |
+| --          | Yes     | --    | --                                                                  |
+| icon        | No      | --    | <code>&lt;svelte:component this={icon} name={iconName} /&gt;</code> |
+| triggerText | No      | --    | <code>{triggerText}</code>                                          |
 
 ### Events
 
@@ -4666,10 +4666,10 @@ None.
 
 ### Slots
 
-| Slot name   | Default | Props | Fallback                                              |
-| :---------- | :------ | :---- | :---------------------------------------------------- |
-| --          | Yes     | --    | <code>&lt;svelte:component this="{icon}" /&gt;</code> |
-| tooltipText | No      | --    | <code>{tooltipText}</code>                            |
+| Slot name   | Default | Props | Fallback                                            |
+| :---------- | :------ | :---- | :-------------------------------------------------- |
+| --          | Yes     | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| tooltipText | No      | --    | <code>{tooltipText}</code>                          |
 
 ### Events
 
@@ -4710,7 +4710,7 @@ export interface TreeNode {
 | hideLabel     | No       | <code>let</code>      | No       | <code>boolean</code>                                          | <code>false</code>                                                                                                                                                                                                                                                                                                                                                                                                                               | Set to `true` to visually hide the label text                                                        |
 | expandAll     | No       | <code>function</code> | No       | <code>() => void</code>                                       | <code>() => { expandedIds = [...nodeIds]; }</code>                                                                                                                                                                                                                                                                                                                                                                                               | Programmatically expand all nodes                                                                    |
 | collapseAll   | No       | <code>function</code> | No       | <code>() => void</code>                                       | <code>() => { expandedIds = []; }</code>                                                                                                                                                                                                                                                                                                                                                                                                         | Programmatically collapse all nodes                                                                  |
-| expandNodes   | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code> | <code>() => { expandedIds = nodes .filter( (node) => filterNode(node) &#124;&#124; node.nodes?.some((child) => filterNode(child) && child.nodes) ) .map((node) => node.id); }</code>                                                                                                                                                                                                                                                             | Programmatically expand a subset of nodes.<br />Expands all nodes if no argument is provided         |
+| expandNodes   | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code> | <code>() => { expandedIds = nodes .filter( (node) => filterNode(node) &#124;&#124; node.nodes?.some((child) => filterNode(child) && child.nodes), ) .map((node) => node.id); }</code>                                                                                                                                                                                                                                                            | Programmatically expand a subset of nodes.<br />Expands all nodes if no argument is provided         |
 | collapseNodes | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code> | <code>() => { expandedIds = nodes .filter((node) => expandedIds.includes(node.id) && !filterNode(node)) .map((node) => node.id); }</code>                                                                                                                                                                                                                                                                                                        | Programmatically collapse a subset of nodes.<br />Collapses all nodes if no argument is provided     |
 | showNode      | No       | <code>function</code> | No       | <code>(id: TreeNodeId) => void</code>                         | <code>() => { for (const child of nodes) { const nodes = findNodeById(child, id); if (nodes) { const ids = nodes.map((node) => node.id); const nodeIds = new Set(ids); expandNodes((node) => nodeIds.has(node.id)); const lastId = ids[ids.length - 1]; activeId = lastId; selectedIds = [lastId]; tick().then(() => { ref?.querySelector(\`[id="${lastId}"]\`)?.focus(); }); // Break out of the loop if the node is found. break; } } }</code> | Programmatically show a node by `id`.<br />The matching node will be expanded, selected, and focused |
 

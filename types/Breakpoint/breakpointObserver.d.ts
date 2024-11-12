@@ -9,7 +9,7 @@ export function breakpointObserver(): {
   subscribe: (
     this: void,
     run: Subscriber<any>,
-    invalidate?: (value?: any) => void
+    invalidate?: (value?: any) => void,
   ) => Unsubscriber;
   /**
    * Returns a store readable store that returns whether the current
