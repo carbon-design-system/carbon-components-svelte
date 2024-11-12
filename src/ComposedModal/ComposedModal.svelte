@@ -98,18 +98,18 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
-  bind:this="{ref}"
+  bind:this={ref}
   role="presentation"
-  class:bx--modal="{true}"
-  class:is-visible="{open}"
-  class:bx--modal--danger="{danger}"
+  class:bx--modal={true}
+  class:is-visible={open}
+  class:bx--modal--danger={danger}
   {...$$restProps}
   on:keydown
-  on:keydown="{(e) => {
+  on:keydown={(e) => {
     if (open) {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         open = false;
-      } else if (e.key === 'Tab') {
+      } else if (e.key === "Tab") {
         // taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
         const selectorTabbable = `
   a[href], area[href], input:not([disabled]):not([tabindex='-1']),
@@ -130,41 +130,41 @@
         e.preventDefault();
       }
     }
-  }}"
+  }}
   on:click
-  on:click="{() => {
+  on:click={() => {
     if (!didClickInnerModal && !preventCloseOnClickOutside) open = false;
     didClickInnerModal = false;
-  }}"
+  }}
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:transitionend="{({ propertyName, currentTarget }) => {
-    if (propertyName === 'transform') {
-      dispatch('transitionend', { open });
+  on:transitionend={({ propertyName, currentTarget }) => {
+    if (propertyName === "transform") {
+      dispatch("transitionend", { open });
     }
 
     if (didOpen) {
       focus(currentTarget);
       didOpen = false;
     }
-  }}"
+  }}
 >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <div
-    bind:this="{innerModal}"
+    bind:this={innerModal}
     role="dialog"
     aria-modal="true"
-    aria-label="{$$props['aria-label'] || $label || undefined}"
-    class:bx--modal-container="{true}"
-    class:bx--modal-container--xs="{size === 'xs'}"
-    class:bx--modal-container--sm="{size === 'sm'}"
-    class:bx--modal-container--lg="{size === 'lg'}"
-    class="{containerClass}"
-    on:click="{() => {
+    aria-label={$$props["aria-label"] || $label || undefined}
+    class:bx--modal-container={true}
+    class:bx--modal-container--xs={size === "xs"}
+    class:bx--modal-container--sm={size === "sm"}
+    class:bx--modal-container--lg={size === "lg"}
+    class={containerClass}
+    on:click={() => {
       didClickInnerModal = true;
-    }}"
+    }}
   >
     <slot />
   </div>

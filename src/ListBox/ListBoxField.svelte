@@ -45,17 +45,15 @@
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div
-  bind:this="{ref}"
-  role="{role}"
-  aria-expanded="{ariaExpanded}"
-  aria-owns="{(ariaExpanded && menuId) || undefined}"
-  aria-controls="{(ariaExpanded && menuId) || undefined}"
-  aria-disabled="{disabled}"
-  aria-label="{ariaExpanded
-    ? translateWithId('close')
-    : translateWithId('open')}"
-  tabindex="{disabled ? '-1' : tabindex}"
-  class:bx--list-box__field="{true}"
+  bind:this={ref}
+  {role}
+  aria-expanded={ariaExpanded}
+  aria-owns={(ariaExpanded && menuId) || undefined}
+  aria-controls={(ariaExpanded && menuId) || undefined}
+  aria-disabled={disabled}
+  aria-label={ariaExpanded ? translateWithId("close") : translateWithId("open")}
+  tabindex={disabled ? "-1" : tabindex}
+  class:bx--list-box__field={true}
   {...$$restProps}
   on:click
   on:mouseover

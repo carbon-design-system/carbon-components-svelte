@@ -13,4 +13,4 @@
   <BreadcrumbItem href="/profile" isCurrentPage>Profile</BreadcrumbItem>
 </Breadcrumb>
 
-<Breadcrumb noTrailingSlash skeleton count="{3}" />
+<Breadcrumb noTrailingSlash skeleton count={3} />

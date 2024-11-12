@@ -1,21 +1,21 @@
 {
-    "compilerOptions": {
-      "noEmit": true,
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "ignoreDeprecations": "5.0",
-      "verbatimModuleSyntax": true,
-      "isolatedModules": true,
-      "target": "ESNext",
-      "module": "ESNext",
-      "moduleResolution": "node",
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "strict": true,
-      "paths": {
-        "carbon-components-svelte": ["./types"],
-        "carbon-components-svelte/*": ["./types/*"]
-      }
-    },
-    "include": ["src", "tests"]
-  }
+  "compilerOptions": {
+    "noEmit": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "ignoreDeprecations": "5.0",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "paths": {
+      "carbon-components-svelte": ["./types"],
+      "carbon-components-svelte/*": ["./types/*"]
+    }
+  },
+  "include": ["src", "tests"]
+}

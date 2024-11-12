@@ -10,16 +10,16 @@
   <ButtonSet>
     <Button
       size="small"
-      disabled="{value === 'Cloud functions'}"
-      on:click="{() => (value = 'Cloud functions')}"
+      disabled={value === "Cloud functions"}
+      on:click={() => (value = "Cloud functions")}
     >
       Set value
     </Button>
     <Button
       kind="ghost"
       size="small"
-      disabled="{value.length === 0}"
-      on:click="{() => (value = '')}"
+      disabled={value.length === 0}
+      on:click={() => (value = "")}
     >
       Clear value
     </Button>

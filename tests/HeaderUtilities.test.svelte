@@ -30,12 +30,12 @@
     <SkipToContent />
   </div>
   <HeaderUtilities>
-    <HeaderGlobalAction iconDescription="Settings" icon="{SettingsAdjust}" />
+    <HeaderGlobalAction iconDescription="Settings" icon={SettingsAdjust} />
     <HeaderAction
       bind:isOpen
       on:open
       on:close
-      transition="{{ duration: 400, easing: quintOut }}"
+      transition={{ duration: 400, easing: quintOut }}
     >
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
@@ -51,7 +51,7 @@
   </HeaderUtilities>
 </Header>
 
-<SideNav bind:isOpen="{isSideNavOpen}">
+<SideNav bind:isOpen={isSideNavOpen}>
   <SideNavItems>
     <SideNavLink text="Link 1" />
     <SideNavLink text="Link 2" />

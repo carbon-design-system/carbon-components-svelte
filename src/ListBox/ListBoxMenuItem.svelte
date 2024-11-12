@@ -21,21 +21,17 @@
 <div
   role="option"
   tabindex="-1"
-  class:bx--list-box__menu-item="{true}"
-  class:bx--list-box__menu-item--active="{active}"
-  class:bx--list-box__menu-item--highlighted="{highlighted || active}"
-  aria-selected="{active}"
-  disabled="{disabled ? true : undefined}"
+  class:bx--list-box__menu-item={true}
+  class:bx--list-box__menu-item--active={active}
+  class:bx--list-box__menu-item--highlighted={highlighted || active}
+  aria-selected={active}
+  disabled={disabled ? true : undefined}
   {...$$restProps}
   on:click
   on:mouseenter
   on:mouseleave
 >
-  <div
-    bind:this="{ref}"
-    title="{title}"
-    class:bx--list-box__menu-item__option="{true}"
-  >
+  <div bind:this={ref} {title} class:bx--list-box__menu-item__option={true}>
     <slot />
   </div>
 </div>

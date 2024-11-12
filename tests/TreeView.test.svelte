@@ -63,16 +63,16 @@
 </script>
 
 <TreeView
-  bind:this="{treeview}"
+  bind:this={treeview}
   size="compact"
   labelText="Cloud Products"
   {nodes}
   bind:activeId
   bind:selectedIds
   bind:expandedIds
-  on:select="{({ detail }) => console.log('select', detail)}"
-  on:toggle="{({ detail }) => console.log('toggle', detail)}"
-  on:focus="{({ detail }) => console.log('focus', detail)}"
+  on:select={({ detail }) => console.log("select", detail)}
+  on:toggle={({ detail }) => console.log("toggle", detail)}
+  on:focus={({ detail }) => console.log("focus", detail)}
   let:node
 >
   {node.id}

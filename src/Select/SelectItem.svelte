@@ -47,13 +47,13 @@
 </script>
 
 <option
-  value="{value}"
-  disabled="{disabled}"
-  hidden="{hidden}"
-  selected="{selected}"
-  class:bx--select-option="{true}"
-  class="{className}"
-  style="{style}"
+  {value}
+  {disabled}
+  {hidden}
+  {selected}
+  class:bx--select-option={true}
+  class={className}
+  {style}
 >
   {text || value}
 </option>

@@ -1,9 +1,13 @@
 <script lang="ts">
-  import { TimePicker, TimePickerSelect, SelectItem } from "carbon-components-svelte";
+  import {
+    TimePicker,
+    TimePickerSelect,
+    SelectItem,
+  } from "carbon-components-svelte";
 </script>
 
 <TimePicker
-  spellcheck="{false}"
+  spellcheck={false}
   labelText="Cron job"
   placeholder="hh:mm"
   on:paste

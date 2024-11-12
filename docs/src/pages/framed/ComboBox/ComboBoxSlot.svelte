@@ -5,11 +5,11 @@
 <ComboBox
   titleText="Contact"
   placeholder="Select contact method"
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
   let:item
   let:index
 >

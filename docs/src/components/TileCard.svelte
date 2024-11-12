@@ -15,8 +15,8 @@
 <div class="card-wrapper" class:borderRight class:borderBottom>
   <AspectRatio>
     <svelte:component
-      this="{tileComponent}"
-      href="{href}"
+      this={tileComponent}
+      {href}
       {...$$restProps}
       style="height: 100%;"
     >
@@ -29,11 +29,11 @@
         </div>
         <div class="card-footer">
           <svelte:component
-            this="{LogoGithub}"
-            size="{32}"
+            this={LogoGithub}
+            size={32}
             style="fill: var(--cds-icon-01)"
           />
-          <Launch size="{20}" style="fill: var(--cds-icon-01)" />
+          <Launch size={20} style="fill: var(--cds-icon-01)" />
         </div>
       </div>
     </svelte:component>

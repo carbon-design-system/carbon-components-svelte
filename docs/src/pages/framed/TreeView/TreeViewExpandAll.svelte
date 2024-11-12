@@ -45,14 +45,10 @@
 </script>
 
 <div>
-  <Button on:click="{treeview?.expandAll}">Expand all</Button>
+  <Button on:click={treeview?.expandAll}>Expand all</Button>
 </div>
 
-<TreeView
-  bind:this="{treeview}"
-  labelText="Cloud Products"
-  nodes="{nodes}"
-/>
+<TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />
 
 <style>
   div {

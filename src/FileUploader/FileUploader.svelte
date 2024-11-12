@@ -90,14 +90,16 @@
     if (addedIds.length > 0) {
       dispatch(
         "add",
-        addedIds.map((id) => files.find((file) => id === getFileId(file)))
+        addedIds.map((id) => files.find((file) => id === getFileId(file))),
       );
     }
 
     if (removedIds.length > 0) {
       dispatch(
         "remove",
-        removedIds.map((id) => prevFiles.find((file) => id === getFileId(file)))
+        removedIds.map((id) =>
+          prevFiles.find((file) => id === getFileId(file)),
+        ),
       );
     }
 
@@ -108,7 +110,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:bx--form-item={true}
   {...$$restProps}
   on:click
   on:mouseover
@@ -117,8 +119,8 @@
 >
   {#if labelTitle || $$slots.labelTitle}
     <p
-      class:bx--file--label="{true}"
-      class:bx--label-description--disabled="{disabled}"
+      class:bx--file--label={true}
+      class:bx--label-description--disabled={disabled}
     >
       <slot name="labelTitle">
         {labelTitle}
@@ -127,8 +129,8 @@
   {/if}
   {#if labelDescription || $$slots.labelDescription}
     <p
-      class:bx--label-description="{true}"
-      class:bx--label-description--disabled="{disabled}"
+      class:bx--label-description={true}
+      class:bx--label-description--disabled={disabled}
     >
       <slot name="labelDescription">
         {labelDescription}
@@ -136,37 +138,37 @@
     </p>
   {/if}
   <FileUploaderButton
-    disabled="{disabled}"
+    {disabled}
     disableLabelChanges
-    labelText="{buttonLabel}"
-    accept="{accept}"
-    name="{name}"
-    multiple="{multiple}"
-    kind="{kind}"
-    size="{size}"
+    labelText={buttonLabel}
+    {accept}
+    {name}
+    {multiple}
+    {kind}
+    {size}
     on:change
-    on:change="{(e) => {
+    on:change={(e) => {
       files = e.detail;
-    }}"
+    }}
   />
-  <div class:bx--file-container="{true}">
+  <div class:bx--file-container={true}>
     {#each files as { name }, i}
-      <span class:bx--file__selected-file="{true}">
-        <p class:bx--file-filename="{true}">{name}</p>
-        <span class:bx--file__state-container="{true}">
+      <span class:bx--file__selected-file={true}>
+        <p class:bx--file-filename={true}>{name}</p>
+        <span class:bx--file__state-container={true}>
           <Filename
-            iconDescription="{iconDescription}"
-            status="{status}"
+            {iconDescription}
+            {status}
             on:keydown
-            on:keydown="{({ key }) => {
-              if (key === ' ' || key === 'Enter') {
+            on:keydown={({ key }) => {
+              if (key === " " || key === "Enter") {
                 files = files.filter((_, index) => index !== i);
               }
-            }}"
+            }}
             on:click
-            on:click="{() => {
+            on:click={() => {
               files = files.filter((_, index) => index !== i);
-            }}"
+            }}
           />
         </span>
       </span>

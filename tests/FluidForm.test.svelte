@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { FluidForm, TextInput, PasswordInput } from "carbon-components-svelte";
+  import {
+    FluidForm,
+    TextInput,
+    PasswordInput,
+  } from "carbon-components-svelte";
 </script>
 
 <FluidForm action="" method="get">

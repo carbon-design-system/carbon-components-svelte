@@ -17,7 +17,7 @@
   const dispatch = createEventDispatcher();
   const steps = writable([]);
   const stepsById = derived(steps, (steps) =>
-    steps.reduce((a, c) => ({ ...a, [c.id]: c }), {})
+    steps.reduce((a, c) => ({ ...a, [c.id]: c }), {}),
   );
   const preventChangeOnClickStore = writable(preventChangeOnClick);
 
@@ -58,7 +58,7 @@
     _.map((step, i) => ({
       ...step,
       current: i === currentIndex,
-    }))
+    })),
   );
   $: preventChangeOnClickStore.set(preventChangeOnClick);
 </script>
@@ -66,9 +66,9 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <ul
-  class:bx--progress="{true}"
-  class:bx--progress--vertical="{vertical}"
-  class:bx--progress--space-equal="{spaceEqually && !vertical}"
+  class:bx--progress={true}
+  class:bx--progress--vertical={vertical}
+  class:bx--progress--space-equal={spaceEqually && !vertical}
   {...$$restProps}
   on:click
   on:mouseover

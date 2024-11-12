@@ -55,66 +55,66 @@
 </script>
 
 <svelte:window
-  on:mouseup="{({ target }) => {
+  on:mouseup={({ target }) => {
     if (active && !refSearch.contains(target)) active = false;
-  }}"
+  }}
 />
 
 <div
-  bind:this="{refSearch}"
-  class:bx--header__search="{true}"
+  bind:this={refSearch}
+  class:bx--header__search={true}
   role="search"
-  class:bx--header__search--active="{active}"
+  class:bx--header__search--active={active}
 >
   <label
-    class:bx--header__search-label="{true}"
+    class:bx--header__search-label={true}
     for="search-input"
     id="search-label">Search</label
   >
   <div
-    class:bx--header__search-menu="{true}"
+    class:bx--header__search-menu={true}
     aria-owns="search-menu"
     aria-haspopup="menu"
   >
     <button
       type="button"
       aria-label="Search"
-      aria-expanded="{active}"
-      tabindex="{active ? '-1' : '0'}"
-      class:bx--header-search-button="{true}"
-      class:bx--header__action="{true}"
-      class:bx--header-search-button--disabled="{active}"
-      on:click="{() => {
+      aria-expanded={active}
+      tabindex={active ? "-1" : "0"}
+      class:bx--header-search-button={true}
+      class:bx--header__action={true}
+      class:bx--header-search-button--disabled={active}
+      on:click={() => {
         active = true;
-      }}"
+      }}
     >
-      <IconSearch size="{20}" title="Search" />
+      <IconSearch size={20} title="Search" />
     </button>
     <input
-      bind:this="{ref}"
+      bind:this={ref}
       type="text"
       autocomplete="off"
       placeholder="Search..."
-      tabindex="{active ? '0' : '-1'}"
-      class:bx--header__search-input="{true}"
-      class:bx--header__search--active="{active}"
+      tabindex={active ? "0" : "-1"}
+      class:bx--header__search-input={true}
+      class:bx--header__search--active={active}
       {...$$restProps}
       id="search-input"
       aria-autocomplete="list"
       aria-controls="search-menu"
-      aria-activedescendant="{selectedId}"
+      aria-activedescendant={selectedId}
       bind:value
       on:change
       on:input
       on:focus
       on:blur
       on:keydown
-      on:keydown="{(e) => {
+      on:keydown={(e) => {
         switch (e.key) {
-          case 'Enter':
+          case "Enter":
             selectResult();
             break;
-          case 'ArrowDown':
+          case "ArrowDown":
             e.preventDefault();
             if (selectedResultIndex === results.length - 1) {
               selectedResultIndex = 0;
@@ -122,7 +122,7 @@
               selectedResultIndex += 1;
             }
             break;
-          case 'ArrowUp':
+          case "ArrowUp":
             e.preventDefault();
             if (selectedResultIndex === 0) {
               selectedResultIndex = results.length - 1;
@@ -130,34 +130,34 @@
               selectedResultIndex -= 1;
             }
             break;
-          case 'Escape':
-            if (value === '') {
+          case "Escape":
+            if (value === "") {
               // If the search bar is empty, deactivate the input.
               active = false;
             }
 
             // Reset the search query but keep the search bar active.
             // Do not dispatch "clear" event as that should fire only on the "x" button.
-            value = '';
+            value = "";
             selectedResultIndex = 0;
             break;
         }
-      }}"
+      }}
       on:paste
     />
     <button
       type="button"
       aria-label="Clear search"
-      tabindex="{active ? '0' : '-1'}"
-      class:bx--header__action="{true}"
-      class:bx--header-search-button="{true}"
-      class:bx--header-search-button--hidden="{!active}"
-      on:click="{() => {
+      tabindex={active ? "0" : "-1"}
+      class:bx--header__action={true}
+      class:bx--header-search-button={true}
+      class:bx--header-search-button--hidden={!active}
+      on:click={() => {
         reset();
-        dispatch('clear');
-      }}"
+        dispatch("clear");
+      }}
     >
-      <Close size="{20}" title="Close" />
+      <Close size={20} title="Close" />
     </button>
   </div>
 
@@ -167,7 +167,7 @@
       aria-labelledby="search-label"
       role="menu"
       id="search-menu"
-      class:bx--header-search-menu="{true}"
+      class:bx--header-search-menu={true}
     >
       {#each results as result, i}
         <li role="none">
@@ -175,20 +175,20 @@
             tabindex="-1"
             id="search-menuitem-{i}"
             role="menuitem"
-            href="{result.href}"
-            class:bx--header-search-menu-item="{true}"
-            class:bx--header-search-menu-item--selected="{selectedId ===
-              `search-menuitem-${i}`}"
-            on:click|preventDefault="{async () => {
+            href={result.href}
+            class:bx--header-search-menu-item={true}
+            class:bx--header-search-menu-item--selected={selectedId ===
+              `search-menuitem-${i}`}
+            on:click|preventDefault={async () => {
               selectedResultIndex = i;
               await tick();
               selectResult();
-            }}"
+            }}
           >
-            <slot result="{result}" index="{i}">
+            <slot {result} index={i}>
               {result.text}
               {#if result.description}<span
-                  class:bx--header-search-menu-description="{true}"
+                  class:bx--header-search-menu-description={true}
                   >– {result.description}</span
                 >{/if}
             </slot>
@@ -222,7 +222,8 @@
     height: 3rem;
     background-color: #393939;
     color: #fff;
-    transition: max-width 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
+    transition:
+      max-width 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
       background 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 
@@ -272,7 +273,8 @@
     padding: 0;
     flex-shrink: 0;
     opacity: 1;
-    transition: background-color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
+    transition:
+      background-color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
       opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 

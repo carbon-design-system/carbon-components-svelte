@@ -45,16 +45,10 @@
   ];
 </script>
 
-<TreeView
-  labelText="Cloud Products"
-  activeId="{activeId}"
-  selectedIds="{selectedIds}"
-  nodes="{nodes}"
-  let:node
->
+<TreeView labelText="Cloud Products" {activeId} {selectedIds} {nodes} let:node>
   <span
-    style:color="{node.selected ? "var(--cds-interactive-04)" : "inherit"}"
-    style:text-decoration="{node.disabled ? "inherit" : "underline"}"
+    style:color={node.selected ? "var(--cds-interactive-04)" : "inherit"}
+    style:text-decoration={node.disabled ? "inherit" : "underline"}
   >
     {node.text} (id: {node.id})
   </span>

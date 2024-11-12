@@ -16,7 +16,7 @@
 </Tabs>
 
 <div style="margin: var(--cds-layout-01) 0">
-  <Button on:click="{() => (selected = 1)}">Set index to 1</Button>
+  <Button on:click={() => (selected = 1)}>Set index to 1</Button>
 </div>
 
 <strong>Selected index:</strong>

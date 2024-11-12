@@ -5,5 +5,5 @@
 
 <CodeSnippet
   code="npm i carbon-components-svelte"
-  copy="{(text) => copy(text)}"
+  copy={(text) => copy(text)}
 />

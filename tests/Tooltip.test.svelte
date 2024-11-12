@@ -41,7 +41,7 @@
 
 <Button size="small">Manage</Button>
 
-<Tooltip triggerText="Resource list" icon="{Catalog}">
+<Tooltip triggerText="Resource list" icon={Catalog}>
   <p>Resources are provisioned based on your account's organization.</p>
 </Tooltip>
 

@@ -99,7 +99,7 @@
       .filter(
         (node) =>
           filterNode(node) ||
-          node.nodes?.some((child) => filterNode(child) && child.nodes)
+          node.nodes?.some((child) => filterNode(child) && child.nodes),
       )
       .map((node) => node.id);
   }
@@ -198,7 +198,7 @@
 
   onMount(() => {
     const firstFocusableNode = ref.querySelector(
-      "li.bx--tree-node:not(.bx--tree-node--disabled)"
+      "li.bx--tree-node:not(.bx--tree-node--disabled)",
     );
 
     if (firstFocusableNode != null) {
@@ -242,7 +242,7 @@
 
 {#if !hideLabel}
   <!-- svelte-ignore a11y-label-has-associated-control -->
-  <label id="{labelId}" class:bx--label="{true}">
+  <label id={labelId} class:bx--label={true}>
     <slot name="labelText">{labelText}</slot>
   </label>
 {/if}
@@ -251,18 +251,18 @@
 <ul
   {...$$restProps}
   role="tree"
-  bind:this="{ref}"
-  class:bx--tree="{true}"
-  class:bx--tree--default="{size === 'default'}"
-  class:bx--tree--compact="{size === 'compact'}"
-  aria-label="{hideLabel ? labelText : undefined}"
-  aria-labelledby="{!hideLabel ? labelId : undefined}"
-  aria-multiselectable="{selectedIds.length > 1 || undefined}"
+  bind:this={ref}
+  class:bx--tree={true}
+  class:bx--tree--default={size === "default"}
+  class:bx--tree--compact={size === "compact"}
+  aria-label={hideLabel ? labelText : undefined}
+  aria-labelledby={!hideLabel ? labelId : undefined}
+  aria-multiselectable={selectedIds.length > 1 || undefined}
   on:keydown
-  on:keydown|stopPropagation="{handleKeyDown}"
+  on:keydown|stopPropagation={handleKeyDown}
 >
-  <TreeViewNodeList root nodes="{nodes}" let:node>
-    <slot node="{node}">
+  <TreeViewNodeList root {nodes} let:node>
+    <slot {node}>
       {node.text}
     </slot>
   </TreeViewNodeList>

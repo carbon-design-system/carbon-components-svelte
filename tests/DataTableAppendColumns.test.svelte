@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { DataTable, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
+  import {
+    DataTable,
+    OverflowMenu,
+    OverflowMenuItem,
+  } from "carbon-components-svelte";
 
   const headers = [
     { key: "name", value: "Name" },
@@ -18,7 +22,7 @@
   ];
 </script>
 
-<DataTable sortable headers="{headers}" rows="{rows}">
+<DataTable sortable {headers} {rows}>
   <span slot="cell" let:cell>
     {#if cell.key === "overflow"}
       <OverflowMenu flipped>

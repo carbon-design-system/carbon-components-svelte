@@ -7,9 +7,9 @@
   required
   legend="Service pricing tiers"
   selected="0"
-  on:select="{(e) => {
+  on:select={(e) => {
     console.log(e.detail); // string
-  }}"
+  }}
 >
   <RadioTile light checked value="0">Lite plan</RadioTile>
   <RadioTile value="1">Standard plan</RadioTile>

@@ -39,13 +39,13 @@
 
 <li role="none">
   <a
-    bind:this="{ref}"
+    bind:this={ref}
     role="menuitem"
     tabindex="0"
-    href="{href}"
-    rel="{$$restProps.target === '_blank' ? 'noopener noreferrer' : undefined}"
-    class:bx--header__menu-item="{true}"
-    aria-current="{isSelected ? 'page' : undefined}"
+    {href}
+    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    class:bx--header__menu-item={true}
+    aria-current={isSelected ? "page" : undefined}
     {...$$restProps}
     on:click
     on:mouseover
@@ -55,12 +55,12 @@
     on:keydown
     on:focus
     on:blur
-    on:blur="{() => {
+    on:blur={() => {
       if (selectedItemIds.indexOf(id) === selectedItemIds.length - 1) {
         ctx?.closeMenu();
       }
-    }}"
+    }}
   >
-    <span class:bx--text-truncate--end="{true}"><slot>{text}</slot></span>
+    <span class:bx--text-truncate--end={true}><slot>{text}</slot></span>
   </a>
 </li>

@@ -22,15 +22,15 @@
 </script>
 
 <DataTable
-  headers="{[
-    { key: 'name', value: 'Name' },
-    { key: 'protocol', value: 'Protocol' },
-    { key: 'port', value: 'Port' },
-    { key: 'rule', value: 'Rule' },
-  ]}"
-  rows="{rows}"
-  pageSize="{pageSize}"
-  page="{page}"
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" },
+  ]}
+  {rows}
+  {pageSize}
+  {page}
 >
   <Toolbar>
     <ToolbarContent>
@@ -47,6 +47,6 @@
 <Pagination
   bind:pageSize
   bind:page
-  totalItems="{filteredRowIds.length}"
+  totalItems={filteredRowIds.length}
   pageSizeInputDisabled
 />

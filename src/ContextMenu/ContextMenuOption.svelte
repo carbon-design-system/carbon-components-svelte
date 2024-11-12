@@ -167,46 +167,46 @@
 </script>
 
 <li
-  bind:this="{ref}"
-  role="{role}"
+  bind:this={ref}
+  {role}
   tabindex="-1"
-  aria-disabled="{!subOptions && disabled}"
-  aria-haspopup="{subOptions ? true : undefined}"
-  aria-expanded="{subOptions ? submenuOpen : undefined}"
-  class:bx--menu-option="{true}"
-  class:bx--menu-option--disabled="{true}"
-  class:bx--menu-option--active="{subOptions && submenuOpen}"
-  class:bx--menu-option--danger="{!subOptions && kind === 'danger'}"
-  indented="{indented}"
-  aria-checked="{isSelectable || isRadio ? selected : undefined}"
-  data-nested="{ref &&
-    ref.closest('.bx--menu').getAttribute('data-level') === '2'}"
-  data-sub="{subOptions}"
-  data-id="{id}"
+  aria-disabled={!subOptions && disabled}
+  aria-haspopup={subOptions ? true : undefined}
+  aria-expanded={subOptions ? submenuOpen : undefined}
+  class:bx--menu-option={true}
+  class:bx--menu-option--disabled={true}
+  class:bx--menu-option--active={subOptions && submenuOpen}
+  class:bx--menu-option--danger={!subOptions && kind === "danger"}
+  {indented}
+  aria-checked={isSelectable || isRadio ? selected : undefined}
+  data-nested={ref &&
+    ref.closest(".bx--menu").getAttribute("data-level") === "2"}
+  data-sub={subOptions}
+  data-id={id}
   {...$$restProps}
   on:keydown
-  on:keydown="{async ({ key, target }) => {
+  on:keydown={async ({ key, target }) => {
     if (
       subOptions &&
-      (key === 'ArrowRight' || key === ' ' || key === 'Enter')
+      (key === "ArrowRight" || key === " " || key === "Enter")
     ) {
       submenuOpen = true;
       await tick();
-      options = [...ref.querySelectorAll('li[tabindex]')];
+      options = [...ref.querySelectorAll("li[tabindex]")];
       if (options[focusIndex]) options[focusIndex].focus();
       return;
     }
 
     if (submenuOpen) {
-      if (key === 'ArrowLeft') {
+      if (key === "ArrowLeft") {
         submenuOpen = false;
         focusIndex = 0;
         return;
       }
 
-      if (key === 'ArrowDown') {
+      if (key === "ArrowDown") {
         if (focusIndex < options.length - 1) focusIndex++;
-      } else if (key === 'ArrowUp') {
+      } else if (key === "ArrowUp") {
         if (focusIndex === -1) {
           focusIndex = options.length - 1;
         } else {
@@ -217,68 +217,68 @@
       if (options[focusIndex]) options[focusIndex].focus();
     }
 
-    if (key === ' ' || key === 'Enter') {
-      handleClick({ fromKeyboard: true, id: target.getAttribute('data-id') });
+    if (key === " " || key === "Enter") {
+      handleClick({ fromKeyboard: true, id: target.getAttribute("data-id") });
     }
-  }}"
+  }}
   on:mouseenter
-  on:mouseenter="{() => {
+  on:mouseenter={() => {
     if (subOptions) {
       timeoutHover = setTimeout(() => {
         submenuOpen = true;
       }, moderate01);
     }
-  }}"
+  }}
   on:mouseleave
-  on:mouseleave="{(e) => {
+  on:mouseleave={(e) => {
     if (subOptions) {
-      if (typeof timeoutHover === 'number') clearTimeout(timeoutHover);
+      if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
       submenuOpen = false;
     }
-  }}"
-  on:click="{handleClick}"
+  }}
+  on:click={handleClick}
 >
   {#if subOptions}
     <div
-      class:bx--menu-option__content="{true}"
-      class:bx--menu-option__content--disabled="{disabled}"
+      class:bx--menu-option__content={true}
+      class:bx--menu-option__content--disabled={disabled}
     >
       {#if indented}
-        <div class:bx--menu-option__icon="{true}">
+        <div class:bx--menu-option__icon={true}>
           <slot name="icon">
-            <svelte:component this="{icon}" />
+            <svelte:component this={icon} />
           </slot>
         </div>
       {/if}
-      <span class:bx--menu-option__label="{true}" title="{labelText}">
+      <span class:bx--menu-option__label={true} title={labelText}>
         <slot name="labelText">{labelText}</slot>
       </span>
-      <div class:bx--menu-option__info="{true}"><CaretRight /></div>
+      <div class:bx--menu-option__info={true}><CaretRight /></div>
     </div>
 
     <ContextMenu
-      open="{submenuOpen}"
-      x="{submenuPosition[0]}"
-      y="{submenuPosition[1]}"
+      open={submenuOpen}
+      x={submenuPosition[0]}
+      y={submenuPosition[1]}
     >
       <slot />
     </ContextMenu>
   {:else}
     <div
-      class:bx--menu-option__content="{true}"
-      class:bx--menu-option__content--disabled="{disabled}"
+      class:bx--menu-option__content={true}
+      class:bx--menu-option__content--disabled={disabled}
     >
       {#if indented}
-        <div class:bx--menu-option__icon="{true}">
+        <div class:bx--menu-option__icon={true}>
           <slot name="icon">
-            <svelte:component this="{icon}" />
+            <svelte:component this={icon} />
           </slot>
         </div>
       {/if}
-      <span class:bx--menu-option__label="{true}" title="{labelText}">
+      <span class:bx--menu-option__label={true} title={labelText}>
         <slot name="labelText">{labelText}</slot>
       </span>
-      <div class:bx--menu-option__info="{true}">
+      <div class:bx--menu-option__info={true}>
         <slot name="shortcutText">{shortcutText}</slot>
       </div>
     </div>

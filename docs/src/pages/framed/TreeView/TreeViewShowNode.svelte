@@ -31,19 +31,14 @@
 <ButtonSet style="margin-bottom: var(--cds-spacing-05)">
   {#each [nodeSpark, nodeBlockchain] as { id, text }}
     <Button
-      on:click="{() => {
+      on:click={() => {
         treeview?.showNode(id);
-      }}"
+      }}
     >
       Show "{text}"
     </Button>
   {/each}
-  <Button kind="tertiary" on:click="{treeview.collapseAll}">Collapse all</Button
-  >
+  <Button kind="tertiary" on:click={treeview.collapseAll}>Collapse all</Button>
 </ButtonSet>
 
-<TreeView
-  bind:this="{treeview}"
-  labelText="Cloud Products"
-  nodes="{nodes}"
-/>
+<TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />

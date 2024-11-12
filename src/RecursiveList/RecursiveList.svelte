@@ -22,14 +22,14 @@
 </script>
 
 <svelte:component
-  this="{type === 'unordered' ? UnorderedList : OrderedList}"
-  native="{type === 'ordered-native'}"
+  this={type === "unordered" ? UnorderedList : OrderedList}
+  native={type === "ordered-native"}
   {...$$restProps}
 >
   {#each nodes as child}
     {#if Array.isArray(child.nodes)}
       <RecursiveListItem {...child}>
-        <svelte:self {...child} type="{type}" nested />
+        <svelte:self {...child} {type} nested />
       </RecursiveListItem>
     {:else}
       <RecursiveListItem {...child} />

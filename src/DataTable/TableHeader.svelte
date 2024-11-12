@@ -33,9 +33,9 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if sortable}
   <th
-    aria-sort="{active ? sortDirection : 'none'}"
-    scope="{scope}"
-    data-header="{id}"
+    aria-sort={active ? sortDirection : "none"}
+    {scope}
+    data-header={id}
     {...$$restProps}
     on:mouseover
     on:mouseenter
@@ -43,38 +43,33 @@
   >
     <button
       type="button"
-      class:bx--table-sort="{true}"
-      class:bx--table-sort--active="{active}"
-      class:bx--table-sort--ascending="{active &&
-        sortDirection === 'descending'}"
+      class:bx--table-sort={true}
+      class:bx--table-sort--active={active}
+      class:bx--table-sort--ascending={active && sortDirection === "descending"}
       on:click
     >
-      <div class:bx--table-header-label="{true}">
+      <div class:bx--table-header-label={true}>
         <slot />
       </div>
-      <ArrowUp
-        size="{20}"
-        aria-label="{ariaLabel}"
-        class="bx--table-sort__icon"
-      />
+      <ArrowUp size={20} aria-label={ariaLabel} class="bx--table-sort__icon" />
       <ArrowsVertical
-        size="{20}"
-        aria-label="{ariaLabel}"
+        size={20}
+        aria-label={ariaLabel}
         class="bx--table-sort__icon-unsorted"
       />
     </button>
   </th>
 {:else}
   <th
-    scope="{scope}"
-    data-header="{id}"
+    {scope}
+    data-header={id}
     {...$$restProps}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
   >
-    <div class:bx--table-header-label="{true}">
+    <div class:bx--table-header-label={true}>
       <slot />
     </div>
   </th>

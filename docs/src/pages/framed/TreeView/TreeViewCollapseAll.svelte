@@ -46,14 +46,14 @@
 </script>
 
 <div>
-  <Button on:click="{treeview?.collapseAll}">Collapse all</Button>
+  <Button on:click={treeview?.collapseAll}>Collapse all</Button>
 </div>
 
 <TreeView
-  bind:this="{treeview}"
+  bind:this={treeview}
   bind:expandedIds
   labelText="Cloud Products"
-  nodes="{nodes}"
+  {nodes}
 />
 
 <style>

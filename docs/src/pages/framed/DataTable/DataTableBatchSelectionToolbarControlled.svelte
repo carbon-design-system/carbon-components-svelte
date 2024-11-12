@@ -32,32 +32,32 @@
 
 <DataTable
   selectable
-  batchSelection="{active}"
+  batchSelection={active}
   bind:selectedRowIds
-  headers="{headers}"
-  rows="{rows}"
+  {headers}
+  {rows}
 >
   <Toolbar>
     <ToolbarBatchActions
       bind:active
-      on:cancel="{(e) => {
+      on:cancel={(e) => {
         e.preventDefault();
         active = false;
-      }}"
+      }}
     >
       <Button
-        icon="{TrashCan}"
-        disabled="{selectedRowIds.length === 0}"
-        on:click="{() => {
+        icon={TrashCan}
+        disabled={selectedRowIds.length === 0}
+        on:click={() => {
           rows = rows.filter((row) => !selectedRowIds.includes(row.id));
           selectedRowIds = [];
-        }}"
+        }}
       >
         Delete
       </Button>
     </ToolbarBatchActions>
     <ToolbarContent>
-      <Button on:click="{() => (active = true)}">Edit rows</Button>
+      <Button on:click={() => (active = true)}>Edit rows</Button>
     </ToolbarContent>
   </Toolbar>
 </DataTable>

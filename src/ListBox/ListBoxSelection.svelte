@@ -55,57 +55,57 @@
 
 {#if selectionCount !== undefined}
   <div
-    class:bx--tag="{true}"
-    class:bx--tag--filter="{true}"
-    class:bx--tag--high-contrast="{true}"
-    class:bx--tag--disabled="{disabled}"
+    class:bx--tag={true}
+    class:bx--tag--filter={true}
+    class:bx--tag--high-contrast={true}
+    class:bx--tag--disabled={disabled}
   >
-    <span class:bx--tag__label="{true}" title="{selectionCount}">
+    <span class:bx--tag__label={true} title={selectionCount}>
       {selectionCount}
     </span>
     <div
-      bind:this="{ref}"
+      bind:this={ref}
       role="button"
-      tabindex="{disabled ? -1 : 0}"
-      class:bx--tag__close-icon="{true}"
-      on:click|preventDefault|stopPropagation="{(e) => {
+      tabindex={disabled ? -1 : 0}
+      class:bx--tag__close-icon={true}
+      on:click|preventDefault|stopPropagation={(e) => {
         if (!disabled) {
-          dispatch('clear', e);
+          dispatch("clear", e);
         }
-      }}"
-      on:keydown|stopPropagation="{(e) => {
-        if (!disabled && e.key === 'Enter') {
-          dispatch('clear', e);
+      }}
+      on:keydown|stopPropagation={(e) => {
+        if (!disabled && e.key === "Enter") {
+          dispatch("clear", e);
         }
-      }}"
-      disabled="{disabled}"
-      aria-label="{translationIds.clearAll}"
-      title="{description}"
+      }}
+      {disabled}
+      aria-label={translationIds.clearAll}
+      title={description}
     >
       <Close />
     </div>
   </div>
 {:else}
   <div
-    bind:this="{ref}"
+    bind:this={ref}
     role="button"
-    aria-label="{description}"
-    title="{description}"
-    tabindex="{disabled ? '-1' : '0'}"
-    class:bx--list-box__selection="{true}"
-    class:bx--tag--filter="{selectionCount}"
-    class:bx--list-box__selection--multi="{selectionCount}"
+    aria-label={description}
+    title={description}
+    tabindex={disabled ? "-1" : "0"}
+    class:bx--list-box__selection={true}
+    class:bx--tag--filter={selectionCount}
+    class:bx--list-box__selection--multi={selectionCount}
     {...$$restProps}
-    on:click|preventDefault|stopPropagation="{(e) => {
+    on:click|preventDefault|stopPropagation={(e) => {
       if (!disabled) {
-        dispatch('clear', e);
+        dispatch("clear", e);
       }
-    }}"
-    on:keydown|stopPropagation="{(e) => {
-      if (!disabled && e.key === 'Enter') {
-        dispatch('clear', e);
+    }}
+    on:keydown|stopPropagation={(e) => {
+      if (!disabled && e.key === "Enter") {
+        dispatch("clear", e);
       }
-    }}"
+    }}
   >
     {#if selectionCount !== undefined}{selectionCount}{/if}
     <Close />

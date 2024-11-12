@@ -4,9 +4,9 @@
 </script>
 
 <OverflowMenu
-  on:close="{(e) => {
+  on:close={(e) => {
     console.log(e.detail); // { index: number; text: string; }
-  }}"
+  }}
 >
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem
@@ -61,7 +61,7 @@
   <OverflowMenuItem primaryFocus danger text="Delete service" />
 </OverflowMenu>
 
-<OverflowMenu icon="{Add}">
+<OverflowMenu icon={Add}>
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem
     href="https://cloud.ibm.com/docs/api-gateway/"

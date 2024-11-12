@@ -79,15 +79,15 @@
 </script>
 
 <div
-  class:bx--date-picker-container="{true}"
-  class:bx--date-picker--nolabel="{!labelText}"
+  class:bx--date-picker-container={true}
+  class:bx--date-picker--nolabel={!labelText}
 >
   {#if labelText || $$slots.labelText}
     <label
-      for="{id}"
-      class:bx--label="{true}"
-      class:bx--visually-hidden="{hideLabel}"
-      class:bx--label--disabled="{disabled}"
+      for={id}
+      class:bx--label={true}
+      class:bx--visually-hidden={hideLabel}
+      class:bx--label--disabled={disabled}
     >
       <slot name="labelText">
         {labelText}
@@ -95,47 +95,47 @@
     </label>
   {/if}
   <div
-    class:bx--date-picker-input__wrapper="{true}"
-    class:bx--date-picker-input__wrapper--invalid="{invalid}"
-    class:bx--date-picker-input__wrapper--warn="{warn}"
+    class:bx--date-picker-input__wrapper={true}
+    class:bx--date-picker-input__wrapper--invalid={invalid}
+    class:bx--date-picker-input__wrapper--warn={warn}
   >
     <input
-      bind:this="{ref}"
-      data-invalid="{invalid || undefined}"
-      id="{id}"
-      name="{name}"
-      placeholder="{placeholder}"
-      type="{type}"
-      pattern="{pattern}"
-      disabled="{disabled}"
+      bind:this={ref}
+      data-invalid={invalid || undefined}
+      {id}
+      {name}
+      {placeholder}
+      {type}
+      {pattern}
+      {disabled}
       {...$$restProps}
-      value="{$range
+      value={$range
         ? $inputIds.indexOf(id) === 0
           ? $inputValueFrom
           : $inputValueTo
-        : $inputValue}"
-      class:bx--date-picker__input="{true}"
-      class:bx--date-picker__input--invalid="{invalid}"
-      class:bx--date-picker__input--sm="{size === 'sm'}"
-      class:bx--date-picker__input--xl="{size === 'xl'}"
+        : $inputValue}
+      class:bx--date-picker__input={true}
+      class:bx--date-picker__input--invalid={invalid}
+      class:bx--date-picker__input--sm={size === "sm"}
+      class:bx--date-picker__input--xl={size === "xl"}
       on:input
-      on:input="{({ target }) => {
-        updateValue({ type: 'input', value: target.value });
-      }}"
-      on:change="{({ target }) => {
-        updateValue({ type: 'change', value: target.value });
-      }}"
+      on:input={({ target }) => {
+        updateValue({ type: "input", value: target.value });
+      }}
+      on:change={({ target }) => {
+        updateValue({ type: "change", value: target.value });
+      }}
       on:keydown
-      on:keydown="{({ key }) => {
-        if (key === 'ArrowDown') {
+      on:keydown={({ key }) => {
+        if (key === "ArrowDown") {
           focusCalendar();
         }
-      }}"
+      }}
       on:keyup
       on:blur
-      on:blur="{({ relatedTarget }) => {
+      on:blur={({ relatedTarget }) => {
         blurInput(relatedTarget);
-      }}"
+      }}
       on:paste
     />
     {#if invalid}
@@ -151,21 +151,21 @@
     {#if $hasCalendar && !invalid && !warn}
       <Calendar
         class="bx--date-picker__icon"
-        aria-label="{iconDescription}"
-        on:click="{openCalendar}"
+        aria-label={iconDescription}
+        on:click={openCalendar}
       />
     {/if}
   </div>
   {#if invalid}
-    <div class:bx--form-requirement="{true}">{invalidText}</div>
+    <div class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
   {#if !invalid && warn}
-    <div class:bx--form-requirement="{true}">{warnText}</div>
+    <div class:bx--form-requirement={true}>{warnText}</div>
   {/if}
   {#if !invalid && !warn && helperText}
     <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}"
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
     >
       {helperText}
     </div>

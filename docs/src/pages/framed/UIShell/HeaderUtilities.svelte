@@ -29,21 +29,18 @@
     <HeaderGlobalAction
       iconDescription="Settings"
       tooltipAlignment="start"
-      icon="{SettingsAdjust}"
+      icon={SettingsAdjust}
     />
-    <HeaderGlobalAction
-      iconDescription="Profile"
-      icon="{UserAvatarFilledAlt}"
-    />
+    <HeaderGlobalAction iconDescription="Profile" icon={UserAvatarFilledAlt} />
     <HeaderGlobalAction
       iconDescription="Log out"
       tooltipAlignment="end"
-      icon="{Logout}"
+      icon={Logout}
     />
   </HeaderUtilities>
 </Header>
 
-<SideNav bind:isOpen="{isSideNavOpen}">
+<SideNav bind:isOpen={isSideNavOpen}>
   <SideNavItems>
     <SideNavLink text="Link 1" />
     <SideNavLink text="Link 2" />

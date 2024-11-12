@@ -11,14 +11,14 @@
   let target;
 </script>
 
-<ContextMenu target="{target}" on:open="{(e) => console.log(e.detail)}">
+<ContextMenu {target} on:open={(e) => console.log(e.detail)}>
   <ContextMenuOption
     indented
     labelText="Copy"
     shortcutText="⌘C"
-    icon="{CopyFile}"
+    icon={CopyFile}
   />
-  <ContextMenuOption indented labelText="Cut" shortcutText="⌘X" icon="{Cut}" />
+  <ContextMenuOption indented labelText="Cut" shortcutText="⌘X" icon={Cut} />
   <ContextMenuDivider />
   <ContextMenuOption indented labelText="Export as">
     <ContextMenuGroup labelText="Export options">
@@ -40,7 +40,7 @@
 </ContextMenu>
 
 <div>
-  <p bind:this="{target}">Right click this element</p>
+  <p bind:this={target}>Right click this element</p>
 </div>
 
 <style>

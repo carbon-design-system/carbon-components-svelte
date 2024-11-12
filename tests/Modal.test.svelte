@@ -4,18 +4,18 @@
   let open = false;
 </script>
 
-<Button on:click="{() => (open = true)}">Create database</Button>
+<Button on:click={() => (open = true)}>Create database</Button>
 
 <Modal
   bind:open
   modalHeading="Create database"
   primaryButtonText="Confirm"
-  secondaryButtons="{[{ text: 'Cancel' }, { text: 'Duplicate' }]}"
+  secondaryButtons={[{ text: "Cancel" }, { text: "Duplicate" }]}
   secondaryButtonText="Cancel"
-  on:click:button--secondary="{({ detail }) => {
+  on:click:button--secondary={({ detail }) => {
     console.log(detail);
     open = false;
-  }}"
+  }}
   on:open
   on:close
   on:submit

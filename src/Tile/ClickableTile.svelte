@@ -21,20 +21,20 @@
 
 <Link
   {...$$restProps}
-  disabled="{disabled}"
+  {disabled}
   class="bx--tile bx--tile--clickable {clicked &&
     'bx--tile--is-clicked'} {light && 'bx--tile--light'} {$$restProps.class}"
-  href="{href}"
+  {href}
   on:click
-  on:click="{() => {
+  on:click={() => {
     clicked = !clicked;
-  }}"
+  }}
   on:keydown
-  on:keydown="{({ key }) => {
-    if (key === ' ' || key === 'Enter') {
+  on:keydown={({ key }) => {
+    if (key === " " || key === "Enter") {
       clicked = !clicked;
     }
-  }}"
+  }}
   on:mouseover
   on:mouseenter
   on:mouseleave

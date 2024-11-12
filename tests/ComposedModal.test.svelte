@@ -17,10 +17,10 @@
   </ModalBody>
   <ModalFooter
     primaryButtonText="Proceed"
-    primaryButtonDisabled="{!checked}"
-    secondaryButtons="{[{ text: 'Cancel' }, { text: 'Duplicate' }]}"
-    on:click:button--secondary="{({ detail }) => {
+    primaryButtonDisabled={!checked}
+    secondaryButtons={[{ text: "Cancel" }, { text: "Duplicate" }]}
+    on:click:button--secondary={({ detail }) => {
       console.log(detail);
-    }}"
+    }}
   />
 </ComposedModal>

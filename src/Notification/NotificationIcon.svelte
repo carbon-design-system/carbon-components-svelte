@@ -32,9 +32,9 @@
 </script>
 
 <svelte:component
-  this="{icons[kind]}"
-  size="{20}"
-  title="{iconDescription}"
+  this={icons[kind]}
+  size={20}
+  title={iconDescription}
   class="{notificationType === 'toast' &&
     'bx--toast-notification__icon'} {notificationType === 'inline' &&
     'bx--inline-notification__icon'}"

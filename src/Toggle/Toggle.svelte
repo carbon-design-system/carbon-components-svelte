@@ -46,7 +46,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--form-item="{true}"
+  class:bx--form-item={true}
   style:user-select="none"
   {...$$restProps}
   on:click
@@ -58,46 +58,46 @@
   <input
     role="switch"
     type="checkbox"
-    class:bx--toggle-input="{true}"
-    class:bx--toggle-input--small="{size === 'sm'}"
-    checked="{toggled}"
-    on:change="{() => {
+    class:bx--toggle-input={true}
+    class:bx--toggle-input--small={size === "sm"}
+    checked={toggled}
+    on:change={() => {
       toggled = !toggled;
-    }}"
+    }}
     on:change
-    on:keyup="{(e) => {
-      if (e.key === ' ' || e.key === 'Enter') {
+    on:keyup={(e) => {
+      if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
         toggled = !toggled;
       }
-    }}"
+    }}
     on:keyup
     on:focus
     on:blur
-    disabled="{disabled}"
-    id="{id}"
-    name="{name}"
+    {disabled}
+    {id}
+    {name}
   />
   <label
-    aria-label="{labelText ? undefined : $$props['aria-label'] || 'Toggle'}"
-    for="{id}"
-    class:bx--toggle-input__label="{true}"
+    aria-label={labelText ? undefined : $$props["aria-label"] || "Toggle"}
+    for={id}
+    class:bx--toggle-input__label={true}
   >
-    <span class:bx--visually-hidden="{hideLabel}">
+    <span class:bx--visually-hidden={hideLabel}>
       <slot name="labelText">
         {labelText}
       </slot>
     </span>
     <span
-      class:bx--toggle__switch="{true}"
-      style:margin-top="{hideLabel ? 0 : undefined}"
+      class:bx--toggle__switch={true}
+      style:margin-top={hideLabel ? 0 : undefined}
     >
-      <span aria-hidden="true" class:bx--toggle__text--off="{true}">
+      <span aria-hidden="true" class:bx--toggle__text--off={true}>
         <slot name="labelA">
           {labelA}
         </slot>
       </span>
-      <span aria-hidden="true" class:bx--toggle__text--on="{true}">
+      <span aria-hidden="true" class:bx--toggle__text--on={true}>
         <slot name="labelB">
           {labelB}
         </slot>

@@ -49,14 +49,14 @@
 
 <DataTable
   batchSelection
-  nonSelectableRowIds="{rows
+  nonSelectableRowIds={rows
     .filter((row) => row.port === 3000)
-    .map((row) => row.id)}"
-  headers="{[
-    { key: 'name', value: 'Name' },
-    { key: 'protocol', value: 'Protocol' },
-    { key: 'port', value: 'Port' },
-    { key: 'rule', value: 'Rule' },
-  ]}"
-  rows="{rows}"
+    .map((row) => row.id)}
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" },
+  ]}
+  {rows}
 />

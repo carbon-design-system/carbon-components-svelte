@@ -14,19 +14,19 @@ export function breakpointObserver() {
     const match = {
       sm: window.matchMedia(`(max-width: ${breakpoints.md}px)`),
       md: window.matchMedia(
-        `(min-width: ${breakpoints.md}px) and (max-width: ${breakpoints.lg}px)`
+        `(min-width: ${breakpoints.md}px) and (max-width: ${breakpoints.lg}px)`,
       ),
       lg: window.matchMedia(
-        `(min-width: ${breakpoints.lg}px) and (max-width: ${breakpoints.xlg}px)`
+        `(min-width: ${breakpoints.lg}px) and (max-width: ${breakpoints.xlg}px)`,
       ),
       xlg: window.matchMedia(
-        `(min-width: ${breakpoints.xlg}px) and (max-width: ${breakpoints.max}px)`
+        `(min-width: ${breakpoints.xlg}px) and (max-width: ${breakpoints.max}px)`,
       ),
       max: window.matchMedia(`(min-width: ${breakpoints.max}px)`),
     };
     const matchers = Object.entries(match);
     const sizeByMedia = Object.fromEntries(
-      matchers.map(([size, queryList]) => [queryList.media, size])
+      matchers.map(([size, queryList]) => [queryList.media, size]),
     );
 
     const size = matchers.find(([size, queryList]) => queryList.matches)[0];
@@ -39,12 +39,12 @@ export function breakpointObserver() {
     }
 
     matchers.forEach(([size, queryList]) =>
-      queryList.addEventListener("change", handleChange)
+      queryList.addEventListener("change", handleChange),
     );
 
     return () => {
       matchers.forEach(([size, queryList]) =>
-        queryList.removeEventListener("change", handleChange)
+        queryList.removeEventListener("change", handleChange),
       );
     };
   });

@@ -1,3 +1,3 @@
-<div class:bx--header__global="{true}">
+<div class:bx--header__global={true}>
   <slot />
 </div>

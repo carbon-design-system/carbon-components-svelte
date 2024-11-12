@@ -6,7 +6,7 @@
   } from "carbon-components-svelte";
 </script>
 
-<ProgressIndicator currentIndex="{2}">
+<ProgressIndicator currentIndex={2}>
   <ProgressStep
     complete
     label="Step 1"
@@ -28,7 +28,7 @@
   />
 </ProgressIndicator>
 
-<ProgressIndicator preventChangeOnClick currentIndex="{2}">
+<ProgressIndicator preventChangeOnClick currentIndex={2}>
   <ProgressStep
     complete
     label="Step 1"
@@ -80,4 +80,4 @@
   />
 </ProgressIndicator>
 
-<ProgressIndicatorSkeleton count="{3}" />
+<ProgressIndicatorSkeleton count={3} />

@@ -22,7 +22,7 @@
   ];
 </script>
 
-<DataTable sortable headers="{headers}" rows="{rows}">
+<DataTable sortable {headers} {rows}>
   <svelte:fragment slot="cell" let:cell>
     {#if cell.key === "overflow"}
       <OverflowMenu flipped>

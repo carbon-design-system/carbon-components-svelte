@@ -32,13 +32,13 @@
 
   const tabs = writable([]);
   const tabsById = derived(tabs, (_) =>
-    _.reduce((a, c) => ({ ...a, [c.id]: c }), {})
+    _.reduce((a, c) => ({ ...a, [c.id]: c }), {}),
   );
   const useAutoWidth = writable(autoWidth);
   const selectedTab = writable(undefined);
   const content = writable([]);
   const contentById = derived(content, (_) =>
-    _.reduce((a, c) => ({ ...a, [c.id]: c }), {})
+    _.reduce((a, c) => ({ ...a, [c.id]: c }), {}),
   );
   const selectedContent = writable(undefined);
 
@@ -125,42 +125,42 @@
 
 <div
   role="navigation"
-  class:bx--tabs="{true}"
-  class:bx--tabs--container="{type === 'container'}"
+  class:bx--tabs={true}
+  class:bx--tabs--container={type === "container"}
   {...$$restProps}
 >
   <div
     role="listbox"
     tabindex="0"
-    class:bx--tabs-trigger="{true}"
-    aria-label="{$$props['aria-label'] || 'listbox'}"
-    on:click="{() => {
+    class:bx--tabs-trigger={true}
+    aria-label={$$props["aria-label"] || "listbox"}
+    on:click={() => {
       dropdownHidden = !dropdownHidden;
-    }}"
+    }}
     on:keypress
-    on:keypress="{() => {
+    on:keypress={() => {
       dropdownHidden = !dropdownHidden;
-    }}"
+    }}
   >
     <a
       tabindex="-1"
-      class:bx--tabs-trigger-text="{true}"
-      href="{triggerHref}"
+      class:bx--tabs-trigger-text={true}
+      href={triggerHref}
       on:click|preventDefault
-      on:click|preventDefault|stopPropagation="{() => {
+      on:click|preventDefault|stopPropagation={() => {
         dropdownHidden = !dropdownHidden;
-      }}"
+      }}
     >
       {#if currentTab}{currentTab.label}{/if}
     </a>
-    <ChevronDown aria-hidden="true" title="{iconDescription}" />
+    <ChevronDown aria-hidden="true" title={iconDescription} />
   </div>
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
-    bind:this="{refTabList}"
+    bind:this={refTabList}
     role="tablist"
-    class:bx--tabs__nav="{true}"
-    class:bx--tabs__nav--hidden="{dropdownHidden}"
+    class:bx--tabs__nav={true}
+    class:bx--tabs__nav--hidden={dropdownHidden}
   >
     <slot />
   </ul>

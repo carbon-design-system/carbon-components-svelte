@@ -20,7 +20,7 @@
 </script>
 
 <Header
-  persistentHamburgerMenu="{true}"
+  persistentHamburgerMenu={true}
   company="IBM"
   platformName="Carbon Svelte"
   bind:isSideNavOpen
@@ -40,7 +40,7 @@
   </HeaderNav>
 </Header>
 
-<SideNav bind:isOpen="{isSideNavOpen}">
+<SideNav bind:isOpen={isSideNavOpen}>
   <SideNavItems>
     <SideNavLink text="Link 1" />
     <SideNavLink text="Link 2" />

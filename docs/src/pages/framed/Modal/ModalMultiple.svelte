@@ -5,17 +5,17 @@
   let openDelete = false;
 </script>
 
-<Button on:click="{() => (openCreate = true)}">Create database</Button>
-<Button kind="danger-tertiary" on:click="{() => (openDelete = true)}">
+<Button on:click={() => (openCreate = true)}>Create database</Button>
+<Button kind="danger-tertiary" on:click={() => (openDelete = true)}>
   Delete database
 </Button>
 
 <Modal
-  bind:open="{openCreate}"
+  bind:open={openCreate}
   modalHeading="Create database"
   primaryButtonText="Confirm"
   secondaryButtonText="Cancel"
-  on:click:button--secondary="{() => (openCreate = false)}"
+  on:click:button--secondary={() => (openCreate = false)}
   on:open
   on:close
   on:submit
@@ -25,11 +25,11 @@
 
 <Modal
   danger
-  bind:open="{openDelete}"
+  bind:open={openDelete}
   modalHeading="Delete database"
   primaryButtonText="Delete"
   secondaryButtonText="Cancel"
-  on:click:button--secondary="{() => (openDelete = false)}"
+  on:click:button--secondary={() => (openDelete = false)}
   on:open
   on:close
   on:submit

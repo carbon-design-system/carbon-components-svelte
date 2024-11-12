@@ -15,9 +15,9 @@
 </script>
 
 <main
-  id="{id}"
-  class:bx--content="{true}"
-  style:margin-left="{unsetLeftMargin ? 0 : undefined}"
+  {id}
+  class:bx--content={true}
+  style:margin-left={unsetLeftMargin ? 0 : undefined}
   {...$$restProps}
 >
   <slot />

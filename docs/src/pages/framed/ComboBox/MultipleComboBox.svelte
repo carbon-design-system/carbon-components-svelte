@@ -18,19 +18,19 @@
 </script>
 
 <ComboBox
-  bind:selectedId="{comboBox1_selectedId}"
+  bind:selectedId={comboBox1_selectedId}
   titleText="Primary contact"
   placeholder="Select primary contact method"
-  items="{items}"
+  {items}
 />
 
 <div>Primary: {primary}</div>
 
 <ComboBox
-  bind:selectedId="{comboBox2_selectedId}"
+  bind:selectedId={comboBox2_selectedId}
   titleText="Secondary contact"
   placeholder="Select secondary contact method"
-  items="{items}"
+  {items}
 />
 
 <div>Secondary: {secondary}</div>

@@ -111,7 +111,7 @@
 </script>
 
 {#if as}
-  <slot props="{props}" />
+  <slot {props} />
 {:else}
   <div {...props}>
     <slot />

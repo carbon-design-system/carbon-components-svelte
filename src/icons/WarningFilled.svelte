@@ -16,8 +16,8 @@
   viewBox="0 0 32 32"
   fill="currentColor"
   preserveAspectRatio="xMidYMid meet"
-  width="{size}"
-  height="{size}"
+  width={size}
+  height={size}
   {...attributes}
   {...$$restProps}
 >
@@ -28,5 +28,6 @@
     fill="none"
     d="M17.5,23.5c0,0.8-0.7,1.5-1.5,1.5c-0.8,0-1.5-0.7-1.5-1.5S15.2,22,16,22	C16.8,22,17.5,22.7,17.5,23.5z M17.1,8h-2.2v11h2.2V8z"
     data-icon-path="inner-path"
-    opacity="0"></path>
+    opacity="0"
+  ></path>
 </svg>

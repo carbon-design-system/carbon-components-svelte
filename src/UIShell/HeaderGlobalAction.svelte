@@ -28,6 +28,6 @@
     .join(" ");
 </script>
 
-<Button bind:ref {...$$restProps} class="{buttonClass}" on:click>
-  <svelte:component this="{icon}" slot="icon" size="{20}" />
+<Button bind:ref {...$$restProps} class={buttonClass} on:click>
+  <svelte:component this={icon} slot="icon" size={20} />
 </Button>

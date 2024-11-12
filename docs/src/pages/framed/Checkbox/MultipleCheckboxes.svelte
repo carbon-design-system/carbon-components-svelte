@@ -6,11 +6,11 @@
 </script>
 
 {#each values as value}
-  <Checkbox bind:group labelText="{value}" value="{value}" />
+  <Checkbox bind:group labelText={value} {value} />
 {/each}
 
 <div style="margin: var(--cds-layout-01) 0">
-  <Button on:click="{() => (group = ['Banana'])}">Set to ["Banana"]</Button>
+  <Button on:click={() => (group = ["Banana"])}>Set to ["Banana"]</Button>
 </div>
 
 <strong>Selected:</strong>

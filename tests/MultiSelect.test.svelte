@@ -16,28 +16,28 @@
   label="Select contact methods..."
   hideLabel
   bind:selectedIds
-  items="{[
-    { id: 0, text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax', disabled: true },
-  ]}"
-  on:select="{(e) => {
+  items={[
+    { id: 0, text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax", disabled: true },
+  ]}
+  on:select={(e) => {
     console.log(e.detail.selectedIds);
     console.log(e.detail.selected);
     console.log(e.detail.unselected);
-  }}"
-  on:blur="{(e) => {
+  }}
+  on:blur={(e) => {
     e.detail; // number | FocusEvent
-  }}"
+  }}
   on:paste
-  translateWithId="{(id) => {
+  translateWithId={(id) => {
     console.log(id); // "open" | "close"
     return id;
-  }}"
-  translateWithIdSelection="{(id) => {
+  }}
+  translateWithIdSelection={(id) => {
     console.log(id); // "clearAll" | "clearSelection"
     return id;
-  }}"
+  }}
   let:item
   let:index
 >
@@ -48,93 +48,93 @@
 <MultiSelect
   titleText="Contact"
   label="Select contact methods..."
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
-  sortItem="{() => {}}"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  sortItem={() => {}}
 />
 
 <MultiSelect
-  selectedIds="{['0', '1']}"
+  selectedIds={["0", "1"]}
   titleText="Contact"
   label="Select contact methods..."
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
 />
 
 <MultiSelect
-  itemToString="{(item) => {
-    return item.text + ' (' + item.id + ')';
-  }}"
+  itemToString={(item) => {
+    return item.text + " (" + item.id + ")";
+  }}
   titleText="Contact"
   label="Select contact methods..."
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
-  sortItem="{() => {}}"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  sortItem={() => {}}
 />
 
 <MultiSelect
   light
   titleText="Contact"
   label="Select contact methods..."
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
 />
 
 <MultiSelect
   type="inline"
   titleText="Contact"
   label="Select contact methods..."
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
 />
 
 <MultiSelect
   size="xl"
   titleText="Contact"
   label="Select contact methods..."
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
 />
 
 <MultiSelect
   size="sm"
   titleText="Contact"
   label="Select contact methods..."
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
 />
 
 <MultiSelect
   filterable
-  filterItem="{(item, query) => {
+  filterItem={(item, query) => {
     return item.text.toLowerCase().includes(query.toLowerCase());
-  }}"
+  }}
   titleText="Contact"
   placeholder="Filter contact methods..."
-  items="{[
-    { id: '0', text: 'Slack' },
-    { id: '1', text: 'Email' },
-    { id: '2', text: 'Fax' },
-  ]}"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
 />

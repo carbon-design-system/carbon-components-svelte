@@ -26,10 +26,10 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   type="button"
-  aria-label="{iconDescription}"
-  title="{iconDescription}"
-  class:bx--toast-notification__close-button="{notificationType === 'toast'}"
-  class:bx--inline-notification__close-button="{notificationType === 'inline'}"
+  aria-label={iconDescription}
+  title={iconDescription}
+  class:bx--toast-notification__close-button={notificationType === "toast"}
+  class:bx--inline-notification__close-button={notificationType === "inline"}
   {...$$restProps}
   on:click
   on:mouseover
@@ -37,9 +37,9 @@
   on:mouseleave
 >
   <svelte:component
-    this="{icon}"
-    size="{20}"
-    title="{title}"
+    this={icon}
+    size={20}
+    {title}
     class="{notificationType === 'toast' &&
       'bx--toast-notification__close-icon'} {notificationType === 'inline' &&
       'bx--inline-notification__close-icon'}"

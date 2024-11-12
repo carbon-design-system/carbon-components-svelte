@@ -5,13 +5,13 @@
   let open = false;
 </script>
 
-<Button on:click="{() => (open = true)}">Create database</Button>
+<Button on:click={() => (open = true)}>Create database</Button>
 
 <Modal
   bind:open
   modalHeading="Invite someone"
   primaryButtonText="Send invitation"
-  primaryButtonIcon="{Send}"
+  primaryButtonIcon={Send}
   secondaryButtonText="Cancel"
 >
   <p>Do you really want to invite someone?</p>

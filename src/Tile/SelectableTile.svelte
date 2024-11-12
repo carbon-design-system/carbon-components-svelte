@@ -46,50 +46,50 @@
 </script>
 
 <input
-  bind:this="{ref}"
+  bind:this={ref}
   type="checkbox"
   tabindex="-1"
-  class:bx--tile-input="{true}"
-  checked="{selected}"
-  id="{id}"
-  value="{value}"
-  name="{name}"
-  title="{title}"
-  disabled="{disabled}"
+  class:bx--tile-input={true}
+  checked={selected}
+  {id}
+  {value}
+  {name}
+  {title}
+  {disabled}
 />
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <label
-  for="{id}"
-  tabindex="{disabled ? undefined : tabindex}"
-  class:bx--tile="{true}"
-  class:bx--tile--selectable="{true}"
-  class:bx--tile--is-selected="{selected}"
-  class:bx--tile--light="{light}"
-  class:bx--tile--disabled="{disabled}"
+  for={id}
+  tabindex={disabled ? undefined : tabindex}
+  class:bx--tile={true}
+  class:bx--tile--selectable={true}
+  class:bx--tile--is-selected={selected}
+  class:bx--tile--light={light}
+  class:bx--tile--disabled={disabled}
   {...$$restProps}
   on:click
-  on:click|preventDefault="{() => {
+  on:click|preventDefault={() => {
     if (disabled) return;
     selected = !selected;
-  }}"
+  }}
   on:mouseover
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown="{(e) => {
+  on:keydown={(e) => {
     if (disabled) return;
-    if (e.key === ' ' || e.key === 'Enter') {
+    if (e.key === " " || e.key === "Enter") {
       e.preventDefault();
       selected = !selected;
     }
-  }}"
+  }}
 >
-  <span class:bx--tile__checkmark="{true}">
-    <CheckmarkFilled aria-label="{iconDescription}" title="{iconDescription}" />
+  <span class:bx--tile__checkmark={true}>
+    <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
   </span>
-  <span class:bx--tile-content="{true}">
+  <span class:bx--tile-content={true}>
     <slot />
   </span>
 </label>

@@ -171,32 +171,32 @@
   });
 </script>
 
-<svelte:window on:click="{pageClickHandler}" />
+<svelte:window on:click={pageClickHandler} />
 
 <div
-  class:bx--dropdown__wrapper="{true}"
-  class:bx--list-box__wrapper="{true}"
-  class:bx--dropdown__wrapper--inline="{inline}"
-  class:bx--list-box__wrapper--inline="{inline}"
-  class:bx--dropdown__wrapper--inline--invalid="{inline && invalid}"
+  class:bx--dropdown__wrapper={true}
+  class:bx--list-box__wrapper={true}
+  class:bx--dropdown__wrapper--inline={inline}
+  class:bx--list-box__wrapper--inline={inline}
+  class:bx--dropdown__wrapper--inline--invalid={inline && invalid}
   {...$$restProps}
 >
   {#if titleText}
     <label
-      for="{id}"
-      class:bx--label="{true}"
-      class:bx--label--disabled="{disabled}"
-      class:bx--visually-hidden="{hideLabel}"
+      for={id}
+      class:bx--label={true}
+      class:bx--label--disabled={disabled}
+      class:bx--visually-hidden={hideLabel}
     >
       {titleText}
     </label>
   {/if}
   <ListBox
-    role="{undefined}"
-    type="{type}"
-    size="{size}"
-    name="{name}"
-    aria-label="{$$props['aria-label']}"
+    role={undefined}
+    {type}
+    {size}
+    {name}
+    aria-label={$$props["aria-label"]}
     class="bx--dropdown 
       {direction === 'top' && 'bx--list-box--up'} 
       {invalid && 'bx--dropdown--invalid'} 
@@ -207,17 +207,17 @@
       {inline && 'bx--dropdown--inline'}
       {disabled && 'bx--dropdown--disabled'}
       {light && 'bx--dropdown--light'}"
-    on:click="{({ target }) => {
+    on:click={({ target }) => {
       if (disabled) return;
       open = ref.contains(target) ? !open : false;
-    }}"
-    disabled="{disabled}"
-    open="{open}"
-    invalid="{invalid}"
-    invalidText="{invalidText}"
-    light="{light}"
-    warn="{warn}"
-    warnText="{warnText}"
+    }}
+    {disabled}
+    {open}
+    {invalid}
+    {invalidText}
+    {light}
+    {warn}
+    {warnText}
   >
     {#if invalid}
       <WarningFilled class="bx--list-box__invalid-icon" />
@@ -228,17 +228,17 @@
       />
     {/if}
     <button
-      bind:this="{ref}"
+      bind:this={ref}
       type="button"
-      class:bx--list-box__field="{true}"
+      class:bx--list-box__field={true}
       tabindex="0"
-      aria-expanded="{open}"
-      on:keydown="{(e) => {
+      aria-expanded={open}
+      on:keydown={(e) => {
         const { key } = e;
-        if (['Enter', 'ArrowDown', 'ArrowUp'].includes(key)) {
+        if (["Enter", "ArrowDown", "ArrowUp"].includes(key)) {
           e.preventDefault();
         }
-        if (key === 'Enter') {
+        if (key === "Enter") {
           open = !open;
           if (
             highlightedIndex > -1 &&
@@ -248,22 +248,22 @@
             dispatchSelect();
             open = false;
           }
-        } else if (key === 'Tab') {
+        } else if (key === "Tab") {
           open = false;
           ref.blur();
-        } else if (key === 'ArrowDown') {
+        } else if (key === "ArrowDown") {
           if (!open) open = true;
           change(1);
-        } else if (key === 'ArrowUp') {
+        } else if (key === "ArrowUp") {
           if (!open) open = true;
           change(-1);
-        } else if (key === 'Escape') {
+        } else if (key === "Escape") {
           open = false;
         }
-      }}"
-      on:keyup="{(e) => {
+      }}
+      on:keyup={(e) => {
         const { key } = e;
-        if ([' '].includes(key)) {
+        if ([" "].includes(key)) {
           e.preventDefault();
         } else {
           return;
@@ -278,33 +278,33 @@
           dispatchSelect();
           open = false;
         }
-      }}"
-      disabled="{disabled}"
-      translateWithId="{translateWithId}"
-      id="{id}"
+      }}
+      {disabled}
+      {translateWithId}
+      {id}
     >
-      <span class:bx--list-box__label="{true}">
+      <span class:bx--list-box__label={true}>
         {#if selectedItem}{itemToString(selectedItem)}{:else}{label}{/if}
       </span>
       <ListBoxMenuIcon
-        on:click="{(e) => {
+        on:click={(e) => {
           e.stopPropagation();
           if (disabled) return;
           open = !open;
-        }}"
-        translateWithId="{translateWithId}"
-        open="{open}"
+        }}
+        {translateWithId}
+        {open}
       />
     </button>
     {#if open}
-      <ListBoxMenu aria-labelledby="{id}" id="{id}">
+      <ListBoxMenu aria-labelledby={id} {id}>
         {#each items as item, i (item.id)}
           <ListBoxMenuItem
-            id="{item.id}"
-            active="{selectedId === item.id}"
-            highlighted="{highlightedIndex === i}"
-            disabled="{item.disabled}"
-            on:click="{(e) => {
+            id={item.id}
+            active={selectedId === item.id}
+            highlighted={highlightedIndex === i}
+            disabled={item.disabled}
+            on:click={(e) => {
               if (item.disabled) {
                 e.stopPropagation();
                 return;
@@ -312,13 +312,13 @@
               selectedId = item.id;
               dispatchSelect();
               ref.focus();
-            }}"
-            on:mouseenter="{() => {
+            }}
+            on:mouseenter={() => {
               if (item.disabled) return;
               highlightedIndex = i;
-            }}"
+            }}
           >
-            <slot item="{item}" index="{i}">
+            <slot {item} index={i}>
               {itemToString(item)}
             </slot>
           </ListBoxMenuItem>
@@ -328,8 +328,8 @@
   </ListBox>
   {#if !inline && !invalid && !warn && helperText}
     <div
-      class:bx--form__helper-text="{true}"
-      class:bx--form__helper-text--disabled="{disabled}"
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
     >
       {helperText}
     </div>

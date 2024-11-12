@@ -88,31 +88,31 @@
     } else {
       console.warn(
         `[Theme.svelte] invalid theme "${theme}". Value must be one of: ${JSON.stringify(
-          Object.keys(themes)
-        )}`
+          Object.keys(themes),
+        )}`,
       );
     }
   }
 </script>
 
 {#if persist}
-  <LocalStorage bind:value="{theme}" key="{persistKey}" />
+  <LocalStorage bind:value={theme} key={persistKey} />
 {/if}
 
 {#if render === "toggle"}
   <Toggle
     {...toggle}
-    toggled="{theme === toggle.themes[1]}"
-    on:toggle="{({ detail }) => {
+    toggled={theme === toggle.themes[1]}
+    on:toggle={({ detail }) => {
       theme = detail.toggled ? toggle.themes[1] : toggle.themes[0];
-    }}"
+    }}
   />
 {:else if render === "select"}
-  <Select {...select} bind:selected="{theme}">
+  <Select {...select} bind:selected={theme}>
     {#each select.themes as theme (theme)}
-      <SelectItem value="{theme}" text="{themes[theme]}" />
+      <SelectItem value={theme} text={themes[theme]} />
     {/each}
   </Select>
 {/if}
 
-<slot theme="{theme}" />
+<slot {theme} />

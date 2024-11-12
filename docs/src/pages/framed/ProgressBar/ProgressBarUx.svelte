@@ -13,18 +13,12 @@
   }
 </script>
 
-<ProgressBar
-  labelText="Upload status"
-  value="{value}"
-  max="{max}"
-  helperText="{helperText}"
-  status="{status}"
-/>
+<ProgressBar labelText="Upload status" {value} {max} {helperText} {status} />
 
 <ButtonSet style="margin-top: var(--cds-spacing-08)">
   <Button
-    disabled="{value > 0}"
-    on:click="{() => {
+    disabled={value > 0}
+    on:click={() => {
       const interval = setInterval(() => {
         const delta = Math.random() * 10;
 
@@ -35,17 +29,17 @@
           clearInterval(interval);
         }
       }, 30);
-    }}"
+    }}
   >
     Start
   </Button>
   <Button
     kind="tertiary"
-    disabled="{value !== max}"
-    on:click="{() => {
+    disabled={value !== max}
+    on:click={() => {
       value = 0;
-      status = 'active';
-    }}"
+      status = "active";
+    }}
   >
     Reset
   </Button>

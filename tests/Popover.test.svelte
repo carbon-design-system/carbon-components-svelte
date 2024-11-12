@@ -12,9 +12,9 @@
   relative
   light
   highContrast
-  on:click:outside="{() => {
-    console.log('on:click:outside');
-  }}"
+  on:click:outside={() => {
+    console.log("on:click:outside");
+  }}
 >
   <div style="padding: var(--cds-spacing-05)">Content</div>
 </Popover>

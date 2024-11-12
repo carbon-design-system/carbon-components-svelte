@@ -6,7 +6,7 @@
 </script>
 
 <div>
-  <CodeSnippet code="{code}" type="inline" copy="{(text) => copy(text)}" />
+  <CodeSnippet {code} type="inline" copy={(text) => copy(text)} />
 </div>
 
 <style>

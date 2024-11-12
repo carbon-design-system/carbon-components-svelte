@@ -1,11 +1,16 @@
 <script lang="ts">
-  import { Tabs, Tab, TabContent, TabsSkeleton } from "carbon-components-svelte";
+  import {
+    Tabs,
+    Tab,
+    TabContent,
+    TabsSkeleton,
+  } from "carbon-components-svelte";
 </script>
 
 <Tabs
-  on:change="{(e) => {
+  on:change={(e) => {
     console.log(e.detail); // number
-  }}"
+  }}
 >
   <Tab label="Tab label 1" />
   <Tab label="Tab label 2" />
@@ -40,4 +45,4 @@
 
 <TabContent>Content 3</TabContent>
 
-<TabsSkeleton count="{3}" />
+<TabsSkeleton count={3} />

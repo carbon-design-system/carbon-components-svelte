@@ -4,7 +4,7 @@
 
 <CodeSnippet
   type="inline"
-  copy="{(text) => text}"
+  copy={(text) => text}
   code=""
   hideCopyButton
   disabled

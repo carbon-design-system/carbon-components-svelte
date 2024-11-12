@@ -41,8 +41,8 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--select="{true}"
-  class:bx--time-picker__select="{true}"
+  class:bx--select={true}
+  class:bx--time-picker__select={true}
   {...$$restProps}
   on:click
   on:mouseover
@@ -50,11 +50,7 @@
   on:mouseleave
 >
   {#if labelText || $$slots.labelText}
-    <label
-      for="{id}"
-      class:bx--label="{true}"
-      class:bx--visually-hidden="{true}"
-    >
+    <label for={id} class:bx--label={true} class:bx--visually-hidden={true}>
       <slot name="labelText">
         {labelText}
       </slot>
@@ -62,21 +58,21 @@
   {/if}
   <!-- svelte-ignore a11y-no-onchange -->
   <select
-    bind:this="{ref}"
-    id="{id}"
-    name="{name}"
-    disabled="{disabled}"
-    value="{value}"
-    class:bx--select-input="{true}"
-    on:change="{({ target }) => {
+    bind:this={ref}
+    {id}
+    {name}
+    {disabled}
+    {value}
+    class:bx--select-input={true}
+    on:change={({ target }) => {
       selectedValue.set(target.value);
-    }}"
+    }}
   >
     <slot />
   </select>
   <ChevronDown
-    aria-label="{iconDescription}"
-    title="{iconDescription}"
+    aria-label={iconDescription}
+    title={iconDescription}
     class="bx--select__arrow"
   />
 </div>

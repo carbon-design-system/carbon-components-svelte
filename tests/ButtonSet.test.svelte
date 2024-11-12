@@ -9,6 +9,6 @@
 </ButtonSet>
 
 <ButtonSet stacked>
-  <Button icon="{Login}">Log in</Button>
+  <Button icon={Login}>Log in</Button>
   <Button kind="ghost">Sign up</Button>
 </ButtonSet>

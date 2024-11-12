@@ -124,21 +124,21 @@
   $: selectedValue.set(selected ?? $defaultValue);
 </script>
 
-<div class:bx--form-item="{true}" {...$$restProps}>
+<div class:bx--form-item={true} {...$$restProps}>
   <div
-    class:bx--select="{true}"
-    class:bx--select--inline="{inline}"
-    class:bx--select--light="{light}"
-    class:bx--select--invalid="{invalid}"
-    class:bx--select--disabled="{disabled}"
-    class:bx--select--warning="{warn}"
+    class:bx--select={true}
+    class:bx--select--inline={inline}
+    class:bx--select--light={light}
+    class:bx--select--invalid={invalid}
+    class:bx--select--disabled={disabled}
+    class:bx--select--warning={warn}
   >
     {#if !noLabel}
       <label
-        for="{id}"
-        class:bx--label="{true}"
-        class:bx--visually-hidden="{hideLabel}"
-        class:bx--label--disabled="{disabled}"
+        for={id}
+        class:bx--label={true}
+        class:bx--visually-hidden={hideLabel}
+        class:bx--label--disabled={disabled}
       >
         <slot name="labelText">
           {labelText}
@@ -146,23 +146,23 @@
       </label>
     {/if}
     {#if inline}
-      <div class:bx--select-input--inline__wrapper="{true}">
+      <div class:bx--select-input--inline__wrapper={true}>
         <div
-          class:bx--select-input__wrapper="{true}"
-          data-invalid="{invalid || undefined}"
+          class:bx--select-input__wrapper={true}
+          data-invalid={invalid || undefined}
         >
           <select
-            bind:this="{ref}"
-            aria-describedby="{invalid ? errorId : undefined}"
-            aria-invalid="{invalid || undefined}"
-            disabled="{disabled || undefined}"
-            required="{required || undefined}"
-            id="{id}"
-            name="{name}"
-            class:bx--select-input="{true}"
-            class:bx--select-input--sm="{size === 'sm'}"
-            class:bx--select-input--xl="{size === 'xl'}"
-            on:change="{handleChange}"
+            bind:this={ref}
+            aria-describedby={invalid ? errorId : undefined}
+            aria-invalid={invalid || undefined}
+            disabled={disabled || undefined}
+            required={required || undefined}
+            {id}
+            {name}
+            class:bx--select-input={true}
+            class:bx--select-input--sm={size === "sm"}
+            class:bx--select-input--xl={size === "xl"}
+            on:change={handleChange}
             on:change
             on:input
             on:focus
@@ -176,15 +176,15 @@
           {/if}
         </div>
         {#if invalid}
-          <div class:bx--form-requirement="{true}" id="{errorId}">
+          <div class:bx--form-requirement={true} id={errorId}>
             {invalidText}
           </div>
         {/if}
       </div>
       {#if !invalid && !warn && helperText}
         <div
-          class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}"
+          class:bx--form__helper-text={true}
+          class:bx--form__helper-text--disabled={disabled}
         >
           {helperText}
         </div>
@@ -192,21 +192,21 @@
     {/if}
     {#if !inline}
       <div
-        class:bx--select-input__wrapper="{true}"
-        data-invalid="{invalid || undefined}"
+        class:bx--select-input__wrapper={true}
+        data-invalid={invalid || undefined}
       >
         <select
-          bind:this="{ref}"
-          id="{id}"
-          name="{name}"
-          aria-describedby="{invalid ? errorId : undefined}"
-          disabled="{disabled || undefined}"
-          required="{required || undefined}"
-          aria-invalid="{invalid || undefined}"
-          class:bx--select-input="{true}"
-          class:bx--select-input--sm="{size === 'sm'}"
-          class:bx--select-input--xl="{size === 'xl'}"
-          on:change="{handleChange}"
+          bind:this={ref}
+          {id}
+          {name}
+          aria-describedby={invalid ? errorId : undefined}
+          disabled={disabled || undefined}
+          required={required || undefined}
+          aria-invalid={invalid || undefined}
+          class:bx--select-input={true}
+          class:bx--select-input--sm={size === "sm"}
+          class:bx--select-input--xl={size === "xl"}
+          on:change={handleChange}
           on:change
           on:input
           on:focus
@@ -226,19 +226,19 @@
       </div>
       {#if !invalid && helperText}
         <div
-          class:bx--form__helper-text="{true}"
-          class:bx--form__helper-text--disabled="{disabled}"
+          class:bx--form__helper-text={true}
+          class:bx--form__helper-text--disabled={disabled}
         >
           {helperText}
         </div>
       {/if}
       {#if invalid}
-        <div id="{errorId}" class:bx--form-requirement="{true}">
+        <div id={errorId} class:bx--form-requirement={true}>
           {invalidText}
         </div>
       {/if}
       {#if !invalid && warn}
-        <div id="{errorId}" class:bx--form-requirement="{true}">
+        <div id={errorId} class:bx--form-requirement={true}>
           {warnText}
         </div>
       {/if}

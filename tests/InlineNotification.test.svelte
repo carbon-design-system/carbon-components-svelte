@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { InlineNotification, NotificationActionButton } from "carbon-components-svelte";
+  import {
+    InlineNotification,
+    NotificationActionButton,
+  } from "carbon-components-svelte";
 </script>
 
 <InlineNotification on:close />
@@ -8,9 +11,9 @@
   hideCloseButton
   kind="warning"
   title="Upcoming scheduled maintenance"
-  on:close="{(e) => {
+  on:close={(e) => {
     console.log(e.detail.timeout);
-  }}"
+  }}
 />
 
 <InlineNotification kind="warning" title="Upcoming scheduled maintenance">

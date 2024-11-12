@@ -12,7 +12,7 @@
         <h1>404</h1>
         <div>
           Page not found.
-          <Link href="{$url('/')}">Return home</Link>
+          <Link href={$url("/")}>Return home</Link>
         </div>
       </Column>
     </Row>

@@ -54,57 +54,57 @@
 
 <li
   role="none"
-  id="{id}"
-  class:bx--overflow-menu-options__option="{true}"
-  class:bx--overflow-menu--divider="{hasDivider}"
-  class:bx--overflow-menu-options__option--danger="{danger}"
-  class:bx--overflow-menu-options__option--disabled="{disabled}"
+  {id}
+  class:bx--overflow-menu-options__option={true}
+  class:bx--overflow-menu--divider={hasDivider}
+  class:bx--overflow-menu-options__option--danger={danger}
+  class:bx--overflow-menu-options__option--disabled={disabled}
   {...$$restProps}
 >
   {#if href}
     <!-- svelte-ignore a11y-missing-attribute -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <a
-      bind:this="{ref}"
+      bind:this={ref}
       {...buttonProps}
       on:click
-      on:click="{() => {
+      on:click={() => {
         update(id);
-      }}"
+      }}
       on:keydown
-      on:keydown="{({ key }) => {
-        if (key === 'ArrowDown') {
+      on:keydown={({ key }) => {
+        if (key === "ArrowDown") {
           change(1);
-        } else if (key === 'ArrowUp') {
+        } else if (key === "ArrowUp") {
           change(-1);
         }
-      }}"
+      }}
     >
       <slot>
-        <div class:bx--overflow-menu-options__option-content="{true}">
+        <div class:bx--overflow-menu-options__option-content={true}>
           {text}
         </div>
       </slot>
     </a>
   {:else}
     <button
-      bind:this="{ref}"
+      bind:this={ref}
       {...buttonProps}
       on:click
-      on:click="{() => {
+      on:click={() => {
         update(id);
-      }}"
+      }}
       on:keydown
-      on:keydown="{({ key }) => {
-        if (key === 'ArrowDown') {
+      on:keydown={({ key }) => {
+        if (key === "ArrowDown") {
           change(1);
-        } else if (key === 'ArrowUp') {
+        } else if (key === "ArrowUp") {
           change(-1);
         }
-      }}"
+      }}
     >
       <slot>
-        <div class:bx--overflow-menu-options__option-content="{true}">
+        <div class:bx--overflow-menu-options__option-content={true}>
           {text}
         </div>
       </slot>

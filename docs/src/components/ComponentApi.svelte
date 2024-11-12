@@ -32,16 +32,16 @@
 
   $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
   $: forwarded_events = component.events.filter(
-    (event) => event.type === "forwarded"
+    (event) => event.type === "forwarded",
   );
   $: dispatched_events = component.events.filter(
-    (event) => event.type === "dispatched"
+    (event) => event.type === "dispatched",
   );
 </script>
 
 <p style="margin-bottom: var(--cds-layout-02)">
   Source code:
-  <OutboundLink size="lg" inline href="{source}">
+  <OutboundLink size="lg" inline href={source}>
     {component.filePath}
   </OutboundLink>
 </p>
@@ -65,7 +65,7 @@
         }) as prop (prop.name)}
           <StructuredListRow>
             <StructuredListCell noWrap>
-              <InlineSnippet code="{prop.name}" />
+              <InlineSnippet code={prop.name} />
               {#if prop.reactive}
                 <div
                   style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-{prop.isRequired
@@ -99,7 +99,7 @@
                   {:else if type.startsWith("(")}
                     <code class="code-01">{type}</code>
                   {:else}
-                    <InlineSnippet code="{type}" />
+                    <InlineSnippet code={type} />
                   {/if}
                 </div>
               {/each}

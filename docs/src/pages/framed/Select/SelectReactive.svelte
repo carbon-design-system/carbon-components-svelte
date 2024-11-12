@@ -16,6 +16,6 @@
   Selected: <strong>{selected}</strong>
 </div>
 
-<Button disabled="{selected === 'g90'}" on:click="{() => (selected = 'g90')}">
+<Button disabled={selected === "g90"} on:click={() => (selected = "g90")}>
   Set to "g90"
 </Button>

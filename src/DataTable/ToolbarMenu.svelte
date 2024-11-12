@@ -14,7 +14,7 @@
 
 <OverflowMenu
   bind:menuRef
-  icon="{Settings}"
+  icon={Settings}
   {...$$restProps}
   class="bx--toolbar-action bx--overflow-menu {$$restProps.class}"
   flipped

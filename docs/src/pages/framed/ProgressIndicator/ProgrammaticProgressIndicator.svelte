@@ -22,7 +22,7 @@
   />
   <ProgressStep
     complete
-    bind:current="{thirdStepCurrent}"
+    bind:current={thirdStepCurrent}
     label="Step 3"
     description="The progress indicator will listen for clicks on the steps"
   />
@@ -34,10 +34,10 @@
 
 <div style="margin: var(--cds-layout-02) 0">
   <Button
-    kind="{currentIndex === 2 ? 'secondary' : 'primary'}"
-    on:click="{() => {
+    kind={currentIndex === 2 ? "secondary" : "primary"}
+    on:click={() => {
       currentIndex = currentIndex === 2 ? 0 : 2;
-    }}"
+    }}
   >
     Set currentIndex to
     {currentIndex === 2 ? 0 : 2}

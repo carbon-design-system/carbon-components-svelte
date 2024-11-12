@@ -26,8 +26,8 @@
         kind="ghost"
         target="_blank"
         size="field"
-        href="{themedSrcUrl}"
-        icon="{Launch}"
+        href={themedSrcUrl}
+        icon={Launch}
       >
         Open in new tab
       </Button>
@@ -35,13 +35,13 @@
   {/if}
   <div class="preview-viewer" class:framed>
     {#if framed}
-      <iframe title="{src.split('/').pop()}" src="{themedSrcUrl}"></iframe>
+      <iframe title={src.split("/").pop()} src={themedSrcUrl}></iframe>
     {:else}
       <slot />
     {/if}
   </div>
   <div class="code-override">
-    <CodeSnippet type="multi" code="{codeRaw}" copy="{(text) => copy(text)}">
+    <CodeSnippet type="multi" code={codeRaw} copy={(text) => copy(text)}>
       {@html code}
     </CodeSnippet>
   </div>

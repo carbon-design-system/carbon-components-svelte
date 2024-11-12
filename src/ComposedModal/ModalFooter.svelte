@@ -48,17 +48,17 @@
 </script>
 
 <div
-  class:bx--modal-footer="{true}"
-  class:bx--modal-footer--three-button="{secondaryButtons.length === 2}"
+  class:bx--modal-footer={true}
+  class:bx--modal-footer--three-button={secondaryButtons.length === 2}
   {...$$restProps}
 >
   {#if secondaryButtons.length > 0}
     {#each secondaryButtons as button}
       <Button
         kind="secondary"
-        on:click="{() => {
-          dispatch('click:button--secondary', { text: button.text });
-        }}"
+        on:click={() => {
+          dispatch("click:button--secondary", { text: button.text });
+        }}
       >
         {button.text}
       </Button>
@@ -66,22 +66,22 @@
   {:else if secondaryButtonText}
     <Button
       kind="secondary"
-      class="{secondaryClass}"
-      on:click="{() => {
+      class={secondaryClass}
+      on:click={() => {
         closeModal();
-        dispatch('click:button--secondary', { text: secondaryButtonText });
-      }}"
+        dispatch("click:button--secondary", { text: secondaryButtonText });
+      }}
     >
       {secondaryButtonText}
     </Button>
   {/if}
   {#if primaryButtonText}
     <Button
-      kind="{danger ? 'danger' : 'primary'}"
-      disabled="{primaryButtonDisabled}"
-      class="{primaryClass}"
-      icon="{primaryButtonIcon}"
-      on:click="{submit}"
+      kind={danger ? "danger" : "primary"}
+      disabled={primaryButtonDisabled}
+      class={primaryClass}
+      icon={primaryButtonIcon}
+      on:click={submit}
     >
       {primaryButtonText}
     </Button>

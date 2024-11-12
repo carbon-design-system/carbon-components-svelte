@@ -56,50 +56,50 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  class:bx--file="{true}"
+  class:bx--file={true}
   {...$$restProps}
   on:dragover
-  on:dragover|preventDefault|stopPropagation="{({ dataTransfer }) => {
+  on:dragover|preventDefault|stopPropagation={({ dataTransfer }) => {
     if (!disabled) {
       over = true;
-      dataTransfer.dropEffect = 'copy';
+      dataTransfer.dropEffect = "copy";
     }
-  }}"
+  }}
   on:dragleave
-  on:dragleave|preventDefault|stopPropagation="{({ dataTransfer }) => {
+  on:dragleave|preventDefault|stopPropagation={({ dataTransfer }) => {
     if (!disabled) {
       over = false;
-      dataTransfer.dropEffect = 'move';
+      dataTransfer.dropEffect = "move";
     }
-  }}"
+  }}
   on:drop
-  on:drop|preventDefault|stopPropagation="{({ dataTransfer }) => {
+  on:drop|preventDefault|stopPropagation={({ dataTransfer }) => {
     if (!disabled) {
       over = false;
       files = validateFiles([...dataTransfer.files]);
-      dispatch('add', files);
-      dispatch('change', files);
+      dispatch("add", files);
+      dispatch("change", files);
     }
-  }}"
+  }}
 >
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
-    for="{id}"
-    tabindex="{tabindex}"
-    class:bx--file-browse-btn="{true}"
-    class:bx--file-browse-btn--disabled="{disabled}"
+    for={id}
+    {tabindex}
+    class:bx--file-browse-btn={true}
+    class:bx--file-browse-btn--disabled={disabled}
     on:keydown
-    on:keydown="{({ key }) => {
-      if (key === ' ' || key === 'Enter') {
+    on:keydown={({ key }) => {
+      if (key === " " || key === "Enter") {
         ref.click();
       }
-    }}"
+    }}
   >
     <div
-      role="{role}"
-      class:bx--file__drop-container="{true}"
-      class:bx--file__drop-container--drag-over="{over}"
+      {role}
+      class:bx--file__drop-container={true}
+      class:bx--file__drop-container--drag-over={over}
     >
       <slot name="labelText">
         {labelText}
@@ -107,23 +107,23 @@
     </div>
   </label>
   <input
-    bind:this="{ref}"
+    bind:this={ref}
     type="file"
     tabindex="-1"
-    id="{id}"
-    disabled="{disabled}"
-    accept="{accept}"
-    name="{name}"
-    multiple="{multiple}"
-    class:bx--file-input="{true}"
-    on:change="{({ target }) => {
+    {id}
+    {disabled}
+    {accept}
+    {name}
+    {multiple}
+    class:bx--file-input={true}
+    on:change={({ target }) => {
       files = validateFiles([...target.files]);
-      dispatch('add', files);
-      dispatch('change', files);
-    }}"
+      dispatch("add", files);
+      dispatch("change", files);
+    }}
     on:click
-    on:click="{({ target }) => {
+    on:click={({ target }) => {
       target.value = null;
-    }}"
+    }}
   />
 </div>

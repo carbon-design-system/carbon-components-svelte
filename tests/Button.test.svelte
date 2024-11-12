@@ -17,10 +17,10 @@
 
 <Button kind="danger-ghost">Danger ghost button</Button>
 
-<Button icon="{Add}">With icon</Button>
+<Button icon={Add}>With icon</Button>
 
 <Button
-  icon="{Add}"
+  icon={Add}
   tooltipPosition="bottom"
   tooltipAlignment="center"
   iconDescription="Tooltip text"

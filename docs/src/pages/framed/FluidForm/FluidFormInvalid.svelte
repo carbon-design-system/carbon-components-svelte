@@ -14,8 +14,8 @@
 <FluidForm>
   <TextInput labelText="User name" placeholder="Enter user name..." required />
   <PasswordInput
-    bind:value="{password}"
-    invalid="{invalid}"
+    bind:value={password}
+    {invalid}
     invalidText="Your password must be at least 6 characters as well as contain at least one uppercase, one lowercase, and one number."
     required
     type="password"

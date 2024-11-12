@@ -16,19 +16,19 @@
   sortable
   title="Load balancers"
   description="Your organization's active load balancers."
-  headers="{[
-    { key: 'name', value: 'Name' },
-    { key: 'protocol', value: 'Protocol' },
-    { key: 'port', value: 'Port' },
-    { key: 'rule', value: 'Rule' },
-  ]}"
-  pageSize="{pageSize}"
-  page="{page}"
-  rows="{rows}"
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" },
+  ]}
+  {pageSize}
+  {page}
+  {rows}
 />
 <Pagination
   bind:pageSize
   bind:page
-  totalItems="{rows.length}"
+  totalItems={rows.length}
   pageSizeInputDisabled
 />

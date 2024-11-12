@@ -52,7 +52,7 @@
 </script>
 
 <svelte:window
-  on:click="{({ target }) => {
+  on:click={({ target }) => {
     if (
       isOpen &&
       !ref.contains(target) &&
@@ -60,47 +60,47 @@
       !preventCloseOnClickOutside
     ) {
       isOpen = false;
-      dispatch('close');
+      dispatch("close");
     }
-  }}"
+  }}
 />
 
 <button
-  bind:this="{ref}"
+  bind:this={ref}
   type="button"
-  class:bx--header__action="{true}"
-  class:bx--header__action--active="{isOpen}"
-  class:bx--header__action--text="{text}"
+  class:bx--header__action={true}
+  class:bx--header__action--active={isOpen}
+  class:bx--header__action--text={text}
   {...$$restProps}
   on:click
-  on:click|stopPropagation="{() => {
+  on:click|stopPropagation={() => {
     isOpen = !isOpen;
-    dispatch(isOpen ? 'open' : 'close');
-  }}"
+    dispatch(isOpen ? "open" : "close");
+  }}
 >
   {#if isOpen}
     <slot name="closeIcon">
-      <svelte:component this="{closeIcon}" size="{20}" />
+      <svelte:component this={closeIcon} size={20} />
     </slot>
   {:else}
     <slot name="icon">
-      <svelte:component this="{icon}" size="{20}" />
+      <svelte:component this={icon} size={20} />
     </slot>
   {/if}
   <slot name="text">
-    {#if text}<span class:bx--header__action-text="{true}">{text}</span>{/if}
+    {#if text}<span class:bx--header__action-text={true}>{text}</span>{/if}
   </slot>
 </button>
 {#if isOpen}
   <div
-    bind:this="{refPanel}"
-    class:bx--header-panel="{true}"
-    class:bx--header-panel--expanded="{true}"
+    bind:this={refPanel}
+    class:bx--header-panel={true}
+    class:bx--header-panel--expanded={true}
     style:overflow-y="auto"
-    transition:slide|local="{{
+    transition:slide|local={{
       ...transition,
       duration: transition === false ? 0 : transition.duration,
-    }}"
+    }}
   >
     <slot />
   </div>

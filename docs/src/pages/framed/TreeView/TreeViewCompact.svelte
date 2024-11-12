@@ -48,12 +48,12 @@
 <TreeView
   size="compact"
   labelText="Cloud Products"
-  nodes="{nodes}"
+  {nodes}
   bind:activeId
   bind:selectedIds
-  on:select="{({ detail }) => console.log('select', detail)}"
-  on:toggle="{({ detail }) => console.log('toggle', detail)}"
-  on:focus="{({ detail }) => console.log('focus', detail)}"
+  on:select={({ detail }) => console.log("select", detail)}
+  on:toggle={({ detail }) => console.log("toggle", detail)}
+  on:focus={({ detail }) => console.log("focus", detail)}
 />
 
 <div>Active node id: {activeId}</div>

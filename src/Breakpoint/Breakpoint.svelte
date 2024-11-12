@@ -44,4 +44,4 @@
     dispatch("change", { size, breakpointValue: breakpoints[size] });
 </script>
 
-<slot size="{size}" sizes="{sizes}" />
+<slot {size} {sizes} />
