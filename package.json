@@ -35,7 +35,6 @@
     "lint": "prettier --write \"**/*.{svelte,md,js,json,ts}\"",
     "build:css": "node scripts/build-css",
     "build:docs": "node scripts/build-docs",
-    "format": "prettier --write \"./**/*.{svelte,js,md}\"",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
     "release": "standard-version && npm run build:docs"
   },
