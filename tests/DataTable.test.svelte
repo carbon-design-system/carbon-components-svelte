@@ -10,16 +10,15 @@
     Button,
     Link,
   } from "carbon-components-svelte";
-  import type { DataTableHeader } from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import type { ComponentProps } from "svelte";
 
-  const headers: DataTableHeader[] = [
+  const headers = [
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol", width: "400px", minWidth: "40%" },
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule", sort: false },
-  ];
+  ] as const;
   const rows = [
     {
       id: "a",
@@ -285,3 +284,67 @@
 <DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="short" />
 
 <DataTableSkeleton showHeader="{false}" showToolbar="{false}" size="compact" />
+
+<DataTable
+  rows="{[
+    {
+      name: 'Load Balancer 3',
+      protocol: 'HTTP',
+      port: 3000,
+      rule: 'Round robin',
+      id: '-',
+    },
+  ]}"
+  headers="{[
+    {
+      key: 'name',
+      value: 'Name',
+    },
+    {
+      key: 'protocol',
+      value: 'Protocol',
+      display: (value) => {
+        return value + ' Protocol';
+      },
+    },
+    {
+      key: 'port',
+      value: 'Port',
+      display: (value, row) => {
+        console.log(row.port);
+        return value + ' €';
+      },
+      sort: (a, b) => {
+        if (a > b) return 1;
+        return 0;
+      },
+    },
+    {
+      key: 'rule',
+      value: 'Rule',
+    },
+  ]}"
+  sortKey="name"
+  on:click:row="{(e) => {
+    const detail = e.detail;
+    detail.name;
+    detail.port;
+  }}"
+  on:click:cell="{(e) => {
+    const detail = e.detail;
+    switch (detail.key) {
+      case 'name':
+        detail.value;
+        break;
+    }
+  }}"
+  on:click="{(e) => {
+    e.detail.cell;
+    e.detail.row?.name;
+  }}"
+  on:click:row--expand="{(e) => {
+    const detail = e.detail;
+    detail.row.id;
+    detail.row.name;
+  }}"
+/>

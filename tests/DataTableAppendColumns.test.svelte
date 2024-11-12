@@ -6,7 +6,7 @@
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule" },
     { key: "overflow", empty: true },
-  ];
+  ] as const;
 
   const rows = [
     { id: "a", name: "Load Balancer 3", port: 3000, rule: "Round robin" },
