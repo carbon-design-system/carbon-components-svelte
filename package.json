@@ -43,7 +43,6 @@
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^4.0.1",
     "autoprefixer": "^10.4.8",
     "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^12.1.0",
@@ -53,7 +52,7 @@
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
     "sveld": "^0.22.0",
-    "svelte": "^5.2.4",
+    "svelte": "^4.2.10",
     "svelte-check": "^4.0.6",
     "tinyglobby": "^0.2.10",
     "typescript": "^5.6.3"
