@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.86.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.4...v0.86.0) (2024-11-20)
+
+### ⚠ BREAKING CHANGES
+
+- **package:** set `type="module"` in `package.json`
+- **package:** remove bundled ESM/UMD support
+- **treeview:** rename `children` prop to `nodes` for Svelte 5 compatibility
+- **recursive-list:** rename `children` prop to `nodes` for Svelte 5 compatibility
+- **types:** use type alias instead of interface for exported component props ([6fbd8ae](https://github.com/carbon-design-system/carbon-components-svelte/commit/6fbd8ae6a90eabde74fb5481c980716eba477c31))
+
+### Features
+
+- **data-table:** support TypeScript generics ([#1954](https://github.com/carbon-design-system/carbon-components-svelte/issues/1954)) ([dd43224](https://github.com/carbon-design-system/carbon-components-svelte/commit/dd43224119905c3a26a2369f836338c18fcbafba))
+
+### Bug Fixes
+
+- **data-table:** (Svelte 5 compatibility) handle `ToolbarSearch` filtering in `DataTable` ([#2037](https://github.com/carbon-design-system/carbon-components-svelte/issues/2037)) ([3192824](https://github.com/carbon-design-system/carbon-components-svelte/commit/3192824322faef7c0c012eb246bb6ef9da7f78dc))
+- **multi-select:** (Svelte 5 compatibility) avoid cyclic dependency ([#2034](https://github.com/carbon-design-system/carbon-components-svelte/issues/2034)) ([1acd713](https://github.com/carbon-design-system/carbon-components-svelte/commit/1acd7135372eeabf002dacc80e39162989427140))
+- **toolbar-menu:** (Svelte 5 compatibility) remove redundant menu offset ([#2047](https://github.com/carbon-design-system/carbon-components-svelte/issues/2047)) ([7e17394](https://github.com/carbon-design-system/carbon-components-svelte/commit/7e173943ac783756521c4957a1c24b5288ab45b7)), closes [#2040](https://github.com/carbon-design-system/carbon-components-svelte/issues/2040)
+- **checkbox:** (Svelte 5 compatibility) bind `indeterminate` ([#2044](https://github.com/carbon-design-system/carbon-components-svelte/issues/2044)) ([9d5e7e3](https://github.com/carbon-design-system/carbon-components-svelte/commit/9d5e7e31efb2d439b18ba0bf350b712377e160a7)), closes [#2039](https://github.com/carbon-design-system/carbon-components-svelte/issues/2039)
+
 ### [0.85.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.3...v0.85.4) (2024-11-09)
 
 ### Bug Fixes
