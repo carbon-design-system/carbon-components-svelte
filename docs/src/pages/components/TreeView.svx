@@ -1,15 +1,21 @@
 <script>
-  import { InlineNotification, UnorderedList, ListItem } from "carbon-components-svelte";
+  import { InlineNotification, UnorderedList, ListItem, Link,  } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
 ## Default
 
-The `children` prop accepts an array of child nodes. Each node should contain `id` and `text` properties.
+The `nodes` prop accepts an array of child nodes. Each node should contain `id` and `text` properties.
 
-Optional properties include `disabled`, `icon`, and `children`.
+Optional properties include `disabled`, `icon`, and `nodes`.
 
-A parent node contains `children` while a leaf node does not.
+A parent node contains `nodes` (children) while a leaf node does not.
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    In version 0.86.0, the <strong>children</strong> prop has been renamed to <strong>nodes</strong> for <Link target="_blank" href="https://svelte.dev/docs/svelte/v5-migration-guide#The-children-prop-is-reserved">Svelte 5 compatibility</Link>.
+  </div>
+</InlineNotification>
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every node must have a unique id.</div>
@@ -27,7 +33,7 @@ The destructured `let:node` contains the following properties:
   <ListItem><strong>id</strong>: the node id</ListItem>
   <ListItem><strong>text</strong>: the node text</ListItem>
   <ListItem><strong>expanded</strong>: true if the node is expanded</ListItem>
-  <ListItem><strong>leaf</strong>: true if the node does not have children</ListItem>
+  <ListItem><strong>leaf</strong>: true if the node does not have child nodes</ListItem>
   <ListItem><strong>disabled</strong>: true if the node is disabled</ListItem>
   <ListItem><strong>selected</strong>: true if the node is selected</ListItem>
 </UnorderedList>
