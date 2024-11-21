@@ -1,5 +1,5 @@
 <script>
-  import { InlineNotification, UnorderedList, ListItem } from "carbon-components-svelte";
+  import { InlineNotification, UnorderedList, ListItem, Link,  } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -11,9 +11,11 @@ Optional properties include `disabled`, `icon`, and `nodes`.
 
 A parent node contains `nodes` (children) while a leaf node does not.
 
-Note: in version 0.86.0 the `children` prop has been renamed to `nodes` to be compatible with Svelte 5 (`children`
-[has become a reserved word](https://svelte.dev/docs/svelte/v5-migration-guide#The-children-prop-is-reserved) in 
-Svelte 5 to pass properties down to components).
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    In version 0.86.0, the <strong>children</strong> prop has been renamed to <strong>nodes</strong> for <Link target="_blank" href="https://svelte.dev/docs/svelte/v5-migration-guide#The-children-prop-is-reserved">Svelte 5 compatibility</Link>.
+  </div>
+</InlineNotification>
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every node must have a unique id.</div>
