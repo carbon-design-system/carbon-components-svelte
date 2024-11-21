@@ -1,11 +1,17 @@
 <script>
-  import { InlineNotification, RecursiveList } from "carbon-components-svelte";
+  import { InlineNotification, RecursiveList, Link } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
 This component uses the [svelte:self API](https://svelte.dev/docs#svelte_self) to render the [UnorderedList](/components/UnorderedList) and [OrderedList](/components/OrderedList) components with tree structured data.
 
-A child node can render text, a link, HTML content, and other children.
+A child node can render text, a link, HTML content, and other child nodes.
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    In version 0.86.0, the <strong>children</strong> prop was renamed to <strong>nodes</strong> for <Link target="_blank" href="https://svelte.dev/docs/svelte/v5-migration-guide#The-children-prop-is-reserved">Svelte 5 compatibility</Link>.
+  </div>
+</InlineNotification>
 
 <InlineNotification svx-ignore lowContrast title="Warning:" kind="warning" hideCloseButton>
   <div class="body-short-01">
@@ -15,7 +21,7 @@ A child node can render text, a link, HTML content, and other children.
 
 ## Unordered
 
-The `children` prop accepts an array of child nodes.
+The `nodes` prop accepts an array of child nodes.
 
 By default, the list type is unordered.
 

@@ -9,11 +9,11 @@ The `nodes` prop accepts an array of child nodes. Each node should contain `id` 
 
 Optional properties include `disabled`, `icon`, and `nodes`.
 
-A parent node contains `nodes` (children) while a leaf node does not.
+A parent node contains `nodes` while a leaf node does not.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    In version 0.86.0, the <strong>children</strong> prop has been renamed to <strong>nodes</strong> for <Link target="_blank" href="https://svelte.dev/docs/svelte/v5-migration-guide#The-children-prop-is-reserved">Svelte 5 compatibility</Link>.
+    In version 0.86.0, the <strong>children</strong> prop was renamed to <strong>nodes</strong> for <Link target="_blank" href="https://svelte.dev/docs/svelte/v5-migration-guide#The-children-prop-is-reserved">Svelte 5 compatibility</Link>.
   </div>
 </InlineNotification>
 
