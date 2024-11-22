@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.86.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.86.0...v0.86.1) (2024-11-22)
+
+### Bug Fixes
+
+- **tree-view:** do not flatten original `nodes` ([#2056](https://github.com/carbon-design-system/carbon-components-svelte/issues/2056)) ([e488c88](https://github.com/carbon-design-system/carbon-components-svelte/commit/e488c8837146432330ebbf2f9182a8a69eab6b70))
+
 ## [0.86.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.85.4...v0.86.0) (2024-11-20)
 
 ### ⚠ BREAKING CHANGES

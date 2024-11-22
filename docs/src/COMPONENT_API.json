@@ -14711,7 +14711,7 @@
           "isFunctionDeclaration": false,
           "isRequired": false,
           "constant": false,
-          "reactive": true
+          "reactive": false
         },
         {
           "name": "activeId",
@@ -14814,7 +14814,7 @@
           "kind": "function",
           "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {     expandedIds = nodes       .filter(         (node) =>           filterNode(node) ||           node.nodes?.some((child) => filterNode(child) && child.nodes),       )       .map((node) => node.id);   }",
+          "value": "() => {     expandedIds = flattenedNodes       .filter(         (node) =>           filterNode(node) ||           node.nodes?.some((child) => filterNode(child) && child.nodes),       )       .map((node) => node.id);   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -14826,7 +14826,7 @@
           "kind": "function",
           "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {     expandedIds = nodes       .filter((node) => expandedIds.includes(node.id) && !filterNode(node))       .map((node) => node.id);   }",
+          "value": "() => {     expandedIds = flattenedNodes       .filter((node) => expandedIds.includes(node.id) && !filterNode(node))       .map((node) => node.id);   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
