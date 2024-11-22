@@ -95,7 +95,7 @@
    * @type {(filterId?: (node: TreeNode) => boolean) => void}
    */
   export function expandNodes(filterNode = (node) => false) {
-    expandedIds = nodes
+    expandedIds = flattenedNodes
       .filter(
         (node) =>
           filterNode(node) ||
@@ -110,7 +110,7 @@
    * @type {(filterId?: (node: TreeNode) => boolean) => void}
    */
   export function collapseNodes(filterNode = (node) => true) {
-    expandedIds = nodes
+    expandedIds = flattenedNodes
       .filter((node) => expandedIds.includes(node.id) && !filterNode(node))
       .map((node) => node.id);
   }
@@ -207,24 +207,22 @@
   });
 
   /**
+   * Recursively flattens a tree of nodes into a single array
    * @param {Array<TreeNode & { nodes?: TreeNode[] }>} nodes
+   * @returns {Array<TreeNode>}
    */
   function traverse(nodes) {
-    let _nodes = [];
-
-    nodes.forEach((node) => {
-      _nodes.push(node);
-
-      if (Array.isArray(node.nodes)) {
-        _nodes = [...nodes, ...traverse(node.nodes)];
+    return nodes.reduce((acc, node) => {
+      acc.push(node);
+      if (Array.isArray(node.nodes) && node.nodes.length > 0) {
+        acc.push(...traverse(node.nodes));
       }
-    });
-
-    return _nodes;
+      return acc;
+    }, []);
   }
 
-  $: nodes = traverse(nodes);
-  $: nodeIds = nodes.map((node) => node.id);
+  $: flattenedNodes = traverse(nodes);
+  $: nodeIds = flattenedNodes.map((node) => node.id);
   $: activeNodeId.set(activeId);
   $: selectedNodeIds.set(selectedIds);
   $: expandedNodeIds.set(expandedIds);
