@@ -66,7 +66,17 @@
       </StructuredListHead>
       <StructuredListBody>
         {#each component.props.sort((a, b) => {
-          if (a.reactive > b.reactive) return -1;
+          // Sort props so required props are listed first, then reactive props.
+
+          if (a.isRequired !== b.isRequired) {
+            return b.isRequired ? 1 : -1;
+          }
+
+          if (a.reactive !== b.reactive) {
+            return b.reactive ? 1 : -1;
+          }
+
+          return 0;
         }) as prop (prop.name)}
           <StructuredListRow>
             <StructuredListCell noWrap>
