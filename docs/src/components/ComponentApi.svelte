@@ -7,6 +7,7 @@
     typedefs: [],
   };
 
+  import { onMount } from "svelte";
   import {
     Button,
     OutboundLink,
@@ -21,8 +22,17 @@
     Tag,
   } from "carbon-components-svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
-  import PreviewTypeScript from "./PreviewTypeScript.svelte";
   import Code from "carbon-icons-svelte/lib/Code.svelte";
+
+  let AsyncPreviewTypeScript;
+
+  onMount(async () => {
+    AsyncPreviewTypeScript = (await import("./PreviewTypeScript.svelte"))
+      .default;
+  });
+
+  $: console.log(AsyncPreviewTypeScript);
+
   const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
   const typeMap = {
     string: "string",
@@ -116,7 +126,8 @@
                         ? "break-word"
                         : "normal"}
                     >
-                      <PreviewTypeScript
+                      <svelte:component
+                        this={AsyncPreviewTypeScript}
                         type="inline"
                         noFormat
                         code={typeMap[type]}
@@ -126,7 +137,12 @@
                     <div
                       style="display: inline-flex; max-width: 180px; word-break: break-word;"
                     >
-                      <PreviewTypeScript type="inline" noFormat code={type} />
+                      <svelte:component
+                        this={AsyncPreviewTypeScript}
+                        type="inline"
+                        noFormat
+                        code={type}
+                      />
                     </div>
                   {:else}
                     <div
@@ -135,7 +151,12 @@
                         ? "break-word"
                         : "normal"}
                     >
-                      <PreviewTypeScript type="inline" noFormat code={type} />
+                      <svelte:component
+                        this={AsyncPreviewTypeScript}
+                        type="inline"
+                        noFormat
+                        code={type}
+                      />
                     </div>
                   {/if}
                 </div>
@@ -157,7 +178,8 @@
                     />
                   </div>
                 {:else}
-                  <PreviewTypeScript
+                  <svelte:component
+                    this={AsyncPreviewTypeScript}
                     type="inline"
                     noFormat
                     code={prop.value.replace(/\s+/g, " ")}
@@ -166,7 +188,12 @@
               {:else if prop.value === undefined}
                 <em>undefined</em>
               {:else}
-                <PreviewTypeScript type="inline" noFormat code={prop.value} />
+                <svelte:component
+                  this={AsyncPreviewTypeScript}
+                  type="inline"
+                  noFormat
+                  code={prop.value}
+                />
               {/if}
             </StructuredListCell>
             <StructuredListCell>
@@ -195,7 +222,10 @@
 <h2 id="typedefs">Typedefs</h2>
 
 {#if component.typedefs.length > 0}
-  <PreviewTypeScript code={component.typedefs.map((t) => t.ts).join(";\n\n")} />
+  <svelte:component
+    this={AsyncPreviewTypeScript}
+    code={component.typedefs.map((t) => t.ts).join(";\n\n")}
+  />
 {:else}
   <p class="my-layout-01-03">No typedefs.</p>
 {/if}
@@ -230,9 +260,7 @@
     <StructuredListHead>
       <StructuredListRow>
         <StructuredListCell>Event name</StructuredListCell>
-        <StructuredListCell>
-          <PreviewTypeScript type="inline" noFormat code="event.detail" />
-        </StructuredListCell>
+        <StructuredListCell>Event detail</StructuredListCell>
         {#if hasDescription}
           <StructuredListCell>Description</StructuredListCell>
         {/if}
@@ -245,7 +273,10 @@
             <strong>on:{event.name}</strong>
           </StructuredListCell>
           <StructuredListCell>
-            <PreviewTypeScript code={"type EventDetail = " + event.detail} />
+            <svelte:component
+              this={AsyncPreviewTypeScript}
+              code={"type EventDetail = " + event.detail}
+            />
           </StructuredListCell>
           <StructuredListCell>
             {event.description ?? ""}
@@ -286,7 +317,8 @@
     Default value for <strong>{full_code_prop}</strong>.
   {/if}
   {#if full_code}
-    <PreviewTypeScript
+    <svelte:component
+      this={AsyncPreviewTypeScript}
       code={full_code.startsWith("()")
         ? `const ${full_code_prop} = ` + full_code
         : full_code}
