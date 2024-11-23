@@ -17,6 +17,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Unit tests
+        run: npm run test
+
       - name: Test generated source types
         run: npm run test:src-types
 
