@@ -45,6 +45,7 @@ html[theme="g90"] .code-override {
   color: #6ea6ff;
 }
 
+.token.builtin,
 .token.attr-name {
   color: #3ddbd9; /* teal 30 */
 }

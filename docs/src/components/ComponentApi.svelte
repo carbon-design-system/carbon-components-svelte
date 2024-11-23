@@ -8,7 +8,9 @@
   };
 
   import {
+    Button,
     OutboundLink,
+    Modal,
     StructuredList,
     StructuredListHead,
     StructuredListRow,
@@ -17,10 +19,10 @@
     UnorderedList,
     ListItem,
     Tag,
-    CodeSnippet,
   } from "carbon-components-svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
-
+  import PreviewTypeScript from "./PreviewTypeScript.svelte";
+  import Code from "carbon-icons-svelte/lib/Code.svelte";
   const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
   const typeMap = {
     string: "string",
@@ -29,6 +31,9 @@
     null: "null",
     Date: "JavaScript Date",
   };
+
+  let full_code = null;
+  let full_code_prop = null;
 
   $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
   $: forwarded_events = component.events.filter(
@@ -55,7 +60,7 @@
         <StructuredListRow head>
           <StructuredListCell head>Prop name</StructuredListCell>
           <StructuredListCell head>Type</StructuredListCell>
-          <StructuredListCell head noWrap>Default value</StructuredListCell>
+          <StructuredListCell head>Default value</StructuredListCell>
           <StructuredListCell head>Description</StructuredListCell>
         </StructuredListRow>
       </StructuredListHead>
@@ -95,18 +100,65 @@
                       {type}
                     </OutboundLink>
                   {:else if type in typeMap}
-                    <code class="code-01">{typeMap[type]}</code>
+                    <div
+                      style="display: inline-flex; max-width: 200px;"
+                      style:word-break={/\s/.test(type) || type.length > 20
+                        ? "break-word"
+                        : "normal"}
+                    >
+                      <PreviewTypeScript
+                        type="inline"
+                        noFormat
+                        code={typeMap[type]}
+                      />
+                    </div>
                   {:else if type.startsWith("(")}
-                    <code class="code-01">{type}</code>
+                    <div
+                      style="display: inline-flex; max-width: 180px; word-break: break-word;"
+                    >
+                      <PreviewTypeScript type="inline" noFormat code={type} />
+                    </div>
                   {:else}
-                    <InlineSnippet code={type} />
+                    <div
+                      style="display: inline-flex; max-width: 200px;"
+                      style:word-break={/\s/.test(type) || type.length > 20
+                        ? "break-word"
+                        : "normal"}
+                    >
+                      <PreviewTypeScript type="inline" noFormat code={type} />
+                    </div>
                   {/if}
                 </div>
               {/each}
             </StructuredListCell>
-            <StructuredListCell
-              ><code class="code-01">{prop.value}</code></StructuredListCell
-            >
+            <StructuredListCell>
+              {#if /\s+/.test(prop.value)}
+                {#if prop.value.length > 100}
+                  <div style="display: inline-flex">
+                    <Button
+                      kind="ghost"
+                      size="sm"
+                      icon={Code}
+                      iconDescription="View full code"
+                      on:click={() => {
+                        full_code = prop.value;
+                        full_code_prop = prop.name;
+                      }}
+                    />
+                  </div>
+                {:else}
+                  <PreviewTypeScript
+                    type="inline"
+                    noFormat
+                    code={prop.value.replace(/\s+/g, " ")}
+                  />
+                {/if}
+              {:else if prop.value === undefined}
+                <em>undefined</em>
+              {:else}
+                <PreviewTypeScript type="inline" noFormat code={prop.value} />
+              {/if}
+            </StructuredListCell>
             <StructuredListCell>
               {#if prop.description}
                 {#each prop.description.split("\n") as line}
@@ -133,12 +185,7 @@
 <h2 id="typedefs">Typedefs</h2>
 
 {#if component.typedefs.length > 0}
-  <CodeSnippet
-    style="margin-top: var(--cds-spacing-08)"
-    class="my-layout-01-03"
-    type="multi"
-    code="{component.typedefs.map((t) => t.ts).join(';\n\n')};"
-  />
+  <PreviewTypeScript code={component.typedefs.map((t) => t.ts).join(";\n\n")} />
 {:else}
   <p class="my-layout-01-03">No typedefs.</p>
 {/if}
@@ -173,7 +220,9 @@
     <StructuredListHead>
       <StructuredListRow>
         <StructuredListCell>Event name</StructuredListCell>
-        <StructuredListCell><code>event.detail</code> type</StructuredListCell>
+        <StructuredListCell>
+          <PreviewTypeScript type="inline" noFormat code="event.detail" />
+        </StructuredListCell>
         {#if hasDescription}
           <StructuredListCell>Description</StructuredListCell>
         {/if}
@@ -186,7 +235,7 @@
             <strong>on:{event.name}</strong>
           </StructuredListCell>
           <StructuredListCell>
-            <code>{event.detail}</code>
+            <PreviewTypeScript code={"type EventDetail = " + event.detail} />
           </StructuredListCell>
           <StructuredListCell>
             {event.description ?? ""}
@@ -213,6 +262,27 @@
     {:else}<code>{component.rest_props.name}</code> component.{/if}
   {:else}This component does not spread <code>restProps</code>{/if}
 </div>
+
+<Modal
+  passiveModal
+  open={full_code !== null}
+  modalHeading="Default value"
+  on:close={() => {
+    full_code = null;
+    full_code_prop = null;
+  }}
+>
+  {#if full_code_prop}
+    Default value for <strong>{full_code_prop}</strong>.
+  {/if}
+  {#if full_code}
+    <PreviewTypeScript
+      code={full_code.startsWith("()")
+        ? `const ${full_code_prop} = ` + full_code
+        : full_code}
+    />
+  {/if}
+</Modal>
 
 <style>
   .description {
@@ -244,7 +314,11 @@
     word-break: break-word;
   }
 
-  :global(.cell .bx--snippet--inline code, .bx--snippet--single pre) {
+  :global(
+      .cell .bx--snippet--inline code,
+      .cell .bx--snippet--single pre,
+      .bx--snippet--inline code
+    ) {
     white-space: pre-wrap !important;
   }
 </style>
