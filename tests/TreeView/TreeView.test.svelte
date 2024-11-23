@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ComponentProps } from "svelte";
-  import { TreeView } from "carbon-components-svelte";
+  import { Button, TreeView } from "carbon-components-svelte";
   import type { TreeNodeId } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 
@@ -12,7 +12,7 @@
     { id: 0, text: "AI / Machine learning", icon: Analytics },
     {
       id: 1,
-      text: 0,
+      text: "Analytics",
       nodes: [
         {
           id: 2,
@@ -49,17 +49,19 @@
     },
   ];
 
-  $: if (treeview) {
-    treeview.expandAll();
-    treeview.expandNodes((node) => {
-      return +node.id > 0;
-    });
-    treeview.collapseAll();
-    treeview.collapseNodes((node) => {
-      return node.disabled === true;
-    });
-    treeview.showNode(1);
-  }
+  $: console.log("selectedIds", selectedIds);
+
+  /*    $: if (treeview) {
+      treeview.expandAll();
+      treeview.expandNodes((node) => {
+        return +node.id > 0;
+      });
+      treeview.collapseAll();
+      treeview.collapseNodes((node) => {
+        return node.disabled === true;
+      });
+      treeview.showNode(1);
+    } */
 </script>
 
 <TreeView
@@ -75,10 +77,7 @@
   on:focus={({ detail }) => console.log("focus", detail)}
   let:node
 >
-  {node.id}
-  {node.disabled}
-  {node.expanded}
-  {node.leaf}
-  {node.selected}
   {node.text}
 </TreeView>
+
+<Button on:click={treeview.expandAll}>Expand all</Button>

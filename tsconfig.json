@@ -12,6 +12,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strict": true,
+    "skipLibCheck": true,
     "paths": {
       "carbon-components-svelte": ["./types"],
       "carbon-components-svelte/*": ["./types/*"]
