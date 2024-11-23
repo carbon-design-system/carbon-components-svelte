@@ -139,7 +139,6 @@
           ref?.querySelector(`[id="${lastId}"]`)?.focus();
         });
 
-        // Break out of the loop if the node is found.
         break;
       }
     }

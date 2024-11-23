@@ -14838,7 +14838,7 @@
           "kind": "function",
           "description": "Programmatically show a node by `id`.\nThe matching node will be expanded, selected, and focused",
           "type": "(id: TreeNodeId) => void",
-          "value": "() => {     for (const child of nodes) {       const nodes = findNodeById(child, id);       if (nodes) {         const ids = nodes.map((node) => node.id);         const nodeIds = new Set(ids);         expandNodes((node) => nodeIds.has(node.id));         const lastId = ids[ids.length - 1];         activeId = lastId;         selectedIds = [lastId];         tick().then(() => {           ref?.querySelector(`[id=\"${lastId}\"]`)?.focus();         });         // Break out of the loop if the node is found.         break;       }     }   }",
+          "value": "() => {     for (const child of nodes) {       const nodes = findNodeById(child, id);       if (nodes) {         const ids = nodes.map((node) => node.id);         const nodeIds = new Set(ids);         expandNodes((node) => nodeIds.has(node.id));         const lastId = ids[ids.length - 1];         activeId = lastId;         selectedIds = [lastId];         tick().then(() => {           ref?.querySelector(`[id=\"${lastId}\"]`)?.focus();         });         break;       }     }   }",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
