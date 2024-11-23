@@ -34,7 +34,7 @@
     "test:ui": "vite",
     "test:src-types": "tsc types/**/*.ts",
     "test:types": "svelte-check --workspace tests",
-    "lint": "prettier --write \"**/*.{svelte,md,js,json,ts}\"",
+    "lint": "prettier --write --cache \"**/*.{svelte,md,js,json,ts}\"",
     "build:css": "node scripts/build-css",
     "build:docs": "node scripts/build-docs",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
