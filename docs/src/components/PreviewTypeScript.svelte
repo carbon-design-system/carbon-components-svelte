@@ -1,48 +1,33 @@
-<script context="module">
-  // Lazy load dependencies for performance.
-  const asyncFormat = Promise.all([
-    import("prettier/standalone"),
-    import("prettier/parser-typescript"),
-  ]).then(([prettier, typescriptParser]) => prettier.format);
-
-  const asyncHighlight = import("prismjs").then((module) => {
-    import("prismjs/components/prism-typescript");
-    return module.highlight;
-  });
-</script>
-
 <script>
   export let code = "";
   export let noFormat = false;
   export let type = "multi";
 
   import { CodeSnippet } from "carbon-components-svelte";
+  import { format } from "prettier/standalone";
+  import { highlight } from "prismjs";
+  import "prismjs/components/prism-typescript";
+  import plugin from "prettier/parser-typescript";
   import copy from "clipboard-copy";
 
   let formattedCode = "";
   let highlightedCode = "";
 
   $: {
-    asyncFormat.then((format) => {
-      try {
-        formattedCode = noFormat
-          ? code
-          : format(code, { parser: "typescript", plugins: [typescriptParser] });
-      } catch (e) {
-        formattedCode = code;
-      }
-    });
+    try {
+      formattedCode = noFormat
+        ? code
+        : format(code, { parser: "typescript", plugins: [plugin] });
+    } catch (e) {
+      formattedCode = code;
+    }
   }
 
-  $: {
-    asyncHighlight.then((highlight) => {
-      highlightedCode = highlight(
-        formattedCode,
-        Prism.languages.typescript,
-        "typescript",
-      );
-    });
-  }
+  $: highlightedCode = highlight(
+    formattedCode,
+    Prism.languages.typescript,
+    "typescript",
+  );
 </script>
 
 {#if type === "multi"}
