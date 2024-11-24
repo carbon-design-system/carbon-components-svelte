@@ -127,7 +127,6 @@
                       <svelte:component
                         this={AsyncPreviewTypeScript}
                         type="inline"
-                        noFormat
                         code={typeMap[type]}
                       />
                     </div>
@@ -138,7 +137,6 @@
                       <svelte:component
                         this={AsyncPreviewTypeScript}
                         type="inline"
-                        noFormat
                         code={type}
                       />
                     </div>
@@ -152,7 +150,6 @@
                       <svelte:component
                         this={AsyncPreviewTypeScript}
                         type="inline"
-                        noFormat
                         code={type}
                       />
                     </div>
@@ -179,8 +176,7 @@
                   <svelte:component
                     this={AsyncPreviewTypeScript}
                     type="inline"
-                    noFormat
-                    code={prop.value.replace(/\s+/g, " ")}
+                    code={prop.value}
                   />
                 {/if}
               {:else if prop.value === undefined}
@@ -189,7 +185,6 @@
                 <svelte:component
                   this={AsyncPreviewTypeScript}
                   type="inline"
-                  noFormat
                   code={prop.value}
                 />
               {/if}
@@ -220,21 +215,41 @@
 <h2 id="typedefs">Typedefs</h2>
 
 {#if component.typedefs.length > 0}
-  <svelte:component
-    this={AsyncPreviewTypeScript}
-    code={component.typedefs.map((t) => t.ts).join(";\n\n")}
-  />
+  <div class="my-layout-01-03">
+    <svelte:component
+      this={AsyncPreviewTypeScript}
+      code={component.typedefs.map((t) => t.ts).join("\n")}
+    />
+  </div>
 {:else}
   <p class="my-layout-01-03">No typedefs.</p>
 {/if}
 
 <h2 id="slots">Slots</h2>
 {#if component.slots.length > 0}
-  <UnorderedList class="my-layout-01-03">
-    {#each component.slots as slot (slot.name)}
-      <ListItem>{slot.default ? "default" : slot.name}</ListItem>
-    {/each}
-  </UnorderedList>
+  <StructuredList class="my-layout-01-03">
+    <StructuredListHead>
+      <StructuredListRow>
+        <StructuredListCell>Slot name</StructuredListCell>
+        <StructuredListCell>Slot detail</StructuredListCell>
+      </StructuredListRow>
+    </StructuredListHead>
+    <StructuredListBody>
+      {#each component.slots as slot (slot.name)}
+        <StructuredListRow>
+          <StructuredListCell>
+            <strong>{slot.default ? "default" : slot.name}</strong>
+          </StructuredListCell>
+          <StructuredListCell>
+            <svelte:component
+              this={AsyncPreviewTypeScript}
+              code={slot.slot_props}
+            />
+          </StructuredListCell>
+        </StructuredListRow>
+      {/each}
+    </StructuredListBody>
+  </StructuredList>
 {:else}
   <p class="my-layout-01-03">No slots.</p>
 {/if}
@@ -273,7 +288,7 @@
           <StructuredListCell>
             <svelte:component
               this={AsyncPreviewTypeScript}
-              code={"type EventDetail = " + event.detail}
+              code={event.detail}
             />
           </StructuredListCell>
           <StructuredListCell>
@@ -317,12 +332,7 @@
     </div>
   {/if}
   {#if full_code}
-    <svelte:component
-      this={AsyncPreviewTypeScript}
-      code={full_code.startsWith("()")
-        ? `const ${full_code_prop} = ` + full_code
-        : full_code}
-    />
+    <svelte:component this={AsyncPreviewTypeScript} code={full_code} />
   {/if}
 </Modal>
 

@@ -1,30 +1,14 @@
 <script>
   export let code = "";
-  export let noFormat = false;
   export let type = "multi";
 
   import { CodeSnippet } from "carbon-components-svelte";
-  import { format } from "prettier/standalone";
   import { highlight } from "prismjs";
   import "prismjs/components/prism-typescript";
-  import plugin from "prettier/parser-typescript";
   import copy from "clipboard-copy";
 
-  let formattedCode = "";
-  let highlightedCode = "";
-
-  $: {
-    try {
-      formattedCode = noFormat
-        ? code
-        : format(code, { parser: "typescript", plugins: [plugin] });
-    } catch (e) {
-      formattedCode = code;
-    }
-  }
-
   $: highlightedCode = highlight(
-    formattedCode,
+    code,
     Prism.languages.typescript,
     "typescript",
   );
@@ -32,19 +16,14 @@
 
 {#if type === "multi"}
   <div class="code-override">
-    <CodeSnippet type="multi" code={formattedCode} {copy}>
+    <CodeSnippet type="multi" {code} {copy}>
       {@html highlightedCode}
     </CodeSnippet>
   </div>
 {/if}
 
 {#if type === "inline"}
-  <CodeSnippet
-    type="inline"
-    class="code-override-inline"
-    code={formattedCode}
-    {copy}
-  >
+  <CodeSnippet type="inline" class="code-override-inline" {code} {copy}>
     {@html highlightedCode}
   </CodeSnippet>
 {/if}
