@@ -5,7 +5,12 @@ import { format } from "prettier";
 import plugin from "prettier/plugins/typescript";
 
 const formatTypeScript = async (value) => {
-  return await format(value, { parser: "typescript", plugins: [plugin] });
+  return await format(value, { 
+    parser: "typescript", 
+    plugins: [plugin],
+    printWidth: 40, // Force breaking onto new lines
+    bracketSameLine: false
+  });
 };
 
 console.time("formatComponentApi");
