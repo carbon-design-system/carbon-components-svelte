@@ -39,7 +39,12 @@
 {/if}
 
 {#if type === "inline"}
-  <CodeSnippet type="inline" code={formattedCode} {copy}>
+  <CodeSnippet
+    type="inline"
+    class="code-override-inline"
+    code={formattedCode}
+    {copy}
+  >
     {@html highlightedCode}
   </CodeSnippet>
 {/if}

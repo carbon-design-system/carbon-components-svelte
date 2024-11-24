@@ -45,6 +45,17 @@ html[theme="g90"] .code-override {
   color: #6ea6ff;
 }
 
+/* Override syntax highlighting for light theme inline code .*/
+[theme="white"] .code-override-inline .token,
+[theme="g10"] .code-override-inline .token {
+  color: var(--cds-text-01, #161616);
+}
+
+/** Gray 80 is the "lighted" dark theme. Ensure the background is dark. */
+[theme="g80"] .code-override-inline {
+  background-color: #262626;
+}
+
 .token.builtin,
 .token.attr-name {
   color: #3ddbd9; /* teal 30 */
