@@ -36,7 +36,7 @@
     "test:types": "svelte-check --workspace tests",
     "lint": "prettier --write --cache \"**/*.{svelte,md,js,json,ts}\"",
     "build:css": "node scripts/build-css",
-    "build:docs": "node scripts/build-docs",
+    "build:docs": "node scripts/build-docs && node scripts/format-component-api",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
     "release": "standard-version && npm run build:docs"
   },
