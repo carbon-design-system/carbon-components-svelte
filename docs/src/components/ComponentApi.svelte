@@ -9,9 +9,7 @@
 
   import { onMount } from "svelte";
   import {
-    Button,
     OutboundLink,
-    Modal,
     StructuredList,
     StructuredListHead,
     StructuredListRow,
@@ -22,7 +20,6 @@
     Tag,
   } from "carbon-components-svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
-  import Code from "carbon-icons-svelte/lib/Code.svelte";
 
   let AsyncPreviewTypeScript;
 
@@ -40,15 +37,12 @@
     Date: "JavaScript Date",
   };
 
-  let full_code = null;
-  let full_code_prop = null;
-
   $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
   $: forwarded_events = component.events.filter(
-    (event) => event.type === "forwarded",
+    (event) => event.type === "forwarded"
   );
   $: dispatched_events = component.events.filter(
-    (event) => event.type === "dispatched",
+    (event) => event.type === "dispatched"
   );
 </script>
 
@@ -68,7 +62,6 @@
         <StructuredListRow head>
           <StructuredListCell head>Prop name</StructuredListCell>
           <StructuredListCell head>Type</StructuredListCell>
-          <StructuredListCell head>Default value</StructuredListCell>
           <StructuredListCell head>Description</StructuredListCell>
         </StructuredListRow>
       </StructuredListHead>
@@ -119,75 +112,27 @@
                     </OutboundLink>
                   {:else if type in typeMap}
                     <div
-                      style="display: inline-flex; max-width: 200px;"
-                      style:word-break={/\s/.test(type) || type.length > 20
-                        ? "break-word"
-                        : "normal"}
+                      style="display: inline-flex; max-width: 220px; word-break: break-word;"
                     >
                       <svelte:component
                         this={AsyncPreviewTypeScript}
-                        type="inline"
-                        code={typeMap[type]}
-                      />
-                    </div>
-                  {:else if type.startsWith("(")}
-                    <div
-                      style="display: inline-flex; max-width: 180px; word-break: break-word;"
-                    >
-                      <svelte:component
-                        this={AsyncPreviewTypeScript}
-                        type="inline"
-                        code={type}
-                      />
-                    </div>
+                      type="inline"
+                      code={typeMap[type]}
+                    />
+                  </div>
                   {:else}
                     <div
-                      style="display: inline-flex; max-width: 200px;"
-                      style:word-break={/\s/.test(type) || type.length > 20
-                        ? "break-word"
-                        : "normal"}
+                      style="display: inline-flex; max-width: 220px; word-break: break-word;"
                     >
                       <svelte:component
                         this={AsyncPreviewTypeScript}
-                        type="inline"
-                        code={type}
-                      />
-                    </div>
+                      type="inline"
+                      code={type}
+                    />
+                  </div>
                   {/if}
                 </div>
               {/each}
-            </StructuredListCell>
-            <StructuredListCell>
-              {#if /\s+/.test(prop.value)}
-                {#if prop.value.length > 100}
-                  <div style="display: inline-flex">
-                    <Button
-                      kind="ghost"
-                      size="sm"
-                      icon={Code}
-                      iconDescription="View full code"
-                      on:click={() => {
-                        full_code = prop.value;
-                        full_code_prop = prop.name;
-                      }}
-                    />
-                  </div>
-                {:else}
-                  <svelte:component
-                    this={AsyncPreviewTypeScript}
-                    type="inline"
-                    code={prop.value}
-                  />
-                {/if}
-              {:else if prop.value === undefined}
-                <em>undefined</em>
-              {:else}
-                <svelte:component
-                  this={AsyncPreviewTypeScript}
-                  type="inline"
-                  code={prop.value}
-                />
-              {/if}
             </StructuredListCell>
             <StructuredListCell>
               {#if prop.description}
@@ -199,9 +144,21 @@
                       .replace(/`(.*?)`/g, "<code>$1</code>")}.
                   </div>
                 {/each}
-              {:else}
-                <div class="description">No description available.</div>
               {/if}
+              <div style:margin-top="var(--cds-layout-02)" style:margin-bottom="var(--cds-spacing-03)">
+                <strong>Default value</strong>
+              </div>
+              <div style:margin-bottom="var(--cds-layout-01)" style:max-width="85%">
+                {#if prop.value === undefined}
+                  <em>undefined</em>
+                {:else}
+                  <svelte:component
+                    this={AsyncPreviewTypeScript}
+                    type={/\n/.test(prop.value) ? "multi" : "inline"}
+                    code={prop.value}
+                  />
+                {/if}
+              </div>
             </StructuredListCell>
           </StructuredListRow>
         {/each}
@@ -243,6 +200,7 @@
           <StructuredListCell>
             <svelte:component
               this={AsyncPreviewTypeScript}
+              type={/\n/.test(slot.slot_props) ? "multi" : "inline"}
               code={slot.slot_props}
             />
           </StructuredListCell>
@@ -288,6 +246,7 @@
           <StructuredListCell>
             <svelte:component
               this={AsyncPreviewTypeScript}
+              type={/\n/.test(event.detail) ? "multi" : "inline"}
               code={event.detail}
             />
           </StructuredListCell>
@@ -317,28 +276,10 @@
   {:else}This component does not spread <code>restProps</code>{/if}
 </div>
 
-<Modal
-  passiveModal
-  open={full_code !== null}
-  modalHeading="Default value"
-  on:close={() => {
-    full_code = null;
-    full_code_prop = null;
-  }}
->
-  {#if full_code_prop}
-    <div style="margin-bottom: var(--cds-spacing-04);">
-      Default value for <strong>{full_code_prop}</strong>.
-    </div>
-  {/if}
-  {#if full_code}
-    <svelte:component this={AsyncPreviewTypeScript} code={full_code} />
-  {/if}
-</Modal>
-
 <style>
   .description {
     margin-bottom: var(--cds-spacing-04);
+    width: 80%;
   }
 
   .cell {
