@@ -17,6 +17,16 @@ describe("TreeView", () => {
     });
   };
 
+  const noExpandedItems = () => {
+    expect(screen.queryAllByRole("treeitem", { expanded: true })).toHaveLength(
+      0,
+    );
+  };
+
+  const getAllExpandedItems = () => {
+    return screen.getAllByRole("treeitem", { expanded: true });
+  };
+
   it("can select a node", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
@@ -36,5 +46,31 @@ describe("TreeView", () => {
       selected: false,
       text: "AI / Machine learning",
     });
+  });
+
+  it("can expand all nodes", async () => {
+    render(TreeView);
+
+    noExpandedItems();
+
+    const expandAllButton = screen.getByText("Expand all");
+    await user.click(expandAllButton);
+
+    expect(getAllExpandedItems()).toHaveLength(5);
+  });
+
+  it("can expand some nodes", async () => {
+    render(TreeView);
+
+    noExpandedItems();
+
+    const expandSomeNodesButton = screen.getByText("Expand some nodes");
+    await user.click(expandSomeNodesButton);
+
+    expect(getAllExpandedItems()).toHaveLength(2);
+
+    expect(
+      screen.getByText("IBM Analytics Engine").parentNode?.parentNode,
+    ).toHaveAttribute("aria-expanded", "true");
   });
 });

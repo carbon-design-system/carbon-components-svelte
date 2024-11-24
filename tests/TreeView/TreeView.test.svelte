@@ -7,7 +7,7 @@
   let treeview: TreeView;
   let activeId: TreeNodeId = "";
   let selectedIds: TreeNodeId[] = [];
-  let expandedIds: TreeNodeId[] = [1];
+  let expandedIds: TreeNodeId[] = [];
   let nodes: ComponentProps<TreeView>["nodes"] = [
     { id: 0, text: "AI / Machine learning", icon: Analytics },
     {
@@ -81,3 +81,12 @@
 </TreeView>
 
 <Button on:click={treeview.expandAll}>Expand all</Button>
+<Button
+  on:click={() => {
+    treeview.expandNodes((node) => {
+      return /^IBM/.test(node.text);
+    });
+  }}
+>
+  Expand some nodes
+</Button>
