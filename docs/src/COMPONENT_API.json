@@ -419,7 +419,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props?: { [\"aria-current\"]?: string; class: \"bx--link\" } }"
+          "slot_props": "{\n  props?: {\n    [\"aria-current\"]?: string;\n    class: \"bx--link\";\n  };\n}"
         }
       ],
       "events": [
@@ -531,7 +531,7 @@
           "kind": "let",
           "description": "Carbon grid sizes as an object",
           "type": "Record<BreakpointSize, boolean>",
-          "value": "{ sm: false, md: false, lg: false, xlg: false, max: false }",
+          "value": "{\n  sm: false,\n  md: false,\n  lg: false,\n  xlg: false,\n  max: false,\n}",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -544,26 +544,26 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{\n  size: BreakpointSize;\n  sizes: Record<BreakpointSize, boolean>;\n}"
+          "slot_props": "{\n  size: BreakpointSize;\n  sizes: Record<\n    BreakpointSize,\n    boolean\n  >;\n}"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "change",
-          "detail": "{ size: BreakpointSize; breakpointValue: BreakpointValue }"
+          "detail": "{\n  size: BreakpointSize;\n  breakpointValue: BreakpointValue;\n}"
         }
       ],
       "typedefs": [
         {
           "type": "\"sm\" | \"md\" | \"lg\" | \"xlg\" | \"max\"",
           "name": "BreakpointSize",
-          "ts": "type BreakpointSize = \"sm\" | \"md\" | \"lg\" | \"xlg\" | \"max\";\n"
+          "ts": "type BreakpointSize =\n  | \"sm\"\n  | \"md\"\n  | \"lg\"\n  | \"xlg\"\n  | \"max\";\n"
         },
         {
           "type": "320 | 672 | 1056 | 1312 | 1584",
           "name": "BreakpointValue",
-          "ts": "type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;\n"
+          "ts": "type BreakpointValue =\n  | 320\n  | 672\n  | 1056\n  | 1312\n  | 1584;\n"
         }
       ],
       "generics": null
@@ -1298,7 +1298,7 @@
           "kind": "let",
           "description": "By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.\n\nProvide a custom function to override this behavior.",
           "type": "(code: string) => void",
-          "value": "async (code) => {\n  try {\n    await navigator.clipboard.writeText(code);\n  } catch (e) {\n    console.log(e);\n  }\n}",
+          "value": "async (code) => {\n  try {\n    await navigator.clipboard.writeText(\n      code,\n    );\n  } catch (e) {\n    console.log(e);\n  }\n}",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1726,7 +1726,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props: { class: string; [key: string]: any } }"
+          "slot_props": "{\n  props: {\n    class: string;\n    [key: string]: any;\n  };\n}"
         }
       ],
       "events": [],
@@ -1744,7 +1744,7 @@
         {
           "type": "ColumnSize | ColumnSizeDescriptor",
           "name": "ColumnBreakpoint",
-          "ts": "type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;\n"
+          "ts": "type ColumnBreakpoint =\n  | ColumnSize\n  | ColumnSizeDescriptor;\n"
         }
       ],
       "generics": null,
@@ -2033,7 +2033,7 @@
           "kind": "function",
           "description": "Clear the combo box programmatically",
           "type": "(options?: { focus?: boolean; }) => void",
-          "value": "() => {\n  prevSelectedId = null;\n  highlightedIndex = -1;\n  highlightedId = undefined;\n  selectedId = undefined;\n  selectedItem = undefined;\n  open = false;\n  value = \"\";\n  if (options?.focus !== false) ref?.focus();\n}",
+          "value": "() => {\n  prevSelectedId = null;\n  highlightedIndex = -1;\n  highlightedId = undefined;\n  selectedId = undefined;\n  selectedItem = undefined;\n  open = false;\n  value = \"\";\n  if (options?.focus !== false)\n    ref?.focus();\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -2047,7 +2047,7 @@
           "name": "__default__",
           "default": true,
           "fallback": "{itemToString(item)}",
-          "slot_props": "{ item: ComboBoxItem; index: number }"
+          "slot_props": "{\n  item: ComboBoxItem;\n  index: number;\n}"
         },
         {
           "name": "titleText",
@@ -2060,12 +2060,12 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }"
+          "detail": "{\n  selectedId: ComboBoxItemId;\n  selectedItem: ComboBoxItem;\n}"
         },
         {
           "type": "dispatched",
           "name": "clear",
-          "detail": "KeyboardEvent | MouseEvent"
+          "detail": "type EventDetail =\n  | KeyboardEvent\n  | MouseEvent"
         },
         {
           "type": "forwarded",
@@ -2802,7 +2802,7 @@
           "kind": "let",
           "description": "Override the default copy behavior of using the navigator.clipboard.writeText API to copy text",
           "type": "(text: string) => void",
-          "value": "async (text) => {\n  try {\n    await navigator.clipboard.writeText(text);\n  } catch (e) {\n    console.log(e);\n  }\n}",
+          "value": "async (text) => {\n  try {\n    await navigator.clipboard.writeText(\n      text,\n    );\n  } catch (e) {\n    console.log(e);\n  }\n}",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -3121,7 +3121,7 @@
           "name": "cell-header",
           "default": false,
           "fallback": "{header.value}",
-          "slot_props": "{ header: DataTableNonEmptyHeader }"
+          "slot_props": "{\n  header: DataTableNonEmptyHeader;\n}"
         },
         {
           "name": "description",
@@ -3150,17 +3150,17 @@
         {
           "type": "dispatched",
           "name": "click:header--expand",
-          "detail": "{ expanded: boolean }"
+          "detail": "{\n  expanded: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "click:header",
-          "detail": "{\n  header: DataTableHeader<Row>;\n  sortDirection?: \"ascending\" | \"descending\" | \"none\";\n}"
+          "detail": "{\n  header: DataTableHeader<Row>;\n  sortDirection?:\n    | \"ascending\"\n    | \"descending\"\n    | \"none\";\n}"
         },
         {
           "type": "dispatched",
           "name": "click:header--select",
-          "detail": "{ indeterminate: boolean; selected: boolean }"
+          "detail": "{\n  indeterminate: boolean;\n  selected: boolean;\n}"
         },
         {
           "type": "dispatched",
@@ -3180,12 +3180,12 @@
         {
           "type": "dispatched",
           "name": "click:row--expand",
-          "detail": "{ expanded: boolean; row: Row }"
+          "detail": "{\n  expanded: boolean;\n  row: Row;\n}"
         },
         {
           "type": "dispatched",
           "name": "click:row--select",
-          "detail": "{ selected: boolean; row: Row }"
+          "detail": "{\n  selected: boolean;\n  row: Row;\n}"
         },
         {
           "type": "dispatched",
@@ -3207,17 +3207,17 @@
         {
           "type": "{\n   key: DataTableKey<Row> | (string & {});\n   empty: boolean;\n   display?: (item: DataTableValue, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
           "name": "DataTableEmptyHeader<Row=DataTableRow>",
-          "ts": "interface DataTableEmptyHeader<Row = DataTableRow> {\n  key: DataTableKey<Row> | (string & {});\n  empty: boolean;\n  display?: (item: DataTableValue, row: Row) => DataTableValue;\n  sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}\n"
+          "ts": "interface DataTableEmptyHeader<\n  Row = DataTableRow,\n> {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  empty: boolean;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}\n"
         },
         {
           "type": "{\n   key: DataTableKey<Row>;\n   value: DataTableValue;\n   display?: (item: DataTableValue, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
           "name": "DataTableNonEmptyHeader<Row=DataTableRow>",
-          "ts": "interface DataTableNonEmptyHeader<Row = DataTableRow> {\n  key: DataTableKey<Row>;\n  value: DataTableValue;\n  display?: (item: DataTableValue, row: Row) => DataTableValue;\n  sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}\n"
+          "ts": "interface DataTableNonEmptyHeader<\n  Row = DataTableRow,\n> {\n  key: DataTableKey<Row>;\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}\n"
         },
         {
           "type": "DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>",
           "name": "DataTableHeader<Row=DataTableRow>",
-          "ts": "type DataTableHeader<Row = DataTableRow> =\n  | DataTableNonEmptyHeader<Row>\n  | DataTableEmptyHeader<Row>;\n"
+          "ts": "type DataTableHeader<\n  Row = DataTableRow,\n> =\n  | DataTableNonEmptyHeader<Row>\n  | DataTableEmptyHeader<Row>;\n"
         },
         {
           "type": "{ id: any; [key: string]: DataTableValue; }",
@@ -3232,10 +3232,13 @@
         {
           "type": "{\n   key: DataTableKey<Row> | (string & {});\n   value: DataTableValue;\n   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;\n}",
           "name": "DataTableCell<Row=DataTableRow>",
-          "ts": "interface DataTableCell<Row = DataTableRow> {\n  key: DataTableKey<Row> | (string & {});\n  value: DataTableValue;\n  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;\n}\n"
+          "ts": "interface DataTableCell<\n  Row = DataTableRow,\n> {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: DataTableRow,\n  ) => DataTableValue;\n}\n"
         }
       ],
-      "generics": ["Row", "Row extends DataTableRow = DataTableRow"],
+      "generics": [
+        "Row",
+        "Row extends DataTableRow = DataTableRow"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "div"
@@ -3525,7 +3528,7 @@
         {
           "type": "dispatched",
           "name": "change",
-          "detail": "type EventDetail =\n  | string\n  | {\n      selectedDates: [dateFrom: Date, dateTo?: Date];\n      dateStr: string | { from: string; to: string };\n    }"
+          "detail": "type EventDetail =\n  | string\n  | {\n      selectedDates: [\n        dateFrom: Date,\n        dateTo?: Date,\n      ];\n      dateStr:\n        | string\n        | { from: string; to: string };\n    }"
         },
         {
           "type": "forwarded",
@@ -4111,14 +4114,14 @@
           "name": "__default__",
           "default": true,
           "fallback": "{itemToString(item)}",
-          "slot_props": "{ item: DropdownItem; index: number }"
+          "slot_props": "{\n  item: DropdownItem;\n  index: number;\n}"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{ selectedId: DropdownItemId; selectedItem: DropdownItem }"
+          "detail": "{\n  selectedId: DropdownItemId;\n  selectedItem: DropdownItem;\n}"
         }
       ],
       "typedefs": [
@@ -5644,7 +5647,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props: { class: string; [key: string]: any } }"
+          "slot_props": "{\n  props: {\n    class: string;\n    [key: string]: any;\n  };\n}"
         }
       ],
       "events": [],
@@ -6487,7 +6490,7 @@
           "name": "__default__",
           "default": true,
           "fallback": "{result.text}\n              {#if result.description}<span\n                  class:bx--header-search-menu-description={true}\n                  >– {result.description}</span\n                >{/if}",
-          "slot_props": "{ result: HeaderSearchResult; index: number }"
+          "slot_props": "{\n  result: HeaderSearchResult;\n  index: number;\n}"
         }
       ],
       "events": [
@@ -7368,7 +7371,7 @@
         {
           "type": "\"close\" | \"open\"",
           "name": "ListBoxFieldTranslationId",
-          "ts": "type ListBoxFieldTranslationId = \"close\" | \"open\";\n"
+          "ts": "type ListBoxFieldTranslationId =\n  | \"close\"\n  | \"open\";\n"
         }
       ],
       "generics": null,
@@ -7482,7 +7485,7 @@
         {
           "type": "\"close\" | \"open\"",
           "name": "ListBoxMenuIconTranslationId",
-          "ts": "type ListBoxMenuIconTranslationId = \"close\" | \"open\";\n"
+          "ts": "type ListBoxMenuIconTranslationId =\n  | \"close\"\n  | \"open\";\n"
         }
       ],
       "generics": null,
@@ -7634,14 +7637,14 @@
         {
           "type": "dispatched",
           "name": "clear",
-          "detail": "KeyboardEvent | MouseEvent"
+          "detail": "type EventDetail =\n  | KeyboardEvent\n  | MouseEvent"
         }
       ],
       "typedefs": [
         {
           "type": "\"clearAll\" | \"clearSelection\"",
           "name": "ListBoxSelectionTranslationId",
-          "ts": "type ListBoxSelectionTranslationId = \"clearAll\" | \"clearSelection\";\n"
+          "ts": "type ListBoxSelectionTranslationId =\n  | \"clearAll\"\n  | \"clearSelection\";\n"
         }
       ],
       "generics": null,
@@ -7818,7 +7821,7 @@
         {
           "type": "dispatched",
           "name": "update",
-          "detail": "{ prevValue: any; value: any }"
+          "detail": "{\n  prevValue: any;\n  value: any;\n}"
         }
       ],
       "typedefs": [],
@@ -8576,7 +8579,7 @@
           "kind": "let",
           "description": "Override the filtering logic\nThe default filtering is an exact string comparison",
           "type": "(item: MultiSelectItem, value: string) => boolean",
-          "value": "(item, value) =>\n  item.text.toLowerCase().includes(value.trim().toLowerCase())",
+          "value": "(item, value) =>\n  item.text\n    .toLowerCase()\n    .includes(\n      value.trim().toLowerCase(),\n    )",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8636,7 +8639,7 @@
           "kind": "let",
           "description": "Override the sorting logic\nThe default sorting compare the item text value",
           "type": "((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)",
-          "value": "(a, b) =>\n  a.text.localeCompare(b.text, locale, { numeric: true })",
+          "value": "(a, b) =>\n  a.text.localeCompare(b.text, locale, {\n    numeric: true,\n  })",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8863,7 +8866,7 @@
           "name": "__default__",
           "default": true,
           "fallback": "{itemToString(item)}",
-          "slot_props": "{ item: MultiSelectItem; index: number }"
+          "slot_props": "{\n  item: MultiSelectItem;\n  index: number;\n}"
         },
         {
           "name": "titleText",
@@ -8886,7 +8889,7 @@
         {
           "type": "dispatched",
           "name": "blur",
-          "detail": "FocusEvent | CustomEvent<FocusEvent>"
+          "detail": "type EventDetail =\n  | FocusEvent\n  | CustomEvent<FocusEvent>"
         },
         {
           "type": "forwarded",
@@ -9338,7 +9341,7 @@
           "kind": "const",
           "description": "Default translation ids",
           "type": "{ increment: \"increment\"; decrement: \"decrement\" }",
-          "value": "{ increment: \"increment\", decrement: \"decrement\" }",
+          "value": "{\n  increment: \"increment\",\n  decrement: \"decrement\",\n}",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9451,7 +9454,7 @@
         {
           "type": "\"increment\" | \"decrement\"",
           "name": "NumberInputTranslationId",
-          "ts": "type NumberInputTranslationId = \"increment\" | \"decrement\";\n"
+          "ts": "type NumberInputTranslationId =\n  | \"increment\"\n  | \"decrement\";\n"
         }
       ],
       "generics": null,
@@ -9794,7 +9797,7 @@
         {
           "type": "dispatched",
           "name": "close",
-          "detail": "null | { index: number; text: string }"
+          "detail": "null | {\n  index: number;\n  text: string;\n}"
         },
         {
           "type": "forwarded",
@@ -10051,7 +10054,7 @@
           "kind": "let",
           "description": "Override the item text",
           "type": "(min: number, max: number) => string",
-          "value": "(min, max) => `${min}–${max} item${max === 1 ? \"\" : \"s\"}`",
+          "value": "(min, max) =>\n  `${min}–${max} item${max === 1 ? \"\" : \"s\"}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10063,7 +10066,7 @@
           "kind": "let",
           "description": "Override the item range text",
           "type": "(min: number, max: number, total: number) => string",
-          "value": "(min, max, total) =>\n  `${min}–${max} of ${total} item${max === 1 ? \"\" : \"s\"}`",
+          "value": "(\n  min,\n  max,\n  total,\n) =>\n  `${min}–${max} of ${total} item${max === 1 ? \"\" : \"s\"}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10147,7 +10150,7 @@
           "kind": "let",
           "description": "Override the page range text",
           "type": "(current: number, total: number) => string",
-          "value": "(current, total) =>\n  `of ${total} page${total === 1 ? \"\" : \"s\"}`",
+          "value": "(\n  current,\n  total,\n) =>\n  `of ${total} page${total === 1 ? \"\" : \"s\"}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10173,7 +10176,7 @@
         {
           "type": "dispatched",
           "name": "change",
-          "detail": "{ page?: number; pageSize?: number }",
+          "detail": "{\n  page?: number;\n  pageSize?: number;\n}",
           "description": "Dispatched after any user interaction"
         },
         {
@@ -10189,7 +10192,7 @@
         {
           "type": "dispatched",
           "name": "update",
-          "detail": "{ pageSize: number; page: number }"
+          "detail": "{\n  pageSize: number;\n  page: number;\n}"
         }
       ],
       "typedefs": [],
@@ -10779,7 +10782,7 @@
         {
           "type": "dispatched",
           "name": "click:outside",
-          "detail": "{ target: HTMLElement }"
+          "detail": "{\n  target: HTMLElement;\n}"
         }
       ],
       "typedefs": [],
@@ -11180,7 +11183,7 @@
           "name": "__default__",
           "default": true,
           "fallback": "<p class:bx--progress-label={true}>{label}</p>",
-          "slot_props": "{ props: { class: \"bx--progress-label\" } }"
+          "slot_props": "{\n  props: {\n    class: \"bx--progress-label\";\n  };\n}"
         }
       ],
       "events": [
@@ -11854,7 +11857,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props: { class: string; [key: string]: any } }"
+          "slot_props": "{\n  props: {\n    class: string;\n    [key: string]: any;\n  };\n}"
         }
       ],
       "events": [],
@@ -15083,7 +15086,7 @@
         {
           "name": "__default__",
           "default": true,
-          "slot_props": "{ props: { class: \"bx--tag__label\" } }"
+          "slot_props": "{\n  props: { class: \"bx--tag__label\" };\n}"
         },
         {
           "name": "icon",
@@ -15721,12 +15724,12 @@
         {
           "type": "dispatched",
           "name": "change",
-          "detail": "null | number | string"
+          "detail": "type EventDetail =\n  | null\n  | number\n  | string"
         },
         {
           "type": "dispatched",
           "name": "input",
-          "detail": "null | number | string"
+          "detail": "type EventDetail =\n  | null\n  | number\n  | string"
         },
         {
           "type": "forwarded",
@@ -15909,7 +15912,7 @@
           "kind": "let",
           "description": "Override the default select props",
           "type": "import(\"../Select/Select.svelte\").SelectProps & { themes?: CarbonTheme[]; }",
-          "value": "{ themes: themeKeys, labelText: \"Themes\", hideLabel: false }",
+          "value": "{\n  themes: themeKeys,\n  labelText: \"Themes\",\n  hideLabel: false,\n}",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -15929,14 +15932,14 @@
         {
           "type": "dispatched",
           "name": "update",
-          "detail": "{ theme: CarbonTheme }"
+          "detail": "{\n  theme: CarbonTheme;\n}"
         }
       ],
       "typedefs": [
         {
           "type": "\"white\" | \"g10\" | \"g80\" | \"g90\" | \"g100\"",
           "name": "CarbonTheme",
-          "ts": "type CarbonTheme = \"white\" | \"g10\" | \"g80\" | \"g90\" | \"g100\";\n"
+          "ts": "type CarbonTheme =\n  | \"white\"\n  | \"g10\"\n  | \"g80\"\n  | \"g90\"\n  | \"g100\";\n"
         }
       ],
       "generics": null
@@ -16964,7 +16967,7 @@
           "kind": "let",
           "description": "Override the total items selected text",
           "type": "(totalSelected: number) => string",
-          "value": "(totalSelected) =>\n  `${totalSelected} item${totalSelected === 1 ? \"\" : \"s\"} selected`",
+          "value": "(\n  totalSelected,\n) =>\n  `${totalSelected} item${totalSelected === 1 ? \"\" : \"s\"} selected`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -17877,7 +17880,7 @@
           "kind": "function",
           "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {\n  expandedIds = flattenedNodes\n    .filter(\n      (node) =>\n        filterNode(node) ||\n        node.nodes?.some((child) => filterNode(child) && child.nodes),\n    )\n    .map((node) => node.id);\n}",
+          "value": "() => {\n  expandedIds = flattenedNodes\n    .filter(\n      (node) =>\n        filterNode(node) ||\n        node.nodes?.some(\n          (child) =>\n            filterNode(child) &&\n            child.nodes,\n        ),\n    )\n    .map((node) => node.id);\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -17889,7 +17892,7 @@
           "kind": "function",
           "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {\n  expandedIds = flattenedNodes\n    .filter((node) => expandedIds.includes(node.id) && !filterNode(node))\n    .map((node) => node.id);\n}",
+          "value": "() => {\n  expandedIds = flattenedNodes\n    .filter(\n      (node) =>\n        expandedIds.includes(node.id) &&\n        !filterNode(node),\n    )\n    .map((node) => node.id);\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -17901,7 +17904,7 @@
           "kind": "function",
           "description": "Programmatically show a node by `id`.\nThe matching node will be expanded, selected, and focused",
           "type": "(id: TreeNodeId) => void",
-          "value": "() => {\n  for (const child of nodes) {\n    const nodes = findNodeById(child, id);\n    if (nodes) {\n      const ids = nodes.map((node) => node.id);\n      const nodeIds = new Set(ids);\n      expandNodes((node) => nodeIds.has(node.id));\n      const lastId = ids[ids.length - 1];\n      activeId = lastId;\n      selectedIds = [lastId];\n      tick().then(() => {\n        ref?.querySelector(`[id=\"${lastId}\"]`)?.focus();\n      });\n      break;\n    }\n  }\n}",
+          "value": "() => {\n  for (const child of nodes) {\n    const nodes = findNodeById(\n      child,\n      id,\n    );\n    if (nodes) {\n      const ids = nodes.map(\n        (node) => node.id,\n      );\n      const nodeIds = new Set(ids);\n      expandNodes((node) =>\n        nodeIds.has(node.id),\n      );\n      const lastId =\n        ids[ids.length - 1];\n      activeId = lastId;\n      selectedIds = [lastId];\n      tick().then(() => {\n        ref\n          ?.querySelector(\n            `[id=\"${lastId}\"]`,\n          )\n          ?.focus();\n      });\n      break;\n    }\n  }\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -17928,17 +17931,17 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "TreeNode & { expanded: boolean; leaf: boolean }"
+          "detail": "TreeNode & {\n  expanded: boolean;\n  leaf: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "toggle",
-          "detail": "TreeNode & { expanded: boolean; leaf: boolean }"
+          "detail": "TreeNode & {\n  expanded: boolean;\n  leaf: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "focus",
-          "detail": "TreeNode & { expanded: boolean; leaf: boolean }"
+          "detail": "TreeNode & {\n  expanded: boolean;\n  leaf: boolean;\n}"
         },
         {
           "type": "forwarded",
