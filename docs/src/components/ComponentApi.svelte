@@ -31,8 +31,6 @@
       .default;
   });
 
-  $: console.log(AsyncPreviewTypeScript);
-
   const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
   const typeMap = {
     string: "string",
@@ -314,7 +312,9 @@
   }}
 >
   {#if full_code_prop}
-    Default value for <strong>{full_code_prop}</strong>.
+    <div style="margin-bottom: var(--cds-spacing-04);">
+      Default value for <strong>{full_code_prop}</strong>.
+    </div>
   {/if}
   {#if full_code}
     <svelte:component
