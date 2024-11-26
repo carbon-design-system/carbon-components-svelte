@@ -44,7 +44,7 @@
 
   /**
    * Provide a flat array of nodes to render
-   * @type {Array<TreeNode>}
+   * @type {Array<TreeNode & {pid?: any}>}
    */
   export let nodesFlat = [];
 
@@ -203,8 +203,7 @@
 
   /**
    * Create a nested array from a flat array
-   * TODO: accept a parent key
-   * @type {(flatArray: TreeNode[] & { pid: any }[]) => TreeNode[]}
+   * @type {(flatArray: TreeNode[] & { pid?: any }[]) => TreeNode[]}
    */
   function createNestedArray(flatArray) {
     /** @type TreeNode[] */
