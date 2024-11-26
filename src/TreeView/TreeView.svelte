@@ -268,7 +268,9 @@
     }, []);
   }
 
-  $: nodes = createNestedArray(nodesFlat);
+  $: if (nodesFlat.length > 0) {
+    nodes = createNestedArray(nodesFlat);
+  }
   $: flattenedNodes = traverse(nodes);
   $: nodeIds = flattenedNodes.map((node) => node.id);
   $: activeNodeId.set(activeId);

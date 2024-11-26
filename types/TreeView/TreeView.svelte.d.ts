@@ -15,10 +15,16 @@ type $RestProps = SvelteHTMLElements["ul"];
 
 type $Props = {
   /**
-   * Provide an array of nodes to render
+   * Provide a nested array of nodes to render
    * @default []
    */
   nodes?: Array<TreeNode>;
+
+  /**
+   * Provide a flat array of nodes to render
+   * @default []
+   */
+  nodesFlat?: Array<TreeNode>[];
 
   /**
    * Set the current active node id
