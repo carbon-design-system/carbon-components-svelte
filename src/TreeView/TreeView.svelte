@@ -44,7 +44,7 @@
 
   /**
    * Provide a flat array of nodes to render
-   * @type {Array<TreeNode>[]}
+   * @type {Array<TreeNode>}
    */
   export let nodesFlat = [];
 
