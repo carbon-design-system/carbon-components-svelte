@@ -58,11 +58,20 @@ To render a node with an icon, define an `icon` property with a Carbon Svelte ic
 
 <FileSource src="/framed/TreeView/TreeViewIcons" />
 
+## Flat data structure
+
+Provide a flat data structure through the `nodesFlat` property. Child object needs to have a `pid` property 
+to reference its parent. Optionally the key for the parent can be provided. 
+When no parent id is available the object is assumed to be at the root of the tree. 
+
+<FileSource src="/framed/TreeView/TreeViewFlatArray" />
+
 ## Initial expanded nodes
 
 Expanded nodes can be set using `expandedIds`.
 
 <FileSource src="/framed/TreeView/TreeViewExpanded" />
+
 
 ## Initial multiple selected nodes
 
