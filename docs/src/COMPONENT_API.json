@@ -17770,8 +17770,20 @@
         {
           "name": "nodes",
           "kind": "let",
-          "description": "Provide an array of nodes to render",
+          "description": "Provide a nested array of nodes to render",
           "type": "Array<TreeNode>",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "nodesFlat",
+          "kind": "let",
+          "description": "Provide a flat array of nodes to render",
+          "type": "Array<TreeNode>[]",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
