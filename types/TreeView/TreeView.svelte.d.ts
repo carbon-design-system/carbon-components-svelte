@@ -24,7 +24,7 @@ type $Props = {
    * Provide a flat array of nodes to render
    * @default []
    */
-  nodesFlat?: Array<TreeNode>;
+  nodesFlat?: Array<TreeNode & { pid?: any }>;
 
   /**
    * Set the current active node id

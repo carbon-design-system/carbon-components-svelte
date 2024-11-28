@@ -17783,7 +17783,7 @@
           "name": "nodesFlat",
           "kind": "let",
           "description": "Provide a flat array of nodes to render",
-          "type": "Array<TreeNode>",
+          "type": "Array<TreeNode & {pid?: any}>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
