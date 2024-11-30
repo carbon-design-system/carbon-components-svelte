@@ -39,10 +39,10 @@
 
   $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
   $: forwarded_events = component.events.filter(
-    (event) => event.type === "forwarded"
+    (event) => event.type === "forwarded",
   );
   $: dispatched_events = component.events.filter(
-    (event) => event.type === "dispatched"
+    (event) => event.type === "dispatched",
   );
 </script>
 
@@ -116,20 +116,20 @@
                     >
                       <svelte:component
                         this={AsyncPreviewTypeScript}
-                      type="inline"
-                      code={typeMap[type]}
-                    />
-                  </div>
+                        type="inline"
+                        code={typeMap[type]}
+                      />
+                    </div>
                   {:else}
                     <div
                       style="display: inline-flex; max-width: 220px; word-break: break-word;"
                     >
                       <svelte:component
                         this={AsyncPreviewTypeScript}
-                      type="inline"
-                      code={type}
-                    />
-                  </div>
+                        type="inline"
+                        code={type}
+                      />
+                    </div>
                   {/if}
                 </div>
               {/each}
@@ -145,10 +145,16 @@
                   </div>
                 {/each}
               {/if}
-              <div style:margin-top="var(--cds-layout-02)" style:margin-bottom="var(--cds-spacing-03)">
+              <div
+                style:margin-top="var(--cds-layout-02)"
+                style:margin-bottom="var(--cds-spacing-03)"
+              >
                 <strong>Default value</strong>
               </div>
-              <div style:margin-bottom="var(--cds-layout-01)" style:max-width="85%">
+              <div
+                style:margin-bottom="var(--cds-layout-01)"
+                style:max-width="85%"
+              >
                 {#if prop.value === undefined}
                   <em>undefined</em>
                 {:else}
