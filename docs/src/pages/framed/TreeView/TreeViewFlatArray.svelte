@@ -1,5 +1,5 @@
 <script>
-  import { TreeView } from "carbon-components-svelte";
+  import { TreeView, toHierarchy } from "carbon-components-svelte";
   import WatsonMachineLearning from "carbon-icons-svelte/lib/WatsonMachineLearning.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
   import Blockchain from "carbon-icons-svelte/lib/Blockchain.svelte";
@@ -51,7 +51,7 @@
 
 <TreeView
   labelText="Cloud Products"
-  {nodesFlat}
+  nodes={toHierarchy(nodesFlat)}
   bind:activeId
   bind:selectedIds
   on:select={({ detail }) => console.log("select", detail)}
