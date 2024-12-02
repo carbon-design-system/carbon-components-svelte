@@ -1,4 +1,4 @@
-import { type TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
+import { type TreeNode } from "./TreeView.svelte";
 /**
  * Create a nested array from a flat array
  */
