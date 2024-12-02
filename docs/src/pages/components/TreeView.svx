@@ -58,14 +58,6 @@ To render a node with an icon, define an `icon` property with a Carbon Svelte ic
 
 <FileSource src="/framed/TreeView/TreeViewIcons" />
 
-## Flat data structure
-
-Provide a flat data structure through the `nodesFlat` property. Child object needs to have a `pid` property 
-to reference its parent. Optionally the key for the parent can be provided. 
-When no parent id is available the object is assumed to be at the root of the tree. 
-
-<FileSource src="/framed/TreeView/TreeViewFlatArray" />
-
 ## Initial expanded nodes
 
 Expanded nodes can be set using `expandedIds`.
@@ -116,3 +108,13 @@ Use the `TreeView.showNode` method to show a specific node.
 If a matching node is found, it will be expanded, selected, and focused.
 
 <FileSource src="/framed/TreeView/TreeViewShowNode" />
+
+## Flat data structure
+
+Use the `toHierarchy` method to provide a flat data structure to the `nodes` property.
+
+This method will transform a flat array of objects into the hierarchical array as expected by `nodes`. 
+The child objects in the flat array need to have a `pid` property to reference its parent.
+When `pid` is not provided the object is assumed to be at the root of the tree.
+
+<FileSource src="/framed/TreeView/TreeViewFlatArray" />

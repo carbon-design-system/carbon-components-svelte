@@ -1,7 +1,9 @@
 <script lang="ts">
-  import type { ComponentProps } from "svelte";
   import { Button, TreeView } from "carbon-components-svelte";
-  import type { TreeNodeId } from "carbon-components-svelte/TreeView/TreeView.svelte";
+  import type {
+    TreeNode,
+    TreeNodeId,
+  } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
   import WatsonMachineLearning from "carbon-icons-svelte/lib/WatsonMachineLearning.svelte";
   import Blockchain from "carbon-icons-svelte/lib/Blockchain.svelte";
@@ -13,7 +15,7 @@
   let selectedIds: TreeNodeId[] = [];
   let expandedIds: TreeNodeId[] = [1];
 
-  let nodesFlat: ComponentProps<TreeView>["nodesFlat"] = [
+  let nodesFlat: TreeNode[] & { pid?: any }[] = [
     { id: 0, text: "AI / Machine learning", icon: WatsonMachineLearning },
     { id: 1, text: "Analytics", icon: Analytics },
     { id: 2, text: "IBM Analytics Engine", pid: 1, icon: Analytics },
@@ -60,7 +62,7 @@
   bind:this={treeview}
   size="compact"
   labelText="Cloud Products"
-  {nodesFlat}
+  nodes={treeview?.toHierarchy(nodesFlat)}
   bind:activeId
   bind:selectedIds
   bind:expandedIds
