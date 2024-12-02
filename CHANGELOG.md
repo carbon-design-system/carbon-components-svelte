@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.86.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.86.1...v0.86.2) (2024-11-30)
+
+### Bug Fixes
+
+- **multi-select:** fix sorting behavior ([c3a390f](https://github.com/carbon-design-system/carbon-components-svelte/commit/c3a390f3fef072c6b736e33a85a2ae772df12e52)), closes [#2066](https://github.com/carbon-design-system/carbon-components-svelte/issues/2066)
+
 ## [0.86.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.86.0...v0.86.1) (2024-11-22)
 
 ### Bug Fixes

@@ -243,11 +243,11 @@
     }
   });
 
-  $: menuId = `menu-${id}`;
-  $: inline = type === "inline";
-  $: ariaLabel = $$props["aria-label"] || "Choose an item";
-  $: sortedItems = (() => {
-    if (selectionFeedback === "top" && selectedIds.length > 0) {
+  function sort() {
+    if (
+      selectionFeedback === "top" ||
+      selectionFeedback === "top-after-reopen"
+    ) {
       const checkedItems = items
         .filter((item) => selectedIds.includes(item.id))
         .map((item) => ({ ...item, checked: true }));
@@ -269,7 +269,20 @@
         checked: selectedIds.includes(item.id),
       }))
       .sort(sortItem);
-  })();
+  }
+
+  let sortedItems = sort();
+
+  $: menuId = `menu-${id}`;
+  $: inline = type === "inline";
+  $: ariaLabel = $$props["aria-label"] || "Choose an item";
+  $: if (
+    selectedIds &&
+    (selectionFeedback === "top" ||
+      (selectionFeedback === "top-after-reopen" && open === false))
+  ) {
+    sortedItems = sort();
+  }
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
   $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
