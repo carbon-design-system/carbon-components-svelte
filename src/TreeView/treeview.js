@@ -25,8 +25,6 @@ export function toHierarchy(flatArray) {
   });
 
   // Remove the empty nodes props that make TreeView render a twistie.
-  // Maybe this should actually be taken care of in TreeView itself? It makes
-  // no sense i think that an empty nodes property render a twistie.
   function removeEmptyNodes(element) {
     element.forEach((elmt) => {
       if (elmt.nodes?.length === 0) delete elmt.nodes;

@@ -21,12 +21,6 @@ type $Props = {
   nodes?: Array<TreeNode>;
 
   /**
-   * Provide a flat array of nodes to render
-   * @default []
-   */
-  nodesFlat?: Array<TreeNode & { pid?: any }>;
-
-  /**
    * Set the current active node id
    * Only one node can be active
    * @default ""
@@ -99,6 +93,11 @@ export default class TreeView extends SvelteComponentTyped<
    * Programmatically collapse all nodes
    */
   collapseAll: () => void;
+
+  /**
+   * Create a nested array from a flat array
+   */
+  toHierarchy: (flatArray: TreeNode[] & { pid?: any }[]) => TreeNode[];
 
   /**
    * Programmatically expand a subset of nodes.

@@ -17777,18 +17777,6 @@
           "isFunctionDeclaration": false,
           "isRequired": false,
           "constant": false,
-          "reactive": true
-        },
-        {
-          "name": "nodesFlat",
-          "kind": "let",
-          "description": "Provide a flat array of nodes to render",
-          "type": "Array<TreeNode & {pid?: any}>",
-          "value": "[]",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
           "reactive": false
         },
         {
@@ -17881,6 +17869,18 @@
           "description": "Programmatically collapse all nodes",
           "type": "() => void",
           "value": "() => {\n  expandedIds = [];\n}",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "toHierarchy",
+          "kind": "function",
+          "description": "Create a nested array from a flat array",
+          "type": "(flatArray: TreeNode[] & { pid?: any }[]) => TreeNode[]",
+          "value": "() => {\n  return th(flatArray);\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,

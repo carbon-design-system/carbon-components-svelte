@@ -90,6 +90,14 @@
   }
 
   /**
+   * Create a nested array from a flat array
+   * @type {(flatArray: TreeNode[] & { pid?: any }[]) => TreeNode[]}
+   */
+  export function toHierarchy(flatArray) {
+    return th(flatArray);
+  }
+
+  /**
    * Programmatically expand a subset of nodes.
    * Expands all nodes if no argument is provided
    * @type {(filterId?: (node: TreeNode) => boolean) => void}
@@ -147,6 +155,7 @@
   import { createEventDispatcher, setContext, onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
+  import { toHierarchy as th } from "./treeview";
 
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
