@@ -17770,7 +17770,7 @@
         {
           "name": "nodes",
           "kind": "let",
-          "description": "Provide a nested array of nodes to render",
+          "description": "Provide an array of nodes to render",
           "type": "Array<TreeNode>",
           "value": "[]",
           "isFunction": false,
@@ -17869,18 +17869,6 @@
           "description": "Programmatically collapse all nodes",
           "type": "() => void",
           "value": "() => {\n  expandedIds = [];\n}",
-          "isFunction": true,
-          "isFunctionDeclaration": true,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "toHierarchy",
-          "kind": "function",
-          "description": "Create a nested array from a flat array",
-          "type": "(flatArray: TreeNode[] & { pid?: any }[]) => TreeNode[]",
-          "value": "() => {\n  return th(flatArray);\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,

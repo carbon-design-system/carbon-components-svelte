@@ -15,7 +15,7 @@ type $RestProps = SvelteHTMLElements["ul"];
 
 type $Props = {
   /**
-   * Provide a nested array of nodes to render
+   * Provide an array of nodes to render
    * @default []
    */
   nodes?: Array<TreeNode>;
@@ -93,11 +93,6 @@ export default class TreeView extends SvelteComponentTyped<
    * Programmatically collapse all nodes
    */
   collapseAll: () => void;
-
-  /**
-   * Create a nested array from a flat array
-   */
-  toHierarchy: (flatArray: TreeNode[] & { pid?: any }[]) => TreeNode[];
 
   /**
    * Programmatically expand a subset of nodes.
