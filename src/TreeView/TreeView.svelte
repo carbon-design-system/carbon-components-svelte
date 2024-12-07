@@ -37,7 +37,7 @@
    */
 
   /**
-   * Provide a nested array of nodes to render
+   * Provide an array of nodes to render
    * @type {Array<TreeNode>}
    */
   export let nodes = [];
@@ -87,14 +87,6 @@
    */
   export function collapseAll() {
     expandedIds = [];
-  }
-
-  /**
-   * Create a nested array from a flat array
-   * @type {(flatArray: TreeNode[] & { pid?: any }[]) => TreeNode[]}
-   */
-  export function toHierarchy(flatArray) {
-    return th(flatArray);
   }
 
   /**
@@ -155,7 +147,6 @@
   import { createEventDispatcher, setContext, onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
-  import { toHierarchy as th } from "./treeview";
 
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
