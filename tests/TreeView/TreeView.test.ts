@@ -1,8 +1,14 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
 import TreeView from "./TreeView.test.svelte";
 
-describe("TreeView", () => {
+const testCases = [
+  { name: "TreeView", component: TreeView },
+  { name: "TreeView hierarchy", component: TreeViewHierarchy },
+];
+
+describe.each(testCases)("$name", ({ component }) => {
   const getItemByName = (name: RegExp) => {
     return screen.getByRole("treeitem", {
       name,
@@ -30,7 +36,7 @@ describe("TreeView", () => {
   it("can select a node", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
-    render(TreeView);
+    render(component);
 
     const firstItem = getItemByName(/AI \/ Machine learning/);
     expect(firstItem).toBeInTheDocument();
@@ -49,7 +55,7 @@ describe("TreeView", () => {
   });
 
   it("can expand all nodes", async () => {
-    render(TreeView);
+    render(component);
 
     noExpandedItems();
 
@@ -60,7 +66,7 @@ describe("TreeView", () => {
   });
 
   it("can expand some nodes", async () => {
-    render(TreeView);
+    render(component);
 
     noExpandedItems();
 

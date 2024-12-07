@@ -1,40 +1,49 @@
+// @ts-check
 /**
- * Create a nested array from a flat array
- * @type {(flatArray: TreeNode[] & { pid?: any }[]) => TreeNode[]}
+ * Create a nested array from a flat array.
+ * @typedef {Object} NodeLike
+ * @property {string | number} id - Unique identifier for the node
+ * @property {NodeLike[]} [nodes] - Optional array of child nodes
+ * @property {Record<string, any>} [additionalProperties] - Any additional properties
+ *
+ * @param {NodeLike[]} flatArray - Array of flat nodes to convert
+ * @param {function(NodeLike): (string|number|null)} getParentId - Function to get parent ID for a node
+ * @returns {NodeLike[]} Hierarchical tree structure
  */
-export function toHierarchy(flatArray) {
-  /** @type TreeNode[] */
+export function toHierarchy(flatArray, getParentId) {
+  /** @type {NodeLike[]} */
   const tree = [];
-  /** @type TreeNode[] */
-  const childrenOf = [];
 
-  flatArray.forEach((dstItem) => {
-    const { id, pid } = dstItem;
-    childrenOf[id] = childrenOf[id] || [];
-    dstItem["nodes"] = childrenOf[id];
+  // Use Map for O(1) lookups.
+  const childrenOf = new Map();
 
-    if (pid) {
-      // objects without pid are root level objects.
-      childrenOf[pid] = childrenOf[pid] || [];
-      delete dstItem.pid; // TreeNode type doesn't have pid.
-      childrenOf[pid].push(dstItem);
+  flatArray.forEach((item) => {
+    const parentId = getParentId(item);
+
+    // Only create nodes array if we have children
+    const children = childrenOf.get(item.id);
+    if (children) {
+      item.nodes = children;
+    }
+
+    // Check if parentId exists in the flatArray.
+    const parentExists = parentId && flatArray.some((p) => p.id === parentId);
+
+    if (parentId && parentExists) {
+      if (!childrenOf.has(parentId)) {
+        childrenOf.set(parentId, []);
+      }
+      childrenOf.get(parentId).push(item);
+
+      // If parent already processed, add nodes array.
+      const parent = flatArray.find((p) => p.id === parentId);
+      if (parent) {
+        parent.nodes = childrenOf.get(parentId);
+      }
     } else {
-      delete dstItem.pid;
-      tree.push(dstItem);
+      tree.push(item);
     }
   });
 
-  // Remove the empty nodes props that make TreeView render a twistie.
-  function removeEmptyNodes(element) {
-    element.forEach((elmt) => {
-      if (elmt.nodes?.length === 0) delete elmt.nodes;
-      else {
-        removeEmptyNodes(elmt.nodes);
-      }
-    });
-  }
-  removeEmptyNodes(tree);
   return tree;
 }
-
-export default toHierarchy;
