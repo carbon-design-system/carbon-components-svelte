@@ -3235,7 +3235,10 @@
           "ts": "interface DataTableCell<\n  Row = DataTableRow,\n> {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: DataTableRow,\n  ) => DataTableValue;\n}\n"
         }
       ],
-      "generics": ["Row", "Row extends DataTableRow = DataTableRow"],
+      "generics": [
+        "Row",
+        "Row extends DataTableRow = DataTableRow"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "div"

@@ -6,3 +6,4 @@ dist
 client
 build
 *.svx
+COMPONENT_API.json
