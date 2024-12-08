@@ -64,6 +64,7 @@ Expanded nodes can be set using `expandedIds`.
 
 <FileSource src="/framed/TreeView/TreeViewExpanded" />
 
+
 ## Initial multiple selected nodes
 
 Initial multiple selected nodes can be set using `selectedIds`.
@@ -107,3 +108,13 @@ Use the `TreeView.showNode` method to show a specific node.
 If a matching node is found, it will be expanded, selected, and focused.
 
 <FileSource src="/framed/TreeView/TreeViewShowNode" />
+
+## Flat data structure
+
+Use the `toHierarchy` method to provide a flat data structure to the `nodes` property.
+
+This method will transform a flat array of objects into the hierarchical array as expected by `nodes`. 
+The child objects in the flat array need to have a `pid` property to reference its parent.
+When `pid` is not provided the object is assumed to be at the root of the tree.
+
+<FileSource src="/framed/TreeView/TreeViewFlatArray" />
