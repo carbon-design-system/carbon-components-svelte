@@ -1,4 +1,4 @@
-import { toHierarchy } from "../../src/TreeView/treeview";
+import { toHierarchy } from "../../src/utils/toHierarchy";
 
 describe("toHierarchy", () => {
   test("should create a flat hierarchy when no items have parents", () => {

@@ -47,3 +47,5 @@ export function toHierarchy(flatArray, getParentId) {
 
   return tree;
 }
+
+export default toHierarchy;

@@ -127,7 +127,6 @@ export { Tooltip, TooltipFooter } from "./Tooltip";
 export { TooltipDefinition } from "./TooltipDefinition";
 export { TooltipIcon } from "./TooltipIcon";
 export { TreeView } from "./TreeView";
-export { toHierarchy } from "./TreeView/treeview";
 export { Truncate } from "./Truncate";
 export { default as truncate } from "./Truncate/truncate";
 export {
@@ -153,3 +152,4 @@ export {
   HeaderSearch,
 } from "./UIShell";
 export { UnorderedList } from "./UnorderedList";
+export { toHierarchy } from "./utils/toHierarchy";

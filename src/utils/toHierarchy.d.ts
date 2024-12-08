@@ -17,3 +17,5 @@ export function toHierarchy<
    */
   getParentId: (node: T) => T[K] | null,
 ): (T & { nodes?: (T & { nodes?: T[] })[] })[];
+
+export default toHierarchy;
