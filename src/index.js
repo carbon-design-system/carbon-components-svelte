@@ -152,3 +152,4 @@ export {
   HeaderSearch,
 } from "./UIShell";
 export { UnorderedList } from "./UnorderedList";
+export { toHierarchy } from "./utils/toHierarchy";

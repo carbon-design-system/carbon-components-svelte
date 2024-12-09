@@ -38,3 +38,10 @@ Set `type` to `"ordered"` to use the ordered list variant.
 Set `type` to `"ordered-native"` to use the native styles for an ordered list.
 
 <FileSource src="/framed/RecursiveList/RecursiveListOrderedNative" />
+
+## Flat data structure
+
+If working with a flat data structure, use the `toHierarchy` utility
+to convert a flat data structure into a hierarchical array accepted by the `nodes` prop.
+
+<FileSource src="/framed/RecursiveList/RecursiveListFlatArray" />

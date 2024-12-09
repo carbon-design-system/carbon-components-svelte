@@ -166,3 +166,4 @@ export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as HeaderGlobalAction } from "./UIShell/HeaderGlobalAction.svelte";
 export { default as HeaderSearch } from "./UIShell/HeaderSearch.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
+export { default as toHierarchy } from "./utils/toHierarchy";

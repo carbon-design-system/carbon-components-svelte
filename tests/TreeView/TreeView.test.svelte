@@ -50,18 +50,6 @@
   ];
 
   $: console.log("selectedIds", selectedIds);
-
-  /*    $: if (treeview) {
-      treeview.expandAll();
-      treeview.expandNodes((node) => {
-        return +node.id > 0;
-      });
-      treeview.collapseAll();
-      treeview.collapseNodes((node) => {
-        return node.disabled === true;
-      });
-      treeview.showNode(1);
-    } */
 </script>
 
 <TreeView

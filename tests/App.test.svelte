@@ -1,6 +1,7 @@
 <script lang="ts">
   import { TreeView as TreeViewNav } from "carbon-components-svelte";
   import TreeView from "./TreeView/TreeView.test.svelte";
+  import TreeViewHierarchy from "./TreeView/TreeView.hierarchy.test.svelte";
   import { onMount } from "svelte";
 
   const routes = [
@@ -8,6 +9,11 @@
       path: "/treeview",
       name: "TreeView",
       component: TreeView,
+    },
+    {
+      path: "/treeview-hierarchy",
+      name: "TreeViewHierarchy",
+      component: TreeViewHierarchy,
     },
   ] as const;
 
