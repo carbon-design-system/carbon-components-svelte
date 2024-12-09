@@ -256,7 +256,7 @@
         <TileCard
           borderBottom
           title="Carbon Charts Svelte"
-          subtitle="20+ charts, powered by d3"
+          subtitle="25+ charts, powered by d3"
           target="_blank"
           href="https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte"
         />
