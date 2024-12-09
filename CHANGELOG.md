@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.86.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.86.2...v0.86.3) (2024-12-09)
+
+### Features
+
+- add `toHierarchy` utility to normalize flat data into `nodes` for `TreeView`, `RecursiveList` ([#2072](https://github.com/carbon-design-system/carbon-components-svelte/issues/2072)) ([48afd18](https://github.com/carbon-design-system/carbon-components-svelte/commit/48afd18e5e01c2839024b8ddb31038267bcedeb8))
+
+### Bug Fixes
+
+- **tooltip-icon:** `button` should have explicit `type` ([#2071](https://github.com/carbon-design-system/carbon-components-svelte/issues/2071)) ([18c964e](https://github.com/carbon-design-system/carbon-components-svelte/commit/18c964e579a3762b8022751bf0ed5313b78b22ba))
+
 ### [0.86.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.86.1...v0.86.2) (2024-11-30)
 
 ### Bug Fixes
