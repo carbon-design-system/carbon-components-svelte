@@ -23,7 +23,7 @@ jobs:
         run: npm run build:docs
 
       - name: Prune package.json
-        run: node scripts/build-package.js
+        run: npx culls --preserve=svelte
 
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}
