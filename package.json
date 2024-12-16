@@ -53,6 +53,7 @@
     "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^12.1.0",
     "carbon-preprocess-svelte": "^0.11.7",
+    "culls": "^0.1.1",
     "jsdom": "^25.0.1",
     "postcss": "^8.4.16",
     "prettier": "^3.3.3",
