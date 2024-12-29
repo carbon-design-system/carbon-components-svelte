@@ -1,10 +1,40 @@
 <script lang="ts">
   import { TreeView as TreeViewNav } from "carbon-components-svelte";
+  import Accordion from "./Accordion/Accordion.test.svelte";
+  import AccordionProgrammatic from "./Accordion/Accordion.programmatic.test.svelte";
+  import AccordionDisabled from "./Accordion/Accordion.disabled.test.svelte";
   import TreeView from "./TreeView/TreeView.test.svelte";
   import TreeViewHierarchy from "./TreeView/TreeView.hierarchy.test.svelte";
+  import RecursiveList from "./RecursiveList/RecursiveList.test.svelte";
+  import RecursiveListHierarchy from "./RecursiveList/RecursiveList.hierarchy.test.svelte";
   import { onMount } from "svelte";
 
   const routes = [
+    {
+      path: "/accordion",
+      name: "Accordion",
+      component: Accordion,
+    },
+    {
+      path: "/accordion-programmatic",
+      name: "AccordionProgrammatic",
+      component: AccordionProgrammatic,
+    },
+    {
+      path: "/accordion-disabled",
+      name: "AccordionDisabled",
+      component: AccordionDisabled,
+    },
+    {
+      path: "/recursive-list",
+      name: "RecursiveList",
+      component: RecursiveList,
+    },
+    {
+      path: "/recursive-list-hierarchy",
+      name: "RecursiveListHierarchy",
+      component: RecursiveListHierarchy,
+    },
     {
       path: "/treeview",
       name: "TreeView",
