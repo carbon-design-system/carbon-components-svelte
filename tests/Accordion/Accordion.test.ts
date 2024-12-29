@@ -104,11 +104,25 @@ describe("Accordion", () => {
     expect(items).toHaveLength(4);
 
     // First item is open.
-    expect(items[0]).toHaveAttribute("class", expect.stringContaining("bx--accordion__item bx--accordion__item--active"));
+    expect(items[0]).toHaveAttribute(
+      "class",
+      expect.stringContaining(
+        "bx--accordion__item bx--accordion__item--active",
+      ),
+    );
 
     // All other items are collapsed.
-    expect(items[1]).toHaveAttribute("class", expect.stringContaining("bx--accordion__item"));
-    expect(items[2]).toHaveAttribute("class", expect.stringContaining("bx--accordion__item"));
-    expect(items[3]).toHaveAttribute("class", expect.stringContaining("bx--accordion__item"));
+    expect(items[1]).toHaveAttribute(
+      "class",
+      expect.not.stringContaining("bx--accordion__item--active"),
+    );
+    expect(items[2]).toHaveAttribute(
+      "class",
+      expect.not.stringContaining("bx--accordion__item--active"),
+    );
+    expect(items[3]).toHaveAttribute(
+      "class",
+      expect.not.stringContaining("bx--accordion__item--active"),
+    );
   });
 });
