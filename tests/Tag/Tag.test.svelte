@@ -29,10 +29,23 @@
 
 <Tag type="outline">outline</Tag>
 
-<Tag filter on:click on:close>Filterable</Tag>
+<Tag
+  filter
+  on:click={() => {
+    console.log("click");
+  }}
+  on:close={() => {
+    console.log("close");
+  }}>Filterable</Tag
+>
 
 <Tag icon={Add}>Custom icon</Tag>
 
-<Tag interactive>Text</Tag>
+<Tag
+  interactive
+  on:click={() => {
+    console.log("click");
+  }}>Text</Tag
+>
 
 <Tag skeleton />

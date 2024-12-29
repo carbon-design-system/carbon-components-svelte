@@ -8,6 +8,7 @@
   import TreeViewHierarchy from "./TreeView/TreeView.hierarchy.test.svelte";
   import RecursiveList from "./RecursiveList/RecursiveList.test.svelte";
   import RecursiveListHierarchy from "./RecursiveList/RecursiveList.hierarchy.test.svelte";
+  import Tag from "./Tag/Tag.test.svelte";
   import { onMount } from "svelte";
 
   const routes = [
@@ -50,6 +51,11 @@
       path: "/treeview-hierarchy",
       name: "TreeViewHierarchy",
       component: TreeViewHierarchy,
+    },
+    {
+      path: "/tag",
+      name: "Tag",
+      component: Tag,
     },
   ] as const;
 
