@@ -1,5 +1,6 @@
 <script lang="ts">
   import { TreeView as TreeViewNav } from "carbon-components-svelte";
+  import AspectRatio from "./AspectRatio/AspectRatio.test.svelte";
   import Accordion from "./Accordion/Accordion.test.svelte";
   import AccordionProgrammatic from "./Accordion/Accordion.programmatic.test.svelte";
   import AccordionDisabled from "./Accordion/Accordion.disabled.test.svelte";
@@ -10,6 +11,11 @@
   import { onMount } from "svelte";
 
   const routes = [
+    {
+      path: "/aspect-ratio",
+      name: "AspectRatio",
+      component: AspectRatio,
+    },
     {
       path: "/accordion",
       name: "Accordion",
