@@ -170,6 +170,10 @@
   const batchSelectedIds = writable(false);
   const tableRows = writable(rows);
 
+  // Internal ID prefix for radio buttons, checkboxes, etc.
+  // since there may be multiple `DataTable` instances that have overlapping row ids.
+  const id = "ccs-" + Math.random().toString(36);
+
   // Store a copy of the original rows for filter restoration.
   $: originalRows = [...rows];
 
@@ -499,7 +503,7 @@
               {#if !nonSelectableRowIds.includes(row.id)}
                 {#if radio}
                   <RadioButton
-                    name="select-row-{row.id}"
+                    name="{id}-{row.id}"
                     checked={selectedRowIds.includes(row.id)}
                     on:change={() => {
                       selectedRowIds = [row.id];
@@ -508,7 +512,7 @@
                   />
                 {:else}
                   <InlineCheckbox
-                    name="select-row-{row.id}"
+                    name="{id}-{row.id}"
                     checked={selectedRowIds.includes(row.id)}
                     on:change={() => {
                       if (selectedRowIds.includes(row.id)) {
