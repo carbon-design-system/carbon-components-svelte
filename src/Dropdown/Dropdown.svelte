@@ -250,7 +250,6 @@
           }
         } else if (key === "Tab") {
           open = false;
-          ref.blur();
         } else if (key === "ArrowDown") {
           if (!open) open = true;
           change(1);
