@@ -374,7 +374,6 @@
             selectionRef.focus();
           } else {
             open = false;
-            fieldRef.blur();
           }
         } else if (key === "ArrowDown") {
           change(1);
@@ -414,7 +413,6 @@
               ...item,
               checked: false,
             }));
-            if (fieldRef) fieldRef.blur();
           }}
           translateWithId={translateWithIdSelection}
           {disabled}
@@ -450,7 +448,6 @@
               }
             } else if (key === "Tab") {
               open = false;
-              inputRef.blur();
             } else if (key === "ArrowDown") {
               change(1);
             } else if (key === "ArrowUp") {
