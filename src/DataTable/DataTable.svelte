@@ -354,6 +354,10 @@
               <button
                 type="button"
                 class:bx--table-expand__button={true}
+                aria-label={expanded ? "Collapse all rows" : "Expand all rows"}
+                aria-controls={expandableRowIds
+                  .map((id) => `expandable-row-${id}`)
+                  .join(" ")}
                 on:click={() => {
                   expanded = !expanded;
                   expandedRowIds = expanded ? expandableRowIds : [];
@@ -361,7 +365,10 @@
                   dispatch("click:header--expand", { expanded });
                 }}
               >
-                <ChevronRight class="bx--table-expand__svg" />
+                <ChevronRight
+                  aria-hidden="true"
+                  class="bx--table-expand__svg"
+                />
               </button>
             {/if}
           </th>
@@ -476,6 +483,7 @@
                 <button
                   type="button"
                   class:bx--table-expand__button={true}
+                  aria-controls={`expandable-row-${row.id}`}
                   aria-label={expandedRows[row.id]
                     ? "Collapse current row"
                     : "Expand current row"}
@@ -492,7 +500,10 @@
                     });
                   }}
                 >
-                  <ChevronRight class="bx--table-expand__svg" />
+                  <ChevronRight
+                    aria-hidden="true"
+                    class="bx--table-expand__svg"
+                  />
                 </button>
               {/if}
             </TableCell>
@@ -560,6 +571,7 @@
 
         {#if expandable}
           <tr
+            id={`expandable-row-${row.id}`}
             data-child-row
             class:bx--expandable-row={true}
             on:mouseenter={() => {
