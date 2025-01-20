@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.87.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.0...v0.87.1) (2025-01-19)
+
+### Bug Fixes
+
+- **data-table:** improve `expandable` accessibility ([#2086](https://github.com/carbon-design-system/carbon-components-svelte/issues/2086)) ([e874ac1](https://github.com/carbon-design-system/carbon-components-svelte/commit/e874ac19d778a00c0bba9be65d10be7e6c9104dd))
+- **data-table:** prefix internal ID for radio button, checkbox ([#2082](https://github.com/carbon-design-system/carbon-components-svelte/issues/2082)) ([dd6cbac](https://github.com/carbon-design-system/carbon-components-svelte/commit/dd6cbac3ee1728dbcba5cd1d8faa43941e2a198e)), closes [#2081](https://github.com/carbon-design-system/carbon-components-svelte/issues/2081)
+- **dropdown:** avoid manual field `blur` ([c194c80](https://github.com/carbon-design-system/carbon-components-svelte/commit/c194c80e29ab36935af71adb9e166e9a16b70910)), closes [#2083](https://github.com/carbon-design-system/carbon-components-svelte/issues/2083)
+- **multi-select:** avoid manual field `blur` ([fb6719b](https://github.com/carbon-design-system/carbon-components-svelte/commit/fb6719b1aee35aa45004d82e3b923b4ad45dff5d)), closes [#2083](https://github.com/carbon-design-system/carbon-components-svelte/issues/2083)
+
 ### [0.87.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.86.2...v0.87.0) (2024-12-09)
 
 ### Features
