@@ -1029,9 +1029,17 @@ In the following example, each row in the sortable data table has an overflow me
 
 Set `selectable` to `true` for rows to be multi-selectable.
 
+Bind to `selectedRowIds` to get the ids of the selected rows.
+
+To customize the `input` name for the checkbox, use the `inputName` prop.
+
 <FileSource src="/framed/DataTable/SelectableDataTable" />
 
 ## Batch selection
+
+To enable batch selection, set `batchSelection` to `true`.
+
+This checkbox is used to select all rows. It enters an indeterminate state when some rows are selected.
 
 <FileSource src="/framed/DataTable/DataTableBatchSelection" />
 
@@ -1051,13 +1059,17 @@ By default, `ToolbarBatchActions` is activated if one or more rows is selected. 
 
 Use the `active` prop to control the toolbar. Note that it will still activate if one or more rows are selected.
 
-You can also prevent the default "Cancel" behavior in the dispatched `on:cancel` event.
+You can prevent the default "Cancel" behavior in the dispatched `on:cancel` event.
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionToolbarControlled" />
 
 ## Selectable rows (radio)
 
 Set `radio` to `true` for only one row to be selected at a time.
+
+Bind to `selectedRowIds` to get the ids of the selected rows. Because it's radio selection, `selectedRowIds` will only contain one id.
+
+To customize the `input` name for the radio button, use the `inputName` prop.
 
 <FileSource src="/framed/DataTable/RadioSelectableDataTable" />
 

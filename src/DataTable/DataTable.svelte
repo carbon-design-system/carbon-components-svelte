@@ -71,6 +71,14 @@
   /** Specify the description of the data table */
   export let description = "";
 
+  /**
+   * Specify a name attribute for the input elements
+   * in a selectable data table (radio or checkbox).
+   * When the table is inside a form, this name will
+   * be included in the form data on submit.
+   */
+  export let inputName = "ccs-" + Math.random().toString(36);
+
   /** Set to `true` to use zebra styles */
   export let zebra = false;
 
@@ -515,12 +523,12 @@
             >
               {#if !nonSelectableRowIds.includes(row.id)}
                 {@const inputId = `${id}-${row.id}`}
-                {@const inputName = `${id}-name`}
                 {#if radio}
                   <RadioButton
                     id={inputId}
                     name={inputName}
                     checked={selectedRowIds.includes(row.id)}
+                    value={row.id}
                     on:change={() => {
                       selectedRowIds = [row.id];
                       dispatch("click:row--select", { row, selected: true });
@@ -531,6 +539,7 @@
                     id={inputId}
                     name={inputName}
                     checked={selectedRowIds.includes(row.id)}
+                    value={row.id}
                     on:change={() => {
                       if (selectedRowIds.includes(row.id)) {
                         selectedRowIds = selectedRowIds.filter(

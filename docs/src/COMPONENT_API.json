@@ -2900,6 +2900,18 @@
           "reactive": false
         },
         {
+          "name": "inputName",
+          "kind": "let",
+          "description": "Specify a name attribute for the input elements\nin a selectable data table (radio or checkbox).\nWhen the table is inside a form, this name will\nbe included in the form data on submit.",
+          "type": "string",
+          "value": "\"ccs-\" + Math.random().toString(36)",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "zebra",
           "kind": "let",
           "description": "Set to `true` to use zebra styles",
