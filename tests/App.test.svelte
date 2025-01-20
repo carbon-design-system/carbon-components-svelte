@@ -4,6 +4,7 @@
   import Accordion from "./Accordion/Accordion.test.svelte";
   import AccordionProgrammatic from "./Accordion/Accordion.programmatic.test.svelte";
   import AccordionDisabled from "./Accordion/Accordion.disabled.test.svelte";
+  import DuplicateDataTables from "./DataTable/DuplicateDataTables.test.svelte";
   import TreeView from "./TreeView/TreeView.test.svelte";
   import TreeViewHierarchy from "./TreeView/TreeView.hierarchy.test.svelte";
   import RecursiveList from "./RecursiveList/RecursiveList.test.svelte";
@@ -31,6 +32,11 @@
       path: "/accordion-disabled",
       name: "AccordionDisabled",
       component: AccordionDisabled,
+    },
+    {
+      path: "/data-table",
+      name: "DataTable",
+      component: DuplicateDataTables,
     },
     {
       path: "/recursive-list",
