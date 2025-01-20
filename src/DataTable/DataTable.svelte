@@ -381,6 +381,8 @@
             <InlineCheckbox
               bind:ref={refSelectAll}
               aria-label="Select all rows"
+              name="{id}-select-all}"
+              value="all"
               checked={selectAll}
               {indeterminate}
               on:change={(e) => {
@@ -512,9 +514,12 @@
               class:bx--table-column-radio={radio}
             >
               {#if !nonSelectableRowIds.includes(row.id)}
+                {@const inputId = `${id}-${row.id}`}
+                {@const inputName = `${id}-name`}
                 {#if radio}
                   <RadioButton
-                    name="{id}-{row.id}"
+                    id={inputId}
+                    name={inputName}
                     checked={selectedRowIds.includes(row.id)}
                     on:change={() => {
                       selectedRowIds = [row.id];
@@ -523,7 +528,8 @@
                   />
                 {:else}
                   <InlineCheckbox
-                    name="{id}-{row.id}"
+                    id={inputId}
+                    name={inputName}
                     checked={selectedRowIds.includes(row.id)}
                     on:change={() => {
                       if (selectedRowIds.includes(row.id)) {

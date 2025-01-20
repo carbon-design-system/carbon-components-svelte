@@ -14,3 +14,6 @@
 
 <DataTable radio {headers} {rows} />
 <DataTable radio {headers} {rows} />
+
+<DataTable batchSelection selectable {headers} {rows} />
+<DataTable batchSelection selectable {headers} {rows} />
