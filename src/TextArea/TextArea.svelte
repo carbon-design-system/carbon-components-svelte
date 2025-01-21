@@ -85,7 +85,7 @@
       </label>
       {#if maxCount}
         <div class:bx--label={true} class:bx--label--disabled={disabled}>
-          {value.length}/{maxCount}
+          {value?.length || 0}/{maxCount}
         </div>
       {/if}
     </div>
