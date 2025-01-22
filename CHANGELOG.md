@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.87.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.1...v0.87.2) (2025-01-22)
+
+### Bug Fixes
+
+- **text-area:** counter supports null `value` ([#2089](https://github.com/carbon-design-system/carbon-components-svelte/issues/2089)) ([76eec84](https://github.com/carbon-design-system/carbon-components-svelte/commit/76eec84c5458d07d61d057d9ff06938e244dbb2c))
+
 ### [0.87.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.0...v0.87.1) (2025-01-19)
 
 ### Bug Fixes
