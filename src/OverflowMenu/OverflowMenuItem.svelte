@@ -31,7 +31,9 @@
 
   import { getContext, afterUpdate } from "svelte";
 
-  const { focusedId, add, update, change } = getContext("OverflowMenu");
+  const { focusedId, add, update, change, items } = getContext("OverflowMenu");
+
+  $: item = $items.find((_) => _.id === id);
 
   add({ id, text, primaryFocus, disabled });
 
@@ -68,8 +70,9 @@
       bind:this={ref}
       {...buttonProps}
       on:click
-      on:click={() => {
-        update(id);
+      on:click={(e) => {
+        e.stopPropagation();
+        update(id, item);
       }}
       on:keydown
       on:keydown={({ key }) => {
@@ -91,8 +94,9 @@
       bind:this={ref}
       {...buttonProps}
       on:click
-      on:click={() => {
-        update(id);
+      on:click={(e) => {
+        e.stopPropagation();
+        update(id, item);
       }}
       on:keydown
       on:keydown={({ key }) => {

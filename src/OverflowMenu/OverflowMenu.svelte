@@ -81,6 +81,7 @@
 
   setContext("OverflowMenu", {
     focusedId,
+    items,
     add: ({ id, text, primaryFocus, disabled }) => {
       items.update((_) => {
         if (primaryFocus) {
@@ -90,8 +91,11 @@
         return [..._, { id, text, primaryFocus, disabled, index: _.length }];
       });
     },
-    update: (id) => {
+    update: (id, item) => {
       currentId.set(id);
+
+      dispatch("close", { index: item.index, text: item.text });
+      open = false;
     },
     change: (direction) => {
       let index = $currentIndex + direction;
@@ -121,12 +125,6 @@
   });
 
   afterUpdate(() => {
-    if ($currentId) {
-      const { index, text } = $items.filter((_) => _.id === $currentId)[0];
-      dispatch("close", { index, text });
-      open = false;
-    }
-
     if (open) {
       const width = buttonRef.offsetWidth;
       const height = buttonRef.offsetHeight;
@@ -183,6 +181,7 @@
   on:click={({ target }) => {
     if (buttonRef && buttonRef.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
+      dispatch("close");
       open = false;
     }
   }}
@@ -222,14 +221,6 @@
         dispatch("close");
         open = false;
         buttonRef.focus();
-      }
-    }
-  }}
-  on:focusout={(e) => {
-    if (open) {
-      if (!buttonRef.contains(e.relatedTarget)) {
-        dispatch("close");
-        open = false;
       }
     }
   }}
