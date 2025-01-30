@@ -10,6 +10,7 @@
   import RecursiveList from "./RecursiveList/RecursiveList.test.svelte";
   import RecursiveListHierarchy from "./RecursiveList/RecursiveList.hierarchy.test.svelte";
   import Tag from "./Tag/Tag.test.svelte";
+  import OverflowMenu from "./OverflowMenu/OverflowMenu.test.svelte";
   import { onMount } from "svelte";
 
   const routes = [
@@ -62,6 +63,11 @@
       path: "/tag",
       name: "Tag",
       component: Tag,
+    },
+    {
+      path: "/overflow-menu",
+      name: "OverflowMenu",
+      component: OverflowMenu,
     },
   ] as const;
 
