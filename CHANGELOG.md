@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.87.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.3...v0.87.4) (2025-02-02)
+
+### Bug Fixes
+
+- **types:** loosen `icon` prop type to `any` ([#2095](https://github.com/carbon-design-system/carbon-components-svelte/issues/2095)) ([6bf72d4](https://github.com/carbon-design-system/carbon-components-svelte/commit/6bf72d46024ad2ce03651f28fc1a2a95ec03385d))
+
 ### [0.87.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.2...v0.87.3) (2025-01-30)
 
 ### Bug Fixes
