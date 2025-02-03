@@ -15,7 +15,7 @@ type $Props = {
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Set to `true` to disable the tooltip icon

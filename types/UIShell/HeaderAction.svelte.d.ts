@@ -15,14 +15,14 @@ type $Props = {
    * Defaults to `<Switcher size={20} />`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Specify the icon to render when the action panel is open.
    * Defaults to `<Close size={20} />`
    * @default undefined
    */
-  closeIcon?: typeof import("svelte").SvelteComponent<any>;
+  closeIcon?: any;
 
   /**
    * Specify the text.

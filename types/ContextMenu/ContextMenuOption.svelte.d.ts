@@ -27,7 +27,7 @@ type $Props = {
    * Icon is rendered to the left of the label text
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Specify the label text.

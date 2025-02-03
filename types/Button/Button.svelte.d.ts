@@ -44,7 +44,7 @@ type $Props = {
    * Alternatively, use the named slot "icon" (e.g., `<Icon slot="icon" size="{20}" />`)
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Specify the ARIA label for the button icon

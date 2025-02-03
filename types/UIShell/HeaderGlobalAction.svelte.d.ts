@@ -12,7 +12,7 @@ export type HeaderGlobalActionProps = ButtonProps & {
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Obtain a reference to the HTML button element

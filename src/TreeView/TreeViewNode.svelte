@@ -46,7 +46,7 @@
 
   /**
    * Specify the icon to render
-   * @type {typeof import("svelte").SvelteComponent<any>}
+   * @type {any}
    */
   export let icon = undefined;
 

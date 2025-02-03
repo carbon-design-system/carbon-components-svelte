@@ -33,7 +33,7 @@ type $Props = {
    * Default to `<Information />`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Specify the ARIA label for the tooltip button

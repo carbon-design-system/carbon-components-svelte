@@ -17,7 +17,7 @@
   /**
    * Specify the icon to render
    * `inline` must be `false`
-   * @type {typeof import("svelte").SvelteComponent<any>}
+   * @type {any}
    */
   export let icon = undefined;
 

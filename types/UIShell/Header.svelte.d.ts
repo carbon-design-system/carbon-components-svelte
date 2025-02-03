@@ -72,14 +72,14 @@ type $Props = {
    * Defaults to `<Menu size={20} />`
    * @default undefined
    */
-  iconMenu?: typeof import("svelte").SvelteComponent<any>;
+  iconMenu?: any;
 
   /**
    * Specify the icon to render for the opened state.
    * Defaults to `<Close size={20} />`
    * @default undefined
    */
-  iconClose?: typeof import("svelte").SvelteComponent<any>;
+  iconClose?: any;
 
   [key: `data-${string}`]: any;
 };

@@ -31,7 +31,7 @@
   /**
    * Specify the icon to render for the tooltip button.
    * Default to `<Information />`
-   * @type {typeof import("svelte").SvelteComponent<any>}
+   * @type {any}
    */
   export let icon = Information;
 
