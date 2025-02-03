@@ -14,7 +14,7 @@ type $Props = {
    * Specify the primary button icon
    * @default undefined
    */
-  primaryButtonIcon?: typeof import("svelte").SvelteComponent<any>;
+  primaryButtonIcon?: any;
 
   /**
    * Set to `true` to disable the primary button

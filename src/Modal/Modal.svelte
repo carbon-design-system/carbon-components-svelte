@@ -57,7 +57,7 @@
 
   /**
    * Specify the primary button icon
-   * @type {typeof import("svelte").SvelteComponent<any>}
+   * @type {any}
    */
   export let primaryButtonIcon = undefined;
 

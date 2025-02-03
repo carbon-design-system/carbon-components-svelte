@@ -87,7 +87,7 @@ type $Props = {
    * Defaults to `<Search />`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Set an id for the input element

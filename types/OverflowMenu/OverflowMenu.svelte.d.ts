@@ -45,7 +45,7 @@ type $Props = {
    * Defaults to `<OverflowMenuVertical />`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Specify the icon class

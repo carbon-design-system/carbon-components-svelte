@@ -33,7 +33,7 @@
   /**
    * Specify the icon to render.
    * Defaults to `<OverflowMenuVertical />`
-   * @type {typeof import("svelte").SvelteComponent<any>}
+   * @type {any}
    */
   export let icon = OverflowMenuVertical;
 

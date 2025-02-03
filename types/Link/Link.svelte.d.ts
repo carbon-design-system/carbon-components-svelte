@@ -27,7 +27,7 @@ type $Props = {
    * `inline` must be `false`
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Set to `true` to disable the checkbox

@@ -61,7 +61,7 @@ type $Props = {
    * Specify the icon to render
    * @default undefined
    */
-  icon?: typeof import("svelte").SvelteComponent<any>;
+  icon?: any;
 
   /**
    * Set an id for the filterable tag
