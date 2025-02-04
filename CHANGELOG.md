@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.87.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.4...v0.87.5) (2025-02-04)
+
+### Bug Fixes
+
+- **tag:** allow `on:close` to work with Svelte 5 ([#2097](https://github.com/carbon-design-system/carbon-components-svelte/issues/2097)) ([6e65ef3](https://github.com/carbon-design-system/carbon-components-svelte/commit/6e65ef39e7ff9a3c0ee25b7945a62584e9b7441e)), closes [#2096](https://github.com/carbon-design-system/carbon-components-svelte/issues/2096)
+
 ### [0.87.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.3...v0.87.4) (2025-02-02)
 
 ### Bug Fixes
