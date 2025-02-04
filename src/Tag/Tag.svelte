@@ -82,7 +82,7 @@
       class:bx--tag__close-icon={true}
       {disabled}
       {title}
-      on:click|stopPropagation
+      on:click
       on:click|stopPropagation={() => {
         dispatch("close");
       }}
