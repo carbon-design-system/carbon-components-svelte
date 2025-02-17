@@ -162,6 +162,7 @@
     onMountAfterUpdate = false;
   });
 
+  $: menuId = `menu-${id}`;
   $: ariaLabel = $$props["aria-label"] || "menu";
   $: if ($items[$currentIndex]) {
     focusedId.set($items[$currentIndex].id);
@@ -194,6 +195,7 @@
   aria-haspopup="true"
   aria-expanded={open}
   aria-label={ariaLabel}
+  aria-controls={open ? menuId : undefined}
   {id}
   class:bx--overflow-menu={true}
   class:bx--overflow-menu--open={open}
@@ -239,6 +241,7 @@
       bind:this={menuRef}
       role="menu"
       tabindex="-1"
+      id={menuId}
       aria-label={ariaLabel}
       data-floating-menu-direction={direction}
       class:bx--overflow-menu-options={true}
