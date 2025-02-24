@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.87.6](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.5...v0.87.6) (2025-02-24)
+
+### Bug Fixes
+
+- **overflow-menu:** add `aria-controls` to trigger button ([#2100](https://github.com/carbon-design-system/carbon-components-svelte/issues/2100)) ([b7297d4](https://github.com/carbon-design-system/carbon-components-svelte/commit/b7297d452a7813c02f3c89280787292b1c46acec))
+
 ### [0.87.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.4...v0.87.5) (2025-02-04)
 
 ### Bug Fixes
