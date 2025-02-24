@@ -12,8 +12,20 @@
   ];
 </script>
 
-<DataTable radio {headers} {rows} />
-<DataTable radio {headers} {rows} />
+<DataTable inputName="radio-select" radio {headers} {rows} />
+<DataTable inputName="radio-select" radio {headers} {rows} />
 
-<DataTable batchSelection selectable {headers} {rows} />
-<DataTable batchSelection selectable {headers} {rows} />
+<DataTable
+  inputName="checkbox-select"
+  batchSelection
+  selectable
+  {headers}
+  {rows}
+/>
+<DataTable
+  inputName="checkbox-select"
+  batchSelection
+  selectable
+  {headers}
+  {rows}
+/>
