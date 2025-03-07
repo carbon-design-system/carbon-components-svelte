@@ -111,10 +111,11 @@
   let prevSelected = undefined;
 
   afterUpdate(() => {
-    selected = $selectedValue;
-
-    if (prevSelected !== undefined && selected !== prevSelected) {
-      dispatch("update", $selectedValue);
+    if (selected !== $selectedValue) {
+      selected = $selectedValue;
+      if (prevSelected !== undefined) {
+        dispatch("update", $selectedValue);
+      }
     }
 
     prevSelected = selected;
