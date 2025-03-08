@@ -22,11 +22,25 @@
   export let closeIcon = Close;
 
   /**
-   * Specify the text.
+   * Specify the text displayed next to the icon.
    * Alternatively, use the named slot "text" (e.g., `<div slot="text">...</div>`)
    * @type {string}
    */
   export let text = undefined;
+
+  /**
+   * Specify an icon tooltip. The tooltip will not be displayed
+   * if either the `text` prop or a named slot="text" is used
+   * @type {string}
+   */
+  export let iconDescription = undefined;
+
+  /**
+   * Set the alignment of the tooltip relative to the icon.
+   * Only applies when `iconDescription` is provided
+   * @type {"start" | "center" | "end"}
+   */
+  export let tooltipAlignment = "center";
 
   /** Obtain a reference to the button HTML element */
   export let ref = null;
@@ -49,6 +63,17 @@
   const dispatch = createEventDispatcher();
 
   let refPanel = null;
+
+  $: hasIconOnly = iconDescription && !(text || $$slots.text);
+  $: buttonClass = [
+    hasIconOnly && "bx--btn bx--btn--primary",
+    hasIconOnly && "bx--tooltip__trigger bx--tooltip--a11y",
+    hasIconOnly && "bx--btn--icon-only bx--btn--icon-only--bottom",
+    hasIconOnly && `bx--tooltip--align-${tooltipAlignment}`,
+    $$restProps.class,
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 <svelte:window
@@ -72,12 +97,16 @@
   class:bx--header__action--active={isOpen}
   class:bx--header__action--text={text}
   {...$$restProps}
+  class={buttonClass}
   on:click
   on:click|stopPropagation={() => {
     isOpen = !isOpen;
     dispatch(isOpen ? "open" : "close");
   }}
 >
+  {#if hasIconOnly}
+    <span class:bx--assistive-text={true}>{iconDescription}</span>
+  {/if}
   {#if isOpen}
     <slot name="closeIcon">
       <svelte:component this={closeIcon} size={20} />
