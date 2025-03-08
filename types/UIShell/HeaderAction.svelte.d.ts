@@ -25,22 +25,22 @@ type $Props = {
   closeIcon?: any;
 
   /**
-   * Specify the text.
+   * Specify the text displayed next to the icon.
    * Alternatively, use the named slot "text" (e.g., `<div slot="text">...</div>`)
    * @default undefined
    */
   text?: string;
 
   /**
-   * Specify an icon tooltip.
-   * This only works if `text` or a named slot "text" is not provided.
+   * Specify an icon tooltip. The tooltip will not be displayed
+   * if either the `text` prop or a named slot="text" is used
    * @default undefined
    */
   iconDescription?: string;
 
   /**
    * Set the alignment of the tooltip relative to the icon.
-   * This only works if `iconDescription` is provided.
+   * Only applies when `iconDescription` is provided
    * @default "center"
    */
   tooltipAlignment?: "start" | "center" | "end";

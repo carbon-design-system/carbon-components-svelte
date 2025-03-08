@@ -35,6 +35,8 @@
       bind:isOpen
       on:open
       on:close
+      iconDescription="Switcher"
+      tooltipAlignment="start"
       transition={{ duration: 400, easing: quintOut }}
     >
       <HeaderPanelLinks>
