@@ -5879,6 +5879,29 @@
           "reactive": false
         },
         {
+          "name": "iconDescription",
+          "kind": "let",
+          "description": "Specify an icon tooltip.\nThis only works if `text` or a named slot \"text\" is not provided.",
+          "type": "string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "tooltipAlignment",
+          "kind": "let",
+          "description": "Set the alignment of the tooltip relative to the icon.\nThis only works if `iconDescription` is provided.",
+          "type": "\"start\" | \"center\" | \"end\"",
+          "value": "\"center\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "ref",
           "kind": "let",
           "description": "Obtain a reference to the button HTML element",

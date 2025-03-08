@@ -32,6 +32,20 @@ type $Props = {
   text?: string;
 
   /**
+   * Specify an icon tooltip.
+   * This only works if `text` or a named slot "text" is not provided.
+   * @default undefined
+   */
+  iconDescription?: string;
+
+  /**
+   * Set the alignment of the tooltip relative to the icon.
+   * This only works if `iconDescription` is provided.
+   * @default "center"
+   */
+  tooltipAlignment?: "start" | "center" | "end";
+
+  /**
    * Obtain a reference to the button HTML element
    * @default null
    */
