@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "noEmit": true,
+    "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "ignoreDeprecations": "5.0",
@@ -11,6 +12,7 @@
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "noImplicitAny": true,
     "strict": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
