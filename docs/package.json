@@ -13,7 +13,7 @@
     "@sveltech/routify": "^1.9.10",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "carbon-components-svelte": "file:..",
-    "carbon-icons-svelte": "^12.13.0",
+    "carbon-icons-svelte": "^13.3.0",
     "clipboard-copy": "^4.0.1",
     "cross-env": "^7.0.3",
     "mdsvex": "^0.12.3",

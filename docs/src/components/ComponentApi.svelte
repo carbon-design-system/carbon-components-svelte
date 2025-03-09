@@ -314,10 +314,10 @@
   }
 
   :global(
-      .cell .bx--snippet--inline code,
-      .cell .bx--snippet--single pre,
-      .bx--snippet--inline code
-    ) {
+    .cell .bx--snippet--inline code,
+    .cell .bx--snippet--single pre,
+    .bx--snippet--inline code
+  ) {
     white-space: pre-wrap !important;
   }
 </style>
