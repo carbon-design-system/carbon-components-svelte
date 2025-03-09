@@ -78,6 +78,15 @@ type $Props<Row> = {
   description?: string;
 
   /**
+   * Specify a name attribute for the input elements
+   * in a selectable data table (radio or checkbox).
+   * When the table is inside a form, this name will
+   * be included in the form data on submit.
+   * @default "ccs-" + Math.random().toString(36)
+   */
+  inputName?: string;
+
+  /**
    * Set to `true` to use zebra styles
    * @default false
    */
