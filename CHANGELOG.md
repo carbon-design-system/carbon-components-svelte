@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.88.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.7...v0.88.0) (2025-03-09)
+
+### Features
+
+- **data-table:** allow custom `inputName` for radio/checkbox ([#2087](https://github.com/carbon-design-system/carbon-components-svelte/issues/2087)) ([7481b9a](https://github.com/carbon-design-system/carbon-components-svelte/commit/7481b9a995dfbc8c2fbaeaae143c8372cf5fce66)), closes [#2085](https://github.com/carbon-design-system/carbon-components-svelte/issues/2085)
+- **ui-shell:** `HeaderAction` supports tooltip ([#2111](https://github.com/carbon-design-system/carbon-components-svelte/issues/2111)) ([24b9cbc](https://github.com/carbon-design-system/carbon-components-svelte/commit/24b9cbc9c343537e5e74799ef8289bd29396cf04)), closes [#2110](https://github.com/carbon-design-system/carbon-components-svelte/issues/2110)
+
 ### [0.87.7](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.6...v0.87.7) (2025-03-07)
 
 ### Bug Fixes
