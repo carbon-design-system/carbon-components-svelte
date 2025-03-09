@@ -59,6 +59,16 @@ You can disable the `transition` by setting it to `false`.
 
 <FileSource src="/framed/UIShell/HeaderSwitcher" />
 
+## Header with multiple switchers
+
+Multiple switchers can be used, and the switcher button can be customized. For example, display a tooltip using `iconDescription`.
+
+Control the tooltip alignment using `tooltipAlignment`.
+
+Note that providing `text` overrides the tooltip.
+
+<FileSource src="/framed/UIShell/HeaderMultipleSwitcher" />
+
 ## Header with global search
 
 <FileSource src="/framed/UIShell/HeaderSearch" />
