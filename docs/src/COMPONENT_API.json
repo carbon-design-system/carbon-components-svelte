@@ -5882,8 +5882,31 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text.\nAlternatively, use the named slot \"text\" (e.g., `<div slot=\"text\">...</div>`)",
+          "description": "Specify the text displayed next to the icon.\nAlternatively, use the named slot \"text\" (e.g., `<div slot=\"text\">...</div>`)",
           "type": "string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "iconDescription",
+          "kind": "let",
+          "description": "Specify an icon tooltip. The tooltip will not be displayed\nif either the `text` prop or a named slot=\"text\" is used",
+          "type": "string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "tooltipAlignment",
+          "kind": "let",
+          "description": "Set the alignment of the tooltip relative to the icon.\nOnly applies when `iconDescription` is provided",
+          "type": "\"start\" | \"center\" | \"end\"",
+          "value": "\"center\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
