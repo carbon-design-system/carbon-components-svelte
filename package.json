@@ -51,21 +51,21 @@
     "@testing-library/user-event": "^14.6.1",
     "autoprefixer": "^10.4.8",
     "carbon-components": "10.58.12",
-    "carbon-icons-svelte": "^13.2.0",
-    "carbon-preprocess-svelte": "^0.11.10",
+    "carbon-icons-svelte": "^13.3.0",
+    "carbon-preprocess-svelte": "^0.11.11",
     "culls": "^0.1.1",
     "jsdom": "^26.0.0",
     "postcss": "^8.5.3",
-    "prettier": "^3.5.2",
+    "prettier": "^3.5.3",
     "prettier-plugin-svelte": "^3.3.3",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
     "sveld": "^0.22.1",
     "svelte": "^4.2.19",
-    "svelte-check": "^4.1.4",
+    "svelte-check": "^4.1.5",
     "tinyglobby": "^0.2.12",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.6"
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
   },
   "standard-version": {
     "skip": {
