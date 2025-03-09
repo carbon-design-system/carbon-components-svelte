@@ -82,7 +82,7 @@
     "type": "git",
     "url": "git+https://github.com/carbon-design-system/carbon-components-svelte.git"
   },
-  "homepage": "https://github.com/carbon-design-system/carbon-components-svelte",
+  "homepage": "https://svelte.carbondesignsystem.com/",
   "bugs": "https://github.com/carbon-design-system/carbon-components-svelte/issues",
   "keywords": [
     "carbon",
