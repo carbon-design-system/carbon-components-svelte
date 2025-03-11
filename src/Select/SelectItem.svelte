@@ -55,5 +55,5 @@
   class={className}
   {style}
 >
-  {text || value}
+  {text ?? value}
 </option>
