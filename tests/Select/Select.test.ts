@@ -3,6 +3,7 @@ import { user } from "../setup-tests";
 import Select from "./Select.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
 import SelectSkeleton from "./Select.skeleton.test.svelte";
+import SelectFalsy from "./Select.falsy.test.svelte";
 
 describe("Select", () => {
   beforeEach(() => {
@@ -237,5 +238,12 @@ describe("Select", () => {
     const skeleton = screen.getByTestId("select-skeleton");
     expect(skeleton).toBeInTheDocument();
     expect(skeleton.children[0]).toHaveClass("bx--skeleton");
+  });
+
+  it("renders value if `text` is falsy", () => {
+    render(SelectFalsy);
+
+    expect(screen.getByLabelText("Falsy text")).toHaveValue("-1");
+    expect(screen.getByDisplayValue("")).toBeInTheDocument();
   });
 });
