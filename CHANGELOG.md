@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.88.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.0...v0.88.1) (2025-03-12)
+
+### Bug Fixes
+
+- **select:** falsy item `text` should not override `value` ([#2118](https://github.com/carbon-design-system/carbon-components-svelte/issues/2118)) ([663b79a](https://github.com/carbon-design-system/carbon-components-svelte/commit/663b79ad054d14a91a8bf700feb62dcf50976eb8)), closes [#2117](https://github.com/carbon-design-system/carbon-components-svelte/issues/2117)
+- **ui-shell:** `HeaderAction` uses dark color scheme ([#2119](https://github.com/carbon-design-system/carbon-components-svelte/issues/2119)) ([7ff93ad](https://github.com/carbon-design-system/carbon-components-svelte/commit/7ff93ad2dac489859d5b4a83c1e359a6507718b4))
+
 ### [0.88.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.87.7...v0.88.0) (2025-03-09)
 
 ### Features
