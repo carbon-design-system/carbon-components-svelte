@@ -175,7 +175,6 @@
       filteredItems = [];
       if (!selectedItem) {
         selectedId = undefined;
-        value = "";
         highlightedIndex = -1;
         highlightedId = undefined;
       } else {
@@ -283,7 +282,13 @@
             open = true;
           }
         }}
-        on:keydown
+        on:keydown={(e) => {
+          // If there's a selection and user types a printable character, clear selection immediately
+          if (e.key.length === 1 && selectedItem) {
+            selectedId = undefined;
+            selectedItem = undefined;
+          }
+        }}
         on:keydown|stopPropagation={(e) => {
           const { key } = e;
           if (["Enter", "ArrowDown", "ArrowUp"].includes(key)) {
