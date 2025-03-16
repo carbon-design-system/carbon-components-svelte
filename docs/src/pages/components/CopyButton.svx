@@ -5,8 +5,6 @@
 
 This component uses the native, asynchronous [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text.
 
-Please note that the `clipboard.writeText` API is not supported in [IE 11 nor Safari iOS version 13.3  or lower](https://caniuse.com/mdn-api_clipboard_writetext).
-
 You can override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
 
 ## Default
