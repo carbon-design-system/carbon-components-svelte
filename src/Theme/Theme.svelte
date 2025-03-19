@@ -100,16 +100,18 @@
 {/if}
 
 {#if render === "toggle"}
+  {@const { themes: toggleThemes, ...toggleProps } = toggle}
   <Toggle
-    {...toggle}
-    toggled={theme === toggle.themes[1]}
+    {...toggleProps}
+    toggled={theme === toggleThemes[1]}
     on:toggle={({ detail }) => {
-      theme = detail.toggled ? toggle.themes[1] : toggle.themes[0];
+      theme = detail.toggled ? toggleThemes[1] : toggleThemes[0];
     }}
   />
 {:else if render === "select"}
-  <Select {...select} bind:selected={theme}>
-    {#each select.themes as theme (theme)}
+  {@const { themes: selectThemes, ...selectProps } = select}
+  <Select {...selectProps} bind:selected={theme}>
+    {#each selectThemes as theme (theme)}
       <SelectItem value={theme} text={themes[theme]} />
     {/each}
   </Select>
