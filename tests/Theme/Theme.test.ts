@@ -130,14 +130,20 @@ describe("Theme", () => {
   it("should render custom toggle when render prop is set to toggle and custom toggle options are provided", async () => {
     render(ThemeToggleCustom);
 
+    const checkbox = screen.getByRole("switch");
+    assert(checkbox);
+    expect(checkbox).not.toBeChecked();
+
     const toggle = screen.getAllByText("Enable dark mode")[0];
     expect(toggle).toBeInTheDocument();
 
     await user.click(toggle);
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g80" });
+    expect(checkbox).toBeChecked();
 
     await user.click(toggle);
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g10" });
+    expect(checkbox).not.toBeChecked();
   });
 
   it("should render select when render prop is set to select", async () => {
@@ -145,11 +151,17 @@ describe("Theme", () => {
 
     const select = screen.getByLabelText("Themes");
     expect(select).toBeInTheDocument();
+    expect(select).toHaveTextContent("White");
+    expect(select).toHaveValue("white");
 
     await user.selectOptions(select, "g100");
+    expect(select).toHaveTextContent("Gray 100");
+    expect(select).toHaveValue("g100");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
 
     await user.selectOptions(select, "white");
+    expect(select).toHaveTextContent("White");
+    expect(select).toHaveValue("white");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
   });
 
@@ -158,11 +170,17 @@ describe("Theme", () => {
 
     const select = screen.getByLabelText("Select a theme");
     expect(select).toBeInTheDocument();
+    expect(select).toHaveTextContent("White");
+    expect(select).toHaveValue("white");
 
     await user.selectOptions(select, "g100");
+    expect(select).toHaveTextContent("Gray 100");
+    expect(select).toHaveValue("g100");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
 
     await user.selectOptions(select, "white");
+    expect(select).toHaveTextContent("White");
+    expect(select).toHaveValue("white");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
   });
 });
