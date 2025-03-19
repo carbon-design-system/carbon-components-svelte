@@ -175,12 +175,18 @@
       filteredItems = [];
       if (!selectedItem) {
         selectedId = undefined;
-        value = "";
+        // Only reset value if the input is not focused
+        if (!ref.contains(document.activeElement)) {
+          value = "";
+        }
         highlightedIndex = -1;
         highlightedId = undefined;
       } else {
-        // programmatically set value
-        value = itemToString(selectedItem);
+        // Only set value if the input is not focused
+        if (!ref.contains(document.activeElement)) {
+          // programmatically set value
+          value = itemToString(selectedItem);
+        }
       }
     }
   });

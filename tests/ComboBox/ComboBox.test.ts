@@ -127,6 +127,24 @@ describe("ComboBox", () => {
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(1);
     expect(options[0]).toHaveTextContent("Email");
+
+    await user.clear(input);
+    expect(input).toHaveValue("");
+    expect(screen.getAllByRole("option")).toHaveLength(3);
+
+    await user.click(document.body);
+    expect(input).not.toHaveFocus();
+
+    await user.keyboard("{Tab}");
+    expect(input).toHaveFocus();
+
+    await user.type(input, "a");
+    await user.click(screen.getAllByRole("option")[1]);
+    expect(input).toHaveValue("Email");
+    
+    await user.click(document.body);
+    expect(input).not.toHaveFocus();
+    expect(screen.queryByRole("option")).not.toBeInTheDocument();
   });
 
   it("should handle disabled items", async () => {
