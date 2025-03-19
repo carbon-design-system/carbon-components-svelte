@@ -201,7 +201,8 @@
 
   function change(direction) {
     let index = highlightedIndex + direction;
-    const length = filterable ? filteredItems.length : items.length;
+    const itemsToUse = filterable ? filteredItems : sortedItems;
+    const length = itemsToUse.length;
     if (length === 0) return;
     if (index < 0) {
       index = length - 1;
@@ -209,18 +210,18 @@
       index = 0;
     }
 
-    let disabled = items[index].disabled;
+    let disabled = itemsToUse[index].disabled;
 
     while (disabled) {
       index = index + direction;
 
       if (index < 0) {
-        index = items.length - 1;
-      } else if (index >= items.length) {
+        index = length - 1;
+      } else if (index >= length) {
         index = 0;
       }
 
-      disabled = items[index].disabled;
+      disabled = itemsToUse[index].disabled;
     }
 
     highlightedIndex = index;
