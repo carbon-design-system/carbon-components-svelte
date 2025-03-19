@@ -71,7 +71,6 @@
 {#if open}
   <div
     {role}
-    {kind}
     class:bx--inline-notification={true}
     class:bx--inline-notification--low-contrast={lowContrast}
     class:bx--inline-notification--hide-close-button={hideCloseButton}

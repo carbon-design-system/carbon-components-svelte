@@ -93,7 +93,6 @@
 {#if open}
   <div
     {role}
-    {kind}
     class:bx--toast-notification={true}
     class:bx--toast-notification--low-contrast={lowContrast}
     class:bx--toast-notification--error={kind === "error"}
