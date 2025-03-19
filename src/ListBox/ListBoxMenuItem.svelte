@@ -25,7 +25,7 @@
   class:bx--list-box__menu-item--active={active}
   class:bx--list-box__menu-item--highlighted={highlighted || active}
   aria-selected={active}
-  disabled={disabled ? true : undefined}
+  aria-disabled={disabled ? true : undefined}
   {...$$restProps}
   on:click
   on:mouseenter
