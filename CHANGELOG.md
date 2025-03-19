@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.88.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.1...v0.88.2) (2025-03-19)
+
+### Bug Fixes
+
+- **combo-box:** fix typing when refocusing input ([9e3d830](https://github.com/carbon-design-system/carbon-components-svelte/commit/9e3d83031e69889472c4e84be256ea242854cf81))
+- **list-box:** use `aria-disabled` instead of invalid `disabled` attribute ([#2125](https://github.com/carbon-design-system/carbon-components-svelte/issues/2125)) ([e1b3ef2](https://github.com/carbon-design-system/carbon-components-svelte/commit/e1b3ef22c9ee09474bacadbb0b22b41326566bab))
+- **multi-select:** fix keyboard navigation for disabled items ([#2129](https://github.com/carbon-design-system/carbon-components-svelte/issues/2129)) ([e7939ff](https://github.com/carbon-design-system/carbon-components-svelte/commit/e7939ff0e21c3430c9eea74c503b7c35f6823445)), closes [#2128](https://github.com/carbon-design-system/carbon-components-svelte/issues/2128)
+- **notification:** remove invalid `kind` prop from markup ([#2126](https://github.com/carbon-design-system/carbon-components-svelte/issues/2126)) ([e85d7ef](https://github.com/carbon-design-system/carbon-components-svelte/commit/e85d7efc5ed15f5236d074fd7981ae527d9e5ab5))
+- **theme:** remove invalid `themes` prop from markup ([#2127](https://github.com/carbon-design-system/carbon-components-svelte/issues/2127)) ([5987b61](https://github.com/carbon-design-system/carbon-components-svelte/commit/5987b61a5522fff09468bddd586eed4a537edcc8))
+
 ### [0.88.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.0...v0.88.1) (2025-03-12)
 
 ### Bug Fixes
