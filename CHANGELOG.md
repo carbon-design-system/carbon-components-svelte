@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.88.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.2...v0.88.3) (2025-03-19)
+
 ### [0.88.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.1...v0.88.2) (2025-03-19)
 
 ### Bug Fixes
