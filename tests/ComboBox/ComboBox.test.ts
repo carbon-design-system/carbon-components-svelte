@@ -141,10 +141,22 @@ describe("ComboBox", () => {
     await user.type(input, "a");
     await user.click(screen.getAllByRole("option")[1]);
     expect(input).toHaveValue("Email");
-    
+
     await user.click(document.body);
     expect(input).not.toHaveFocus();
     expect(screen.queryByRole("option")).not.toBeInTheDocument();
+  });
+
+  it("should clear input when clicking clear button", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox, { props: { selectedId: "1" } });
+
+    expect(consoleLog).not.toBeCalled();
+    const clearButton = screen.getByRole("button", { name: /clear/i });
+    await user.click(clearButton);
+
+    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(consoleLog).toHaveBeenCalledWith("clear", "clear");
   });
 
   it("should handle disabled items", async () => {
@@ -184,9 +196,26 @@ describe("ComboBox", () => {
   it("should programmatically clear selection", async () => {
     render(ComboBoxCustom, { props: { selectedId: "1" } });
 
-    expect(screen.getByRole("textbox")).toHaveValue("Email");
+    const textbox = screen.getByRole("textbox");
+    expect(textbox).toHaveValue("Email");
     await user.click(screen.getByText("Clear"));
-    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(textbox).toHaveValue("");
+    expect(textbox).toHaveFocus();
+  });
+
+  it("should not re-focus textbox if clearOptions.focus is false", async () => {
+    render(ComboBoxCustom, {
+      props: {
+        selectedId: "1",
+        clearOptions: { focus: false },
+      },
+    });
+
+    const textbox = screen.getByRole("textbox");
+    expect(textbox).toHaveValue("Email");
+    await user.click(screen.getByText("Clear"));
+    expect(textbox).toHaveValue("");
+    expect(textbox).not.toHaveFocus();
   });
 
   it("should close menu on Escape key", async () => {

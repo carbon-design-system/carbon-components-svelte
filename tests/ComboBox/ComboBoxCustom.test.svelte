@@ -11,6 +11,7 @@
   ];
   export let selectedId: string | undefined = undefined;
   export let direction: "top" | "bottom" = "bottom";
+  export let clearOptions: { focus?: boolean } = {};
   export let shouldFilterItem = (item: ComboBoxItem, value: string) =>
     item.text.toLowerCase().includes(value.toLowerCase());
   export let itemToString = (item: ComboBoxItem) => item.text;
@@ -33,4 +34,6 @@
   <span>Item {item.text}</span>
 </ComboBox>
 
-<button type="button" on:click={() => comboBoxRef.clear()}>Clear</button>
+<button type="button" on:click={() => comboBoxRef.clear(clearOptions)}>
+  Clear
+</button>
