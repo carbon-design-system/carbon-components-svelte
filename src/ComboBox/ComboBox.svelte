@@ -175,11 +175,18 @@
       filteredItems = [];
       if (!selectedItem) {
         selectedId = undefined;
+        // Only reset value if the input is not focused
+        if (!ref.contains(document.activeElement)) {
+          value = "";
+        }
         highlightedIndex = -1;
         highlightedId = undefined;
       } else {
-        // programmatically set value
-        value = itemToString(selectedItem);
+        // Only set value if the input is not focused
+        if (!ref.contains(document.activeElement)) {
+          // programmatically set value
+          value = itemToString(selectedItem);
+        }
       }
     }
   });
@@ -282,13 +289,7 @@
             open = true;
           }
         }}
-        on:keydown={(e) => {
-          // If there's a selection and user types a printable character, clear selection immediately
-          if (e.key.length === 1 && selectedItem) {
-            selectedId = undefined;
-            selectedItem = undefined;
-          }
-        }}
+        on:keydown
         on:keydown|stopPropagation={(e) => {
           const { key } = e;
           if (["Enter", "ArrowDown", "ArrowUp"].includes(key)) {
