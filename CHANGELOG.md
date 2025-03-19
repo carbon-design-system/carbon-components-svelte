@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [0.88.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.2...v0.88.3) (2025-03-19)
 
+### Bug Fixes
+
+- Revert **list-box:** use `aria-disabled` instead of invalid `disabled` attribute ([#2125](https://github.com/carbon-design-system/carbon-components-svelte/issues/2125)) ([e1b3ef2](https://github.com/carbon-design-system/carbon-components-svelte/commit/e1b3ef22c9ee09474bacadbb0b22b41326566bab))
+
 ### [0.88.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.1...v0.88.2) (2025-03-19)
 
 ### Bug Fixes
