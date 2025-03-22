@@ -94,8 +94,7 @@ describe("RadioTile", () => {
     expect(radioTileLabel).toHaveAttribute("for", "custom-id");
   });
 
-  // TODO(bug): support standalone radio tile.
-  it.skip("should handle custom name", () => {
+  it("should handle custom name", () => {
     render(RadioTileSingle);
 
     expect(screen.getByRole("radio")).toHaveAttribute("name", "custom-name");
