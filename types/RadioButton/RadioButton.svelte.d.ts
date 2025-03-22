@@ -71,6 +71,10 @@ export type RadioButtonProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class RadioButton extends SvelteComponentTyped<
   RadioButtonProps,
-  { change: WindowEventMap["change"] },
+  {
+    focus: WindowEventMap["focus"];
+    blur: WindowEventMap["blur"];
+    change: WindowEventMap["change"];
+  },
   { labelText: {} }
 > {}
