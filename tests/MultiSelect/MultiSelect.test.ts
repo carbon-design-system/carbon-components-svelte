@@ -166,15 +166,14 @@ describe("MultiSelect", () => {
       expect(screen.queryByText("Fax")).not.toBeInTheDocument();
     });
 
-    // TODO(bug): ListBoxSelection aria-labels should be user-friendly
-    it.skip("should clear filter on selection clear", async () => {
+    it("should clear filter on selection clear", async () => {
       render(MultiSelect, {
         items,
         filterable: true,
         selectedIds: ["0"],
       });
 
-      const clearButton = screen.getByLabelText("Clear all");
+      const clearButton = screen.getByLabelText("Clear all selected items");
       await user.click(clearButton);
 
       const input = screen.getByRole("combobox");

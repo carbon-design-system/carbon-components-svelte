@@ -48,7 +48,9 @@
   $: translationId = selectionCount
     ? translationIds.clearAll
     : translationIds.clearSelection;
-
+  $: buttonLabel =
+    translateWithId?.(translationIds.clearAll) ??
+    defaultTranslations[translationIds.clearAll];
   $: description =
     translateWithId?.(translationId) ?? defaultTranslations[translationId];
 </script>
@@ -79,7 +81,7 @@
         }
       }}
       {disabled}
-      aria-label={translationIds.clearAll}
+      aria-label={buttonLabel}
       title={description}
     >
       <Close />
