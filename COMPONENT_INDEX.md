@@ -2966,6 +2966,8 @@ None.
 
 | Event name | Type      | Detail |
 | :--------- | :-------- | :----- |
+| focus      | forwarded | --     |
+| blur       | forwarded | --     |
 | change     | forwarded | --     |
 
 ## `RadioButtonGroup`

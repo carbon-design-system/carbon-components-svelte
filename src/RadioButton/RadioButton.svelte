@@ -71,6 +71,8 @@
     required={$groupRequired ?? required}
     {value}
     class:bx--radio-button={true}
+    on:focus
+    on:blur
     on:change
     on:change={() => {
       if (update) {
