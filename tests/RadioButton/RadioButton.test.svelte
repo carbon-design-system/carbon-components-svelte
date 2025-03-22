@@ -26,6 +26,12 @@
   {id}
   {name}
   {ref}
+  on:focus={() => {
+    console.log("focus");
+  }}
+  on:blur={() => {
+    console.log("blur");
+  }}
   on:change={() => {
     console.log("change");
   }}

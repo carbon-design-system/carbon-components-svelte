@@ -91,8 +91,7 @@ describe("RadioButton", () => {
     expect(consoleLog).toHaveBeenCalledWith("change");
   });
 
-  // TODO(bug): forward focus/blur events.
-  it.skip("should handle focus and blur events", async () => {
+  it("should handle focus and blur events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(RadioButton);
 
