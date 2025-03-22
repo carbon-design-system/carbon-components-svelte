@@ -36,6 +36,7 @@
   const { add, update, selectedValue, groupName, groupRequired } = getContext(
     "TileGroup",
   ) ?? {
+    add: () => {},
     groupName: readable(undefined),
     groupRequired: readable(undefined),
     selectedValue: readable(checked ? value : undefined),
