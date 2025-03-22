@@ -71,7 +71,7 @@
   on:mouseleave
   class:bx--form-item={true}
 >
-  {#if (labelText || $$slots.labelText) && !hideLabel}
+  {#if (labelText || $$slots.labelText)}
     <div class:bx--text-area__label-wrapper={true}>
       <label
         for={id}

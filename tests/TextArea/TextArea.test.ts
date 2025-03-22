@@ -79,8 +79,7 @@ describe("TextArea", () => {
     );
   });
 
-  // TODO(bug): hidden label should still be rendered.
-  it.skip("should handle hidden label", () => {
+  it("should handle hidden label", () => {
     render(TextArea, { props: { hideLabel: true } });
 
     expect(screen.getByLabelText("App description")).toBeInTheDocument();
