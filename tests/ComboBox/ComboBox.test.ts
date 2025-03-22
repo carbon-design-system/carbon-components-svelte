@@ -193,6 +193,16 @@ describe("ComboBox", () => {
     expect(screen.getByRole("listbox")).toHaveClass("bx--list-box--up");
   });
 
+  it("should clear filter on selection clear", async () => {
+    render(ComboBoxCustom, { props: { selectedId: "1" } });
+
+    const clearButton = screen.getByLabelText("Clear selected item");
+    await user.click(clearButton);
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveValue("");
+  });
+
   it("should programmatically clear selection", async () => {
     render(ComboBoxCustom, { props: { selectedId: "1" } });
 
