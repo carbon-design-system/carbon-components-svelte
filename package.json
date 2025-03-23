@@ -34,7 +34,7 @@
     "test:ui": "vite",
     "test:src-types": "tsc types/**/*.ts",
     "test:types": "svelte-check --workspace tests",
-    "lint": "prettier --write --cache \"**/*.{svelte,md,js,json,ts}\"",
+    "lint": "biome format --write ./",
     "build:css": "node scripts/build-css",
     "build:docs": "node scripts/build-docs && node scripts/format-component-api",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
@@ -45,6 +45,7 @@
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/svelte": "^5.2.7",
@@ -56,8 +57,6 @@
     "culls": "^0.1.1",
     "jsdom": "^26.0.0",
     "postcss": "^8.5.3",
-    "prettier": "^3.5.3",
-    "prettier-plugin-svelte": "^3.3.3",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
     "sveld": "^0.22.1",
@@ -72,11 +71,6 @@
       "commit": true,
       "tag": true
     }
-  },
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-svelte"
-    ]
   },
   "repository": {
     "type": "git",

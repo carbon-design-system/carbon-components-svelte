@@ -1,9 +1,0 @@
-/css
-/types
-.svelte-kit
-.routify
-dist
-client
-build
-*.svx
-COMPONENT_API.json
