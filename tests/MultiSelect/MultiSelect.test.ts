@@ -124,7 +124,7 @@ describe("MultiSelect", () => {
       await toggleOption("C");
       expect(nthRenderedOptionText(0)).toBe("A");
 
-      // The newly-selected item also shouldn’t move after the dropdown is closed
+      // The newly-selected item also shouldn't move after the dropdown is closed
       // and reopened.
       await closeMenu();
       await openMenu();
@@ -178,6 +178,42 @@ describe("MultiSelect", () => {
 
       const input = screen.getByRole("combobox");
       expect(input).toHaveValue("");
+    });
+
+    it("should show correct clear button label regardless of selection count", async () => {
+      render(MultiSelect, {
+        items,
+        selectedIds: ["0"],
+      });
+
+      expect(
+        screen.getByLabelText("Clear all selected items"),
+      ).toBeInTheDocument();
+
+      await openMenu();
+      await toggleOption("Email");
+      expect(
+        screen.getByLabelText("Clear all selected items"),
+      ).toBeInTheDocument();
+    });
+
+    it("should use custom translations when translateWithId is provided", async () => {
+      const customTranslations = {
+        clearSelection: "Remove selected item",
+        clearAll: "Remove all items",
+      } as const;
+
+      render(MultiSelect, {
+        items,
+        selectedIds: ["0"],
+        translateWithIdSelection: (id) => customTranslations[id],
+      });
+
+      expect(screen.getByLabelText("Remove all items")).toBeInTheDocument();
+
+      await openMenu();
+      await toggleOption("Email");
+      expect(screen.getByLabelText("Remove all items")).toBeInTheDocument();
     });
   });
 

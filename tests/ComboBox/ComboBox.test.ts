@@ -60,11 +60,33 @@ describe("ComboBox", () => {
       },
     });
 
-    const clearButton = screen.getByRole("button", { name: /clear/i });
+    const clearButton = screen.getByRole("button", {
+      name: "Clear selected item",
+    });
     await user.click(clearButton);
 
     expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
     expect(screen.getByRole("textbox")).toHaveValue("");
+  });
+
+  it("should use custom translations when translateWithId is provided", () => {
+    const customTranslations = {
+      clearSelection: "Remove selected item",
+      clearAll: "Remove all items",
+    } as const;
+
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        translateWithIdSelection: (id) => customTranslations[id],
+      },
+    });
+
+    const clearButton = screen.getByRole("button", {
+      name: "Remove selected item",
+    });
+    expect(clearButton).toBeInTheDocument();
   });
 
   it("should handle disabled state", () => {
