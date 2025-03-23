@@ -1,13 +1,13 @@
 <script>
-  import {
-    Button,
-    RadioButtonGroup,
-    RadioButton,
-  } from "carbon-components-svelte";
+import {
+  Button,
+  RadioButtonGroup,
+  RadioButton,
+} from "carbon-components-svelte";
 
-  const plans = ["Free (1 GB)", "Standard (10 GB)", "Pro (128 GB)"];
+const plans = ["Free (1 GB)", "Standard (10 GB)", "Pro (128 GB)"];
 
-  let plan = plans[1];
+let plan = plans[1];
 </script>
 
 <RadioButtonGroup

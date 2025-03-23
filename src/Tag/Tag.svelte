@@ -1,44 +1,44 @@
 <script>
-  /** @restProps {div | span} */
+/** @restProps {div | span} */
 
-  /**
-   * Specify the type of tag
-   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast" | "outline"}
-   */
-  export let type = undefined;
+/**
+ * Specify the type of tag
+ * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast" | "outline"}
+ */
+export let type = undefined;
 
-  /** @type {"sm" | "default"} */
-  export let size = "default";
+/** @type {"sm" | "default"} */
+export let size = "default";
 
-  /** Set to `true` to use filterable variant */
-  export let filter = false;
+/** Set to `true` to use filterable variant */
+export let filter = false;
 
-  /** Set to `true` to disable a filterable tag */
-  export let disabled = false;
+/** Set to `true` to disable a filterable tag */
+export let disabled = false;
 
-  /** Set to `true` to render a `button` element instead of a `div` */
-  export let interactive = false;
+/** Set to `true` to render a `button` element instead of a `div` */
+export let interactive = false;
 
-  /** Set to `true` to display the skeleton state */
-  export let skeleton = false;
+/** Set to `true` to display the skeleton state */
+export let skeleton = false;
 
-  /** Set the title for the close button in a filterable tag */
-  export let title = "Clear filter";
+/** Set the title for the close button in a filterable tag */
+export let title = "Clear filter";
 
-  /**
-   * Specify the icon to render
-   * @type {any}
-   */
-  export let icon = undefined;
+/**
+ * Specify the icon to render
+ * @type {any}
+ */
+export let icon = undefined;
 
-  /** Set an id for the filterable tag */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the filterable tag */
+export let id = "ccs-" + Math.random().toString(36);
 
-  import { createEventDispatcher } from "svelte";
-  import Close from "../icons/Close.svelte";
-  import TagSkeleton from "./TagSkeleton.svelte";
+import { createEventDispatcher } from "svelte";
+import Close from "../icons/Close.svelte";
+import TagSkeleton from "./TagSkeleton.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

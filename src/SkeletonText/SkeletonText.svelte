@@ -1,20 +1,20 @@
 <script>
-  /** Specify the number of lines to render */
-  export let lines = 3;
+/** Specify the number of lines to render */
+export let lines = 3;
 
-  /** Set to `true` to use the heading size variant */
-  export let heading = false;
+/** Set to `true` to use the heading size variant */
+export let heading = false;
 
-  /** Set to `true` to use the paragraph size variant */
-  export let paragraph = false;
+/** Set to `true` to use the paragraph size variant */
+export let paragraph = false;
 
-  /** Specify the width of the text (% or px) */
-  export let width = "100%";
+/** Specify the width of the text (% or px) */
+export let width = "100%";
 
-  const RANDOM = [0.973, 0.153, 0.567];
+const RANDOM = [0.973, 0.153, 0.567];
 
-  $: widthNum = parseInt(width, 10);
-  $: widthPx = width.includes("px");
+$: widthNum = parseInt(width, 10);
+$: widthPx = width.includes("px");
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

@@ -1,5 +1,5 @@
 <script>
-  import { DataTable } from "carbon-components-svelte";
+import { DataTable } from "carbon-components-svelte";
 </script>
 
 <DataTable

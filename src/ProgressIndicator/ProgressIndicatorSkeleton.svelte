@@ -1,9 +1,9 @@
 <script>
-  /** Set to `true` to use the vertical variant */
-  export let vertical = false;
+/** Set to `true` to use the vertical variant */
+export let vertical = false;
 
-  /** Specify the number of steps to render */
-  export let count = 4;
+/** Specify the number of steps to render */
+export let count = 4;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

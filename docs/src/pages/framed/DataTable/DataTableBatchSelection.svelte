@@ -1,9 +1,9 @@
 <script>
-  import { DataTable } from "carbon-components-svelte";
+import { DataTable } from "carbon-components-svelte";
 
-  let selectedRowIds = [];
+let selectedRowIds = [];
 
-  $: console.log("selectedRowIds", selectedRowIds);
+$: console.log("selectedRowIds", selectedRowIds);
 </script>
 
 <DataTable

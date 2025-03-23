@@ -1,5 +1,5 @@
 <script>
-  import { MultiSelect } from "carbon-components-svelte";
+import { MultiSelect } from "carbon-components-svelte";
 </script>
 
 <MultiSelect

@@ -1,6 +1,6 @@
 <script>
-  /** @type {"end" | "front"}*/
-  export let clamp = "end";
+/** @type {"end" | "front"}*/
+export let clamp = "end";
 </script>
 
 <p

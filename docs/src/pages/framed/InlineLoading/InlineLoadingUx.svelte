@@ -1,37 +1,37 @@
 <script>
-  import { Button, ButtonSet, InlineLoading } from "carbon-components-svelte";
-  import { onDestroy } from "svelte";
+import { Button, ButtonSet, InlineLoading } from "carbon-components-svelte";
+import { onDestroy } from "svelte";
 
-  const descriptionMap = {
-    active: "Submitting...",
-    finished: "Success",
-    inactive: "Cancelling...",
-  };
+const descriptionMap = {
+  active: "Submitting...",
+  finished: "Success",
+  inactive: "Cancelling...",
+};
 
-  const stateMap = {
-    active: "finished",
-    inactive: "dormant",
-    finished: "dormant",
-  };
+const stateMap = {
+  active: "finished",
+  inactive: "dormant",
+  finished: "dormant",
+};
 
-  let timeout = undefined;
-  let state = "dormant"; // "dormant" | "active" | "finished" | "inactive"
+let timeout = undefined;
+let state = "dormant"; // "dormant" | "active" | "finished" | "inactive"
 
-  function reset(incomingState) {
-    if (typeof timeout === "number") {
-      clearTimeout(timeout);
-    }
-
-    if (incomingState) {
-      timeout = setTimeout(() => {
-        state = incomingState;
-      }, 2000);
-    }
+function reset(incomingState) {
+  if (typeof timeout === "number") {
+    clearTimeout(timeout);
   }
 
-  onDestroy(reset);
+  if (incomingState) {
+    timeout = setTimeout(() => {
+      state = incomingState;
+    }, 2000);
+  }
+}
 
-  $: reset(stateMap[state]);
+onDestroy(reset);
+
+$: reset(stateMap[state]);
 </script>
 
 <ButtonSet>

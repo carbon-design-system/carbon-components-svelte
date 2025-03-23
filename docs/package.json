@@ -30,10 +30,7 @@
   "routify": {
     "routifyDir": ".routify",
     "dynamicImports": true,
-    "extensions": [
-      "svelte",
-      "svx"
-    ]
+    "extensions": ["svelte", "svx"]
   },
   "type": "module"
 }

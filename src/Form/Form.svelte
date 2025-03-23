@@ -1,6 +1,6 @@
 <script>
-  /** Obtain a reference to the form element */
-  export let ref = null;
+/** Obtain a reference to the form element */
+export let ref = null;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

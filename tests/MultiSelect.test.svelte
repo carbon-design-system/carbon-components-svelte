@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { MultiSelect } from "carbon-components-svelte";
-  import type { MultiSelectProps } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import { MultiSelect } from "carbon-components-svelte";
+import type { MultiSelectProps } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 
-  let selectedIds: MultiSelectProps["selectedIds"] = [0];
+let selectedIds: MultiSelectProps["selectedIds"] = [0];
 
-  $: {
-    // @ts-expect-error
-    selectedIds[0] = [0];
-  }
+$: {
+  // @ts-expect-error
+  selectedIds[0] = [0];
+}
 </script>
 
 <MultiSelect

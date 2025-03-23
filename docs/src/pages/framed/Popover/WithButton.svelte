@@ -1,8 +1,8 @@
 <script>
-  import { Popover, Button } from "carbon-components-svelte";
+import { Popover, Button } from "carbon-components-svelte";
 
-  let open = true;
-  let ref = null;
+let open = true;
+let ref = null;
 </script>
 
 <div bind:this={ref} style:position="relative">

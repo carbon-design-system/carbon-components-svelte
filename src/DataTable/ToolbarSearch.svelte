@@ -1,78 +1,78 @@
 <script>
-  /**
-   * @restProps {input}
-   * @event {null} clear
-   */
+/**
+ * @restProps {input}
+ * @event {null} clear
+ */
 
-  /**
-   * Specify the value of the search input
-   * @type {number | string}
-   */
-  export let value = "";
+/**
+ * Specify the value of the search input
+ * @type {number | string}
+ */
+export let value = "";
 
-  /** Set to `true` to expand the search bar */
-  export let expanded = false;
+/** Set to `true` to expand the search bar */
+export let expanded = false;
 
-  /** Set to `true` to keep the search bar expanded */
-  export let persistent = false;
+/** Set to `true` to keep the search bar expanded */
+export let persistent = false;
 
-  /** Set to `true` to disable the search bar */
-  export let disabled = false;
+/** Set to `true` to disable the search bar */
+export let disabled = false;
 
-  /**
-   * Set to `true` to filter table rows using the search value.
-   *
-   * If `true`, the default search excludes `id`, `cells` fields and
-   * only does a basic comparison on string and number type cell values.
-   *
-   * To implement your own client-side filtering, pass a function
-   * that accepts a row and value and returns a boolean.
-   * @type {boolean | ((row: import("./DataTable.svelte").DataTableRow, value: number | string) => boolean)}
-   */
-  export let shouldFilterRows = false;
+/**
+ * Set to `true` to filter table rows using the search value.
+ *
+ * If `true`, the default search excludes `id`, `cells` fields and
+ * only does a basic comparison on string and number type cell values.
+ *
+ * To implement your own client-side filtering, pass a function
+ * that accepts a row and value and returns a boolean.
+ * @type {boolean | ((row: import("./DataTable.svelte").DataTableRow, value: number | string) => boolean)}
+ */
+export let shouldFilterRows = false;
 
-  /**
-   * The filtered row ids
-   * @type {ReadonlyArray<import("./DataTable.svelte").DataTableRowId>}
-   */
-  export let filteredRowIds = [];
+/**
+ * The filtered row ids
+ * @type {ReadonlyArray<import("./DataTable.svelte").DataTableRowId>}
+ */
+export let filteredRowIds = [];
 
-  /** Specify the tabindex */
-  export let tabindex = "0";
+/** Specify the tabindex */
+export let tabindex = "0";
 
-  /**
-   * Obtain a reference to the input HTML element
-   * @type {null | HTMLInputElement}
-   */
-  export let ref = null;
+/**
+ * Obtain a reference to the input HTML element
+ * @type {null | HTMLInputElement}
+ */
+export let ref = null;
 
-  import { tick, getContext } from "svelte";
-  import Search from "../Search/Search.svelte";
+import { tick, getContext } from "svelte";
+import Search from "../Search/Search.svelte";
 
-  const ctx = getContext("DataTable") ?? {};
+const ctx = getContext("DataTable") ?? {};
 
-  $: if (shouldFilterRows) {
-    filteredRowIds = ctx?.filterRows(value, shouldFilterRows);
-  }
+$: if (shouldFilterRows) {
+  filteredRowIds = ctx?.filterRows(value, shouldFilterRows);
+}
 
-  async function expandSearch() {
-    await tick();
-    if (disabled || persistent || expanded) return;
-    expanded = true;
-    await tick();
-    ref.focus();
-  }
+async function expandSearch() {
+  await tick();
+  if (disabled || persistent || expanded) return;
+  expanded = true;
+  await tick();
+  ref.focus();
+}
 
-  $: expanded = !!value.length;
-  $: classes = [
-    expanded && "bx--toolbar-search-container-active",
-    persistent
-      ? "bx--toolbar-search-container-persistent"
-      : "bx--toolbar-search-container-expandable",
-    disabled && "bx--toolbar-search-container-disabled",
-  ]
-    .filter(Boolean)
-    .join(" ");
+$: expanded = !!value.length;
+$: classes = [
+  expanded && "bx--toolbar-search-container-active",
+  persistent
+    ? "bx--toolbar-search-container-persistent"
+    : "bx--toolbar-search-container-expandable",
+  disabled && "bx--toolbar-search-container-disabled",
+]
+  .filter(Boolean)
+  .join(" ");
 </script>
 
 <Search

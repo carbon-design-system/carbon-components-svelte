@@ -1,15 +1,15 @@
 <script>
-  import {
-    ContextMenu,
-    ContextMenuDivider,
-    ContextMenuGroup,
-    ContextMenuOption,
-  } from "carbon-components-svelte";
-  import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
-  import Cut from "carbon-icons-svelte/lib/Cut.svelte";
+import {
+  ContextMenu,
+  ContextMenuDivider,
+  ContextMenuGroup,
+  ContextMenuOption,
+} from "carbon-components-svelte";
+import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
+import Cut from "carbon-icons-svelte/lib/Cut.svelte";
 
-  let target;
-  let target2;
+let target;
+let target2;
 </script>
 
 <ContextMenu target={[target, target2]} on:open={(e) => console.log(e.detail)}>

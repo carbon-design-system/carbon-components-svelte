@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tile } from "carbon-components-svelte";
+import { Tile } from "carbon-components-svelte";
 </script>
 
 <Tile>Default tile</Tile>

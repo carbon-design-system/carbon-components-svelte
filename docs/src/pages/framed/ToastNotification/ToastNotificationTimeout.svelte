@@ -1,9 +1,9 @@
 <script>
-  import { Button, ToastNotification } from "carbon-components-svelte";
-  import { fade } from "svelte/transition";
+import { Button, ToastNotification } from "carbon-components-svelte";
+import { fade } from "svelte/transition";
 
-  let timeout = undefined;
-  $: showNotification = timeout !== undefined;
+let timeout = undefined;
+$: showNotification = timeout !== undefined;
 </script>
 
 <Button

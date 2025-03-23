@@ -1,7 +1,7 @@
 <script>
-  import { Tabs, Tab, TabContent, Button } from "carbon-components-svelte";
+import { Tabs, Tab, TabContent, Button } from "carbon-components-svelte";
 
-  let selected = 0;
+let selected = 0;
 </script>
 
 <Tabs bind:selected>

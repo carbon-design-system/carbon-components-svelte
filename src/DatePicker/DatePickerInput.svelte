@@ -1,81 +1,81 @@
 <script>
-  /**
-   * Set the size of the input
-   * @type {"sm" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the input
+ * @type {"sm" | "xl"}
+ */
+export let size = undefined;
 
-  /** Specify the input type */
-  export let type = "text";
+/** Specify the input type */
+export let type = "text";
 
-  /** Specify the input placeholder text */
-  export let placeholder = "";
+/** Specify the input placeholder text */
+export let placeholder = "";
 
-  /** Specify the Regular Expression for the input value */
-  export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
+/** Specify the Regular Expression for the input value */
+export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
 
-  /** Set to `true` to disable the input */
-  export let disabled = false;
+/** Set to `true` to disable the input */
+export let disabled = false;
 
-  /** Specify the helper text */
-  export let helperText = "";
+/** Specify the helper text */
+export let helperText = "";
 
-  /** Specify the ARIA label for the calendar icon */
-  export let iconDescription = "";
+/** Specify the ARIA label for the calendar icon */
+export let iconDescription = "";
 
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the input element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Specify the invalid state text */
-  export let invalidText = "";
+/** Specify the invalid state text */
+export let invalidText = "";
 
-  /** Set to `true` to indicate an warning state */
-  export let warn = false;
+/** Set to `true` to indicate an warning state */
+export let warn = false;
 
-  /** Specify the warning state text */
-  export let warnText = "";
+/** Specify the warning state text */
+export let warnText = "";
 
-  /**
-   * Set a name for the input element
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Set a name for the input element
+ * @type {string}
+ */
+export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
+/** Obtain a reference to the input HTML element */
+export let ref = null;
 
-  import { getContext } from "svelte";
-  import Calendar from "../icons/Calendar.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+import { getContext } from "svelte";
+import Calendar from "../icons/Calendar.svelte";
+import WarningFilled from "../icons/WarningFilled.svelte";
+import WarningAltFilled from "../icons/WarningAltFilled.svelte";
 
-  const {
-    range,
-    add,
-    hasCalendar,
-    declareRef,
-    inputIds,
-    updateValue,
-    blurInput,
-    openCalendar,
-    focusCalendar,
-    inputValue,
-    inputValueFrom,
-    inputValueTo,
-  } = getContext("DatePicker");
+const {
+  range,
+  add,
+  hasCalendar,
+  declareRef,
+  inputIds,
+  updateValue,
+  blurInput,
+  openCalendar,
+  focusCalendar,
+  inputValue,
+  inputValueFrom,
+  inputValueTo,
+} = getContext("DatePicker");
 
-  add({ id, labelText });
+add({ id, labelText });
 
-  $: if (ref) declareRef({ id, ref });
+$: if (ref) declareRef({ id, ref });
 </script>
 
 <div

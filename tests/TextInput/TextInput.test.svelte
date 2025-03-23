@@ -1,26 +1,26 @@
 <script lang="ts">
-  import { TextInput } from "carbon-components-svelte";
-  import type { ComponentProps } from "svelte";
+import { TextInput } from "carbon-components-svelte";
+import type { ComponentProps } from "svelte";
 
-  export let value: ComponentProps<TextInput>["value"] = "";
-  export let placeholder = "";
-  export let size: ComponentProps<TextInput>["size"] = undefined;
-  export let light = false;
-  export let disabled = false;
-  export let helperText = "";
-  export let labelText = "User name";
-  export let hideLabel = false;
-  export let invalid = false;
-  export let invalidText = "";
-  export let warn = false;
-  export let warnText = "";
-  export let id = "ccs-test";
-  export let name: ComponentProps<TextInput>["name"] = undefined;
-  export let ref: ComponentProps<TextInput>["ref"] = null;
-  export let required = false;
-  export let inline = false;
-  export let readonly = false;
-  export let type: ComponentProps<TextInput>["type"] = "text";
+export let value: ComponentProps<TextInput>["value"] = "";
+export let placeholder = "";
+export let size: ComponentProps<TextInput>["size"] = undefined;
+export let light = false;
+export let disabled = false;
+export let helperText = "";
+export let labelText = "User name";
+export let hideLabel = false;
+export let invalid = false;
+export let invalidText = "";
+export let warn = false;
+export let warnText = "";
+export let id = "ccs-test";
+export let name: ComponentProps<TextInput>["name"] = undefined;
+export let ref: ComponentProps<TextInput>["ref"] = null;
+export let required = false;
+export let inline = false;
+export let readonly = false;
+export let type: ComponentProps<TextInput>["type"] = "text";
 </script>
 
 <TextInput

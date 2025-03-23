@@ -1,29 +1,29 @@
 <script context="module">
-  /**
-   * Depth-first search to find a node by id; returns an array
-   * of nodes from the initial node to the matching leaf.
-   * @param {TreeNode} node
-   * @param {TreeNodeId} id
-   * @returns {null | TreeNode[]}
-   */
-  function findNodeById(node, id) {
-    if (node === null) return null;
-    if (node.id === id) return [node];
-    if (!Array.isArray(node.nodes)) {
-      return null;
-    }
-
-    for (const child of node.nodes) {
-      const nodes = findNodeById(child, id);
-
-      if (Array.isArray(nodes)) {
-        nodes.unshift(node);
-        return nodes;
-      }
-    }
-
+/**
+ * Depth-first search to find a node by id; returns an array
+ * of nodes from the initial node to the matching leaf.
+ * @param {TreeNode} node
+ * @param {TreeNodeId} id
+ * @returns {null | TreeNode[]}
+ */
+function findNodeById(node, id) {
+  if (node === null) return null;
+  if (node.id === id) return [node];
+  if (!Array.isArray(node.nodes)) {
     return null;
   }
+
+  for (const child of node.nodes) {
+    const nodes = findNodeById(child, id);
+
+    if (Array.isArray(nodes)) {
+      nodes.unshift(node);
+      return nodes;
+    }
+  }
+
+  return null;
+}
 </script>
 
 <script>

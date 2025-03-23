@@ -1,97 +1,97 @@
 <script>
-  /**
-   * Set the size of the input
-   * @type {"sm" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the input
+ * @type {"sm" | "xl"}
+ */
+export let size = undefined;
 
-  /**
-   * Specify the input value
-   * @type {number | string}
-   */
-  export let value = "";
+/**
+ * Specify the input value
+ * @type {number | string}
+ */
+export let value = "";
 
-  /**
-   * Set to `"text"` to toggle the password visibility
-   * @type {"text" | "password"}
-   */
-  export let type = "password";
+/**
+ * Set to `"text"` to toggle the password visibility
+ * @type {"text" | "password"}
+ */
+export let type = "password";
 
-  /** Specify the placeholder text */
-  export let placeholder = "";
+/** Specify the placeholder text */
+export let placeholder = "";
 
-  /** Specify the hide password label text */
-  export let hidePasswordLabel = "Hide password";
+/** Specify the hide password label text */
+export let hidePasswordLabel = "Hide password";
 
-  /** Specify the show password label text */
-  export let showPasswordLabel = "Show password";
+/** Specify the show password label text */
+export let showPasswordLabel = "Show password";
 
-  /**
-   * Set the alignment of the tooltip relative to the icon
-   * @type {"start" | "center" | "end"}
-   */
-  export let tooltipAlignment = "center";
+/**
+ * Set the alignment of the tooltip relative to the icon
+ * @type {"start" | "center" | "end"}
+ */
+export let tooltipAlignment = "center";
 
-  /**
-   * Set the position of the tooltip relative to the icon
-   * @type {"top" | "right" | "bottom" | "left"}
-   */
-  export let tooltipPosition = "bottom";
+/**
+ * Set the position of the tooltip relative to the icon
+ * @type {"top" | "right" | "bottom" | "left"}
+ */
+export let tooltipPosition = "bottom";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to disable the input */
-  export let disabled = false;
+/** Set to `true` to disable the input */
+export let disabled = false;
 
-  /** Specify the helper text */
-  export let helperText = "";
+/** Specify the helper text */
+export let helperText = "";
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Specify the text for the invalid state */
-  export let invalidText = "";
+/** Specify the text for the invalid state */
+export let invalidText = "";
 
-  /** Set to `true` to indicate an warning state */
-  export let warn = false;
+/** Set to `true` to indicate an warning state */
+export let warn = false;
 
-  /** Specify the warning state text */
-  export let warnText = "";
+/** Specify the warning state text */
+export let warnText = "";
 
-  /** Set to `true` to use inline version */
-  export let inline = false;
+/** Set to `true` to use inline version */
+export let inline = false;
 
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the input element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the input
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the input
+ * @type {string}
+ */
+export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
+/** Obtain a reference to the input HTML element */
+export let ref = null;
 
-  import { getContext } from "svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import View from "../icons/View.svelte";
-  import ViewOff from "../icons/ViewOff.svelte";
+import { getContext } from "svelte";
+import WarningFilled from "../icons/WarningFilled.svelte";
+import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+import View from "../icons/View.svelte";
+import ViewOff from "../icons/ViewOff.svelte";
 
-  const ctx = getContext("Form");
+const ctx = getContext("Form");
 
-  const isFluid = !!ctx && ctx.isFluid;
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+const isFluid = !!ctx && ctx.isFluid;
+$: helperId = `helper-${id}`;
+$: errorId = `error-${id}`;
+$: warnId = `warn-${id}`;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

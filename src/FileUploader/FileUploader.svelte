@@ -1,110 +1,108 @@
 <script>
-  /**
-   * @event {ReadonlyArray<File>} add
-   * @event {ReadonlyArray<File>} remove
-   * @event {ReadonlyArray<File>} change
-   */
+/**
+ * @event {ReadonlyArray<File>} add
+ * @event {ReadonlyArray<File>} remove
+ * @event {ReadonlyArray<File>} change
+ */
 
-  /**
-   * Specify the file uploader status
-   * @type {"uploading" | "edit" | "complete"}
-   */
-  export let status = "uploading";
+/**
+ * Specify the file uploader status
+ * @type {"uploading" | "edit" | "complete"}
+ */
+export let status = "uploading";
 
-  /** Set to `true` to disable the file uploader */
-  export let disabled = false;
+/** Set to `true` to disable the file uploader */
+export let disabled = false;
 
-  /**
-   * Specify the accepted file types
-   * @type {ReadonlyArray<string>}
-   */
-  export let accept = [];
+/**
+ * Specify the accepted file types
+ * @type {ReadonlyArray<string>}
+ */
+export let accept = [];
 
-  /**
-   * Obtain a reference to the uploaded files
-   * @type {ReadonlyArray<File>}
-   */
-  export let files = [];
+/**
+ * Obtain a reference to the uploaded files
+ * @type {ReadonlyArray<File>}
+ */
+export let files = [];
 
-  /** Set to `true` to allow multiple files */
-  export let multiple = false;
+/** Set to `true` to allow multiple files */
+export let multiple = false;
 
-  /**
-   * Programmatically clear the uploaded files
-   * @type {() => void}
-   */
-  export const clearFiles = () => {
-    files = [];
-  };
+/**
+ * Programmatically clear the uploaded files
+ * @type {() => void}
+ */
+export const clearFiles = () => {
+  files = [];
+};
 
-  /**
-   * Specify the label title.
-   * Alternatively, use the named slot "labelTitle" (e.g., `<span slot="labelTitle">...</span>`)
-   */
-  export let labelTitle = "";
+/**
+ * Specify the label title.
+ * Alternatively, use the named slot "labelTitle" (e.g., `<span slot="labelTitle">...</span>`)
+ */
+export let labelTitle = "";
 
-  /**
-   * Specify the label description.
-   * Alternatively, use the named slot "labelDescription" (e.g., `<span slot="labelDescription">...</span>`)
-   */
-  export let labelDescription = "";
+/**
+ * Specify the label description.
+ * Alternatively, use the named slot "labelDescription" (e.g., `<span slot="labelDescription">...</span>`)
+ */
+export let labelDescription = "";
 
-  /**
-   * Specify the kind of file uploader button
-   * @type {import("../Button/Button.svelte").ButtonProps["kind"]}
-   */
-  export let kind = "primary";
+/**
+ * Specify the kind of file uploader button
+ * @type {import("../Button/Button.svelte").ButtonProps["kind"]}
+ */
+export let kind = "primary";
 
-  /**
-   * Specify the size of the file uploader button
-   * @type {import("../Button/Button.svelte").ButtonProps["size"]}
-   */
-  export let size = "small";
+/**
+ * Specify the size of the file uploader button
+ * @type {import("../Button/Button.svelte").ButtonProps["size"]}
+ */
+export let size = "small";
 
-  /** Specify the button label */
-  export let buttonLabel = "";
+/** Specify the button label */
+export let buttonLabel = "";
 
-  /** Specify the ARIA label used for the status icons */
-  export let iconDescription = "Provide icon description";
+/** Specify the ARIA label used for the status icons */
+export let iconDescription = "Provide icon description";
 
-  /** Specify a name attribute for the file button uploader input */
-  export let name = "";
+/** Specify a name attribute for the file button uploader input */
+export let name = "";
 
-  import { createEventDispatcher, afterUpdate } from "svelte";
-  import Filename from "./Filename.svelte";
-  import FileUploaderButton from "./FileUploaderButton.svelte";
+import { createEventDispatcher, afterUpdate } from "svelte";
+import Filename from "./Filename.svelte";
+import FileUploaderButton from "./FileUploaderButton.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let prevFiles = [];
+let prevFiles = [];
 
-  /** @type {(file: File) => string} */
-  const getFileId = (file) => file.lastModified + file.name;
+/** @type {(file: File) => string} */
+const getFileId = (file) => file.lastModified + file.name;
 
-  afterUpdate(() => {
-    const fileIds = files.map(getFileId);
-    const prevFileIds = prevFiles.map(getFileId);
-    const addedIds = fileIds.filter((_) => !prevFileIds.includes(_));
-    const removedIds = prevFileIds.filter((_) => !fileIds.includes(_));
+afterUpdate(() => {
+  const fileIds = files.map(getFileId);
+  const prevFileIds = prevFiles.map(getFileId);
+  const addedIds = fileIds.filter((_) => !prevFileIds.includes(_));
+  const removedIds = prevFileIds.filter((_) => !fileIds.includes(_));
 
-    if (addedIds.length > 0) {
-      dispatch(
-        "add",
-        addedIds.map((id) => files.find((file) => id === getFileId(file))),
-      );
-    }
+  if (addedIds.length > 0) {
+    dispatch(
+      "add",
+      addedIds.map((id) => files.find((file) => id === getFileId(file))),
+    );
+  }
 
-    if (removedIds.length > 0) {
-      dispatch(
-        "remove",
-        removedIds.map((id) =>
-          prevFiles.find((file) => id === getFileId(file)),
-        ),
-      );
-    }
+  if (removedIds.length > 0) {
+    dispatch(
+      "remove",
+      removedIds.map((id) => prevFiles.find((file) => id === getFileId(file))),
+    );
+  }
 
-    prevFiles = [...files];
-  });
+  prevFiles = [...files];
+});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

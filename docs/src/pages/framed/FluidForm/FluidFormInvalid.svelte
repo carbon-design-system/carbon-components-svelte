@@ -1,14 +1,10 @@
 <script>
-  import {
-    FluidForm,
-    TextInput,
-    PasswordInput,
-  } from "carbon-components-svelte";
+import { FluidForm, TextInput, PasswordInput } from "carbon-components-svelte";
 
-  let password = "";
-  let invalid = false;
+let password = "";
+let invalid = false;
 
-  $: invalid = !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(password);
+$: invalid = !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(password);
 </script>
 
 <FluidForm>

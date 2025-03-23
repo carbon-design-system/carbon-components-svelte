@@ -1,57 +1,57 @@
 <script>
-  /**
-   * @typedef {{ href: string; text: string; description?: string; }} HeaderSearchResult
-   * @event {null} active
-   * @event {null} inactive
-   * @event {null} clear
-   * @event {{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }} select
-   * @slot {{ result: HeaderSearchResult; index: number }}
-   */
+/**
+ * @typedef {{ href: string; text: string; description?: string; }} HeaderSearchResult
+ * @event {null} active
+ * @event {null} inactive
+ * @event {null} clear
+ * @event {{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }} select
+ * @slot {{ result: HeaderSearchResult; index: number }}
+ */
 
-  /** Specify the search input value */
-  export let value = "";
+/** Specify the search input value */
+export let value = "";
 
-  /** Set to `true` to activate and focus the search bar */
-  export let active = false;
+/** Set to `true` to activate and focus the search bar */
+export let active = false;
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
+/** Obtain a reference to the input HTML element */
+export let ref = null;
 
-  /**
-   * Render a list of search results
-   * @type {ReadonlyArray<HeaderSearchResult>}
-   */
-  export let results = [];
+/**
+ * Render a list of search results
+ * @type {ReadonlyArray<HeaderSearchResult>}
+ */
+export let results = [];
 
-  /** Specify the selected result index */
-  export let selectedResultIndex = 0;
+/** Specify the selected result index */
+export let selectedResultIndex = 0;
 
-  import { createEventDispatcher, tick } from "svelte";
-  import Close from "../icons/Close.svelte";
-  import IconSearch from "../icons/IconSearch.svelte";
+import { createEventDispatcher, tick } from "svelte";
+import Close from "../icons/Close.svelte";
+import IconSearch from "../icons/IconSearch.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let refSearch = null;
+let refSearch = null;
 
-  function reset() {
-    active = false;
-    value = "";
-    selectedResultIndex = 0;
-  }
+function reset() {
+  active = false;
+  value = "";
+  selectedResultIndex = 0;
+}
 
-  function selectResult() {
-    dispatch("select", { value, selectedResultIndex, selectedResult });
-    reset();
-  }
+function selectResult() {
+  dispatch("select", { value, selectedResultIndex, selectedResult });
+  reset();
+}
 
-  $: if (active && ref) ref.focus();
-  $: if (!active && ref) ref.blur();
-  $: dispatch(active ? "active" : "inactive");
-  $: selectedResult = results[selectedResultIndex];
-  $: selectedId = selectedResult
-    ? `search-menuitem-${selectedResultIndex}`
-    : undefined;
+$: if (active && ref) ref.focus();
+$: if (!active && ref) ref.blur();
+$: dispatch(active ? "active" : "inactive");
+$: selectedResult = results[selectedResultIndex];
+$: selectedId = selectedResult
+  ? `search-menuitem-${selectedResultIndex}`
+  : undefined;
 </script>
 
 <svelte:window

@@ -1,7 +1,7 @@
 <script>
-  import { Button, Modal, TextInput } from "carbon-components-svelte";
+import { Button, Modal, TextInput } from "carbon-components-svelte";
 
-  let open = false;
+let open = false;
 </script>
 
 <Button on:click={() => (open = true)}>Create database</Button>

@@ -1,38 +1,38 @@
 <script>
-  /**
-   * Specify the tooltip text.
-   * Alternatively, use the "tooltipText" slot
-   */
-  export let tooltipText = "";
+/**
+ * Specify the tooltip text.
+ * Alternatively, use the "tooltipText" slot
+ */
+export let tooltipText = "";
 
-  /**
-   * Specify the icon to render
-   * @type {any}
-   */
-  export let icon = undefined;
+/**
+ * Specify the icon to render
+ * @type {any}
+ */
+export let icon = undefined;
 
-  /** Set to `true` to disable the tooltip icon */
-  export let disabled = false;
+/** Set to `true` to disable the tooltip icon */
+export let disabled = false;
 
-  /**
-   * Set the alignment of the tooltip relative to the icon
-   * @type {"start" | "center" | "end"}
-   */
-  export let align = "center";
+/**
+ * Set the alignment of the tooltip relative to the icon
+ * @type {"start" | "center" | "end"}
+ */
+export let align = "center";
 
-  /**
-   * Set the direction of the tooltip relative to the icon
-   * @type {"top" | "right" | "bottom" | "left"}
-   */
-  export let direction = "bottom";
+/**
+ * Set the direction of the tooltip relative to the icon
+ * @type {"top" | "right" | "bottom" | "left"}
+ */
+export let direction = "bottom";
 
-  /** Set an id for the span element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the span element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the button HTML element */
-  export let ref = null;
+/** Obtain a reference to the button HTML element */
+export let ref = null;
 
-  let hidden = false;
+let hidden = false;
 </script>
 
 <svelte:window

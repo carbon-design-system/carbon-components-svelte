@@ -1,97 +1,96 @@
 <script>
-  /**
-   * @event {{ page?: number; pageSize?: number }} change - Dispatched after any user interaction
-   * @event {{ page: number; }} click:button--previous
-   * @event {{ page: number; }} click:button--next
-   * @event {{ pageSize: number; page: number; }} update
-   */
+/**
+ * @event {{ page?: number; pageSize?: number }} change - Dispatched after any user interaction
+ * @event {{ page: number; }} click:button--previous
+ * @event {{ page: number; }} click:button--next
+ * @event {{ pageSize: number; page: number; }} update
+ */
 
-  /** Specify the current page index */
-  export let page = 1;
+/** Specify the current page index */
+export let page = 1;
 
-  /** Specify the total number of items */
-  export let totalItems = 0;
+/** Specify the total number of items */
+export let totalItems = 0;
 
-  /** Set to `true` to disable the pagination */
-  export let disabled = false;
+/** Set to `true` to disable the pagination */
+export let disabled = false;
 
-  /** Specify the forward button text */
-  export let forwardText = "Next page";
+/** Specify the forward button text */
+export let forwardText = "Next page";
 
-  /** Specify the backward button text */
-  export let backwardText = "Previous page";
+/** Specify the backward button text */
+export let backwardText = "Previous page";
 
-  /** Specify the items per page text */
-  export let itemsPerPageText = "Items per page:";
+/** Specify the items per page text */
+export let itemsPerPageText = "Items per page:";
 
-  /**
-   * Override the item text
-   * @type {(min: number, max: number) => string}
-   */
-  export let itemText = (min, max) =>
-    `${min}–${max} item${max === 1 ? "" : "s"}`;
+/**
+ * Override the item text
+ * @type {(min: number, max: number) => string}
+ */
+export let itemText = (min, max) => `${min}–${max} item${max === 1 ? "" : "s"}`;
 
-  /**
-   * Override the item range text
-   * @type {(min: number, max: number, total: number) => string}
-   */
-  export let itemRangeText = (min, max, total) =>
-    `${min}–${max} of ${total} item${max === 1 ? "" : "s"}`;
+/**
+ * Override the item range text
+ * @type {(min: number, max: number, total: number) => string}
+ */
+export let itemRangeText = (min, max, total) =>
+  `${min}–${max} of ${total} item${max === 1 ? "" : "s"}`;
 
-  /** Set to `true` to disable the page input */
-  export let pageInputDisabled = false;
+/** Set to `true` to disable the page input */
+export let pageInputDisabled = false;
 
-  /** Set to `true` to disable the page size input */
-  export let pageSizeInputDisabled = false;
+/** Set to `true` to disable the page size input */
+export let pageSizeInputDisabled = false;
 
-  /** Specify the number of items to display in a page */
-  export let pageSize = 10;
+/** Specify the number of items to display in a page */
+export let pageSize = 10;
 
-  /**
-   * Specify the available page sizes
-   * @type {ReadonlyArray<number>}
-   */
-  export let pageSizes = [10];
+/**
+ * Specify the available page sizes
+ * @type {ReadonlyArray<number>}
+ */
+export let pageSizes = [10];
 
-  /** Set to `true` if the number of pages is unknown */
-  export let pagesUnknown = false;
+/** Set to `true` if the number of pages is unknown */
+export let pagesUnknown = false;
 
-  /**
-   * Override the page text
-   * @type {(page: number) => string}
-   */
-  export let pageText = (page) => `page ${page}`;
+/**
+ * Override the page text
+ * @type {(page: number) => string}
+ */
+export let pageText = (page) => `page ${page}`;
 
-  /**
-   * Override the page range text
-   * @type {(current: number, total: number) => string}
-   */
-  export let pageRangeText = (current, total) =>
-    `of ${total} page${total === 1 ? "" : "s"}`;
+/**
+ * Override the page range text
+ * @type {(current: number, total: number) => string}
+ */
+export let pageRangeText = (current, total) =>
+  `of ${total} page${total === 1 ? "" : "s"}`;
 
-  /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the top-level element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  import { afterUpdate, createEventDispatcher } from "svelte";
-  import CaretLeft from "../icons/CaretLeft.svelte";
-  import CaretRight from "../icons/CaretRight.svelte";
-  import Button from "../Button/Button.svelte";
-  import Select from "../Select/Select.svelte";
-  import SelectItem from "../Select/SelectItem.svelte";
+import { afterUpdate, createEventDispatcher } from "svelte";
+import CaretLeft from "../icons/CaretLeft.svelte";
+import CaretRight from "../icons/CaretRight.svelte";
+import Button from "../Button/Button.svelte";
+import Select from "../Select/Select.svelte";
+import SelectItem from "../Select/SelectItem.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  afterUpdate(() => {
-    if (page > totalPages) {
-      page = totalPages;
-    }
-  });
+afterUpdate(() => {
+  if (page > totalPages) {
+    page = totalPages;
+  }
+});
 
-  $: dispatch("update", { pageSize, page });
-  $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
-  $: selectItems = Array.from({ length: totalPages }, (_, i) => i);
-  $: backButtonDisabled = disabled || page === 1;
-  $: forwardButtonDisabled = disabled || page === totalPages;
+$: dispatch("update", { pageSize, page });
+$: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
+$: selectItems = Array.from({ length: totalPages }, (_, i) => i);
+$: backButtonDisabled = disabled || page === 1;
+$: forwardButtonDisabled = disabled || page === totalPages;
 </script>
 
 <div {id} class:bx--pagination={true} {...$$restProps}>

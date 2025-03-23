@@ -1,5 +1,5 @@
 <script>
-  import { Loading } from "carbon-components-svelte";
+import { Loading } from "carbon-components-svelte";
 </script>
 
 <Loading />

@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { RadioTile, TileGroup } from "carbon-components-svelte";
-  import type { ComponentProps } from "svelte";
+import { RadioTile, TileGroup } from "carbon-components-svelte";
+import type { ComponentProps } from "svelte";
 
-  export let checked: ComponentProps<RadioTile>["checked"] = false;
-  export let light: ComponentProps<RadioTile>["light"] = false;
-  export let disabled: ComponentProps<RadioTile>["disabled"] = false;
-  export let required: ComponentProps<RadioTile>["required"] = false;
-  export let value: ComponentProps<RadioTile>["value"] = "test";
-  export let tabindex: ComponentProps<RadioTile>["tabindex"] = "0";
-  export let iconDescription: ComponentProps<RadioTile>["iconDescription"] =
-    "Tile checkmark";
-  export let id: ComponentProps<RadioTile>["id"] = "ccs-test";
-  export let name: ComponentProps<RadioTile>["name"] = "test-group";
+export let checked: ComponentProps<RadioTile>["checked"] = false;
+export let light: ComponentProps<RadioTile>["light"] = false;
+export let disabled: ComponentProps<RadioTile>["disabled"] = false;
+export let required: ComponentProps<RadioTile>["required"] = false;
+export let value: ComponentProps<RadioTile>["value"] = "test";
+export let tabindex: ComponentProps<RadioTile>["tabindex"] = "0";
+export let iconDescription: ComponentProps<RadioTile>["iconDescription"] =
+  "Tile checkmark";
+export let id: ComponentProps<RadioTile>["id"] = "ccs-test";
+export let name: ComponentProps<RadioTile>["name"] = "test-group";
 </script>
 
 <TileGroup

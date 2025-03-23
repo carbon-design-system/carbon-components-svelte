@@ -1,9 +1,9 @@
 <script lang="ts">
-  import {
-    TimePicker,
-    TimePickerSelect,
-    SelectItem,
-  } from "carbon-components-svelte";
+import {
+  TimePicker,
+  TimePickerSelect,
+  SelectItem,
+} from "carbon-components-svelte";
 </script>
 
 <TimePicker labelText="Custom label">

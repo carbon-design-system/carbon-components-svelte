@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { Select, SelectItem } from "carbon-components-svelte";
+import { Select, SelectItem } from "carbon-components-svelte";
 
-  export let selected: string | number | undefined = undefined;
-  export let disabled = false;
-  export let invalid = false;
-  export let invalidText = "";
-  export let warn = false;
-  export let warnText = "";
-  export let helperText = "";
-  export let hideLabel = false;
-  export let labelText = "Select label";
-  export let size: "sm" | "xl" | undefined = undefined;
-  export let inline = false;
-  export let light = false;
+export let selected: string | number | undefined = undefined;
+export let disabled = false;
+export let invalid = false;
+export let invalidText = "";
+export let warn = false;
+export let warnText = "";
+export let helperText = "";
+export let hideLabel = false;
+export let labelText = "Select label";
+export let size: "sm" | "xl" | undefined = undefined;
+export let inline = false;
+export let light = false;
 </script>
 
 <Select

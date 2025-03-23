@@ -1,26 +1,26 @@
 <script>
-  /**
-   * Set the type of notification
-   * @type {"toast" | "inline"}
-   */
-  export let notificationType = "toast";
+/**
+ * Set the type of notification
+ * @type {"toast" | "inline"}
+ */
+export let notificationType = "toast";
 
-  /**
-   * Specify the icon to render
-   * @type {any}
-   */
-  export let icon = Close;
+/**
+ * Specify the icon to render
+ * @type {any}
+ */
+export let icon = Close;
 
-  /**
-   * Specify the title of the icon
-   * @type {string}
-   */
-  export let title = undefined;
+/**
+ * Specify the title of the icon
+ * @type {string}
+ */
+export let title = undefined;
 
-  /** Specify the ARIA label for the icon */
-  export let iconDescription = "Close icon";
+/** Specify the ARIA label for the icon */
+export let iconDescription = "Close icon";
 
-  import Close from "../icons/Close.svelte";
+import Close from "../icons/Close.svelte";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

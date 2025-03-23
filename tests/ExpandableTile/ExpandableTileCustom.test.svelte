@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { ExpandableTile, Button } from "carbon-components-svelte";
+import { ExpandableTile, Button } from "carbon-components-svelte";
 
-  export let buttonClicked = false;
-  export let linkClicked = false;
+export let buttonClicked = false;
+export let linkClicked = false;
 </script>
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">

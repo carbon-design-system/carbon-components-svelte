@@ -1,22 +1,22 @@
 <script>
-  /** @restProps {a | p} */
+/** @restProps {a | p} */
 
-  /** Set to `true` to click the tile */
-  export let clicked = false;
+/** Set to `true` to click the tile */
+export let clicked = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to disable the tile */
-  export let disabled = false;
+/** Set to `true` to disable the tile */
+export let disabled = false;
 
-  /**
-   * Set the `href`
-   * @type {string}
-   */
-  export let href = undefined;
+/**
+ * Set the `href`
+ * @type {string}
+ */
+export let href = undefined;
 
-  import Link from "../Link/Link.svelte";
+import Link from "../Link/Link.svelte";
 </script>
 
 <Link

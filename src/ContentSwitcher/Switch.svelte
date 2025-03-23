@@ -1,41 +1,41 @@
 <script>
-  /**
-   * Specify the switch text.
-   * Alternatively, use the "text" slot  (e.g., `<span slot="text">...</span>`)
-   */
-  export let text = "Provide text";
+/**
+ * Specify the switch text.
+ * Alternatively, use the "text" slot  (e.g., `<span slot="text">...</span>`)
+ */
+export let text = "Provide text";
 
-  /** Set to `true` for the switch to be selected */
-  export let selected = false;
+/** Set to `true` for the switch to be selected */
+export let selected = false;
 
-  /** Set to `true` to disable the switch */
-  export let disabled = false;
+/** Set to `true` to disable the switch */
+export let disabled = false;
 
-  /** Set an id for the button element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the button element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the button HTML element */
-  export let ref = null;
+/** Obtain a reference to the button HTML element */
+export let ref = null;
 
-  import { afterUpdate, getContext, onMount } from "svelte";
+import { afterUpdate, getContext, onMount } from "svelte";
 
-  const ctx = getContext("ContentSwitcher");
+const ctx = getContext("ContentSwitcher");
 
-  ctx.add({ id, text, selected });
+ctx.add({ id, text, selected });
 
-  const unsubscribe = ctx.currentId.subscribe((currentId) => {
-    selected = currentId === id;
-  });
+const unsubscribe = ctx.currentId.subscribe((currentId) => {
+  selected = currentId === id;
+});
 
-  afterUpdate(() => {
-    if (selected) {
-      ref.focus();
-    }
-  });
+afterUpdate(() => {
+  if (selected) {
+    ref.focus();
+  }
+});
 
-  onMount(() => {
-    return () => unsubscribe();
-  });
+onMount(() => {
+  return () => unsubscribe();
+});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

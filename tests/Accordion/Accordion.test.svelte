@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Accordion, AccordionItem } from "carbon-components-svelte";
+import { Accordion, AccordionItem } from "carbon-components-svelte";
 </script>
 
 <Accordion>

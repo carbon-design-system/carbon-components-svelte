@@ -1,169 +1,169 @@
 <script>
-  /**
-   * Specify the kind of option
-   * @type {"default" | "danger"}
-   */
-  export let kind = "default";
+/**
+ * Specify the kind of option
+ * @type {"default" | "danger"}
+ */
+export let kind = "default";
 
-  /** Set to `true` to enable the disabled state */
-  export let disabled = false;
+/** Set to `true` to enable the disabled state */
+export let disabled = false;
 
-  /** Set to `true` to indent the label */
-  export let indented = false;
+/** Set to `true` to indent the label */
+export let indented = false;
 
-  /**
-   * Specify the icon to render
-   * Icon is rendered to the left of the label text
-   * @type {any}
-   */
-  export let icon = undefined;
+/**
+ * Specify the icon to render
+ * Icon is rendered to the left of the label text
+ * @type {any}
+ */
+export let icon = undefined;
 
-  /**
-   * Specify the label text.
-   * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
-   */
-  export let labelText = "";
+/**
+ * Specify the label text.
+ * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
+ */
+export let labelText = "";
 
-  /** Set to `true` to use the selected variant */
-  export let selected = false;
+/** Set to `true` to use the selected variant */
+export let selected = false;
 
-  /**
-   * Set to `true` to enable the selectable variant
-   * Automatically set to `true` if `selected` is `true`
-   */
-  export let selectable = false;
+/**
+ * Set to `true` to enable the selectable variant
+ * Automatically set to `true` if `selected` is `true`
+ */
+export let selectable = false;
 
-  /**
-   * Specify the shortcut text.
-   * Alternatively, use the "shortcutText" slot (e.g., `<span slot="shortcutText">...</span>`)
-   */
-  export let shortcutText = "";
+/**
+ * Specify the shortcut text.
+ * Alternatively, use the "shortcutText" slot (e.g., `<span slot="shortcutText">...</span>`)
+ */
+export let shortcutText = "";
 
-  /**
-   * Specify the id
-   * It's recommended to provide an id as a value to bind to within a selectable/radio menu group
-   */
-  export let id = "ccs-" + Math.random().toString(36);
+/**
+ * Specify the id
+ * It's recommended to provide an id as a value to bind to within a selectable/radio menu group
+ */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the list item HTML element */
-  export let ref = null;
+/** Obtain a reference to the list item HTML element */
+export let ref = null;
 
-  import { onMount, getContext, createEventDispatcher, tick } from "svelte";
-  import ContextMenu from "./ContextMenu.svelte";
-  import Checkmark from "../icons/Checkmark.svelte";
-  import CaretRight from "../icons/CaretRight.svelte";
+import { onMount, getContext, createEventDispatcher, tick } from "svelte";
+import ContextMenu from "./ContextMenu.svelte";
+import Checkmark from "../icons/Checkmark.svelte";
+import CaretRight from "../icons/CaretRight.svelte";
 
-  const dispatch = createEventDispatcher();
-  const ctx = getContext("ContextMenu");
-  const ctxGroup = getContext("ContextMenuGroup");
-  const ctxRadioGroup = getContext("ContextMenuRadioGroup");
+const dispatch = createEventDispatcher();
+const ctx = getContext("ContextMenu");
+const ctxGroup = getContext("ContextMenuGroup");
+const ctxRadioGroup = getContext("ContextMenuRadioGroup");
 
-  // "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
-  const moderate01 = 150;
+// "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
+const moderate01 = 150;
 
-  let unsubCurrentIds = undefined;
-  let unsubCurrentId = undefined;
-  let timeoutHover = undefined;
-  let rootMenuPosition = [0, 0];
-  let focusIndex = 0;
-  let options = [];
-  let role = "menuitem";
-  let submenuOpen = false;
-  let submenuPosition = [0, 0];
-  let menuOffsetX = 0;
+let unsubCurrentIds = undefined;
+let unsubCurrentId = undefined;
+let timeoutHover = undefined;
+let rootMenuPosition = [0, 0];
+let focusIndex = 0;
+let options = [];
+let role = "menuitem";
+let submenuOpen = false;
+let submenuPosition = [0, 0];
+let menuOffsetX = 0;
 
-  const unsubPosition = ctx.position.subscribe((position) => {
-    rootMenuPosition = position;
-  });
+const unsubPosition = ctx.position.subscribe((position) => {
+  rootMenuPosition = position;
+});
 
-  const unsubMenuOffsetX = ctx.menuOffsetX.subscribe((_menuOffsetX) => {
-    menuOffsetX = _menuOffsetX;
-  });
+const unsubMenuOffsetX = ctx.menuOffsetX.subscribe((_menuOffsetX) => {
+  menuOffsetX = _menuOffsetX;
+});
 
-  function handleClick(opts = {}) {
-    if (disabled) return ctx.close();
-    if (subOptions) return;
+function handleClick(opts = {}) {
+  if (disabled) return ctx.close();
+  if (subOptions) return;
 
-    if (!!ctxGroup) {
-      ctxGroup.toggleOption({ id });
-    } else if (!!ctxRadioGroup) {
-      if (opts.fromKeyboard) {
-        ctxRadioGroup.setOption({ id: opts.id });
-      } else {
-        ctxRadioGroup.setOption({ id });
-      }
+  if (!!ctxGroup) {
+    ctxGroup.toggleOption({ id });
+  } else if (!!ctxRadioGroup) {
+    if (opts.fromKeyboard) {
+      ctxRadioGroup.setOption({ id: opts.id });
     } else {
-      selected = !selected;
+      ctxRadioGroup.setOption({ id });
     }
-
-    ctx.close();
-    dispatch("click");
+  } else {
+    selected = !selected;
   }
 
-  onMount(() => {
-    if (selected === true) selectable = true;
+  ctx.close();
+  dispatch("click");
+}
 
-    if (ctxGroup) {
-      unsubCurrentIds = ctxGroup.currentIds.subscribe((_currentIds) => {
-        selected = _currentIds.includes(id);
-      });
-    }
+onMount(() => {
+  if (selected === true) selectable = true;
 
-    if (ctxRadioGroup) {
-      unsubCurrentId = ctxRadioGroup.currentId.subscribe((_id) => {
-        selected = id === _id;
-      });
-    }
-
-    return () => {
-      unsubPosition();
-      unsubMenuOffsetX();
-      if (unsubCurrentIds) unsubCurrentIds();
-      if (unsubCurrentId) unsubCurrentId();
-      if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
-    };
-  });
-
-  $: isSelectable = !!ctxGroup || selectable;
-  $: isRadio = !!ctxRadioGroup;
-  $: subOptions = $$slots.default;
-  $: ctx.setPopup(submenuOpen);
-  $: if (submenuOpen) {
-    const { width, y } = ref.getBoundingClientRect();
-    let x = rootMenuPosition[0] + width;
-
-    if (window.innerWidth - menuOffsetX < width) {
-      x = rootMenuPosition[0] - width;
-    }
-
-    submenuPosition = [x, y];
+  if (ctxGroup) {
+    unsubCurrentIds = ctxGroup.currentIds.subscribe((_currentIds) => {
+      selected = _currentIds.includes(id);
+    });
   }
-  $: {
-    if (isSelectable) {
-      indented = true;
-      role = "menuitemcheckbox";
 
-      if (selected) {
-        if (ctxGroup) ctxGroup.addOption({ id });
-        icon = Checkmark;
-      } else {
-        icon = undefined;
-      }
-    }
+  if (ctxRadioGroup) {
+    unsubCurrentId = ctxRadioGroup.currentId.subscribe((_id) => {
+      selected = id === _id;
+    });
+  }
 
-    if (isRadio) {
-      indented = true;
-      role = "menuitemradio";
-      ctxRadioGroup.addOption({ id });
+  return () => {
+    unsubPosition();
+    unsubMenuOffsetX();
+    if (unsubCurrentIds) unsubCurrentIds();
+    if (unsubCurrentId) unsubCurrentId();
+    if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
+  };
+});
 
-      if (selected) {
-        if (ctxRadioGroup) ctxRadioGroup.setOption({ id });
-        icon = Checkmark;
-      } else {
-        icon = undefined;
-      }
+$: isSelectable = !!ctxGroup || selectable;
+$: isRadio = !!ctxRadioGroup;
+$: subOptions = $$slots.default;
+$: ctx.setPopup(submenuOpen);
+$: if (submenuOpen) {
+  const { width, y } = ref.getBoundingClientRect();
+  let x = rootMenuPosition[0] + width;
+
+  if (window.innerWidth - menuOffsetX < width) {
+    x = rootMenuPosition[0] - width;
+  }
+
+  submenuPosition = [x, y];
+}
+$: {
+  if (isSelectable) {
+    indented = true;
+    role = "menuitemcheckbox";
+
+    if (selected) {
+      if (ctxGroup) ctxGroup.addOption({ id });
+      icon = Checkmark;
+    } else {
+      icon = undefined;
     }
   }
+
+  if (isRadio) {
+    indented = true;
+    role = "menuitemradio";
+    ctxRadioGroup.addOption({ id });
+
+    if (selected) {
+      if (ctxRadioGroup) ctxRadioGroup.setOption({ id });
+      icon = Checkmark;
+    } else {
+      icon = undefined;
+    }
+  }
+}
 </script>
 
 <li

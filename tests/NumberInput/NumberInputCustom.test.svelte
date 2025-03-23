@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { NumberInput } from "carbon-components-svelte";
+import { NumberInput } from "carbon-components-svelte";
 </script>
 
 <NumberInput label="Custom label" value={0}>

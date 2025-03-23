@@ -1,137 +1,136 @@
 <script>
-  /**
-   * @event {number} change
-   * @event {number} input
-   */
+/**
+ * @event {number} change
+ * @event {number} input
+ */
 
-  /** Specify the value of the slider */
-  export let value = 0;
+/** Specify the value of the slider */
+export let value = 0;
 
-  /** Set the maximum slider value */
-  export let max = 100;
+/** Set the maximum slider value */
+export let max = 100;
 
-  /** Specify the label for the max value */
-  export let maxLabel = "";
+/** Specify the label for the max value */
+export let maxLabel = "";
 
-  /** Set the minimum slider value */
-  export let min = 0;
+/** Set the minimum slider value */
+export let min = 0;
 
-  /** Specify the label for the min value */
-  export let minLabel = "";
+/** Specify the label for the min value */
+export let minLabel = "";
 
-  /** Set the step value */
-  export let step = 1;
+/** Set the step value */
+export let step = 1;
 
-  /** Set the step multiplier value */
-  export let stepMultiplier = 4;
+/** Set the step multiplier value */
+export let stepMultiplier = 4;
 
-  /** Set to `true` to require a value */
-  export let required = false;
+/** Set to `true` to require a value */
+export let required = false;
 
-  /** Specify the input type */
-  export let inputType = "number";
+/** Specify the input type */
+export let inputType = "number";
 
-  /** Set to `true` to disable the slider */
-  export let disabled = false;
+/** Set to `true` to disable the slider */
+export let disabled = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to hide the text input */
-  export let hideTextInput = false;
+/** Set to `true` to hide the text input */
+export let hideTextInput = false;
 
-  /**
-   * Set to `true` for the slider to span
-   * the full width of its containing element.
-   */
-  export let fullWidth = false;
+/**
+ * Set to `true` for the slider to span
+ * the full width of its containing element.
+ */
+export let fullWidth = false;
 
-  /** Set an id for the slider div element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the slider div element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /**
-   * Specify the label text.
-   * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
-   */
-  export let labelText = "";
+/**
+ * Specify the label text.
+ * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
+ */
+export let labelText = "";
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /** Set a name for the slider element */
-  export let name = "";
+/** Set a name for the slider element */
+export let name = "";
 
-  /** Obtain a reference to the HTML element */
-  export let ref = null;
+/** Obtain a reference to the HTML element */
+export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let trackRef = null;
-  let dragging = false;
-  let holding = false;
+let trackRef = null;
+let dragging = false;
+let holding = false;
 
-  function startDragging() {
-    dragging = true;
+function startDragging() {
+  dragging = true;
+}
+
+function startHolding() {
+  holding = true;
+}
+
+function stopHolding() {
+  holding = false;
+  dragging = false;
+}
+
+function move() {
+  if (holding) {
+    startDragging();
+  }
+}
+
+function calcValue(e) {
+  if (disabled) return;
+
+  const offsetX = e.touches ? e.touches[0].clientX : e.clientX;
+  const { left, width } = trackRef.getBoundingClientRect();
+  let nextValue =
+    min + Math.round(((max - min) * ((offsetX - left) / width)) / step) * step;
+
+  if (nextValue <= min) {
+    nextValue = min;
+  } else if (nextValue >= max) {
+    nextValue = max;
   }
 
-  function startHolding() {
-    holding = true;
+  value = nextValue;
+  dispatch("input", value);
+}
+
+$: labelId = `label-${id}`;
+$: range = max - min;
+$: left = ((value - min) / range) * 100;
+$: {
+  if (value <= min) {
+    value = min;
+  } else if (value >= max) {
+    value = max;
   }
 
-  function stopHolding() {
-    holding = false;
+  if (dragging) {
+    calcValue(event);
     dragging = false;
   }
 
-  function move() {
-    if (holding) {
-      startDragging();
-    }
+  if (!holding && !disabled) {
+    dispatch("change", value);
   }
-
-  function calcValue(e) {
-    if (disabled) return;
-
-    const offsetX = e.touches ? e.touches[0].clientX : e.clientX;
-    const { left, width } = trackRef.getBoundingClientRect();
-    let nextValue =
-      min +
-      Math.round(((max - min) * ((offsetX - left) / width)) / step) * step;
-
-    if (nextValue <= min) {
-      nextValue = min;
-    } else if (nextValue >= max) {
-      nextValue = max;
-    }
-
-    value = nextValue;
-    dispatch("input", value);
-  }
-
-  $: labelId = `label-${id}`;
-  $: range = max - min;
-  $: left = ((value - min) / range) * 100;
-  $: {
-    if (value <= min) {
-      value = min;
-    } else if (value >= max) {
-      value = max;
-    }
-
-    if (dragging) {
-      calcValue(event);
-      dragging = false;
-    }
-
-    if (!holding && !disabled) {
-      dispatch("change", value);
-    }
-  }
+}
 </script>
 
 <svelte:window

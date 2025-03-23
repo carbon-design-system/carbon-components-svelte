@@ -1,15 +1,15 @@
 <script>
-  import {
-    Button,
-    ComposedModal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Checkbox,
-  } from "carbon-components-svelte";
+import {
+  Button,
+  ComposedModal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Checkbox,
+} from "carbon-components-svelte";
 
-  let open = true;
-  let checked = false;
+let open = true;
+let checked = false;
 </script>
 
 <Button on:click={() => (open = true)}>Review changes</Button>

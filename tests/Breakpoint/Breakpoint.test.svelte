@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { Breakpoint } from "carbon-components-svelte";
-  import type { BreakpointSize } from "carbon-components-svelte/Breakpoint/breakpoints";
+import { Breakpoint } from "carbon-components-svelte";
+import type { BreakpointSize } from "carbon-components-svelte/Breakpoint/breakpoints";
 
-  export let size: BreakpointSize | undefined = undefined;
-  export let sizes: Record<BreakpointSize, boolean> = {
-    sm: false,
-    md: false,
-    lg: false,
-    xlg: false,
-    max: false,
-  };
+export let size: BreakpointSize | undefined = undefined;
+export let sizes: Record<BreakpointSize, boolean> = {
+  sm: false,
+  md: false,
+  lg: false,
+  xlg: false,
+  max: false,
+};
 </script>
 
 <Breakpoint

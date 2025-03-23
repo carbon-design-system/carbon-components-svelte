@@ -1,12 +1,12 @@
 <script>
-  /**
-   * @restProps {form}
-   */
+/**
+ * @restProps {form}
+ */
 
-  import { setContext } from "svelte";
-  import Form from "../Form/Form.svelte";
+import { setContext } from "svelte";
+import Form from "../Form/Form.svelte";
 
-  setContext("Form", { isFluid: true });
+setContext("Form", { isFluid: true });
 </script>
 
 <Form

@@ -1,104 +1,115 @@
 <script>
-  /**
-   * @event {null | { index: number; text: string; }} close
-   */
+/**
+ * @event {null | { index: number; text: string; }} close
+ */
 
-  /**
-   * Specify the size of the overflow menu
-   * @type {"sm" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Specify the size of the overflow menu
+ * @type {"sm" | "xl"}
+ */
+export let size = undefined;
 
-  /**
-   * Specify the direction of the overflow menu relative to the button
-   * @type {"top" | "bottom"}
-   */
-  export let direction = "bottom";
+/**
+ * Specify the direction of the overflow menu relative to the button
+ * @type {"top" | "bottom"}
+ */
+export let direction = "bottom";
 
-  /** Set to `true` to open the menu */
-  export let open = false;
+/** Set to `true` to open the menu */
+export let open = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to flip the menu relative to the button */
-  export let flipped = false;
+/** Set to `true` to flip the menu relative to the button */
+export let flipped = false;
 
-  /**
-   * Specify the menu options class
-   * @type {string}
-   */
-  export let menuOptionsClass = undefined;
+/**
+ * Specify the menu options class
+ * @type {string}
+ */
+export let menuOptionsClass = undefined;
 
-  /**
-   * Specify the icon to render.
-   * Defaults to `<OverflowMenuVertical />`
-   * @type {any}
-   */
-  export let icon = OverflowMenuVertical;
+/**
+ * Specify the icon to render.
+ * Defaults to `<OverflowMenuVertical />`
+ * @type {any}
+ */
+export let icon = OverflowMenuVertical;
 
-  /**
-   * Specify the icon class
-   * @type {string}
-   */
-  export let iconClass = undefined;
+/**
+ * Specify the icon class
+ * @type {string}
+ */
+export let iconClass = undefined;
 
-  /** Specify the ARIA label for the icon */
-  export let iconDescription = "Open and close list of options";
+/** Specify the ARIA label for the icon */
+export let iconDescription = "Open and close list of options";
 
-  /** Set an id for the button element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the button element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the trigger button element */
-  export let buttonRef = null;
+/** Obtain a reference to the trigger button element */
+export let buttonRef = null;
 
-  /** Obtain a reference to the overflow menu element */
-  export let menuRef = null;
+/** Obtain a reference to the overflow menu element */
+export let menuRef = null;
 
-  import {
-    createEventDispatcher,
-    getContext,
-    setContext,
-    afterUpdate,
-  } from "svelte";
-  import { writable } from "svelte/store";
-  import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
-  import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
+import {
+  createEventDispatcher,
+  getContext,
+  setContext,
+  afterUpdate,
+} from "svelte";
+import { writable } from "svelte/store";
+import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
+import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
 
-  const ctxBreadcrumbItem = getContext("BreadcrumbItem");
-  const dispatch = createEventDispatcher();
-  const items = writable([]);
-  const currentId = writable(undefined);
-  const focusedId = writable(undefined);
-  const currentIndex = writable(-1);
+const ctxBreadcrumbItem = getContext("BreadcrumbItem");
+const dispatch = createEventDispatcher();
+const items = writable([]);
+const currentId = writable(undefined);
+const focusedId = writable(undefined);
+const currentIndex = writable(-1);
 
-  let buttonWidth = undefined;
-  let onMountAfterUpdate = true;
+let buttonWidth = undefined;
+let onMountAfterUpdate = true;
 
-  $: if (ctxBreadcrumbItem) {
-    icon = OverflowMenuHorizontal;
-  }
+$: if (ctxBreadcrumbItem) {
+  icon = OverflowMenuHorizontal;
+}
 
-  setContext("OverflowMenu", {
-    focusedId,
-    items,
-    add: ({ id, text, primaryFocus, disabled }) => {
-      items.update((_) => {
-        if (primaryFocus) {
-          currentIndex.set(_.length);
-        }
+setContext("OverflowMenu", {
+  focusedId,
+  items,
+  add: ({ id, text, primaryFocus, disabled }) => {
+    items.update((_) => {
+      if (primaryFocus) {
+        currentIndex.set(_.length);
+      }
 
-        return [..._, { id, text, primaryFocus, disabled, index: _.length }];
-      });
-    },
-    update: (id, item) => {
-      currentId.set(id);
+      return [..._, { id, text, primaryFocus, disabled, index: _.length }];
+    });
+  },
+  update: (id, item) => {
+    currentId.set(id);
 
-      dispatch("close", { index: item.index, text: item.text });
-      open = false;
-    },
-    change: (direction) => {
-      let index = $currentIndex + direction;
+    dispatch("close", { index: item.index, text: item.text });
+    open = false;
+  },
+  change: (direction) => {
+    let index = $currentIndex + direction;
+
+    if (index < 0) {
+      index = $items.length - 1;
+    } else if (index >= $items.length) {
+      index = 0;
+    }
+
+    let disabled = $items[index].disabled;
+
+    while (disabled) {
+      index = index + direction;
 
       if (index < 0) {
         index = $items.length - 1;
@@ -106,68 +117,57 @@
         index = 0;
       }
 
-      let disabled = $items[index].disabled;
-
-      while (disabled) {
-        index = index + direction;
-
-        if (index < 0) {
-          index = $items.length - 1;
-        } else if (index >= $items.length) {
-          index = 0;
-        }
-
-        disabled = $items[index].disabled;
-      }
-
-      currentIndex.set(index);
-    },
-  });
-
-  afterUpdate(() => {
-    if (open) {
-      const width = buttonRef.offsetWidth;
-      const height = buttonRef.offsetHeight;
-
-      buttonWidth = width;
-
-      if (!onMountAfterUpdate && $currentIndex < 0) {
-        menuRef.focus();
-      }
-
-      if (flipped) {
-        menuRef.style.left = "auto";
-        menuRef.style.right = 0;
-      }
-
-      if (direction === "top") {
-        menuRef.style.top = "auto";
-        menuRef.style.bottom = height + "px";
-      } else if (direction === "bottom") {
-        menuRef.style.top = height + "px";
-      }
-
-      if (ctxBreadcrumbItem) {
-        menuRef.style.top = height + 10 + "px";
-        menuRef.style.left = -11 + "px";
-      }
+      disabled = $items[index].disabled;
     }
 
-    if (!open) {
-      items.set([]);
-      currentId.set(undefined);
-      currentIndex.set(0);
+    currentIndex.set(index);
+  },
+});
+
+afterUpdate(() => {
+  if (open) {
+    const width = buttonRef.offsetWidth;
+    const height = buttonRef.offsetHeight;
+
+    buttonWidth = width;
+
+    if (!onMountAfterUpdate && $currentIndex < 0) {
+      menuRef.focus();
     }
 
-    onMountAfterUpdate = false;
-  });
+    if (flipped) {
+      menuRef.style.left = "auto";
+      menuRef.style.right = 0;
+    }
 
-  $: menuId = `menu-${id}`;
-  $: ariaLabel = $$props["aria-label"] || "menu";
-  $: if ($items[$currentIndex]) {
-    focusedId.set($items[$currentIndex].id);
+    if (direction === "top") {
+      menuRef.style.top = "auto";
+      menuRef.style.bottom = height + "px";
+    } else if (direction === "bottom") {
+      menuRef.style.top = height + "px";
+    }
+
+    if (ctxBreadcrumbItem) {
+      menuRef.style.top = height + 10 + "px";
+      menuRef.style.left = -11 + "px";
+    }
   }
-  $: styles = `<style>
+
+  if (!open) {
+    items.set([]);
+    currentId.set(undefined);
+    currentIndex.set(0);
+  }
+
+  onMountAfterUpdate = false;
+});
+
+$: menuId = `menu-${id}`;
+$: ariaLabel = $$props["aria-label"] || "menu";
+$: if ($items[$currentIndex]) {
+  focusedId.set($items[$currentIndex].id);
+}
+$: styles = `<style>
     #${id} .bx--overflow-menu-options.bx--overflow-menu-options:after {
       width: ${buttonWidth ? buttonWidth + "px" : "2rem"};
     }

@@ -1,44 +1,44 @@
 <script>
-  /** @extends {"./DataTable.svelte"} DataTableHeader */
+/** @extends {"./DataTable.svelte"} DataTableHeader */
 
-  /**
-   * Specify the number of columns
-   * Superseded by `headers` if `headers` is a non-empty array
-   */
-  export let columns = 5;
+/**
+ * Specify the number of columns
+ * Superseded by `headers` if `headers` is a non-empty array
+ */
+export let columns = 5;
 
-  /** Specify the number of rows */
-  export let rows = 5;
+/** Specify the number of rows */
+export let rows = 5;
 
-  /**
-   * Set the size of the data table
-   * @type {"compact" | "short" | "tall"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the data table
+ * @type {"compact" | "short" | "tall"}
+ */
+export let size = undefined;
 
-  /** Set to `true` to apply zebra styles to the datatable rows */
-  export let zebra = false;
+/** Set to `true` to apply zebra styles to the datatable rows */
+export let zebra = false;
 
-  /** Set to `false` to hide the header */
-  export let showHeader = true;
+/** Set to `false` to hide the header */
+export let showHeader = true;
 
-  /**
-   * Set the column headers
-   * Supersedes `columns` if value is a non-empty array
-   * @type {ReadonlyArray<string | Partial<DataTableHeader>>}
-   */
-  export let headers = [];
+/**
+ * Set the column headers
+ * Supersedes `columns` if value is a non-empty array
+ * @type {ReadonlyArray<string | Partial<DataTableHeader>>}
+ */
+export let headers = [];
 
-  /** Set to `false` to hide the toolbar */
-  export let showToolbar = true;
+/** Set to `false` to hide the toolbar */
+export let showToolbar = true;
 
-  $: values = headers.map((header) =>
-    header.value !== undefined ? header.value : header,
-  );
-  $: cols = Array.from(
-    { length: headers.length > 0 ? headers.length : columns },
-    (_, i) => i,
-  );
+$: values = headers.map((header) =>
+  header.value !== undefined ? header.value : header,
+);
+$: cols = Array.from(
+  { length: headers.length > 0 ? headers.length : columns },
+  (_, i) => i,
+);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { ContentSwitcher, Switch } from "carbon-components-svelte";
+import { ContentSwitcher, Switch } from "carbon-components-svelte";
 
-  export let selectedIndex = 1;
+export let selectedIndex = 1;
 </script>
 
 <ContentSwitcher {selectedIndex}>

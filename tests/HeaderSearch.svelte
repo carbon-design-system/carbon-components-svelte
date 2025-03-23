@@ -1,58 +1,58 @@
 <script lang="ts">
-  import {
-    Header,
-    HeaderUtilities,
-    HeaderAction,
-    HeaderSearch,
-    HeaderPanelLinks,
-    HeaderPanelDivider,
-    HeaderPanelLink,
-    SideNav,
-    SideNavItems,
-    SideNavMenu,
-    SideNavMenuItem,
-    SideNavLink,
-    SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
-  } from "carbon-components-svelte";
-  import type { ComponentProps } from "svelte";
+import {
+  Header,
+  HeaderUtilities,
+  HeaderAction,
+  HeaderSearch,
+  HeaderPanelLinks,
+  HeaderPanelDivider,
+  HeaderPanelLink,
+  SideNav,
+  SideNavItems,
+  SideNavMenu,
+  SideNavMenuItem,
+  SideNavLink,
+  SkipToContent,
+  Content,
+  Grid,
+  Row,
+  Column,
+} from "carbon-components-svelte";
+import type { ComponentProps } from "svelte";
 
-  let isSideNavOpen = false;
-  let isOpen = false;
+let isSideNavOpen = false;
+let isOpen = false;
 
-  let ref: ComponentProps<HeaderSearch>["ref"] = null;
-  let active = false;
-  let value = "";
-  let selectedResultIndex = 1;
+let ref: ComponentProps<HeaderSearch>["ref"] = null;
+let active = false;
+let value = "";
+let selectedResultIndex = 1;
 
-  $: results =
-    value.length > 2
-      ? [
-          {
-            href: "/",
-            text: "Result 1",
-            description: "Result description",
-          },
-          {
-            href: "/",
-            text: "Result 2",
-            description: "Result description",
-          },
-          {
-            href: "/",
-            text: "Result 3",
-            description: "Result description",
-          },
-        ]
-      : [];
+$: results =
+  value.length > 2
+    ? [
+        {
+          href: "/",
+          text: "Result 1",
+          description: "Result description",
+        },
+        {
+          href: "/",
+          text: "Result 2",
+          description: "Result description",
+        },
+        {
+          href: "/",
+          text: "Result 3",
+          description: "Result description",
+        },
+      ]
+    : [];
 
-  $: console.log("ref", ref);
-  $: console.log("active", active);
-  $: console.log("value", value);
-  $: console.log("selectedResultIndex", selectedResultIndex);
+$: console.log("ref", ref);
+$: console.log("active", active);
+$: console.log("value", value);
+$: console.log("selectedResultIndex", selectedResultIndex);
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>

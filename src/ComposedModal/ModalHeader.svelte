@@ -1,31 +1,31 @@
 <script>
-  /** Specify the modal title */
-  export let title = "";
+/** Specify the modal title */
+export let title = "";
 
-  /** Specify the modal label */
-  export let label = "";
+/** Specify the modal label */
+export let label = "";
 
-  /** Specify the label class */
-  export let labelClass = "";
+/** Specify the label class */
+export let labelClass = "";
 
-  /** Specify the title class */
-  export let titleClass = "";
+/** Specify the title class */
+export let titleClass = "";
 
-  /** Specify the close class */
-  export let closeClass = "";
+/** Specify the close class */
+export let closeClass = "";
 
-  /** Specify the close icon class */
-  export let closeIconClass = "";
+/** Specify the close icon class */
+export let closeIconClass = "";
 
-  /** Specify the ARIA label for the close icon */
-  export let iconDescription = "Close";
+/** Specify the ARIA label for the close icon */
+export let iconDescription = "Close";
 
-  import { getContext } from "svelte";
-  import Close from "../icons/Close.svelte";
+import { getContext } from "svelte";
+import Close from "../icons/Close.svelte";
 
-  const { closeModal, updateLabel } = getContext("ComposedModal");
+const { closeModal, updateLabel } = getContext("ComposedModal");
 
-  $: updateLabel(label);
+$: updateLabel(label);
 </script>
 
 <div class:bx--modal-header={true} {...$$restProps}>

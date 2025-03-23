@@ -1,15 +1,15 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { ImageLoader, InlineLoading } from "carbon-components-svelte";
+import { ImageLoader, InlineLoading } from "carbon-components-svelte";
 
-  // Valid image URL for testing successful loads
-  const validImageSrc =
-    "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg";
-  // Invalid image URL for testing error states
-  const invalidImageSrc = "https://invalid-url/nonexistent.png";
+// Valid image URL for testing successful loads
+const validImageSrc =
+  "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg";
+// Invalid image URL for testing error states
+const invalidImageSrc = "https://invalid-url/nonexistent.png";
 
-  export let imageLoader: ImageLoader;
+export let imageLoader: ImageLoader;
 </script>
 
 <!-- Default image loader -->

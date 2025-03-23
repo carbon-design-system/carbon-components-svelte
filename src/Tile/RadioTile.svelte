@@ -1,50 +1,50 @@
 <script>
-  /** Set to `true` to check the tile */
-  export let checked = false;
+/** Set to `true` to check the tile */
+export let checked = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to disable the tile */
-  export let disabled = false;
+/** Set to `true` to disable the tile */
+export let disabled = false;
 
-  /** Set to `true` to mark the field as required */
-  export let required = false;
+/** Set to `true` to mark the field as required */
+export let required = false;
 
-  /** Specify the value of the radio input */
-  export let value = "";
+/** Specify the value of the radio input */
+export let value = "";
 
-  /** Specify the tabindex */
-  export let tabindex = "0";
+/** Specify the tabindex */
+export let tabindex = "0";
 
-  /** Specify the ARIA label for the radio tile checkmark icon */
-  export let iconDescription = "Tile checkmark";
+/** Specify the ARIA label for the radio tile checkmark icon */
+export let iconDescription = "Tile checkmark";
 
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the input element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the radio tile input
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the radio tile input
+ * @type {string}
+ */
+export let name = undefined;
 
-  import { getContext } from "svelte";
-  import { readable } from "svelte/store";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+import { getContext } from "svelte";
+import { readable } from "svelte/store";
+import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
 
-  const { add, update, selectedValue, groupName, groupRequired } = getContext(
-    "TileGroup",
-  ) ?? {
-    add: () => {},
-    groupName: readable(undefined),
-    groupRequired: readable(undefined),
-    selectedValue: readable(checked ? value : undefined),
-  };
+const { add, update, selectedValue, groupName, groupRequired } = getContext(
+  "TileGroup",
+) ?? {
+  add: () => {},
+  groupName: readable(undefined),
+  groupRequired: readable(undefined),
+  selectedValue: readable(checked ? value : undefined),
+};
 
-  add({ value, checked });
+add({ value, checked });
 
-  $: checked = value === $selectedValue;
+$: checked = value === $selectedValue;
 </script>
 
 <input

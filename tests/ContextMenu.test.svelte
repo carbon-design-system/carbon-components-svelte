@@ -1,20 +1,20 @@
 <script lang="ts">
-  import {
-    ContextMenu,
-    ContextMenuDivider,
-    ContextMenuOption,
-    ContextMenuRadioGroup,
-    ContextMenuGroup,
-  } from "carbon-components-svelte";
-  import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
-  import Cut from "carbon-icons-svelte/lib/Cut.svelte";
-  import type { ComponentProps } from "svelte";
+import {
+  ContextMenu,
+  ContextMenuDivider,
+  ContextMenuOption,
+  ContextMenuRadioGroup,
+  ContextMenuGroup,
+} from "carbon-components-svelte";
+import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
+import Cut from "carbon-icons-svelte/lib/Cut.svelte";
+import type { ComponentProps } from "svelte";
 
-  let ref: HTMLElement;
-  let selectedId = "0";
-  let selectedIds: ComponentProps<ContextMenuGroup>["selectedIds"] = [];
+let ref: HTMLElement;
+let selectedId = "0";
+let selectedIds: ComponentProps<ContextMenuGroup>["selectedIds"] = [];
 
-  $: console.log("selectedId", selectedId);
+$: console.log("selectedId", selectedId);
 </script>
 
 <div bind:this={ref}></div>

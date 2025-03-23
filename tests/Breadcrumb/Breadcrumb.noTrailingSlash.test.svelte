@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Breadcrumb, BreadcrumbItem } from "carbon-components-svelte";
+import { Breadcrumb, BreadcrumbItem } from "carbon-components-svelte";
 </script>
 
 <Breadcrumb noTrailingSlash>

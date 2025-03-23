@@ -1,9 +1,9 @@
 <script>
-  import { TileGroup, RadioTile } from "carbon-components-svelte";
+import { TileGroup, RadioTile } from "carbon-components-svelte";
 
-  const values = ["Lite plan", "Standard plan", "Plus plan"];
+const values = ["Lite plan", "Standard plan", "Plus plan"];
 
-  let selected = values[1];
+let selected = values[1];
 </script>
 
 <TileGroup

@@ -1,7 +1,7 @@
 <script>
-  import { PaginationNav, Button } from "carbon-components-svelte";
+import { PaginationNav, Button } from "carbon-components-svelte";
 
-  let page = 2;
+let page = 2;
 </script>
 
 <PaginationNav bind:page />

@@ -1,57 +1,57 @@
 <script>
-  /**
-   * Specify the item text.
-   * Alternatively, use the default slot
-   */
-  export let text = "Provide text";
+/**
+ * Specify the item text.
+ * Alternatively, use the default slot
+ */
+export let text = "Provide text";
 
-  /** Specify the `href` attribute if the item is a link */
-  export let href = "";
+/** Specify the `href` attribute if the item is a link */
+export let href = "";
 
-  /** Set to `true` if the item should be focused when opening the menu */
-  export let primaryFocus = false;
+/** Set to `true` if the item should be focused when opening the menu */
+export let primaryFocus = false;
 
-  /** Set to `true` to disable the item */
-  export let disabled = false;
+/** Set to `true` to disable the item */
+export let disabled = false;
 
-  /** Set to `true` to include a divider */
-  export let hasDivider = false;
+/** Set to `true` to include a divider */
+export let hasDivider = false;
 
-  /** Set to `true` to use the danger variant */
-  export let danger = false;
+/** Set to `true` to use the danger variant */
+export let danger = false;
 
-  /** Set to `false` to omit the button `title` attribute */
-  export let requireTitle = true;
+/** Set to `false` to omit the button `title` attribute */
+export let requireTitle = true;
 
-  /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the top-level element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the HTML element */
-  export let ref = null;
+/** Obtain a reference to the HTML element */
+export let ref = null;
 
-  import { getContext, afterUpdate } from "svelte";
+import { getContext, afterUpdate } from "svelte";
 
-  const { focusedId, add, update, change, items } = getContext("OverflowMenu");
+const { focusedId, add, update, change, items } = getContext("OverflowMenu");
 
-  $: item = $items.find((_) => _.id === id);
+$: item = $items.find((_) => _.id === id);
 
-  add({ id, text, primaryFocus, disabled });
+add({ id, text, primaryFocus, disabled });
 
-  afterUpdate(() => {
-    if (ref && primaryFocus) {
-      ref.focus();
-    }
-  });
+afterUpdate(() => {
+  if (ref && primaryFocus) {
+    ref.focus();
+  }
+});
 
-  $: primaryFocus = $focusedId === id;
-  $: buttonProps = {
-    role: "menuitem",
-    tabindex: "-1",
-    class: "bx--overflow-menu-options__btn",
-    disabled: href ? undefined : disabled,
-    href: href ? href : undefined,
-    title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
-  };
+$: primaryFocus = $focusedId === id;
+$: buttonProps = {
+  role: "menuitem",
+  tabindex: "-1",
+  class: "bx--overflow-menu-options__btn",
+  disabled: href ? undefined : disabled,
+  href: href ? href : undefined,
+  title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
+};
 </script>
 
 <li

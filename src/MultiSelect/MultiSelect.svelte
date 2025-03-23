@@ -1,297 +1,291 @@
 <script>
-  /**
-   * @typedef {any} MultiSelectItemId
-   * @typedef {string} MultiSelectItemText
-   * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }} MultiSelectItem
-   * @event {{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
-   * @event {null} clear
-   * @event {FocusEvent | CustomEvent<FocusEvent>} blur
-   * @slot {{ item: MultiSelectItem; index: number }}
-   */
+/**
+ * @typedef {any} MultiSelectItemId
+ * @typedef {string} MultiSelectItemText
+ * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }} MultiSelectItem
+ * @event {{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
+ * @event {null} clear
+ * @event {FocusEvent | CustomEvent<FocusEvent>} blur
+ * @slot {{ item: MultiSelectItem; index: number }}
+ */
 
-  /**
-   * Set the multiselect items
-   * @type {ReadonlyArray<MultiSelectItem>}
-   */
-  export let items = [];
+/**
+ * Set the multiselect items
+ * @type {ReadonlyArray<MultiSelectItem>}
+ */
+export let items = [];
 
-  /**
-   * Override the display of a multiselect item
-   * @type {(item: MultiSelectItem) => any}
-   */
-  export let itemToString = (item) => item.text || item.id;
+/**
+ * Override the display of a multiselect item
+ * @type {(item: MultiSelectItem) => any}
+ */
+export let itemToString = (item) => item.text || item.id;
 
-  /**
-   * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
-   * @type {(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }}
-   */
-  export let itemToInput = (item) => {};
+/**
+ * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
+ * @type {(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }}
+ */
+export let itemToInput = (item) => {};
 
-  /**
-   * Set the selected ids
-   * @type {ReadonlyArray<MultiSelectItemId>}
-   */
-  export let selectedIds = [];
+/**
+ * Set the selected ids
+ * @type {ReadonlyArray<MultiSelectItemId>}
+ */
+export let selectedIds = [];
 
-  /** Specify the multiselect value */
-  export let value = "";
+/** Specify the multiselect value */
+export let value = "";
 
-  /**
-   * Set the size of the combobox
-   * @type {"sm" | "lg" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the combobox
+ * @type {"sm" | "lg" | "xl"}
+ */
+export let size = undefined;
 
-  /**
-   * Specify the type of multiselect
-   * @type {"default" | "inline"}
-   */
-  export let type = "default";
+/**
+ * Specify the type of multiselect
+ * @type {"default" | "inline"}
+ */
+export let type = "default";
 
-  /**
-   * Specify the direction of the multiselect dropdown menu
-   * @type {"bottom" | "top"}
-   */
-  export let direction = "bottom";
+/**
+ * Specify the direction of the multiselect dropdown menu
+ * @type {"bottom" | "top"}
+ */
+export let direction = "bottom";
 
-  /**
-   * Specify the selection feedback after selecting items
-   * @type {"top" | "fixed" | "top-after-reopen"}
-   */
-  export let selectionFeedback = "top-after-reopen";
+/**
+ * Specify the selection feedback after selecting items
+ * @type {"top" | "fixed" | "top-after-reopen"}
+ */
+export let selectionFeedback = "top-after-reopen";
 
-  /** Set to `true` to disable the dropdown */
-  export let disabled = false;
+/** Set to `true` to disable the dropdown */
+export let disabled = false;
 
-  /** Set to `true` to filter items */
-  export let filterable = false;
+/** Set to `true` to filter items */
+export let filterable = false;
 
-  /**
-   * Override the filtering logic
-   * The default filtering is an exact string comparison
-   * @type {(item: MultiSelectItem, value: string) => boolean}
-   */
-  export let filterItem = (item, value) =>
-    item.text.toLowerCase().includes(value.trim().toLowerCase());
+/**
+ * Override the filtering logic
+ * The default filtering is an exact string comparison
+ * @type {(item: MultiSelectItem, value: string) => boolean}
+ */
+export let filterItem = (item, value) =>
+  item.text.toLowerCase().includes(value.trim().toLowerCase());
 
-  /** Set to `true` to open the dropdown */
-  export let open = false;
+/** Set to `true` to open the dropdown */
+export let open = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Specify the locale */
-  export let locale = "en";
+/** Specify the locale */
+export let locale = "en";
 
-  /** Specify the placeholder text */
-  export let placeholder = "";
+/** Specify the placeholder text */
+export let placeholder = "";
 
-  /**
-   * Override the sorting logic
-   * The default sorting compare the item text value
-   * @type {((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)}
-   */
-  export let sortItem = (a, b) =>
-    a.text.localeCompare(b.text, locale, { numeric: true });
+/**
+ * Override the sorting logic
+ * The default sorting compare the item text value
+ * @type {((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)}
+ */
+export let sortItem = (a, b) =>
+  a.text.localeCompare(b.text, locale, { numeric: true });
 
-  /**
-   * Override the chevron icon label based on the open state.
-   * Defaults to "Open menu" when closed and "Close menu" when open
-   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
-   */
-  export let translateWithId = undefined;
+/**
+ * Override the chevron icon label based on the open state.
+ * Defaults to "Open menu" when closed and "Close menu" when open
+ * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
+ */
+export let translateWithId = undefined;
 
-  /**
-   * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected
-   * @type {(id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string}
-   */
-  export let translateWithIdSelection = undefined;
+/**
+ * Override the label of the clear button when the input has a selection.
+ * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected
+ * @type {(id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string}
+ */
+export let translateWithIdSelection = undefined;
 
-  /** Specify the title text */
-  export let titleText = "";
+/** Specify the title text */
+export let titleText = "";
 
-  /** Set to `true` to pass the item to `itemToString` in the checkbox */
-  export let useTitleInItem = false;
+/** Set to `true` to pass the item to `itemToString` in the checkbox */
+export let useTitleInItem = false;
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Specify the invalid state text */
-  export let invalidText = "";
+/** Specify the invalid state text */
+export let invalidText = "";
 
-  /** Set to `true` to indicate an warning state */
-  export let warn = false;
+/** Set to `true` to indicate an warning state */
+export let warn = false;
 
-  /** Specify the warning state text */
-  export let warnText = "";
+/** Specify the warning state text */
+export let warnText = "";
 
-  /** Specify the helper text */
-  export let helperText = "";
+/** Specify the helper text */
+export let helperText = "";
 
-  /** Specify the list box label */
-  export let label = "";
+/** Specify the list box label */
+export let label = "";
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /** Set an id for the list box component */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the list box component */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the select
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the select
+ * @type {string}
+ */
+export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
-  export let inputRef = null;
+/** Obtain a reference to the input HTML element */
+export let inputRef = null;
 
-  /** Obtain a reference to the outer div element */
-  export let multiSelectRef = null;
+/** Obtain a reference to the outer div element */
+export let multiSelectRef = null;
 
-  /**
-   * Obtain a reference to the field box element
-   * @type {null | HTMLDivElement}
-   */
-  export let fieldRef = null;
+/**
+ * Obtain a reference to the field box element
+ * @type {null | HTMLDivElement}
+ */
+export let fieldRef = null;
 
-  /**
-   * Obtain a reference to the selection element
-   * @type {null | HTMLDivElement}
-   */
-  export let selectionRef = null;
+/**
+ * Obtain a reference to the selection element
+ * @type {null | HTMLDivElement}
+ */
+export let selectionRef = null;
 
-  /**
-   * Id of the highlighted ListBoxMenuItem
-   * @type {null | MultiSelectItemId}
-   */
-  export let highlightedId = null;
+/**
+ * Id of the highlighted ListBoxMenuItem
+ * @type {null | MultiSelectItemId}
+ */
+export let highlightedId = null;
 
-  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import Checkbox from "../Checkbox/Checkbox.svelte";
-  import {
-    ListBox,
-    ListBoxField,
-    ListBoxMenu,
-    ListBoxMenuIcon,
-    ListBoxMenuItem,
-    ListBoxSelection,
-  } from "../ListBox";
+import { afterUpdate, createEventDispatcher, setContext } from "svelte";
+import WarningFilled from "../icons/WarningFilled.svelte";
+import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+import Checkbox from "../Checkbox/Checkbox.svelte";
+import {
+  ListBox,
+  ListBoxField,
+  ListBoxMenu,
+  ListBoxMenuIcon,
+  ListBoxMenuItem,
+  ListBoxSelection,
+} from "../ListBox";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let highlightedIndex = -1;
-  let prevChecked = [];
+let highlightedIndex = -1;
+let prevChecked = [];
 
-  setContext("MultiSelect", {
-    declareRef: ({ key, ref }) => {
-      switch (key) {
-        case "field":
-          fieldRef = ref;
-          break;
-        case "selection":
-          selectionRef = ref;
-          break;
-      }
-    },
-  });
+setContext("MultiSelect", {
+  declareRef: ({ key, ref }) => {
+    switch (key) {
+      case "field":
+        fieldRef = ref;
+        break;
+      case "selection":
+        selectionRef = ref;
+        break;
+    }
+  },
+});
 
-  function change(direction) {
-    let index = highlightedIndex + direction;
-    const itemsToUse = filterable ? filteredItems : sortedItems;
-    const length = itemsToUse.length;
-    if (length === 0) return;
+function change(direction) {
+  let index = highlightedIndex + direction;
+  const itemsToUse = filterable ? filteredItems : sortedItems;
+  const length = itemsToUse.length;
+  if (length === 0) return;
+  if (index < 0) {
+    index = length - 1;
+  } else if (index >= length) {
+    index = 0;
+  }
+
+  let disabled = itemsToUse[index].disabled;
+
+  while (disabled) {
+    index = index + direction;
+
     if (index < 0) {
       index = length - 1;
     } else if (index >= length) {
       index = 0;
     }
 
-    let disabled = itemsToUse[index].disabled;
-
-    while (disabled) {
-      index = index + direction;
-
-      if (index < 0) {
-        index = length - 1;
-      } else if (index >= length) {
-        index = 0;
-      }
-
-      disabled = itemsToUse[index].disabled;
-    }
-
-    highlightedIndex = index;
+    disabled = itemsToUse[index].disabled;
   }
 
-  afterUpdate(() => {
-    if (checked.length !== prevChecked.length) {
-      prevChecked = checked;
-      selectedIds = checked.map(({ id }) => id);
-      dispatch("select", {
-        selectedIds,
-        selected: checked,
-        unselected: unchecked,
-      });
-    }
+  highlightedIndex = index;
+}
 
-    if (!open) {
-      highlightedIndex = -1;
-      value = "";
-    }
-  });
-
-  function sort() {
-    if (
-      selectionFeedback === "top" ||
-      selectionFeedback === "top-after-reopen"
-    ) {
-      const checkedItems = items
-        .filter((item) => selectedIds.includes(item.id))
-        .map((item) => ({ ...item, checked: true }));
-      const uncheckedItems = items
-        .filter((item) => !selectedIds.includes(item.id))
-        .map((item) => ({ ...item, checked: false }));
-
-      return [
-        ...(checkedItems.length > 1
-          ? checkedItems.sort(sortItem)
-          : checkedItems),
-        ...uncheckedItems.sort(sortItem),
-      ];
-    }
-
-    return items
-      .map((item) => ({
-        ...item,
-        checked: selectedIds.includes(item.id),
-      }))
-      .sort(sortItem);
+afterUpdate(() => {
+  if (checked.length !== prevChecked.length) {
+    prevChecked = checked;
+    selectedIds = checked.map(({ id }) => id);
+    dispatch("select", {
+      selectedIds,
+      selected: checked,
+      unselected: unchecked,
+    });
   }
 
-  let sortedItems = sort();
-
-  $: menuId = `menu-${id}`;
-  $: inline = type === "inline";
-  $: ariaLabel = $$props["aria-label"] || "Choose an item";
-  $: if (
-    selectedIds &&
-    (selectionFeedback === "top" ||
-      (selectionFeedback === "top-after-reopen" && open === false))
-  ) {
-    sortedItems = sort();
+  if (!open) {
+    highlightedIndex = -1;
+    value = "";
   }
-  $: checked = sortedItems.filter(({ checked }) => checked);
-  $: unchecked = sortedItems.filter(({ checked }) => !checked);
-  $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
-  $: highlightedId =
-    highlightedIndex > -1
-      ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
-        null)
-      : null;
+});
+
+function sort() {
+  if (selectionFeedback === "top" || selectionFeedback === "top-after-reopen") {
+    const checkedItems = items
+      .filter((item) => selectedIds.includes(item.id))
+      .map((item) => ({ ...item, checked: true }));
+    const uncheckedItems = items
+      .filter((item) => !selectedIds.includes(item.id))
+      .map((item) => ({ ...item, checked: false }));
+
+    return [
+      ...(checkedItems.length > 1 ? checkedItems.sort(sortItem) : checkedItems),
+      ...uncheckedItems.sort(sortItem),
+    ];
+  }
+
+  return items
+    .map((item) => ({
+      ...item,
+      checked: selectedIds.includes(item.id),
+    }))
+    .sort(sortItem);
+}
+
+let sortedItems = sort();
+
+$: menuId = `menu-${id}`;
+$: inline = type === "inline";
+$: ariaLabel = $$props["aria-label"] || "Choose an item";
+$: if (
+  selectedIds &&
+  (selectionFeedback === "top" ||
+    (selectionFeedback === "top-after-reopen" && open === false))
+) {
+  sortedItems = sort();
+}
+$: checked = sortedItems.filter(({ checked }) => checked);
+$: unchecked = sortedItems.filter(({ checked }) => !checked);
+$: filteredItems = sortedItems.filter((item) => filterItem(item, value));
+$: highlightedId =
+  highlightedIndex > -1
+    ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ?? null)
+    : null;
 </script>
 
 <svelte:window

@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { Tooltip } from "carbon-components-svelte";
+import { Tooltip } from "carbon-components-svelte";
 
-  let openCount = 0;
-  let closeCount = 0;
+let openCount = 0;
+let closeCount = 0;
 
-  function handleOpen() {
-    openCount += 1;
-  }
+function handleOpen() {
+  openCount += 1;
+}
 
-  function handleClose() {
-    closeCount += 1;
-  }
+function handleClose() {
+  closeCount += 1;
+}
 </script>
 
 <div>

@@ -1,12 +1,12 @@
 <script>
-  /**
-   * Specify the `href` attribute
-   * @type {string}
-   */
-  export let href = undefined;
+/**
+ * Specify the `href` attribute
+ * @type {string}
+ */
+export let href = undefined;
 
-  /** Obtain a reference to the HTML anchor element */
-  export let ref = null;
+/** Obtain a reference to the HTML anchor element */
+export let ref = null;
 </script>
 
 <li class:bx--switcher__item={true}>

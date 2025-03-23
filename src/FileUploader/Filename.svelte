@@ -1,24 +1,24 @@
 <script>
-  /**
-   * @restProps {div | button | svg}
-   */
+/**
+ * @restProps {div | button | svg}
+ */
 
-  /**
-   * Specify the file name status
-   * @type {"uploading" | "edit" | "complete"}
-   */
-  export let status = "uploading";
+/**
+ * Specify the file name status
+ * @type {"uploading" | "edit" | "complete"}
+ */
+export let status = "uploading";
 
-  /** Specify the ARIA label used for the status icons */
-  export let iconDescription = "";
+/** Specify the ARIA label used for the status icons */
+export let iconDescription = "";
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  import Close from "../icons/Close.svelte";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import Loading from "../Loading/Loading.svelte";
+import Close from "../icons/Close.svelte";
+import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+import WarningFilled from "../icons/WarningFilled.svelte";
+import Loading from "../Loading/Loading.svelte";
 </script>
 
 {#if status === "uploading"}

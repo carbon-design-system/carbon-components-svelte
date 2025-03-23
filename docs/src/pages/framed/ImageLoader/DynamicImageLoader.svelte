@@ -1,14 +1,14 @@
 <script>
-  import { ImageLoader, Button } from "carbon-components-svelte";
+import { ImageLoader, Button } from "carbon-components-svelte";
 
-  const images = [
-    "https://upload.wikimedia.org/wikipedia/commons/1/1b/Svelte_Logo.svg",
-    "https://upload.wikimedia.org/wikipedia/commons/b/b9/Carbon-design-system-logo.png",
-  ];
+const images = [
+  "https://upload.wikimedia.org/wikipedia/commons/1/1b/Svelte_Logo.svg",
+  "https://upload.wikimedia.org/wikipedia/commons/b/b9/Carbon-design-system-logo.png",
+];
 
-  let index = 0;
+let index = 0;
 
-  $: src = images[index];
+$: src = images[index];
 </script>
 
 <Button

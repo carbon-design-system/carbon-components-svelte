@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { LocalStorage } from "carbon-components-svelte";
+import { LocalStorage } from "carbon-components-svelte";
 
-  const objectValue = { theme: "dark", fontSize: 16 };
+const objectValue = { theme: "dark", fontSize: 16 };
 </script>
 
 <div data-testid="object-storage">

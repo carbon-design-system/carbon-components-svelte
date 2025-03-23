@@ -1,28 +1,28 @@
 <script lang="ts">
-  import {
-    Header,
-    HeaderUtilities,
-    HeaderAction,
-    HeaderGlobalAction,
-    HeaderPanelLinks,
-    HeaderPanelDivider,
-    HeaderPanelLink,
-    SideNav,
-    SideNavItems,
-    SideNavMenu,
-    SideNavMenuItem,
-    SideNavLink,
-    SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
-  } from "carbon-components-svelte";
-  import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
-  import { quintOut } from "svelte/easing";
+import {
+  Header,
+  HeaderUtilities,
+  HeaderAction,
+  HeaderGlobalAction,
+  HeaderPanelLinks,
+  HeaderPanelDivider,
+  HeaderPanelLink,
+  SideNav,
+  SideNavItems,
+  SideNavMenu,
+  SideNavMenuItem,
+  SideNavLink,
+  SkipToContent,
+  Content,
+  Grid,
+  Row,
+  Column,
+} from "carbon-components-svelte";
+import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
+import { quintOut } from "svelte/easing";
 
-  let isSideNavOpen = false;
-  let isOpen = false;
+let isSideNavOpen = false;
+let isOpen = false;
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>

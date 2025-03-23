@@ -1,69 +1,69 @@
 <script>
-  /**
-   * @event {ReadonlyArray<File>} change
-   */
+/**
+ * @event {ReadonlyArray<File>} change
+ */
 
-  /**
-   * Specify the accepted file types
-   * @type {ReadonlyArray<string>}
-   */
-  export let accept = [];
+/**
+ * Specify the accepted file types
+ * @type {ReadonlyArray<string>}
+ */
+export let accept = [];
 
-  /**
-   * Obtain a reference to the uploaded files
-   * @type {ReadonlyArray<File>}
-   */
-  export let files = [];
+/**
+ * Obtain a reference to the uploaded files
+ * @type {ReadonlyArray<File>}
+ */
+export let files = [];
 
-  /** Set to `true` to allow multiple files */
-  export let multiple = false;
+/** Set to `true` to allow multiple files */
+export let multiple = false;
 
-  /** Set to `true` to disable the input */
-  export let disabled = false;
+/** Set to `true` to disable the input */
+export let disabled = false;
 
-  /** Set to `true` to disable label changes */
-  export let disableLabelChanges = false;
+/** Set to `true` to disable label changes */
+export let disableLabelChanges = false;
 
-  /**
-   * Specify the kind of file uploader button
-   * @type {import("../Button/Button.svelte").ButtonProps["kind"]}
-   */
-  export let kind = "primary";
+/**
+ * Specify the kind of file uploader button
+ * @type {import("../Button/Button.svelte").ButtonProps["kind"]}
+ */
+export let kind = "primary";
 
-  /**
-   * Specify the size of the file uploader button
-   * @type {import("../Button/Button.svelte").ButtonProps["size"]}
-   */
-  export let size = "small";
+/**
+ * Specify the size of the file uploader button
+ * @type {import("../Button/Button.svelte").ButtonProps["size"]}
+ */
+export let size = "small";
 
-  /** Specify the label text */
-  export let labelText = "Add file";
+/** Specify the label text */
+export let labelText = "Add file";
 
-  /** Specify the label role */
-  export let role = "button";
+/** Specify the label role */
+export let role = "button";
 
-  /** Specify `tabindex` attribute */
-  export let tabindex = "0";
+/** Specify `tabindex` attribute */
+export let tabindex = "0";
 
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the input element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Specify a name attribute for the input */
-  export let name = "";
+/** Specify a name attribute for the input */
+export let name = "";
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
+/** Obtain a reference to the input HTML element */
+export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let initialLabelText = labelText;
+let initialLabelText = labelText;
 
-  $: if (ref && files.length === 0) {
-    labelText = initialLabelText;
-    ref.value = "";
-  }
+$: if (ref && files.length === 0) {
+  labelText = initialLabelText;
+  ref.value = "";
+}
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->

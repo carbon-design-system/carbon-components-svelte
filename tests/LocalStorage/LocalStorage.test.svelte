@@ -1,11 +1,11 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { LocalStorage } from "carbon-components-svelte";
+import { LocalStorage } from "carbon-components-svelte";
 
-  // Example values for testing
-  const primitiveValue = "test-value";
-  const objectValue = { theme: "dark", fontSize: 16 };
+// Example values for testing
+const primitiveValue = "test-value";
+const objectValue = { theme: "dark", fontSize: 16 };
 </script>
 
 <!-- Default local storage -->

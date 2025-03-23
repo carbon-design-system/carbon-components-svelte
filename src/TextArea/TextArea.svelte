@@ -1,64 +1,64 @@
 <script>
-  /**
-   * Specify the textarea value.
-   * @type {null | string}
-   */
-  export let value = "";
+/**
+ * Specify the textarea value.
+ * @type {null | string}
+ */
+export let value = "";
 
-  /** Specify the placeholder text */
-  export let placeholder = "";
+/** Specify the placeholder text */
+export let placeholder = "";
 
-  /** Specify the number of cols */
-  export let cols = 50;
+/** Specify the number of cols */
+export let cols = 50;
 
-  /** Specify the number of rows */
-  export let rows = 4;
+/** Specify the number of rows */
+export let rows = 4;
 
-  /**
-   * Specify the max character count
-   * @type {number}
-   */
-  export let maxCount = undefined;
+/**
+ * Specify the max character count
+ * @type {number}
+ */
+export let maxCount = undefined;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to disable the input */
-  export let disabled = false;
+/** Set to `true` to disable the input */
+export let disabled = false;
 
-  /** Set to `true` to use the read-only variant */
-  export let readonly = false;
+/** Set to `true` to use the read-only variant */
+export let readonly = false;
 
-  /** Specify the helper text */
-  export let helperText = "";
+/** Specify the helper text */
+export let helperText = "";
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Specify the text for the invalid state */
-  export let invalidText = "";
+/** Specify the text for the invalid state */
+export let invalidText = "";
 
-  /** Set an id for the textarea element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the textarea element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the input
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the input
+ * @type {string}
+ */
+export let name = undefined;
 
-  /** Obtain a reference to the textarea HTML element */
-  export let ref = null;
+/** Obtain a reference to the textarea HTML element */
+export let ref = null;
 
-  import WarningFilled from "../icons/WarningFilled.svelte";
+import WarningFilled from "../icons/WarningFilled.svelte";
 
-  $: errorId = `error-${id}`;
+$: errorId = `error-${id}`;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

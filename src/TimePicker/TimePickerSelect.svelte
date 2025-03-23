@@ -1,41 +1,41 @@
 <script>
-  /**
-   * Specify the select value
-   * @type {number | string}
-   */
-  export let value = "";
+/**
+ * Specify the select value
+ * @type {number | string}
+ */
+export let value = "";
 
-  /** Set to `true` to disable the select */
-  export let disabled = false;
+/** Set to `true` to disable the select */
+export let disabled = false;
 
-  /** Specify the ARIA label for the chevron icon */
-  export let iconDescription = "Open list of options";
+/** Specify the ARIA label for the chevron icon */
+export let iconDescription = "Open list of options";
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /** Set an id for the select element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the select element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the select element
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the select element
+ * @type {string}
+ */
+export let name = undefined;
 
-  /** Obtain a reference to the select HTML element */
-  export let ref = null;
+/** Obtain a reference to the select HTML element */
+export let ref = null;
 
-  import { setContext } from "svelte";
-  import { writable } from "svelte/store";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+import { setContext } from "svelte";
+import { writable } from "svelte/store";
+import ChevronDown from "../icons/ChevronDown.svelte";
 
-  const selectedValue = writable(value);
+const selectedValue = writable(value);
 
-  setContext("TimePickerSelect", { selectedValue });
+setContext("TimePickerSelect", { selectedValue });
 
-  $: selectedValue.set(value);
-  $: value = $selectedValue;
+$: selectedValue.set(value);
+$: value = $selectedValue;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

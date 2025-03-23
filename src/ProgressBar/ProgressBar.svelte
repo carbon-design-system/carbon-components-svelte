@@ -1,64 +1,64 @@
 <script>
-  /**
-   * Specify the current value
-   * @type {number}
-   */
-  export let value = undefined;
+/**
+ * Specify the current value
+ * @type {number}
+ */
+export let value = undefined;
 
-  /** Specify the maximum value */
-  export let max = 100;
+/** Specify the maximum value */
+export let max = 100;
 
-  /**
-   * Specify the kind of progress bar
-   * @type {"default" | "inline" | "indented"}
-   */
-  export let kind = "default";
+/**
+ * Specify the kind of progress bar
+ * @type {"default" | "inline" | "indented"}
+ */
+export let kind = "default";
 
-  /**
-   * Specify the status
-   * @type {"active" | "finished" | "error"}
-   */
-  export let status = "active";
+/**
+ * Specify the status
+ * @type {"active" | "finished" | "error"}
+ */
+export let status = "active";
 
-  /**
-   * Specify the size
-   * @type {"sm" | "md"}
-   */
-  export let size = "md";
+/**
+ * Specify the size
+ * @type {"sm" | "md"}
+ */
+export let size = "md";
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /** Specify the helper text */
-  export let helperText = "";
+/** Specify the helper text */
+export let helperText = "";
 
-  /** Set an id for the progress bar element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the progress bar element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import ErrorFilled from "../icons/ErrorFilled.svelte";
+import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+import ErrorFilled from "../icons/ErrorFilled.svelte";
 
-  const statusIcons = {
-    error: ErrorFilled,
-    finished: CheckmarkFilled,
-  };
+const statusIcons = {
+  error: ErrorFilled,
+  finished: CheckmarkFilled,
+};
 
-  let helperId = "ccs-" + Math.random().toString(36);
+let helperId = "ccs-" + Math.random().toString(36);
 
-  $: indeterminate = value === undefined && status === "active";
-  let capped;
-  $: {
-    if (status === "error" || value < 0) {
-      capped = 0;
-    } else if (value > max) {
-      capped = max;
-    } else {
-      capped = value;
-    }
+$: indeterminate = value === undefined && status === "active";
+let capped;
+$: {
+  if (status === "error" || value < 0) {
+    capped = 0;
+  } else if (value > max) {
+    capped = max;
+  } else {
+    capped = value;
   }
+}
 </script>
 
 <div

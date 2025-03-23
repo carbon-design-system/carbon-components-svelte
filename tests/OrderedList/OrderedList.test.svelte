@@ -1,13 +1,13 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { OrderedList, ListItem } from "carbon-components-svelte";
+import { OrderedList, ListItem } from "carbon-components-svelte";
 
-  export let nested = false;
-  export let native = false;
-  export let expressive = false;
-  export let items: string[] = ["Item 1", "Item 2", "Item 3"];
-  export let nestedItems: string[] = [];
+export let nested = false;
+export let native = false;
+export let expressive = false;
+export let items: string[] = ["Item 1", "Item 2", "Item 3"];
+export let nestedItems: string[] = [];
 </script>
 
 <div data-testid="list-wrapper">

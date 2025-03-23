@@ -1,128 +1,128 @@
 <script>
-  /**
-   * @event {string | number} update The selected value.
-   */
+/**
+ * @event {string | number} update The selected value.
+ */
 
-  /**
-   * Specify the selected item value
-   * @type {string | number}
-   */
-  export let selected = undefined;
+/**
+ * Specify the selected item value
+ * @type {string | number}
+ */
+export let selected = undefined;
 
-  /**
-   * Set the size of the select input
-   * @type {"sm" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the select input
+ * @type {"sm" | "xl"}
+ */
+export let size = undefined;
 
-  /** Set to `true` to use the inline variant */
-  export let inline = false;
+/** Set to `true` to use the inline variant */
+export let inline = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to disable the select element */
-  export let disabled = false;
+/** Set to `true` to disable the select element */
+export let disabled = false;
 
-  /** Set an id for the select element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the select element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the select element
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the select element
+ * @type {string}
+ */
+export let name = undefined;
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Specify the invalid state text */
-  export let invalidText = "";
+/** Specify the invalid state text */
+export let invalidText = "";
 
-  /** Set to `true` to indicate an warning state */
-  export let warn = false;
+/** Set to `true` to indicate an warning state */
+export let warn = false;
 
-  /** Specify the warning state text */
-  export let warnText = "";
+/** Specify the warning state text */
+export let warnText = "";
 
-  /** Specify the helper text */
-  export let helperText = "";
+/** Specify the helper text */
+export let helperText = "";
 
-  /** Set to `true` to not render a label */
-  export let noLabel = false;
+/** Set to `true` to not render a label */
+export let noLabel = false;
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /** Obtain a reference to the select HTML element */
-  export let ref = null;
+/** Obtain a reference to the select HTML element */
+export let ref = null;
 
-  /** Set to `true` to mark the field as required */
-  export let required = false;
+/** Set to `true` to mark the field as required */
+export let required = false;
 
-  import { createEventDispatcher, setContext, afterUpdate } from "svelte";
-  import { writable } from "svelte/store";
-  import ChevronDown from "../icons/ChevronDown.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+import { createEventDispatcher, setContext, afterUpdate } from "svelte";
+import { writable } from "svelte/store";
+import ChevronDown from "../icons/ChevronDown.svelte";
+import WarningFilled from "../icons/WarningFilled.svelte";
+import WarningAltFilled from "../icons/WarningAltFilled.svelte";
 
-  const dispatch = createEventDispatcher();
-  const selectedValue = writable(selected);
-  const defaultSelectId = writable(null);
-  const defaultValue = writable(null);
-  const itemTypesByValue = writable({});
+const dispatch = createEventDispatcher();
+const selectedValue = writable(selected);
+const defaultSelectId = writable(null);
+const defaultValue = writable(null);
+const itemTypesByValue = writable({});
 
-  setContext("Select", {
-    selectedValue,
-    setDefaultValue: (id, value) => {
-      /**
-       * Use the first `SelectItem` value as the
-       * default value if `selected` is `undefined`.
-       */
-      if ($defaultValue === null) {
-        defaultSelectId.set(id);
-        defaultValue.set(value);
-      } else {
-        if ($defaultSelectId === id) {
-          selectedValue.set(value);
-        }
-      }
-
-      itemTypesByValue.update((types) => ({
-        ...types,
-        [value]: typeof value,
-      }));
-    },
-  });
-
-  const handleChange = ({ target }) => {
-    let value = target.value;
-
-    if ($itemTypesByValue[value] === "number") {
-      value = Number(value);
-    }
-
-    selectedValue.set(value);
-  };
-
-  let prevSelected = undefined;
-
-  afterUpdate(() => {
-    if (selected !== $selectedValue) {
-      selected = $selectedValue;
-      if (prevSelected !== undefined) {
-        dispatch("update", $selectedValue);
+setContext("Select", {
+  selectedValue,
+  setDefaultValue: (id, value) => {
+    /**
+     * Use the first `SelectItem` value as the
+     * default value if `selected` is `undefined`.
+     */
+    if ($defaultValue === null) {
+      defaultSelectId.set(id);
+      defaultValue.set(value);
+    } else {
+      if ($defaultSelectId === id) {
+        selectedValue.set(value);
       }
     }
 
-    prevSelected = selected;
-  });
+    itemTypesByValue.update((types) => ({
+      ...types,
+      [value]: typeof value,
+    }));
+  },
+});
 
-  $: errorId = `error-${id}`;
-  $: selectedValue.set(selected ?? $defaultValue);
+const handleChange = ({ target }) => {
+  let value = target.value;
+
+  if ($itemTypesByValue[value] === "number") {
+    value = Number(value);
+  }
+
+  selectedValue.set(value);
+};
+
+let prevSelected = undefined;
+
+afterUpdate(() => {
+  if (selected !== $selectedValue) {
+    selected = $selectedValue;
+    if (prevSelected !== undefined) {
+      dispatch("update", $selectedValue);
+    }
+  }
+
+  prevSelected = selected;
+});
+
+$: errorId = `error-${id}`;
+$: selectedValue.set(selected ?? $defaultValue);
 </script>
 
 <div class:bx--form-item={true} {...$$restProps}>

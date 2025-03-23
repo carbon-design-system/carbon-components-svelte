@@ -1,32 +1,32 @@
 <script>
-  /**
-   * Specify the ARIA label for the button
-   * @type {string}
-   */
-  export let ariaLabel = undefined;
+/**
+ * Specify the ARIA label for the button
+ * @type {string}
+ */
+export let ariaLabel = undefined;
 
-  /** Set to `true` to toggle the open state */
-  export let isOpen = false;
+/** Set to `true` to toggle the open state */
+export let isOpen = false;
 
-  /**
-   * Specify the icon to render for the closed state.
-   * Defaults to `<Menu size={20} />`
-   * @type {any}
-   */
-  export let iconMenu = Menu;
+/**
+ * Specify the icon to render for the closed state.
+ * Defaults to `<Menu size={20} />`
+ * @type {any}
+ */
+export let iconMenu = Menu;
 
-  /**
-   * Specify the icon to render for the opened state.
-   * Defaults to `<Close size={20} />`
-   * @type {any}
-   */
-  export let iconClose = Close;
+/**
+ * Specify the icon to render for the opened state.
+ * Defaults to `<Close size={20} />`
+ * @type {any}
+ */
+export let iconClose = Close;
 
-  /** Obtain a reference to the HTML button element */
-  export let ref = null;
+/** Obtain a reference to the HTML button element */
+export let ref = null;
 
-  import Close from "../icons/Close.svelte";
-  import Menu from "../icons/Menu.svelte";
+import Close from "../icons/Close.svelte";
+import Menu from "../icons/Menu.svelte";
 </script>
 
 <button

@@ -1,16 +1,16 @@
 <script lang="ts">
-  import {
-    Form,
-    FormGroup,
-    Checkbox,
-    RadioButtonGroup,
-    RadioButton,
-    Select,
-    SelectItem,
-    Button,
-  } from "carbon-components-svelte";
+import {
+  Form,
+  FormGroup,
+  Checkbox,
+  RadioButtonGroup,
+  RadioButton,
+  Select,
+  SelectItem,
+  Button,
+} from "carbon-components-svelte";
 
-  let ref: HTMLFormElement;
+let ref: HTMLFormElement;
 </script>
 
 <Form on:submit bind:ref>

@@ -1,21 +1,21 @@
 <script>
-  /** Set to `true` for to remove the bottom margin */
-  export let noMargin = false;
+/** Set to `true` for to remove the bottom margin */
+export let noMargin = false;
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Set to `true` to render a form requirement */
-  export let message = false;
+/** Set to `true` to render a form requirement */
+export let message = false;
 
-  /** Specify the message text */
-  export let messageText = "";
+/** Specify the message text */
+export let messageText = "";
 
-  /** Specify the legend text */
-  export let legendText = "";
+/** Specify the legend text */
+export let legendText = "";
 
-  /** Specify an id for the legend element */
-  export let legendId = "";
+/** Specify an id for the legend element */
+export let legendId = "";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

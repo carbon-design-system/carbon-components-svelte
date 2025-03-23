@@ -1,65 +1,65 @@
 <script>
-  /** Set to `true` to expand the tile */
-  export let expanded = false;
+/** Set to `true` to expand the tile */
+export let expanded = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Specify the max height of the tile  (number of pixels) */
-  export let tileMaxHeight = 0;
+/** Specify the max height of the tile  (number of pixels) */
+export let tileMaxHeight = 0;
 
-  /** Specify the padding of the tile (number of pixels) */
-  export let tilePadding = 0;
+/** Specify the padding of the tile (number of pixels) */
+export let tilePadding = 0;
 
-  /** Specify the icon text of the collapsed tile */
-  export let tileCollapsedIconText = "Interact to expand Tile";
+/** Specify the icon text of the collapsed tile */
+export let tileCollapsedIconText = "Interact to expand Tile";
 
-  /** Specify the icon text of the expanded tile */
-  export let tileExpandedIconText = "Interact to collapse Tile";
+/** Specify the icon text of the expanded tile */
+export let tileExpandedIconText = "Interact to collapse Tile";
 
-  /** Specify the icon label of the expanded tile */
-  export let tileExpandedLabel = "";
+/** Specify the icon label of the expanded tile */
+export let tileExpandedLabel = "";
 
-  /** Specify the icon label of the collapsed tile */
-  export let tileCollapsedLabel = "";
+/** Specify the icon label of the collapsed tile */
+export let tileCollapsedLabel = "";
 
-  /** Specify the tabindex */
-  export let tabindex = "0";
+/** Specify the tabindex */
+export let tabindex = "0";
 
-  /** Set an id for the top-level div element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the top-level div element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the top-level element */
-  export let ref = null;
+/** Obtain a reference to the top-level element */
+export let ref = null;
 
-  import { afterUpdate, onMount } from "svelte";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+import { afterUpdate, onMount } from "svelte";
+import ChevronDown from "../icons/ChevronDown.svelte";
 
-  let refAbove = null;
+let refAbove = null;
 
-  onMount(() => {
-    const resizeObserver = new ResizeObserver(([elem]) => {
-      tileMaxHeight = elem.contentRect.height;
-    });
-
-    resizeObserver.observe(refAbove);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
+onMount(() => {
+  const resizeObserver = new ResizeObserver(([elem]) => {
+    tileMaxHeight = elem.contentRect.height;
   });
 
-  afterUpdate(() => {
-    if (tileMaxHeight === 0) {
-      tileMaxHeight = refAbove.getBoundingClientRect().height;
-    }
+  resizeObserver.observe(refAbove);
 
-    const style = getComputedStyle(ref);
+  return () => {
+    resizeObserver.disconnect();
+  };
+});
 
-    tilePadding =
-      parseInt(style.getPropertyValue("padding-top"), 10) +
-      parseInt(style.getPropertyValue("padding-bottom"), 10);
-  });
+afterUpdate(() => {
+  if (tileMaxHeight === 0) {
+    tileMaxHeight = refAbove.getBoundingClientRect().height;
+  }
+
+  const style = getComputedStyle(ref);
+
+  tilePadding =
+    parseInt(style.getPropertyValue("padding-top"), 10) +
+    parseInt(style.getPropertyValue("padding-bottom"), 10);
+});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

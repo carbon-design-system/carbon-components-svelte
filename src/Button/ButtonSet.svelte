@@ -1,6 +1,6 @@
 <script>
-  /** Set to `true` to stack the buttons vertically */
-  export let stacked = false;
+/** Set to `true` to stack the buttons vertically */
+export let stacked = false;
 </script>
 
 <div

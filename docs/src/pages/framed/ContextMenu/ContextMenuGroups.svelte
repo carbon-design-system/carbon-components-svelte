@@ -1,14 +1,14 @@
 <script>
-  import {
-    ContextMenu,
-    ContextMenuDivider,
-    ContextMenuOption,
-    ContextMenuRadioGroup,
-  } from "carbon-components-svelte";
+import {
+  ContextMenu,
+  ContextMenuDivider,
+  ContextMenuOption,
+  ContextMenuRadioGroup,
+} from "carbon-components-svelte";
 
-  let selectedId = "0";
+let selectedId = "0";
 
-  $: console.log("selectedId", selectedId);
+$: console.log("selectedId", selectedId);
 </script>
 
 <ContextMenu>

@@ -1,15 +1,15 @@
 <script>
-  export let href = undefined;
-  export let title = "";
-  export let subtitle = "";
-  export let borderRight = false;
-  export let borderBottom = false;
+export let href = undefined;
+export let title = "";
+export let subtitle = "";
+export let borderRight = false;
+export let borderBottom = false;
 
-  import { AspectRatio, ClickableTile, Tile } from "carbon-components-svelte";
-  import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
-  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
+import { AspectRatio, ClickableTile, Tile } from "carbon-components-svelte";
+import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
+import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 
-  $: tileComponent = href ? ClickableTile : Tile;
+$: tileComponent = href ? ClickableTile : Tile;
 </script>
 
 <div class="card-wrapper" class:borderRight class:borderBottom>

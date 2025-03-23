@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AspectRatio } from "carbon-components-svelte";
+import { AspectRatio } from "carbon-components-svelte";
 </script>
 
 <AspectRatio>2x1</AspectRatio>

@@ -1,6 +1,6 @@
 <script>
-  /** Set to `true` to use the inline variant */
-  export let inline = false;
+/** Set to `true` to use the inline variant */
+export let inline = false;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

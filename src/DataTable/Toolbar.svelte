@@ -1,24 +1,24 @@
 <script>
-  /**
-   * Specify the toolbar size
-   * @type {"sm" | "default"}
-   */
-  export let size = "default";
+/**
+ * Specify the toolbar size
+ * @type {"sm" | "default"}
+ */
+export let size = "default";
 
-  import { setContext } from "svelte";
-  import { writable } from "svelte/store";
+import { setContext } from "svelte";
+import { writable } from "svelte/store";
 
-  let ref = null;
+let ref = null;
 
-  const overflowVisible = writable(false);
+const overflowVisible = writable(false);
 
-  setContext("Toolbar", {
-    overflowVisible,
-    setOverflowVisible: (visible) => {
-      overflowVisible.set(visible);
-      if (ref) ref.style.overflow = visible ? "visible" : "inherit";
-    },
-  });
+setContext("Toolbar", {
+  overflowVisible,
+  setOverflowVisible: (visible) => {
+    overflowVisible.set(visible);
+    if (ref) ref.style.overflow = visible ? "visible" : "inherit";
+  },
+});
 </script>
 
 <section

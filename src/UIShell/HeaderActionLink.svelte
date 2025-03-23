@@ -1,21 +1,21 @@
 <script>
-  /** Set to `true` to use the active state */
-  export let linkIsActive = false;
+/** Set to `true` to use the active state */
+export let linkIsActive = false;
 
-  /**
-   * Specify the `href` attribute
-   * @type {string}
-   */
-  export let href = undefined;
+/**
+ * Specify the `href` attribute
+ * @type {string}
+ */
+export let href = undefined;
 
-  /**
-   * Specify the icon to render
-   * @type {any}
-   */
-  export let icon = undefined;
+/**
+ * Specify the icon to render
+ * @type {any}
+ */
+export let icon = undefined;
 
-  /** Obtain a reference to the HTML anchor element */
-  export let ref = null;
+/** Obtain a reference to the HTML anchor element */
+export let ref = null;
 </script>
 
 <a

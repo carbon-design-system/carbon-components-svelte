@@ -1,14 +1,14 @@
 <script>
-  export let size = 16;
+export let size = 16;
 
-  export let title = undefined;
+export let title = undefined;
 
-  $: labelled = $$props["aria-label"] || $$props["aria-labelledby"] || title;
-  $: attributes = {
-    "aria-hidden": labelled ? undefined : true,
-    role: labelled ? "img" : undefined,
-    focusable: Number($$props["tabindex"]) === 0 ? true : undefined,
-  };
+$: labelled = $$props["aria-label"] || $$props["aria-labelledby"] || title;
+$: attributes = {
+  "aria-hidden": labelled ? undefined : true,
+  role: labelled ? "img" : undefined,
+  focusable: Number($$props["tabindex"]) === 0 ? true : undefined,
+};
 </script>
 
 <svg

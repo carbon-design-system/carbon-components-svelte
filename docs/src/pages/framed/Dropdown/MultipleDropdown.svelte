@@ -1,20 +1,20 @@
 <script>
-  import { Dropdown } from "carbon-components-svelte";
+import { Dropdown } from "carbon-components-svelte";
 
-  const items = [
-    { id: "0", text: "Slack" },
-    { id: "1", text: "Email" },
-    { id: "2", text: "Fax" },
-  ];
+const items = [
+  { id: "0", text: "Slack" },
+  { id: "1", text: "Email" },
+  { id: "2", text: "Fax" },
+];
 
-  let dropdown1_selectedId = "0";
-  let dropdown2_selectedId = "1";
+let dropdown1_selectedId = "0";
+let dropdown2_selectedId = "1";
 
-  const formatSelected = (id) =>
-    items.find((item) => item.id === id)?.text ?? "N/A";
+const formatSelected = (id) =>
+  items.find((item) => item.id === id)?.text ?? "N/A";
 
-  $: primary = formatSelected(dropdown1_selectedId);
-  $: secondary = formatSelected(dropdown2_selectedId);
+$: primary = formatSelected(dropdown1_selectedId);
+$: secondary = formatSelected(dropdown2_selectedId);
 </script>
 
 <Dropdown

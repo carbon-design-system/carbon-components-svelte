@@ -1,9 +1,9 @@
 <script>
-  /**
-   * Set the type of code snippet
-   * @type {"single" | "multi"}
-   */
-  export let type = "single";
+/**
+ * Set the type of code snippet
+ * @type {"single" | "multi"}
+ */
+export let type = "single";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

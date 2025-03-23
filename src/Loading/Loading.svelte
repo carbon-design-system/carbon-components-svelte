@@ -1,17 +1,17 @@
 <script>
-  /** Set to `true` to use the small variant */
-  export let small = false;
+/** Set to `true` to use the small variant */
+export let small = false;
 
-  /** Set to `false` to disable the active state */
-  export let active = true;
+/** Set to `false` to disable the active state */
+export let active = true;
 
-  /** Set to `false` to disable the overlay */
-  export let withOverlay = true;
+/** Set to `false` to disable the overlay */
+export let withOverlay = true;
 
-  /** Specify the description to describe the loading state */
-  export let description = "loading";
+/** Specify the description to describe the loading state */
+export let description = "loading";
 
-  $: spinnerRadius = small ? "42" : "44";
+$: spinnerRadius = small ? "42" : "44";
 </script>
 
 {#if withOverlay}

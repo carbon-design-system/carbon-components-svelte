@@ -1,15 +1,15 @@
 <script>
-  /** @extends {"../OverflowMenu/OverflowMenu.svelte"} OverflowMenuProps */
+/** @extends {"../OverflowMenu/OverflowMenu.svelte"} OverflowMenuProps */
 
-  import { getContext } from "svelte";
-  import Settings from "../icons/Settings.svelte";
-  import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
+import { getContext } from "svelte";
+import Settings from "../icons/Settings.svelte";
+import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
 
-  const ctx = getContext("Toolbar") ?? {};
+const ctx = getContext("Toolbar") ?? {};
 
-  let menuRef = null;
+let menuRef = null;
 
-  $: ctx.setOverflowVisible?.(menuRef != null);
+$: ctx.setOverflowVisible?.(menuRef != null);
 </script>
 
 <OverflowMenu

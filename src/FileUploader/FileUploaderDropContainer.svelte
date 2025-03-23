@@ -1,57 +1,57 @@
 <script>
-  /**
-   * @event {ReadonlyArray<File>} add
-   * @event {ReadonlyArray<File>} change
-   */
+/**
+ * @event {ReadonlyArray<File>} add
+ * @event {ReadonlyArray<File>} change
+ */
 
-  /**
-   * Specify the accepted file types
-   * @type {ReadonlyArray<string>}
-   */
-  export let accept = [];
+/**
+ * Specify the accepted file types
+ * @type {ReadonlyArray<string>}
+ */
+export let accept = [];
 
-  /**
-   * Obtain a reference to the uploaded files
-   * @type {ReadonlyArray<File>}
-   */
-  export let files = [];
+/**
+ * Obtain a reference to the uploaded files
+ * @type {ReadonlyArray<File>}
+ */
+export let files = [];
 
-  /** Set to `true` to allow multiple files */
-  export let multiple = false;
+/** Set to `true` to allow multiple files */
+export let multiple = false;
 
-  /**
-   * Override the default behavior of validating uploaded files.
-   * By default, files are not validated
-   * @type {(files: ReadonlyArray<File>) => ReadonlyArray<File>}
-   */
-  export let validateFiles = (files) => files;
+/**
+ * Override the default behavior of validating uploaded files.
+ * By default, files are not validated
+ * @type {(files: ReadonlyArray<File>) => ReadonlyArray<File>}
+ */
+export let validateFiles = (files) => files;
 
-  /** Specify the label text */
-  export let labelText = "Add file";
+/** Specify the label text */
+export let labelText = "Add file";
 
-  /** Specify the `role` attribute of the drop container */
-  export let role = "button";
+/** Specify the `role` attribute of the drop container */
+export let role = "button";
 
-  /** Set to `true` to disable the input */
-  export let disabled = false;
+/** Set to `true` to disable the input */
+export let disabled = false;
 
-  /** Specify `tabindex` attribute */
-  export let tabindex = "0";
+/** Specify `tabindex` attribute */
+export let tabindex = "0";
 
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the input element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Specify a name attribute for the input */
-  export let name = "";
+/** Specify a name attribute for the input */
+export let name = "";
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
+/** Obtain a reference to the input HTML element */
+export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let over = false;
+let over = false;
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->

@@ -1,9 +1,9 @@
 <script>
-  /** Set to `true` to use as a header */
-  export let head = false;
+/** Set to `true` to use as a header */
+export let head = false;
 
-  /** Set to `true` to prevent wrapping */
-  export let noWrap = false;
+/** Set to `true` to prevent wrapping */
+export let noWrap = false;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

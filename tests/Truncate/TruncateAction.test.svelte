@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { truncate } from "carbon-components-svelte";
+import { truncate } from "carbon-components-svelte";
 
-  export let clamp: "end" | "front" = "end";
-  export let text =
-    "This is a long text that should be truncated when it exceeds the available space";
-  export let element: "h1" | "h2" | "h3" | "h4" | "p" | "span" = "p";
+export let clamp: "end" | "front" = "end";
+export let text =
+  "This is a long text that should be truncated when it exceeds the available space";
+export let element: "h1" | "h2" | "h3" | "h4" | "p" | "span" = "p";
 </script>
 
 {#if element === "h1"}

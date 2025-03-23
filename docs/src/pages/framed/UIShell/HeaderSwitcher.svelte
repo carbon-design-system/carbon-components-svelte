@@ -1,43 +1,43 @@
 <script>
-  import {
-    Header,
-    HeaderUtilities,
-    HeaderAction,
-    HeaderPanelLinks,
-    HeaderPanelDivider,
-    HeaderPanelLink,
-    SideNav,
-    SideNavItems,
-    SideNavMenu,
-    SideNavMenuItem,
-    SideNavLink,
-    SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
-    TileGroup,
-    RadioTile,
-  } from "carbon-components-svelte";
-  import { expoIn } from "svelte/easing";
+import {
+  Header,
+  HeaderUtilities,
+  HeaderAction,
+  HeaderPanelLinks,
+  HeaderPanelDivider,
+  HeaderPanelLink,
+  SideNav,
+  SideNavItems,
+  SideNavMenu,
+  SideNavMenuItem,
+  SideNavLink,
+  SkipToContent,
+  Content,
+  Grid,
+  Row,
+  Column,
+  TileGroup,
+  RadioTile,
+} from "carbon-components-svelte";
+import { expoIn } from "svelte/easing";
 
-  let isSideNavOpen = false;
-  let isOpen = false;
-  let selected = "0";
-  let transitions = {
-    "0": {
-      text: "Default (duration: 200ms)",
-      value: { duration: 200 },
-    },
-    "1": {
-      text: "Custom (duration: 600ms, delay: 50ms, easing: expoIn)",
-      value: { duration: 600, delay: 50, easing: expoIn },
-    },
-    "2": {
-      text: "Disabled",
-      value: false,
-    },
-  };
+let isSideNavOpen = false;
+let isOpen = false;
+let selected = "0";
+let transitions = {
+  0: {
+    text: "Default (duration: 200ms)",
+    value: { duration: 200 },
+  },
+  1: {
+    text: "Custom (duration: 600ms, delay: 50ms, easing: expoIn)",
+    value: { duration: 600, delay: 50, easing: expoIn },
+  },
+  2: {
+    text: "Disabled",
+    value: false,
+  },
+};
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>

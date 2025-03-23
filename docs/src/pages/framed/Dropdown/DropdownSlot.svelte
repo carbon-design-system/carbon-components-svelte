@@ -1,5 +1,5 @@
 <script>
-  import { Dropdown } from "carbon-components-svelte";
+import { Dropdown } from "carbon-components-svelte";
 </script>
 
 <Dropdown

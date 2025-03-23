@@ -1,13 +1,13 @@
 <script lang="ts">
-  import {
-    ComposedModal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Checkbox,
-  } from "carbon-components-svelte";
+import {
+  ComposedModal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Checkbox,
+} from "carbon-components-svelte";
 
-  let checked = false;
+let checked = false;
 </script>
 
 <ComposedModal open on:close on:click:button--primary>

@@ -1,5 +1,5 @@
 <script>
-  import { DatePicker, DatePickerInput } from "carbon-components-svelte";
+import { DatePicker, DatePickerInput } from "carbon-components-svelte";
 </script>
 
 <DatePicker datePickerType="single" on:change>

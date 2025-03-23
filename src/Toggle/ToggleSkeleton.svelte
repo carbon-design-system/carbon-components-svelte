@@ -1,15 +1,15 @@
 <script>
-  /**
-   * Specify the toggle size
-   * @type {"default" | "sm"}
-   */
-  export let size = "default";
+/**
+ * Specify the toggle size
+ * @type {"default" | "sm"}
+ */
+export let size = "default";
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the input element */
+export let id = "ccs-" + Math.random().toString(36);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

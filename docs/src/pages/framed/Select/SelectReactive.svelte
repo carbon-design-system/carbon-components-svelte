@@ -1,7 +1,7 @@
 <script>
-  import { Select, SelectItem, Button } from "carbon-components-svelte";
+import { Select, SelectItem, Button } from "carbon-components-svelte";
 
-  let selected = "g10";
+let selected = "g10";
 </script>
 
 <Select labelText="Carbon theme" bind:selected>

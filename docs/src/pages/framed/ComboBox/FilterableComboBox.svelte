@@ -1,10 +1,10 @@
 <script>
-  import { ComboBox } from "carbon-components-svelte";
+import { ComboBox } from "carbon-components-svelte";
 
-  function shouldFilterItem(item, value) {
-    if (!value) return true;
-    return item.text.toLowerCase().includes(value.toLowerCase());
-  }
+function shouldFilterItem(item, value) {
+  if (!value) return true;
+  return item.text.toLowerCase().includes(value.toLowerCase());
+}
 </script>
 
 <ComboBox

@@ -26,9 +26,7 @@
       "import": "./src/*.js"
     }
   },
-  "sideEffects": [
-    "css/*.css"
-  ],
+  "sideEffects": ["css/*.css"],
   "scripts": {
     "test": "vitest",
     "test:ui": "vite",
@@ -85,12 +83,7 @@
     "component library",
     "carbon design system"
   ],
-  "files": [
-    "src",
-    "types",
-    "css",
-    "telemetry.yml"
-  ],
+  "files": ["src", "types", "css", "telemetry.yml"],
   "maintainers": [
     "Eric Liu (https://github.com/metonym)",
     "Enrico Sacchetti (https://github.com/theetrain)"

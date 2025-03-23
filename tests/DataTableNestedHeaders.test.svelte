@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DataTable } from "../types";
+import { DataTable } from "../types";
 </script>
 
 <DataTable

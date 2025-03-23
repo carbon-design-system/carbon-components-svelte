@@ -1,16 +1,16 @@
 <script>
-  import { ProgressBar, ButtonSet, Button } from "carbon-components-svelte";
+import { ProgressBar, ButtonSet, Button } from "carbon-components-svelte";
 
-  let max = 328;
-  let value = 0;
-  let status = "active";
+let max = 328;
+let value = 0;
+let status = "active";
 
-  $: helperText =
-    value > 0 ? value.toFixed(0) + "MB of " + max + "MB" : "Press start";
-  $: if (value === max) {
-    helperText = "Done";
-    status = "finished";
-  }
+$: helperText =
+  value > 0 ? value.toFixed(0) + "MB of " + max + "MB" : "Press start";
+$: if (value === max) {
+  helperText = "Done";
+  status = "finished";
+}
 </script>
 
 <ProgressBar labelText="Upload status" {value} {max} {helperText} {status} />

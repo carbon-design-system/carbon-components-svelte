@@ -1,6 +1,6 @@
 <script>
-  import ButtonSkeleton from "../Button/ButtonSkeleton.svelte";
-  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+import ButtonSkeleton from "../Button/ButtonSkeleton.svelte";
+import SkeletonText from "../SkeletonText/SkeletonText.svelte";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

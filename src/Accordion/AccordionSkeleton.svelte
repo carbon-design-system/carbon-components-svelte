@@ -1,24 +1,24 @@
 <script>
-  /** Specify the number of accordion items to render */
-  export let count = 4;
+/** Specify the number of accordion items to render */
+export let count = 4;
 
-  /**
-   * Specify alignment of accordion item chevron icon
-   * @type {"start" | "end"}
-   */
-  export let align = "end";
+/**
+ * Specify alignment of accordion item chevron icon
+ * @type {"start" | "end"}
+ */
+export let align = "end";
 
-  /**
-   * Specify the size of the accordion
-   * @type {"sm" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Specify the size of the accordion
+ * @type {"sm" | "xl"}
+ */
+export let size = undefined;
 
-  /** Set to `false` to close the first accordion item */
-  export let open = true;
+/** Set to `false` to close the first accordion item */
+export let open = true;
 
-  import ChevronRight from "../icons/ChevronRight.svelte";
-  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+import ChevronRight from "../icons/ChevronRight.svelte";
+import SkeletonText from "../SkeletonText/SkeletonText.svelte";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

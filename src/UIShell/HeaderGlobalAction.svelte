@@ -1,31 +1,31 @@
 <script>
-  /**
-   * @extends {"../Button/Button.svelte"} ButtonProps
-   */
+/**
+ * @extends {"../Button/Button.svelte"} ButtonProps
+ */
 
-  /** Set to `true` to use the active variant */
-  export let isActive = false;
+/** Set to `true` to use the active variant */
+export let isActive = false;
 
-  /**
-   * Specify the icon to render
-   * @type {any}
-   */
-  export let icon = undefined;
+/**
+ * Specify the icon to render
+ * @type {any}
+ */
+export let icon = undefined;
 
-  /** Obtain a reference to the HTML button element
-   * @type {HTMLButtonElement}
-   */
-  export let ref = null;
+/** Obtain a reference to the HTML button element
+ * @type {HTMLButtonElement}
+ */
+export let ref = null;
 
-  import Button from "../Button/Button.svelte";
+import Button from "../Button/Button.svelte";
 
-  $: buttonClass = [
-    "bx--header__action",
-    isActive && " bx--header__action--active",
-    $$restProps.class,
-  ]
-    .filter(Boolean)
-    .join(" ");
+$: buttonClass = [
+  "bx--header__action",
+  isActive && " bx--header__action--active",
+  $$restProps.class,
+]
+  .filter(Boolean)
+  .join(" ");
 </script>
 
 <Button bind:ref {...$$restProps} class={buttonClass} on:click>

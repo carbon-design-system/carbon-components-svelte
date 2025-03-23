@@ -1,12 +1,12 @@
 <script>
-  import {
-    ProgressIndicator,
-    ProgressStep,
-    Button,
-  } from "carbon-components-svelte";
+import {
+  ProgressIndicator,
+  ProgressStep,
+  Button,
+} from "carbon-components-svelte";
 
-  let currentIndex = 1;
-  let thirdStepCurrent = false;
+let currentIndex = 1;
+let thirdStepCurrent = false;
 </script>
 
 <ProgressIndicator bind:currentIndex>

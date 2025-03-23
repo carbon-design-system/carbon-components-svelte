@@ -1,82 +1,82 @@
 <script>
-  /**
-   * @event {null} expand
-   * @event {null} collapse
-   * @restProps {input}
-   */
+/**
+ * @event {null} expand
+ * @event {null} collapse
+ * @restProps {input}
+ */
 
-  /**
-   * Specify the value of the search input
-   * @type {any}
-   */
-  export let value = "";
+/**
+ * Specify the value of the search input
+ * @type {any}
+ */
+export let value = "";
 
-  /**
-   * Specify the size of the search input
-   * @type {"sm" | "lg" | "xl"}
-   */
-  export let size = "xl";
+/**
+ * Specify the size of the search input
+ * @type {"sm" | "lg" | "xl"}
+ */
+export let size = "xl";
 
-  /** Specify the class name passed to the outer div element */
-  export let searchClass = "";
+/** Specify the class name passed to the outer div element */
+export let searchClass = "";
 
-  /** Set to `true` to display the skeleton state  */
-  export let skeleton = false;
+/** Set to `true` to display the skeleton state  */
+export let skeleton = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to disable the search input */
-  export let disabled = false;
+/** Set to `true` to disable the search input */
+export let disabled = false;
 
-  /** Set to `true` to enable the expandable variant */
-  export let expandable = false;
+/** Set to `true` to enable the expandable variant */
+export let expandable = false;
 
-  /** Set to `true to expand the search input */
-  export let expanded = false;
+/** Set to `true to expand the search input */
+export let expanded = false;
 
-  /** Specify the `placeholder` attribute of the search input */
-  export let placeholder = "Search...";
+/** Specify the `placeholder` attribute of the search input */
+export let placeholder = "Search...";
 
-  /**
-   * Specify the `autocomplete` attribute
-   * @type {"on" | "off"}
-   */
-  export let autocomplete = "off";
+/**
+ * Specify the `autocomplete` attribute
+ * @type {"on" | "off"}
+ */
+export let autocomplete = "off";
 
-  /** Set to `true` to auto focus the search element */
-  export let autofocus = false;
+/** Set to `true` to auto focus the search element */
+export let autofocus = false;
 
-  /** Specify the close button label text */
-  export let closeButtonLabelText = "Clear search input";
+/** Specify the close button label text */
+export let closeButtonLabelText = "Clear search input";
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /**
-   * Specify the icon to render.
-   * Defaults to `<Search />`
-   * @type {any}
-   */
-  export let icon = IconSearch;
+/**
+ * Specify the icon to render.
+ * Defaults to `<Search />`
+ * @type {any}
+ */
+export let icon = IconSearch;
 
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the input element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
+/** Obtain a reference to the input HTML element */
+export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
-  import Close from "../icons/Close.svelte";
-  import IconSearch from "../icons/IconSearch.svelte";
-  import SearchSkeleton from "./SearchSkeleton.svelte";
+import { createEventDispatcher } from "svelte";
+import Close from "../icons/Close.svelte";
+import IconSearch from "../icons/IconSearch.svelte";
+import SearchSkeleton from "./SearchSkeleton.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let searchRef = null;
+let searchRef = null;
 
-  $: if (expanded && ref) ref.focus();
-  $: dispatch(expanded ? "expand" : "collapse");
+$: if (expanded && ref) ref.focus();
+$: dispatch(expanded ? "expand" : "collapse");
 </script>
 
 <!-- svelte-ignore a11y-autofocus -->

@@ -1,46 +1,46 @@
 <script>
-  /**
-   * @event {{ toggled: boolean; }} toggle
-   */
+/**
+ * @event {{ toggled: boolean; }} toggle
+ */
 
-  /**
-   * Specify the toggle size
-   * @type {"default" | "sm"}
-   */
-  export let size = "default";
+/**
+ * Specify the toggle size
+ * @type {"default" | "sm"}
+ */
+export let size = "default";
 
-  /** Set to `true` to toggle the checkbox input */
-  export let toggled = false;
+/** Set to `true` to toggle the checkbox input */
+export let toggled = false;
 
-  /** Set to `true` to disable checkbox input */
-  export let disabled = false;
+/** Set to `true` to disable checkbox input */
+export let disabled = false;
 
-  /** Specify the label for the untoggled state */
-  export let labelA = "Off";
+/** Specify the label for the untoggled state */
+export let labelA = "Off";
 
-  /** Specify the label for the toggled state */
-  export let labelB = "On";
+/** Specify the label for the toggled state */
+export let labelB = "On";
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the input element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the checkbox input
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the checkbox input
+ * @type {string}
+ */
+export let name = undefined;
 
-  import { createEventDispatcher } from "svelte";
+import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  $: dispatch("toggle", { toggled });
+$: dispatch("toggle", { toggled });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

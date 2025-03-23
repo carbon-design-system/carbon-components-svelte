@@ -1,75 +1,75 @@
 <script lang="ts">
-  import {
-    DataTable,
-    DataTableSkeleton,
-    Toolbar,
-    ToolbarContent,
-    ToolbarSearch,
-    ToolbarMenu,
-    ToolbarMenuItem,
-    Button,
-    Link,
-  } from "carbon-components-svelte";
-  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
-  import type { ComponentProps } from "svelte";
+import {
+  DataTable,
+  DataTableSkeleton,
+  Toolbar,
+  ToolbarContent,
+  ToolbarSearch,
+  ToolbarMenu,
+  ToolbarMenuItem,
+  Button,
+  Link,
+} from "carbon-components-svelte";
+import Launch from "carbon-icons-svelte/lib/Launch.svelte";
+import type { ComponentProps } from "svelte";
 
-  const headers = [
-    { key: "name", value: "Name" },
-    { key: "protocol", value: "Protocol", width: "400px", minWidth: "40%" },
-    { key: "port", value: "Port" },
-    { key: "rule", value: "Rule", sort: false },
-  ] as const;
-  const rows = [
-    {
-      id: "a",
-      name: "Load Balancer 3",
-      protocol: "HTTP",
-      port: 3000,
-      rule: "Round robin",
-    },
-    {
-      id: "b",
-      name: "Load Balancer 1",
-      protocol: "HTTP",
-      port: 443,
-      rule: "Round robin",
-    },
-    {
-      id: "c",
-      name: "Load Balancer 2",
-      protocol: "HTTP",
-      port: 80,
-      rule: "DNS delegation",
-    },
-    {
-      id: "d",
-      name: "Load Balancer 6",
-      protocol: "HTTP",
-      port: 3000,
-      rule: "Round robin",
-    },
-    {
-      id: "e",
-      name: "Load Balancer 4",
-      protocol: "HTTP",
-      port: 443,
-      rule: "Round robin",
-    },
-    {
-      id: "f",
-      name: "Load Balancer 5",
-      protocol: "HTTP",
-      port: 80,
-      rule: "DNS delegation",
-    },
-  ];
+const headers = [
+  { key: "name", value: "Name" },
+  { key: "protocol", value: "Protocol", width: "400px", minWidth: "40%" },
+  { key: "port", value: "Port" },
+  { key: "rule", value: "Rule", sort: false },
+] as const;
+const rows = [
+  {
+    id: "a",
+    name: "Load Balancer 3",
+    protocol: "HTTP",
+    port: 3000,
+    rule: "Round robin",
+  },
+  {
+    id: "b",
+    name: "Load Balancer 1",
+    protocol: "HTTP",
+    port: 443,
+    rule: "Round robin",
+  },
+  {
+    id: "c",
+    name: "Load Balancer 2",
+    protocol: "HTTP",
+    port: 80,
+    rule: "DNS delegation",
+  },
+  {
+    id: "d",
+    name: "Load Balancer 6",
+    protocol: "HTTP",
+    port: 3000,
+    rule: "Round robin",
+  },
+  {
+    id: "e",
+    name: "Load Balancer 4",
+    protocol: "HTTP",
+    port: 443,
+    rule: "Round robin",
+  },
+  {
+    id: "f",
+    name: "Load Balancer 5",
+    protocol: "HTTP",
+    port: 80,
+    rule: "DNS delegation",
+  },
+];
 
-  function sort(a: any, b: any) {
-    if (new Date(a) > new Date(b)) return 1;
-    return 0;
-  }
+function sort(a: any, b: any) {
+  if (new Date(a) > new Date(b)) return 1;
+  return 0;
+}
 
-  let filteredRowIds: ComponentProps<ToolbarSearch>["filteredRowIds"] = [];
+let filteredRowIds: ComponentProps<ToolbarSearch>["filteredRowIds"] = [];
 </script>
 
 <DataTable

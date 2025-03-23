@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TextInput } from "carbon-components-svelte";
+import { TextInput } from "carbon-components-svelte";
 </script>
 
 <TextInput labelText="Custom label">

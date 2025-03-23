@@ -1,37 +1,37 @@
 <script>
-  /**
-   * Specify the title of the accordion item heading.
-   * Alternatively, use the "title" slot (e.g., `<div slot="title">...</div>`)
-   */
-  export let title = "title";
+/**
+ * Specify the title of the accordion item heading.
+ * Alternatively, use the "title" slot (e.g., `<div slot="title">...</div>`)
+ */
+export let title = "title";
 
-  /** Set to `true` to open the first accordion item */
-  export let open = false;
+/** Set to `true` to open the first accordion item */
+export let open = false;
 
-  /** Set to `true` to disable the accordion item */
-  export let disabled = false;
+/** Set to `true` to disable the accordion item */
+export let disabled = false;
 
-  /** Specify the ARIA label for the accordion item chevron icon */
-  export let iconDescription = "Expand/Collapse";
+/** Specify the ARIA label for the accordion item chevron icon */
+export let iconDescription = "Expand/Collapse";
 
-  import { onMount, getContext } from "svelte";
-  import ChevronRight from "../icons/ChevronRight.svelte";
+import { onMount, getContext } from "svelte";
+import ChevronRight from "../icons/ChevronRight.svelte";
 
-  let initialDisabled = disabled;
+let initialDisabled = disabled;
 
-  const ctx = getContext("Accordion");
-  const unsubscribe = ctx.disableItems.subscribe((value) => {
-    if (!value && initialDisabled) return;
-    disabled = value;
-  });
+const ctx = getContext("Accordion");
+const unsubscribe = ctx.disableItems.subscribe((value) => {
+  if (!value && initialDisabled) return;
+  disabled = value;
+});
 
-  let animation = undefined;
+let animation = undefined;
 
-  onMount(() => {
-    return () => {
-      unsubscribe();
-    };
-  });
+onMount(() => {
+  return () => {
+    unsubscribe();
+  };
+});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

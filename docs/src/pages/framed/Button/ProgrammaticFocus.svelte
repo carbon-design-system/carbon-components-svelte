@@ -1,7 +1,7 @@
 <script>
-  import { Button } from "carbon-components-svelte";
+import { Button } from "carbon-components-svelte";
 
-  let ref;
+let ref;
 </script>
 
 <Button bind:ref>Primary button</Button>

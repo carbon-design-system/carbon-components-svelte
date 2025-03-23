@@ -1,48 +1,48 @@
 <script>
-  import {
-    Content,
-    Grid,
-    Row,
-    Column,
-    CodeSnippet,
-    Link,
-    Tabs,
-    Tab,
-    TabContent,
-    OutboundLink,
-    RadioButtonGroup,
-    RadioButton,
-  } from "carbon-components-svelte";
-  import TileCard from "../components/TileCard.svelte";
-  import { theme } from "../store";
-  import { metatags } from "@sveltech/routify";
+import {
+  Content,
+  Grid,
+  Row,
+  Column,
+  CodeSnippet,
+  Link,
+  Tabs,
+  Tab,
+  TabContent,
+  OutboundLink,
+  RadioButtonGroup,
+  RadioButton,
+} from "carbon-components-svelte";
+import TileCard from "../components/TileCard.svelte";
+import { theme } from "../store";
+import { metatags } from "@sveltech/routify";
 
-  metatags.title = "Carbon Components Svelte";
-  metatags.description =
-    "The Svelte implementation of the Carbon Design System featuring UI components, icons, pictograms, and charts.";
+metatags.title = "Carbon Components Svelte";
+metatags.description =
+  "The Svelte implementation of the Carbon Design System featuring UI components, icons, pictograms, and charts.";
 
-  const installNpm = "npm i carbon-components-svelte";
-  const installPnpm = "pnpm i carbon-components-svelte";
-  const installYarn = "yarn add carbon-components-svelte";
-  const installBun = "bun add carbon-components-svelte";
-  const themes = {
-    white: "White",
-    g10: "Gray 10",
-    g80: "Gray 80",
-    g90: "Gray 90",
-    g100: "Gray 100",
-    all: "All",
-  };
+const installNpm = "npm i carbon-components-svelte";
+const installPnpm = "pnpm i carbon-components-svelte";
+const installYarn = "yarn add carbon-components-svelte";
+const installBun = "bun add carbon-components-svelte";
+const themes = {
+  white: "White",
+  g10: "Gray 10",
+  g80: "Gray 80",
+  g90: "Gray 90",
+  g100: "Gray 100",
+  all: "All",
+};
 
-  const cssImportAll = `import "carbon-components-svelte/css/all.css";`;
-  const cssThemeToggle = `<script>
+const cssImportAll = `import "carbon-components-svelte/css/all.css";`;
+const cssThemeToggle = `<script>
   let theme = "${$theme}"; // "white" | "g10" | "g80" | "g90" | "g100"
 
   $: document.documentElement.setAttribute("theme", theme);
 <\/script>
 `;
 
-  $: cssImport = `import "carbon-components-svelte/css/${$theme}.css";`;
+$: cssImport = `import "carbon-components-svelte/css/${$theme}.css";`;
 </script>
 
 <svelte:head>

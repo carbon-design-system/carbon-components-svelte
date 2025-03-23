@@ -1,135 +1,135 @@
 <script>
-  /**
-   * @event {{ open: boolean; }} transitionend
-   * @event {{ text: string; }} click:button--secondary
-   */
+/**
+ * @event {{ open: boolean; }} transitionend
+ * @event {{ text: string; }} click:button--secondary
+ */
 
-  /**
-   * Set the size of the modal
-   * @type {"xs" | "sm" | "lg"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the modal
+ * @type {"xs" | "sm" | "lg"}
+ */
+export let size = undefined;
 
-  /** Set to `true` to open the modal */
-  export let open = false;
+/** Set to `true` to open the modal */
+export let open = false;
 
-  /** Set to `true` to use the danger variant */
-  export let danger = false;
+/** Set to `true` to use the danger variant */
+export let danger = false;
 
-  /** Set to `true` to enable alert mode */
-  export let alert = false;
+/** Set to `true` to enable alert mode */
+export let alert = false;
 
-  /** Set to `true` to use the passive variant */
-  export let passiveModal = false;
+/** Set to `true` to use the passive variant */
+export let passiveModal = false;
 
-  /**
-   * Specify the modal heading
-   * @type {string}
-   */
-  export let modalHeading = undefined;
+/**
+ * Specify the modal heading
+ * @type {string}
+ */
+export let modalHeading = undefined;
 
-  /**
-   * Specify the modal label
-   * @type {string}
-   */
-  export let modalLabel = undefined;
+/**
+ * Specify the modal label
+ * @type {string}
+ */
+export let modalLabel = undefined;
 
-  /**
-   * Specify the ARIA label for the modal
-   * @type {string}
-   */
-  export let modalAriaLabel = undefined;
+/**
+ * Specify the ARIA label for the modal
+ * @type {string}
+ */
+export let modalAriaLabel = undefined;
 
-  /** Specify the ARIA label for the close icon */
-  export let iconDescription = "Close the modal";
+/** Specify the ARIA label for the close icon */
+export let iconDescription = "Close the modal";
 
-  /** Set to `true` if the modal contains form elements */
-  export let hasForm = false;
+/** Set to `true` if the modal contains form elements */
+export let hasForm = false;
 
-  /** Set to `true` if the modal contains scrolling content */
-  export let hasScrollingContent = false;
+/** Set to `true` if the modal contains scrolling content */
+export let hasScrollingContent = false;
 
-  /** Specify the primary button text */
-  export let primaryButtonText = "";
+/** Specify the primary button text */
+export let primaryButtonText = "";
 
-  /** Set to `true` to disable the primary button */
-  export let primaryButtonDisabled = false;
+/** Set to `true` to disable the primary button */
+export let primaryButtonDisabled = false;
 
-  /**
-   * Specify the primary button icon
-   * @type {any}
-   */
-  export let primaryButtonIcon = undefined;
+/**
+ * Specify the primary button icon
+ * @type {any}
+ */
+export let primaryButtonIcon = undefined;
 
-  /**
-   * Set to `true` for the "submit" and "click:button--primary" events
-   * to be dispatched when pressing "Enter"
-   */
-  export let shouldSubmitOnEnter = true;
+/**
+ * Set to `true` for the "submit" and "click:button--primary" events
+ * to be dispatched when pressing "Enter"
+ */
+export let shouldSubmitOnEnter = true;
 
-  /** Specify the secondary button text */
-  export let secondaryButtonText = "";
+/** Specify the secondary button text */
+export let secondaryButtonText = "";
 
-  /**
-   * 2-tuple prop to render two secondary buttons for a 3 button modal
-   * supersedes `secondaryButtonText`
-   * @type {[{ text: string; }, { text: string; }]}
-   */
-  export let secondaryButtons = [];
+/**
+ * 2-tuple prop to render two secondary buttons for a 3 button modal
+ * supersedes `secondaryButtonText`
+ * @type {[{ text: string; }, { text: string; }]}
+ */
+export let secondaryButtons = [];
 
-  /** Specify a selector to be focused when opening the modal */
-  export let selectorPrimaryFocus = "[data-modal-primary-focus]";
+/** Specify a selector to be focused when opening the modal */
+export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
-  /** Set to `true` to prevent the modal from closing when clicking outside */
-  export let preventCloseOnClickOutside = false;
+/** Set to `true` to prevent the modal from closing when clicking outside */
+export let preventCloseOnClickOutside = false;
 
-  /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the top-level element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the top-level HTML element */
-  export let ref = null;
+/** Obtain a reference to the top-level HTML element */
+export let ref = null;
 
-  import { createEventDispatcher, afterUpdate } from "svelte";
-  import Close from "../icons/Close.svelte";
-  import Button from "../Button/Button.svelte";
-  import { trackModal } from "./modalStore";
-  import { writable } from "svelte/store";
+import { createEventDispatcher, afterUpdate } from "svelte";
+import Close from "../icons/Close.svelte";
+import Button from "../Button/Button.svelte";
+import { trackModal } from "./modalStore";
+import { writable } from "svelte/store";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let buttonRef = null;
-  let innerModal = null;
-  let opened = false;
-  let didClickInnerModal = false;
+let buttonRef = null;
+let innerModal = null;
+let opened = false;
+let didClickInnerModal = false;
 
-  function focus(element) {
-    const node =
-      (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
-    node.focus();
-  }
+function focus(element) {
+  const node =
+    (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
+  node.focus();
+}
 
-  const openStore = writable(open);
-  $: $openStore = open;
-  trackModal(openStore);
+const openStore = writable(open);
+$: $openStore = open;
+trackModal(openStore);
 
-  afterUpdate(() => {
-    if (opened) {
-      if (!open) {
-        opened = false;
-        dispatch("close");
-      }
-    } else if (open) {
-      opened = true;
-      focus();
-      dispatch("open");
+afterUpdate(() => {
+  if (opened) {
+    if (!open) {
+      opened = false;
+      dispatch("close");
     }
-  });
+  } else if (open) {
+    opened = true;
+    focus();
+    dispatch("open");
+  }
+});
 
-  $: modalLabelId = `bx--modal-header__label--modal-${id}`;
-  $: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
-  $: modalBodyId = `bx--modal-body--${id}`;
-  $: ariaLabel =
-    modalLabel || $$props["aria-label"] || modalAriaLabel || modalHeading;
+$: modalLabelId = `bx--modal-header__label--modal-${id}`;
+$: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
+$: modalBodyId = `bx--modal-body--${id}`;
+$: ariaLabel =
+  modalLabel || $$props["aria-label"] || modalAriaLabel || modalHeading;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

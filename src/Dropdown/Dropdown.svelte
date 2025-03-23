@@ -1,174 +1,174 @@
 <script>
-  /**
-   * @typedef {any} DropdownItemId
-   * @typedef {string} DropdownItemText
-   * @typedef {{ id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }} DropdownItem
-   * @event {{ selectedId: DropdownItemId, selectedItem: DropdownItem }} select
-   * @slot {{ item: DropdownItem; index: number; }}
-   */
+/**
+ * @typedef {any} DropdownItemId
+ * @typedef {string} DropdownItemText
+ * @typedef {{ id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }} DropdownItem
+ * @event {{ selectedId: DropdownItemId, selectedItem: DropdownItem }} select
+ * @slot {{ item: DropdownItem; index: number; }}
+ */
 
-  /**
-   * Set the dropdown items
-   * @type {ReadonlyArray<DropdownItem>}
-   */
-  export let items = [];
+/**
+ * Set the dropdown items
+ * @type {ReadonlyArray<DropdownItem>}
+ */
+export let items = [];
 
-  /**
-   * Override the display of a dropdown item
-   * @type {(item: DropdownItem) => string}
-   */
-  export let itemToString = (item) => item.text || item.id;
+/**
+ * Override the display of a dropdown item
+ * @type {(item: DropdownItem) => string}
+ */
+export let itemToString = (item) => item.text || item.id;
 
-  /**
-   * Specify the selected item id
-   * @type {DropdownItemId}
-   */
-  export let selectedId;
+/**
+ * Specify the selected item id
+ * @type {DropdownItemId}
+ */
+export let selectedId;
 
-  /**
-   * Specify the type of dropdown
-   * @type {"default" | "inline"}
-   */
-  export let type = "default";
+/**
+ * Specify the type of dropdown
+ * @type {"default" | "inline"}
+ */
+export let type = "default";
 
-  /**
-   * Specify the direction of the dropdown menu
-   * @type {"bottom" | "top"}
-   */
-  export let direction = "bottom";
+/**
+ * Specify the direction of the dropdown menu
+ * @type {"bottom" | "top"}
+ */
+export let direction = "bottom";
 
-  /**
-   * Specify the size of the dropdown field
-   * @type {"sm" | "lg" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Specify the size of the dropdown field
+ * @type {"sm" | "lg" | "xl"}
+ */
+export let size = undefined;
 
-  /** Set to `true` to open the dropdown */
-  export let open = false;
+/** Set to `true` to open the dropdown */
+export let open = false;
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to disable the dropdown */
-  export let disabled = false;
+/** Set to `true` to disable the dropdown */
+export let disabled = false;
 
-  /** Specify the title text */
-  export let titleText = "";
+/** Specify the title text */
+export let titleText = "";
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Specify the invalid state text */
-  export let invalidText = "";
+/** Specify the invalid state text */
+export let invalidText = "";
 
-  /** Set to `true` to indicate an warning state */
-  export let warn = false;
+/** Set to `true` to indicate an warning state */
+export let warn = false;
 
-  /** Specify the warning state text */
-  export let warnText = "";
+/** Specify the warning state text */
+export let warnText = "";
 
-  /** Specify the helper text */
-  export let helperText = "";
+/** Specify the helper text */
+export let helperText = "";
 
-  /**
-   * Specify the list box label
-   * @type {string}
-   */
-  export let label = undefined;
+/**
+ * Specify the list box label
+ * @type {string}
+ */
+export let label = undefined;
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /**
-   * Override the chevron icon label based on the open state.
-   * Defaults to "Open menu" when closed and "Close menu" when open
-   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
-   */
-  export let translateWithId = undefined;
+/**
+ * Override the chevron icon label based on the open state.
+ * Defaults to "Open menu" when closed and "Close menu" when open
+ * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
+ */
+export let translateWithId = undefined;
 
-  /** Set an id for the list box component */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the list box component */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the list box
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the list box
+ * @type {string}
+ */
+export let name = undefined;
 
-  /** Obtain a reference to the button HTML element */
-  export let ref = null;
+/** Obtain a reference to the button HTML element */
+export let ref = null;
 
-  import { createEventDispatcher, onMount } from "svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import {
-    ListBox,
-    ListBoxMenu,
-    ListBoxMenuIcon,
-    ListBoxMenuItem,
-  } from "../ListBox";
+import { createEventDispatcher, onMount } from "svelte";
+import WarningFilled from "../icons/WarningFilled.svelte";
+import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+import {
+  ListBox,
+  ListBoxMenu,
+  ListBoxMenuIcon,
+  ListBoxMenuItem,
+} from "../ListBox";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let highlightedIndex = -1;
+let highlightedIndex = -1;
 
-  $: inline = type === "inline";
-  $: selectedItem = items.find((item) => item.id === selectedId);
-  $: if (!open) {
-    highlightedIndex = -1;
+$: inline = type === "inline";
+$: selectedItem = items.find((item) => item.id === selectedId);
+$: if (!open) {
+  highlightedIndex = -1;
+}
+
+function change(dir) {
+  let index = highlightedIndex + dir;
+
+  if (items.length === 0) return;
+  if (index < 0) {
+    index = items.length - 1;
+  } else if (index >= items.length) {
+    index = 0;
   }
 
-  function change(dir) {
-    let index = highlightedIndex + dir;
+  let disabled = items[index].disabled;
 
-    if (items.length === 0) return;
+  while (disabled) {
+    index = index + dir;
+
     if (index < 0) {
       index = items.length - 1;
     } else if (index >= items.length) {
       index = 0;
     }
 
-    let disabled = items[index].disabled;
-
-    while (disabled) {
-      index = index + dir;
-
-      if (index < 0) {
-        index = items.length - 1;
-      } else if (index >= items.length) {
-        index = 0;
-      }
-
-      disabled = items[index].disabled;
-    }
-
-    highlightedIndex = index;
+    disabled = items[index].disabled;
   }
 
-  const dispatchSelect = () => {
-    dispatch("select", {
-      selectedId,
-      selectedItem: items.find((item) => item.id === selectedId),
-    });
-  };
+  highlightedIndex = index;
+}
 
-  const pageClickHandler = ({ target }) => {
-    if (open && ref && !ref.contains(target)) {
-      open = false;
-    }
-  };
-
-  onMount(() => {
-    if (parent) {
-      parent.addEventListener("click", pageClickHandler);
-    }
-
-    return () => {
-      if (parent) {
-        parent.removeEventListener("click", pageClickHandler);
-      }
-    };
+const dispatchSelect = () => {
+  dispatch("select", {
+    selectedId,
+    selectedItem: items.find((item) => item.id === selectedId),
   });
+};
+
+const pageClickHandler = ({ target }) => {
+  if (open && ref && !ref.contains(target)) {
+    open = false;
+  }
+};
+
+onMount(() => {
+  if (parent) {
+    parent.addEventListener("click", pageClickHandler);
+  }
+
+  return () => {
+    if (parent) {
+      parent.removeEventListener("click", pageClickHandler);
+    }
+  };
+});
 </script>
 
 <svelte:window on:click={pageClickHandler} />

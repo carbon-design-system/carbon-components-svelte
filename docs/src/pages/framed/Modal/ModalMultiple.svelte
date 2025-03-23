@@ -1,8 +1,8 @@
 <script>
-  import { Button, Modal } from "carbon-components-svelte";
+import { Button, Modal } from "carbon-components-svelte";
 
-  let openCreate = false;
-  let openDelete = false;
+let openCreate = false;
+let openDelete = false;
 </script>
 
 <Button on:click={() => (openCreate = true)}>Create database</Button>

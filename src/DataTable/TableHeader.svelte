@@ -1,33 +1,33 @@
 <script>
-  /** Set to `true` for the sortable variant */
-  export let sortable = false;
+/** Set to `true` for the sortable variant */
+export let sortable = false;
 
-  /**
-   * Specify the sort direction
-   * @type {"none" | "ascending" | "descending"}
-   */
-  export let sortDirection = "none";
+/**
+ * Specify the sort direction
+ * @type {"none" | "ascending" | "descending"}
+ */
+export let sortDirection = "none";
 
-  /** Set to `true` if the column sorting */
-  export let active = false;
+/** Set to `true` if the column sorting */
+export let active = false;
 
-  /** Specify the `scope` attribute */
-  export let scope = "col";
+/** Specify the `scope` attribute */
+export let scope = "col";
 
-  /**
-   * Override the default id translations
-   * @type {() => string}
-   */
-  export let translateWithId = () => "";
+/**
+ * Override the default id translations
+ * @type {() => string}
+ */
+export let translateWithId = () => "";
 
-  /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the top-level element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  import ArrowUp from "../icons/ArrowUp.svelte";
-  import ArrowsVertical from "../icons/ArrowsVertical.svelte";
+import ArrowUp from "../icons/ArrowUp.svelte";
+import ArrowsVertical from "../icons/ArrowsVertical.svelte";
 
-  // TODO: translate with id
-  $: ariaLabel = translateWithId();
+// TODO: translate with id
+$: ariaLabel = translateWithId();
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

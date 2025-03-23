@@ -1,44 +1,44 @@
 <script>
-  /**
-   * @event {null} open
-   * @event {null} close
-   */
+/**
+ * @event {null} open
+ * @event {null} close
+ */
 
-  /** Specify the tooltip text */
-  export let tooltipText = "";
+/** Specify the tooltip text */
+export let tooltipText = "";
 
-  /**
-   * Set to `true` to open the tooltip
-   */
-  export let open = false;
+/**
+ * Set to `true` to open the tooltip
+ */
+export let open = false;
 
-  /**
-   * Set the alignment of the tooltip relative to the icon
-   * @type {"start" | "center" | "end"}
-   */
-  export let align = "center";
+/**
+ * Set the alignment of the tooltip relative to the icon
+ * @type {"start" | "center" | "end"}
+ */
+export let align = "center";
 
-  /**
-   * Set the direction of the tooltip relative to the icon
-   * @type {"top" | "bottom"}
-   */
-  export let direction = "bottom";
+/**
+ * Set the direction of the tooltip relative to the icon
+ * @type {"top" | "bottom"}
+ */
+export let direction = "bottom";
 
-  /** Set an id for the tooltip div element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the tooltip div element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the button HTML element */
-  export let ref = null;
+/** Obtain a reference to the button HTML element */
+export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  const hide = () => (open = false);
+const hide = () => (open = false);
 
-  const show = () => (open = true);
+const show = () => (open = true);
 
-  $: dispatch(open ? "open" : "close");
+$: dispatch(open ? "open" : "close");
 </script>
 
 <svelte:window

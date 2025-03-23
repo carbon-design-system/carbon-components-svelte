@@ -1,19 +1,19 @@
 <script lang="ts">
-  import {
-    StructuredList,
-    StructuredListBody,
-    StructuredListHead,
-    StructuredListCell,
-    StructuredListRow,
-    StructuredListInput,
-  } from "carbon-components-svelte";
-  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
-  import type { ComponentProps } from "svelte";
+import {
+  StructuredList,
+  StructuredListBody,
+  StructuredListHead,
+  StructuredListCell,
+  StructuredListRow,
+  StructuredListInput,
+} from "carbon-components-svelte";
+import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
+import type { ComponentProps } from "svelte";
 
-  export let selected: ComponentProps<StructuredList>["selected"] = undefined;
-  export let condensed: ComponentProps<StructuredList>["condensed"] = false;
-  export let flush: ComponentProps<StructuredList>["flush"] = false;
-  export let selection: ComponentProps<StructuredList>["selection"] = false;
+export let selected: ComponentProps<StructuredList>["selected"] = undefined;
+export let condensed: ComponentProps<StructuredList>["condensed"] = false;
+export let flush: ComponentProps<StructuredList>["flush"] = false;
+export let selection: ComponentProps<StructuredList>["selection"] = false;
 </script>
 
 <StructuredList

@@ -1,42 +1,41 @@
 <script>
-  /** Set to `true` to toggle the expanded state */
-  export let expanded = false;
+/** Set to `true` to toggle the expanded state */
+export let expanded = false;
 
-  /** Specify the `href` attribute */
-  export let href = "/";
+/** Specify the `href` attribute */
+export let href = "/";
 
-  /**
-   * Specify the text
-   * @type {string}
-   */
-  export let text = undefined;
+/**
+ * Specify the text
+ * @type {string}
+ */
+export let text = undefined;
 
-  /** Obtain a reference to the HTML anchor element */
-  export let ref = null;
+/** Obtain a reference to the HTML anchor element */
+export let ref = null;
 
-  import { setContext } from "svelte";
-  import { writable } from "svelte/store";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+import { setContext } from "svelte";
+import { writable } from "svelte/store";
+import ChevronDown from "../icons/ChevronDown.svelte";
 
-  const selectedItems = writable({});
+const selectedItems = writable({});
 
-  let menuRef = null;
+let menuRef = null;
 
-  setContext("HeaderNavMenu", {
-    selectedItems,
-    updateSelectedItems(item) {
-      selectedItems.update((_items) => ({
-        ..._items,
-        [item.id]: item.isSelected,
-      }));
-    },
-    closeMenu() {
-      expanded = false;
-    },
-  });
+setContext("HeaderNavMenu", {
+  selectedItems,
+  updateSelectedItems(item) {
+    selectedItems.update((_items) => ({
+      ..._items,
+      [item.id]: item.isSelected,
+    }));
+  },
+  closeMenu() {
+    expanded = false;
+  },
+});
 
-  $: isCurrentSubmenu =
-    Object.values($selectedItems).filter(Boolean).length > 0;
+$: isCurrentSubmenu = Object.values($selectedItems).filter(Boolean).length > 0;
 </script>
 
 <svelte:window

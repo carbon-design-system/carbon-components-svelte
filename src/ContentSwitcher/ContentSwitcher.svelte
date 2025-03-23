@@ -1,60 +1,60 @@
 <script>
-  /**
-   * @event {number} change
-   */
+/**
+ * @event {number} change
+ */
 
-  /** Set the selected index of the switch item */
-  export let selectedIndex = 0;
+/** Set the selected index of the switch item */
+export let selectedIndex = 0;
 
-  /**
-   * Specify the size of the content switcher
-   * @type {"sm" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Specify the size of the content switcher
+ * @type {"sm" | "xl"}
+ */
+export let size = undefined;
 
-  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
-  import { writable } from "svelte/store";
+import { afterUpdate, createEventDispatcher, setContext } from "svelte";
+import { writable } from "svelte/store";
 
-  const dispatch = createEventDispatcher();
-  const currentId = writable(null);
+const dispatch = createEventDispatcher();
+const currentId = writable(null);
 
-  $: currentIndex = -1;
-  $: switches = [];
-  $: if (switches[currentIndex]) {
-    dispatch("change", currentIndex);
-    currentId.set(switches[currentIndex].id);
-  }
+$: currentIndex = -1;
+$: switches = [];
+$: if (switches[currentIndex]) {
+  dispatch("change", currentIndex);
+  currentId.set(switches[currentIndex].id);
+}
 
-  setContext("ContentSwitcher", {
-    currentId,
-    add: ({ id, text, selected }) => {
-      if (selected) {
-        selectedIndex = switches.length;
-      }
-
-      switches = [...switches, { id, text, selected }];
-    },
-    update: (id) => {
-      selectedIndex = switches.map(({ id }) => id).indexOf(id);
-    },
-    change: (direction) => {
-      let index = currentIndex + direction;
-
-      if (index < 0) {
-        index = switches.length - 1;
-      } else if (index >= switches.length) {
-        index = 0;
-      }
-
-      selectedIndex = index;
-    },
-  });
-
-  afterUpdate(() => {
-    if (selectedIndex !== currentIndex) {
-      currentIndex = selectedIndex;
+setContext("ContentSwitcher", {
+  currentId,
+  add: ({ id, text, selected }) => {
+    if (selected) {
+      selectedIndex = switches.length;
     }
-  });
+
+    switches = [...switches, { id, text, selected }];
+  },
+  update: (id) => {
+    selectedIndex = switches.map(({ id }) => id).indexOf(id);
+  },
+  change: (direction) => {
+    let index = currentIndex + direction;
+
+    if (index < 0) {
+      index = switches.length - 1;
+    } else if (index >= switches.length) {
+      index = 0;
+    }
+
+    selectedIndex = index;
+  },
+});
+
+afterUpdate(() => {
+  if (selectedIndex !== currentIndex) {
+    currentIndex = selectedIndex;
+  }
+});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

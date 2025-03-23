@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { Search } from "carbon-components-svelte";
+import { Search } from "carbon-components-svelte";
 
-  let expanded = false;
-  let value = "";
+let expanded = false;
+let value = "";
 </script>
 
 <Search

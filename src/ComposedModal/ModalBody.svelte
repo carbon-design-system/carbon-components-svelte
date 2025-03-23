@@ -1,9 +1,9 @@
 <script>
-  /** Set to `true` if the modal contains form elements */
-  export let hasForm = false;
+/** Set to `true` if the modal contains form elements */
+export let hasForm = false;
 
-  /** Set to `true` if the modal contains scrolling content */
-  export let hasScrollingContent = false;
+/** Set to `true` if the modal contains scrolling content */
+export let hasScrollingContent = false;
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->

@@ -1,23 +1,23 @@
 <script>
-  import {
-    Header,
-    HeaderNav,
-    HeaderNavItem,
-    HeaderNavMenu,
-    SideNav,
-    SideNavItems,
-    SideNavMenu,
-    SideNavMenuItem,
-    SideNavLink,
-    SideNavDivider,
-    SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
-  } from "carbon-components-svelte";
+import {
+  Header,
+  HeaderNav,
+  HeaderNavItem,
+  HeaderNavMenu,
+  SideNav,
+  SideNavItems,
+  SideNavMenu,
+  SideNavMenuItem,
+  SideNavLink,
+  SideNavDivider,
+  SkipToContent,
+  Content,
+  Grid,
+  Row,
+  Column,
+} from "carbon-components-svelte";
 
-  let isSideNavOpen = false;
+let isSideNavOpen = false;
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>

@@ -1,9 +1,9 @@
 <script>
-  /** Set to `true` to hide the breadcrumb trailing slash */
-  export let noTrailingSlash = false;
+/** Set to `true` to hide the breadcrumb trailing slash */
+export let noTrailingSlash = false;
 
-  /** Specify the number of breadcrumb items to render */
-  export let count = 3;
+/** Specify the number of breadcrumb items to render */
+export let count = 3;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

@@ -1,43 +1,43 @@
 <script>
-  /** Set the feedback text shown after clicking the button */
-  export let feedback = "Copied!";
+/** Set the feedback text shown after clicking the button */
+export let feedback = "Copied!";
 
-  /** Set the timeout duration (ms) to display feedback text */
-  export let feedbackTimeout = 2000;
+/** Set the timeout duration (ms) to display feedback text */
+export let feedbackTimeout = 2000;
 
-  /** Set the title and ARIA label for the copy button */
-  export let iconDescription = "Copy to clipboard";
+/** Set the title and ARIA label for the copy button */
+export let iconDescription = "Copy to clipboard";
 
-  /**
-   * Specify the text to copy
-   * @type {string}
-   */
-  export let text;
+/**
+ * Specify the text to copy
+ * @type {string}
+ */
+export let text;
 
-  /**
-   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
-   * @type {(text: string) => void}
-   */
-  export let copy = async (text) => {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+/**
+ * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
+ * @type {(text: string) => void}
+ */
+export let copy = async (text) => {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    console.log(e);
+  }
+};
 
-  import { createEventDispatcher, onMount } from "svelte";
-  import Copy from "../icons/Copy.svelte";
+import { createEventDispatcher, onMount } from "svelte";
+import Copy from "../icons/Copy.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  /** @type {"fade-in" | "fade-out"} */
-  let animation = undefined;
-  let timeout = undefined;
+/** @type {"fade-in" | "fade-out"} */
+let animation = undefined;
+let timeout = undefined;
 
-  onMount(() => {
-    return () => clearTimeout(timeout);
-  });
+onMount(() => {
+  return () => clearTimeout(timeout);
+});
 </script>
 
 <button

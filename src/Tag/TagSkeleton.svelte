@@ -1,6 +1,6 @@
 <script>
-  /** @type {"sm" | "default"} */
-  export let size = "default";
+/** @type {"sm" | "default"} */
+export let size = "default";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

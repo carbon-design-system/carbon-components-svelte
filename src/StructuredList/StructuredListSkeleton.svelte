@@ -1,6 +1,6 @@
 <script>
-  /** Specify the number of rows */
-  export let rows = 5;
+/** Specify the number of rows */
+export let rows = 5;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

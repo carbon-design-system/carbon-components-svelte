@@ -1,11 +1,7 @@
 <script>
-  import {
-    Theme,
-    RadioButtonGroup,
-    RadioButton,
-  } from "carbon-components-svelte";
+import { Theme, RadioButtonGroup, RadioButton } from "carbon-components-svelte";
 
-  let theme = "g90";
+let theme = "g90";
 </script>
 
 <Theme bind:theme persist persistKey="__carbon-theme" />

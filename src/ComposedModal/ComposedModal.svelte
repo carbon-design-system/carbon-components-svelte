@@ -1,99 +1,99 @@
 <script>
-  /**
-   * @event {{ open: boolean; }} transitionend
-   */
+/**
+ * @event {{ open: boolean; }} transitionend
+ */
 
-  /**
-   * Set the size of the composed modal
-   * @type {"xs" | "sm" | "lg"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the composed modal
+ * @type {"xs" | "sm" | "lg"}
+ */
+export let size = undefined;
 
-  /** Set to `true` to open the modal */
-  export let open = false;
+/** Set to `true` to open the modal */
+export let open = false;
 
-  /** Set to `true` to use the danger variant */
-  export let danger = false;
+/** Set to `true` to use the danger variant */
+export let danger = false;
 
-  /** Set to `true` to prevent the modal from closing when clicking outside */
-  export let preventCloseOnClickOutside = false;
+/** Set to `true` to prevent the modal from closing when clicking outside */
+export let preventCloseOnClickOutside = false;
 
-  /** Specify a class for the inner modal */
-  export let containerClass = "";
+/** Specify a class for the inner modal */
+export let containerClass = "";
 
-  /**
-   * Specify a selector to be focused when opening the modal
-   * @type {null | string}
-   */
-  export let selectorPrimaryFocus = "[data-modal-primary-focus]";
+/**
+ * Specify a selector to be focused when opening the modal
+ * @type {null | string}
+ */
+export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
-  /** Obtain a reference to the top-level HTML element */
-  export let ref = null;
+/** Obtain a reference to the top-level HTML element */
+export let ref = null;
 
-  import {
-    createEventDispatcher,
-    tick,
-    setContext,
-    onMount,
-    afterUpdate,
-  } from "svelte";
-  import { writable } from "svelte/store";
-  import { trackModal } from "../Modal/modalStore";
+import {
+  createEventDispatcher,
+  tick,
+  setContext,
+  onMount,
+  afterUpdate,
+} from "svelte";
+import { writable } from "svelte/store";
+import { trackModal } from "../Modal/modalStore";
 
-  const dispatch = createEventDispatcher();
-  const label = writable(undefined);
+const dispatch = createEventDispatcher();
+const label = writable(undefined);
 
-  let buttonRef = null;
-  let innerModal = null;
-  let didClickInnerModal = false;
+let buttonRef = null;
+let innerModal = null;
+let didClickInnerModal = false;
 
-  setContext("ComposedModal", {
-    closeModal: () => {
-      open = false;
-    },
-    submit: () => {
-      dispatch("submit");
-      dispatch("click:button--primary");
-    },
-    declareRef: (ref) => {
-      buttonRef = ref;
-    },
-    updateLabel: (value) => {
-      label.set(value);
-    },
+setContext("ComposedModal", {
+  closeModal: () => {
+    open = false;
+  },
+  submit: () => {
+    dispatch("submit");
+    dispatch("click:button--primary");
+  },
+  declareRef: (ref) => {
+    buttonRef = ref;
+  },
+  updateLabel: (value) => {
+    label.set(value);
+  },
+});
+
+function focus(element) {
+  if (selectorPrimaryFocus == null) return;
+  const node =
+    (element || innerModal)?.querySelector(selectorPrimaryFocus) || buttonRef;
+  if (node != null) node.focus();
+}
+
+let opened = false;
+$: didOpen = open;
+
+const openStore = writable(open);
+$: $openStore = open;
+trackModal(openStore);
+
+onMount(() => {
+  tick().then(() => {
+    focus();
   });
+});
 
-  function focus(element) {
-    if (selectorPrimaryFocus == null) return;
-    const node =
-      (element || innerModal)?.querySelector(selectorPrimaryFocus) || buttonRef;
-    if (node != null) node.focus();
-  }
-
-  let opened = false;
-  $: didOpen = open;
-
-  const openStore = writable(open);
-  $: $openStore = open;
-  trackModal(openStore);
-
-  onMount(() => {
-    tick().then(() => {
-      focus();
-    });
-  });
-
-  afterUpdate(() => {
-    if (opened) {
-      if (!open) {
-        opened = false;
-        dispatch("close");
-      }
-    } else if (open) {
-      opened = true;
-      dispatch("open");
+afterUpdate(() => {
+  if (opened) {
+    if (!open) {
+      opened = false;
+      dispatch("close");
     }
-  });
+  } else if (open) {
+    opened = true;
+    dispatch("open");
+  }
+});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

@@ -1,11 +1,7 @@
 <script lang="ts">
-  import {
-    Select,
-    SelectItem,
-    SelectItemGroup,
-  } from "carbon-components-svelte";
+import { Select, SelectItem, SelectItemGroup } from "carbon-components-svelte";
 
-  export let selected: string | number | undefined = undefined;
+export let selected: string | number | undefined = undefined;
 </script>
 
 <Select bind:selected data-testid="select-group">

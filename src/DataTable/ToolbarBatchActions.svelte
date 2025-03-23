@@ -1,77 +1,77 @@
 <script>
-  /**
-   * @event {null} cancel
-   */
+/**
+ * @event {null} cancel
+ */
 
-  /**
-   * Override the total items selected text
-   * @type {(totalSelected: number) => string}
-   */
-  export let formatTotalSelected = (totalSelected) =>
-    `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
+/**
+ * Override the total items selected text
+ * @type {(totalSelected: number) => string}
+ */
+export let formatTotalSelected = (totalSelected) =>
+  `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
 
-  /**
-   * Use a boolean to show or hide the toolbar
-   * @type {undefined | boolean}
-   */
-  export let active = undefined;
+/**
+ * Use a boolean to show or hide the toolbar
+ * @type {undefined | boolean}
+ */
+export let active = undefined;
 
-  import {
-    onMount,
-    getContext,
-    createEventDispatcher,
-    afterUpdate,
-  } from "svelte";
+import {
+  onMount,
+  getContext,
+  createEventDispatcher,
+  afterUpdate,
+} from "svelte";
 
-  import Button from "../Button/Button.svelte";
+import Button from "../Button/Button.svelte";
 
-  let batchSelectedIds = [];
-  let prevActive;
+let batchSelectedIds = [];
+let prevActive;
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  const ctx = getContext("DataTable");
+const ctx = getContext("DataTable");
 
-  function cancel() {
-    const shouldContinue = dispatch("cancel", null, { cancelable: true });
+function cancel() {
+  const shouldContinue = dispatch("cancel", null, { cancelable: true });
 
-    if (shouldContinue) {
-      ctx.resetSelectedRowIds();
-    }
+  if (shouldContinue) {
+    ctx.resetSelectedRowIds();
+  }
+}
+
+$: showActions = batchSelectedIds.length > 0 || active;
+$: {
+  if (prevActive !== active && active === false) {
+    showActions = false;
   }
 
-  $: showActions = batchSelectedIds.length > 0 || active;
-  $: {
-    if (prevActive !== active && active === false) {
-      showActions = false;
-    }
+  prevActive = active;
+}
 
-    prevActive = active;
+const unsubscribe = ctx.batchSelectedIds.subscribe((value) => {
+  batchSelectedIds = value;
+});
+
+let overflowVisible = false;
+
+const ctxToolbar = getContext("Toolbar");
+const unsubscribeOverflow = ctxToolbar.overflowVisible.subscribe((value) => {
+  overflowVisible = value;
+});
+
+onMount(() => {
+  return () => {
+    unsubscribe();
+    unsubscribeOverflow();
+  };
+});
+
+afterUpdate(() => {
+  if (active === false && showActions) {
+    active = true;
   }
-
-  const unsubscribe = ctx.batchSelectedIds.subscribe((value) => {
-    batchSelectedIds = value;
-  });
-
-  let overflowVisible = false;
-
-  const ctxToolbar = getContext("Toolbar");
-  const unsubscribeOverflow = ctxToolbar.overflowVisible.subscribe((value) => {
-    overflowVisible = value;
-  });
-
-  onMount(() => {
-    return () => {
-      unsubscribe();
-      unsubscribeOverflow();
-    };
-  });
-
-  afterUpdate(() => {
-    if (active === false && showActions) {
-      active = true;
-    }
-  });
+});
 </script>
 
 {#if !overflowVisible}

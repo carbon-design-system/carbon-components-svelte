@@ -1,15 +1,15 @@
 <script>
-  /**
-   * Set the `href` to use an anchor link
-   * @type {string}
-   */
-  export let href = undefined;
+/**
+ * Set the `href` to use an anchor link
+ * @type {string}
+ */
+export let href = undefined;
 
-  /**
-   * Specify the size of button skeleton
-   * @type {"default" | "field" | "small" | "lg" | "xl"}
-   */
-  export let size = "default";
+/**
+ * Specify the size of button skeleton
+ * @type {"default" | "field" | "small" | "lg" | "xl"}
+ */
+export let size = "default";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

@@ -1,8 +1,8 @@
 <script>
-  import { Button, Modal } from "carbon-components-svelte";
-  import Send from "carbon-icons-svelte/lib/Send.svelte";
+import { Button, Modal } from "carbon-components-svelte";
+import Send from "carbon-icons-svelte/lib/Send.svelte";
 
-  let open = false;
+let open = false;
 </script>
 
 <Button on:click={() => (open = true)}>Create database</Button>

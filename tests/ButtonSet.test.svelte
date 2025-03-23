@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Button, ButtonSet } from "carbon-components-svelte";
-  import Login from "carbon-icons-svelte/lib/Login.svelte";
+import { Button, ButtonSet } from "carbon-components-svelte";
+import Login from "carbon-icons-svelte/lib/Login.svelte";
 </script>
 
 <ButtonSet>

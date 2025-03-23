@@ -1,7 +1,7 @@
 <script>
-  import { Tooltip, Button } from "carbon-components-svelte";
+import { Tooltip, Button } from "carbon-components-svelte";
 
-  let open = true;
+let open = true;
 </script>
 
 <Tooltip bind:open triggerText="Resource list" align="start">

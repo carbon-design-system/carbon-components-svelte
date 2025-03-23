@@ -1,54 +1,54 @@
 <script>
-  /** Set to `true` for the complete variant */
-  export let complete = false;
+/** Set to `true` for the complete variant */
+export let complete = false;
 
-  /** Set to `true` to use the current variant */
-  export let current = false;
+/** Set to `true` to use the current variant */
+export let current = false;
 
-  /** Set to `true` to disable the progress step */
-  export let disabled = false;
+/** Set to `true` to disable the progress step */
+export let disabled = false;
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Specify the step description */
-  export let description = "";
+/** Specify the step description */
+export let description = "";
 
-  /** Specify the step label */
-  export let label = "";
+/** Specify the step label */
+export let label = "";
 
-  /** Specify the step secondary label */
-  export let secondaryLabel = "";
+/** Specify the step secondary label */
+export let secondaryLabel = "";
 
-  /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the top-level element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  import { onMount, getContext } from "svelte";
-  import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
-  import Warning from "../icons/Warning.svelte";
-  import CircleDash from "../icons/CircleDash.svelte";
-  import Incomplete from "../icons/Incomplete.svelte";
+import { onMount, getContext } from "svelte";
+import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
+import Warning from "../icons/Warning.svelte";
+import CircleDash from "../icons/CircleDash.svelte";
+import Incomplete from "../icons/Incomplete.svelte";
 
-  let step = {};
+let step = {};
 
-  const { stepsById, add, change, preventChangeOnClick } =
-    getContext("ProgressIndicator");
+const { stepsById, add, change, preventChangeOnClick } =
+  getContext("ProgressIndicator");
 
-  $: add({ id, complete, disabled });
+$: add({ id, complete, disabled });
 
-  const unsubscribe = stepsById.subscribe((value) => {
-    if (value[id]) {
-      step = value[id];
-      current = step.current;
-      complete = step.complete;
-    }
-  });
+const unsubscribe = stepsById.subscribe((value) => {
+  if (value[id]) {
+    step = value[id];
+    current = step.current;
+    complete = step.complete;
+  }
+});
 
-  onMount(() => {
-    return () => {
-      unsubscribe();
-    };
-  });
+onMount(() => {
+  return () => {
+    unsubscribe();
+  };
+});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

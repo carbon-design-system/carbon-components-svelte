@@ -1,7 +1,7 @@
 <script>
-  import { Toggle, Button } from "carbon-components-svelte";
+import { Toggle, Button } from "carbon-components-svelte";
 
-  let toggled = true;
+let toggled = true;
 </script>
 
 <Toggle labelText="Push notifications" bind:toggled />

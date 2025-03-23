@@ -1,49 +1,48 @@
 <script>
-  export let component = {
-    props: [],
-    slots: [],
-    events: [],
-    rest_props: undefined,
-    typedefs: [],
-  };
+export let component = {
+  props: [],
+  slots: [],
+  events: [],
+  rest_props: undefined,
+  typedefs: [],
+};
 
-  import { onMount } from "svelte";
-  import {
-    OutboundLink,
-    StructuredList,
-    StructuredListHead,
-    StructuredListRow,
-    StructuredListCell,
-    StructuredListBody,
-    UnorderedList,
-    ListItem,
-    Tag,
-  } from "carbon-components-svelte";
-  import InlineSnippet from "./InlineSnippet.svelte";
+import { onMount } from "svelte";
+import {
+  OutboundLink,
+  StructuredList,
+  StructuredListHead,
+  StructuredListRow,
+  StructuredListCell,
+  StructuredListBody,
+  UnorderedList,
+  ListItem,
+  Tag,
+} from "carbon-components-svelte";
+import InlineSnippet from "./InlineSnippet.svelte";
 
-  let AsyncPreviewTypeScript;
+let AsyncPreviewTypeScript;
 
-  onMount(async () => {
-    AsyncPreviewTypeScript = (await import("./PreviewTypeScript.svelte"))
-      .default;
-  });
+onMount(async () => {
+  AsyncPreviewTypeScript = (await import("./PreviewTypeScript.svelte")).default;
+});
 
-  const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
-  const typeMap = {
-    string: "string",
-    boolean: "boolean",
-    number: "number",
-    null: "null",
-    Date: "JavaScript Date",
-  };
+const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
+const typeMap = {
+  string: "string",
+  boolean: "boolean",
+  number: "number",
+  null: "null",
+  Date: "JavaScript Date",
+};
 
-  $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
-  $: forwarded_events = component.events.filter(
-    (event) => event.type === "forwarded",
-  );
-  $: dispatched_events = component.events.filter(
-    (event) => event.type === "dispatched",
-  );
+$: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
+$: forwarded_events = component.events.filter(
+  (event) => event.type === "forwarded",
+);
+$: dispatched_events = component.events.filter(
+  (event) => event.type === "dispatched",
+);
 </script>
 
 <p style="margin-bottom: var(--cds-layout-02)">

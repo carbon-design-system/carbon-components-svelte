@@ -1,55 +1,55 @@
 <script>
-  /**
-   * @event {null} open
-   * @event {null} close
-   * @event {null} click:overlay
-   */
+/**
+ * @event {null} open
+ * @event {null} close
+ * @event {null} click:overlay
+ */
 
-  /** Set to `true` to use the fixed variant */
-  export let fixed = false;
+/** Set to `true` to use the fixed variant */
+export let fixed = false;
 
-  /** Set to `true` to use the rail variant */
-  export let rail = false;
+/** Set to `true` to use the rail variant */
+export let rail = false;
 
-  /**
-   * Specify the ARIA label for the nav
-   * @type {string}
-   */
-  export let ariaLabel = undefined;
+/**
+ * Specify the ARIA label for the nav
+ * @type {string}
+ */
+export let ariaLabel = undefined;
 
-  /** Set to `true` to toggle the expanded state */
-  export let isOpen = false;
+/** Set to `true` to toggle the expanded state */
+export let isOpen = false;
 
-  /**
-   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.
-   * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
-   * - small: 320
-   * - medium: 672
-   * - large: 1056
-   * - x-large: 1312
-   * - max: 1584
-   */
-  export let expansionBreakpoint = 1056;
+/**
+ * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.
+ * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
+ * - small: 320
+ * - medium: 672
+ * - large: 1056
+ * - x-large: 1312
+ * - max: 1584
+ */
+export let expansionBreakpoint = 1056;
 
-  import { onMount, createEventDispatcher } from "svelte";
-  import {
-    shouldRenderHamburgerMenu,
-    isSideNavCollapsed,
-    isSideNavRail,
-  } from "./navStore";
+import { onMount, createEventDispatcher } from "svelte";
+import {
+  shouldRenderHamburgerMenu,
+  isSideNavCollapsed,
+  isSideNavRail,
+} from "./navStore";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let winWidth = undefined;
+let winWidth = undefined;
 
-  $: dispatch(isOpen ? "open" : "close");
-  $: $isSideNavCollapsed = !isOpen;
-  $: $isSideNavRail = rail;
+$: dispatch(isOpen ? "open" : "close");
+$: $isSideNavCollapsed = !isOpen;
+$: $isSideNavRail = rail;
 
-  onMount(() => {
-    shouldRenderHamburgerMenu.set(true);
-    return () => shouldRenderHamburgerMenu.set(false);
-  });
+onMount(() => {
+  shouldRenderHamburgerMenu.set(true);
+  return () => shouldRenderHamburgerMenu.set(false);
+});
 </script>
 
 <svelte:window bind:innerWidth={winWidth} />

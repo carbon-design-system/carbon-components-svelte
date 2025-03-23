@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { CodeSnippet } from "carbon-components-svelte";
+import { CodeSnippet } from "carbon-components-svelte";
 
-  let copyCount = 0;
+let copyCount = 0;
 
-  function handleCopy() {
-    copyCount += 1;
-  }
+function handleCopy() {
+  copyCount += 1;
+}
 </script>
 
 Copy events: {copyCount}

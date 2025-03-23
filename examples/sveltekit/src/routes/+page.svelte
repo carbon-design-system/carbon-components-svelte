@@ -1,6 +1,6 @@
 <script>
-  import { Button, breakpoints } from "carbon-components-svelte";
-  import { Airplane } from "carbon-pictograms-svelte";
+import { Button, breakpoints } from "carbon-components-svelte";
+import { Airplane } from "carbon-pictograms-svelte";
 </script>
 
 <Button>Primary button</Button>

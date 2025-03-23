@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Tooltip } from "carbon-components-svelte";
+import { Tooltip } from "carbon-components-svelte";
 
-  const alignments = ["start", "center", "end"] as const;
+const alignments = ["start", "center", "end"] as const;
 </script>
 
 <div>

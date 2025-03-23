@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Tag } from "carbon-components-svelte";
-  import Add from "carbon-icons-svelte/lib/Add.svelte";
+import { Tag } from "carbon-components-svelte";
+import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 
 <Tag class="my-class" style="margin: 1rem;">IBM Cloud</Tag>

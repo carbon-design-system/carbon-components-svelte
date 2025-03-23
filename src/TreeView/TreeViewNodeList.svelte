@@ -1,67 +1,67 @@
 <script>
-  /**
-   * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode
-   * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
-   */
+/**
+ * @typedef {string | number} TreeNodeId
+ * @typedef {{ id: TreeNodeId; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode
+ * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
+ */
 
-  /** @type {Array<TreeNode & { nodes?: TreeNode[] }>} */
-  export let nodes = [];
-  export let root = false;
+/** @type {Array<TreeNode & { nodes?: TreeNode[] }>} */
+export let nodes = [];
+export let root = false;
 
-  /** @type {string | number} */
-  export let id = "";
-  export let text = "";
-  export let disabled = false;
+/** @type {string | number} */
+export let id = "";
+export let text = "";
+export let disabled = false;
 
-  /**
-   * Specify the icon to render
-   * @type {any}
-   */
-  export let icon = undefined;
+/**
+ * Specify the icon to render
+ * @type {any}
+ */
+export let icon = undefined;
 
-  import { afterUpdate, getContext } from "svelte";
-  import CaretDown from "../icons/CaretDown.svelte";
-  import TreeViewNode, { computeTreeLeafDepth } from "./TreeViewNode.svelte";
+import { afterUpdate, getContext } from "svelte";
+import CaretDown from "../icons/CaretDown.svelte";
+import TreeViewNode, { computeTreeLeafDepth } from "./TreeViewNode.svelte";
 
-  let ref = null;
-  let refLabel = null;
-  let prevActiveId = undefined;
+let ref = null;
+let refLabel = null;
+let prevActiveId = undefined;
 
-  const {
-    activeNodeId,
-    selectedNodeIds,
-    expandedNodeIds,
-    clickNode,
-    selectNode,
-    expandNode,
-    focusNode,
-    toggleNode,
-  } = getContext("TreeView");
+const {
+  activeNodeId,
+  selectedNodeIds,
+  expandedNodeIds,
+  clickNode,
+  selectNode,
+  expandNode,
+  focusNode,
+  toggleNode,
+} = getContext("TreeView");
 
-  const offset = () => {
-    const depth = computeTreeLeafDepth(refLabel);
+const offset = () => {
+  const depth = computeTreeLeafDepth(refLabel);
 
-    if (parent) return depth + 1;
-    if (icon) return depth + 2;
-    return depth + 2.5;
-  };
+  if (parent) return depth + 1;
+  if (icon) return depth + 2;
+  return depth + 2.5;
+};
 
-  afterUpdate(() => {
-    if (id === $activeNodeId && prevActiveId !== $activeNodeId) {
-      if (!$selectedNodeIds.includes(id)) selectNode(node);
-    }
-
-    prevActiveId = $activeNodeId;
-  });
-
-  $: parent = Array.isArray(nodes);
-  $: node = { id, text, expanded, leaf: !parent };
-  $: if (refLabel) {
-    refLabel.style.marginLeft = `-${offset()}rem`;
-    refLabel.style.paddingLeft = `${offset()}rem`;
+afterUpdate(() => {
+  if (id === $activeNodeId && prevActiveId !== $activeNodeId) {
+    if (!$selectedNodeIds.includes(id)) selectNode(node);
   }
-  $: expanded = $expandedNodeIds.includes(id);
+
+  prevActiveId = $activeNodeId;
+});
+
+$: parent = Array.isArray(nodes);
+$: node = { id, text, expanded, leaf: !parent };
+$: if (refLabel) {
+  refLabel.style.marginLeft = `-${offset()}rem`;
+  refLabel.style.paddingLeft = `${offset()}rem`;
+}
+$: expanded = $expandedNodeIds.includes(id);
 </script>
 
 {#if root}

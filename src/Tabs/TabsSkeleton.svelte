@@ -1,12 +1,12 @@
 <script>
-  /** Specify the number of tabs to render */
-  export let count = 4;
+/** Specify the number of tabs to render */
+export let count = 4;
 
-  /**
-   * Specify the type of tabs
-   * @type {"default" | "container"}
-   */
-  export let type = "default";
+/**
+ * Specify the type of tabs
+ * @type {"default" | "container"}
+ */
+export let type = "default";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ProgressBar } from "carbon-components-svelte";
+import { ProgressBar } from "carbon-components-svelte";
 </script>
 
 <ProgressBar status="active" data-testid="indeterminate-progress" />

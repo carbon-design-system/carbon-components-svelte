@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { Checkbox } from "carbon-components-svelte";
+import { Checkbox } from "carbon-components-svelte";
 
-  export let group = ["option-2"];
+export let group = ["option-2"];
 
-  $: console.log(group);
+$: console.log(group);
 </script>
 
 <Checkbox

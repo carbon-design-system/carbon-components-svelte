@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Button, Modal } from "carbon-components-svelte";
+import { Button, Modal } from "carbon-components-svelte";
 
-  let open = false;
+let open = false;
 </script>
 
 <Button kind="tertiary" on:click={() => (open = true)}>Learn more</Button>

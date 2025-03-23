@@ -1,7 +1,7 @@
 <script>
-  import { Search, ButtonSet, Button } from "carbon-components-svelte";
+import { Search, ButtonSet, Button } from "carbon-components-svelte";
 
-  let value = "";
+let value = "";
 </script>
 
 <Search bind:value />

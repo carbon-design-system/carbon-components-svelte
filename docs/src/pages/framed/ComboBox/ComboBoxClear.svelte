@@ -1,7 +1,7 @@
 <script>
-  import { ComboBox, Button } from "carbon-components-svelte";
+import { ComboBox, Button } from "carbon-components-svelte";
 
-  let ref;
+let ref;
 </script>
 
 <ComboBox

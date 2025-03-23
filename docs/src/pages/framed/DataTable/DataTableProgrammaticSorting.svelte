@@ -1,11 +1,11 @@
 <script>
-  import { DataTable, Button } from "carbon-components-svelte";
+import { DataTable, Button } from "carbon-components-svelte";
 
-  let sortKey = "port";
-  let sortDirection = "ascending";
+let sortKey = "port";
+let sortDirection = "ascending";
 
-  $: console.log("sortKey", sortKey);
-  $: console.log("sortDirection", sortDirection);
+$: console.log("sortKey", sortKey);
+$: console.log("sortDirection", sortDirection);
 </script>
 
 <Button

@@ -1,64 +1,64 @@
 <script>
-  import {
-    isActive,
-    url,
-    layout,
-    beforeUrlChange,
-    goto,
-  } from "@sveltech/routify";
-  import {
-    Header,
-    HeaderUtilities,
-    HeaderAction,
-    HeaderActionLink,
-    HeaderPanelLinks,
-    HeaderPanelLink,
-    HeaderPanelDivider,
-    HeaderSearch,
-    SkipToContent,
-    SideNav,
-    SideNavItems,
-    SideNavMenuItem,
-    Theme,
-    Tag,
-  } from "carbon-components-svelte";
-  import MiniSearch from "minisearch";
-  import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
-  import { theme } from "../store";
-  import SEARCH_INDEX from "../SEARCH_INDEX.json";
+import {
+  isActive,
+  url,
+  layout,
+  beforeUrlChange,
+  goto,
+} from "@sveltech/routify";
+import {
+  Header,
+  HeaderUtilities,
+  HeaderAction,
+  HeaderActionLink,
+  HeaderPanelLinks,
+  HeaderPanelLink,
+  HeaderPanelDivider,
+  HeaderSearch,
+  SkipToContent,
+  SideNav,
+  SideNavItems,
+  SideNavMenuItem,
+  Theme,
+  Tag,
+} from "carbon-components-svelte";
+import MiniSearch from "minisearch";
+import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
+import { theme } from "../store";
+import SEARCH_INDEX from "../SEARCH_INDEX.json";
 
-  const miniSearch = new MiniSearch({
-    fields: ["text", "description"],
-    storeFields: ["text", "description", "href"],
-    searchOptions: {
-      prefix: true,
-      boost: { description: 2 },
-      fuzzy: 0.1,
-    },
-  });
+const miniSearch = new MiniSearch({
+  fields: ["text", "description"],
+  storeFields: ["text", "description", "href"],
+  searchOptions: {
+    prefix: true,
+    boost: { description: 2 },
+    fuzzy: 0.1,
+  },
+});
 
-  miniSearch.addAll(SEARCH_INDEX);
+miniSearch.addAll(SEARCH_INDEX);
 
-  const deprecated = [];
-  const new_components = [];
+const deprecated = [];
+const new_components = [];
 
-  let value = "";
-  let active = false;
-  $: results = miniSearch.search(value).slice(0, 10);
+let value = "";
+let active = false;
+$: results = miniSearch.search(value).slice(0, 10);
 
-  let isOpen = false;
-  let isSideNavOpen = true;
-  let innerWidth = 2048;
+let isOpen = false;
+let isSideNavOpen = true;
+let innerWidth = 2048;
 
-  $: isMobile = innerWidth < 1056;
-  $: components = $layout.children.filter(
-    (child) => child.title === "components",
-  )[0];
+$: isMobile = innerWidth < 1056;
+$: components = $layout.children.filter(
+  (child) => child.title === "components",
+)[0];
 
-  $beforeUrlChange(() => {
-    if (isMobile) isSideNavOpen = false;
-    return true;
-  });
+$beforeUrlChange(() => {
+  if (isMobile) isSideNavOpen = false;
+  return true;
+});
 </script>
 
 <!-- routify:options bundle=true -->

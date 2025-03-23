@@ -1,22 +1,22 @@
 <script lang="ts">
-  import {
-    FileUploaderButton,
-    FileUploader,
-    FileUploaderDropContainer,
-    FileUploaderItem,
-    FileUploaderSkeleton,
-  } from "carbon-components-svelte";
-  import type { FileUploaderProps } from "carbon-components-svelte/FileUploader/FileUploader.svelte";
+import {
+  FileUploaderButton,
+  FileUploader,
+  FileUploaderDropContainer,
+  FileUploaderItem,
+  FileUploaderSkeleton,
+} from "carbon-components-svelte";
+import type { FileUploaderProps } from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 
-  let fileUploader: FileUploader;
-  let files: FileUploaderProps["files"] = [];
+let fileUploader: FileUploader;
+let files: FileUploaderProps["files"] = [];
 
-  $: {
-    // @ts-expect-error
-    files[0] = null;
-  }
+$: {
+  // @ts-expect-error
+  files[0] = null;
+}
 
-  $: fileUploader?.clearFiles();
+$: fileUploader?.clearFiles();
 </script>
 
 <FileUploaderButton

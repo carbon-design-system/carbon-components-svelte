@@ -1,12 +1,12 @@
 <script>
-  import {
-    Button,
-    Modal,
-    DatePicker,
-    DatePickerInput,
-  } from "carbon-components-svelte";
+import {
+  Button,
+  Modal,
+  DatePicker,
+  DatePickerInput,
+} from "carbon-components-svelte";
 
-  let open = false;
+let open = false;
 </script>
 
 <Button on:click={() => (open = true)}>Select date</Button>

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import {
-    InlineNotification,
-    NotificationActionButton,
-  } from "carbon-components-svelte";
+import {
+  InlineNotification,
+  NotificationActionButton,
+} from "carbon-components-svelte";
 </script>
 
 <InlineNotification kind="warning">

@@ -1,37 +1,37 @@
 <script>
-  /**
-   * @event {{ target: HTMLElement; }} click:outside
-   */
+/**
+ * @event {{ target: HTMLElement; }} click:outside
+ */
 
-  /** Set to `true` to display the popover */
-  export let open = false;
+/** Set to `true` to display the popover */
+export let open = false;
 
-  /** Set to `true` to close the popover on an outside click */
-  export let closeOnOutsideClick = false;
+/** Set to `true` to close the popover on an outside click */
+export let closeOnOutsideClick = false;
 
-  /** Set to `true` render a caret */
-  export let caret = false;
+/** Set to `true` render a caret */
+export let caret = false;
 
-  /**
-   * Specify the alignment of the caret
-   * @type {"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"}
-   */
-  export let align = "top";
+/**
+ * Specify the alignment of the caret
+ * @type {"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"}
+ */
+export let align = "top";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to enable the high contrast variant */
-  export let highContrast = false;
+/** Set to `true` to enable the high contrast variant */
+export let highContrast = false;
 
-  /** Set to `true` to use a relative position */
-  export let relative = false;
+/** Set to `true` to use a relative position */
+export let relative = false;
 
-  import { createEventDispatcher } from "svelte";
+import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let ref = null;
+let ref = null;
 </script>
 
 <svelte:window

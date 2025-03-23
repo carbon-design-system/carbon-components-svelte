@@ -1,7 +1,7 @@
 <script>
-  import { CodeSnippet, Button } from "carbon-components-svelte";
+import { CodeSnippet, Button } from "carbon-components-svelte";
 
-  let expanded = false;
+let expanded = false;
 </script>
 
 <Button on:click={() => (expanded = !expanded)}>Toggle expansion</Button>

@@ -1,104 +1,104 @@
 <script>
-  /**
-   * @event {null | number | string} change
-   * @event {null | number | string} input
-   */
+/**
+ * @event {null | number | string} change
+ * @event {null | number | string} input
+ */
 
-  /**
-   * Set the size of the input
-   * @type {"sm" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the input
+ * @type {"sm" | "xl"}
+ */
+export let size = undefined;
 
-  /**
-   * Specify the input value.
-   *
-   * `value` will be set to `null` if type="number"
-   * and the value is empty.
-   * @type {null | number | string}
-   */
-  export let value = "";
+/**
+ * Specify the input value.
+ *
+ * `value` will be set to `null` if type="number"
+ * and the value is empty.
+ * @type {null | number | string}
+ */
+export let value = "";
 
-  /** Specify the placeholder text */
-  export let placeholder = "";
+/** Specify the placeholder text */
+export let placeholder = "";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to disable the input */
-  export let disabled = false;
+/** Set to `true` to disable the input */
+export let disabled = false;
 
-  /** Specify the helper text */
-  export let helperText = "";
+/** Specify the helper text */
+export let helperText = "";
 
-  /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the input element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the input
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the input
+ * @type {string}
+ */
+export let name = undefined;
 
-  /** Specify the label text */
-  export let labelText = "";
+/** Specify the label text */
+export let labelText = "";
 
-  /** Set to `true` to visually hide the label text */
-  export let hideLabel = false;
+/** Set to `true` to visually hide the label text */
+export let hideLabel = false;
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Specify the invalid state text */
-  export let invalidText = "";
+/** Specify the invalid state text */
+export let invalidText = "";
 
-  /** Set to `true` to indicate an warning state */
-  export let warn = false;
+/** Set to `true` to indicate an warning state */
+export let warn = false;
 
-  /** Specify the warning state text */
-  export let warnText = "";
+/** Specify the warning state text */
+export let warnText = "";
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
+/** Obtain a reference to the input HTML element */
+export let ref = null;
 
-  /** Set to `true` to mark the field as required */
-  export let required = false;
+/** Set to `true` to mark the field as required */
+export let required = false;
 
-  /** Set to `true` to use the inline variant */
-  export let inline = false;
+/** Set to `true` to use the inline variant */
+export let inline = false;
 
-  /** Set to `true` to use the read-only variant */
-  export let readonly = false;
+/** Set to `true` to use the read-only variant */
+export let readonly = false;
 
-  import { createEventDispatcher, getContext } from "svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import EditOff from "../icons/EditOff.svelte";
+import { createEventDispatcher, getContext } from "svelte";
+import WarningFilled from "../icons/WarningFilled.svelte";
+import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+import EditOff from "../icons/EditOff.svelte";
 
-  const ctx = getContext("Form");
-  const dispatch = createEventDispatcher();
+const ctx = getContext("Form");
+const dispatch = createEventDispatcher();
 
-  function parse(raw) {
-    if ($$restProps.type !== "number") return raw;
-    return raw != "" ? Number(raw) : null;
-  }
+function parse(raw) {
+  if ($$restProps.type !== "number") return raw;
+  return raw != "" ? Number(raw) : null;
+}
 
-  /** @type {(e: Event) => void} */
-  const onInput = (e) => {
-    value = parse(e.target.value);
-    dispatch("input", value);
-  };
+/** @type {(e: Event) => void} */
+const onInput = (e) => {
+  value = parse(e.target.value);
+  dispatch("input", value);
+};
 
-  /** @type {(e: Event) => void} */
-  const onChange = (e) => {
-    dispatch("change", parse(e.target.value));
-  };
+/** @type {(e: Event) => void} */
+const onChange = (e) => {
+  dispatch("change", parse(e.target.value));
+};
 
-  const isFluid = !!ctx && ctx.isFluid;
-  $: error = invalid && !readonly;
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+const isFluid = !!ctx && ctx.isFluid;
+$: error = invalid && !readonly;
+$: helperId = `helper-${id}`;
+$: errorId = `error-${id}`;
+$: warnId = `warn-${id}`;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

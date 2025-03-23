@@ -1,5 +1,5 @@
 <script>
-  import { Theme, Button } from "carbon-components-svelte";
+import { Theme, Button } from "carbon-components-svelte";
 </script>
 
 <Theme

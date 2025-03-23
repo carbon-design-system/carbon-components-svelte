@@ -1,7 +1,7 @@
 <script>
-  import { NumberInput, Button } from "carbon-components-svelte";
+import { NumberInput, Button } from "carbon-components-svelte";
 
-  let value = null;
+let value = null;
 </script>
 
 <NumberInput allowEmpty bind:value />

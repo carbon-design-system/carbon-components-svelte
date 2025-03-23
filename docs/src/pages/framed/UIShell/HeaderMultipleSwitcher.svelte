@@ -1,23 +1,23 @@
 <script>
-  import {
-    Header,
-    HeaderUtilities,
-    HeaderAction,
-    HeaderPanelLinks,
-    HeaderPanelDivider,
-    HeaderPanelLink,
-    SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
-  } from "carbon-components-svelte";
-  import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
-  import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
+import {
+  Header,
+  HeaderUtilities,
+  HeaderAction,
+  HeaderPanelLinks,
+  HeaderPanelDivider,
+  HeaderPanelLink,
+  SkipToContent,
+  Content,
+  Grid,
+  Row,
+  Column,
+} from "carbon-components-svelte";
+import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
+import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
 
-  let isOpen1 = false;
-  let isOpen2 = false;
-  let isOpen3 = false;
+let isOpen1 = false;
+let isOpen2 = false;
+let isOpen3 = false;
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" isSideNavOpen>

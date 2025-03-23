@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { CodeSnippet } from "carbon-components-svelte";
+import { CodeSnippet } from "carbon-components-svelte";
 
-  let toggled = false;
+let toggled = false;
 
-  const code = Array.from({ length: 20 }, (_, i) => i + 1).join("\n");
+const code = Array.from({ length: 20 }, (_, i) => i + 1).join("\n");
 </script>
 
 {#if toggled}

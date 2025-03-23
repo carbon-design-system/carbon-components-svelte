@@ -1,10 +1,10 @@
 <script>
-  import { Button } from "carbon-components-svelte";
-  import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
-  import TextItalic from "carbon-icons-svelte/lib/TextItalic.svelte";
-  import TextUnderline from "carbon-icons-svelte/lib/TextUnderline.svelte";
+import { Button } from "carbon-components-svelte";
+import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
+import TextItalic from "carbon-icons-svelte/lib/TextItalic.svelte";
+import TextUnderline from "carbon-icons-svelte/lib/TextUnderline.svelte";
 
-  let index = 1;
+let index = 1;
 </script>
 
 <Button

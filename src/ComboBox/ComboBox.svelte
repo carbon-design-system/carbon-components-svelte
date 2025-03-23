@@ -1,219 +1,219 @@
 <script>
-  /**
-   * @typedef {any} ComboBoxItemId
-   * @typedef {{ id: ComboBoxItemId; text: string; disabled?: boolean; }} ComboBoxItem
-   * @event {{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }} select
-   * @event {KeyboardEvent | MouseEvent} clear
-   * @slot {{ item: ComboBoxItem; index: number }}
-   */
+/**
+ * @typedef {any} ComboBoxItemId
+ * @typedef {{ id: ComboBoxItemId; text: string; disabled?: boolean; }} ComboBoxItem
+ * @event {{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }} select
+ * @event {KeyboardEvent | MouseEvent} clear
+ * @slot {{ item: ComboBoxItem; index: number }}
+ */
 
-  /**
-   * Set the combobox items
-   * @type {ReadonlyArray<ComboBoxItem>}
-   */
-  export let items = [];
+/**
+ * Set the combobox items
+ * @type {ReadonlyArray<ComboBoxItem>}
+ */
+export let items = [];
 
-  /**
-   * Override the display of a combobox item
-   * @type {(item: ComboBoxItem) => string}
-   */
-  export let itemToString = (item) => item.text || item.id;
+/**
+ * Override the display of a combobox item
+ * @type {(item: ComboBoxItem) => string}
+ */
+export let itemToString = (item) => item.text || item.id;
 
-  /**
-   * Set the selected item by value id
-   * @type {ComboBoxItemId}
-   */
-  export let selectedId = undefined;
+/**
+ * Set the selected item by value id
+ * @type {ComboBoxItemId}
+ */
+export let selectedId = undefined;
 
-  /** Specify the selected combobox value */
-  export let value = "";
+/** Specify the selected combobox value */
+export let value = "";
 
-  /**
-   * Specify the direction of the combobox dropdown menu
-   * @type {"bottom" | "top"}
-   */
-  export let direction = "bottom";
+/**
+ * Specify the direction of the combobox dropdown menu
+ * @type {"bottom" | "top"}
+ */
+export let direction = "bottom";
 
-  /**
-   * Set the size of the combobox
-   * @type {"sm" | "xl"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the combobox
+ * @type {"sm" | "xl"}
+ */
+export let size = undefined;
 
-  /** Set to `true` to disable the combobox */
-  export let disabled = false;
+/** Set to `true` to disable the combobox */
+export let disabled = false;
 
-  /** Specify the title text of the combobox */
-  export let titleText = "";
+/** Specify the title text of the combobox */
+export let titleText = "";
 
-  /** Specify the placeholder text */
-  export let placeholder = "";
+/** Specify the placeholder text */
+export let placeholder = "";
 
-  /** Specify the helper text */
-  export let helperText = "";
+/** Specify the helper text */
+export let helperText = "";
 
-  /** Specify the invalid state text */
-  export let invalidText = "";
+/** Specify the invalid state text */
+export let invalidText = "";
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Set to `true` to indicate an warning state */
-  export let warn = false;
+/** Set to `true` to indicate an warning state */
+export let warn = false;
 
-  /** Specify the warning state text */
-  export let warnText = "";
+/** Specify the warning state text */
+export let warnText = "";
 
-  /** Set to `true` to enable the light variant */
-  export let light = false;
+/** Set to `true` to enable the light variant */
+export let light = false;
 
-  /** Set to `true` to open the combobox menu dropdown */
-  export let open = false;
+/** Set to `true` to open the combobox menu dropdown */
+export let open = false;
 
-  /**
-   * Determine if an item should be filtered given the current combobox value
-   * @type {(item: ComboBoxItem, value: string) => boolean}
-   */
-  export let shouldFilterItem = () => true;
+/**
+ * Determine if an item should be filtered given the current combobox value
+ * @type {(item: ComboBoxItem, value: string) => boolean}
+ */
+export let shouldFilterItem = () => true;
 
-  /**
-   * Override the chevron icon label based on the open state.
-   * Defaults to "Open menu" when closed and "Close menu" when open
-   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
-   */
-  export let translateWithId = undefined;
+/**
+ * Override the chevron icon label based on the open state.
+ * Defaults to "Open menu" when closed and "Close menu" when open
+ * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
+ */
+export let translateWithId = undefined;
 
-  /**
-   * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item" since a combo box can only have on selection.
-   * @type {(id: "clearSelection") => string}
-   */
-  export let translateWithIdSelection = undefined;
+/**
+ * Override the label of the clear button when the input has a selection.
+ * Defaults to "Clear selected item" since a combo box can only have on selection.
+ * @type {(id: "clearSelection") => string}
+ */
+export let translateWithIdSelection = undefined;
 
-  /** Set an id for the list box component */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the list box component */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /**
-   * Specify a name attribute for the input
-   * @type {string}
-   */
-  export let name = undefined;
+/**
+ * Specify a name attribute for the input
+ * @type {string}
+ */
+export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
-  export let ref = null;
+/** Obtain a reference to the input HTML element */
+export let ref = null;
 
-  /**
-   * Obtain a reference to the list HTML element
-   * @type {null | HTMLDivElement}
-   */
-  export let listRef = null;
+/**
+ * Obtain a reference to the list HTML element
+ * @type {null | HTMLDivElement}
+ */
+export let listRef = null;
 
-  import { createEventDispatcher, afterUpdate, tick } from "svelte";
-  import Checkmark from "../icons/Checkmark.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import ListBox from "../ListBox/ListBox.svelte";
-  import ListBoxField from "../ListBox/ListBoxField.svelte";
-  import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
-  import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
-  import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
-  import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
+import { createEventDispatcher, afterUpdate, tick } from "svelte";
+import Checkmark from "../icons/Checkmark.svelte";
+import WarningFilled from "../icons/WarningFilled.svelte";
+import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+import ListBox from "../ListBox/ListBox.svelte";
+import ListBoxField from "../ListBox/ListBoxField.svelte";
+import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
+import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
+import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
+import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let selectedItem = undefined;
-  let prevSelectedId = null;
-  let highlightedIndex = -1;
+let selectedItem = undefined;
+let prevSelectedId = null;
+let highlightedIndex = -1;
 
-  function change(dir) {
-    let index = highlightedIndex + dir;
-    let _items = !filteredItems?.length ? items : filteredItems;
-    if (_items.length === 0) return;
+function change(dir) {
+  let index = highlightedIndex + dir;
+  let _items = !filteredItems?.length ? items : filteredItems;
+  if (_items.length === 0) return;
+  if (index < 0) {
+    index = _items.length - 1;
+  } else if (index >= _items.length) {
+    index = 0;
+  }
+  let disabled = items[index].disabled;
+
+  while (disabled) {
+    index = index + dir;
+
     if (index < 0) {
-      index = _items.length - 1;
-    } else if (index >= _items.length) {
+      index = items.length - 1;
+    } else if (index >= items.length) {
       index = 0;
     }
-    let disabled = items[index].disabled;
 
-    while (disabled) {
-      index = index + dir;
-
-      if (index < 0) {
-        index = items.length - 1;
-      } else if (index >= items.length) {
-        index = 0;
-      }
-
-      disabled = items[index].disabled;
-    }
-
-    highlightedIndex = index;
+    disabled = items[index].disabled;
   }
 
-  /**
-   * Clear the combo box programmatically
-   * @type {(options?: { focus?: boolean; }) => void}
-   */
-  export function clear(options = {}) {
-    prevSelectedId = null;
-    highlightedIndex = -1;
-    highlightedId = undefined;
-    selectedId = undefined;
-    selectedItem = undefined;
-    open = false;
-    value = "";
-    if (options?.focus !== false) ref?.focus();
-  }
+  highlightedIndex = index;
+}
 
-  afterUpdate(() => {
-    if (open) {
-      ref.focus();
-      filteredItems = items.filter((item) => shouldFilterItem(item, value));
-    } else {
-      highlightedIndex = -1;
-      filteredItems = [];
-      if (!selectedItem) {
-        selectedId = undefined;
-        // Only reset value if the input is not focused
-        if (!ref.contains(document.activeElement)) {
-          value = "";
-        }
-        highlightedIndex = -1;
-        highlightedId = undefined;
-      } else {
-        // Only set value if the input is not focused
-        if (!ref.contains(document.activeElement)) {
-          // programmatically set value
-          value = itemToString(selectedItem);
-        }
-      }
-    }
-  });
+/**
+ * Clear the combo box programmatically
+ * @type {(options?: { focus?: boolean; }) => void}
+ */
+export function clear(options = {}) {
+  prevSelectedId = null;
+  highlightedIndex = -1;
+  highlightedId = undefined;
+  selectedId = undefined;
+  selectedItem = undefined;
+  open = false;
+  value = "";
+  if (options?.focus !== false) ref?.focus();
+}
 
-  $: if (selectedId !== undefined) {
-    if (prevSelectedId !== selectedId) {
-      prevSelectedId = selectedId;
-      if (filteredItems?.length === 1 && open) {
-        selectedId = filteredItems[0].id;
-        selectedItem = filteredItems[0];
-        highlightedIndex = -1;
-        highlightedId = undefined;
-      } else {
-        selectedItem = items.find((item) => item.id === selectedId);
-      }
-      dispatch("select", { selectedId, selectedItem });
-    }
+afterUpdate(() => {
+  if (open) {
+    ref.focus();
+    filteredItems = items.filter((item) => shouldFilterItem(item, value));
   } else {
-    prevSelectedId = selectedId;
-    selectedItem = undefined;
+    highlightedIndex = -1;
+    filteredItems = [];
+    if (!selectedItem) {
+      selectedId = undefined;
+      // Only reset value if the input is not focused
+      if (!ref.contains(document.activeElement)) {
+        value = "";
+      }
+      highlightedIndex = -1;
+      highlightedId = undefined;
+    } else {
+      // Only set value if the input is not focused
+      if (!ref.contains(document.activeElement)) {
+        // programmatically set value
+        value = itemToString(selectedItem);
+      }
+    }
   }
+});
 
-  $: ariaLabel = $$props["aria-label"] || "Choose an item";
-  $: menuId = `menu-${id}`;
-  $: comboId = `combo-${id}`;
-  $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
-  $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
+$: if (selectedId !== undefined) {
+  if (prevSelectedId !== selectedId) {
+    prevSelectedId = selectedId;
+    if (filteredItems?.length === 1 && open) {
+      selectedId = filteredItems[0].id;
+      selectedItem = filteredItems[0];
+      highlightedIndex = -1;
+      highlightedId = undefined;
+    } else {
+      selectedItem = items.find((item) => item.id === selectedId);
+    }
+    dispatch("select", { selectedId, selectedItem });
+  }
+} else {
+  prevSelectedId = selectedId;
+  selectedItem = undefined;
+}
+
+$: ariaLabel = $$props["aria-label"] || "Choose an item";
+$: menuId = `menu-${id}`;
+$: comboId = `combo-${id}`;
+$: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
+$: filteredItems = items.filter((item) => shouldFilterItem(item, value));
 </script>
 
 <svelte:window

@@ -1,14 +1,14 @@
 <script>
-  /** Specify the text to render*/
-  export let text = "";
+/** Specify the text to render*/
+export let text = "";
 
-  /** Specify a link href */
-  export let href = "";
+/** Specify a link href */
+export let href = "";
 
-  /** Specify HTML to render using `@html` */
-  export let html = "";
+/** Specify HTML to render using `@html` */
+export let html = "";
 
-  import ListItem from "../ListItem/ListItem.svelte";
+import ListItem from "../ListItem/ListItem.svelte";
 </script>
 
 <ListItem>

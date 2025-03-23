@@ -1,23 +1,23 @@
 <script>
-  /** Set to `true` to toggle the expanded state */
-  export let expanded = false;
+/** Set to `true` to toggle the expanded state */
+export let expanded = false;
 
-  /**
-   * Specify the text
-   * @type {string}
-   */
-  export let text = undefined;
+/**
+ * Specify the text
+ * @type {string}
+ */
+export let text = undefined;
 
-  /**
-   * Specify the icon to render
-   * @type {any}
-   */
-  export let icon = undefined;
+/**
+ * Specify the icon to render
+ * @type {any}
+ */
+export let icon = undefined;
 
-  /** Obtain a reference to the HTML button element */
-  export let ref = null;
+/** Obtain a reference to the HTML button element */
+export let ref = null;
 
-  import ChevronDown from "../icons/ChevronDown.svelte";
+import ChevronDown from "../icons/ChevronDown.svelte";
 </script>
 
 <li class:bx--side-nav__item={true} class:bx--side-nav__item--icon={icon}>

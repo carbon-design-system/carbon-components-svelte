@@ -1,42 +1,42 @@
 <script>
-  /**
-   * @event {string} delete
-   */
+/**
+ * @event {string} delete
+ */
 
-  /**
-   * Specify the file uploader status
-   * @type {"uploading" | "edit" | "complete"}
-   */
-  export let status = "uploading";
+/**
+ * Specify the file uploader status
+ * @type {"uploading" | "edit" | "complete"}
+ */
+export let status = "uploading";
 
-  /**
-   * Specify the size of button skeleton
-   * @type {"default" | "field" | "small"}
-   */
-  export let size = "default";
+/**
+ * Specify the size of button skeleton
+ * @type {"default" | "field" | "small"}
+ */
+export let size = "default";
 
-  /** Specify the ARIA label used for the status icons */
-  export let iconDescription = "";
+/** Specify the ARIA label used for the status icons */
+export let iconDescription = "";
 
-  /** Set to `true` to indicate an invalid state */
-  export let invalid = false;
+/** Set to `true` to indicate an invalid state */
+export let invalid = false;
 
-  /** Specify the error subject text */
-  export let errorSubject = "";
+/** Specify the error subject text */
+export let errorSubject = "";
 
-  /** Specify the error body text */
-  export let errorBody = "";
+/** Specify the error body text */
+export let errorBody = "";
 
-  /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the top-level element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Specify the file uploader name */
-  export let name = "";
+/** Specify the file uploader name */
+export let name = "";
 
-  import { createEventDispatcher } from "svelte";
-  import Filename from "./Filename.svelte";
+import { createEventDispatcher } from "svelte";
+import Filename from "./Filename.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

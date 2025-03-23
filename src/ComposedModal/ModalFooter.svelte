@@ -1,50 +1,50 @@
 <script>
-  /**
-   * @event {{ text: string; }} click:button--secondary
-   */
+/**
+ * @event {{ text: string; }} click:button--secondary
+ */
 
-  /** Specify the primary button text */
-  export let primaryButtonText = "";
+/** Specify the primary button text */
+export let primaryButtonText = "";
 
-  /**
-   * Specify the primary button icon
-   * @type {any}
-   */
-  export let primaryButtonIcon = undefined;
+/**
+ * Specify the primary button icon
+ * @type {any}
+ */
+export let primaryButtonIcon = undefined;
 
-  /** Set to `true` to disable the primary button */
-  export let primaryButtonDisabled = false;
+/** Set to `true` to disable the primary button */
+export let primaryButtonDisabled = false;
 
-  /**
-   * Specify a class for the primary button
-   * @type {string}
-   */
-  export let primaryClass = undefined;
+/**
+ * Specify a class for the primary button
+ * @type {string}
+ */
+export let primaryClass = undefined;
 
-  /** Specify the secondary button text */
-  export let secondaryButtonText = "";
+/** Specify the secondary button text */
+export let secondaryButtonText = "";
 
-  /**
-   * 2-tuple prop to render two secondary buttons for a 3 button modal
-   * supersedes `secondaryButtonText`
-   * @type {[{ text: string; }, { text: string; }]}
-   */
-  export let secondaryButtons = [];
+/**
+ * 2-tuple prop to render two secondary buttons for a 3 button modal
+ * supersedes `secondaryButtonText`
+ * @type {[{ text: string; }, { text: string; }]}
+ */
+export let secondaryButtons = [];
 
-  /**
-   * Specify a class for the secondary button
-   * @type {string}
-   */
-  export let secondaryClass = undefined;
+/**
+ * Specify a class for the secondary button
+ * @type {string}
+ */
+export let secondaryClass = undefined;
 
-  /** Set to `true` to use the danger variant */
-  export let danger = false;
+/** Set to `true` to use the danger variant */
+export let danger = false;
 
-  import { getContext, createEventDispatcher } from "svelte";
-  import Button from "../Button/Button.svelte";
+import { getContext, createEventDispatcher } from "svelte";
+import Button from "../Button/Button.svelte";
 
-  const dispatch = createEventDispatcher();
-  const { closeModal, submit } = getContext("ComposedModal");
+const dispatch = createEventDispatcher();
+const { closeModal, submit } = getContext("ComposedModal");
 </script>
 
 <div

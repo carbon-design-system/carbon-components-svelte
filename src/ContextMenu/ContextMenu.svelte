@@ -1,141 +1,141 @@
 <script>
-  /**
-   * @event {HTMLElement} open
-   */
+/**
+ * @event {HTMLElement} open
+ */
 
-  /**
-   * Specify an element or list of elements to trigger the context menu.
-   * If no element is specified, the context menu applies to the entire window
-   * @type {null | ReadonlyArray<null | HTMLElement>}
-   */
-  export let target = null;
+/**
+ * Specify an element or list of elements to trigger the context menu.
+ * If no element is specified, the context menu applies to the entire window
+ * @type {null | ReadonlyArray<null | HTMLElement>}
+ */
+export let target = null;
 
-  /**
-   * Set to `true` to open the menu
-   * Either `x` and `y` must be greater than zero
-   */
-  export let open = false;
+/**
+ * Set to `true` to open the menu
+ * Either `x` and `y` must be greater than zero
+ */
+export let open = false;
 
-  /** Specify the horizontal offset of the menu position */
-  export let x = 0;
+/** Specify the horizontal offset of the menu position */
+export let x = 0;
 
-  /** Specify the vertical offset of the menu position */
-  export let y = 0;
+/** Specify the vertical offset of the menu position */
+export let y = 0;
 
-  /** Obtain a reference to the unordered list HTML element */
-  export let ref = null;
+/** Obtain a reference to the unordered list HTML element */
+export let ref = null;
 
-  import {
-    onMount,
-    setContext,
-    getContext,
-    afterUpdate,
-    createEventDispatcher,
-  } from "svelte";
-  import { writable } from "svelte/store";
+import {
+  onMount,
+  setContext,
+  getContext,
+  afterUpdate,
+  createEventDispatcher,
+} from "svelte";
+import { writable } from "svelte/store";
 
-  const dispatch = createEventDispatcher();
-  const position = writable([x, y]);
-  const currentIndex = writable(-1);
-  const hasPopup = writable(false);
-  const menuOffsetX = writable(0);
-  const ctx = getContext("ContextMenu");
+const dispatch = createEventDispatcher();
+const position = writable([x, y]);
+const currentIndex = writable(-1);
+const hasPopup = writable(false);
+const menuOffsetX = writable(0);
+const ctx = getContext("ContextMenu");
 
-  let options = [];
-  let direction = 1;
-  let prevX = 0;
-  let prevY = 0;
-  let focusIndex = -1;
-  let openDetail = null;
+let options = [];
+let direction = 1;
+let prevX = 0;
+let prevY = 0;
+let focusIndex = -1;
+let openDetail = null;
 
-  function close() {
-    open = false;
-    x = 0;
-    y = 0;
-    prevX = 0;
-    prevY = 0;
-    focusIndex = -1;
-  }
+function close() {
+  open = false;
+  x = 0;
+  y = 0;
+  prevX = 0;
+  prevY = 0;
+  focusIndex = -1;
+}
 
-  /** @type {(e: MouseEvent) => void} */
-  function openMenu(e) {
-    e.preventDefault();
-    const { height, width } = ref.getBoundingClientRect();
+/** @type {(e: MouseEvent) => void} */
+function openMenu(e) {
+  e.preventDefault();
+  const { height, width } = ref.getBoundingClientRect();
 
-    if (open || x === 0) {
-      if (window.innerWidth - width < e.x) {
-        x = e.x - width;
-      } else {
-        x = e.x;
-      }
-    }
-
-    if (open || y === 0) {
-      menuOffsetX.set(e.x);
-
-      if (window.innerHeight - height < e.y) {
-        y = e.y - height;
-      } else {
-        y = e.y;
-      }
-    }
-    position.set([x, y]);
-    open = true;
-    openDetail = e.target;
-  }
-
-  $: if (target != null) {
-    if (Array.isArray(target)) {
-      target.forEach((node) => node?.addEventListener("contextmenu", openMenu));
+  if (open || x === 0) {
+    if (window.innerWidth - width < e.x) {
+      x = e.x - width;
     } else {
-      target.addEventListener("contextmenu", openMenu);
+      x = e.x;
     }
   }
 
-  onMount(() => {
-    return () => {
-      if (target != null) {
-        if (Array.isArray(target)) {
-          target.forEach((node) =>
-            node?.removeEventListener("contextmenu", openMenu),
-          );
-        } else {
-          target.removeEventListener("contextmenu", openMenu);
-        }
-      }
-    };
-  });
+  if (open || y === 0) {
+    menuOffsetX.set(e.x);
 
-  setContext("ContextMenu", {
-    menuOffsetX,
-    currentIndex,
-    position,
-    close,
-    setPopup: (popup) => {
-      hasPopup.set(popup);
-    },
-  });
-
-  afterUpdate(() => {
-    if (open) {
-      options = [...ref.querySelectorAll("li[data-nested='false']")];
-
-      if (level === 1) {
-        if (prevX !== x || prevY !== y) ref.focus();
-        prevX = x;
-        prevY = y;
-      }
-
-      dispatch("open", openDetail);
+    if (window.innerHeight - height < e.y) {
+      y = e.y - height;
     } else {
-      dispatch("close");
+      y = e.y;
+    }
+  }
+  position.set([x, y]);
+  open = true;
+  openDetail = e.target;
+}
+
+$: if (target != null) {
+  if (Array.isArray(target)) {
+    target.forEach((node) => node?.addEventListener("contextmenu", openMenu));
+  } else {
+    target.addEventListener("contextmenu", openMenu);
+  }
+}
+
+onMount(() => {
+  return () => {
+    if (target != null) {
+      if (Array.isArray(target)) {
+        target.forEach((node) =>
+          node?.removeEventListener("contextmenu", openMenu),
+        );
+      } else {
+        target.removeEventListener("contextmenu", openMenu);
+      }
+    }
+  };
+});
+
+setContext("ContextMenu", {
+  menuOffsetX,
+  currentIndex,
+  position,
+  close,
+  setPopup: (popup) => {
+    hasPopup.set(popup);
+  },
+});
+
+afterUpdate(() => {
+  if (open) {
+    options = [...ref.querySelectorAll("li[data-nested='false']")];
+
+    if (level === 1) {
+      if (prevX !== x || prevY !== y) ref.focus();
+      prevX = x;
+      prevY = y;
     }
 
-    if (!$hasPopup && options[focusIndex]) options[focusIndex].focus();
-  });
+    dispatch("open", openDetail);
+  } else {
+    dispatch("close");
+  }
 
-  $: level = !ctx ? 1 : 2;
-  $: currentIndex.set(focusIndex);
+  if (!$hasPopup && options[focusIndex]) options[focusIndex].focus();
+});
+
+$: level = !ctx ? 1 : 2;
+$: currentIndex.set(focusIndex);
 </script>
 
 <svelte:window

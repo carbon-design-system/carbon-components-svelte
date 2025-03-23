@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Loading } from "carbon-components-svelte";
+import { Loading } from "carbon-components-svelte";
 </script>
 
 <!-- Default loading (with overlay) -->

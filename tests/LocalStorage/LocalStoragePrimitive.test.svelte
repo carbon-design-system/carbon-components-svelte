@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { LocalStorage } from "carbon-components-svelte";
+import { LocalStorage } from "carbon-components-svelte";
 
-  const primitiveValue = "test-value";
+const primitiveValue = "test-value";
 </script>
 
 <div data-testid="primitive-storage">

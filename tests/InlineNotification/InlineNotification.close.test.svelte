@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { InlineNotification } from "carbon-components-svelte";
+import { InlineNotification } from "carbon-components-svelte";
 </script>
 
 <InlineNotification

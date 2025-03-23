@@ -1,48 +1,48 @@
 <script>
-  /**
-   * Set the loading status
-   * @type {"active" | "inactive" | "finished" | "error"}
-   */
-  export let status = "active";
+/**
+ * Set the loading status
+ * @type {"active" | "inactive" | "finished" | "error"}
+ */
+export let status = "active";
 
-  /**
-   * Set the loading description
-   * @type {string}
-   */
-  export let description = undefined;
+/**
+ * Set the loading description
+ * @type {string}
+ */
+export let description = undefined;
 
-  /**
-   * Specify a description for the loading icon.
-   * Defaults to the `status` prop for the "error" and "finished" states
-   * @type {string}
-   */
-  export let iconDescription = undefined;
+/**
+ * Specify a description for the loading icon.
+ * Defaults to the `status` prop for the "error" and "finished" states
+ * @type {string}
+ */
+export let iconDescription = undefined;
 
-  /** Specify the timeout delay (ms) after `status` is set to "success" */
-  export let successDelay = 1500;
+/** Specify the timeout delay (ms) after `status` is set to "success" */
+export let successDelay = 1500;
 
-  import { createEventDispatcher, afterUpdate, onMount } from "svelte";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import ErrorFilled from "../icons/ErrorFilled.svelte";
-  import Loading from "../Loading/Loading.svelte";
+import { createEventDispatcher, afterUpdate, onMount } from "svelte";
+import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+import ErrorFilled from "../icons/ErrorFilled.svelte";
+import Loading from "../Loading/Loading.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let timeout = undefined;
+let timeout = undefined;
 
-  onMount(() => {
-    return () => {
-      clearTimeout(timeout);
-    };
-  });
+onMount(() => {
+  return () => {
+    clearTimeout(timeout);
+  };
+});
 
-  afterUpdate(() => {
-    if (status === "finished") {
-      timeout = setTimeout(() => {
-        dispatch("success");
-      }, successDelay);
-    }
-  });
+afterUpdate(() => {
+  if (status === "finished") {
+    timeout = setTimeout(() => {
+      dispatch("success");
+    }, successDelay);
+  }
+});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

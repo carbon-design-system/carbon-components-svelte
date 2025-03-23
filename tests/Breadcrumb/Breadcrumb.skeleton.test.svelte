@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Breadcrumb } from "carbon-components-svelte";
+import { Breadcrumb } from "carbon-components-svelte";
 </script>
 
 <Breadcrumb skeleton count={3} />

@@ -1,34 +1,34 @@
 <script>
-  /**
-   * Specify the size of the link
-   * @type {"sm" | "lg"}
-   */
-  export let size = undefined;
+/**
+ * Specify the size of the link
+ * @type {"sm" | "lg"}
+ */
+export let size = undefined;
 
-  /**
-   * Specify the href value
-   * @type {string}
-   */
-  export let href = undefined;
+/**
+ * Specify the href value
+ * @type {string}
+ */
+export let href = undefined;
 
-  /** Set to `true` to use the inline variant */
-  export let inline = false;
+/** Set to `true` to use the inline variant */
+export let inline = false;
 
-  /**
-   * Specify the icon to render
-   * `inline` must be `false`
-   * @type {any}
-   */
-  export let icon = undefined;
+/**
+ * Specify the icon to render
+ * `inline` must be `false`
+ * @type {any}
+ */
+export let icon = undefined;
 
-  /** Set to `true` to disable the checkbox */
-  export let disabled = false;
+/** Set to `true` to disable the checkbox */
+export let disabled = false;
 
-  /** Set to `true` to allow visited styles */
-  export let visited = false;
+/** Set to `true` to allow visited styles */
+export let visited = false;
 
-  /** Obtain a reference to the top-level HTML element */
-  export let ref = null;
+/** Obtain a reference to the top-level HTML element */
+export let ref = null;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

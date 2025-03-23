@@ -1,8 +1,8 @@
 <script>
-  import { Breakpoint } from "carbon-components-svelte";
+import { Breakpoint } from "carbon-components-svelte";
 
-  let size;
-  let events = [];
+let size;
+let events = [];
 </script>
 
 <Breakpoint bind:size on:change={(e) => (events = [...events, e.detail])} />

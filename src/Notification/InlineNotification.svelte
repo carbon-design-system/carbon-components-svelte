@@ -1,70 +1,70 @@
 <script>
-  /**
-   * @event {{ timeout: boolean }} close
-   */
+/**
+ * @event {{ timeout: boolean }} close
+ */
 
-  /**
-   * Specify the kind of notification
-   * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
-   */
-  export let kind = "error";
+/**
+ * Specify the kind of notification
+ * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
+ */
+export let kind = "error";
 
-  /** Set to `true` to use the low contrast variant */
-  export let lowContrast = false;
+/** Set to `true` to use the low contrast variant */
+export let lowContrast = false;
 
-  /** Set the timeout duration (ms) to hide the notification after opening it */
-  export let timeout = 0;
+/** Set the timeout duration (ms) to hide the notification after opening it */
+export let timeout = 0;
 
-  /** Set the `role` attribute */
-  export let role = "alert";
+/** Set the `role` attribute */
+export let role = "alert";
 
-  /** Specify the title text */
-  export let title = "";
+/** Specify the title text */
+export let title = "";
 
-  /** Specify the subtitle text */
-  export let subtitle = "";
+/** Specify the subtitle text */
+export let subtitle = "";
 
-  /** Set to `true` to hide the close button */
-  export let hideCloseButton = false;
+/** Set to `true` to hide the close button */
+export let hideCloseButton = false;
 
-  /**
-   * Specify the ARIA label for the status icon
-   * @type {string}
-   * */
-  export let statusIconDescription = kind + " icon";
+/**
+ * Specify the ARIA label for the status icon
+ * @type {string}
+ * */
+export let statusIconDescription = kind + " icon";
 
-  /** Specify the ARIA label for the close button */
-  export let closeButtonDescription = "Close notification";
+/** Specify the ARIA label for the close button */
+export let closeButtonDescription = "Close notification";
 
-  import { createEventDispatcher, onMount } from "svelte";
-  import NotificationIcon from "./NotificationIcon.svelte";
-  import NotificationButton from "./NotificationButton.svelte";
+import { createEventDispatcher, onMount } from "svelte";
+import NotificationIcon from "./NotificationIcon.svelte";
+import NotificationButton from "./NotificationButton.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let open = true;
-  let timeoutId = undefined;
+let open = true;
+let timeoutId = undefined;
 
-  function close(closeFromTimeout) {
-    const shouldContinue = dispatch(
-      "close",
-      { timeout: closeFromTimeout === true },
-      { cancelable: true },
-    );
-    if (shouldContinue) {
-      open = false;
-    }
+function close(closeFromTimeout) {
+  const shouldContinue = dispatch(
+    "close",
+    { timeout: closeFromTimeout === true },
+    { cancelable: true },
+  );
+  if (shouldContinue) {
+    open = false;
+  }
+}
+
+onMount(() => {
+  if (timeout) {
+    timeoutId = setTimeout(() => close(true), timeout);
   }
 
-  onMount(() => {
-    if (timeout) {
-      timeoutId = setTimeout(() => close(true), timeout);
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  });
+  return () => {
+    clearTimeout(timeoutId);
+  };
+});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

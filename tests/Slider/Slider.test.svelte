@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { Slider } from "carbon-components-svelte";
+import { Slider } from "carbon-components-svelte";
 
-  let value = 0;
+let value = 0;
 
-  export let disabled = false;
-  export let invalid = false;
-  export let required = false;
-  export let minLabel = "";
-  export let maxLabel = "";
-  export let hideTextInput = false;
-  export let fullWidth = false;
-  export let min = 0;
-  export let max = 100;
-  export let step = 1;
+export let disabled = false;
+export let invalid = false;
+export let required = false;
+export let minLabel = "";
+export let maxLabel = "";
+export let hideTextInput = false;
+export let fullWidth = false;
+export let min = 0;
+export let max = 100;
+export let step = 1;
 </script>
 
 <Slider

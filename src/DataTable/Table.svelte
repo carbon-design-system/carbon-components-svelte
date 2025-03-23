@@ -1,27 +1,27 @@
 <script>
-  /**
-   * Set the size of the table
-   * @type {"compact" | "short" | "medium" | "tall"}
-   */
-  export let size = undefined;
+/**
+ * Set the size of the table
+ * @type {"compact" | "short" | "medium" | "tall"}
+ */
+export let size = undefined;
 
-  /** Set to `true` to use zebra styles */
-  export let zebra = false;
+/** Set to `true` to use zebra styles */
+export let zebra = false;
 
-  /** Set to `true` to use static width */
-  export let useStaticWidth = false;
+/** Set to `true` to use static width */
+export let useStaticWidth = false;
 
-  /** Set to `true` for the sortable variant */
-  export let sortable = false;
+/** Set to `true` for the sortable variant */
+export let sortable = false;
 
-  /** Set to `true` to enable a sticky header */
-  export let stickyHeader = false;
+/** Set to `true` to enable a sticky header */
+export let stickyHeader = false;
 
-  /**
-   * Set the style attribute on the `table` element
-   * @type {string}
-   */
-  export let tableStyle = undefined;
+/**
+ * Set the style attribute on the `table` element
+ * @type {string}
+ */
+export let tableStyle = undefined;
 </script>
 
 {#if stickyHeader}

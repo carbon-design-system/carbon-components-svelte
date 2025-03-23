@@ -1,7 +1,7 @@
 <script>
-  import { Button, Modal } from "carbon-components-svelte";
+import { Button, Modal } from "carbon-components-svelte";
 
-  let open = false;
+let open = false;
 </script>
 
 <Button kind="danger" on:click={() => (open = true)}>Delete all</Button>

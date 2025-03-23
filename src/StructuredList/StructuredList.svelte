@@ -1,38 +1,38 @@
 <script>
-  /**
-   * @event {string} change
-   */
+/**
+ * @event {string} change
+ */
 
-  /**
-   * Specify the selected structured list row value
-   * @type {string}
-   */
-  export let selected = undefined;
+/**
+ * Specify the selected structured list row value
+ * @type {string}
+ */
+export let selected = undefined;
 
-  /** Set to `true` to use the condensed variant */
-  export let condensed = false;
+/** Set to `true` to use the condensed variant */
+export let condensed = false;
 
-  /** Set to `true` to flush the list */
-  export let flush = false;
+/** Set to `true` to flush the list */
+export let flush = false;
 
-  /** Set to `true` to use the selection variant */
-  export let selection = false;
+/** Set to `true` to use the selection variant */
+export let selection = false;
 
-  import { createEventDispatcher, setContext } from "svelte";
-  import { writable } from "svelte/store";
+import { createEventDispatcher, setContext } from "svelte";
+import { writable } from "svelte/store";
 
-  const dispatch = createEventDispatcher();
-  const selectedValue = writable(selected);
+const dispatch = createEventDispatcher();
+const selectedValue = writable(selected);
 
-  setContext("StructuredListWrapper", {
-    selectedValue,
-    update: (value) => {
-      selectedValue.set(value);
-    },
-  });
+setContext("StructuredListWrapper", {
+  selectedValue,
+  update: (value) => {
+    selectedValue.set(value);
+  },
+});
 
-  $: selected = $selectedValue;
-  $: dispatch("change", $selectedValue);
+$: selected = $selectedValue;
+$: dispatch("change", $selectedValue);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

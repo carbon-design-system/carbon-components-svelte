@@ -1,5 +1,5 @@
 <script>
-  import { ComboBox } from "carbon-components-svelte";
+import { ComboBox } from "carbon-components-svelte";
 </script>
 
 <ComboBox

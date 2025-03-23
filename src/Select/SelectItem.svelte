@@ -1,49 +1,49 @@
 <script>
-  /**
-   * Specify the option value
-   * @type {string | number}
-   */
-  export let value = "";
+/**
+ * Specify the option value
+ * @type {string | number}
+ */
+export let value = "";
 
-  /** Specify the option text */
-  export let text = "";
+/** Specify the option text */
+export let text = "";
 
-  /** Set to `true` to hide the option */
-  export let hidden = false;
+/** Set to `true` to hide the option */
+export let hidden = false;
 
-  /** Set to `true` to disable the option */
-  export let disabled = false;
+/** Set to `true` to disable the option */
+export let disabled = false;
 
-  let className = undefined;
+let className = undefined;
 
-  /**
-   * Specify the class of the `option` element
-   * @type {string}
-   */
-  export { className as class };
+/**
+ * Specify the class of the `option` element
+ * @type {string}
+ */
+export { className as class };
 
-  /**
-   * Specify the style of the `option` element
-   * @type {string}
-   */
-  export let style = undefined;
+/**
+ * Specify the style of the `option` element
+ * @type {string}
+ */
+export let style = undefined;
 
-  import { getContext, onMount } from "svelte";
+import { getContext, onMount } from "svelte";
 
-  const id = "ccs-" + Math.random().toString(36);
-  const ctx = getContext("Select") || getContext("TimePickerSelect");
+const id = "ccs-" + Math.random().toString(36);
+const ctx = getContext("Select") || getContext("TimePickerSelect");
 
-  $: ctx?.setDefaultValue?.(id, value);
+$: ctx?.setDefaultValue?.(id, value);
 
-  let selected = false;
+let selected = false;
 
-  const unsubscribe = ctx.selectedValue.subscribe((currentValue) => {
-    selected = currentValue === value;
-  });
+const unsubscribe = ctx.selectedValue.subscribe((currentValue) => {
+  selected = currentValue === value;
+});
 
-  onMount(() => {
-    return () => unsubscribe();
-  });
+onMount(() => {
+  return () => unsubscribe();
+});
 </script>
 
 <option

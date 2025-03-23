@@ -1,24 +1,24 @@
 <script>
-  import {
-    Header,
-    HeaderUtilities,
-    HeaderGlobalAction,
-    SideNav,
-    SideNavItems,
-    SideNavMenu,
-    SideNavMenuItem,
-    SideNavLink,
-    SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
-  } from "carbon-components-svelte";
-  import Logout from "carbon-icons-svelte/lib/Logout.svelte";
-  import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
-  import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
+import {
+  Header,
+  HeaderUtilities,
+  HeaderGlobalAction,
+  SideNav,
+  SideNavItems,
+  SideNavMenu,
+  SideNavMenuItem,
+  SideNavLink,
+  SkipToContent,
+  Content,
+  Grid,
+  Row,
+  Column,
+} from "carbon-components-svelte";
+import Logout from "carbon-icons-svelte/lib/Logout.svelte";
+import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
+import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
 
-  let isSideNavOpen = false;
+let isSideNavOpen = false;
 </script>
 
 <Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>

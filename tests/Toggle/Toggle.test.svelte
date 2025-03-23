@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Toggle } from "carbon-components-svelte";
+import { Toggle } from "carbon-components-svelte";
 
-  let toggled = false;
+let toggled = false;
 </script>
 
 <Toggle

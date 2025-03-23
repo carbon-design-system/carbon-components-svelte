@@ -1,32 +1,32 @@
 <script>
-  /**
-   * Specify the tab label.
-   * Alternatively, use the default slot (e.g., `<Tab><span>Label</span></Tab>`)
-   */
-  export let label = "";
+/**
+ * Specify the tab label.
+ * Alternatively, use the default slot (e.g., `<Tab><span>Label</span></Tab>`)
+ */
+export let label = "";
 
-  /** Specify the href attribute */
-  export let href = "#";
+/** Specify the href attribute */
+export let href = "#";
 
-  /** Set to `true` to disable the tab */
-  export let disabled = false;
+/** Set to `true` to disable the tab */
+export let disabled = false;
 
-  /** Specify the tabindex */
-  export let tabindex = "0";
+/** Specify the tabindex */
+export let tabindex = "0";
 
-  /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+/** Set an id for the top-level element */
+export let id = "ccs-" + Math.random().toString(36);
 
-  /** Obtain a reference to the anchor HTML element */
-  export let ref = null;
+/** Obtain a reference to the anchor HTML element */
+export let ref = null;
 
-  import { getContext } from "svelte";
+import { getContext } from "svelte";
 
-  const { selectedTab, useAutoWidth, add, update, change } = getContext("Tabs");
+const { selectedTab, useAutoWidth, add, update, change } = getContext("Tabs");
 
-  add({ id, label, disabled });
+add({ id, label, disabled });
 
-  $: selected = $selectedTab === id;
+$: selected = $selectedTab === id;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

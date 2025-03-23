@@ -1,9 +1,9 @@
 <script>
-  /** Specify the current page index */
-  export let page = 1;
+/** Specify the current page index */
+export let page = 1;
 
-  /** Set to `true` to use the active state */
-  export let active = false;
+/** Set to `true` to use the active state */
+export let active = false;
 </script>
 
 <li class:bx--pagination-nav__list-item={true}>

@@ -1,7 +1,7 @@
 <script>
-  /** @extends {"../Button/Button.svelte"} ButtonProps */
+/** @extends {"../Button/Button.svelte"} ButtonProps */
 
-  import Button from "../Button/Button.svelte";
+import Button from "../Button/Button.svelte";
 </script>
 
 <Button

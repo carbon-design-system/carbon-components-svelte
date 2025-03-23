@@ -1,13 +1,13 @@
 <script>
-  /** @extends {"./BreadcrumbSkeleton.svelte"} BreadcrumbSkeletonProps */
+/** @extends {"./BreadcrumbSkeleton.svelte"} BreadcrumbSkeletonProps */
 
-  /** Set to `true` to hide the breadcrumb trailing slash */
-  export let noTrailingSlash = false;
+/** Set to `true` to hide the breadcrumb trailing slash */
+export let noTrailingSlash = false;
 
-  /** Set to `true` to display skeleton state */
-  export let skeleton = false;
+/** Set to `true` to display skeleton state */
+export let skeleton = false;
 
-  import BreadcrumbSkeleton from "./BreadcrumbSkeleton.svelte";
+import BreadcrumbSkeleton from "./BreadcrumbSkeleton.svelte";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

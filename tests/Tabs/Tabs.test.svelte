@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Tabs, Tab, TabContent } from "carbon-components-svelte";
+import { Tabs, Tab, TabContent } from "carbon-components-svelte";
 
-  export let selected = 0;
-  export let type: "default" | "container" = "default";
-  export let autoWidth = false;
-  export let iconDescription = "Show menu options";
-  export let triggerHref = "#";
+export let selected = 0;
+export let type: "default" | "container" = "default";
+export let autoWidth = false;
+export let iconDescription = "Show menu options";
+export let triggerHref = "#";
 </script>
 
 <Tabs

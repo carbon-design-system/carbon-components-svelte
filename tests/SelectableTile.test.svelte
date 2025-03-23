@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SelectableTile } from "carbon-components-svelte";
+import { SelectableTile } from "carbon-components-svelte";
 </script>
 
 <SelectableTile selected>Multi-select Tile</SelectableTile>

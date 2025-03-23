@@ -1,27 +1,27 @@
 <script>
-  /** Set to `true` to select the current link */
-  export let isSelected = false;
+/** Set to `true` to select the current link */
+export let isSelected = false;
 
-  /**
-   * Specify the `href` attribute
-   * @type {string}
-   */
-  export let href = undefined;
+/**
+ * Specify the `href` attribute
+ * @type {string}
+ */
+export let href = undefined;
 
-  /**
-   * Specify the text
-   * @type {string}
-   */
-  export let text = undefined;
+/**
+ * Specify the text
+ * @type {string}
+ */
+export let text = undefined;
 
-  /**
-   * Specify the icon to render
-   * @type {any}
-   */
-  export let icon = undefined;
+/**
+ * Specify the icon to render
+ * @type {any}
+ */
+export let icon = undefined;
 
-  /** Obtain a reference to the HTML anchor element */
-  export let ref = null;
+/** Obtain a reference to the HTML anchor element */
+export let ref = null;
 </script>
 
 <li class:bx--side-nav__item={true}>

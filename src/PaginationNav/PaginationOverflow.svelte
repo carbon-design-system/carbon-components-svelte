@@ -1,21 +1,21 @@
 <script>
-  /**
-   * @event {{ index: number; }} select
-   */
+/**
+ * @event {{ index: number; }} select
+ */
 
-  /** Specify the pivot start index */
-  export let fromIndex = 0;
+/** Specify the pivot start index */
+export let fromIndex = 0;
 
-  /** Specify the pivot end index */
-  export let count = 0;
+/** Specify the pivot end index */
+export let count = 0;
 
-  import { createEventDispatcher } from "svelte";
-  import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
-  import PaginationItem from "./PaginationItem.svelte";
+import { createEventDispatcher } from "svelte";
+import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
+import PaginationItem from "./PaginationItem.svelte";
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-  let value = "";
+let value = "";
 </script>
 
 {#if count > 1}

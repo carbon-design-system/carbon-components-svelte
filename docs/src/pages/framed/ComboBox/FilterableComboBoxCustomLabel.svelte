@@ -1,24 +1,24 @@
 <script>
-  import { ComboBox } from "carbon-components-svelte";
+import { ComboBox } from "carbon-components-svelte";
 
-  const translation = {
-    Slack: 'Custom label for "Slack"',
-    Email: 'Custom label for "Email"',
-    Fax: 'Custom label for "Fax"',
-  };
+const translation = {
+  Slack: 'Custom label for "Slack"',
+  Email: 'Custom label for "Email"',
+  Fax: 'Custom label for "Fax"',
+};
 
-  function itemToString(item) {
-    return translation[item.key];
-  }
+function itemToString(item) {
+  return translation[item.key];
+}
 
-  function shouldFilterItem(item, value) {
-    if (!value) return true;
-    const comparison = value.toLowerCase();
-    return (
-      item.key.toLowerCase().includes(comparison) ||
-      itemToString(item).toLowerCase().includes(comparison)
-    );
-  }
+function shouldFilterItem(item, value) {
+  if (!value) return true;
+  const comparison = value.toLowerCase();
+  return (
+    item.key.toLowerCase().includes(comparison) ||
+    itemToString(item).toLowerCase().includes(comparison)
+  );
+}
 </script>
 
 <ComboBox

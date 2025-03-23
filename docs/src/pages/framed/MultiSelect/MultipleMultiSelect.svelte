@@ -1,22 +1,22 @@
 <script>
-  import { MultiSelect } from "carbon-components-svelte";
+import { MultiSelect } from "carbon-components-svelte";
 
-  const items = [
-    { id: "0", text: "Slack" },
-    { id: "1", text: "Email" },
-    { id: "2", text: "Fax" },
-  ];
+const items = [
+  { id: "0", text: "Slack" },
+  { id: "1", text: "Email" },
+  { id: "2", text: "Fax" },
+];
 
-  let multiselect1_selectedIds = ["0"];
-  let multiselect2_selectedIds = ["1", "2"];
+let multiselect1_selectedIds = ["0"];
+let multiselect2_selectedIds = ["1", "2"];
 
-  const formatSelected = (i) =>
-    i.length === 0
-      ? "N/A"
-      : i.map((id) => items.find((item) => item.id === id).text).join(", ");
+const formatSelected = (i) =>
+  i.length === 0
+    ? "N/A"
+    : i.map((id) => items.find((item) => item.id === id).text).join(", ");
 
-  $: primary = formatSelected(multiselect1_selectedIds);
-  $: secondary = formatSelected(multiselect2_selectedIds);
+$: primary = formatSelected(multiselect1_selectedIds);
+$: secondary = formatSelected(multiselect2_selectedIds);
 </script>
 
 <MultiSelect

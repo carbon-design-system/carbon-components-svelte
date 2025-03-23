@@ -1,10 +1,10 @@
 <script lang="ts">
-  import {
-    DatePicker,
-    DatePickerSkeleton,
-    DatePickerInput,
-  } from "carbon-components-svelte";
-  import { Russian } from "flatpickr/dist/l10n/ru.js";
+import {
+  DatePicker,
+  DatePickerSkeleton,
+  DatePickerInput,
+} from "carbon-components-svelte";
+import { Russian } from "flatpickr/dist/l10n/ru.js";
 </script>
 
 <DatePicker

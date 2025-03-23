@@ -1,11 +1,11 @@
 <script lang="ts">
-  import {
-    StructuredList,
-    StructuredListBody,
-    StructuredListHead,
-    StructuredListCell,
-    StructuredListRow,
-  } from "carbon-components-svelte";
+import {
+  StructuredList,
+  StructuredListBody,
+  StructuredListHead,
+  StructuredListCell,
+  StructuredListRow,
+} from "carbon-components-svelte";
 </script>
 
 <StructuredList>

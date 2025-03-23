@@ -1,13 +1,13 @@
 <script>
-  import { DataTable } from "carbon-components-svelte";
+import { DataTable } from "carbon-components-svelte";
 
-  let expandedRowIds = [];
-  let selectedRowIds = [];
+let expandedRowIds = [];
+let selectedRowIds = [];
 
-  $: {
-    console.log("expandedRowIds", expandedRowIds);
-    console.log("selectedRowIds", selectedRowIds);
-  }
+$: {
+  console.log("expandedRowIds", expandedRowIds);
+  console.log("selectedRowIds", selectedRowIds);
+}
 </script>
 
 <DataTable

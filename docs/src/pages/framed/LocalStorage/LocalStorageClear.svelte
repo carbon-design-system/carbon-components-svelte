@@ -1,10 +1,10 @@
 <script>
-  import { LocalStorage, Toggle, Button } from "carbon-components-svelte";
+import { LocalStorage, Toggle, Button } from "carbon-components-svelte";
 
-  let storage;
-  let toggled = false;
+let storage;
+let toggled = false;
 
-  $: document.documentElement.setAttribute("theme", toggled ? "g100" : "white");
+$: document.documentElement.setAttribute("theme", toggled ? "g100" : "white");
 </script>
 
 <LocalStorage bind:this={storage} bind:value={toggled} />

@@ -1,69 +1,69 @@
 <script>
-  import {
-    Grid,
-    Link,
-    Row,
-    Column,
-    Content,
-    Button,
-    Select,
-    SelectItem,
-    InlineNotification,
-    Tabs,
-    Tab,
-    TabContent,
-  } from "carbon-components-svelte";
-  import Code from "carbon-icons-svelte/lib/Code.svelte";
-  import { page, metatags } from "@sveltech/routify";
-  import { onMount } from "svelte";
-  import { theme } from "../store";
-  import ComponentApi from "../components/ComponentApi.svelte";
-  import COMPONENT_API from "../COMPONENT_API.json";
+import {
+  Grid,
+  Link,
+  Row,
+  Column,
+  Content,
+  Button,
+  Select,
+  SelectItem,
+  InlineNotification,
+  Tabs,
+  Tab,
+  TabContent,
+} from "carbon-components-svelte";
+import Code from "carbon-icons-svelte/lib/Code.svelte";
+import { page, metatags } from "@sveltech/routify";
+import { onMount } from "svelte";
+import { theme } from "../store";
+import ComponentApi from "../components/ComponentApi.svelte";
+import COMPONENT_API from "../COMPONENT_API.json";
 
-  export let component = $page.title;
-  export let components = [component];
-  export let unreleased = false;
-  export let unstable = false;
+export let component = $page.title;
+export let components = [component];
+export let unreleased = false;
+export let unstable = false;
 
-  metatags.title = $page.title;
+metatags.title = $page.title;
 
-  // TODO: `find` is not supported in IE
-  $: api_components = components.map((i) =>
-    COMPONENT_API.components.find((_) => _.moduleName === i),
-  );
-  $: multiple = api_components.length > 1;
+// TODO: `find` is not supported in IE
+$: api_components = components.map((i) =>
+  COMPONENT_API.components.find((_) => _.moduleName === i),
+);
+$: multiple = api_components.length > 1;
 
-  onMount(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const current_theme = searchParams.get("theme");
+onMount(() => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const current_theme = searchParams.get("theme");
 
-    if (["white", "g10", "g80", "g90", "g100"].includes(current_theme)) {
-      theme.set(current_theme);
-    }
-  });
+  if (["white", "g10", "g80", "g90", "g100"].includes(current_theme)) {
+    theme.set(current_theme);
+  }
+});
 
-  function formatSourceURL(multiple) {
-    const filePath = api_components[0]?.filePath ?? "";
+function formatSourceURL(multiple) {
+  const filePath = api_components[0]?.filePath ?? "";
 
-    if (multiple) {
-      /**
-       * Link to folder for doc with multiple components.
-       * @example "src/Breadcrumb"
-       */
-      return filePath.split("/").slice(0, -1).join("/");
-    }
-
+  if (multiple) {
     /**
-     * Else, link to the component source.
-     * @example "src/Tile/ClickableTile.svelte"
+     * Link to folder for doc with multiple components.
+     * @example "src/Breadcrumb"
      */
-    return filePath;
+    return filePath.split("/").slice(0, -1).join("/");
   }
 
-  // TODO: [refactor] read from package.json value
-  $: sourceCode = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${formatSourceURL(
-    multiple,
-  )}`;
+  /**
+   * Else, link to the component source.
+   * @example "src/Tile/ClickableTile.svelte"
+   */
+  return filePath;
+}
+
+// TODO: [refactor] read from package.json value
+$: sourceCode = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${formatSourceURL(
+  multiple,
+)}`;
 </script>
 
 <svelte:head>

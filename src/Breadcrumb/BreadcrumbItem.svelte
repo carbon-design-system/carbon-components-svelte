@@ -1,22 +1,22 @@
 <script>
-  /**
-   * @slot {{props?: { ["aria-current"]?: string; class: "bx--link"; }}}
-   */
+/**
+ * @slot {{props?: { ["aria-current"]?: string; class: "bx--link"; }}}
+ */
 
-  /**
-   * Set the `href` to use an anchor link
-   * @type {string}
-   */
-  export let href = undefined;
+/**
+ * Set the `href` to use an anchor link
+ * @type {string}
+ */
+export let href = undefined;
 
-  /** Set to `true` if the breadcrumb item represents the current page */
-  export let isCurrentPage = false;
+/** Set to `true` if the breadcrumb item represents the current page */
+export let isCurrentPage = false;
 
-  import Link from "../Link/Link.svelte";
+import Link from "../Link/Link.svelte";
 
-  import { setContext } from "svelte";
+import { setContext } from "svelte";
 
-  setContext("BreadcrumbItem", {});
+setContext("BreadcrumbItem", {});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

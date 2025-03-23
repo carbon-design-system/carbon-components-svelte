@@ -1,9 +1,9 @@
 <script>
-  /**
-   * Specify the size of the search input
-   * @type {"sm" | "lg" | "xl"}
-   */
-  export let size = "xl";
+/**
+ * Specify the size of the search input
+ * @type {"sm" | "lg" | "xl"}
+ */
+export let size = "xl";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
