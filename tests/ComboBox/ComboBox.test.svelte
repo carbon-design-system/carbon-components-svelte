@@ -1,13 +1,13 @@
 <script lang="ts">
   import { ComboBox } from "carbon-components-svelte";
-  import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let items: ComboBoxItem[] = [
+  export let items: ComponentProps<ComboBox>["items"] = [
     { id: "0", text: "Slack" },
     { id: "1", text: "Email" },
     { id: "2", text: "Fax" },
   ];
-  export let selectedId: string | undefined = undefined;
+  export let selectedId: ComponentProps<ComboBox>["selectedId"] = undefined;
   export let value = "";
   export let disabled = false;
   export let invalid = false;
@@ -20,8 +20,12 @@
   export let warnText = "";
   export let helperText = "";
   export let size: "sm" | "xl" | undefined = undefined;
-  export let shouldFilterItem = (item: ComboBoxItem, value: string) =>
-    item.text.toLowerCase().includes(value.toLowerCase());
+  export let shouldFilterItem: ComponentProps<ComboBox>["shouldFilterItem"] = (
+    item,
+    value,
+  ) => item.text.toLowerCase().includes(value.toLowerCase());
+  export let translateWithIdSelection: ComponentProps<ComboBox>["translateWithIdSelection"] =
+    undefined;
 </script>
 
 <ComboBox
@@ -40,6 +44,7 @@
   {warn}
   {warnText}
   {shouldFilterItem}
+  {translateWithIdSelection}
   on:select={(e) => {
     console.log("select", e.detail);
   }}

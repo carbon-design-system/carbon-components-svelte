@@ -44,13 +44,12 @@
   $: if (ctx && ref) {
     ctx.declareRef({ key: "selection", ref });
   }
-
-  $: translationId = selectionCount
-    ? translationIds.clearAll
-    : translationIds.clearSelection;
+  $: translationId =
+    selectionCount === undefined
+      ? translationIds.clearSelection
+      : translationIds.clearAll;
   $: buttonLabel =
-    translateWithId?.(translationIds.clearAll) ??
-    defaultTranslations[translationIds.clearAll];
+    translateWithId?.(translationId) ?? defaultTranslations[translationId];
   $: description =
     translateWithId?.(translationId) ?? defaultTranslations[translationId];
 </script>
