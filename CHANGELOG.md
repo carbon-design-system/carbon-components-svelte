@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.88.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.3...v0.88.4) (2025-03-24)
+
+### Bug Fixes
+
+- **list-box-selection:** fix `aria-label` for clear button ([#2134](https://github.com/carbon-design-system/carbon-components-svelte/issues/2134)) ([dd1338f](https://github.com/carbon-design-system/carbon-components-svelte/commit/dd1338ffc47926a13e231d4a0f724e923f2219e2))
+- **list-box:** correct button/description translations based on selection count ([#2139](https://github.com/carbon-design-system/carbon-components-svelte/issues/2139)) ([1a5f2d8](https://github.com/carbon-design-system/carbon-components-svelte/commit/1a5f2d8e67734bfda20272ae6a77d13b3837416d))
+- **list-box:** set `aria-disabled` if `disabled` ([#2125](https://github.com/carbon-design-system/carbon-components-svelte/issues/2125)) ([#2138](https://github.com/carbon-design-system/carbon-components-svelte/issues/2138)) ([9b61af0](https://github.com/carbon-design-system/carbon-components-svelte/commit/9b61af0306b422acf1e7cdde278e517740f667c5)), closes [#2130](https://github.com/carbon-design-system/carbon-components-svelte/issues/2130)
+- **radio-button:** forward `focus`, `blur` events ([#2135](https://github.com/carbon-design-system/carbon-components-svelte/issues/2135)) ([1462e30](https://github.com/carbon-design-system/carbon-components-svelte/commit/1462e300d69f0cd7ee5476dfe3a7ea892ac8f4ad)), closes [#2131](https://github.com/carbon-design-system/carbon-components-svelte/issues/2131)
+- **radio-tile:** allow standalone `RadioTile` usage ([#2136](https://github.com/carbon-design-system/carbon-components-svelte/issues/2136)) ([ca9beeb](https://github.com/carbon-design-system/carbon-components-svelte/commit/ca9beebaeac7eaed8079c010a86a78926b00147f))
+- **text-area:** allow visually hidden label ([#2137](https://github.com/carbon-design-system/carbon-components-svelte/issues/2137)) ([43511e0](https://github.com/carbon-design-system/carbon-components-svelte/commit/43511e09ecf312c1b8e9339856b9d7d0785036de))
+
 ### [0.88.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.2...v0.88.3) (2025-03-19)
 
 ### Bug Fixes
