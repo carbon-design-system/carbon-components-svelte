@@ -22,7 +22,7 @@ sveld({
   },
 });
 
-globSync(["./src/**/*.d.ts"]).forEach((file) => {
+for (const file of globSync(["./src/**/*.d.ts"])) {
   console.log("Copying", file, " to types/");
   fs.copyFileSync(file, file.replace(/src/, "types"));
-});
+}

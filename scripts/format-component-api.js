@@ -15,7 +15,7 @@ const formatTypeScript = async (value) => {
 
 console.time("formatComponentApi");
 
-let modified = { ...componentApi };
+const modified = { ...componentApi };
 
 modified.components = await Promise.all(
   componentApi.components.map(async (component) => {
@@ -26,7 +26,7 @@ modified.components = await Promise.all(
         }
 
         let normalizedValue = prop.value;
-        let prefix = `const ${prop.name} = `;
+        const prefix = `const ${prop.name} = `;
 
         if (prop.isFunction || prop.value.startsWith("{")) {
           normalizedValue = prefix + prop.value;
@@ -64,7 +64,7 @@ modified.components = await Promise.all(
           return event;
         }
 
-        let normalizedValue = `type EventDetail = ` + event.detail;
+        const normalizedValue = `type EventDetail = ${event.detail}`;
 
         const formatted = (await formatTypeScript(normalizedValue))
           // Remove prefix needed for formatting.
@@ -88,7 +88,7 @@ modified.components = await Promise.all(
         let normalizedValue = slot.slot_props;
 
         if (normalizedValue.startsWith("{")) {
-          normalizedValue = `type SlotProps = ` + normalizedValue;
+          normalizedValue = `type SlotProps = ${normalizedValue}`;
         }
 
         const formatted = (await formatTypeScript(normalizedValue))
