@@ -179,8 +179,8 @@ describe("Dropdown", () => {
 
     const menuItemText = screen.getByText("Email");
     const menuItem = menuItemText.closest(".bx--list-box__menu-item");
-    expect(menuItem).not.toBeNull();
-    await user.click(menuItem!);
+    assert(menuItem);
+    await user.click(menuItem);
 
     expect(selectHandler).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -262,5 +262,100 @@ describe("Dropdown", () => {
 
     await user.click(document.body);
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+  });
+
+  it("should handle direction prop", () => {
+    render(Dropdown, {
+      props: {
+        items,
+        selectedId: "0",
+        direction: "top",
+      },
+    });
+
+    const dropdown = screen.getByRole("button").closest(".bx--dropdown");
+    expect(dropdown).toHaveClass("bx--list-box--up");
+  });
+
+  it("should handle keyboard navigation with disabled items", async () => {
+    const itemsWithDisabled = [
+      { id: "0", text: "Slack" },
+      { id: "1", text: "Email", disabled: true },
+      { id: "2", text: "Fax" },
+    ];
+
+    render(Dropdown, {
+      props: {
+        items: itemsWithDisabled,
+        selectedId: "0",
+      },
+    });
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    await user.keyboard("{ArrowDown}{ArrowDown}");
+    await user.keyboard("{Enter}");
+
+    expect(button).toHaveTextContent("Fax");
+  });
+
+  it("should handle keyboard navigation wrapping around", async () => {
+    render(Dropdown, {
+      props: {
+        items,
+        selectedId: "0",
+      },
+    });
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    await user.keyboard("{ArrowUp}");
+    await user.keyboard("{Enter}");
+
+    expect(button).toHaveTextContent("Fax");
+
+    await user.click(button);
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{Enter}");
+
+    expect(button).toHaveTextContent("Slack");
+  });
+
+  it("should handle empty items array", () => {
+    render(Dropdown, {
+      props: {
+        items: [],
+        selectedId: undefined,
+      },
+    });
+
+    const button = screen.getByRole("button");
+    expect(button).toBeEnabled();
+    expect(button).toHaveTextContent("undefined");
+  });
+
+  it("should handle translateWithId prop", () => {
+    const translateWithId = (id: "open" | "close") => {
+      const translations = {
+        open: "Open dropdown",
+        close: "Close dropdown",
+      };
+      return translations[id];
+    };
+
+    render(Dropdown, {
+      props: {
+        items,
+        selectedId: "0",
+        translateWithId,
+      },
+    });
+
+    const button = screen.getByRole("button");
+    expect(
+      button.querySelector(".bx--list-box__menu-icon svg"),
+    ).toHaveAttribute("aria-label", "Open dropdown");
   });
 });
