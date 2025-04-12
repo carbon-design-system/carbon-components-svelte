@@ -3,13 +3,9 @@
     DataTable,
     Toolbar,
     ToolbarContent,
-    ToolbarSearch,
-    ToolbarMenu,
-    ToolbarMenuItem,
     ToolbarBatchActions,
     Button,
   } from "carbon-components-svelte";
-  import Save from "carbon-icons-svelte/lib/Save.svelte";
 
   const headers = [
     { key: "name", value: "Name" },
@@ -26,25 +22,38 @@
     { id: "f", name: "Load Balancer 5", port: 80, rule: "DNS delegation" },
   ];
 
-  let selectedRowIds = [rows[0].id, rows[1].id];
-
-  $: console.log("selectedRowIds", selectedRowIds);
+  export let selectedRowIds: string[] = [];
+  export let active: boolean | undefined = undefined;
+  export let controlled = false;
 </script>
 
-<DataTable batchSelection bind:selectedRowIds {headers} {rows}>
+<DataTable batchSelection {headers} {rows} {selectedRowIds}>
   <Toolbar>
-    <ToolbarBatchActions>
-      <Button icon={Save}>Save</Button>
+    <ToolbarBatchActions
+      {active}
+      on:cancel={() => {
+        if (!controlled) {
+          selectedRowIds = [];
+        }
+      }}
+    >
+      <Button
+        kind="danger"
+        on:click={() => {
+          console.log("delete", selectedRowIds);
+        }}
+      >
+        Delete
+      </Button>
+      <Button
+        on:click={() => {
+          console.log("restart", selectedRowIds);
+        }}
+      >
+        Restart
+      </Button>
     </ToolbarBatchActions>
     <ToolbarContent>
-      <ToolbarSearch />
-      <ToolbarMenu>
-        <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
-        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">
-          API documentation
-        </ToolbarMenuItem>
-        <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
-      </ToolbarMenu>
       <Button>Create balancer</Button>
     </ToolbarContent>
   </Toolbar>
