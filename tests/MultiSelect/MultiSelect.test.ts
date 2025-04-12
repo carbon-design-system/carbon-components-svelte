@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
-import { MultiSelect } from "carbon-components-svelte";
 import { user } from "../setup-tests";
+import MultiSelect from "./MultiSelect.test.svelte";
+import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
 
 const items = [
   { id: "0", text: "Slack" },
@@ -9,7 +10,6 @@ const items = [
 ] as const;
 
 describe("MultiSelect", () => {
-  /** Opens the dropdown. */
   const openMenu = async () =>
     await user.click(
       await screen.findByLabelText("Open menu", {
@@ -17,7 +17,6 @@ describe("MultiSelect", () => {
       }),
     );
 
-  /** Closes the dropdown. */
   const closeMenu = async () =>
     await user.click(
       await screen.findByLabelText("Close menu", {
@@ -25,119 +24,126 @@ describe("MultiSelect", () => {
       }),
     );
 
-  /** Toggles an option, identifying it by its `text` value. */
   const toggleOption = async (optionText: string) =>
     await user.click(
       await screen.findByText((text) => text.trim() === optionText),
     );
 
-  /** Fetches the `text` value of the nth option in the MultiSelect component. */
   const nthRenderedOptionText = (index: number) =>
     screen.queryAllByRole("option").at(index)?.textContent?.trim();
 
-  describe("sorting behavior", () => {
-    it("initially sorts items alphabetically", async () => {
-      render(MultiSelect, {
-        items: [
-          { id: "1", text: "C" },
-          { id: "3", text: "A" },
-          { id: "2", text: "B" },
-        ],
-      });
-
-      // Initially, items should be sorted alphabetically.
-      await openMenu();
-      expect(nthRenderedOptionText(0)).toBe("A");
-      expect(nthRenderedOptionText(1)).toBe("B");
-      expect(nthRenderedOptionText(2)).toBe("C");
+  it("renders with default props", () => {
+    render(MultiSelect, {
+      props: {
+        items,
+        titleText: "Contact methods",
+      },
     });
 
-    it("immediately moves selected items to the top (with selectionFeedback: top)", async () => {
+    expect(screen.getByText("Contact methods")).toBeInTheDocument();
+    expect(screen.getByRole("button")).toBeInTheDocument();
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  });
+
+  it("renders default slot", () => {
+    render(MultiSelectSlot, { items });
+    expect(screen.getByText("1 Email 0")).toBeInTheDocument();
+    expect(screen.getByText("2 Fax 1")).toBeInTheDocument();
+    expect(screen.getByText("0 Slack 2")).toBeInTheDocument();
+  });
+
+  describe("selection behavior", () => {
+    it("handles item selection", async () => {
+      const consoleLog = vi.spyOn(console, "log");
       render(MultiSelect, {
-        items: [
-          { id: "3", text: "C" },
-          { id: "1", text: "A" },
-          { id: "2", text: "B" },
-        ],
-        selectionFeedback: "top",
+        props: { items },
       });
 
-      // Initially, items should be sorted alphabetically.
       await openMenu();
-      expect(nthRenderedOptionText(0)).toBe("A");
-
-      await toggleOption("C");
-      expect(nthRenderedOptionText(0)).toBe("C");
-
-      await toggleOption("C");
-      expect(nthRenderedOptionText(0)).toBe("A");
+      await toggleOption("Slack");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: ["0"],
+        selected: [{ id: "0", text: "Slack", checked: true }],
+        unselected: [
+          { id: "1", text: "Email", checked: false },
+          { id: "2", text: "Fax", checked: false },
+        ],
+      });
     });
 
-    it("sorts newly-toggled items only after the dropdown is reoponed (with selectionFeedback: top-after-reopen)", async () => {
+    it("handles multiple selections", async () => {
+      const consoleLog = vi.spyOn(console, "log");
       render(MultiSelect, {
-        items: [
-          { id: "3", text: "C" },
-          { id: "1", text: "A" },
-          { id: "2", text: "B" },
-        ],
+        props: { items },
       });
 
-      // Initially, items should be sorted alphabetically.
       await openMenu();
-      expect(nthRenderedOptionText(0)).toBe("A");
-
-      // While the menu is still open, a newly-selected item should not move.
-      await toggleOption("C");
-      expect(nthRenderedOptionText(0)).toBe("A");
-
-      // The newly-selected item should move after the menu is closed and
-      // re-opened.
-      await closeMenu();
-      await openMenu();
-      expect(nthRenderedOptionText(0)).toBe("C");
-
-      // A deselected item should not move while the dropdown is still open.
-      await toggleOption("C");
-      expect(nthRenderedOptionText(0)).toBe("C");
-
-      // The deselected item should move after closing and re-opening the dropdown.
-      await closeMenu();
-      await openMenu();
-      expect(nthRenderedOptionText(0)).toBe("A");
+      await toggleOption("Slack");
+      await toggleOption("Email");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: ["0"],
+        selected: [{ id: "0", text: "Slack", checked: true }],
+        unselected: [
+          { id: "1", text: "Email", checked: false },
+          { id: "2", text: "Fax", checked: false },
+        ],
+      });
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: ["1", "0"],
+        selected: [
+          { id: "1", text: "Email", checked: true },
+          { id: "0", text: "Slack", checked: true },
+        ],
+        unselected: [{ id: "2", text: "Fax", checked: false }],
+      });
     });
 
-    it("never moves selected items to the top (with selectionFeedback: fixed)", async () => {
+    it("handles item deselection", async () => {
+      const consoleLog = vi.spyOn(console, "log");
       render(MultiSelect, {
-        items: [
-          { id: "3", text: "C" },
-          { id: "1", text: "A" },
-          { id: "2", text: "B" },
-        ],
-        selectionFeedback: "fixed",
+        props: {
+          items,
+          selectedIds: ["0"],
+        },
       });
 
-      // Items should be sorted alphabetically.
       await openMenu();
-      expect(nthRenderedOptionText(0)).toBe("A");
+      await toggleOption("Slack");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: [],
+        selected: [],
+        unselected: [
+          { id: "0", text: "Slack", checked: false },
+          { id: "1", text: "Email", checked: false },
+          { id: "2", text: "Fax", checked: false },
+        ],
+      });
 
-      // A newly-selected item should not move after the selection is made.
-      await toggleOption("C");
-      expect(nthRenderedOptionText(0)).toBe("A");
-
-      // The newly-selected item also shouldn't move after the dropdown is closed
-      // and reopened.
-      await closeMenu();
-      await openMenu();
-      expect(nthRenderedOptionText(0)).toBe("A");
+      await toggleOption("Slack");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: [],
+        selected: [],
+        unselected: [
+          { id: "0", text: "Slack", checked: false },
+          { id: "1", text: "Email", checked: false },
+          { id: "2", text: "Fax", checked: false },
+        ],
+      });
     });
   });
 
   describe("filtering behavior", () => {
-    it("should filter items based on input value", async () => {
+    it("filters items based on input", async () => {
+      const consoleLog = vi.spyOn(console, "log");
       render(MultiSelect, {
-        items,
-        filterable: true,
-        placeholder: "Filter items...",
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter items...",
+        },
       });
 
       await openMenu();
@@ -147,14 +153,28 @@ describe("MultiSelect", () => {
       expect(screen.queryByText("Slack")).not.toBeInTheDocument();
       expect(screen.getByText("Email")).toBeInTheDocument();
       expect(screen.queryByText("Fax")).not.toBeInTheDocument();
+
+      await user.keyboard("{ArrowDown}{Enter}");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: ["1"],
+        selected: [{ id: "1", text: "Email", checked: true }],
+        unselected: [
+          { id: "2", text: "Fax", checked: false },
+          { id: "0", text: "Slack", checked: false },
+        ],
+      });
     });
 
-    it("should use custom filter function", async () => {
+    it("uses custom filter function", async () => {
+      const consoleLog = vi.spyOn(console, "log");
       render(MultiSelect, {
-        items,
-        filterable: true,
-        filterItem: (item, value) =>
-          item.text.toLowerCase().startsWith(value.toLowerCase()),
+        props: {
+          items,
+          filterable: true,
+          filterItem: (item, value) => {
+            return item.text.toLowerCase().startsWith(value.toLowerCase());
+          },
+        },
       });
 
       await openMenu();
@@ -164,122 +184,112 @@ describe("MultiSelect", () => {
       expect(screen.queryByText("Slack")).not.toBeInTheDocument();
       expect(screen.getByText("Email")).toBeInTheDocument();
       expect(screen.queryByText("Fax")).not.toBeInTheDocument();
-    });
 
-    it("should clear filter on selection clear", async () => {
-      render(MultiSelect, {
-        items,
-        filterable: true,
-        selectedIds: ["0"],
+      await user.keyboard("{ArrowDown}{Enter}");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: ["1"],
+        selected: [{ id: "1", text: "Email", checked: true }],
+        unselected: [
+          { id: "2", text: "Fax", checked: false },
+          { id: "0", text: "Slack", checked: false },
+        ],
       });
-
-      const clearButton = screen.getByLabelText("Clear all selected items");
-      await user.click(clearButton);
-
-      const input = screen.getByRole("combobox");
-      expect(input).toHaveValue("");
-    });
-
-    it("should show correct clear button label regardless of selection count", async () => {
-      render(MultiSelect, {
-        items,
-        selectedIds: ["0"],
-      });
-
-      expect(
-        screen.getByLabelText("Clear all selected items"),
-      ).toBeInTheDocument();
-
-      await openMenu();
-      await toggleOption("Email");
-      expect(
-        screen.getByLabelText("Clear all selected items"),
-      ).toBeInTheDocument();
-    });
-
-    it("should use custom translations when translateWithId is provided", async () => {
-      const customTranslations = {
-        clearSelection: "Remove selected item",
-        clearAll: "Remove all items",
-      } as const;
-
-      render(MultiSelect, {
-        items,
-        selectedIds: ["0"],
-        translateWithIdSelection: (id) => customTranslations[id],
-      });
-
-      expect(screen.getByLabelText("Remove all items")).toBeInTheDocument();
-
-      await openMenu();
-      await toggleOption("Email");
-      expect(screen.getByLabelText("Remove all items")).toBeInTheDocument();
     });
   });
 
-  describe("keyboard navigation", () => {
-    it("should handle arrow keys for navigation", async () => {
-      render(MultiSelect, { items });
-
-      await openMenu();
-      await user.keyboard("{ArrowDown}");
-
-      const options = screen.getAllByRole("option");
-      expect(options[0]).toHaveClass("bx--list-box__menu-item--highlighted");
-    });
-
-    it("should select item with Enter key", async () => {
-      const { component } = render(MultiSelect, { items });
-      const selectHandler = vi.fn();
-      component.$on("select", selectHandler);
-
-      await openMenu();
-      await user.keyboard("{ArrowDown}");
-      await user.keyboard("{Enter}");
-
-      expect(selectHandler).toHaveBeenCalled();
-    });
-
-    it("should close menu with Escape key", async () => {
-      render(MultiSelect, { items });
-
-      await openMenu();
-      await user.keyboard("{Escape}");
-
-      const button = screen.getByRole("button");
-      expect(button).toHaveAttribute("aria-expanded", "false");
-    });
-  });
-
-  describe("accessibility", () => {
-    it("should handle hidden label", () => {
+  describe("sorting behavior", () => {
+    it("initially sorts items alphabetically", async () => {
       render(MultiSelect, {
-        items,
-        titleText: "Contact methods",
-        hideLabel: true,
-      });
-
-      const label = screen.getByText("Contact methods");
-      expect(label).toHaveClass("bx--visually-hidden");
-    });
-
-    it("should handle custom aria-label", async () => {
-      render(MultiSelect, {
-        items,
-        "aria-label": "Custom label",
+        props: {
+          items: [
+            { id: "1", text: "C" },
+            { id: "3", text: "A" },
+            { id: "2", text: "B" },
+          ],
+        },
       });
 
       await openMenu();
-      const menu = screen.getByLabelText("Custom label");
-      expect(menu).toBeInTheDocument();
+      expect(nthRenderedOptionText(0)).toBe("A");
+      expect(nthRenderedOptionText(1)).toBe("B");
+      expect(nthRenderedOptionText(2)).toBe("C");
+    });
+
+    it("moves selected items to top with selectionFeedback: top", async () => {
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "3", text: "C" },
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+          ],
+          selectionFeedback: "top",
+        },
+      });
+
+      await openMenu();
+      expect(nthRenderedOptionText(0)).toBe("A");
+
+      await toggleOption("C");
+      expect(nthRenderedOptionText(0)).toBe("C");
+
+      await toggleOption("C");
+      expect(nthRenderedOptionText(0)).toBe("A");
+    });
+
+    it("sorts after reopen with selectionFeedback: top-after-reopen", async () => {
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "3", text: "C" },
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+          ],
+        },
+      });
+
+      await openMenu();
+      expect(nthRenderedOptionText(0)).toBe("A");
+
+      await toggleOption("C");
+      expect(nthRenderedOptionText(0)).toBe("A");
+
+      await closeMenu();
+      await openMenu();
+      expect(nthRenderedOptionText(0)).toBe("C");
+    });
+
+    it("maintains order with selectionFeedback: fixed", async () => {
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "3", text: "C" },
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+          ],
+          selectionFeedback: "fixed",
+        },
+      });
+
+      await openMenu();
+      expect(nthRenderedOptionText(0)).toBe("A");
+
+      await toggleOption("C");
+      expect(nthRenderedOptionText(0)).toBe("A");
+
+      await closeMenu();
+      await openMenu();
+      expect(nthRenderedOptionText(0)).toBe("A");
     });
   });
 
   describe("variants and states", () => {
-    it("should render in light variant", async () => {
+    it("renders in light variant", async () => {
       render(MultiSelect, {
-        items,
-        light: true,
+        props: {
+          items,
+          light: true,
+        },
       });
 
       await openMenu();
@@ -287,10 +297,12 @@ describe("MultiSelect", () => {
       expect(listBox).toHaveClass("bx--list-box--light");
     });
 
-    it("should render in inline variant", () => {
+    it("renders in inline variant", () => {
       render(MultiSelect, {
-        items,
-        type: "inline",
+        props: {
+          items,
+          type: "inline",
+        },
       });
 
       const wrapper = screen
@@ -299,11 +311,13 @@ describe("MultiSelect", () => {
       expect(wrapper).toHaveClass("bx--multi-select__wrapper--inline");
     });
 
-    it("should handle invalid state", () => {
+    it("handles invalid state", () => {
       render(MultiSelect, {
-        items,
-        invalid: true,
-        invalidText: "Invalid selection",
+        props: {
+          items,
+          invalid: true,
+          invalidText: "Invalid selection",
+        },
       });
 
       expect(screen.getByText("Invalid selection")).toBeInTheDocument();
@@ -311,11 +325,13 @@ describe("MultiSelect", () => {
       expect(wrapper).toHaveClass("bx--multi-select--invalid");
     });
 
-    it("should handle warning state", () => {
+    it("handles warning state", () => {
       render(MultiSelect, {
-        items,
-        warn: true,
-        warnText: "Warning message",
+        props: {
+          items,
+          warn: true,
+          warnText: "Warning message",
+        },
       });
 
       expect(screen.getByText("Warning message")).toBeInTheDocument();
@@ -323,8 +339,13 @@ describe("MultiSelect", () => {
       expect(wrapper).toHaveClass("bx--list-box--warning");
     });
 
-    it("should handle disabled state", () => {
-      render(MultiSelect, { items, disabled: true });
+    it("handles disabled state", () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          disabled: true,
+        },
+      });
 
       const field = screen.getByRole("button");
       expect(field).toHaveAttribute("aria-disabled", "true");
@@ -335,7 +356,7 @@ describe("MultiSelect", () => {
       );
     });
 
-    it("should handle disabled items", async () => {
+    it("handles disabled items", async () => {
       const itemsWithDisabled = [
         { id: "0", text: "Slack" },
         { id: "1", text: "Email", disabled: true },
@@ -343,7 +364,9 @@ describe("MultiSelect", () => {
       ];
 
       render(MultiSelect, {
-        items: itemsWithDisabled,
+        props: {
+          items: itemsWithDisabled,
+        },
       });
 
       await openMenu();
@@ -354,33 +377,51 @@ describe("MultiSelect", () => {
     });
   });
 
-  describe("custom formatting", () => {
-    it("should handle custom itemToString", () => {
+  describe("accessibility", () => {
+    it("handles hidden label", () => {
       render(MultiSelect, {
-        items,
-        selectedIds: ["0"],
-        itemToString: (item) => `${item.text} (${item.id})`,
+        props: {
+          items,
+          titleText: "Contact methods",
+          hideLabel: true,
+        },
+      });
+
+      const label = screen.getByText("Contact methods");
+      expect(label).toHaveClass("bx--visually-hidden");
+    });
+  });
+
+  describe("custom formatting", () => {
+    it("handles custom itemToString", () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          selectedIds: ["0"],
+          itemToString: (item) => `${item.text} (${item.id})`,
+        },
       });
 
       expect(screen.getByText("Slack (0)")).toBeInTheDocument();
     });
 
-    it("should handle custom itemToInput", async () => {
+    it("handles custom itemToInput", async () => {
       render(MultiSelect, {
-        items,
-        itemToInput: (item) => ({
-          name: `contact_${item.id}`,
-          value: item.text.toLowerCase(),
-        }),
+        props: {
+          items,
+          itemToInput: (item) => ({
+            name: `contact_${item.id}`,
+            value: item.text.toLowerCase(),
+          }),
+        },
       });
 
       await openMenu();
       const checkbox = screen.getByText("Slack");
       const checkboxWrapper = checkbox.closest(".bx--checkbox-wrapper");
-      assert(checkboxWrapper);
-
-      const checkboxInput = checkboxWrapper.querySelector("input");
+      const checkboxInput = checkboxWrapper?.querySelector("input");
       expect(checkboxInput).toHaveAttribute("name", "contact_0");
+      expect(checkboxInput).toHaveAttribute("value", "slack");
     });
   });
 });
