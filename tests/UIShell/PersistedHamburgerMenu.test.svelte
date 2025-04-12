@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import {
     Header,
@@ -16,10 +18,15 @@
     Column,
   } from "carbon-components-svelte";
 
-  let isSideNavOpen = false;
+  export let isSideNavOpen = false;
 </script>
 
-<Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header
+  persistentHamburgerMenu={true}
+  company="IBM"
+  platformName="Carbon Svelte"
+  bind:isSideNavOpen
+>
   <div slot="skip-to-content">
     <SkipToContent />
   </div>
