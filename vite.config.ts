@@ -17,6 +17,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
+    clearMocks: true,
     // Suppress `console` output in CI.
     silent: !!process.env.CI,
     setupFiles: ["./tests/setup-tests.ts"],
