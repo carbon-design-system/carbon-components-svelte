@@ -5,9 +5,10 @@
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 
   let treeview: TreeView;
-  let activeId: TreeNodeId = "";
-  let selectedIds: TreeNodeId[] = [];
-  let expandedIds: TreeNodeId[] = [];
+  export let activeId: TreeNodeId = "";
+  export let selectedIds: TreeNodeId[] = [];
+  export let expandedIds: TreeNodeId[] = [];
+  export let size: "default" | "compact" = "compact";
   let nodes: ComponentProps<TreeView>["nodes"] = [
     { id: 0, text: "AI / Machine learning", icon: Analytics },
     {
@@ -47,6 +48,7 @@
       disabled: true,
       nodes: [{ id: 15, text: "IBM API Connect", disabled: true }],
     },
+    { id: 16, text: "Disabled Node", disabled: true },
   ];
 
   $: console.log("selectedIds", selectedIds);
@@ -54,7 +56,7 @@
 
 <TreeView
   bind:this={treeview}
-  size="compact"
+  {size}
   labelText="Cloud Products"
   {nodes}
   bind:activeId
