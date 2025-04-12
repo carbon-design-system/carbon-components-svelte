@@ -43,3 +43,41 @@ class ResizeObserverMock {
 global.ResizeObserver = ResizeObserverMock;
 
 export const user = userEvent.setup();
+
+export const setupLocalStorageMock = () => {
+  let localStorageMock: { [key: string]: string } = {};
+  let originalLocalStorage: Storage;
+
+  beforeEach(() => {
+    originalLocalStorage = global.localStorage;
+    localStorageMock = {};
+    global.localStorage = {
+      getItem: vi.fn((key) => localStorageMock[key] || null),
+      setItem: vi.fn((key, value) => {
+        localStorageMock[key] = value;
+      }),
+      removeItem: vi.fn((key) => {
+        delete localStorageMock[key];
+      }),
+      clear: vi.fn(() => {
+        localStorageMock = {};
+      }),
+      length: 0,
+      key: vi.fn(),
+    };
+  });
+
+  afterEach(() => {
+    global.localStorage = originalLocalStorage;
+    localStorage.clear();
+    vi.restoreAllMocks();
+    localStorageMock = {};
+  });
+
+  return {
+    setMockItem: (key: string, value: string) => {
+      localStorageMock[key] = value;
+    },
+    getMockItem: (key: string) => localStorageMock[key],
+  };
+};

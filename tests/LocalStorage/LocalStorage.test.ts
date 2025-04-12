@@ -1,35 +1,9 @@
 import { render } from "@testing-library/svelte";
+import { setupLocalStorageMock } from "../setup-tests";
 import LocalStorage from "./LocalStorage.test.svelte";
 
 describe("LocalStorage", () => {
-  let localStorageMock: { [key: string]: string };
-  let originalLocalStorage: Storage;
-
-  beforeEach(() => {
-    originalLocalStorage = global.localStorage;
-    localStorageMock = {};
-    global.localStorage = {
-      getItem: vi.fn((key) => localStorageMock[key] || null),
-      setItem: vi.fn((key, value) => {
-        localStorageMock[key] = value;
-      }),
-      removeItem: vi.fn((key) => {
-        delete localStorageMock[key];
-      }),
-      clear: vi.fn(() => {
-        localStorageMock = {};
-      }),
-      length: 0,
-      key: vi.fn(),
-    };
-  });
-
-  afterEach(() => {
-    global.localStorage = originalLocalStorage;
-    localStorage.clear();
-    vi.restoreAllMocks();
-    localStorageMock = {};
-  });
+  const { setMockItem } = setupLocalStorageMock();
 
   it("saves primitive value to localStorage on mount", () => {
     render(LocalStorage);
@@ -50,7 +24,7 @@ describe("LocalStorage", () => {
   });
 
   it("loads existing primitive value from localStorage", () => {
-    localStorageMock["local-storage-key"] = "existing-value";
+    setMockItem("local-storage-key", "existing-value");
 
     render(LocalStorage);
     expect(localStorage.getItem).toHaveBeenCalledWith("local-storage-key");
@@ -59,7 +33,7 @@ describe("LocalStorage", () => {
   it("loads existing object value from localStorage", () => {
     // Set up existing value
     const existingSettings = { theme: "light", fontSize: 14 };
-    localStorageMock["theme-settings"] = JSON.stringify(existingSettings);
+    setMockItem("theme-settings", JSON.stringify(existingSettings));
 
     render(LocalStorage);
     expect(localStorage.getItem).toHaveBeenCalledWith("theme-settings");
@@ -87,7 +61,7 @@ describe("LocalStorage", () => {
 
   it("handles JSON parse errors gracefully", () => {
     // Set up invalid JSON
-    localStorageMock["local-storage-key"] = "{invalid-json}";
+    setMockItem("local-storage-key", "{invalid-json}");
 
     render(LocalStorage);
     expect(localStorage.getItem).toHaveBeenCalledWith("local-storage-key");
