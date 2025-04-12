@@ -65,7 +65,7 @@
     "svelte-check": "^4.1.5",
     "tinyglobby": "^0.2.12",
     "typescript": "^5.8.2",
-    "vitest": "^3.0.8"
+    "vitest": "^3.1.1"
   },
   "standard-version": {
     "skip": {
