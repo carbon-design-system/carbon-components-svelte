@@ -1,5 +1,5 @@
 {
-  "total": 165,
+  "total": 167,
   "components": [
     {
       "moduleName": "Accordion",
@@ -5228,6 +5228,16 @@
         "type": "Element",
         "name": "div | button | svg"
       }
+    },
+    {
+      "moduleName": "FloatingPortal",
+      "filePath": "src/Portal/FloatingPortal.svelte",
+      "props": [],
+      "moduleExports": [],
+      "slots": [],
+      "events": [],
+      "typedefs": [],
+      "generics": null
     },
     {
       "moduleName": "FluidForm",
@@ -10826,6 +10836,22 @@
         "type": "Element",
         "name": "div"
       }
+    },
+    {
+      "moduleName": "Portal",
+      "filePath": "src/Portal/Portal.svelte",
+      "props": [],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": "__default__",
+          "default": true,
+          "slot_props": "{}"
+        }
+      ],
+      "events": [],
+      "typedefs": [],
+      "generics": null
     },
     {
       "moduleName": "ProgressBar",

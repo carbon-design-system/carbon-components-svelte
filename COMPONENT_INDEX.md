@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@0.88.4.
+> 167 components exported from carbon-components-svelte@0.88.4.
 
 ## Components
 
@@ -45,6 +45,7 @@
 - [`FileUploaderItem`](#fileuploaderitem)
 - [`FileUploaderSkeleton`](#fileuploaderskeleton)
 - [`Filename`](#filename)
+- [`FloatingPortal`](#floatingportal)
 - [`FluidForm`](#fluidform)
 - [`Form`](#form)
 - [`FormGroup`](#formgroup)
@@ -95,6 +96,7 @@
 - [`PaginationSkeleton`](#paginationskeleton)
 - [`PasswordInput`](#passwordinput)
 - [`Popover`](#popover)
+- [`Portal`](#portal)
 - [`ProgressBar`](#progressbar)
 - [`ProgressIndicator`](#progressindicator)
 - [`ProgressIndicatorSkeleton`](#progressindicatorskeleton)
@@ -1433,6 +1435,20 @@ None.
 | :--------- | :-------- | :----- |
 | click      | forwarded | --     |
 | keydown    | forwarded | --     |
+
+## `FloatingPortal`
+
+### Props
+
+None.
+
+### Slots
+
+None.
+
+### Events
+
+None.
 
 ## `FluidForm`
 
@@ -2832,6 +2848,22 @@ None.
 | Event name    | Type       | Detail                                |
 | :------------ | :--------- | :------------------------------------ |
 | click:outside | dispatched | <code>{ target: HTMLElement; }</code> |
+
+## `Portal`
+
+### Props
+
+None.
+
+### Slots
+
+| Slot name | Default | Props | Fallback |
+| :-------- | :------ | :---- | :------- |
+| --        | Yes     | --    | --       |
+
+### Events
+
+None.
 
 ## `ProgressBar`
 

@@ -1,0 +1,8 @@
+<script>
+  import { Portal } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+## Default
+
+<FileSource src="/framed/Portal/BasicPortal" />
