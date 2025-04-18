@@ -240,10 +240,17 @@ describe("Select", () => {
     expect(skeleton.children[0]).toHaveClass("bx--skeleton");
   });
 
-  it("renders value if `text` is falsy", () => {
+  it("renders `text` instead of `value` if `text` is an empty string", () => {
     render(SelectFalsy);
 
     expect(screen.getByLabelText("Falsy text")).toHaveValue("-1");
-    expect(screen.getByDisplayValue("")).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "" })).toBeInTheDocument();
+  });
+  
+  it("renders value if `text` is undefined", () => {
+    render(SelectFalsy);
+
+    expect(screen.getByLabelText("Undefined text")).toHaveValue("2");
+    expect(screen.getByRole("option", { name: "2" })).toBeInTheDocument();
   });
 });

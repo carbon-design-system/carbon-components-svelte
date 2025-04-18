@@ -3221,14 +3221,14 @@ None.
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                              | Default value          | Description                               |
-| :-------- | :------- | :--------------- | :------- | --------------------------------- | ---------------------- | ----------------------------------------- |
-| value     | No       | <code>let</code> | No       | <code>string &#124; number</code> | <code>""</code>        | Specify the option value                  |
-| text      | No       | <code>let</code> | No       | <code>string</code>               | <code>""</code>        | Specify the option text                   |
-| hidden    | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to hide the option          |
-| disabled  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to disable the option       |
-| class     | No       | <code>let</code> | No       | <code>string</code>               | <code>undefined</code> | Specify the class of the `option` element |
-| style     | No       | <code>let</code> | No       | <code>string</code>               | <code>undefined</code> | Specify the style of the `option` element |
+| Prop name | Required | Kind             | Reactive | Type                              | Default value          | Description                                                                        |
+| :-------- | :------- | :--------------- | :------- | --------------------------------- | ---------------------- | ---------------------------------------------------------------------------------- |
+| value     | No       | <code>let</code> | No       | <code>string &#124; number</code> | <code>""</code>        | Specify the option value                                                           |
+| text      | No       | <code>let</code> | No       | <code>string</code>               | <code>undefined</code> | Specify the option text<br />If not specified, the value will be used as the text. |
+| hidden    | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to hide the option                                                   |
+| disabled  | No       | <code>let</code> | No       | <code>boolean</code>              | <code>false</code>     | Set to `true` to disable the option                                                |
+| class     | No       | <code>let</code> | No       | <code>string</code>               | <code>undefined</code> | Specify the class of the `option` element                                          |
+| style     | No       | <code>let</code> | No       | <code>string</code>               | <code>undefined</code> | Specify the style of the `option` element                                          |
 
 ### Slots
 

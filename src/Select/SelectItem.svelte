@@ -5,8 +5,12 @@
    */
   export let value = "";
 
-  /** Specify the option text */
-  export let text = "";
+  /**
+   * Specify the option text
+   * If not specified, the value will be used as the text.
+   * @type {string}
+   */
+  export let text = undefined;
 
   /** Set to `true` to hide the option */
   export let hidden = false;

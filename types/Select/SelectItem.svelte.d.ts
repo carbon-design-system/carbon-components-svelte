@@ -9,7 +9,8 @@ export type SelectItemProps = {
 
   /**
    * Specify the option text
-   * @default ""
+   * If not specified, the value will be used as the text.
+   * @default undefined
    */
   text?: string;
 
