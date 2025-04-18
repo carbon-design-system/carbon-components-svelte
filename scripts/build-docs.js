@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import { globSync } from "tinyglobby";
 import { sveld } from "sveld";
-import pkg from "../package.json" assert { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 
 sveld({
   glob: true,
