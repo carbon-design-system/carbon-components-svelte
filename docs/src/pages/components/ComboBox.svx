@@ -24,6 +24,15 @@ Override the default slot to customize the display of each item. Access the item
 
 <FileSource src="/framed/ComboBox/ComboBoxSlot" />
 
+## Hidden label
+
+<ComboBox hideLabel titleText="Hidden Label" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
 ## Initial selected id
 
 <ComboBox titleText="Contact" placeholder="Select contact method"

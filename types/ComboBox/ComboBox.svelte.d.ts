@@ -61,6 +61,12 @@ type $Props = {
   titleText?: string;
 
   /**
+   * Set to `true` to visually hide the label text
+   * @default false
+   */
+  hideLabel?: boolean;
+
+  /**
    * Specify the placeholder text
    * @default ""
    */

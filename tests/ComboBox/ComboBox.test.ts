@@ -96,6 +96,17 @@ describe("ComboBox", () => {
     expect(screen.getByText("Contact")).toHaveClass("bx--label--disabled");
   });
 
+  it("should handle hidden label", () => {
+    render(ComboBox, {
+      props: {
+        titleText: "Hidden Label",
+        hideLabel: true,
+      },
+    });
+
+    expect(screen.getByText("Hidden Label")).toHaveClass("bx--visually-hidden");
+  });
+
   it("should handle invalid state", () => {
     render(ComboBox, {
       props: {
