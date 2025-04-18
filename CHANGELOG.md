@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.89.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.4...v0.89.0) (2025-04-18)
+
+### Features
+
+- **combo-box:** add `hideLabel` prop ([#2153](https://github.com/carbon-design-system/carbon-components-svelte/issues/2153)) ([436dea4](https://github.com/carbon-design-system/carbon-components-svelte/commit/436dea47e8da35753a257c9b2bd6f33338e95ba5))
+
+### Bug Fixes
+
+- **select:** falsy item `text` should fallback to `value` ([#2152](https://github.com/carbon-design-system/carbon-components-svelte/issues/2152)) ([61ea8dd](https://github.com/carbon-design-system/carbon-components-svelte/commit/61ea8dd82c2f9863dfe5f8a882e73624b994d9e5))
+
 ### [0.88.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.3...v0.88.4) (2025-03-24)
 
 ### Bug Fixes
