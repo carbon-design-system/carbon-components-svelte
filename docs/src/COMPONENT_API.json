@@ -12519,9 +12519,8 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the option text",
+          "description": "Specify the option text\nIf not specified, the value will be used as the text.",
           "type": "string",
-          "value": "\"\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
