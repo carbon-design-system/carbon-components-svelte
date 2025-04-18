@@ -19,6 +19,7 @@
   export let invalidText = "";
   export let warnText = "";
   export let helperText = "";
+  export let hideLabel = false;
   export let size: "sm" | "xl" | undefined = undefined;
   export let shouldFilterItem: ComponentProps<ComboBox>["shouldFilterItem"] = (
     item,
@@ -31,6 +32,7 @@
 <ComboBox
   {disabled}
   {helperText}
+  {hideLabel}
   {invalid}
   {invalidText}
   {items}
