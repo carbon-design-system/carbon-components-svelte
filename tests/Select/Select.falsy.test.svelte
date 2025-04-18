@@ -7,6 +7,7 @@
   <SelectItem value={0} text="Zero" />
   <SelectItem value={1} text="One" />
 </Select>
+
 <Select labelText="Undefined text">
   <SelectItem value={2} />
   <SelectItem value={0} text="Zero" />

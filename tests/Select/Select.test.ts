@@ -244,12 +244,13 @@ describe("Select", () => {
     render(SelectFalsy);
 
     expect(screen.getByLabelText("Falsy text")).toHaveValue("-1");
-    expect(screen.getByRole('option', { name: "" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "" })).toBeInTheDocument();
   });
+  
   it("renders value if `text` is undefined", () => {
     render(SelectFalsy);
 
     expect(screen.getByLabelText("Undefined text")).toHaveValue("2");
-    expect(screen.getByRole('option', { name: "2" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "2" })).toBeInTheDocument();
   });
 });
