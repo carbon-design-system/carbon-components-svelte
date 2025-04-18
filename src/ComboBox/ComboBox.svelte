@@ -229,7 +229,12 @@
 
 <div class:bx--list-box__wrapper={true}>
   {#if titleText || $$slots.titleText}
-    <label for={id} class:bx--label={true} class:bx--label--disabled={disabled} class:bx--visually-hidden={hideLabel}>
+    <label
+      for={id}
+      class:bx--label={true}
+      class:bx--label--disabled={disabled}
+      class:bx--visually-hidden={hideLabel}
+    >
       <slot name="titleText">
         {titleText}
       </slot>
