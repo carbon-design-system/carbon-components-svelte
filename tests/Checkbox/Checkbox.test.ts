@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
-import Checkbox from "./Checkbox.test.svelte";
-import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
 import CheckboxGroup from "./Checkbox.group.test.svelte";
+import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
 import CheckboxSlot from "./Checkbox.slot.test.svelte";
+import Checkbox from "./Checkbox.test.svelte";
 
 describe("Checkbox", () => {
   beforeEach(() => {
@@ -17,13 +17,15 @@ describe("Checkbox", () => {
     expect(checkbox).toBeInTheDocument();
 
     const input = checkbox.querySelector("input[type='checkbox']");
+    assert(input);
     expect(input).not.toBeChecked();
     expect(input).not.toBeDisabled();
     expect(input).not.toHaveAttribute("indeterminate");
 
     const label = checkbox.querySelector("label");
+    assert(label);
     expect(label).toHaveTextContent("Checkbox label");
-    const hiddenElement = label?.querySelector(".bx--visually-hidden");
+    const hiddenElement = label.querySelector(".bx--visually-hidden");
     expect(hiddenElement).not.toBeInTheDocument();
   });
 
@@ -33,6 +35,7 @@ describe("Checkbox", () => {
     const input = screen
       .getByTestId("checkbox")
       .querySelector("input[type='checkbox']");
+    assert(input);
     expect(input).toBeChecked();
   });
 
@@ -42,7 +45,8 @@ describe("Checkbox", () => {
 
     const input = screen
       .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']") as HTMLInputElement;
+      .querySelector("input[type='checkbox']");
+    assert(input);
     await user.click(input);
     expect(consoleLog).toHaveBeenCalledWith("check");
     expect(consoleLog).toHaveBeenCalledWith("click");
@@ -54,7 +58,9 @@ describe("Checkbox", () => {
 
     const input = screen
       .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']") as HTMLInputElement;
+      .querySelector("input[type='checkbox']");
+    assert(input);
+    assert(input instanceof HTMLInputElement);
     expect(input.indeterminate).toBe(true);
   });
 
@@ -64,6 +70,7 @@ describe("Checkbox", () => {
     const input = screen
       .getByTestId("checkbox")
       .querySelector("input[type='checkbox']");
+    assert(input);
     expect(input).toBeDisabled();
   });
 
@@ -71,7 +78,8 @@ describe("Checkbox", () => {
     render(Checkbox, { hideLabel: true });
 
     const label = screen.getByTestId("checkbox").querySelector("label");
-    const hiddenElement = label?.querySelector(".bx--visually-hidden");
+    assert(label);
+    const hiddenElement = label.querySelector(".bx--visually-hidden");
     expect(hiddenElement).toBeInTheDocument();
   });
 
@@ -79,6 +87,7 @@ describe("Checkbox", () => {
     render(Checkbox, { labelText: "Custom label" });
 
     const label = screen.getByTestId("checkbox").querySelector("label");
+    assert(label);
     expect(label).toHaveTextContent("Custom label");
   });
 
@@ -101,13 +110,16 @@ describe("Checkbox", () => {
 
     const checkbox1 = screen
       .getByTestId("checkbox-1")
-      .querySelector("input[type='checkbox']") as HTMLInputElement;
+      .querySelector("input[type='checkbox']");
     const checkbox2 = screen
       .getByTestId("checkbox-2")
-      .querySelector("input[type='checkbox']") as HTMLInputElement;
+      .querySelector("input[type='checkbox']");
     const checkbox3 = screen
       .getByTestId("checkbox-3")
-      .querySelector("input[type='checkbox']") as HTMLInputElement;
+      .querySelector("input[type='checkbox']");
+    assert(checkbox1);
+    assert(checkbox2);
+    assert(checkbox3);
 
     expect(checkbox1).not.toBeChecked();
     expect(checkbox2).toBeChecked();
