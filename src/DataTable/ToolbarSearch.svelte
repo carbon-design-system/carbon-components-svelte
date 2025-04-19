@@ -46,14 +46,38 @@
    */
   export let ref = null;
 
-  import { tick, getContext } from "svelte";
+  import { tick, getContext, afterUpdate, onMount } from "svelte";
   import Search from "../Search/Search.svelte";
 
   const ctx = getContext("DataTable") ?? {};
 
+  let rows = null;
+  let unsubscribe = null;
+
   $: if (shouldFilterRows) {
-    filteredRowIds = ctx?.filterRows(value, shouldFilterRows);
+    unsubscribe = ctx?.tableRows.subscribe((tableRows) => {
+      // Only update if the rows have actually changed.
+      // This approach works in both Svelte 4 and Svelte 5.
+      if (JSON.stringify(tableRows) !== JSON.stringify(rows)) {
+        rows = tableRows;
+      }
+    });
+  } else {
+    rows = null;
   }
+
+  onMount(() => {
+    return () => {
+      unsubscribe?.();
+    };
+  });
+
+  afterUpdate(() => {
+    // Only filter rows in a callback to avoid an infinite update loop.
+    if (rows !== null) {
+      filteredRowIds = ctx?.filterRows(value, shouldFilterRows);
+    }
+  });
 
   async function expandSearch() {
     await tick();

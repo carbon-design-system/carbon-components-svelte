@@ -182,8 +182,7 @@ describe("DataTableSearch", () => {
     });
   });
 
-  // TODO: fix reactivity
-  it.skip("re-filters rows when toggled", async () => {
+  it("re-filters rows when toggled", async () => {
     render(DataTableSearch);
 
     allRowsRendered();
