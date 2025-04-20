@@ -14,6 +14,8 @@ components: ["Breadcrumb", "BreadcrumbItem"]
 
 ## Default
 
+Display a hierarchical navigation trail with slashes between items. Mark the current page with `isCurrentPage`.
+
 <Breadcrumb>
   <BreadcrumbItem href="/">Dashboard</BreadcrumbItem>
   <BreadcrumbItem href="/reports">Annual reports</BreadcrumbItem>
@@ -22,12 +24,16 @@ components: ["Breadcrumb", "BreadcrumbItem"]
 
 ## No trailing slash
 
+Remove the trailing slash from the last breadcrumb item using `noTrailingSlash`.
+
 <Breadcrumb noTrailingSlash>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
   <BreadcrumbItem href="/profile" isCurrentPage>Profile</BreadcrumbItem>
 </Breadcrumb>
 
 ## Overflow menu
+
+Add an `OverflowMenu` to handle long breadcrumb trails. Use `OverflowMenuItem` components for menu options.
 
 <Breadcrumb>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
@@ -46,5 +52,7 @@ components: ["Breadcrumb", "BreadcrumbItem"]
 <FileSource src="/framed/Breadcrumbs/Breadcrumbs" />
 
 ## Skeleton
+
+Display a loading state with `skeleton` prop. Use `count` to specify the number of items.
 
 <Breadcrumb noTrailingSlash skeleton count={3} />
