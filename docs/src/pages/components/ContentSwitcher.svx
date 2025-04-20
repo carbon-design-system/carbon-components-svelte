@@ -9,7 +9,11 @@ components: ["ContentSwitcher", "Switch"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`ContentSwitcher` lets users switch between different views or sections of content. Use it to organize related content into distinct categories or states.
+
 ## Default
+
+Create a content switcher with `Switch` components. Each switch needs a `text` prop.
 
 <ContentSwitcher>
   <Switch text="Latest news" />
@@ -17,6 +21,8 @@ components: ["ContentSwitcher", "Switch"]
 </ContentSwitcher>
 
 ## Initial selected index
+
+Set `selectedIndex` to pre-select a switch when the content switcher loads.
 
 <ContentSwitcher selectedIndex={1}>
   <Switch text="Latest news" />
@@ -26,9 +32,15 @@ components: ["ContentSwitcher", "Switch"]
 
 ## Reactive example
 
+This example demonstrates how to programmatically control the content switcher using
+the `bind:selectedIndex` directive. Update the selected index based on user
+interactions or application state.
+
 <FileSource src="/framed/ContentSwitcher/ContentSwitcherReactive" />
 
 ## Custom switch slot
+
+Override the default slot in `Switch` to customize how each option displays.
 
 <ContentSwitcher>
   <Switch>
@@ -45,6 +57,8 @@ components: ["ContentSwitcher", "Switch"]
 
 ## Extra-large size
 
+Set `size` to `"xl"` for an extra-large content switcher.
+
 <ContentSwitcher size="xl">
   <Switch text="All" />
   <Switch text="Archived" />
@@ -52,12 +66,16 @@ components: ["ContentSwitcher", "Switch"]
 
 ## Small size
 
+Set `size` to `"sm"` for a small content switcher.
+
 <ContentSwitcher size="sm">
   <Switch text="All" />
   <Switch text="Archived" />
 </ContentSwitcher>
 
 ## Disabled
+
+Set `disabled` to `true` on individual switches to prevent interaction.
 
 <ContentSwitcher>
   <Switch disabled text="All" />
