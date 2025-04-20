@@ -3,7 +3,11 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+Clickable tiles create interactive content areas that link to other pages or trigger actions. Use them to group related content and provide clear navigation targets.
+
 ## Default
+
+Create a clickable tile with an `href` to link to another page.
 
 <ClickableTile href="https://www.carbondesignsystem.com/">
 Carbon Design System
@@ -11,7 +15,7 @@ Carbon Design System
 
 ## Prevent default behavior
 
-Use the forwarded `click` event and invoke `e.preventDefault()` to prevent the native link behavior.
+Handle the `click` event to override the default link behavior. Use `e.preventDefault()` to stop navigation.
 
 <ClickableTile
   href="/"
@@ -25,11 +29,15 @@ Use the forwarded `click` event and invoke `e.preventDefault()` to prevent the n
 
 ## Light variant
 
+Set `light` to `true` to use the light color scheme.
+
 <ClickableTile light href="https://www.carbondesignsystem.com/">
 Carbon Design System
 </ClickableTile>
 
 ## Disabled state
+
+Set `disabled` to `true` to prevent interaction.
 
 <ClickableTile disabled href="https://www.carbondesignsystem.com/">
 Carbon Design System
