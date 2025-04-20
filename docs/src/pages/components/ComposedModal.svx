@@ -6,12 +6,16 @@ components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`ComposedModal` lets you build custom modals by combining `ModalHeader`, `ModalBody`, and `ModalFooter` components. Use it to create focused interactions that require user attention or input.
+
 ## Composed modal
+
+Create a modal with a header, body, and footer. Each section can be customized independently.
 
 <FileSource src="/framed/Modal/ComposedModal" />
 
 ## Multiple secondary buttons
 
-Use the `secondaryButtons` prop in `ModalFooter` to render two secondary buttons for a "3-button modal". The prop is a 2-tuple type that supersedes `secondaryButtonText`.
+Set `secondaryButtons` in `ModalFooter` to create a 3-button modal. This prop replaces `secondaryButtonText` and takes a tuple of two button configurations.
 
 <FileSource src="/framed/Modal/3ButtonComposedModal" />
