@@ -4,31 +4,43 @@
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
   import Preview from "../../components/Preview.svelte";
-
-  let index = 1;
 </script>
 
+Buttons trigger actions in the interface. Use them to submit forms, navigate between pages, or perform specific tasks. Choose from different styles and sizes to match the importance and context of each action.
+
 ## Primary button
+
+The default button style is primary. This should be used for primary actions.
 
 <Button>Primary button</Button>
 
 ## Secondary button
 
+Set `kind="secondary"` for secondary actions.
+
 <Button kind="secondary">Secondary button</Button>
 
 ## Tertiary button
+
+Set `kind="tertiary"` for tertiary actions.
 
 <Button kind="tertiary">Tertiary button</Button>
 
 ## Ghost button
 
+Set `kind="ghost"` for ghost-style buttons.
+
 <Button kind="ghost">Ghost button</Button>
 
 ## Danger button
 
+Set `kind="danger"` for destructive actions.
+
 <Button kind="danger">Danger button</Button>
 
 ## Danger tertiary button
+
+Set `kind="danger-tertiary"` for less prominent destructive actions.
 
 <Button kind="danger-tertiary">Danger tertiary button</Button>
 
@@ -36,17 +48,21 @@
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    You must provide an <strong>iconDescription</strong> for the button tooltip.
+    Provide an <strong>iconDescription</strong> for accessibility. This text will be used as the button's tooltip and screen reader label.
   </div>
 </InlineNotification>
 
-<Button kind="danger-tertiary"iconDescription="Delete" icon={TrashCan} />
+<Button kind="danger-tertiary" iconDescription="Delete" icon={TrashCan} />
 
 ## Danger ghost button
+
+Set `kind="danger-ghost"` for ghost-style destructive actions.
 
 <Button kind="danger-ghost">Danger ghost button</Button>
 
 ## Button with icon
+
+Add an icon to the button using the `icon` prop.
 
 <Button icon={Add}>With icon</Button>
 
@@ -54,7 +70,7 @@
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    You must provide an <strong>iconDescription</strong> for the button tooltip.
+    Provide an <strong>iconDescription</strong> for accessibility. This text will be used as the button's tooltip and screen reader label.
   </div>
 </InlineNotification>
 
@@ -62,11 +78,13 @@
 
 ## Icon-only, link button
 
+Set `href` to create an icon-only link button.
+
 <Button iconDescription="Login" icon={Login} href="#" />
 
 ## Icon-only button (custom tooltip position)
 
-The tooltip position and alignment can be controlled by `tooltipPosition` and `tooltipAlignment`.
+Control the tooltip position and alignment with `tooltipPosition` and `tooltipAlignment`.
 
 <Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add} />
 
@@ -78,11 +96,13 @@ Set `isSelected` to `true` to enable the selected state for an icon-only, ghost 
 
 ## Link button
 
-If an `href` value is specified, the component will render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) instead of a `button` element.
+Set `href` to render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) instead of a `button` element.
 
 <Button href="#">Link button</Button>
 
 ## Link button with icon
+
+Similarly, link buttons can have icons.
 
 <Button href="#" icon={Add}>Link button with icon</Button>
 
@@ -90,13 +110,17 @@ If an `href` value is specified, the component will render an [anchor element](h
 
 By default, the `Button` will render either a `button` or `a` element.
 
-If you need to render a different element, set `as` to `true` and spread `let:props` to the element.
+To render a different element, set `as` to `true` and spread `let:props` to the element.
 
 <Button as let:props>
   <p {...props}>Custom element</p>
 </Button>
 
 ## Field size
+
+The default size is "default".
+
+Set `size="field"` for field-sized buttons.
 
 <Button size="field">Primary</Button>
 <Button size="field" kind="secondary">Secondary</Button>
@@ -106,6 +130,8 @@ If you need to render a different element, set `as` to `true` and spread `let:pr
 
 ## Small size
 
+Set `size="small"` for small buttons.
+
 <Button size="small">Primary</Button>
 <Button size="small" kind="secondary">Secondary</Button>
 <Button size="small" kind="tertiary">Tertiary</Button>
@@ -113,6 +139,8 @@ If you need to render a different element, set `as` to `true` and spread `let:pr
 <Button size="small" kind="danger">Danger</Button>
 
 ## Large size
+
+Set `size="lg"` for large buttons.
 
 <Button size="lg">Primary</Button>
 <Button size="lg" kind="secondary">Secondary</Button>
@@ -122,6 +150,8 @@ If you need to render a different element, set `as` to `true` and spread `let:pr
 
 ## Extra-large size
 
+Set `size="xl"` for extra-large buttons.
+
 <Button size="xl">Primary</Button>
 <Button size="xl" kind="secondary">Secondary</Button>
 <Button size="xl" kind="tertiary">Tertiary</Button>
@@ -129,6 +159,8 @@ If you need to render a different element, set `as` to `true` and spread `let:pr
 <Button size="xl" kind="danger">Danger</Button>
 
 ## Disabled state
+
+Set `disabled` to disable the button.
 
 <Button disabled>Disabled button</Button>
 <Button disabled iconDescription="Tooltip text" icon={Add} />
@@ -139,7 +171,7 @@ Set `expressive` to `true` to use Carbon's expressive typesetting.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    Expressive styles only work with the default, "lg", and "xl" button sizes.
+    Use expressive styles with default, "lg", or "xl" button sizes.
   </div>
 </InlineNotification>
 
@@ -163,6 +195,8 @@ Set `expressive` to `true` to use Carbon's expressive typesetting.
 
 ## Skeleton
 
+Set `skeleton` to show a loading state.
+
 <Button size="xl" skeleton />
 <Button size="lg" skeleton />
 <Button skeleton />
@@ -171,8 +205,6 @@ Set `expressive` to `true` to use Carbon's expressive typesetting.
 
 ## Programmatic focus
 
-Bind to the `ref` prop to access a reference to the underlying button element.
-
-You can use this reference to programmatically focus the button.
+Bind to the `ref` prop to access the button element for programmatic focus.
 
 <FileSource src="/framed/Button/ProgrammaticFocus" />
