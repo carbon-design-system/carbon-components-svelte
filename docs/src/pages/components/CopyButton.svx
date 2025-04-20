@@ -3,28 +3,32 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-This component uses the native, asynchronous [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text.
+`CopyButton` lets users copy text to their clipboard with a single click. Use it to provide quick access to code snippets, links, or other text content.
 
-You can override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
+This component uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text. Override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
 
 ## Default
+
+Create a copy button with the `text` prop to specify what to copy.
 
 <CopyButton text="Carbon svelte" />
 
 ## Custom feedback text
 
+Set `feedback` to customize the message shown after copying.
+
 <CopyButton text="Carbon svelte" feedback="Copied to clipboard" />
 
 ## Overriding copy functionality
 
-To override the default copy behavior, pass a custom function to the `copy` prop.
+Pass a custom function to the `copy` prop to override the default copy behavior.
 
-In this example, we use the open source module [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
+This example uses the NPM package [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
 
 <FileSource src="/framed/CopyButton/CopyButtonOverride" />
 
 ## Preventing copy functionality
 
-To prevent text from being copied entirely, pass a no-op function to the `copy` prop.
+Pass a no-op function to the `copy` prop to disable copying.
 
 <CopyButton text="This text should not be copied" copy={() => {}} />
