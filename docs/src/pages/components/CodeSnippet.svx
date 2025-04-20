@@ -27,18 +27,21 @@ let comment = `
 `
 </script>
 
+Code snippets display and copy code examples. They support single-line, multi-line, and inline formats with customizable copy and expand functionality.
+
 This component uses the native, asynchronous [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text.
 
 You can override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
 
-
 ## Default (single-line)
+
+Display a single line of code with a copy button.
 
 <CodeSnippet code="npm i carbon-components-svelte" />
 
 ## Overriding copy functionality
 
-To override the default copy behavior, pass a custom function to the `copy` prop.
+Pass a custom function to the `copy` prop to override the default copy behavior.
 
 In this example, we use the open source module [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
 
@@ -46,33 +49,37 @@ In this example, we use the open source module [clipboard-copy](https://github.c
 
 ## Preventing copy functionality
 
-To prevent text from being copied entirely, pass a no-op function to the `copy` prop.
+Pass a no-op function to the `copy` prop to disable copying.
 
 <CodeSnippet code="npm i carbon-components-svelte" copy={() => {}} />
 
 ## Inline
 
+Set `type="inline"` to display code inline with text.
+
 <CodeSnippet type="inline" code="rm -rf node_modules/" />
 
 ## Multi-line
+
+Set `type="multi"` to display multiple lines of code with expand/collapse functionality.
 
 <CodeSnippet type="multi" {code} />
 
 ## Expanded by default
 
-Use the `expanded` prop to control whether the multi-line code snippet is expanded or not.
+Set `expanded` to `true` to show the full multi-line code snippet.
 
 <CodeSnippet type="multi" {code} expanded />
 
 ## Reactive example
 
-The multi-line code snippet also dispatches "expand" and "collapse" events.
+The multi-line code snippet dispatches "expand" and "collapse" events.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetReactive" />
 
 ## Custom copy feedback text
 
-Use the `feedback` prop to override the default copy button feedback text.
+Set `feedback` to customize the copy button feedback text.
 
 <CodeSnippet type="multi" {code} feedback="Copied to clipboard" />
 
@@ -84,23 +91,25 @@ Set `hideCopyButton` to `true` to hide the copy button.
 
 ## Hidden show more button
 
-Only multi-line code snippets have a "Show more" button by default. Set `showMoreLess` to `false` to hide it.
+Set `showMoreLess` to `false` to hide the expand/collapse button on multi-line snippets.
 
 <CodeSnippet type="multi" {code} showMoreLess={false} />
 
 ## Hidden copy, show more buttons
 
+Hide both the copy and expand/collapse buttons.
+
 <CodeSnippet type="multi" {code} hideCopyButton showMoreLess={false} />
 
 ## Custom show more/less text
 
-Use the `showMoreText` and `showLessText` props to override the default "Show more" and "Show less" button text.
+Set `showMoreText` and `showLessText` to customize the expand/collapse button text.
 
 <CodeSnippet type="multi" {code} showMoreText="Expand" showLessText="Collapse" />
 
 ## Disabled
 
-The `disabled` prop applies only to the `"single"` and `"multi"` code snippet types.
+Set `disabled` to `true` to disable interaction. This only applies to `"single"` and `"multi"` types.
 
 <CodeSnippet disabled code="npm i carbon-components-svelte" />
 <br />
@@ -108,30 +117,34 @@ The `disabled` prop applies only to the `"single"` and `"multi"` code snippet ty
 
 ## Wrapped text
 
-`wrapText` only applies to the `"multi"` type.
+By default, the code snippet preserves text formatting and does not wrap text.
+
+Set `wrapText` to `true` to wrap long lines in multi-line snippets.
 
 <CodeSnippet wrapText type="multi" code="{comment}" />
 
 ## Dynamic multi-line code
 
-For dynamically updated code, you must use the `code` prop instead of the default slot.
+Use the `code` prop instead of the default slot for dynamically updated code.
 
 <FileSource src="/framed/CodeSnippet/DynamicCodeSnippet" />
 
 ## Hidden multi-line code
 
-There may be cases where your code snippet is hidden in the DOM. The logic to render the "Show more" button relies on the element's computed height. For hidden content, the button will not appear because the computed height is `0`.
+The "Show more" button relies on the element's computed height. For hidden content, the button won't appear because the height is `0`.
 
-The recommended workaround is to re-render the component. See the example below.
+Re-render the component to fix this issue.
 
 <FileSource src="/framed/CodeSnippet/HiddenCodeSnippet" />
 
 ## Skeleton
 
-The default skeleton type is `"single"`.
+Set `skeleton` to `true` to show a loading state. Defaults to `"single"` type.
 
 <CodeSnippet skeleton />
 
 ## Skeleton (multi-line)
+
+Set `type="multi"` with `skeleton` to show a multi-line loading state.
 
 <CodeSnippet type="multi" skeleton />
