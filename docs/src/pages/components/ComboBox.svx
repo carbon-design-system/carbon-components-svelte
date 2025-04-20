@@ -3,6 +3,8 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+ComboBox combines a text input with a dropdown menu. Use it to let users select from a predefined list of options or enter custom values.
+
 `ComboBox` is keyed for performance reasons.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
@@ -10,6 +12,8 @@
 </InlineNotification>
 
 ## Default
+
+Create a combobox with a title and placeholder text. Each item requires a unique `id` and `text`.
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
 items={[
@@ -20,11 +24,13 @@ items={[
 
 ## Custom slot
 
-Override the default slot to customize the display of each item. Access the item and index through the `let:` directive.
+Override the default slot to customize how each item displays. Access the item and index through the `let:` directive.
 
 <FileSource src="/framed/ComboBox/ComboBoxSlot" />
 
 ## Hidden label
+
+Set `hideLabel` to `true` to visually hide the label while keeping it accessible to screen readers.
 
 <ComboBox hideLabel titleText="Hidden Label" placeholder="Select contact method"
 items={[
@@ -34,6 +40,8 @@ items={[
   ]}  />
 
 ## Initial selected id
+
+Set `selectedId` to pre-select an item when the combobox loads.
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
 selectedId="1"
@@ -45,33 +53,39 @@ items={[
 
 ## Reactive example
 
+See how the combobox responds to user input and selection changes.
+
 <FileSource src="/framed/ComboBox/ReactiveComboBox" />
 
 ## Clear selection
 
-To programmatically clear the selection, access the component instance using the [bind:this](https://svelte.dev/docs#bind_element) directive and invoke the `ComboBox.clear()` accessor.
+Use `bind:this` to access the component instance and call `ComboBox.clear()` to programmatically clear the selection.
 
-Specify `focus: false` in the method options to avoid re-focusing the input.
+Set `focus: false` in the method options to prevent re-focusing the input.
 
 <FileSource src="/framed/ComboBox/ComboBoxClear" />
 
 ## Multiple combo boxes
 
+See how to manage multiple comboboxes in a form.
+
 <FileSource src="/framed/ComboBox/MultipleComboBox" />
 
 ## Filterable
+
+Enable filtering to let users search through the options.
 
 <FileSource src="/framed/ComboBox/FilterableComboBox" />
 
 ## Filterable with custom label
 
-Combine a custom label `itemToString` with the filterable option (e.g., internationalization).
+Set `itemToString` to customize how items display in the filterable combobox.
 
 <FileSource src="/framed/ComboBox/FilterableComboBoxCustomLabel" />
 
 ## Top direction
 
-Set `direction` to `"top"` for the combobox dropdown menu to appear above the input.
+Set `direction` to `"top"` to make the dropdown menu appear above the input.
 
 <ComboBox direction="top" titleText="Contact" placeholder="Select contact method"
 items={[
@@ -82,6 +96,8 @@ items={[
 
 ## Light variant
 
+Set `light` to `true` to use the light color scheme.
+
 <ComboBox light titleText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
@@ -90,6 +106,8 @@ items={[
   ]}  />
 
 ## Extra-large size
+
+Set `size` to `"xl"` for an extra-large combobox.
 
 <ComboBox titleText="Contact" placeholder="Select contact method"
 size="xl"
@@ -101,6 +119,8 @@ items={[
 
 ## Small size
 
+Set `size` to `"sm"` for a small combobox.
+
 <ComboBox titleText="Contact" placeholder="Select contact method"
 size="sm"
 items={[
@@ -111,6 +131,8 @@ items={[
 
 ## Invalid state
 
+Set `invalid` to `true` and provide `invalidText` to show an error message.
+
 <ComboBox invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
@@ -119,6 +141,8 @@ items={[
   ]}  />
 
 ## Warning state
+
+Set `warn` to `true` and provide `warnText` to show a warning message.
 
 <ComboBox warn warnText="This contact method is not associated with your account" titleText="Contact" placeholder="Select contact method"
 items={[
@@ -129,6 +153,8 @@ items={[
 
 ## Disabled state
 
+Set `disabled` to `true` to prevent interaction with the combobox.
+
 <ComboBox disabled titleText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
@@ -138,7 +164,7 @@ items={[
 
 ## Disabled items
 
-Use the `disabled` property in the `items` prop to disable specific items.
+Set `disabled: true` in an item object to disable specific options.
 
 <ComboBox
   titleText="Contact"
