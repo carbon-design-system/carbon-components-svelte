@@ -4,9 +4,11 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+Group related buttons together in a set. Use this component to create consistent spacing and alignment between multiple buttons.
+
 ## Default
 
-Buttons in a button set are juxtaposed by default.
+Place buttons side by side in a horizontal layout.
 
 <ButtonSet>
   <Button kind="secondary">Cancel</Button>
@@ -15,7 +17,7 @@ Buttons in a button set are juxtaposed by default.
 
 ## Stacked
 
-Set `stacked` to `true` to use the stacked variant.
+Set `stacked` to `true` to arrange buttons vertically.
 
 <ButtonSet stacked>
   <Button icon={Login}>Log in</Button>
