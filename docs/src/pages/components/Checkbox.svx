@@ -3,44 +3,60 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-## Default (unchecked)
+Checkboxes let users select one or more options from a list. Use them for multiple-choice questions, settings, or to confirm actions.
+
+## Default
+
+Create a checkbox with a label using `labelText`.
+
+By default, the checkbox is unchecked.
 
 <Checkbox labelText="Label text" />
 
 ## Checked
 
+Set `checked` to `true` to pre-select the checkbox.
+
 <Checkbox labelText="Label text" checked />
 
 ## Indeterminate
+
+Set `indeterminate` to `true` to show a mixed state, typically used in parent checkboxes with some children selected.
 
 <Checkbox labelText="Label text" indeterminate />
 
 ## Hidden label
 
+Set `hideLabel` to `true` to visually hide the label while keeping it accessible to screen readers.
+
 <Checkbox labelText="Label text" hideLabel />
 
-## Disabled
+## Disabled state
+
+Set `disabled` to `true` to prevent user interaction.
 
 <Checkbox labelText="Label text" disabled />
 
 ## Reactive example (bind:checked)
 
-The `checked` prop supports two-way binding.
+Use two-way binding with `bind:checked` to track the checkbox state.
 
 <FileSource src="/framed/Checkbox/CheckboxReactive" />
 
 ## Reactive example (bind:group)
 
-An alternative to `checked` is binding an array of values using `group`. This API in inspired by Svelte [group inputs](https://svelte.dev/tutorial/group-inputs).
+Bind an array of values using `group` to manage multiple checkboxes. This API is inspired by Svelte [group inputs](https://svelte.dev/tutorial/group-inputs).
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
-    If using <strong>bind:group</strong>, <strong>bind:checked</strong> will only support one-way binding.
+    When using <strong>bind:group</strong>, <strong>bind:checked</strong> only supports one-way binding.
   </div>
 </InlineNotification>
 
 <FileSource src="/framed/Checkbox/MultipleCheckboxes" />
 
 ## Skeleton
+
+Set `skeleton` to `true` to show a loading state.
 
 <Checkbox skeleton />
