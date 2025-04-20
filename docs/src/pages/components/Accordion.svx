@@ -12,6 +12,11 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
 
 ## Default
 
+Use the `Accordion` and `AccordionItem` components to compose a collapsible list of
+items.
+
+By default, the chevron icon is on the right side of the accordion item.
+
 <Accordion>
   <AccordionItem title="Natural Language Classifier">
    <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
@@ -27,6 +32,10 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
 
 ## Left-aligned chevron
 
+The chevron icon can be aligned to the left side of the accordion item by setting
+the `align` prop to "start". This provides an alternative visual style while
+maintaining the same functionality.
+
 <Accordion align="start">
   <AccordionItem title="Natural Language Classifier">
    <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
@@ -41,6 +50,9 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
 </Accordion>
 
 ## Custom title slot
+
+Customize the title content by using the `title` slot instead of the `title` prop.
+This allows for more complex title layouts with multiple elements.
 
 <Accordion>
   <AccordionItem>
@@ -69,6 +81,9 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
 
 ## First item open
 
+Set the `open` prop on an `AccordionItem` to have it expanded by default when the
+accordion is first rendered.
+
 <Accordion>
   <AccordionItem open title="Natural Language Classifier">
    <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
@@ -84,11 +99,17 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
 
 ## Programmatic example
 
-This example demonstrates how a list of items can be programmatically expanded and collapsed.
+This example demonstrates how to programmatically control the accordion items using
+the `bind:open` directive. Expand and collapse items based on user
+interactions or application state.
 
 <FileSource src="/framed/Accordion/ExpandableAccordion" />
 
 ## Extra-large size
+
+The accordion can be displayed in an extra-large size by setting the `size` prop to
+"xl". This provides more visual emphasis and is suitable for prominent content
+sections.
 
 <Accordion size="xl">
   <AccordionItem title="Natural Language Classifier">
@@ -105,6 +126,10 @@ This example demonstrates how a list of items can be programmatically expanded a
 
 ## Small size
 
+For more compact layouts, set the `size` prop to "sm" to display the accordion in a
+smaller size. This is useful when space is limited or when the accordion is used as
+a secondary UI element.
+
 <Accordion size="sm">
   <AccordionItem title="Natural Language Classifier">
    <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
@@ -119,6 +144,9 @@ This example demonstrates how a list of items can be programmatically expanded a
 </Accordion>
 
 ## Disabled
+
+Set the `disabled` prop on the `Accordion` component to disable all items at once.
+This prevents users from expanding or collapsing any items in the accordion.
 
 <Accordion disabled>
   <AccordionItem title="Natural Language Classifier">
@@ -135,6 +163,10 @@ This example demonstrates how a list of items can be programmatically expanded a
 
 ## Disabled (item)
 
+Individual accordion items can be disabled by setting the `disabled` prop on
+specific `AccordionItem` components. This allows for more granular control over
+which items are interactive.
+
 <Accordion>
   <AccordionItem disabled title="Natural Language Classifier">
    <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
@@ -150,25 +182,45 @@ This example demonstrates how a list of items can be programmatically expanded a
 
 ## Skeleton
 
+The skeleton state provides a loading placeholder for the accordion. It displays a
+simplified version of the component while content is being loaded.
+
 <Accordion skeleton />
 
 ## Skeleton (left-aligned chevron)
+
+The skeleton state can be combined with the left-aligned chevron style by setting
+both the `skeleton` and `align="start"` props.
 
 <Accordion skeleton align="start" />
 
 ## Skeleton (custom count)
 
+By default, the skeleton state displays 4 items.
+
+Specify the number of skeleton items to display using the `count` prop. This is
+useful when you know the exact number of items that will be loaded.
+
 <Accordion skeleton count={3} />
 
 ## Skeleton (closed)
+
+By default, the first skeleton item is open. The skeleton state can be displayed
+in a collapsed state by setting `open={false}`.
 
 <Accordion skeleton open={false} />
 
 ## Skeleton (extra-large)
 
+The skeleton state supports the extra-large size variant, maintaining visual
+consistency with the active component states.
+
 <Accordion skeleton size="xl" />
 
 ## Skeleton (small)
+
+The skeleton state also supports the small size variant, providing a compact
+loading placeholder for space-constrained layouts.
 
 <Accordion skeleton size="sm" />
 
