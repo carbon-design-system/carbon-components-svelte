@@ -8,37 +8,40 @@
   $: console.log("sortDirection", sortDirection);
 </script>
 
-<Button
-  kind="tertiary"
-  disabled={sortKey === "port" && sortDirection === "ascending"}
-  on:click={() => {
-    sortKey = "port";
-    sortDirection = "ascending";
-  }}
->
-  Sort "port" in ascending order
-</Button>
-
-<Button
-  kind="tertiary"
-  disabled={sortKey === "name" && sortDirection === "descending"}
-  on:click={() => {
-    sortKey = "name";
-    sortDirection = "descending";
-  }}
->
-  Sort "name" in descending order
-</Button>
-
-<Button
-  kind="ghost"
-  on:click={() => {
-    sortKey = null;
-    sortDirection = "none";
-  }}
->
-  Clear sorting
-</Button>
+<div style="margin-bottom: 1rem">
+  <Button
+    size="sm"
+    kind="tertiary"
+    disabled={sortKey === "port" && sortDirection === "ascending"}
+    on:click={() => {
+      sortKey = "port";
+      sortDirection = "ascending";
+    }}
+  >
+    Sort "port" in ascending order
+  </Button>
+  <Button
+    size="sm"
+    kind="tertiary"
+    disabled={sortKey === "name" && sortDirection === "descending"}
+    on:click={() => {
+      sortKey = "name";
+      sortDirection = "descending";
+    }}
+  >
+    Sort "name" in descending order
+  </Button>
+  <Button
+    size="sm"
+    kind="ghost"
+    on:click={() => {
+      sortKey = null;
+      sortDirection = "none";
+    }}
+  >
+    Clear sorting
+  </Button>
+</div>
 
 <DataTable
   sortable
