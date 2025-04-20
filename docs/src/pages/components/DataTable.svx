@@ -8,21 +8,20 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`DataTable` is keyed for performance reasons.
+`DataTable` displays structured data in a tabular format. Use it to present large datasets with features like sorting, filtering, pagination, and row selection.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">Every <code>headers</code> object must have a unique "key" property.</div>
-</InlineNotification>
-
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">Every <code>rows</code> object must have a unique "id" property.</div>
+  <div class="body-short-01">
+    This component is keyed for performance.
+    
+    Every <strong>headers</strong> object must have a unique "key" property.
+    <div class="body-short-01">Every <strong>rows</strong> object must have a unique "id" property.</div>
+  </div>
 </InlineNotification>
 
 ## Default
 
-The key value in `headers` corresponds to the key value defined in `rows`.
-
-For example, the header key `"name"` will use the value of `rows[index].name`.
+Create a basic table by providing `headers` and `rows` data. Match the `key` in headers with the corresponding property in rows.
 
 <DataTable
   headers="{[
@@ -79,9 +78,7 @@ For example, the header key `"name"` will use the value of `rows[index].name`.
 
 ## Slotted cells
 
-Use the `"cell"` slot to control the display value per table cell. Individual row and cell data are provided through the `let:row` and `let:cell` directives.
-
-The slot name for the table header cells is `"cell-header"`.
+Use the `"cell"` slot to customize cell content. Access row and cell data through `let:row` and `let:cell` directives. Use `"cell-header"` slot for header cells.
 
 <DataTable
   headers="{[
@@ -153,6 +150,8 @@ The slot name for the table header cells is `"cell-header"`.
 
 ## With title, description
 
+Add a title and description to provide context for the table data.
+
 <DataTable title="Load balancers" description="Your organization's active load balancers."
   headers="{[
     { key: "name", value: "Name" },
@@ -208,7 +207,7 @@ The slot name for the table header cells is `"cell-header"`.
 
 ## Slottable title, description
 
-The `title` and `description` props are slottable.
+Use slots to customize the title and description content.
 
 <DataTable
   headers="{[
@@ -270,7 +269,7 @@ The `title` and `description` props are slottable.
 
 ## Static width
 
-Set `useStaticWidth` to `true` to render the table with a width of "auto" instead of "100%".
+Set `useStaticWidth` to `true` to render the table with an auto width instead of 100%.
 
 <DataTable useStaticWidth
 title="Load balancers" description="Your organization's active load balancers."
@@ -328,9 +327,7 @@ title="Load balancers" description="Your organization's active load balancers."
 
 ## Custom column widths
 
-Specify a `width` or `minWidth` property in the `headers` object to customize the width of each column.
-
-A [table-layout: fixed](https://developer.mozilla.org/en-US/docs/Web/CSS/table-layout#values) rule will be applied to the `table` element when using custom widths.
+Specify `width` or `minWidth` in the `headers` object to set column dimensions. This applies a fixed table layout.
 
 <InlineNotification svx-ignore lowContrast kind="warning" title="Note:" hideCloseButton>
   <div class="body-short-01">Custom column widths do not work with a <a class="bx--link" href="#sticky-header">sticky header</a>.</div>
@@ -340,9 +337,7 @@ A [table-layout: fixed](https://developer.mozilla.org/en-US/docs/Web/CSS/table-l
 
 ## Sticky header
 
-Set `stickyHeader` to `true` for the header to be fixed in place.
-
-A maximum height will applied to the datatable to force a scrollbar.
+Set `stickyHeader` to `true` to fix the header in place. This adds a maximum height to force scrolling.
 
 <DataTable
   stickyHeader
@@ -362,6 +357,8 @@ A maximum height will applied to the datatable to force a scrollbar.
 />
 
 ## With toolbar
+
+Add a toolbar with search, menu, and actions above the table.
 
 <DataTable title="Load balancers" description="Your organization's active load balancers."
   headers="{[
@@ -432,6 +429,8 @@ A maximum height will applied to the datatable to force a scrollbar.
 
 ## With toolbar (small size)
 
+Use `size="short"` to create a more compact table with a small toolbar.
+
 <DataTable size="short" title="Load balancers" description="Your organization's active load balancers."
   headers="{[
     { key: "name", value: "Name" },
@@ -499,23 +498,21 @@ A maximum height will applied to the datatable to force a scrollbar.
 
 ## Filterable
 
-By default, `ToolbarSearch` will not filter `DataTable` rows.
+Set `shouldFilterRows` to `true` to enable client-side filtering. The default filter performs string comparisons on cell values.
 
-Set `shouldFilterRows` to `true` to enable client-side filtering. The default filtering performs a basic string comparison on cell values that are of a string or a number type.
-
-To use filtering with pagination, bind to the `filteredRowIds` prop and pass its length to `totalItems` in `Pagination`.
-
-Note that in-memory filtering is not optimal for large data sets, where you might consider using server-side search.
+For pagination with filtering, bind to `filteredRowIds` and pass its length to `Pagination`'s `totalItems`.
 
 <FileSource src="/framed/DataTable/DataTableFilterable" />
 
 ## Filterable (custom)
 
-`shouldFilterRows` also accepts a function and passes it the current row and search value. It expects the function to return a boolean.
+Pass a function to `shouldFilterRows` to implement custom filtering logic.
 
 <FileSource src="/framed/DataTable/DataTableFilterCustom" />
 
 ## Zebra stripes
+
+Set `zebra` to `true` to add alternating row colors.
 
 <DataTable zebra
   headers="{[
@@ -572,6 +569,8 @@ Note that in-memory filtering is not optimal for large data sets, where you migh
 
 ## Tall rows
 
+Set `size="tall"` for increased row height.
+
 <DataTable size="tall"
   headers="{[
     { key: "name", value: "Name" },
@@ -626,6 +625,8 @@ Note that in-memory filtering is not optimal for large data sets, where you migh
 />
 
 ## Medium rows
+
+Set `size="medium"` for standard row height.
 
 <DataTable size="medium"
   headers="{[
@@ -682,6 +683,8 @@ Note that in-memory filtering is not optimal for large data sets, where you migh
 
 ## Short rows
 
+Set `size="short"` for compact row height.
+
 <DataTable size="short"
   headers="{[
     { key: "name", value: "Name" },
@@ -736,6 +739,8 @@ Note that in-memory filtering is not optimal for large data sets, where you migh
 />
 
 ## Compact rows
+
+Set `size="compact"` for minimal row height.
 
 <DataTable size="compact"
   headers="{[
@@ -792,11 +797,7 @@ Note that in-memory filtering is not optimal for large data sets, where you migh
 
 ## Sortable
 
-Set `sortable` to `true` to enable table column sorting.
-
-To disable sorting on a specific column, set `sort` to `false` in the header object passed to the `headers` prop.
-
-In the example below, the "Protocol" column is not sortable.
+Set `sortable` to `true` to enable column sorting. Disable sorting on specific columns by setting `sort: false` in the header object.
 
 <DataTable sortable
   headers="{[
@@ -853,11 +854,13 @@ In the example below, the "Protocol" column is not sortable.
 
 ## Sortable with pagination
 
-For pagination, bind to the `pageSize` and `page` props of `Pagination` and pass their values to `DataTable`.
+Bind to `pageSize` and `page` props of `Pagination` and pass them to `DataTable`.
 
 <FileSource src="/framed/DataTable/DataTablePagination" />
 
 ## Sortable with custom display and sort methods
+
+Use `display` and `sort` functions in header objects to customize cell rendering and sorting.
 
 <DataTable sortable title="Load balancers" description="Your organization's active load balancers."
   headers="{[
@@ -925,6 +928,8 @@ For pagination, bind to the `pageSize` and `page` props of `Pagination` and pass
 />
 
 ## Sortable with nested object values
+
+Access nested object properties using dot notation in the header key.
 
 <DataTable sortable title="Load balancers" description="Your organization's active load balancers."
            headers="{[
@@ -1005,83 +1010,61 @@ For pagination, bind to the `pageSize` and `page` props of `Pagination` and pass
 
 ## Programmatic sorting
 
-Use the reactive `sortKey` and `sortDirection` props for programmatic sorting.
-
-By default, the table is not sorted by a specific key. The `sortKey` value must be a valid `key` specified in the `headers` object.
-
-Possible values for `sortDirection` include `"none"` or `"ascending"` or `"descending"`.
-
-Setting `sortKey` to `null` and `sortDirection` to `"none"` should reset the table rows to their initial order.
+Use `sortKey` and `sortDirection` props to control sorting programmatically. Set `sortKey` to a valid header key and `sortDirection` to "none", "ascending", or "descending".
 
 <FileSource src="/framed/DataTable/DataTableProgrammaticSorting" />
 
 ## Empty column with overflow menu
 
-Some use cases require an empty column in the table body without a corresponding table header.
-
-For an object in the `headers` array, set `empty` to `true` to render an empty column.
-
-In the following example, each row in the sortable data table has an overflow menu. There isn't a separate, useless table header column for the overflow menu.
+Set `empty: true` in a header object to create an empty column. Use this for overflow menus without a header.
 
 <FileSource src="/framed/DataTable/DataTableAppendColumns" />
 
 ## Selectable rows (checkbox)
 
-Set `selectable` to `true` for rows to be multi-selectable.
-
-Bind to `selectedRowIds` to get the ids of the selected rows.
-
-To customize the `input` name for the checkbox, use the `inputName` prop.
+Set `selectable` to `true` for multi-select functionality. Bind to `selectedRowIds` to track selections. Use `inputName` to customize checkbox names.
 
 <FileSource src="/framed/DataTable/SelectableDataTable" />
 
 ## Batch selection
 
-To enable batch selection, set `batchSelection` to `true`.
-
-This checkbox is used to select all rows. It enters an indeterminate state when some rows are selected.
+Set `batchSelection` to `true` to add a checkbox for selecting all rows. The checkbox shows an indeterminate state when some rows are selected.
 
 <FileSource src="/framed/DataTable/DataTableBatchSelection" />
 
 ## Batch selection with initial selected rows
 
-Use the `selectedRowIds` prop to specify which rows should be selected.
+Use `selectedRowIds` to specify initially selected rows.
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionInitial" />
 
 ## Batch selection with batch actions toolbar
 
+Add a toolbar for batch actions when rows are selected.
+
 <FileSource src="/framed/DataTable/DataTableBatchSelectionToolbar" />
 
 ## Batch selection with controlled toolbar
 
-By default, `ToolbarBatchActions` is activated if one or more rows is selected. Clicking "Cancel" will deactivate it.
-
-Use the `active` prop to control the toolbar. Note that it will still activate if one or more rows are selected.
-
-You can prevent the default "Cancel" behavior in the dispatched `on:cancel` event.
+Control the batch actions toolbar with the `active` prop. Prevent default cancel behavior in the `on:cancel` event.
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionToolbarControlled" />
 
 ## Selectable rows (radio)
 
-Set `radio` to `true` for only one row to be selected at a time.
-
-Bind to `selectedRowIds` to get the ids of the selected rows. Because it's radio selection, `selectedRowIds` will only contain one id.
-
-To customize the `input` name for the radio button, use the `inputName` prop.
+Set `radio` to `true` for single-row selection. Bind to `selectedRowIds` to track the selected row. Use `inputName` to customize radio button names.
 
 <FileSource src="/framed/DataTable/RadioSelectableDataTable" />
 
 ## Non-selectable rows
 
-Use `nonSelectableRowIds` to specify the ids for rows that should not be selectable.
+Use `nonSelectableRowIds` to prevent selection of specific rows.
 
 <FileSource src="/framed/DataTable/DataTableNonSelectableRows" />
 
 ## Expandable rows
 
-Set `expandable` to `true` for rows to be expandable.
+Set `expandable` to `true` to make rows expandable. Use the `expanded-row` slot to customize expanded content.
 
 <DataTable expandable
   headers="{[
@@ -1142,15 +1125,19 @@ Set `expandable` to `true` for rows to be expandable.
 
 ## Non-expandable rows
 
-Use `nonExpandableRowIds` to specify the ids for rows that should not be expandable.
+Use `nonExpandableRowIds` to prevent expansion of specific rows.
 
 <FileSource src="/framed/DataTable/DataTableNonExpandableRows" />
 
 ## Expandable (zebra styles)
 
+Combine expandable rows with zebra striping.
+
 <FileSource src="/framed/DataTable/DataTableExpandableZebra" />
 
 ## Expandable (compact size)
+
+Set `size="compact"` for expandable rows with minimal height.
 
 <DataTable size="compact" expandable
   headers="{[
@@ -1211,6 +1198,8 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
 
 ## Expandable (short size)
 
+Set `size="short"` for expandable rows with compact height.
+
 <DataTable size="short" expandable
   headers="{[
     { key: "name", value: "Name" },
@@ -1269,6 +1258,8 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
 </DataTable>
 
 ## Expandable (tall size)
+
+Set `size="tall"` for expandable rows with increased height.
 
 <DataTable size="tall" expandable
   headers="{[
@@ -1329,7 +1320,7 @@ Use `nonExpandableRowIds` to specify the ids for rows that should not be expanda
 
 ## Batch expansion
 
-Set `batchExpansion` to `true` for the ability to expand and collapse all rows at once.
+Set `batchExpansion` to `true` to expand and collapse all rows at once.
 
 <DataTable batchExpansion
   headers="{[
@@ -1390,42 +1381,54 @@ Set `batchExpansion` to `true` for the ability to expand and collapse all rows a
 
 ## Expandable and selectable rows
 
-The `batchExpansion` and `batchSelection` props can be used together.
+Combine `batchExpansion` and `batchSelection` for tables with both expandable and selectable rows.
 
 <FileSource src="/framed/DataTable/DataTableExpandableSelectable" />
 
 ## Skeleton
 
+Use `DataTableSkeleton` to show a loading state.
+
 <DataTableSkeleton />
 
 ## Skeleton with headers, row count
+
+Specify headers and row count for the skeleton.
 
 <DataTableSkeleton headers={["Name", "Protocol", "Port", "Rule"]} rows={10} />
 
 ## Skeleton with object headers
 
-`headers` can also be an array of objects. The type is the same as the `headers` prop type used in `DataTable`.
+Pass header objects to customize the skeleton.
 
 <DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}]} rows={10} />
 
 ## Skeleton with empty header
 
-Pass an object with `"empty"` set to `true` to render an empty table header column.
+Add an empty header column with `empty: true`.
 
 <DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}, { empty: true }]} rows={10} />
 
 ## Skeleton without header, toolbar
 
+Hide the header and toolbar in the skeleton.
+
 <DataTableSkeleton showHeader={false} showToolbar={false} />
 
 ## Skeleton (tall size)
+
+Set `size="tall"` for a taller skeleton.
 
 <DataTableSkeleton showHeader={false} showToolbar={false} size="tall" />
 
 ## Skeleton (short size)
 
+Set `size="short"` for a shorter skeleton.
+
 <DataTableSkeleton showHeader={false} showToolbar={false} size="short" />
 
 ## Skeleton (compact size)
+
+Set `size="compact"` for a minimal skeleton.
 
 <DataTableSkeleton showHeader={false} showToolbar={false} size="compact" />
