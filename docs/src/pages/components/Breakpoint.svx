@@ -1,12 +1,12 @@
 
 <script>
   import {
-    Breakpoint, UnorderedList, ListItem
+    UnorderedList, ListItem
   } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The [Carbon Design System grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints:
+The Carbon Design System [grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints:
 
 <UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
   <ListItem><strong>Small</strong>: less than 672px</ListItem>
@@ -28,8 +28,8 @@ The `"on:change"` event will fire when the size is initially determined and when
 
 ## Store and Breakpoint Values
 
-As an alternative to the component, `breakpointObserver` can be used to get the current size as a Svelte store. The store has two additional functions which create derived stores that return a `boolean` indicating whether the size is smaller/larger than a certain breakpoint.
+Use `breakpointObserver` as an alternative to the component to get the current size as a Svelte store. The store provides two additional functions that create derived stores returning a `boolean` indicating whether the size is smaller/larger than a certain breakpoint.
 
-There also exists a `breakpoints` dictionary mapping from `BreakpointSize` to `BreakpointValue`.
+Access the `breakpoints` dictionary to map from `BreakpointSize` to `BreakpointValue`.
 
 <FileSource src="/framed/Breakpoint/BreakpointObserver" />
