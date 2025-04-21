@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.89.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.0...v0.89.1) (2025-04-21)
+
+### Bug Fixes
+
+- **toolbar-search:** re-filter rows if `DataTable` rows change ([#2154](https://github.com/carbon-design-system/carbon-components-svelte/issues/2154)) ([f09c2e2](https://github.com/carbon-design-system/carbon-components-svelte/commit/f09c2e2c311c15f633db8dc45930d8e58a4b362d)), closes [#2143](https://github.com/carbon-design-system/carbon-components-svelte/issues/2143)
+
 ### [0.89.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.88.4...v0.89.0) (2025-04-18)
 
 ### Features
