@@ -42,7 +42,7 @@ An alternative to the "labelA" and "labelB" props is to use the corresponding na
   <span slot="labelB" style="color: green">Yes</span>
 </Toggle>
 
-## Disabled
+## Disabled state
 
 <Toggle labelText="Push notifications" disabled />
 
