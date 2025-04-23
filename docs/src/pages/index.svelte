@@ -247,7 +247,7 @@
           borderBottom
           borderRight
           title="Carbon Pictograms Svelte"
-          subtitle="1,200+ pictograms"
+          subtitle="1,300+ pictograms"
           target="_blank"
           href="https://github.com/carbon-design-system/carbon-pictograms-svelte"
         />
@@ -276,8 +276,7 @@
 </Content>
 
 <footer>
-  <dds-footer-container disable-locale-button="true" size="micro"
-  ></dds-footer-container>
+  <dds-footer-container disable-locale-button="true" size="micro" />
 </footer>
 
 <style>
