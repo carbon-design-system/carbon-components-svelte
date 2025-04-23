@@ -64,7 +64,9 @@ describe("DatePicker", () => {
       screen.queryByLabelText("calendar-container"),
     ).not.toBeInTheDocument();
     await user.click(inputStart);
-    expect(screen.getByLabelText("calendar-container")).toBeInTheDocument();
+    expect(
+      await screen.findByLabelText("calendar-container"),
+    ).toBeInTheDocument();
   });
 
   it("handles disabled state", () => {
