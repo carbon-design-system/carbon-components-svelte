@@ -13,22 +13,35 @@
 export function toHierarchy(flatArray, getParentId) {
   /** @type {NodeLike[]} */
   const tree = [];
-  const nodeMap = new Map();
+  const childrenOf = new Map();
+  const itemsMap = new Map(flatArray.map((item) => [item.id, item]));
 
-  for (const item of flatArray) {
+  flatArray.forEach((item) => {
     const parentId = getParentId(item);
-    nodeMap.set(item.id, item);
 
-    if (!parentId || !nodeMap.has(parentId)) {
-      tree.push(item);
-    } else {
-      const parent = nodeMap.get(parentId);
-      if (!parent.nodes) {
-        parent.nodes = [];
-      }
-      parent.nodes.push(item);
+    // Only create nodes array if we have children.
+    const children = childrenOf.get(item.id);
+    if (children) {
+      item.nodes = children;
     }
-  }
+
+    // Check if parentId exists using Map instead of array lookup.
+    const parentExists = parentId && itemsMap.has(parentId);
+
+    if (parentId && parentExists) {
+      if (!childrenOf.has(parentId)) {
+        childrenOf.set(parentId, []);
+      }
+      childrenOf.get(parentId).push(item);
+
+      const parent = itemsMap.get(parentId);
+      if (parent) {
+        parent.nodes = childrenOf.get(parentId);
+      }
+    } else {
+      tree.push(item);
+    }
+  });
 
   return tree;
 }
