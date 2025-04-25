@@ -10049,6 +10049,18 @@
           "reactive": false
         },
         {
+          "name": "pageWindow",
+          "kind": "let",
+          "description": "If `totalItems` is a large number, it can affect the\nrendering performance of this component since its value\nis used to calculate the number of pages in the native\nselect dropdown. This value creates a small window of\npages rendered around the current page. By default,\na maximum of 1000 select items are rendered.",
+          "type": "number",
+          "value": "1000",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "disabled",
           "kind": "let",
           "description": "Set to `true` to disable the pagination",

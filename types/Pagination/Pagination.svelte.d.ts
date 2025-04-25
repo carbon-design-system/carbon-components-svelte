@@ -17,6 +17,17 @@ type $Props = {
   totalItems?: number;
 
   /**
+   * If `totalItems` is a large number, it can affect the
+   * rendering performance of this component since its value
+   * is used to calculate the number of pages in the native
+   * select dropdown. This value creates a small window of
+   * pages rendered around the current page. By default,
+   * a maximum of 1000 select items are rendered.
+   * @default 1000
+   */
+  pageWindow?: number;
+
+  /**
    * Set to `true` to disable the pagination
    * @default false
    */

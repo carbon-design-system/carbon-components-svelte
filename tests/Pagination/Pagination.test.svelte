@@ -11,6 +11,7 @@
   export let pageSizeInputDisabled = false;
   export let pageSize = 10;
   export let pageSizes: ReadonlyArray<number> = [10];
+  export let pageWindow: undefined | number = undefined;
   export let pagesUnknown = false;
 </script>
 
@@ -23,6 +24,7 @@
   {itemsPerPageText}
   {pageInputDisabled}
   {pageSizeInputDisabled}
+  {pageWindow}
   bind:pageSize
   {pageSizes}
   {pagesUnknown}

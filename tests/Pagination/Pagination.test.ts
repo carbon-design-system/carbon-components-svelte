@@ -196,4 +196,22 @@ describe("Pagination", () => {
 
     expect(screen.getByText("0–0 of 0 items")).toBeInTheDocument();
   });
+
+  it("renders a cap of 1000 page numbers by default", () => {
+    render(Pagination, {
+      props: { totalItems: 100_000 },
+    });
+
+    const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
+    expect(pageNumbers).toHaveLength(1_000 + 1);
+  });
+
+  it("renders a custom page window", () => {
+    render(Pagination, {
+      props: { totalItems: 100_000, pageWindow: 100 },
+    });
+
+    const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
+    expect(pageNumbers).toHaveLength(100 + 1);
+  });
 });

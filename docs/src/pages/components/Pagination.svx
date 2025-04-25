@@ -19,6 +19,19 @@ components: ["Pagination", "PaginationSkeleton"]
 
 <Pagination totalItems={102} pageSizes="{[16, 36, 99]}" pageSize="{36}" />
 
+## Page window
+
+The number of native select items rendered is derived from the value of `totalItems`.
+
+If `totalItems` is a very large number, this can impact rendering performance since
+thousands of elements may be rendered. By default, the window of rendered items is
+capped at 1,000. For example, if `totalItems=100_000` and the `pageSize=10`,
+1,000 select options are rendered.
+
+Use the `pageWindow` prop to increase this value.
+
+<Pagination totalItems={100_000} pageSizes={[10, 15, 20]} />
+
 ## Hidden page input
 
 <Pagination totalItems={102} pageInputDisabled />
