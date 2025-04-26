@@ -214,4 +214,47 @@ describe("Pagination", () => {
     const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
     expect(pageNumbers).toHaveLength(100 + 1);
   });
+
+  it("formats larger numbers using `toLocaleString`", () => {
+    render(Pagination, {
+      props: { totalItems: 100_000 },
+    });
+
+    expect(screen.getByText(/1–10 of 100,000 items/)).toBeInTheDocument();
+    expect(screen.getByText(/of 10,000 pages/)).toBeInTheDocument();
+  });
+
+  it("handles custom page text", () => {
+    render(Pagination, {
+      props: {
+        pagesUnknown: true,
+        totalItems: 100_000,
+        pageText: (page) => `Current page ${page}`,
+      },
+    });
+
+    expect(screen.getByText(/Current page 1/)).toBeInTheDocument();
+  });
+
+  it("handles custom page range text", () => {
+    render(Pagination, {
+      props: {
+        totalItems: 100_000,
+        pageRangeText: (current, total) => `${current} of ${total}`,
+      },
+    });
+
+    expect(screen.getByText(/1 of 10000/)).toBeInTheDocument();
+  });
+
+  it("handles custom item range text", () => {
+    render(Pagination, {
+      props: {
+        totalItems: 100_000,
+        itemRangeText: (min, max, total) => `${min}–${max} of ${total}`,
+      },
+    });
+
+    expect(screen.getByText(/1–10 of 100000/)).toBeInTheDocument();
+  });
 });

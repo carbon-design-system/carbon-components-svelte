@@ -53,13 +53,13 @@ type $Props = {
 
   /**
    * Override the item text
-   * @default (min, max) => `${min}–${max} item${max === 1 ? "" : "s"}`
+   * @default (min, max) => `${min.toLocaleString()}–${max.toLocaleString()} item${max === 1 ? "" : "s"}`
    */
   itemText?: (min: number, max: number) => string;
 
   /**
    * Override the item range text
-   * @default (min, max, total) => `${min}–${max} of ${total} item${max === 1 ? "" : "s"}`
+   * @default (min, max, total) => `${min.toLocaleString()}–${max.toLocaleString()} of ${total.toLocaleString()} item${max === 1 ? "" : "s"}`
    */
   itemRangeText?: (min: number, max: number, total: number) => string;
 
@@ -95,13 +95,13 @@ type $Props = {
 
   /**
    * Override the page text
-   * @default (page) => `page ${page}`
+   * @default (page) => `page ${page.toLocaleString()}`
    */
   pageText?: (page: number) => string;
 
   /**
    * Override the page range text
-   * @default (current, total) => `of ${total} page${total === 1 ? "" : "s"}`
+   * @default (current, total) => `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`
    */
   pageRangeText?: (current: number, total: number) => string;
 
