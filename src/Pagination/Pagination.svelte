@@ -12,6 +12,16 @@
   /** Specify the total number of items */
   export let totalItems = 0;
 
+  /**
+   * If `totalItems` is a large number, it can affect the
+   * rendering performance of this component since its value
+   * is used to calculate the number of pages in the native
+   * select dropdown. This value creates a small window of
+   * pages rendered around the current page. By default,
+   * a maximum of 1000 select items are rendered.
+   */
+  export let pageWindow = 1000;
+
   /** Set to `true` to disable the pagination */
   export let disabled = false;
 
@@ -81,6 +91,21 @@
 
   const dispatch = createEventDispatcher();
 
+  /**
+   * Returns a subset of page numbers centered around the current page to prevent
+   * performance issues with large datasets. Creates a capped window of pages
+   * instead of potentially thousands, improving render speed and memory usage.
+   * @param {number} currentPage - The current page number
+   * @param {number} totalPages - Total number of pages
+   * @param {number} window - How many pages to show before/after current page
+   * @returns {number[]} Array of page numbers to display
+   */
+  function getWindowedPages(currentPage, totalPages, window) {
+    const start = Math.max(1, currentPage - window);
+    const end = Math.min(totalPages, currentPage + window);
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }
+
   afterUpdate(() => {
     if (page > totalPages) {
       page = totalPages;
@@ -89,7 +114,7 @@
 
   $: dispatch("update", { pageSize, page });
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
-  $: selectItems = Array.from({ length: totalPages }, (_, i) => i);
+  $: selectItems = getWindowedPages(page, totalPages, pageWindow);
   $: backButtonDisabled = disabled || page === 1;
   $: forwardButtonDisabled = disabled || page === totalPages;
 </script>
@@ -146,7 +171,7 @@
         bind:selected={page}
       >
         {#each selectItems as size, i (size)}
-          <SelectItem value={size + 1} text={(size + 1).toString()} />
+          <SelectItem value={size} text={size.toString()} />
         {/each}
       </Select>
       <span class:bx--pagination__text={true}>
