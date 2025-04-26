@@ -39,14 +39,14 @@
    * @type {(min: number, max: number) => string}
    */
   export let itemText = (min, max) =>
-    `${min}–${max} item${max === 1 ? "" : "s"}`;
+    `${min.toLocaleString()}–${max.toLocaleString()} item${max === 1 ? "" : "s"}`;
 
   /**
    * Override the item range text
    * @type {(min: number, max: number, total: number) => string}
    */
   export let itemRangeText = (min, max, total) =>
-    `${min}–${max} of ${total} item${max === 1 ? "" : "s"}`;
+    `${min.toLocaleString()}–${max.toLocaleString()} of ${total.toLocaleString()} item${max === 1 ? "" : "s"}`;
 
   /** Set to `true` to disable the page input */
   export let pageInputDisabled = false;
@@ -70,14 +70,14 @@
    * Override the page text
    * @type {(page: number) => string}
    */
-  export let pageText = (page) => `page ${page}`;
+  export let pageText = (page) => `page ${page.toLocaleString()}`;
 
   /**
    * Override the page range text
    * @type {(current: number, total: number) => string}
    */
   export let pageRangeText = (current, total) =>
-    `of ${total} page${total === 1 ? "" : "s"}`;
+    `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`;
 
   /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);

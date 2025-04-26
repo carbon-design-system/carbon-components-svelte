@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Pagination } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   export let page = 1;
   export let totalItems = 0;
@@ -10,9 +11,14 @@
   export let pageInputDisabled = false;
   export let pageSizeInputDisabled = false;
   export let pageSize = 10;
-  export let pageSizes: ReadonlyArray<number> = [10];
-  export let pageWindow: undefined | number = undefined;
+  export let pageSizes: ComponentProps<Pagination>["pageSizes"] = [10];
+  export let pageWindow: ComponentProps<Pagination>["pageWindow"] = undefined;
   export let pagesUnknown = false;
+  export let pageText: ComponentProps<Pagination>["pageText"] = undefined;
+  export let pageRangeText: ComponentProps<Pagination>["pageRangeText"] =
+    undefined;
+  export let itemRangeText: ComponentProps<Pagination>["itemRangeText"] =
+    undefined;
 </script>
 
 <Pagination
@@ -28,6 +34,9 @@
   bind:pageSize
   {pageSizes}
   {pagesUnknown}
+  {pageText}
+  {pageRangeText}
+  {itemRangeText}
   on:change={(e) => {
     console.log("change", e.detail);
   }}
