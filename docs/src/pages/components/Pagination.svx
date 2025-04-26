@@ -19,6 +19,14 @@ components: ["Pagination", "PaginationSkeleton"]
 
 <Pagination totalItems={102} pageSizes="{[16, 36, 99]}" pageSize="{36}" />
 
+## Unknown pages
+
+If the total number of pages is unknown, set `pagesUnknown` to `true`.
+
+This will render the item range text without factoring in the total number of pages.
+
+<Pagination pagesUnknown />
+
 ## Page window
 
 The number of native select items rendered is derived from the value of `totalItems`.
