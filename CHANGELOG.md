@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.89.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.1...v0.89.2) (2025-04-28)
+
+### Bug Fixes
+
+- **composed-modal:** ignore a11y warning in Svelte 5 ([#2159](https://github.com/carbon-design-system/carbon-components-svelte/issues/2159)) ([024d774](https://github.com/carbon-design-system/carbon-components-svelte/commit/024d77493c93e7823e4781a1a60aaf350d289d52))
+- **pagination:** use `toLocaleString` for default text formatting ([#2161](https://github.com/carbon-design-system/carbon-components-svelte/issues/2161)) ([cdf5659](https://github.com/carbon-design-system/carbon-components-svelte/commit/cdf5659fa0177da77dc8ea1ccffdec54b746954b))
+- **pagination:** window `totalItems` for performance ([#2160](https://github.com/carbon-design-system/carbon-components-svelte/issues/2160)) ([ed3928b](https://github.com/carbon-design-system/carbon-components-svelte/commit/ed3928bb01ecca2fa63f551938dbee1c1829a978)), closes [#2156](https://github.com/carbon-design-system/carbon-components-svelte/issues/2156)
+- **to-hierarchy:** revert to previous implementation ([96d37cc](https://github.com/carbon-design-system/carbon-components-svelte/commit/96d37cc490f28830264c35c84447ee4526256314))
+
 ### [0.89.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.0...v0.89.1) (2025-04-21)
 
 ### Bug Fixes
