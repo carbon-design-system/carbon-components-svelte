@@ -7,7 +7,11 @@ components: ["TileGroup", "RadioTile"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`RadioTile` provides a selectable tile interface for choosing a single option from a set. It supports both individual and grouped usage, with options for light and disabled states.
+
 ## Default
+
+Create a group of radio tiles with a shared name and legend.
 
 <TileGroup legend="Service pricing tiers" name="plan" selected="standard">
   <RadioTile value="lite">
@@ -23,15 +27,19 @@ components: ["TileGroup", "RadioTile"]
 
 ## Reactive (one-way binding)
 
+Update the selected value using the `select` event.
+
 <FileSource src="/framed/RadioTile/RadioTileReactiveOneWay" />
 
 ## Reactive (two-way binding)
 
-Binding to the `selected` prop is a more concise approach to managing state.
+Bind to the `selected` prop for simpler state management.
 
 <FileSource src="/framed/RadioTile/RadioTileReactive" />
 
 ## Light variant
+
+Use the light variant for light backgrounds.
 
 <TileGroup legend="Service pricing tiers" name="plan-light" selected="standard">
   <RadioTile light value="lite">
@@ -46,6 +54,8 @@ Binding to the `selected` prop is a more concise approach to managing state.
 </TileGroup>
 
 ## Disabled state
+
+Disable specific tiles to prevent selection.
 
 <TileGroup legend="Service pricing tiers" name="plan-disabled" selected="standard">
   <RadioTile value="lite" disabled>
