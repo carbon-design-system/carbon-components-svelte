@@ -5,15 +5,22 @@
     let key = 0;
 </script>
 
-This utility component uses the [Image API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image) to programmatically load an image with slottable loading and error states.
-  
+The `ImageLoader` component provides a robust way to load images with built-in
+loading and error states. It uses the [Image API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image)
+to handle image loading programmatically. The component supports aspect ratios,
+fade-in animations, and custom loading/error states.
+
 ## Default
-  
+
+Load an image with the default configuration. The component handles the loading
+process automatically.
+
 <ImageLoader src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
 
 ## Slots
 
-Use the "loading" and "error" named slots to render an element when the image is loading or has an error.
+Customize the loading and error states using named slots. This example shows how
+to display a loading indicator and error message.
 
 <ImageLoader src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg">
     <svelte:fragment slot="loading">
@@ -26,27 +33,32 @@ Use the "loading" and "error" named slots to render an element when the image is
 
 ## With aspect ratio
 
-If `ratio` is set, this component uses the [AspectRatio](/components/AspectRatio) to constrain the image.
+Maintain consistent image dimensions using aspect ratios. The component uses
+[AspectRatio](/components/AspectRatio) to constrain the image.
 
-Supported aspect ratios include `"2x1"`, `"2x3"`, `"16x9"`, `"4x3"`, `"1x1"`, `"3x4"`, `"3x2"`, `"9x16"` and `"1x2"`.
+Supported aspect ratios include `"2x1"`, `"2x3"`, `"16x9"`, `"4x3"`, `"1x1"`,
+`"3x4"`, `"3x2"`, `"9x16"` and `"1x2"`.
   
 <ImageLoader ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
 
 ## Fade in
 
-Set `fadeIn` to `true` to fade in the image if successfully loaded.
+Enable a smooth fade-in animation when the image loads successfully. This provides
+a better user experience for image loading.
 
 <Button kind="ghost" on:click="{() => { key++;}}">Reload image</Button>
 {#key key}<ImageLoader fadeIn ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />{/key}
 
 ## Programmatic usage
 
-In this example, a component reference is obtained to programmatically trigger the `loadImage` method.
+Control image loading programmatically using component references. This example
+demonstrates how to trigger image loading manually.
 
 <FileSource src="/framed/ImageLoader/ProgrammaticImageLoader" />
 
 ## Dynamic image source
 
-The same `ImageLoader` instance can be used to load different images.
+Update the image source dynamically using the same `ImageLoader` instance. This
+allows for smooth transitions between different images.
 
 <FileSource src="/framed/ImageLoader/DynamicImageLoader" />
