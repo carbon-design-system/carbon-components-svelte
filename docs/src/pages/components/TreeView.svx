@@ -1,15 +1,13 @@
 <script>
-  import { InlineNotification, UnorderedList, ListItem, Link,  } from "carbon-components-svelte";
+  import { InlineNotification, UnorderedList, ListItem, Link } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`TreeView` displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, and programmatic control of the tree state.
+
 ## Default
 
-The `nodes` prop accepts an array of child nodes. Each node should contain `id` and `text` properties.
-
-Optional properties include `disabled`, `icon`, and `nodes`.
-
-A parent node contains `nodes` while a leaf node does not.
+Create a basic tree view using the `nodes` prop. Each node requires an `id` and `text`, with optional properties for `disabled`, `icon`, and child `nodes`.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -25,9 +23,7 @@ A parent node contains `nodes` while a leaf node does not.
 
 ## Slottable node
 
-By default, each item renders the value of `node.text`. Use the data from `let:node` directive to override the default slot.
-
-The destructured `let:node` contains the following properties:
+Customize node rendering using the default slot with the `let:node` directive. The node object provides:
 
 <UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
   <ListItem><strong>id</strong>: the node id</ListItem>
@@ -42,75 +38,66 @@ The destructured `let:node` contains the following properties:
 
 ## Initial active node
 
-The active node can be set through `activeId`.
+Set the initial active node using the `activeId` prop.
 
 <FileSource src="/framed/TreeView/TreeViewActive" />
 
 ## Compact size
 
-Set `size` to `"compact"` to use the compact variant.
+Use the compact variant by setting `size` to `"compact"`.
 
 <FileSource src="/framed/TreeView/TreeViewCompact" />
 
 ## With icons
 
-To render a node with an icon, define an `icon` property with a Carbon Svelte icon as its value.
+Add icons to nodes by defining an `icon` property with a Carbon Svelte icon component.
 
 <FileSource src="/framed/TreeView/TreeViewIcons" />
 
 ## Initial expanded nodes
 
-Expanded nodes can be set using `expandedIds`.
+Set initially expanded nodes using the `expandedIds` prop.
 
 <FileSource src="/framed/TreeView/TreeViewExpanded" />
 
 ## Initial multiple selected nodes
 
-Initial multiple selected nodes can be set using `selectedIds`.
+Set multiple initially selected nodes using the `selectedIds` prop.
 
 <FileSource src="/framed/TreeView/TreeViewMultiselect" />
 
 ## Expand all nodes
 
-To programmatically expand all nodes, access the component instance using the [bind:this](https://svelte.dev/docs#bind_element) directive and invoke the `TreeView.expandAll()` accessor.
+Programmatically expand all nodes using the `TreeView.expandAll()` method.
 
 <FileSource src="/framed/TreeView/TreeViewExpandAll" />
 
 ## Collapse all nodes
 
-Similarly, invoke `TreeView.collapseAll()` to collapse all nodes.
+Programmatically collapse all nodes using the `TreeView.collapseAll()` method.
 
 <FileSource src="/framed/TreeView/TreeViewCollapseAll" />
 
 ## Expand a subset of nodes
 
-Use the `TreeView.expandNodes` method to expand only a subset of nodes.
-
-The method accepts an argument that takes a node and returns a boolean.
-
-If no argument is provided, all nodes will be expanded.
+Use `TreeView.expandNodes` to expand specific nodes based on a condition.
 
 <FileSource src="/framed/TreeView/TreeViewExpandNodes" />
 
 ## Collapse a subset of nodes
 
-Use the `TreeView.collapseNodes` method to collapse a subset of nodes.
-
-If no argument is provided, all nodes will be collapsed.
+Use `TreeView.collapseNodes` to collapse specific nodes based on a condition.
 
 <FileSource src="/framed/TreeView/TreeViewCollapseNodes" />
 
 ## Show a specific node
 
-Use the `TreeView.showNode` method to show a specific node.
-
-If a matching node is found, it will be expanded, selected, and focused.
+Use `TreeView.showNode` to expand, select, and focus a specific node.
 
 <FileSource src="/framed/TreeView/TreeViewShowNode" />
 
 ## Flat data structure
 
-If working with a flat data structure, use the `toHierarchy` utility
-to convert a flat data structure into a hierarchical array accepted by the `nodes` prop.
+Convert flat data to a hierarchical structure using the `toHierarchy` utility.
 
 <FileSource src="/framed/TreeView/TreeViewFlatArray" />
