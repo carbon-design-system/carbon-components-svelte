@@ -7,7 +7,11 @@ components: ["Slider", "SliderSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Slider` provides a visual way to select a value from a range. It supports keyboard navigation, custom ranges, step values, and various states.
+
 ## Default
+
+Create a basic slider with a label and default range (0-100).
 
 <Slider labelText="Instances" value={0} />
 
@@ -19,36 +23,54 @@ Set `fullWidth` to `true` for the slider to span the full width of its containin
 
 ## Hidden label
 
+Visually hide the label while maintaining accessibility.
+
 <Slider labelText="Instances" hideLabel value={0} />
 
 ## Hidden text input
+
+Hide the text input while keeping the slider functionality.
 
 <Slider labelText="Instances" hideTextInput value={0} />
 
 ## Custom minimum, maximum values
 
+Set custom range values and labels.
+
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} />
 
 ## Custom step value
+
+Specify the step value for more precise control.
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
 ## Light variant
 
-<Slider light labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
+Use the light variant for light backgrounds.
+
+<Slider light labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
 ## Invalid state
 
-<Slider invalid labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
+Indicate an invalid state with the `invalid` prop.
+
+<Slider invalid labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
 ## Disabled state
 
-<Slider disabled labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100}  step={10} />
+Disable the slider to prevent interaction.
+
+<Slider disabled labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
 ## Skeleton
+
+Show a loading state with the skeleton variant.
 
 <SliderSkeleton />
 
 ## Skeleton (hidden label)
+
+Show a loading state without a label.
 
 <SliderSkeleton hideLabel />
