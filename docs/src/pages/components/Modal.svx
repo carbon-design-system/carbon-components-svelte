@@ -2,60 +2,76 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+The `Modal` component provides a focused dialog for user interactions, confirmations, or data entry. It supports various sizes, states, and customization options to create accessible and user-friendly modal experiences.
+
 ## Default (transactional)
+
+Create a basic modal dialog with primary and secondary actions. This variant is ideal for confirming user actions or gathering input.
 
 <FileSource src="/framed/Modal/Modal" />
 
 ## Custom focus
 
-By default, the modal close button will be focused when opened.
-
-Use the `selectorPrimaryFocus` to specify the element that should be focused when the modal is opened (e.g., `#id`, `.class`, `[data-attribute]`).
+Control which element receives focus when the modal opens. Use `selectorPrimaryFocus` to specify the target element using CSS selectors.
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
 ## Danger modal
 
+Display critical actions or destructive operations with the danger variant. This style emphasizes the severity of the action.
+
 <FileSource src="/framed/Modal/DangerModal" />
 
 ## Passive modal
+
+Create a non-interactive modal for displaying information. This variant lacks action buttons and focuses on content presentation.
 
 <FileSource src="/framed/Modal/PassiveModal" />
 
 ## Has scrolling content
 
-Setting `hasScrollingContent` to `true` increases the vertical space within the modal.
+Enable vertical scrolling for modals with lengthy content. This ensures all content remains accessible while maintaining a reasonable modal height.
 
 <FileSource src="/framed/Modal/ModalScrollingContent" />
 
 ## Multiple modals
 
+Stack multiple modals for complex workflows. Each modal maintains its own state and focus management.
+
 <FileSource src="/framed/Modal/ModalMultiple" />
 
 ## Multiple secondary buttons
 
-Use the `secondaryButtons` prop to render two secondary buttons. The prop is a 2-tuple type that supersedes `secondaryButtonText`.
+Add up to two secondary actions using the `secondaryButtons` prop. This provides more flexibility than the single `secondaryButtonText` option.
 
 <FileSource src="/framed/Modal/3ButtonModal" />
 
 ## Extra-small size
 
+Use the extra-small size for compact notifications by setting `size` to `"xs"`. This is ideal for simple confirmations.
+
 <FileSource src="/framed/Modal/ModalExtraSmall" />
 
 ## Small size
+
+Use the small size for simple confirmations by setting `size` to `"sm"`. This provides a more focused dialog.
 
 <FileSource src="/framed/Modal/ModalSmall" />
 
 ## Large size
 
+Use the large size for complex content by setting `size` to `"lg"`. This provides more space for detailed information.
+
 <FileSource src="/framed/Modal/ModalLarge" />
 
 ## Prevent close on outside click
 
-`preventCloseOnClickOutside` prevents the modal from being closed when clicking outside of an open modal. This prop is intended to be used for transactional modals.
+Disable closing the modal when clicking outside by setting `preventCloseOnClickOutside` to `true`. This is useful for transactional modals where explicit user action is required.
 
 <FileSource src="/framed/Modal/ModalPreventOutsideClick" />
 
 ## Button with icon
+
+Enhance modal buttons with icons for better visual context and clarity. This example shows how to add icons to modal actions.
 
 <FileSource src="/framed/Modal/ModalButtonWithIcon" />
