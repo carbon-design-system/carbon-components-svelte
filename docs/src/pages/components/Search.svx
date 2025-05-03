@@ -4,53 +4,71 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Search` provides a flexible search input component with support for expandable variants, different sizes, and custom icons. It includes built-in functionality for clearing input and handling keyboard events.
+
 ## Default
 
-The `Search` component size is extra-large by default. There are [large](#large-size) and [small](#small-size) size variants.
+The search component is extra-large by default. Use the `size` prop to choose between [large](#large-size) and [small](#small-size) variants.
 
 <Search />
 
 ## Default value
 
+Set an initial value using the `value` prop.
+
 <Search placeholder="Search catalog..." value="Cloud functions" />
 
 ## Reactive example
 
+Bind to the `value` prop for reactive updates.
+
 <FileSource src="/framed/Search/SearchReactive" />
 
-## on:clear
+## Clear event
 
-The "clear" event is dispatched when clicking the "X" button or when pressing the "Escape" key.
+The `clear` event is dispatched when clicking the clear button or pressing the Escape key.
 
 <Search value="Cloud functions" on:clear={() => console.log('clear')}/>
 
 ## Expandable variant
 
-Set `expandable` to `true` to use the expandable variant.
+Enable the expandable variant to show a compact search icon that expands on focus.
 
 <FileSource src="/framed/Search/SearchExpandableReactive" />
 
 ## Light variant
 
+Use the light variant for light backgrounds.
+
 <Search light />
 
 ## Large size
+
+Set `size` to `"lg"` for a large search input.
 
 <Search size="lg" />
 
 ## Small size
 
+Set `size` to `"sm"` for a small search input.
+
 <Search size="sm" />
 
 ## Disabled state
 
+Disable the search input using the `disabled` prop.
+
 <Search disabled />
 
-## Custom search icon
+## Custom icon
+
+Replace the default search icon with a custom one.
 
 <Search icon={Query} />
 
 ## Skeleton
+
+Display a loading state using the skeleton variant.
 
 <Search skeleton />
 
