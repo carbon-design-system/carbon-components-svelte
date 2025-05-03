@@ -6,34 +6,62 @@ components: ["Grid", "Row", "Column"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+The `Grid` system provides a responsive, 12-column layout structure. Use `Row` and
+`Column` components to create flexible layouts that adapt to different screen
+sizes. The grid supports various spacing options and column configurations.
+
 ## Default
+
+Create a basic grid layout with equal-width columns. This example demonstrates the
+default grid behavior.
 
 <FileSource src="/framed/Grid/Grid" />
 
 ## Full width
 
+Use the full-width grid variant for layouts that span the entire viewport width.
+This removes the default max-width constraint.
+
 <FileSource src="/framed/Grid/FullWidthGrid" />
 
 ## Narrow
+
+Create a more compact grid layout using the narrow variant. This reduces the
+spacing between columns.
 
 <FileSource src="/framed/Grid/NarrowGrid" />
 
 ## Condensed
 
+Use the condensed variant for even tighter spacing between columns. This is ideal
+for dense data displays.
+
 <FileSource src="/framed/Grid/CondensedGrid" />
 
 ## Responsive
+
+Build responsive layouts by specifying different column widths for different
+breakpoints. The grid automatically adjusts based on screen size.
 
 <FileSource src="/framed/Grid/ResponsiveGrid" />
 
 ## Offset columns
 
+Create space between columns using the offset feature. This allows for more
+flexible layouts without empty columns.
+
 <FileSource src="/framed/Grid/OffsetColumns" />
 
 ## Aspect ratio columns
 
+Maintain consistent column heights using aspect ratio columns. This ensures
+content alignment across different column widths.
+
 <FileSource src="/framed/Grid/AspectRatioColumns" />
 
 ## Padded columns
+
+Add padding to columns using the padded variant. This creates more breathing room
+between content.
 
 <FileSource src="/framed/Grid/PaddedGrid" />
