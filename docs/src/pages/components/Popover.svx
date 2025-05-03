@@ -3,9 +3,11 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Popover` provides a floating container that displays content relative to a trigger element. It supports various alignments, caret indicators, and visual variants.
+
 ## Default
 
-By default, the position of the popover component is absolute.
+Create a basic popover with absolute positioning.
 
 <div data-outline>
     Parent
@@ -16,7 +18,7 @@ By default, the position of the popover component is absolute.
 
 ## Relative position
 
-Set `relative` to `true` to use a relative position.
+Set `relative` to `true` to position the popover relative to its parent element.
 
 <div data-outline>
     Parent
@@ -27,7 +29,7 @@ Set `relative` to `true` to use a relative position.
 
 ## Close on outside click
 
-Set `closeOnOutsideClick` to set `open` to `false` when clicking outside of the popover.
+Enable automatic closing when clicking outside the popover using `closeOnOutsideClick`.
 
 <div data-outline>
     Parent
@@ -111,6 +113,8 @@ The default `align` value is `"top"`.
 
 ## With caret
 
+Add a caret indicator to the popover using the `caret` prop.
+
 <div data-outline>
     Parent
     <Popover caret open>
@@ -120,9 +124,7 @@ The default `align` value is `"top"`.
 
 ## Custom caret alignment
 
-By default, the caret is aligned "top".
-
-Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"` or `"right-top"`.
+By default, the caret is aligned "top". Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"` or `"right-top"`.
 
 <div data-outline>
     Parent
@@ -133,6 +135,8 @@ Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`
 
 ## Light variant
 
+Enable the light variant for use on dark backgrounds.
+
 <div data-outline>
     Parent
     <Popover light open>
@@ -141,6 +145,8 @@ Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`
 </div>
 
 ## High contrast variant
+
+Enable the high contrast variant for improved visibility.
 
 <div data-outline>
     Parent
