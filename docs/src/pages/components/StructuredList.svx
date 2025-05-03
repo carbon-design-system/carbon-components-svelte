@@ -3,12 +3,16 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
 ---
 
 <script>
-  import { StructuredList, StructuredListSkeleton, StructuredListBody, StructuredListHead, StructuredListCell ,StructuredListRow, StructuredListInput } from "carbon-components-svelte";
+  import { StructuredList, StructuredListSkeleton, StructuredListBody, StructuredListHead, StructuredListCell, StructuredListRow, StructuredListInput } from "carbon-components-svelte";
   import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`StructuredList` provides a semantic way to display tabular data with support for selection, keyboard navigation, and various layout options.
+
 ## Default (read-only)
+
+Create a basic structured list with headers and rows.
 
 <StructuredList>
   <StructuredListHead>
@@ -20,39 +24,26 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
   </StructuredListHead>
   <StructuredListBody>
     <StructuredListRow>
-      <StructuredListCell noWrap>Row 1</StructuredListCell>
       <StructuredListCell>Row 1</StructuredListCell>
-      <StructuredListCell>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
-      </StructuredListCell>
+      <StructuredListCell>Row 1</StructuredListCell>
+      <StructuredListCell>Row 1</StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell noWrap>Row 2</StructuredListCell>
       <StructuredListCell>Row 2</StructuredListCell>
-      <StructuredListCell>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
-      </StructuredListCell>
+      <StructuredListCell>Row 2</StructuredListCell>
+      <StructuredListCell>Row 2</StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell noWrap>Row 3</StructuredListCell>
       <StructuredListCell>Row 3</StructuredListCell>
-      <StructuredListCell>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
-      </StructuredListCell>
+      <StructuredListCell>Row 3</StructuredListCell>
+      <StructuredListCell>Row 3</StructuredListCell>
     </StructuredListRow>
   </StructuredListBody>
 </StructuredList>
 
 ## Condensed variant
+
+Use the condensed variant for more compact rows.
 
 <StructuredList condensed>
   <StructuredListHead>
@@ -64,39 +55,26 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
   </StructuredListHead>
   <StructuredListBody>
     <StructuredListRow>
-      <StructuredListCell noWrap>Row 1</StructuredListCell>
       <StructuredListCell>Row 1</StructuredListCell>
-      <StructuredListCell>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
-      </StructuredListCell>
+      <StructuredListCell>Row 1</StructuredListCell>
+      <StructuredListCell>Row 1</StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell noWrap>Row 2</StructuredListCell>
       <StructuredListCell>Row 2</StructuredListCell>
-      <StructuredListCell>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
-      </StructuredListCell>
+      <StructuredListCell>Row 2</StructuredListCell>
+      <StructuredListCell>Row 2</StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell noWrap>Row 3</StructuredListCell>
       <StructuredListCell>Row 3</StructuredListCell>
-      <StructuredListCell>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
-      </StructuredListCell>
+      <StructuredListCell>Row 3</StructuredListCell>
+      <StructuredListCell>Row 3</StructuredListCell>
     </StructuredListRow>
   </StructuredListBody>
 </StructuredList>
 
-## Flush
+## Flush variant
+
+Use the flush variant to remove padding from the list.
 
 <StructuredList flush>
   <StructuredListHead>
@@ -142,6 +120,8 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
 
 ## Selectable rows
 
+Enable row selection with the `selection` prop and `StructuredListInput` components.
+
 <StructuredList selection selected="row-1-value">
   <StructuredListHead>
     <StructuredListRow head>
@@ -181,5 +161,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
 </StructuredList>
 
 ## Skeleton
+
+Show a loading state with the skeleton variant.
 
 <StructuredListSkeleton rows={3} />
