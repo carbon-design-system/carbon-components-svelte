@@ -12,9 +12,9 @@ components: ["ToastNotification"]
 See [detailed usage](https://carbondesignsystem.com/components/notification/usage).  
 See also: [InlineNotification](InlineNotification)
 
-## Default (error)
+## Default
 
-Display a basic error notification with title, subtitle, and timestamp.
+Display a basic error notification with title, subtitle, and timestamp by default.
 
 <ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 

@@ -9,9 +9,9 @@ components: ["Toggle", "ToggleSkeleton"]
 
 `Toggle` provides a switch-like control that allows users to turn options on or off. It supports custom labels, different sizes, and various states to match your application's needs.
 
-## Default (untoggled)
+## Default
 
-Display a basic toggle with a label.
+Display a basic toggle in its untoggled state by default.
 
 <Toggle labelText="Push notifications" />
 

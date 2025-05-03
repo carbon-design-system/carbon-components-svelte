@@ -9,7 +9,7 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
 
 `ProgressIndicator` provides a visual representation of progress through a sequence of steps. It supports horizontal and vertical layouts, step completion states, and interactive navigation.
 
-## Default (horizontal)
+## Default
 
 Create a horizontal progress indicator with four steps.
 

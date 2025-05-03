@@ -4,7 +4,9 @@
 
 The `Modal` component provides a focused dialog for user interactions, confirmations, or data entry. It supports various sizes, states, and customization options to create accessible and user-friendly modal experiences.
 
-## Default (transactional)
+## Default
+
+Display a modal dialog with a header, content area, and footer by default.
 
 Create a basic modal dialog with primary and secondary actions. This variant is ideal for confirming user actions or gathering input.
 

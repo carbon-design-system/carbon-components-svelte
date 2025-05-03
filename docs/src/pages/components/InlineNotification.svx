@@ -12,9 +12,9 @@ The `InlineNotification` component displays contextual messages inline with cont
 See [detailed usage](https://carbondesignsystem.com/components/notification/usage).  
 See also: [ToastNotification](ToastNotification)
 
-## Default (error)
+## Default
 
-Display a basic error notification with title and subtitle.
+Display a basic error notification with title and subtitle by default.
 
 <InlineNotification title="Error:" subtitle="An internal server error occurred." />
 

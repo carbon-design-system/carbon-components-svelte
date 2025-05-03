@@ -33,9 +33,9 @@ This component uses the native, asynchronous [Clipboard API](https://developer.m
 
 You can override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
 
-## Default (single-line)
+## Default
 
-Display a single line of code with a copy button.
+Display a single-line code snippet by default.
 
 <CodeSnippet code="npm i carbon-components-svelte" />
 

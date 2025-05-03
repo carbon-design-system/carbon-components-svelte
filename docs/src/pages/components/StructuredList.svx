@@ -10,9 +10,9 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
 
 `StructuredList` provides a semantic way to display tabular data with support for selection, keyboard navigation, and various layout options.
 
-## Default (read-only)
+## Default
 
-Create a basic structured list with headers and rows.
+Display a basic structured list with headers and rows by default.
 
 <StructuredList>
   <StructuredListHead>
