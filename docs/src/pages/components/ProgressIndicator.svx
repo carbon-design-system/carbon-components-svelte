@@ -7,7 +7,11 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`ProgressIndicator` provides a visual representation of progress through a sequence of steps. It supports horizontal and vertical layouts, step completion states, and interactive navigation.
+
 ## Default (horizontal)
+
+Create a horizontal progress indicator with four steps.
 
 <ProgressIndicator currentIndex={2}>
   <ProgressStep complete
@@ -30,9 +34,7 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
 
 ## Prevent change on click
 
-By default, clicking any step that is complete will update the current step index.
-
-Set `preventChangeOnClick` to `true` to prevent this behavior.
+Disable automatic step selection when clicking completed steps.
 
 <ProgressIndicator preventChangeOnClick currentIndex={2}>
   <ProgressStep complete
@@ -55,11 +57,13 @@ Set `preventChangeOnClick` to `true` to prevent this behavior.
 
 ## Programmatic usage
 
-When programmatically updating the `currentIndex`, keep in mind that only completed steps should be selectable.
+Update the current step programmatically while maintaining step completion rules.
 
 <FileSource src="/framed/ProgressIndicator/ProgrammaticProgressIndicator" />
 
 ## Invalid step
+
+Mark a step as invalid to indicate an error state.
 
 <ProgressIndicator>
   <ProgressStep complete
@@ -78,6 +82,8 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
 
 ## Disabled steps
 
+Disable specific steps to prevent user interaction.
+
 <ProgressIndicator>
   <ProgressStep complete
     label="Step 1"
@@ -94,6 +100,8 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
 </ProgressIndicator>
 
 ## Spaced-equally
+
+Distribute steps evenly across the available space.
 
 <ProgressIndicator spaceEqually>
   <ProgressStep
@@ -112,6 +120,8 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
 
 ## Vertical
 
+Display steps in a vertical layout.
+
 <ProgressIndicator vertical>
   <ProgressStep
     label="Really long label"
@@ -129,10 +139,12 @@ When programmatically updating the `currentIndex`, keep in mind that only comple
 
 ## Skeleton
 
-Use the `count` prop to specify the number of progress steps to render.
+Show a loading state with the specified number of steps.
 
 <ProgressIndicatorSkeleton />
 
 ## Skeleton (vertical)
+
+Show a vertical loading state with the specified number of steps.
 
 <ProgressIndicatorSkeleton vertical />
