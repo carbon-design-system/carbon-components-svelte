@@ -7,35 +7,47 @@ components: ["Toggle", "ToggleSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Toggle` provides a switch-like control that allows users to turn options on or off. It supports custom labels, different sizes, and various states to match your application's needs.
+
 ## Default (untoggled)
+
+Display a basic toggle with a label.
 
 <Toggle labelText="Push notifications" />
 
 ## Toggled
 
+Set `toggled` to `true` to display the toggle in its on state.
+
 <Toggle labelText="Push notifications" toggled />
 
 ## Reactive example
+
+Use two-way binding to control the toggle state programmatically.
 
 <FileSource src="/framed/Toggle/ToggleReactive" />
 
 ## on:toggle event
 
+Listen for toggle state changes using the `on:toggle` event.
+
 <Toggle labelText="Push notifications" on:toggle={e => console.log(e.detail)} />
 
 ## Hidden label text
 
-Set `hideLabel` to `true` to visually hide the label text. It's recommended to still specify `labelText` for screen reader accessibility.
+Set `hideLabel` to `true` to visually hide the label while maintaining accessibility.
 
 <Toggle labelText="Push notifications" hideLabel />
 
 ## Custom labels
 
+Customize the toggle labels using `labelA` and `labelB` props.
+
 <Toggle labelText="Push notifications" labelA="No" labelB="Yes" />
 
 ## Slottable labels
 
-An alternative to the "labelA" and "labelB" props is to use the corresponding named slots.
+Use slots to customize the toggle labels with additional styling or content.
 
 <Toggle labelText="Push notifications">
   <span slot="labelA" style="color: red">No</span>
@@ -44,16 +56,24 @@ An alternative to the "labelA" and "labelB" props is to use the corresponding na
 
 ## Disabled state
 
+Set `disabled` to `true` to prevent user interaction.
+
 <Toggle labelText="Push notifications" disabled />
 
 ## Small size
+
+Use the small size variant by setting `size` to `"sm"`.
 
 <Toggle size="sm" labelText="Push notifications" />
 
 ## Skeleton
 
+Display a loading state using the skeleton component.
+
 <ToggleSkeleton />
 
 ## Skeleton (small)
+
+Use the small size variant for the skeleton component.
 
 <ToggleSkeleton size="sm" />
