@@ -3,11 +3,19 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+The `ExpandableTile` component creates a collapsible content container that can
+show and hide content with a smooth animation. It's ideal for managing content
+overflow and progressive disclosure of information. The component automatically
+measures content height using a resize observer.
+
 ## Default
 
-This component uses a [resize observer](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) to determine the height of the above-the-fold content.
+Create an expandable tile that shows and hides content. The component uses a
+[resize observer](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)
+to determine the height of the above-the-fold content.
 
-It's unexpanded by default.
+By default, the tile is collapsed. Use the `above` and `below` slots to define the
+content that appears before and after expansion.
 
 <ExpandableTile>
   <div slot="above">
@@ -25,7 +33,8 @@ It's unexpanded by default.
 
 ## Custom tile heights
 
-Set a custom height for the tiles on the "above" and "below" slots.
+Set custom heights for the tile content using CSS. This is useful when you need to
+control the exact dimensions of the visible and hidden content.
 
 <ExpandableTile>
   <div slot="above" style="height: 10rem">Above the fold content here</div>
@@ -34,12 +43,18 @@ Set a custom height for the tiles on the "above" and "below" slots.
 
 ## Expanded
 
+Display the tile in its expanded state by default by setting the `expanded` prop to
+`true`.
+
 <ExpandableTile expanded>
   <div slot="above">Above the fold content here</div>
   <div slot="below">Below the fold content here</div>
 </ExpandableTile>
 
 ## Light variant
+
+Use the light variant for expandable tiles on dark backgrounds by setting the
+`light` prop to `true`.
 
 <ExpandableTile light>
   <div slot="above">Above the fold content here</div>
@@ -48,6 +63,9 @@ Set a custom height for the tiles on the "above" and "below" slots.
 
 ## With icon labels
 
+Customize the expand/collapse button labels using the `tileExpandedLabel` and
+`tileCollapsedLabel` props.
+
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <div slot="above">Above the fold content here</div>
   <div slot="below">Below the fold content here</div>
@@ -55,7 +73,9 @@ Set a custom height for the tiles on the "above" and "below" slots.
 
 ## With interactive content
 
-For tiles containing interactive content, use `stopPropagation` to prevent the tile from toggling.
+Handle interactive content within the tile by preventing event propagation. This
+ensures that clicks on interactive elements don't trigger the tile's expand/collapse
+behavior.
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <div slot="above">
