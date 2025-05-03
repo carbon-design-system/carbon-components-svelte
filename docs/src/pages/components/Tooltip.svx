@@ -8,9 +8,11 @@ components: ["Tooltip", "TooltipFooter"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Tooltip` displays contextual information when users hover over or focus on an element. It supports various directions, alignments, and interactive content to provide additional context or guidance.
+
 ## Default
 
-By default, the tooltip is triggered by an information icon.
+Display a tooltip triggered by the default information icon.
 
 <Tooltip>
   <p>
@@ -20,6 +22,8 @@ By default, the tooltip is triggered by an information icon.
 
 ## With trigger text
 
+Use custom trigger text instead of the default icon.
+
 <Tooltip triggerText="Resource list">
   <p>
     Resources are provisioned based on your account's organization.
@@ -28,9 +32,13 @@ By default, the tooltip is triggered by an information icon.
 
 ## Reactive example
 
+Control the tooltip state programmatically.
+
 <FileSource src="/framed/Tooltip/TooltipReactive" />
 
 ## Directions
+
+Position the tooltip in different directions using the `direction` prop.
 
 <Tooltip triggerText="Top" direction="top"><p>Top</p></Tooltip>
 <Tooltip triggerText="Right" direction="right"><p>Right</p></Tooltip>
@@ -39,11 +47,15 @@ By default, the tooltip is triggered by an information icon.
 
 ## Alignment
 
+Align the tooltip content using the `align` prop.
+
 <Tooltip triggerText="Start" align="start"><p>Start</p></Tooltip>
 <Tooltip triggerText="End" align="end"><p>End</p></Tooltip>
 <Tooltip triggerText="Center" align="center"><p>Center</p></Tooltip>
 
 ## Interactive
+
+Add interactive elements like links and buttons using `TooltipFooter`.
 
 <Tooltip triggerText="Resource list">
   <p>
@@ -52,10 +64,12 @@ By default, the tooltip is triggered by an information icon.
   <TooltipFooter selectorPrimaryFocus="#d">
     <Link href="/">Learn more</Link>
     <Button id="d" size="small">Manage</Button>
-</TooltipFooter>
+  </TooltipFooter>
 </Tooltip>
 
 ## Custom icon (component)
+
+Use a custom icon component with the `icon` prop.
 
 <Tooltip triggerText="Resource list" icon={Catalog}>
   <p>
@@ -65,6 +79,8 @@ By default, the tooltip is triggered by an information icon.
 
 ## Custom icon (slot)
 
+Customize the icon using the `icon` slot for more flexibility.
+
 <Tooltip triggerText="Resource list">
   <div slot="icon" style="width: 1rem; height: 1rem; outline: 1px solid red;"></div>
   <p>
@@ -73,6 +89,8 @@ By default, the tooltip is triggered by an information icon.
 </Tooltip>
 
 ## Hidden icon
+
+Hide the icon while keeping the tooltip functionality using `hideIcon`.
 
 <Tooltip hideIcon triggerText="Resource list">
   <p>
