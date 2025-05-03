@@ -12,6 +12,8 @@ components: ["Breadcrumb", "BreadcrumbItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Breadcrumb` displays a hierarchical navigation trail that shows users their current location within an application. It supports current page indication, trailing slash customization, and overflow handling for long navigation paths.
+
 ## Default
 
 Display a hierarchical navigation trail with slashes between items. Mark the current page with `isCurrentPage`.
