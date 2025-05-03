@@ -1,3 +1,7 @@
+---
+components: ["Theme"]
+---
+
 <script>
   import { InlineNotification, CodeSnippet } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
@@ -5,7 +9,7 @@
   let code = `import "carbon-components-svelte/css/all.css";`;
 </script>
 
-The `Theme` component can dyanmically update the Carbon theme on the client-side. It can persist the theme locally using [window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
+The `Theme` component provides dynamic client-side theming using CSS variables. It supports five Carbon themes: white, g10, g80, g90, and g100, and allows for custom theme token overrides. The component can persist theme preferences using [window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and provides built-in toggle and select controls for theme switching.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">You must use the "all.css" StyleSheet with the <code>Theme</code> component.</div>
@@ -17,40 +21,42 @@ The `all.css` StyleSheet uses [CSS variables](https://developer.mozilla.org/en-U
 
 ## Default
 
+Create a basic theme component that can be controlled programmatically.
+
 <FileSource src="/framed/Theme/Theme" />
 
 ## Persist locally
 
-Set `persist` to `true` to persist the theme locally using the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
+Set `persist` to `true` to save the theme preference in [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). Use `persistKey` to specify a custom storage key.
 
 <FileSource src="/framed/Theme/ThemePersist" />
 
 ## Custom theme
 
-Define keys and values in the `tokens` prop that override default Carbon theme tokens. Refer to the [Carbon website](https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme) for guidance on customizing a theme using token values.
+Override default Carbon theme tokens by providing custom key-value pairs in the `tokens` prop. Refer to the [Carbon website](https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme) for guidance on customizing themes.
 
 <FileSource src="/framed/Theme/ThemeTokens" />
 
 ## Theme toggle
 
-Set `render` to `"toggle"` to render a toggle switch to control the theme.
+Set `render` to `"toggle"` to display a toggle switch for switching between two themes. By default, it toggles between "white" and "g100" themes.
 
 <FileSource src="/framed/Theme/ThemeToggle" />
 
 ## Theme toggle (custom)
 
-Customize the toggle using the `toggle` prop.
+Customize the toggle appearance and behavior using the `toggle` prop. You can specify custom themes, labels, and other toggle properties.
 
 <FileSource src="/framed/Theme/ThemeToggleCustom" />
 
 ## Theme select
 
-Set `render` to `"select"` to render a select dropdown to control the theme.
+Set `render` to `"select"` to display a dropdown menu for selecting from all available themes.
 
 <FileSource src="/framed/Theme/ThemeSelect" />
 
 ## Theme select (custom)
 
-Customize the select using the `select` prop.
+Customize the select dropdown using the `select` prop. You can specify which themes to include, customize labels, and adjust other select properties.
 
 <FileSource src="/framed/Theme/ThemeSelectCustom" />
