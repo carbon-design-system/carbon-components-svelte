@@ -7,9 +7,11 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Select` provides a dropdown menu for selecting a single option from a list. It supports various states, sizes, and includes built-in validation and helper text.
+
 ## Default
 
-If the `selected` prop is not set, the value of the first `SelectItem` will be used as the default value.
+Create a basic select menu with `SelectItem` components. The first item's value is used as the default if `selected` is not set.
 
 <Select labelText="Carbon theme" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" />
@@ -21,7 +23,7 @@ If the `selected` prop is not set, the value of the first `SelectItem` will be u
 
 ## Custom item text
 
-Use the `text` prop on `SelectItem` to customize the display value.
+Use the `text` prop to customize the display text of each option.
 
 <Select labelText="Carbon theme" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" text="White" />
@@ -33,7 +35,7 @@ Use the `text` prop on `SelectItem` to customize the display value.
 
 ## Initial selected value
 
-Use the `selected` prop to specify an initial value.
+Set the initial selection using the `selected` prop.
 
 <Select labelText="Carbon theme" selected="g10" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" text="White" />
@@ -45,11 +47,13 @@ Use the `selected` prop to specify an initial value.
 
 ## Reactive example
 
-The `selected` prop is reactive and supports two-way binding.
+The `selected` prop supports two-way binding for reactive updates.
 
 <FileSource src="/framed/Select/SelectReactive" />
 
 ## Helper text
+
+Add descriptive text below the select menu.
 
 <Select helperText="Carbon offers 4 themes (2 light, 3 dark)" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -61,6 +65,8 @@ The `selected` prop is reactive and supports two-way binding.
 
 ## Hidden label
 
+Visually hide the label while maintaining accessibility.
+
 <Select hideLabel labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
@@ -70,6 +76,8 @@ The `selected` prop is reactive and supports two-way binding.
 </Select>
 
 ## Item groups
+
+Group related options using `SelectItemGroup` components.
 
 <Select labelText="Carbon theme" selected="0">
   <SelectItem value="0" text="Select a theme" disabled hidden />
@@ -84,37 +92,9 @@ The `selected` prop is reactive and supports two-way binding.
   </SelectItemGroup>
 </Select>
 
-## Light variant
-
-<Select light labelText="Carbon theme" selected="g10" >
-  <SelectItem value="white" text="White" />
-  <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
-  <SelectItem value="g90" text="Gray 90" />
-  <SelectItem value="g100" text="Gray 100" />
-</Select>
-
-## Inline variant
-
-<Select inline labelText="Carbon theme" selected="g10" >
-  <SelectItem value="white" text="White" />
-  <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
-  <SelectItem value="g90" text="Gray 90" />
-  <SelectItem value="g100" text="Gray 100" />
-</Select>
-
-## Extra-large size
-
-<Select size="xl" labelText="Carbon theme" selected="g10" >
-  <SelectItem value="white" text="White" />
-  <SelectItem value="g10" text="Gray 10" />
-  <SelectItem value="g80" text="Gray 80" />
-  <SelectItem value="g90" text="Gray 90" />
-  <SelectItem value="g100" text="Gray 100" />
-</Select>
-
 ## Small size
+
+Use the small size variant for compact layouts.
 
 <Select size="sm" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -124,7 +104,45 @@ The `selected` prop is reactive and supports two-way binding.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
+## Extra-large size
+
+Use the extra-large size variant for prominent selections.
+
+<Select size="xl" labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+## Inline variant
+
+Use the inline variant for horizontal layouts.
+
+<Select inline labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+## Light variant
+
+Use the light variant for light backgrounds.
+
+<Select light labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
 ## Invalid state
+
+Show validation errors using the invalid state.
 
 <Select invalid invalidText="Theme must be a dark variant" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -136,6 +154,8 @@ The `selected` prop is reactive and supports two-way binding.
 
 ## Warning state
 
+Show warnings using the warning state.
+
 <Select warn warnText="The selected theme will not be persisted" labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
@@ -146,6 +166,8 @@ The `selected` prop is reactive and supports two-way binding.
 
 ## Disabled state
 
+Disable the select menu to prevent interaction.
+
 <Select disabled labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
@@ -155,6 +177,8 @@ The `selected` prop is reactive and supports two-way binding.
 </Select>
 
 ## Skeleton
+
+Display a loading state using the skeleton variant.
 
 <SelectSkeleton />
 
