@@ -7,23 +7,28 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
   import Preview from "../../components/Preview.svelte";
 </script>
 
+The `FileUploader` components provide a complete solution for file uploads, including
+a button trigger, drag-and-drop container, and file list display. The components
+support various states, file validation, and customization options.
+
 ## File uploader (button-only)
 
-By default, the file uploader only accepts one file.
-
-Set `multiple` to `true` for multiple files to be accepted.
+Create a simple file upload button using `FileUploaderButton`. By default, it
+accepts a single file. Set `multiple` to `true` to allow multiple file selection.
 
 <FileUploaderButton labelText="Add file" />
 
 ## Multiple files
 
+Enable multiple file selection by setting the `multiple` prop to `true`. This
+allows users to select multiple files at once.
+
 <FileUploaderButton multiple labelText="Add files" />
 
 ## Custom button kind, size
 
-By default, the `primary` small button kind is used.
-
-Use the `kind` and `size` props to customize the button.
+Customize the button appearance using the `kind` and `size` props. The default is
+a small primary button.
 
 <FileUploaderButton kind="secondary" size="field" />
 <FileUploaderButton kind="tertiary" size="default" />
@@ -32,17 +37,17 @@ Use the `kind` and `size` props to customize the button.
 
 ## File uploader
 
-The `FileUploader` wraps `FileUploaderButton` and lists out uploaded files.
+The `FileUploader` component combines a button trigger with a list of uploaded
+files. It supports file type restrictions, multiple file selection, and various
+upload states.
 
-The example below accepts multiple files with an extension of `.jpg` or `.jpeg`. It sets the status to `"complete"`; by default, the status is `"loading"`.
-
-See the [item examples below](#item-uploading) for different statuses.
+This example accepts multiple JPEG files and displays them in a completed state.
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
 ## Clear files
 
-There are two ways to clear files in `FileUploader`:
+Remove uploaded files from the `FileUploader` component in two ways:
 
 <UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
   <ListItem>programmatically using the <strong>clearFiles</strong> accessor</ListItem>
@@ -53,21 +58,29 @@ There are two ways to clear files in `FileUploader`:
 
 ## File uploader (disabled state)
 
+Disable the file uploader by setting the `disabled` prop to `true`. This prevents
+user interaction with the component.
+
 <FileUploader disabled multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
 ## Item (uploading)
+
+Display a file upload in progress using the `uploading` status. This shows a
+loading indicator and the file name.
 
 <FileUploaderItem name="README.md" status="uploading" />
 
 ## Item (complete)
 
+Show a successfully uploaded file using the `complete` status. This displays a
+checkmark icon next to the file name.
+
 <FileUploaderItem name="README.md" status="complete" />
 
 ## Item (edit)
 
-If the `status` is `"edit"`, clicking the close icon will dispatch a `delete` event.
-
-The event detail contains the item `id`.
+Enable file deletion by setting the status to `"edit"`. Clicking the close icon
+dispatches a `delete` event with the item's ID.
 
 <FileUploaderItem id="readme" name="README.md" status="edit" on:delete={(e) => {
   console.log(e.detail); // "readme"
@@ -75,13 +88,15 @@ The event detail contains the item `id`.
 
 ## Item (edit status, invalid state)
 
-An item can also have an edit status with an invalid state.
+Mark a file as invalid while keeping it editable. This shows an error icon and
+allows the user to remove the file.
 
 <FileUploaderItem invalid id="readme" name="README.md" status="edit" on:delete />
 
 ## Item (edit status, invalid state with subject, body)
 
-Use the `errorSubject` and `errorBody` props to customize the error message.
+Provide detailed error messages for invalid files using the `errorSubject` and
+`errorBody` props. This helps users understand and resolve upload issues.
 
 <FileUploaderItem
   invalid
@@ -95,7 +110,8 @@ Use the `errorSubject` and `errorBody` props to customize the error message.
 
 ## Item sizes
 
-The default `FileUploaderItem` size is "default".
+Customize the size of file uploader items using the `size` prop. The default size
+is "default".
 
 <FileUploaderItem size="default" name="README.md" status="uploading" />
 <FileUploaderItem size="field" name="README.md" status="uploading" />
@@ -103,11 +119,11 @@ The default `FileUploaderItem` size is "default".
 
 ## Drop container
 
-The `FileUploaderDropContainer` accepts files through click and drop events.
+Use `FileUploaderDropContainer` for drag-and-drop file uploads. It supports file
+validation and multiple file selection.
 
-Use the `validateFiles` prop to filter out files before they are set.
-
-The following example accepts files smaller than 1 kB.
+This example accepts files smaller than 1 kB and logs the selected files to the
+console.
 
 <FileUploaderDropContainer
   multiple
@@ -121,5 +137,8 @@ The following example accepts files smaller than 1 kB.
 />
 
 ## Skeleton
+
+Display a loading state using the `FileUploaderSkeleton` component. This provides
+visual feedback while the file uploader content is being loaded.
 
 <FileUploaderSkeleton />
