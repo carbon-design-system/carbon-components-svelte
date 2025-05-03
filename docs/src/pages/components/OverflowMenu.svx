@@ -8,7 +8,11 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`OverflowMenu` provides a compact way to display a list of actions or options. It renders as a button that opens a dropdown menu when clicked, making it ideal for secondary actions or overflow content.
+
 ## Default
+
+Create a basic overflow menu by wrapping `OverflowMenuItem` components within `OverflowMenu`.
 
 <OverflowMenu>
   <OverflowMenuItem text="Manage credentials" />
@@ -18,7 +22,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
 
 ## Flipped
 
-Set `flipped` to `true` for the menu to be positioned to the left of the button.
+Set `flipped` to `true` to position the menu to the left of the button.
 
 <OverflowMenu flipped>
   <OverflowMenuItem text="Manage credentials" />
@@ -26,7 +30,9 @@ Set `flipped` to `true` for the menu to be positioned to the left of the button.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Menu direction top
+## Menu direction
+
+Set `direction` to `"top"` to position the menu above the button.
 
 <OverflowMenu flipped direction="top">
   <OverflowMenuItem text="Manage credentials" />
@@ -36,6 +42,8 @@ Set `flipped` to `true` for the menu to be positioned to the left of the button.
 
 ## Light variant
 
+Enable the light variant by setting `light` to `true`.
+
 <OverflowMenu light>
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
@@ -43,6 +51,8 @@ Set `flipped` to `true` for the menu to be positioned to the left of the button.
 </OverflowMenu>
 
 ## Extra-large size
+
+Set `size` to `"xl"` for an extra-large overflow menu.
 
 <OverflowMenu size="xl">
   <OverflowMenuItem text="Manage credentials" />
@@ -52,6 +62,8 @@ Set `flipped` to `true` for the menu to be positioned to the left of the button.
 
 ## Small size
 
+Set `size` to `"sm"` for a small overflow menu.
+
 <OverflowMenu size="sm">
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
@@ -60,7 +72,7 @@ Set `flipped` to `true` for the menu to be positioned to the left of the button.
 
 ## Custom primary focus
 
-By default, the first overflow menu item is focused when opening the dropdown.
+Set `primaryFocus` to `true` on a menu item to focus it when opening the dropdown.
 
 <OverflowMenu>
   <OverflowMenuItem text="Manage credentials" />
@@ -70,6 +82,8 @@ By default, the first overflow menu item is focused when opening the dropdown.
 
 ## Custom trigger icon
 
+Replace the default vertical overflow menu icon with a custom icon.
+
 <OverflowMenu icon={Add}>
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
@@ -77,6 +91,8 @@ By default, the first overflow menu item is focused when opening the dropdown.
 </OverflowMenu>
 
 ## Custom trigger slot
+
+Use the `menu` slot to customize the trigger button content.
 
 <OverflowMenu style="width: auto;">
   <div slot="menu" style="padding: 1rem; color: red;">Custom trigger</div>
@@ -87,7 +103,7 @@ By default, the first overflow menu item is focused when opening the dropdown.
 
 ## Disabled items
 
-Disable menu items by setting `disabled` to `true`.
+Set `disabled` to `true` to disable menu items. Use `hasDivider` to add visual separation between items.
 
 <OverflowMenu>
   <OverflowMenuItem text="Create key" />
