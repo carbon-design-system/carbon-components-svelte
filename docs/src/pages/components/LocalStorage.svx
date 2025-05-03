@@ -1,23 +1,26 @@
+---
+components: ["LocalStorage"]
+---
+
 <script>
   import Preview from "../../components/Preview.svelte";
 </script>
 
-This utility component wraps the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and is useful for persisting ephemeral data (e.g., color theme) at the browser level.
-  
+The `LocalStorage` component provides a reactive wrapper around the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). It's useful for persisting user preferences and application state across page reloads.
+
 ## Reactive example
 
-In the example below, toggle the switch and reload the page. The updated theme should be persisted locally.
-  
+See how the component maintains state across page reloads. Toggle the switch and refresh the page to see the persisted state.
+
 <FileSource src="/framed/LocalStorage/LocalStorage" />
 
 ## Clear item, clear all
 
-Use the `bind:this` directive to access the `clearItem` and `clearAll` methods.
+The component provides methods to manage stored data:
 
-Invoking `clearItem` will remove the persisted key value from the browser's local storage.
+- `clearItem`: Remove a specific key-value pair
+- `clearAll`: Remove all stored data
 
-Invoking `clearAll` will remove all key values.
-
-In the following example, toggle the switch and reload the page. Then, click the "Clear storage" button. Refresh the page; the theme should be reset to the untoggled state.
+Use `bind:this` to access these methods. In this example, try toggling the switch, refreshing the page, then clearing the storage.
 
 <FileSource src="/framed/LocalStorage/LocalStorageClear" />
