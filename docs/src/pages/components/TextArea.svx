@@ -7,46 +7,64 @@ components: ["TextArea", "TextAreaSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`TextArea` provides a multi-line text input field with support for various states, character counting, and accessibility features. It's ideal for longer text input like descriptions, comments, or messages.
+
 ## Default
+
+Create a basic textarea with a label and placeholder text.
 
 <TextArea labelText="App description" placeholder="Enter a description..." />
 
 ## Maximum character count
 
-Specify the max character count using the `maxCount` prop. A character counter will be displayed to the right of the label.
-
-You can always use the native `maxlength` attribute if you'd prefer that a counter not be shown.
+Specify the max character count using the `maxCount` prop. A character counter will be displayed to the right of the label. You can also use the native `maxlength` attribute if you prefer not to show a counter.
 
 <TextArea labelText="App description" placeholder="Enter a description..." maxCount={100} />
 
 ## With helper text
 
+Add helper text below the textarea to provide additional context or instructions.
+
 <TextArea labelText="App description" helperText="A rich description helps us better recommend related products and services" placeholder="Enter a description..." />
 
 ## Hidden label
+
+Visually hide the label while maintaining accessibility by setting `hideLabel` to `true`.
 
 <TextArea hideLabel labelText="App description" placeholder="Enter a description..." />
 
 ## Light variant
 
+Use the light variant for light-themed backgrounds by setting `light` to `true`.
+
 <TextArea light labelText="App description" placeholder="Enter a description..." />
 
 ## Custom rows
+
+Adjust the number of visible rows using the `rows` prop. The default is 4 rows.
 
 <TextArea rows={10} labelText="App description" placeholder="Enter a description..." />
 
 ## Invalid state
 
+Indicate an invalid state with an error message by setting `invalid` to `true` and providing `invalidText`.
+
 <TextArea invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
 
 ## Disabled state
+
+Disable the textarea to prevent user interaction by setting `disabled` to `true`.
 
 <TextArea disabled labelText="App description" placeholder="Enter a description..." />
 
 ## Skeleton
 
+Show a loading state with the default skeleton variant.
+
 <TextAreaSkeleton />
 
 ## Skeleton without label
+
+Show a loading state without a label by setting `hideLabel` to `true`.
 
 <TextAreaSkeleton hideLabel />
