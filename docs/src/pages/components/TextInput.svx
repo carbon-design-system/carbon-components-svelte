@@ -7,54 +7,82 @@ components: ["TextInput", "TextInputSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`TextInput` provides a single-line text input field with support for various states, sizes, and accessibility features. It's ideal for short text input like usernames, search terms, or form fields.
+
 ## Default
+
+Create a basic text input with a label and placeholder text.
 
 <TextInput labelText="User name" placeholder="Enter user name..." />
 
 ## With helper text
 
+Add helper text below the input to provide additional context or instructions.
+
 <TextInput labelText="User name" helperText="Your user name is associated with your email" placeholder="Enter user name..." />
 
 ## Hidden label
+
+Visually hide the label while maintaining accessibility by setting `hideLabel` to `true`.
 
 <TextInput hideLabel labelText="User name" placeholder="Enter user name..." />
 
 ## Light variant
 
+Use the light variant for light-themed backgrounds by setting `light` to `true`.
+
 <TextInput light labelText="User name" placeholder="Enter user name..." />
 
 ## Inline variant
+
+Use the inline variant to display the label and input on the same line by setting `inline` to `true`.
 
 <TextInput inline labelText="User name" placeholder="Enter user name..." />
 
 ## Read-only variant
 
+Display a non-editable value by setting `readonly` to `true`.
+
 <TextInput readonly labelText="User name" value="IBM" />
 
 ## Extra-large size
+
+Use the extra-large size for more prominent inputs by setting `size` to `"xl"`.
 
 <TextInput size="xl" labelText="User name" placeholder="Enter user name..." />
 
 ## Small size
 
+Use the small size for more compact inputs by setting `size` to `"sm"`.
+
 <TextInput size="sm" labelText="User name" placeholder="Enter user name..." />
 
 ## Invalid state
+
+Indicate an invalid state with an error message by setting `invalid` to `true` and providing `invalidText`.
 
 <TextInput invalid invalidText="User name is already taken. Please try another." labelText="User name" placeholder="Enter user name..." />
 
 ## Warning state
 
+Indicate a warning state with a message by setting `warn` to `true` and providing `warnText`.
+
 <TextInput warn warnText="Your user name is different from your log in ID." labelText="User name" placeholder="Enter user name..." />
 
 ## Disabled state
+
+Disable the input to prevent user interaction by setting `disabled` to `true`.
 
 <TextInput disabled labelText="User name" placeholder="Enter user name..." />
 
 ## Skeleton
 
+Show a loading state with the default skeleton variant.
+
 <TextInputSkeleton />
 
 ## Skeleton without label
+
+Show a loading state without a label by setting `hideLabel` to `true`.
 
 <TextInputSkeleton hideLabel />
