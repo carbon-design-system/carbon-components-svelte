@@ -7,47 +7,52 @@ components: ["Pagination", "PaginationSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Pagination` provides navigation controls for large data sets. It displays the current page, total items, and allows users to change page size and navigate between pages.
+
 ## Default
 
-<Pagination totalItems={102} pageSizes="{[10, 15, 20]}" />
+Create a basic pagination component with default page size options.
+
+<Pagination totalItems={102} pageSizes={[10, 15, 20]} />
 
 ## Current page
+
+Set the current page using the `page` prop.
 
 <Pagination totalItems={102} page={4} />
 
 ## Custom page sizes
 
-<Pagination totalItems={102} pageSizes="{[16, 36, 99]}" pageSize="{36}" />
+Specify custom page sizes and set a default page size.
+
+<Pagination totalItems={102} pageSizes={[16, 36, 99]} pageSize={36} />
 
 ## Unknown pages
 
-If the total number of pages is unknown, set `pagesUnknown` to `true`.
-
-This will render the item range text without factoring in the total number of pages.
+Set `pagesUnknown` to `true` when the total number of pages is unknown. This renders the item range text without factoring in the total number of pages.
 
 <Pagination pagesUnknown />
 
 ## Page window
 
-The number of native select items rendered is derived from the value of `totalItems`.
-
-If `totalItems` is a very large number, this can impact rendering performance since
-thousands of elements may be rendered. By default, the window of rendered items is
-capped at 1,000. For example, if `totalItems=100_000` and the `pageSize=10`,
-1,000 select options are rendered.
-
-Use the `pageWindow` prop to increase this value.
+The number of native select items rendered is derived from `totalItems`. For large datasets, this can impact performance. Use `pageWindow` to control the number of rendered items.
 
 <Pagination totalItems={100_000} pageSizes={[10, 15, 20]} />
 
 ## Hidden page input
 
+Disable the page input by setting `pageInputDisabled` to `true`.
+
 <Pagination totalItems={102} pageInputDisabled />
 
 ## Hidden page size
 
+Disable the page size selector by setting `pageSizeInputDisabled` to `true`.
+
 <Pagination totalItems={102} pageSizeInputDisabled />
 
 ## Skeleton
+
+Use `PaginationSkeleton` to show a loading state.
 
 <PaginationSkeleton />
