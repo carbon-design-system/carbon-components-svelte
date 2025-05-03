@@ -1,18 +1,30 @@
+---
+components: ["Tag", "TagSkeleton"]
+---
+
 <script>
   import { Tag, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Tag` provides a way to categorize content with a keyword or label. It supports various styles, sizes, and interactive states, including filterable and interactive variants.
+
 ## Default
+
+Create a basic tag with text content.
 
 <Tag>IBM Cloud</Tag>
 
 ## Small size
 
+Use the small size variant for more compact layouts.
+
 <Tag size="sm">IBM Cloud</Tag>
 
 ## Tag types
+
+Choose from a variety of color types to match your design system.
 
 <Tag type="red">red</Tag>
 <Tag type="magenta">magenta</Tag>
@@ -29,36 +41,44 @@
 
 ## Filterable
 
+Create a filterable tag with a close button that dispatches a `close` event when clicked.
+
 <Tag filter on:close>carbon-components</Tag>
 
 ## Filterable (disabled)
+
+Disable a filterable tag to prevent interaction.
 
 <Tag filter disabled on:close>carbon-components</Tag>
 
 ## Filterable (small)
 
+Combine the filterable variant with the small size.
+
 <Tag size="sm" filter on:close>carbon-components</Tag>
 
 ## Custom icon
 
-Note: rendering a custom icon cannot be used with the filterable variant.
+Add a custom icon to the tag. Note: custom icons cannot be used with the filterable variant.
 
 <Tag icon={IbmCloud}>IBM Cloud</Tag>
 
 ## Interactive variant
 
-Set `interactive` to `true` to render a `button` element instead of a `div`.
+Set `interactive` to `true` to render a `button` element instead of a `div`. This is useful for clickable tags.
 
 <Tag interactive>Machine learning</Tag>
 
 ## Disabled
 
-The filterable and interactive tag variants have a disabled state.
+Both filterable and interactive tag variants support a disabled state.
 
 <Tag filter disabled>Machine learning</Tag>
 <Tag interactive disabled>Machine learning</Tag>
 
 ## Tooltip in a tag
+
+Embed a tooltip within a tag to provide additional context.
 
 <Tag>
   <TooltipDefinition tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
@@ -68,8 +88,12 @@ The filterable and interactive tag variants have a disabled state.
 
 ## Skeleton
 
+Show a loading state with the default skeleton variant.
+
 <Tag skeleton />
 
 ## Skeleton (small)
+
+Show a loading state with the small skeleton variant.
 
 <Tag size="sm" skeleton />
