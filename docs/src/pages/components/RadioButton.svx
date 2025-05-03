@@ -7,9 +7,11 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`RadioButton` provides a selection control that allows users to choose a single option from a set. It supports both individual and grouped usage, with options for horizontal and vertical layouts.
+
 ## Default
 
-The `name` prop set on `RadioButtonGroup` is passed to the individual `RadioButton` inputs.
+Create a group of radio buttons with a shared name and legend.
 
 <RadioButtonGroup legendText="Storage tier (disk)" name="plan" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -19,9 +21,7 @@ The `name` prop set on `RadioButtonGroup` is passed to the individual `RadioButt
 
 ## Hidden legend
 
-It's recommended that you provide a legend for accessibility.
-
-Use `hideLegend` to visually hide the legend text.
+Visually hide the legend while maintaining accessibility.
 
 <RadioButtonGroup hideLegend legendText="Storage tier (disk)" name="plan-legend" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -31,7 +31,7 @@ Use `hideLegend` to visually hide the legend text.
 
 ## Legend text slot
 
-Use the named "legendText" slot to customize the legend text.
+Customize the legend text with additional content.
 
 <RadioButtonGroup name="plan-legend-slot" selected="standard">
   <div slot="legendText" style:display="flex">
@@ -49,11 +49,13 @@ Use the named "legendText" slot to customize the legend text.
 
 ## Reactive example
 
-Use the `selected` prop to bind and update the selected value.
+Bind and update the selected value programmatically.
 
 <FileSource src="/framed/RadioButton/RadioButtonReactive" />
 
 ## Left-aligned label text
+
+Position labels to the left of the radio buttons.
 
 <RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" name="plan-left-aligned" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -63,6 +65,8 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Disabled buttons
 
+Disable specific radio buttons to prevent selection.
+
 <RadioButtonGroup labelPosition="left" legendText="Storage tier (disk)" name="plan-disabled" selected="standard">
   <RadioButton disabled labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
@@ -70,6 +74,8 @@ Use the `selected` prop to bind and update the selected value.
 </RadioButtonGroup>
 
 ## Vertical orientation
+
+Display radio buttons in a vertical layout.
 
 <RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" name="plan-vertical" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -79,6 +85,8 @@ Use the `selected` prop to bind and update the selected value.
 
 ## Skeleton
 
+Show a loading state for horizontal radio buttons.
+
 <RadioButtonGroup legendText="Storage tier (disk)">
   <RadioButtonSkeleton />
   <RadioButtonSkeleton />
@@ -86,6 +94,8 @@ Use the `selected` prop to bind and update the selected value.
 </RadioButtonGroup>
 
 ## Skeleton (vertical)
+
+Show a loading state for vertical radio buttons.
 
 <RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)">
   <RadioButtonSkeleton />
