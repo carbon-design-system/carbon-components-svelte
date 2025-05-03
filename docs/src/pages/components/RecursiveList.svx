@@ -3,9 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-This component uses the [svelte:self API](https://svelte.dev/docs#svelte_self) to render the [UnorderedList](/components/UnorderedList) and [OrderedList](/components/OrderedList) components with tree structured data.
-
-A child node can render text, a link, HTML content, and other child nodes.
+`RecursiveList` provides a flexible way to render hierarchical data structures using either unordered or ordered lists. It supports nested nodes, links, and HTML content, making it ideal for displaying complex data hierarchies.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -19,29 +17,26 @@ A child node can render text, a link, HTML content, and other child nodes.
   </div>
 </InlineNotification>
 
-## Unordered
+## Default
 
-The `nodes` prop accepts an array of child nodes.
-
-By default, the list type is unordered.
+Create a hierarchical list using the `nodes` prop. Each node can contain text, links, HTML content, and nested nodes.
 
 <FileSource src="/framed/RecursiveList/RecursiveList" />
 
 ## Ordered
 
-Set `type` to `"ordered"` to use the ordered list variant.
+Set `type` to `"ordered"` to use numbered lists with proper indentation.
 
 <FileSource src="/framed/RecursiveList/RecursiveListOrdered" />
 
 ## Ordered (native styles)
 
-Set `type` to `"ordered-native"` to use the native styles for an ordered list.
+Set `type` to `"ordered-native"` to use browser-native numbering styles.
 
 <FileSource src="/framed/RecursiveList/RecursiveListOrderedNative" />
 
 ## Flat data structure
 
-If working with a flat data structure, use the `toHierarchy` utility
-to convert a flat data structure into a hierarchical array accepted by the `nodes` prop.
+Convert flat data structures to hierarchical arrays using the `toHierarchy` utility function.
 
 <FileSource src="/framed/RecursiveList/RecursiveListFlatArray" />
