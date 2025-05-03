@@ -7,7 +7,11 @@ components: ["SelectableTile"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`SelectableTile` provides a tile-based selection interface that allows users to select multiple options. It supports various states and includes built-in keyboard navigation and accessibility features.
+
 ## Multi-selectable tiles
+
+Group multiple selectable tiles together for multi-selection scenarios.
 
 <div role="group" aria-label="selectable tiles">
   <SelectableTile selected>
@@ -23,6 +27,8 @@ components: ["SelectableTile"]
 
 ## Light variant
 
+Use the light variant for light backgrounds.
+
 <div role="group" aria-label="selectable tiles">
   <SelectableTile light selected>
     Multi-select Tile
@@ -36,6 +42,8 @@ components: ["SelectableTile"]
 </div>
 
 ## Disabled state
+
+Disable tiles to prevent interaction.
 
 <div role="group" aria-label="selectable tiles">
   <SelectableTile selected>
