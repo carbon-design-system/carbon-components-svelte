@@ -5,11 +5,17 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-## Default ("bottom" direction, "center" aligned)
+`TooltipIcon` displays contextual information when users hover over or focus on an icon. It's ideal for providing additional context about icons or actions in your interface.
+
+## Default
+
+Display a tooltip with the default bottom-center alignment.
 
 <TooltipIcon tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
 
 ## Directions
+
+Position the tooltip in different directions and alignments using the `direction` and `align` props.
 
 <TooltipIcon tooltipText="Top start" direction="top" align="start" icon={Filter} />
 <TooltipIcon tooltipText="Right end" direction="right" align="end" icon={Filter} />
@@ -18,12 +24,14 @@
 
 ## Custom tooltip text
 
-Use the "text" slot to customize the tooltip text.
+Use the `tooltipText` slot to customize the tooltip content with additional styling.
 
 <TooltipIcon icon={Carbon}>
   <span slot="tooltipText" style="color: red">Carbon is an open source design system by IBM.</span>
 </TooltipIcon>
 
 ## Disabled state
+
+Set `disabled` to `true` to prevent user interaction with the tooltip.
 
 <TooltipIcon disabled tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
