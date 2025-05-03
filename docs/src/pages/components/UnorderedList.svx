@@ -7,6 +7,8 @@ components: ["UnorderedList", "ListItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`UnorderedList` provides a styled unordered list component that supports nested lists, links, and expressive typography. It's ideal for displaying bulleted content in your interface.
+
 <InlineNotification svx-ignore lowContrast title="Tip:" kind="info" hideCloseButton>
   <div class="body-short-01">
    Consider using the <Link href="/components/RecursiveList#unordered">RecursiveList</Link> component for rendering tree structured data.
@@ -15,6 +17,8 @@ components: ["UnorderedList", "ListItem"]
 
 ## Default
 
+Create a basic unordered list with `ListItem` components.
+
 <UnorderedList>
   <ListItem>Unordered list item</ListItem>
   <ListItem>Unordered list item</ListItem>
@@ -22,6 +26,8 @@ components: ["UnorderedList", "ListItem"]
 </UnorderedList>
 
 ## With links
+
+Add links to list items by wrapping them in `Link` components.
 
 <UnorderedList>
   <ListItem>
@@ -36,6 +42,8 @@ components: ["UnorderedList", "ListItem"]
 </UnorderedList>
 
 ## Nested
+
+Create nested lists by setting `nested` to `true` on child `UnorderedList` components.
 
 <UnorderedList>
   <ListItem>
@@ -57,7 +65,7 @@ components: ["UnorderedList", "ListItem"]
 
 ## Expressive styles
 
-Set `expressive` to `true` to use Carbon's expressive typesetting.
+Use Carbon's expressive typesetting by setting `expressive` to `true`.
 
 <UnorderedList expressive>
   <ListItem><Link size="lg" href="#">Unordered list item</Link></ListItem>
