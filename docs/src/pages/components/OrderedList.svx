@@ -7,13 +7,17 @@ components: ["OrderedList", "ListItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`OrderedList` provides a structured way to display numbered lists of items. It supports nested lists, native browser styles, and expressive typography for enhanced visual hierarchy.
+
 <InlineNotification svx-ignore lowContrast title="Tip:" kind="info" hideCloseButton>
   <div class="body-short-01">
     Consider using the <Link href="/components/RecursiveList#ordered">RecursiveList</Link> component for rendering tree structured data.
-   </div>
+  </div>
 </InlineNotification>
 
 ## Default
+
+Create a basic ordered list by wrapping `ListItem` components within `OrderedList`.
 
 <OrderedList>
   <ListItem>Ordered list item</ListItem>
@@ -22,6 +26,8 @@ components: ["OrderedList", "ListItem"]
 </OrderedList>
 
 ## With links
+
+Add interactive elements like `Link` components within list items.
 
 <OrderedList>
   <ListItem>
@@ -36,6 +42,8 @@ components: ["OrderedList", "ListItem"]
 </OrderedList>
 
 ## Nested
+
+Set the `nested` prop to `true` to create hierarchical lists with proper indentation and numbering.
 
 <OrderedList>
   <ListItem>
@@ -57,7 +65,7 @@ components: ["OrderedList", "ListItem"]
 
 ## Native list styles
 
-Use the `native` attribute to enable default browser list styles. This is useful for large lists (i.e., 1000 or more items) where the list number may overlap with the list item text.
+Enable native browser list styles by setting the `native` prop to `true`. This is useful for large lists where the list number may overlap with the list item text.
 
 <OrderedList native>
   <ListItem>
@@ -79,7 +87,7 @@ Use the `native` attribute to enable default browser list styles. This is useful
 
 ## Expressive styles
 
-Set `expressive` to `true` to use Carbon's expressive typesetting.
+Use Carbon's expressive typesetting by setting the `expressive` prop to `true`.
 
 <OrderedList expressive>
   <ListItem><Link size="lg" href="#">Ordered list item</Link></ListItem>
