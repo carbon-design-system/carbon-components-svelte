@@ -14,7 +14,14 @@ components: ["Form", "FormGroup"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+The `Form` component provides a structured way to collect user input. It works with
+various form controls like checkboxes, radio buttons, and select menus. The
+`FormGroup` component helps organize related form controls with a legend.
+
 ## Form
+
+Create a form with grouped controls using `Form` and `FormGroup`. This example
+shows a form with checkboxes, radio buttons, and a select menu.
 
 <Form on:submit>
   <FormGroup legendText="Checkboxes">
@@ -63,7 +70,9 @@ components: ["Form", "FormGroup"]
 
 ## Prevent default behavior
 
-The forwarded `submit` event is not modified. Use `e.preventDefault()` to prevent the native form submission behavior.
+Handle form submission by preventing the default browser behavior. Use
+`e.preventDefault()` to stop the native form submission and handle the event
+programmatically.
 
 <Form on:submit={e => {
   e.preventDefault();
