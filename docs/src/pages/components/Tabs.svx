@@ -7,7 +7,11 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`Tabs` provides a way to organize content into separate views that can be switched between. It supports keyboard navigation, disabled states, and various layout options.
+
 ## Default
+
+Create a basic tab interface with labels and content.
 
 <Tabs>
   <Tab label="Tab label 1" />
@@ -22,9 +26,7 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
 
 ## Auto width
 
-By default, the width of each tab is set to `10rem`.
-
-Set `autoWidth` to `true` for tabs to have an automatically set width.
+By default, each tab has a fixed width of `10rem`. Set `autoWidth` to `true` for tabs to automatically adjust their width based on content.
 
 <Tabs autoWidth>
   <Tab label="Tab label 1" />
@@ -39,13 +41,13 @@ Set `autoWidth` to `true` for tabs to have an automatically set width.
 
 ## Reactive example
 
+Use `bind:selected` to create a two-way binding with the selected tab index. This allows you to programmatically control the selected tab and react to tab changes.
+
 <FileSource src="/framed/Tabs/TabsReactive" />
 
 ## Disabled tabs
 
-Setting `disabled` to `true` on the `Tab` component will prevent it from being clickable.
-
-Using keyboard navigation (left and right arrow keys) will skip to the next non-disabled tab.
+Set `disabled` to `true` on a `Tab` component to prevent interaction. Keyboard navigation will skip disabled tabs.
 
 <Tabs>
   <Tab label="Tab label 1" />
@@ -62,6 +64,8 @@ Using keyboard navigation (left and right arrow keys) will skip to the next non-
 
 ## Container type
 
+Use the container type for a more prominent tab interface.
+
 <Tabs type="container">
   <Tab label="Tab label 1" />
   <Tab label="Tab label 2" />
@@ -75,8 +79,12 @@ Using keyboard navigation (left and right arrow keys) will skip to the next non-
 
 ## Skeleton (default)
 
+Show a loading state with the default skeleton variant.
+
 <TabsSkeleton count={3} />
 
 ## Skeleton (container)
+
+Show a loading state with the container skeleton variant.
 
 <TabsSkeleton type="container" count={3} />
