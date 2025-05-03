@@ -3,9 +3,11 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`PaginationNav` provides a compact navigation interface for paginated content. It displays page numbers and navigation buttons, with support for overflow menus when there are many pages.
+
 ## Default
 
-`PaginationNav` renders `10` items and does not loop by default.
+Create a basic pagination navigation with default settings.
 
 <PaginationNav />
 
@@ -15,37 +17,35 @@ Use the `page` prop to bind to the current page number.
 
 <FileSource src="/framed/PaginationNav/PaginationNavReactive" />
 
-## Total
+## Total pages
 
-Use the `total` prop to specify the number of pages.
+Specify the total number of pages using the `total` prop.
 
 <PaginationNav total={3} />
 
-## Loopable
+## Loop navigation
 
-Set `loop` to `true` for navigation to be looped.
+Set `loop` to `true` to enable circular navigation between pages.
 
 <PaginationNav total={3} loop />
 
-## Shown
+## Visible pages
 
-If `total` is greater than `10`, the number of items shown will be truncated to `10`.
+Control the number of visible page numbers with the `shown` prop.
 
-Use `shown` to override the number of items shown.
-
-<PaginationNav total={100} shown={5}  />
+<PaginationNav total={100} shown={5} />
 
 ## Custom button text
 
-Use the `forwardText` and `backwardText` props to customize the button text.
+Customize the navigation button text using `forwardText` and `backwardText`.
 
 <PaginationNav
   forwardText="Next"
   backwardText="Previous"
 />
 
-## Tooltip Position
+## Tooltip position
 
-Use the `tooltipPosition` prop to change the alignment of the tooltip.
+Set the tooltip position relative to the navigation buttons using `tooltipPosition`.
 
 <PaginationNav tooltipPosition="outside" total={3} loop />
