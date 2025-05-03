@@ -3,7 +3,11 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`TooltipDefinition` provides inline definitions for terms or concepts. It displays a tooltip when users hover over or focus on the defined term, making it ideal for providing additional context without cluttering the interface.
+
 ## Default
+
+Display a basic definition tooltip with the default bottom-center alignment.
 
 <TooltipDefinition tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk
@@ -11,15 +15,15 @@
 
 ## Custom tooltip direction and alignment
 
-Customize the tooltip menu direction and alignment through the `direction` and `align` props.
-
-By default, `direction` is `"bottom"` and `align` is `"center"`.
+Customize the tooltip position using the `direction` and `align` props. The default direction is `"bottom"` and alignment is `"center"`.
 
 <TooltipDefinition direction="top" align="start" tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk
 </TooltipDefinition>
 
 ## Custom tooltip slot
+
+Use the `tooltip` slot to customize the tooltip content with additional styling or structure.
 
 <TooltipDefinition>
   Armonk
