@@ -3,10 +3,16 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`SkeletonPlaceholder` provides a loading state placeholder that can be used to indicate content is being loaded. It supports custom sizing and forwards mouse events for interactive loading states.
+
 ## Default
+
+Create a basic skeleton placeholder with default styling.
 
 <SkeletonPlaceholder />
 
 ## Custom size
+
+Specify custom dimensions using the `style` prop.
 
 <SkeletonPlaceholder style="height: 12rem; width: 12rem;" />
