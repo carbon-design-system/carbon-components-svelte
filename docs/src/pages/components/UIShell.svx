@@ -1,5 +1,3 @@
-
-
 ---
 components: ["Header",
 "HeaderAction",
@@ -27,6 +25,8 @@ components: ["Header",
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`UIShell` provides a collection of components for building application shells and navigation structures. It includes header, side navigation, and content components that work together to create a cohesive user interface.
+
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
     Currently, the UI Shell is not themable and only supports dark mode.
@@ -36,6 +36,8 @@ components: ["Header",
 Open the following examples in a new tab to experience them in full.
 
 ## Header
+
+Create a basic header with the `Header` component.
 
 <FileSource src="/framed/UIShell/Header" />
 
@@ -71,12 +73,18 @@ Note that providing `text` overrides the tooltip.
 
 ## Header with global search
 
+Add a global search component to the header.
+
 <FileSource src="/framed/UIShell/HeaderSearch" />
 
 ## Header with utilities
 
+Include utility components in the header using `HeaderUtilities`.
+
 <FileSource src="/framed/UIShell/HeaderUtilities" />
 
 ## Header with persisted hamburger menu
+
+Create a header with a persistent hamburger menu state.
 
 <FileSource src="/framed/UIShell/PersistedHamburgerMenu" />
