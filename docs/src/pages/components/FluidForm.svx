@@ -7,9 +7,15 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+The `FluidForm` component provides a fluid-width form layout that adapts to its
+container. It's designed for full-width form layouts and works with most Carbon
+input components. Note that inline input variants cannot be used within a
+`FluidForm`.
+
 ## Fluid form
 
-Note that the `inline` input variants cannot be used within a `FluidForm`.
+Create a fluid-width form layout using the `FluidForm` component. This example
+shows a basic login form with required fields.
 
 <FluidForm>
   <TextInput labelText="User name" placeholder="Enter user name..." required />
@@ -22,5 +28,9 @@ Note that the `inline` input variants cannot be used within a `FluidForm`.
 </FluidForm>
 
 ## Invalid state
+
+Handle form validation and display error states using the `invalid` and
+`invalidText` props on form inputs. This example demonstrates how to show
+validation errors in a fluid form.
 
 <FileSource src="/framed/FluidForm/FluidFormInvalid" />
