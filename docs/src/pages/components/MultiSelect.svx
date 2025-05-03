@@ -3,7 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`MultiSelect` is keyed for performance reasons.
+The `MultiSelect` component provides a dropdown interface for selecting multiple options using checkboxes. It supports filtering, custom formatting, and various states. Each item must have a unique `id` property for proper functionality.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every <code>items</code> object must have a unique "id" property.</div>
@@ -11,12 +11,7 @@
 
 ## Default
 
-By default, items will be ordered alphabetically based on the `item.text` value.
-To prevent this, see [#no-alphabetical-ordering](#no-alphabetical-ordering).
-
-MultiSelect provides interactivity for a list of checkbox inputs. Those
-checkboxes will remain rendered in the DOM and are submittable within forms.
-Checkbox attributes can be adjusted via the `itemToInput` prop.
+Create a basic multi-select dropdown with three contact methods. By default, items are ordered alphabetically.
 
 <MultiSelect titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -26,7 +21,7 @@ Checkbox attributes can be adjusted via the `itemToInput` prop.
 
 ## Format item display text
 
-Use the `itemToString` prop to format the display of individual items without modifying the underlying value.
+Format the display text of items using the `itemToString` prop. This example appends the item ID in parentheses.
 
 <MultiSelect itemToString={item => {
   return item.text + ' (' + item.id +')'
@@ -39,15 +34,13 @@ Use the `itemToString` prop to format the display of individual items without mo
 
 ## Custom slot
 
-For even more customization, use the default slot.
-
-Access the `item` and `index` values through the `let:` directive.
+Override the default slot to customize item rendering. This example shows how to access and use the item and index values.
 
 <FileSource src="/framed/MultiSelect/MultiSelectSlot" />
 
 ## No alphabetical ordering
 
-To prevent alphabetical item ordering, pass a noop function to the `sortItem` prop.
+Prevent automatic alphabetical ordering by passing a no-op function to `sortItem`. This maintains the original order of items.
 
 <MultiSelect titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -58,9 +51,7 @@ To prevent alphabetical item ordering, pass a noop function to the `sortItem` pr
 
 ## Filterable
 
-Set `filterable` to `true` to enable filtering.
-
-`$$restProps` are spread to the underlying input element.
+Enable filtering by setting `filterable` to `true`. This example includes a placeholder text for the filter input.
 
 <MultiSelect spellcheck="false" filterable titleText="Contact" placeholder="Filter contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -70,7 +61,7 @@ Set `filterable` to `true` to enable filtering.
 
 ## Initial selected items
 
-To select (or bind) items, pass an array of item ids to `selectedIds`.
+Pre-select items by passing an array of item IDs to `selectedIds`. This example pre-selects Slack and Email.
 
 <MultiSelect selectedIds="{["0", "1"]}" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -80,19 +71,24 @@ To select (or bind) items, pass an array of item ids to `selectedIds`.
 
 ## Multiple multi-select dropdowns
 
+This example demonstrates how to manage multiple dropdowns in a form with coordinated state.
+
 <FileSource src="/framed/MultiSelect/MultipleMultiSelect" />
 
 ## Format checkbox values
 
+Customize checkbox attributes using the `itemToInput` prop. This example sets a consistent name for all checkboxes.
+
 Use the `itemToInput` prop to customize the user-selectable checkbox values.
 This will also override the underlying hidden inputs used for form submission.
 
-For example: 
-
 ```js
-(item) => ({name: `Contact_${item.id}`], value: item.id})
-
-
+itemToInput={(item) => {
+  return {
+    name: `Contact_${item.id}`,
+    value: item.id
+  }
+}}
 ```
 
 The above function sets the `name` attribute to
@@ -112,7 +108,7 @@ renders, along with each respective item's `id` set to the `value` attribute.
 
 ## Top direction
 
-Set `direction` to `"top"` for the dropdown menu to appear above the input.
+Display the dropdown menu above the input by setting `direction` to `"top"`. This is useful when space below is limited.
 
 <MultiSelect direction="top" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -122,9 +118,7 @@ Set `direction` to `"top"` for the dropdown menu to appear above the input.
 
 ## Hidden label
 
-Set `hideLabel` to `true` to visually hide the label.
-
-Note that you should still specify a `label` for accessibility.
+Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
 
 <MultiSelect titleText="Contact" label="Select contact methods..." hideLabel
     items="{[{id: "0", text: "Slack"},
@@ -134,6 +128,8 @@ Note that you should still specify a `label` for accessibility.
 
 ## Light variant
 
+Use the light variant for dark backgrounds by setting `light` to `true`. This provides better contrast in dark themes.
+
 <MultiSelect light titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
@@ -141,6 +137,8 @@ Note that you should still specify a `label` for accessibility.
   />
 
 ## Inline variant
+
+Display the dropdown inline with other content by setting `type` to `"inline"`. This removes the background and border.
 
 <MultiSelect type="inline" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -150,6 +148,8 @@ Note that you should still specify a `label` for accessibility.
 
 ## Extra-large size
 
+Use the extra-large size for prominent selections by setting `size` to `"xl"`. This provides more visual emphasis.
+
 <MultiSelect size="xl" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
@@ -157,6 +157,8 @@ Note that you should still specify a `label` for accessibility.
   />
 
 ## Small size
+
+Use the small size for compact layouts by setting `size` to `"sm"`. This is ideal for secondary selections.
 
 <MultiSelect size="sm" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -166,6 +168,8 @@ Note that you should still specify a `label` for accessibility.
 
 ## Invalid state
 
+Indicate an invalid selection by setting `invalid` to `true`. This example shows a required field error.
+
 <MultiSelect invalid invalidText="A contact method is required" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
@@ -173,6 +177,8 @@ Note that you should still specify a `label` for accessibility.
   />
 
 ## Warning state
+
+Indicate a warning state by setting `warn` to `true`. This example shows a warning about unassociated accounts.
 
 <MultiSelect warn warnText="One or more contact methods are not associated with your account" titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -182,6 +188,8 @@ Note that you should still specify a `label` for accessibility.
 
 ## Disabled state
 
+Disable the entire dropdown by setting `disabled` to `true`. This prevents all user interaction.
+
 <MultiSelect disabled titleText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
@@ -190,7 +198,7 @@ Note that you should still specify a `label` for accessibility.
 
 ## Disabled items
 
-Use the `disabled` property in the `items` prop to disable specific items.
+Disable specific items using the `disabled` property in the `items` prop. This example disables the Email option.
 
 <MultiSelect
   titleText="Contact"
