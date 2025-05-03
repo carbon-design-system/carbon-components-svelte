@@ -3,7 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-ComboBox combines a text input with a dropdown menu. Use it to let users select from a predefined list of options or enter custom values.
+`ComboBox` combines a text input with a dropdown menu to let users select from predefined options or enter custom values. It supports filtering, custom item rendering, and various states.
 
 `ComboBox` is keyed for performance reasons.
 
