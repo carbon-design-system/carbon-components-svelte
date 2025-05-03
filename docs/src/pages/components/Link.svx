@@ -8,7 +8,11 @@ components: ["Link", "OutboundLink"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+The `Link` component provides styled hyperlinks with various customization options. It supports different sizes, states, and can include icons. The `OutboundLink` variant automatically handles external links with proper security attributes.
+
 ## Default
+
+Create a basic link with the default styling.
 
 <Link href="https://www.carbondesignsystem.com/">
   Carbon Design System
@@ -16,9 +20,7 @@ components: ["Link", "OutboundLink"]
 
 ## Target _blank
 
-If setting `target` to `"_blank"`, the `Link` component will automatically set `rel="noopener noreferrer"` to guard against [potential cross-origin security exploits](https://web.dev/external-anchors-use-rel-noopener/).
-
-You can override the `rel` attribute with a custom value.
+For external links, the component automatically adds security attributes. You can override the `rel` attribute if needed.
 
 <Link href="https://www.carbondesignsystem.com/" target="_blank">
   Carbon Design System
@@ -26,13 +28,15 @@ You can override the `rel` attribute with a custom value.
 
 ## Outbound link
 
-An alternative to manually setting `target` to `"_blank"` is to use the `OutboundLink`.
+Use `OutboundLink` as a convenient alternative for external links.
 
 <OutboundLink href="https://www.carbondesignsystem.com/">
   Carbon Design System
 </OutboundLink>
 
 ## Inline variant
+
+Create links that flow naturally with surrounding text.
 
 <div>
   Visit the
@@ -43,7 +47,7 @@ An alternative to manually setting `target` to `"_blank"` is to use the `Outboun
 
 ## Link with icon
 
-Note that `inline` must be `false` when rendering a link with an icon.
+Add icons to links for better visual context. Note that `inline` must be `false` when using icons.
 
 <div>
   Visit the
@@ -52,28 +56,34 @@ Note that `inline` must be `false` when rendering a link with an icon.
   </Link>.
 </div>
 
-## Large size
+## Size variants
+
+The component supports different sizes to match your design needs:
 
 <Link size="lg" href="https://www.carbondesignsystem.com/">
-  Carbon Design System
+  Large link
 </Link>
-
-## Small size
-
+<br />
+<Link href="https://www.carbondesignsystem.com/">
+  Default link
+</Link>
+<br />
 <Link size="sm" href="https://www.carbondesignsystem.com/">
-  Carbon Design System
+  Small link
 </Link>
 
 ## Disabled state
 
-A `disabled` link will render a `p` tag instead of an anchor element.
+Disabled links render as plain text while maintaining accessibility.
 
 <Link disabled href="https://www.carbondesignsystem.com/">
-  Carbon Design System
+  Disabled link
 </Link>
 
 ## Visited styles
 
+Show visited state styling for links.
+
 <Link visited href="https://www.carbondesignsystem.com/">
-  Carbon Design System
+  Visited link
 </Link>
