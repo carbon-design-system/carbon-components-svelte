@@ -7,6 +7,8 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`TimePicker` provides a time input field with optional period (AM/PM) and timezone selectors. It supports various sizes, states, and themes to match your application's design system.
+
 ## Default
 
 <TimePicker labelText="Cron job" placeholder="hh:mm">
@@ -22,6 +24,8 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 
 ## Light variant
 
+Use the light variant for light-themed backgrounds by setting `light` to `true`.
+
 <TimePicker light labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
@@ -34,6 +38,8 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 </TimePicker>
 
 ## Extra-large size
+
+Use the extra-large size for more prominent time pickers by setting `size` to `"xl"`.
 
 <TimePicker size="xl" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -48,6 +54,8 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 
 ## Small size
 
+Use the small size for more compact time pickers by setting `size` to `"sm"`.
+
 <TimePicker size="sm" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
@@ -61,6 +69,8 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 
 ## Invalid state
 
+Indicate an invalid state with an error message by setting `invalid` to `true` and providing `invalidText`.
+
 <TimePicker invalid invalidText="A valid value is required" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
@@ -72,8 +82,9 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
   </TimePickerSelect>
 </TimePicker>
 
-
 ## Disabled state
+
+Disable the time picker to prevent user interaction by setting `disabled` to `true`.
 
 <TimePicker labelText="Cron job" placeholder="hh:mm" disabled>
   <TimePickerSelect value="pm" disabled>
