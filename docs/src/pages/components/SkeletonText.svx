@@ -3,22 +3,34 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
+`SkeletonText` provides a loading state for text content with support for different sizes and line counts. It's commonly used to indicate that text content is being loaded.
+
 ## Default
+
+Create a basic skeleton text with default styling.
 
 <SkeletonText />
 
 ## Heading variant
 
+Use the heading variant for larger text placeholders.
+
 <SkeletonText heading />
 
 ## Paragraph variant
+
+Use the paragraph variant for multi-line text placeholders.
 
 <SkeletonText paragraph />
 
 ## Paragraph with custom line count
 
+Specify the number of lines to render using the `lines` prop.
+
 <SkeletonText paragraph lines={8} />
 
 ## Paragraph with max width
+
+Set a custom width for the text placeholder using the `width` prop.
 
 <SkeletonText paragraph width="50%" />
