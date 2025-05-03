@@ -7,26 +7,29 @@ components: ["InlineNotification", "NotificationActionButton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-Notification that appears inline.
+The `InlineNotification` component displays contextual messages inline with content. It supports various types of notifications (error, warning, success, info) and can include actions. Use it to provide feedback or important information to users.
 
-See [detailed
-usage](https://carbondesignsystem.com/components/notification/usage).  
+See [detailed usage](https://carbondesignsystem.com/components/notification/usage).  
 See also: [ToastNotification](ToastNotification)
 
 ## Default (error)
+
+Display a basic error notification with title and subtitle.
 
 <InlineNotification title="Error:" subtitle="An internal server error occurred." />
 
 ## Prevent default close behavior
 
-`InlineNotification` is a controlled component. Prevent the default close behavior using the `e.preventDefault()` method in the dispatched `on:close` event.
+The component is controlled, allowing you to prevent the default close behavior using `e.preventDefault()`.
 
 <InlineNotification title="Error" subtitle="An internal server error occurred." on:close={(e) => {
   e.preventDefault();
   // custom close logic (e.g., transitions)
 }} />
 
-## Slottable title, subtitle
+## Slottable title and subtitle
+
+Customize the notification content using slots for more flexibility.
 
 <InlineNotification>
   <strong slot="title">Error: </strong>
@@ -35,9 +38,7 @@ See also: [ToastNotification](ToastNotification)
 
 ## Accessible icon descriptions
 
-The status icon and close button icon descriptions appear on cursor hover and are read
-by assistive technology. Default descriptions are provided in English and can be
-overridden via `statusIconDescription` and `closeButtonDescription`.
+Make notifications more accessible by providing custom descriptions for icons.
 
 <InlineNotification 
   title="错误"
@@ -48,9 +49,13 @@ overridden via `statusIconDescription` and `closeButtonDescription`.
 
 ## Hidden close button
 
+Create a persistent notification by hiding the close button.
+
 <InlineNotification hideCloseButton kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 
 ## With actions
+
+Add interactive elements to notifications using the actions slot.
 
 <InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours.">
   <svelte:fragment slot="actions">
@@ -60,6 +65,8 @@ overridden via `statusIconDescription` and `closeButtonDescription`.
 
 ## Notification variants
 
+The component supports different notification types:
+
 <InlineNotification kind="error" title="Error:" subtitle="An internal server error occurred." />
 <InlineNotification kind="info" title="New updates:" subtitle="Restart to get the latest updates." />
 <InlineNotification kind="info-square" title="New updates:" subtitle="Restart to get the latest updates." />
@@ -68,6 +75,8 @@ overridden via `statusIconDescription` and `closeButtonDescription`.
 <InlineNotification kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 
 ## Low contrast
+
+Use low contrast variants for less prominent notifications.
 
 <InlineNotification lowContrast kind="error" title="Error:" subtitle="An internal server error occurred." />
 <InlineNotification lowContrast kind="info" title="New updates:" subtitle="Restart to get the latest updates." />
