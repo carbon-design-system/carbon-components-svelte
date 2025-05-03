@@ -1,22 +1,24 @@
+---
+components: ["ToastNotification"]
+---
+
 <script>
   import { ToastNotification } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
-Toasts are non-modal, time-based window elements used to display short messages;
-they usually appear at the top of the screen and disappear after a few seconds.
+`ToastNotification` displays non-modal, time-based messages that appear at the top of the screen and automatically disappear. It supports various notification types, custom content, and accessibility features.
 
-See [detailed
-usage](https://carbondesignsystem.com/components/notification/usage).  
+See [detailed usage](https://carbondesignsystem.com/components/notification/usage).  
 See also: [InlineNotification](InlineNotification)
 
 ## Default (error)
 
+Display a basic error notification with title, subtitle, and timestamp.
+
 <ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 
 ## Autoclose
-
-By default, `ToastNotification` does not automatically close.
 
 Specify the `timeout` prop to automatically close the notification after a specified duration (in milliseconds).
 
@@ -24,7 +26,7 @@ Specify the `timeout` prop to automatically close the notification after a speci
 
 ## Prevent default close behavior
 
-`ToastNotification` is a controlled component. Prevent the default close behavior using the `e.preventDefault()` method in the dispatched `on:close` event.
+Prevent the default close behavior using `e.preventDefault()` in the `on:close` event handler.
 
 <ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" on:close={(e) => {
   e.preventDefault();
@@ -33,11 +35,13 @@ Specify the `timeout` prop to automatically close the notification after a speci
 
 ## Full width
 
-Set `fullWidth` to `true` for the notification to span the full width of its containing element.
+Set `fullWidth` to `true` for the notification to span the full width of its container.
 
 <ToastNotification fullWidth title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 
 ## Slottable title, subtitle, caption
+
+Customize the notification content using slots for more flexibility.
 
 <ToastNotification>
   <strong slot="title">Error: </strong>
@@ -47,9 +51,7 @@ Set `fullWidth` to `true` for the notification to span the full width of its con
 
 ## Accessible icon descriptions
 
-The status icon and close button icon descriptions appear on cursor hover and are read
-by assistive technology. Default descriptions are provided in English and can be
-overridden via `statusIconDescription` and `closeButtonDescription`.
+Provide custom descriptions for icons to improve accessibility.
 
 <ToastNotification 
   title="错误"
@@ -60,9 +62,13 @@ overridden via `statusIconDescription` and `closeButtonDescription`.
 
 ## Hidden close button
 
+Create a persistent notification by hiding the close button.
+
 <ToastNotification hideCloseButton kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
 
 ## Notification variants
+
+The component supports different notification types:
 
 <ToastNotification kind="error" title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 <ToastNotification kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="{new Date().toLocaleString()}"  />
@@ -72,6 +78,8 @@ overridden via `statusIconDescription` and `closeButtonDescription`.
 <ToastNotification kind="warning-alt" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
 
 ## Low contrast
+
+Use low contrast variants for less prominent notifications.
 
 <ToastNotification lowContrast kind="error" title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 <ToastNotification lowContrast kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="{new Date().toLocaleString()}" />
