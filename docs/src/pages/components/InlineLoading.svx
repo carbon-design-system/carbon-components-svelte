@@ -1,17 +1,36 @@
+---
+components: ["InlineLoading"]
+---
+
 <script>
-  import { InlineLoading } from "carbon-components-svelte";
+  import { InlineLoading, UnorderedList, ListItem } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
+The `InlineLoading` component provides a compact loading indicator that can be embedded within content. It's ideal for showing progress during inline operations like form submissions or data updates.
+
 ## Default
+
+Display a basic loading indicator with the default configuration.
 
 <InlineLoading />
 
 ## With description
 
+Add a descriptive text to provide context about the loading operation.
+
 <InlineLoading description="Loading metrics..." />
 
 ## Status states
+
+The component supports different status states to indicate progress:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem><strong>active</strong>: Shows an animated loading indicator</ListItem>
+  <ListItem><strong>inactive</strong>: Displays a static state</ListItem>
+  <ListItem><strong>finished</strong>: Shows a success state</ListItem>
+  <ListItem><strong>error</strong>: Displays an error state</ListItem>
+</UnorderedList>
 
 <InlineLoading status="active" description="Submitting..." />
 <InlineLoading status="inactive" description="Cancelling..." />
@@ -19,5 +38,7 @@
 <InlineLoading status="error" description="An error occurred" />
 
 ## UX example
+
+See how to integrate the loading indicator in a real-world scenario.
 
 <FileSource src="/framed/InlineLoading/InlineLoadingUx" />
