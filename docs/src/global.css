@@ -2,12 +2,19 @@ html[theme="g90"] .code-override {
   border: 1px solid var(--cds-ui-03);
 }
 
+.prose > pre,
 .code-override .bx--snippet {
   /** Docs code snippet is always dark mode */
   color-scheme: dark;
   max-width: none;
 }
 
+.prose > pre {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose > pre,
 .code-override .bx--copy-btn,
 .code-override .bx--snippet,
 .code-override button.bx--btn.bx--snippet-btn--expand {
@@ -24,6 +31,7 @@ html[theme="g90"] .code-override {
   fill: #f4f4f4;
 }
 
+.prose > pre,
 .code-override .bx--snippet-container pre {
   font-size: var(--cds-code-02-font-size);
   line-height: var(--cds-code-02-line-height);
