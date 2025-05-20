@@ -424,4 +424,114 @@ describe("MultiSelect", () => {
       expect(checkboxInput).toHaveAttribute("value", "slack");
     });
   });
+
+  it("does not show helper text if warn is true", () => {
+    render(MultiSelect, {
+      props: {
+        items,
+        helperText: "Help",
+        warn: true,
+      },
+    });
+    expect(screen.queryByText("Help")).not.toBeInTheDocument();
+  });
+
+  it("does not show helper text if invalid is true", () => {
+    render(MultiSelect, {
+      props: {
+        items,
+        helperText: "Help",
+        invalid: true,
+      },
+    });
+    expect(screen.queryByText("Help")).not.toBeInTheDocument();
+  });
+
+  it("does not show helper text if inline is true", () => {
+    render(MultiSelect, {
+      props: {
+        items,
+        helperText: "Help",
+        type: "inline",
+      },
+    });
+    expect(screen.queryByText("Help")).not.toBeInTheDocument();
+  });
+
+  it("clears all selections when clear button is clicked", async () => {
+    render(MultiSelect, {
+      props: {
+        items,
+        selectedIds: ["0", "1"],
+      },
+    });
+    await user.click(screen.getAllByRole("button")[0]);
+
+    const options = screen.getAllByRole("option");
+    expect(options[0]).toHaveAttribute("aria-selected", "true");
+    expect(options[1]).toHaveAttribute("aria-selected", "true");
+    expect(options[2]).toHaveAttribute("aria-selected", "false");
+
+    const clearButton = screen.getByRole("button", { name: /clear/i });
+    await user.click(clearButton);
+    await user.click(screen.getByRole("button"));
+
+    expect(options[0]).toHaveAttribute("aria-selected", "false");
+    expect(options[1]).toHaveAttribute("aria-selected", "false");
+    expect(options[2]).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("skips disabled items during keyboard navigation", async () => {
+    render(MultiSelect, {
+      props: {
+        items: [
+          { id: "1", text: "Aa" },
+          { id: "2", text: "Ba", disabled: true },
+          { id: "3", text: "Ca" },
+        ],
+        filterable: true,
+        placeholder: "Filter...",
+      },
+    });
+    await user.click(screen.getByRole("button"));
+    const input = screen.getByPlaceholderText("Filter...");
+
+    await user.type(input, "a");
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{Enter}");
+
+    const options = screen.getAllByRole("option");
+    expect(options[2]).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("focuses input when filterable and menu is opened", async () => {
+    render(MultiSelect, {
+      props: {
+        items,
+        filterable: true,
+        placeholder: "Filter...",
+      },
+    });
+    await user.click(screen.getByRole("button"));
+    const input = screen.getByPlaceholderText("Filter...");
+    expect(input).toHaveFocus();
+  });
+
+  it("does not select disabled items when clicked", async () => {
+    render(MultiSelect, {
+      props: {
+        items: [
+          { id: "1", text: "A" },
+          { id: "2", text: "B", disabled: true },
+          { id: "3", text: "C" },
+        ],
+      },
+    });
+    await user.click(screen.getByRole("button"));
+    const disabledOption = screen.getByText("B").closest("[role='option']");
+
+    await user.click(disabledOption!);
+    expect(disabledOption).toHaveAttribute("aria-selected", "false");
+  });
 });

@@ -25,6 +25,7 @@
   ) => item.text;
   export let itemToInput: ComponentProps<MultiSelect>["itemToInput"] =
     undefined;
+  export let helperText: ComponentProps<MultiSelect>["helperText"] = "";
 </script>
 
 <MultiSelect
@@ -46,6 +47,7 @@
   {translateWithIdSelection}
   {itemToString}
   {itemToInput}
+  {helperText}
   on:select={(e) => {
     console.log("select", e.detail);
   }}
