@@ -69,6 +69,26 @@ describe("ComboBox", () => {
     expect(screen.getByRole("textbox")).toHaveValue("");
   });
 
+  it("should handle clear selection via keyboard navigation", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+      },
+    });
+
+    const clearButton = screen.getByRole("button", {
+      name: /clear/i,
+    });
+    clearButton.focus();
+    expect(clearButton).toHaveFocus();
+    await user.keyboard("{Enter}");
+
+    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
+    expect(screen.getByRole("textbox")).toHaveValue("");
+  });
+
   it("should use custom translations when translateWithId is provided", () => {
     const customTranslations = {
       clearSelection: "Remove selected item",
