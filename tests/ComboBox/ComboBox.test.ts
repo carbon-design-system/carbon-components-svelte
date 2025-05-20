@@ -294,4 +294,76 @@ describe("ComboBox", () => {
     await user.keyboard("{Escape}");
     expect(dropdown).not.toBeVisible();
   });
+
+  it("should use custom shouldFilterItem function", async () => {
+    render(ComboBoxCustom, {
+      props: {
+        items: [
+          { id: "1", text: "Apple" },
+          { id: "2", text: "Banana" },
+          { id: "3", text: "Cherry" },
+        ],
+        shouldFilterItem: (item: { text: string }, value: string) =>
+          item.text.startsWith(value),
+      },
+    });
+    const input = screen.getByRole("textbox");
+    await user.click(input);
+    await user.type(input, "B");
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]).toHaveTextContent("Banana");
+  });
+
+  it("should use custom itemToString function", async () => {
+    render(ComboBoxCustom, {
+      props: {
+        items: [
+          { id: "1", text: "Apple" },
+          { id: "2", text: "Banana" },
+        ],
+        itemToString: (item: { text: string }) => `Item ${item.text}`,
+      },
+    });
+    const input = screen.getByRole("textbox");
+    await user.click(input);
+    const options = screen.getAllByRole("option");
+    expect(options[0]).toHaveTextContent("Item Apple");
+    await user.click(options[1]);
+    expect(input).toHaveValue("Item Banana");
+  });
+
+  it("should open menu if open prop is true on mount", () => {
+    render(ComboBox, { props: { open: true } });
+    const dropdown = screen.getAllByRole("listbox")[1];
+    expect(dropdown).toBeVisible();
+  });
+
+  it("should skip disabled items during keyboard navigation", async () => {
+    render(ComboBoxCustom, {
+      props: {
+        items: [
+          { id: "1", text: "A" },
+          { id: "2", text: "B", disabled: true },
+          { id: "3", text: "C" },
+        ],
+      },
+    });
+    const input = screen.getByRole("textbox");
+    await user.click(input);
+    await user.keyboard("{ArrowDown}"); // should highlight A
+    await user.keyboard("{ArrowDown}"); // should skip B and highlight C
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("C");
+  });
+
+  it("should not show helper text if warn is true", () => {
+    render(ComboBox, { props: { helperText: "Help", warn: true } });
+    expect(screen.queryByText("Help")).not.toBeInTheDocument();
+  });
+
+  it("should not show helper text if invalid is true", () => {
+    render(ComboBox, { props: { helperText: "Help", invalid: true } });
+    expect(screen.queryByText("Help")).not.toBeInTheDocument();
+  });
 });
