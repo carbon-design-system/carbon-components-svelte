@@ -91,6 +91,7 @@ export {
   ProgressIndicatorSkeleton,
   ProgressStep,
 } from "./ProgressIndicator";
+export { Portal, FloatingPortal } from "./Portal";
 export { RadioButton, RadioButtonSkeleton } from "./RadioButton";
 export { RadioButtonGroup } from "./RadioButtonGroup";
 export { RecursiveList } from "./RecursiveList";
