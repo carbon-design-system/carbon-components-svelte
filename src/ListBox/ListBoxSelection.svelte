@@ -75,7 +75,7 @@
         }
       }}
       on:keydown|stopPropagation={(e) => {
-        if (!disabled && e.key === "Enter") {
+        if (!disabled && (e.key === "Enter" || e.key === " ")) {
           dispatch("clear", e);
         }
       }}
@@ -103,7 +103,7 @@
       }
     }}
     on:keydown|stopPropagation={(e) => {
-      if (!disabled && e.key === "Enter") {
+      if (!disabled && (e.key === "Enter" || e.key === " ")) {
         dispatch("clear", e);
       }
     }}
