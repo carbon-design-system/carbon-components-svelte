@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.89.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.2...v0.89.3) (2025-06-07)
+
+### Bug Fixes
+
+- **combo-box:** "Escape" key clears input value ([#2169](https://github.com/carbon-design-system/carbon-components-svelte/issues/2169)) ([632320a](https://github.com/carbon-design-system/carbon-components-svelte/commit/632320ae3b8d9c602add0f4f7c708fc643cb7ffc)), closes [#2167](https://github.com/carbon-design-system/carbon-components-svelte/issues/2167)
+- **combo-box:** clear button supports "Space" key ([#2168](https://github.com/carbon-design-system/carbon-components-svelte/issues/2168)) ([95c06a8](https://github.com/carbon-design-system/carbon-components-svelte/commit/95c06a83b3afcbb76acfc0a5efe2f178d333ff19)), closes [#2166](https://github.com/carbon-design-system/carbon-components-svelte/issues/2166)
+
 ### [0.89.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.1...v0.89.2) (2025-04-28)
 
 ### Bug Fixes
