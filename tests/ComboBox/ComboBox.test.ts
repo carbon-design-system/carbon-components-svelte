@@ -4,6 +4,9 @@ import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
 
 describe("ComboBox", () => {
+  const getClearButton = () =>
+    screen.getByRole("button", { name: "Clear selected item" });
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -60,16 +63,13 @@ describe("ComboBox", () => {
       },
     });
 
-    const clearButton = screen.getByRole("button", {
-      name: "Clear selected item",
-    });
-    await user.click(clearButton);
+    await user.click(getClearButton());
 
     expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
     expect(screen.getByRole("textbox")).toHaveValue("");
   });
 
-  it("should handle clear selection via keyboard navigation", async () => {
+  it("should handle clear selection via keyboard navigation (Enter)", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ComboBox, {
       props: {
@@ -78,12 +78,34 @@ describe("ComboBox", () => {
       },
     });
 
-    const clearButton = screen.getByRole("button", {
-      name: /clear/i,
-    });
+    expect(consoleLog).not.toHaveBeenCalled();
+    expect(screen.getByRole("textbox")).toHaveValue("Email");
+
+    const clearButton = getClearButton();
     clearButton.focus();
     expect(clearButton).toHaveFocus();
     await user.keyboard("{Enter}");
+
+    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
+    expect(screen.getByRole("textbox")).toHaveValue("");
+  });
+
+  it("should handle clear selection via keyboard navigation (Space)", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+      },
+    });
+
+    expect(consoleLog).not.toHaveBeenCalled();
+    expect(screen.getByRole("textbox")).toHaveValue("Email");
+
+    const clearButton = getClearButton();
+    clearButton.focus();
+    expect(clearButton).toHaveFocus();
+    await user.keyboard(" ");
 
     expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
     expect(screen.getByRole("textbox")).toHaveValue("");
@@ -205,8 +227,7 @@ describe("ComboBox", () => {
     render(ComboBox, { props: { selectedId: "1" } });
 
     expect(consoleLog).not.toBeCalled();
-    const clearButton = screen.getByRole("button", { name: /clear/i });
-    await user.click(clearButton);
+    await user.click(getClearButton());
 
     expect(screen.getByRole("textbox")).toHaveValue("");
     expect(consoleLog).toHaveBeenCalledWith("clear", "clear");
@@ -250,8 +271,7 @@ describe("ComboBox", () => {
   it("should clear filter on selection clear", async () => {
     render(ComboBoxCustom, { props: { selectedId: "1" } });
 
-    const clearButton = screen.getByLabelText("Clear selected item");
-    await user.click(clearButton);
+    await user.click(getClearButton());
 
     const input = screen.getByRole("textbox");
     expect(input).toHaveValue("");

@@ -52,5 +52,7 @@
   }}
   on:clear={(e) => {
     console.log("clear", e.type);
+    value = "";
+    selectedId = undefined;
   }}
 />
