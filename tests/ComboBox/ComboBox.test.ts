@@ -305,6 +305,8 @@ describe("ComboBox", () => {
   it("should close menu on Escape key", async () => {
     render(ComboBox);
 
+    expect(screen.getByRole("textbox")).toHaveValue("");
+
     const input = screen.getByRole("textbox");
     await user.click(input);
 
@@ -313,6 +315,30 @@ describe("ComboBox", () => {
 
     await user.keyboard("{Escape}");
     expect(dropdown).not.toBeVisible();
+    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(screen.getByRole("textbox")).toHaveFocus();
+  });
+
+  it("should close menu and clear selection on Escape key", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+      },
+    });
+
+    expect(screen.getByRole("textbox")).toHaveValue("Email");
+
+    const input = screen.getByRole("textbox");
+    await user.click(input);
+
+    const dropdown = screen.getAllByRole("listbox")[1];
+    expect(dropdown).toBeVisible();
+
+    await user.keyboard("{Escape}");
+    expect(dropdown).not.toBeVisible();
+    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(screen.getByRole("textbox")).toHaveFocus();
   });
 
   it("should use custom shouldFilterItem function", async () => {
