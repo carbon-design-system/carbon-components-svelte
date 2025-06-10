@@ -2419,6 +2419,7 @@ export interface MultiSelectItem {
 | clear      | dispatched | <code>null</code>                                                                                              |
 | blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         |
 | keydown    | forwarded  | --                                                                                                             |
+| input      | forwarded  | --                                                                                                             |
 | keyup      | forwarded  | --                                                                                                             |
 | focus      | forwarded  | --                                                                                                             |
 | paste      | forwarded  | --                                                                                                             |
