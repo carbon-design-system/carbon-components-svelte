@@ -459,6 +459,7 @@
               if (!open) open = true;
             }
           }}
+          on:input
           on:keyup
           on:focus
           on:blur

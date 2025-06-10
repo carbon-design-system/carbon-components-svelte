@@ -8945,6 +8945,11 @@
         },
         {
           "type": "forwarded",
+          "name": "input",
+          "element": "input"
+        },
+        {
+          "type": "forwarded",
           "name": "keyup",
           "element": "input"
         },
