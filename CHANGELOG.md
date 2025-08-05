@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.89.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.4...v0.89.5) (2025-08-05)
+
+### Bug Fixes
+
+- **checkbox:** prevent infinite effect loop when binding to same object ([#2178](https://github.com/carbon-design-system/carbon-components-svelte/issues/2178)) ([c7ad1eb](https://github.com/carbon-design-system/carbon-components-svelte/commit/c7ad1ebdd3764235f460abd95cdb7d1d389983d9)), closes [#2177](https://github.com/carbon-design-system/carbon-components-svelte/issues/2177)
+
 ### [0.89.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.3...v0.89.4) (2025-06-10)
 
 ### Bug Fixes
