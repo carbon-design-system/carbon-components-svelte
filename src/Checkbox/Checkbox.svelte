@@ -61,7 +61,7 @@
   const dispatch = createEventDispatcher();
 
   $: useGroup = Array.isArray(group);
-  $: checked = useGroup ? group.includes(value) : checked;
+  $: if (useGroup) checked = group.includes(value);
   $: dispatch("check", checked);
 
   let refLabel = null;
