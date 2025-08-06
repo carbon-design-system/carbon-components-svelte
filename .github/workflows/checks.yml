@@ -1,40 +1,60 @@
 on:
   pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "examples/**"
   push:
     branches: [master]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "examples/**"
 
 permissions:
   contents: read
 
 jobs:
-  test:
-    runs-on: macos-latest-xlarge
+  lint:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v4
-        id: npm-cache
+      - uses: actions/setup-node@v4
         with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          node-version: "22.x"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run lint
 
-      - name: Install dependencies
-        run: npm install
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run test
 
-      - name: Run lint
-        run: npm run lint
+  types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run test:src-types
+      - run: npm run test:types
 
-      - name: Unit tests
-        run: npm run test
-
-      - name: Test generated source types
-        run: npm run test:src-types
-
-      - name: Test types
-        run: npm run test:types
-
+  deploy-docs:
+    if: github.ref == 'refs/heads/master'
+    needs: [lint, test, types]
+    runs-on: ubuntu-latest
+    steps:
       - name: Trigger deploy
-        if: github.ref == 'refs/heads/master'
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: |
-          curl "$deploy_url"
+        run: curl -f "$deploy_url"
