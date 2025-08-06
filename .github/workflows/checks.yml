@@ -18,35 +18,26 @@ jobs:
     runs-on: macos-15-xlarge
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: "npm"
-      - run: npm ci
-      - run: npm run lint
+      - uses: oven-sh/setup-bun@v2
+      - run: bun ci
+      - run: bun run lint
 
   test:
     runs-on: macos-15-xlarge
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: "npm"
-      - run: npm ci
-      - run: npm run test
+      - uses: oven-sh/setup-bun@v2
+      - run: bun ci
+      - run: bun run test
 
   types:
     runs-on: macos-15-xlarge
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: "npm"
-      - run: npm ci
-      - run: npm run test:src-types
-      - run: npm run test:types
+      - uses: oven-sh/setup-bun@v2
+      - run: bun ci
+      - run: bun --bun run test:src-types
+      - run: bun --bun run test:types
 
   deploy-docs:
     if: github.ref == 'refs/heads/master'
