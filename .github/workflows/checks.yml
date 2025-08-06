@@ -19,35 +19,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22.x"
-          cache: "npm"
-      - run: npm ci
-      - run: npm run lint
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun run lint
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22.x"
-          cache: "npm"
-      - run: npm ci
-      - run: npm run test
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun run test
 
   types:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22.x"
-          cache: "npm"
-      - run: npm ci
-      - run: npm run test:src-types
-      - run: npm run test:types
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun run test:src-types
+      - run: bun run test:types
 
   deploy-docs:
     if: github.ref == 'refs/heads/master'
