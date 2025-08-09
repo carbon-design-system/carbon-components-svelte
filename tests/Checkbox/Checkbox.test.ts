@@ -4,6 +4,7 @@ import CheckboxGroup from "./Checkbox.group.test.svelte";
 import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
 import CheckboxSlot from "./Checkbox.slot.test.svelte";
 import Checkbox from "./Checkbox.test.svelte";
+import MultipleCheckboxes from "./MultipleCheckboxes.test.svelte";
 
 describe("Checkbox", () => {
   beforeEach(() => {
@@ -145,5 +146,107 @@ describe("Checkbox", () => {
     const customLabel = screen.getByTestId("custom-label");
     expect(customLabel).toBeInTheDocument();
     expect(customLabel).toHaveTextContent("Custom label content");
+  });
+
+  it("renders multiple checkboxes with default values", () => {
+    render(MultipleCheckboxes);
+
+    expect(screen.getByTestId("checkbox-0")).toBeInTheDocument();
+    expect(screen.getByTestId("checkbox-1")).toBeInTheDocument();
+    expect(screen.getByTestId("checkbox-2")).toBeInTheDocument();
+
+    const appleCheckbox = screen
+      .getByTestId("checkbox-0")
+      .querySelector("input[type='checkbox']");
+    const bananaCheckbox = screen
+      .getByTestId("checkbox-1")
+      .querySelector("input[type='checkbox']");
+    const coconutCheckbox = screen
+      .getByTestId("checkbox-2")
+      .querySelector("input[type='checkbox']");
+
+    assert(appleCheckbox);
+    assert(bananaCheckbox);
+    assert(coconutCheckbox);
+
+    expect(appleCheckbox).toBeChecked();
+    expect(bananaCheckbox).toBeChecked();
+    expect(coconutCheckbox).not.toBeChecked();
+
+    expect(screen.getByTestId("selected-values")).toHaveTextContent(
+      '["Apple","Banana"]',
+    );
+  });
+
+  it("handles checkbox selection changes", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MultipleCheckboxes);
+
+    const coconutCheckbox = screen
+      .getByTestId("checkbox-2")
+      .querySelector("input[type='checkbox']");
+    assert(coconutCheckbox);
+
+    await user.click(coconutCheckbox);
+
+    expect(coconutCheckbox).toBeChecked();
+    expect(consoleLog).toHaveBeenCalledWith("group changed:", [
+      "Apple",
+      "Banana",
+      "Coconut",
+    ]);
+    expect(screen.getByTestId("selected-values")).toHaveTextContent(
+      '["Apple","Banana","Coconut"]',
+    );
+  });
+
+  it("handles button click to set specific value", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MultipleCheckboxes);
+
+    await user.click(screen.getByText(/Set to/));
+
+    expect(consoleLog).toHaveBeenCalledWith("set to banana");
+    expect(consoleLog).toHaveBeenCalledWith("group changed:", ["Banana"]);
+
+    const appleCheckbox = screen
+      .getByTestId("checkbox-0")
+      .querySelector("input[type='checkbox']");
+    const bananaCheckbox = screen
+      .getByTestId("checkbox-1")
+      .querySelector("input[type='checkbox']");
+    const coconutCheckbox = screen
+      .getByTestId("checkbox-2")
+      .querySelector("input[type='checkbox']");
+
+    assert(appleCheckbox);
+    assert(bananaCheckbox);
+    assert(coconutCheckbox);
+
+    expect(appleCheckbox).not.toBeChecked();
+    expect(bananaCheckbox).toBeChecked();
+    expect(coconutCheckbox).not.toBeChecked();
+
+    expect(screen.getByTestId("selected-values")).toHaveTextContent(
+      '["Banana"]',
+    );
+  });
+
+  it("handles deselection of checkboxes", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MultipleCheckboxes);
+
+    const bananaCheckbox = screen
+      .getByTestId("checkbox-1")
+      .querySelector("input[type='checkbox']");
+    assert(bananaCheckbox);
+
+    await user.click(bananaCheckbox);
+
+    expect(bananaCheckbox).not.toBeChecked();
+    expect(consoleLog).toHaveBeenCalledWith("group changed:", ["Apple"]);
+    expect(screen.getByTestId("selected-values")).toHaveTextContent(
+      '["Apple"]',
+    );
   });
 });
