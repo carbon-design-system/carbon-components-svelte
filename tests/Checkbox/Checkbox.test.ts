@@ -5,6 +5,7 @@ import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
 import CheckboxSlot from "./Checkbox.slot.test.svelte";
 import Checkbox from "./Checkbox.test.svelte";
 import MultipleCheckboxes from "./MultipleCheckboxes.test.svelte";
+import MultipleCheckboxesObject from "./MultipleCheckboxesObject.test.svelte";
 
 describe("Checkbox", () => {
   beforeEach(() => {
@@ -247,6 +248,146 @@ describe("Checkbox", () => {
     expect(consoleLog).toHaveBeenCalledWith("group changed:", ["Apple"]);
     expect(screen.getByTestId("selected-values")).toHaveTextContent(
       '["Apple"]',
+    );
+  });
+
+  it("renders multiple checkboxes bound to object properties", () => {
+    render(MultipleCheckboxesObject);
+
+    expect(screen.getByTestId("checkbox-a")).toBeInTheDocument();
+    expect(screen.getByTestId("checkbox-b")).toBeInTheDocument();
+
+    const checkboxA = screen
+      .getByTestId("checkbox-a")
+      .querySelector("input[type='checkbox']");
+    const checkboxB = screen
+      .getByTestId("checkbox-b")
+      .querySelector("input[type='checkbox']");
+
+    assert(checkboxA);
+    assert(checkboxB);
+
+    expect(checkboxA).not.toBeChecked();
+    expect(checkboxB).not.toBeChecked();
+
+    expect(screen.getByTestId("object-values")).toHaveTextContent(
+      '{"a":false,"b":false}',
+    );
+  });
+
+  it("handles checkbox selection changes with object binding", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MultipleCheckboxesObject);
+
+    const checkboxA = screen
+      .getByTestId("checkbox-a")
+      .querySelector("input[type='checkbox']");
+    assert(checkboxA);
+
+    await user.click(checkboxA);
+
+    expect(checkboxA).toBeChecked();
+    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
+      a: true,
+      b: false,
+    });
+    expect(screen.getByTestId("object-values")).toHaveTextContent(
+      '{"a":true,"b":false}',
+    );
+  });
+
+  it("handles multiple checkbox selections with object binding", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MultipleCheckboxesObject);
+
+    const checkboxA = screen
+      .getByTestId("checkbox-a")
+      .querySelector("input[type='checkbox']");
+    const checkboxB = screen
+      .getByTestId("checkbox-b")
+      .querySelector("input[type='checkbox']");
+    assert(checkboxA);
+    assert(checkboxB);
+
+    await user.click(checkboxA);
+    expect(checkboxA).toBeChecked();
+    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
+      a: true,
+      b: false,
+    });
+
+    await user.click(checkboxB);
+    expect(checkboxB).toBeChecked();
+    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
+      a: true,
+      b: true,
+    });
+
+    expect(screen.getByTestId("object-values")).toHaveTextContent(
+      '{"a":true,"b":true}',
+    );
+  });
+
+  it("handles checkbox deselection with object binding", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MultipleCheckboxesObject, {
+      props: {
+        obj: { a: true, b: true },
+      },
+    });
+
+    const checkboxA = screen
+      .getByTestId("checkbox-a")
+      .querySelector("input[type='checkbox']");
+    const checkboxB = screen
+      .getByTestId("checkbox-b")
+      .querySelector("input[type='checkbox']");
+    assert(checkboxA);
+    assert(checkboxB);
+
+    expect(checkboxA).toBeChecked();
+    expect(checkboxB).toBeChecked();
+
+    await user.click(checkboxA);
+    expect(checkboxA).not.toBeChecked();
+    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
+      a: false,
+      b: true,
+    });
+
+    await user.click(checkboxB);
+    expect(checkboxB).not.toBeChecked();
+    expect(consoleLog).toHaveBeenCalledWith("object changed:", {
+      a: false,
+      b: false,
+    });
+
+    expect(screen.getByTestId("object-values")).toHaveTextContent(
+      '{"a":false,"b":false}',
+    );
+  });
+
+  it("accepts custom initial object state", () => {
+    render(MultipleCheckboxesObject, {
+      props: {
+        obj: { a: true, b: false },
+      },
+    });
+
+    const checkboxA = screen
+      .getByTestId("checkbox-a")
+      .querySelector("input[type='checkbox']");
+    const checkboxB = screen
+      .getByTestId("checkbox-b")
+      .querySelector("input[type='checkbox']");
+    assert(checkboxA);
+    assert(checkboxB);
+
+    expect(checkboxA).toBeChecked();
+    expect(checkboxB).not.toBeChecked();
+
+    expect(screen.getByTestId("object-values")).toHaveTextContent(
+      '{"a":true,"b":false}',
     );
   });
 });
