@@ -2,6 +2,7 @@
   import { Toggle } from "carbon-components-svelte";
 
   let toggled = false;
+  let initialToggled = true;
 </script>
 
 <Toggle
@@ -23,3 +24,14 @@
   labelText="Hidden label toggle"
   aria-label="Hidden label toggle"
 />
+
+<Toggle
+  bind:toggled={initialToggled}
+  labelText="Initial toggled state"
+  name="test-toggle"
+  on:toggle={(e) => {
+    console.log("initial toggled:", e.detail.toggled);
+  }}
+/>
+
+<Toggle labelText="Custom name toggle" name="custom-name-toggle" />
