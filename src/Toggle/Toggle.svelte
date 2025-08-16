@@ -39,8 +39,6 @@
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
-
-  $: dispatch("toggle", { toggled });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -63,12 +61,14 @@
     checked={toggled}
     on:change={() => {
       toggled = !toggled;
+      dispatch("toggle", { toggled });
     }}
     on:change
     on:keyup={(e) => {
       if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
         toggled = !toggled;
+        dispatch("toggle", { toggled });
       }
     }}
     on:keyup
