@@ -196,4 +196,20 @@ describe("Toggle", () => {
     const defaultToggle = getToggle("Default toggle");
     expect(defaultToggle).toHaveAccessibleName("Default toggle");
   });
+
+  it("does not dispatch toggle event on mount", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Toggle);
+
+    expect(consoleLog).not.toHaveBeenCalled();
+    expect(getToggle("Default toggle")).not.toBeChecked();
+  });
+
+  it("does not dispatch toggle event on mount for initial toggled state", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Toggle);
+
+    expect(consoleLog).not.toHaveBeenCalled();
+    expect(getToggle("Initial toggled state")).toBeChecked();
+  });
 });
