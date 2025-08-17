@@ -412,4 +412,14 @@ describe("ComboBox", () => {
     render(ComboBox, { props: { helperText: "Help", invalid: true } });
     expect(screen.queryByText("Help")).not.toBeInTheDocument();
   });
+
+  it("should not open menu when input is focused via keyboard", async () => {
+    render(ComboBox);
+
+    await user.keyboard("{Tab}");
+    expect(screen.getByRole("textbox")).toHaveFocus();
+
+    const dropdown = screen.queryAllByRole("listbox")[1];
+    expect(dropdown).toBeUndefined();
+  });
 });
