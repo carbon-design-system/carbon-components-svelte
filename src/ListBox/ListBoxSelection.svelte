@@ -64,10 +64,9 @@
     <span class:bx--tag__label={true} title={selectionCount}>
       {selectionCount}
     </span>
-    <div
+    <button
       bind:this={ref}
-      role="button"
-      tabindex={disabled ? -1 : 0}
+      type="button"
       class:bx--tag__close-icon={true}
       on:click|preventDefault|stopPropagation={(e) => {
         if (!disabled) {
@@ -84,15 +83,15 @@
       title={description}
     >
       <Close />
-    </div>
+    </button>
   </div>
 {:else}
-  <div
+  <button
     bind:this={ref}
-    role="button"
+    type="button"
+    {disabled}
     aria-label={description}
     title={description}
-    tabindex={disabled ? "-1" : "0"}
     class:bx--list-box__selection={true}
     class:bx--tag--filter={selectionCount}
     class:bx--list-box__selection--multi={selectionCount}
@@ -110,5 +109,5 @@
   >
     {#if selectionCount !== undefined}{selectionCount}{/if}
     <Close />
-  </div>
+  </button>
 {/if}
