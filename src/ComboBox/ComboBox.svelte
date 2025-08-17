@@ -116,7 +116,6 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
-  import ListBoxField from "../ListBox/ListBoxField.svelte";
   import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
@@ -254,22 +253,12 @@
     {warn}
     {warnText}
   >
-    <ListBoxField
-      role="button"
-      aria-expanded={open}
-      on:click={async () => {
-        if (disabled) return;
-        open = true;
-        await tick();
-        ref.focus();
-      }}
-      {id}
-      {disabled}
-      {translateWithId}
-    >
+    <div class:bx--list-box__field={true}>
       <input
         bind:this={ref}
         bind:value
+        type="text"
+        role="combobox"
         tabindex="0"
         autocomplete="off"
         aria-autocomplete="list"
@@ -287,6 +276,10 @@
         class:bx--text-input={true}
         class:bx--text-input--light={light}
         class:bx--text-input--empty={value === ""}
+        on:click={() => {
+          if (disabled) return;
+          open = true;
+        }}
         on:input={({ target }) => {
           if (!open && target.value.length > 0) {
             open = true;
@@ -384,7 +377,7 @@
         {translateWithId}
         {open}
       />
-    </ListBoxField>
+    </div>
     {#if open}
       <ListBoxMenu aria-label={ariaLabel} {id} on:scroll bind:ref={listRef}>
         {#each filteredItems as item, i (item.id)}
