@@ -47,6 +47,7 @@
 <div
   bind:this={ref}
   {role}
+  {id}
   aria-expanded={ariaExpanded}
   aria-owns={(ariaExpanded && menuId) || undefined}
   aria-controls={(ariaExpanded && menuId) || undefined}

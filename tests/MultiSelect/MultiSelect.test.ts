@@ -465,20 +465,24 @@ describe("MultiSelect", () => {
         selectedIds: ["0", "1"],
       },
     });
-    await user.click(screen.getAllByRole("button")[0]);
 
+    await openMenu();
     const options = screen.getAllByRole("option");
     expect(options[0]).toHaveAttribute("aria-selected", "true");
     expect(options[1]).toHaveAttribute("aria-selected", "true");
     expect(options[2]).toHaveAttribute("aria-selected", "false");
 
-    const clearButton = screen.getByRole("button", { name: /clear/i });
+    await closeMenu();
+    const clearButton = screen.getByRole("button", {
+      name: /clear all selected items/i,
+    });
     await user.click(clearButton);
-    await user.click(screen.getByRole("button"));
 
-    expect(options[0]).toHaveAttribute("aria-selected", "false");
-    expect(options[1]).toHaveAttribute("aria-selected", "false");
-    expect(options[2]).toHaveAttribute("aria-selected", "false");
+    await openMenu();
+    const updatedOptions = screen.getAllByRole("option");
+    expect(updatedOptions[0]).toHaveAttribute("aria-selected", "false");
+    expect(updatedOptions[1]).toHaveAttribute("aria-selected", "false");
+    expect(updatedOptions[2]).toHaveAttribute("aria-selected", "false");
   });
 
   it("skips disabled items during keyboard navigation", async () => {
