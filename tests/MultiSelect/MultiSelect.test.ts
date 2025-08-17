@@ -465,7 +465,7 @@ describe("MultiSelect", () => {
         selectedIds: ["0", "1"],
       },
     });
-    await user.click(screen.getAllByRole("button")[0]);
+    await openMenu();
 
     const options = screen.getAllByRole("option");
     expect(options[0]).toHaveAttribute("aria-selected", "true");
@@ -474,7 +474,7 @@ describe("MultiSelect", () => {
 
     const clearButton = screen.getByRole("button", { name: /clear/i });
     await user.click(clearButton);
-    await user.click(screen.getByRole("button"));
+    await closeMenu();
 
     expect(options[0]).toHaveAttribute("aria-selected", "false");
     expect(options[1]).toHaveAttribute("aria-selected", "false");
@@ -493,7 +493,7 @@ describe("MultiSelect", () => {
         placeholder: "Filter...",
       },
     });
-    await user.click(screen.getByRole("button"));
+    await openMenu();
     const input = screen.getByPlaceholderText("Filter...");
 
     await user.type(input, "a");
@@ -513,7 +513,7 @@ describe("MultiSelect", () => {
         placeholder: "Filter...",
       },
     });
-    await user.click(screen.getByRole("button"));
+    await openMenu();
     const input = screen.getByPlaceholderText("Filter...");
     expect(input).toHaveFocus();
   });
@@ -528,7 +528,7 @@ describe("MultiSelect", () => {
         ],
       },
     });
-    await user.click(screen.getByRole("button"));
+    await openMenu();
     const disabledOption = screen.getByText("B").closest("[role='option']");
 
     await user.click(disabledOption!);
