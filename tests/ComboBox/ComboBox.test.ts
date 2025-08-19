@@ -4,6 +4,7 @@ import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
 
 describe("ComboBox", () => {
+  const getInput = () => screen.getByRole("combobox");
   const getClearButton = () =>
     screen.getByRole("button", { name: "Clear selected item" });
 
@@ -15,15 +16,13 @@ describe("ComboBox", () => {
     render(ComboBox);
 
     expect(screen.getByText("Contact")).toBeInTheDocument();
-    const input = screen.getByRole("textbox");
-    expect(input).toHaveAttribute("placeholder", "Select contact method");
+    expect(getInput()).toHaveAttribute("placeholder", "Select contact method");
   });
 
   it("should open menu on click", async () => {
     render(ComboBox);
 
-    const input = screen.getByRole("textbox");
-    await user.click(input);
+    await user.click(getInput());
 
     const dropdown = screen.getAllByRole("listbox")[1];
     expect(dropdown).toBeVisible();
@@ -33,20 +32,20 @@ describe("ComboBox", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ComboBox);
 
-    await user.click(screen.getByRole("textbox"));
+    await user.click(getInput());
     await user.click(screen.getByText("Email"));
 
     expect(consoleLog).toHaveBeenCalledWith("select", {
       selectedId: "1",
       selectedItem: { id: "1", text: "Email" },
     });
-    expect(screen.getByRole("textbox")).toHaveValue("Email");
+    expect(getInput()).toHaveValue("Email");
   });
 
   it("should handle keyboard navigation", async () => {
     render(ComboBox);
 
-    const input = screen.getByRole("textbox");
+    const input = getInput();
     await user.click(input);
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{Enter}");
@@ -66,7 +65,7 @@ describe("ComboBox", () => {
     await user.click(getClearButton());
 
     expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
-    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(getInput()).toHaveValue("");
   });
 
   it("should handle clear selection via keyboard navigation (Enter)", async () => {
@@ -79,7 +78,7 @@ describe("ComboBox", () => {
     });
 
     expect(consoleLog).not.toHaveBeenCalled();
-    expect(screen.getByRole("textbox")).toHaveValue("Email");
+    expect(getInput()).toHaveValue("Email");
 
     const clearButton = getClearButton();
     clearButton.focus();
@@ -87,7 +86,7 @@ describe("ComboBox", () => {
     await user.keyboard("{Enter}");
 
     expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
-    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(getInput()).toHaveValue("");
   });
 
   it("should handle clear selection via keyboard navigation (Space)", async () => {
@@ -100,7 +99,7 @@ describe("ComboBox", () => {
     });
 
     expect(consoleLog).not.toHaveBeenCalled();
-    expect(screen.getByRole("textbox")).toHaveValue("Email");
+    expect(getInput()).toHaveValue("Email");
 
     const clearButton = getClearButton();
     clearButton.focus();
@@ -108,7 +107,7 @@ describe("ComboBox", () => {
     await user.keyboard(" ");
 
     expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
-    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(getInput()).toHaveValue("");
   });
 
   it("should use custom translations when translateWithId is provided", () => {
@@ -134,7 +133,7 @@ describe("ComboBox", () => {
   it("should handle disabled state", () => {
     render(ComboBox, { props: { disabled: true } });
 
-    expect(screen.getByRole("textbox")).toBeDisabled();
+    expect(getInput()).toBeDisabled();
     expect(screen.getByText("Contact")).toHaveClass("bx--label--disabled");
   });
 
@@ -181,7 +180,7 @@ describe("ComboBox", () => {
   it("should handle light variant", () => {
     render(ComboBox, { props: { light: true } });
 
-    expect(screen.getByRole("textbox")).toHaveClass("bx--text-input--light");
+    expect(getInput()).toHaveClass("bx--text-input--light");
   });
 
   test.each([
@@ -195,7 +194,7 @@ describe("ComboBox", () => {
   it("should handle filtering items", async () => {
     render(ComboBox);
 
-    const input = screen.getByRole("textbox");
+    const input = getInput();
     await user.click(input);
     await user.type(input, "em");
 
@@ -229,21 +228,21 @@ describe("ComboBox", () => {
     expect(consoleLog).not.toBeCalled();
     await user.click(getClearButton());
 
-    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(getInput()).toHaveValue("");
     expect(consoleLog).toHaveBeenCalledWith("clear", "clear");
   });
 
   it("should handle disabled items", async () => {
     render(ComboBoxCustom);
 
-    await user.click(screen.getByRole("textbox"));
+    await user.click(getInput());
     const disabledOption = screen.getByText(/Fax/).closest('[role="option"]');
     assert(disabledOption);
     expect(disabledOption).toHaveAttribute("disabled", "true");
     expect(disabledOption).toHaveAttribute("aria-disabled", "true");
 
     await user.click(disabledOption);
-    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(getInput()).toHaveValue("");
 
     // Dropdown remains open
     const dropdown = screen.getAllByRole("listbox")[1];
@@ -253,7 +252,7 @@ describe("ComboBox", () => {
   it("should handle custom item display", async () => {
     render(ComboBoxCustom);
 
-    await user.click(screen.getByRole("textbox"));
+    await user.click(getInput());
     const options = screen.getAllByRole("option");
 
     expect(options[0]).toHaveTextContent("Item Slack");
@@ -272,19 +271,18 @@ describe("ComboBox", () => {
     render(ComboBoxCustom, { props: { selectedId: "1" } });
 
     await user.click(getClearButton());
-
-    const input = screen.getByRole("textbox");
-    expect(input).toHaveValue("");
+    expect(getInput()).toHaveValue("");
   });
 
   it("should programmatically clear selection", async () => {
     render(ComboBoxCustom, { props: { selectedId: "1" } });
 
-    const textbox = screen.getByRole("textbox");
-    expect(textbox).toHaveValue("Email");
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
     await user.click(screen.getByText("Clear"));
-    expect(textbox).toHaveValue("");
-    expect(textbox).toHaveFocus();
+    expect(input).toHaveValue("");
+    expect(input).toHaveFocus();
   });
 
   it("should not re-focus textbox if clearOptions.focus is false", async () => {
@@ -295,19 +293,20 @@ describe("ComboBox", () => {
       },
     });
 
-    const textbox = screen.getByRole("textbox");
-    expect(textbox).toHaveValue("Email");
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
     await user.click(screen.getByText("Clear"));
-    expect(textbox).toHaveValue("");
-    expect(textbox).not.toHaveFocus();
+    expect(input).toHaveValue("");
+    expect(input).not.toHaveFocus();
   });
 
   it("should close menu on Escape key", async () => {
     render(ComboBox);
 
-    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(getInput()).toHaveValue("");
 
-    const input = screen.getByRole("textbox");
+    const input = getInput();
     await user.click(input);
 
     const dropdown = screen.getAllByRole("listbox")[1];
@@ -315,8 +314,8 @@ describe("ComboBox", () => {
 
     await user.keyboard("{Escape}");
     expect(dropdown).not.toBeVisible();
-    expect(screen.getByRole("textbox")).toHaveValue("");
-    expect(screen.getByRole("textbox")).toHaveFocus();
+    expect(getInput()).toHaveValue("");
+    expect(getInput()).toHaveFocus();
   });
 
   it("should close menu and clear selection on Escape key", async () => {
@@ -327,9 +326,9 @@ describe("ComboBox", () => {
       },
     });
 
-    expect(screen.getByRole("textbox")).toHaveValue("Email");
+    expect(getInput()).toHaveValue("Email");
 
-    const input = screen.getByRole("textbox");
+    const input = getInput();
     await user.click(input);
 
     const dropdown = screen.getAllByRole("listbox")[1];
@@ -337,8 +336,8 @@ describe("ComboBox", () => {
 
     await user.keyboard("{Escape}");
     expect(dropdown).not.toBeVisible();
-    expect(screen.getByRole("textbox")).toHaveValue("");
-    expect(screen.getByRole("textbox")).toHaveFocus();
+    expect(getInput()).toHaveValue("");
+    expect(getInput()).toHaveFocus();
   });
 
   it("should use custom shouldFilterItem function", async () => {
@@ -353,7 +352,7 @@ describe("ComboBox", () => {
           item.text.startsWith(value),
       },
     });
-    const input = screen.getByRole("textbox");
+    const input = getInput();
     await user.click(input);
     await user.type(input, "B");
     const options = screen.getAllByRole("option");
@@ -371,7 +370,7 @@ describe("ComboBox", () => {
         itemToString: (item: { text: string }) => `Item ${item.text}`,
       },
     });
-    const input = screen.getByRole("textbox");
+    const input = getInput();
     await user.click(input);
     const options = screen.getAllByRole("option");
     expect(options[0]).toHaveTextContent("Item Apple");
@@ -395,7 +394,7 @@ describe("ComboBox", () => {
         ],
       },
     });
-    const input = screen.getByRole("textbox");
+    const input = getInput();
     await user.click(input);
     await user.keyboard("{ArrowDown}"); // should highlight A
     await user.keyboard("{ArrowDown}"); // should skip B and highlight C
@@ -417,7 +416,7 @@ describe("ComboBox", () => {
     render(ComboBox);
 
     await user.keyboard("{Tab}");
-    expect(screen.getByRole("textbox")).toHaveFocus();
+    expect(getInput()).toHaveFocus();
 
     const dropdown = screen.queryAllByRole("listbox")[1];
     expect(dropdown).toBeUndefined();
