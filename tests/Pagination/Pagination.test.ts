@@ -75,7 +75,7 @@ describe("Pagination", () => {
     const select = screen.getByRole("combobox", { name: "Items per page:" });
     await user.selectOptions(select, "15");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 10 });
+    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 15 });
     expect(consoleLog).toHaveBeenCalledWith("update", {
       pageSize: 15,
       page: 1,
@@ -91,7 +91,7 @@ describe("Pagination", () => {
     const pageSelect = screen.getAllByRole("combobox");
     await user.selectOptions(pageSelect[0], "5");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 10 });
+    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 5 });
     expect(consoleLog).toHaveBeenCalledWith("update", { pageSize: 5, page: 1 });
   });
 
@@ -169,7 +169,7 @@ describe("Pagination", () => {
     // Change page size
     const pageSizeSelect = screen.getAllByRole("combobox");
     await user.selectOptions(pageSizeSelect[0], "15");
-    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 10 });
+    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 15 });
     expect(consoleLog).toHaveBeenCalledWith("update", {
       pageSize: 15,
       page: 1,
@@ -178,7 +178,7 @@ describe("Pagination", () => {
     // Change page
     const pageSelect = screen.getAllByRole("combobox");
     await user.selectOptions(pageSelect[1], "2");
-    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 10 });
+    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
     expect(consoleLog).toHaveBeenCalledWith("update", {
       pageSize: 15,
       page: 2,
@@ -256,5 +256,24 @@ describe("Pagination", () => {
     });
 
     expect(screen.getByText(/1–10 of 100000/)).toBeInTheDocument();
+  });
+
+  it("should dispatch change event with new value, not previous value", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: { totalItems: 102, pageSizes: [10, 15, 20] },
+    });
+
+    const pageSizeSelect = screen.getByRole("combobox", {
+      name: "Items per page:",
+    });
+    await user.selectOptions(pageSizeSelect, "15");
+
+    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 15 });
+
+    const pageSelect = screen.getAllByRole("combobox")[1];
+    await user.selectOptions(pageSelect, "2");
+
+    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
   });
 });
