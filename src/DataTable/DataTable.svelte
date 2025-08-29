@@ -263,12 +263,13 @@
     expanded = expandedRowIds.length === expandableRowIds.length;
   }
   $: if (radio || batchSelection) selectable = true;
-  $: headerKeys = headers.map(({ key }) => key);
   $: tableCellsByRowId = rows.reduce((rows, row) => {
-    rows[row.id] = headerKeys.map((key, index) => ({
-      key,
-      value: resolvePath(row, key),
-      display: headers[index].display,
+    rows[row.id] = headers.map((header, index) => ({
+      key: header.key || `key-${index}`,
+      value: header.key ? resolvePath(row, header.key) : undefined,
+      display: header.display,
+      empty: header.empty,
+      columnMenu: header.columnMenu,
     }));
     return rows;
   }, {});
@@ -557,8 +558,8 @@
             </td>
           {/if}
           {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
-            {#if headers[j].empty}
-              <td class:bx--table-column-menu={headers[j].columnMenu}>
+            {#if cell.empty}
+              <td class:bx--table-column-menu={cell.columnMenu}>
                 <slot name="cell" {row} {cell} rowIndex={i} cellIndex={j}>
                   {cell.display ? cell.display(cell.value, row) : cell.value}
                 </slot>
