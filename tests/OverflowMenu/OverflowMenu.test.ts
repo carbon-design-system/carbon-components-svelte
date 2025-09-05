@@ -127,4 +127,164 @@ describe("OverflowMenu", () => {
       expect(menu).toHaveStyle("--overflow-menu-options-after-width: 2rem");
     });
   });
+
+  test.each([
+    ["sm", "bx--overflow-menu--sm"],
+    ["xl", "bx--overflow-menu--xl"],
+  ] as const)("should support %s size", (size, expectedClass) => {
+    render(OverflowMenu, { props: { size } });
+
+    const menuButton = screen.getByRole("button");
+    expect(menuButton).toHaveClass(expectedClass);
+  });
+
+  it("should not apply size classes when size is undefined", () => {
+    render(OverflowMenu, { props: { size: undefined } });
+
+    const menuButton = screen.getByRole("button");
+    expect(menuButton).not.toHaveClass("bx--overflow-menu--sm");
+    expect(menuButton).not.toHaveClass("bx--overflow-menu--xl");
+  });
+
+  it("applies light variant styling", () => {
+    render(OverflowMenu, { props: { light: true } });
+
+    const menuButton = screen.getByRole("button");
+    expect(menuButton).toHaveClass("bx--overflow-menu--light");
+  });
+
+  it("applies flipped styling", async () => {
+    render(OverflowMenu, { props: { flipped: true } });
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menu = screen.getByRole("menu");
+    expect(menu).toHaveClass("bx--overflow-menu--flip");
+  });
+
+  it("applies direction attribute", async () => {
+    render(OverflowMenu, { props: { direction: "top" } });
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menu = screen.getByRole("menu");
+    expect(menu).toHaveAttribute("data-floating-menu-direction", "top");
+  });
+
+  it("applies custom menu options class", async () => {
+    render(OverflowMenu, { props: { menuOptionsClass: "custom-class" } });
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menu = screen.getByRole("menu");
+    expect(menu).toHaveClass("custom-class");
+  });
+
+  it("applies custom icon class", () => {
+    render(OverflowMenu, { props: { iconClass: "custom-icon-class" } });
+
+    const icon = screen.getByRole("button").querySelector("svg");
+    expect(icon).toHaveClass("custom-icon-class");
+  });
+
+  it("uses custom icon description", () => {
+    render(OverflowMenu, { props: { iconDescription: "Custom description" } });
+
+    const icon = screen.getByRole("button").querySelector("svg");
+    expect(icon).toHaveAttribute("aria-label", "Custom description");
+  });
+
+  it("uses custom id", () => {
+    render(OverflowMenu, { props: { id: "custom-id" } });
+
+    const menuButton = screen.getByRole("button");
+    expect(menuButton).toHaveAttribute("id", "custom-id");
+  });
+
+  it("applies danger styling to menu items", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menuItems = screen.getAllByRole("menuitem");
+    const dangerItem = menuItems.find(
+      (item) => item.textContent === "Delete service",
+    );
+    expect(dangerItem?.parentElement).toHaveClass(
+      "bx--overflow-menu-options__option--danger",
+    );
+  });
+
+  it("handles link menu items correctly", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menuItems = screen.getAllByRole("menuitem");
+    const linkItem = menuItems.find(
+      (item) => item.textContent === "API documentation",
+    );
+    expect(linkItem).toHaveAttribute(
+      "href",
+      "https://cloud.ibm.com/docs/api-gateway/",
+    );
+  });
+
+  it("returns focus to button after menu closes", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menuItems = screen.getAllByRole("menuitem");
+    expect(menuItems[0]).toHaveFocus();
+
+    await user.keyboard("{Escape}");
+    expect(menuButton).toHaveFocus();
+  });
+
+  it("handles close event with item click", async () => {
+    render(OverflowMenu);
+
+    const spy = vi.spyOn(console, "log");
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menuItems = screen.getAllByRole("menuitem");
+    await user.click(menuItems[0]);
+
+    expect(spy).toHaveBeenCalledWith("close", {
+      index: 0,
+      text: "Manage credentials",
+    });
+  });
+
+  it("handles close event with escape key", async () => {
+    render(OverflowMenu);
+
+    const spy = vi.spyOn(console, "log");
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    await user.keyboard("{Escape}");
+
+    expect(spy).toHaveBeenCalledWith("close", null);
+  });
+
+  it("handles close event with outside click", async () => {
+    render(OverflowMenu);
+
+    const spy = vi.spyOn(console, "log");
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    await user.click(document.body);
+
+    expect(spy).toHaveBeenCalledWith("close", null);
+  });
 });
