@@ -167,16 +167,11 @@
   $: if ($items[$currentIndex]) {
     focusedId.set($items[$currentIndex].id);
   }
-  $: styles = `<style>
-    #${id} .bx--overflow-menu-options.bx--overflow-menu-options:after {
-      width: ${buttonWidth ? buttonWidth + "px" : "2rem"};
-    }
-  <\/style>`;
+  // Use CSS custom properties instead of dynamic style injection for better
+  // performance. The previous approach created individual `style` tags per
+  // instance, causing overhead when many OverflowMenu components are rendered.
+  $: overflowMenuOptionsAfterWidth = buttonWidth ? buttonWidth + "px" : "2rem";
 </script>
-
-<svelte:head>
-  {@html styles}
-</svelte:head>
 
 <svelte:window
   on:click={({ target }) => {
@@ -252,8 +247,15 @@
       class:bx--overflow-menu-options--xl={size === "xl"}
       class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
       class={menuOptionsClass}
+      style="--overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
     >
       <slot />
     </ul>
   {/if}
 </button>
+
+<style>
+  .bx--overflow-menu-options:after {
+    width: var(--overflow-menu-options-after-width, 2rem);
+  }
+</style>

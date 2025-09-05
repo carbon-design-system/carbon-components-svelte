@@ -81,4 +81,50 @@ describe("OverflowMenu", () => {
     await user.click(document.body);
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
   });
+
+  it("uses CSS custom properties for performance optimization", async () => {
+    const { container } = render(OverflowMenu);
+
+    const styleTags = document.querySelectorAll("style");
+    const initialStyleCount = styleTags.length;
+    expect(styleTags.length).toBe(initialStyleCount);
+
+    await user.click(screen.getByRole("button"));
+    expect(container.querySelector(".bx--overflow-menu-options")).toHaveStyle(
+      "--overflow-menu-options-after-width: 2rem",
+    );
+    expect(styleTags.length).toBe(initialStyleCount);
+  });
+
+  it("stress test: multiple instances don't create individual style tags", async () => {
+    const { container: container1 } = render(OverflowMenu);
+    const { container: container2 } = render(OverflowMenu);
+    const { container: container3 } = render(OverflowMenu);
+
+    const styleTagsBefore = document.querySelectorAll("style").length;
+    const menuButtons1 = container1.querySelectorAll("button");
+    const menuButtons2 = container2.querySelectorAll("button");
+    const menuButtons3 = container3.querySelectorAll("button");
+
+    await user.click(menuButtons1[0]);
+    await user.click(menuButtons2[0]);
+    await user.click(menuButtons3[0]);
+
+    const styleTagsAfter = document.querySelectorAll("style").length;
+
+    // Verify no additional style tags created (old approach would create 3+)
+    expect(styleTagsAfter).toBe(styleTagsBefore);
+
+    // Verify all menus have CSS custom property set.
+    const allMenus = [
+      ...container1.querySelectorAll(".bx--overflow-menu-options"),
+      ...container2.querySelectorAll(".bx--overflow-menu-options"),
+      ...container3.querySelectorAll(".bx--overflow-menu-options"),
+    ];
+
+    expect(allMenus.length).toBeGreaterThan(0);
+    allMenus.forEach((menu) => {
+      expect(menu).toHaveStyle("--overflow-menu-options-after-width: 2rem");
+    });
+  });
 });
