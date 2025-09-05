@@ -772,4 +772,90 @@ describe("DataTable", () => {
       expect.any(Object),
     );
   });
+
+  it("should handle changing number of headers without crashing", async () => {
+    const rows = [
+      {
+        id: "a",
+        name: "Load Balancer 3",
+        protocol: "HTTP",
+        port: 3000,
+        rule: "Round robin",
+      },
+      {
+        id: "b",
+        name: "Load Balancer 1",
+        protocol: "HTTP",
+        port: 443,
+        rule: "Round robin",
+      },
+    ];
+
+    const headers5 = [
+      { key: "name", value: "Name" },
+      { key: "protocol", value: "Protocol" },
+      { key: "port", value: "Port" },
+      { key: "rule", value: "Rule" },
+      { key: "actions", value: "Actions" },
+    ];
+
+    const headers3 = [
+      { key: "name", value: "Name" },
+      { key: "protocol", value: "Protocol" },
+      { key: "port", value: "Port" },
+    ];
+
+    const { component, rerender } = render(DataTable, {
+      props: {
+        rows,
+        headers: headers5,
+      },
+    });
+
+    // First render with 5 headers
+    expect(component).toBeTruthy();
+
+    // Change to 3 headers - this should not crash
+    await rerender({
+      rows,
+      headers: headers3,
+    });
+
+    expect(component).toBeTruthy();
+
+    // Change back to 5 headers - this should not crash
+    await rerender({
+      rows,
+      headers: headers5,
+    });
+
+    expect(component).toBeTruthy();
+  });
+
+  it("should handle empty headers correctly", async () => {
+    const rows = [
+      {
+        id: "a",
+        name: "Load Balancer 3",
+        protocol: "HTTP",
+        port: 3000,
+        rule: "Round robin",
+      },
+    ];
+
+    const headersWithEmpty = [
+      { key: "name", value: "Name" },
+      { key: "protocol", value: "Protocol" },
+      { key: "actions", value: "", empty: true, columnMenu: true },
+    ];
+
+    const { component } = render(DataTable, {
+      props: {
+        rows,
+        headers: headersWithEmpty,
+      },
+    });
+
+    expect(component).toBeTruthy();
+  });
 });
