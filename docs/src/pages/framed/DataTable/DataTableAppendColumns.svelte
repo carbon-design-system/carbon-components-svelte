@@ -9,7 +9,7 @@
     { key: "name", value: "Name" },
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule" },
-    { key: "overflow", empty: true },
+    { key: "overflow", empty: true, width: "72px" },
   ];
 
   const rows = [
