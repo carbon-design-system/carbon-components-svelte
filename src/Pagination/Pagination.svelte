@@ -135,8 +135,8 @@
         hideLabel
         noLabel
         inline
-        on:change={() => {
-          dispatch("change", { pageSize });
+        on:update={(event) => {
+          dispatch("change", { pageSize: event.detail });
         }}
         bind:selected={pageSize}
       >
@@ -165,8 +165,8 @@
         labelText="Page number, of {totalPages} pages"
         inline
         hideLabel
-        on:change={() => {
-          dispatch("change", { page });
+        on:update={(event) => {
+          dispatch("change", { page: event.detail });
         }}
         bind:selected={page}
       >
