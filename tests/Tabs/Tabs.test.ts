@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import Tabs from "./Tabs.test.svelte";
+import Tab from "../Tab/Tab.test.svelte";
+import TabsSkeleton from "../Tabs/TabsSkeleton.test.svelte";
 
 describe("Tabs", () => {
   let consoleLog: ReturnType<typeof vi.spyOn>;
@@ -125,5 +127,174 @@ describe("Tabs", () => {
     });
 
     expect(screen.getByTitle("Custom description")).toBeInTheDocument();
+  });
+});
+
+describe("Tab", () => {
+  it("should render with default props", () => {
+    render(Tab);
+
+    const tab = screen.getByRole("tab", { name: "Test Tab" });
+    expect(tab).toBeInTheDocument();
+    expect(tab).toHaveAttribute("href", "#test");
+    expect(tab).toHaveAttribute("tabindex", "0");
+    expect(tab).toHaveAttribute("id", "test-tab");
+  });
+
+  it("should render with custom label", () => {
+    render(Tab, { props: { label: "Custom Label" } });
+
+    expect(
+      screen.getByRole("tab", { name: "Custom Label" }),
+    ).toBeInTheDocument();
+  });
+
+  it("should render with custom href", () => {
+    render(Tab, { props: { href: "/custom" } });
+
+    const tab = screen.getByRole("tab");
+    expect(tab).toHaveAttribute("href", "/custom");
+  });
+
+  it("should handle disabled state", () => {
+    render(Tab, { props: { disabled: true } });
+
+    const tab = screen.getByRole("tab");
+    expect(tab).toHaveAttribute("aria-disabled", "true");
+    expect(tab).toHaveAttribute("tabindex", "-1");
+  });
+
+  it("should handle custom tabindex", () => {
+    render(Tab, { props: { tabindex: "1" } });
+
+    const tab = screen.getByRole("tab");
+    expect(tab).toHaveAttribute("tabindex", "1");
+  });
+
+  it("should handle custom id", () => {
+    render(Tab, { props: { id: "custom-id" } });
+
+    const tab = screen.getByRole("tab");
+    expect(tab).toHaveAttribute("id", "custom-id");
+  });
+
+  it("should be clickable when enabled", async () => {
+    render(Tab);
+
+    const tab = screen.getByRole("tab");
+    await user.click(tab);
+
+    expect(tab).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("should handle keyboard navigation with arrow keys", async () => {
+    render(Tab);
+
+    const tab = screen.getByRole("tab");
+    await user.click(tab);
+    await user.keyboard("{ArrowRight}");
+
+    expect(tab).toHaveFocus();
+  });
+
+  it("should handle space key activation", async () => {
+    render(Tab);
+
+    const tab = screen.getByRole("tab");
+    await user.click(tab);
+    await user.keyboard(" ");
+
+    expect(tab).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("should handle enter key activation", async () => {
+    render(Tab);
+
+    const tab = screen.getByRole("tab");
+    await user.click(tab);
+    await user.keyboard("{Enter}");
+
+    expect(tab).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("should render slot content when no label provided", () => {
+    render(Tab, { props: { label: "" } });
+
+    const tab = screen.getByRole("tab");
+    expect(tab).toHaveTextContent("");
+  });
+});
+
+describe("TabsSkeleton", () => {
+  it("should render with default props", () => {
+    const { container } = render(TabsSkeleton);
+
+    const skeleton = container.querySelector(".bx--tabs");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass("bx--skeleton");
+    expect(skeleton).toHaveClass("bx--tabs--scrollable");
+
+    const navItems = container.querySelectorAll(
+      ".bx--tabs--scrollable__nav-item",
+    );
+    expect(navItems).toHaveLength(4);
+  });
+
+  it("should render with custom count", () => {
+    const { container } = render(TabsSkeleton, { props: { count: 6 } });
+
+    const navItems = container.querySelectorAll(
+      ".bx--tabs--scrollable__nav-item",
+    );
+    expect(navItems).toHaveLength(6);
+  });
+
+  it("should render with container type", () => {
+    const { container } = render(TabsSkeleton, {
+      props: { type: "container" },
+    });
+
+    const skeleton = container.querySelector(".bx--tabs");
+    expect(skeleton).toHaveClass("bx--tabs--scrollable--container");
+  });
+
+  it("should render with default type", () => {
+    const { container } = render(TabsSkeleton, { props: { type: "default" } });
+
+    const skeleton = container.querySelector(".bx--tabs");
+    expect(skeleton).not.toHaveClass("bx--tabs--scrollable--container");
+  });
+
+  it("should render skeleton nav items with correct structure", () => {
+    const { container } = render(TabsSkeleton);
+
+    const navItems = container.querySelectorAll(
+      ".bx--tabs--scrollable__nav-item",
+    );
+    navItems.forEach((item) => {
+      const link = item.querySelector(".bx--tabs__nav-link");
+      const span = link?.querySelector("span");
+
+      expect(link).toBeInTheDocument();
+      expect(span).toBeInTheDocument();
+    });
+  });
+
+  it("should handle zero count", () => {
+    const { container } = render(TabsSkeleton, { props: { count: 0 } });
+
+    const navItems = container.querySelectorAll(
+      ".bx--tabs--scrollable__nav-item",
+    );
+    expect(navItems).toHaveLength(0);
+  });
+
+  it("should handle large count", () => {
+    const { container } = render(TabsSkeleton, { props: { count: 20 } });
+
+    const navItems = container.querySelectorAll(
+      ".bx--tabs--scrollable__nav-item",
+    );
+    expect(navItems).toHaveLength(20);
   });
 });
