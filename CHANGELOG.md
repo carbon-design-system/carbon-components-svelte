@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.89.7](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.6...v0.89.7) (2025-09-05)
+
+### Bug Fixes
+
+- **combo-box:** address accessibility issues ([#2186](https://github.com/carbon-design-system/carbon-components-svelte/issues/2186)) ([2fc884c](https://github.com/carbon-design-system/carbon-components-svelte/commit/2fc884cacabfffcf7779d6ef9ba01dece0bf5d86)), closes [#2172](https://github.com/carbon-design-system/carbon-components-svelte/issues/2172)
+- **data-table:** handle dynamic `headers` gracefully ([#2195](https://github.com/carbon-design-system/carbon-components-svelte/issues/2195)) ([6d0d3b1](https://github.com/carbon-design-system/carbon-components-svelte/commit/6d0d3b108bb4595d878fda20736c40b9656d14d7)), closes [#2193](https://github.com/carbon-design-system/carbon-components-svelte/issues/2193)
+- **overflow-menu:** avoid dynamic style injection for performance ([#2198](https://github.com/carbon-design-system/carbon-components-svelte/issues/2198)) ([14edf41](https://github.com/carbon-design-system/carbon-components-svelte/commit/14edf41e57fea1ddbb2cf24c37e79475849bdea1)), closes [#2197](https://github.com/carbon-design-system/carbon-components-svelte/issues/2197)
+- **pagination:** `on:change` dispatches with correct value ([#2194](https://github.com/carbon-design-system/carbon-components-svelte/issues/2194)) ([44a6cc0](https://github.com/carbon-design-system/carbon-components-svelte/commit/44a6cc0dfcbd3cdad1b442a760c9f604e58d56e6))
+
 ### [0.89.6](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.5...v0.89.6) (2025-08-16)
 
 ### Bug Fixes
