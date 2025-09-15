@@ -136,9 +136,12 @@ describe("Tab", () => {
 
     const tab = screen.getByRole("tab", { name: "Test Tab" });
     expect(tab).toBeInTheDocument();
-    expect(tab).toHaveAttribute("href", "#test");
-    expect(tab).toHaveAttribute("tabindex", "0");
-    expect(tab).toHaveAttribute("id", "test-tab");
+    expect(tab).toHaveAttribute("aria-selected", "true");
+
+    const link = tab.querySelector("a");
+    expect(link).toHaveAttribute("href", "#test");
+    expect(link).toHaveAttribute("tabindex", "0");
+    expect(link).toHaveAttribute("id", "test-tab");
   });
 
   it("should render with custom label", () => {
@@ -153,7 +156,8 @@ describe("Tab", () => {
     render(Tab, { props: { href: "/custom" } });
 
     const tab = screen.getByRole("tab");
-    expect(tab).toHaveAttribute("href", "/custom");
+    const link = tab.querySelector("a");
+    expect(link).toHaveAttribute("href", "/custom");
   });
 
   it("should handle disabled state", () => {
@@ -161,21 +165,25 @@ describe("Tab", () => {
 
     const tab = screen.getByRole("tab");
     expect(tab).toHaveAttribute("aria-disabled", "true");
-    expect(tab).toHaveAttribute("tabindex", "-1");
+
+    const link = tab.querySelector("a");
+    expect(link).toHaveAttribute("tabindex", "-1");
   });
 
   it("should handle custom tabindex", () => {
     render(Tab, { props: { tabindex: "1" } });
 
     const tab = screen.getByRole("tab");
-    expect(tab).toHaveAttribute("tabindex", "1");
+    const link = tab.querySelector("a");
+    expect(link).toHaveAttribute("tabindex", "1");
   });
 
   it("should handle custom id", () => {
     render(Tab, { props: { id: "custom-id" } });
 
     const tab = screen.getByRole("tab");
-    expect(tab).toHaveAttribute("id", "custom-id");
+    const link = tab.querySelector("a");
+    expect(link).toHaveAttribute("id", "custom-id");
   });
 
   it("should be clickable when enabled", async () => {
