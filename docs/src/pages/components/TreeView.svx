@@ -102,6 +102,12 @@ Use `TreeView.collapseNodes` to collapse specific nodes based on a condition.
 
 <FileSource src="/framed/TreeView/TreeViewCollapseNodes" />
 
+## Select a specific node
+
+Use `TreeView.selectNode` to programmatically select a node without changing expansion state or focus.
+
+<FileSource src="/framed/TreeView/TreeViewSelectNode" />
+
 ## Show a specific node
 
 Use `TreeView.showNode` to expand, select, and focus a specific node.

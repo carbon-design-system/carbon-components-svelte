@@ -116,6 +116,14 @@
   }
 
   /**
+   * Programmatically select a node by `id` without changing focus or expansion state
+   * @type {(id: TreeNodeId) => void}
+   */
+  export function selectNode(id) {
+    selectedIds = [id];
+  }
+
+  /**
    * Programmatically show a node by `id`.
    * The matching node will be expanded, selected, and focused
    * @type {(id: TreeNodeId) => void}

@@ -78,3 +78,4 @@
 >
   Expand some nodes
 </Button>
+<Button on:click={() => treeview.selectNode(3)}>Select Apache Spark</Button>

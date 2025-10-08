@@ -79,4 +79,24 @@ describe.each(testCases)("$name", ({ component }) => {
       screen.getByText("IBM Analytics Engine").parentNode?.parentNode,
     ).toHaveAttribute("aria-expanded", "true");
   });
+
+  it("can programmatically select a node without affecting expansion or focus", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(component);
+
+    noExpandedItems();
+
+    const selectButton = screen.getByText("Select Apache Spark");
+    await user.click(selectButton);
+
+    // Should not expand any nodes
+    noExpandedItems();
+
+    // Should update selectedIds
+    expect(consoleLog).toBeCalledWith("selectedIds", [3]);
+
+    // Should not trigger select event (no user interaction with tree)
+    expect(consoleLog).not.toBeCalledWith("select", expect.any(Object));
+  });
 });
