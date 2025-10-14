@@ -98,7 +98,6 @@
     "telemetry.yml"
   ],
   "maintainers": [
-    "Eric Liu (https://github.com/metonym)",
-    "Enrico Sacchetti (https://github.com/theetrain)"
+    "Eric Liu (https://github.com/metonym)"
   ]
 }
