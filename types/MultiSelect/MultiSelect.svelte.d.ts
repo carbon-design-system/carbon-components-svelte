@@ -168,7 +168,7 @@ type $Props = {
   invalidText?: string;
 
   /**
-   * Set to `true` to indicate an warning state
+   * Set to `true` to indicate a warning state
    * @default false
    */
   warn?: boolean;

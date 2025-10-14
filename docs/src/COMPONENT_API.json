@@ -1914,7 +1914,7 @@
         {
           "name": "warn",
           "kind": "let",
-          "description": "Set to `true` to indicate an warning state",
+          "description": "Set to `true` to indicate a warning state",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -3732,7 +3732,7 @@
         {
           "name": "warn",
           "kind": "let",
-          "description": "Set to `true` to indicate an warning state",
+          "description": "Set to `true` to indicate a warning state",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -4029,7 +4029,7 @@
         {
           "name": "warn",
           "kind": "let",
-          "description": "Set to `true` to indicate an warning state",
+          "description": "Set to `true` to indicate a warning state",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -7231,7 +7231,7 @@
         {
           "name": "warn",
           "kind": "let",
-          "description": "Set to `true` to indicate an warning state",
+          "description": "Set to `true` to indicate a warning state",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -8766,7 +8766,7 @@
         {
           "name": "warn",
           "kind": "let",
-          "description": "Set to `true` to indicate an warning state",
+          "description": "Set to `true` to indicate a warning state",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -9319,7 +9319,7 @@
         {
           "name": "warn",
           "kind": "let",
-          "description": "Set to `true` to indicate an warning state",
+          "description": "Set to `true` to indicate a warning state",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -10603,7 +10603,7 @@
         {
           "name": "warn",
           "kind": "let",
-          "description": "Set to `true` to indicate an warning state",
+          "description": "Set to `true` to indicate a warning state",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -12386,7 +12386,7 @@
         {
           "name": "warn",
           "kind": "let",
-          "description": "Set to `true` to indicate an warning state",
+          "description": "Set to `true` to indicate a warning state",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -15714,7 +15714,7 @@
         {
           "name": "warn",
           "kind": "let",
-          "description": "Set to `true` to indicate an warning state",
+          "description": "Set to `true` to indicate a warning state",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
