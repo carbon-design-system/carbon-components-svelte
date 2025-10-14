@@ -141,7 +141,10 @@
                     {@html line
                       .replace(/\</g, "&lt;")
                       .replace(/\>/g, "&gt;")
-                      .replace(/`(.*?)`/g, "<code>$1</code>")}.
+                      .replace(/`(.*?)`/g, "<code>$1</code>") +
+                      (line.trim().endsWith(".") || line.trim() === ""
+                        ? ""
+                        : ".")}
                   </div>
                 {/each}
               {/if}
