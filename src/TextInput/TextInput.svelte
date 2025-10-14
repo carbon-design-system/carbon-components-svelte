@@ -13,8 +13,7 @@
   /**
    * Specify the input value.
    *
-   * `value` will be set to `null` if type="number"
-   * and the value is empty.
+   * `value` will be set to `null` if type="number" and the value is empty.
    * @type {null | number | string}
    */
   export let value = "";
