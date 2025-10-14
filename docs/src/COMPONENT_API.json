@@ -15583,7 +15583,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the input value.\n\n`value` will be set to `null` if type=\"number\"\nand the value is empty.",
+          "description": "Specify the input value.\n\n`value` will be set to `null` if type=\"number\" and the value is empty.",
           "type": "null | number | string",
           "value": "\"\"",
           "isFunction": false,

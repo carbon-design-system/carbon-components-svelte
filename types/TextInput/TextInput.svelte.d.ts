@@ -13,8 +13,7 @@ type $Props = {
   /**
    * Specify the input value.
    *
-   * `value` will be set to `null` if type="number"
-   * and the value is empty.
+   * `value` will be set to `null` if type="number" and the value is empty.
    * @default ""
    */
   value?: null | number | string;
