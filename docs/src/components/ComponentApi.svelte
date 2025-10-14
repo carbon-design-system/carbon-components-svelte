@@ -193,11 +193,11 @@
 
 <h2 id="slots">Slots</h2>
 {#if component.slots.length > 0}
-  <StructuredList class="my-layout-01-03">
+  <StructuredList flush condensed class="my-layout-01-03">
     <StructuredListHead>
-      <StructuredListRow>
-        <StructuredListCell>Slot name</StructuredListCell>
-        <StructuredListCell>Slot detail</StructuredListCell>
+      <StructuredListRow head>
+        <StructuredListCell head>Slot name</StructuredListCell>
+        <StructuredListCell head>Slot detail</StructuredListCell>
       </StructuredListRow>
     </StructuredListHead>
     <StructuredListBody>
@@ -236,13 +236,13 @@
 
 {#if dispatched_events.length > 0}
   {@const hasDescription = dispatched_events.find((el) => el.description)}
-  <StructuredList flush>
+  <StructuredList flush condensed>
     <StructuredListHead>
-      <StructuredListRow>
-        <StructuredListCell>Event name</StructuredListCell>
-        <StructuredListCell>Event detail</StructuredListCell>
+      <StructuredListRow head>
+        <StructuredListCell head>Event name</StructuredListCell>
+        <StructuredListCell head>Event detail</StructuredListCell>
         {#if hasDescription}
-          <StructuredListCell>Description</StructuredListCell>
+          <StructuredListCell head>Description</StructuredListCell>
         {/if}
       </StructuredListRow>
     </StructuredListHead>
