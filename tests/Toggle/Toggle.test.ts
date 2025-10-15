@@ -212,4 +212,61 @@ describe("Toggle", () => {
     expect(consoleLog).not.toHaveBeenCalled();
     expect(getToggle("Initial toggled state")).toBeChecked();
   });
+
+  it("supports custom id", () => {
+    render(Toggle);
+
+    const toggle = getToggle("Custom id toggle");
+    expect(toggle).toHaveAttribute("id", "custom-id");
+  });
+
+  it("handles focus and blur events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Toggle);
+
+    const toggle = getToggle("Events toggle");
+    toggle.focus();
+    expect(toggle).toHaveFocus();
+    expect(consoleLog).toHaveBeenCalledWith("focus");
+
+    toggle.blur();
+    expect(toggle).not.toHaveFocus();
+    expect(consoleLog).toHaveBeenCalledWith("blur");
+  });
+
+  it("handles click events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Toggle);
+
+    const toggle = getToggle("Events toggle");
+    await user.click(toggle);
+
+    expect(consoleLog).toHaveBeenCalledWith("click");
+  });
+
+  it("applies custom class", () => {
+    render(Toggle);
+
+    const toggle = getToggle("Custom class toggle");
+    const formItem = toggle.closest(".bx--form-item");
+    expect(formItem).toHaveClass("custom-class");
+  });
+
+  it("supports label text slot", () => {
+    render(Toggle);
+
+    expect(screen.getByText("Label slot")).toBeInTheDocument();
+  });
+
+  it("supports labelA slot", () => {
+    render(Toggle);
+
+    expect(screen.getByText("Off slot")).toBeInTheDocument();
+  });
+
+  it("supports labelB slot", () => {
+    render(Toggle);
+
+    expect(screen.getByText("On slot")).toBeInTheDocument();
+  });
 });
