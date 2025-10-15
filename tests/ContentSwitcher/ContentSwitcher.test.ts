@@ -164,4 +164,64 @@ describe("ContentSwitcher", () => {
     expect(tabs).toHaveLength(2);
     expect(tabs[1]).toHaveTextContent("Regular Text");
   });
+
+  it("should apply custom class", () => {
+    const { container } = render(ContentSwitcher, {
+      props: { customClass: "custom-switcher" },
+    });
+
+    const switcher = container.querySelector(".bx--content-switcher");
+    expect(switcher).toHaveClass("custom-switcher");
+  });
+
+  it("should dispatch change event", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContentSwitcher);
+
+    const tabs = screen.getAllByRole("tab");
+    await user.click(tabs[1]);
+
+    expect(consoleLog).toHaveBeenCalledWith("change", 1);
+  });
+
+  it("should handle mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(ContentSwitcher);
+
+    const switcher = container.querySelector(".bx--content-switcher")!;
+    await user.hover(switcher);
+
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(switcher);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
+
+  it("should handle click events on container", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(ContentSwitcher);
+
+    const switcher = container.querySelector(".bx--content-switcher")!;
+    await user.click(switcher);
+
+    expect(consoleLog).toHaveBeenCalledWith("click");
+  });
+
+  it("should apply custom id to Switch", () => {
+    render(ContentSwitcher, {
+      props: { switchId: "custom-switch-id" },
+    });
+
+    const tab = screen.getByRole("tab", { name: "Option 2" });
+    expect(tab).toHaveAttribute("id", "custom-switch-id");
+  });
+
+  it("should bind ref to Switch button element", () => {
+    const { component } = render(ContentSwitcher);
+
+    assert(component.switchRef);
+    expect(component.switchRef).toBeInstanceOf(HTMLButtonElement);
+    expect(component.switchRef.type).toBe("button");
+  });
 });
