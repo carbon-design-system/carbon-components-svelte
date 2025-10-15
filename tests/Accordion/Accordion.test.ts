@@ -224,4 +224,82 @@ describe("Accordion", () => {
     expect(accordion).not.toHaveClass("bx--accordion--sm");
     expect(accordion).not.toHaveClass("bx--accordion--xl");
   });
+
+  it("should apply custom class to Accordion", () => {
+    render(Accordion, { props: { customClass: "custom-accordion" } });
+
+    const accordion = screen.getByRole("list");
+    expect(accordion).toHaveClass("custom-accordion");
+  });
+
+  it("should apply custom class to AccordionItem", () => {
+    render(Accordion, { props: { itemClass: "custom-item" } });
+
+    const item = screen.getByText("Language Translator").closest("li");
+    expect(item).toHaveClass("custom-item");
+  });
+
+  it("should handle click events on Accordion", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Accordion);
+
+    const accordion = screen.getByRole("list");
+    await user.click(accordion);
+
+    expect(consoleLog).toHaveBeenCalledWith("accordion-click");
+  });
+
+  it("should handle mouse events on Accordion", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Accordion);
+
+    const accordion = screen.getByRole("list");
+    await user.hover(accordion);
+
+    expect(consoleLog).toHaveBeenCalledWith("accordion-mouseenter");
+    expect(consoleLog).toHaveBeenCalledWith("accordion-mouseover");
+
+    await user.unhover(accordion);
+    expect(consoleLog).toHaveBeenCalledWith("accordion-mouseleave");
+  });
+
+  it("should handle click events on AccordionItem", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Accordion);
+
+    const item = screen.getByText("Language Translator");
+    await user.click(item);
+
+    expect(consoleLog).toHaveBeenCalledWith("item-click");
+  });
+
+  it("should render title slot", () => {
+    render(Accordion, { props: { useSlot: true } });
+
+    expect(screen.getByText("Custom Title")).toBeInTheDocument();
+  });
+
+  it("should handle Escape key to close item", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Accordion);
+
+    const item = screen.getByText("Language Translator");
+    await user.click(item);
+
+    itemIsExpanded(/Language Translator/);
+
+    await user.keyboard("{Escape}");
+    expect(consoleLog).toHaveBeenCalledWith("item-keydown", "Escape");
+
+    itemIsCollapsed(/Language Translator/);
+  });
+
+  it("should use custom iconDescription", () => {
+    render(Accordion, {
+      props: { useSlot: true, iconDescription: "Custom description" },
+    });
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("title", "Custom description");
+  });
 });
