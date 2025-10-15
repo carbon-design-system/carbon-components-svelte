@@ -124,4 +124,21 @@ describe("RadioButton", () => {
 
     expect(screen.getByText("Custom Label Text").tagName).toBe("SPAN");
   });
+
+  it("should apply custom class", () => {
+    render(RadioButton, { props: { customClass: "custom-radio" } });
+
+    const wrapper = screen
+      .getByRole("radio")
+      .closest(".bx--radio-button-wrapper");
+    expect(wrapper).toHaveClass("custom-radio");
+  });
+
+  it("should bind ref to input element", () => {
+    const { component } = render(RadioButton);
+
+    expect(component.ref).toBeInstanceOf(HTMLInputElement);
+    assert(component.ref);
+    expect(component.ref.type).toBe("radio");
+  });
 });
