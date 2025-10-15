@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { RadioButton } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
@@ -13,6 +15,7 @@
   export let id: ComponentProps<RadioButton>["id"] = "ccs-test";
   export let name: ComponentProps<RadioButton>["name"] = "test-group";
   export let ref: ComponentProps<RadioButton>["ref"] = null;
+  export let customClass = "";
 </script>
 
 <RadioButton
@@ -25,7 +28,8 @@
   {hideLabel}
   {id}
   {name}
-  {ref}
+  bind:ref
+  class={customClass}
   on:focus={() => {
     console.log("focus");
   }}
