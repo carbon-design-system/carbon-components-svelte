@@ -19,6 +19,8 @@
     undefined;
   export let itemRangeText: ComponentProps<Pagination>["itemRangeText"] =
     undefined;
+  export let id: ComponentProps<Pagination>["id"] = undefined;
+  export let customClass = "";
 </script>
 
 <Pagination
@@ -37,6 +39,8 @@
   {pageText}
   {pageRangeText}
   {itemRangeText}
+  {id}
+  class={customClass}
   on:change={(e) => {
     console.log("change", e.detail);
   }}

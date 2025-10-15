@@ -276,4 +276,22 @@ describe("Pagination", () => {
 
     expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
   });
+
+  it("should apply custom id", () => {
+    const { container } = render(Pagination, {
+      props: { id: "custom-pagination-id" },
+    });
+
+    const pagination = container.querySelector("#custom-pagination-id");
+    expect(pagination).toBeInTheDocument();
+  });
+
+  it("should apply custom class", () => {
+    const { container } = render(Pagination, {
+      props: { customClass: "custom-pagination" },
+    });
+
+    const pagination = container.querySelector(".bx--pagination");
+    expect(pagination).toHaveClass("custom-pagination");
+  });
 });
