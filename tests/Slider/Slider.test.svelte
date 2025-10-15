@@ -13,25 +13,65 @@
   export let min = 0;
   export let max = 100;
   export let step = 1;
+  export let light = false;
+  export let hideLabel = false;
+  export let name = "";
+  export let inputType = "number";
+  export let customClass = "";
+  export let useSlot = false;
 </script>
 
-<Slider
-  bind:value
-  labelText="Test Slider"
-  {min}
-  {max}
-  {step}
-  {disabled}
-  {invalid}
-  {required}
-  {minLabel}
-  {maxLabel}
-  {hideTextInput}
-  {fullWidth}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
-  on:input={(e) => {
-    console.log("input", e.detail);
-  }}
-/>
+{#if useSlot}
+  <Slider
+    bind:value
+    {min}
+    {max}
+    {step}
+    {disabled}
+    {invalid}
+    {required}
+    {minLabel}
+    {maxLabel}
+    {hideTextInput}
+    {fullWidth}
+    {light}
+    {hideLabel}
+    {name}
+    {inputType}
+    class={customClass}
+    on:change={(e) => {
+      console.log("change", e.detail);
+    }}
+    on:input={(e) => {
+      console.log("input", e.detail);
+    }}
+  >
+    <span slot="labelText">Slot Label</span>
+  </Slider>
+{:else}
+  <Slider
+    bind:value
+    labelText="Test Slider"
+    {min}
+    {max}
+    {step}
+    {disabled}
+    {invalid}
+    {required}
+    {minLabel}
+    {maxLabel}
+    {hideTextInput}
+    {fullWidth}
+    {light}
+    {hideLabel}
+    {name}
+    {inputType}
+    class={customClass}
+    on:change={(e) => {
+      console.log("change", e.detail);
+    }}
+    on:input={(e) => {
+      console.log("input", e.detail);
+    }}
+  />
+{/if}

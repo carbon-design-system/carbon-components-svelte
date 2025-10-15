@@ -162,16 +162,99 @@ describe("Slider", () => {
     const slider = screen.getByRole("slider");
     const container = screen.getByRole("presentation");
 
-    // Simulate mouse down on the slider
     await user.pointer({ target: slider, keys: "[MouseLeft]" });
 
-    // Simulate mouse move
     const { left, width } = container.getBoundingClientRect();
     await user.pointer({ target: container, coords: { x: left + width / 2 } });
 
-    // Simulate mouse up
     await user.pointer({ target: container, keys: "[/MouseLeft]" });
 
     expect(consoleLog).not.toHaveBeenCalled();
+  });
+
+  it("should handle light variant", () => {
+    render(Slider, {
+      props: { light: true },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveClass("bx--text-input--light");
+  });
+
+  it("should hide label visually", () => {
+    render(Slider, {
+      props: { hideLabel: true },
+    });
+
+    const label = screen.getByText("Test Slider");
+    expect(label).toHaveClass("bx--visually-hidden");
+  });
+
+  it("should apply name attribute", () => {
+    render(Slider, {
+      props: { name: "slider-name" },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveAttribute("name", "slider-name");
+  });
+
+  it("should handle custom input type", () => {
+    render(Slider, {
+      props: { inputType: "text" },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("type", "text");
+  });
+
+  it("should render label slot", () => {
+    render(Slider, {
+      props: { useSlot: true },
+    });
+
+    expect(screen.getByText("Slot Label")).toBeInTheDocument();
+  });
+
+  it("should handle arrow up key", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Slider);
+
+    const slider = screen.getByRole("slider");
+    await user.tab();
+    expect(slider).toHaveFocus();
+
+    await user.keyboard("{ArrowUp}");
+    expect(consoleLog).toHaveBeenCalledWith("change", 1);
+  });
+
+  it("should handle arrow down key", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Slider, {
+      props: { min: 0, max: 100 },
+    });
+
+    const slider = screen.getByRole("slider");
+    const input = screen.getByRole("spinbutton");
+    await user.clear(input);
+    await user.type(input, "50");
+    await user.keyboard("{Tab}");
+
+    vi.clearAllMocks();
+
+    await user.tab();
+    expect(slider).toHaveFocus();
+
+    await user.keyboard("{ArrowDown}");
+    expect(consoleLog).toHaveBeenCalledWith("change", 49);
+  });
+
+  it("should apply custom class", () => {
+    const { container } = render(Slider, {
+      props: { customClass: "custom-slider" },
+    });
+
+    const formItem = container.querySelector(".bx--form-item");
+    expect(formItem).toHaveClass("custom-slider");
   });
 });
