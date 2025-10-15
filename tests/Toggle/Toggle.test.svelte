@@ -35,3 +35,26 @@
 />
 
 <Toggle labelText="Custom name toggle" name="custom-name-toggle" />
+
+<Toggle id="custom-id" labelText="Custom id toggle" />
+
+<Toggle
+  labelText="Events toggle"
+  on:focus={() => {
+    console.log("focus");
+  }}
+  on:blur={() => {
+    console.log("blur");
+  }}
+  on:click={() => {
+    console.log("click");
+  }}
+/>
+
+<Toggle class="custom-class" labelText="Custom class toggle" />
+
+<Toggle labelText="Slots toggle">
+  <span slot="labelText">Label slot</span>
+  <span slot="labelA">Off slot</span>
+  <span slot="labelB">On slot</span>
+</Toggle>
