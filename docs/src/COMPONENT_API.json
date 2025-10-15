@@ -8321,7 +8321,7 @@
           "name": "secondaryButtons",
           "kind": "let",
           "description": "2-tuple prop to render two secondary buttons for a 3 button modal\nsupersedes `secondaryButtonText`",
-          "type": "[{ text: string; }, { text: string; }]",
+          "type": "[] | [{ text: string; }, { text: string; }]",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
