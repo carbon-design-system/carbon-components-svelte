@@ -49,3 +49,28 @@
 >
 
 <Tag skeleton />
+
+<Tag size="sm">Small tag</Tag>
+
+<Tag filter disabled title="Custom title">Disabled filterable</Tag>
+
+<Tag interactive disabled>Disabled interactive</Tag>
+
+<Tag id="custom-tag-id">Custom ID tag</Tag>
+
+<Tag
+  on:mouseover={() => {
+    console.log("mouseover");
+  }}
+  on:mouseenter={() => {
+    console.log("mouseenter");
+  }}
+  on:mouseleave={() => {
+    console.log("mouseleave");
+  }}>Mouse events</Tag
+>
+
+<Tag interactive>
+  <Add slot="icon" />
+  Icon slot
+</Tag>
