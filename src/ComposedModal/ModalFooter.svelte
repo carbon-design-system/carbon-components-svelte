@@ -27,7 +27,7 @@
   /**
    * 2-tuple prop to render two secondary buttons for a 3 button modal
    * supersedes `secondaryButtonText`
-   * @type {[{ text: string; }, { text: string; }]}
+   * @type {[] | [{ text: string; }, { text: string; }]}
    */
   export let secondaryButtons = [];
 

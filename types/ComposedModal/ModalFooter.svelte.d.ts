@@ -39,7 +39,7 @@ type $Props = {
    * supersedes `secondaryButtonText`
    * @default []
    */
-  secondaryButtons?: [{ text: string }, { text: string }];
+  secondaryButtons?: [] | [{ text: string }, { text: string }];
 
   /**
    * Specify a class for the secondary button

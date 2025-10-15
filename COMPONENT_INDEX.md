@@ -2299,16 +2299,16 @@ None.
 
 ### Props
 
-| Prop name             | Required | Kind             | Reactive | Type                                                | Default value          | Description                                                                                             |
-| :-------------------- | :------- | :--------------- | :------- | --------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------- |
-| primaryButtonText     | No       | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>        | Specify the primary button text                                                                         |
-| primaryButtonIcon     | No       | <code>let</code> | No       | <code>any</code>                                    | <code>undefined</code> | Specify the primary button icon                                                                         |
-| primaryButtonDisabled | No       | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code>     | Set to `true` to disable the primary button                                                             |
-| primaryClass          | No       | <code>let</code> | No       | <code>string</code>                                 | <code>undefined</code> | Specify a class for the primary button                                                                  |
-| secondaryButtonText   | No       | <code>let</code> | No       | <code>string</code>                                 | <code>""</code>        | Specify the secondary button text                                                                       |
-| secondaryButtons      | No       | <code>let</code> | No       | <code>[{ text: string; }, { text: string; }]</code> | <code>[]</code>        | 2-tuple prop to render two secondary buttons for a 3 button modal<br />supersedes `secondaryButtonText` |
-| secondaryClass        | No       | <code>let</code> | No       | <code>string</code>                                 | <code>undefined</code> | Specify a class for the secondary button                                                                |
-| danger                | No       | <code>let</code> | No       | <code>boolean</code>                                | <code>false</code>     | Set to `true` to use the danger variant                                                                 |
+| Prop name             | Required | Kind             | Reactive | Type                                                          | Default value          | Description                                                                                             |
+| :-------------------- | :------- | :--------------- | :------- | ------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------- |
+| primaryButtonText     | No       | <code>let</code> | No       | <code>string</code>                                           | <code>""</code>        | Specify the primary button text                                                                         |
+| primaryButtonIcon     | No       | <code>let</code> | No       | <code>any</code>                                              | <code>undefined</code> | Specify the primary button icon                                                                         |
+| primaryButtonDisabled | No       | <code>let</code> | No       | <code>boolean</code>                                          | <code>false</code>     | Set to `true` to disable the primary button                                                             |
+| primaryClass          | No       | <code>let</code> | No       | <code>string</code>                                           | <code>undefined</code> | Specify a class for the primary button                                                                  |
+| secondaryButtonText   | No       | <code>let</code> | No       | <code>string</code>                                           | <code>""</code>        | Specify the secondary button text                                                                       |
+| secondaryButtons      | No       | <code>let</code> | No       | <code>[] &#124; [{ text: string; }, { text: string; }]</code> | <code>[]</code>        | 2-tuple prop to render two secondary buttons for a 3 button modal<br />supersedes `secondaryButtonText` |
+| secondaryClass        | No       | <code>let</code> | No       | <code>string</code>                                           | <code>undefined</code> | Specify a class for the secondary button                                                                |
+| danger                | No       | <code>let</code> | No       | <code>boolean</code>                                          | <code>false</code>     | Set to `true` to use the danger variant                                                                 |
 
 ### Slots
 
