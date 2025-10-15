@@ -6,6 +6,8 @@
   export let autoWidth = false;
   export let iconDescription = "Show menu options";
   export let triggerHref = "#";
+  export let customClass = "";
+  export let ariaLabel = "";
 </script>
 
 <Tabs
@@ -14,6 +16,8 @@
   {autoWidth}
   {iconDescription}
   {triggerHref}
+  class={customClass}
+  aria-label={ariaLabel || undefined}
   on:change={({ detail }) => {
     console.log("change event", detail);
   }}
