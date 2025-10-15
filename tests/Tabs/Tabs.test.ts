@@ -128,6 +128,35 @@ describe("Tabs", () => {
 
     expect(screen.getByTitle("Custom description")).toBeInTheDocument();
   });
+
+  it("should apply custom class", () => {
+    const { container } = render(Tabs, {
+      props: { customClass: "custom-tabs" },
+    });
+
+    const tabs = container.querySelector(".bx--tabs");
+    expect(tabs).toHaveClass("custom-tabs");
+  });
+
+  it("should apply custom aria-label", () => {
+    const { container } = render(Tabs, {
+      props: { ariaLabel: "Custom label" },
+    });
+
+    const trigger = container.querySelector(".bx--tabs-trigger");
+    expect(trigger).toHaveAttribute("aria-label", "Custom label");
+  });
+
+  it("should handle keypress on dropdown trigger", async () => {
+    const { container } = render(Tabs);
+
+    const trigger = container.querySelector(".bx--tabs-trigger") as HTMLElement;
+    if (!trigger) throw new Error("Trigger element not found");
+
+    trigger.focus();
+    await user.keyboard("{Enter}");
+    expect(container.querySelector(".bx--tabs__nav--hidden")).toBeNull();
+  });
 });
 
 describe("Tab", () => {
@@ -222,6 +251,13 @@ describe("Tab", () => {
 
     const tab = screen.getByRole("tab");
     expect(tab).toHaveTextContent("");
+  });
+
+  it("should render slot content instead of label", () => {
+    render(Tab, { props: { useSlot: true } });
+
+    const tab = screen.getByRole("tab");
+    expect(tab).toHaveTextContent("Slot content");
   });
 });
 
