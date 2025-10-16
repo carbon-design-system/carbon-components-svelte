@@ -217,15 +217,22 @@
         // Apply custom filter if provided.
         filteredRows = originalRows.filter((row) => customFilter(row, value));
       } else {
-        // Default filter checks all non-id fields for a basic, case-insensitive match (non-fuzzy).
+        // Get searchable keys from headers (non-empty headers with keys).
+        const searchableKeys = headers
+          .filter((header) => !header.empty && header.key)
+          .map((header) => header.key);
+
+        // Default filter checks fields defined in headers
+        // for a basic, case-insensitive match (non-fuzzy).
+        // This supports nested keys like "contact.company".
         filteredRows = originalRows.filter((row) => {
-          return Object.entries(row)
-            .filter(([key]) => key !== "id")
-            .some(([key, _value]) => {
-              if (typeof _value === "string" || typeof _value === "number") {
-                return (_value + "")?.toLowerCase().includes(value);
-              }
-            });
+          return searchableKeys.some((key) => {
+            const _value = resolvePath(row, key);
+            if (typeof _value === "string" || typeof _value === "number") {
+              return (_value + "")?.toLowerCase().includes(value);
+            }
+            return false;
+          });
         });
       }
 
