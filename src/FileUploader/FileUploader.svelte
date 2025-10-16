@@ -146,6 +146,7 @@
     {multiple}
     {kind}
     {size}
+    bind:files
     on:change
     on:change={(e) => {
       files = e.detail;
