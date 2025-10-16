@@ -11,6 +11,8 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
 
 ## Default
 
+`RadioButton` is intended to be used within a `RadioButtonGroup`. See [Standalone usage](#standalone-usage) for individual usage.
+
 Create a group of radio buttons with a shared name and legend.
 
 <RadioButtonGroup legendText="Storage tier (disk)" name="plan" selected="standard">
@@ -18,6 +20,12 @@ Create a group of radio buttons with a shared name and legend.
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
+
+## Standalone usage
+
+Use `RadioButton` individually with a bindable `checked` prop for simple use cases.
+
+<FileSource src="/framed/RadioButton/RadioButtonStandalone" />
 
 ## Hidden legend
 
