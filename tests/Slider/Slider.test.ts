@@ -275,4 +275,46 @@ describe("Slider", () => {
     expect(consoleLog).toHaveBeenCalledWith("input", 0);
     expect(consoleLog).toHaveBeenCalledWith("change", 0);
   });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1219
+  it("should round shift+arrow values to valid steps", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Slider, {
+      props: {
+        min: 0,
+        max: 10,
+        step: 1,
+      },
+    });
+
+    const slider = screen.getByRole("slider");
+    await user.tab();
+    expect(slider).toHaveFocus();
+
+    // With step=1, all values should be integers
+    // Using Shift+ArrowRight should increment by whole numbers only
+    await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
+    const firstCall = consoleLog.mock.calls.find(
+      (call) => call[0] === "change",
+    );
+    expect(firstCall).toBeDefined();
+    const firstValue = firstCall![1];
+
+    // Value should be a whole number when step=1
+    expect(Number.isInteger(firstValue)).toBe(true);
+    expect(firstValue % 1).toBe(0);
+
+    vi.clearAllMocks();
+
+    await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
+    const secondCall = consoleLog.mock.calls.find(
+      (call) => call[0] === "change",
+    );
+    expect(secondCall).toBeDefined();
+    const secondValue = secondCall![1];
+
+    // Value should still be a whole number
+    expect(Number.isInteger(secondValue)).toBe(true);
+    expect(secondValue % 1).toBe(0);
+  });
 });
