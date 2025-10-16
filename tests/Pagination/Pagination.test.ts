@@ -294,4 +294,39 @@ describe("Pagination", () => {
     const pagination = container.querySelector(".bx--pagination");
     expect(pagination).toHaveClass("custom-pagination");
   });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1634
+  it("should not trigger multiple updates when pageSize changes on last page", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: {
+        totalItems: 35,
+        page: 4,
+        pageSize: 10,
+        pageSizes: [10, 15, 20],
+      },
+    });
+
+    consoleLog.mockClear();
+
+    // Change page size from 10 to 15 while on page 4
+    // This should adjust page to 3 (since totalPages becomes 3)
+    // but should only trigger one update cycle.
+    const pageSizeSelect = screen.getByRole("combobox", {
+      name: "Items per page:",
+    });
+    await user.selectOptions(pageSizeSelect, "15");
+
+    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 15 });
+    expect(consoleLog).toHaveBeenCalledWith("update", {
+      pageSize: 15,
+      page: 3,
+    });
+
+    const updateCalls = consoleLog.mock.calls.filter(
+      (call) =>
+        call[0] === "update" && call[1].pageSize === 15 && call[1].page === 3,
+    );
+    expect(updateCalls.length).toBe(1);
+  });
 });

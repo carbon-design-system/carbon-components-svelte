@@ -82,7 +82,7 @@
   /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  import { afterUpdate, createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import Button from "../Button/Button.svelte";
@@ -106,14 +106,9 @@
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
-  afterUpdate(() => {
-    if (page > totalPages) {
-      page = totalPages;
-    }
-  });
-
-  $: dispatch("update", { pageSize, page });
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
+  $: if (page > totalPages) page = totalPages;
+  $: dispatch("update", { pageSize, page });
   $: selectItems = getWindowedPages(page, totalPages, pageWindow);
   $: backButtonDisabled = disabled || page === 1;
   $: forwardButtonDisabled = disabled || page === totalPages;
