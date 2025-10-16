@@ -36,6 +36,12 @@ Customize node rendering using the default slot with the `let:node` directive. T
 
 <FileSource src="/framed/TreeView/TreeViewSlot" />
 
+## Slottable node with checkbox
+
+Slot a `Checkbox` component in each tree view node to create a tree with checkable items. The checkbox is wrapped in a container with `stopPropagation` to prevent tree node selection when checking items.
+
+<FileSource src="/framed/TreeView/TreeViewCheckbox" />
+
 ## Initial active node
 
 Set the initial active node using the `activeId` prop.
