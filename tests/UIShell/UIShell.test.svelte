@@ -17,6 +17,7 @@
   export let platformName: ComponentProps<Header>["platformName"] = "";
   export let isSideNavOpen: ComponentProps<Header>["isSideNavOpen"] = false;
   export let persistentHamburgerMenu: ComponentProps<Header>["persistentHamburgerMenu"] = false;
+  export let ariaLabelMenu: ComponentProps<Header>["ariaLabelMenu"] = undefined;
   export let headerRef: ComponentProps<Header>["ref"] = null;
   export let headerClass = "";
   export let useSlots = false;
@@ -34,6 +35,7 @@
   <Header
     bind:isSideNavOpen
     {persistentHamburgerMenu}
+    {ariaLabelMenu}
     bind:ref={headerRef}
     class={headerClass}
     on:click={() => {
@@ -54,6 +56,7 @@
     {platformName}
     bind:isSideNavOpen
     {persistentHamburgerMenu}
+    {ariaLabelMenu}
     bind:ref={headerRef}
     class={headerClass}
     on:click={() => {

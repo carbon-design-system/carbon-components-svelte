@@ -70,6 +70,56 @@ describe("UIShell", () => {
 
       expect(component.headerRef).toBeInstanceOf(HTMLAnchorElement);
     });
+
+    it("should apply custom ariaLabelMenu to hamburger menu when persistentHamburgerMenu is true", () => {
+      const { container } = render(UIShell, {
+        props: {
+          persistentHamburgerMenu: true,
+          ariaLabelMenu: "Toggle menu",
+        },
+      });
+
+      const hamburgerButton = container.querySelector(
+        ".bx--header__menu-trigger",
+      );
+      expect(hamburgerButton).toHaveAttribute("aria-label", "Toggle menu");
+      expect(hamburgerButton).toHaveAttribute("title", "Toggle menu");
+    });
+
+    it("should default to 'Open menu' when side nav is closed", () => {
+      const { container } = render(UIShell, {
+        props: {
+          persistentHamburgerMenu: true,
+          isSideNavOpen: false,
+        },
+      });
+
+      const hamburgerButton = container.querySelector(
+        ".bx--header__menu-trigger",
+      );
+      expect(hamburgerButton).toHaveAttribute("aria-label", "Open menu");
+      expect(hamburgerButton).toHaveAttribute("title", "Open menu");
+    });
+
+    it("should update label when hamburger menu is clicked", async () => {
+      const { container } = render(UIShell, {
+        props: {
+          persistentHamburgerMenu: true,
+          isSideNavOpen: false,
+        },
+      });
+
+      const hamburgerButton = container.querySelector(
+        ".bx--header__menu-trigger",
+      );
+      expect(hamburgerButton).toHaveAttribute("aria-label", "Open menu");
+
+      assert(hamburgerButton);
+      await user.click(hamburgerButton);
+
+      expect(hamburgerButton).toHaveAttribute("aria-label", "Close menu");
+      expect(hamburgerButton).toHaveAttribute("title", "Close menu");
+    });
   });
 
   describe("HeaderNav", () => {

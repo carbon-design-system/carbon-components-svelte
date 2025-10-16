@@ -5812,6 +5812,17 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "ariaLabelMenu",
+          "kind": "let",
+          "description": "Specify the ARIA label for the hamburger menu.\nDefaults to \"Open menu\" or \"Close menu\" based on `isSideNavOpen` state.",
+          "type": "string",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
