@@ -81,6 +81,13 @@ type $Props = {
    */
   iconClose?: any;
 
+  /**
+   * Specify the ARIA label for the hamburger menu.
+   * Defaults to "Open menu" or "Close menu" based on `isSideNavOpen` state.
+   * @default undefined
+   */
+  ariaLabelMenu?: string;
+
   [key: `data-${string}`]: any;
 };
 

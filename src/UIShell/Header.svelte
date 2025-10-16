@@ -62,6 +62,13 @@
    */
   export let iconClose = Close;
 
+  /**
+   * Specify the ARIA label for the hamburger menu.
+   * Defaults to "Open menu" or "Close menu" based on `isSideNavOpen` state.
+   * @type {string}
+   */
+  export let ariaLabelMenu = undefined;
+
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/Menu.svelte";
   import { shouldRenderHamburgerMenu } from "./navStore";
@@ -76,6 +83,8 @@
   $: ariaLabel = company
     ? `${company} `
     : "" + (uiShellAriaLabel || $$props["aria-label"] || platformName);
+  $: hamburgerAriaLabel =
+    ariaLabelMenu ?? (isSideNavOpen ? "Close menu" : "Open menu");
 </script>
 
 <svelte:window bind:innerWidth={winWidth} />
@@ -83,7 +92,12 @@
 <header aria-label={ariaLabel} class:bx--header={true}>
   <slot name="skip-to-content" />
   {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
-    <HamburgerMenu bind:isOpen={isSideNavOpen} {iconClose} {iconMenu} />
+    <HamburgerMenu
+      bind:isOpen={isSideNavOpen}
+      {iconClose}
+      {iconMenu}
+      ariaLabel={hamburgerAriaLabel}
+    />
   {/if}
   <a
     {href}
