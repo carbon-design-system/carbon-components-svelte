@@ -105,4 +105,45 @@ describe("ContextMenu", () => {
     nestedMenu.setAttribute("data-level", "2");
     menus[0].appendChild(nestedMenu);
   });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1848
+  it("should not close parent menu when clicking submenu trigger", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContextMenu, {
+      props: {
+        open: true,
+        withSubmenu: true,
+        x: 100,
+        y: 100,
+      },
+    });
+
+    const submenuTrigger = screen.getByText("Option with submenu");
+    expect(submenuTrigger).toBeInTheDocument();
+
+    await user.click(submenuTrigger);
+
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+
+    const submenuOptions = screen.getByText("Submenu option 1");
+    expect(submenuOptions).toBeInTheDocument();
+  });
+
+  it("should close menu when clicking regular option", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContextMenu, {
+      props: {
+        open: true,
+        x: 100,
+        y: 100,
+      },
+    });
+
+    // Click a regular option
+    const option = screen.getByText("Option 1");
+    await user.click(option);
+
+    // Menu should close
+    expect(consoleLog).toHaveBeenCalledWith("close");
+  });
 });

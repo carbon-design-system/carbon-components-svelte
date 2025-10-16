@@ -236,7 +236,14 @@
       submenuOpen = false;
     }
   }}
-  on:click={handleClick}
+  on:click={(e) => {
+    if (subOptions) {
+      e.stopPropagation();
+      submenuOpen = true;
+      return;
+    }
+    handleClick();
+  }}
 >
   {#if subOptions}
     <div
