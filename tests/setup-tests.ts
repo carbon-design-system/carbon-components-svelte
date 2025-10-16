@@ -42,6 +42,46 @@ class ResizeObserverMock {
 
 global.ResizeObserver = ResizeObserverMock;
 
+if (typeof DataTransfer === "undefined") {
+  class DataTransferMock {
+    items: DataTransferItemList;
+    files: FileList = [] as unknown as FileList;
+    private fileList: File[] = [];
+
+    constructor() {
+      this.items = {
+        add: (file: File) => {
+          this.fileList.push(file);
+          this.updateFiles();
+          return null as unknown as DataTransferItem;
+        },
+        length: 0,
+      } as unknown as DataTransferItemList;
+
+      this.updateFiles();
+    }
+
+    private updateFiles() {
+      const fileList = Object.create(Array.prototype);
+      this.fileList.forEach((file, index) => {
+        fileList[index] = file;
+      });
+      fileList.length = this.fileList.length;
+      fileList.item = (index: number) => this.fileList[index] || null;
+
+      fileList[Symbol.iterator] = function* () {
+        for (let i = 0; i < this.length; i++) {
+          yield this[i];
+        }
+      };
+
+      this.files = fileList as FileList;
+    }
+  }
+
+  global.DataTransfer = DataTransferMock as unknown as typeof DataTransfer;
+}
+
 export const user = userEvent.setup();
 
 export const setupLocalStorageMock = () => {
