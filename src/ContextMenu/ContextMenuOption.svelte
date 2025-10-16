@@ -74,6 +74,7 @@
   let submenuPosition = [0, 0];
   let menuOffsetX = 0;
   let mousePosition = { x: 0, y: 0 };
+  /** @type {HTMLUListElement | null} */
   let submenuRef = null;
 
   const unsubPosition = ctx.position.subscribe((position) => {
@@ -220,8 +221,15 @@
     const { width, y } = ref.getBoundingClientRect();
     let x = rootMenuPosition[0] + width;
 
-    if (window.innerWidth - menuOffsetX < width) {
-      x = rootMenuPosition[0] - width;
+    const submenuWidth = submenuRef?.getBoundingClientRect().width ?? width;
+
+    if (x + submenuWidth > window.innerWidth) {
+      x = rootMenuPosition[0] - submenuWidth;
+
+      // On narrow screens, position submenu at edge to avoid clipping.
+      if (x < 0) {
+        x = Math.max(0, window.innerWidth - submenuWidth);
+      }
     }
 
     submenuPosition = [x, y];

@@ -146,4 +146,115 @@ describe("ContextMenu", () => {
     // Menu should close
     expect(consoleLog).toHaveBeenCalledWith("close");
   });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
+  it("should position submenu to the left when it would overflow right viewport edge", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 400,
+    });
+
+    render(ContextMenu, {
+      props: {
+        open: true,
+        withSubmenu: true,
+        x: 300,
+        y: 100,
+      },
+    });
+
+    const submenuTrigger = screen.getByText("Option with submenu");
+    await user.hover(submenuTrigger);
+
+    const submenu = screen
+      .getAllByRole("menu")
+      .find((menu) => menu.getAttribute("data-level") === "2");
+
+    expect(submenu).toBeDefined();
+
+    if (submenu) {
+      const submenuX = parseInt(submenu.style.left);
+      const submenuWidth = submenu.getBoundingClientRect().width;
+
+      // Submenu should not overflow the right edge of viewport
+      expect(submenuX + submenuWidth).toBeLessThanOrEqual(400);
+    }
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
+  it("should position submenu to the right when there is sufficient space", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 1024,
+    });
+
+    render(ContextMenu, {
+      props: {
+        open: true,
+        withSubmenu: true,
+        x: 100,
+        y: 100,
+      },
+    });
+
+    const submenuTrigger = screen.getByText("Option with submenu");
+    await user.hover(submenuTrigger);
+    await new Promise((resolve) => setTimeout(resolve, 150));
+
+    const submenu = screen
+      .getAllByRole("menu")
+      .find((menu) => menu.getAttribute("data-level") === "2");
+
+    expect(submenu).toBeDefined();
+
+    if (submenu) {
+      const rootMenu = screen
+        .getAllByRole("menu")
+        .find((menu) => menu.getAttribute("data-level") === "1");
+
+      if (rootMenu) {
+        const rootX = parseInt(rootMenu.style.left);
+        const rootWidth = rootMenu.getBoundingClientRect().width;
+        const submenuX = parseInt(submenu.style.left);
+
+        // Submenu should be positioned to the right of the parent menu.
+        expect(submenuX).toBeGreaterThanOrEqual(rootX + rootWidth);
+      }
+    }
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
+  it("should constrain submenu to viewport when it would overflow both sides", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 200,
+    });
+
+    render(ContextMenu, {
+      props: {
+        open: true,
+        withSubmenu: true,
+        x: 100,
+        y: 100,
+      },
+    });
+
+    const submenuTrigger = screen.getByText("Option with submenu");
+    await user.hover(submenuTrigger);
+
+    const submenu = screen
+      .getAllByRole("menu")
+      .find((menu) => menu.getAttribute("data-level") === "2");
+
+    expect(submenu).toBeDefined();
+
+    if (submenu) {
+      const submenuX = parseInt(submenu.style.left);
+      // Submenu should be positioned at or near 0 (left edge of viewport).
+      expect(submenuX).toBeGreaterThanOrEqual(0);
+    }
+  });
 });
