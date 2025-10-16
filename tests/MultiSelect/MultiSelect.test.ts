@@ -530,8 +530,9 @@ describe("MultiSelect", () => {
     });
     await openMenu();
     const disabledOption = screen.getByText("B").closest("[role='option']");
+    assert(disabledOption);
 
-    await user.click(disabledOption!);
+    await user.click(disabledOption);
     expect(disabledOption).toHaveAttribute("aria-selected", "false");
   });
 });
