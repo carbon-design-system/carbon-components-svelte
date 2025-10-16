@@ -183,8 +183,9 @@
           ArrowUp: 1,
         };
         if (keys[key]) {
-          value +=
+          const delta =
             step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
+          value = Math.round((value + delta) / step) * step;
           dispatch("input", value);
         }
       }}
