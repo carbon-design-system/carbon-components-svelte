@@ -106,7 +106,7 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -119,11 +119,28 @@
   const dispatch = createEventDispatcher();
 
   let highlightedIndex = -1;
+  let typeaheadBuffer = "";
+  let typeaheadTimeout = null;
+
+  const TYPEAHEAD_DELAY = 500;
+
+  onMount(() => {
+    return () => {
+      if (typeaheadTimeout) {
+        clearTimeout(typeaheadTimeout);
+      }
+    };
+  });
 
   $: inline = type === "inline";
   $: selectedItem = items.find((item) => item.id === selectedId);
   $: if (!open) {
     highlightedIndex = -1;
+    typeaheadBuffer = "";
+    if (typeaheadTimeout) {
+      clearTimeout(typeaheadTimeout);
+      typeaheadTimeout = null;
+    }
   }
 
   function change(dir) {
@@ -151,6 +168,41 @@
     }
 
     highlightedIndex = index;
+  }
+
+  function typeaheadSearch(char) {
+    if (items.length === 0) return;
+
+    if (typeaheadTimeout) {
+      clearTimeout(typeaheadTimeout);
+    }
+
+    typeaheadBuffer += char.toLowerCase();
+
+    typeaheadTimeout = setTimeout(() => {
+      typeaheadBuffer = "";
+      typeaheadTimeout = null;
+    }, TYPEAHEAD_DELAY);
+
+    // Start search from the next index after current highlight, or from 0 if none highlighted.
+    const startIndex = highlightedIndex >= 0 ? highlightedIndex + 1 : 0;
+
+    for (let i = startIndex; i < items.length; i++) {
+      const itemText = itemToString(items[i]).toLowerCase();
+      if (itemText.startsWith(typeaheadBuffer) && !items[i].disabled) {
+        highlightedIndex = i;
+        return;
+      }
+    }
+
+    // Wrap around: search from beginning to startIndex.
+    for (let i = 0; i < startIndex; i++) {
+      const itemText = itemToString(items[i]).toLowerCase();
+      if (itemText.startsWith(typeaheadBuffer) && !items[i].disabled) {
+        highlightedIndex = i;
+        return;
+      }
+    }
   }
 
   const dispatchSelect = () => {
@@ -230,11 +282,11 @@
       tabindex="0"
       aria-expanded={open}
       on:keydown={(e) => {
-        const { key } = e;
-        if (["Enter", "ArrowDown", "ArrowUp"].includes(key)) {
+        if (["Enter", "ArrowDown", "ArrowUp"].includes(e.key)) {
           e.preventDefault();
         }
-        if (key === "Enter") {
+
+        if (e.key === "Enter") {
           open = !open;
           if (
             highlightedIndex > -1 &&
@@ -244,21 +296,29 @@
             dispatchSelect();
             open = false;
           }
-        } else if (key === "Tab") {
+        } else if (e.key === "Tab") {
           open = false;
-        } else if (key === "ArrowDown") {
+        } else if (e.key === "ArrowDown") {
           if (!open) open = true;
           change(1);
-        } else if (key === "ArrowUp") {
+        } else if (e.key === "ArrowUp") {
           if (!open) open = true;
           change(-1);
-        } else if (key === "Escape") {
+        } else if (e.key === "Escape") {
           open = false;
+        } else if (
+          open &&
+          e.key.length === 1 &&
+          !e.ctrlKey &&
+          !e.metaKey &&
+          !e.altKey
+        ) {
+          e.preventDefault();
+          typeaheadSearch(e.key);
         }
       }}
       on:keyup={(e) => {
-        const { key } = e;
-        if ([" "].includes(key)) {
+        if ([" "].includes(e.key)) {
           e.preventDefault();
         } else {
           return;
