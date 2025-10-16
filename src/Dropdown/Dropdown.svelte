@@ -98,7 +98,7 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import {
@@ -151,27 +151,15 @@
       selectedItem: items.find((item) => item.id === selectedId),
     });
   };
-
-  const pageClickHandler = ({ target }) => {
-    if (open && ref && !ref.contains(target)) {
-      open = false;
-    }
-  };
-
-  onMount(() => {
-    if (parent) {
-      parent.addEventListener("click", pageClickHandler);
-    }
-
-    return () => {
-      if (parent) {
-        parent.removeEventListener("click", pageClickHandler);
-      }
-    };
-  });
 </script>
 
-<svelte:window on:click={pageClickHandler} />
+<svelte:window
+  on:click={(e) => {
+    if (open && ref && !ref.contains(e.target)) {
+      open = false;
+    }
+  }}
+/>
 
 <div
   class:bx--dropdown__wrapper={true}
