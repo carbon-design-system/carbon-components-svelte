@@ -76,7 +76,8 @@
   on:drop|preventDefault|stopPropagation={({ dataTransfer }) => {
     if (!disabled) {
       over = false;
-      files = validateFiles([...dataTransfer.files]);
+      const newFiles = validateFiles([...dataTransfer.files]);
+      files = multiple ? [...files, ...newFiles] : newFiles;
       dispatch("add", files);
       dispatch("change", files);
     }
@@ -117,7 +118,8 @@
     {multiple}
     class:bx--file-input={true}
     on:change={({ target }) => {
-      files = validateFiles([...target.files]);
+      const newFiles = validateFiles([...target.files]);
+      files = multiple ? [...files, ...newFiles] : newFiles;
       dispatch("add", files);
       dispatch("change", files);
     }}

@@ -110,7 +110,7 @@
   class:bx--visually-hidden={true}
   {...$$restProps}
   on:change|stopPropagation={({ target }) => {
-    files = [...target.files];
+    files = multiple ? [...files, ...target.files] : [...target.files];
 
     if (files && !disableLabelChanges) {
       labelText = files.length > 1 ? `${files.length} files` : files[0].name;
