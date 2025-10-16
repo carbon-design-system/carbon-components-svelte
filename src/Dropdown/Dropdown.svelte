@@ -111,11 +111,18 @@
   const dispatch = createEventDispatcher();
 
   let highlightedIndex = -1;
+  let typeaheadBuffer = "";
+  let typeaheadTimeout = null;
 
   $: inline = type === "inline";
   $: selectedItem = items.find((item) => item.id === selectedId);
   $: if (!open) {
     highlightedIndex = -1;
+    typeaheadBuffer = "";
+    if (typeaheadTimeout) {
+      clearTimeout(typeaheadTimeout);
+      typeaheadTimeout = null;
+    }
   }
 
   function change(dir) {
@@ -143,6 +150,65 @@
     }
 
     highlightedIndex = index;
+  }
+
+  function typeaheadSearch(char) {
+    if (items.length === 0) return;
+
+    // Clear existing timeout
+    if (typeaheadTimeout) {
+      clearTimeout(typeaheadTimeout);
+    }
+
+    // Add character to buffer
+    typeaheadBuffer += char.toLowerCase();
+
+    // Set new timeout to reset buffer after 500ms
+    typeaheadTimeout = setTimeout(() => {
+      typeaheadBuffer = "";
+      typeaheadTimeout = null;
+    }, 500);
+
+    // Start search from the next index after current highlight, or from 0 if none highlighted
+    const startIndex = highlightedIndex >= 0 ? highlightedIndex + 1 : 0;
+
+    // Search from startIndex to end
+    for (let i = startIndex; i < items.length; i++) {
+      const itemText = itemToString(items[i]).toLowerCase();
+      if (itemText.startsWith(typeaheadBuffer) && !items[i].disabled) {
+        highlightedIndex = i;
+        scrollToHighlighted();
+        return;
+      }
+    }
+
+    // Wrap around: search from beginning to startIndex
+    for (let i = 0; i < startIndex; i++) {
+      const itemText = itemToString(items[i]).toLowerCase();
+      if (itemText.startsWith(typeaheadBuffer) && !items[i].disabled) {
+        highlightedIndex = i;
+        scrollToHighlighted();
+        return;
+      }
+    }
+  }
+
+  function scrollToHighlighted() {
+    if (highlightedIndex < 0) return;
+
+    // Wait for next tick to ensure DOM is updated
+    setTimeout(() => {
+      const items = document.querySelectorAll(
+        `.bx--list-box__menu-item[role="option"]`,
+      );
+      const highlightedItem = items[highlightedIndex];
+      if (highlightedItem) {
+        highlightedItem.scrollIntoView({
+          behavior: "instant",
+          block: "nearest",
+        });
+      }
+    }, 0);
   }
 
   const dispatchSelect = () => {
@@ -235,9 +301,21 @@
       aria-expanded={open}
       on:keydown={(e) => {
         const { key } = e;
+
+        // Navigation keys
+        const navigationKeys = [
+          "Enter",
+          "ArrowDown",
+          "ArrowUp",
+          "Tab",
+          "Escape",
+          " ",
+        ];
+
         if (["Enter", "ArrowDown", "ArrowUp"].includes(key)) {
           e.preventDefault();
         }
+
         if (key === "Enter") {
           open = !open;
           if (
@@ -258,6 +336,16 @@
           change(-1);
         } else if (key === "Escape") {
           open = false;
+        } else if (
+          open &&
+          key.length === 1 &&
+          !e.ctrlKey &&
+          !e.metaKey &&
+          !e.altKey
+        ) {
+          // Typeahead search for printable characters when menu is open
+          e.preventDefault();
+          typeaheadSearch(key);
         }
       }}
       on:keyup={(e) => {
