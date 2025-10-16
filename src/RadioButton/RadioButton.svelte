@@ -53,7 +53,11 @@
     add({ id, checked, disabled, value });
   }
 
-  $: checked = $selectedValue === value;
+  // Only sync checked when inside RadioButtonGroup.
+  // This allows standalone `RadioButton` usage.
+  $: if (add) {
+    checked = $selectedValue === value;
+  }
 </script>
 
 <div
@@ -74,9 +78,12 @@
     on:focus
     on:blur
     on:change
-    on:change={() => {
+    on:change={(e) => {
       if (update) {
         update(value);
+      } else {
+        // Update `checked` for standalone `RadioButton` usage.
+        checked = e.currentTarget.checked;
       }
     }}
   />
