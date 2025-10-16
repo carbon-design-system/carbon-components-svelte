@@ -60,10 +60,12 @@
 
   // "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
   const moderate01 = 150;
+  const closeDelay = moderate01;
 
   let unsubCurrentIds = undefined;
   let unsubCurrentId = undefined;
   let timeoutHover = undefined;
+  let timeoutClose = undefined;
   let rootMenuPosition = [0, 0];
   let focusIndex = 0;
   let options = [];
@@ -71,6 +73,8 @@
   let submenuOpen = false;
   let submenuPosition = [0, 0];
   let menuOffsetX = 0;
+  let mousePosition = { x: 0, y: 0 };
+  let submenuRef = null;
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
@@ -79,6 +83,73 @@
   const unsubMenuOffsetX = ctx.menuOffsetX.subscribe((_menuOffsetX) => {
     menuOffsetX = _menuOffsetX;
   });
+
+  function isPointInTriangle(px, py, x1, y1, x2, y2, x3, y3) {
+    const denominator = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
+    const a = ((y2 - y3) * (px - x3) + (x3 - x2) * (py - y3)) / denominator;
+    const b = ((y3 - y1) * (px - x3) + (x1 - x3) * (py - y3)) / denominator;
+    const c = 1 - a - b;
+
+    return a >= 0 && a <= 1 && b >= 0 && b <= 1 && c >= 0 && c <= 1;
+  }
+
+  // Utility function to check if mouse is in the
+  // safe triangle when transferring to the submenu.
+  function isInSafeTriangle(mouseX, mouseY) {
+    if (!submenuOpen || !ref || !submenuRef) return false;
+
+    const parentRect = ref.getBoundingClientRect();
+    const submenuRect = submenuRef.getBoundingClientRect();
+
+    // Magic number to make the triangle slightly larger
+    const buffer = 12;
+    const isSubmenuOnRight = submenuRect.left >= parentRect.right;
+
+    let trianglePoints;
+    if (isSubmenuOnRight) {
+      trianglePoints = {
+        x1: parentRect.right,
+        y1: parentRect.top - buffer,
+        x2: parentRect.right,
+        y2: parentRect.bottom + buffer,
+        x3: submenuRect.left,
+        y3: submenuRect.top + submenuRect.height / 2,
+      };
+    } else {
+      trianglePoints = {
+        x1: parentRect.left,
+        y1: parentRect.top - buffer,
+        x2: parentRect.left,
+        y2: parentRect.bottom + buffer,
+        x3: submenuRect.right,
+        y3: submenuRect.top + submenuRect.height / 2,
+      };
+    }
+
+    const inTopTriangle = isPointInTriangle(
+      mouseX,
+      mouseY,
+      trianglePoints.x1,
+      trianglePoints.y1,
+      isSubmenuOnRight ? trianglePoints.x3 : trianglePoints.x2,
+      submenuRect.top,
+      trianglePoints.x3,
+      trianglePoints.y3,
+    );
+
+    const inBottomTriangle = isPointInTriangle(
+      mouseX,
+      mouseY,
+      trianglePoints.x2,
+      trianglePoints.y2,
+      trianglePoints.x3,
+      trianglePoints.y3,
+      isSubmenuOnRight ? trianglePoints.x3 : trianglePoints.x1,
+      submenuRect.bottom,
+    );
+
+    return inTopTriangle || inBottomTriangle;
+  }
 
   function handleClick(opts = {}) {
     if (disabled) return ctx.close();
@@ -100,6 +171,19 @@
     dispatch("click");
   }
 
+  function handleGlobalMouseMove(e) {
+    if (subOptions && submenuOpen) {
+      mousePosition = { x: e.clientX, y: e.clientY };
+
+      if (isInSafeTriangle(e.clientX, e.clientY)) {
+        if (typeof timeoutClose === "number") {
+          clearTimeout(timeoutClose);
+          timeoutClose = undefined;
+        }
+      }
+    }
+  }
+
   onMount(() => {
     if (selected === true) selectable = true;
 
@@ -115,12 +199,16 @@
       });
     }
 
+    window.addEventListener("mousemove", handleGlobalMouseMove);
+
     return () => {
       unsubPosition();
       unsubMenuOffsetX();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
+      if (typeof timeoutClose === "number") clearTimeout(timeoutClose);
+      window.removeEventListener("mousemove", handleGlobalMouseMove);
     };
   });
 
@@ -224,16 +312,31 @@
   on:mouseenter
   on:mouseenter={() => {
     if (subOptions) {
+      if (typeof timeoutClose === "number") {
+        clearTimeout(timeoutClose);
+        timeoutClose = undefined;
+      }
+
       timeoutHover = setTimeout(() => {
         submenuOpen = true;
       }, moderate01);
+    }
+  }}
+  on:mousemove={(e) => {
+    if (subOptions && submenuOpen) {
+      mousePosition = { x: e.clientX, y: e.clientY };
     }
   }}
   on:mouseleave
   on:mouseleave={(e) => {
     if (subOptions) {
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
-      submenuOpen = false;
+
+      timeoutClose = setTimeout(() => {
+        if (!isInSafeTriangle(mousePosition.x, mousePosition.y)) {
+          submenuOpen = false;
+        }
+      }, closeDelay);
     }
   }}
   on:click={(e) => {
@@ -264,6 +367,7 @@
     </div>
 
     <ContextMenu
+      bind:ref={submenuRef}
       open={submenuOpen}
       x={submenuPosition[0]}
       y={submenuPosition[1]}
