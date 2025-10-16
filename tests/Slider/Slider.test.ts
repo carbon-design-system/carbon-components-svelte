@@ -257,4 +257,22 @@ describe("Slider", () => {
     const formItem = container.querySelector(".bx--form-item");
     expect(formItem).toHaveClass("custom-slider");
   });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1980
+  it("should fire input event when using arrow keys", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Slider);
+
+    const slider = screen.getByRole("slider");
+    await user.tab();
+    expect(slider).toHaveFocus();
+
+    await user.keyboard("{ArrowRight}");
+    expect(consoleLog).toHaveBeenCalledWith("input", 1);
+    expect(consoleLog).toHaveBeenCalledWith("change", 1);
+
+    await user.keyboard("{ArrowLeft}");
+    expect(consoleLog).toHaveBeenCalledWith("input", 0);
+    expect(consoleLog).toHaveBeenCalledWith("change", 0);
+  });
 });

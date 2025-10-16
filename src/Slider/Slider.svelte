@@ -185,6 +185,7 @@
         if (keys[key]) {
           value +=
             step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
+          dispatch("input", value);
         }
       }}
     >
