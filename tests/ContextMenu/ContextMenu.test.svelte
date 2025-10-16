@@ -7,6 +7,7 @@
   export let x = 0;
   export let y = 0;
   export let ref: ComponentProps<ContextMenu>["ref"] = null;
+  export let withSubmenu = false;
 </script>
 
 <div data-testid="target">Right click me</div>
@@ -24,6 +25,13 @@
     console.log("close");
   }}
 >
-  <ContextMenuOption>Option 1</ContextMenuOption>
-  <ContextMenuOption>Option 2</ContextMenuOption>
+  <ContextMenuOption labelText="Option 1" />
+  {#if withSubmenu}
+    <ContextMenuOption labelText="Option with submenu">
+      <ContextMenuOption labelText="Submenu option 1" />
+      <ContextMenuOption labelText="Submenu option 2" />
+    </ContextMenuOption>
+  {:else}
+    <ContextMenuOption labelText="Option 2" />
+  {/if}
 </ContextMenu>
