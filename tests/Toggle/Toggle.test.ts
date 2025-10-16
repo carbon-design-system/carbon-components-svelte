@@ -16,10 +16,12 @@ describe("Toggle", () => {
     await user.click(toggle);
     expect(toggle).toBeChecked();
     expect(consoleLog).toHaveBeenCalledWith("toggled:", true);
+    expect(consoleLog).toHaveBeenCalledWith("change:", true);
 
     await user.click(toggle);
     expect(toggle).not.toBeChecked();
     expect(consoleLog).toHaveBeenCalledWith("toggled:", false);
+    expect(consoleLog).toHaveBeenCalledWith("change:", false);
   });
 
   it("supports custom labels", () => {
@@ -73,10 +75,12 @@ describe("Toggle", () => {
     await user.keyboard(" ");
     expect(toggle).toBeChecked();
     expect(consoleLog).toHaveBeenCalledWith("toggled:", true);
+    expect(consoleLog).toHaveBeenCalledWith("change:", true);
 
     await user.keyboard(" ");
     expect(toggle).not.toBeChecked();
     expect(consoleLog).toHaveBeenCalledWith("toggled:", false);
+    expect(consoleLog).toHaveBeenCalledWith("change:", false);
   });
 
   it("handles keyboard interactions (Enter)", async () => {
@@ -89,10 +93,12 @@ describe("Toggle", () => {
     await user.keyboard("{Enter}");
     expect(toggle).toBeChecked();
     expect(consoleLog).toHaveBeenCalledWith("toggled:", true);
+    expect(consoleLog).toHaveBeenCalledWith("change:", true);
 
     await user.keyboard("{Enter}");
     expect(toggle).not.toBeChecked();
     expect(consoleLog).toHaveBeenCalledWith("toggled:", false);
+    expect(consoleLog).toHaveBeenCalledWith("change:", false);
   });
 
   it("ignores other key presses", async () => {
@@ -118,22 +124,22 @@ describe("Toggle", () => {
     expect(toggle).toHaveAttribute("name", "custom-name-toggle");
   });
 
-  it("prevents default on space and enter keys", async () => {
+  it("prevents default on enter key", async () => {
     render(Toggle);
 
     const toggle = getToggle("Default toggle");
     toggle.focus();
 
-    const spaceEvent = new KeyboardEvent("keyup", { key: " " });
-    const enterEvent = new KeyboardEvent("keyup", { key: "Enter" });
+    const enterEvent = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
 
-    const spacePreventDefault = vi.spyOn(spaceEvent, "preventDefault");
     const enterPreventDefault = vi.spyOn(enterEvent, "preventDefault");
 
-    toggle.dispatchEvent(spaceEvent);
     toggle.dispatchEvent(enterEvent);
 
-    expect(spacePreventDefault).toHaveBeenCalled();
     expect(enterPreventDefault).toHaveBeenCalled();
   });
 
@@ -175,7 +181,7 @@ describe("Toggle", () => {
     await user.click(toggle);
 
     expect(toggle).toBeChecked();
-    expect(consoleLog).toHaveBeenCalledTimes(3);
+    expect(consoleLog).toHaveBeenCalledTimes(6); // 3 toggle events + 3 change events
   });
 
   it("visually hides label when hideLabel is true", () => {

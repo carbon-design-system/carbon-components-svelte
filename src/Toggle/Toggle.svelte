@@ -39,6 +39,8 @@
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
+
+  let ref = null;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -54,6 +56,7 @@
 >
   <!-- svelte-ignore a11y-role-has-required-aria-props -->
   <input
+    bind:this={ref}
     role="switch"
     type="checkbox"
     class:bx--toggle-input={true}
@@ -64,11 +67,10 @@
       dispatch("toggle", { toggled });
     }}
     on:change
-    on:keyup={(e) => {
-      if (e.key === " " || e.key === "Enter") {
+    on:keydown={(e) => {
+      if (e.key === "Enter") {
         e.preventDefault();
-        toggled = !toggled;
-        dispatch("toggle", { toggled });
+        ref?.click();
       }
     }}
     on:keyup

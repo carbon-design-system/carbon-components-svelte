@@ -11,6 +11,11 @@
   on:toggle={(e) => {
     console.log("toggled:", e.detail.toggled);
   }}
+  on:change={(e) => {
+    if (e.target instanceof HTMLInputElement) {
+      console.log("change:", e.target.checked);
+    }
+  }}
 />
 
 <Toggle labelText="Custom labels" labelA="Inactive" labelB="Active" />
