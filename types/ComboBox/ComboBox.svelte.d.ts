@@ -115,6 +115,14 @@ type $Props = {
   open?: boolean;
 
   /**
+   * Set to `true` to allow custom values that are not in the items list.
+   * By default, user-entered text is cleared when the combobox loses focus without selecting an item.
+   * When enabled, custom text is preserved.
+   * @default false
+   */
+  allowCustomValue?: boolean;
+
+  /**
    * Determine if an item should be filtered given the current combobox value
    * @default () => true
    */
