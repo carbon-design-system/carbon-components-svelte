@@ -10,6 +10,7 @@
   export let light = false;
   export let readonly = false;
   export let allowEmpty = false;
+  export let allowDecimal = false;
   export let disabled = false;
   export let hideSteppers = false;
   export let iconDescription = "";
@@ -34,6 +35,7 @@
   {light}
   {readonly}
   {allowEmpty}
+  {allowDecimal}
   {disabled}
   {hideSteppers}
   {iconDescription}
