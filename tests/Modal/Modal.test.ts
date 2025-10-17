@@ -58,7 +58,6 @@ describe("Modal", () => {
   });
 
   it("opens and closes properly", async () => {
-    const consoleLog = vi.spyOn(console, "log");
     const { component } = render(ModalTest, {
       props: {
         open: false,
@@ -66,16 +65,21 @@ describe("Modal", () => {
       },
     });
 
+    const openHandler = vi.fn();
+    const closeHandler = vi.fn();
+    component.$on("open", openHandler);
+    component.$on("close", closeHandler);
+
     // Open the modal
     component.$set({ open: true });
     await tick();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(consoleLog).toHaveBeenCalledWith("open");
+    expect(openHandler).toHaveBeenCalledTimes(1);
 
     // Close the modal
     component.$set({ open: false });
     await tick();
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(closeHandler).toHaveBeenCalledTimes(1);
   });
 
   it("handles form submission", async () => {
@@ -251,34 +255,102 @@ describe("Modal", () => {
     ).toBeInTheDocument();
   });
 
-  it("handles closing through various methods", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+  it("dispatches close event with escape-key trigger", async () => {
     const { component } = render(ModalTest, {
       props: {
         open: true,
-        modalHeading: "Close Test Modal",
+        modalHeading: "Escape Key Test",
       },
     });
 
-    // Close via escape key
+    const closeHandler = vi.fn();
+    component.$on("close", closeHandler);
+
     await user.keyboard("{Escape}");
-    expect(consoleLog).toHaveBeenCalledWith("close");
-
-    component.$set({ open: true });
     await tick();
 
-    expect(consoleLog).toHaveBeenCalledWith("open");
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      trigger: "escape-key",
+    });
+  });
 
-    // Close via clicking outside
-    await user.click(document.body);
-    expect(consoleLog).toHaveBeenCalledWith("close");
+  it("dispatches close event with outside-click trigger", async () => {
+    const { container, component } = render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Outside Click Test",
+      },
+    });
 
-    component.$set({ open: true });
+    const closeHandler = vi.fn();
+    component.$on("close", closeHandler);
+
+    // Click on the modal overlay
+    const modalOverlay = container.querySelector(".bx--modal");
+    assert(modalOverlay);
+    await user.click(modalOverlay);
     await tick();
 
-    // Close via close button
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      trigger: "outside-click",
+    });
+  });
+
+  it("dispatches close event with close-button trigger", async () => {
+    const { component } = render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Close Button Test",
+      },
+    });
+
+    const closeHandler = vi.fn();
+    component.$on("close", closeHandler);
+
     const closeButton = screen.getByLabelText("Close the modal");
     await user.click(closeButton);
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      trigger: "close-button",
+    });
+  });
+
+  it("prevents closing when preventDefault is called on close event", async () => {
+    const { container, component } = render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Prevent Close Test",
+      },
+    });
+
+    const closeHandler = vi.fn((e) => {
+      e.preventDefault();
+    });
+    component.$on("close", closeHandler);
+
+    // Close via escape key.
+    await user.keyboard("{Escape}");
+    await tick();
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    // Close via outside click.
+    const modalOverlay = container.querySelector(".bx--modal");
+    assert(modalOverlay);
+    await user.click(modalOverlay);
+    await tick();
+    expect(closeHandler).toHaveBeenCalledTimes(2);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    // Close via close button.
+    const closeButton = screen.getByLabelText("Close the modal");
+    await user.click(closeButton);
+    await tick();
+    expect(closeHandler).toHaveBeenCalledTimes(3);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 });

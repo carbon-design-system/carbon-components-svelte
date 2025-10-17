@@ -2266,19 +2266,19 @@ None.
 
 ### Events
 
-| Event name              | Type       | Detail                          |
-| :---------------------- | :--------- | :------------------------------ |
-| transitionend           | dispatched | <code>{ open: boolean; }</code> |
-| click:button--secondary | dispatched | <code>{ text: string; }</code>  |
-| keydown                 | forwarded  | --                              |
-| click                   | forwarded  | --                              |
-| mouseover               | forwarded  | --                              |
-| mouseenter              | forwarded  | --                              |
-| mouseleave              | forwarded  | --                              |
-| submit                  | dispatched | <code>null</code>               |
-| click:button--primary   | dispatched | <code>null</code>               |
-| close                   | dispatched | <code>null</code>               |
-| open                    | dispatched | <code>null</code>               |
+| Event name              | Type       | Detail                                                                              |
+| :---------------------- | :--------- | :---------------------------------------------------------------------------------- |
+| close                   | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button" }</code> |
+| transitionend           | dispatched | <code>{ open: boolean; }</code>                                                     |
+| click:button--secondary | dispatched | <code>{ text: string; }</code>                                                      |
+| keydown                 | forwarded  | --                                                                                  |
+| click                   | forwarded  | --                                                                                  |
+| mouseover               | forwarded  | --                                                                                  |
+| mouseenter              | forwarded  | --                                                                                  |
+| mouseleave              | forwarded  | --                                                                                  |
+| submit                  | dispatched | <code>null</code>                                                                   |
+| click:button--primary   | dispatched | <code>null</code>                                                                   |
+| open                    | dispatched | <code>null</code>                                                                   |
 
 ## `ModalBody`
 
