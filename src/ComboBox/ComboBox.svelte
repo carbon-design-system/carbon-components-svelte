@@ -74,6 +74,13 @@
   export let open = false;
 
   /**
+   * Set to `true` to allow custom values that are not in the items list.
+   * By default, user-entered text is cleared when the combobox loses focus without selecting an item.
+   * When enabled, custom text is preserved.
+   */
+  export let allowCustomValue = false;
+
+  /**
    * Determine if an item should be filtered given the current combobox value
    * @type {(item: ComboBoxItem, value: string) => boolean}
    */
@@ -177,8 +184,8 @@
       filteredItems = [];
       if (!selectedItem) {
         selectedId = undefined;
-        // Only reset value if the input is not focused
-        if (!ref.contains(document.activeElement)) {
+        // Only reset value if the input is not focused and allowCustomValue is false
+        if (!ref.contains(document.activeElement) && !allowCustomValue) {
           value = "";
         }
         highlightedIndex = -1;

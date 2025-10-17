@@ -421,4 +421,53 @@ describe("ComboBox", () => {
     const dropdown = screen.queryAllByRole("listbox")[1];
     expect(dropdown).toBeUndefined();
   });
+
+  it("should preserve custom value when allowCustomValue is true and user clicks away", async () => {
+    render(ComboBox, { props: { allowCustomValue: true } });
+
+    const input = getInput();
+    await user.click(input);
+    await user.type(input, "Custom Value");
+    await user.click(document.body);
+    expect(input).toHaveValue("Custom Value");
+  });
+
+  it("should preserve custom value when allowCustomValue is true and menu closes", async () => {
+    render(ComboBox, { props: { allowCustomValue: true } });
+
+    const input = getInput();
+    await user.click(input);
+    await user.type(input, "My Custom Text");
+    await user.keyboard("{Tab}");
+    expect(input).toHaveValue("My Custom Text");
+  });
+
+  it("should clear custom value when allowCustomValue is false (default behavior)", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+    await user.type(input, "Custom Value");
+    await user.click(document.body);
+    expect(input).toHaveValue("");
+  });
+
+  it("should preserve custom value when allowCustomValue is true and Enter is pressed", async () => {
+    render(ComboBox, { props: { allowCustomValue: true } });
+
+    const input = getInput();
+    await user.click(input);
+    await user.type(input, "New Custom Entry");
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("New Custom Entry");
+  });
+
+  it("should still allow selecting items from list when allowCustomValue is true", async () => {
+    render(ComboBox, { props: { allowCustomValue: true } });
+
+    const input = getInput();
+    await user.click(input);
+    await user.click(screen.getByText("Email"));
+    expect(input).toHaveValue("Email");
+  });
 });
