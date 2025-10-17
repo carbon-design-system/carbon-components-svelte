@@ -116,8 +116,23 @@
         inputValue.set(value);
       }
 
-      if (!calendar && type === "change") {
-        dispatch("change", value);
+      if (type === "change") {
+        if (calendar) {
+          const detail = { selectedDates: calendar.selectedDates || [] };
+
+          if ($range) {
+            detail.dateStr = {
+              from: inputRef?.value || "",
+              to: inputRefTo?.value || "",
+            };
+          } else {
+            detail.dateStr = inputRef?.value || "";
+          }
+
+          dispatch("change", detail);
+        } else {
+          dispatch("change", value);
+        }
       }
     },
     blurInput: (relatedTarget) => {
@@ -160,7 +175,7 @@
       base: inputRef,
       input: inputRefTo,
       dispatch: (event) => {
-        const detail = { selectedDates: calendar.selectedDates };
+        const detail = { selectedDates: calendar?.selectedDates || [] };
 
         if ($range) {
           const from = inputRef.value;

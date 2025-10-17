@@ -37,9 +37,7 @@
   {short}
   {light}
   {flatpickrProps}
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
+  on:change
 >
   <DatePickerInput
     labelText="Date"
