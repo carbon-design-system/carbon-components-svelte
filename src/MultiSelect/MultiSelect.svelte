@@ -275,6 +275,7 @@
   let sortedItems = sort();
 
   $: menuId = `menu-${id}`;
+  $: comboId = `combo-${id}`;
   $: inline = type === "inline";
   $: ariaLabel = $$props["aria-label"] || "Choose an item";
   $: if (
@@ -324,6 +325,8 @@
   {/if}
   <ListBox
     role={undefined}
+    id={comboId}
+    aria-label={ariaLabel}
     {disabled}
     {invalid}
     {invalidText}
@@ -347,79 +350,23 @@
         class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
     {/if}
-    <ListBoxField
-      role="button"
-      tabindex="0"
-      aria-expanded={open}
-      on:click={() => {
-        if (disabled) return;
-        if (filterable) {
-          open = true;
-          inputRef.focus();
-        } else {
-          open = !open;
-        }
-      }}
-      on:keydown={(e) => {
-        if (filterable) {
-          return;
-        }
-        const key = e.key;
-        if ([" ", "ArrowUp", "ArrowDown"].includes(key)) {
-          e.preventDefault();
-        }
-        if (key === " ") {
-          open = !open;
-        } else if (key === "Tab") {
-          if (selectionRef && checked.length > 0) {
-            selectionRef.focus();
-          } else {
-            open = false;
-          }
-        } else if (key === "ArrowDown") {
-          change(1);
-        } else if (key === "ArrowUp") {
-          change(-1);
-        } else if (key === "Enter") {
-          if (highlightedIndex > -1) {
-            sortedItems = sortedItems.map((item, i) => {
-              if (i !== highlightedIndex) return item;
-              return { ...item, checked: !item.checked };
-            });
-          }
-        } else if (key === "Escape") {
-          open = false;
-        }
-      }}
-      on:focus={() => {
-        if (filterable) {
-          open = true;
-          if (inputRef) inputRef.focus();
-        }
-      }}
-      on:blur={(e) => {
-        if (!filterable) dispatch("blur", e);
-      }}
-      {id}
-      {disabled}
-      {translateWithId}
-    >
-      {#if checked.length > 0}
-        <ListBoxSelection
-          selectionCount={checked.length}
-          on:clear
-          on:clear={() => {
-            selectedIds = [];
-            sortedItems = sortedItems.map((item) => ({
-              ...item,
-              checked: false,
-            }));
-          }}
-          translateWithId={translateWithIdSelection}
-          {disabled}
-        />
-      {/if}
-      {#if filterable}
+    {#if filterable}
+      <div class:bx--list-box__field={true}>
+        {#if checked.length > 0}
+          <ListBoxSelection
+            selectionCount={checked.length}
+            on:clear
+            on:clear={() => {
+              selectedIds = [];
+              sortedItems = sortedItems.map((item) => ({
+                ...item,
+                checked: false,
+              }));
+            }}
+            translateWithId={translateWithIdSelection}
+            {disabled}
+          />
+        {/if}
         <input
           bind:this={inputRef}
           bind:value
@@ -430,11 +377,17 @@
           aria-autocomplete="list"
           aria-expanded={open}
           aria-activedescendant={highlightedId}
+          aria-labelledby={comboId}
           aria-disabled={disabled}
-          aria-controls={menuId}
+          aria-controls={open ? menuId : undefined}
+          aria-owns={open ? menuId : undefined}
           class:bx--text-input={true}
           class:bx--text-input--empty={value === ""}
           class:bx--text-input--light={light}
+          on:click={() => {
+            if (disabled) return;
+            open = true;
+          }}
           on:keydown
           on:keydown|stopPropagation={({ key }) => {
             if (key === "Enter") {
@@ -472,6 +425,11 @@
         {#if invalid}
           <WarningFilled class="bx--list-box__invalid-icon" />
         {/if}
+        {#if !invalid && warn}
+          <WarningAltFilled
+            class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+          />
+        {/if}
         {#if value}
           <ListBoxSelection
             on:clear={() => {
@@ -484,20 +442,81 @@
           />
         {/if}
         <ListBoxMenuIcon
-          style="pointer-events: {open ? 'auto' : 'none'}"
           on:click={(e) => {
+            if (disabled) return;
             e.stopPropagation();
             open = !open;
           }}
           {translateWithId}
           {open}
         />
-      {/if}
-      {#if !filterable}
+      </div>
+    {:else}
+      <ListBoxField
+        role="combobox"
+        tabindex="0"
+        aria-expanded={open}
+        aria-activedescendant={highlightedId}
+        aria-controls={open ? menuId : undefined}
+        aria-owns={open ? menuId : undefined}
+        on:click={() => {
+          if (disabled) return;
+          open = !open;
+        }}
+        on:keydown={(e) => {
+          const key = e.key;
+          if ([" ", "ArrowUp", "ArrowDown"].includes(key)) {
+            e.preventDefault();
+          }
+          if (key === " ") {
+            open = !open;
+          } else if (key === "Tab") {
+            if (selectionRef && checked.length > 0) {
+              selectionRef.focus();
+            } else {
+              open = false;
+            }
+          } else if (key === "ArrowDown") {
+            change(1);
+          } else if (key === "ArrowUp") {
+            change(-1);
+          } else if (key === "Enter") {
+            if (highlightedIndex > -1) {
+              sortedItems = sortedItems.map((item, i) => {
+                if (i !== highlightedIndex) return item;
+                return { ...item, checked: !item.checked };
+              });
+            }
+          } else if (key === "Escape") {
+            open = false;
+          }
+        }}
+        on:blur={(e) => {
+          dispatch("blur", e);
+        }}
+        {id}
+        {disabled}
+        {translateWithId}
+      >
+        {#if checked.length > 0}
+          <ListBoxSelection
+            selectionCount={checked.length}
+            on:clear
+            on:clear={() => {
+              selectedIds = [];
+              sortedItems = sortedItems.map((item) => ({
+                ...item,
+                checked: false,
+              }));
+            }}
+            translateWithId={translateWithIdSelection}
+            {disabled}
+          />
+        {/if}
         <span class:bx--list-box__label={true}>{label}</span>
         <ListBoxMenuIcon {open} {translateWithId} />
-      {/if}
-    </ListBoxField>
+      </ListBoxField>
+    {/if}
     <div style:display={open ? "block" : "none"}>
       <ListBoxMenu aria-label={ariaLabel} {id} aria-multiselectable="true">
         {#each filterable ? filteredItems : sortedItems as item, i (item.id)}
