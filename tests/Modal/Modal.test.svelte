@@ -25,7 +25,7 @@
 </script>
 
 <Modal
-  {open}
+  bind:open
   {modalHeading}
   {modalLabel}
   {modalAriaLabel}
@@ -44,8 +44,8 @@
   {danger}
   {alert}
   {passiveModal}
-  on:open={() => console.log("open")}
-  on:close={() => console.log("close")}
+  on:open
+  on:close
   on:submit={() => console.log("submit")}
   on:click:button--primary={() => console.log("click:button--primary")}
   on:click:button--secondary={(e) =>
