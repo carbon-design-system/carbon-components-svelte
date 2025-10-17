@@ -42,6 +42,12 @@ Slot a `Checkbox` component in each tree view node to create a tree with checkab
 
 <FileSource src="/framed/TreeView/TreeViewCheckbox" />
 
+## Slottable node with inline editing
+
+Use a `contenteditable` element in each tree view node to enable inline editing of node names. The editable region is wrapped in a container with `stopPropagation` to prevent tree node selection when editing.
+
+<FileSource src="/framed/TreeView/TreeViewInlineEditing" />
+
 ## Initial active node
 
 Set the initial active node using the `activeId` prop.
