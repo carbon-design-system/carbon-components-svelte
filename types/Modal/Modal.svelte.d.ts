@@ -140,6 +140,9 @@ export type ModalProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class Modal extends SvelteComponentTyped<
   ModalProps,
   {
+    close: CustomEvent<{
+      trigger: "escape-key" | "outside-click" | "close-button";
+    }>;
     transitionend: CustomEvent<{ open: boolean }>;
     ["click:button--secondary"]: CustomEvent<{ text: string }>;
     keydown: WindowEventMap["keydown"];
@@ -149,7 +152,6 @@ export default class Modal extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     submit: CustomEvent<null>;
     ["click:button--primary"]: CustomEvent<null>;
-    close: CustomEvent<null>;
     open: CustomEvent<null>;
   },
   { default: {}; heading: {}; label: {} }

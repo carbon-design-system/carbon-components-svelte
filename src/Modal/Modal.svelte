@@ -1,5 +1,6 @@
 <script>
   /**
+   * @event {{ trigger: "escape-key" | "outside-click" | "close-button" }} close
    * @event {{ open: boolean; }} transitionend
    * @event {{ text: string; }} click:button--secondary
    */
@@ -101,11 +102,22 @@
   let innerModal = null;
   let opened = false;
   let didClickInnerModal = false;
+  let closeDispatched = false;
 
   function focus(element) {
     const node =
       (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
     node.focus();
+  }
+
+  function close(trigger) {
+    closeDispatched = true;
+    const shouldContinue = dispatch("close", { trigger }, { cancelable: true });
+    if (shouldContinue) {
+      open = false;
+    } else {
+      closeDispatched = false;
+    }
   }
 
   const openStore = writable(open);
@@ -116,7 +128,10 @@
     if (opened) {
       if (!open) {
         opened = false;
-        dispatch("close");
+        if (!closeDispatched) {
+          dispatch("close");
+        }
+        closeDispatched = false;
       }
     } else if (open) {
       opened = true;
@@ -146,7 +161,7 @@
   on:keydown={(e) => {
     if (open) {
       if (e.key === "Escape") {
-        open = false;
+        close("escape-key");
       } else if (e.key === "Tab") {
         // trap focus
 
@@ -180,7 +195,9 @@
   }}
   on:click
   on:click={() => {
-    if (!didClickInnerModal && !preventCloseOnClickOutside) open = false;
+    if (!didClickInnerModal && !preventCloseOnClickOutside) {
+      close("outside-click");
+    }
     didClickInnerModal = false;
   }}
   on:mouseover
@@ -215,7 +232,7 @@
           aria-label={iconDescription}
           class:bx--modal-close={true}
           on:click={() => {
-            open = false;
+            close("close-button");
           }}
         >
           <Close size={20} class="bx--modal-close__icon" aria-hidden="true" />
@@ -236,7 +253,7 @@
           aria-label={iconDescription}
           class:bx--modal-close={true}
           on:click={() => {
-            open = false;
+            close("close-button");
           }}
         >
           <Close size={20} class="bx--modal-close__icon" aria-hidden="true" />
