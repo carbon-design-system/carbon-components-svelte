@@ -8,8 +8,13 @@
   /** Specify the placeholder text */
   export let placeholder = "";
 
-  /** Specify the number of cols */
-  export let cols = 50;
+  /**
+   * Specify the number of cols.
+   * If specified, the textarea will not be resizable.
+   * Override this using the `resize` style attribute.
+   * @type {number}
+   */
+  export let cols = undefined;
 
   /** Specify the number of rows */
   export let rows = 4;
@@ -129,6 +134,7 @@
       class:bx--text-area--light={light}
       class:bx--text-area--invalid={invalid}
       class:bx--text-area--warning={warn}
+      style:resize={typeof cols === "number" ? "none" : undefined}
       maxlength={maxCount ?? undefined}
       {...$$restProps}
       on:change

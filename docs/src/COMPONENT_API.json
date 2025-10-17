@@ -15296,9 +15296,8 @@
         {
           "name": "cols",
           "kind": "let",
-          "description": "Specify the number of cols",
+          "description": "Specify the number of cols.\nIf specified, the textarea will not be resizable.\nOverride this using the `resize` style attribute.",
           "type": "number",
-          "value": "50",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
