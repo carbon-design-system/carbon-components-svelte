@@ -106,4 +106,59 @@ describe("DatePicker", () => {
     expect(input).toHaveAttribute("placeholder", "mm/dd/yyyy");
     expect(screen.getByText("Date")).toHaveClass("bx--visually-hidden");
   });
+
+  it("dispatches change event when manually typing in simple mode", async () => {
+    const changeHandler = vi.fn();
+    const { component } = render(DatePicker, {
+      datePickerType: "simple",
+    });
+
+    component.$on("change", changeHandler);
+
+    const input = screen.getByLabelText("Date");
+    await user.type(input, "01/15/2024");
+    await user.tab();
+
+    expect(changeHandler).toHaveBeenCalled();
+    expect(changeHandler.mock.lastCall?.[0]?.detail).toBe("01/15/2024");
+  });
+
+  it("dispatches change event when manually typing in single mode", async () => {
+    const changeHandler = vi.fn();
+    const { component } = render(DatePicker, {
+      datePickerType: "single",
+    });
+
+    component.$on("change", changeHandler);
+
+    const input = screen.getByLabelText("Date");
+    await user.type(input, "01/15/2024");
+    await user.tab();
+
+    expect(changeHandler).toHaveBeenCalled();
+    expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+      dateStr: "01/15/2024",
+    });
+  });
+
+  // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/314
+  // and https://github.com/carbon-design-system/carbon-components-svelte/issues/950
+  it("dispatches change event when manually clearing in single mode", async () => {
+    const changeHandler = vi.fn();
+    const { component } = render(DatePicker, {
+      datePickerType: "single",
+      value: "01/15/2024",
+    });
+
+    component.$on("change", changeHandler);
+
+    const input = screen.getByLabelText("Date");
+    await user.clear(input);
+    await user.tab();
+
+    expect(changeHandler).toHaveBeenCalled();
+    expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+      dateStr: "",
+    });
+  });
 });
