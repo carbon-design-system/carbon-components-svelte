@@ -13,14 +13,14 @@ describe("MultiSelect", () => {
   const openMenu = async () =>
     await user.click(
       await screen.findByLabelText("Open menu", {
-        selector: `[role="button"]`,
+        selector: `[role="combobox"]`,
       }),
     );
 
   const closeMenu = async () =>
     await user.click(
       await screen.findByLabelText("Close menu", {
-        selector: `[role="button"]`,
+        selector: `[role="combobox"]`,
       }),
     );
 
@@ -41,8 +41,8 @@ describe("MultiSelect", () => {
     });
 
     expect(screen.getByText("Contact methods")).toBeInTheDocument();
-    expect(screen.getByRole("button")).toBeInTheDocument();
-    expect(screen.getByRole("button")).toHaveAttribute(
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
+    expect(screen.getByRole("combobox")).toHaveAttribute(
       "aria-expanded",
       "false",
     );
@@ -146,8 +146,8 @@ describe("MultiSelect", () => {
         },
       });
 
-      await openMenu();
       const input = screen.getByPlaceholderText("Filter items...");
+      await user.click(input);
       await user.type(input, "em");
 
       expect(screen.queryByText("Slack")).not.toBeInTheDocument();
@@ -177,8 +177,8 @@ describe("MultiSelect", () => {
         },
       });
 
-      await openMenu();
       const input = screen.getByRole("combobox");
+      await user.click(input);
       await user.type(input, "e");
 
       expect(screen.queryByText("Slack")).not.toBeInTheDocument();
@@ -306,7 +306,7 @@ describe("MultiSelect", () => {
       });
 
       const wrapper = screen
-        .getByRole("button")
+        .getByRole("combobox")
         .closest(".bx--multi-select__wrapper");
       expect(wrapper).toHaveClass("bx--multi-select__wrapper--inline");
     });
@@ -321,7 +321,7 @@ describe("MultiSelect", () => {
       });
 
       expect(screen.getByText("Invalid selection")).toBeInTheDocument();
-      const wrapper = screen.getByRole("button").closest(".bx--list-box");
+      const wrapper = screen.getByRole("combobox").closest(".bx--list-box");
       expect(wrapper).toHaveClass("bx--multi-select--invalid");
     });
 
@@ -335,7 +335,7 @@ describe("MultiSelect", () => {
       });
 
       expect(screen.getByText("Warning message")).toBeInTheDocument();
-      const wrapper = screen.getByRole("button").closest(".bx--list-box");
+      const wrapper = screen.getByRole("combobox").closest(".bx--list-box");
       expect(wrapper).toHaveClass("bx--list-box--warning");
     });
 
@@ -347,7 +347,7 @@ describe("MultiSelect", () => {
         },
       });
 
-      const field = screen.getByRole("button");
+      const field = screen.getByRole("combobox");
       expect(field).toHaveAttribute("aria-disabled", "true");
       expect(field).toHaveAttribute("tabindex", "-1");
       expect(field.closest(".bx--multi-select")).toHaveAttribute(
@@ -389,6 +389,104 @@ describe("MultiSelect", () => {
 
       const label = screen.getByText("Contact methods");
       expect(label).toHaveClass("bx--visually-hidden");
+    });
+
+    it("non-filterable variant has correct ARIA attributes", () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          titleText: "Contact methods",
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      expect(combobox).toHaveAttribute("role", "combobox");
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+      expect(combobox).toHaveAttribute("tabindex", "0");
+    });
+
+    it("non-filterable variant opens menu and updates aria-controls", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          titleText: "Contact methods",
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+      expect(combobox).not.toHaveAttribute("aria-controls");
+
+      await user.click(combobox);
+
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      expect(combobox).toHaveAttribute("aria-controls");
+      const menuId = combobox.getAttribute("aria-controls");
+      expect(screen.getByRole("listbox")).toHaveAttribute("id", menuId);
+    });
+
+    it("filterable variant has correct ARIA attributes", () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      expect(combobox).toHaveAttribute("role", "combobox");
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+      expect(combobox).toHaveAttribute("aria-autocomplete", "list");
+      expect(combobox).toHaveAttribute("tabindex", "0");
+    });
+
+    it("filterable variant updates aria-controls when opened", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+      expect(combobox).not.toHaveAttribute("aria-controls");
+
+      await user.click(combobox);
+
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      expect(combobox).toHaveAttribute("aria-controls");
+      const menuId = combobox.getAttribute("aria-controls");
+      expect(screen.getByRole("listbox")).toHaveAttribute("id", menuId);
+    });
+
+    it("listbox has aria-multiselectable attribute", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+        },
+      });
+
+      await openMenu();
+      const listbox = screen.getByRole("listbox");
+      expect(listbox).toHaveAttribute("aria-multiselectable", "true");
+    });
+
+    it("options have correct aria-selected state", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          selectedIds: ["0"],
+        },
+      });
+
+      await openMenu();
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+      expect(options[1]).toHaveAttribute("aria-selected", "false");
+      expect(options[2]).toHaveAttribute("aria-selected", "false");
     });
   });
 
@@ -493,9 +591,8 @@ describe("MultiSelect", () => {
         placeholder: "Filter...",
       },
     });
-    await openMenu();
     const input = screen.getByPlaceholderText("Filter...");
-
+    await user.click(input);
     await user.type(input, "a");
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{ArrowDown}");
@@ -513,8 +610,8 @@ describe("MultiSelect", () => {
         placeholder: "Filter...",
       },
     });
-    await openMenu();
     const input = screen.getByPlaceholderText("Filter...");
+    await user.click(input);
     expect(input).toHaveFocus();
   });
 
