@@ -65,6 +65,12 @@ type $Props = {
   hideLabel?: boolean;
 
   /**
+   * Specify the helper text
+   * @default ""
+   */
+  helperText?: string;
+
+  /**
    * Set a name for the input element
    * @default ""
    */

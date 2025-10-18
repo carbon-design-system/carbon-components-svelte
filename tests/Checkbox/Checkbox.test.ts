@@ -440,4 +440,19 @@ describe("Checkbox", () => {
     await user.click(input);
     expect(input).toBeChecked();
   });
+
+  it("should render helper text when provided", () => {
+    render(Checkbox, { helperText: "Helper text message" });
+    const wrapper = screen.getByTestId("checkbox");
+    const helperElement = wrapper.querySelector(".bx--form__helper-text");
+    assert(helperElement);
+    expect(helperElement).toHaveTextContent("Helper text message");
+  });
+
+  it("should not render helper text by default", () => {
+    render(Checkbox);
+    const wrapper = screen.getByTestId("checkbox");
+    const helperElement = wrapper.querySelector(".bx--form__helper-text");
+    expect(helperElement).not.toBeInTheDocument();
+  });
 });
