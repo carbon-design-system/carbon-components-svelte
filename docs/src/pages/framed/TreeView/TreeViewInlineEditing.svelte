@@ -1,5 +1,5 @@
 <script>
-  import { TreeView } from "carbon-components-svelte";
+  import { TreeView, RecursiveList } from "carbon-components-svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
 
   let nodes = [
@@ -34,6 +34,23 @@
       ],
     },
   ];
+
+  function updateNodeText(id, text) {
+    const findAndUpdate = (items) => {
+      for (const item of items) {
+        if (item.id === id) {
+          item.text = text;
+          return true;
+        }
+        if (item.nodes && findAndUpdate(item.nodes)) {
+          return true;
+        }
+      }
+      return false;
+    };
+    findAndUpdate(nodes);
+    nodes = nodes;
+  }
 </script>
 
 <TreeView labelText="Cloud Products" {nodes} let:node>
@@ -51,3 +68,6 @@
     </span>
   </div>
 </TreeView>
+
+<br />
+<RecursiveList {nodes} />
