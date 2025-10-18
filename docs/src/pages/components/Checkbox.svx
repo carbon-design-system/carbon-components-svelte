@@ -37,6 +37,13 @@ Set `disabled` to `true` to prevent user interaction.
 
 <Checkbox labelText="Label text" disabled />
 
+## Readonly state
+
+Set `readonly` to `true` to make the checkbox non-interactive while keeping the label text readable. Unlike `disabled`, the readonly state is intended for displaying checkbox values that can only be changed programmatically.
+
+<Checkbox labelText="Label text (unchecked)" readonly />
+<Checkbox labelText="Label text (checked)" checked readonly />
+
 ## Reactive example (bind:checked)
 
 Use two-way binding with `bind:checked` to track the checkbox state.
