@@ -4,6 +4,7 @@ import CheckboxGroup from "./Checkbox.group.test.svelte";
 import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
 import CheckboxSlot from "./Checkbox.slot.test.svelte";
 import Checkbox from "./Checkbox.test.svelte";
+import CheckboxReadonly from "./Checkbox.readonly.test.svelte";
 import MultipleCheckboxes from "./MultipleCheckboxes.test.svelte";
 import MultipleCheckboxesObject from "./MultipleCheckboxesObject.test.svelte";
 
@@ -389,5 +390,54 @@ describe("Checkbox", () => {
     expect(screen.getByTestId("object-values")).toHaveTextContent(
       '{"a":true,"b":false}',
     );
+  });
+
+  it("renders readonly state with aria-readonly attribute", () => {
+    render(CheckboxReadonly, { readonly: true });
+
+    const input = screen
+      .getByTestId("checkbox")
+      .querySelector("input[type='checkbox']");
+    assert(input);
+    expect(input).toHaveAttribute("aria-readonly", "true");
+  });
+
+  it("prevents state change when readonly and unchecked", async () => {
+    render(CheckboxReadonly, { checked: false, readonly: true });
+
+    const input = screen
+      .getByTestId("checkbox")
+      .querySelector("input[type='checkbox']");
+    assert(input);
+    expect(input).not.toBeChecked();
+
+    await user.click(input);
+    expect(input).not.toBeChecked();
+  });
+
+  it("prevents state change when readonly and checked", async () => {
+    render(CheckboxReadonly, { checked: true, readonly: true });
+
+    const input = screen
+      .getByTestId("checkbox")
+      .querySelector("input[type='checkbox']");
+    assert(input);
+    expect(input).toBeChecked();
+
+    await user.click(input);
+    expect(input).toBeChecked();
+  });
+
+  it("allows state change when not readonly", async () => {
+    render(CheckboxReadonly, { checked: false, readonly: false });
+
+    const input = screen
+      .getByTestId("checkbox")
+      .querySelector("input[type='checkbox']");
+    assert(input);
+    expect(input).not.toBeChecked();
+
+    await user.click(input);
+    expect(input).toBeChecked();
   });
 });

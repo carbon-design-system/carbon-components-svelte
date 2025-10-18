@@ -84,6 +84,7 @@
   <div
     class:bx--form-item={true}
     class:bx--checkbox-wrapper={true}
+    class:bx--checkbox-wrapper--readonly={readonly}
     {...$$restProps}
     on:click
     on:mouseover
@@ -100,9 +101,18 @@
       bind:indeterminate
       {name}
       {required}
-      {readonly}
+      aria-readonly={readonly || undefined}
       class:bx--checkbox={true}
-      on:change={() => {
+      on:click={(e) => {
+        if (readonly) {
+          e.preventDefault();
+        }
+      }}
+      on:change={(e) => {
+        if (readonly) {
+          e.preventDefault();
+          return;
+        }
         if (useGroup) {
           group = group.includes(value)
             ? group.filter((_value) => _value !== value)
