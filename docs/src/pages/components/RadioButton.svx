@@ -81,6 +81,16 @@ Disable specific radio buttons to prevent selection.
   <RadioButton disabled labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
+## Helper text
+
+Use `helperText` to provide additional context or instructions below the radio button group.
+
+<RadioButtonGroup legendText="Notification preferences" name="plan-helper" selected="email" helperText="You can change this setting at any time">
+  <RadioButton labelText="Email" value="email" />
+  <RadioButton labelText="SMS" value="sms" />
+  <RadioButton labelText="Push notifications" value="push" />
+</RadioButtonGroup>
+
 ## Vertical orientation
 
 Display radio buttons in a vertical layout.
