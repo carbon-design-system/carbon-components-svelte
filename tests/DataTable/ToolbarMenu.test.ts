@@ -131,14 +131,13 @@ describe("DataTable Toolbar Menu", () => {
       const menuItem = container.querySelector(
         ".bx--overflow-menu-options__option",
       );
-      assert(menuItem);
+      assert(menuItem instanceof HTMLElement);
 
-      if (menuItem instanceof HTMLElement) {
         menuItem.focus();
         await user.keyboard("{Enter}");
 
         expect(consoleLog).toHaveBeenCalledWith("keydown");
-      }
+      
     });
 
     it("should apply custom attributes", async () => {

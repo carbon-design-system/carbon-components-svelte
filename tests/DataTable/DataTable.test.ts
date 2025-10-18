@@ -60,8 +60,8 @@ describe("DataTable", () => {
     rows.forEach((row) => {
       const rowElement = screen.getByText(row.name).closest("tr");
       expect(rowElement).toBeInTheDocument();
-
-      if (rowElement) {
+      assert(rowElement);
+      
         const cells = rowElement.querySelectorAll("td");
         expect(cells.length).toBe(4);
 
@@ -79,7 +79,6 @@ describe("DataTable", () => {
           (cell) => cell.textContent?.trim() === row.rule,
         );
         expect(ruleCell).toBeInTheDocument();
-      }
     });
   });
 

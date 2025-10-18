@@ -74,9 +74,7 @@ describe("SkeletonText", () => {
     render(SkeletonText, { props: { paragraph: true } });
 
     const container = screen.getAllByRole("paragraph")[0].parentElement;
-    expect(container).toBeTruthy();
-
-    if (container) {
+    assert(container);
       await user.click(container);
       expect(consoleLog).toHaveBeenCalledWith("click");
 
@@ -85,6 +83,5 @@ describe("SkeletonText", () => {
 
       await user.unhover(container);
       expect(consoleLog).toHaveBeenCalledWith("mouseleave");
-    }
   });
 });

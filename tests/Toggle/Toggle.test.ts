@@ -29,12 +29,9 @@ describe("Toggle", () => {
 
     const toggle = getToggle("Custom labels");
     const label = toggle.closest(".bx--form-item");
-    expect(label).not.toBeNull();
-
-    if (label) {
       expect(label).toContainElement(screen.getByText("Inactive"));
       expect(label).toContainElement(screen.getByText("Active"));
-    }
+ 
   });
 
   it("supports small size variant", () => {
@@ -56,13 +53,11 @@ describe("Toggle", () => {
 
     const toggle = getToggle("Hidden label toggle");
     const label = toggle.closest(".bx--form-item");
-    expect(label).not.toBeNull();
+    assert(label);
 
-    if (label) {
       const hiddenText = label.querySelector(".bx--visually-hidden");
-      expect(hiddenText).toHaveClass("bx--visually-hidden");
-      expect(toggle).toHaveAccessibleName("Hidden label toggle");
-    }
+    expect(hiddenText).toHaveClass("bx--visually-hidden");
+    expect(toggle).toHaveAccessibleName("Hidden label toggle");
   });
 
   it("handles keyboard interactions (Space)", async () => {
