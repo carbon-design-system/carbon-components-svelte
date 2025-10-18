@@ -113,15 +113,14 @@
   trackModal(openStore);
 
   afterUpdate(() => {
-    if (opened) {
-      if (!open) {
-        opened = false;
+    if (opened !== open) {
+      if (open) {
+        focus();
+        dispatch("open");
+      } else {
         dispatch("close");
       }
-    } else if (open) {
-      opened = true;
-      focus();
-      dispatch("open");
+      opened = open;
     }
   });
 
