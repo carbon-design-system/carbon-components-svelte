@@ -1,5 +1,6 @@
 <script>
   /**
+   * @event {{ trigger: "escape-key" | "outside-click" | "close-button" }} close
    * @event {{ open: boolean; }} transitionend
    */
 
@@ -46,10 +47,21 @@
   let buttonRef = null;
   let innerModal = null;
   let didClickInnerModal = false;
+  let closeDispatched = false;
+
+  function close(trigger) {
+    closeDispatched = true;
+    const shouldContinue = dispatch("close", { trigger }, { cancelable: true });
+    if (shouldContinue) {
+      open = false;
+    } else {
+      closeDispatched = false;
+    }
+  }
 
   setContext("ComposedModal", {
     closeModal: () => {
-      open = false;
+      close("close-button");
     },
     submit: () => {
       dispatch("submit");
@@ -87,7 +99,10 @@
     if (opened) {
       if (!open) {
         opened = false;
-        dispatch("close");
+        if (!closeDispatched) {
+          dispatch("close");
+        }
+        closeDispatched = false;
       }
     } else if (open) {
       opened = true;
@@ -108,7 +123,7 @@
   on:keydown={(e) => {
     if (open) {
       if (e.key === "Escape") {
-        open = false;
+        close("escape-key");
       } else if (e.key === "Tab") {
         // taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
         const selectorTabbable = `
@@ -133,7 +148,9 @@
   }}
   on:click
   on:click={() => {
-    if (!didClickInnerModal && !preventCloseOnClickOutside) open = false;
+    if (!didClickInnerModal && !preventCloseOnClickOutside) {
+      close("outside-click");
+    }
     didClickInnerModal = false;
   }}
   on:mouseover

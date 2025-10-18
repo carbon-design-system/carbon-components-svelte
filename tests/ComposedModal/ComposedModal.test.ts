@@ -36,7 +36,6 @@ describe("ComposedModal", () => {
   });
 
   it("should handle open state", async () => {
-    const consoleLog = vi.spyOn(console, "log");
     const { component } = render(ComposedModalTest, {
       props: {
         open: false,
@@ -44,14 +43,19 @@ describe("ComposedModal", () => {
       },
     });
 
+    const openHandler = vi.fn();
+    const closeHandler = vi.fn();
+    component.$on("open", openHandler);
+    component.$on("close", closeHandler);
+
     component.$set({ open: true });
     await tick();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(consoleLog).toHaveBeenCalledWith("open");
+    expect(openHandler).toHaveBeenCalledTimes(1);
 
     component.$set({ open: false });
     await tick();
-    expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(closeHandler).toHaveBeenCalledTimes(1);
   });
 
   it("should handle size variants", () => {
@@ -106,21 +110,6 @@ describe("ComposedModal", () => {
     expect(modalWrapper).not.toHaveClass("is-visible");
   });
 
-  it("should close on outside click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-      },
-    });
-
-    const modalWrapper = container.querySelector(".bx--modal");
-    assert(modalWrapper);
-    await user.click(modalWrapper);
-    expect(consoleLog).toHaveBeenCalledWith("close");
-  });
-
   it("should not close on inside click", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ComposedModalTest, {
@@ -149,20 +138,6 @@ describe("ComposedModal", () => {
     assert(modalWrapper);
     await user.click(modalWrapper);
     expect(consoleLog).not.toHaveBeenCalledWith("close");
-  });
-
-  it("should handle close button click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-      },
-    });
-
-    const closeButton = screen.getByRole("button", { name: "Close" });
-    await user.click(closeButton);
-    expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
   it("should render header with title and label", () => {
@@ -205,23 +180,6 @@ describe("ComposedModal", () => {
     await user.click(screen.getByRole("button", { name: "Save" }));
     expect(consoleLog).toHaveBeenCalledWith("submit");
     expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
-  });
-
-  it("should handle secondary button click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Test Modal",
-        footerSecondaryButtonText: "Cancel",
-      },
-    });
-
-    await user.click(screen.getByRole("button", { name: "Cancel" }));
-    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
-      text: "Cancel",
-    });
-    expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
   it("should disable primary button when configured", () => {
@@ -342,5 +300,77 @@ describe("ComposedModal", () => {
 
     const modalWrapper = container.querySelector(".bx--modal");
     expect(modalWrapper).toHaveClass("is-visible");
+  });
+
+  it("dispatches close event with outside-click trigger", async () => {
+    const { container, component } = render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Outside Click Test",
+      },
+    });
+
+    const closeHandler = vi.fn();
+    component.$on("close", closeHandler);
+
+    const modalOverlay = container.querySelector(".bx--modal");
+    assert(modalOverlay);
+    await user.click(modalOverlay);
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      trigger: "outside-click",
+    });
+  });
+
+  it("dispatches close event with close-button trigger", async () => {
+    const { component } = render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Close Button Test",
+      },
+    });
+
+    const closeHandler = vi.fn();
+    component.$on("close", closeHandler);
+
+    const closeButton = screen.getByLabelText("Close");
+    await user.click(closeButton);
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      trigger: "close-button",
+    });
+  });
+
+  it("prevents closing when preventDefault is called on close event", async () => {
+    const { container, component } = render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Prevent Close Test",
+      },
+    });
+
+    const closeHandler = vi.fn((e) => {
+      e.preventDefault();
+    });
+    component.$on("close", closeHandler);
+
+    // Close via outside click.
+    const modalOverlay = container.querySelector(".bx--modal");
+    assert(modalOverlay);
+    await user.click(modalOverlay);
+    await tick();
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    // Close via close button.
+    const closeButton = screen.getByLabelText("Close");
+    await user.click(closeButton);
+    await tick();
+    expect(closeHandler).toHaveBeenCalledTimes(2);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 });

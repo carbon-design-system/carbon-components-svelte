@@ -54,6 +54,9 @@ export type ComposedModalProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ComposedModal extends SvelteComponentTyped<
   ComposedModalProps,
   {
+    close: CustomEvent<{
+      trigger: "escape-key" | "outside-click" | "close-button";
+    }>;
     transitionend: CustomEvent<{ open: boolean }>;
     keydown: WindowEventMap["keydown"];
     click: WindowEventMap["click"];
@@ -62,7 +65,6 @@ export default class ComposedModal extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     submit: CustomEvent<null>;
     ["click:button--primary"]: CustomEvent<null>;
-    close: CustomEvent<null>;
     open: CustomEvent<null>;
   },
   { default: {} }
