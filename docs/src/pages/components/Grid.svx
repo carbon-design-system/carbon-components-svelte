@@ -59,9 +59,10 @@ content alignment across different column widths.
 
 <FileSource src="/framed/Grid/AspectRatioColumns" />
 
-## Padded columns
+## Padding
 
-Add padding to columns using the padded variant. This creates more breathing room
-between content.
+Add vertical padding (top/bottom) to grid elements using the `padding` prop. You can
+apply padding at the `Grid`, `Row`, or `Column` level to control spacing between rows
+of content. This is useful for creating vertical rhythm without manually adding margins.
 
 <FileSource src="/framed/Grid/PaddedGrid" />
