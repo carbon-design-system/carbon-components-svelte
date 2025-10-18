@@ -60,26 +60,25 @@ describe("DataTable", () => {
     rows.forEach((row) => {
       const rowElement = screen.getByText(row.name).closest("tr");
       expect(rowElement).toBeInTheDocument();
+      assert(rowElement);
 
-      if (rowElement) {
-        const cells = rowElement.querySelectorAll("td");
-        expect(cells.length).toBe(4);
+      const cells = rowElement.querySelectorAll("td");
+      expect(cells.length).toBe(4);
 
-        const protocolCell = Array.from(cells).find(
-          (cell) => cell.textContent?.trim() === row.protocol,
-        );
-        expect(protocolCell).toBeInTheDocument();
+      const protocolCell = Array.from(cells).find(
+        (cell) => cell.textContent?.trim() === row.protocol,
+      );
+      expect(protocolCell).toBeInTheDocument();
 
-        const portCell = Array.from(cells).find(
-          (cell) => cell.textContent?.trim() === row.port.toString(),
-        );
-        expect(portCell).toBeInTheDocument();
+      const portCell = Array.from(cells).find(
+        (cell) => cell.textContent?.trim() === row.port.toString(),
+      );
+      expect(portCell).toBeInTheDocument();
 
-        const ruleCell = Array.from(cells).find(
-          (cell) => cell.textContent?.trim() === row.rule,
-        );
-        expect(ruleCell).toBeInTheDocument();
-      }
+      const ruleCell = Array.from(cells).find(
+        (cell) => cell.textContent?.trim() === row.rule,
+      );
+      expect(ruleCell).toBeInTheDocument();
     });
   });
 

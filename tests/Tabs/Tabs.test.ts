@@ -96,8 +96,7 @@ describe("Tabs", () => {
     const { container } = render(Tabs);
 
     const trigger = container.querySelector(".bx--tabs-trigger");
-    if (!trigger) throw new Error("Trigger element not found");
-
+    assert(trigger);
     await user.click(trigger);
     expect(container.querySelector(".bx--tabs__nav--hidden")).toBeNull();
   });
@@ -150,9 +149,8 @@ describe("Tabs", () => {
   it("should handle keypress on dropdown trigger", async () => {
     const { container } = render(Tabs);
 
-    const trigger = container.querySelector(".bx--tabs-trigger") as HTMLElement;
-    if (!trigger) throw new Error("Trigger element not found");
-
+    const trigger = container.querySelector(".bx--tabs-trigger");
+    assert(trigger instanceof HTMLElement);
     trigger.focus();
     await user.keyboard("{Enter}");
     expect(container.querySelector(".bx--tabs__nav--hidden")).toBeNull();

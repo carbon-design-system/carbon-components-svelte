@@ -74,17 +74,14 @@ describe("SkeletonText", () => {
     render(SkeletonText, { props: { paragraph: true } });
 
     const container = screen.getAllByRole("paragraph")[0].parentElement;
-    expect(container).toBeTruthy();
+    assert(container);
+    await user.click(container);
+    expect(consoleLog).toHaveBeenCalledWith("click");
 
-    if (container) {
-      await user.click(container);
-      expect(consoleLog).toHaveBeenCalledWith("click");
+    await user.hover(container);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
 
-      await user.hover(container);
-      expect(consoleLog).toHaveBeenCalledWith("mouseover");
-
-      await user.unhover(container);
-      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
-    }
+    await user.unhover(container);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });
