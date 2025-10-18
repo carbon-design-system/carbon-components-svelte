@@ -30,6 +30,9 @@
   /** Set to `true` to visually hide the legend */
   export let hideLegend = false;
 
+  /** Specify the helper text */
+  export let helperText = "";
+
   /**
    * Specify the label position
    * @type {"right" | "left"}
@@ -117,4 +120,12 @@
     {/if}
     <slot />
   </fieldset>
+  {#if helperText}
+    <div
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
+    >
+      {helperText}
+    </div>
+  {/if}
 </div>

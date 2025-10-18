@@ -134,4 +134,23 @@ describe("RadioButtonGroup", () => {
 
     expect(component.selected).toBe("3");
   });
+
+  it("should render helper text when provided", () => {
+    render(RadioButtonGroup, { props: { helperText: "Helper text message" } });
+    const helperElement = screen
+      .getByRole("group")
+      .closest(".bx--form-item")
+      ?.querySelector(".bx--form__helper-text");
+    assert(helperElement);
+    expect(helperElement).toHaveTextContent("Helper text message");
+  });
+
+  it("should not render helper text by default", () => {
+    render(RadioButtonGroup);
+    const helperElement = screen
+      .getByRole("group")
+      .closest(".bx--form-item")
+      ?.querySelector(".bx--form__helper-text");
+    expect(helperElement).not.toBeInTheDocument();
+  });
 });

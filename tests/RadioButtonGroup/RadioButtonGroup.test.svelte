@@ -15,6 +15,7 @@
   export let orientation: ComponentProps<RadioButtonGroup>["orientation"] =
     "horizontal";
   export let id: ComponentProps<RadioButtonGroup>["id"] = undefined;
+  export let helperText: ComponentProps<RadioButtonGroup>["helperText"] = "";
   export let customClass = "";
   export let useSlot = false;
 </script>
@@ -29,6 +30,7 @@
     {labelPosition}
     {orientation}
     {id}
+    {helperText}
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);
@@ -50,6 +52,7 @@
     {labelPosition}
     {orientation}
     {id}
+    {helperText}
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);

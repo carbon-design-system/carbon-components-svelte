@@ -41,6 +41,12 @@ type $Props = {
   hideLegend?: boolean;
 
   /**
+   * Specify the helper text
+   * @default ""
+   */
+  helperText?: string;
+
+  /**
    * Specify the label position
    * @default "right"
    */
