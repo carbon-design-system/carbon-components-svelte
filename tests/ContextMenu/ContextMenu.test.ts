@@ -170,16 +170,13 @@ describe("ContextMenu", () => {
     const submenu = screen
       .getAllByRole("menu")
       .find((menu) => menu.getAttribute("data-level") === "2");
+    assert(submenu);
 
-    expect(submenu).toBeDefined();
+    const submenuX = parseInt(submenu.style.left);
+    const submenuWidth = submenu.getBoundingClientRect().width;
 
-    if (submenu) {
-      const submenuX = parseInt(submenu.style.left);
-      const submenuWidth = submenu.getBoundingClientRect().width;
-
-      // Submenu should not overflow the right edge of viewport
-      expect(submenuX + submenuWidth).toBeLessThanOrEqual(400);
-    }
+    // Submenu should not overflow the right edge of viewport
+    expect(submenuX + submenuWidth).toBeLessThanOrEqual(400);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
@@ -206,23 +203,19 @@ describe("ContextMenu", () => {
     const submenu = screen
       .getAllByRole("menu")
       .find((menu) => menu.getAttribute("data-level") === "2");
+    assert(submenu);
 
-    expect(submenu).toBeDefined();
+    const rootMenu = screen
+      .getAllByRole("menu")
+      .find((menu) => menu.getAttribute("data-level") === "1");
+    assert(rootMenu);
 
-    if (submenu) {
-      const rootMenu = screen
-        .getAllByRole("menu")
-        .find((menu) => menu.getAttribute("data-level") === "1");
+    const rootX = parseInt(rootMenu.style.left);
+    const rootWidth = rootMenu.getBoundingClientRect().width;
+    const submenuX = parseInt(submenu.style.left);
 
-      if (rootMenu) {
-        const rootX = parseInt(rootMenu.style.left);
-        const rootWidth = rootMenu.getBoundingClientRect().width;
-        const submenuX = parseInt(submenu.style.left);
-
-        // Submenu should be positioned to the right of the parent menu.
-        expect(submenuX).toBeGreaterThanOrEqual(rootX + rootWidth);
-      }
-    }
+    // Submenu should be positioned to the right of the parent menu.
+    expect(submenuX).toBeGreaterThanOrEqual(rootX + rootWidth);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
@@ -248,13 +241,10 @@ describe("ContextMenu", () => {
     const submenu = screen
       .getAllByRole("menu")
       .find((menu) => menu.getAttribute("data-level") === "2");
+    assert(submenu);
 
-    expect(submenu).toBeDefined();
-
-    if (submenu) {
-      const submenuX = parseInt(submenu.style.left);
-      // Submenu should be positioned at or near 0 (left edge of viewport).
-      expect(submenuX).toBeGreaterThanOrEqual(0);
-    }
+    const submenuX = parseInt(submenu.style.left);
+    // Submenu should be positioned at or near 0 (left edge of viewport).
+    expect(submenuX).toBeGreaterThanOrEqual(0);
   });
 });

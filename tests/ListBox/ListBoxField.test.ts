@@ -197,13 +197,10 @@ describe("ListBoxField", () => {
     const field = screen
       .getByText("Keyboard field")
       .closest(".bx--list-box__field");
+    assert(field instanceof HTMLElement);
 
-    assert(field);
-
-    if (field instanceof HTMLElement) {
-      field.focus();
-      await user.keyboard("{Enter}");
-    }
+    field.focus();
+    await user.keyboard("{Enter}");
 
     expect(keydownHandler).toHaveBeenCalled();
   });
@@ -221,16 +218,13 @@ describe("ListBoxField", () => {
     const field = screen
       .getByText("Focus field")
       .closest(".bx--list-box__field");
-    assert(field);
+    assert(field instanceof HTMLElement);
 
-    if (field instanceof HTMLElement) {
-      field.focus();
+    field.focus();
+    expect(focusHandler).toHaveBeenCalled();
 
-      expect(focusHandler).toHaveBeenCalled();
-
-      field.blur();
-      expect(blurHandler).toHaveBeenCalled();
-    }
+    field.blur();
+    expect(blurHandler).toHaveBeenCalled();
   });
 
   it("should handle mouse events", async () => {
