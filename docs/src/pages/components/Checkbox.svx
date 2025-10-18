@@ -37,6 +37,12 @@ Set `disabled` to `true` to prevent user interaction.
 
 <Checkbox labelText="Label text" disabled />
 
+## Helper text
+
+Use `helperText` to provide additional context or instructions below the checkbox.
+
+<Checkbox labelText="Subscribe to newsletter" helperText="You can unsubscribe at any time" />
+
 ## Read-only state
 
 Set `readonly` to `true` to make the checkbox non-interactive while keeping the label text readable. Unlike `disabled`, the readonly state is intended for displaying checkbox values that can only be changed programmatically.
