@@ -8,11 +8,19 @@ components: ["LocalStorage"]
 
 The `LocalStorage` component provides a reactive wrapper around the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). It's useful for persisting user preferences and application state across page reloads.
 
-## Reactive example
+## Basic example
 
 See how the component maintains state across page reloads. Toggle the switch and refresh the page to see the persisted state.
 
 <FileSource src="/framed/LocalStorage/LocalStorage" />
+
+## Reactive key
+
+The `key` prop is also reactive, allowing you to dynamically switch between different storage keys. This is useful for managing per-user settings or multiple contexts.
+
+In this example, each user has their own theme preference stored under a separate key. When you switch users, the component automatically loads that user's saved preference.
+
+<FileSource src="/framed/LocalStorage/LocalStorageReactiveKey" />
 
 ## Clear item, clear all
 
