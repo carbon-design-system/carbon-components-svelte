@@ -33,8 +33,8 @@
   {preventCloseOnClickOutside}
   {containerClass}
   {selectorPrimaryFocus}
-  on:open={() => console.log("open")}
-  on:close={() => console.log("close")}
+  on:open
+  on:close
   on:submit={() => console.log("submit")}
   on:click:button--primary={() => console.log("click:button--primary")}
   on:transitionend={(e) => console.log("transitionend", e.detail)}
