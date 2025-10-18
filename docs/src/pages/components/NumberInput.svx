@@ -39,6 +39,12 @@ Control the increment/decrement step size using the `step` prop. This example us
 
 <NumberInput value="{1}" helperText="Step of 0.1" step={0.1} label="Clusters" />
 
+## Preserve decimal input
+
+Preserve decimal input formatting like "1.0", "2.00", or "3." by setting `allowDecimal` to `true`. This uses `type="text"` with `inputmode="decimal"` instead of `type="number"`, allowing trailing zeros and decimal points to be preserved while typing. This is useful for financial data or precise decimal entry.
+
+<NumberInput allowDecimal value={1.0} helperText="Trailing zeros preserved" step={0.01} label="Amount" />
+
 ## Hidden label
 
 Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
