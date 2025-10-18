@@ -217,7 +217,9 @@
         calendar.setDate([$inputValueFrom, $inputValueTo]);
 
         // workaround to remove the default range plugin separator "to"
-        inputRef.value = $inputValueFrom;
+        if ($inputValueFrom !== "") {
+          inputRef.value = $inputValueFrom;
+        }
       } else {
         calendar.setDate($inputValue);
       }

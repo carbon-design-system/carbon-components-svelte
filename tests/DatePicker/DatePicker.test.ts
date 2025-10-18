@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
@@ -160,5 +161,30 @@ describe("DatePicker", () => {
     expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
       dateStr: "",
     });
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1862
+  it("allows clearing range dates by setting valueFrom and valueTo to empty strings", async () => {
+    const { component } = render(DatePickerRange, {
+      valueFrom: "01/15/2024",
+      valueTo: "01/20/2024",
+    });
+
+    const inputStart = screen.getByLabelText("Start date");
+    const inputEnd = screen.getByLabelText("End date");
+
+    await user.click(inputStart);
+    expect(
+      await screen.findByLabelText("calendar-container"),
+    ).toBeInTheDocument();
+    expect(inputStart).toHaveValue("01/15/2024");
+    expect(inputEnd).toHaveValue("01/20/2024");
+
+    // Clear the dates by setting both values to empty strings
+    component.$set({ valueFrom: "", valueTo: "" });
+    await tick();
+
+    expect(inputStart).toHaveValue("");
+    expect(inputEnd).toHaveValue("");
   });
 });
