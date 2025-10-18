@@ -20,9 +20,12 @@
   export let helperText = "";
   export let label = "Clusters";
   export let hideLabel = false;
+  export let translateWithId: ComponentProps<NumberInput>["translateWithId"] =
+    undefined;
   export let id = "ccs-test";
   export let name: ComponentProps<NumberInput>["name"] = undefined;
   export let ref: ComponentProps<NumberInput>["ref"] = null;
+  export let title: ComponentProps<NumberInput>["title"] = undefined;
 </script>
 
 <NumberInput
@@ -44,9 +47,11 @@
   {helperText}
   {label}
   {hideLabel}
+  {translateWithId}
   {id}
   {name}
   {ref}
+  {title}
   on:change
   on:input
   on:keydown
