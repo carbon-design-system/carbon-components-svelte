@@ -6,6 +6,7 @@
   export let disabled = false;
   export let hideLabel = false;
   export let labelText = "Checkbox label";
+  export let helperText = "";
 </script>
 
 <Checkbox
@@ -14,6 +15,7 @@
   {disabled}
   {hideLabel}
   {labelText}
+  {helperText}
   data-testid="checkbox"
   on:check={() => console.log("check")}
   on:click={() => console.log("click")}

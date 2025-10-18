@@ -1032,6 +1032,18 @@
           "reactive": false
         },
         {
+          "name": "helperText",
+          "kind": "let",
+          "description": "Specify the helper text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "name",
           "kind": "let",
           "description": "Set a name for the input element",
@@ -11524,6 +11536,18 @@
           "description": "Set to `true` to visually hide the legend",
           "type": "boolean",
           "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "helperText",
+          "kind": "let",
+          "description": "Specify the helper text",
+          "type": "string",
+          "value": "\"\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
