@@ -258,4 +258,12 @@ describe("Select", () => {
     expect(screen.getByLabelText("Undefined text")).toHaveValue("2");
     expect(screen.getByRole("option", { name: "2" })).toBeInTheDocument();
   });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1977
+  it("should not render label element when labelText is empty string", () => {
+    render(Select, { props: { labelText: "" } });
+    const wrapper = screen.getByTestId("select");
+    const label = wrapper.querySelector("label");
+    expect(label).not.toBeInTheDocument();
+  });
 });
