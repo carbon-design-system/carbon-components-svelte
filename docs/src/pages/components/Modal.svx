@@ -66,6 +66,12 @@ Use the large size for complex content by setting `size` to `"lg"`. This provide
 
 <FileSource src="/framed/Modal/ModalLarge" />
 
+## Prevent default close behavior
+
+The modal dispatches a cancelable `close` event, allowing you to prevent the modal from closing using `e.preventDefault()`. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"`, `"outside-click"`, or `"close-button"`.
+
+<FileSource src="/framed/Modal/ModalPreventClose" />
+
 ## Prevent close on outside click
 
 Disable closing the modal when clicking outside by setting `preventCloseOnClickOutside` to `true`. This is useful for transactional modals where explicit user action is required.
