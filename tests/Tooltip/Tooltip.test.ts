@@ -7,6 +7,7 @@ import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
 import TooltipDirections from "./TooltipDirections.test.svelte";
 import TooltipAlignments from "./TooltipAlignments.test.svelte";
 import TooltipEvents from "./TooltipEvents.test.svelte";
+import TooltipPointerCapture from "./TooltipPointerCapture.test.svelte";
 import { user } from "../setup-tests";
 
 describe("Tooltip", () => {
@@ -164,5 +165,32 @@ describe("Tooltip", () => {
 
     await user.click(document.body);
     expect(container.querySelector(".bx--tooltip")).not.toBeInTheDocument();
+  });
+
+  test("should maintain pointer capture during interaction to prevent premature closing", async () => {
+    const { container } = render(TooltipPointerCapture);
+
+    const trigger = container.querySelector(".bx--tooltip__trigger");
+    assert(trigger);
+
+    if (!trigger.setPointerCapture) {
+      trigger.setPointerCapture = vi.fn();
+    }
+    if (!trigger.releasePointerCapture) {
+      trigger.releasePointerCapture = vi.fn();
+    }
+
+    const setPointerCaptureSpy = vi.spyOn(trigger, "setPointerCapture");
+    const releasePointerCaptureSpy = vi.spyOn(trigger, "releasePointerCapture");
+    await fireEvent.pointerDown(trigger, { pointerId: 1 });
+
+    // Simulate the delay of the focus event.
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    expect(container.querySelector(".bx--tooltip")).toBeInTheDocument();
+    expect(setPointerCaptureSpy).toHaveBeenCalled();
+
+    await fireEvent.pointerUp(trigger, { pointerId: 1 });
+    expect(releasePointerCaptureSpy).toHaveBeenCalled();
   });
 });
