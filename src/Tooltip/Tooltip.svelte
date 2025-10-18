@@ -99,13 +99,22 @@
     open = true;
   }
 
-  function onMousedown() {
+  function onPointerdown(e) {
+    if (e.currentTarget.setPointerCapture) {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
     // determine the desired state before the focus event triggers.
     const shouldClose = open;
     // ensure changes are scheduled at the end, i.e. after the possible focus event.
     setTimeout(() => {
       open = shouldClose ? false : true;
     });
+  }
+
+  function onPointerup(e) {
+    if (e.currentTarget.releasePointerCapture) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
   }
 
   afterUpdate(() => {
@@ -212,7 +221,8 @@
         bind:this={refIcon}
         {...buttonProps}
         aria-describedby={tooltipId}
-        on:mousedown={onMousedown}
+        on:pointerdown={onPointerdown}
+        on:pointerup={onPointerup}
         on:focus={onFocus}
         on:keydown={onKeydown}
       >
@@ -227,7 +237,8 @@
       bind:this={ref}
       {...buttonProps}
       aria-describedby={tooltipId}
-      on:mousedown={onMousedown}
+      on:pointerdown={onPointerdown}
+      on:pointerup={onPointerup}
       on:focus={onFocus}
       on:blur={onBlur}
       on:keydown={onKeydown}
