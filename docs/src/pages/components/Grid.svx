@@ -3,12 +3,33 @@ components: ["Grid", "Row", "Column"]
 ---
 
 <script>
+  import { UnorderedList, ListItem } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `Grid` system provides a responsive, 12-column layout structure. Use `Row` and
-`Column` components to create flexible layouts that adapt to different screen
-sizes. The grid supports various spacing options and column configurations.
+The `Grid` system provides a responsive layout structure that adapts to different
+screen sizes. Use `Row` and `Column` components to create flexible layouts. The
+grid supports various spacing options and column configurations.
+
+## Grid System Overview
+
+The Carbon grid system uses a **responsive column structure** where the total
+number of columns changes based on screen size:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem><strong>Small (sm)</strong>: 0-671px — 4 columns</ListItem>
+  <ListItem><strong>Medium (md)</strong>: 672-1055px — 8 columns</ListItem>
+  <ListItem><strong>Large (lg)</strong>: 1056-1311px — 16 columns</ListItem>
+  <ListItem><strong>X-Large (xlg)</strong>: 1312-1583px — 16 columns</ListItem>
+  <ListItem><strong>Max (max)</strong>: 1584px and above — 16 columns</ListItem>
+</UnorderedList>
+
+**Important:** Column spans are relative to the total columns at each breakpoint.
+For example, to create a full-width column, use `sm={4} md={8} lg={16}` - not the
+same value across all breakpoints.
+
+For more details, see the
+[Carbon Design System Grid documentation](https://carbondesignsystem.com/elements/2x-grid/overview/).
 
 ## Default
 
@@ -43,6 +64,29 @@ for dense data displays.
 Build responsive layouts by specifying different column widths for different
 breakpoints. The grid automatically adjusts based on screen size.
 
+**Key concept:** Since each breakpoint has a different total number of columns,
+you need to scale your column spans proportionally. Here are common patterns:
+
+**Full width column:**
+
+```svelte
+<Column sm={4} md={8} lg={16} />
+```
+
+**Half width (50/50 split):**
+
+```svelte
+<Column sm={2} md={4} lg={8} />
+<Column sm={2} md={4} lg={8} />
+```
+
+**Two-thirds / One-third split:**
+
+```svelte
+<Column sm={4} md={6} lg={11} />
+<Column sm={4} md={2} lg={5} />
+```
+
 <FileSource src="/framed/Grid/ResponsiveGrid" />
 
 ## Offset columns
@@ -66,3 +110,19 @@ apply padding at the `Grid`, `Row`, or `Column` level to control spacing between
 of content. This is useful for creating vertical rhythm without manually adding margins.
 
 <FileSource src="/framed/Grid/PaddedGrid" />
+
+## Breakpoints Reference
+
+Understanding [breakpoints](/components/Breakpoint) is critical for creating responsive layouts. Each breakpoint
+has specific pixel ranges and column counts:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem><strong>Small (sm)</strong>: 0-671px — 4 columns — Mobile phones</ListItem>
+  <ListItem><strong>Medium (md)</strong>: 672-1055px — 8 columns — Tablets, small laptops</ListItem>
+  <ListItem><strong>Large (lg)</strong>: 1056-1311px — 16 columns — Desktop monitors, laptops</ListItem>
+  <ListItem><strong>X-Large (xlg)</strong>: 1312-1583px — 16 columns — Large desktop monitors</ListItem>
+  <ListItem><strong>Max (max)</strong>: 1584px and above — 16 columns — Extra-large displays</ListItem>
+</UnorderedList>
+
+When designing responsive layouts, start with mobile (sm) and work your
+way up to ensure your content works well at all sizes.
