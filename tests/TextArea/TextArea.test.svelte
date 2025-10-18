@@ -4,7 +4,7 @@
 
   export let value: ComponentProps<TextArea>["value"] = "";
   export let placeholder = "";
-  export let cols = 50;
+  export let cols: ComponentProps<TextArea>["cols"] = undefined;
   export let rows = 4;
   export let maxCount: ComponentProps<TextArea>["maxCount"] = undefined;
   export let light = false;

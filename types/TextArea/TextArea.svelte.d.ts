@@ -17,8 +17,10 @@ type $Props = {
   placeholder?: string;
 
   /**
-   * Specify the number of cols
-   * @default 50
+   * Specify the number of cols.
+   * If specified, the textarea will not be resizable.
+   * Override this using the `resize` style attribute.
+   * @default undefined
    */
   cols?: number;
 
