@@ -83,6 +83,12 @@ Set `itemToString` to customize how items display in the filterable combobox.
 
 <FileSource src="/framed/ComboBox/FilterableComboBoxCustomLabel" />
 
+## Allow custom value
+
+Set `allowCustomValue` to `true` to let users enter custom text that isn't in the predefined list. By default, user-entered text is cleared when the combobox loses focus without selecting an item. When `allowCustomValue` is enabled, custom text is preserved.
+
+<FileSource src="/framed/ComboBox/AllowCustomValue" />
+
 ## Top direction
 
 Set `direction` to `"top"` to make the dropdown menu appear above the input.
