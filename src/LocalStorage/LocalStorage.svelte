@@ -36,6 +36,8 @@
   const dispatch = createEventDispatcher();
 
   let prevValue = value;
+  let prevKey = key;
+  let mounted = false;
 
   function setItem() {
     if (typeof value === "object") {
@@ -58,7 +60,25 @@
       setItem(value);
       dispatch("save");
     }
+
+    mounted = true;
   });
+
+  $: if (mounted && key !== prevKey) {
+    const item = localStorage.getItem(key);
+
+    if (item != null) {
+      try {
+        value = JSON.parse(item);
+      } catch (e) {
+        value = item;
+      }
+    } else {
+      setItem(value);
+    }
+
+    prevKey = key;
+  }
 
   afterUpdate(() => {
     if (prevValue !== value) {
