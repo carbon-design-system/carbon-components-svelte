@@ -40,6 +40,9 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
+  /** Specify the helper text */
+  export let helperText = "";
+
   /** Set a name for the input element */
   export let name = "";
 
@@ -136,5 +139,13 @@
         </slot>
       </span>
     </label>
+    {#if helperText}
+      <div
+        class:bx--form__helper-text={true}
+        class:bx--form__helper-text--disabled={disabled}
+      >
+        {helperText}
+      </div>
+    {/if}
   </div>
 {/if}

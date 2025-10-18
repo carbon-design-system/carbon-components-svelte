@@ -468,6 +468,7 @@ None.
 | disabled      | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the checkbox             |
 | labelText     | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                            |
 | hideLabel     | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to visually hide the label text     |
+| helperText    | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the helper text                           |
 | name          | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Set a name for the input element                  |
 | id            | No       | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input label                     |
 
@@ -2987,6 +2988,7 @@ None.
 | name          | No       | <code>let</code> | No       | <code>string</code>                         | <code>undefined</code>    | Specify a name attribute for the radio button inputs     |
 | legendText    | No       | <code>let</code> | No       | <code>string</code>                         | <code>""</code>           | Specify the legend text                                  |
 | hideLegend    | No       | <code>let</code> | No       | <code>boolean</code>                        | <code>false</code>        | Set to `true` to visually hide the legend                |
+| helperText    | No       | <code>let</code> | No       | <code>string</code>                         | <code>""</code>           | Specify the helper text                                  |
 | labelPosition | No       | <code>let</code> | No       | <code>"right" &#124; "left"</code>          | <code>"right"</code>      | Specify the label position                               |
 | orientation   | No       | <code>let</code> | No       | <code>"horizontal" &#124; "vertical"</code> | <code>"horizontal"</code> | Specify the orientation of the radio buttons             |
 | id            | No       | <code>let</code> | No       | <code>string</code>                         | <code>undefined</code>    | Set an id for the container div element                  |
