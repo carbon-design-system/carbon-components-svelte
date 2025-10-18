@@ -78,6 +78,7 @@
     : isOpen}
   class:bx--side-nav--collapsed={!isOpen && !rail}
   class:bx--side-nav--rail={rail}
+  style:visibility={!isOpen && !rail ? "hidden" : undefined}
   {...$$restProps}
 >
   <slot />

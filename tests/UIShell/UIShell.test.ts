@@ -244,6 +244,37 @@ describe("UIShell", () => {
 
       expect(links?.length).toBeGreaterThan(0);
     });
+
+    // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/604
+    it("should prevent focus on links when closed (not rail mode)", () => {
+      const { container } = render(UIShell, {
+        props: { sideNavIsOpen: false },
+      });
+
+      const nav = container.querySelector(".bx--side-nav");
+      expect(nav).toHaveAttribute("aria-hidden", "true");
+      expect(nav).toHaveStyle({ visibility: "hidden" });
+    });
+
+    it("should allow focus on links when open", () => {
+      const { container } = render(UIShell, {
+        props: { sideNavIsOpen: true },
+      });
+
+      const nav = container.querySelector(".bx--side-nav");
+      expect(nav).toHaveAttribute("aria-hidden", "false");
+      expect(nav).not.toHaveStyle({ visibility: "hidden" });
+    });
+
+    it("should not apply visibility:hidden in rail mode when closed", () => {
+      const { container } = render(UIShell, {
+        props: { sideNavIsOpen: false, sideNavRail: true },
+      });
+
+      const nav = container.querySelector(".bx--side-nav");
+      expect(nav).toHaveClass("bx--side-nav--rail");
+      expect(nav).not.toHaveStyle({ visibility: "hidden" });
+    });
   });
 
   describe("Content", () => {
