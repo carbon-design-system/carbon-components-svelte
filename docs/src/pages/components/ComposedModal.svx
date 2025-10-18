@@ -14,6 +14,12 @@ Create a modal with a header, body, and footer. Each section can be customized i
 
 <FileSource src="/framed/Modal/ComposedModal" />
 
+## Prevent default close behavior
+
+The modal dispatches a cancelable `close` event, allowing you to prevent the modal from closing using `e.preventDefault()`. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"`, `"outside-click"`, or `"close-button"`.
+
+<FileSource src="/framed/Modal/ComposedModalPreventClose" />
+
 ## Multiple secondary buttons
 
 Set `secondaryButtons` in `ModalFooter` to create a 3-button modal. This prop replaces `secondaryButtonText` and takes a tuple of two button configurations.
