@@ -2244,6 +2244,11 @@
       "events": [
         {
           "type": "dispatched",
+          "name": "close",
+          "detail": "{\n  trigger:\n    | \"escape-key\"\n    | \"outside-click\"\n    | \"close-button\";\n}"
+        },
+        {
+          "type": "dispatched",
           "name": "transitionend",
           "detail": "{ open: boolean }"
         },
@@ -2280,11 +2285,6 @@
         {
           "type": "dispatched",
           "name": "click:button--primary",
-          "detail": "null"
-        },
-        {
-          "type": "dispatched",
-          "name": "close",
           "detail": "null"
         },
         {
