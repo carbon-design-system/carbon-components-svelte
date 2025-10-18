@@ -1,0 +1,54 @@
+// This file backports readonly checkbox styles from carbon-components v11+
+// to ensure compatibility with carbon-components v10.58.12.
+// The readonly checkbox feature was added to Carbon Design System in Nov 2022.
+
+//
+// Copyright IBM Corp. 2016, 2023
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@import 'carbon-components/scss/globals/scss/vars';
+@import 'carbon-components/scss/globals/scss/helper-mixins';
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
+
+/// Readonly checkbox styles
+/// @access private
+/// @group checkbox
+@mixin checkbox-readonly {
+  //----------------------------------------------
+  // Read-only
+  // ---------------------------------------------
+  .#{$prefix}--checkbox-wrapper--readonly .#{$prefix}--checkbox-label {
+    cursor: default;
+  }
+
+  .#{$prefix}--checkbox-wrapper--readonly .#{$prefix}--checkbox-label-text {
+    cursor: text;
+    user-select: text;
+  }
+
+  .#{$prefix}--checkbox-wrapper--readonly
+    .#{$prefix}--checkbox
+    + .#{$prefix}--checkbox-label::before {
+    border-color: $disabled-02;
+  }
+
+  .#{$prefix}--checkbox-wrapper--readonly
+    .#{$prefix}--checkbox:checked
+    + .#{$prefix}--checkbox-label::before {
+    border: 1px solid $disabled-02;
+    background: transparent;
+  }
+
+  .#{$prefix}--checkbox-wrapper--readonly
+    .#{$prefix}--checkbox:checked
+    + .#{$prefix}--checkbox-label::after {
+    border-color: $text-01;
+  }
+}
+
+@include exports('checkbox-readonly') {
+  @include checkbox-readonly;
+}
