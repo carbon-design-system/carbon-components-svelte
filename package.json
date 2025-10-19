@@ -31,7 +31,6 @@
   ],
   "scripts": {
     "test": "vitest",
-    "test:ui": "vite",
     "test:src-types": "tsc types/**/*.ts",
     "test:types": "svelte-check --workspace tests",
     "lint": "prettier --write --cache \"**/*.{svelte,md,js,json,ts}\"",
