@@ -280,6 +280,7 @@
           if (disabled) return;
           open = true;
         }}
+        on:input
         on:input={({ target }) => {
           if (!open && target.value.length > 0) {
             open = true;

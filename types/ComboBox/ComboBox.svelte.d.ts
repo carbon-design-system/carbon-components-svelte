@@ -173,6 +173,7 @@ export default class ComboBox extends SvelteComponentTyped<
       selectedItem: ComboBoxItem;
     }>;
     clear: CustomEvent<KeyboardEvent | MouseEvent>;
+    input: WindowEventMap["input"];
     keydown: WindowEventMap["keydown"];
     keyup: WindowEventMap["keyup"];
     focus: WindowEventMap["focus"];
