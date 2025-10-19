@@ -44,6 +44,12 @@
   /** Specify the text for the invalid state */
   export let invalidText = "";
 
+  /** Set to `true` to indicate a warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Set an id for the textarea element */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -57,8 +63,10 @@
   export let ref = null;
 
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
 
   $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -90,15 +98,26 @@
       {/if}
     </div>
   {/if}
-  <div class:bx--text-area__wrapper={true} data-invalid={invalid || undefined}>
+  <div
+    class:bx--text-area__wrapper={true}
+    data-invalid={invalid || undefined}
+    data-warn={warn || undefined}
+  >
     {#if invalid}
       <WarningFilled class="bx--text-area__invalid-icon" />
+    {/if}
+    {#if !invalid && warn}
+      <WarningAltFilled
+        class="bx--text-area__invalid-icon
+        bx--text-area__invalid-icon--warning"
+      />
     {/if}
     <textarea
       bind:this={ref}
       bind:value
       aria-invalid={invalid || undefined}
-      aria-describedby={invalid ? errorId : undefined}
+      aria-describedby={invalid ? errorId : warn ? warnId : undefined}
+      data-warn={warn || undefined}
       {disabled}
       {id}
       {name}
@@ -109,6 +128,7 @@
       class:bx--text-area={true}
       class:bx--text-area--light={light}
       class:bx--text-area--invalid={invalid}
+      class:bx--text-area--warning={warn}
       maxlength={maxCount ?? undefined}
       {...$$restProps}
       on:change
@@ -120,7 +140,7 @@
       on:paste
     ></textarea>
   </div>
-  {#if !invalid && helperText}
+  {#if !invalid && !warn && helperText}
     <div
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
@@ -130,5 +150,8 @@
   {/if}
   {#if invalid}
     <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+  {/if}
+  {#if !invalid && warn}
+    <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
 </div>
