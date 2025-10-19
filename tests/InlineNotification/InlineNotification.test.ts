@@ -3,6 +3,7 @@ import { user } from "../setup-tests";
 import InlineNotification from "./InlineNotification.test.svelte";
 import InlineNotificationCustom from "./InlineNotificationCustom.test.svelte";
 import InlineNotificationClose from "./InlineNotification.close.test.svelte";
+import InlineNotificationActionHref from "./InlineNotificationActionHref.test.svelte";
 
 describe("InlineNotification", () => {
   beforeEach(() => {
@@ -152,5 +153,14 @@ describe("InlineNotification", () => {
     await user.click(screen.getByRole("button"));
     expect(consoleLog).toHaveBeenCalledWith("close", { timeout: false });
     expect(screen.getByRole("alert")).toBeInTheDocument();
+  });
+
+  it("should render action button with href as link", () => {
+    render(InlineNotificationActionHref);
+
+    const link = screen.getByRole("link", { name: "View release notes" });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute("href", "https://example.com/releases");
+    expect(link).toHaveClass("bx--inline-notification__action-button");
   });
 });
