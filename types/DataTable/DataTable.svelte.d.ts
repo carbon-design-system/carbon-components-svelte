@@ -210,17 +210,27 @@ export default class DataTable<
     ["click:header"]: CustomEvent<{
       header: DataTableHeader<Row>;
       sortDirection?: "ascending" | "descending" | "none";
+      target: EventTarget;
+      currentTarget: EventTarget;
     }>;
     ["click:header--select"]: CustomEvent<{
       indeterminate: boolean;
       selected: boolean;
     }>;
-    ["click:row"]: CustomEvent<Row>;
+    ["click:row"]: CustomEvent<{
+      row: Row;
+      target: EventTarget;
+      currentTarget: EventTarget;
+    }>;
     ["mouseenter:row"]: CustomEvent<Row>;
     ["mouseleave:row"]: CustomEvent<Row>;
     ["click:row--expand"]: CustomEvent<{ expanded: boolean; row: Row }>;
     ["click:row--select"]: CustomEvent<{ selected: boolean; row: Row }>;
-    ["click:cell"]: CustomEvent<DataTableCell<Row>>;
+    ["click:cell"]: CustomEvent<{
+      cell: DataTableCell<Row>;
+      target: EventTarget;
+      currentTarget: EventTarget;
+    }>;
   },
   {
     default: {};

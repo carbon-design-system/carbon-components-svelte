@@ -1014,18 +1014,18 @@ export interface DataTableCell<Row = DataTableRow> {
 
 ### Events
 
-| Event name           | Type       | Detail                                                                                                       |
-| :------------------- | :--------- | :----------------------------------------------------------------------------------------------------------- |
-| click                | dispatched | <code>{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }</code>                        |
-| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                          |
-| click:header         | dispatched | <code>{ header: DataTableHeader<Row>; sortDirection?: "ascending" &#124; "descending" &#124; "none" }</code> |
-| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                                  |
-| click:row            | dispatched | <code>Row</code>                                                                                             |
-| mouseenter:row       | dispatched | <code>Row</code>                                                                                             |
-| mouseleave:row       | dispatched | <code>Row</code>                                                                                             |
-| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                |
-| click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                |
-| click:cell           | dispatched | <code>DataTableCell<Row></code>                                                                              |
+| Event name           | Type       | Detail                                                                                                                                                         |
+| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| click                | dispatched | <code>{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }</code>                                                                          |
+| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                                                                            |
+| click:header         | dispatched | <code>{ header: DataTableHeader<Row>; sortDirection?: "ascending" &#124; "descending" &#124; "none"; target: EventTarget; currentTarget: EventTarget; }</code> |
+| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                                                                                    |
+| click:row            | dispatched | <code>{ row: Row; target: EventTarget; currentTarget: EventTarget; }</code>                                                                                    |
+| mouseenter:row       | dispatched | <code>Row</code>                                                                                                                                               |
+| mouseleave:row       | dispatched | <code>Row</code>                                                                                                                                               |
+| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                                                                  |
+| click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                                                                  |
+| click:cell           | dispatched | <code>{ cell: DataTableCell<Row>; target: EventTarget; currentTarget: EventTarget; }</code>                                                                    |
 
 ## `DataTableSkeleton`
 
