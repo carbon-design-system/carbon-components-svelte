@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "test:types": "svelte-check --workspace ../tests"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/svelte": "^5.2.8",
+    "@testing-library/user-event": "^14.6.1",
+    "carbon-preprocess-svelte": "^0.11.11",
+    "jsdom": "^26.1.0",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.2.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3"
+  }
+}

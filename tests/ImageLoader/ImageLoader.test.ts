@@ -1,5 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
-import ImageLoader from "./ImageLoader.test.svelte";
+import { isSvelte4, isSvelte5 } from "../setup-tests";
+import ImageLoaderSvelte4 from "./ImageLoader.test.svelte";
+import ImageLoaderSvelte5 from "./ImageLoader.svelte5.test.svelte";
+
+const ImageLoader = isSvelte5 ? ImageLoaderSvelte5 : ImageLoaderSvelte4;
 
 describe("ImageLoader", () => {
   beforeEach(() => {
@@ -99,31 +103,60 @@ describe("ImageLoader", () => {
     }
   });
 
-  it("dispatches load and error events", async () => {
-    const { component } = render(ImageLoader);
+  describe.skipIf(isSvelte5)("svelte 4", () => {
+    it("dispatches load and error events", async () => {
+      const { component } = render(ImageLoader);
 
-    const load = vi.fn();
-    const error = vi.fn();
+      const load = vi.fn();
+      const error = vi.fn();
 
-    component.$on("load", load);
-    component.$on("error", error);
+      component.$on("load", load);
+      component.$on("error", error);
 
-    const defaultWrapper = screen.getByTestId("default-loader");
-    const defaultImg = defaultWrapper.querySelector("img");
-    expect(defaultImg).toBeDefined();
+      const defaultWrapper = screen.getByTestId("default-loader");
+      const defaultImg = defaultWrapper.querySelector("img");
+      expect(defaultImg).toBeDefined();
 
-    if (defaultImg) {
-      defaultImg.dispatchEvent(new Event("load"));
-      expect(load).toHaveBeenCalled();
-    }
+      if (defaultImg) {
+        defaultImg.dispatchEvent(new Event("load"));
+        expect(load).toHaveBeenCalled();
+      }
 
-    const errorWrapper = screen.getByTestId("error-loader");
-    const errorImg = errorWrapper.querySelector("img");
-    expect(errorImg).toBeDefined();
+      const errorWrapper = screen.getByTestId("error-loader");
+      const errorImg = errorWrapper.querySelector("img");
+      expect(errorImg).toBeDefined();
 
-    if (errorImg) {
-      errorImg.dispatchEvent(new Event("error"));
-      expect(error).toHaveBeenCalled();
-    }
+      if (errorImg) {
+        errorImg.dispatchEvent(new Event("error"));
+        expect(error).toHaveBeenCalled();
+      }
+    });
+  });
+
+  describe.skipIf(isSvelte4)("svelte 5", () => {
+    it("dispatches load and error events", async () => {
+      const load = vi.fn();
+      const error = vi.fn();
+
+      render(ImageLoader, { onload: load, onerror: error });
+
+      const defaultWrapper = screen.getByTestId("default-loader");
+      const defaultImg = defaultWrapper.querySelector("img");
+      expect(defaultImg).toBeDefined();
+
+      if (defaultImg) {
+        defaultImg.dispatchEvent(new Event("load"));
+        expect(load).toHaveBeenCalled();
+      }
+
+      const errorWrapper = screen.getByTestId("error-loader");
+      const errorImg = errorWrapper.querySelector("img");
+      expect(errorImg).toBeDefined();
+
+      if (errorImg) {
+        errorImg.dispatchEvent(new Event("error"));
+        expect(error).toHaveBeenCalled();
+      }
+    });
   });
 });

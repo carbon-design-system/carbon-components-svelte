@@ -1,7 +1,6 @@
 /// <reference types="vitest/globals" />
 import "@testing-library/jest-dom/vitest";
 import { userEvent } from "@testing-library/user-event";
-// @ts-expect-error
 import { version } from "svelte/package.json";
 
 export const SVELTE_VERSION = parseInt(version.split(".")[0]);

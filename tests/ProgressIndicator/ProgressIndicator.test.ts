@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
-import ProgressIndicator from "./ProgressIndicator.test.svelte";
-import { user } from "../setup-tests";
+import { user, isSvelte4, isSvelte5 } from "../setup-tests";
+import ProgressIndicatorSvelte4 from "./ProgressIndicator.test.svelte";
+import ProgressIndicatorSvelte5 from "./ProgressIndicator.svelte5.test.svelte";
+
+const ProgressIndicator = isSvelte5
+  ? ProgressIndicatorSvelte5
+  : ProgressIndicatorSvelte4;
 
 describe("ProgressIndicator", () => {
   describe("Default (horizontal)", () => {
@@ -56,24 +61,45 @@ describe("ProgressIndicator", () => {
       expect(consoleLog).toHaveBeenCalledWith("change", 0);
     });
 
-    it("should not update currentIndex when preventChangeOnClick is true", async () => {
-      const { component } = render(ProgressIndicator, {
-        currentIndex: 2,
-        preventChangeOnClick: true,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: true },
-          { label: "Step 3", description: "Third step", complete: true },
-          { label: "Step 4", description: "Fourth step", complete: false },
-        ],
+    describe.skipIf(isSvelte5)("svelte 4", () => {
+      it("should not update currentIndex when preventChangeOnClick is true", async () => {
+        const { component } = render(ProgressIndicator, {
+          currentIndex: 2,
+          preventChangeOnClick: true,
+          steps: [
+            { label: "Step 1", description: "First step", complete: true },
+            { label: "Step 2", description: "Second step", complete: true },
+            { label: "Step 3", description: "Third step", complete: true },
+            { label: "Step 4", description: "Fourth step", complete: false },
+          ],
+        });
+
+        const changeHandler = vi.fn();
+        component.$on("change", changeHandler);
+
+        await user.click(screen.getByText("Step 1"));
+        expect(changeHandler).not.toHaveBeenCalled();
       });
+    });
 
-      const changeHandler = vi.fn();
-      component.$on("change", changeHandler);
+    describe.skipIf(isSvelte4)("svelte 5", () => {
+      it("should not update currentIndex when preventChangeOnClick is true", async () => {
+        const changeHandler = vi.fn();
+        render(ProgressIndicator, {
+          currentIndex: 2,
+          preventChangeOnClick: true,
+          steps: [
+            { label: "Step 1", description: "First step", complete: true },
+            { label: "Step 2", description: "Second step", complete: true },
+            { label: "Step 3", description: "Third step", complete: true },
+            { label: "Step 4", description: "Fourth step", complete: false },
+          ],
+          onchange: changeHandler,
+        });
 
-      // Click on a completed step
-      await user.click(screen.getByText("Step 1"));
-      expect(changeHandler).not.toHaveBeenCalled();
+        await user.click(screen.getByText("Step 1"));
+        expect(changeHandler).not.toHaveBeenCalled();
+      });
     });
   });
 

@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
-import ModalTest from "./Modal.test.svelte";
+import { user, isSvelte4, isSvelte5 } from "../setup-tests";
+import ModalTestSvelte4 from "./Modal.test.svelte";
+import ModalTestSvelte5 from "./Modal.svelte5.test.svelte";
+
+const ModalTest = isSvelte5 ? ModalTestSvelte5 : ModalTestSvelte4;
 
 describe("Modal", () => {
   beforeEach(() => {

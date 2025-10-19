@@ -1,8 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
-import DatePicker from "./DatePicker.test.svelte";
+import { user, isSvelte4, isSvelte5 } from "../setup-tests";
+import DatePickerSvelte4 from "./DatePicker.test.svelte";
+import DatePickerSvelte5 from "./DatePicker.svelte5.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
+
+const DatePicker = isSvelte5 ? DatePickerSvelte5 : DatePickerSvelte4;
 
 describe("DatePicker", () => {
   it("renders with default props", async () => {
@@ -108,58 +111,110 @@ describe("DatePicker", () => {
     expect(screen.getByText("Date")).toHaveClass("bx--visually-hidden");
   });
 
-  it("dispatches change event when manually typing in simple mode", async () => {
-    const changeHandler = vi.fn();
-    const { component } = render(DatePicker, {
-      datePickerType: "simple",
+  describe.skipIf(isSvelte5)("svelte 4", () => {
+    it("dispatches change event when manually typing in simple mode", async () => {
+      const changeHandler = vi.fn();
+      const { component } = render(DatePicker, {
+        datePickerType: "simple",
+      });
+
+      component.$on("change", changeHandler);
+
+      const input = screen.getByLabelText("Date");
+      await user.type(input, "01/15/2024");
+      await user.tab();
+
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toBe("01/15/2024");
     });
 
-    component.$on("change", changeHandler);
+    it("dispatches change event when manually typing in single mode", async () => {
+      const changeHandler = vi.fn();
+      const { component } = render(DatePicker, {
+        datePickerType: "single",
+      });
 
-    const input = screen.getByLabelText("Date");
-    await user.type(input, "01/15/2024");
-    await user.tab();
+      component.$on("change", changeHandler);
 
-    expect(changeHandler).toHaveBeenCalled();
-    expect(changeHandler.mock.lastCall?.[0]?.detail).toBe("01/15/2024");
+      const input = screen.getByLabelText("Date");
+      await user.type(input, "01/15/2024");
+      await user.tab();
+
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        dateStr: "01/15/2024",
+      });
+    });
+
+    it("dispatches change event when manually clearing in single mode", async () => {
+      const changeHandler = vi.fn();
+      const { component } = render(DatePicker, {
+        datePickerType: "single",
+        value: "01/15/2024",
+      });
+
+      component.$on("change", changeHandler);
+
+      const input = screen.getByLabelText("Date");
+      await user.clear(input);
+      await user.tab();
+
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        dateStr: "",
+      });
+    });
   });
 
-  it("dispatches change event when manually typing in single mode", async () => {
-    const changeHandler = vi.fn();
-    const { component } = render(DatePicker, {
-      datePickerType: "single",
+  describe.skipIf(isSvelte4)("svelte 5", () => {
+    it("dispatches change event when manually typing in simple mode", async () => {
+      const changeHandler = vi.fn();
+      render(DatePicker, {
+        datePickerType: "simple",
+        onchange: changeHandler,
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.type(input, "01/15/2024");
+      await user.tab();
+
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toBe("01/15/2024");
     });
 
-    component.$on("change", changeHandler);
+    it("dispatches change event when manually typing in single mode", async () => {
+      const changeHandler = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        onchange: changeHandler,
+      });
 
-    const input = screen.getByLabelText("Date");
-    await user.type(input, "01/15/2024");
-    await user.tab();
+      const input = screen.getByLabelText("Date");
+      await user.type(input, "01/15/2024");
+      await user.tab();
 
-    expect(changeHandler).toHaveBeenCalled();
-    expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
-      dateStr: "01/15/2024",
-    });
-  });
-
-  // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/314
-  // and https://github.com/carbon-design-system/carbon-components-svelte/issues/950
-  it("dispatches change event when manually clearing in single mode", async () => {
-    const changeHandler = vi.fn();
-    const { component } = render(DatePicker, {
-      datePickerType: "single",
-      value: "01/15/2024",
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        dateStr: "01/15/2024",
+      });
     });
 
-    component.$on("change", changeHandler);
+    it("dispatches change event when manually clearing in single mode", async () => {
+      const changeHandler = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "01/15/2024",
+        onchange: changeHandler,
+      });
 
-    const input = screen.getByLabelText("Date");
-    await user.clear(input);
-    await user.tab();
+      const input = screen.getByLabelText("Date");
+      await user.clear(input);
+      await user.tab();
 
-    expect(changeHandler).toHaveBeenCalled();
-    expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
-      dateStr: "",
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        dateStr: "",
+      });
     });
   });
 

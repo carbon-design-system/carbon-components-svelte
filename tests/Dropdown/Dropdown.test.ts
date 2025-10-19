@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
-import Dropdown from "./Dropdown.test.svelte";
+import { user, isSvelte4, isSvelte5 } from "../setup-tests";
+import DropdownSvelte4 from "./Dropdown.test.svelte";
+import DropdownSvelte5 from "./Dropdown.svelte5.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
+
+const Dropdown = isSvelte5 ? DropdownSvelte5 : DropdownSvelte4;
 
 const items = [
   { id: "0", text: "Slack" },
@@ -163,30 +166,57 @@ describe("Dropdown", () => {
     expect(screen.getByText("Help text")).toHaveClass("bx--form__helper-text");
   });
 
-  it("should handle item selection", async () => {
-    const { component } = render(Dropdown, {
-      props: {
+  describe.skipIf(isSvelte5)("svelte 4", () => {
+    it("should handle item selection", async () => {
+      const { component } = render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+        },
+      });
+
+      const selectHandler = vi.fn();
+      component.$on("select", selectHandler);
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const menuItemText = screen.getByText("Email");
+      const menuItem = menuItemText.closest(".bx--list-box__menu-item");
+      assert(menuItem);
+      await user.click(menuItem);
+
+      expect(selectHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          detail: { selectedId: "1", selectedItem: items[1] },
+        }),
+      );
+    });
+  });
+
+  describe.skipIf(isSvelte4)("svelte 5", () => {
+    it("should handle item selection", async () => {
+      const selectHandler = vi.fn();
+      render(Dropdown, {
         items,
         selectedId: "0",
-      },
+        onselect: selectHandler,
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const menuItemText = screen.getByText("Email");
+      const menuItem = menuItemText.closest(".bx--list-box__menu-item");
+      assert(menuItem);
+      await user.click(menuItem);
+
+      expect(selectHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          detail: { selectedId: "1", selectedItem: items[1] },
+        }),
+      );
     });
-
-    const selectHandler = vi.fn();
-    component.$on("select", selectHandler);
-
-    const button = screen.getByRole("button");
-    await user.click(button);
-
-    const menuItemText = screen.getByText("Email");
-    const menuItem = menuItemText.closest(".bx--list-box__menu-item");
-    assert(menuItem);
-    await user.click(menuItem);
-
-    expect(selectHandler).toHaveBeenCalledWith(
-      expect.objectContaining({
-        detail: { selectedId: "1", selectedItem: items[1] },
-      }),
-    );
   });
 
   it("should handle keyboard navigation", async () => {

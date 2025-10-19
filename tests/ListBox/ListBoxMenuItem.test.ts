@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
-import ListBoxMenuItem from "./ListBoxMenuItem.test.svelte";
+import { user, isSvelte4, isSvelte5 } from "../setup-tests";
+import ListBoxMenuItemSvelte4 from "./ListBoxMenuItem.test.svelte";
+import ListBoxMenuItemSvelte5 from "./ListBoxMenuItem.svelte5.test.svelte";
+
+const ListBoxMenuItem = isSvelte5
+  ? ListBoxMenuItemSvelte5
+  : ListBoxMenuItemSvelte4;
 
 describe("ListBoxMenuItem", () => {
   it("should render with default props", () => {

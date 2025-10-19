@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
-import ListBoxField from "./ListBoxField.test.svelte";
+import { user, isSvelte4, isSvelte5 } from "../setup-tests";
+import ListBoxFieldSvelte4 from "./ListBoxField.test.svelte";
+import ListBoxFieldSvelte5 from "./ListBoxField.svelte5.test.svelte";
+
+const ListBoxField = isSvelte5 ? ListBoxFieldSvelte5 : ListBoxFieldSvelte4;
 
 describe("ListBoxField", () => {
   it("should render with default props", () => {
