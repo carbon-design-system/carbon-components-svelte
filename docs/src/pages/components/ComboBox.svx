@@ -91,6 +91,12 @@ For async (e.g., server-side) filtering, bind to `value` and update `items` when
 
 <FileSource src="/framed/ComboBox/AsyncComboBox" />
 
+## Virtualized (large lists)
+
+Enable virtualization for large lists to improve performance. Only visible items are rendered in the DOM.
+
+<FileSource src="/framed/ComboBox/VirtualizedComboBox" />
+
 ## Top direction
 
 Set `direction` to `"top"` to make the dropdown menu appear above the input.
