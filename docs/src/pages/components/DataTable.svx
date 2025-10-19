@@ -148,6 +148,12 @@ Use the `"cell"` slot to customize cell content. Access row and cell data throug
   </svelte:fragment>
 </DataTable>
 
+## Custom cell rendering with row state
+
+The `"cell"` slot provides `rowSelected` and `rowExpanded` props to conditionally render content based on row state.
+
+<FileSource src="/framed/DataTable/DataTableCustomCellRowState" />
+
 ## With title, description
 
 Add a title and description to provide context for the table data.
