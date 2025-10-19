@@ -83,6 +83,14 @@ Set `itemToString` to customize how items display in the filterable combobox.
 
 <FileSource src="/framed/ComboBox/FilterableComboBoxCustomLabel" />
 
+## Filtering (async)
+
+By default, combobox filtering is synchronous and client-side.
+
+For async (e.g., server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async/await behavior with a debounced input value change.
+
+<FileSource src="/framed/ComboBox/AsyncComboBox" />
+
 ## Top direction
 
 Set `direction` to `"top"` to make the dropdown menu appear above the input.
