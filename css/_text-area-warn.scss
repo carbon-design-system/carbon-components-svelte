@@ -1,0 +1,46 @@
+// This file backports textarea warning styles from carbon-components v11+
+// to ensure compatibility with carbon-components v10.58.12.
+// The warning state feature provides consistency with other input components.
+
+//
+// Copyright IBM Corp. 2016, 2023
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@import 'carbon-components/scss/globals/scss/vars';
+@import 'carbon-components/scss/globals/scss/helper-mixins';
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
+
+/// Textarea warning styles
+/// @access private
+/// @group text-area
+@mixin text-area-warn {
+  //----------------------------------------------
+  // Warning state
+  // ---------------------------------------------
+  .#{$prefix}--text-area--warning {
+    padding-right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--text-area__invalid-icon.#{$prefix}--text-area__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--text-area__invalid-icon.#{$prefix}--text-area__invalid-icon--warning path[fill] {
+    fill: $inverse-01;
+    opacity: 1;
+  }
+
+  .#{$prefix}--text-area__wrapper[data-warn]~.#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: rem(200px);
+    font-weight: 400;
+  }
+}
+
+@include exports('text-area-warn') {
+  @include text-area-warn;
+}
