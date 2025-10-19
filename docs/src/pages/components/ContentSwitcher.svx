@@ -73,7 +73,7 @@ Set `size` to `"sm"` for a small content switcher.
   <Switch text="Archived" />
 </ContentSwitcher>
 
-## Disabled
+## Disabled state
 
 Set `disabled` to `true` on individual switches to prevent interaction.
 

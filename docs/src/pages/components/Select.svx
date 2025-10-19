@@ -182,6 +182,6 @@ Display a loading state using the skeleton variant.
 
 <SelectSkeleton />
 
-## Skeleton (hidden label)
+## Skeleton without label
 
 <SelectSkeleton hideLabel />

@@ -107,7 +107,7 @@ Set `showMoreText` and `showLessText` to customize the expand/collapse button te
 
 <CodeSnippet type="multi" {code} showMoreText="Expand" showLessText="Collapse" />
 
-## Disabled
+## Disabled state
 
 Set `disabled` to `true` to disable interaction. This only applies to `"single"` and `"multi"` types.
 

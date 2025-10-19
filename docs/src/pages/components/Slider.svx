@@ -69,7 +69,7 @@ Show a loading state with the skeleton variant.
 
 <SliderSkeleton />
 
-## Skeleton (hidden label)
+## Skeleton without label
 
 Show a loading state without a label.
 
