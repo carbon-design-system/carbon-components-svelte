@@ -63,6 +63,16 @@ Add interactive elements to notifications using the actions slot.
   </svelte:fragment>
 </InlineNotification>
 
+## Action button as link
+
+`NotificationActionButton` accepts an `href` prop to render as a link instead of a button.
+
+<InlineNotification kind="info" title="New features available:" subtitle="Check out what's new in this release.">
+  <svelte:fragment slot="actions">
+    <NotificationActionButton href="https://github.com/carbon-design-system/carbon-components-svelte/releases" target="_blank">View release notes</NotificationActionButton>
+  </svelte:fragment>
+</InlineNotification>
+
 ## Notification variants
 
 The component supports different notification types:
