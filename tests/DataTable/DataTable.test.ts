@@ -2,6 +2,9 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DataTable from "./DataTable.test.svelte";
+import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
+import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte";
+import DataTableCustomBoth from "./DataTableCustomBoth.test.svelte";
 
 describe("DataTable", () => {
   beforeEach(() => {
@@ -856,5 +859,40 @@ describe("DataTable", () => {
     });
 
     expect(component).toBeTruthy();
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1594
+  it("renders custom title element with props", () => {
+    render(DataTableCustomSlots);
+
+    const customTitle = screen.getByRole("heading", { level: 2 });
+    expect(customTitle).toBeInTheDocument();
+    expect(customTitle).toHaveTextContent("Custom Title");
+    expect(customTitle).toHaveClass("bx--data-table-header__title");
+  });
+
+  it("renders custom description element with props", () => {
+    const { container } = render(DataTableCustomDescription);
+
+    const customDescription = container.querySelector(
+      "div.bx--data-table-header__description",
+    );
+    expect(customDescription).toBeInTheDocument();
+    expect(customDescription).toHaveTextContent("Custom Description");
+    expect(customDescription).toHaveClass("bx--data-table-header__description");
+  });
+
+  it("renders both custom title and description elements", () => {
+    const { container } = render(DataTableCustomBoth);
+
+    const customTitle = screen.getByRole("heading", { level: 2 });
+    expect(customTitle).toBeInTheDocument();
+    expect(customTitle).toHaveClass("bx--data-table-header__title");
+
+    const customDescription = container.querySelector(
+      "div.bx--data-table-header__description",
+    );
+    expect(customDescription).toBeInTheDocument();
+    expect(customDescription).toHaveClass("bx--data-table-header__description");
   });
 });
