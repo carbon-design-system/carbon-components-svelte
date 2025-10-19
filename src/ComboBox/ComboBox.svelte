@@ -137,6 +137,12 @@
    */
   export let listRef = null;
 
+  /**
+   * Enable virtualization for large lists
+   * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   */
+  export let virtualize = undefined;
+
   import { afterUpdate, createEventDispatcher, tick } from "svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -146,14 +152,20 @@
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
+  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+
+  /** Default item height in pixels for virtualization */
+  const DEFAULT_ITEM_HEIGHT = 40;
 
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
   let valueBeforeOpen = "";
   let prevInputLength = 0;
+  let listScrollTop = 0;
+  let prevOpen = false;
 
   /**
    * @param {Item} item
@@ -223,6 +235,17 @@
   }
 
   afterUpdate(() => {
+    // Reset DOM scroll position when menu opens with virtualization
+    const wasJustOpened = open && !prevOpen;
+    if (wasJustOpened && virtualize && listRef) {
+      tick().then(() => {
+        if (listRef) {
+          listRef.scrollTop = 0;
+        }
+      });
+    }
+    prevOpen = open;
+
     if (open) {
       ref.focus();
 
@@ -231,11 +254,12 @@
         valueBeforeOpen = value;
         value = "";
       }
-
-      filteredItems = items.filter((item) => filterFn(item, value));
     } else {
+      // Reset scroll position when menu closes
+      if (virtualize) {
+        listScrollTop = 0;
+      }
       highlightedIndex = -1;
-      filteredItems = [];
       if (selectedItem) {
         // Only set value if the input is not focused
         if (!ref.contains(document.activeElement)) {
@@ -282,7 +306,30 @@
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
-  $: filteredItems = items.filter((item) => filterFn(item, value));
+  $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
+
+  $: virtualConfig = virtualize
+    ? {
+        itemHeight: DEFAULT_ITEM_HEIGHT,
+        containerHeight: 300,
+        overscan: 3,
+        threshold: 100,
+        maxItems: undefined,
+        ...(typeof virtualize === "object" ? virtualize : {}),
+      }
+    : null;
+
+  $: virtualData = virtualConfig
+    ? virtualizeUtil({
+        items: filteredItems,
+        scrollTop: listScrollTop,
+        ...virtualConfig,
+      })
+    : null;
+
+  $: itemsToRender = virtualData?.isVirtualized
+    ? virtualData.visibleItems
+    : filteredItems;
 
   $: if (typeahead) {
     const showNewSuggestion =
@@ -467,39 +514,89 @@
       />
     </div>
     {#if open}
-      <ListBoxMenu aria-label={ariaLabel} {id} on:scroll bind:ref={listRef}>
-        {#each filteredItems as item, i (item.id)}
-          <ListBoxMenuItem
-            id={item.id}
-            active={selectedId === item.id}
-            highlighted={highlightedIndex === i}
-            disabled={item.disabled}
-            on:click={(e) => {
-              if (item.disabled) {
-                e.stopPropagation();
-                return;
-              }
-              selectedId = item.id;
-              open = false;
-              valueBeforeOpen = "";
+      <ListBoxMenu
+        aria-label={ariaLabel}
+        {id}
+        on:scroll={(e) => {
+          listScrollTop = e.target.scrollTop;
+        }}
+        bind:ref={listRef}
+        style={virtualConfig
+          ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+          : undefined}
+      >
+        {#if virtualData?.isVirtualized}
+          <div style="height: {virtualData.totalHeight}px; position: relative;">
+            <div style="transform: translateY({virtualData.offsetY}px);">
+              {#each itemsToRender as item, i (item.id)}
+                {@const actualIndex = virtualData.startIndex + i}
+                <ListBoxMenuItem
+                  id={item.id}
+                  active={selectedId === item.id}
+                  highlighted={highlightedIndex === actualIndex}
+                  disabled={item.disabled}
+                  on:click={(e) => {
+                    if (item.disabled) {
+                      e.stopPropagation();
+                      return;
+                    }
+                    selectedId = item.id;
+                    open = false;
+                    valueBeforeOpen = "";
 
-              if (filteredItems[i]) {
-                value = itemToString(filteredItems[i]);
-              }
-            }}
-            on:mouseenter={() => {
-              if (item.disabled) return;
-              highlightedIndex = i;
-            }}
-          >
-            <slot {item} index={i}>
-              {itemToString(item)}
-            </slot>
-            {#if selectedItem && selectedItem.id === item.id}
-              <Checkmark class="bx--list-box__menu-item__selected-icon" />
-            {/if}
-          </ListBoxMenuItem>
-        {/each}
+                    if (filteredItems[actualIndex]) {
+                      value = itemToString(filteredItems[actualIndex]);
+                    }
+                  }}
+                  on:mouseenter={() => {
+                    if (item.disabled) return;
+                    highlightedIndex = actualIndex;
+                  }}
+                >
+                  <slot {item} index={actualIndex}>
+                    {itemToString(item)}
+                  </slot>
+                  {#if selectedItem && selectedItem.id === item.id}
+                    <Checkmark class="bx--list-box__menu-item__selected-icon" />
+                  {/if}
+                </ListBoxMenuItem>
+              {/each}
+            </div>
+          </div>
+        {:else}
+          {#each itemsToRender as item, i (item.id)}
+            <ListBoxMenuItem
+              id={item.id}
+              active={selectedId === item.id}
+              highlighted={highlightedIndex === i}
+              disabled={item.disabled}
+              on:click={(e) => {
+                if (item.disabled) {
+                  e.stopPropagation();
+                  return;
+                }
+                selectedId = item.id;
+                open = false;
+                valueBeforeOpen = "";
+
+                if (filteredItems[i]) {
+                  value = itemToString(filteredItems[i]);
+                }
+              }}
+              on:mouseenter={() => {
+                if (item.disabled) return;
+                highlightedIndex = i;
+              }}
+            >
+              <slot {item} index={i}>
+                {itemToString(item)}
+              </slot>
+              {#if selectedItem && selectedItem.id === item.id}
+                <Checkmark class="bx--list-box__menu-item__selected-icon" />
+              {/if}
+            </ListBoxMenuItem>
+          {/each}
+        {/if}
       </ListBoxMenu>
     {/if}
   </ListBox>
