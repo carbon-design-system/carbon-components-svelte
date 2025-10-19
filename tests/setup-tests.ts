@@ -1,6 +1,12 @@
 /// <reference types="vitest/globals" />
 import "@testing-library/jest-dom/vitest";
 import { userEvent } from "@testing-library/user-event";
+// @ts-expect-error
+import { version } from "svelte/package.json";
+
+export const SVELTE_VERSION = parseInt(version.split(".")[0]);
+export const isSvelte4 = SVELTE_VERSION === 4;
+export const isSvelte5 = SVELTE_VERSION === 5;
 
 // Mock scrollIntoView since it's not implemented in JSDOM
 Element.prototype.scrollIntoView = vi.fn();
