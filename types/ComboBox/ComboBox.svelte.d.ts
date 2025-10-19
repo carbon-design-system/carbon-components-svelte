@@ -179,6 +179,34 @@ type $Props<Item extends ComboBoxItem<any> = ComboBoxItem<any>> = {
    */
   listRef?: null | HTMLDivElement;
 
+  /**
+   * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
+   *
+   * By default, virtualization is automatically enabled for lists with more than 100 items.
+   *
+   * Set `virtualize={false}` to explicitly disable virtualization, even for large lists.
+   *
+   * Set `virtualize={true}` to explicitly enable virtualization with default settings.
+   *
+   * Provide an object to customize virtualization behavior:
+   * - `itemHeight` (default: 40): The height in pixels of each item. Specify a custom value when using custom slots with multi-line items or different heights.
+   * - `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.
+   * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
+   * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
+   * - `maxItems` (default: undefined): The maximum number of items to render. When undefined, all visible items are rendered.
+   * @default undefined
+   */
+  virtualize?:
+    | undefined
+    | boolean
+    | {
+        itemHeight?: number;
+        containerHeight?: number;
+        overscan?: number;
+        threshold?: number;
+        maxItems?: number;
+      };
+
   labelChildren?: (this: void) => void;
 
   children?: (this: void, ...args: [{ item: Item; index: number }]) => void;
