@@ -160,6 +160,21 @@ type $Props = {
    */
   listRef?: null | HTMLDivElement;
 
+  /**
+   * Enable virtualization for large lists
+   * @default undefined
+   */
+  virtualize?:
+    | undefined
+    | boolean
+    | {
+        itemHeight?: number;
+        containerHeight?: number;
+        overscan?: number;
+        threshold?: number;
+        maxItems?: number;
+      };
+
   [key: `data-${string}`]: any;
 };
 
@@ -179,7 +194,6 @@ export default class ComboBox extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
     paste: WindowEventMap["paste"];
-    scroll: WindowEventMap["scroll"];
   },
   { default: { item: ComboBoxItem; index: number }; titleText: {} }
 > {

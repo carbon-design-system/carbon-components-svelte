@@ -111,6 +111,12 @@
    */
   export let listRef = null;
 
+  /**
+   * Enable virtualization for large lists
+   * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   */
+  export let virtualize = undefined;
+
   import { createEventDispatcher, afterUpdate, tick } from "svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -120,12 +126,14 @@
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
+  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
 
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
+  let listScrollTop = 0;
 
   function change(dir) {
     let index = highlightedIndex + dir;
@@ -216,6 +224,29 @@
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
   $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
+
+  $: virtualConfig = virtualize
+    ? {
+        itemHeight: 40, // TODO: adjust based on size
+        containerHeight: 300,
+        overscan: 3,
+        threshold: 100,
+        maxItems: undefined,
+        ...(typeof virtualize === "object" ? virtualize : {}),
+      }
+    : null;
+
+  $: virtualData = virtualConfig
+    ? virtualizeUtil({
+        items: filteredItems,
+        scrollTop: listScrollTop,
+        ...virtualConfig,
+      })
+    : null;
+
+  $: itemsToRender = virtualData?.isVirtualized
+    ? virtualData.visibleItems
+    : filteredItems;
 </script>
 
 <svelte:window
@@ -380,38 +411,87 @@
       />
     </div>
     {#if open}
-      <ListBoxMenu aria-label={ariaLabel} {id} on:scroll bind:ref={listRef}>
-        {#each filteredItems as item, i (item.id)}
-          <ListBoxMenuItem
-            id={item.id}
-            active={selectedId === item.id}
-            highlighted={highlightedIndex === i}
-            disabled={item.disabled}
-            on:click={(e) => {
-              if (item.disabled) {
-                e.stopPropagation();
-                return;
-              }
-              selectedId = item.id;
-              open = false;
+      <ListBoxMenu
+        aria-label={ariaLabel}
+        {id}
+        on:scroll={(e) => {
+          listScrollTop = e.target.scrollTop;
+        }}
+        bind:ref={listRef}
+        style={virtualConfig
+          ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+          : undefined}
+      >
+        {#if virtualData?.isVirtualized}
+          <div style="height: {virtualData.totalHeight}px; position: relative;">
+            <div style="transform: translateY({virtualData.offsetY}px);">
+              {#each itemsToRender as item, i (item.id)}
+                {@const actualIndex = virtualData.startIndex + i}
+                <ListBoxMenuItem
+                  id={item.id}
+                  active={selectedId === item.id}
+                  highlighted={highlightedIndex === actualIndex}
+                  disabled={item.disabled}
+                  on:click={(e) => {
+                    if (item.disabled) {
+                      e.stopPropagation();
+                      return;
+                    }
+                    selectedId = item.id;
+                    open = false;
 
-              if (filteredItems[i]) {
-                value = itemToString(filteredItems[i]);
-              }
-            }}
-            on:mouseenter={() => {
-              if (item.disabled) return;
-              highlightedIndex = i;
-            }}
-          >
-            <slot {item} index={i}>
-              {itemToString(item)}
-            </slot>
-            {#if selectedItem && selectedItem.id === item.id}
-              <Checkmark class="bx--list-box__menu-item__selected-icon" />
-            {/if}
-          </ListBoxMenuItem>
-        {/each}
+                    if (filteredItems[actualIndex]) {
+                      value = itemToString(filteredItems[actualIndex]);
+                    }
+                  }}
+                  on:mouseenter={() => {
+                    if (item.disabled) return;
+                    highlightedIndex = actualIndex;
+                  }}
+                >
+                  <slot {item} index={actualIndex}>
+                    {itemToString(item)}
+                  </slot>
+                  {#if selectedItem && selectedItem.id === item.id}
+                    <Checkmark class="bx--list-box__menu-item__selected-icon" />
+                  {/if}
+                </ListBoxMenuItem>
+              {/each}
+            </div>
+          </div>
+        {:else}
+          {#each itemsToRender as item, i (item.id)}
+            <ListBoxMenuItem
+              id={item.id}
+              active={selectedId === item.id}
+              highlighted={highlightedIndex === i}
+              disabled={item.disabled}
+              on:click={(e) => {
+                if (item.disabled) {
+                  e.stopPropagation();
+                  return;
+                }
+                selectedId = item.id;
+                open = false;
+
+                if (filteredItems[i]) {
+                  value = itemToString(filteredItems[i]);
+                }
+              }}
+              on:mouseenter={() => {
+                if (item.disabled) return;
+                highlightedIndex = i;
+              }}
+            >
+              <slot {item} index={i}>
+                {itemToString(item)}
+              </slot>
+              {#if selectedItem && selectedItem.id === item.id}
+                <Checkmark class="bx--list-box__menu-item__selected-icon" />
+              {/if}
+            </ListBoxMenuItem>
+          {/each}
+        {/if}
       </ListBoxMenu>
     {/if}
   </ListBox>

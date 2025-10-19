@@ -2041,6 +2041,17 @@
           "reactive": true
         },
         {
+          "name": "virtualize",
+          "kind": "let",
+          "description": "Enable virtualization for large lists",
+          "type": "undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "clear",
           "kind": "function",
           "description": "Clear the combo box programmatically",
@@ -2108,11 +2119,6 @@
           "type": "forwarded",
           "name": "paste",
           "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "scroll",
-          "element": "ListBoxMenu"
         }
       ],
       "typedefs": [
