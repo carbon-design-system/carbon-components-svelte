@@ -33,7 +33,11 @@ Set `persist` to `true` to save the theme preference in [localStorage](https://d
 
 ## Custom theme
 
-Override default Carbon theme tokens by providing custom key-value pairs in the `tokens` prop. Refer to the [Carbon website](https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme) for guidance on customizing themes.
+Override default Carbon theme tokens using the `tokens` prop.
+
+**Understanding token usage:** The Theme component sets CSS custom properties via `--cds-{token}`. However, not all token names directly map to component styles. Components often use **semantic tokens** (like `interactive-01`) rather than component-specific tokens (like `button-primary`).
+
+For example, primary buttons use `interactive-01` for background color, `hover-primary` for hover state, and `active-primary` for active state. Both token types exist in the system but serve different purposes. Refer to the component CSS or Carbon Design System documentation to understand which tokens affect specific components.
 
 <FileSource src="/framed/Theme/ThemeTokens" />
 
