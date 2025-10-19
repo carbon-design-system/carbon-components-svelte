@@ -231,8 +231,8 @@ export default class DataTable<
       cellIndex: number;
     };
     ["cell-header"]: { header: DataTableNonEmptyHeader };
-    description: {};
+    description: { props: { class: "bx--data-table-header__description" } };
     ["expanded-row"]: { row: Row };
-    title: {};
+    title: { props: { class: "bx--data-table-header__title" } };
   }
 > {}

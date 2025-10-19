@@ -207,7 +207,9 @@ Add a title and description to provide context for the table data.
 
 ## Slottable title, description
 
-Use slots to customize the title and description content.
+By default, the title is rendered as a `<h4>` element and the description is rendered as a `<p>` element.
+
+Use slots to customize the elements and styles. The original classes can be destructured using `let:props`.
 
 <DataTable
   headers="{[
@@ -261,10 +263,8 @@ Use slots to customize the title and description content.
     },
   ]}"
 >
-    <strong slot="title">Load balancers</strong>
-    <span slot="description" style="font-size: 1rem">
-      Your organization's active load balancers.
-    </span>
+    <h1 slot="title" let:props {...props}>Load balancers</h1>
+    <span slot="description" let:props {...props} style="font-size: 1rem">Your organization's active load balancers.</span>
 </DataTable>
 
 ## Static width
