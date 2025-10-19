@@ -269,4 +269,12 @@ describe("Toggle", () => {
 
     expect(screen.getByText("On slot")).toBeInTheDocument();
   });
+
+  it("should bind ref to input element", () => {
+    const { component } = render(Toggle);
+
+    expect(component.ref).toBeInstanceOf(HTMLInputElement);
+    assert(component.ref);
+    expect(component.ref.type).toBe("checkbox");
+  });
 });

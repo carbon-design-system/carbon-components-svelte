@@ -4390,17 +4390,18 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                               | Default value                                    | Description                                     |
-| :-------- | :------- | :--------------- | :------- | ---------------------------------- | ------------------------------------------------ | ----------------------------------------------- |
-| toggled   | No       | <code>let</code> | Yes      | <code>boolean</code>               | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
-| size      | No       | <code>let</code> | No       | <code>"default" &#124; "sm"</code> | <code>"default"</code>                           | Specify the toggle size                         |
-| disabled  | No       | <code>let</code> | No       | <code>boolean</code>               | <code>false</code>                               | Set to `true` to disable checkbox input         |
-| labelA    | No       | <code>let</code> | No       | <code>string</code>                | <code>"Off"</code>                               | Specify the label for the untoggled state       |
-| labelB    | No       | <code>let</code> | No       | <code>string</code>                | <code>"On"</code>                                | Specify the label for the toggled state         |
-| labelText | No       | <code>let</code> | No       | <code>string</code>                | <code>""</code>                                  | Specify the label text                          |
-| hideLabel | No       | <code>let</code> | No       | <code>boolean</code>               | <code>false</code>                               | Set to `true` to visually hide the label text   |
-| id        | No       | <code>let</code> | No       | <code>string</code>                | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
-| name      | No       | <code>let</code> | No       | <code>string</code>                | <code>undefined</code>                           | Specify a name attribute for the checkbox input |
+| Prop name | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                     |
+| :-------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | ----------------------------------------------- |
+| ref       | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element    |
+| toggled   | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to toggle the checkbox input      |
+| size      | No       | <code>let</code> | No       | <code>"default" &#124; "sm"</code>        | <code>"default"</code>                           | Specify the toggle size                         |
+| disabled  | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable checkbox input         |
+| labelA    | No       | <code>let</code> | No       | <code>string</code>                       | <code>"Off"</code>                               | Specify the label for the untoggled state       |
+| labelB    | No       | <code>let</code> | No       | <code>string</code>                       | <code>"On"</code>                                | Specify the label for the toggled state         |
+| labelText | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                          |
+| hideLabel | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to visually hide the label text   |
+| id        | No       | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                 |
+| name      | No       | <code>let</code> | No       | <code>string</code>                       | <code>undefined</code>                           | Specify a name attribute for the checkbox input |
 
 ### Slots
 

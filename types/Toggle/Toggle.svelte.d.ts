@@ -58,6 +58,12 @@ type $Props = {
    */
   name?: string;
 
+  /**
+   * Obtain a reference to the input HTML element
+   * @default null
+   */
+  ref?: null | HTMLInputElement;
+
   [key: `data-${string}`]: any;
 };
 
