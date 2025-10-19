@@ -34,6 +34,8 @@
     "test:ui": "vite",
     "test:src-types": "tsc types/**/*.ts",
     "test:types": "svelte-check --workspace tests",
+    "test:svelte5": "cd tests-svelte5 && npm test",
+    "test:types:svelte5": "cd tests-svelte5 && npm run test:types",
     "lint": "prettier --write --cache \"**/*.{svelte,md,js,json,ts}\"",
     "build:css": "node scripts/build-css",
     "build:docs": "node scripts/build-docs && node scripts/format-component-api",
