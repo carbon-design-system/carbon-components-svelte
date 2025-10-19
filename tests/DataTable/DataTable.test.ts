@@ -895,4 +895,103 @@ describe("DataTable", () => {
     expect(customDescription).toBeInTheDocument();
     expect(customDescription).toHaveClass("bx--data-table-header__description");
   });
+
+  // Slot prop tests
+  it("passes rowSelected and rowExpanded props to cell slot", async () => {
+    const { container } = render(DataTable, {
+      props: {
+        selectable: true,
+        expandable: true,
+        selectedRowIds: ["a"],
+        expandedRowIds: ["b"],
+        headers,
+        rows,
+      },
+    });
+
+    // Verify the component renders with selected and expanded rows
+    const selectedRow = container.querySelector("tr[data-row='a']");
+    expect(selectedRow).toHaveClass("bx--data-table--selected");
+
+    const expandedRow = container.querySelector("tr[data-row='b']");
+    expect(expandedRow).toHaveClass("bx--expandable-row");
+  });
+
+  it("passes rowSelected prop to expanded-row slot", async () => {
+    const { container } = render(DataTable, {
+      props: {
+        selectable: true,
+        expandable: true,
+        selectedRowIds: ["a"],
+        expandedRowIds: ["a"],
+        headers,
+        rows,
+      },
+    });
+
+    // Verify both selected and expanded classes are present on the same row
+    const row = container.querySelector("tr[data-row='a']");
+    expect(row).toHaveClass("bx--data-table--selected");
+    expect(row).toHaveClass("bx--expandable-row");
+
+    // Verify expanded content is visible
+    const expandedContent = container.querySelector(
+      "#expandable-row-a .bx--child-row-inner-container",
+    );
+    expect(expandedContent).toBeInTheDocument();
+  });
+
+  it("updates rowSelected slot prop when selection changes", async () => {
+    const { container, component } = render(DataTable, {
+      props: {
+        selectable: true,
+        expandable: true,
+        selectedRowIds: [],
+        expandedRowIds: ["a"],
+        headers,
+        rows,
+      },
+    });
+
+    // Initially no rows selected
+    let selectedRow = container.querySelector(".bx--data-table--selected");
+    expect(selectedRow).not.toBeInTheDocument();
+
+    // Select row 'a'
+    component.$set({ selectedRowIds: ["a"] });
+    await tick();
+
+    // Verify row is now selected
+    selectedRow = container.querySelector("tr[data-row='a']");
+    expect(selectedRow).toHaveClass("bx--data-table--selected");
+  });
+
+  it("updates rowExpanded slot prop when expansion changes", async () => {
+    const { container, component } = render(DataTable, {
+      props: {
+        selectable: true,
+        expandable: true,
+        selectedRowIds: ["a"],
+        expandedRowIds: [],
+        headers,
+        rows,
+      },
+    });
+
+    // Initially no rows expanded
+    let expandedContent = container.querySelector(
+      ".bx--child-row-inner-container",
+    );
+    expect(expandedContent).not.toBeInTheDocument();
+
+    // Expand row 'a'
+    component.$set({ expandedRowIds: ["a"] });
+    await tick();
+
+    // Verify row is now expanded
+    expandedContent = container.querySelector(
+      "#expandable-row-a .bx--child-row-inner-container",
+    );
+    expect(expandedContent).toBeInTheDocument();
+  });
 });
