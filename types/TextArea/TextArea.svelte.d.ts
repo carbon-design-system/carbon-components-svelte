@@ -83,6 +83,18 @@ type $Props = {
   invalidText?: string;
 
   /**
+   * Set to `true` to indicate a warning state
+   * @default false
+   */
+  warn?: boolean;
+
+  /**
+   * Specify the warning state text
+   * @default ""
+   */
+  warnText?: string;
+
+  /**
    * Set an id for the textarea element
    * @default "ccs-" + Math.random().toString(36)
    */
