@@ -51,6 +51,12 @@ Indicate an invalid state with an error message by setting `invalid` to `true` a
 
 <TextArea invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
 
+## Warning state
+
+Indicate a warning state with a message by setting `warn` to `true` and providing `warnText`.
+
+<TextArea warn warnText="This description is shorter than recommended" labelText="App description" placeholder="Enter a description..." />
+
 ## Disabled state
 
 Disable the textarea to prevent user interaction by setting `disabled` to `true`.
