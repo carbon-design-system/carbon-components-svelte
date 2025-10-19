@@ -31,7 +31,6 @@ describe("LocalStorage - reactive key", () => {
     const { component } = render(LocalStorageReactiveKey, {
       props: {
         storageKey: "user-1-settings",
-        isObject: true,
       },
     });
 
@@ -48,13 +47,12 @@ describe("LocalStorage - reactive key", () => {
     );
   });
 
-  it("should initialize with default value if new key has no stored value", async () => {
+  it("should persist current value when switching to new key with no stored value", async () => {
     setMockItem("existing-key", "existing-value");
 
     const { component } = render(LocalStorageReactiveKey, {
       props: {
         storageKey: "existing-key",
-        defaultValue: "default",
       },
     });
 
