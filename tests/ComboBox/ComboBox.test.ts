@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { expectTypeOf } from "vitest";
 import { user } from "../setup-tests";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
@@ -469,5 +470,109 @@ describe("ComboBox", () => {
     await user.click(input);
     await user.click(screen.getByText("Email"));
     expect(input).toHaveValue("Email");
+  });
+
+  describe("Generics", () => {
+    it("should support custom item types with generics", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+        category: string;
+        inStock: boolean;
+      };
+
+      const products: Product[] = [
+        {
+          id: "1",
+          text: "Laptop",
+          price: 999,
+          category: "Electronics",
+          inStock: true,
+        },
+        {
+          id: "2",
+          text: "Phone",
+          price: 599,
+          category: "Electronics",
+          inStock: false,
+        },
+      ];
+
+      expectTypeOf<typeof products>().toEqualTypeOf<Product[]>();
+
+      const itemToString = (item: Product) => `${item.text} - $${item.price}`;
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
+
+      const shouldFilterItem = (item: Product, value: string) =>
+        item.category.toLowerCase().includes(value.toLowerCase()) ||
+        item.text.toLowerCase().includes(value.toLowerCase());
+      expectTypeOf(shouldFilterItem).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(shouldFilterItem).parameter(1).toEqualTypeOf<string>();
+      expectTypeOf(shouldFilterItem).returns.toEqualTypeOf<boolean>();
+
+      type SelectEvent = CustomEvent<{
+        selectedId: string;
+        selectedItem: Product;
+      }>;
+      expectTypeOf<
+        SelectEvent["detail"]["selectedItem"]
+      >().toEqualTypeOf<Product>();
+    });
+
+    it("should provide type-safe access to custom properties in callbacks", () => {
+      interface Tag {
+        id: number;
+        text: string;
+        color: string;
+        usageCount: number;
+      }
+
+      const tags: Tag[] = [
+        { id: 1, text: "urgent", color: "red", usageCount: 42 },
+        { id: 2, text: "feature", color: "blue", usageCount: 15 },
+      ];
+
+      // itemToString can access custom properties
+      const itemToString = (item: Tag) => {
+        expectTypeOf(item).toHaveProperty("color");
+        expectTypeOf(item).toHaveProperty("usageCount");
+        return `${item.text} (${item.usageCount})`;
+      };
+
+      // shouldFilterItem can access custom properties
+      const shouldFilterItem = (item: Tag, value: string) => {
+        expectTypeOf(item).toHaveProperty("color");
+        expectTypeOf(item).toHaveProperty("usageCount");
+        return item.color.includes(value) || item.usageCount > parseInt(value);
+      };
+
+      expectTypeOf(itemToString).parameter(0).toMatchTypeOf<Tag>();
+      expectTypeOf(shouldFilterItem).parameter(0).toMatchTypeOf<Tag>();
+    });
+
+    it("should support slot props with generic item type", () => {
+      type MenuItem = {
+        id: string;
+        text: string;
+        icon: string;
+        shortcut?: string;
+      };
+
+      type SlotProps = { item: MenuItem; index: number };
+
+      const slotItem: MenuItem = {
+        id: "1",
+        text: "Save",
+        icon: "save-icon",
+        shortcut: "Ctrl+S",
+      };
+
+      // Slot should provide item with custom properties
+      expectTypeOf<SlotProps['item']>().toMatchTypeOf<MenuItem>();
+      expectTypeOf(slotItem).toHaveProperty("icon");
+      expectTypeOf(slotItem).toHaveProperty("shortcut");
+    });
   });
 });
