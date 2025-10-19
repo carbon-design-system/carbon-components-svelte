@@ -3,5 +3,6 @@
 </script>
 
 <Tooltip iconDescription="Information">
+  <!-- svelte-ignore a11y-autofocus -->
   <input type="text" autofocus />
 </Tooltip>
