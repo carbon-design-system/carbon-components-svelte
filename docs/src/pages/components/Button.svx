@@ -88,6 +88,22 @@ Control the tooltip position and alignment with `tooltipPosition` and `tooltipAl
 
 <Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add} />
 
+## Icon-only button (hidden tooltip)
+
+Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers.
+
+<InlineNotification svx-ignore lowContrast title="Use case:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed (e.g., toolbars). The <strong>iconDescription</strong> remains accessible to screen readers.
+  </div>
+</InlineNotification>
+
+<div style="display: flex; gap: 8px;">
+  <Button hideTooltip iconDescription="Add item" icon={Add} />
+  <Button hideTooltip iconDescription="Delete item" icon={TrashCan} kind="danger-tertiary" />
+  <Button hideTooltip iconDescription="Login" icon={Login} kind="ghost" />
+</div>
+
 ## Selected icon-only, ghost button
 
 Set `isSelected` to `true` to enable the selected state for an icon-only, ghost button.
