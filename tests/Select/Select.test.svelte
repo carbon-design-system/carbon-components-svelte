@@ -15,25 +15,26 @@
   export let light = false;
 </script>
 
-<Select
-  bind:selected
-  {disabled}
-  {invalid}
-  {invalidText}
-  {warn}
-  {warnText}
-  {helperText}
-  {hideLabel}
-  {labelText}
-  {size}
-  {inline}
-  {light}
-  data-testid="select"
-  on:change={() => console.log("change")}
-  on:input={() => console.log("input")}
-  on:update={(e) => console.log("update", e.detail)}
->
-  <SelectItem value="option-1" text="Option 1" />
-  <SelectItem value="option-2" text="Option 2" />
-  <SelectItem value="option-3" text="Option 3" />
-</Select>
+<div data-testid="select">
+  <Select
+    bind:selected
+    {disabled}
+    {invalid}
+    {invalidText}
+    {warn}
+    {warnText}
+    {helperText}
+    {hideLabel}
+    {labelText}
+    {size}
+    {inline}
+    {light}
+    on:change={() => console.log("change")}
+    on:input={() => console.log("input")}
+    on:update={(e) => console.log("update", e.detail)}
+  >
+    <SelectItem value="option-1" text="Option 1" />
+    <SelectItem value="option-2" text="Option 2" />
+    <SelectItem value="option-3" text="Option 3" />
+  </Select>
+</div>

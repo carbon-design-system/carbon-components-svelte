@@ -12590,7 +12590,7 @@
       "generics": null,
       "rest_props": {
         "type": "Element",
-        "name": "div"
+        "name": "select"
       }
     },
     {
