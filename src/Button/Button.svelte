@@ -53,6 +53,13 @@
   export let tooltipPosition = "bottom";
 
   /**
+   * Set to `true` to hide the tooltip while maintaining accessibility.
+   * Only applies to icon-only buttons.
+   * When `true`, the tooltip is visually hidden but the `iconDescription` remains accessible to screen readers.
+   */
+  export let hideTooltip = false;
+
+  /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g., <Button let:props><div {...props}>...</div></Button>)
    */
@@ -117,12 +124,14 @@
       kind && `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
-      hasIconOnly && "bx--tooltip__trigger",
-      hasIconOnly && "bx--tooltip--a11y",
+      hasIconOnly && !hideTooltip && "bx--tooltip__trigger",
+      hasIconOnly && !hideTooltip && "bx--tooltip--a11y",
       hasIconOnly &&
+        !hideTooltip &&
         tooltipPosition &&
         `bx--btn--icon-only--${tooltipPosition}`,
       hasIconOnly &&
+        !hideTooltip &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
       hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",

@@ -66,6 +66,14 @@ type $Props = {
   tooltipPosition?: "top" | "right" | "bottom" | "left";
 
   /**
+   * Set to `true` to hide the tooltip while maintaining accessibility.
+   * Only applies to icon-only buttons.
+   * When `true`, the tooltip is visually hidden but the `iconDescription` remains accessible to screen readers.
+   * @default false
+   */
+  hideTooltip?: boolean;
+
+  /**
    * Set to `true` to render a custom HTML element
    * Props are destructured as `props` in the default slot (e.g., <Button let:props><div {...props}>...</div></Button>)
    * @default false

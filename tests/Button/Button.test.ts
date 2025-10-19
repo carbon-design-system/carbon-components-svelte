@@ -106,4 +106,22 @@ describe("Button", () => {
     const icon = buttonWithIcon.querySelector(".bx--btn__icon");
     expect(icon).toBeInTheDocument();
   });
+
+  it("should hide tooltip but keep accessibility when hideTooltip is true", () => {
+    render(Button);
+
+    const iconButton = screen.getByTestId("btn-icon-only-hide-tooltip");
+    expect(iconButton).toHaveClass("bx--btn--icon-only");
+
+    // Should NOT have tooltip classes.
+    expect(iconButton).not.toHaveClass("bx--tooltip__trigger");
+    expect(iconButton).not.toHaveClass("bx--tooltip--a11y");
+    expect(iconButton).not.toHaveClass("bx--btn--icon-only--bottom");
+    expect(iconButton).not.toHaveClass("bx--tooltip--align-center");
+
+    // Should still have accessible text for screen readers.
+    const assistiveText = iconButton.querySelector(".bx--assistive-text");
+    expect(assistiveText).toBeInTheDocument();
+    expect(assistiveText).toHaveTextContent("Add item");
+  });
 });

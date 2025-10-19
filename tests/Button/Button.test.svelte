@@ -21,6 +21,13 @@
   iconDescription="Tooltip text"
 />
 
+<Button
+  data-testid="btn-icon-only-hide-tooltip"
+  icon={Add}
+  hideTooltip
+  iconDescription="Add item"
+/>
+
 <Button href="#">Link button</Button>
 
 <Button as let:props>
