@@ -30,6 +30,7 @@
   export let allowCustomValue = false;
   export let clearFilterOnOpen = false;
   export let typeahead = false;
+  export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
 </script>
 
 <ComboBox
@@ -53,6 +54,7 @@
   {allowCustomValue}
   {clearFilterOnOpen}
   {typeahead}
+  {virtualize}
   on:select={(e) => {
     console.log("select", e.detail);
   }}
