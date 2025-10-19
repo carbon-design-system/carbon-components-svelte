@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
-import ListBoxSelection from "./ListBoxSelection.test.svelte";
+import { user, isSvelte4, isSvelte5 } from "../setup-tests";
+import ListBoxSelectionSvelte4 from "./ListBoxSelection.test.svelte";
+import ListBoxSelectionSvelte5 from "./ListBoxSelection.svelte5.test.svelte";
+
+const ListBoxSelection = isSvelte5
+  ? ListBoxSelectionSvelte5
+  : ListBoxSelectionSvelte4;
 
 describe("ListBoxSelection", () => {
   it("should render single selection button", () => {

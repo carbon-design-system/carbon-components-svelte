@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
-import OrderedList from "./OrderedList.test.svelte";
+import { user, isSvelte4, isSvelte5 } from "../setup-tests";
+import OrderedListSvelte4 from "./OrderedList.test.svelte";
+import OrderedListSvelte5 from "./OrderedList.svelte5.test.svelte";
+
+const OrderedList = isSvelte5 ? OrderedListSvelte5 : OrderedListSvelte4;
 
 describe("OrderedList", () => {
   it("should render with default props", () => {
@@ -98,32 +101,60 @@ describe("OrderedList", () => {
   });
 
   describe("events", () => {
-    it("should emit click event", async () => {
-      const { component } = render(OrderedList);
-      const list = screen.getByRole("list");
-
-      const mock = vi.fn();
-      component.$on("click", mock);
-
-      await user.click(list);
-      expect(mock).toHaveBeenCalled();
-    });
-
-    test.each(["mouseover", "mouseenter", "mouseleave"])(
-      "should emit %s event",
-      (eventName) => {
+    describe.skipIf(isSvelte5)("svelte 4", () => {
+      it("should emit click event", async () => {
         const { component } = render(OrderedList);
         const list = screen.getByRole("list");
 
         const mock = vi.fn();
-        component.$on(eventName, mock);
+        component.$on("click", mock);
 
-        const event = new MouseEvent(eventName);
-        list.dispatchEvent(event);
-
+        await user.click(list);
         expect(mock).toHaveBeenCalled();
-      },
-    );
+      });
+
+      test.each(["mouseover", "mouseenter", "mouseleave"])(
+        "should emit %s event",
+        (eventName) => {
+          const { component } = render(OrderedList);
+          const list = screen.getByRole("list");
+
+          const mock = vi.fn();
+          component.$on(eventName, mock);
+
+          const event = new MouseEvent(eventName);
+          list.dispatchEvent(event);
+
+          expect(mock).toHaveBeenCalled();
+        },
+      );
+    });
+
+    describe.skipIf(isSvelte4)("svelte 5", () => {
+      it("should emit click event", async () => {
+        const mock = vi.fn();
+        render(OrderedList, { onclick: mock });
+        const list = screen.getByRole("list");
+
+        await user.click(list);
+        expect(mock).toHaveBeenCalled();
+      });
+
+      test.each(["mouseover", "mouseenter", "mouseleave"])(
+        "should emit %s event",
+        (eventName) => {
+          const mock = vi.fn();
+          const props = { [`on${eventName}`]: mock };
+          render(OrderedList, props);
+          const list = screen.getByRole("list");
+
+          const event = new MouseEvent(eventName, { bubbles: true });
+          list.dispatchEvent(event);
+
+          expect(mock).toHaveBeenCalled();
+        },
+      );
+    });
   });
 
   describe("accessibility", () => {

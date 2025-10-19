@@ -1,7 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
-import Breakpoint from "./Breakpoint.test.svelte";
+import { isSvelte4, isSvelte5 } from "../setup-tests";
+import BreakpointSvelte4 from "./Breakpoint.test.svelte";
+import BreakpointSvelte5 from "./Breakpoint.svelte5.test.svelte";
 import BreakpointObserver from "./BreakpointObserver.test.svelte";
 import Breakpoints from "./Breakpoints.test.svelte";
+
+const Breakpoint = isSvelte5 ? BreakpointSvelte5 : BreakpointSvelte4;
 
 describe("Breakpoint", () => {
   beforeEach(() => {
@@ -31,63 +35,125 @@ describe("Breakpoint", () => {
     expect(screen.getByTestId("is-max").textContent).toBe("false");
   });
 
-  it("updates when window size changes", async () => {
-    const mockChangeHandler = vi.fn();
-    const mediaQueryListeners = new Map();
+  describe.skipIf(isSvelte5)("svelte 4", () => {
+    it("updates when window size changes", async () => {
+      const mockChangeHandler = vi.fn();
+      const mediaQueryListeners = new Map();
 
-    vi.stubGlobal("matchMedia", (query: string) => {
-      const isLgQuery = query.includes(
-        "(min-width: 1056px) and (max-width: 1312px)",
-      );
+      vi.stubGlobal("matchMedia", (query: string) => {
+        const isLgQuery = query.includes(
+          "(min-width: 1056px) and (max-width: 1312px)",
+        );
 
-      return {
-        matches: isLgQuery,
-        media: query,
-        addEventListener: (event: string, listener: MediaQueryList) => {
-          if (!mediaQueryListeners.has(query)) {
-            mediaQueryListeners.set(query, []);
+        return {
+          matches: isLgQuery,
+          media: query,
+          addEventListener: (event: string, listener: MediaQueryList) => {
+            if (!mediaQueryListeners.has(query)) {
+              mediaQueryListeners.set(query, []);
+            }
+            mediaQueryListeners.get(query).push({ event, listener });
+          },
+          removeEventListener: vi.fn(),
+        };
+      });
+
+      const { component } = render(Breakpoint);
+      component.$on("change", mockChangeHandler);
+
+      expect(screen.getByTestId("current-size").textContent).toBe("lg");
+      mockChangeHandler.mockClear();
+
+      for (const [query, listeners] of mediaQueryListeners.entries()) {
+        const isXlgQuery = query.includes(
+          "(min-width: 1312px) and (max-width: 1584px)",
+        );
+
+        for (const { event, listener } of listeners) {
+          if (event === "change") {
+            listener({ matches: isXlgQuery, media: query });
           }
-          mediaQueryListeners.get(query).push({ event, listener });
-        },
-        removeEventListener: vi.fn(),
-      };
-    });
-
-    const { component } = render(Breakpoint);
-    component.$on("change", mockChangeHandler);
-
-    expect(screen.getByTestId("current-size").textContent).toBe("lg");
-    mockChangeHandler.mockClear();
-
-    for (const [query, listeners] of mediaQueryListeners.entries()) {
-      const isXlgQuery = query.includes(
-        "(min-width: 1312px) and (max-width: 1584px)",
-      );
-
-      for (const { event, listener } of listeners) {
-        if (event === "change") {
-          listener({ matches: isXlgQuery, media: query });
         }
       }
-    }
 
-    await vi.runOnlyPendingTimersAsync();
+      await vi.runOnlyPendingTimersAsync();
 
-    expect(mockChangeHandler).toHaveBeenCalled();
+      expect(mockChangeHandler).toHaveBeenCalled();
 
-    component.$set({
-      size: "xlg",
-      sizes: {
-        sm: false,
-        md: false,
-        lg: false,
-        xlg: true,
-        max: false,
-      },
+      component.$set({
+        size: "xlg",
+        sizes: {
+          sm: false,
+          md: false,
+          lg: false,
+          xlg: true,
+          max: false,
+        },
+      });
+
+      expect(screen.getByTestId("current-size").textContent).toBe("xlg");
+      expect(screen.getByTestId("is-xlg").textContent).toBe("true");
     });
+  });
 
-    expect(screen.getByTestId("current-size").textContent).toBe("xlg");
-    expect(screen.getByTestId("is-xlg").textContent).toBe("true");
+  describe.skipIf(isSvelte4)("svelte 5", () => {
+    it("updates when window size changes", async () => {
+      const mockChangeHandler = vi.fn();
+      const mediaQueryListeners = new Map();
+
+      vi.stubGlobal("matchMedia", (query: string) => {
+        const isLgQuery = query.includes(
+          "(min-width: 1056px) and (max-width: 1312px)",
+        );
+
+        return {
+          matches: isLgQuery,
+          media: query,
+          addEventListener: (event: string, listener: MediaQueryList) => {
+            if (!mediaQueryListeners.has(query)) {
+              mediaQueryListeners.set(query, []);
+            }
+            mediaQueryListeners.get(query).push({ event, listener });
+          },
+          removeEventListener: vi.fn(),
+        };
+      });
+
+      const { rerender } = render(Breakpoint, { onchange: mockChangeHandler });
+
+      expect(screen.getByTestId("current-size").textContent).toBe("lg");
+      mockChangeHandler.mockClear();
+
+      for (const [query, listeners] of mediaQueryListeners.entries()) {
+        const isXlgQuery = query.includes(
+          "(min-width: 1312px) and (max-width: 1584px)",
+        );
+
+        for (const { event, listener } of listeners) {
+          if (event === "change") {
+            listener({ matches: isXlgQuery, media: query });
+          }
+        }
+      }
+
+      await vi.runOnlyPendingTimersAsync();
+
+      expect(mockChangeHandler).toHaveBeenCalled();
+
+      await rerender({
+        size: "xlg",
+        sizes: {
+          sm: false,
+          md: false,
+          lg: false,
+          xlg: true,
+          max: false,
+        },
+      });
+
+      expect(screen.getByTestId("current-size").textContent).toBe("xlg");
+      expect(screen.getByTestId("is-xlg").textContent).toBe("true");
+    });
   });
 
   it("provides breakpointObserver utilities", () => {

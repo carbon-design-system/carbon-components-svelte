@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
-import NumberInput from "./NumberInput.test.svelte";
+import { user, isSvelte4, isSvelte5 } from "../setup-tests";
+import NumberInputSvelte4 from "./NumberInput.test.svelte";
+import NumberInputSvelte5 from "./NumberInput.svelte5.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
+
+const NumberInput = isSvelte5 ? NumberInputSvelte5 : NumberInputSvelte4;
 
 describe("NumberInput", () => {
   it("should render with default props", () => {
@@ -235,49 +238,202 @@ describe("NumberInput", () => {
     );
   });
 
-  it("should dispatch keydown event", async () => {
-    const { component } = render(NumberInput);
-    const mockHandler = vi.fn();
-    component.$on("keydown", mockHandler);
+  describe.skipIf(isSvelte5)("svelte 4", () => {
+    it("should dispatch keydown event", async () => {
+      const { component } = render(NumberInput);
+      const mockHandler = vi.fn();
+      component.$on("keydown", mockHandler);
 
-    const input = screen.getByRole("spinbutton");
-    await user.type(input, "{Enter}");
+      const input = screen.getByRole("spinbutton");
+      await user.type(input, "{Enter}");
 
-    expect(mockHandler).toHaveBeenCalled();
+      expect(mockHandler).toHaveBeenCalled();
+    });
+
+    it("should dispatch keyup event", async () => {
+      const { component } = render(NumberInput);
+      const mockHandler = vi.fn();
+      component.$on("keyup", mockHandler);
+
+      const input = screen.getByRole("spinbutton");
+      await user.type(input, "5");
+
+      expect(mockHandler).toHaveBeenCalled();
+    });
+
+    it("should dispatch focus event", async () => {
+      const { component } = render(NumberInput);
+      const mockHandler = vi.fn();
+      component.$on("focus", mockHandler);
+
+      const input = screen.getByRole("spinbutton");
+      await user.click(input);
+
+      expect(mockHandler).toHaveBeenCalled();
+    });
+
+    it("should dispatch blur event", async () => {
+      const { component } = render(NumberInput);
+      const mockHandler = vi.fn();
+      component.$on("blur", mockHandler);
+
+      const input = screen.getByRole("spinbutton");
+      await user.click(input);
+      await user.tab();
+
+      expect(mockHandler).toHaveBeenCalled();
+    });
+
+    it("should dispatch change event on typing", async () => {
+      const { component } = render(NumberInput);
+      const mockHandler = vi.fn();
+      component.$on("change", mockHandler);
+
+      const input = screen.getByRole("spinbutton");
+      await user.type(input, "5");
+      await user.tab();
+
+      expect(mockHandler).toHaveBeenCalled();
+      expect(mockHandler.mock.calls[0][0].detail).toBe(5);
+    });
+
+    it("should dispatch input event on typing", async () => {
+      const { component } = render(NumberInput);
+      const mockHandler = vi.fn();
+      component.$on("input", mockHandler);
+
+      const input = screen.getByRole("spinbutton");
+      await user.type(input, "7");
+
+      expect(mockHandler).toHaveBeenCalled();
+      expect(mockHandler.mock.calls[0][0].detail).toBe(7);
+    });
+
+    it("should dispatch both change and input events on stepper click", async () => {
+      const { component } = render(NumberInput);
+      const changeHandler = vi.fn();
+      const inputHandler = vi.fn();
+      component.$on("change", changeHandler);
+      component.$on("input", inputHandler);
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+      await user.click(incrementButton);
+
+      expect(changeHandler).toHaveBeenCalled();
+      expect(inputHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.calls[0][0].detail).toBe(1);
+      expect(inputHandler.mock.calls[0][0].detail).toBe(1);
+    });
+
+    it("should dispatch events with null when clearing input", async () => {
+      const { component } = render(NumberInput, { props: { value: 10 } });
+      const inputHandler = vi.fn();
+      component.$on("input", inputHandler);
+
+      const input = screen.getByRole("spinbutton");
+      await user.clear(input);
+
+      expect(inputHandler).toHaveBeenCalled();
+      expect(inputHandler.mock.calls[0][0].detail).toBe(null);
+    });
   });
 
-  it("should dispatch keyup event", async () => {
-    const { component } = render(NumberInput);
-    const mockHandler = vi.fn();
-    component.$on("keyup", mockHandler);
+  describe.skipIf(isSvelte4)("svelte 5", () => {
+    it("should dispatch keydown event", async () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, { onkeydown: mockHandler });
 
-    const input = screen.getByRole("spinbutton");
-    await user.type(input, "5");
+      const input = screen.getByRole("spinbutton");
+      await user.type(input, "{Enter}");
 
-    expect(mockHandler).toHaveBeenCalled();
-  });
+      expect(mockHandler).toHaveBeenCalled();
+    });
 
-  it("should dispatch focus event", async () => {
-    const { component } = render(NumberInput);
-    const mockHandler = vi.fn();
-    component.$on("focus", mockHandler);
+    it("should dispatch keyup event", async () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, { onkeyup: mockHandler });
 
-    const input = screen.getByRole("spinbutton");
-    await user.click(input);
+      const input = screen.getByRole("spinbutton");
+      await user.type(input, "5");
 
-    expect(mockHandler).toHaveBeenCalled();
-  });
+      expect(mockHandler).toHaveBeenCalled();
+    });
 
-  it("should dispatch blur event", async () => {
-    const { component } = render(NumberInput);
-    const mockHandler = vi.fn();
-    component.$on("blur", mockHandler);
+    it("should dispatch focus event", async () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, { onfocus: mockHandler });
 
-    const input = screen.getByRole("spinbutton");
-    await user.click(input);
-    await user.tab();
+      const input = screen.getByRole("spinbutton");
+      await user.click(input);
 
-    expect(mockHandler).toHaveBeenCalled();
+      expect(mockHandler).toHaveBeenCalled();
+    });
+
+    it("should dispatch blur event", async () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, { onblur: mockHandler });
+
+      const input = screen.getByRole("spinbutton");
+      await user.click(input);
+      await user.tab();
+
+      expect(mockHandler).toHaveBeenCalled();
+    });
+
+    it("should dispatch change event on typing", async () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, { onchange: mockHandler });
+
+      const input = screen.getByRole("spinbutton");
+      await user.type(input, "5");
+      await user.tab();
+
+      expect(mockHandler).toHaveBeenCalled();
+      expect(mockHandler.mock.calls[0][0].detail).toBe(5);
+    });
+
+    it("should dispatch input event on typing", async () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, { oninput: mockHandler });
+
+      const input = screen.getByRole("spinbutton");
+      await user.type(input, "7");
+
+      expect(mockHandler).toHaveBeenCalled();
+      expect(mockHandler.mock.calls[0][0].detail).toBe(7);
+    });
+
+    it("should dispatch both change and input events on stepper click", async () => {
+      const changeHandler = vi.fn();
+      const inputHandler = vi.fn();
+      render(NumberInput, {
+        onchange: changeHandler,
+        oninput: inputHandler,
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+      await user.click(incrementButton);
+
+      expect(changeHandler).toHaveBeenCalled();
+      expect(inputHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.calls[0][0].detail).toBe(1);
+      expect(inputHandler.mock.calls[0][0].detail).toBe(1);
+    });
+
+    it("should dispatch events with null when clearing input", async () => {
+      const inputHandler = vi.fn();
+      render(NumberInput, { value: 10, oninput: inputHandler });
+
+      const input = screen.getByRole("spinbutton");
+      await user.clear(input);
+
+      expect(inputHandler).toHaveBeenCalled();
+      expect(inputHandler.mock.calls[0][0].detail).toBe(null);
+    });
   });
 
   it("should have paste event listener", () => {
