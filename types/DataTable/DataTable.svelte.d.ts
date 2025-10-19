@@ -229,10 +229,12 @@ export default class DataTable<
       cell: DataTableCell<Row>;
       rowIndex: number;
       cellIndex: number;
+      rowSelected: boolean;
+      rowExpanded: boolean;
     };
     ["cell-header"]: { header: DataTableNonEmptyHeader };
     description: { props: { class: "bx--data-table-header__description" } };
-    ["expanded-row"]: { row: Row };
+    ["expanded-row"]: { row: Row; rowSelected: boolean };
     title: { props: { class: "bx--data-table-header__title" } };
   }
 > {}

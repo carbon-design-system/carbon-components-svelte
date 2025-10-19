@@ -61,6 +61,8 @@
   export let batchSelection = false;
   export let nonSelectableRowIds: string[] = [];
   export let nonExpandableRowIds: string[] = [];
+  export let selectedRowIds: string[] = [];
+  export let expandedRowIds: string[] = [];
   export let pageSize = 0;
   export let page = 0;
 </script>
@@ -82,6 +84,8 @@
   {batchSelection}
   {nonSelectableRowIds}
   {nonExpandableRowIds}
+  {selectedRowIds}
+  {expandedRowIds}
   {pageSize}
   {page}
   on:click={(e) => {

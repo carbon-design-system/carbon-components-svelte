@@ -3168,7 +3168,7 @@
           "name": "cell",
           "default": false,
           "fallback": "{cell.display ? cell.display(cell.value, row) : cell.value}",
-          "slot_props": "{\n  row: Row;\n  cell: DataTableCell<Row>;\n  rowIndex: number;\n  cellIndex: number;\n}"
+          "slot_props": "{\n  row: Row;\n  cell: DataTableCell<Row>;\n  rowIndex: number;\n  cellIndex: number;\n  rowSelected: boolean;\n  rowExpanded: boolean;\n}"
         },
         {
           "name": "cell-header",
@@ -3185,7 +3185,7 @@
         {
           "name": "expanded-row",
           "default": false,
-          "slot_props": "{ row: Row }"
+          "slot_props": "{\n  row: Row;\n  rowSelected: boolean;\n}"
         },
         {
           "name": "title",

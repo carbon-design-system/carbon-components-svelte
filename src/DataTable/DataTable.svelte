@@ -30,9 +30,9 @@
    *    value: DataTableValue;
    *    display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
    * }} DataTableCell<Row=DataTableRow>
-   * @slot {{ row: Row; }} expanded-row
+   * @slot {{ row: Row; rowSelected: boolean; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
-   * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; }} cell
+   * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
    * @event {{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }} click
    * @event {{ expanded: boolean; }} click:header--expand
    * @event {{ header: DataTableHeader<Row>; sortDirection?: "ascending" | "descending" | "none" }} click:header
@@ -570,7 +570,15 @@
           {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
             {#if cell.empty}
               <td class:bx--table-column-menu={cell.columnMenu}>
-                <slot name="cell" {row} {cell} rowIndex={i} cellIndex={j}>
+                <slot
+                  name="cell"
+                  {row}
+                  {cell}
+                  rowIndex={i}
+                  cellIndex={j}
+                  rowSelected={selectedRowIds.includes(row.id)}
+                  rowExpanded={!!expandedRows[row.id]}
+                >
                   {cell.display ? cell.display(cell.value, row) : cell.value}
                 </slot>
               </td>
@@ -581,7 +589,15 @@
                   dispatch("click:cell", cell);
                 }}
               >
-                <slot name="cell" {row} {cell} rowIndex={i} cellIndex={j}>
+                <slot
+                  name="cell"
+                  {row}
+                  {cell}
+                  rowIndex={i}
+                  cellIndex={j}
+                  rowSelected={selectedRowIds.includes(row.id)}
+                  rowExpanded={!!expandedRows[row.id]}
+                >
                   {cell.display ? cell.display(cell.value, row) : cell.value}
                 </slot>
               </TableCell>
@@ -608,7 +624,11 @@
                 colspan={selectable ? headers.length + 2 : headers.length + 1}
               >
                 <div class:bx--child-row-inner-container={true}>
-                  <slot name="expanded-row" {row} />
+                  <slot
+                    name="expanded-row"
+                    {row}
+                    rowSelected={selectedRowIds.includes(row.id)}
+                  />
                 </div>
               </TableCell>
             {/if}
