@@ -59,11 +59,11 @@
     console.log("submit");
     if (onsubmit) onsubmit(e);
   }}
-  onclick:button--primary={(e) => {
+  onclick_button__primary={(e) => {
     console.log("click:button--primary");
     if (onclick_button__primary) onclick_button__primary(e);
   }}
-  onclick:button--secondary={(e) => {
+  onclick_button__secondary={(e) => {
     console.log("click:button--secondary", e.detail);
     if (onclick_button__secondary) onclick_button__secondary(e);
   }}
