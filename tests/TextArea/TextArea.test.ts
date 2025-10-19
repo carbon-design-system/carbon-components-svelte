@@ -8,7 +8,7 @@ describe("TextArea", () => {
     render(TextArea);
 
     expect(screen.getByLabelText("App description")).toBeInTheDocument();
-    expect(screen.getByRole("textbox")).toHaveAttribute("cols", "50");
+    expect(screen.getByRole("textbox")).not.toHaveAttribute("cols");
     expect(screen.getByRole("textbox")).toHaveAttribute("rows", "4");
   });
 
@@ -148,5 +148,27 @@ describe("TextArea", () => {
     expect(screen.getByText("Helper text")).toHaveClass(
       "bx--form__helper-text--disabled",
     );
+  });
+
+  it("should disable resize when cols is specified", () => {
+    render(TextArea, { props: { cols: 30 } });
+
+    const textarea = screen.getByRole("textbox");
+    expect(textarea).toHaveStyle({ resize: "none" });
+  });
+
+  it("should allow resize when cols is not specified", () => {
+    render(TextArea, { props: { cols: undefined } });
+
+    const textarea = screen.getByRole("textbox");
+    const style = window.getComputedStyle(textarea);
+    expect(style.resize).not.toBe("none");
+  });
+
+  it("should not have default cols value", () => {
+    render(TextArea, { props: { cols: undefined } });
+
+    const textarea = screen.getByRole("textbox");
+    expect(textarea).not.toHaveAttribute("cols");
   });
 });
