@@ -1,21 +1,23 @@
 <script>
   /**
+   * @generics {Item extends ComboBoxItem = ComboBoxItem} Item
+   * @template {ComboBoxItem} Item
    * @typedef {any} ComboBoxItemId
    * @typedef {{ id: ComboBoxItemId; text: string; disabled?: boolean; }} ComboBoxItem
-   * @event {{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }} select
+   * @event {{ selectedId: ComboBoxItemId; selectedItem: Item }} select
    * @event {KeyboardEvent | MouseEvent} clear
-   * @slot {{ item: ComboBoxItem; index: number }}
+   * @slot {{ item: Item; index: number }}
    */
 
   /**
    * Set the combobox items
-   * @type {ReadonlyArray<ComboBoxItem>}
+   * @type {ReadonlyArray<Item>}
    */
   export let items = [];
 
   /**
    * Override the display of a combobox item
-   * @type {(item: ComboBoxItem) => string}
+   * @type {(item: Item) => string}
    */
   export let itemToString = (item) => item.text || item.id;
 
@@ -89,7 +91,7 @@
 
   /**
    * Determine if an item should be filtered given the current combobox value
-   * @type {(item: ComboBoxItem, value: string) => boolean}
+   * @type {(item: Item, value: string) => boolean}
    */
   export let shouldFilterItem = () => true;
 

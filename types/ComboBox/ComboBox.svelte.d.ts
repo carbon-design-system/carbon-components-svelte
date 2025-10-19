@@ -11,18 +11,18 @@ export interface ComboBoxItem {
 
 type $RestProps = SvelteHTMLElements["input"];
 
-type $Props = {
+type $Props<Item> = {
   /**
    * Set the combobox items
    * @default []
    */
-  items?: ReadonlyArray<ComboBoxItem>;
+  items?: ReadonlyArray<Item>;
 
   /**
    * Override the display of a combobox item
    * @default (item) => item.text || item.id
    */
-  itemToString?: (item: ComboBoxItem) => string;
+  itemToString?: (item: Item) => string;
 
   /**
    * Set the selected item by value id
@@ -134,7 +134,7 @@ type $Props = {
    * Determine if an item should be filtered given the current combobox value
    * @default () => true
    */
-  shouldFilterItem?: (item: ComboBoxItem, value: string) => boolean;
+  shouldFilterItem?: (item: Item, value: string) => boolean;
 
   /**
    * Override the chevron icon label based on the open state.
@@ -179,15 +179,15 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type ComboBoxProps = Omit<$RestProps, keyof $Props> & $Props;
+export type ComboBoxProps<Item> = Omit<$RestProps, keyof $Props<Item>> &
+  $Props<Item>;
 
-export default class ComboBox extends SvelteComponentTyped<
-  ComboBoxProps,
+export default class ComboBox<
+  Item extends ComboBoxItem = ComboBoxItem,
+> extends SvelteComponentTyped<
+  ComboBoxProps<Item>,
   {
-    select: CustomEvent<{
-      selectedId: ComboBoxItemId;
-      selectedItem: ComboBoxItem;
-    }>;
+    select: CustomEvent<{ selectedId: ComboBoxItemId; selectedItem: Item }>;
     clear: CustomEvent<KeyboardEvent | MouseEvent>;
     input: WindowEventMap["input"];
     keydown: WindowEventMap["keydown"];
@@ -197,10 +197,7 @@ export default class ComboBox extends SvelteComponentTyped<
     paste: WindowEventMap["paste"];
     scroll: WindowEventMap["scroll"];
   },
-  {
-    default: { item: ComboBoxItem; index: number };
-    titleText: Record<string, never>;
-  }
+  { default: { item: Item; index: number }; titleText: Record<string, never> }
 > {
   /**
    * Clear the combo box programmatically
