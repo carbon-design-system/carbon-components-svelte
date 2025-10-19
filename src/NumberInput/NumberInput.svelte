@@ -42,6 +42,13 @@
   /** Set to `true` to allow for an empty value */
   export let allowEmpty = false;
 
+  /**
+   * Set to `true` to preserve decimal input formatting (e.g., "1.0", "2.00")
+   * When enabled, uses type="text" with inputmode="decimal" instead of type="number"
+   * @type {boolean}
+   */
+  export let allowDecimal = false;
+
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -114,15 +121,42 @@
   const dispatch = createEventDispatcher();
 
   function updateValue(isIncrementing) {
-    if (isIncrementing) {
-      ref.stepUp();
-    } else {
-      ref.stepDown();
-    }
-    value = +ref.value;
+    if (allowDecimal) {
+      const currentValue = value ?? 0;
+      let newValue;
 
-    dispatch("input", value);
-    dispatch("change", value);
+      if (isIncrementing) {
+        newValue = currentValue + step;
+        if (max !== undefined && newValue > max) {
+          newValue = max;
+        }
+      } else {
+        newValue = currentValue - step;
+        if (min !== undefined && newValue < min) {
+          newValue = min;
+        }
+      }
+
+      // Round to avoid floating point precision issues.
+      const decimalPlaces = step.toString().split(".")[1]?.length || 0;
+      newValue = Number(newValue.toFixed(decimalPlaces));
+
+      value = newValue;
+      inputValue = newValue.toString();
+
+      dispatch("input", value);
+      dispatch("change", value);
+    } else {
+      if (isIncrementing) {
+        ref.stepUp();
+      } else {
+        ref.stepDown();
+      }
+      value = +ref.value;
+
+      dispatch("input", value);
+      dispatch("change", value);
+    }
   }
 
   $: incrementLabel = translateWithId("increment");
@@ -137,18 +171,51 @@
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
 
+  let inputValue = value?.toString() ?? "";
+
+  // Only use inputValue tracking in allowDecimal mode
+  $: if (allowDecimal) {
+    if (value != null) {
+      const valueStr = value.toString();
+      // Only update inputValue if it's not the same numeric value
+      // This allows "1.0" to stay as "1.0" while value is 1
+      if (parse(inputValue) !== value) {
+        inputValue = valueStr;
+      }
+    } else if (value == null && inputValue !== "") {
+      inputValue = "";
+    }
+  }
+
   function parse(raw) {
-    return raw != "" ? Number(raw) : null;
+    if (raw === "" || raw === "-") return null;
+    const num = Number(raw);
+    return isNaN(num) ? null : num;
   }
 
   function onInput({ target }) {
-    value = parse(target.value);
+    if (allowDecimal) {
+      inputValue = target.value;
+      value = parse(target.value);
+    } else {
+      value = parse(target.value);
+    }
 
     dispatch("input", value);
   }
 
   function onChange({ target }) {
     dispatch("change", parse(target.value));
+  }
+
+  function onKeyDown(event) {
+    if (
+      allowDecimal &&
+      (event.key === "ArrowUp" || event.key === "ArrowDown")
+    ) {
+      event.preventDefault();
+      updateValue(event.key === "ArrowUp");
+    }
   }
 </script>
 
@@ -187,31 +254,58 @@
       class:bx--number__input-wrapper={true}
       class:bx--number__input-wrapper--warning={!invalid && warn}
     >
-      <input
-        bind:this={ref}
-        type="number"
-        pattern="[0-9]*"
-        aria-describedby={errorId}
-        data-invalid={error || undefined}
-        aria-invalid={error || undefined}
-        aria-label={label ? undefined : ariaLabel}
-        {disabled}
-        {id}
-        {name}
-        {max}
-        {min}
-        {step}
-        value={value ?? ""}
-        {readonly}
-        {...$$restProps}
-        on:change={onChange}
-        on:input={onInput}
-        on:keydown
-        on:keyup
-        on:focus
-        on:blur
-        on:paste
-      />
+      {#if allowDecimal}
+        <input
+          bind:this={ref}
+          bind:value={inputValue}
+          type="text"
+          inputmode="decimal"
+          aria-describedby={errorId}
+          data-invalid={error || undefined}
+          aria-invalid={error || undefined}
+          aria-label={label ? undefined : ariaLabel}
+          {disabled}
+          {id}
+          {name}
+          {readonly}
+          {...$$restProps}
+          on:change={onChange}
+          on:input={onInput}
+          on:keydown={onKeyDown}
+          on:keydown
+          on:keyup
+          on:focus
+          on:blur
+          on:paste
+        />
+      {:else}
+        <input
+          bind:this={ref}
+          type="number"
+          pattern="[0-9]*"
+          aria-describedby={errorId}
+          data-invalid={error || undefined}
+          aria-invalid={error || undefined}
+          aria-label={label ? undefined : ariaLabel}
+          {disabled}
+          {id}
+          {name}
+          {max}
+          {min}
+          {step}
+          value={value ?? ""}
+          {readonly}
+          {...$$restProps}
+          on:change={onChange}
+          on:input={onInput}
+          on:keydown={onKeyDown}
+          on:keydown
+          on:keyup
+          on:focus
+          on:blur
+          on:paste
+        />
+      {/if}
       {#if readonly}
         <EditOff class="bx--text-input__readonly-icon" />
       {:else}
