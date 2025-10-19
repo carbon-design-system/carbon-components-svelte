@@ -3155,8 +3155,8 @@
         {
           "name": "description",
           "default": false,
-          "fallback": "{description}",
-          "slot_props": "{}"
+          "fallback": "<p class:bx--data-table-header__description={true}>{description}</p>",
+          "slot_props": "{\n  props: {\n    class: \"bx--data-table-header__description\";\n  };\n}"
         },
         {
           "name": "expanded-row",
@@ -3166,8 +3166,8 @@
         {
           "name": "title",
           "default": false,
-          "fallback": "{title}",
-          "slot_props": "{}"
+          "fallback": "<h4 class:bx--data-table-header__title={true}>{title}</h4>",
+          "slot_props": "{\n  props: {\n    class: \"bx--data-table-header__title\";\n  };\n}"
         }
       ],
       "events": [

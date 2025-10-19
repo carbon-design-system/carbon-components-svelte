@@ -338,14 +338,17 @@
   {#if title || $$slots.title || description || $$slots.description}
     <div class:bx--data-table-header={true}>
       {#if title || $$slots.title}
-        <h4 class:bx--data-table-header__title={true}>
-          <slot name="title">{title}</slot>
-        </h4>
+        <slot name="title" props={{ class: "bx--data-table-header__title" }}>
+          <h4 class:bx--data-table-header__title={true}>{title}</h4>
+        </slot>
       {/if}
       {#if description || $$slots.description}
-        <p class:bx--data-table-header__description={true}>
-          <slot name="description">{description}</slot>
-        </p>
+        <slot
+          name="description"
+          props={{ class: "bx--data-table-header__description" }}
+        >
+          <p class:bx--data-table-header__description={true}>{description}</p>
+        </slot>
       {/if}
     </div>
   {/if}
