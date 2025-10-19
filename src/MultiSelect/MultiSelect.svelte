@@ -547,7 +547,6 @@
               name={item.id}
               title={useTitleInItem ? itemToString(item) : undefined}
               {...itemToInput(item)}
-              readonly
               tabindex="-1"
               id="checkbox-{item.id}"
               checked={item.checked}
