@@ -27,6 +27,7 @@
   ) => item.text.toLowerCase().includes(value.toLowerCase());
   export let translateWithIdSelection: ComponentProps<ComboBox>["translateWithIdSelection"] =
     undefined;
+  export let allowCustomValue = false;
 </script>
 
 <ComboBox
@@ -47,6 +48,7 @@
   {warnText}
   {shouldFilterItem}
   {translateWithIdSelection}
+  {allowCustomValue}
   on:select={(e) => {
     console.log("select", e.detail);
   }}
