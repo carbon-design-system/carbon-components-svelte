@@ -36,11 +36,12 @@
    */
   export let name = undefined;
 
+  /** Obtain a reference to the input HTML element */
+  export let ref = null;
+
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
-
-  let ref = null;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

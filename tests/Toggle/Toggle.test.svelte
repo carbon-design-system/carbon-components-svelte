@@ -1,12 +1,16 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { Toggle } from "carbon-components-svelte";
 
   let toggled = false;
   let initialToggled = true;
+  export let ref: HTMLInputElement | null = null;
 </script>
 
 <Toggle
   bind:toggled
+  bind:ref
   labelText="Default toggle"
   on:toggle={(e) => {
     console.log("toggled:", e.detail.toggled);
