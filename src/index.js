@@ -153,3 +153,8 @@ export {
 } from "./UIShell";
 export { UnorderedList } from "./UnorderedList";
 export { toHierarchy } from "./utils/toHierarchy";
+export {
+  filterTreeNodes,
+  filterTreeById,
+  filterTreeByText,
+} from "./utils/filterTreeNodes";
