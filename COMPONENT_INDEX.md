@@ -699,6 +699,7 @@ export interface ComboBoxItem {
 | :--------- | :--------- | :---------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }</code> |
 | clear      | dispatched | <code>KeyboardEvent &#124; MouseEvent</code>                            |
+| input      | forwarded  | --                                                                      |
 | keydown    | forwarded  | --                                                                      |
 | keyup      | forwarded  | --                                                                      |
 | focus      | forwarded  | --                                                                      |
