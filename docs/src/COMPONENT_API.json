@@ -1821,7 +1821,7 @@
           "name": "items",
           "kind": "let",
           "description": "Set the combobox items",
-          "type": "ReadonlyArray<ComboBoxItem>",
+          "type": "ReadonlyArray<Item>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -1833,7 +1833,7 @@
           "name": "itemToString",
           "kind": "let",
           "description": "Override the display of a combobox item",
-          "type": "(item: ComboBoxItem) => string",
+          "type": "(item: Item) => string",
           "value": "(item) => item.text || item.id",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -2047,7 +2047,7 @@
           "name": "shouldFilterItem",
           "kind": "let",
           "description": "Determine if an item should be filtered given the current combobox value",
-          "type": "(item: ComboBoxItem, value: string) => boolean",
+          "type": "(item: Item, value: string) => boolean",
           "value": "() => true",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -2143,7 +2143,7 @@
           "name": null,
           "default": true,
           "fallback": "{itemToString(item)}",
-          "slot_props": "{\n  item: ComboBoxItem;\n  index: number;\n}"
+          "slot_props": "{\n  item: Item;\n  index: number;\n}"
         },
         {
           "name": "titleText",
@@ -2156,7 +2156,7 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  selectedId: ComboBoxItemId;\n  selectedItem: ComboBoxItem;\n}"
+          "detail": "{\n  selectedId: ComboBoxItemId;\n  selectedItem: Item;\n}"
         },
         {
           "type": "forwarded",
@@ -2212,7 +2212,10 @@
           "ts": "interface ComboBoxItem {\n  id: ComboBoxItemId;\n  text: string;\n  disabled?: boolean;\n}\n"
         }
       ],
-      "generics": null,
+      "generics": [
+        "Item",
+        "Item extends ComboBoxItem = ComboBoxItem"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "input"
