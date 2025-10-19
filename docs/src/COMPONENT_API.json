@@ -2159,6 +2159,18 @@
           "reactive": true
         },
         {
+          "name": "virtualize",
+          "kind": "let",
+          "description": "Enable virtualization for large lists",
+          "type": "undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "clear",
           "kind": "function",
           "description": "Clear the combo box programmatically\n@example \n```svelte\n<ComboBox bind:this={comboBox} items={items} />\n<button on:click={() => comboBox.clear()}>Clear</button>\n<button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>\n```",
@@ -2234,11 +2246,6 @@
           "type": "forwarded",
           "name": "paste",
           "element": "input"
-        },
-        {
-          "type": "forwarded",
-          "name": "scroll",
-          "element": "ListBoxMenu"
         }
       ],
       "typedefs": [
