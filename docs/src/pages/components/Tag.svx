@@ -69,7 +69,7 @@ Set `interactive` to `true` to render a `button` element instead of a `div`. Thi
 
 <Tag interactive>Machine learning</Tag>
 
-## Disabled
+## Disabled state
 
 Both filterable and interactive tag variants support a disabled state.
 

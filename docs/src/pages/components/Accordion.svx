@@ -145,7 +145,7 @@ a secondary UI element.
   </AccordionItem>
 </Accordion>
 
-## Disabled
+## Disabled state
 
 Set the `disabled` prop on the `Accordion` component to disable all items at once.
 This prevents users from expanding or collapsing any items in the accordion.
