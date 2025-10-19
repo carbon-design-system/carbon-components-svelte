@@ -447,6 +447,50 @@ describe("NumberInput", () => {
     expect(input).toBeInTheDocument();
   });
 
+  it("should preserve decimal input with trailing zeros when allowDecimal is true", async () => {
+    render(NumberInput, {
+      props: { allowDecimal: true, step: 0.1, value: null },
+    });
+
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+
+    await user.type(input, "1.0");
+    expect(input.value).toBe("1.0");
+
+    await user.clear(input);
+    await user.type(input, "2.00");
+    expect(input.value).toBe("2.00");
+
+    await user.clear(input);
+    await user.type(input, "3.");
+    expect(input.value).toBe("3.");
+  });
+
+  it("should use type=text with inputmode=decimal when allowDecimal is true", () => {
+    render(NumberInput, { props: { allowDecimal: true } });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("type", "text");
+    expect(input).toHaveAttribute("inputmode", "decimal");
+  });
+
+  it("should handle increment/decrement with allowDecimal mode", async () => {
+    render(NumberInput, { props: { allowDecimal: true, step: 0.1, value: 0 } });
+
+    const incrementButton = screen.getByRole("button", {
+      name: "Increment number",
+    });
+    const decrementButton = screen.getByRole("button", {
+      name: "Decrement number",
+    });
+
+    await user.click(incrementButton);
+    expect(screen.getByTestId("value").textContent).toBe("0.1");
+
+    await user.click(decrementButton);
+    expect(screen.getByTestId("value").textContent).toBe("0");
+  });
+
   it("should set tabindex -1 on stepper buttons", () => {
     render(NumberInput);
 
