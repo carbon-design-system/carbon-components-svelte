@@ -93,4 +93,89 @@ describe("FileUploader", () => {
     expect(input.files).toHaveLength(0);
     expect(input.value).toBe("");
   });
+
+  it("should clear all files using clearFiles() method", async () => {
+    const { component } = render(FileUploader);
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      expect(fileNames).toHaveLength(2);
+    });
+
+    assert(input.files);
+    expect(input.files).toHaveLength(2);
+
+    component.clearFiles();
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      expect(fileNames).toHaveLength(0);
+    });
+
+    expect(input.files).toHaveLength(0);
+    expect(input.value).toBe("");
+  });
+
+  it("should clear all files using two-way binding (files = [])", async () => {
+    const { component } = render(FileUploader);
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      expect(fileNames).toHaveLength(2);
+    });
+
+    assert(input.files);
+    expect(input.files).toHaveLength(2);
+
+    component.setFiles([]);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      expect(fileNames).toHaveLength(0);
+    });
+
+    expect(input.files).toHaveLength(0);
+    expect(input.value).toBe("");
+  });
+
+  it("should dispatch remove event when clearing files programmatically", async () => {
+    const removeHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { onRemove: removeHandler },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      expect(fileNames).toHaveLength(2);
+    });
+
+    component.setFiles([]);
+
+    await vi.waitFor(() => {
+      expect(removeHandler).toHaveBeenCalled();
+    });
+
+    const event = removeHandler.mock.calls[0][0];
+    expect(event.detail).toHaveLength(2);
+    expect(event.detail[0].name).toBe("file1.txt");
+    expect(event.detail[1].name).toBe("file2.txt");
+  });
 });
