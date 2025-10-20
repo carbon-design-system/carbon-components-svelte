@@ -89,4 +89,108 @@ describe("DataTable Toolbar", () => {
       expect(screen.getByText("Toolbar content text")).toBeInTheDocument();
     });
   });
+
+  describe("ToolbarBatchActions", () => {
+    it("should render in standalone mode with selectedIds", () => {
+      const { container } = render(Toolbar, {
+        props: {
+          testComponent: "ToolbarBatchActions",
+          selectedIds: [1, 2, 3],
+        },
+      });
+
+      const batchActions = container.querySelector(".bx--batch-actions");
+      expect(batchActions).toBeInTheDocument();
+      expect(batchActions).toHaveClass("bx--batch-actions--active");
+    });
+
+    it("should display correct count of selected items", () => {
+      render(Toolbar, {
+        props: {
+          testComponent: "ToolbarBatchActions",
+          selectedIds: [1, 2, 3],
+        },
+      });
+
+      expect(screen.getByText("3 items selected")).toBeInTheDocument();
+    });
+
+    it("should display singular form for one item", () => {
+      render(Toolbar, {
+        props: {
+          testComponent: "ToolbarBatchActions",
+          selectedIds: [1],
+        },
+      });
+
+      expect(screen.getByText("1 item selected")).toBeInTheDocument();
+    });
+
+    it("should not be active when selectedIds is empty", () => {
+      const { container } = render(Toolbar, {
+        props: {
+          testComponent: "ToolbarBatchActions",
+          selectedIds: [],
+        },
+      });
+
+      const batchActions = container.querySelector(".bx--batch-actions");
+      expect(batchActions).not.toHaveClass("bx--batch-actions--active");
+    });
+
+    it("should be active when active prop is true", () => {
+      const { container } = render(Toolbar, {
+        props: {
+          testComponent: "ToolbarBatchActions",
+          selectedIds: [],
+          active: true,
+        },
+      });
+
+      const batchActions = container.querySelector(".bx--batch-actions");
+      expect(batchActions).toHaveClass("bx--batch-actions--active");
+    });
+
+    it("should render cancel button", () => {
+      render(Toolbar, {
+        props: {
+          testComponent: "ToolbarBatchActions",
+          selectedIds: [1, 2],
+        },
+      });
+
+      expect(screen.getByText("Cancel")).toBeInTheDocument();
+    });
+
+    it("should render custom cancel button text", () => {
+      render(Toolbar, {
+        props: {
+          testComponent: "ToolbarBatchActions",
+          selectedIds: [1, 2],
+          slotContent: "Custom cancel",
+        },
+      });
+
+      expect(screen.getByText("Custom cancel")).toBeInTheDocument();
+    });
+
+    it("should dispatch cancel event when cancel button is clicked", async () => {
+      const { component } = render(Toolbar, {
+        props: {
+          testComponent: "ToolbarBatchActions",
+          selectedIds: [1, 2],
+        },
+      });
+
+      const cancelButton = screen.getByText("Cancel");
+      let cancelFired = false;
+
+      component.$on("cancel", () => {
+        cancelFired = true;
+      });
+
+      await cancelButton.click();
+      expect(cancelFired).toBe(true);
+    });
+  });
 });

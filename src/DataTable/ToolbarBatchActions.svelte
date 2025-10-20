@@ -16,6 +16,13 @@
    */
   export let active = undefined;
 
+  /**
+   * Specify the selected IDs for standalone usage.
+   * This is unnecessary if using this component with `DataTable`.
+   * @type {ReadonlyArray<any>}
+   */
+  export let selectedIds = [];
+
   import {
     onMount,
     getContext,
@@ -36,8 +43,22 @@
     const shouldContinue = dispatch("cancel", null, { cancelable: true });
 
     if (shouldContinue) {
-      ctx.resetSelectedRowIds();
+      ctx?.resetSelectedRowIds?.();
     }
+  }
+
+  let unsubscribe;
+
+  // Subscribe to DataTable context if available, otherwise use selectedIds prop
+  if (ctx?.batchSelectedIds) {
+    unsubscribe = ctx.batchSelectedIds.subscribe((value) => {
+      batchSelectedIds = value;
+    });
+  }
+
+  // For standalone usage, watch the selectedIds prop
+  $: if (!ctx?.batchSelectedIds) {
+    batchSelectedIds = selectedIds;
   }
 
   $: showActions = batchSelectedIds.length > 0 || active;
@@ -49,21 +70,21 @@
     prevActive = active;
   }
 
-  const unsubscribe = ctx.batchSelectedIds.subscribe((value) => {
-    batchSelectedIds = value;
-  });
-
   let overflowVisible = false;
 
   const ctxToolbar = getContext("Toolbar");
-  const unsubscribeOverflow = ctxToolbar.overflowVisible.subscribe((value) => {
-    overflowVisible = value;
-  });
+  let unsubscribeOverflow;
+
+  if (ctxToolbar?.overflowVisible) {
+    unsubscribeOverflow = ctxToolbar.overflowVisible.subscribe((value) => {
+      overflowVisible = value;
+    });
+  }
 
   onMount(() => {
     return () => {
-      unsubscribe();
-      unsubscribeOverflow();
+      unsubscribe?.();
+      unsubscribeOverflow?.();
     };
   });
 

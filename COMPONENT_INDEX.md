@@ -4479,10 +4479,11 @@ None.
 
 ### Props
 
-| Prop name           | Required | Kind             | Reactive | Type                                           | Default value                                                                                       | Description                               |
-| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| active              | No       | <code>let</code> | Yes      | <code>undefined &#124; boolean</code>          | <code>undefined</code>                                                                              | Use a boolean to show or hide the toolbar |
-| formatTotalSelected | No       | <code>let</code> | No       | <code>(totalSelected: number) => string</code> | <code>(totalSelected) => \`${totalSelected} item${totalSelected === 1 ? "" : "s"} selected\`</code> | Override the total items selected text    |
+| Prop name           | Required | Kind             | Reactive | Type                                           | Default value                                                                                       | Description                                                                                                       |
+| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| active              | No       | <code>let</code> | Yes      | <code>undefined &#124; boolean</code>          | <code>undefined</code>                                                                              | Use a boolean to show or hide the toolbar                                                                         |
+| formatTotalSelected | No       | <code>let</code> | No       | <code>(totalSelected: number) => string</code> | <code>(totalSelected) => \`${totalSelected} item${totalSelected === 1 ? "" : "s"} selected\`</code> | Override the total items selected text                                                                            |
+| selectedIds         | No       | <code>let</code> | No       | <code>ReadonlyArray<any></code>                | <code>[]</code>                                                                                     | Specify the selected IDs for standalone usage.<br />This is unnecessary if using this component with `DataTable`. |
 
 ### Slots
 
