@@ -83,6 +83,14 @@ Set `itemToString` to customize how items display in the filterable combobox.
 
 <FileSource src="/framed/ComboBox/FilterableComboBoxCustomLabel" />
 
+## Clear filter on open
+
+When using a filterable combobox, reopening the dropdown after making a selection will normally show only the filtered results matching the selected item. Set `clearFilterOnOpen` to `true` to temporarily clear the filter when opening, showing all available items. This makes it easier to browse and change selections.
+
+The original value is automatically restored if you close the dropdown without making a new selection.
+
+<FileSource src="/framed/ComboBox/ClearFilterOnOpen" />
+
 ## Filtering (async)
 
 By default, combobox filtering is synchronous and client-side.
