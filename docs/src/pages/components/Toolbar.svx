@@ -3,7 +3,7 @@ components: ["Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "Toolb
 ---
 
 <script>
-  import { InlineNotification, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button } from "carbon-components-svelte";
+  import { InlineNotification, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, ToolbarBatchActions, Button } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -151,18 +151,10 @@ The toolbar components work standalone for general-purpose layouts:
   </ToolbarContent>
 </Toolbar>
 
-## DataTable integration
+## Batch actions
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    When used within a <strong>DataTable</strong>, <strong>ToolbarSearch</strong> can filter table rows by setting <code>shouldFilterRows</code>. See the <a href="/components/DataTable">DataTable documentation</a> for examples.
-  </div>
-</InlineNotification>
+`ToolbarBatchActions` displays batch actions when items are selected. 
 
-## ToolbarBatchActions
+Although intended for use with [DataTable](/components/datatable), this component can be used standalone if `selectedIds` is provided. This prop does not need to be provided if using with `DataTable`.
 
-<InlineNotification svx-ignore lowContrast kind="warning" hideCloseButton>
-  <div class="body-short-01">
-    <strong>ToolbarBatchActions</strong> requires DataTable context and cannot be used standalone. It displays batch actions when table rows are selected. See the <a href="/components/DataTable">DataTable documentation</a> for usage examples.
-  </div>
-</InlineNotification>
+<FileSource src="/framed/Toolbar/ToolbarBatchActionsStandalone" />
