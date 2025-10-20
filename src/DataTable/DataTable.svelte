@@ -35,14 +35,14 @@
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
    * @event {{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }} click
    * @event {{ expanded: boolean; }} click:header--expand
-   * @event {{ header: DataTableHeader<Row>; sortDirection?: "ascending" | "descending" | "none" }} click:header
+   * @event {{ header: DataTableHeader<Row>; sortDirection?: "ascending" | "descending" | "none"; target: EventTarget; currentTarget: EventTarget; }} click:header
    * @event {{ indeterminate: boolean; selected: boolean; }} click:header--select
-   * @event {Row} click:row
+   * @event {{ row: Row; target: EventTarget; currentTarget: EventTarget; }} click:row
    * @event {Row} mouseenter:row
    * @event {Row} mouseleave:row
    * @event {{ expanded: boolean; row: Row; }} click:row--expand
    * @event {{ selected: boolean; row: Row; }} click:row--select
-   * @event {DataTableCell<Row>} click:cell
+   * @event {{ cell: DataTableCell<Row>; target: EventTarget; currentTarget: EventTarget; }} click:cell
    * @restProps {div}
    */
 
@@ -436,18 +436,27 @@
               sortable={sortable && header.sort !== false}
               sortDirection={sortKey === header.key ? sortDirection : "none"}
               active={sortKey === header.key}
-              on:click={() => {
+              on:click={(e) => {
                 dispatch("click", { header });
 
                 if (header.sort === false) {
-                  dispatch("click:header", { header });
+                  dispatch("click:header", {
+                    header,
+                    target: e.target,
+                    currentTarget: e.currentTarget,
+                  });
                 } else {
                   let currentSortDirection =
                     sortKey === header.key ? sortDirection : "none";
                   sortDirection = sortDirectionMap[currentSortDirection];
                   sortKey =
                     sortDirection === "none" ? null : thKeys[header.key];
-                  dispatch("click:header", { header, sortDirection });
+                  dispatch("click:header", {
+                    header,
+                    sortDirection,
+                    target: e.target,
+                    currentTarget: e.currentTarget,
+                  });
                 }
               }}
             >
@@ -469,18 +478,22 @@
             : ''} {expandable && parentRowId === row.id
             ? 'bx--expandable-row--hover'
             : ''}"
-          on:click={({ target }) => {
+          on:click={(e) => {
             // forgo "click", "click:row" events if target
             // resembles an overflow menu, a checkbox, or radio button
             if (
-              [...target.classList].some((name) =>
+              [...e.target.classList].some((name) =>
                 /^bx--(overflow-menu|checkbox|radio-button)/.test(name),
               )
             ) {
               return;
             }
             dispatch("click", { row });
-            dispatch("click:row", row);
+            dispatch("click:row", {
+              row,
+              target: e.target,
+              currentTarget: e.currentTarget,
+            });
           }}
           on:mouseenter={() => {
             dispatch("mouseenter:row", row);
@@ -584,9 +597,13 @@
               </td>
             {:else}
               <TableCell
-                on:click={() => {
+                on:click={(e) => {
                   dispatch("click", { row, cell });
-                  dispatch("click:cell", cell);
+                  dispatch("click:cell", {
+                    cell,
+                    target: e.target,
+                    currentTarget: e.currentTarget,
+                  });
                 }}
               >
                 <slot

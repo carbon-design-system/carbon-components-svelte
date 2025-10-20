@@ -3220,7 +3220,7 @@
         {
           "type": "dispatched",
           "name": "click:header",
-          "detail": "{\n  header: DataTableHeader<Row>;\n  sortDirection?:\n    | \"ascending\"\n    | \"descending\"\n    | \"none\";\n}"
+          "detail": "{\n  header: DataTableHeader<Row>;\n  sortDirection?:\n    | \"ascending\"\n    | \"descending\"\n    | \"none\";\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
         },
         {
           "type": "dispatched",
@@ -3230,7 +3230,7 @@
         {
           "type": "dispatched",
           "name": "click:row",
-          "detail": "Row"
+          "detail": "{\n  row: Row;\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
         },
         {
           "type": "dispatched",
@@ -3255,7 +3255,7 @@
         {
           "type": "dispatched",
           "name": "click:cell",
-          "detail": "DataTableCell<Row>"
+          "detail": "{\n  cell: DataTableCell<Row>;\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
         }
       ],
       "typedefs": [

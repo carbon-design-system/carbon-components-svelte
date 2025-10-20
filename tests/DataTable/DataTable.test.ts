@@ -994,4 +994,166 @@ describe("DataTable", () => {
     );
     expect(expandedContent).toBeInTheDocument();
   });
+
+  it("includes target and currentTarget in click:row event", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(DataTable, {
+      props: {
+        headers,
+        rows,
+      },
+    });
+
+    const firstRow = container.querySelector("tbody tr");
+    assert(firstRow);
+    await user.click(firstRow);
+
+    expect(consoleLog).toHaveBeenCalledWith("click:row", {
+      row: expect.objectContaining({ id: "a" }),
+      target: expect.any(Object),
+      currentTarget: expect.any(Object),
+    });
+
+    const callArgs = consoleLog.mock.calls.find(
+      (call) => call[0] === "click:row",
+    );
+    expect(callArgs).toBeDefined();
+    if (callArgs) {
+      const detail = callArgs[1];
+      expect(detail.target).toBeInstanceOf(HTMLElement);
+      expect(detail.currentTarget).toBeInstanceOf(HTMLElement);
+    }
+  });
+
+  it("includes target and currentTarget in click:cell event", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(DataTable, {
+      props: {
+        headers,
+        rows,
+      },
+    });
+
+    const firstCell = container.querySelector("td");
+    assert(firstCell);
+    await user.click(firstCell);
+
+    expect(consoleLog).toHaveBeenCalledWith("click:cell", {
+      cell: expect.objectContaining({ key: "name" }),
+      target: expect.any(Object),
+      currentTarget: expect.any(Object),
+    });
+
+    const callArgs = consoleLog.mock.calls.find(
+      (call) => call[0] === "click:cell",
+    );
+    expect(callArgs).toBeDefined();
+    if (callArgs) {
+      const detail = callArgs[1];
+      expect(detail.target).toBeInstanceOf(HTMLElement);
+      expect(detail.currentTarget).toBeInstanceOf(HTMLElement);
+    }
+  });
+
+  it("includes target and currentTarget in click:header event", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(DataTable, {
+      props: {
+        headers,
+        rows,
+        sortable: true,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+    await user.click(nameHeader);
+
+    expect(consoleLog).toHaveBeenCalledWith("click:header", {
+      header: expect.objectContaining({ key: "name" }),
+      sortDirection: "ascending",
+      target: expect.any(Object),
+      currentTarget: expect.any(Object),
+    });
+
+    const callArgs = consoleLog.mock.calls.find(
+      (call) => call[0] === "click:header",
+    );
+    expect(callArgs).toBeDefined();
+    if (callArgs) {
+      const detail = callArgs[1];
+      expect(detail.target).toBeInstanceOf(HTMLElement);
+      expect(detail.currentTarget).toBeInstanceOf(HTMLElement);
+    }
+  });
+
+  it("includes target and currentTarget when clicking non-sortable header", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const customHeaders = [
+      { key: "name", value: "Name" },
+      { key: "protocol", value: "Protocol", sort: false as const },
+    ];
+
+    render(DataTable, {
+      props: {
+        headers: customHeaders,
+        rows,
+        sortable: true,
+      },
+    });
+
+    const protocolHeader = screen.getByText("Protocol");
+    await user.click(protocolHeader);
+
+    expect(consoleLog).toHaveBeenCalledWith("click:header", {
+      header: expect.objectContaining({ key: "protocol" }),
+      target: expect.any(Object),
+      currentTarget: expect.any(Object),
+    });
+
+    const callArgs = consoleLog.mock.calls.find(
+      (call) => call[0] === "click:header",
+    );
+    expect(callArgs).toBeDefined();
+    if (callArgs) {
+      const detail = callArgs[1];
+      expect(detail.target).toBeInstanceOf(HTMLElement);
+      expect(detail.currentTarget).toBeInstanceOf(HTMLElement);
+      // Non-sortable headers should not include sortDirection
+      expect(detail.sortDirection).toBeUndefined();
+    }
+  });
+
+  it("allows filtering click:row events based on target element", async () => {
+    const { container } = render(DataTable, {
+      props: {
+        headers: headers,
+        rows: [
+          { id: "a", name: "Load Balancer 1" },
+          { id: "b", name: "Load Balancer 2" },
+        ],
+      },
+    });
+
+    const consoleLog = vi.spyOn(console, "log");
+
+    // Add a button to the empty cell using slot
+    const firstRow = container.querySelector("tbody tr");
+    const emptyCell = firstRow?.querySelector("td:last-child");
+    assert(emptyCell);
+
+    // Click on the row but not on an interactive element
+    await user.click(firstRow!);
+
+    // Should have dispatched click:row
+    const clickRowCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "click:row",
+    );
+    expect(clickRowCalls.length).toBeGreaterThan(0);
+
+    // Verify we have access to target to implement custom filtering logic
+    const detail = clickRowCalls[0][1];
+    expect(detail).toHaveProperty("target");
+    expect(detail).toHaveProperty("currentTarget");
+    expect(detail).toHaveProperty("row");
+  });
 });
