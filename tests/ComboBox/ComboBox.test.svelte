@@ -28,6 +28,7 @@
   export let translateWithIdSelection: ComponentProps<ComboBox>["translateWithIdSelection"] =
     undefined;
   export let allowCustomValue = false;
+  export let clearFilterOnOpen = false;
 </script>
 
 <ComboBox
@@ -49,6 +50,7 @@
   {shouldFilterItem}
   {translateWithIdSelection}
   {allowCustomValue}
+  {clearFilterOnOpen}
   on:select={(e) => {
     console.log("select", e.detail);
   }}

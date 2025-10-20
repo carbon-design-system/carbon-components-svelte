@@ -470,4 +470,56 @@ describe("ComboBox", () => {
     await user.click(screen.getByText("Email"));
     expect(input).toHaveValue("Email");
   });
+
+  it("should show all items when reopening after selection when clearFilterOnOpen is true", async () => {
+    render(ComboBox, { props: { clearFilterOnOpen: true } });
+
+    const input = getInput();
+    await user.click(input);
+    await user.click(screen.getByText("Email"));
+    expect(input).toHaveValue("Email");
+
+    await user.click(document.body);
+    expect(screen.queryByRole("option")).not.toBeInTheDocument();
+
+    await user.click(input);
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(options[0]).toHaveTextContent("Slack");
+    expect(options[1]).toHaveTextContent("Email");
+    expect(options[2]).toHaveTextContent("Fax");
+  });
+
+  it("should retain filter when reopening by default (clearFilterOnOpen is false)", async () => {
+    render(ComboBox, { props: { clearFilterOnOpen: false } });
+
+    const input = getInput();
+    await user.click(input);
+    await user.click(screen.getByText("Email"));
+    expect(input).toHaveValue("Email");
+
+    await user.click(document.body);
+    expect(screen.queryByRole("option")).not.toBeInTheDocument();
+
+    await user.click(input);
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]).toHaveTextContent("Email");
+  });
+
+  it("should clear filter on open but restore value on close without selection", async () => {
+    render(ComboBox, { props: { clearFilterOnOpen: true, selectedId: "1" } });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
+    await user.click(input);
+    expect(input).toHaveValue("");
+
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(3);
+
+    await user.click(document.body);
+    expect(input).toHaveValue("Email");
+  });
 });

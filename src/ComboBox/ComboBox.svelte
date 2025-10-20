@@ -81,6 +81,13 @@
   export let allowCustomValue = false;
 
   /**
+   * Set to `true` to clear the input value when opening the dropdown.
+   * This allows users to see all available items instead of only filtered results.
+   * The original value is restored if the dropdown is closed without making a selection.
+   */
+  export let clearFilterOnOpen = false;
+
+  /**
    * Determine if an item should be filtered given the current combobox value
    * @type {(item: ComboBoxItem, value: string) => boolean}
    */
@@ -133,6 +140,7 @@
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
+  let valueBeforeOpen = "";
 
   function change(dir) {
     let index = highlightedIndex + dir;
@@ -178,6 +186,13 @@
   afterUpdate(() => {
     if (open) {
       ref.focus();
+
+      // Store the current value before clearing.
+      if (clearFilterOnOpen && value && selectedItem) {
+        valueBeforeOpen = value;
+        value = "";
+      }
+
       filteredItems = items.filter((item) => shouldFilterItem(item, value));
     } else {
       highlightedIndex = -1;
@@ -193,8 +208,14 @@
       } else {
         // Only set value if the input is not focused
         if (!ref.contains(document.activeElement)) {
-          // programmatically set value
-          value = itemToString(selectedItem);
+          // Restore the value if clearFilterOnOpen was used and no new selection was made
+          if (clearFilterOnOpen && valueBeforeOpen && value === "") {
+            value = valueBeforeOpen;
+          } else {
+            // programmatically set value
+            value = itemToString(selectedItem);
+          }
+          valueBeforeOpen = "";
         }
       }
     }
@@ -311,6 +332,7 @@
               filteredItems[highlightedIndex]?.id !== selectedId
             ) {
               open = false;
+              valueBeforeOpen = "";
               if (filteredItems[highlightedIndex]) {
                 value = itemToString(filteredItems[highlightedIndex]);
                 selectedItem = filteredItems[highlightedIndex];
@@ -327,6 +349,7 @@
               if (matchedItem) {
                 // typed value has matched or fallback to first enabled item
                 open = false;
+                valueBeforeOpen = "";
                 selectedItem = matchedItem;
                 value = itemToString(selectedItem);
                 selectedId = selectedItem.id;
@@ -401,6 +424,7 @@
               }
               selectedId = item.id;
               open = false;
+              valueBeforeOpen = "";
 
               if (filteredItems[i]) {
                 value = itemToString(filteredItems[i]);
