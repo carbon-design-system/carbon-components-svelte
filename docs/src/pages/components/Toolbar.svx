@@ -1,0 +1,168 @@
+---
+components: ["Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions"]
+---
+
+<script>
+  import { InlineNotification, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+`Toolbar` provides a flexible container for organizing actions, search, and menu items. It can be used standalone or as part of a DataTable for batch operations and filtering.
+
+## Default
+
+Create a basic toolbar with content inside `ToolbarContent`.
+
+<Toolbar>
+  <ToolbarContent>
+    <Button>Primary action</Button>
+  </ToolbarContent>
+</Toolbar>
+
+## Small size
+
+Set `size="sm"` for a compact toolbar.
+
+<Toolbar size="sm">
+  <ToolbarContent>
+    <Button size="small">Create</Button>
+  </ToolbarContent>
+</Toolbar>
+
+## With search
+
+Add search functionality using `ToolbarSearch`.
+
+<Toolbar>
+  <ToolbarContent>
+    <ToolbarSearch />
+    <Button>Create</Button>
+  </ToolbarContent>
+</Toolbar>
+
+## With persistent search
+
+Set `persistent` on `ToolbarSearch` to keep it always expanded.
+
+<Toolbar>
+  <ToolbarContent>
+    <ToolbarSearch persistent placeholder="Search..." />
+    <Button>Create</Button>
+  </ToolbarContent>
+</Toolbar>
+
+## Reactive search
+
+Bind to the `value` prop for reactive updates.
+
+<FileSource src="/framed/Toolbar/ToolbarSearchReactive" />
+
+## With menu
+
+Add an overflow menu using `ToolbarMenu` and `ToolbarMenuItem`.
+
+<Toolbar>
+  <ToolbarContent>
+    <ToolbarMenu>
+      <ToolbarMenuItem>Restart all</ToolbarMenuItem>
+      <ToolbarMenuItem href="https://cloud.ibm.com/docs">API documentation</ToolbarMenuItem>
+      <ToolbarMenuItem>Settings</ToolbarMenuItem>
+    </ToolbarMenu>
+    <Button>Create</Button>
+  </ToolbarContent>
+</Toolbar>
+
+## Menu with divider and danger item
+
+Use `hasDivider` to add a separator and `danger` for destructive actions.
+
+<Toolbar>
+  <ToolbarContent>
+    <ToolbarMenu>
+      <ToolbarMenuItem>Restart all</ToolbarMenuItem>
+      <ToolbarMenuItem href="https://cloud.ibm.com/docs">API documentation</ToolbarMenuItem>
+      <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
+    </ToolbarMenu>
+  </ToolbarContent>
+</Toolbar>
+
+## Menu with primary focus
+
+Set `primaryFocus` on a menu item to focus it when opening the dropdown.
+
+<Toolbar>
+  <ToolbarContent>
+    <ToolbarMenu>
+      <ToolbarMenuItem>Restart all</ToolbarMenuItem>
+      <ToolbarMenuItem href="https://cloud.ibm.com/docs">API documentation</ToolbarMenuItem>
+      <ToolbarMenuItem primaryFocus hasDivider danger>Stop all</ToolbarMenuItem>
+    </ToolbarMenu>
+  </ToolbarContent>
+</Toolbar>
+
+## Complete toolbar
+
+Combine search, menu, and buttons for a full-featured toolbar.
+
+<Toolbar>
+  <ToolbarContent>
+    <ToolbarSearch />
+    <ToolbarMenu>
+      <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
+      <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">
+        API documentation
+      </ToolbarMenuItem>
+      <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
+    </ToolbarMenu>
+    <Button>Create balancer</Button>
+  </ToolbarContent>
+</Toolbar>
+
+## With multiple actions
+
+Stack multiple action buttons in the toolbar.
+
+<Toolbar>
+  <ToolbarContent>
+    <ToolbarSearch persistent />
+    <Button kind="secondary" size="small">Export</Button>
+    <Button size="small">Create</Button>
+  </ToolbarContent>
+</Toolbar>
+
+## Standalone usage
+
+<InlineNotification svx-ignore lowContrast kind="info" hideCloseButton>
+  <div class="body-short-01">
+    <strong>Toolbar</strong> can be used independently of DataTable. It provides its own context for child components like <strong>ToolbarMenu</strong> and <strong>ToolbarSearch</strong>.
+  </div>
+</InlineNotification>
+
+The toolbar components work standalone for general-purpose layouts:
+
+<Toolbar>
+  <ToolbarContent>
+    <ToolbarSearch placeholder="Search products..." />
+    <ToolbarMenu>
+      <ToolbarMenuItem>Filter by category</ToolbarMenuItem>
+      <ToolbarMenuItem>Sort by price</ToolbarMenuItem>
+    </ToolbarMenu>
+    <Button>Add product</Button>
+  </ToolbarContent>
+</Toolbar>
+
+## DataTable integration
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    When used within a <strong>DataTable</strong>, <strong>ToolbarSearch</strong> can filter table rows by setting <code>shouldFilterRows</code>. See the <a href="/components/DataTable">DataTable documentation</a> for examples.
+  </div>
+</InlineNotification>
+
+## ToolbarBatchActions
+
+<InlineNotification svx-ignore lowContrast kind="warning" hideCloseButton>
+  <div class="body-short-01">
+    <strong>ToolbarBatchActions</strong> requires DataTable context and cannot be used standalone. It displays batch actions when table rows are selected. See the <a href="/components/DataTable">DataTable documentation</a> for usage examples.
+  </div>
+</InlineNotification>
