@@ -17168,6 +17168,18 @@
           "isRequired": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "selectedIds",
+          "kind": "let",
+          "description": "Specify the selected IDs for standalone usage.\nThis is unnecessary if using this component with `DataTable`.",
+          "type": "ReadonlyArray<any>",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],

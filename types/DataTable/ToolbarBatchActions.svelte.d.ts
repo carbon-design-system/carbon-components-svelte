@@ -16,6 +16,13 @@ type $Props = {
    */
   active?: undefined | boolean;
 
+  /**
+   * Specify the selected IDs for standalone usage.
+   * This is unnecessary if using this component with `DataTable`.
+   * @default []
+   */
+  selectedIds?: ReadonlyArray<any>;
+
   [key: `data-${string}`]: any;
 };
 
