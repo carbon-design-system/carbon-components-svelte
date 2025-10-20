@@ -123,6 +123,14 @@ type $Props = {
   allowCustomValue?: boolean;
 
   /**
+   * Set to `true` to clear the input value when opening the dropdown.
+   * This allows users to see all available items instead of only filtered results.
+   * The original value is restored if the dropdown is closed without making a selection.
+   * @default false
+   */
+  clearFilterOnOpen?: boolean;
+
+  /**
    * Determine if an item should be filtered given the current combobox value
    * @default () => true
    */
