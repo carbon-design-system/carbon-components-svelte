@@ -13,7 +13,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["carbon-components-svelte", "carbon-icons-svelte"],
   },
-  resolve: process.env.VITEST ? { conditions: ["browser"] } : undefined,
+  resolve: { conditions: ["browser"] },
   test: {
     globals: true,
     environment: "jsdom",
