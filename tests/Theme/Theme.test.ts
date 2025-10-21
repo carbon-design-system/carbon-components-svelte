@@ -12,15 +12,21 @@ describe("Theme", () => {
     setAttribute: ReturnType<typeof vi.spyOn>;
     style: { setProperty: ReturnType<typeof vi.spyOn> };
   };
-  let consoleLog: ReturnType<typeof vi.spyOn>;
+  let consoleLog: Console["log"];
   let localStorageMock: Record<string, string>;
   let originalLocalStorage: Storage;
 
   beforeEach(() => {
     documentMock = {
-      setAttribute: vi.spyOn(document.documentElement, "setAttribute"),
+      setAttribute: vi.spyOn(
+        document.documentElement,
+        "setAttribute",
+      ) as unknown as ReturnType<typeof vi.spyOn>,
       style: {
-        setProperty: vi.spyOn(document.documentElement.style, "setProperty"),
+        setProperty: vi.spyOn(
+          document.documentElement.style,
+          "setProperty",
+        ) as unknown as ReturnType<typeof vi.spyOn>,
       },
     };
     consoleLog = vi.spyOn(console, "log");
