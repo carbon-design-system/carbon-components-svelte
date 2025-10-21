@@ -4,7 +4,7 @@ import LocalStoragePrimitive from "./LocalStoragePrimitive.test.svelte";
 
 describe("LocalStorage - Primitive Values", () => {
   const { setMockItem } = setupLocalStorageMock();
-  let consoleLog: ReturnType<typeof vi.spyOn>;
+  let consoleLog: Console["log"];
 
   beforeEach(() => {
     consoleLog = vi.spyOn(console, "log");

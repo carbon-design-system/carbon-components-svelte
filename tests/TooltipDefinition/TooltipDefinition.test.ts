@@ -3,7 +3,7 @@ import { user } from "../setup-tests";
 import TooltipDefinition from "./TooltipDefinition.test.svelte";
 
 describe("TooltipDefinition", () => {
-  let consoleLog: ReturnType<typeof vi.spyOn>;
+  let consoleLog: Console["log"];
 
   beforeEach(() => {
     consoleLog = vi.spyOn(console, "log");

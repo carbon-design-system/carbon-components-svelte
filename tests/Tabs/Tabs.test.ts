@@ -5,7 +5,7 @@ import Tab from "./Tab.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 
 describe("Tabs", () => {
-  let consoleLog: ReturnType<typeof vi.spyOn>;
+  let consoleLog: Console["log"];
 
   beforeEach(() => {
     consoleLog = vi.spyOn(console, "log");
