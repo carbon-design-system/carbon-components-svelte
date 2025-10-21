@@ -25,7 +25,7 @@
     "prismjs": "^1.30.0",
     "remark-slug": "^6.1.0",
     "svelte": "^4.2.19",
-    "vite": "^5.4.20"
+    "vite": "^5.4.21"
   },
   "routify": {
     "routifyDir": ".routify",
