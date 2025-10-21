@@ -14,7 +14,7 @@
     "mini-css-extract-plugin": "^2.9.4",
     "svelte": "^4.2.20",
     "svelte-loader": "^3.2.4",
-    "webpack": "^5.101.3",
+    "webpack": "^5.102.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.2.2"
   }
