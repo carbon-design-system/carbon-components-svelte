@@ -1,5 +1,4 @@
 import { fireEvent, render } from "@testing-library/svelte";
-import { expect, test } from "vitest";
 import DuplicateDataTables from "./DuplicateDataTables.test.svelte";
 
 describe("DuplicateDataTables", () => {

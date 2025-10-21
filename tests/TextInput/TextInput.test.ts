@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/svelte";
-import { assert } from "vitest";
 import { user } from "../setup-tests";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
