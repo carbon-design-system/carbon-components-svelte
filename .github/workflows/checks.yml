@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 22
           cache: "npm"
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
       - run: npm run lint
 
   test:
@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: 22
           cache: "npm"
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
       - run: npm run test
 
   types:
@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: 22
           cache: "npm"
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
       - run: npm run test:src-types
       - run: npm run test:types
 
