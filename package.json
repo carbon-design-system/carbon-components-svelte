@@ -65,7 +65,7 @@
     "tinyglobby": "^0.2.14",
     "typescript": "^5.8.3",
     "vite": "^7.1.11",
-    "vitest": "^4.0.0"
+    "vitest": "^4.0.1"
   },
   "standard-version": {
     "skip": {
