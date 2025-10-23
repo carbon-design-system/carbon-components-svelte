@@ -167,3 +167,6 @@ export { default as HeaderGlobalAction } from "./UIShell/HeaderGlobalAction.svel
 export { default as HeaderSearch } from "./UIShell/HeaderSearch.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as toHierarchy } from "./utils/toHierarchy";
+export { default as filterTreeNodes } from "./utils/filterTreeNodes";
+export { default as filterTreeById } from "./utils/filterTreeNodes";
+export { default as filterTreeByText } from "./utils/filterTreeNodes";
