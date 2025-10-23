@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.90.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.8...v0.90.0) (2025-10-23)
+
+### ⚠ BREAKING CHANGES
+
+- **data-table:** include `target` and `currentTarget` in row/cell click events (#2264)
+- **select:** forward `$$restProps` to `select` element (#2263)
+- **text-area:** disallow `resize` if `cols` is specified (#2230)
+
+### Features
+
+- **button:** add `hideTooltip` to hide tooltip for icon-only variant ([ad85269](https://github.com/carbon-design-system/carbon-components-svelte/commit/ad85269d2dc183b1bd514c6e2d408ab17630c830)), closes [#1251](https://github.com/carbon-design-system/carbon-components-svelte/issues/1251)
+- **checkbox:** add `helperText` prop ([dd9e1da](https://github.com/carbon-design-system/carbon-components-svelte/commit/dd9e1daec95058b1440c1e1619416b68abe35bf2))
+- **combo-box:** add `clearFilterOnOpen` prop ([997cda4](https://github.com/carbon-design-system/carbon-components-svelte/commit/997cda4e15b3f0c2a82e3df3516df04b30f5203a)), closes [#1635](https://github.com/carbon-design-system/carbon-components-svelte/issues/1635)
+- **combo-box:** allow custom value ([#2232](https://github.com/carbon-design-system/carbon-components-svelte/issues/2232)) ([1a9c9c4](https://github.com/carbon-design-system/carbon-components-svelte/commit/1a9c9c4ec903db45e98d59aff8fa4f695ac0e1a7)), closes [#1726](https://github.com/carbon-design-system/carbon-components-svelte/issues/1726)
+- **composed-modal:** support cancelable close event ([d256651](https://github.com/carbon-design-system/carbon-components-svelte/commit/d256651b79a8f8069044419a5cb13cab65490b49)), closes [#1549](https://github.com/carbon-design-system/carbon-components-svelte/issues/1549)
+- **data-table:** include `target` and `currentTarget` in row/cell click events ([#2264](https://github.com/carbon-design-system/carbon-components-svelte/issues/2264)) ([acdbc13](https://github.com/carbon-design-system/carbon-components-svelte/commit/acdbc13cbaf5a39bdbab857e31c201ae1ffc0ba7)), closes [#1904](https://github.com/carbon-design-system/carbon-components-svelte/issues/1904)
+- **data-table:** pass `rowSelected` and `rowExpanded` to slotted row/cell ([15914b4](https://github.com/carbon-design-system/carbon-components-svelte/commit/15914b4b2cc551ea1f844eedb1bbe1c123450a9d)), closes [#1672](https://github.com/carbon-design-system/carbon-components-svelte/issues/1672)
+- **modal:** support cancelable close event ([42afc2f](https://github.com/carbon-design-system/carbon-components-svelte/commit/42afc2f0749e6b1e0f564fc704de872afff8c2f6)), closes [#1549](https://github.com/carbon-design-system/carbon-components-svelte/issues/1549)
+- **number-input:** allow decimals ([#2233](https://github.com/carbon-design-system/carbon-components-svelte/issues/2233)) ([416d9e9](https://github.com/carbon-design-system/carbon-components-svelte/commit/416d9e9cd6cff99fa2f02bc8d3adfbe7dbf42fe4)), closes [#1873](https://github.com/carbon-design-system/carbon-components-svelte/issues/1873)
+- **radio-button:** add `helperText` prop ([53aa6e0](https://github.com/carbon-design-system/carbon-components-svelte/commit/53aa6e0f2b949b0b05f085a4222cd769e321fbd7))
+- **text-area:** add `warn` and `warnText` props ([367d607](https://github.com/carbon-design-system/carbon-components-svelte/commit/367d607b31d2902809163e9d12f05502a3bb895a)), closes [#1136](https://github.com/carbon-design-system/carbon-components-svelte/issues/1136)
+- **toggle:** add `ref` prop ([#2252](https://github.com/carbon-design-system/carbon-components-svelte/issues/2252)) ([b54876b](https://github.com/carbon-design-system/carbon-components-svelte/commit/b54876bb16a1325ccd97d000c26ca65730601886)), closes [#2218](https://github.com/carbon-design-system/carbon-components-svelte/issues/2218)
+- **toolbar:** `ToolbarBatchActions` supports standalone usage ([14ff730](https://github.com/carbon-design-system/carbon-components-svelte/commit/14ff730c1a11951372c47b087b10095c249f94ab)), closes [#2273](https://github.com/carbon-design-system/carbon-components-svelte/issues/2273)
+- **ui-shell:** `HeaderNavMenu` implements keyboard navigation ([#2248](https://github.com/carbon-design-system/carbon-components-svelte/issues/2248)) ([b4d7037](https://github.com/carbon-design-system/carbon-components-svelte/commit/b4d7037b251e2b8a3210c906821cc8838d73ece0)), closes [#1068](https://github.com/carbon-design-system/carbon-components-svelte/issues/1068)
+
+### Bug Fixes
+
+- **select:** forward `$$restProps` to `select` element ([#2263](https://github.com/carbon-design-system/carbon-components-svelte/issues/2263)) ([5af6c9d](https://github.com/carbon-design-system/carbon-components-svelte/commit/5af6c9d08a4e64c2c1e8801b7a1818f8227e9c7d))
+- **text-area:** disallow `resize` if `cols` is specified ([#2230](https://github.com/carbon-design-system/carbon-components-svelte/issues/2230)) ([92b8581](https://github.com/carbon-design-system/carbon-components-svelte/commit/92b85813f1cee01ef7fe190df14e7c67e082c12f)), closes [#1661](https://github.com/carbon-design-system/carbon-components-svelte/issues/1661)
+- **text-area:** polyfill warn state styles ([cc65ac2](https://github.com/carbon-design-system/carbon-components-svelte/commit/cc65ac2ae5f7717a1d4bc0e668a0bccb904c0742)), closes [#1136](https://github.com/carbon-design-system/carbon-components-svelte/issues/1136)
+
 ### [0.89.8](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.7...v0.89.8) (2025-10-19)
 
 ### Bug Fixes
