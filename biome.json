@@ -1,0 +1,97 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.0/schema.json",
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
+  "html": {
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!**/build",
+      "!**/dist",
+      "!**/.svelte-kit",
+      "!**/css/*.css",
+      "!**/docs/src/pages/index.svelte",
+      "!**/docs/src/COMPONENT_API.json"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnusedFunctionParameters": "off"
+      },
+      "complexity": {
+        "noBannedTypes": "off",
+        "noImportantStyles": "off",
+        "noUselessTernary": "off",
+        "useLiteralKeys": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noDoubleEquals": "off",
+        "noGlobalIsNan": "off",
+        "useIterableCallbackReturn": "off"
+      },
+      "style": {
+        "noDescendingSpecificity": "off"
+      },
+      "performance": {
+        "noAccumulatingSpread": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.svelte"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off",
+            "noUnusedVariables": "off",
+            "noSelfAssign": "off"
+          },
+          "complexity": {
+            "noUselessUndefinedInitialization": "off"
+          },
+          "suspicious": {
+            "noAssignInExpressions": "off",
+            "noGlobalAssign": "off"
+          },
+          "style": {
+            "useConst": "off",
+            "useImportType": "off",
+            "useTemplate": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["types/**/*.d.ts", "src/**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["types/index.d.ts"],
+      "formatter": {
+        "enabled": false
+      }
+    }
+  ]
+}
