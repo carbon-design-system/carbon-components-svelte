@@ -33,6 +33,13 @@ All notable changes to this project will be documented in this file. See [standa
 - **text-area:** disallow `resize` if `cols` is specified ([#2230](https://github.com/carbon-design-system/carbon-components-svelte/issues/2230)) ([92b8581](https://github.com/carbon-design-system/carbon-components-svelte/commit/92b85813f1cee01ef7fe190df14e7c67e082c12f)), closes [#1661](https://github.com/carbon-design-system/carbon-components-svelte/issues/1661)
 - **text-area:** polyfill warn state styles ([cc65ac2](https://github.com/carbon-design-system/carbon-components-svelte/commit/cc65ac2ae5f7717a1d4bc0e668a0bccb904c0742)), closes [#1136](https://github.com/carbon-design-system/carbon-components-svelte/issues/1136)
 
+### [0.89.9](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.8...v0.89.9) (2025-10-26)
+
+### Bug Fixes
+
+- **multi-select:** only focus input if filterable ([25192832](https://github.com/carbon-design-system/carbon-components-svelte/commit/2519283256307735f57428c3d3604f8b370e953a)), closes [#2288](https://github.com/carbon-design-system/carbon-components-svelte/issues/2288)
+- **text-input:** fix input value reactivity ([#2234](https://github.com/carbon-design-system/carbon-components-svelte/issues/2234))
+
 ### [0.89.8](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.7...v0.89.8) (2025-10-19)
 
 ### Bug Fixes
