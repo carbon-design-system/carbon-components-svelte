@@ -1,8 +1,8 @@
 <script>
   /** @extends {"./Link.svelte"} LinkProps */
 
-  import Link from "./Link.svelte";
   import Launch from "../icons/Launch.svelte";
+  import Link from "./Link.svelte";
 </script>
 
 <Link

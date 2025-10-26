@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { OrderedList, ListItem } from "carbon-components-svelte";
+  import { ListItem, OrderedList } from "carbon-components-svelte";
 
   export let nested = false;
   export let native = false;

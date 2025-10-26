@@ -1,8 +1,8 @@
 <script lang="ts">
   import {
     Toolbar,
-    ToolbarContent,
     ToolbarBatchActions,
+    ToolbarContent,
   } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 

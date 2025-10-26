@@ -2,10 +2,10 @@
   import {
     Button,
     ComposedModal,
-    ModalHeader,
+    InlineNotification,
     ModalBody,
     ModalFooter,
-    InlineNotification,
+    ModalHeader,
   } from "carbon-components-svelte";
 
   let open = false;

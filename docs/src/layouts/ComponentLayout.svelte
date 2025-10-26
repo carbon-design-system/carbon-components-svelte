@@ -1,24 +1,24 @@
 <script>
+  import { metatags, page } from "@sveltech/routify";
   import {
-    Grid,
-    Link,
-    Row,
+    Button,
     Column,
     Content,
-    Button,
+    Grid,
+    InlineNotification,
+    Link,
+    Row,
     Select,
     SelectItem,
-    InlineNotification,
-    Tabs,
     Tab,
     TabContent,
+    Tabs,
   } from "carbon-components-svelte";
   import Code from "carbon-icons-svelte/lib/Code.svelte";
-  import { page, metatags } from "@sveltech/routify";
   import { onMount } from "svelte";
-  import { theme } from "../store";
-  import ComponentApi from "../components/ComponentApi.svelte";
   import COMPONENT_API from "../COMPONENT_API.json";
+  import ComponentApi from "../components/ComponentApi.svelte";
+  import { theme } from "../store";
 
   export let component = $page.title;
   export let components = [component];

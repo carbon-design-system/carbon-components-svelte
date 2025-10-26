@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { UnorderedList, ListItem } from "carbon-components-svelte";
+  import { ListItem, UnorderedList } from "carbon-components-svelte";
 
   export let nested = false;
   export let expressive = false;

@@ -63,11 +63,11 @@
   /** Set to `true` to mark the field as required */
   export let required = false;
 
-  import { createEventDispatcher, setContext, afterUpdate } from "svelte";
+  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);

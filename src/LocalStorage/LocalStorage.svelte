@@ -31,7 +31,7 @@
     localStorage.clear();
   }
 
-  import { onMount, afterUpdate, createEventDispatcher } from "svelte";
+  import { afterUpdate, createEventDispatcher, onMount } from "svelte";
 
   const dispatch = createEventDispatcher();
 

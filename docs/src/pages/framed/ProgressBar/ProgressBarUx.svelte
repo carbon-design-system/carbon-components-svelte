@@ -1,5 +1,5 @@
 <script>
-  import { ProgressBar, ButtonSet, Button } from "carbon-components-svelte";
+  import { Button, ButtonSet, ProgressBar } from "carbon-components-svelte";
 
   let max = 328;
   let value = 0;

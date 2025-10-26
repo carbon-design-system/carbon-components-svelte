@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import RadioTileGroup from "./RadioTile.group.test.svelte";
+import RadioTileSingle from "./RadioTile.single.test.svelte";
 import RadioTile from "./RadioTile.test.svelte";
 import RadioTileCustom from "./RadioTileCustom.test.svelte";
-import RadioTileSingle from "./RadioTile.single.test.svelte";
-import RadioTileGroup from "./RadioTile.group.test.svelte";
 
 describe("RadioTile", () => {
   it("should render with default props", () => {

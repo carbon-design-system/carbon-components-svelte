@@ -15,8 +15,8 @@
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  import Close from "../icons/Close.svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import Close from "../icons/Close.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Loading from "../Loading/Loading.svelte";
 </script>

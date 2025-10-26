@@ -110,7 +110,7 @@ describe("Theme", () => {
     const consoleWarn = vi.spyOn(console, "warn");
     const { component } = render(Theme);
 
-    // @ts-ignore - Testing invalid theme
+    // @ts-expect-error - Testing invalid theme
     component.$set({ theme: "invalid" });
     await tick();
 

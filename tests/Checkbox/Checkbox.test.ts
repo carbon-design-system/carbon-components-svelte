@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import CheckboxGroup from "./Checkbox.group.test.svelte";
+import CheckboxReadonly from "./Checkbox.readonly.test.svelte";
 import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
 import CheckboxSlot from "./Checkbox.slot.test.svelte";
 import Checkbox from "./Checkbox.test.svelte";
-import CheckboxReadonly from "./Checkbox.readonly.test.svelte";
 import MultipleCheckboxes from "./MultipleCheckboxes.test.svelte";
 import MultipleCheckboxesObject from "./MultipleCheckboxesObject.test.svelte";
 

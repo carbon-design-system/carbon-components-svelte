@@ -70,9 +70,9 @@
   export let readonly = false;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import EditOff from "../icons/EditOff.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   const ctx = getContext("Form");
   const dispatch = createEventDispatcher();

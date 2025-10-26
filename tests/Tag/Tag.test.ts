@@ -41,7 +41,8 @@ describe("Tag", () => {
     const filterableTag = screen.getByText("Filterable");
     expect(filterableTag).toHaveClass("bx--tag--filter");
 
-    const closeButton = filterableTag.querySelector("button")!;
+    const closeButton = filterableTag.querySelector("button");
+    assert(closeButton);
     expect(closeButton).toHaveClass("bx--tag__close-icon");
     expect(closeButton).toHaveAttribute("title", "Clear filter");
 
@@ -124,7 +125,8 @@ describe("Tag", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Tag);
 
-    const tag = screen.getByText("Mouse events").parentElement!;
+    const tag = screen.getByText("Mouse events").parentElement;
+    assert(tag);
 
     await user.hover(tag);
     expect(consoleLog).toHaveBeenCalledWith("mouseenter");

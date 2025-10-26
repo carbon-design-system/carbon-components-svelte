@@ -3,9 +3,9 @@
     Table,
     TableBody,
     TableCell,
-    TableRow,
-    TableHead,
     TableContainer,
+    TableHead,
+    TableRow,
   } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 

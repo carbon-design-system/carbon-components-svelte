@@ -1,5 +1,5 @@
 <script>
-  import { ContentSwitcher, Switch, Button } from "carbon-components-svelte";
+  import { Button, ContentSwitcher, Switch } from "carbon-components-svelte";
 
   let selectedIndex = 1;
 </script>

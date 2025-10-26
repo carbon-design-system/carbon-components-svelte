@@ -1,5 +1,5 @@
 <script>
-  import { Grid, Row, Column } from "carbon-components-svelte";
+  import { Column, Grid, Row } from "carbon-components-svelte";
 </script>
 
 <div>Adding padding to Grid applies it to columns in all rows:</div>

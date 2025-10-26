@@ -1,13 +1,13 @@
 <script>
   import {
+    Button,
     DataTable,
     Toolbar,
+    ToolbarBatchActions,
     ToolbarContent,
-    ToolbarSearch,
     ToolbarMenu,
     ToolbarMenuItem,
-    ToolbarBatchActions,
-    Button,
+    ToolbarSearch,
   } from "carbon-components-svelte";
   import Save from "carbon-icons-svelte/lib/Save.svelte";
 

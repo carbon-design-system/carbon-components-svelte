@@ -1,5 +1,5 @@
 <script>
-  import { RadioButton, Button } from "carbon-components-svelte";
+  import { Button, RadioButton } from "carbon-components-svelte";
 
   let agreedToTerms = false;
 </script>

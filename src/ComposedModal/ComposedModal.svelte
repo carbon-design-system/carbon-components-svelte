@@ -32,11 +32,11 @@
   export let ref = null;
 
   import {
-    createEventDispatcher,
-    tick,
-    setContext,
-    onMount,
     afterUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+    tick,
   } from "svelte";
   import { writable } from "svelte/store";
   import { trackModal } from "../Modal/modalStore";

@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
-import ContentSwitcher from "./ContentSwitcher.test.svelte";
-import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
-import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
-import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
+import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
+import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
+import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
+import ContentSwitcher from "./ContentSwitcher.test.svelte";
 
 describe("ContentSwitcher", () => {
   it("renders with default props", () => {
@@ -188,7 +188,8 @@ describe("ContentSwitcher", () => {
     const consoleLog = vi.spyOn(console, "log");
     const { container } = render(ContentSwitcher);
 
-    const switcher = container.querySelector(".bx--content-switcher")!;
+    const switcher = container.querySelector(".bx--content-switcher");
+    assert(switcher);
     await user.hover(switcher);
 
     expect(consoleLog).toHaveBeenCalledWith("mouseenter");
@@ -202,7 +203,8 @@ describe("ContentSwitcher", () => {
     const consoleLog = vi.spyOn(console, "log");
     const { container } = render(ContentSwitcher);
 
-    const switcher = container.querySelector(".bx--content-switcher")!;
+    const switcher = container.querySelector(".bx--content-switcher");
+    assert(switcher);
     await user.click(switcher);
 
     expect(consoleLog).toHaveBeenCalledWith("click");

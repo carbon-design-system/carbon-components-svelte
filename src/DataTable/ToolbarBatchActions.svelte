@@ -24,10 +24,10 @@
   export let selectedIds = [];
 
   import {
-    onMount,
-    getContext,
-    createEventDispatcher,
     afterUpdate,
+    createEventDispatcher,
+    getContext,
+    onMount,
   } from "svelte";
 
   import Button from "../Button/Button.svelte";

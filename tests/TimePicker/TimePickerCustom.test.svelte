@@ -1,8 +1,8 @@
 <script lang="ts">
   import {
+    SelectItem,
     TimePicker,
     TimePickerSelect,
-    SelectItem,
   } from "carbon-components-svelte";
 </script>
 

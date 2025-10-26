@@ -47,7 +47,7 @@ describe("SkeletonText", () => {
     elements.forEach((element) => {
       const width = element.style.width;
       expect(width).toMatch(/^\d+px$/);
-      const numWidth = parseInt(width);
+      const numWidth = parseInt(width, 10);
       expect(numWidth).toBeGreaterThanOrEqual(125); // 200 - 75
       expect(numWidth).toBeLessThanOrEqual(200);
     });

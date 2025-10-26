@@ -1,5 +1,5 @@
 <script>
-  import { PaginationNav, Button } from "carbon-components-svelte";
+  import { Button, PaginationNav } from "carbon-components-svelte";
 
   let page = 2;
 </script>

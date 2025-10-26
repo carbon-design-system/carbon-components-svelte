@@ -71,8 +71,8 @@
 
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/Menu.svelte";
-  import { shouldRenderHamburgerMenu } from "./navStore";
   import HamburgerMenu from "./HamburgerMenu.svelte";
+  import { shouldRenderHamburgerMenu } from "./navStore";
 
   let winWidth = undefined;
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ButtonSet, Button } from "carbon-components-svelte";
+  import { Button, ButtonSet } from "carbon-components-svelte";
 
   export let stacked = false;
 </script>

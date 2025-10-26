@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { TileGroup, RadioTile } from "carbon-components-svelte";
+  import { RadioTile, TileGroup } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 
   export let selected: ComponentProps<TileGroup>["selected"] = undefined;

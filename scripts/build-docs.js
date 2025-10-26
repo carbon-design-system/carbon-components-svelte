@@ -1,7 +1,7 @@
 // @ts-check
 import fs from "node:fs";
-import { globSync } from "tinyglobby";
 import { sveld } from "sveld";
+import { globSync } from "tinyglobby";
 import pkg from "../package.json" with { type: "json" };
 
 sveld({

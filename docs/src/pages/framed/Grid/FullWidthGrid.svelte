@@ -1,5 +1,5 @@
 <script>
-  import { Grid, Row, Column } from "carbon-components-svelte";
+  import { Column, Grid, Row } from "carbon-components-svelte";
 </script>
 
 <Grid fullWidth>

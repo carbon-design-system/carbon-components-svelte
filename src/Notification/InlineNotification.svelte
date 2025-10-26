@@ -37,8 +37,8 @@
   export let closeButtonDescription = "Close notification";
 
   import { createEventDispatcher, onMount } from "svelte";
-  import NotificationIcon from "./NotificationIcon.svelte";
   import NotificationButton from "./NotificationButton.svelte";
+  import NotificationIcon from "./NotificationIcon.svelte";
 
   const dispatch = createEventDispatcher();
 

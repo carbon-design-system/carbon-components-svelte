@@ -1,5 +1,5 @@
 <script>
-  import { DataTable, Button } from "carbon-components-svelte";
+  import { Button, DataTable } from "carbon-components-svelte";
 
   let sortKey = "port";
   let sortDirection = "ascending";

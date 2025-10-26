@@ -2,10 +2,10 @@
   import {
     Button,
     DataTable,
+    Pagination,
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
-    Pagination,
   } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 

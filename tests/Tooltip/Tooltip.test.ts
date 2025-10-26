@@ -1,14 +1,14 @@
-import { render, screen, fireEvent } from "@testing-library/svelte";
-import TooltipDefault from "./TooltipDefault.test.svelte";
-import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
-import TooltipOpen from "./TooltipOpen.test.svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { user } from "../setup-tests";
+import TooltipAlignments from "./TooltipAlignments.test.svelte";
 import TooltipCustomContent from "./TooltipCustomContent.test.svelte";
 import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
+import TooltipDefault from "./TooltipDefault.test.svelte";
 import TooltipDirections from "./TooltipDirections.test.svelte";
-import TooltipAlignments from "./TooltipAlignments.test.svelte";
 import TooltipEvents from "./TooltipEvents.test.svelte";
+import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
+import TooltipOpen from "./TooltipOpen.test.svelte";
 import TooltipPointerCapture from "./TooltipPointerCapture.test.svelte";
-import { user } from "../setup-tests";
 
 describe("Tooltip", () => {
   test("should render with default props", () => {

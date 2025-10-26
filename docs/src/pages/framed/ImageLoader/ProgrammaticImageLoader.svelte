@@ -1,5 +1,5 @@
 <script>
-  import { ImageLoader, Button } from "carbon-components-svelte";
+  import { Button, ImageLoader } from "carbon-components-svelte";
 
   const src =
     "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg";

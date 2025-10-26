@@ -1,8 +1,8 @@
 <script>
   import {
-    Theme,
-    RadioButtonGroup,
     RadioButton,
+    RadioButtonGroup,
+    Theme,
   } from "carbon-components-svelte";
 
   let theme = "g90";

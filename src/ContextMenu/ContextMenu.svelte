@@ -26,11 +26,11 @@
   export let ref = null;
 
   import {
-    onMount,
-    setContext,
-    getContext,
     afterUpdate,
     createEventDispatcher,
+    getContext,
+    onMount,
+    setContext,
   } from "svelte";
   import { writable } from "svelte/store";
 

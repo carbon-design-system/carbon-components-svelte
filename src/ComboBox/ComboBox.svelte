@@ -125,10 +125,10 @@
    */
   export let listRef = null;
 
-  import { createEventDispatcher, afterUpdate, tick } from "svelte";
+  import { afterUpdate, createEventDispatcher, tick } from "svelte";
   import Checkmark from "../icons/Checkmark.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
   import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";

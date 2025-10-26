@@ -70,7 +70,7 @@
   /** Specify a name attribute for the file button uploader input */
   export let name = "";
 
-  import { createEventDispatcher, afterUpdate } from "svelte";
+  import { afterUpdate, createEventDispatcher } from "svelte";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
 

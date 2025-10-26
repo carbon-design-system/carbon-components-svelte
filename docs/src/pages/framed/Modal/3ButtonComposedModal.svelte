@@ -1,11 +1,11 @@
 <script>
   import {
     Button,
+    Checkbox,
     ComposedModal,
-    ModalHeader,
     ModalBody,
     ModalFooter,
-    Checkbox,
+    ModalHeader,
   } from "carbon-components-svelte";
 
   let open = true;
