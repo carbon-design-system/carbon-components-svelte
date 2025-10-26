@@ -536,7 +536,11 @@
               sortedItems = sortedItems.map((_) =>
                 _.id === item.id ? { ..._, checked: !_.checked } : _,
               );
-              fieldRef.focus();
+              if (filterable) {
+                inputRef?.focus();
+              } else {
+                fieldRef?.focus();
+              }
             }}
             on:mouseenter={() => {
               if (item.disabled) return;

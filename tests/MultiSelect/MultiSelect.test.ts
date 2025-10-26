@@ -632,4 +632,23 @@ describe("MultiSelect", () => {
     await user.click(disabledOption);
     expect(disabledOption).toHaveAttribute("aria-selected", "false");
   });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2288
+  it("clicking checkbox in filterable variant should not throw error", async () => {
+    render(MultiSelect, {
+      props: {
+        items,
+        filterable: true,
+        placeholder: "Filter...",
+      },
+    });
+
+    const input = screen.getByPlaceholderText("Filter...");
+    await user.click(input);
+    await toggleOption("Slack");
+
+    const options = screen.getAllByRole("option");
+    expect(options[2]).toHaveAttribute("aria-selected", "true");
+    expect(input).toHaveFocus();
+  });
 });
