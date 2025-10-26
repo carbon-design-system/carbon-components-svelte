@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.90.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.90.0...v0.90.1) (2025-10-26)
+
+### Bug Fixes
+
+- **multi-select:** only focus input if filterable ([25192832](https://github.com/carbon-design-system/carbon-components-svelte/commit/2519283256307735f57428c3d3604f8b370e953a)), closes [#2288](https://github.com/carbon-design-system/carbon-components-svelte/issues/2288)
+- **text-input:** fix input value reactivity ([#2234](https://github.com/carbon-design-system/carbon-components-svelte/issues/2234))
+
 ## [0.90.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.8...v0.90.0) (2025-10-23)
 
 ### ⚠ BREAKING CHANGES
