@@ -1,8 +1,8 @@
 // @ts-check
 import fs from "node:fs";
-import componentApi from "../docs/src/COMPONENT_API.json" with { type: "json" };
 import { format } from "prettier";
 import plugin from "prettier/plugins/typescript";
+import componentApi from "../docs/src/COMPONENT_API.json" with { type: "json" };
 
 const formatTypeScript = async (value) => {
   return await format(value, {

@@ -1,10 +1,10 @@
 <script>
   import { TreeView } from "carbon-components-svelte";
-  import WatsonMachineLearning from "carbon-icons-svelte/lib/WatsonMachineLearning.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
   import Blockchain from "carbon-icons-svelte/lib/Blockchain.svelte";
   import DataBase from "carbon-icons-svelte/lib/DataBase.svelte";
   import SignalStrength from "carbon-icons-svelte/lib/SignalStrength.svelte";
+  import WatsonMachineLearning from "carbon-icons-svelte/lib/WatsonMachineLearning.svelte";
 
   let activeId = 1;
   let selectedIds = [];

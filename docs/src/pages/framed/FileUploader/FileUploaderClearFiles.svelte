@@ -1,5 +1,5 @@
 <script>
-  import { FileUploader, Button } from "carbon-components-svelte";
+  import { Button, FileUploader } from "carbon-components-svelte";
 
   let fileUploader;
   let files = [];

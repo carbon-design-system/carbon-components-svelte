@@ -1,5 +1,5 @@
 import { svelte } from "@sveltejs/vite-plugin-svelte";
-import { optimizeImports, optimizeCss } from "carbon-preprocess-svelte";
+import { optimizeCss, optimizeImports } from "carbon-preprocess-svelte";
 
 /** @type {import('vite').UserConfig} */
 export default {

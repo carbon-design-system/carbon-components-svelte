@@ -2,9 +2,9 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DataTable from "./DataTable.test.svelte";
-import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
-import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte";
 import DataTableCustomBoth from "./DataTableCustomBoth.test.svelte";
+import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte";
+import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
 
 describe("DataTable", () => {
   beforeEach(() => {
@@ -200,7 +200,7 @@ describe("DataTable", () => {
   it("handles sorting with custom display and sort methods", async () => {
     const customHeaders = [
       { key: "name", value: "Name" },
-      { key: "cost", value: "Cost", display: (cost: number) => cost + " €" },
+      { key: "cost", value: "Cost", display: (cost: number) => `${cost} €` },
       {
         key: "expireDate",
         value: "Expire date",
@@ -1142,7 +1142,8 @@ describe("DataTable", () => {
     assert(emptyCell);
 
     // Click on the row but not on an interactive element
-    await user.click(firstRow!);
+    assert(firstRow);
+    await user.click(firstRow);
 
     // Should have dispatched click:row
     const clickRowCalls = consoleLog.mock.calls.filter(

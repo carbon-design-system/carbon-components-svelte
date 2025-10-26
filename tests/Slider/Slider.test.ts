@@ -298,7 +298,8 @@ describe("Slider", () => {
       (call) => call[0] === "change",
     );
     expect(firstCall).toBeDefined();
-    const firstValue = firstCall![1];
+    assert(firstCall);
+    const firstValue = firstCall[1];
 
     // Value should be a whole number when step=1
     expect(Number.isInteger(firstValue)).toBe(true);
@@ -311,7 +312,8 @@ describe("Slider", () => {
       (call) => call[0] === "change",
     );
     expect(secondCall).toBeDefined();
-    const secondValue = secondCall![1];
+    assert(secondCall);
+    const secondValue = secondCall[1];
 
     // Value should still be a whole number
     expect(Number.isInteger(secondValue)).toBe(true);

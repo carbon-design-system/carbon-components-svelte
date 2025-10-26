@@ -172,7 +172,7 @@ describe("ContextMenu", () => {
       .find((menu) => menu.getAttribute("data-level") === "2");
     assert(submenu);
 
-    const submenuX = parseInt(submenu.style.left);
+    const submenuX = parseInt(submenu.style.left, 10);
     const submenuWidth = submenu.getBoundingClientRect().width;
 
     // Submenu should not overflow the right edge of viewport
@@ -210,9 +210,9 @@ describe("ContextMenu", () => {
       .find((menu) => menu.getAttribute("data-level") === "1");
     assert(rootMenu);
 
-    const rootX = parseInt(rootMenu.style.left);
+    const rootX = parseInt(rootMenu.style.left, 10);
     const rootWidth = rootMenu.getBoundingClientRect().width;
-    const submenuX = parseInt(submenu.style.left);
+    const submenuX = parseInt(submenu.style.left, 10);
 
     // Submenu should be positioned to the right of the parent menu.
     expect(submenuX).toBeGreaterThanOrEqual(rootX + rootWidth);
@@ -243,7 +243,7 @@ describe("ContextMenu", () => {
       .find((menu) => menu.getAttribute("data-level") === "2");
     assert(submenu);
 
-    const submenuX = parseInt(submenu.style.left);
+    const submenuX = parseInt(submenu.style.left, 10);
     // Submenu should be positioned at or near 0 (left edge of viewport).
     expect(submenuX).toBeGreaterThanOrEqual(0);
   });

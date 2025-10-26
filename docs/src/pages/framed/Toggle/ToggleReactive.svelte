@@ -1,5 +1,5 @@
 <script>
-  import { Toggle, Button } from "carbon-components-svelte";
+  import { Button, Toggle } from "carbon-components-svelte";
 
   let toggled = true;
 </script>

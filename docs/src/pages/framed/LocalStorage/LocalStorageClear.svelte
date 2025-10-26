@@ -1,5 +1,5 @@
 <script>
-  import { LocalStorage, Toggle, Button } from "carbon-components-svelte";
+  import { Button, LocalStorage, Toggle } from "carbon-components-svelte";
 
   let storage;
   let toggled = false;

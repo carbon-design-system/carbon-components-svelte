@@ -1,14 +1,14 @@
 <script>
   import {
-    Theme,
     Button,
+    Checkbox,
+    InlineNotification,
     Link,
     Tag,
     TextInput,
-    Checkbox,
-    Toggle,
+    Theme,
     Tile,
-    InlineNotification,
+    Toggle,
   } from "carbon-components-svelte";
 </script>
 

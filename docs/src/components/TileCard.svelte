@@ -6,8 +6,8 @@
   export let borderBottom = false;
 
   import { AspectRatio, ClickableTile, Tile } from "carbon-components-svelte";
-  import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
+  import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
 
   $: tileComponent = href ? ClickableTile : Tile;
 </script>

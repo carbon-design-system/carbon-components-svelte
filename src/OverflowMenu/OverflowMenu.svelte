@@ -56,14 +56,14 @@
   export let menuRef = null;
 
   import {
+    afterUpdate,
     createEventDispatcher,
     getContext,
     setContext,
-    afterUpdate,
   } from "svelte";
   import { writable } from "svelte/store";
-  import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
+  import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
 
   const ctxBreadcrumbItem = getContext("BreadcrumbItem");
   const dispatch = createEventDispatcher();

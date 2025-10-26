@@ -1,8 +1,8 @@
 <script>
   import {
     LocalStorage,
-    RadioButtonGroup,
     RadioButton,
+    RadioButtonGroup,
   } from "carbon-components-svelte";
 
   let selectedUser = "user-1";

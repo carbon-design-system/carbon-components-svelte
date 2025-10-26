@@ -18,8 +18,8 @@
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import InformationFilled from "../icons/InformationFilled.svelte";
   import InformationSquareFilled from "../icons/InformationSquareFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   const icons = {
     error: ErrorFilled,

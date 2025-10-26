@@ -1,13 +1,13 @@
 // @ts-check
 import fs from "node:fs";
 import path from "node:path";
-import sass from "sass";
 import autoprefixer from "autoprefixer";
 import postcss from "postcss";
+import sass from "sass";
 
 const scss = fs
   .readdirSync("css")
-  .filter((file) => file.endsWith(".scss") && !/^\_popover/.test(file))
+  .filter((file) => file.endsWith(".scss") && !/^_popover/.test(file))
   .map((file) => path.parse(file));
 
 for (const { name, base } of scss) {

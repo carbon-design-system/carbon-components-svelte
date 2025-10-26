@@ -67,12 +67,12 @@
   export let flatpickrProps = { static: true };
 
   import {
-    createEventDispatcher,
-    setContext,
     afterUpdate,
+    createEventDispatcher,
     onMount,
+    setContext,
   } from "svelte";
-  import { writable, derived } from "svelte/store";
+  import { derived, writable } from "svelte/store";
   import { createCalendar } from "./createCalendar";
 
   const dispatch = createEventDispatcher();

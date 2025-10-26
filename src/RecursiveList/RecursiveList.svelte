@@ -16,8 +16,8 @@
    */
   export let type = "unordered";
 
-  import UnorderedList from "../UnorderedList/UnorderedList.svelte";
   import OrderedList from "../OrderedList/OrderedList.svelte";
+  import UnorderedList from "../UnorderedList/UnorderedList.svelte";
   import RecursiveListItem from "./RecursiveListItem.svelte";
 </script>
 

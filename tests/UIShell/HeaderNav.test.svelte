@@ -1,19 +1,19 @@
 <script lang="ts">
   import {
+    Column,
+    Content,
+    Grid,
     Header,
     HeaderNav,
     HeaderNavItem,
     HeaderNavMenu,
+    Row,
     SideNav,
     SideNavItems,
+    SideNavLink,
     SideNavMenu,
     SideNavMenuItem,
-    SideNavLink,
     SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
   } from "carbon-components-svelte";
 
   let isSideNavOpen = false;

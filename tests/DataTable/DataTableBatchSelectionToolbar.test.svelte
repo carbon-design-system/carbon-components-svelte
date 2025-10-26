@@ -1,10 +1,10 @@
 <script lang="ts">
   import {
+    Button,
     DataTable,
     Toolbar,
-    ToolbarContent,
     ToolbarBatchActions,
-    Button,
+    ToolbarContent,
   } from "carbon-components-svelte";
 
   const headers = [

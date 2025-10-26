@@ -104,10 +104,10 @@
   /** Obtain a reference to the pre HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, tick, onMount } from "svelte";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
+  import ChevronDown from "../icons/ChevronDown.svelte";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

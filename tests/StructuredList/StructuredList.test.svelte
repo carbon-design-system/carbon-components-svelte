@@ -2,10 +2,10 @@
   import {
     StructuredList,
     StructuredListBody,
-    StructuredListHead,
     StructuredListCell,
-    StructuredListRow,
+    StructuredListHead,
     StructuredListInput,
+    StructuredListRow,
   } from "carbon-components-svelte";
   import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import type { ComponentProps } from "svelte";

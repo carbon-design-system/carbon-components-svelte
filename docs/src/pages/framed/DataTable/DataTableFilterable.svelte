@@ -1,10 +1,10 @@
 <script>
   import {
     DataTable,
+    Pagination,
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
-    Pagination,
   } from "carbon-components-svelte";
 
   let rows = Array.from({ length: 10 }).map((_, i) => ({

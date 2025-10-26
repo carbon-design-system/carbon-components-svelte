@@ -1,5 +1,6 @@
 <script>
-  import { ComboBox, Button } from "carbon-components-svelte";
+  import { Button, ComboBox } from "carbon-components-svelte";
+
   let selectedId = "1";
 </script>
 

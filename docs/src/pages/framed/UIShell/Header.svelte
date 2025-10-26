@@ -1,14 +1,14 @@
 <script>
   import {
+    Column,
+    Content,
+    Grid,
     Header,
     HeaderNav,
     HeaderNavItem,
     HeaderNavMenu,
-    SkipToContent,
-    Content,
-    Grid,
     Row,
-    Column,
+    SkipToContent,
   } from "carbon-components-svelte";
 
   let isSideNavOpen = false;

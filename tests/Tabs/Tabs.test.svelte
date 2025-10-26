@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tabs, Tab, TabContent } from "carbon-components-svelte";
+  import { Tab, TabContent, Tabs } from "carbon-components-svelte";
 
   export let selected = 0;
   export let type: "default" | "container" = "default";

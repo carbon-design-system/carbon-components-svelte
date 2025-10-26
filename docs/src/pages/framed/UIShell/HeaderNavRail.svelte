@@ -1,20 +1,20 @@
 <script>
   import {
+    Column,
+    Content,
+    Grid,
     Header,
     HeaderNav,
     HeaderNavItem,
     HeaderNavMenu,
+    Row,
     SideNav,
+    SideNavDivider,
     SideNavItems,
+    SideNavLink,
     SideNavMenu,
     SideNavMenuItem,
-    SideNavLink,
-    SideNavDivider,
     SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
   } from "carbon-components-svelte";
   import Fade from "carbon-icons-svelte/lib/Fade.svelte";
 

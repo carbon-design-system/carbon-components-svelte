@@ -1,5 +1,5 @@
 <script>
-  import { TreeView, Button } from "carbon-components-svelte";
+  import { Button, TreeView } from "carbon-components-svelte";
 
   let treeview = null;
   let nodes = [

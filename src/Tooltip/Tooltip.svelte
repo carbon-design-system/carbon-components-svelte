@@ -68,7 +68,7 @@
   /** Obtain a reference to the icon HTML element */
   export let refIcon = null;
 
-  import { createEventDispatcher, afterUpdate, setContext } from "svelte";
+  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
   import Information from "../icons/Information.svelte";
 

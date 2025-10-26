@@ -55,8 +55,8 @@
 
   import { getContext } from "svelte";
   import Calendar from "../icons/Calendar.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   const {
     range,

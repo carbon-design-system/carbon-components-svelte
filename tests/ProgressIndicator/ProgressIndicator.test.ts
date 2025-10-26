@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
-import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import { user } from "../setup-tests";
+import ProgressIndicator from "./ProgressIndicator.test.svelte";
 
 describe("ProgressIndicator", () => {
   describe("Default (horizontal)", () => {

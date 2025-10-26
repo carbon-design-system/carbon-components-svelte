@@ -4,10 +4,10 @@
   export let src = "";
   export let framed = false;
 
-  import copy from "clipboard-copy";
-  import { CodeSnippet, Button } from "carbon-components-svelte";
-  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import { url } from "@sveltech/routify";
+  import { Button, CodeSnippet } from "carbon-components-svelte";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
+  import copy from "clipboard-copy";
   import { theme } from "../store";
 
   $: themedSrcUrl = $url(`${src}?theme=${$theme}`);

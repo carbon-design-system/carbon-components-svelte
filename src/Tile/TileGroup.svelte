@@ -28,7 +28,7 @@
   export let legend = "";
 
   import { createEventDispatcher, setContext } from "svelte";
-  import { writable, readonly } from "svelte/store";
+  import { readonly, writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
   const selectedValue = writable(selected);

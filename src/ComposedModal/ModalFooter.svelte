@@ -40,7 +40,7 @@
   /** Set to `true` to use the danger variant */
   export let danger = false;
 
-  import { getContext, createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   import Button from "../Button/Button.svelte";
 
   const dispatch = createEventDispatcher();

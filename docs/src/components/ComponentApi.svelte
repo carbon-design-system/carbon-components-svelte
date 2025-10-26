@@ -7,18 +7,18 @@
     typedefs: [],
   };
 
-  import { onMount } from "svelte";
   import {
+    ListItem,
     OutboundLink,
     StructuredList,
+    StructuredListBody,
+    StructuredListCell,
     StructuredListHead,
     StructuredListRow,
-    StructuredListCell,
-    StructuredListBody,
-    UnorderedList,
-    ListItem,
     Tag,
+    UnorderedList,
   } from "carbon-components-svelte";
+  import { onMount } from "svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
 
   let AsyncPreviewTypeScript;

@@ -1,5 +1,5 @@
 <script>
-  import { Toggle, CodeSnippet } from "carbon-components-svelte";
+  import { CodeSnippet, Toggle } from "carbon-components-svelte";
 
   let toggled = false;
 
