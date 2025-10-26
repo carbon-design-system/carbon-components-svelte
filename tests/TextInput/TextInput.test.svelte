@@ -21,10 +21,6 @@
   export let inline = false;
   export let readonly = false;
   export let type: ComponentProps<TextInput>["type"] = "text";
-  export let step: string | undefined = undefined;
-  export let pattern: string | undefined = undefined;
-  export let min: string | undefined = undefined;
-  export let max: string | undefined = undefined;
 </script>
 
 <TextInput
@@ -47,10 +43,6 @@
   {inline}
   {readonly}
   {type}
-  {step}
-  {pattern}
-  {min}
-  {max}
   on:change
   on:input
   on:keydown
