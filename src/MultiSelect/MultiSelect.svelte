@@ -169,9 +169,9 @@
   export let highlightedId = null;
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import {
     ListBox,
     ListBoxField,

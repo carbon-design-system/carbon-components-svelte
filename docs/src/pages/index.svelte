@@ -1,21 +1,21 @@
 <script>
+  import { metatags } from "@sveltech/routify";
   import {
+    CodeSnippet,
+    Column,
     Content,
     Grid,
-    Row,
-    Column,
-    CodeSnippet,
     Link,
-    Tabs,
+    OutboundLink,
+    RadioButton,
+    RadioButtonGroup,
+    Row,
     Tab,
     TabContent,
-    OutboundLink,
-    RadioButtonGroup,
-    RadioButton,
+    Tabs,
   } from "carbon-components-svelte";
   import TileCard from "../components/TileCard.svelte";
   import { theme } from "../store";
-  import { metatags } from "@sveltech/routify";
 
   metatags.title = "Carbon Components Svelte";
   metatags.description =

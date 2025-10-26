@@ -1,8 +1,8 @@
 <script lang="ts">
   import {
     ComposedModal,
-    ModalHeader,
     ModalBody,
+    ModalHeader,
   } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 

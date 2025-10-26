@@ -1,5 +1,5 @@
 <script>
-  import { Select, SelectItem, Button } from "carbon-components-svelte";
+  import { Button, Select, SelectItem } from "carbon-components-svelte";
 
   let selected = "g10";
 </script>

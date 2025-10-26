@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import ToastNotificationClose from "./ToastNotification.close.test.svelte";
 import ToastNotification from "./ToastNotification.test.svelte";
 import ToastNotificationCustom from "./ToastNotificationCustom.test.svelte";
-import ToastNotificationClose from "./ToastNotification.close.test.svelte";
 
 describe("ToastNotification", () => {
   beforeEach(() => {

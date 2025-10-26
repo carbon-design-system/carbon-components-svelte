@@ -52,7 +52,7 @@
   const dispatch = createEventDispatcher();
 
   let open = true;
-  let timeoutId = undefined;
+  let timeoutId;
 
   function close(closeFromTimeout) {
     // Clear the timer if the close button was clicked.

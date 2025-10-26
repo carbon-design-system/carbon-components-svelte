@@ -32,8 +32,8 @@
   const dispatch = createEventDispatcher();
 
   /** @type {"fade-in" | "fade-out"} */
-  let animation = undefined;
-  let timeout = undefined;
+  let animation;
+  let timeout;
 
   onMount(() => {
     return () => clearTimeout(timeout);

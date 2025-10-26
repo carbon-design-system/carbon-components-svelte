@@ -1,31 +1,31 @@
 <script>
   import {
-    isActive,
-    url,
-    layout,
     beforeUrlChange,
     goto,
+    isActive,
+    layout,
+    url,
   } from "@sveltech/routify";
   import {
     Header,
-    HeaderUtilities,
     HeaderAction,
     HeaderActionLink,
-    HeaderPanelLinks,
-    HeaderPanelLink,
     HeaderPanelDivider,
+    HeaderPanelLink,
+    HeaderPanelLinks,
     HeaderSearch,
-    SkipToContent,
+    HeaderUtilities,
     SideNav,
     SideNavItems,
     SideNavMenuItem,
-    Theme,
+    SkipToContent,
     Tag,
+    Theme,
   } from "carbon-components-svelte";
-  import MiniSearch from "minisearch";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
-  import { theme } from "../store";
+  import MiniSearch from "minisearch";
   import SEARCH_INDEX from "../SEARCH_INDEX.json";
+  import { theme } from "../store";
 
   const miniSearch = new MiniSearch({
     fields: ["text", "description"],

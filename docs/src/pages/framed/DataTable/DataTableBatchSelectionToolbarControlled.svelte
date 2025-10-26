@@ -1,10 +1,10 @@
 <script>
   import {
+    Button,
     DataTable,
     Toolbar,
-    ToolbarContent,
     ToolbarBatchActions,
-    Button,
+    ToolbarContent,
   } from "carbon-components-svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 

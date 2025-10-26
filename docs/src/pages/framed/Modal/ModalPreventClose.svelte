@@ -1,5 +1,5 @@
 <script>
-  import { Button, Modal, InlineNotification } from "carbon-components-svelte";
+  import { Button, InlineNotification, Modal } from "carbon-components-svelte";
 
   let open = false;
   let hasUnsavedChanges = true;

@@ -46,7 +46,7 @@
    */
   export let ref = null;
 
-  import { tick, getContext, afterUpdate, onMount } from "svelte";
+  import { afterUpdate, getContext, onMount, tick } from "svelte";
   import Search from "../Search/Search.svelte";
 
   const ctx = getContext("DataTable") ?? {};

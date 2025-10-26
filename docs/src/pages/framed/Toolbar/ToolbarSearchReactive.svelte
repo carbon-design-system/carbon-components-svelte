@@ -1,10 +1,10 @@
 <script>
   import {
+    Button,
+    ButtonSet,
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
-    ButtonSet,
-    Button,
   } from "carbon-components-svelte";
 
   let value = "";

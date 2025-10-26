@@ -2,13 +2,13 @@
 
 <script lang="ts">
   import {
+    Content,
     Header,
     HeaderNav,
     HeaderNavItem,
     SideNav,
     SideNavItems,
     SideNavLink,
-    Content,
   } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 

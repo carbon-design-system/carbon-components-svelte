@@ -1,13 +1,13 @@
+import fs from "node:fs";
 import path from "node:path";
 import { mdsvex } from "mdsvex";
-import { parse, walk } from "svelte/compiler";
-import slug from "remark-slug";
-import visit from "unist-util-visit";
 import { format } from "prettier";
+import Prism from "prismjs";
+import slug from "remark-slug";
+import { parse, walk } from "svelte/compiler";
+import visit from "unist-util-visit";
 import pkg from "../package.json" with { type: "json" };
 import component_api from "./src/COMPONENT_API.json" with { type: "json" };
-import fs from "node:fs";
-import Prism from "prismjs";
 import "prism-svelte";
 
 const component_api_by_name = component_api.components.reduce((a, c) => {
@@ -192,7 +192,7 @@ export default {
                     ${toc
                       .map(
                         (item) =>
-                          `<li class="bx--list__item"><a class="bx--link" href="\#${item.id}">${item.text}</a></li>`,
+                          `<li class="bx--list__item"><a class="bx--link" href="#${item.id}">${item.text}</a></li>`,
                       )
                       .join("")}
                   <h5>Component API</h5>

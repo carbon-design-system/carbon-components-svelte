@@ -1,5 +1,5 @@
 <script>
-  import { ImageLoader, Button } from "carbon-components-svelte";
+  import { Button, ImageLoader } from "carbon-components-svelte";
 
   const images = [
     "https://upload.wikimedia.org/wikipedia/commons/1/1b/Svelte_Logo.svg",

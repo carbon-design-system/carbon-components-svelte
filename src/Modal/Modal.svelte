@@ -90,11 +90,11 @@
   /** Obtain a reference to the top-level HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, afterUpdate } from "svelte";
-  import Close from "../icons/Close.svelte";
-  import Button from "../Button/Button.svelte";
-  import { trackModal } from "./modalStore";
+  import { afterUpdate, createEventDispatcher } from "svelte";
   import { writable } from "svelte/store";
+  import Button from "../Button/Button.svelte";
+  import Close from "../icons/Close.svelte";
+  import { trackModal } from "./modalStore";
 
   const dispatch = createEventDispatcher();
 

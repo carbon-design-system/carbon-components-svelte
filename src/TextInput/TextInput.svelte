@@ -70,20 +70,31 @@
   export let readonly = false;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import EditOff from "../icons/EditOff.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   const ctx = getContext("Form");
   const dispatch = createEventDispatcher();
 
+  // Internal string value for the input element (preserves HTML5 validation)
+  let inputValue = "";
+
+  // Sync inputValue with value prop
+  $: if ($$restProps.type === "number") {
+    inputValue = value == null ? "" : String(value);
+  } else {
+    inputValue = value == null ? "" : value;
+  }
+
   function parse(raw) {
-    if ($$restProps.type !== "number") return raw;
-    return raw != "" ? Number(raw) : null;
+    if ($$restProps.type !== "number") return raw || null;
+    return raw !== "" ? Number(raw) : null;
   }
 
   /** @type {(e: Event) => void} */
   const onInput = (e) => {
+    inputValue = e.target.value;
     value = parse(e.target.value);
     dispatch("input", value);
   };

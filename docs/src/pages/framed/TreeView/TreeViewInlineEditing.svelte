@@ -1,5 +1,5 @@
 <script>
-  import { TreeView, RecursiveList } from "carbon-components-svelte";
+  import { RecursiveList, TreeView } from "carbon-components-svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
 
   let nodes = [

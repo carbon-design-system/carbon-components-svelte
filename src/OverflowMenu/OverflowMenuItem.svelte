@@ -29,7 +29,7 @@
   /** Obtain a reference to the HTML element */
   export let ref = null;
 
-  import { getContext, afterUpdate } from "svelte";
+  import { afterUpdate, getContext } from "svelte";
 
   const { focusedId, add, update, change, items } = getContext("OverflowMenu");
 

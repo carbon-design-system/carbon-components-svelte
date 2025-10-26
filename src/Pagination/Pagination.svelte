@@ -83,9 +83,9 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   import { createEventDispatcher } from "svelte";
+  import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
-  import Button from "../Button/Button.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
 

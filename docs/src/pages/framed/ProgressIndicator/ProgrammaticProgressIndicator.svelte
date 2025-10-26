@@ -1,8 +1,8 @@
 <script>
   import {
+    Button,
     ProgressIndicator,
     ProgressStep,
-    Button,
   } from "carbon-components-svelte";
 
   let currentIndex = 1;

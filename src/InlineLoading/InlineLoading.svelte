@@ -21,14 +21,14 @@
   /** Specify the timeout delay (ms) after `status` is set to "success" */
   export let successDelay = 1500;
 
-  import { createEventDispatcher, afterUpdate, onMount } from "svelte";
+  import { afterUpdate, createEventDispatcher, onMount } from "svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import Loading from "../Loading/Loading.svelte";
 
   const dispatch = createEventDispatcher();
 
-  let timeout = undefined;
+  let timeout;
 
   onMount(() => {
     return () => {

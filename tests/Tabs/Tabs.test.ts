@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
-import Tabs from "./Tabs.test.svelte";
 import Tab from "./Tab.test.svelte";
+import Tabs from "./Tabs.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 
 describe("Tabs", () => {

@@ -1,6 +1,6 @@
 <script>
-  import { onMount } from "svelte";
   import { ComboBox } from "carbon-components-svelte";
+  import { onMount } from "svelte";
 
   let items = [];
   let timeoutId;

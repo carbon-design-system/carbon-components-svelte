@@ -1,5 +1,5 @@
 <script>
-  import { Popover, Button } from "carbon-components-svelte";
+  import { Button, Popover } from "carbon-components-svelte";
 
   let open = true;
   let ref = null;

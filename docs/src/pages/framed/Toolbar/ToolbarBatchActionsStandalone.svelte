@@ -1,13 +1,13 @@
 <script>
   import {
-    Toolbar,
-    ToolbarContent,
-    ToolbarBatchActions,
     Button,
     Checkbox,
+    Toolbar,
+    ToolbarBatchActions,
+    ToolbarContent,
   } from "carbon-components-svelte";
-  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 
   let items = [
     { id: 1, name: "Item 1", checked: false },

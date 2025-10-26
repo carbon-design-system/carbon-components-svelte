@@ -1,9 +1,9 @@
 <script lang="ts">
   import {
+    Button,
+    Checkbox,
     FluidForm,
     FormGroup,
-    Checkbox,
-    Button,
   } from "carbon-components-svelte";
 
   export let preventDefault = false;

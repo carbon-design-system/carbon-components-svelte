@@ -99,8 +99,8 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import {
     ListBox,
     ListBoxMenu,

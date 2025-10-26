@@ -23,8 +23,8 @@
   /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  import ArrowUp from "../icons/ArrowUp.svelte";
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
+  import ArrowUp from "../icons/ArrowUp.svelte";
 
   // TODO: translate with id
   $: ariaLabel = translateWithId();

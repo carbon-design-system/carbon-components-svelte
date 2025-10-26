@@ -1,6 +1,6 @@
 <script>
-  import copy from "clipboard-copy";
   import { CodeSnippet } from "carbon-components-svelte";
+  import copy from "clipboard-copy";
 </script>
 
 <CodeSnippet

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
 

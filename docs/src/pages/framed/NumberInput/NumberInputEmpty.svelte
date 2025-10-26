@@ -1,5 +1,5 @@
 <script>
-  import { NumberInput, Button } from "carbon-components-svelte";
+  import { Button, NumberInput } from "carbon-components-svelte";
 
   let value = null;
 </script>

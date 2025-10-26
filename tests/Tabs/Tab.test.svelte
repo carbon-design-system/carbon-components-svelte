@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tabs, Tab } from "carbon-components-svelte";
+  import { Tab, Tabs } from "carbon-components-svelte";
 
   export let label = "Test Tab";
   export let href = "#test";

@@ -31,16 +31,16 @@
    */
   export let expansionBreakpoint = 1056;
 
-  import { onMount, createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import {
-    shouldRenderHamburgerMenu,
     isSideNavCollapsed,
     isSideNavRail,
+    shouldRenderHamburgerMenu,
   } from "./navStore";
 
   const dispatch = createEventDispatcher();
 
-  let winWidth = undefined;
+  let winWidth;
 
   $: dispatch(isOpen ? "open" : "close");
   $: $isSideNavCollapsed = !isOpen;

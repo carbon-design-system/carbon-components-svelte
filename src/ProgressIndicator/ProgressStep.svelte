@@ -23,11 +23,11 @@
   /** Set an id for the top-level element */
   export let id = "ccs-" + Math.random().toString(36);
 
-  import { onMount, getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
-  import Warning from "../icons/Warning.svelte";
   import CircleDash from "../icons/CircleDash.svelte";
   import Incomplete from "../icons/Incomplete.svelte";
+  import Warning from "../icons/Warning.svelte";
 
   let step = {};
 

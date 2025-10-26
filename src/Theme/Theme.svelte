@@ -70,10 +70,10 @@
   };
 
   import { createEventDispatcher } from "svelte";
-  import Toggle from "../Toggle/Toggle.svelte";
+  import LocalStorage from "../LocalStorage/LocalStorage.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
-  import LocalStorage from "../LocalStorage/LocalStorage.svelte";
+  import Toggle from "../Toggle/Toggle.svelte";
 
   const dispatch = createEventDispatcher();
 

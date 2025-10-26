@@ -67,8 +67,8 @@
   /** Obtain a reference to the textarea HTML element */
   export let ref = null;
 
-  import WarningFilled from "../icons/WarningFilled.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;

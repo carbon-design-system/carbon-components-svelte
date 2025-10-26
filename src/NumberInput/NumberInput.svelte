@@ -108,10 +108,10 @@
 
   import { createEventDispatcher } from "svelte";
   import Add from "../icons/Add.svelte";
-  import Subtract from "../icons/Subtract.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import EditOff from "../icons/EditOff.svelte";
+  import Subtract from "../icons/Subtract.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",

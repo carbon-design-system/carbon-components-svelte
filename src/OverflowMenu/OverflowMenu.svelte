@@ -56,14 +56,14 @@
   export let menuRef = null;
 
   import {
+    afterUpdate,
     createEventDispatcher,
     getContext,
     setContext,
-    afterUpdate,
   } from "svelte";
   import { writable } from "svelte/store";
-  import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
+  import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
 
   const ctxBreadcrumbItem = getContext("BreadcrumbItem");
   const dispatch = createEventDispatcher();
@@ -72,7 +72,7 @@
   const focusedId = writable(undefined);
   const currentIndex = writable(-1);
 
-  let buttonWidth = undefined;
+  let buttonWidth;
   let onMountAfterUpdate = true;
 
   $: if (ctxBreadcrumbItem) {

@@ -1,5 +1,5 @@
 <script>
-  import { Tooltip, Button } from "carbon-components-svelte";
+  import { Button, Tooltip } from "carbon-components-svelte";
 
   let open = true;
 </script>

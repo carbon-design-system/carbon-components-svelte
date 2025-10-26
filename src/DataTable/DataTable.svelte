@@ -158,8 +158,8 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
-  import ChevronRight from "../icons/ChevronRight.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
+  import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
@@ -189,7 +189,7 @@
   const resolvePath = (object, path) => {
     if (path in object) return object[path];
     return path
-      .split(/[\.\[\]\'\"]/)
+      .split(/[.[\]'"]/)
       .filter((p) => p)
       .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
   };

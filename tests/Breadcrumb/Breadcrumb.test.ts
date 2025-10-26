@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
-import Breadcrumb from "./Breadcrumb.test.svelte";
+import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
 import BreadcrumbNoTrailingSlash from "./Breadcrumb.noTrailingSlash.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
-import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
+import Breadcrumb from "./Breadcrumb.test.svelte";
 
 describe("Breadcrumb", () => {
   it("renders with default props", () => {

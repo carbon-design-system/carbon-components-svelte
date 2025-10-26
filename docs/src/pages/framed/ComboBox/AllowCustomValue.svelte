@@ -1,7 +1,7 @@
 <script>
   import { ComboBox } from "carbon-components-svelte";
 
-  let selectedId = undefined;
+  let selectedId;
   let value = "";
 </script>
 

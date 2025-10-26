@@ -30,11 +30,11 @@
   export let tooltipPosition = "bottom";
 
   import { createEventDispatcher } from "svelte";
+  import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import PaginationItem from "./PaginationItem.svelte";
   import PaginationOverflow from "./PaginationOverflow.svelte";
-  import Button from "../Button/Button.svelte";
 
   const dispatch = createEventDispatcher();
   const MIN = 4;

@@ -48,10 +48,10 @@
   /** Obtain a reference to the list item HTML element */
   export let ref = null;
 
-  import { onMount, getContext, createEventDispatcher, tick } from "svelte";
-  import ContextMenu from "./ContextMenu.svelte";
-  import Checkmark from "../icons/Checkmark.svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import CaretRight from "../icons/CaretRight.svelte";
+  import Checkmark from "../icons/Checkmark.svelte";
+  import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();
   const ctx = getContext("ContextMenu");
@@ -62,10 +62,10 @@
   const moderate01 = 150;
   const closeDelay = moderate01;
 
-  let unsubCurrentIds = undefined;
-  let unsubCurrentId = undefined;
-  let timeoutHover = undefined;
-  let timeoutClose = undefined;
+  let unsubCurrentIds;
+  let unsubCurrentId;
+  let timeoutHover;
+  let timeoutClose;
   let rootMenuPosition = [0, 0];
   let focusIndex = 0;
   let options = [];
@@ -156,9 +156,9 @@
     if (disabled) return ctx.close();
     if (subOptions) return;
 
-    if (!!ctxGroup) {
+    if (ctxGroup) {
       ctxGroup.toggleOption({ id });
-    } else if (!!ctxRadioGroup) {
+    } else if (ctxRadioGroup) {
       if (opts.fromKeyboard) {
         ctxRadioGroup.setOption({ id: opts.id });
       } else {

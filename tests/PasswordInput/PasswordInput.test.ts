@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
-import PasswordInput from "./PasswordInput.test.svelte";
 import { user } from "../setup-tests";
+import PasswordInput from "./PasswordInput.test.svelte";
 
 describe("PasswordInput", () => {
   describe("Default", () => {

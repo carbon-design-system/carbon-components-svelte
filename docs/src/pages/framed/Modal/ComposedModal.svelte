@@ -1,10 +1,10 @@
 <script>
   import {
+    Checkbox,
     ComposedModal,
-    ModalHeader,
     ModalBody,
     ModalFooter,
-    Checkbox,
+    ModalHeader,
   } from "carbon-components-svelte";
 
   let checked = false;

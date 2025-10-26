@@ -1,5 +1,5 @@
 <script>
-  import { TreeView, Checkbox } from "carbon-components-svelte";
+  import { Checkbox, TreeView } from "carbon-components-svelte";
 
   let checkedNodes = new Set([0, 7]);
   let nodes = [

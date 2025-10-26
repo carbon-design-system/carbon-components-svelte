@@ -1,8 +1,8 @@
 <script>
   import {
     FluidForm,
-    TextInput,
     PasswordInput,
+    TextInput,
   } from "carbon-components-svelte";
 
   let password = "";

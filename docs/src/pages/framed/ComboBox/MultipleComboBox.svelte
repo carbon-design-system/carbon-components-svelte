@@ -7,8 +7,8 @@
     { id: "2", text: "Fax" },
   ];
 
-  let comboBox1_selectedId = undefined;
-  let comboBox2_selectedId = undefined;
+  let comboBox1_selectedId;
+  let comboBox2_selectedId;
 
   const formatSelected = (id) =>
     items.find((item) => item.id === id)?.text ?? "N/A";

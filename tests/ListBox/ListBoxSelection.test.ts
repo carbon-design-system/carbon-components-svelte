@@ -175,7 +175,7 @@ describe("ListBoxSelection", () => {
       },
     });
 
-    let button = screen.getByRole("button");
+    const button = screen.getByRole("button");
     expect(button).toHaveAttribute("aria-label", "Remove item");
     expect(button).toHaveAttribute("title", "Remove item");
 

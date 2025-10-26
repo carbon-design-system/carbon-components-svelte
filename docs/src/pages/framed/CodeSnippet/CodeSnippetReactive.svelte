@@ -1,5 +1,5 @@
 <script>
-  import { CodeSnippet, Button } from "carbon-components-svelte";
+  import { Button, CodeSnippet } from "carbon-components-svelte";
 
   let expanded = false;
 </script>

@@ -1,5 +1,5 @@
 <script>
-  import { Search, ButtonSet, Button } from "carbon-components-svelte";
+  import { Button, ButtonSet, Search } from "carbon-components-svelte";
 
   let value = "";
 </script>

@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, Tab, TabContent, Button } from "carbon-components-svelte";
+  import { Button, Tab, TabContent, Tabs } from "carbon-components-svelte";
 
   let selected = 0;
 </script>

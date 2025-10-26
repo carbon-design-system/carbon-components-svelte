@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
-import InlineNotification from "./InlineNotification.test.svelte";
-import InlineNotificationCustom from "./InlineNotificationCustom.test.svelte";
 import InlineNotificationClose from "./InlineNotification.close.test.svelte";
+import InlineNotification from "./InlineNotification.test.svelte";
 import InlineNotificationActionHref from "./InlineNotificationActionHref.test.svelte";
+import InlineNotificationCustom from "./InlineNotificationCustom.test.svelte";
 
 describe("InlineNotification", () => {
   beforeEach(() => {

@@ -49,7 +49,7 @@ describe("DataTableSearch", () => {
     expect(getNextPageButton()).toBeDisabled();
     expect(getPrevPageButton()).toBeDisabled();
 
-    let tableRows = getTableRows();
+    const tableRows = getTableRows();
     expect(tableRows).toHaveLength(5);
     tableRows.forEach((row) => {
       expect(row).toHaveTextContent("DNS");
@@ -87,7 +87,7 @@ describe("DataTableSearch", () => {
     expect(getNextPageButton()).toBeDisabled();
     expect(getPrevPageButton()).toBeDisabled();
 
-    let tableRows = getTableRows();
+    const tableRows = getTableRows();
     expect(tableRows).toHaveLength(5);
     tableRows.forEach((row) => {
       expect(row).toHaveTextContent("DNS");
@@ -157,7 +157,7 @@ describe("DataTableSearch", () => {
         shouldFilterRows: (row, value) => {
           return (
             /(6|8)$/.test(row.name) &&
-            row.rule.toLowerCase().includes((value + "").toLowerCase())
+            row.rule.toLowerCase().includes(value.toString().toLowerCase())
           );
         },
       },
@@ -174,7 +174,7 @@ describe("DataTableSearch", () => {
     expect(getNextPageButton()).toBeDisabled();
     expect(getPrevPageButton()).toBeDisabled();
 
-    let tableRows = getTableRows();
+    const tableRows = getTableRows();
     expect(tableRows).toHaveLength(2);
     tableRows.forEach((row) => {
       expect(row).toHaveTextContent("Round");
@@ -207,7 +207,7 @@ describe("DataTableSearch", () => {
     expect(getNextPageButton()).toBeDisabled();
     expect(getPrevPageButton()).toBeDisabled();
 
-    let tableRows = getTableRows();
+    const tableRows = getTableRows();
     expect(tableRows).toHaveLength(2);
     tableRows.forEach((row) => {
       expect(row).toHaveTextContent("Round!");

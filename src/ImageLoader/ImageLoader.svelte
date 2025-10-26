@@ -55,7 +55,7 @@
     image.onerror = () => (error = true);
   };
 
-  import { onMount, createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { fade } from "svelte/transition";
   import AspectRatio from "../AspectRatio/AspectRatio.svelte";
 

@@ -1,9 +1,9 @@
 <script>
   import {
     Button,
-    Modal,
     DatePicker,
     DatePickerInput,
+    Modal,
   } from "carbon-components-svelte";
 
   let open = false;

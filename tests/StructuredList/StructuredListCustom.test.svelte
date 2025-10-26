@@ -2,8 +2,8 @@
   import {
     StructuredList,
     StructuredListBody,
-    StructuredListHead,
     StructuredListCell,
+    StructuredListHead,
     StructuredListRow,
   } from "carbon-components-svelte";
 </script>

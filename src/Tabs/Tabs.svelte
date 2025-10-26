@@ -24,8 +24,8 @@
   /** Specify the tab trigger href attribute */
   export let triggerHref = "#";
 
-  import { createEventDispatcher, afterUpdate, setContext, tick } from "svelte";
-  import { writable, derived } from "svelte/store";
+  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
+  import { derived, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
 
   const dispatch = createEventDispatcher();

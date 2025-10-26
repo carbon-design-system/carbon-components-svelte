@@ -1,5 +1,5 @@
 <script>
-  import { Checkbox, Button } from "carbon-components-svelte";
+  import { Button, Checkbox } from "carbon-components-svelte";
 
   let values = ["Apple", "Banana", "Coconut"];
   let group = values.slice(0, 2);

@@ -1,14 +1,14 @@
 import { render, screen } from "@testing-library/svelte";
-import CodeSnippetInline from "./CodeSnippetInline.test.svelte";
-import CodeSnippetMultiline from "./CodeSnippetMultiline.test.svelte";
-import CodeSnippetExpandable from "./CodeSnippetExpandable.test.svelte";
-import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte";
+import { user } from "../setup-tests";
 import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
-import CodeSnippetWithWrapText from "./CodeSnippetWithWrapText.test.svelte";
-import CodeSnippetWithHideShowMore from "./CodeSnippetWithHideShowMore.test.svelte";
+import CodeSnippetExpandable from "./CodeSnippetExpandable.test.svelte";
+import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte";
+import CodeSnippetInline from "./CodeSnippetInline.test.svelte";
+import CodeSnippetMultiline from "./CodeSnippetMultiline.test.svelte";
 import CodeSnippetWithCustomCopyText from "./CodeSnippetWithCustomCopyText.test.svelte";
-import { user } from "../setup-tests";
+import CodeSnippetWithHideShowMore from "./CodeSnippetWithHideShowMore.test.svelte";
+import CodeSnippetWithWrapText from "./CodeSnippetWithWrapText.test.svelte";
 
 describe("CodeSnippet", () => {
   test("should render inline variant", () => {
