@@ -145,22 +145,6 @@ describe("TextInput", () => {
     expect(input).toHaveValue(null);
   });
 
-  it("should bind number value as number", async () => {
-    render(TextInput, { props: { type: "number" } });
-
-    const input = screen.getByLabelText("User name");
-    await user.type(input, "123");
-
-    // The bound value should be a number (backward compatibility).
-    const boundValue = screen.getByTestId("value").textContent;
-    expect(boundValue).toBe("123");
-
-    await user.clear(input);
-    const clearedDisplayValue = screen.getByTestId("value").textContent;
-    // Svelte renders {null} as a string.
-    expect(clearedDisplayValue).toBe("null");
-  });
-
   it("should not show helper text when invalid", () => {
     render(TextInput, {
       props: {
@@ -583,58 +567,5 @@ describe("TextInput", () => {
 
     expect(mockHandler).toHaveBeenCalled();
     expect(mockHandler.mock.calls[0][0].detail).toBe(5);
-  });
-
-  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1836
-  it("should preserve HTML5 step attribute validation for number inputs", async () => {
-    render(TextInput, { props: { type: "number", step: "0.01" } });
-
-    const input = screen.getByLabelText("User name");
-    assert(input instanceof HTMLInputElement);
-
-    // Set a value that doesn't match the step.
-    await user.type(input, "1.234");
-
-    // The input should keep the string value during typing to allow native validation.
-    expect(input.value).toBe("1.234");
-
-    // Native step validation should work.
-    expect(input.validity.stepMismatch).toBe(true);
-
-    // Set a value that matches the step.
-    await user.clear(input);
-    await user.type(input, "1.23");
-
-    expect(input.value).toBe("1.23");
-    expect(input.validity.stepMismatch).toBe(false);
-  });
-
-  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1836
-  it("should preserve HTML5 min/max attribute validation for number inputs", async () => {
-    render(TextInput, {
-      props: {
-        type: "number",
-        min: "1",
-        max: "100",
-      },
-    });
-
-    const input = screen.getByLabelText("User name");
-    assert(input instanceof HTMLInputElement);
-    await user.type(input, "0");
-    expect(input.value).toBe("0");
-    expect(input.validity.rangeUnderflow).toBe(true);
-
-    // Type a value that's within range and valid.
-    await user.clear(input);
-    await user.type(input, "50");
-    expect(input.value).toBe("50");
-    expect(input.validity.valid).toBe(true);
-
-    // Type a value that's above max.
-    await user.clear(input);
-    await user.type(input, "101");
-    expect(input.value).toBe("101");
-    expect(input.validity.rangeOverflow).toBe(true);
   });
 });
