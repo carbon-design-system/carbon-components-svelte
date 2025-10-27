@@ -1,5 +1,5 @@
 import type { Readable, Subscriber, Unsubscriber } from "svelte/store";
-import type { BreakpointSize, BreakpointValue } from "./breakpoints";
+import type { BreakpointSize } from "./breakpoints";
 
 /**
  * Creates a readable store that returns the current breakpoint size.
