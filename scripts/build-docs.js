@@ -1,7 +1,7 @@
 // @ts-check
 import fs from "node:fs";
+import { Glob } from "bun";
 import { sveld } from "sveld";
-import { globSync } from "tinyglobby";
 import pkg from "../package.json" with { type: "json" };
 
 sveld({
@@ -22,7 +22,8 @@ sveld({
   },
 });
 
-for (const file of globSync(["./src/**/*.d.ts"])) {
+const glob = new Glob("**/*.d.ts");
+for (const file of glob.scanSync({ cwd: "./src" })) {
   console.log("Copying", file, " to types/");
-  fs.copyFileSync(file, file.replace(/src/, "types"));
+  fs.copyFileSync(`./src/${file}`, `./types/${file}`);
 }
