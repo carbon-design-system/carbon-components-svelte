@@ -86,7 +86,9 @@
 
   $: if (target != null) {
     if (Array.isArray(target)) {
-      target.forEach((node) => node?.addEventListener("contextmenu", openMenu));
+      target.forEach((node) => {
+        node?.addEventListener("contextmenu", openMenu);
+      });
     } else {
       target.addEventListener("contextmenu", openMenu);
     }
@@ -96,9 +98,9 @@
     return () => {
       if (target != null) {
         if (Array.isArray(target)) {
-          target.forEach((node) =>
-            node?.removeEventListener("contextmenu", openMenu),
-          );
+          target.forEach((node) => {
+            node?.removeEventListener("contextmenu", openMenu);
+          });
         } else {
           target.removeEventListener("contextmenu", openMenu);
         }
