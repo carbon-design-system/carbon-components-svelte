@@ -107,7 +107,7 @@
     const shouldClose = open;
     // ensure changes are scheduled at the end, i.e. after the possible focus event.
     setTimeout(() => {
-      open = shouldClose ? false : true;
+      open = !shouldClose;
     });
   }
 
