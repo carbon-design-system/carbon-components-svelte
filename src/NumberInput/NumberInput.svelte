@@ -190,7 +190,7 @@
   function parse(raw) {
     if (raw === "" || raw === "-") return null;
     const num = Number(raw);
-    return isNaN(num) ? null : num;
+    return Number.isNaN(num) ? null : num;
   }
 
   function onInput({ target }) {
