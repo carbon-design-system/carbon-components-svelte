@@ -17,13 +17,13 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: bun ci
 
       - name: Build docs
-        run: npm run build:docs
+        run: bun build:docs
 
       - name: Prune package.json
-        run: npx culls --preserve=svelte
+        run: bunx culls --preserve=svelte
 
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}
