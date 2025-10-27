@@ -4,8 +4,14 @@ Before submitting a pull request (PR), consider [filing an issue](https://github
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/en/download/package-manager/) (version >=20)
-- [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm#using-a-node-installer-to-install-nodejs-and-npm)
+**Codebase**
+
+- [Bun](https://bun.com/docs/installation)
+
+**Docs**
+
+- [Node.js](https://nodejs.org/en/download/package-manager/) (version 20)
+  - Installing Node should automatically install [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm#using-a-node-installer-to-install-nodejs-and-npm)
 
 ## Project set-up
 
@@ -29,30 +35,29 @@ git remote -v
 Install the project dependencies.
 
 ```sh
-npm install
+bun install
 ```
 
 ## Documentation set-up
 
 Component documentation is located in the `docs` folder. The website is built using svite, routify, and MDsveX. You will need to create a symbolic project link in order to see live changes reflected when developing locally.
 
-First, create a symbolic link at the root of the project:
+Running the docs site requires Node.js version 20.
+
+Use `nvm` to switch:
 
 ```sh
-npm link
+nvm use 20
 ```
 
-Then, go into `docs` and link the package.
+To run the docs site:
 
 ```sh
 cd docs
-npm link "carbon-components-svelte"
-npm install
+nvm use 20 && npm i && npm run dev
 ```
 
-If linked correctly, any change to a component in the `src` folder should be reflected in the `docs` site.
-
----
+The site should be served at http://localhost:5173/ (or the next available port).
 
 ## Development workflow
 
@@ -63,14 +68,6 @@ git checkout -b new-feature
 ```
 
 Preview changes to components from the `src` folder in the documentation website located in `docs/`.
-
-In the `docs` folder, run:
-
-```sh
-npm run dev
-```
-
-The site should be served at http://localhost:5173/ (or the next available port).
 
 ### Component Format
 
@@ -114,12 +111,12 @@ export {
 } from "./ComposedModal";
 ```
 
-### Run `npm run build:docs`
+### Run `bun run build:docs`
 
 Run the following command to re-generate TypeScript definitions and documentation.
 
 ```sh
-npm run build:docs
+bun run build:docs
 ```
 
 ## Submit a Pull Request
@@ -150,11 +147,11 @@ The workflow is automatically triggered when pushing a tag that begins with `v` 
 
 However, maintainers must perform a few things in preparation for a release.
 
-Locally, while on `master` and the branch is clean, run `npm run release`. This command will:
+Locally, while on `master` and the branch is clean, run `bun run release`. This command will:
 
 - Bump the semantic version in `package.json`
 - Generate notes in `CHANGELOG.md`
-- Run `npm run build:docs` to update the generated documentation
+- Run `bun run build:docs` to update the generated documentation
 
 This command will not create a commit nor tag. Afterwards, perform the following manually:
 
