@@ -34,10 +34,10 @@
     "test:src-types": "tsc types/**/*.ts",
     "test:types": "svelte-check --workspace tests",
     "lint": "biome check --write .",
-    "build:css": "node scripts/build-css",
-    "build:docs": "node scripts/build-docs && node scripts/format-component-api",
+    "build:css": "bun scripts/build-css",
+    "build:docs": "bun scripts/build-docs && bun scripts/format-component-api",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
-    "release": "standard-version && npm run build:docs"
+    "release": "standard-version && bun build:docs"
   },
   "dependencies": {
     "@ibm/telemetry-js": "^1.5.0",
