@@ -5,7 +5,7 @@ import SkeletonText from "./SkeletonText.test.svelte";
 describe("SkeletonText", () => {
   it("should render with default props", () => {
     render(SkeletonText);
-    const element = screen.getByRole("paragraph");
+    const element = screen.getByRole("paragraph")!;
     expect(element).toHaveClass("bx--skeleton__text");
     expect(element).toHaveStyle({ width: "100%" });
   });
