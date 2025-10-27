@@ -33,13 +33,13 @@
 
   $: size = $observer;
   $: sizes = {
-    sm: size == "sm",
-    md: size == "md",
-    lg: size == "lg",
-    xlg: size == "xlg",
-    max: size == "max",
+    sm: size === "sm",
+    md: size === "md",
+    lg: size === "lg",
+    xlg: size === "xlg",
+    max: size === "max",
   };
-  $: if (size != undefined)
+  $: if (size !== undefined)
     // svelte-ignore reactive_declaration_non_reactive_property
     dispatch("change", { size, breakpointValue: breakpoints[size] });
 </script>
