@@ -101,7 +101,7 @@ type $Props = {
 
   /**
    * Override the page range text
-   * @default (current, total) => `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`
+   * @default (_current, total) => `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`
    */
   pageRangeText?: (current: number, total: number) => string;
 

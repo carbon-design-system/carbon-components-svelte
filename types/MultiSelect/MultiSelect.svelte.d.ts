@@ -28,7 +28,7 @@ type $Props = {
 
   /**
    * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
-   * @default (item) => {}
+   * @default (_item) => {}
    */
   itemToInput?: (item: MultiSelectItem) => {
     name?: string;
