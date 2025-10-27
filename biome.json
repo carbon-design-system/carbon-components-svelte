@@ -34,7 +34,7 @@
       },
       "suspicious": {
         "noExplicitAny": "off",
-        "noDoubleEquals": "off",
+        "noGlobalIsNan": "off",
         "useIterableCallbackReturn": "off"
       },
       "style": {
