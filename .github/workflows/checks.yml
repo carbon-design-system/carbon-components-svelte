@@ -23,7 +23,7 @@ jobs:
           node-version: 22
           cache: "npm"
       - run: npm ci --legacy-peer-deps
-      - run: npm run lint
+      - run: npx biome ci --error-on-warnings
 
   test:
     runs-on: macos-15-xlarge
