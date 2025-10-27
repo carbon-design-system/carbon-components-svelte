@@ -24,9 +24,6 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "correctness": {
-        "noUnusedFunctionParameters": "off"
-      },
       "complexity": {
         "noBannedTypes": "off",
         "noImportantStyles": "off",
