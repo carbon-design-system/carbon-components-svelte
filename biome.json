@@ -34,9 +34,6 @@
       },
       "style": {
         "noDescendingSpecificity": "off"
-      },
-      "performance": {
-        "noAccumulatingSpread": "off"
       }
     }
   },
