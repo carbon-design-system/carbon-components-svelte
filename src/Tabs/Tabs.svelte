@@ -32,13 +32,19 @@
 
   const tabs = writable([]);
   const tabsById = derived(tabs, (_) =>
-    _.reduce((a, c) => ({ ...a, [c.id]: c }), {}),
+    _.reduce((a, c) => {
+      a[c.id] = c;
+      return a;
+    }, {}),
   );
   const useAutoWidth = writable(autoWidth);
   const selectedTab = writable(undefined);
   const content = writable([]);
   const contentById = derived(content, (_) =>
-    _.reduce((a, c) => ({ ...a, [c.id]: c }), {}),
+    _.reduce((a, c) => {
+      a[c.id] = c;
+      return a;
+    }, {}),
   );
   const selectedContent = writable(undefined);
 

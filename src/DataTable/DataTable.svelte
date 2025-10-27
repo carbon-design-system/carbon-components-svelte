@@ -185,7 +185,10 @@
   // Store a copy of the original rows for filter restoration.
   $: originalRows = [...rows];
 
-  $: thKeys = headers.reduce((a, c) => ({ ...a, [c.key]: c.key }), {});
+  $: thKeys = headers.reduce((a, c) => {
+    a[c.key] = c.key;
+    return a;
+  }, {});
   const resolvePath = (object, path) => {
     if (path in object) return object[path];
     return path
@@ -244,10 +247,10 @@
   let expanded = false;
   let parentRowId = null;
 
-  $: expandedRows = expandedRowIds.reduce(
-    (a, id) => ({ ...a, [id]: true }),
-    {},
-  );
+  $: expandedRows = expandedRowIds.reduce((a, id) => {
+    a[id] = true;
+    return a;
+  }, {});
 
   let refSelectAll = null;
 
