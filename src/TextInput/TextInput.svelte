@@ -79,7 +79,7 @@
 
   function parse(raw) {
     if ($$restProps.type !== "number") return raw;
-    return raw != "" ? Number(raw) : null;
+    return raw !== "" ? Number(raw) : null;
   }
 
   /** @type {(e: Event) => void} */
