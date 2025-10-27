@@ -1,4 +1,3 @@
-// @ts-check
 import fs from "node:fs";
 import { Glob } from "bun";
 import { sveld } from "sveld";

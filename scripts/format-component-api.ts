@@ -1,4 +1,3 @@
-// @ts-check
 import fs from "node:fs";
 import { format } from "prettier";
 import plugin from "prettier/plugins/typescript";
