@@ -15,7 +15,6 @@
       "!**/.*",
       "!**/build",
       "!**/dist",
-      "!**/.svelte-kit",
       "!**/css/*.css",
       "!**/docs/src/pages/index.svelte",
       "!**/docs/src/COMPONENT_API.json"
