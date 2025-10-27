@@ -17,7 +17,10 @@
   const dispatch = createEventDispatcher();
   const steps = writable([]);
   const stepsById = derived(steps, (steps) =>
-    steps.reduce((a, c) => ({ ...a, [c.id]: c }), {}),
+    steps.reduce((a, c) => {
+      a[c.id] = c;
+      return a;
+    }, {}),
   );
   const preventChangeOnClickStore = writable(preventChangeOnClick);
 
