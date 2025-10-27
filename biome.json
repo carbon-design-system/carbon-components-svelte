@@ -76,12 +76,6 @@
           }
         }
       }
-    },
-    {
-      "includes": ["types/index.d.ts"],
-      "formatter": {
-        "enabled": false
-      }
     }
   ]
 }
