@@ -38,14 +38,14 @@ export function breakpointObserver() {
       if (matches) store.set(size);
     }
 
-    matchers.forEach(([_size, queryList]) =>
-      queryList.addEventListener("change", handleChange),
-    );
+    matchers.forEach(([_size, queryList]) => {
+      queryList.addEventListener("change", handleChange);
+    });
 
     return () => {
-      matchers.forEach(([_size, queryList]) =>
-        queryList.removeEventListener("change", handleChange),
-      );
+      matchers.forEach(([_size, queryList]) => {
+        queryList.removeEventListener("change", handleChange);
+      });
     };
   });
 

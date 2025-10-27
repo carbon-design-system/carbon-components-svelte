@@ -90,6 +90,8 @@
 
         return bp.join(" ");
       }
+
+      return undefined;
     })
     .filter(Boolean)
     .join(" ");
