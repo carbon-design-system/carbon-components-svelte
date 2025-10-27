@@ -30,8 +30,7 @@
         "useLiteralKeys": "off"
       },
       "suspicious": {
-        "noExplicitAny": "off",
-        "useIterableCallbackReturn": "off"
+        "noExplicitAny": "off"
       },
       "style": {
         "noDescendingSpecificity": "off"
