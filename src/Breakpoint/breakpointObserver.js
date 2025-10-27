@@ -29,7 +29,7 @@ export function breakpointObserver() {
       matchers.map(([size, queryList]) => [queryList.media, size]),
     );
 
-    const size = matchers.find(([size, queryList]) => queryList.matches)[0];
+    const size = matchers.find(([_size, queryList]) => queryList.matches)[0];
     store.set(size);
 
     /** @type {(e: MediaQueryListEvent) => void} */
@@ -38,12 +38,12 @@ export function breakpointObserver() {
       if (matches) store.set(size);
     }
 
-    matchers.forEach(([size, queryList]) =>
+    matchers.forEach(([_size, queryList]) =>
       queryList.addEventListener("change", handleChange),
     );
 
     return () => {
-      matchers.forEach(([size, queryList]) =>
+      matchers.forEach(([_size, queryList]) =>
         queryList.removeEventListener("change", handleChange),
       );
     };

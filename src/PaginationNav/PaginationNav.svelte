@@ -72,7 +72,7 @@
   // all enumerable items to render in between
   // overflow menus
   $: items = Array.from({ length: total })
-    .map((e, i) => i)
+    .map((_item, i) => i)
     .slice(startOffset + front, (back + 1) * -1);
 </script>
 

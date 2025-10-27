@@ -25,7 +25,7 @@
    * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
    * @type {(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }}
    */
-  export let itemToInput = (item) => {};
+  export let itemToInput = (_item) => {};
 
   /**
    * Set the selected ids

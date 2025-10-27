@@ -85,10 +85,10 @@ async function createCalendar({ options, base, input, dispatch }) {
     onClose: () => {
       dispatch("close");
     },
-    onMonthChange: (s, d, instance) => {
+    onMonthChange: (_s, _d, instance) => {
       updateMonthNode(instance);
     },
-    onOpen: (s, d, instance) => {
+    onOpen: (_s, _d, instance) => {
       dispatch("open");
       updateClasses(instance);
       updateMonthNode(instance);
