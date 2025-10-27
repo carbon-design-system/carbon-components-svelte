@@ -11,10 +11,8 @@ import component_api from "./src/COMPONENT_API.json" with { type: "json" };
 import "prism-svelte";
 
 const component_api_by_name = component_api.components.reduce((a, c) => {
-  return {
-    ...a,
-    [c.moduleName]: true,
-  };
+  a[c.moduleName] = true;
+  return a;
 }, {});
 
 function createImports(source) {
