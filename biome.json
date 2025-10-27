@@ -30,7 +30,6 @@
       "complexity": {
         "noBannedTypes": "off",
         "noImportantStyles": "off",
-        "noUselessTernary": "off",
         "useLiteralKeys": "off"
       },
       "suspicious": {
