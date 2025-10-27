@@ -12,6 +12,7 @@
   "files": {
     "includes": [
       "**",
+      "!**/.*",
       "!**/build",
       "!**/dist",
       "!**/.svelte-kit",
