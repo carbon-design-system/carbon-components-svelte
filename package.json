@@ -54,7 +54,7 @@
     "carbon-icons-svelte": "^13.4.0",
     "carbon-preprocess-svelte": "^0.11.11",
     "culls": "^0.1.1",
-    "jsdom": "^26.1.0",
+    "jsdom": "^27.0.1",
     "postcss": "^8.5.5",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
@@ -63,8 +63,7 @@
     "svelte-check": "^4.2.1",
     "tinyglobby": "^0.2.14",
     "typescript": "^5.9.3",
-    "vite": "^7.1.11",
-    "vitest": "^4.0.1"
+    "vitest": "^4.0.4"
   },
   "standard-version": {
     "skip": {

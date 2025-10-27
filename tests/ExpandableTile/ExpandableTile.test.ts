@@ -141,7 +141,7 @@ describe("ExpandableTile", () => {
     });
 
     const tile = screen.getByRole("button");
-    expect(tile.getAttribute("style")).toBe("max-height: 105px;");
+    expect(tile.getAttribute("style")).toBe("max-height: 220px;");
 
     await user.click(tile);
     expect(tile.getAttribute("style")).toBe("max-height: none;");
