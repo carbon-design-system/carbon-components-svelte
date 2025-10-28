@@ -37,6 +37,7 @@
     "build:css": "bun scripts/build-css",
     "build:docs": "bun scripts/build-docs && bun scripts/format-component-api",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
+    "prepare": "lefthook install",
     "release": "standard-version && bun build:docs"
   },
   "dependencies": {
@@ -56,6 +57,7 @@
     "carbon-preprocess-svelte": "^0.11.11",
     "culls": "^0.1.1",
     "jsdom": "^27.0.1",
+    "lefthook": "^2.0.1",
     "postcss": "^8.5.5",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
