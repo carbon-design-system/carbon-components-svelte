@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ListBoxField from "./ListBoxField.test.svelte";
 
@@ -105,13 +106,14 @@ describe("ListBoxField", () => {
       close: "Custom close",
     } as const;
 
-    render(ListBoxField, {
-      props: {
-        "aria-expanded": false,
-        translateWithId: (id) => customTranslations[id],
-        slotContent: "Custom field",
-      },
-    });
+    const props = {
+      "aria-expanded": false,
+      translateWithId: (id: keyof typeof customTranslations) =>
+        customTranslations[id],
+      slotContent: "Custom field",
+    } satisfies ComponentProps<ListBoxField>;
+
+    render(ListBoxField, { props });
 
     const field = screen
       .getByText("Custom field")
@@ -125,13 +127,14 @@ describe("ListBoxField", () => {
       close: "Custom close",
     } as const;
 
-    render(ListBoxField, {
-      props: {
-        "aria-expanded": true,
-        translateWithId: (id) => customTranslations[id],
-        slotContent: "Custom field",
-      },
-    });
+    const props = {
+      "aria-expanded": true,
+      translateWithId: (id: keyof typeof customTranslations) =>
+        customTranslations[id],
+      slotContent: "Custom field",
+    } satisfies ComponentProps<ListBoxField>;
+
+    render(ListBoxField, { props });
 
     const field = screen
       .getByText("Custom field")

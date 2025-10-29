@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ListBoxSelection from "./ListBoxSelection.test.svelte";
 
@@ -169,11 +170,12 @@ describe("ListBoxSelection", () => {
       clearAll: "Remove all",
     } as const;
 
-    const { component } = render(ListBoxSelection, {
-      props: {
-        translateWithId: (id) => customTranslations[id],
-      },
-    });
+    const props = {
+      translateWithId: (id: keyof typeof customTranslations) =>
+        customTranslations[id],
+    } satisfies ComponentProps<ListBoxSelection>;
+
+    const { component } = render(ListBoxSelection, { props });
 
     const button = screen.getByRole("button");
     expect(button).toHaveAttribute("aria-label", "Remove item");

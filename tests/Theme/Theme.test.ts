@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import Theme from "./Theme.test.svelte";
@@ -110,8 +111,7 @@ describe("Theme", () => {
     const consoleWarn = vi.spyOn(console, "warn");
     const { component } = render(Theme);
 
-    // @ts-expect-error - Testing invalid theme
-    component.$set({ theme: "invalid" });
+    component.$set({ theme: "invalid" as unknown as CarbonTheme });
     await tick();
 
     expect(consoleWarn).toHaveBeenCalledWith(

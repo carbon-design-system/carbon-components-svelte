@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import DataTableSearch from "./DataTableSearch.test.svelte";
 
@@ -68,7 +69,7 @@ describe("DataTableSearch", () => {
     render(DataTableSearch, {
       props: {
         persistent: true,
-      },
+      } satisfies ComponentProps<DataTableSearch>,
     });
 
     const searchBar = screen.getByRole("search");
@@ -152,16 +153,16 @@ describe("DataTableSearch", () => {
   });
 
   it("can filter with a custom filter function", async () => {
-    render(DataTableSearch, {
-      props: {
-        shouldFilterRows: (row, value) => {
-          return (
-            /(6|8)$/.test(row.name) &&
-            row.rule.toLowerCase().includes(value.toString().toLowerCase())
-          );
-        },
+    const props = {
+      shouldFilterRows: (row: any, value: any) => {
+        return (
+          /(6|8)$/.test(row.name) &&
+          row.rule.toLowerCase().includes(value.toString().toLowerCase())
+        );
       },
-    });
+    } satisfies ComponentProps<DataTableSearch>;
+
+    render(DataTableSearch, { props });
 
     allRowsRendered();
 
