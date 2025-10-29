@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import NumberInput from "./NumberInput.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
@@ -295,15 +296,15 @@ describe("NumberInput", () => {
   });
 
   it("should support custom translateWithId function", () => {
-    render(NumberInput, {
-      props: {
-        translateWithId: (id) => {
-          if (id === "increment") return "Custom Increment";
-          if (id === "decrement") return "Custom Decrement";
-          return id;
-        },
+    const props = {
+      translateWithId: (id: string) => {
+        if (id === "increment") return "Custom Increment";
+        if (id === "decrement") return "Custom Decrement";
+        return id;
       },
-    });
+    } satisfies ComponentProps<NumberInput>;
+
+    render(NumberInput, { props });
 
     expect(
       screen.getByRole("button", { name: "Custom Increment" }),

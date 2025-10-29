@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
@@ -167,15 +169,15 @@ describe("MultiSelect", () => {
 
     it("uses custom filter function", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      render(MultiSelect, {
-        props: {
-          items,
-          filterable: true,
-          filterItem: (item, value) => {
-            return item.text.toLowerCase().startsWith(value.toLowerCase());
-          },
+      const props = {
+        items,
+        filterable: true,
+        filterItem: (item: MultiSelectItem, value: string) => {
+          return item.text.toLowerCase().startsWith(value.toLowerCase());
         },
-      });
+      } satisfies ComponentProps<MultiSelect>;
+
+      render(MultiSelect, { props });
 
       const input = screen.getByRole("combobox");
       await user.click(input);
@@ -492,27 +494,27 @@ describe("MultiSelect", () => {
 
   describe("custom formatting", () => {
     it("handles custom itemToString", () => {
-      render(MultiSelect, {
-        props: {
-          items,
-          selectedIds: ["0"],
-          itemToString: (item) => `${item.text} (${item.id})`,
-        },
-      });
+      const props = {
+        items,
+        selectedIds: ["0"],
+        itemToString: (item: MultiSelectItem) => `${item.text} (${item.id})`,
+      } satisfies ComponentProps<MultiSelect>;
+
+      render(MultiSelect, { props });
 
       expect(screen.getByText("Slack (0)")).toBeInTheDocument();
     });
 
     it("handles custom itemToInput", async () => {
-      render(MultiSelect, {
-        props: {
-          items,
-          itemToInput: (item) => ({
-            name: `contact_${item.id}`,
-            value: item.text.toLowerCase(),
-          }),
-        },
-      });
+      const props = {
+        items,
+        itemToInput: (item: MultiSelectItem) => ({
+          name: `contact_${item.id}`,
+          value: item.text.toLowerCase(),
+        }),
+      } satisfies ComponentProps<MultiSelect>;
+
+      render(MultiSelect, { props });
 
       await openMenu();
       const checkbox = screen.getByText("Slack");

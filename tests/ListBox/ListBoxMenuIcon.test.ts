@@ -1,4 +1,5 @@
 import { render } from "@testing-library/svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ListBoxMenuIcon from "./ListBoxMenuIcon.test.svelte";
 
@@ -51,12 +52,13 @@ describe("ListBoxMenuIcon", () => {
       close: "Custom close text",
     } as const;
 
-    const { component } = render(ListBoxMenuIcon, {
-      props: {
-        open: false,
-        translateWithId: (id) => customTranslations[id],
-      },
-    });
+    const props = {
+      open: false,
+      translateWithId: (id: keyof typeof customTranslations) =>
+        customTranslations[id],
+    } satisfies ComponentProps<ListBoxMenuIcon>;
+
+    const { component } = render(ListBoxMenuIcon, { props });
 
     let svg = document.querySelector(".bx--list-box__menu-icon svg");
     expect(svg).toHaveAttribute("aria-label", "Custom open text");

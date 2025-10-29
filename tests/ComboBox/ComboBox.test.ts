@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
@@ -116,13 +117,14 @@ describe("ComboBox", () => {
       clearAll: "Remove all items",
     } as const;
 
-    render(ComboBox, {
-      props: {
-        selectedId: "1",
-        value: "Email",
-        translateWithIdSelection: (id) => customTranslations[id],
-      },
-    });
+    const props = {
+      selectedId: "1",
+      value: "Email",
+      translateWithIdSelection: (id: keyof typeof customTranslations) =>
+        customTranslations[id],
+    } satisfies ComponentProps<ComboBox>;
+
+    render(ComboBox, { props });
 
     const clearButton = screen.getByRole("button", {
       name: "Remove selected item",

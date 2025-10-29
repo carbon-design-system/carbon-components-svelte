@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import Pagination from "./Pagination.test.svelte";
 
@@ -225,35 +226,37 @@ describe("Pagination", () => {
   });
 
   it("handles custom page text", () => {
-    render(Pagination, {
-      props: {
-        pagesUnknown: true,
-        totalItems: 100_000,
-        pageText: (page) => `Current page ${page}`,
-      },
-    });
+    const props = {
+      pagesUnknown: true,
+      totalItems: 100_000,
+      pageText: (page: number) => `Current page ${page}`,
+    } satisfies ComponentProps<Pagination>;
+
+    render(Pagination, { props });
 
     expect(screen.getByText(/Current page 1/)).toBeInTheDocument();
   });
 
   it("handles custom page range text", () => {
-    render(Pagination, {
-      props: {
-        totalItems: 100_000,
-        pageRangeText: (current, total) => `${current} of ${total}`,
-      },
-    });
+    const props = {
+      totalItems: 100_000,
+      pageRangeText: (current: number, total: number) =>
+        `${current} of ${total}`,
+    } satisfies ComponentProps<Pagination>;
+
+    render(Pagination, { props });
 
     expect(screen.getByText(/1 of 10000/)).toBeInTheDocument();
   });
 
   it("handles custom item range text", () => {
-    render(Pagination, {
-      props: {
-        totalItems: 100_000,
-        itemRangeText: (min, max, total) => `${min}–${max} of ${total}`,
-      },
-    });
+    const props = {
+      totalItems: 100_000,
+      itemRangeText: (min: number, max: number, total: number) =>
+        `${min}–${max} of ${total}`,
+    } satisfies ComponentProps<Pagination>;
+
+    render(Pagination, { props });
 
     expect(screen.getByText(/1–10 of 100000/)).toBeInTheDocument();
   });

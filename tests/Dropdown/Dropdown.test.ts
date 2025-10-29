@@ -23,14 +23,15 @@ describe("Dropdown", () => {
   });
 
   it("should handle custom item display text", () => {
-    render(Dropdown, {
-      props: {
-        items,
-        selectedId: "0",
-        titleText: "Contact",
-        itemToString: (item) => `${item.text} (${item.id})`,
-      },
-    });
+    const props = {
+      items,
+      selectedId: "0",
+      titleText: "Contact",
+      itemToString: (item: (typeof items)[number]) =>
+        `${item.text} (${item.id})`,
+    };
+
+    render(Dropdown, { props });
 
     const button = screen.getByRole("button");
     expect(button.querySelector(".bx--list-box__label")).toHaveTextContent(
