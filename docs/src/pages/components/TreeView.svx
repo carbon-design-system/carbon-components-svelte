@@ -113,3 +113,28 @@ Use `TreeView.showNode` to expand, select, and focus a specific node.
 Convert flat data to a hierarchical structure using the `toHierarchy` utility.
 
 <FileSource src="/framed/TreeView/TreeViewFlatArray" />
+
+## Filter by text with search input
+
+Combine a `Search` input with `filterTreeByText` to create an interactive searchable tree. Type to filter nodes by name (case-insensitive substring matching).
+
+<FileSource src="/framed/TreeView/TreeViewFilter" />
+
+## Filter utilities
+
+Three filtering functions are available:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem><strong>filterTreeByText(tree, text, options)</strong>: Case-insensitive substring search on node text</ListItem>
+  <ListItem><strong>filterTreeById(tree, id, options)</strong>: Filter by single ID or array of IDs</ListItem>
+  <ListItem><strong>filterTreeNodes(tree, predicate, options)</strong>: Custom filtering with predicate function</ListItem>
+</UnorderedList>
+
+## Filter options
+
+All filter functions accept an optional `options` object:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem><strong>includeAncestors</strong> (default: true): Include parent chain of matched nodes</ListItem>
+  <ListItem><strong>includeChildren</strong> (default: false): Include all descendants of matched nodes</ListItem>
+</UnorderedList>
