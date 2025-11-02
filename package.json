@@ -62,7 +62,7 @@
     "postcss": "^8.5.5",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
-    "sveld": "^0.22.1",
+    "sveld": "^0.22.2",
     "svelte": "^4.2.20",
     "svelte-check": "^4.2.1",
     "vitest": "^4.0.4"
