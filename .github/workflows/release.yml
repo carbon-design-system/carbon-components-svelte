@@ -5,7 +5,7 @@ on:
 
 jobs:
   release:
-    runs-on: macos-latest-xlarge
+    runs-on: macos-15
     permissions:
       contents: read
       id-token: write
