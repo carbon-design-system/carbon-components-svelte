@@ -25,7 +25,6 @@
     "rules": {
       "recommended": true,
       "complexity": {
-        "noBannedTypes": "off",
         "noImportantStyles": "off",
         "useLiteralKeys": "error"
       },
