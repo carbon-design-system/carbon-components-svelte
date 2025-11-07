@@ -30,6 +30,8 @@
    *    value: DataTableValue;
    *    display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
    * }} DataTableCell<Row=DataTableRow>
+   * @slot {{ props: { class: string; }; }} title
+   * @slot {{ props: { class: string; }; }} description
    * @slot {{ row: Row; rowSelected: boolean; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
