@@ -6,7 +6,12 @@
   import { setContext } from "svelte";
   import Form from "../Form/Form.svelte";
 
-  setContext("Form", { isFluid: true });
+  /**
+   * @type {{ isFluid: boolean }}
+   */
+  const formContext = { isFluid: true };
+
+  setContext("Form", formContext);
 </script>
 
 <Form

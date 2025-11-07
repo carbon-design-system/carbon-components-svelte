@@ -186,17 +186,22 @@
   let highlightedIndex = -1;
   let prevChecked = [];
 
+  /**
+   * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement }) => void}
+   */
+  const declareRef = ({ key, ref }) => {
+    switch (key) {
+      case "field":
+        fieldRef = ref;
+        break;
+      case "selection":
+        selectionRef = ref;
+        break;
+    }
+  };
+
   setContext("MultiSelect", {
-    declareRef: ({ key, ref }) => {
-      switch (key) {
-        case "field":
-          fieldRef = ref;
-          break;
-        case "selection":
-          selectionRef = ref;
-          break;
-      }
-    },
+    declareRef,
   });
 
   function change(direction) {

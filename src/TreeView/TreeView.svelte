@@ -150,34 +150,68 @@
 
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
+  /**
+   * @type {import("svelte/store").Writable<TreeNodeId>}
+   */
   const activeNodeId = writable(activeId);
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>}
+   */
   const selectedNodeIds = writable(selectedIds);
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>}
+   */
   const expandedNodeIds = writable(expandedIds);
 
   let ref = null;
   let treeWalker = null;
 
+  /**
+   * @type {(node: TreeNode) => void}
+   */
+  const clickNode = (node) => {
+    activeId = node.id;
+    selectedIds = [node.id];
+    dispatch("select", node);
+  };
+
+  /**
+   * @type {(node: TreeNode) => void}
+   */
+  const selectNode = (node) => {
+    selectedIds = [node.id];
+  };
+
+  /**
+   * @type {(node: TreeNode, expanded: boolean) => void}
+   */
+  const expandNode = (node, expanded) => {
+    if (expanded) {
+      expandedIds = [...expandedIds, node.id];
+    } else {
+      expandedIds = expandedIds.filter((_id) => _id !== node.id);
+    }
+  };
+
+  /**
+   * @type {(node: TreeNode) => void}
+   */
+  const focusNode = (node) => dispatch("focus", node);
+
+  /**
+   * @type {(node: TreeNode) => void}
+   */
+  const toggleNode = (node) => dispatch("toggle", node);
+
   setContext("TreeView", {
     activeNodeId,
     selectedNodeIds,
     expandedNodeIds,
-    clickNode: (node) => {
-      activeId = node.id;
-      selectedIds = [node.id];
-      dispatch("select", node);
-    },
-    selectNode: (node) => {
-      selectedIds = [node.id];
-    },
-    expandNode: (node, expanded) => {
-      if (expanded) {
-        expandedIds = [...expandedIds, node.id];
-      } else {
-        expandedIds = expandedIds.filter((_id) => _id !== node.id);
-      }
-    },
-    focusNode: (node) => dispatch("focus", node),
-    toggleNode: (node) => dispatch("toggle", node),
+    clickNode,
+    selectNode,
+    expandNode,
+    focusNode,
+    toggleNode,
   });
 
   function handleKeyDown(e) {

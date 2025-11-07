@@ -60,22 +60,35 @@
   import { readonly, writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  /**
+   * @type {import("svelte/store").Writable<string | number | undefined>}
+   */
   const selectedValue = writable(selected);
   const groupName = writable(name);
   const groupRequired = writable(required);
+
+  /**
+   * @type {(data: { checked: boolean; value: string | number }) => void}
+   */
+  const add = ({ checked, value }) => {
+    if (checked) {
+      selectedValue.set(value);
+    }
+  };
+
+  /**
+   * @type {(value: string | number) => void}
+   */
+  const update = (value) => {
+    selected = value;
+  };
 
   setContext("RadioButtonGroup", {
     selectedValue,
     groupName: readonly(groupName),
     groupRequired: readonly(groupRequired),
-    add: ({ checked, value }) => {
-      if (checked) {
-        selectedValue.set(value);
-      }
-    },
-    update: (value) => {
-      selected = value;
-    },
+    add,
+    update,
   });
 
   onMount(() => {
