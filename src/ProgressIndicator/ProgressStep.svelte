@@ -1,4 +1,9 @@
 <script>
+  /**
+   * @restProps {li}
+   * @slot {{ props: { class: string; }; }}
+  */
+
   /** Set to `true` for the complete variant */
   export let complete = false;
 
