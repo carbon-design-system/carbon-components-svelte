@@ -23,9 +23,10 @@
         "jsdom": "^27.0.1",
         "lefthook": "^2.0.1",
         "postcss": "^8.5.5",
+        "prettier": "^3.6.2",
         "sass": "^1.49.11",
         "standard-version": "^9.5.0",
-        "sveld": "^0.22.2",
+        "sveld": "^0.22.5",
         "svelte": "^4.2.20",
         "svelte-check": "^4.2.1",
         "vitest": "^4.0.4",
@@ -695,7 +696,7 @@
 
     "rollup": ["rollup@2.79.2", "", { "optionalDependencies": { "fsevents": "~2.3.2" }, "bin": { "rollup": "dist/bin/rollup" } }, "sha512-fS6iqSPZDs3dr/y7Od6y5nha8dW1YnbgtsyotCVvoFGKbERG++CVRFv1meyGDE1SNItQA8BrnCw7ScdAhRJ3XQ=="],
 
-    "rollup-plugin-svelte": ["rollup-plugin-svelte@7.2.2", "", { "dependencies": { "@rollup/pluginutils": "^4.1.0", "resolve.exports": "^2.0.0" }, "peerDependencies": { "rollup": ">=2.0.0", "svelte": ">=3.5.0" } }, "sha512-hgnIblTRewaBEVQD6N0Q43o+y6q1TmDRhBjaEzQCi50bs8TXqjc+d1zFZyE8tsfgcfNHZQzclh4RxlFUB85H8Q=="],
+    "rollup-plugin-svelte": ["rollup-plugin-svelte@7.2.3", "", { "dependencies": { "@rollup/pluginutils": "^4.1.0", "resolve.exports": "^2.0.0" }, "peerDependencies": { "rollup": ">=2.0.0", "svelte": ">=3.5.0" } }, "sha512-LlniP+h00DfM+E4eav/Kk8uGjgPUjGIBfrAS/IxQvsuFdqSM0Y2sXf31AdxuIGSW9GsmocDqOfaxR5QNno/Tgw=="],
 
     "sade": ["sade@1.8.1", "", { "dependencies": { "mri": "^1.1.0" } }, "sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A=="],
 
@@ -749,7 +750,7 @@
 
     "supports-preserve-symlinks-flag": ["supports-preserve-symlinks-flag@1.0.0", "", {}, "sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w=="],
 
-    "sveld": ["sveld@0.22.2", "", { "dependencies": { "@rollup/plugin-node-resolve": "^13.3.0", "acorn": "^8.14.1", "comment-parser": "^1.4.1", "prettier": "^3.5.3", "rollup": "^2.79.2", "rollup-plugin-svelte": "^7.2.2", "svelte": "^4.2.20", "svelte-preprocess": "^6.0.3", "tinyglobby": "^0.2.14", "typescript": "^5.8.3" }, "bin": { "sveld": "cli.js" } }, "sha512-P/YLwxU5zkxtFRnL8wd34GGp8M7ns1VP2Kpf/toWKZacgs5/VlmMyYM8EEWb2CZOWxzUBcd7LK2MNPign66MZQ=="],
+    "sveld": ["sveld@0.22.5", "", { "dependencies": { "@rollup/plugin-node-resolve": "^13.3.0", "acorn": "^8.14.1", "comment-parser": "^1.4.1", "prettier": "^3.5.3", "rollup": "^2.79.2", "rollup-plugin-svelte": "^7.2.2", "svelte": "^4.2.20", "svelte-preprocess": "^6.0.3", "tinyglobby": "^0.2.14", "typescript": "^5.8.3" }, "bin": { "sveld": "cli.js" } }, "sha512-YI/ie2hSSJ7VInFR+nOqW2hrDuymuFbR8qtUctLTxekwg8iNi7Fxn3HgVYhnI4CkClM7PqOM+JfYKBqQRvPgrw=="],
 
     "svelte": ["svelte@4.2.20", "", { "dependencies": { "@ampproject/remapping": "^2.2.1", "@jridgewell/sourcemap-codec": "^1.4.15", "@jridgewell/trace-mapping": "^0.3.18", "@types/estree": "^1.0.1", "acorn": "^8.9.0", "aria-query": "^5.3.0", "axobject-query": "^4.0.0", "code-red": "^1.0.3", "css-tree": "^2.3.1", "estree-walker": "^3.0.3", "is-reference": "^3.0.1", "locate-character": "^3.0.0", "magic-string": "^0.30.4", "periscopic": "^3.1.0" } }, "sha512-eeEgGc2DtiUil5ANdtd8vPwt9AgaMdnuUFnPft9F5oMvU/FHu5IHFic+p1dR/UOB7XU2mX2yHW+NcTch4DCh5Q=="],
 
