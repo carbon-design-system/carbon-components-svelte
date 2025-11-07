@@ -772,7 +772,7 @@
         {
           "name": "icon",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "{\n  style: undefined | string;\n}"
         }
       ],
       "events": [
@@ -2123,9 +2123,10 @@
           "detail": "{\n  selectedId: ComboBoxItemId;\n  selectedItem: ComboBoxItem;\n}"
         },
         {
-          "type": "dispatched",
+          "type": "forwarded",
           "name": "clear",
-          "detail": "type EventDetail =\n  | KeyboardEvent\n  | MouseEvent"
+          "element": "ListBoxSelection",
+          "detail": "KeyboardEvent | MouseEvent"
         },
         {
           "type": "forwarded",
@@ -4644,8 +4645,9 @@
           "detail": "ReadonlyArray<File>"
         },
         {
-          "type": "dispatched",
+          "type": "forwarded",
           "name": "change",
+          "element": "FileUploaderButton",
           "detail": "ReadonlyArray<File>"
         },
         {
@@ -8993,8 +8995,9 @@
           "detail": "{\n  selectedIds: MultiSelectItemId[];\n  selected: MultiSelectItem[];\n  unselected: MultiSelectItem[];\n}"
         },
         {
-          "type": "dispatched",
+          "type": "forwarded",
           "name": "clear",
+          "element": "ListBoxSelection",
           "detail": "null"
         },
         {
@@ -17402,8 +17405,9 @@
       "slots": [],
       "events": [
         {
-          "type": "dispatched",
+          "type": "forwarded",
           "name": "clear",
+          "element": "Search",
           "detail": "null"
         },
         {
