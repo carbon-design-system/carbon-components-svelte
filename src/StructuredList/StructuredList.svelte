@@ -22,13 +22,21 @@
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  /**
+   * @type {import("svelte/store").Writable<string | undefined>}
+   */
   const selectedValue = writable(selected);
+
+  /**
+   * @type {(value: string) => void}
+   */
+  const update = (value) => {
+    selectedValue.set(value);
+  };
 
   setContext("StructuredListWrapper", {
     selectedValue,
-    update: (value) => {
-      selectedValue.set(value);
-    },
+    update,
   });
 
   $: selected = $selectedValue;

@@ -23,6 +23,9 @@
   import { writable } from "svelte/store";
   import AccordionSkeleton from "./AccordionSkeleton.svelte";
 
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
   const disableItems = writable(disabled);
 
   $: disableItems.set(disabled);

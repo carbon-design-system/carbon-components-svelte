@@ -77,22 +77,114 @@
 
   const dispatch = createEventDispatcher();
   const inputs = writable([]);
+  /**
+   * @type {import("svelte/store").Readable<ReadonlyArray<string>>}
+   */
   const inputIds = derived(inputs, (_) => _.map(({ id }) => id));
   const labelTextEmpty = derived(
     inputs,
     (_) => _.filter(({ labelText }) => !!labelText).length === 0,
   );
+  /**
+   * @type {import("svelte/store").Writable<number | string>}
+   */
   const inputValue = writable(value);
+  /**
+   * @type {import("svelte/store").Writable<string>}
+   */
   const inputValueFrom = writable(valueFrom);
+  /**
+   * @type {import("svelte/store").Writable<string>}
+   */
   const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
+  /**
+   * @type {import("svelte/store").Readable<boolean>}
+   */
   const range = derived(mode, (_) => _ === "range");
+  /**
+   * @type {import("svelte/store").Readable<boolean>}
+   */
   const hasCalendar = derived(mode, (_) => _ === "single" || _ === "range");
 
   let calendar = null;
   let datePickerRef = null;
   let inputRef = null;
   let inputRefTo = null;
+
+  /**
+   * @type {(data: { id: string; labelText: string }) => void}
+   */
+  const add = (data) => {
+    inputs.update((_) => [..._, data]);
+  };
+
+  /**
+   * @type {(data: { id: string; ref: HTMLInputElement }) => void}
+   */
+  const declareRef = ({ id, ref }) => {
+    if ($inputIds.indexOf(id) === 0) {
+      inputRef = ref;
+    } else {
+      inputRefTo = ref;
+    }
+  };
+
+  /**
+   * @type {(data: { type: "input" | "change"; value: string }) => void}
+   */
+  const updateValue = ({ type, value }) => {
+    if ((!calendar && type === "input") || type === "change") {
+      inputValue.set(value);
+    }
+
+    if (type === "change") {
+      if (calendar) {
+        const detail = { selectedDates: calendar.selectedDates || [] };
+
+        if ($range) {
+          detail.dateStr = {
+            from: inputRef?.value || "",
+            to: inputRefTo?.value || "",
+          };
+        } else {
+          detail.dateStr = inputRef?.value || "";
+        }
+
+        dispatch("change", detail);
+      } else {
+        dispatch("change", value);
+      }
+    }
+  };
+
+  /**
+   * @type {(relatedTarget: EventTarget | null) => void}
+   */
+  const blurInput = (relatedTarget) => {
+    if (calendar && !calendar.calendarContainer.contains(relatedTarget)) {
+      calendar.close();
+    }
+  };
+
+  /**
+   * @type {() => void}
+   */
+  const openCalendar = () => {
+    calendar.open();
+  };
+
+  /**
+   * @type {() => void}
+   */
+  const focusCalendar = () => {
+    (
+      calendar.selectedDateElem ||
+      calendar.todayDateElem ||
+      calendar.calendarContainer.querySelector(".flatpickr-day[tabindex]") ||
+      calendar.calendarContainer
+    ).focus();
+  };
 
   setContext("DatePicker", {
     range,
@@ -101,56 +193,12 @@
     inputValueTo,
     inputIds,
     hasCalendar,
-    add: (data) => {
-      inputs.update((_) => [..._, data]);
-    },
-    declareRef: ({ id, ref }) => {
-      if ($inputIds.indexOf(id) === 0) {
-        inputRef = ref;
-      } else {
-        inputRefTo = ref;
-      }
-    },
-    updateValue: ({ type, value }) => {
-      if ((!calendar && type === "input") || type === "change") {
-        inputValue.set(value);
-      }
-
-      if (type === "change") {
-        if (calendar) {
-          const detail = { selectedDates: calendar.selectedDates || [] };
-
-          if ($range) {
-            detail.dateStr = {
-              from: inputRef?.value || "",
-              to: inputRefTo?.value || "",
-            };
-          } else {
-            detail.dateStr = inputRef?.value || "";
-          }
-
-          dispatch("change", detail);
-        } else {
-          dispatch("change", value);
-        }
-      }
-    },
-    blurInput: (relatedTarget) => {
-      if (calendar && !calendar.calendarContainer.contains(relatedTarget)) {
-        calendar.close();
-      }
-    },
-    openCalendar: () => {
-      calendar.open();
-    },
-    focusCalendar: () => {
-      (
-        calendar.selectedDateElem ||
-        calendar.todayDateElem ||
-        calendar.calendarContainer.querySelector(".flatpickr-day[tabindex]") ||
-        calendar.calendarContainer
-      ).focus();
-    },
+    add,
+    declareRef,
+    updateValue,
+    blurInput,
+    openCalendar,
+    focusCalendar,
   });
 
   async function initCalendar(options) {

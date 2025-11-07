@@ -70,32 +70,38 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
 
   const dispatch = createEventDispatcher();
+  /**
+   * @type {import("svelte/store").Writable<string | number | undefined>}
+   */
   const selectedValue = writable(selected);
   const defaultSelectId = writable(null);
   const defaultValue = writable(null);
   const itemTypesByValue = writable({});
 
+  /**
+   * Use the first `SelectItem` value as the
+   * default value if `selected` is `undefined`.
+   * @type {(id: string, value: string | number) => void}
+   */
+  const setDefaultValue = (id, value) => {
+    if ($defaultValue === null) {
+      defaultSelectId.set(id);
+      defaultValue.set(value);
+    } else {
+      if ($defaultSelectId === id) {
+        selectedValue.set(value);
+      }
+    }
+
+    itemTypesByValue.update((types) => ({
+      ...types,
+      [value]: typeof value,
+    }));
+  };
+
   setContext("Select", {
     selectedValue,
-    setDefaultValue: (id, value) => {
-      /**
-       * Use the first `SelectItem` value as the
-       * default value if `selected` is `undefined`.
-       */
-      if ($defaultValue === null) {
-        defaultSelectId.set(id);
-        defaultValue.set(value);
-      } else {
-        if ($defaultSelectId === id) {
-          selectedValue.set(value);
-        }
-      }
-
-      itemTypesByValue.update((types) => ({
-        ...types,
-        [value]: typeof value,
-      }));
-    },
+    setDefaultValue,
   });
 
   const handleChange = ({ target }) => {

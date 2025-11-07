@@ -175,7 +175,13 @@
     descending: "none",
   };
   const dispatch = createEventDispatcher();
-  const batchSelectedIds = writable(false);
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<DataTableRowId>>}
+   */
+  const batchSelectedIds = writable([]);
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<Row>>}
+   */
   const tableRows = writable(rows);
 
   // Internal ID prefix for radio buttons, checkboxes, etc.
@@ -197,51 +203,61 @@
       .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
   };
 
+  /**
+   * @type {() => void}
+   */
+  const resetSelectedRowIds = () => {
+    selectAll = false;
+    selectedRowIds = [];
+    if (refSelectAll) refSelectAll.checked = false;
+  };
+
+  /**
+   * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<DataTableRowId>}
+   */
+  const filterRows = (searchValue, customFilter) => {
+    const value = searchValue.trim().toLowerCase();
+
+    if (value.length === 0) {
+      // Reset to original rows.
+      tableRows.set(originalRows);
+      return originalRows.map((row) => row.id);
+    }
+
+    let filteredRows = [];
+
+    if (typeof customFilter === "function") {
+      // Apply custom filter if provided.
+      filteredRows = originalRows.filter((row) => customFilter(row, value));
+    } else {
+      // Get searchable keys from headers (non-empty headers with keys).
+      const searchableKeys = headers
+        .filter((header) => !header.empty && header.key)
+        .map((header) => header.key);
+
+      // Default filter checks fields defined in headers
+      // for a basic, case-insensitive match (non-fuzzy).
+      // This supports nested keys like "contact.company".
+      filteredRows = originalRows.filter((row) => {
+        return searchableKeys.some((key) => {
+          const _value = resolvePath(row, key);
+          if (typeof _value === "string" || typeof _value === "number") {
+            return (_value + "")?.toLowerCase().includes(value);
+          }
+          return false;
+        });
+      });
+    }
+
+    tableRows.set(filteredRows);
+    return filteredRows.map((row) => row.id);
+  };
+
   setContext("DataTable", {
     batchSelectedIds,
     tableRows,
-    resetSelectedRowIds: () => {
-      selectAll = false;
-      selectedRowIds = [];
-      if (refSelectAll) refSelectAll.checked = false;
-    },
-    filterRows: (searchValue, customFilter) => {
-      const value = searchValue.trim().toLowerCase();
-
-      if (value.length === 0) {
-        // Reset to original rows.
-        tableRows.set(originalRows);
-        return originalRows.map((row) => row.id);
-      }
-
-      let filteredRows = [];
-
-      if (typeof customFilter === "function") {
-        // Apply custom filter if provided.
-        filteredRows = originalRows.filter((row) => customFilter(row, value));
-      } else {
-        // Get searchable keys from headers (non-empty headers with keys).
-        const searchableKeys = headers
-          .filter((header) => !header.empty && header.key)
-          .map((header) => header.key);
-
-        // Default filter checks fields defined in headers
-        // for a basic, case-insensitive match (non-fuzzy).
-        // This supports nested keys like "contact.company".
-        filteredRows = originalRows.filter((row) => {
-          return searchableKeys.some((key) => {
-            const _value = resolvePath(row, key);
-            if (typeof _value === "string" || typeof _value === "number") {
-              return (_value + "")?.toLowerCase().includes(value);
-            }
-            return false;
-          });
-        });
-      }
-
-      tableRows.set(filteredRows);
-      return filteredRows.map((row) => row.id);
-    },
+    resetSelectedRowIds,
+    filterRows,
   });
 
   let expanded = false;

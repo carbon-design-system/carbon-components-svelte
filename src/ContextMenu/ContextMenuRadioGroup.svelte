@@ -8,20 +8,36 @@
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
 
+  /**
+   * @type {import("svelte/store").Writable<string>}
+   */
   const currentId = writable("");
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<string>>}
+   */
   const radioIds = writable([]);
+
+  /**
+   * @type {(data: { id: string }) => void}
+   */
+  const addOption = ({ id }) => {
+    if (!$radioIds.includes(id)) {
+      radioIds.update((_) => [..._, id]);
+    }
+  };
+
+  /**
+   * @type {(data: { id: string }) => void}
+   */
+  const setOption = ({ id }) => {
+    selectedId = id;
+  };
 
   setContext("ContextMenuRadioGroup", {
     currentId,
     radioIds,
-    addOption: ({ id }) => {
-      if (!$radioIds.includes(id)) {
-        radioIds.update((_) => [..._, id]);
-      }
-    },
-    setOption: ({ id }) => {
-      selectedId = id;
-    },
+    addOption,
+    setOption,
   });
 
   $: currentId.set(selectedId);

@@ -35,9 +35,18 @@
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  /**
+   * @type {import("svelte/store").Writable<[number, number]>}
+   */
   const position = writable([x, y]);
+  /**
+   * @type {import("svelte/store").Writable<number>}
+   */
   const currentIndex = writable(-1);
   const hasPopup = writable(false);
+  /**
+   * @type {import("svelte/store").Writable<number>}
+   */
   const menuOffsetX = writable(0);
   const ctx = getContext("ContextMenu");
 
@@ -48,6 +57,9 @@
   let focusIndex = -1;
   let openDetail = null;
 
+  /**
+   * @type {() => void}
+   */
   function close() {
     open = false;
     x = 0;
@@ -108,14 +120,19 @@
     };
   });
 
+  /**
+   * @type {(popup: boolean) => void}
+   */
+  const setPopup = (popup) => {
+    hasPopup.set(popup);
+  };
+
   setContext("ContextMenu", {
     menuOffsetX,
     currentIndex,
     position,
     close,
-    setPopup: (popup) => {
-      hasPopup.set(popup);
-    },
+    setPopup,
   });
 
   afterUpdate(() => {

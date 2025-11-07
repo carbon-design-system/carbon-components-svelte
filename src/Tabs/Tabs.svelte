@@ -30,6 +30,9 @@
 
   const dispatch = createEventDispatcher();
 
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; index: number }>>}
+   */
   const tabs = writable([]);
   const tabsById = derived(tabs, (_) =>
     _.reduce((a, c) => {
@@ -37,36 +40,71 @@
       return a;
     }, {}),
   );
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
   const useAutoWidth = writable(autoWidth);
+  /**
+   * @type {import("svelte/store").Writable<string | undefined>}
+   */
   const selectedTab = writable(undefined);
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; index: number }>>}
+   */
   const content = writable([]);
+  /**
+   * @type {import("svelte/store").Readable<Record<string, { id: string; index: number }>>}
+   */
   const contentById = derived(content, (_) =>
     _.reduce((a, c) => {
       a[c.id] = c;
       return a;
     }, {}),
   );
+  /**
+   * @type {import("svelte/store").Writable<string | undefined>}
+   */
   const selectedContent = writable(undefined);
 
   let refTabList = null;
 
-  setContext("Tabs", {
-    tabs,
-    contentById,
-    selectedTab,
-    selectedContent,
-    useAutoWidth,
-    add: (data) => {
-      tabs.update((_) => [..._, { ...data, index: _.length }]);
-    },
-    addContent: (data) => {
-      content.update((_) => [..._, { ...data, index: _.length }]);
-    },
-    update: (id) => {
-      currentIndex = $tabsById[id].index;
-    },
-    change: async (direction) => {
-      let index = currentIndex + direction;
+  /**
+   * @type {(data: { id: string; label: string; disabled: boolean }) => void}
+   */
+  const add = (data) => {
+    tabs.update((_) => [..._, { ...data, index: _.length }]);
+  };
+
+  /**
+   * @type {(data: { id: string }) => void}
+   */
+  const addContent = (data) => {
+    content.update((_) => [..._, { ...data, index: _.length }]);
+  };
+
+  /**
+   * @type {(id: string) => void}
+   */
+  const update = (id) => {
+    currentIndex = $tabsById[id].index;
+  };
+
+  /**
+   * @type {(direction: number) => Promise<void>}
+   */
+  const change = async (direction) => {
+    let index = currentIndex + direction;
+
+    if (index < 0) {
+      index = $tabs.length - 1;
+    } else if (index >= $tabs.length) {
+      index = 0;
+    }
+
+    let disabled = $tabs[index].disabled;
+
+    while (disabled) {
+      index = index + direction;
 
       if (index < 0) {
         index = $tabs.length - 1;
@@ -74,27 +112,27 @@
         index = 0;
       }
 
-      let disabled = $tabs[index].disabled;
+      disabled = $tabs[index].disabled;
+    }
 
-      while (disabled) {
-        index = index + direction;
+    currentIndex = index;
 
-        if (index < 0) {
-          index = $tabs.length - 1;
-        } else if (index >= $tabs.length) {
-          index = 0;
-        }
+    await tick();
+    const activeTab =
+      refTabList?.querySelectorAll("[role='tab']")[currentIndex];
+    activeTab?.focus();
+  };
 
-        disabled = $tabs[index].disabled;
-      }
-
-      currentIndex = index;
-
-      await tick();
-      const activeTab =
-        refTabList?.querySelectorAll("[role='tab']")[currentIndex];
-      activeTab?.focus();
-    },
+  setContext("Tabs", {
+    tabs,
+    contentById,
+    selectedTab,
+    selectedContent,
+    useAutoWidth,
+    add,
+    addContent,
+    update,
+    change,
   });
 
   afterUpdate(() => {
