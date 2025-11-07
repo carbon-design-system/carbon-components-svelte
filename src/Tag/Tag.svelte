@@ -1,5 +1,8 @@
 <script>
-  /** @restProps {div | span} */
+  /**
+   * @restProps {div | span}
+   * @slot {{ props: { class: string; }; }}
+  */
 
   /**
    * Specify the type of tag
