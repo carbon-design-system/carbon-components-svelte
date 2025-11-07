@@ -396,7 +396,7 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 | Slot name | Default | Props                                                                                                                                           | Fallback |
 | :-------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------- | :------- |
 | --        | Yes     | <code>{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } } </code> | --       |
-| icon      | No      | --                                                                                                                                              | --       |
+| icon      | No      | <code>{ style: undefined &#124; string; } </code>                                                                                               | --       |
 
 ### Events
 
@@ -702,7 +702,7 @@ export interface ComboBoxItem {
 | Event name | Type       | Detail                                                                  |
 | :--------- | :--------- | :---------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }</code> |
-| clear      | dispatched | <code>KeyboardEvent &#124; MouseEvent</code>                            |
+| clear      | forwarded  | --                                                                      |
 | input      | forwarded  | --                                                                      |
 | keydown    | forwarded  | --                                                                      |
 | keyup      | forwarded  | --                                                                      |
@@ -1295,7 +1295,7 @@ None.
 | :--------- | :--------- | :------------------------------- |
 | add        | dispatched | <code>ReadonlyArray<File></code> |
 | remove     | dispatched | <code>ReadonlyArray<File></code> |
-| change     | dispatched | <code>ReadonlyArray<File></code> |
+| change     | forwarded  | --                               |
 | click      | forwarded  | --                               |
 | mouseover  | forwarded  | --                               |
 | mouseenter | forwarded  | --                               |
@@ -2422,7 +2422,7 @@ export interface MultiSelectItem {
 | Event name | Type       | Detail                                                                                                         |
 | :--------- | :--------- | :------------------------------------------------------------------------------------------------------------- |
 | select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
-| clear      | dispatched | <code>null</code>                                                                                              |
+| clear      | forwarded  | --                                                                                                             |
 | blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         |
 | keydown    | forwarded  | --                                                                                                             |
 | input      | forwarded  | --                                                                                                             |
@@ -4571,16 +4571,16 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| clear      | dispatched | <code>null</code> |
-| change     | forwarded  | --                |
-| input      | forwarded  | --                |
-| focus      | forwarded  | --                |
-| blur       | forwarded  | --                |
-| keyup      | forwarded  | --                |
-| keydown    | forwarded  | --                |
-| paste      | forwarded  | --                |
+| Event name | Type      | Detail |
+| :--------- | :-------- | :----- |
+| clear      | forwarded | --     |
+| change     | forwarded | --     |
+| input      | forwarded | --     |
+| focus      | forwarded | --     |
+| blur       | forwarded | --     |
+| keyup      | forwarded | --     |
+| keydown    | forwarded | --     |
+| paste      | forwarded | --     |
 
 ## `Tooltip`
 

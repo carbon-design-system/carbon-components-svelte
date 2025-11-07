@@ -148,6 +148,6 @@ export default class Button extends SvelteComponentTyped<
         [key: string]: any;
       };
     };
-    icon: {};
+    icon: { style: undefined | string };
   }
 > {}
